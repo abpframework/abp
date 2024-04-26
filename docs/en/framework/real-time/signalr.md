@@ -6,7 +6,7 @@
 
 ### Server Side
 
-It is suggested to use the [ABP CLI](../../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../../cli) to install this package.
 
 #### Using the ABP CLI
 
@@ -18,7 +18,7 @@ abp add-package Volo.Abp.AspNetCore.SignalR
 
 > You typically want to add this package to the web or API layer of your application, depending on your architecture.
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.SignalR).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.SignalR).
 
 #### Manual Installation
 
@@ -72,7 +72,7 @@ This will add the `@abp/signalr` to the dependencies in the `package.json` of yo
 }
 ```
 
-Run the following [ABP CLI](../../cli/index.md) command in the root folder of your web project:
+Run the following [ABP CLI](../../cli) command in the root folder of your web project:
 
 ```bash
 abp install-libs

@@ -2,13 +2,13 @@
 
 BLOB Storing Aliyun Provider can store BLOBs in [Aliyun Blob storage](https://help.aliyun.com/product/31815.html).
 
-> Read the [BLOB Storing document](./index.md) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a Aliyun BLOB as the storage provider.
+> Read the [BLOB Storing document](../blob-storing) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a Aliyun BLOB as the storage provider.
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.BlobStoring.Aliyun](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Aliyun) NuGet package to your project:
 
-* Install the [ABP CLI](../../../cli/index.md) if you haven't installed before.
+* Install the [ABP CLI](../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring.Aliyun` package.
 * Run `abp add-package Volo.Abp.BlobStoring.Aliyun` command.
 
@@ -16,7 +16,7 @@ If you want to do it manually, install the [Volo.Abp.BlobStoring.Aliyun](https:/
 
 ## Configuration
 
-Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](./index.md).
+Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](../blob-storing).
 
 **Example: Configure to use the Aliyun storage provider by default**
 
@@ -42,7 +42,7 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
-> See the [BLOB Storing document](./index.md) to learn how to configure this provider for a specific container.
+> See the [BLOB Storing document](../blob-storing) to learn how to configure this provider for a specific container.
 
 ### Options
 
@@ -55,7 +55,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **RoleSessionName** ([NotNull]string): Used to identify the temporary access credentials, it is recommended to use different application users to distinguish.
 * **Policy** (string): Additional permission restrictions. See the [document](https://help.aliyun.com/document_detail/100680.html) for details.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600.
-* **ContainerName** (string): You can specify the container name in Aliyun. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](./index.md)). Please note that Aliyun has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://help.aliyun.com/knowledge_detail/39668.html):
+* **ContainerName** (string): You can specify the container name in Aliyun. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](../blob-storing)). Please note that Aliyun has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://help.aliyun.com/knowledge_detail/39668.html):
     * Container names must start or end with a letter or number, and can contain only letters, numbers, and the dash (-) character.
     * Container names Must start and end with lowercase letters and numbers.
     * Container names must be from **3** through **63** characters long.
@@ -67,7 +67,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 Aliyun Blob Provider organizes BLOB name and implements some conventions. The full name of a BLOB is determined by the following rules by default:
 
-* Appends `host` string if [current tenant](../../architecture/multi-tenancy/index.md) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](./index.md) to learn how to disable multi-tenancy for a container).
+* Appends `host` string if [current tenant](../../architecture/multi-tenancy) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](../blob-storing) to learn how to disable multi-tenancy for a container).
 * Appends `tenants/<tenant-id>` string if current tenant is not `null`.
 * Appends the BLOB name.
 

@@ -8,7 +8,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Gdpr) f
 
 ## How to install
 
-The GDPR module is pre-installed in the [Application](../solution-templates/layered-web-application/index.md) and [Application (Single Layer) templates](../solution-templates/single-layer-web-application/index.md). So, no need to manually install it. 
+The GDPR module is pre-installed in the [Application](../solution-templates/layered-web-application) and [Application (Single Layer) templates](../solution-templates/single-layer-web-application). So, no need to manually install it. 
 
 If you need to install it manually, there are 2 ways of installing it:
 
@@ -22,7 +22,7 @@ abp add-module Volo.Gdpr
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
 
 You can visit the [Gdpr module package list page](https://abp.io/packages?moduleName=Volo.Abp.Gdpr) to see a list of packages related to this module.
 
@@ -221,11 +221,11 @@ The GDPR module collects the data asynchronous to work that is compatible with m
 
 ### GdprUserDataRequestedEto
 
-This [Event Transfer Object](../framework/infrastructure/event-bus/distributed/index.md#event-transfer-object) is published to trigger all personal data collectors to begin preparing their data. If you want to collect personal data for your module, you need to subscribe to this ETO class and publish the `GdprUserDataPreparedEto` event with your collected data.
+This [Event Transfer Object](../framework/infrastructure/event-bus/distributed#event-transfer-object) is published to trigger all personal data collectors to begin preparing their data. If you want to collect personal data for your module, you need to subscribe to this ETO class and publish the `GdprUserDataPreparedEto` event with your collected data.
 
 ### GdprUserDataPreparedEto
 
-This [Event Transfer Object](../framework/infrastructure/event-bus/distributed/index.md#event-transfer-object) is used to save the collected personal data into a single JSON file by module.
+This [Event Transfer Object](../framework/infrastructure/event-bus/distributed#event-transfer-object) is used to save the collected personal data into a single JSON file by module.
 
 
 ## Cookie Consent
@@ -234,7 +234,7 @@ This [Event Transfer Object](../framework/infrastructure/event-bus/distributed/i
 
 Cookie Consent can be used to inform the users of the application, before saving any specific data about the users. 
 
-This feature is enabled by default for the [Application](../solution-templates/layered-web-application/index.md) and [Application Single Layer](../solution-templates/single-layer-web-application/index.md) Startup Templates.
+This feature is enabled by default for the [Application](../solution-templates/layered-web-application) and [Application Single Layer](../solution-templates/single-layer-web-application) Startup Templates.
 
 > You can easily enable/disable to show the Cookie Consent by configuring the `AbpCookieConsentOptions`, which explained above.
 

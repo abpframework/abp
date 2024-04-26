@@ -12,7 +12,7 @@ abp get-source Volo.Chat
 
 ## How to Install
 
-Chat module is not installed in [the startup templates](../solution-templates/index.md). So, it needs to be installed manually. There are two ways of installing a module into your application.
+Chat module is not installed in [the startup templates](../solution-templates). So, it needs to be installed manually. There are two ways of installing a module into your application.
 
 ### Installation
 
@@ -82,11 +82,11 @@ app.Use(async (httpContext, next) =>
 
 When Web & API tiers are separated, it is impossible to directly send a server-to-client message from the HTTP API. This is also true for a microservice architected application. **Chat Module** uses the distributed event bus to deliver the message from API application to the web application, then to the client.
 
-If your project has such an architecture (example: MVC + tiered option), then you need a Distributed Event Bus. See [related ABP documentation](../framework/infrastructure/event-bus/distributed/index.md) to understand Distributed Event Bus system in ABP framework. Also see [RabbitMQ Integration documentation](../framework/infrastructure/event-bus/distributed/rabbitmq.md) if your choice is to use RabbitMQ.
+If your project has such an architecture (example: MVC + tiered option), then you need a Distributed Event Bus. See [related ABP documentation](../framework/infrastructure/event-bus/distributed) to understand Distributed Event Bus system in ABP framework. Also see [RabbitMQ Integration documentation](../framework/infrastructure/event-bus/distributed/rabbitmq.md) if your choice is to use RabbitMQ.
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Chat module package list page](https://abp.io/packages?moduleName=Volo.Chat) to see list of packages related with this module.
 
@@ -138,7 +138,7 @@ An icon that shows unread message count of the user and leads to chat page when 
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/index.md) guide.
+This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices) guide.
 
 Following custom repositories are defined for this module:
 
@@ -234,7 +234,7 @@ export class AppRoutingModule {}
 
 #### Services / Models
 
-Chat module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
+Chat module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module chat
@@ -293,4 +293,4 @@ Configure<ChatBlazorWebAssemblyOptions>(options =>
 
 ## Distributed Events
 
-This module defines an event for messaging. It is published when a new message is sent from a user to another user, with an Event Transfer Object type of `ChatMessageEto`. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md) for more information about distributed events.
+This module defines an event for messaging. It is published when a new message is sent from a user to another user, with an Event Transfer Object type of `ChatMessageEto`. See the [standard distributed events](../framework/infrastructure/event-bus/distributed) for more information about distributed events.

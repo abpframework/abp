@@ -7,7 +7,7 @@ The ABP Framework provides an abstraction to sending SMS. Having such an abstrac
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -17,7 +17,7 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.Sms
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Sms).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Sms).
 
 ### Manual Installation
 

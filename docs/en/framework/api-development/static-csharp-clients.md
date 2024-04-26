@@ -114,7 +114,7 @@ public class MyClientAppModule : AbpModule
 
 `AddStaticHttpClientProxies` method gets an assembly, finds all service interfaces in the given assembly, and prepares for static client proxy generation.
 
-> The [application startup template](../../solution-templates/layered-web-application/index.md) comes pre-configured for the **dynamic** client proxy generation, in the `HttpApi.Client` project. If you want to switch to the **static** client proxies, change `context.Services.AddHttpClientProxies` to `context.Services.AddStaticHttpClientProxies` in the module class of your `HttpApi.Client` project.
+> The [application startup template](../../solution-templates/layered-web-application) comes pre-configured for the **dynamic** client proxy generation, in the `HttpApi.Client` project. If you want to switch to the **static** client proxies, change `context.Services.AddHttpClientProxies` to `context.Services.AddStaticHttpClientProxies` in the module class of your `HttpApi.Client` project.
 
 ### Endpoint Configuration
 
@@ -144,7 +144,7 @@ Open a command-line terminal in the root folder of your client project (`.csproj
 abp generate-proxy -t csharp -u http://localhost:53929/
 ````
 
-> If you haven't installed yet, you should install the [ABP CLI](../../cli/index.md).
+> If you haven't installed yet, you should install the [ABP CLI](../../cli).
 
 This command should generate the following files under the `ClientProxies` folder:
 
@@ -168,7 +168,7 @@ This command should generate the following files under the `ClientProxies` folde
 * `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class where you can write your custom code (ABP won't override it). 
 * `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests. This file must be configured as an embedded resource in your project, so that it can be found by the virtual file system.
 
-> `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../../cli/index.md) documentation for other options.
+> `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../../cli) documentation for other options.
 
 ## Usage
 

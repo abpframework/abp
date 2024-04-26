@@ -129,7 +129,7 @@ There are 5 pre-built setting value providers registered by the order below:
 * `DefaultValueSettingValueProvider`: Gets the value from the default value of the setting definition, if set (see the SettingDefinition section above).
 * `ConfigurationSettingValueProvider`: Gets the value from the [IConfiguration service](./configuration.md).
 * `GlobalSettingValueProvider`: Gets the global (system-wide) value for a setting, if set.
-* `TenantSettingValueProvider`: Gets the setting value for the current tenant, if set (see the [multi-tenancy](../architecture/multi-tenancy/index.md) document).
+* `TenantSettingValueProvider`: Gets the setting value for the current tenant, if set (see the [multi-tenancy](../architecture/multi-tenancy) document).
 * `UserSettingValueProvider`: Gets the setting value for the current user, if set (see the [current user](../infrastructure/current-user.md) document).
 
 > Setting fallback system works from bottom (user) to top (default).

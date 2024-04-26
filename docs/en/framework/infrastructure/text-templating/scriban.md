@@ -2,7 +2,7 @@
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../../../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli) to install this package.
 
 ### Using the ABP CLI
 

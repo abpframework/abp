@@ -49,7 +49,7 @@ You can add the ABP Framework packages that you need to use in the module. At le
 abp add-package Volo.Abp.Core
 ````
 
- If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
+ If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
 Every [module](../modularity/basics.md) must declare a class derived from the `AbpModule`. Here, a simple module class that resolves a service and initializes it on the application startup:
 
@@ -208,7 +208,7 @@ For package/dll dependencies, you can copy the related dlls to the plug-in folde
 
 ### Database Schema
 
-If your module uses a relational database and [Entity Framework Core](../../data/entity-framework-core/index.md), it will need to have its tables available in the database. There are different ways to ensure the tables have been created when an application uses the plug-in. Some examples;
+If your module uses a relational database and [Entity Framework Core](../../data/entity-framework-core), it will need to have its tables available in the database. There are different ways to ensure the tables have been created when an application uses the plug-in. Some examples;
 
 1. The Plugin may check if the database tables does exists and create the tables on the application startup or migrate them if the plug-in has been updated and requires some schema changes. You can use EF Core's migration API to do that.
 2. You can improve the `DbMigrator` application to find migrations of the plug-ins and execute them.

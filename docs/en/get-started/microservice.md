@@ -81,7 +81,7 @@ You can explore the solution, but you need to wait for background tasks to be co
 
 This **solution** consists of several **modules** shown in the *Solution Explorer* section:
 
-> You can refer the ***[Concepts](../modules/index.md)*** document to learn what do **solution** and **module** terms mean.
+> You can refer the ***[Concepts](../modules)*** document to learn what do **solution** and **module** terms mean.
 
 ![abp-studio-created-microservice-solution-explorer](images/abp-studio-created-microservice-solution-explorer.png)
 
@@ -101,7 +101,7 @@ You can open any module's .NET solution in your favorite IDE and make your devel
 
 ![abp-studio-microservice-example-identity-service-in-visual-studio](images/abp-studio-microservice-example-identity-service-in-visual-studio.png)
 
-If you explore that .NET solution, you will typically see some configuration code, and you won't see any business code. That's because the solution uses [pre-built application modules](../../modules/index.md) as NuGet packages, and doesn't contain their source code. In this way, you can easily upgrade these application modules when a new version is available.
+If you explore that .NET solution, you will typically see some configuration code, and you won't see any business code. That's because the solution uses [pre-built application modules](../../modules) as NuGet packages, and doesn't contain their source code. In this way, you can easily upgrade these application modules when a new version is available.
 
 You will typically add new microservices to the solution and perform your business logic inside these new services (however, you can always want to download the source code of any pre-built application module and include it into your solution to freely customize it).
 

@@ -30,7 +30,7 @@ Configure<AbpMultiTenancyOptions>(options =>
 });
 ```
 
-> Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](../../../solution-templates/layered-web-application/index.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
+> Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](../../../solution-templates/layered-web-application). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
 
 ### Database Architecture
 
@@ -436,7 +436,7 @@ BLOB Storing, Caching, Data Filtering, Data Seeding, Authorization and all the o
 
 ABP Framework provides all the the infrastructure to create a multi-tenant application, but doesn't make any assumption about how you manage (create, delete...) your tenants.
 
-The [Tenant Management module](../../../modules/tenant-management.md) provides a basic UI to manage your tenants and set their connection strings. It is pre-configured for the [application startup template](../../../solution-templates/layered-web-application/index.md).
+The [Tenant Management module](../../../modules/tenant-management.md) provides a basic UI to manage your tenants and set their connection strings. It is pre-configured for the [application startup template](../../../solution-templates/layered-web-application).
 
 ## See Also
 

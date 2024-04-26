@@ -1,6 +1,6 @@
 # Switch to EF Core Oracle Devart Provider
 
-This document explains how to switch to the **Oracle** database provider for **[the application startup template](../../../solution-templates/layered-web-application/index.md)** which comes with SQL Server provider pre-configured.
+This document explains how to switch to the **Oracle** database provider for **[the application startup template](../../../solution-templates/layered-web-application)** which comes with SQL Server provider pre-configured.
 
 > This document uses a paid library of [Devart](https://www.devart.com/dotconnect/oracle/) company, See [this document](./oracle.md) for other options.
 

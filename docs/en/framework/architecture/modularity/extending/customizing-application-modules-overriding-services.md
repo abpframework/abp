@@ -176,7 +176,7 @@ public class MyEfCoreIdentityUserRepository : EfCoreIdentityUserRepository
 }
 ````
 
-In this example, we are overriding the `EfCoreIdentityUserRepository` class that is defined by the [Identity module](../../../../modules/identity.md). This is the [Entity Framework Core](../../../data/entity-framework-core/index.md) implementation of the user repository. 
+In this example, we are overriding the `EfCoreIdentityUserRepository` class that is defined by the [Identity module](../../../../modules/identity.md). This is the [Entity Framework Core](../../../data/entity-framework-core) implementation of the user repository. 
 
 Thanks to the naming convention (`MyEfCoreIdentityUserRepository` ends with `EfCoreIdentityUserRepository`), no additional setup is required. You can override any base method to customize it for your needs.
 
@@ -382,4 +382,4 @@ See [Overriding the User Interface](./overriding-user-interface.md) guide for th
 
 ## How to Find the Services?
 
-[Module documents](../../../../modules/index.md) includes the list of the major services they define. In addition, you can investigate [their source code](https://github.com/abpframework/abp/tree/dev/modules) to explore all the services.
+[Module documents](../../../../modules) includes the list of the major services they define. In addition, you can investigate [their source code](https://github.com/abpframework/abp/tree/dev/modules) to explore all the services.

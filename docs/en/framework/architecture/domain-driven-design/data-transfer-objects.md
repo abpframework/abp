@@ -266,7 +266,7 @@ You are free to design your DTO classes. However, there are some best practices 
 
 * DTOs should be **well serializable** since they are generally serialized and deserialized (to JSON or other format). It is suggested to have an empty (parameterless) public constructor if you have another constructor with parameter(s).
 * DTOs **should not contain any business logic**, except some formal [validation](../../fundamentals/validation.md) code.
-* Do not inherit DTOs from entities and **do not reference to entities**. The [application startup template](../../../solution-templates/layered-web-application/index.md) already prevents it by separating the projects.
+* Do not inherit DTOs from entities and **do not reference to entities**. The [application startup template](../../../solution-templates/layered-web-application) already prevents it by separating the projects.
 * If you use an auto [object to object mapping](../../infrastructure/object-to-object-mapping.md) library, like AutoMapper, enable the **mapping configuration validation** to prevent potential bugs.
 
 ### Input DTO Principles

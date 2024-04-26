@@ -1,8 +1,8 @@
 # Customizing the Existing Modules
 
-ABP Framework has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules/index.md) those are **ready to use** in any kind of application.
+ABP Framework has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules) those are **ready to use** in any kind of application.
 
-For example, you can **re-use** the [Identity Management Module](../../../../modules/identity.md) to add user, role and permission management to your application. The [application startup template](../../../../solution-templates/layered-web-application/index.md) already comes with Identity and some other modules **pre-installed**.
+For example, you can **re-use** the [Identity Management Module](../../../../modules/identity.md) to add user, role and permission management to your application. The [application startup template](../../../../solution-templates/layered-web-application) already comes with Identity and some other modules **pre-installed**.
 
 ## Re-Using an Application Module
 
@@ -12,12 +12,12 @@ You have two options to re-use an application module.
 
 You can add **NuGet** & **NPM** package references of the related module to your application and configure the module (based on its documentation) to integrate to your application.
 
-As mentioned before, the [application startup template](../../../../solution-templates/layered-web-application/index.md) already comes with some **fundamental modules pre-installed**. It uses the modules as NuGet & NPM package references.
+As mentioned before, the [application startup template](../../../../solution-templates/layered-web-application) already comes with some **fundamental modules pre-installed**. It uses the modules as NuGet & NPM package references.
 
 This approach has the following benefits:
 
 * Your solution will be **clean** and only contains your **own application code**.
-* You can **easily upgrade** a module when a new version is available. `abp update` [CLI](../../../../cli/index.md) command makes it even easier. In this way, you can continue to get **new features and bug fixes**.
+* You can **easily upgrade** a module when a new version is available. `abp update` [CLI](../../../../cli) command makes it even easier. In this way, you can continue to get **new features and bug fixes**.
 
 However, there is a drawback:
 
@@ -31,7 +31,7 @@ If you don't think to make huge changes on the pre-built modules, re-using them 
 
 If you want to make **huge changes** or add **major features** on a pre-built module, but the available extension points are not enough, you can consider to directly work the source code of the depended module.
 
-In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](../../../../cli/index.md)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
+In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](../../../../cli)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
 
 
 #### Separating the Module Solution

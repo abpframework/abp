@@ -13,11 +13,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.identit
 
 ## How to Install
 
-Identity Server is pre-installed in [the startup templates](../solution-templates/index.md). So, no need to manually install it.
+Identity Server is pre-installed in [the startup templates](../solution-templates). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
 
@@ -292,7 +292,7 @@ You can modify the look and behavior of the module pages by passing the followin
 
 #### Services / Models
 
-Identity Server module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
+Identity Server module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module identityServer
@@ -329,4 +329,4 @@ The Identity Server module remote URL configuration shown above is optional. If 
 
 ## Distributed Events
 
-This module defines events for `Client` aggregate and `ClientCorsOrigin` entity. When a `Client` or  `ClientCorsOrigin` changes, `AllowedCorsOriginsCacheItemInvalidator` invalidates the cache for `AllowedCorsOriginsCacheItem`. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md) for more information about distributed events.
+This module defines events for `Client` aggregate and `ClientCorsOrigin` entity. When a `Client` or  `ClientCorsOrigin` changes, `AllowedCorsOriginsCacheItemInvalidator` invalidates the cache for `AllowedCorsOriginsCacheItem`. See the [standard distributed events](../framework/infrastructure/event-bus/distributed) for more information about distributed events.

@@ -57,7 +57,7 @@ Here are the fundamental properties of the `ICurrentUser` interface:
 * **IsAuthenticated** (bool): Returns `true` if the current user has logged in (authenticated). If the user has not logged in then `Id` and `UserName` returns `null`.
 * **Id** (Guid?): Id of the current user. Returns `null`, if the current user has not logged in.
 * **UserName** (string): User name of the current user. Returns `null`, if the current user has not logged in.
-* **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](../architecture/multi-tenancy/index.md) application. Returns `null`, if the current user is not assigned to a tenant.
+* **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](../architecture/multi-tenancy) application. Returns `null`, if the current user is not assigned to a tenant.
 * **Email** (string): Email address of the current user.Returns `null`, if the current user has not logged in or not set an email address.
 * **EmailVerified** (bool): Returns `true`, if the email address of the current user has been verified.
 * **PhoneNumber** (string): Phone number of the current user. Returns `null`, if the current user has not logged in or not set a phone number.

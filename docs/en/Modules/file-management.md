@@ -2,17 +2,17 @@
 
 This module is used to upload, download and organize files in a hierarchical folder structure. It is also compatible to multi-tenancy and you can determine total size limit for your tenants.
 
-This module is based on the [BLOB Storing](../framework/infrastructure/blob-storing/index.md) system, so it can use different storage providers to store the file contents.
+This module is based on the [BLOB Storing](../framework/infrastructure/blob-storing) system, so it can use different storage providers to store the file contents.
 
 See [the module description page](https://commercial.abp.io/modules/Volo.FileManagement) for an overview of the module features.
 
 ## How to Install
 
-File Management module is not installed in [the startup templates](../solution-templates/layered-web-application/index.md). So, it needs to be installed manually. There are two ways of installing a module into your application.
+File Management module is not installed in [the startup templates](../solution-templates/layered-web-application). So, it needs to be installed manually. There are two ways of installing a module into your application.
 
 ### 1. Using ABP CLI
 
-ABP CLI allows adding a module to a solution using `add-module` command. You can check its [documentation](../cli/index.md#add-module) for more information. So, file management module can be added using the command below;
+ABP CLI allows adding a module to a solution using `add-module` command. You can check its [documentation](../cli#add-module) for more information. So, file management module can be added using the command below;
 
 ```bash
 abp add-module Volo.FileManagement
@@ -77,7 +77,7 @@ Configure<HubOptions>(options =>
 
 ## Setting BLOB Provider
 
-File Management module is based on the [BLOB Storing](../framework/infrastructure/blob-storing/index.md) system as defined before, and it uses `FileManagementContainer` as a BLOB container.
+File Management module is based on the [BLOB Storing](../framework/infrastructure/blob-storing) system as defined before, and it uses `FileManagementContainer` as a BLOB container.
 
 You must set a BLOB provider for `FileManagementContainer`.
 
@@ -91,11 +91,11 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ```
 
-Please check the [BLOB Storage Providers documentation](../framework/infrastructure/blob-storing/index.md#blob-storage-providers) for more information about providers and how to use them.
+Please check the [BLOB Storage Providers documentation](../framework/infrastructure/blob-storing#blob-storage-providers) for more information about providers and how to use them.
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [File Management module package list page](https://abp.io/packages?moduleName=Volo.FileManagement) to see list of packages related with this module.
 
@@ -221,4 +221,4 @@ See the `FileManagementPermissions` class members for all permissions defined fo
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed).

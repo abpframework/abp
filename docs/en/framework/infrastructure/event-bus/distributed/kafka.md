@@ -1,12 +1,12 @@
 # Distributed Event Bus Kafka Integration
 
-> This document explains **how to configure the [Kafka](https://kafka.apache.org/)** as the distributed event bus provider. See the [distributed event bus document](../distributed/index.md) to learn how to use the distributed event bus system
+> This document explains **how to configure the [Kafka](https://kafka.apache.org/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.EventBus.Kafka](https://www.nuget.org/packages/Volo.Abp.EventBus.Kafka) NuGet package to your project:
 
-* Install the [ABP CLI](../../../../cli/index.md) if you haven't installed before.
+* Install the [ABP CLI](../../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.Kafka` package.
 * Run `abp add-package Volo.Abp.EventBus.Kafka` command.
 

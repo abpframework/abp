@@ -104,7 +104,7 @@ This table is used to associate tags with blog posts in order to categorize and 
 | [BlgTags](#blgtags) | Id | Links the post tag to the corresponding tag. |
 | [BlgPosts](#blgposts) | Id | Links the post tag to the corresponding blog post. |
 
-## [CMS Kit Module](cms-kit/index.md)
+## [CMS Kit Module](cms-kit)
 
 ### CmsUsers
 
@@ -146,7 +146,7 @@ This table is a database table for the [CMS Kit Global Resources system](cms-kit
 
 ### CmsMediaDescriptors
 
-This table is utilized by the CMS kit module to manage media files by using the [BlobStoring](../framework/infrastructure/blob-storing/index.md) module.
+This table is utilized by the CMS kit module to manage media files by using the [BlobStoring](../framework/infrastructure/blob-storing) module.
 
 ### CmsMenuItems
 

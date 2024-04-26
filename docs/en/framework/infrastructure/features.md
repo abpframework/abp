@@ -4,9 +4,9 @@ ABP Feature system is used to **enable**, **disable** or **change the behavior**
 
 The runtime value for a feature is generally a `boolean` value, like `true` (enabled) or `false` (disabled). However, you can get/set **any kind** of value for feature.
 
-Feature system was originally designed to control the tenant features in a **[multi-tenant](../architecture/multi-tenancy/index.md)** application. However, it is **extensible** and capable of determining the features by any condition.
+Feature system was originally designed to control the tenant features in a **[multi-tenant](../architecture/multi-tenancy)** application. However, it is **extensible** and capable of determining the features by any condition.
 
-> The feature system is implemented with the [Volo.Abp.Features](https://www.nuget.org/packages/Volo.Abp.Features) NuGet package. Most of the times you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Features) since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application/index.md).
+> The feature system is implemented with the [Volo.Abp.Features](https://www.nuget.org/packages/Volo.Abp.Features) NuGet package. Most of the times you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Features) since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application).
 
 ## Checking for the Features
 
@@ -242,7 +242,7 @@ See the [localization document](../fundamentals/localization.md) for details abo
 
 ### Feature Management Modal
 
-The [application startup template](../../solution-templates/layered-web-application/index.md) comes with the [tenant management](../../modules/tenant-management.md) and the [feature management](../../modules/feature-management.md) modules pre-installed.
+The [application startup template](../../solution-templates/layered-web-application) comes with the [tenant management](../../modules/tenant-management.md) and the [feature management](../../modules/feature-management.md) modules pre-installed.
 
 Whenever you define a new feature, it will be available on the **feature management modal**. To open this modal, navigate to the **tenant management page** and select the `Features` action for a tenant (create a new tenant if there is no tenant yet):
 

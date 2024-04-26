@@ -10,7 +10,7 @@ The ABP Framework provides an abstraction to work with BLOBs and provides some p
 * You can then **easily change** your BLOB storage without changing your application code.
 * If you want to create **reusable application modules**, you don't need to make assumption about how the BLOBs are stored.
 
-ABP BLOB Storage system is also compatible to other ABP Framework features like [multi-tenancy](../../architecture/multi-tenancy/index.md).
+ABP BLOB Storage system is also compatible to other ABP Framework features like [multi-tenancy](../../architecture/multi-tenancy).
 
 ## BLOB Storage Providers
 
@@ -23,7 +23,7 @@ The ABP Framework has already the following storage provider implementations:
 * [Minio](./minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
 * [Aws](./aws.md): Stores BLOBs on the [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 
-More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution/index.md) to the ABP Framework.
+More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution) to the ABP Framework.
 
 Multiple providers **can be used together** by the help of the **container system**, where each container can uses a different provider.
 
@@ -35,7 +35,7 @@ Multiple providers **can be used together** by the help of the **container syste
 
 Use the ABP CLI to add this package to your project:
 
-* Install the [ABP CLI](../../../cli/index.md), if you haven't installed it.
+* Install the [ABP CLI](../../../cli), if you haven't installed it.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring` package.
 * Run `abp add-package Volo.Abp.BlobStoring` command.
 
@@ -272,7 +272,7 @@ This is a way to configure all the containers.
 
 ## Multi-Tenancy
 
-If your application is set as multi-tenant, the BLOB Storage system **works seamlessly with the [multi-tenancy](../../architecture/multi-tenancy/index.md)**. All the providers implement multi-tenancy as a standard feature. They **isolate BLOBs** of different tenants from each other, so they can only access to their own BLOBs. It means you can use the **same BLOB name for different tenants**.
+If your application is set as multi-tenant, the BLOB Storage system **works seamlessly with the [multi-tenancy](../../architecture/multi-tenancy)**. All the providers implement multi-tenancy as a standard feature. They **isolate BLOBs** of different tenants from each other, so they can only access to their own BLOBs. It means you can use the **same BLOB name for different tenants**.
 
 If your application is multi-tenant, you may want to control **multi-tenancy behavior** of the containers individually. For example, you may want to **disable multi-tenancy** for a specific container, so the BLOBs inside it will be **available to all the tenants**. This is a way to share BLOBs among all tenants.
 

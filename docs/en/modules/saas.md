@@ -11,11 +11,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Saas) f
 
 ## How to install
 
-Saas is pre-installed in [the startup templates](../solution-templates/index.md). So, no need to manually install it.
+Saas is pre-installed in [the startup templates](../solution-templates). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [SaaS module package list page](https://abp.io/packages?moduleName=Volo.Saas) to see list of packages related with this module.
 
@@ -291,7 +291,7 @@ You can modify the look and behavior of the module pages by passing the followin
 
 #### Services / Models
 
-Saas module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
+Saas module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module saas

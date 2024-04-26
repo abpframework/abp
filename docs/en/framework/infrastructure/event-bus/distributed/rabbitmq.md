@@ -1,12 +1,12 @@
 # Distributed Event Bus RabbitMQ Integration
 
-> This document explains **how to configure the [RabbitMQ](https://www.rabbitmq.com/)** as the distributed event bus provider. See the [distributed event bus document](./index.md) to learn how to use the distributed event bus system
+> This document explains **how to configure the [RabbitMQ](https://www.rabbitmq.com/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) NuGet package to your project:
 
-* Install the [ABP CLI](../../../../cli/index.md) if you haven't installed before.
+* Install the [ABP CLI](../../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.RabbitMQ` package.
 * Run `abp add-package Volo.Abp.EventBus.RabbitMQ` command.
 

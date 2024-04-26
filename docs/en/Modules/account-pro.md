@@ -12,11 +12,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Account
 
 ## How to Install
 
-The account is pre-installed in [the startup templates](../startup-templates/application/index.md). So, no need to manually install it.
+The account is pre-installed in [the startup templates](../startup-templates/application). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and the relations between them.
 
 You can visit the [Account module package list page](https://abp.io/packages?moduleName=Volo.Account.Pro) to see a list of packages related to this module.
 
@@ -272,7 +272,7 @@ You can modify the look and behavior of the module pages by passing the followin
 
 #### Services / Models
 
-Account module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following commands in the Angular project directory.
+Account module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli). If you need the module's proxies, you can run the following commands in the Angular project directory.
 
 The command below generates `AccountPublicModule` proxies:
 
@@ -336,7 +336,7 @@ OAuth is preconfigured as authorization code flow in MauiBlazor application temp
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/index.md).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus).
 
 ## See Also
 

@@ -13,7 +13,7 @@ While EF Core Data Seeding system provides a way, it is very limited and doesn't
 ABP Framework provides a data seed system that is;
 
 * **Modular**: Any [module](../architecture/modularity/basics.md) can silently contribute to the data seeding process without knowing and effecting each other. In this way, a module seeds its own initial data.
-* **Database Independent**: It is not only for EF Core, it also works for other database providers (like [MongoDB](../data/mongodb/index.md)).
+* **Database Independent**: It is not only for EF Core, it also works for other database providers (like [MongoDB](../data/mongodb)).
 * **Production Ready**: It solves the problems on production environments. See the "*On Production*" section below.
 * **Dependency Injection**: It takes the full advantage of dependency injection, so you can use any internal or external service while seeding the initial data. Actually, you can do much more than data seeding.
 
@@ -82,7 +82,7 @@ namespace Acme.BookStore
 
 ### DataSeedContext
 
-`DataSeedContext` contains `TenantId` if your application is [multi-tenant](../architecture/multi-tenancy/index.md), so you can use this value while inserting data or performing custom logic based on the tenant.
+`DataSeedContext` contains `TenantId` if your application is [multi-tenant](../architecture/multi-tenancy), so you can use this value while inserting data or performing custom logic based on the tenant.
 
 `DataSeedContext` also contains name-value style configuration parameters for passing to the seeder contributors from the `IDataSeeder`.
 
@@ -94,7 +94,7 @@ For example, the [Identity Module](../../modules/identity.md) has a data seed co
 
 ## IDataSeeder
 
-> You typically never need to directly use the `IDataSeeder` service since it is already done if you've started with the [application startup template](../../solution-templates/layered-web-application/index.md). But its suggested to read it to understand the design behind the data seed system.
+> You typically never need to directly use the `IDataSeeder` service since it is already done if you've started with the [application startup template](../../solution-templates/layered-web-application). But its suggested to read it to understand the design behind the data seed system.
 
 `IDataSeeder` is the main service that is used to seed initial data. It is pretty easy to use;
 
@@ -129,7 +129,7 @@ await _dataSeeder.SeedAsync(
 
 Then the data seed contributors can access to these properties via the `DataSeedContext` explained before. 
 
-If a module needs to a parameter, it should be declared on the [module documentation](../../modules/index.md). For example, the [Identity Module](../../modules/identity.md) can use `AdminEmail` and `AdminPassword` parameters if you provide (otherwise uses the default values).
+If a module needs to a parameter, it should be declared on the [module documentation](../../modules). For example, the [Identity Module](../../modules/identity.md) can use `AdminEmail` and `AdminPassword` parameters if you provide (otherwise uses the default values).
 
 ### Separate Unit Of Works
 
@@ -147,7 +147,7 @@ It is important to understand where & how to execute the `IDataSeeder.SeedAsync(
 
 #### On Production
 
-The [application startup template](../../solution-templates/layered-web-application/index.md) comes with a *YourProjectName***.DbMigrator** project (Acme.BookStore.DbMigrator on the picture below), which is a **console application** that is responsible to **migrate** the database schema (for relational databases) and **seed** the initial data:
+The [application startup template](../../solution-templates/layered-web-application) comes with a *YourProjectName***.DbMigrator** project (Acme.BookStore.DbMigrator on the picture below), which is a **console application** that is responsible to **migrate** the database schema (for relational databases) and **seed** the initial data:
 
 ![bookstore-visual-studio-solution-v3](../../images/bookstore-visual-studio-solution-v3.png)
 
@@ -171,6 +171,6 @@ We suggest the same way on development. Run the DbMigrator console application w
 
 #### On Testing
 
-You probably want to seed the data also for automated [testing](../../testing/overall.md), so want to use the `IDataSeeder.SeedAsync()`. In the [application startup template](../../solution-templates/layered-web-application/index.md), it is done in the [OnApplicationInitialization](../architecture/modularity/basics.md) method of the *YourProjectName*TestBaseModule class of the TestBase project.
+You probably want to seed the data also for automated [testing](../../testing/overall.md), so want to use the `IDataSeeder.SeedAsync()`. In the [application startup template](../../solution-templates/layered-web-application), it is done in the [OnApplicationInitialization](../architecture/modularity/basics.md) method of the *YourProjectName*TestBaseModule class of the TestBase project.
 
 In addition to the standard seed data (that is also used on production), you may want to seed additional data unique to the automated tests. If so, you can create a new data seed contributor in the test project to have more data to work on.

@@ -2,7 +2,7 @@
 
 Setting Management Module implements the `ISettingStore` (see [the setting system](../framework/fundamentals/settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.
 
-> Setting Management module is already installed and configured for [the startup templates](../solution-templates/index.md). So, most of the times you don't need to manually add this module to your application.
+> Setting Management module is already installed and configured for [the startup templates](../solution-templates). So, most of the times you don't need to manually add this module to your application.
 
 ## ISettingManager
 

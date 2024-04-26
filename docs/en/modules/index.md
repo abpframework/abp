@@ -17,9 +17,9 @@ Here are all the free and pro application modules developed and maintained as a 
 * **[Audit logging (Pro)](audit-logging-pro.md)**: Reporting the user audit logs and entity histories in details.
 * [**Background Jobs**](background-jobs.md): Persist background jobs when using the default background job manager.
 * **[Chat (Pro)](chat.md)**: Real time messaging between users of the application.
-* [**CMS Kit**](cms-kit/index.md): A set of reusable *Content Management System* features.
-* **[CMS Kit (Pro)](cms-kit-pro/index.md)**: A set of reusable CMS (Content Management System) building blocks.
-* [**Docs**](docs.md): Used to create technical documentation website. ABP's [own documentation](../index.md) already using this module.
+* [**CMS Kit**](cms-kit): A set of reusable *Content Management System* features.
+* **[CMS Kit (Pro)](cms-kit-pro)**: A set of reusable CMS (Content Management System) building blocks.
+* [**Docs**](docs.md): Used to create technical documentation website. ABP's [own documentation](../modules) already using this module.
 * [**Feature Management**](feature-management.md): Used to persist and manage the [features](../features.md).
 * **[File Management (Pro)](file-management.md)**: Upload, download and organize files in a hierarchical folder structure.
 * **[Forms (Pro)](forms.md)**: Create forms and surveys.

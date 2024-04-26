@@ -237,4 +237,4 @@ Pre-build events are published when you save changes to the database;
 
 ## See Also
 
-* [Distributed Event Bus](../distributed/index.md)
+* [Distributed Event Bus](../distributed)

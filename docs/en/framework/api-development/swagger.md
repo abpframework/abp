@@ -11,7 +11,7 @@ ABP Framework offers a prebuilt module for full Swagger integration with small c
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-If installation is needed, it is suggested to use the [ABP CLI](../../cli/index.md) to install this package.
+If installation is needed, it is suggested to use the [ABP CLI](../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -21,7 +21,7 @@ Open a command line window in the folder of the `Web` or `HttpApi.Host` project 
 abp add-package Volo.Abp.Swashbuckle
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Swashbuckle).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Swashbuckle).
 
 ### Manual Installation
 

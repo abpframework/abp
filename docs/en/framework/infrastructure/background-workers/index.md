@@ -143,4 +143,4 @@ See pre-built worker manager alternatives:
 
 ## See Also
 
-* [Background Jobs](../background-jobs/index.md)
+* [Background Jobs](../background-jobs)

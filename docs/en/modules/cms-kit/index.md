@@ -22,8 +22,8 @@ All features are individually usable. If you disable a feature, it completely di
 
 ## Pre Requirements
 
--  This module depends on [BlobStoring](../../framework/infrastructure/blob-storing/index.md) module for keeping media content.
-> Make sure `BlobStoring` module is installed and at least one provider is configured properly. For more information, check the [documentation](../../framework/infrastructure/blob-storing/index.md).
+-  This module depends on [BlobStoring](../../framework/infrastructure/blob-storing) module for keeping media content.
+> Make sure `BlobStoring` module is installed and at least one provider is configured properly. For more information, check the [documentation](../../framework/infrastructure/blob-storing).
 
 - CMS Kit uses [distributed cache](../../framework/fundamentals/caching.md) for responding faster. 
 > Using a distributed cache, such as [Redis](../../framework/fundamentals/redis-cache.md), is highly recommended for data consistency in distributed/clustered deployments.
@@ -61,7 +61,7 @@ GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
 
 ## The Packages
 
-This module follows the [module development best practices guide](../../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 CMS kit packages are designed for various usage scenarios. If you check the [CMS kit packages](https://www.nuget.org/packages?q=Volo.CmsKit), you will see that some packages have `Admin` and `Public` suffixes. The reason is that the module has two application layers, considering they might be used in different type of applications. These application layers uses a single domain layer:
 

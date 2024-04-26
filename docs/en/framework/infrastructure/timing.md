@@ -82,7 +82,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 `Normalize` method is used by the ABP Framework when the it gets a `DateTime` that is not created by `IClock.Now` and may not be compatible with the current Clock type. Examples;
 
 * `DateTime` type binding in the ASP.NET Core MVC model binding.
-* Saving data to and reading data from database via [Entity Framework Core](../data/entity-framework-core/index.md).
+* Saving data to and reading data from database via [Entity Framework Core](../data/entity-framework-core).
 * Working with `DateTime` objects on [JSON deserialization](Json-Serialization.md).
 
 #### DisableDateTimeNormalization Attribute
@@ -102,7 +102,7 @@ This section covers the ABP Framework infrastructure related to managing time zo
 
 ### TimeZone Setting
 
-ABP Framework defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](../architecture/multi-tenancy/index.md) or globally for the application. The default value is `UTC`.
+ABP Framework defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](../architecture/multi-tenancy) or globally for the application. The default value is `UTC`.
 
 See the [setting documentation](../fundamentals/settings.md) to learn more about the setting system.
 

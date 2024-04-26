@@ -4,15 +4,15 @@
 
 ## Install Autofac Integration
 
-> All the [startup templates](../../get-started/index.md) and samples are Autofac integrated. So, most of the time you don't need to manually install this package.
+> All the [startup templates](../../get-started) and samples are Autofac integrated. So, most of the time you don't need to manually install this package.
 
-If you're not using a startup template, you can use the [ABP CLI](../../cli/index.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project (suggested to add it to the executable/web project):
+If you're not using a startup template, you can use the [ABP CLI](../../cli) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project (suggested to add it to the executable/web project):
 
 ````bash
 abp add-package Volo.Abp.Autofac
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Autofac).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Autofac).
 >
 
 Finally, configure `AbpApplicationCreationOptions` to replace default dependency injection services by Autofac. It depends on the application type.

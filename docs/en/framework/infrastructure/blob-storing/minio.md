@@ -2,13 +2,13 @@
 
 BLOB Storing Minio Provider can store BLOBs in [MinIO Object storage](https://min.io/).
 
-> Read the [BLOB Storing document](./index.md) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a Minio BLOB as the storage provider.
+> Read the [BLOB Storing document](../blob-storing) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a Minio BLOB as the storage provider.
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.BlobStoring.Minio](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Minio) NuGet package to your project:
 
-* Install the [ABP CLI](../../../cli/index.md) if you haven't installed before.
+* Install the [ABP CLI](../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring.Minio` package.
 * Run `abp add-package Volo.Abp.BlobStoring.Minio` command.
 
@@ -16,7 +16,7 @@ If you want to do it manually, install the [Volo.Abp.BlobStoring.Minio](https://
 
 ## Configuration
 
-Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](./index.md).
+Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](../blob-storing).
 
 **Example: Configure to use the minio storage provider by default**
 
@@ -36,14 +36,14 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
-> See the [BLOB Storing document](./index.md) to learn how to configure this provider for a specific container.
+> See the [BLOB Storing document]() to learn how to configure this provider for a specific container.
 
 ### Options
 
 * **EndPoint** (string): URL to object storage service. Please refer to MinIO Client SDK for .NET: https://docs.min.io/docs/dotnet-client-quickstart-guide.html
 * **AccessKey** (string): Access key is the user ID that uniquely identifies your account. 
 * **SecretKey** (string): Secret key is the password to your account.
-* **BucketName** (string): You can specify the bucket name in MinIO. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](./index.md)).MinIO is the defacto standard for S3 compatibility, So MinIO has some **rules for naming bucket**.  The [following rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) apply for naming MinIO buckets:
+* **BucketName** (string): You can specify the bucket name in MinIO. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](../blob-storing)).MinIO is the defacto standard for S3 compatibility, So MinIO has some **rules for naming bucket**.  The [following rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html) apply for naming MinIO buckets:
     * Bucket names must be between **3** and **63** characters long.
     * Bucket names can consist only of **lowercase** letters, numbers, dots (.), and hyphens (-).
     * Bucket names must begin and end with a letter or number.
@@ -59,7 +59,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 Minio Blob Provider organizes BLOB name and implements some conventions. The full name of a BLOB is determined by the following rules by default:
 
-* Appends `host` string if [current tenant](../../architecture/multi-tenancy/index.md) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](./index.md) to learn how to disable multi-tenancy for a container).
+* Appends `host` string if [current tenant](../../architecture/multi-tenancy) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](../blob-storing) to learn how to disable multi-tenancy for a container).
 * Appends `tenants/<tenant-id>` string if current tenant is not `null`.
 * Appends the BLOB name.
 

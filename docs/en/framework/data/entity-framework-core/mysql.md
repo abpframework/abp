@@ -1,6 +1,6 @@
 # Switch to EF Core MySQL Provider
 
-> [ABP CLI](../../../cli/index.md) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with MySQL. See [that document](./other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to MySQL after creating the solution.
+> [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with MySQL. See [that document](./other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to MySQL after creating the solution.
 
 This document explains how to switch to the **MySQL** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 

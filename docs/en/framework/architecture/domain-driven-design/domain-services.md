@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In a [Domain Driven Design](./index.md) (DDD) solution, the core business logic is generally implemented in aggregates ([entities](./entities.md)) and the Domain Services. Creating a Domain Service is especially needed when;
+In a [Domain Driven Design](../domain-driven-design) (DDD) solution, the core business logic is generally implemented in aggregates ([entities](./entities.md)) and the Domain Services. Creating a Domain Service is especially needed when;
 
 * You implement a core domain logic that depends on some services (like repositories or other external services).
 * The logic you need to implement is related to more than one aggregate/entity, so it doesn't properly fit in any of the aggregates.

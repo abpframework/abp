@@ -26,7 +26,7 @@ This table can store information about the Chat user messages, including the mes
 | --- | --- | --- |
 | [ChatMessages](#chatmessages) | Id | Link to the message. |
 
-## [Cms Kit Module](cms-kit/index.md)
+## [Cms Kit Module](cms-kit)
 
 ### CmsNewsletterPreferences
 

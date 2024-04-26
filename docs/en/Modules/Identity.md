@@ -4,7 +4,7 @@ Identity module is used to manage roles, users and their permissions, based on t
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli) command) to develop your custom module.
 
 ### The Source Code
 
@@ -81,7 +81,7 @@ OU code is automatically generated and maintained by the `OrganizationUnitManage
 
 This code can be used to easily query the database for all the children of an OU (recursively). There are some rules for this code (automatically applied when you use `OrganizationUnitManager`):
 
-- It is **unique** for a [tenant](../framework/architecture/multi-tenancy/index.md).
+- It is **unique** for a [tenant](../framework/architecture/multi-tenancy).
 - All the children of the same OU have codes that **start with the parent OU's code**.
 - It's **fixed length** and based on the level of the OU in the tree, as shown in the sample.
 - While the OU code is unique, it can be **changed** if you move the related OU.
@@ -182,9 +182,9 @@ public class MyHandler :
 }
 ````
 
-`UserEto` and `IdentityRoleEto` are configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](../framework/infrastructure/event-bus/distributed/index.md) to learn details of the pre-defined events.
+`UserEto` and `IdentityRoleEto` are configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](../framework/infrastructure/event-bus/distributed) to learn details of the pre-defined events.
 
-> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Identity Module, then subscribing to the [local events](../framework/infrastructure/event-bus/local/index.md) can be more efficient and easier.
+> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Identity Module, then subscribing to the [local events](../framework/infrastructure/event-bus/local) can be more efficient and easier.
 
 ## Internals
 
@@ -277,7 +277,7 @@ Following custom repositories are defined for this module:
 
 ### Database Providers
 
-This module provides [Entity Framework Core](../framework/data/entity-framework-core/index.md) and [MongoDB](../framework/data/mongodb/index.md) options for the database.
+This module provides [Entity Framework Core](../framework/data/entity-framework-core) and [MongoDB](../framework/data/mongodb) options for the database.
 
 #### Entity Framework Core
 

@@ -36,7 +36,7 @@ namespace Acme.BookStore
 
 ### IMultiTenant
 
-[Multi-tenancy](../architecture/multi-tenancy/index.md) is an efficient way of creating SaaS applications. Once you create a multi-tenant application, you typically want to isolate data between tenants. Implement `IMultiTenant` interface to make your entity "multi-tenant aware".
+[Multi-tenancy](../architecture/multi-tenancy) is an efficient way of creating SaaS applications. Once you create a multi-tenant application, you typically want to isolate data between tenants. Implement `IMultiTenant` interface to make your entity "multi-tenant aware".
 
 Example:
 
@@ -59,7 +59,7 @@ namespace Acme.BookStore
 }
 ````
 
-`IMultiTenant` interface defines the `TenantId` property which is then used to automatically filter the entities for the current tenant. See the [Multi-tenancy](../architecture/multi-tenancy/index.md) document for more.
+`IMultiTenant` interface defines the `TenantId` property which is then used to automatically filter the entities for the current tenant. See the [Multi-tenancy](../architecture/multi-tenancy) document for more.
 
 ## IDataFilter Service: Enable/Disable Data Filters
 
@@ -200,7 +200,7 @@ public class Book : AggregateRoot<Guid>, IIsActive
 
 ### EntityFramework Core
 
-ABP uses [EF Core's Global Query Filters](https://docs.microsoft.com/en-us/ef/core/querying/filters) system for the [EF Core Integration](../data/entity-framework-core/index.md). So, it is well integrated to EF Core and works as expected even if you directly work with `DbContext`.
+ABP uses [EF Core's Global Query Filters](https://docs.microsoft.com/en-us/ef/core/querying/filters) system for the [EF Core Integration](../data/entity-framework-core). So, it is well integrated to EF Core and works as expected even if you directly work with `DbContext`.
 
 Best way to implement a custom filter is to override  `ShouldFilterEntity` and `CreateFilterExpression` method for your `DbContext`. Example:
 
@@ -253,7 +253,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ### MongoDB
 
-ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](../data/mongodb/index.md), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
+ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](../data/mongodb), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
 
 Currently, the best way to implement a data filter for the MongoDB integration is to create a derived class of `MongoDbRepositoryFilterer` and override `FilterQueryable`. Example:
 

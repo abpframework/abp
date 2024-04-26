@@ -1,12 +1,12 @@
 # Quartz Background Job Manager
 
-[Quartz](https://www.quartz-scheduler.net/) is an advanced background job manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background job manager](./index.md). In this way, you can use the same background job API for Quartz and your code will be independent of Quartz. If you like, you can directly use Quartz's API, too.
+[Quartz](https://www.quartz-scheduler.net/) is an advanced background job manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background job manager](../background-jobs). In this way, you can use the same background job API for Quartz and your code will be independent of Quartz. If you like, you can directly use Quartz's API, too.
 
-> See the [background jobs document](./index.md) to learn how to use the background job system. This document only shows how to install and configure the Quartz integration.
+> See the [background jobs document](../background-jobs) to learn how to use the background job system. This document only shows how to install and configure the Quartz integration.
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../../../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -16,7 +16,7 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.BackgroundJobs.Quartz
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.BackgroundJobs.Quartz).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.BackgroundJobs.Quartz).
 
 ### Manual Installation
 

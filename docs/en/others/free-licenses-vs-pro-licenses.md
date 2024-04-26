@@ -1,6 +1,6 @@
 # Free (Open Source) License vs Paid (Pro) Licenses
 
-[ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates/index.md), [CLI](../cli/index.md), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/AspNetCore.md) and ready to use [application modules](../modules/index.md). 
+[ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates), [CLI](../cli), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/AspNetCore.md) and ready to use [application modules](../modules). 
 
 [ABP Pro licenses](https://commercial.abp.io) adds important benefits on top of the open-source ABP framework project with a set of professional [application modules](https://commercial.abp.io/modules), [UI themes](https://commercial.abp.io/themes), CRUD page generator: [ABP Suite](https://commercial.abp.io/tools/suite), [premium support](https://commercial.abp.io/support) and [additional services](https://commercial.abp.io/additional-services). 
 
@@ -172,7 +172,7 @@ A screenshot of the LeptonX Theme (paid version):
 
 We provide many sample solutions based on the ABP Framework and ABP Commercial. All the [sample solutions](https://docs.abp.io/en/abp/latest/Samples/Index) built with the ABP Framework are also valid for the ABP Commercial. So, ABP Commercial users can benefit from these samples as well. For that reason, we create many samples on the open-source side to provide more value for everyone.
 
-However, there are some samples valid only for the ABP Commercial. See the [samples for the ABP Commercial](../samples/index.md).
+However, there are some samples valid only for the ABP Commercial. See the [samples for the ABP Commercial](../samples).
 
 ## Support
 

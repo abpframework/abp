@@ -1,6 +1,6 @@
 # Switch to Another DBMS for Entity Framework Core
 
-[ABP CLI](../../../cli/index.md) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
+[ABP CLI](../../../cli) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
 
 - `SqlServer` (default)
 - `MySQL`
@@ -71,7 +71,7 @@ Configure<AbpDbContextOptions>(options =>
 
 * `UseMySql` calls in this code is defined by the Pomelo.EntityFrameworkCore.MySql package and you can use its additional options if you need.
 * This code first checks if there is an existing (active) connection to the same database in the current request and reuses it if possible. This allows to share a single transaction among different DbContext types. ABP handles the rest of the things.
-* It uses `ctx.ConnectionString` and passes to the `UseMySql` if there is no active connection (which will cause to create a new database connection). Using the `ctx.ConnectionString` is important here. Don't pass a static connection string (or a connection string from a configuration). Because ABP [dynamically determines the correct connection string](../../fundamentals/connection-strings.md) in a multi-database or [multi-tenant](../../architecture/multi-tenancy/index.md) environment.
+* It uses `ctx.ConnectionString` and passes to the `UseMySql` if there is no active connection (which will cause to create a new database connection). Using the `ctx.ConnectionString` is important here. Don't pass a static connection string (or a connection string from a configuration). Because ABP [dynamically determines the correct connection string](../../fundamentals/connection-strings.md) in a multi-database or [multi-tenant](../../architecture/multi-tenancy) environment.
 
 ## Change the Connection Strings
 

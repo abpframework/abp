@@ -6,7 +6,7 @@ The Audit Logging Module basically implements the `IAuditingStore` to save the a
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli) command) to develop your custom module.
 
 ### The Source Code
 

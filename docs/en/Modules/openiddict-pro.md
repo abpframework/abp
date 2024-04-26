@@ -10,11 +10,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.OpenIdd
 
 ## How to Install
 
-OpenIddict is pre-installed in [the startup templates](../solution-templates/index.md) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../migration-guides/openIddict-step-by-step).
+OpenIddict is pre-installed in [the startup templates](../solution-templates) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../migration-guides/openIddict-step-by-step).
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
 

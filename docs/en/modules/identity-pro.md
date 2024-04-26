@@ -21,11 +21,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Identit
 
 ## How to install
 
-Identity is pre-installed in [the startup templates](../solution-templates/layered-web-application/index.md). So, no need to manually install it.
+Identity is pre-installed in [the startup templates](../solution-templates/layered-web-application). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
 
@@ -201,7 +201,7 @@ Configure<AbpIdentityAspNetCoreOptions>(options =>
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/index.md) guide.
+This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices) guide.
 
 ##### User
 
@@ -389,7 +389,7 @@ You can modify the look and behavior of the module pages by passing the followin
 
 #### Services / Models
 
-Identity module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
+Identity module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module identity
@@ -426,7 +426,7 @@ The Identity module remote URL configuration shown above is optional. If you don
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed).
 
 ## See Also
 

@@ -8,7 +8,7 @@ Specification Pattern is used to define **named, reusable, combinable and testab
 
 > This package is **already installed** when you use the startup templates. So, most of the times you don't need to manually install it.
 
-Install the [Volo.Abp.Specifications](https://abp.io/package-detail/Volo.Abp.Specifications) package to your project. You can use the [ABP CLI](../../../cli/index.md) *add-package* command in a command line terminal when the current folder is the root folder of your project (`.csproj`):
+Install the [Volo.Abp.Specifications](https://abp.io/package-detail/Volo.Abp.Specifications) package to your project. You can use the [ABP CLI](../../../cli) *add-package* command in a command line terminal when the current folder is the root folder of your project (`.csproj`):
 
 ````bash
 abp add-package Volo.Abp.Specifications

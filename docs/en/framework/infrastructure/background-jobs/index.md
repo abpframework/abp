@@ -251,4 +251,4 @@ See pre-built job manager alternatives:
 * [Quartz Background Job Manager](./quartz.md)
 
 ## See Also
-* [Background Workers](../background-workers/index.md)
+* [Background Workers](../background-workers)

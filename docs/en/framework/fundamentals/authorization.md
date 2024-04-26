@@ -80,7 +80,7 @@ namespace Acme.BookStore.Permissions
 
 > ABP automatically discovers this class. No additional configuration required!
 
-> You typically define this class inside the `Application.Contracts` project of your [application](../../solution-templates/layered-web-application/index.md). The startup template already comes with an empty class named *YourProjectNamePermissionDefinitionProvider* that you can start with.
+> You typically define this class inside the `Application.Contracts` project of your [application](../../solution-templates/layered-web-application). The startup template already comes with an empty class named *YourProjectNamePermissionDefinitionProvider* that you can start with.
 
 In the `Define` method, you first need to add a **permission group** or get an existing group then add **permissions** to this group.
 
@@ -126,7 +126,7 @@ The localized UI will be as seen below:
 
 #### Multi-Tenancy
 
-ABP supports [multi-tenancy](../architecture/multi-tenancy/index.md) as a first class citizen. You can define multi-tenancy side option while defining a new permission. It gets one of the three values defined below:
+ABP supports [multi-tenancy](../architecture/multi-tenancy) as a first class citizen. You can define multi-tenancy side option while defining a new permission. It gets one of the three values defined below:
 
 - **Host**: The permission is available only for the host side.
 - **Tenant**: The permission is available only for the tenant side.

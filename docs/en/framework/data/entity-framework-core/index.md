@@ -10,14 +10,14 @@ This document explains how to integrate EF Core as an ORM provider to ABP based 
 abp add-package Volo.Abp.EntityFrameworkCore
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore).
 >
 
 > Note: Instead, you can directly download a [startup template](https://abp.io/Templates) with EF Core pre-installed.
 
 ### Database Management System Selection
 
-Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](../../../modules/index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
+Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](../../../modules), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
 
 > See [Switch to Another DBMS for Entity Framework Core](./other-dbms.md) document to learn how to switch the DBMS.
 
@@ -45,7 +45,7 @@ namespace MyCompany.MyProject
 
 ### About the EF Core Fluent Mapping
 
-The [application startup template](../../../solution-templates/layered-web-application/index.md) has been configured to use the [EF Core fluent configuration API](https://docs.microsoft.com/en-us/ef/core/modeling/) to map your entities to your database tables.
+The [application startup template](../../../solution-templates/layered-web-application) has been configured to use the [EF Core fluent configuration API](https://docs.microsoft.com/en-us/ef/core/modeling/) to map your entities to your database tables.
 
 You can still use the **data annotation attributes** (like `[Required]`) on the properties of your entity while the ABP documentation generally follows the **fluent mapping API** approach. It is up to you.
 
@@ -649,7 +649,7 @@ public async Task TestAsync()
 
 ## Extra Properties & Object Extension Manager
 
-Extra Properties system allows you to set/get dynamic properties to entities those implement the `IHasExtraProperties` interface. It is especially useful when you want to add custom properties to the entities defined in an [application module](../../../modules/index.md), when you use the module as package reference.
+Extra Properties system allows you to set/get dynamic properties to entities those implement the `IHasExtraProperties` interface. It is especially useful when you want to add custom properties to the entities defined in an [application module](../../../modules), when you use the module as package reference.
 
 By default, all the extra properties of an entity are stored as a single `JSON` object in the database.
 
@@ -761,7 +761,7 @@ See the "*ConfigureByConvention Method*" section above for more information.
 
 ### Controlling the Multi-Tenancy
 
-If your solution is [multi-tenant](../../architecture/multi-tenancy/index.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.
+If your solution is [multi-tenant](../../architecture/multi-tenancy), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.
 
 **Example:**
 
@@ -883,7 +883,7 @@ In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature
 
 #### Replacing with Multi-Tenancy
 
-It is also possible to replace a DbContext based on the [multi-tenancy](../../architecture/multi-tenancy/index.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
+It is also possible to replace a DbContext based on the [multi-tenancy](../../architecture/multi-tenancy) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
 
 **Example:** Replace DbContext only for tenants, using the `ReplaceDbContext` attribute
 

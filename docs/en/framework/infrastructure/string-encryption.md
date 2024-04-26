@@ -6,7 +6,7 @@ ABP Framework provides string encryption feature that allows to **Encrypt** and 
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-If installation is needed, it is suggested to use the [ABP CLI](../../cli/index.md) to install this package.
+If installation is needed, it is suggested to use the [ABP CLI](../../cli) to install this package.
 
 ### Using the ABP CLI
 

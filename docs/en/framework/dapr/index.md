@@ -28,7 +28,7 @@ In the following sections, we will see how to use these packages to use Dapr in 
 
 Use the ABP CLI to add the [Volo.Abp.Dapr](https://www.nuget.org/packages/Volo.Abp.Dapr) NuGet package to your project:
 
-* Install the [ABP CLI](../../cli/index.md) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.Dapr` package.
 * Run the `abp add-package Volo.Abp.Dapr` command.
 
@@ -107,7 +107,7 @@ ABP can [dynamically](../api-development/dynamic-csharp-clients.md) or [statical
 
 Use the ABP CLI to add the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package to your project (to the client side):
 
-* Install the [ABP CLI](../../cli/index.md) if you haven't installed before.
+* Install the [ABP CLI](../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.Http.Client.Dapr` package to.
 * Run the `abp add-package Volo.Abp.Http.Client.Dapr` command.
 
@@ -137,7 +137,7 @@ The remote service name (`Default` in this example) should match the remote serv
 
 ## Distributed Event Bus Integration
 
-[ABP's distributed event bus](../infrastructure/event-bus/distributed/index.md) system provides a convenient abstraction to allow applications to communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
+[ABP's distributed event bus](../infrastructure/event-bus/distributed) system provides a convenient abstraction to allow applications to communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
 
 ABP's [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make it possible to use the Dapr infrastructure for ABP's distributed event bus.
 
@@ -147,7 +147,7 @@ The [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Da
 
 If your application is an ASP.NET Core application and you want to send and receive events, you need to install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package as described below:
 
-* Install the [ABP CLI](../../cli/index.md) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` package to.
 * Run the `abp add-package Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` command.
 
@@ -157,7 +157,7 @@ If you want to do it manually, install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBu
 
 If your application is not an ASP.NET Core application, you can't receive events from Dapr, at least with ABP's integration packages (see [Dapr's document](https://docs.dapr.io/developing-applications/building-blocks/pubsub/howto-publish-subscribe/) if you want to receive events in a different type of application). However, you can still publish messages using the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) package. In this case, follow the steps below to install that package to your project:
 
-* Install the [ABP CLI](../../cli/index.md) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.Dapr` package to.
 * Run the `abp add-package Volo.Abp.EventBus.Dapr` command.
 
@@ -191,7 +191,7 @@ ABP provides the following endpoints to receive events from Dapr:
 
 #### The ABP Way
 
-You can follow [ABP's distributed event bus documentation](../infrastructure/event-bus/distributed/index.md) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub. ABP will automatically subscribe to Dapr for your event handler classes (that implement the `IDistributedEventHandler` interface).
+You can follow [ABP's distributed event bus documentation](../infrastructure/event-bus/distributed) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub. ABP will automatically subscribe to Dapr for your event handler classes (that implement the `IDistributedEventHandler` interface).
 
 ABP provides `api/abp/dapr/event`
 
@@ -233,7 +233,7 @@ public class MyHandler :
 }
 ````
 
-See [ABP's distributed event bus documentation](../infrastructure/event-bus/distributed/index.md) to learn the details.
+See [ABP's distributed event bus documentation](../infrastructure/event-bus/distributed) to learn the details.
 
 #### Using the Dapr API
 
@@ -299,7 +299,7 @@ ABP provides a [Distributed Locking](../infrastructure/distributed-locking.md) a
 
 Use the ABP CLI to add the [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) NuGet package to your project (to the client side):
 
-* Install the [ABP CLI](../../cli/index.md) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.DistributedLocking.Dapr` package to.
 * Run the `abp add-package Volo.Abp.DistributedLocking.Dapr` command.
 

@@ -4,7 +4,7 @@
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../../cli/index.md) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
+It is suggested to use the [ABP CLI](../../cli) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ````bash
 abp add-package Volo.Abp.MailKit

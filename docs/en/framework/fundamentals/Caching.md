@@ -6,9 +6,9 @@ ABP Framework extends the [ASP.NET Core distributed cache](https://docs.microsof
 
 ## Installation
 
-> This package is already installed by default with the [application startup template](../../solution-templates/layered-web-application/index.md). So, most of the time, you don't need to install it manually.
+> This package is already installed by default with the [application startup template](../../solution-templates/layered-web-application). So, most of the time, you don't need to install it manually.
 
-[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it a project using the add-package command of the [ABP CLI](../../cli/index.md):
+[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it a project using the add-package command of the [ABP CLI](../../cli):
 
 ```bash
 abp add-package Volo.Abp.Caching
@@ -25,7 +25,7 @@ ASP.NET Core defines the `IDistributedCache` interface to get/set the cache valu
 * It works with **byte arrays** rather than .NET objects. So, you need to **serialize/deserialize** the objects you need to cache.
 * It provides a **single key pool** for all cache items, so;
   * You need to care about the keys to distinguish **different type of objects**.
-  * You need to care about the cache items of **different tenants** in a [multi-tenant](../architecture/multi-tenancy/index.md) system.
+  * You need to care about the cache items of **different tenants** in a [multi-tenant](../architecture/multi-tenancy) system.
 
 > `IDistributedCache` is defined in the `Microsoft.Extensions.Caching.Abstractions` package. That means it is not only usable for ASP.NET Core applications, but also available to **any type of applications**.
 
@@ -39,7 +39,7 @@ ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in t
 
 * It internally **serializes/deserializes** the cached objects. Uses **JSON** serialization by default, but can be overridden by replacing the `IDistributedCacheSerializer` service in the [dependency injection](./dependency-injection.md) system.
 * It automatically adds a **cache name** prefix to the cache keys based on the object type stored in the cache. Default cache name is the full name of the cache item class (`CacheItem` postfix is removed if your cache item class ends with it). You can use the **`CacheName` attribute** on the cache item class to set the cache name.
-* It automatically adds the **current tenant id** to the cache key to distinguish cache items for different tenants (if your application is [multi-tenant](../architecture/multi-tenancy/index.md)). Define `IgnoreMultiTenancy` attribute on the cache item class to disable this if you want to share the cached objects among all tenants in a multi-tenant application.
+* It automatically adds the **current tenant id** to the cache key to distinguish cache items for different tenants (if your application is [multi-tenant](../architecture/multi-tenancy)). Define `IgnoreMultiTenancy` attribute on the cache item class to disable this if you want to share the cached objects among all tenants in a multi-tenant application.
 * Allows to define a **global cache key prefix** per application, so different applications can use their isolated key pools in a shared distributed cache server.
 * It **can tolerate errors** wherever possible and bypasses the cache. This is useful when you have temporary problems on the cache server.
 * It has methods like `GetManyAsync` and `SetManyAsync` which significantly improve the performance on **batch operations**.

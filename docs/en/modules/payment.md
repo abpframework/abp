@@ -8,7 +8,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Payment
 
 ## How to install
 
-Payment module is not installed in [the startup templates](../startup-templates/application/index.md). So, it needs to be installed manually. There are two ways of installing a module into your application.
+Payment module is not installed in [the startup templates](../startup-templates/application). So, it needs to be installed manually. There are two ways of installing a module into your application.
 
 
 ### Using ABP CLI
@@ -51,7 +51,7 @@ Follow the [instructions here](payment-custom-gateway) to create a custom paymen
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Payment module package list page](https://abp.io/packages?moduleName=Volo.Payment) to see list of packages related with this module.
 
@@ -474,7 +474,7 @@ public static void ConfigureExtraProperties()
   - `PeriodEndDate`: Represents end date of subscription. _Subscriptions may canceled but lasts until end of last period._
 
   
-> Couldn't find what you need? Check out the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
+> Couldn't find what you need? Check out the [standard distributed events](../framework/infrastructure/event-bus/distributed).
 
 ## One-Time Payments
 

@@ -1,8 +1,8 @@
 # EF Core Database Migrations
 
-This document begins by **introducing the default structure** provided by [the application startup template](../../../solution-templates/layered-web-application/index.md) and **discusses various scenarios** you may want to implement for your own application.
+This document begins by **introducing the default structure** provided by [the application startup template](../../../solution-templates/layered-web-application) and **discusses various scenarios** you may want to implement for your own application.
 
-> This document is for who want to fully understand and customize the database structure comes with [the application startup template](../../../solution-templates/layered-web-application/index.md). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](../../../tutorials/book-store/part-01.md).
+> This document is for who want to fully understand and customize the database structure comes with [the application startup template](../../../solution-templates/layered-web-application). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](../../../tutorials/book-store/part-01.md).
 
 ### Source Code
 
@@ -10,7 +10,7 @@ You can find the source code of the example project referenced by this document 
 
 ## About the EF Core Code First Migrations
 
-Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](../../../get-started/index.md) take the advantage of this system to allow you to develop your application in a standard way.
+Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](../../../get-started) take the advantage of this system to allow you to develop your application in a standard way.
 
 However, EF Core migration system is **not so good in a modular environment** where each module maintains its **own database schema** while two or more modules may **share a single database** in practical.
 
@@ -30,7 +30,7 @@ Actual solution structure may be a bit different based on your preferences, but 
 
 ### The Database Structure
 
-The startup template has some [application modules](../../../modules/index.md) pre-installed. Each layer of the solution has corresponding module **package references**. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
+The startup template has some [application modules](../../../modules) pre-installed. Each layer of the solution has corresponding module **package references**. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
 
 ![bookstore-efcore-dependencies](../../../images/bookstore-efcore-dependencies.png)
 
@@ -139,7 +139,7 @@ This `DbContext` class needs some explanations:
 
 * It defines `[ReplaceDbContext]` attributes for `IIdentityDbContext` and `ITenantManagementDbContext` those replaces Identity and Tenant Management module's `DbContext`s by your `DbContext` on runtime. This allows us to easily perform LINQ queries by joining your entities with the entities (over the repositories) coming from those modules.
 * It defines a `[ConnectionStringName]` attribute which tells ABP to always use the `Default` connection string for this `Dbcontext`.
-* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](../../data/entity-framework-core/index.md) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you.
+* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](../../data/entity-framework-core) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you.
 * It declares `DbSet` properties for entities from the replaced `DbContext`s (by implementing the corresponding interfaces). These `DbSet` properties are not shown above (for the sake of brevity), but you can find in your application's code in a `region`.
 * The constructor takes a `DbContextOptions<T>` instance.
 * It overrides the `OnModelCreating` method to define the EF Core mappings.
@@ -546,7 +546,7 @@ There are four methods to check the current side:
 * `IsTenantDatabase()`: Returns `true` if you should create tenant-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide().HasFlag(MultiTenancySides.Tenant)`.
 * `IsTenantOnlyDatabase()`: Returns `true` if you should only create tenant-related tables, but should not create host-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide() == MultiTenancySides.Tenant`.
 
-All pre-built ABP [modules](../../../modules/index.md) checks this value in their `modelBuilder.ConfigureXXX()` methods.
+All pre-built ABP [modules](../../../modules) checks this value in their `modelBuilder.ConfigureXXX()` methods.
 
 ## Conclusion
 

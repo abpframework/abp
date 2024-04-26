@@ -4,14 +4,14 @@ ABP Framework provides various services, settings and integrations for sending e
 
 * Provides `IEmailSender` service that is used to send emails.
 * Defines [settings](../fundamentals/settings.md) to configure email sending.
-* Integrates to the [background job system](./background-jobs/index.md) to send emails via background jobs.
+* Integrates to the [background job system](./background-jobs) to send emails via background jobs.
 * Provides [MailKit integration](./mail-kit.md) package.
 
 ## Installation
 
 > This package is already installed if you are using the [application startup template](../../solution-templates/layered-web-application).
 
-It is suggested to use the [ABP CLI](../../cli/index.md) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
+It is suggested to use the [ABP CLI](../../cli) to install this package. Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ````bash
 abp add-package Volo.Abp.Emailing
@@ -82,7 +82,7 @@ Most of the time you want to directly use the `IEmailSender` to make your code p
 
 Queueing emails tolerates errors since the background job system has re-try mechanism to overcome temporary network/server problems. 
 
-See the [background jobs document](./background-jobs/index.md) for more about the background job system.
+See the [background jobs document](./background-jobs) for more about the background job system.
 
 ## Email Settings
 
@@ -134,7 +134,7 @@ If you don't want to use the setting system to store the email sending configura
 
 ## Text Template Integration
 
-ABP Framework provides a strong and flexible [text templating system](./text-templating/index.md). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
+ABP Framework provides a strong and flexible [text templating system](./text-templating). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
 
 While you can define and use your own text templates, email sending system provides two simple built-in text templates.
 
@@ -237,7 +237,7 @@ If you add files to the same location in the virtual file system, your files wil
 
 Templates are inline localized, that means you can take the power of the [localization system](../fundamentals/localization.md) to make your templates multi-cultural.
 
-See the [text templating system](./text-templating/index.md) document for details.
+See the [text templating system](./text-templating) document for details.
 
 > Notice that you can define and use your own templates for your application, rather than using the standard simple templates. These standard templates are mostly for reusable modules where they don't define their own templates but rely on the built-in ones. This makes easy to customize emails sent by the used modules, by just overriding the standard email layout template.
 
@@ -245,7 +245,7 @@ See the [text templating system](./text-templating/index.md) document for detail
 
 `NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](../fundamentals/logging.md), rathen than actually sending the emails.
 
-This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](../../solution-templates/layered-web-application/index.md) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
+This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](../../solution-templates/layered-web-application) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
 
 ````csharp
 #if DEBUG

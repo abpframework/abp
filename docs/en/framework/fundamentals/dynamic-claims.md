@@ -8,7 +8,7 @@ ABP's dynamic claims feature is used to automatically and dynamically override t
 
 This feature is disabled by default. You should enable it for your application and use the Dynamic Claims middleware.
 
-> **Beginning from the v8.0, all the [startup templates](../../solution-templates/index.md) are pre-configured and the dynamic claims feature is enabled by default. So, if you have created a solution with v8.0 and above, you don't need to make any configuration. Follow the instructions only if you've upgraded from a version lower than 8.0.**
+> **Beginning from the v8.0, all the [startup templates](../../solution-templates) are pre-configured and the dynamic claims feature is enabled by default. So, if you have created a solution with v8.0 and above, you don't need to make any configuration. Follow the instructions only if you've upgraded from a version lower than 8.0.**
 
 ### Enabling the Dynamic Claims
 

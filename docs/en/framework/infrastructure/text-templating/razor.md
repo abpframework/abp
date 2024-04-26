@@ -6,7 +6,7 @@ The Razor template is a standard C# class, so you can freely use the functions o
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../../../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -16,7 +16,7 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.TextTemplating.Razor
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.TextTemplating.Razor).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.TextTemplating.Razor).
 
 ### Manual Installation
 

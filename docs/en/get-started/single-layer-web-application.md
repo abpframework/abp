@@ -104,7 +104,7 @@ You can use any IDE (e.g. Visual Studio, Visual Studio Code or Rider) to develop
 
 First of all, we can stop the application(s) in ABP Studio, so it won't conflict when we run it in Visual Studio.
 
-You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../modules/index.md), and select the *Open with* -> *Visual Studio* command:
+You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../modules), and select the *Open with* -> *Visual Studio* command:
 
 ![abp-studio-open-in-visual-studio](images/abp-studio-no-layers-open-in-visual-studio.png)
 

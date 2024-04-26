@@ -4,7 +4,7 @@ The ABP Framework provides an abstraction to work with JSON. Having such an abst
 * You can write library independent code. Therefore, you can change the underlying library with the minimum effort and code change.
 * You can use the predefined converters defined in the ABP without worrying about the underlying library's internal details.
 
-> The JSON serialization system is implemented with the [Volo.Abp.Json](https://www.nuget.org/packages/Volo.Abp.Json) NuGet package([Volo.Abp.Json.SystemTextJson](https://www.nuget.org/packages/Volo.Abp.Json.SystemTextJson) is the default implementation). Most of the time, you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Json) since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application/index.md).
+> The JSON serialization system is implemented with the [Volo.Abp.Json](https://www.nuget.org/packages/Volo.Abp.Json) NuGet package([Volo.Abp.Json.SystemTextJson](https://www.nuget.org/packages/Volo.Abp.Json.SystemTextJson) is the default implementation). Most of the time, you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Json) since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application).
 
 ## IJsonSerializer
 

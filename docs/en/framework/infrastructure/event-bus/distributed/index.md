@@ -14,7 +14,7 @@ Distributed event bus system provides an **abstraction** that can be implemented
 
 Using a local event bus as default has a few important advantages. The most important one is that: It allows you to write your code compatible to distributed architecture. You can write a monolithic application now that can be split into microservices later. It is a good practice to communicate between bounded contexts (or between application modules) via distributed events instead of local events.
 
-For example, [pre-built application modules](../../../../modules/index.md) is designed to work as a service in a distributed system while they can also work as a module in a monolithic application without depending an external message broker.
+For example, [pre-built application modules](../../../../modules) is designed to work as a service in a distributed system while they can also work as a module in a monolithic application without depending an external message broker.
 
 ## Publishing Events
 
@@ -421,9 +421,9 @@ If you don't configure outbox/inbox pattern or use the `LocalDistributedEventBus
 
 ## Outbox / Inbox for Transactional Events
 
-The **[transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)** is used to publishing distributed events within the **same transaction** that manipulates the application's database. When you enable outbox, distributed events are saved into the database inside the same transaction with your data changes, then sent to the actual message broker by a separate [background worker](../../background-workers/index.md) with a re-try system. In this way, it ensures the consistency between your database state and the published events.
+The **[transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)** is used to publishing distributed events within the **same transaction** that manipulates the application's database. When you enable outbox, distributed events are saved into the database inside the same transaction with your data changes, then sent to the actual message broker by a separate [background worker](../../background-workers) with a re-try system. In this way, it ensures the consistency between your database state and the published events.
 
-The **transactional inbox pattern**, on the other hand, saves incoming events into database first. Then (in a [background worker](../../background-workers/index.md)) executes the event handler in a transactional manner and removes the event from the inbox queue in the same transaction. It ensures that the event is only executed one time by keeping the processed messages for a while and discarding the duplicate events received from the message broker.
+The **transactional inbox pattern**, on the other hand, saves incoming events into database first. Then (in a [background worker](../../background-workers)) executes the event handler in a transactional manner and removes the event from the inbox queue in the same transaction. It ensures that the event is only executed one time by keeping the processed messages for a while and discarding the duplicate events received from the message broker.
 
 Enabling the event outbox and inbox systems require a few manual steps for your application. Please apply  the instructions in the following sections to make them running.
 
@@ -432,9 +432,9 @@ Enabling the event outbox and inbox systems require a few manual steps for your 
 ### Pre-requirements
 
 * The outbox/inbox system uses the distributed lock system to handle concurrency when you run multiple instances of your application/service. So, you should **configure the distributed lock system** with one of the providers as [explained in this document](../../distributed-locking.md).
-* The outbox/inbox system supports [Entity Framework Core](../../../data/entity-framework-core/index.md) (EF Core) and [MongoDB](../../../data/mongodb/index.md) **database providers** out of the box. So, your applications should use one of these database providers. For other database providers, see the *Implementing a Custom Database Provider* section.
+* The outbox/inbox system supports [Entity Framework Core](../../../data/entity-framework-core) (EF Core) and [MongoDB](../../../data/mongodb) **database providers** out of the box. So, your applications should use one of these database providers. For other database providers, see the *Implementing a Custom Database Provider* section.
 
-> If you are using MongoDB, be sure that you enabled multi-document database transactions  that was introduced in MongoDB version 4.0. See the *Transactions* section of the [MongoDB](../../../data/mongodb/index.md) document.
+> If you are using MongoDB, be sure that you enabled multi-document database transactions  that was introduced in MongoDB version 4.0. See the *Transactions* section of the [MongoDB](../../../data/mongodb) document.
 
 ### Enabling event outbox
 
@@ -682,7 +682,7 @@ Multiple outboxes can be needed if your application have more than one database 
 
 #### Implementing a Custom Outbox/Inbox Database Provider
 
-If your application or service is using a database provider other than [EF Core](../../../data/entity-framework-core/index.md) and [MongoDB](../../../data/mongodb/index.md), you should manually integrate outbox/inbox system with your database provider.
+If your application or service is using a database provider other than [EF Core](../../../data/entity-framework-core) and [MongoDB](../../../data/mongodb), you should manually integrate outbox/inbox system with your database provider.
 
 > Outbox and Inbox table/data must be stored in the same database with your application's data (since we want to create a single database transaction that includes application's database operations and outbox/inbox table operations). Otherwise, you should care about distributed (multi-database) transaction support which is not provided by most of the vendors and may require additional configuration.
 
@@ -707,4 +707,4 @@ Configure<AbpDistributedEventBusOptions>(options =>
 
 ## See Also
 
-* [Local Event Bus](../local/index.md)
+* [Local Event Bus](../local)

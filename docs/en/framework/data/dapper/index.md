@@ -8,7 +8,7 @@ While you can use Dapper as is in your ABP applications, there is also an integr
 
 ## Installation
 
-You can use the [ABP CLI](../../../cli/index.md) to install the [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper) package to your project. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
+You can use the [ABP CLI](../../../cli) to install the [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper) package to your project. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
 
 ````bash
 abp add-package Volo.Abp.Dapper
@@ -55,7 +55,7 @@ public class PersonDapperRepository :
 Let's examine this class:
 
 - It inherits from the `DapperRepository` class, which provides useful methods and properties for database operations. It also implements the `IUnitOfWorkEnabled` interface, so ABP makes the database connection (and transaction if requested) available in the method body by implementing dynamic proxies (a.k.a. interception).
-- It gets an `IDbContextProvider<MyAppDbContext>` object where `MyAppDbContext` is type of your Entity Framework Core `DbContext` class. It should be configured as explained in the [EF Core document](../../data/entity-framework-core/index.md). If you've created by ABP's startup template, then it should already be configured.
+- It gets an `IDbContextProvider<MyAppDbContext>` object where `MyAppDbContext` is type of your Entity Framework Core `DbContext` class. It should be configured as explained in the [EF Core document](../../data/entity-framework-core). If you've created by ABP's startup template, then it should already be configured.
 - The `GetAllPersonNamesAsync` and `UpdatePersonNamesAsync` method's been made `virtual`. That's needed to make the interception process working.
 - We've used the `GetDbConnectionAsync` and `GetDbTransactionAsync` methods to obtain the current database connection and transaction (that is managed by ABP's [Unit of Work](../../architecture/domain-driven-design/unit-of-work.md) system).
 
@@ -66,4 +66,4 @@ Then you can [inject](../../fundamentals/dependency-injection.md) `PersonDapperR
 ## See Also
 
 * [Community Article: Using Dapper with the ABP Framework](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l)
-* [Entity Framework Core integration document](../../data/entity-framework-core/index.md)
+* [Entity Framework Core integration document](../../data/entity-framework-core)

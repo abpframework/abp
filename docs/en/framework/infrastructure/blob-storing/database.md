@@ -5,15 +5,15 @@ BLOB Storing Database Storage Provider can store BLOBs in a relational or non-re
 There are two database providers implemented;
 
 * [Volo.Abp.BlobStoring.Database.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Database.EntityFrameworkCore) package implements for [EF Core](Entity-Framework-Core.md), so it can store BLOBs in [any DBMS supported](https://docs.microsoft.com/en-us/ef/core/providers/) by the EF Core.
-* [Volo.Abp.BlobStoring.Database.MongoDB](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Database.MongoDB) package implements for [MongoDB](../../data/mongodb/index.md).
+* [Volo.Abp.BlobStoring.Database.MongoDB](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Database.MongoDB) package implements for [MongoDB](../../data/mongodb).
 
-> Read the [BLOB Storing document](./index.md) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a database as the storage provider.
+> Read the [BLOB Storing document](.../blob-storing) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a database as the storage provider.
 
 ## Installation
 
 ### Automatic Installation
 
-If you've created your solution based on the [application startup template](Startup-Templates/Application.md), you can use the `abp add-module` [CLI](../../../cli/index.md) command to automatically add related packages to your solution.
+If you've created your solution based on the [application startup template](Startup-Templates/Application.md), you can use the `abp add-module` [CLI](../../../cli) command to automatically add related packages to your solution.
 
 Open a command prompt (terminal) in the folder containing your solution (`.sln`) file and run the following command:
 
@@ -57,7 +57,7 @@ If you want to use a separate database for BLOB storage, use the `AbpBlobStoring
 
 If you are using only the database storage provider, you don't need to manually configure it, since it is automatically done. If you are using multiple storage providers, you may want to configure it.
 
-Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](../blob-storing/index.md).
+Configuration is done in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class, as explained in the [BLOB Storing document](../blob-storing).
 
 **Example: Configure to use the database storage provider by default**
 
@@ -71,11 +71,11 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
-> See the [BLOB Storing document](../blob-storing/index.md) to learn how to configure this provider for a specific container.
+> See the [BLOB Storing document](../blob-storing) to learn how to configure this provider for a specific container.
 
 ## Additional Information
 
-It is expected to use the [BLOB Storing services](../blob-storing/index.md) to use the BLOB storing system. However, if you want to work on the database tables/entities, you can use the following information.
+It is expected to use the [BLOB Storing services](../blob-storing) to use the BLOB storing system. However, if you want to work on the database tables/entities, you can use the following information.
 
 ### Entities
 

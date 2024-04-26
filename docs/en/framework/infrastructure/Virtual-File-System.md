@@ -4,13 +4,13 @@ The Virtual File System makes it possible to manage files that do not physically
 
 ## Installation
 
-> Most of the times you don't need to manually install this package since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application/index.md).
+> Most of the times you don't need to manually install this package since it comes pre-installed with the [application startup template](../../solution-templates/layered-web-application).
 
 [Volo.Abp.VirtualFileSystem](https://www.nuget.org/packages/Volo.Abp.VirtualFileSystem) is the main package of the Virtual File System.
 
 Use the ABP CLI to add this package to your project:
 
-* Install the [ABP CLI](../../cli/index.md), if you haven't installed it.
+* Install the [ABP CLI](../../cli), if you haven't installed it.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.VirtualFileSystem` package.
 * Run `abp add-package Volo.Abp.VirtualFileSystem` command.
 
@@ -167,7 +167,7 @@ public class MyWebAppModule : AbpModule
 
 The code above assumes that `MyWebAppModule` and `MyModule` are two different projects in a Visual Studio solution and `MyWebAppModule` depends on the `MyModule`.
 
-> The [application startup template](../../solution-templates/layered-web-application/index.md) already uses this technique for the localization files. So, when you change a localization file it automatically detects the change.
+> The [application startup template](../../solution-templates/layered-web-application) already uses this technique for the localization files. So, when you change a localization file it automatically detects the change.
 
 ## Replacing/Overriding Virtual Files
 

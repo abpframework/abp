@@ -72,9 +72,9 @@ public class MySmsSender : ISmsSender, ITransientDependency
 
 ## BLOB Provider
 
-If you use ABP's [BLOB Storing](../framework/infrastructure/blob-storing/index.md) infrastructure, you should care about the BLOB provider in your production environment. For example, if you use the [File System](../framework/infrastructure/blob-storing/file-system.md) provider and your application is running in a Docker container, you should configure a volume mapping for the BLOB storage path. Otherwise, your data will be lost when the container is restarted. Also, the File System is not a good provider for production if you have a [clustered deployment](./clustered-environment.md) or a microservice system.
+If you use ABP's [BLOB Storing](../framework/infrastructure/blob-storing) infrastructure, you should care about the BLOB provider in your production environment. For example, if you use the [File System](../framework/infrastructure/blob-storing/file-system.md) provider and your application is running in a Docker container, you should configure a volume mapping for the BLOB storage path. Otherwise, your data will be lost when the container is restarted. Also, the File System is not a good provider for production if you have a [clustered deployment](./clustered-environment.md) or a microservice system.
 
-Check the [BLOB Storing](../framework/infrastructure/blob-storing/index.md) document to see all the available BLOB storage providers.
+Check the [BLOB Storing](../framework/infrastructure/blob-storing) document to see all the available BLOB storage providers.
 
 > **Warning**: Even if you don't directly use the BLOB Storage system, a module you are depending on may use it. For example, ABP Commercial's [File Management](../modules/file-management.md) module stores file contents, and the [Account](../modules/account.md) module stores user profile pictures in the BLOB Storage system. So, be careful with the BLOB Storing configuration in production. Note that ABP Commercial uses the [Database Provider](../framework/infrastructure/blob-storing/database.md) as a pre-configured BLOB storage provider, which works in production without any problem, but you may still want to use another provider.
 

@@ -13,11 +13,11 @@ See [the module description page](https://commercial.abp.io/modules/Volo.AuditLo
 
 ## How to install
 
-Identity is pre-installed in [the startup templates](../solution-templates/index.md). So, no need to manually install it.
+Identity is pre-installed in [the startup templates](../solution-templates). So, no need to manually install it.
 
 ### Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Audit Logging module package list page](https://abp.io/packages?moduleName=Volo.AuditLogging.Ui) to see list of packages related with this module.
 
@@ -247,4 +247,4 @@ The Audit Logging module remote URL configuration shown above is optional. If yo
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed).

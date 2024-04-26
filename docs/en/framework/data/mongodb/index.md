@@ -4,13 +4,13 @@ This document explains how to integrate MongoDB as a database provider to ABP ba
 
 ## Installation
 
-`Volo.Abp.MongoDB` is the main NuGet package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer), You can use the [ABP CLI](../../../cli/index.md) to install it to your project. Execute the following command in the folder of the .csproj file of the layer:
+`Volo.Abp.MongoDB` is the main NuGet package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer), You can use the [ABP CLI](../../../cli) to install it to your project. Execute the following command in the folder of the .csproj file of the layer:
 
 ```
 abp add-package Volo.Abp.MongoDB
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.MongoDB).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.MongoDB).
 
 Then add `AbpMongoDbModule` module dependency to your [module](../../architecture/modularity/basics.md):
 
@@ -309,7 +309,7 @@ public class BookService
 
 ### Transactions
 
-MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](../../../solution-templates/index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](../../../solution-templates) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
@@ -324,7 +324,7 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 
 ### Controlling the Multi-Tenancy
 
-If your solution is [multi-tenant](../../architecture/multi-tenancy/index.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.
+If your solution is [multi-tenant](../../architecture/multi-tenancy), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.
 
 **Example:**
 
@@ -447,7 +447,7 @@ In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. Th
 
 #### Replacing with Multi-Tenancy
 
-It is also possible to replace a DbContext based on the [multi-tenancy](../../architecture/multi-tenancy/index.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
+It is also possible to replace a DbContext based on the [multi-tenancy](../../architecture/multi-tenancy) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
 
 **Example:** Replace DbContext only for tenants, using the `ReplaceDbContext` attribute
 

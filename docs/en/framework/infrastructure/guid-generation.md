@@ -1,6 +1,6 @@
 # GUID Generation
 
-GUID is a common **primary key type** that is used in database management systems. ABP Framework prefers GUID as the primary for pre-built [application modules](../../modules/index.md). Also, `ICurrentUser.Id` property ([see](./current-user.md)) is type of GUID, that means the ABP Framework assumes that the User Id is always GUID.
+GUID is a common **primary key type** that is used in database management systems. ABP Framework prefers GUID as the primary for pre-built [application modules](../../modules). Also, `ICurrentUser.Id` property ([see](./current-user.md)) is type of GUID, that means the ABP Framework assumes that the User Id is always GUID.
 
 ## Why Prefer GUID?
 
@@ -95,7 +95,7 @@ This service injects the `IGuidGenerator` in the constructor. If your class is a
 
 Database providers behaves differently while processing GUIDs, so you should set it based on your database provider. `SequentialGuidType` has the following `enum` members:
 
-* `SequentialAtEnd` (**default**) works well with the [SQL Server](../data/entity-framework-core/index.md).
+* `SequentialAtEnd` (**default**) works well with the [SQL Server](../data/entity-framework-core).
 * `SequentialAsString` is used by [MySQL](../data/entity-framework-core/mysql.md) and [PostgreSQL](../data/entity-framework-core/postgresql.md).
 * `SequentialAsBinary` is used by [Oracle](../data/entity-framework-core/oracle.md).
 

@@ -18,13 +18,13 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 
-You can use the [ABP CLI](../cli/index.md) to install the Volo.Abp.AspNetCore.Mvc package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
+You can use the [ABP CLI](../cli) to install the Volo.Abp.AspNetCore.Mvc package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ````bash
 abp add-package Volo.Abp.AspNetCore.Mvc
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc).
+> If you haven't done it yet, you first need to install the [ABP CLI](../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc).
 
 ## Create the First ABP Module
 

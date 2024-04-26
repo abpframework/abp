@@ -6,7 +6,7 @@ This module is based on [Microsoft's Identity library](https://docs.microsoft.co
 
 ## How to Install
 
-This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
+This module comes as pre-installed (as NuGet/NPM packages). You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli) command) to develop your custom module.
 
 ### The Source Code
 
@@ -44,7 +44,7 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 
 ## OpenIddict Integration
 
-[Volo.Abp.Account.Web.OpenIddict](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) package provides integration for the [OpenIddict](https://github.com/openiddict). This package comes as installed with the [application startup template](../solution-templates/layered-web-application/index.md). See the [OpenIddict Module](./openiddict.md) documentation.
+[Volo.Abp.Account.Web.OpenIddict](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) package provides integration for the [OpenIddict](https://github.com/openiddict). This package comes as installed with the [application startup template](../solution-templates/layered-web-application). See the [OpenIddict Module](./openiddict.md) documentation.
 
 ## IdentityServer Integration
 

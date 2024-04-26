@@ -8,7 +8,7 @@ Repositories, in practice, are used to perform database operations for domain ob
 
 ABP can provide a **default generic repository** for each aggregate root or entity. You can [inject](../../fundamentals/dependency-injection.md) `IRepository<TEntity, TKey>` into your service and perform standard **CRUD** operations.
 
-> The database provider layer should be properly configured to be able to use the default generic repositories. It is **already done** if you've created your project using the startup templates. If not, refer to the database provider documents ([EF Core](../../data/entity-framework-core/index.md) / [MongoDB](../../data/mongodb/index.md)) to configure it.
+> The database provider layer should be properly configured to be able to use the default generic repositories. It is **already done** if you've created your project using the startup templates. If not, refer to the database provider documents ([EF Core](../../data/entity-framework-core) / [MongoDB](../../data/mongodb)) to configure it.
 
 **Example usage of a default generic repository:**
 
@@ -182,7 +182,7 @@ ABP provides repository extension methods and attributes that can be used to con
 
 Disabling change tracking can gain performance if you query many entities from the database for read-only purposes. Querying single or a few entities won't make much performance difference, but you are free to use it whenever you like.
 
-> If the underlying database provider doesn't support change tracking, then this system won't have any effect. [Entity Framework Core](../../data/entity-framework-core/index.md) supports change tracking, for example, while the [MongoDB](../../data/mongodb/index.md) provider doesn't support it.
+> If the underlying database provider doesn't support change tracking, then this system won't have any effect. [Entity Framework Core](../../data/entity-framework-core) supports change tracking, for example, while the [MongoDB](../../data/mongodb) provider doesn't support it.
 
 #### Repository Extension Methods for Change Tracking
 
@@ -344,7 +344,7 @@ public class PersonRepository : EfCoreRepository<MyDbContext, Person, Guid>, IPe
 
 You can directly access the data access provider (`DbContext` in this case) to perform operations.
 
-> See [EF Core](../../data/entity-framework-core/index.md) or [MongoDb](../../data/mongodb/index.md) document for more info about the custom repositories.
+> See [EF Core](../../data/entity-framework-core) or [MongoDb](../../data/mongodb) document for more info about the custom repositories.
 
 ## IQueryable & Async Operations
 
@@ -363,7 +363,7 @@ var people = queryable
 
 You normally want to use `.ToListAsync()`, `.CountAsync()`... instead, to be able to write a **truly async code**.
 
-However, you see that you can't use all the async extension methods in your application or domain layer when you create a new project using the standard [application startup template](../../../solution-templates/layered-web-application/index.md), because;
+However, you see that you can't use all the async extension methods in your application or domain layer when you create a new project using the standard [application startup template](../../../solution-templates/layered-web-application), because;
 
 * These async methods **are not standard LINQ methods** and they are defined in the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package.
 * The standard template **doesn't have a reference** to the EF Core package from the domain and application layers, to be independent from the database provider.
@@ -395,7 +395,7 @@ This method is suggested;
 
 #### MongoDB Case
 
-If you are using [MongoDB](../../data/mongodb/index.md), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IMongoQueryable<T>`. You need to cast the query to `IMongoQueryable<T>` first to be able to use the async extension methods.
+If you are using [MongoDB](../../data/mongodb), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IMongoQueryable<T>`. You need to cast the query to `IMongoQueryable<T>` first to be able to use the async extension methods.
 
 **Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
 
@@ -499,12 +499,12 @@ For example, ABP Framework uses the `IAsyncQueryableExecuter` in the `CrudAppSer
 
 ### Option-4: Custom Repository Methods
 
-You can always create custom repository methods and use the database provider-specific APIs, like async extension methods here. See [EF Core](../../data/entity-framework-core/index.md) or [MongoDb](../../data/mongodb/index.md) document for more info about the custom repositories.
+You can always create custom repository methods and use the database provider-specific APIs, like async extension methods here. See [EF Core](../../data/entity-framework-core) or [MongoDb](../../data/mongodb) document for more info about the custom repositories.
 
 This method is suggested;
 
 * If you want to **completely isolate** your domain & application layers from the database provider.
-* If you develop a **reusable [application module](../../../modules/index.md)** and don't want to force to a specific database provider, which should be done as a [best practice](../best-practices/index.md).
+* If you develop a **reusable [application module](../../../modules)** and don't want to force to a specific database provider, which should be done as a [best practice](../best-practices).
 
 ## See Also
 

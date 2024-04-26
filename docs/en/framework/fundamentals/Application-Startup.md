@@ -1,8 +1,8 @@
 ## ABP Application Startup
 
-You typically use the [ABP CLI](../../cli/index.md)'s `abp new` command to [get started](../../get-started/layered-web-application.md) with one of the pre-built [startup solution templates](../../solution-templates/index.md). When you do that, you generally don't need to know the details of how the ABP Framework is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](../../modules/index.md) are pre-installed and configured for you.
+You typically use the [ABP CLI](../../cli)'s `abp new` command to [get started](../../get-started/layered-web-application.md) with one of the pre-built [startup solution templates](../../solution-templates). When you do that, you generally don't need to know the details of how the ABP Framework is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](../../modules) are pre-installed and configured for you.
 
-> It is always suggested to [get started with a startup template](../../get-started/index.md) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP Framework starts.
+> It is always suggested to [get started with a startup template](../../get-started) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP Framework starts.
 
 While the ABP Framework has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NPM packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](../../get-started/empty-aspnet-core-application.md) document, you'll see how easy it is to install the ABP Framework into an empty ASP.NET Core project from scratch. You only need to install a single NuGet package and make a few small changes.
 
@@ -24,7 +24,7 @@ The first step is to install the [Volo.Abp.Core](https://www.nuget.org/packages/
 abp add-package Volo.Abp.Core
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
 Alternatively, you can use a command-line terminal in the root folder of the project (the folder containing the `MyConsoleDemo.csproj` file, for this example):
 
@@ -116,7 +116,7 @@ await application.ShutdownAsync();
 
 That's all. Install an ABP NuGet package, add the module dependency (using the `[DependsOn]` attribute) and use any service inside the NuGet package.
 
-The [ABP CLI](../../cli/index.md) already has a special command to perform the addition of an ABP NuGet and also adding the `[DependsOn]` attribute to your module class for you with a single command:
+The [ABP CLI](../../cli) already has a special command to perform the addition of an ABP NuGet and also adding the `[DependsOn]` attribute to your module class for you with a single command:
 
 ````bash
 abp add-package Volo.Abp.Emailing

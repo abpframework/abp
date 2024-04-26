@@ -6,7 +6,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Abp.Sms
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../cli) to install this package.
 
 Open a command line window in the folder of the project (.csproj file) and type the following command:
 
@@ -18,7 +18,7 @@ You can also check detailed installation guide [here](https://abp.io/package-det
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and depends on the below NuGet packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and depends on the below NuGet packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit [Twilio SMS module package list page](https://abp.io/packages?moduleName=Volo.Abp.Sms.Twilio) to see list of packages related with this module.
 

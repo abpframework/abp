@@ -6,7 +6,7 @@ IdentityServer module provides a full integration with the [IdentityServer4](htt
 
 ## How to Install
 
-You don't need this module when you are using OpenIddict module. However, if you want to keep using IdentityServer4 for your applications, you can install this module and remove the OpenIddict module. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli/index.md) command) to develop your custom module.
+You don't need this module when you are using OpenIddict module. However, if you want to keep using IdentityServer4 for your applications, you can install this module and remove the OpenIddict module. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli) command) to develop your custom module.
 
 ### The Source Code
 

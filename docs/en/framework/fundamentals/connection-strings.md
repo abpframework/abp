@@ -1,8 +1,8 @@
 # Connection Strings
 
-> Connection string system is especially needed when you want to create or use a modular system. If you have a monolithic application with a single database, you can go with the [ABP startup solution template](../../solution-templates/layered-web-application/index.md), which is properly configured for you.
+> Connection string system is especially needed when you want to create or use a modular system. If you have a monolithic application with a single database, you can go with the [ABP startup solution template](../../solution-templates/layered-web-application), which is properly configured for you.
 
-ABP Framework is designed to be [modular](../architecture/modularity/basics.md) and [multi-tenancy](../architecture/multi-tenancy/index.md) aware. Connection string management is also designed to support these scenarios;
+ABP Framework is designed to be [modular](../architecture/modularity/basics.md) and [multi-tenancy](../architecture/multi-tenancy) aware. Connection string management is also designed to support these scenarios;
 
 * Allows to set separate connection strings for every module, so every module can have its own physical database. Modules even might be configured to use different database providers.
 * Allows to set separate connection string and use a separate database per tenant (in a SaaS application).
@@ -13,7 +13,7 @@ It also supports hybrid scenarios;
 * Allows to group tenants into databases, just like the modules.
 * Allows to separate databases per tenant per module (which might be hard to maintain for you because of too many databases, but the ABP framework supports it).
 
-All the [pre-built application modules](../../modules/index.md) are designed to be compatible these scenarios.
+All the [pre-built application modules](../../modules) are designed to be compatible these scenarios.
 
 ## Configure the Connection Strings
 
@@ -31,11 +31,11 @@ See the following configuration:
 
 This configuration defines three different connection strings:
 
-* `MyMainDb` (the `Default` connection string) is the main connection string of the application. If you don't specify a connection string for a module, it fallbacks to the `Default` connection string. The [application startup template](../../solution-templates/layered-web-application/index.md) is configured to use a single connection string, so all the modules uses a single, shared database.
+* `MyMainDb` (the `Default` connection string) is the main connection string of the application. If you don't specify a connection string for a module, it fallbacks to the `Default` connection string. The [application startup template](../../solution-templates/layered-web-application) is configured to use a single connection string, so all the modules uses a single, shared database.
 * `MyIdsDb` (the `AbpIdentityServer` connection string) is used by the [IdentityServer](../../modules/identity.md) module.
 * `MyPermissionDb` (the `AbpPermissionManagement` connection string) is used by the [Permission Management](../../modules/permission-management.md) module.
 
-[Pre-built application modules](../../modules/index.md) define constants for the connection string names. For example, the [IdentityServer module](../../modules/identity-server.md) defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
+[Pre-built application modules](../../modules) define constants for the connection string names. For example, the [IdentityServer module](../../modules/identity-server.md) defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
 
 ### AbpDbConnectionOptions
 
@@ -114,7 +114,7 @@ public class IdentityServerDbContext
 }
 ````
 
-For [Entity Framework Core](../data/entity-framework-core/index.md) and [MongoDB](../data/mongodb/index.md), write this to your `DbContext` class (and the interface if it has). In this way, ABP uses the specified connection string for the related `DbContext` instances.
+For [Entity Framework Core](../data/entity-framework-core) and [MongoDB](../data/mongodb), write this to your `DbContext` class (and the interface if it has). In this way, ABP uses the specified connection string for the related `DbContext` instances.
 
 ## Database Migrations for the Entity Framework Core
 
@@ -126,7 +126,7 @@ Once you want to separate a module's database, you typically will need to create
 
 ## Multi-Tenancy
 
-See [the multi-tenancy document](../architecture/multi-tenancy/index.md) to learn how to use separate databases for tenants.
+See [the multi-tenancy document](../architecture/multi-tenancy) to learn how to use separate databases for tenants.
 
 ## Replace the Connection String Resolver
 

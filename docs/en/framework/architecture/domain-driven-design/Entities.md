@@ -108,7 +108,7 @@ public class UserRole : Entity
 
 For the example above, the composite key is composed of `UserId` and `RoleId`. For a relational database, it is the composite primary key of the related table. Entities with composite keys should implement the `GetKeys()` method as shown above.
 
-> Notice that you also need to define keys of the entity in your **object-relational mapping** (ORM) configuration. See the [Entity Framework Core](../../data/entity-framework-core/index.md) integration document for example.
+> Notice that you also need to define keys of the entity in your **object-relational mapping** (ORM) configuration. See the [Entity Framework Core](../../data/entity-framework-core) integration document for example.
 
 > Also note that Entities with Composite Primary Keys cannot utilize the `IRepository<TEntity, TKey>` interface since it requires a single Id property.  However, you can always use `IRepository<TEntity>`. See [repositories documentation](./repositories.md) for more.
 
@@ -136,7 +136,7 @@ if (book1.EntityEquals(book2)) //Check equality
 
 > Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See the [repositories documentation](./repositories.md) for more. 
 
-ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement the [Domain Driven Design](./index.md) and want to create aggregate root classes, there are some best practices you may want to consider:
+ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement the [Domain Driven Design](../domain-driven-design) and want to create aggregate root classes, there are some best practices you may want to consider:
 
 * An aggregate root is responsible for preserving its own integrity. This is also true for all entities, but the aggregate root has responsibility for its sub-entities too. So, the aggregate root must always be in a valid state.
 * An aggregate root can be referenced by its `Id`. Do not reference it by its navigation property.
@@ -417,10 +417,10 @@ So, you can directly use the `ExtraProperties` property to use  the dictionary A
 
 The way to store this dictionary in the database depends on the database provider you're using.
 
-* For [Entity Framework Core](../../data/entity-framework-core/index.md), here are two type of configurations;
+* For [Entity Framework Core](../../data/entity-framework-core), here are two type of configurations;
   * By default, it is stored in a single `ExtraProperties` field as a `JSON` string (that means all extra properties stored in a single database table field). Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP Framework using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
-  * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](../../../modules/index.md) and want to [extend its entities](../modularity/extending/customizing-application-modules-extending-entities.md). See the [EF Core integration document](../../data/entity-framework-core/index.md) to learn how to use the `ObjectExtensionManager`.
-* For [MongoDB](../../data/mongodb/index.md), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
+  * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](../../../modules) and want to [extend its entities](../modularity/extending/customizing-application-modules-extending-entities.md). See the [EF Core integration document](../../data/entity-framework-core) to learn how to use the `ObjectExtensionManager`.
+* For [MongoDB](../../data/mongodb), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
 
 ### Discussion for the Extra Properties
 

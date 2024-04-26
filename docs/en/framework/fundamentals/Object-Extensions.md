@@ -1,6 +1,6 @@
 # Object Extensions
 
-ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](../../modules/index.md), especially when you want to [extend entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) and [DTOs](../architecture/modularity/extending/customizing-application-modules-overriding-services.md) defined by the module.
+ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](../../modules), especially when you want to [extend entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) and [DTOs](../architecture/modularity/extending/customizing-application-modules-overriding-services.md) defined by the module.
 
 > Object extension system normally is not needed for your own objects since you can easily add regular properties to your own classes.
 
@@ -112,9 +112,9 @@ While you can set arbitrary properties to an extensible object (which implements
 Explicitly defining an extra property has some use cases:
 
 * Allows to control how the extra property is handled on object to object mapping (see the section below).
-* Allows to define metadata for the property. For example, you can map an extra property to a table field in the database while using the [EF Core](../data/entity-framework-core/index.md).
+* Allows to define metadata for the property. For example, you can map an extra property to a table field in the database while using the [EF Core](../data/entity-framework-core).
 
-> `ObjectExtensionManager` implements the singleton pattern (`ObjectExtensionManager.Instance`) and you should define object extensions before your application startup. The [application startup template](../../solution-templates/layered-web-application/index.md) has some pre-defined static classes to safely define object extensions inside.
+> `ObjectExtensionManager` implements the singleton pattern (`ObjectExtensionManager.Instance`) and you should define object extensions before your application startup. The [application startup template](../../solution-templates/layered-web-application) has some pre-defined static classes to safely define object extensions inside.
 
 ### AddOrUpdate
 
@@ -409,7 +409,7 @@ ObjectExtensionManager.Instance
     );
 ````
 
-See the [Entity Framework Core Integration document](../data/entity-framework-core/index.md) for more.
+See the [Entity Framework Core Integration document](../data/entity-framework-core) for more.
 
 ## See Also
 

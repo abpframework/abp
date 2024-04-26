@@ -5,7 +5,7 @@ ABP Framework provides services to compress and resize images and implements the
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli) or manually installing it. Using the [ABP CLI](../../cli) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -223,7 +223,7 @@ public enum ImageProcessState : byte
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli) or manually installing it. Using the [ABP CLI](../../cli) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -267,7 +267,7 @@ public class MyModule : AbpModule
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli) or manually installing it. Using the [ABP CLI](../../cli) is the recommended approach.
 
 ### Using the ABP CLI
 
@@ -333,7 +333,7 @@ Configure<ImageSharpCompressOptions>(options =>
 
 ## Installation
 
-You can add this package to your application by either using the [ABP CLI](../../cli/index.md) or manually installing it. Using the [ABP CLI](../../cli/index.md) is the recommended approach.
+You can add this package to your application by either using the [ABP CLI](../../cli) or manually installing it. Using the [ABP CLI](../../cli) is the recommended approach.
 
 ### Using the ABP CLI
 

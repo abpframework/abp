@@ -18,7 +18,7 @@ The form module doesn't come pre-installed. You need to install it manually. The
 
 ## Packages
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 You can visit the [forms module package list page](https://abp.io/packages?moduleName=Volo.Forms) to see list of packages related with this module.
 
@@ -147,4 +147,4 @@ Forms module support Blazor-Server. Blazor-Server uses Razor pages and it's almo
 
 ## Distributed Events
 
-This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed/index.md).
+This module doesn't define any additional distributed event. See the [standard distributed events](../framework/infrastructure/event-bus/distributed).

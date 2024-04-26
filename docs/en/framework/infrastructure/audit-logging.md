@@ -12,16 +12,16 @@ An **audit log object** (see the Audit Log Object section below) is typically cr
 * **Exception** information (if there was an error while executing the request).
 * **Request duration** (to measure the performance of the application).
 
-> [Startup templates](../../solution-templates/index.md) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
+> [Startup templates](../../solution-templates) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
 
 ### Database Provider Support
 
-* Fully supported by the [Entity Framework Core](../data/entity-framework-core/index.md) provider.
-* Entity change logging is not supported by the [MongoDB](../data/mongodb/index.md) provider. Other features work as expected.
+* Fully supported by the [Entity Framework Core](../data/entity-framework-core) provider.
+* Entity change logging is not supported by the [MongoDB](../data/mongodb) provider. Other features work as expected.
 
 ## UseAuditing()
 
-`UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](../../solution-templates/index.md), it is already added.
+`UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](../../solution-templates), it is already added.
 
 ## AbpAuditingOptions
 
@@ -218,7 +218,7 @@ public class MyUser : Entity<Guid>
 
 `SimpleLogAuditingStore` is used if no audit store was registered. It simply writes the audit object to the standard [logging system](../fundamentals/logging.md).
 
-[The Audit Logging Module](../../modules/audit-logging.md) has been configured in [the startup templates](../../solution-templates/index.md) saves audit log objects to a database (it supports multiple database providers). So, most of the times you don't care about how `IAuditingStore` was implemented and used.
+[The Audit Logging Module](../../modules/audit-logging.md) has been configured in [the startup templates](../../solution-templates) saves audit log objects to a database (it supports multiple database providers). So, most of the times you don't care about how `IAuditingStore` was implemented and used.
 
 ## Audit Log Object
 

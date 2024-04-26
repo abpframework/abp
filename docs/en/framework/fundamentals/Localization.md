@@ -6,13 +6,13 @@ ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-You can use the [ABP CLI](../../cli/index.md) to install the Volo.Abp.Localization package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
+You can use the [ABP CLI](../../cli) to install the Volo.Abp.Localization package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ```bash
 abp add-package Volo.Abp.Localization
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Localization).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Localization).
 
 Then you can add **AbpLocalizationModule** dependency to your module:
 
@@ -102,7 +102,7 @@ Configure<AbpLocalizationOptions>(options =>
 });
 ````
 
-> The [application startup template](../../solution-templates/layered-web-application/index.md) sets `DefaultResourceType` to the localization resource of the application.
+> The [application startup template](../../solution-templates/layered-web-application) sets `DefaultResourceType` to the localization resource of the application.
 
 ### Short Localization Resource Name
 
@@ -229,7 +229,7 @@ namespace MyProject
 
 When you set the `LocalizationResource` in the constructor, the `ApplicationService` class uses that resource type when you use the `L` property, just like in the `DoIt()` method.
 
-Setting `LocalizationResource` in every application service can be tedious. You can create an abstract base application service class, set it there and derive your application services from that base class. This is already implemented when you create a new project with the [startup templates](../../solution-templates/layered-web-application/index.md). So, you can simply inherit from the base class directly use the `L` property:
+Setting `LocalizationResource` in every application service can be tedious. You can create an abstract base application service class, set it there and derive your application services from that base class. This is already implemented when you create a new project with the [startup templates](../../solution-templates/layered-web-application). So, you can simply inherit from the base class directly use the `L` property:
 
 ```csharp
 using System.Threading.Tasks;

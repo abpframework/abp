@@ -1,6 +1,6 @@
 # CMS Kit Pro Module
 
-This module extends the [open-source CMS Kit module](../cms-kit/index.md) and adds additional CMS (Content Management System) capabilities to your application.
+This module extends the [open-source CMS Kit module](../cms-kit) and adds additional CMS (Content Management System) capabilities to your application.
 
 > **This module is currently available for MVC / Razor Pages and Blazor UIs**.
 
@@ -30,7 +30,7 @@ Click on a feature to understand and learn how to use it. See [the module descri
 
 ### New Solutions
 
-CMS Kit Pro is pre-installed in [the startup templates](../../solution-templates/index.md) if you create the solution with the **public website** option. If you are using ABP CLI, you should specify the the `--with-public-website` option as shown below:
+CMS Kit Pro is pre-installed in [the startup templates](../../solution-templates) if you create the solution with the **public website** option. If you are using ABP CLI, you should specify the the `--with-public-website` option as shown below:
 
 ```bash
 abp new Acme.BookStore --with-public-website

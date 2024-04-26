@@ -4,13 +4,13 @@ RabbitMQ is an industry standard message broker. While it is typically used for 
 
 ABP Framework provides the [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to use the RabbitMQ for background job execution.
 
-> See the [background jobs document](./index.md) to learn how to use the background job system. This document only shows how to install and configure the RabbitMQ integration.
+> See the [background jobs document](../background-jobs) to learn how to use the background job system. This document only shows how to install and configure the RabbitMQ integration.
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BackgroundJobs.RabbitMQ` package.
 * Run `abp add-package Volo.Abp.BackgroundJobs.RabbitMQ` command.
 
@@ -156,4 +156,4 @@ See the RabbitMQ documentation if you want to understand the `durable`, `exclusi
 
 ## See Also
 
-* [Background Jobs](./index.md)
+* [Background Jobs](.)

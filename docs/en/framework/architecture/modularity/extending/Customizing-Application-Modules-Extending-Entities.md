@@ -53,7 +53,7 @@ ObjectExtensionManager.Instance
 * You provide the `IdentityUser` as the entity name, `string` as the type of the new property, `SocialSecurityNumber` as the property name (also, the field name in the database table).
 * You also need to provide an action that defines the database mapping properties using the [EF Core Fluent API](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties).
 
-> This code part must be executed before the related `DbContext` used. The [application startup template](../../../../solution-templates/layered-web-application/index.md) defines a static class named `YourProjectNameEfCoreEntityExtensionMappings`. You can define your extensions in this class to ensure that it is executed in the proper time. Otherwise, you should handle it yourself.
+> This code part must be executed before the related `DbContext` used. The [application startup template](../../../../solution-templates/layered-web-application) defines a static class named `YourProjectNameEfCoreEntityExtensionMappings`. You can define your extensions in this class to ensure that it is executed in the proper time. Otherwise, you should handle it yourself.
 
 Once you define an entity extension, you then need to use the standard [Add-Migration](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#add-migration) and [Update-Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#update-database) commands of the EF Core to create a code first migration class and update your database.
 
@@ -74,14 +74,14 @@ If you want to **loose couple** your entity with the entity defined by the modul
 
 In this case, you need to deal with the **synchronization problems**, especially if you want to **duplicate** some properties/fields of the related entity. There are a few solutions;
 
-* If you are building a **monolithic** application (or managing your entity and the related module entity within the same process), you can use the [local event bus](../../../infrastructure/event-bus/local/index.md) to listen changes.
-* If you are building a **distributed** system where the module entity is managed (created/updated/deleted) on a different process/service than your entity is managed, then you can subscribe to the [distributed event bus](../../../infrastructure/event-bus/distributed/index.md) for change events.
+* If you are building a **monolithic** application (or managing your entity and the related module entity within the same process), you can use the [local event bus](../../../infrastructure/event-bus/local) to listen changes.
+* If you are building a **distributed** system where the module entity is managed (created/updated/deleted) on a different process/service than your entity is managed, then you can subscribe to the [distributed event bus](../../../infrastructure/event-bus/distributed) for change events.
 
 Once you handle the event, you can update your own entity in your own database.
 
 ### Subscribing to Local Events
 
-[Local Event Bus](../../../infrastructure/event-bus/local/index.md) system is a way to publish and subscribe to events occurring in the same application.
+[Local Event Bus](../../../infrastructure/event-bus/local) system is a way to publish and subscribe to events occurring in the same application.
 
 Assume that you want to get informed when a `IdentityUser` entity changes (created, updated or deleted). You can create a class that implements the `ILocalEventHandler<EntityChangedEventData<IdentityUser>>` interface.
 
@@ -107,7 +107,7 @@ public class MyLocalIdentityUserChangeEventHandler :
 
 ### Subscribing to Distributed Events
 
-[Distributed Event Bus](../../../infrastructure/event-bus/distributed/index.md) system is a way to publish an event in one application and receive the event in the same or different application running on the same or different server.
+[Distributed Event Bus](../../../infrastructure/event-bus/distributed) system is a way to publish an event in one application and receive the event in the same or different application running on the same or different server.
 
 Assume that you want to get informed when `Tenant` entity (of the [Tenant Management](../../../../modules/tenant-management.md) module) has created. In this case, you can subscribe to the `EntityCreatedEto<TenantEto>` event as shown in the following example:
 
@@ -127,9 +127,9 @@ public class MyDistributedEventHandler :
 }
 ````
 
-This handler is executed only when a new tenant has been created. All the pre-built ABP [application modules](../../../../modules/index.md) define corresponding `ETO` types for their entities. So, you can easily get informed when they changes.
+This handler is executed only when a new tenant has been created. All the pre-built ABP [application modules](../../../../modules) define corresponding `ETO` types for their entities. So, you can easily get informed when they changes.
 
-> Notice that ABP doesn't publish distributed events for an entity by default. Because it has a cost and should be enabled by intention. See the [distributed event bus document](../../../infrastructure/event-bus/distributed/index.md) to learn more.
+> Notice that ABP doesn't publish distributed events for an entity by default. Because it has a cost and should be enabled by intention. See the [distributed event bus document](../../../infrastructure/event-bus/distributed) to learn more.
 
 ## See Also
 

@@ -1,10 +1,10 @@
 # Quartz Background Worker Manager
 
-[Quartz](https://www.quartz-scheduler.net/) is an advanced background worker manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background worker manager](./index.md). ABP simply integrates quartz.
+[Quartz](https://www.quartz-scheduler.net/) is an advanced background worker manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background worker manager](../background-workers). ABP simply integrates quartz.
 
 ## Installation
 
-It is suggested to use the [ABP CLI](../../../cli/index.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -36,7 +36,7 @@ public class YourModule : AbpModule
 }
 ````
 
-> Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still fllow the [background workers document](./index.md) to define the background worker.
+> Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still fllow the [background workers document](../background-workers) to define the background worker.
 
 ## Configuration
 

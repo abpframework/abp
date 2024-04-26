@@ -4,7 +4,7 @@ This template is used to create a minimalist WPF application project.
 
 ## How to Start With?
 
-First, install the [ABP CLI](../cli/index.md) if you haven't installed before:
+First, install the [ABP CLI](../cli) if you haven't installed before:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli

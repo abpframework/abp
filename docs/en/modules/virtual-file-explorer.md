@@ -4,19 +4,19 @@
 
 Virtual File Explorer Module provided a simple UI to view all files in [virtual file system](../framework/infrastructure/virtual-file-system.md).
 
-> Virtual File Explorer Module is not installed for [the startup templates](../solution-templates/index.md). So, you need to manually add this module to your application.
+> Virtual File Explorer Module is not installed for [the startup templates](../solution-templates). So, you need to manually add this module to your application.
 
 ### Installation
 
 #### 1- Use ABP CLI
 
-It is recommended to use the [ABP CLI](../cli/index.md) to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
+It is recommended to use the [ABP CLI](../cli) to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
 ```
 abp add-module Volo.VirtualFileExplorer
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.VirtualFileExplorer.Web).
+> If you haven't done it yet, you first need to install the [ABP CLI](../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.VirtualFileExplorer.Web).
 
 #### 2- Manually install
 

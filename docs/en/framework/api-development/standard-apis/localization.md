@@ -27,7 +27,7 @@ For [ASP.NET Core MVC (Razor Pages)](../../ui/mvc-razor-pages/overall.md) applic
 /Abp/ApplicationLocalizationScript?cultureName=en
 ````
 
-See the [JavaScript API document](../../ui/mvc-razor-pages/javascript-api/index.md) for the ASP.NET Core UI.
+See the [JavaScript API document](../../ui/mvc-razor-pages/javascript-api) for the ASP.NET Core UI.
 
 Other UI types provide services native to the related platform. For example, see the [Angular UI localization documentation](../../ui/angular/localization.md) to learn how to use the localization values exposes by this endpoint.
 

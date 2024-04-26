@@ -52,15 +52,15 @@ ABP Framework is (and ASP.NET Boilerplate was) designed based on the [Domain Dri
 
 ## Creating the Solution
 
-First step of the migration is to create a new solution. We suggest you to create a fresh new project using [the startup templates](https://abp.io/get-started) (see [this document](../get-started/index.md) for the ABP Commercial).
+First step of the migration is to create a new solution. We suggest you to create a fresh new project using [the startup templates](https://abp.io/get-started) (see [this document](../get-started) for the ABP Commercial).
 
 After creating the project and running the application, you can copy your code from your existing solution to the new solution step by step, layer by layer.
 
 ### About Pre-Built Modules
 
-The startup projects for the ABP Framework use the [pre-built modules](../modules/index.md) (not all of them, but the essentials) and themes as NuGet/NPM packages. So, you don't see the source code of the modules/themes in your solution. This has an advantage that you can easily update these packages when a new version is released. However, you can not easily customize them as their source code in your hands.
+The startup projects for the ABP Framework use the [pre-built modules](../modules) (not all of them, but the essentials) and themes as NuGet/NPM packages. So, you don't see the source code of the modules/themes in your solution. This has an advantage that you can easily update these packages when a new version is released. However, you can not easily customize them as their source code in your hands.
 
-We suggest to continue to use these modules as package references, in this way you can get new features easily (see [abp update command](../cli/index.md#update)). In this case, you have a few options to customize or extend the functionality of the used modules;
+We suggest to continue to use these modules as package references, in this way you can get new features easily (see [abp update command](../cli#update)). In this case, you have a few options to customize or extend the functionality of the used modules;
 
 * You can create your own entity and share the same database table with an entity in a used module. An example of this is the `AppUser` entity comes in the startup template.
 * You can [replace](../framework/fundamentals/dependency-injection.md#replace-a-service) a domain service, application service, controller, page model or other types of services with your own implementation. We suggest you to inherit from the existing implementation and override the method you need.
@@ -69,7 +69,7 @@ We suggest to continue to use these modules as package references, in this way y
 
 More extend/customization options will be developed and documented by the time. However, if you need to fully change the module implementation, it is best to add the [source code](https://github.com/abpframework/abp/tree/dev/modules) of the related module into your own solution and remove the package dependencies.
 
-The source code of the modules and the themes are [MIT](https://opensource.org/licenses/MIT) licensed, you can fully own and customize it without any limitation (for the ABP Commercial, you can download the source code of a [module](../modules/index.md)/[theme](https://commercial.abp.io/themes) if you have a [license](https://commercial.abp.io/pricing) type that includes the source code).
+The source code of the modules and the themes are [MIT](https://opensource.org/licenses/MIT) licensed, you can fully own and customize it without any limitation (for the ABP Commercial, you can download the source code of a [module](../modules)/[theme](https://commercial.abp.io/themes) if you have a [license](https://commercial.abp.io/pricing) type that includes the source code).
 
 ## The Domain Layer
 
@@ -728,4 +728,4 @@ The following features are not present for the ABP Framework. Here, a list of so
 * [Real time notification system](https://aspnetboilerplate.com/Pages/Documents/Notification-System) ([#633](https://github.com/abpframework/abp/issues/633))
 * [NHibernate Integration](https://aspnetboilerplate.com/Pages/Documents/NHibernate-Integration) ([#339](https://github.com/abpframework/abp/issues/339)) - We don't intent to work on this, but any community contribution welcome.
 
-Some of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](../contribution/index.md) to the framework, it is appreciated.
+Some of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](../contribution) to the framework, it is appreciated.
