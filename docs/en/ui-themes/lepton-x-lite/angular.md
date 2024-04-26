@@ -26,7 +26,7 @@ yarn add bootstrap-icons
 
 - Then, we need to edit the styles array in `angular.json` to replace the existing style with the new one in the following link :
 
-* [Styles - Angular UI](../../UI/Angular/Theme-Configurations.md)
+* [Styles - Angular UI](../../framework/ui/angular/theme-configurations.md)
 
 Note: You should remove the old theme styles from "angular.json" if you are switching from "ThemeBasic" or "Lepton."
 Look at the [Theme Configurations](../../UI/Angular/Theme-Configurations) list of styles. Depending on your theme, you can alter your styles in angular.json.

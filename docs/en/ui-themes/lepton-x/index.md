@@ -20,7 +20,7 @@ A screenshot from the light style of the theme:
 
 ## How to Install
 
-LeptonX Theme module is pre-installed in [the startup templates](../startup-templates/application/create-solution.md). So, no need to manually install it.
+LeptonX Theme module is pre-installed in [the startup templates](../../_deleted/Getting-Started-Create-Solution.md). So, no need to manually install it.
 
 ## Packages
 

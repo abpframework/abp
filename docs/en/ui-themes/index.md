@@ -22,12 +22,12 @@ The Basic Theme is a minimalist theme that doesn't add any styling on top of the
 
 See the following documents based on the UI type you are using:
 
-- [Basic Theme - MVC UI](../UI/AspNetCore/Basic-Theme.md)
-- [Basic Theme - Blazor UI](../UI/Blazor/Basic-Theme.md)
-- [Basic Theme - Angular UI](../UI/Angular/Basic-Theme.md)
+- [Basic Theme - MVC UI](../framework/ui/mvc-razor-pages/basic-theme.md)
+- [Basic Theme - Blazor UI](../framework/ui/blazor/basic-theme.md)
+- [Basic Theme - Angular UI](../framework/ui/angular/basic-theme.md)
 
 ## See Also
 
-* [Theming - MVC UI](../UI/AspNetCore/Theming.md)
-* [Theming - Blazor UI](../UI/Blazor/Theming.md)
-* [Theming - Angular UI](../UI/Angular/Theming.md)
+* [Theming - MVC UI](../framework/ui/mvc-razor-pages/theming.md)
+* [Theming - Blazor UI](../framework/ui/blazor/theming.md)
+* [Theming - Angular UI](../framework/ui/angular/theming.md)
