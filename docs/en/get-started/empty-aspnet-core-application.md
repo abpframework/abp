@@ -6,15 +6,15 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 1. Create a new AspNet Core Web Application with Visual Studio 2022 (17.0.0+):
 
-![](images/create-new-aspnet-core-application-v2.png)
+![](../images/create-new-aspnet-core-application-v2.png)
 
 2. Configure your new project:
 
-![](images/select-empty-web-application-v2.png)
+![](../images/select-empty-web-application-v2.png)
 
 3. Press the create button:
 
-![create-aspnet-core-application](images/create-aspnet-core-application.png)
+![create-aspnet-core-application](../images/create-aspnet-core-application.png)
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 
