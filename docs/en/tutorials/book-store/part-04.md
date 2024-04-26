@@ -30,16 +30,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
 - **Part 4: Integration tests (this part)**
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -49,7 +49,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -75,17 +75,17 @@ Each project is used to test the related project. Test projects use the followin
 
 {{if DB=="EF"}}
 
-> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
+> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the [data seed system](../../framework/infrastructure/data-seeding.md)) to prepare a fresh database for every test.
 
 {{else if DB=="Mongo"}}
 
-> **[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../Data-Seeding.md)) to prepare a fresh database for every test.
+> **[EphemeralMongo](https://github.com/asimmon/ephemeral-mongo)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the [data seed system](../../framework/infrastructure/data-seeding.md)) to prepare a fresh database for every test.
 
 {{end}}
 
 ## Adding Test Data
 
-If you had created a data seed contributor as described in the [first part](Part-1.md), the same data will be available in your tests. So, you can skip this section. If you haven't created the seed contributor, you can use the `BookStoreTestDataSeedContributor` to seed the same data to be used in the tests below.
+If you had created a data seed contributor as described in the [first part](part-01.md), the same data will be available in your tests. So, you can skip this section. If you haven't created the seed contributor, you can use the `BookStoreTestDataSeedContributor` to seed the same data to be used in the tests below.
 
 ## Testing the BookAppService
 

@@ -30,16 +30,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
 - **Part 7: Authors: Database Integration (this part)**
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -49,7 +49,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 ## Introduction
 
@@ -178,7 +178,7 @@ public class EfCoreAuthorRepository
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
-> See the [EF Core Integration document](../Entity-Framework-Core.md) for more information on the EF Core based repositories.
+> See the [EF Core Integration document](../../framework/data/entity-framework-core/index.md) for more information on the EF Core based repositories.
 
 {{else if DB=="Mongo"}}
 
@@ -239,6 +239,6 @@ public class MongoDbAuthorRepository
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
-> See the [MongoDB Integration document](../MongoDB.md) for more information on the MongoDB based repositories.
+> See the [MongoDB Integration document](../../framework/data/mongodb/index.md) for more information on the MongoDB based repositories.
 
 {{end}}

@@ -30,14 +30,14 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
 - **Part 9: Authors: User Interface (this part)**
 - [Part 10: Book to Author Relation](Part-10.md)
 
@@ -49,7 +49,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 ## Introduction
 
@@ -302,7 +302,7 @@ Create a new razor page, `CreateModal.cshtml` under the `Pages/Authors` folder o
 </form>
 ```
 
-We had used [dynamic forms](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) of the ABP Framework for the books page before. We could use the same approach here, but we wanted to show how to do it manually. Actually, not so manually, because we've used `abp-input` tag helper in this case to simplify creating the form elements.
+We had used [dynamic forms](../../framework/ui/mvc-razor-pages/tag-helpers/dynamic-forms.md) of the ABP Framework for the books page before. We could use the same approach here, but we wanted to show how to do it manually. Actually, not so manually, because we've used `abp-input` tag helper in this case to simplify creating the form elements.
 
 You can definitely use the standard Bootstrap HTML structure, but it requires to write a lot of code. `abp-input` automatically adds validation, localization and other standard elements based on the data type.
 
@@ -618,7 +618,7 @@ function configureRoutes(routes: RoutesService) {
 
 ### Service Proxy Generation
 
-[ABP CLI](https://docs.abp.io/en/abp/latest/CLI) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+[ABP CLI](../../cli/index.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Run the following command in the `angular` folder:
 
@@ -1044,9 +1044,9 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
 ````
 
 * This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
-* Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../API/Dynamic-CSharp-API-Clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
-* Injects the `IAuthorizationService` to check [permissions](../Authorization.md).
-* Injects the `IObjectMapper` for [object to object mapping](../Object-To-Object-Mapping.md).
+* Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../../framework/api-development/dynamic-csharp-clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
+* Injects the `IAuthorizationService` to check [permissions](../../framework/fundamentals/authorization.md).
+* Injects the `IObjectMapper` for [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md).
 
 Create a new code behind file, `Authors.razor.cs`, under the `Pages` folder, with the following content:
 

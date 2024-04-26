@@ -2,7 +2,7 @@
 
 ## About This Tutorial
 
-This tutorial assumes that you have completed the [Web Application Development tutorial](../part-1.md) and built an ABP based application named `Acme.BookStore` with [MAUI](../../../getting-started-maui.md) as the mobile option. Therefore, if you haven't completed the [Web Application Development tutorial](../part-1.md), you either need to complete it or download the source code from down below and follow this tutorial. 
+This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [MAUI](../../../get-started/maui.md) as the mobile option. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial. 
 
 In this tutorial, we will only focus on the UI side of the `Acme.BookStore` application and we will implement the CRUD operations for a MAUI mobile application. This tutorial follows the [MVVM (Model-View-ViewModel) Pattern ](https://learn.microsoft.com/en-us/dotnet/architecture/maui/mvvm), which separates the UI from the business logic of an application.
 
@@ -12,7 +12,7 @@ You can use the following link to download the source code of the application de
 
 * [Acme.BookStore](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-maui-efcore-mobile)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](https://docs.abp.io/en/abp/latest/KB/Windows-Path-Too-Long-Fix).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../../kb/windows-path-too-long-fix.md).
 
 ## Create the Authors Page - List & Delete Authors
 

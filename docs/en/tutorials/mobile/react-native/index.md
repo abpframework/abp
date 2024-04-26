@@ -2,7 +2,7 @@
 
 ## About This Tutorial
 
-- This tutorial assumes that you have completed the [Web Application Development tutorial](../part-1.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../getting-started-react-native.md) as the mobile option.. Therefore, if you haven't completed the [Web Application Development tutorial](../part-1.md), you either need to complete it or download the source code from down below and follow this tutorial.
+- This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../_deleted/Getting-Started-React-Native.md) as the mobile option.. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial.
 - In this tutorial, we will only focus on the UI side of the `Acme.BookStore` application and will implement the CRUD operations.
 - Before starting, please make sure that the [React Native Development Environment](https://docs.abp.io/en/commercial/latest/getting-started-react-native) is ready on your machine.
 
@@ -12,7 +12,7 @@ You can use the following link to download the source code of the application de
 
 - [Acme.BookStore](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-react-native-mongodb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](https://docs.abp.io/en/abp/latest/KB/Windows-Path-Too-Long-Fix).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../../kb/windows-path-too-long-fix.md).
 
 ## The Book List Page
 

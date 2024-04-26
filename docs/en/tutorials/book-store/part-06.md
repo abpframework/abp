@@ -30,16 +30,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
 - **Part 6: Authors: Domain layer (this part)**
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -55,8 +55,8 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 
 In the previous parts, we've used the ABP infrastructure to easily build some services;
 
-* Used the [CrudAppService](../Application-Services.md) base class instead of manually developing an application service for standard create, read, update and delete operations.
-* Used [generic repositories](../Repositories.md) to completely automate the database layer.
+* Used the [CrudAppService](../../framework/architecture/domain-driven-design/application-services.md) base class instead of manually developing an application service for standard create, read, update and delete operations.
+* Used [generic repositories](../../framework/architecture/domain-driven-design/repositories.md) to completely automate the database layer.
 
 For the "Authors" part;
 
@@ -117,7 +117,7 @@ public class Author : FullAuditedAggregateRoot<Guid>
 }
 ````
 
-* Inherited from `FullAuditedAggregateRoot<Guid>` which makes the entity [soft delete](../Data-Filtering.md) (that means when you delete it, it is not deleted in the database, but just marked as deleted) with all the [auditing](../Entities.md) properties.
+* Inherited from `FullAuditedAggregateRoot<Guid>` which makes the entity [soft delete](../../framework/infrastructure/data-filtering.md) (that means when you delete it, it is not deleted in the database, but just marked as deleted) with all the [auditing](../../framework/architecture/domain-driven-design/entities.md) properties.
 * `private set` for the `Name` property restricts to set this property from out of this class. There are two ways of setting the name (in both cases, we validate the name):
   * In the constructor, while creating a new author.
   * Using the `ChangeName` method to update the name later.
@@ -136,7 +136,7 @@ public static class AuthorConsts
 
 ````
 
-Created this class inside the `Acme.BookStore.Domain.Shared` project since we will re-use it on the [Data Transfer Objects](../Data-Transfer-Objects.md) (DTOs) later.
+Created this class inside the `Acme.BookStore.Domain.Shared` project since we will re-use it on the [Data Transfer Objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) (DTOs) later.
 
 ## AuthorManager: The Domain Service
 
@@ -266,7 +266,7 @@ public interface IAuthorRepository : IRepository<Author, Guid>
 }
 ````
 
-* `IAuthorRepository` extends the standard `IRepository<Author, Guid>` interface, so all the standard [repository](../Repositories.md) methods will also be available for the `IAuthorRepository`.
+* `IAuthorRepository` extends the standard `IRepository<Author, Guid>` interface, so all the standard [repository](../../framework/architecture/domain-driven-design/repositories.md) methods will also be available for the `IAuthorRepository`.
 * `FindByNameAsync` was used in the `AuthorManager` to query an author by name.
 * `GetListAsync` will be used in the application layer to get a listed, sorted and filtered list of authors to show on the UI.
 
