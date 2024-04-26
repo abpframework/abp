@@ -17,7 +17,7 @@ ABP Studio automatically installs PowerShell, but if you want to install it manu
 
 ### ABP CLI (installed by default) *
 Ensure ABP CLI (Command Line Interface) is installed on your system. 
-ABP Studio automatically installs ABP CLI, but if you want to install it manually, follow the instructions in the official [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI). 
+ABP Studio automatically installs ABP CLI, but if you want to install it manually, follow the instructions in the official [ABP CLI documentation](../cli/index.md). 
 
 ### ABPC CLI (installed by default) *
 The ABPC CLI (Command-Line Interface) is a tool that works with ABP Studio. It doesn't need the user interface; you can run it by typing commands or including it in scripts. When you install ABP Studio, the ABPC CLI is automatically installed. This CLI tool helps automate tasks when working with CI/CD pipelines.

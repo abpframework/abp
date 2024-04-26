@@ -36,7 +36,7 @@ The top menu is the main menu bar in ABP Studio. It offers access to various fun
 ### Help Menu
 
 - **License Information:** Shows your organization's license information.
-- **Framework Documentation:** Opens the official [framework documentation](https://docs.abp.io/en/abp/latest/) website in your browser.
+- **Framework Documentation:** Opens the official [framework documentation](../index.md) website in your browser.
 - **Commercial Documentation:** Opens the official [commercial documentation](https://docs.abp.io/en/commercial/latest/) website in your browser.
 - **Community:** Opens the official [ABP Community](https://community.abp.io/) website in your browser.
 - **Support:** Opens the official [Support](https://support.abp.io/QA/Questions) website in your browser.
@@ -119,7 +119,7 @@ This tab provides a log of all HTTP requests across applications, complete with 
 
 ### Events
 
-The Events tab is a centralized stream where all the [distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) across applications are recorded. It allows filtering by name, application, direction, and source, providing a transparent view of the inter-service communication. So far, so good. Now let's move on to the next tab.
+The Events tab is a centralized stream where all the [distributed events](../framework/infrastructure/event-bus/distributed/index) across applications are recorded. It allows filtering by name, application, direction, and source, providing a transparent view of the inter-service communication. So far, so good. Now let's move on to the next tab.
 
 ![application-monitor-events](./images/overview/application-monitor-events.png)
 

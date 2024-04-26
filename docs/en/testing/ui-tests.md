@@ -14,9 +14,9 @@ Such tests completely depends on your UI Framework choice;
 
 See the following documents to learn Non Visual UI Testing;
 
-* [Testing in ASP.NET Core MVC / Razor Pages](UI/AspNetCore/Testing.md)
-* [Testing in Angular](UI/Angular/Testing.md)
-* [Testing in Blazor](UI/Blazor/Testing.md)
+* [Testing in ASP.NET Core MVC / Razor Pages](../framework/ui/mvc-razor-pages/testing.md)
+* [Testing in Angular](../framework/ui/angular/testing.md)
+* [Testing in Blazor](../framework/ui/blazor/testing.md)
 
 ## Visual Tests
 
