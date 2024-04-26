@@ -1,11 +1,12 @@
 param(
   [string]$Version,
-  [string]$Registry
-
+  [string]$Registry,
+  [string]$LeptonXVersion
 )
+
 $commands = (
   ".\publish-mvc.ps1 $Version $Registry",
-  ".\publish-ng.ps1 $Version $Registry"
+  ".\publish-ng.ps1 $Version $Registry $LeptonXVersion"
 );
 
 $NextVersion = $(node publish-utils.js --nextVersion)
