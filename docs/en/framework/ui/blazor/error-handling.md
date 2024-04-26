@@ -13,7 +13,7 @@ ABP provides an automatic error handling system for the Blazor UI.
 
 * Handles all unhandled exceptions and shows nice and useful messages to the user.
 * It distinguishes different kind of exceptions. Hides internal/technical error details from the user (shows a generic error message in these cases).
-* It is well integrated to the [server side exception handling](../../Exception-Handling.md) system.
+* It is well integrated to the [server side exception handling](../../fundamentals/exception-handling.md) system.
 
 ## Basic Usage
 
@@ -75,21 +75,21 @@ There are different type of `Exception` classes handled differently by the ABP F
 
 ABP automatically handle the exception and show an error message to the user:
 
-![blazor-user-friendly-exception](../../images/blazor-user-friendly-exception.png)
+![blazor-user-friendly-exception](../../../images/blazor-user-friendly-exception.png)
 
 > You can derive from `UserFriendlyException` or directly implement `IUserFriendlyException` interface to create your own `Exception` class if you need.
 
-> You can use the [localization system](Localization.md) to show localized error messages.
+> You can use the [localization system](localization.md) to show localized error messages.
 
 ### BusinessException and Other Exception Types
 
-See the [exception handling document](../../Exception-Handling.md) to understand different kind of Exception class and interfaces and other capabilities of the Exception Handling system.
+See the [exception handling document](../../fundamentals/exception-handling.md) to understand different kind of Exception class and interfaces and other capabilities of the Exception Handling system.
 
 ## Generic Errors
 
 If the thrown `Exception` is not a special type, it is considered as generic error and a generic error message is shown to the user:
 
-![blazor-generic-exception-message](../../images/blazor-generic-exception-message.png)
+![blazor-generic-exception-message](../../../images/blazor-generic-exception-message.png)
 
 > All error details (including stack trace) are still written in the browser's console.
 
@@ -99,4 +99,4 @@ Errors (like Validation, Authorization and User Friendly Errors) sent by the ser
 
 ## See Also
 
-* [Exception Handling System](../../Exception-Handling.md)
+* [Exception Handling System](../../fundamentals/exception-handling.md)

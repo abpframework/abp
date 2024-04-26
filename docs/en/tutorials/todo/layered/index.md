@@ -63,7 +63,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Install ABP CLI Tool
 
-We will use the [ABP CLI](../../../cli/index.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
+We will use the [ABP CLI](../../../cli) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -101,7 +101,7 @@ If you are using Visual Studio, right click on the `TodoApp.DbMigrator` project,
 
 #### Installing the Client-Side Packages
 
-[ABP CLI](../../../cli/index.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../../../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -117,7 +117,7 @@ abp install-libs
 
 #### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../cli/index.md).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../cli).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
@@ -200,7 +200,7 @@ namespace TodoApp
 
 {{if DB=="EF"}}
 
-Next step is to setup the [Entity Framework Core](../../../framework/data/entity-framework-core/index.md) configuration.
+Next step is to setup the [Entity Framework Core](../../../framework/data/entity-framework-core) configuration.
 
 ### Mapping Configuration
 
@@ -256,7 +256,7 @@ dotnet ef database update
 
 {{else if DB=="Mongo"}}
 
-Next step is to setup the [MongoDB](../../../framework/data/mongodb/index.md) configuration. Open the `TodoAppMongoDbContext` class in the `MongoDb` folder of the *TodoApp.MongoDB* project and make the following changes:
+Next step is to setup the [MongoDB](../../../framework/data/mongodb) configuration. Open the `TodoAppMongoDbContext` class in the `MongoDb` folder of the *TodoApp.MongoDB* project and make the following changes:
 
 1. Add a new property to the class:
 
@@ -495,7 +495,7 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
 </div>
 ````
 
-We are using ABP's [card tag helper](../../../framework/ui/mvc-razor-pages/tag-helpers/cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../../framework/ui/mvc-razor-pages/tag-helpers/index.md) make it much easier and type safe.
+We are using ABP's [card tag helper](../../../framework/ui/mvc-razor-pages/tag-helpers/cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../../framework/ui/mvc-razor-pages/tag-helpers) make it much easier and type safe.
 
 This page imports a CSS and a JavaScript file, so we should also create them.
 

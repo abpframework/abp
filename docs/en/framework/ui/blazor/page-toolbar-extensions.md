@@ -2,7 +2,7 @@
 
 Page toolbar system allows you to add components to the toolbar of any page. The page toolbar is the area right to the header of a page. A button ("Import users from excel") was added to the user management page below:
 
-![page-toolbar-button](../../images/page-toolbar-button-blazor.png)
+![page-toolbar-button](../../../images/page-toolbar-button-blazor.png)
 
 You can add any type of view component item to the page toolbar or modify existing items.
 
@@ -14,9 +14,9 @@ In this example, we will add an "Import users from excel" button and execute a C
 
 First, add a new C# file to your solution. We added inside the `/Pages/Identity/` folder of the `.Blazor` project:
 
-![user-action-extension-on-solution](../../images/user-action-extension-on-blazor-project.png)
+![user-action-extension-on-solution](../../../images/user-action-extension-on-blazor-project.png)
 
-We will use the [component override system](Customization-Overriding-Components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetToolbarItemsAsync` method and add the toolbar item programmatically.
+We will use the [component override system](customization-overriding-components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetToolbarItemsAsync` method and add the toolbar item programmatically.
 
 Here, the content of the overridden `SetToolbarItemsAsync` method.
 
@@ -70,7 +70,7 @@ While you typically want to add a button action to the page toolbar, it is possi
 
 First, create a new blazor component in your project:
 
-![page-toolbar-custom-component-blazor](../../images/page-toolbar-custom-component-blazor.png)
+![page-toolbar-custom-component-blazor](../../../images/page-toolbar-custom-component-blazor.png)
 
 For this example, we've created a `MyToolbarComponent` component under the `/Pages/Identity/` folder.
 

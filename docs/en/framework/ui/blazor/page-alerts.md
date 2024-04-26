@@ -2,11 +2,11 @@
 
 It is common to show error, warning or information alerts to inform the user. An example *Service Interruption* alert is shown below:
 
-![blazor-page-alert-example](../../images/blazor-page-alert-example.png)
+![blazor-page-alert-example](../../../images/blazor-page-alert-example.png)
 
 ## Quick Example
 
-Simply [inject](../../Dependency-Injection.md) `IAlertManager` to your page or component and call the `Alerts.Warning` method to show a success message.
+Simply [inject](../../fundamentals/dependency-injection.md) `IAlertManager` to your page or component and call the `Alerts.Warning` method to show a success message.
 
 ```csharp
 namespace MyProject.Blazor.Pages

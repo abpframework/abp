@@ -11,7 +11,7 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
 
 > If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP Commercial](https://commercial.abp.io/).
 
-> See the [Theming document](Theming.md) to learn about themes.
+> See the [Theming document](theming.md) to learn about themes.
 
 ## Installation
 
@@ -20,7 +20,7 @@ If you need to manually this theme, follow the steps below:
 {{if UI == "Blazor"}}
 
 * Install the [Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme) NuGet package to your web project.
-* Add `AbpAspNetCoreComponentsWebAssemblyBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../Module-Development-Basics.md) in the your Blazor UI project.
+* Add `AbpAspNetCoreComponentsWebAssemblyBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../architecture/modularity/basics.md) in the your Blazor UI project.
 * Use `Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic.App` as the root component of your application in the `ConfigureServices` method of your module:
 
     ```csharp
@@ -35,11 +35,11 @@ If you need to manually this theme, follow the steps below:
 
 {{if UI == "BlazorServer"}}
 
-* Make sure [AspNetCore Basic Theme](../AspNetCore/Basic-Theme.md) installation steps are completed. 
+* Make sure [AspNetCore Basic Theme](../mvc-razor-pages/basic-theme.md) installation steps are completed. 
 
 * Install the [Volo.Abp.AspNetCore.Components.Server.BasicTheme](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Components.Server.BasicTheme) NuGet package to your web project.
 
-* Add `AbpAspNetCoreComponentsServerBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../Module-Development-Basics.md) in the your Blazor UI project.
+* Add `AbpAspNetCoreComponentsServerBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../architecture/modularity/basics.md) in the your Blazor UI project.
 
 * Perform following changes in `Pages/_Host.cshtml` file
   * Add usings at the top of the page.
@@ -60,14 +60,14 @@ If you need to manually this theme, follow the steps below:
 
 ## The Layout
 
-![basic-theme-application-layout](../../images/basic-theme-application-layout.png)
+![basic-theme-application-layout](../../../images/basic-theme-application-layout.png)
 
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
-* [Branding](Branding.md) Area
-* Main [Menu](Navigation-Menu.md)
-* Main [Toolbar](Toolbars.md) with Language Selection & User Menu
-* [Page Alerts](Page-Alerts.md)
+* [Branding](branding.md) Area
+* Main [Menu](navigation-menu.md)
+* Main [Toolbar](toolbars.md) with Language Selection & User Menu
+* [Page Alerts](page-alerts.md)
 
 ## Customization
 
@@ -83,7 +83,7 @@ You can simply override the styles in the Global Styles file of your application
 
 #### Override the Components
 
-See the [Customization / Overriding Components](Customization-Overriding-Components.md) to learn how you can replace components, customize and extend the user interface.
+See the [Customization / Overriding Components](customization-overriding-components.md) to learn how you can replace components, customize and extend the user interface.
 
 ### Overriding the Menu Item
 Basic theme supports overriding a single menu item with a custom component. You can create a custom component and call `UseComponent` extension method in the **MenuContributor**.
@@ -108,7 +108,7 @@ context.Menu.Items.Add(
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../CLI.md) command in **Blazor{{if UI == "Blazor"}}WebAssembly{{else}} Server{{end}}** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../../cli) command in **Blazor{{if UI == "Blazor"}}WebAssembly{{else}} Server{{end}}** project directory to copy the source code to your solution:
 
 {{if UI == "Blazor"}}
 
@@ -144,4 +144,4 @@ Or, you can download the source code of the Basic Theme, manually copy the proje
 
 ## See Also
 
-* [Theming](Theming.md)
+* [Theming](theming.md)

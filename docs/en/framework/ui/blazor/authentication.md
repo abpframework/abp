@@ -7,7 +7,7 @@
 }
 ````
 
-The [application startup template](../../Startup-Templates/Application.md) is properly configured to use OpenId Connect to authenticate the user;
+The [application startup template](../../../solution-templates/layered-web-application) is properly configured to use OpenId Connect to authenticate the user;
 
 {{if UI == "BlazorServer"}}
 The Blazor Server application UI is actually a hybrid application that is combined with the MVC UI, and uses the login page provided by the MVC UI. When users enter a page that requires login, they are redirected to the `/Account/Login` page. Once they complete the login process, they are returned back to the application's UI. The login page also contains features like registration, password recovery, etc.

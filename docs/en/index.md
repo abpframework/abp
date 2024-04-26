@@ -8,7 +8,7 @@ Wondering why you should use the ABP Platform instead of creating a new solution
 
 ## Get Started
 
-The [Getting Started](get-started/index.md) guide can be used to create and run ABP based solutions with different options and details. Then you can follow the [Todo Application Tutorial](tutorials/todo/index.md) to create your first application with ABP, or build a full-featured and real-life web application by following the [Book Store Application Tutorial](tutorials/book-store/part-01.md).
+The [Getting Started](get-started) guide can be used to create and run ABP based solutions with different options and details. Then you can follow the [Todo Application Tutorial](tutorials/todo) to create your first application with ABP, or build a full-featured and real-life web application by following the [Book Store Application Tutorial](tutorials/book-store/part-01.md).
 
 ### UI Framework Options
 
@@ -30,16 +30,16 @@ ABP has a **comprehensive documentation** that not only explains the ABP Framewo
 
 #### Architecture
 
-ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](./framework/architecture/domain-driven-design/index.md) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
+ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](./framework/architecture/domain-driven-design) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
 * See the [Modularity](./framework/architecture/modularity/basics.md) document to understand the module system.
 * [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
-* [Microservice Architecture](./framework/architecture/microservices/index.md) document explains how ABP helps to create a microservice solution.
-* [Multi-Tenancy](./framework/architecture/multi-tenancy/index.md) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
+* [Microservice Architecture](./framework/architecture/microservices) document explains how ABP helps to create a microservice solution.
+* [Multi-Tenancy](./framework/architecture/multi-tenancy) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
 #### Infrastructure
 
-There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus/index.md), [Background Job System](./framework/infrastructure/background-jobs/index.md), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing/index.md), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
+There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus), [Background Job System](./framework/infrastructure/background-jobs), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
 
 #### Cross Cutting Concerns
 
@@ -51,27 +51,27 @@ ABP.IO Platform provides tooling to help you in your daily development.
 
 #### ABP Studio
 
-[ABP Studio](studio/index.md) is a cross-platform desktop application for ABP and .NET developers. It aims to provide a comfortable development environment for you by automating things, providing insights about your solution, making develop, run, browse, monitor, trace and deploy your solutions much easier.
+[ABP Studio](studio) is a cross-platform desktop application for ABP and .NET developers. It aims to provide a comfortable development environment for you by automating things, providing insights about your solution, making develop, run, browse, monitor, trace and deploy your solutions much easier.
 
 #### ABP Suite
 
-[ABP Suite](suite/index.md) is a tool to assist your application development. Its main functionality is to automatically generate CRUD-style pages once you define your entities and their relations.
+[ABP Suite](suite) is a tool to assist your application development. Its main functionality is to automatically generate CRUD-style pages once you define your entities and their relations.
 
 #### ABP CLI
 
-[ABP CLI](cli/index.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
+[ABP CLI](cli) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
 
 ### Startup Templates
 
-The [Startup templates](./solution-templates/index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
+The [Startup templates](./solution-templates) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
 
 ### Application Modules
 
-Application Modules provides pre-built application modules those implement common business requirements. See the [Application Modules](modules/index.md) document for all pre-built modules.
+Application Modules provides pre-built application modules those implement common business requirements. See the [Application Modules](modules) document for all pre-built modules.
 
 ### UI Themes
 
-ABP provides a UI theming system where you can use [pre-built themes](ui-themes/index.md) for your solution or build your own UI themes.
+ABP provides a UI theming system where you can use [pre-built themes](ui-themes) for your solution or build your own UI themes.
 
 ## Books
 
@@ -93,7 +93,7 @@ A **practical guide** for implementing Domain Driven Design (DDD). While the imp
 
 ## Samples
 
-See the [sample projects](samples/index.md) built with ABP.
+See the [sample projects](samples) built with ABP.
 
 ## ABP Community
 
@@ -109,4 +109,4 @@ ABP Framework's source code is hosted on GitHub. See [the source code](https://g
 
 ### Want to Contribute?
 
-ABP Framework is a community-driven open source project. See [the contribution guide](contribution/index.md) if you want to be a part of this project.
+ABP Framework is a community-driven open source project. See [the contribution guide](contribution) if you want to be a part of this project.

@@ -14,7 +14,7 @@ If you are using the microservice template, please check [Migrating the Microser
 
 ## OpenIddict Migration Steps
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](index.md) based on your application version.
+Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](../migration-guides) based on your application version.
 
 ### Domain.Shared Layer
 

@@ -24,7 +24,7 @@ We suggest to go mixed: Write unit or integration test where it is necessary and
 
 ## The Application Startup Template
 
-The [Application Startup Template](../solution-templates/layered-web-application/index.md) comes with the test infrastructure properly installed and configured for you.
+The [Application Startup Template](../solution-templates/layered-web-application) comes with the test infrastructure properly installed and configured for you.
 
 ### The Test Projects
 
@@ -36,7 +36,7 @@ There are more than one test project, organized by the layers;
 
 * `Domain.Tests` is used to test your Domain Layer objects (like [Domain Services](../framework/architecture/best-practices/domain-services.md) and [Entities](../framework/architecture/domain-driven-design/entities.md)).
 * `Application.Tests` is used to test your Application Layer (like [Application Services](../framework/architecture/domain-driven-design/application-services.md)).
-* `EntityFrameworkCore.Tests` is used to implement abstract test classes and test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](../framework/data/index.md)).
+* `EntityFrameworkCore.Tests` is used to implement abstract test classes and test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](../framework/data)).
 * `Web.Tests` is used to test the UI Layer (like Pages, Controllers and View Components). This project does exists only for MVC / Razor Page applications.
 * `TestBase` contains some classes those are shared/used by the other projects.
 

@@ -2,7 +2,7 @@
 
 `abp.currentUser` is an object that contains information about the current user of the application.
 
-> This document only explains the JavaScript API. See the [CurrentUser document](../../../infrastructure/current-user.md) to get information about the current user in the server side.
+> This document only explains the JavaScript API. See the [CurrentUser document](../../infrastructure/current-user.md) to get information about the current user in the server side.
 
 ## Authenticated User
 

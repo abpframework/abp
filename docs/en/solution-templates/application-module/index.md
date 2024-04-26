@@ -1,10 +1,10 @@
 # Module Startup Template
 
-This template can be used to create a **reusable [application module](../../modules/index.md)** based on the [module development best practices & conventions](../../framework/architecture/best-practices/index.md). It is also suitable for creating **microservices** (with or without UI).
+This template can be used to create a **reusable [application module](../../modules)** based on the [module development best practices & conventions](../../framework/architecture/best-practices). It is also suitable for creating **microservices** (with or without UI).
 
 ## How to Start With?
 
-You can use the [ABP CLI](../../cli/index.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../../cli) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed before:
 

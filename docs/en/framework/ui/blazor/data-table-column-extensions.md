@@ -2,11 +2,11 @@
 
 Data table column extension system allows you to add a **new table column** on the user interface. The example below adds a new column with the "Email Confirmed" title:
 
-![datatable-column-extension-](../../images/table-column-extension-example-blazor.png)
+![datatable-column-extension-](../../../images/table-column-extension-example-blazor.png)
 
 You can use the standard column options to fine control the table column.
 
-> Note that this is a low level API to find control the table column. If you want to show an extension property on the table, see the [module entity extension](../../Module-Entity-Extensions.md) document.
+> Note that this is a low level API to find control the table column. If you want to show an extension property on the table, see the [module entity extension](../../architecture/modularity/extending/module-entity-extensions.md) document.
 
 ## How to Set Up
 
@@ -14,9 +14,9 @@ You can use the standard column options to fine control the table column.
 
 First, add a new C# file to your solution. We added inside the `/Pages/Identity/` folder of the `.Blazor` project:
 
-![user-action-extension-on-solution](../../images/user-action-extension-on-blazor-project.png)
+![user-action-extension-on-solution](../../../images/user-action-extension-on-blazor-project.png)
 
-We will use the [component override system](Customization-Overriding-Components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetTableColumnsAsync` method and add the table column programmatically.
+We will use the [component override system](customization-overriding-components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetTableColumnsAsync` method and add the table column programmatically.
 
 Here, the content of the overridden `SetTableColumnsAsync` method.
 
@@ -81,7 +81,7 @@ This section explains how to render custom blazor components in data table colum
 
 First of all, create a blazor component. We will name it `CustomTableColumn`.
 
-![data-table-colum-extension-blazor-component-render-solution](../../images/data-table-colum-extension-blazor-component-render-solution.png)
+![data-table-colum-extension-blazor-component-render-solution](../../../images/data-table-colum-extension-blazor-component-render-solution.png)
 
 Add an object parameter named `Data`.
 
@@ -126,4 +126,4 @@ protected override async ValueTask SetTableColumnsAsync()
 
 Run the project and you will see the icons instead of text fields.
 
-![data-table-colum-extension-blazor-component-render](../../images/data-table-colum-extension-blazor-component-render.png)
+![data-table-colum-extension-blazor-component-render](../../../images/data-table-colum-extension-blazor-component-render.png)

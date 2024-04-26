@@ -2,7 +2,7 @@
 
 Some modules may require additional styles or scripts that need to be referenced in **index.html** file. It's not easy to find and update these types of references in Blazor apps. ABP offers a simple, powerful, and modular way to manage global style and scripts in Blazor apps.
 
-To update script & style references without worrying about dependencies, ordering, etc in a project, you can use the [bundle command](../../CLI.md#bundle).
+To update script & style references without worrying about dependencies, ordering, etc in a project, you can use the [bundle command](../../../cli#bundle).
 
 You can also add custom styles and scripts and let ABP manage them for you. In your Blazor project, you can create a class implementing `IBundleContributor` interface.
 
@@ -11,7 +11,7 @@ You can also add custom styles and scripts and let ABP manage them for you. In y
 * `AddScripts(...)`
 * `AddStyles(...)`
 
-Both methods get `BundleContext` as a parameter. You can add scripts and styles to the `BundleContext` and run [bundle command](../../CLI.md#bundle). Bundle command detects custom styles and scripts with module dependencies and updates `index.html` file.
+Both methods get `BundleContext` as a parameter. You can add scripts and styles to the `BundleContext` and run [bundle command](../../../cli#bundle). Bundle command detects custom styles and scripts with module dependencies and updates `index.html` file.
 
 ## Example Usage
 ```csharp

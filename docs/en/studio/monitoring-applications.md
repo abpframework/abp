@@ -40,7 +40,7 @@ In this tab, you can view comprehensive overall information. You have the option
 
 - `Apps Running`: The number of applications running. It includes CLI and C# applications. In the example two C# microservice applications and one CLI application is running.
 - `Requests`: The number of HTTP requests received by all C# applications.
-- `Events`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed/index.md) sent or received by all C# applications.
+- `Events`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed) sent or received by all C# applications.
 - `Exceptions`: The number of exceptions thrown by all C# applications.
 
 ![overall](./images/monitoring-applications/overall.png)
@@ -52,11 +52,11 @@ In the data grid, details for each application are displayed. It's possible to s
 - `Instances`: Indicates the count of running instances for the application. This value is particularly helpful when scaling the application within a Kubernetes, providing visibility into the number of currently active instances.
 - `Uptime`: The time elapsed since the application started.
 - `Requests`: The number of HTTP requests received by the application.
-- `Events (R/S)`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed/index.md) received or sent by the application.
+- `Events (R/S)`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed) received or sent by the application.
 - `Exceptions`: The number of exceptions thrown by the application.
 - `Actions`: The actions that can be performed on the application. You can start and stop the application.
 
-> For the events system, you can exclusively view the [Distributed Events](../framework/infrastructure/event-bus/distributed/index.md). Generally, the [Local Events](../framework/infrastructure/event-bus/distributed/index.md) is not included.
+> For the events system, you can exclusively view the [Distributed Events](../framework/infrastructure/event-bus/distributed). Generally, the [Local Events](../framework/infrastructure/event-bus/distributed) is not included.
 
 ## Browse
 
@@ -94,11 +94,11 @@ Furthermore, by clicking the gear icon in the *HTTP Requests* tab, you can acces
 
 ## Events
 
-In this tab, you can view all [Distributed Events](../framework/infrastructure/event-bus/distributed/index.md) sent or received by your C# applications. You can filter them by [Event Name](../framework/infrastructure/event-bus/distributed/index.md#event-name) using the search textbox or by selecting a specific application. Additionally, you can choose the *Direction* (Received/Send) and *Source* (Direct/Inbox/Outbox) of events. The *Clear Events* button removes all events.
+In this tab, you can view all [Distributed Events](../framework/infrastructure/event-bus/distributed) sent or received by your C# applications. You can filter them by [Event Name](../framework/infrastructure/event-bus/distributed#event-name) using the search textbox or by selecting a specific application. Additionally, you can choose the *Direction* (Received/Send) and *Source* (Direct/Inbox/Outbox) of events. The *Clear Events* button removes all events.
 
 ![events](./images/monitoring-applications/events.png)
 
-> In the *Direction* section, there are two options: *Received*, indicating events received by the application, and *Sent*, indicating events sent by the application. Within the *Source* section, three options are available, and their significance comes into play when utilizing the [Inbox/Outbox pattern](../framework/infrastructure/event-bus/distributed/index.md#outbox-inbox-for-transactional-events). *Inbox* refers to events received by the application, *Outbox* refers to events sent by the application and *Direct* signifies events sent or received by the application without involving Inbox/Outbox pattern.
+> In the *Direction* section, there are two options: *Received*, indicating events received by the application, and *Sent*, indicating events sent by the application. Within the *Source* section, three options are available, and their significance comes into play when utilizing the [Inbox/Outbox pattern](../framework/infrastructure/event-bus/distributed#outbox-inbox-for-transactional-events). *Inbox* refers to events received by the application, *Outbox* refers to events sent by the application and *Direct* signifies events sent or received by the application without involving Inbox/Outbox pattern.
 
 Clicking on a row enables you to view the details of each event; `Application`, `Event Name`, `Direction`, `Source`, `Timestamp` and `Event Data`.
 

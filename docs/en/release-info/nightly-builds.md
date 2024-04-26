@@ -28,4 +28,4 @@ abp switch-to-stable
 
 ## See Also
 
-[ABP CLI documentation](../cli/index.md)
+[ABP CLI documentation](../cli)

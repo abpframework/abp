@@ -24,7 +24,7 @@ LeptonX Theme module is pre-installed in [the startup templates](../../_deleted/
 
 ## Packages
 
-This module follows the [module development best practices guide](../../framework/architecture/best-practices/index.md) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 ### NuGet Packages
 

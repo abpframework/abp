@@ -26,19 +26,19 @@ You have multiple options to initiate a new React Native project that works with
 
 ### 1. Using ABP CLI
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](../../../cli/index.md) and run the following command in your terminal:
+ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](../../../cli) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u <angular or mvc> -m react-native
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](../../../cli/index.md).
+> To see further options in the CLI, please visit the [CLI manual](../../../cli).
 
 This command will prepare a solution with an **Angular** or an **MVC** (depends on your choice), a **.NET Core**, and a **React Native** project in it.
 
 ### 2. Generating a CLI Command from Get Started Page
 
-You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../../solution-templates/index.md).
+You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../../solution-templates).
 
 ## How to Configure & Run the Backend
 
@@ -65,7 +65,7 @@ A React Native application running on an Android emulator or a physical phone **
 
 {{ end }}
 
-Run the backend application as described in the [getting started document](../../../get-started/index.md).
+Run the backend application as described in the [getting started document](../../../get-started).
 
 > You should turn off the "Https Restriction" if you're using OpenIddict as a central identity management solution. Because the IOS Simulator doesn't support self-signed certificates and OpenIddict is set to only work with HTTPS by default.
 
@@ -85,7 +85,7 @@ Open the {{ if Tiered == "No" }}`MyProjectNameHttpApiHostModule`{{ else if Tiere
 
 ## How to Configure & Run the React Native Application
 
-1. Make sure the [database migration is complete](../../../get-started/index.md?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../../get-started/index.md?UI=NG&DB=EF&Tiered=No#run-the-application).
+1. Make sure the [database migration is complete](../../../get-started?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../../get-started?UI=NG&DB=EF&Tiered=No#run-the-application).
 2. Open `react-native` folder and run `yarn` or `npm install` if you have not already.
 3. Open the `Environment.js` in the `react-native` folder and replace the `localhost` address on the `apiUrl` and `issuer` properties with your local IP address as shown below:
 
@@ -126,4 +126,4 @@ The application is up and running. You can continue to develop your application 
 
 ## See Also
 
-- [React Native project structure](../../../solution-templates/application-module/index.md#react-native)
+- [React Native project structure](../../../solution-templates/application-module#react-native)

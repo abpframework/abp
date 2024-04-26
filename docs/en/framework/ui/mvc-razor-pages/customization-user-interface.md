@@ -1,6 +1,6 @@
 # ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide
 
-This document explains how to override the user interface of a depended [application module](../../../modules/index.md) or [theme](theming.md) for ASP.NET Core MVC / Razor Page applications.
+This document explains how to override the user interface of a depended [application module](../../../modules) or [theme](theming.md) for ASP.NET Core MVC / Razor Page applications.
 
 ## Overriding a Page
 
@@ -63,7 +63,7 @@ The account module defines a `Login.cshtml` file under the `Pages/Account` folde
 
 You typically want to copy the original `.cshtml` file of the module, then make the necessary changes. You can find the original file [here](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml). Do not copy the `Login.cshtml.cs` file which is the code behind file for the razor page and we don't want to override it yet (see the next section).
 
-> Don't forget to add [_ViewImports.cshtml](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/layout?view=aspnetcore-7.0#importing-shared-directives) if the page you want to override contains [ABP Tag Helpers](tag-helpers/index.md).
+> Don't forget to add [_ViewImports.cshtml](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/layout?view=aspnetcore-7.0#importing-shared-directives) if the page you want to override contains [ABP Tag Helpers](tag-helpers).
 
 ````csharp
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

@@ -4,7 +4,7 @@
 
 ABP Framework provides a complete **UI Theming** system with the following goals:
 
-* Reusable [application modules](../../../modules/index.md) are developed **theme-independent**, so they can work with any UI theme.
+* Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
 * The theme is distributed via NuGet/NPM packages, so it is **easily upgradable**.
 * The final application can **customize** the selected theme.
@@ -52,7 +52,7 @@ These libraries are selected as the base libraries and available to the applicat
 
 There are some abstractions in the ABP Framework to make your code independent from some of these libraries too. Examples;
 
-* [Tag Helpers](tag-helpers/index.md) makes it easy to generate the Bootstrap UIs.
+* [Tag Helpers](tag-helpers) makes it easy to generate the Bootstrap UIs.
 * JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provides abstractions to use the Sweetalert and Toastr.
 * [Forms & Validation](forms-validation.md) system automatically handles the validation, so you mostly don't directly type any validation code.
 
@@ -99,7 +99,7 @@ The Account layout is typically used by the [account module](../../../modules/ac
 This layout typically provides the following parts;
 
 * Language switch dropdown
-* Tenant switch area (if the application is [multi-tenant](../../architecture/multi-tenancy/index.md) and the current is resolved by the cookie)
+* Tenant switch area (if the application is [multi-tenant](../../architecture/multi-tenancy) and the current is resolved by the cookie)
 * [Page alerts](page-alerts.md)
 * The page content (aka `RenderBody()`)
 * [Layout hooks](layout-hooks.md)
@@ -257,7 +257,7 @@ The following sections explain the fundamental parts pre-defined by the ABP Fram
 
 `IBrandingProvider` service should be used to get the name and the logo URL of the application to render in the Branding part.
 
-The [Application Startup Template](../../../solution-templates/layered-web-application/index.md) has an implementation of this interface to set the values by the application developer.
+The [Application Startup Template](../../../solution-templates/layered-web-application) has an implementation of this interface to set the values by the application developer.
 
 #### Main Menu
 
@@ -324,7 +324,7 @@ User menu includes links related to the user account. `IMenuManager` is used jus
 var menu = await _menuManager.GetAsync(StandardMenus.User);
 ````
 
-[ICurrentUser](.././../infrastructure/current-user.md) and [ICurrentTenant](../../architecture/multi-tenancy/index.md) services can be used to obtain the current user and tenant names.
+[ICurrentUser](.././../infrastructure/current-user.md) and [ICurrentTenant](../../architecture/multi-tenancy) services can be used to obtain the current user and tenant names.
 
 #### Page Alerts
 

@@ -22,7 +22,7 @@ dotnet tool update --global Volo.Abp.Cli --version 8.2.0-rc.1
 
 ### New Solutions
 
-To create a project for testing the preview version, you can select the "**preview**" option on the [get started](https://abp.io/get-started) page or use the "**--preview**" parameter with the [ABP CLI](../cli/index.md) new command:
+To create a project for testing the preview version, you can select the "**preview**" option on the [get started](https://abp.io/get-started) page or use the "**--preview**" parameter with the [ABP CLI](../cli) new command:
 
 ````bash
 abp new Acme.BookStore --preview
@@ -32,7 +32,7 @@ This command will create a new project using the latest preview NuGet packages, 
 
 ### Existing Solutions
 
-If you already have a solution and want to use/test the latest preview version, use the following [ABP CLI](../cli/index.md) command in the root folder of your solution.
+If you already have a solution and want to use/test the latest preview version, use the following [ABP CLI](../cli) command in the root folder of your solution.
 
 ````bash
 abp switch-to-preview

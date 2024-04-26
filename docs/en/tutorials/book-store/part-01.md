@@ -58,13 +58,13 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Creating the Solution
 
-Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../../get-started/index.md).
+Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../../get-started).
 
 ## After Creating the Solution
 
 ### Installing the Client-Side Packages
 
-[ABP CLI](../../cli/index.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -80,7 +80,7 @@ abp install-libs
 
 ### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../cli/index.md).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../cli).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
@@ -96,7 +96,7 @@ abp bundle
 
 **Domain layer** in the startup template is separated into two projects:
 
-- `Acme.BookStore.Domain` contains your [entities](../../framework/architecture/domain-driven-design/entities.md), [domain services](../../framework/architecture/domain-driven-design/index.md) and other core domain objects.
+- `Acme.BookStore.Domain` contains your [entities](../../framework/architecture/domain-driven-design/entities.md), [domain services](../../framework/architecture/domain-driven-design) and other core domain objects.
 - `Acme.BookStore.Domain.Shared` contains `constants`, `enums` or other domain related objects that can be shared with clients.
 
 So, define your entities in the domain layer (`Acme.BookStore.Domain` project) of the solution. 
@@ -121,7 +121,7 @@ public class Book : AuditedAggregateRoot<Guid>
 }
 ````
 
-* ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../../framework/architecture/domain-driven-design/index.md) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../../framework/architecture/domain-driven-design/entities.md) for more).
+* ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../../framework/architecture/domain-driven-design) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../../framework/architecture/domain-driven-design/entities.md) for more).
 * The `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../../framework/infrastructure/audit-logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
 * `Guid` is the **primary key type** of the `Book` entity.
 

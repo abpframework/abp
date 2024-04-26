@@ -618,7 +618,7 @@ function configureRoutes(routes: RoutesService) {
 
 ### Service Proxy Generation
 
-[ABP CLI](../../cli/index.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+[ABP CLI](../../cli) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Run the following command in the `angular` folder:
 

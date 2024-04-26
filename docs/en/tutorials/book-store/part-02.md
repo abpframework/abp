@@ -261,7 +261,7 @@ Change the `Pages/Books/Index.cshtml` as the following:
 ````
 
 * `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to the standard `script` tag. It handles **minification** and **versioning**. Check the [bundling & minification document](../../framework/ui/mvc-razor-pages/bundling-minification.md) for details.
-* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../../framework/ui/mvc-razor-pages/tag-helpers/index.md) document.
+* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../../framework/ui/mvc-razor-pages/tag-helpers) document.
 
 #### Index.js
 
@@ -462,7 +462,7 @@ For more information, check the [RoutesService document](../../framework/ui/angu
 
 ### Service Proxy Generation
 
-[ABP CLI](../../cli/index.md) provides a `generate-proxy` command that generates client proxies for your HTTP APIs to make your HTTP APIs easy to consume by the client side. Before running the `generate-proxy` command, your host must be up and running.
+[ABP CLI](../../cli) provides a `generate-proxy` command that generates client proxies for your HTTP APIs to make your HTTP APIs easy to consume by the client side. Before running the `generate-proxy` command, your host must be up and running.
 
 > **Warning**: There is a problem with IIS Express; it doesn't allow connecting to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 

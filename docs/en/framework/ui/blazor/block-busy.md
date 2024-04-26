@@ -4,7 +4,7 @@ UI Block disables (blocks) the page or a part of the page.
 
 ## Quick Example
 
-Simply [inject](../../Dependency-Injection.md) `IBlockUiService` to your page or component and call the `Block/UnBlock` method to disables (blocks) the element.
+Simply [inject](../../fundamentals/dependency-injection.md) `IBlockUiService` to your page or component and call the `Block/UnBlock` method to disables (blocks) the element.
 
 ```csharp
 namespace MyProject.Blazor.Pages
@@ -33,6 +33,6 @@ namespace MyProject.Blazor.Pages
 
 The resulting UI will look like below:
 
-![ui-busy](../../images/ui-busy.png)
+![ui-busy](../../../images/ui-busy.png)
 
 Then you can use `_blockUiService.UnBlock()` to re-enable the busy area/page.

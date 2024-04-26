@@ -22,4 +22,4 @@
 }
 ```
 
-- You can follow _Check for a Global Feature_ section of the [Global Features document](../../Global-Features.md) to check global features in your C# code.
+- You can follow _Check for a Global Feature_ section of the [Global Features document](../../infrastructure/global-features.md) to check global features in your C# code.

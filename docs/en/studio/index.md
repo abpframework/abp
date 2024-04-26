@@ -23,7 +23,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
 * Empty
 * Application (Single Layer)
 * Application (Layered)
-* [Microservice](../solution-templates/microservice/index.md)
+* [Microservice](../solution-templates/microservice)
 
 ## Other Resources
 

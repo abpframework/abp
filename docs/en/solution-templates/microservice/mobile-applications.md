@@ -120,7 +120,7 @@ You can start the MAUI application with the solution runner. You can click the s
 
 #### Development on MAUI Application
 
-You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/mobile/maui/index.md) to learn how to develop on MAUI Application.
+You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/mobile/maui) to learn how to develop on MAUI Application.
 
 ### The React Native Application
 

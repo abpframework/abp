@@ -178,7 +178,7 @@ public class EfCoreAuthorRepository
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
-> See the [EF Core Integration document](../../framework/data/entity-framework-core/index.md) for more information on the EF Core based repositories.
+> See the [EF Core Integration document](../../framework/data/entity-framework-core) for more information on the EF Core based repositories.
 
 {{else if DB=="Mongo"}}
 
@@ -239,6 +239,6 @@ public class MongoDbAuthorRepository
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
-> See the [MongoDB Integration document](../../framework/data/mongodb/index.md) for more information on the MongoDB based repositories.
+> See the [MongoDB Integration document](../../framework/data/mongodb) for more information on the MongoDB based repositories.
 
 {{end}}

@@ -59,7 +59,7 @@ In this version, we have made some enhancements in the transactional inbox/outbo
 
 If you call one of these methods in your DbContext class, then this introduces a breaking-change because if you do it, MongoDB collection names will be changed. Therefore, it should be carefully done since existing (non-processed) event records are not automatically moved to new collection and they will be lost. Existing applications with event records should rename the collection manually while deploying their solutions.
 
-See https://github.com/abpframework/abp/pull/17723 for more information. Also, check the documentation for the related configurations: [Distributed Event Bus](../../framework/infrastructure/event-bus/distributed/index.md)
+See https://github.com/abpframework/abp/pull/17723 for more information. Also, check the documentation for the related configurations: [Distributed Event Bus](../../framework/infrastructure/event-bus/distributed)
 
 ## Moved the CMS Kit Pages Feature's Routing to a `DynamicRouteValueTransformer`
 

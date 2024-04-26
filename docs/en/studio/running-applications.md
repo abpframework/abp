@@ -43,7 +43,7 @@ We can start/stop the applications with this option. Go to root of the tree and 
 
 - `Start All`: Start all(CLI, C#) applications.
 - `Stop All`: Stop all(CLI, C#) applications.
-- `Build & Start All`: Builds each C# application in the [Background Tasks](./overview/index.md#background-tasks) and starts all (CLI, C#) applications after the build tasks are completed.
+- `Build & Start All`: Builds each C# application in the [Background Tasks](./overview#background-tasks) and starts all (CLI, C#) applications after the build tasks are completed.
 
 > `Start All` doesn't build the C# applications before running. If you're running it for the first time or if you've made changes, you should build the applications. You can simply use the `Build & Start All`.
 
@@ -60,7 +60,7 @@ We can use common [dotnet](https://learn.microsoft.com/en-us/dotnet/core/tools) 
 - `Restore`: Restores the dependencies for C# applications.
 - `Clean`: Cleans the output of the previous build for C# applications.
 
-> Since *Solution Runner* may contain numerous C# projects, the *Build* options uses the [Background Tasks](./overview/index.md#background-tasks), ensuring a seamless experience while using ABP Studio.
+> Since *Solution Runner* may contain numerous C# projects, the *Build* options uses the [Background Tasks](./overview#background-tasks), ensuring a seamless experience while using ABP Studio.
 
 ### Add
 

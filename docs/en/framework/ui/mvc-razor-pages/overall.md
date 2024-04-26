@@ -19,13 +19,13 @@ ASP.NET Core provides two models for UI development:
 
 [Modularity](../../architecture/modularity/basics.md) is one of the key goals of the ABP Framework. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
 
-The [application startup template](../../../solution-templates/application-module/index.md) comes with some application modules pre-installed. These modules have their own UI pages embedded into their own NuGet packages. You don't see their code in your solution, but they work as expected on runtime.
+The [application startup template](../../../solution-templates/application-module) comes with some application modules pre-installed. These modules have their own UI pages embedded into their own NuGet packages. You don't see their code in your solution, but they work as expected on runtime.
 
 ## Theme System
 
 ABP Framework provides a complete [Theming](theming.md) system with the following goals:
 
-* Reusable [application modules](../../../modules/index.md) are developed **theme-independent**, so they can work with any UI theme.
+* Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
 * The theme is distributed via NuGet/NPM packages, so it is **easily upgradable**.
 * The final application can **customize** the selected theme.
@@ -111,7 +111,7 @@ ABP makes it easier & type safe to write Bootstrap HTML.
 </abp-modal>
 ````
 
-See the [Tag Helpers](tag-helpers/index.md) document for more.
+See the [Tag Helpers](tag-helpers) document for more.
 
 ### Forms & Validation
 
@@ -144,7 +144,7 @@ See the [Bundling & Minification](bundling-minification.md) and [Client Side Pac
 
 ### JavaScript APIs
 
-[JavaScript APIs](javascript-api/index.md) provides a strong abstractions to the server side localization, settings, permissions, features... etc. They also provide a simple way to show messages and **notifications** to the user.
+[JavaScript APIs](javascript-api) provides a strong abstractions to the server side localization, settings, permissions, features... etc. They also provide a simple way to show messages and **notifications** to the user.
 
 ### Modals, Alerts, Widgets and More
 

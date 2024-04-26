@@ -157,5 +157,5 @@ export class AppModule {}
 
 ## See Also
 
-- [Multi Tenancy in ABP](../../architecture/multi-tenancy/index.md)
+- [Multi Tenancy in ABP](../../architecture/multi-tenancy)
 

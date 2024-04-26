@@ -19,7 +19,7 @@ See the [8.2 milestone](https://github.com/abpframework/abp/milestone/95) for al
 
 ## Backlog Items
 
-The *Next Versions* section above shows the main focus of the planned versions. However, in each release, we add new features to the core framework and the [application modules](../modules/index.md).
+The *Next Versions* section above shows the main focus of the planned versions. However, in each release, we add new features to the core framework and the [application modules](../modules).
 
 Here is a list of major items in the backlog we are considering working on in the next versions.
 
@@ -27,7 +27,7 @@ Here is a list of major items in the backlog we are considering working on in th
 
 * [#86](https://github.com/abpframework/abp/issues/86) / GrapQL Integration
 * [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system
-* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules/index.md))
+* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules))
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
 * [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
 * [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy

@@ -1,6 +1,6 @@
 # ABP Studio CLI
 
-ABP Studio CLI is a command line tool that extends [ABP CLI](../cli/index.md) by adding more commands to perform operations of ABP Studio features.
+ABP Studio CLI is a command line tool that extends [ABP CLI](../cli) by adding more commands to perform operations of ABP Studio features.
 
 ## Installation
 
@@ -8,9 +8,9 @@ ABP Studio CLI is installed automatically when you install ABP Studio.
 
 ## Commands
 
-As ABP Studio CLI extends [ABP CLI](../cli/index.md), all commands provided by [ABP CLI](../cli/index.md) is also valid for ABP Studio CLI. Here, is the list of additional commands before explaining their details:
+As ABP Studio CLI extends [ABP CLI](../cli), all commands provided by [ABP CLI](../cli) is also valid for ABP Studio CLI. Here, is the list of additional commands before explaining their details:
 
-* new-solution: Generates a new solution based on the ABP Studio [startup templates](../solution-templates/index.md).
+* new-solution: Generates a new solution based on the ABP Studio [startup templates](../solution-templates).
 * new-module: Generates a new module based on the given template.
 * new-package: Generates a new package based on the given template.
 * add-package-ref: Adds package to given project.
@@ -23,7 +23,7 @@ As ABP Studio CLI extends [ABP CLI](../cli/index.md), all commands provided by [
 
 ### new-solution
 
-Generates a new solution based on the ABP Studio [startup templates](../solution-templates/index.md).
+Generates a new solution based on the ABP Studio [startup templates](../solution-templates).
 
 ````bash
 abpc new-solution <solution-name> [options]
@@ -352,4 +352,4 @@ abpc kube-intercept mycrm-product-service -ns mycrm-local -a MyCrm.ProductServic
 
 ## See Also
 
-* [ABP CLI](../cli/index.md)
+* [ABP CLI](../cli)

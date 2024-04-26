@@ -11,7 +11,7 @@
 
 ABP Framework provides a complete **UI Theming** system with the following goals:
 
-* Reusable [application modules](../../Modules/Index.md) are developed **theme-independent**, so they can work with any UI theme.
+* Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
 * The theme is distributed via a NuGet package, so it is **easily upgradable**.
 * The final application can **customize** the selected theme.
@@ -19,15 +19,15 @@ ABP Framework provides a complete **UI Theming** system with the following goals
 In order to accomplish these goals, ABP Framework;
 
 * Determines a set of **base libraries** used and adapted by all the themes. So, module and application developers can depend on and use these libraries without depending on a particular theme.
-* Provides a system that consists of layout parts (like [navigation menus](Navigation-Menu.md) and [toolbars](Toolbars.md)) that is implemented by all the themes. So, the modules and the application to contribute to the layout to compose a consistent application UI.
+* Provides a system that consists of layout parts (like [navigation menus](navigation-menu.md) and [toolbars](toolbars.md)) that is implemented by all the themes. So, the modules and the application to contribute to the layout to compose a consistent application UI.
 
 ### Current Themes
 
 Currently, three themes are **officially provided**:
 
-* The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
+* The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
-* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/blazor) and a [lite](../../Themes/LeptonXLite/Blazor.md) version. 
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/blazor) and a [lite](../../../ui-themes/lepton-x-lite/blazor.md) version. 
 
 ## Overall
 
@@ -56,23 +56,23 @@ These libraries are selected as the base libraries and available to the applicat
 
 ### The Layout
 
-All themes must define a layout for the application. The following image shows the user management page in the [Basic Theme](Basic-Theme.md) application layout:
+All themes must define a layout for the application. The following image shows the user management page in the [Basic Theme](basic-theme.md) application layout:
 
-![basic-theme-application-layout-blazor](../../images/basic-theme-application-layout-blazor.png)
+![basic-theme-application-layout-blazor](../../../images/basic-theme-application-layout-blazor.png)
 
 And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
 
-![lepton-theme-application-layout](../../images/lepton-theme-blazor-layout.png)
+![lepton-theme-application-layout](../../../images/lepton-theme-blazor-layout.png)
 
 As you can see, the page is the same, but the look is completely different in the themes above.
 
 The application layout typically includes the following parts;
 
-* A [main menu](Navigation-Menu.md)
-* Main [Toolbar](Toolbars.md) with the following components;
+* A [main menu](navigation-menu.md)
+* Main [Toolbar](toolbars.md) with the following components;
   * User menu
   * Language switch dropdown
-* [Page alerts](Page-Alerts.md)
+* [Page alerts](page-alerts.md)
 * The page content (aka `@Body`)
 
 ## Implementing a Theme
@@ -97,7 +97,7 @@ abp add-package Volo.Abp.AspNetCore.Components.Server.BasicTheme --with-source-c
 
 ### Global Styles / Scripts
 
-A theme generally needs to add a global style to the page. ABP provides a system to manage the [Global Styles and Scripts](Global-Scripts-Styles.md). A theme can implement the `IBundleContributor` to add global style or script files to the page.
+A theme generally needs to add a global style to the page. ABP provides a system to manage the [Global Styles and Scripts](global-scripts-styles.md). A theme can implement the `IBundleContributor` to add global style or script files to the page.
 
 **Example: Adding a style to the page**
 
@@ -123,7 +123,7 @@ namespace MyTheme
 
 `styles.css` file should be added into the `wwwroot` folder of the theme project for this example. When you use the `abp bundle` command, this class is automatically discovered and executed to add the style to the page.
 
-See the [Global Styles and Scripts](Global-Scripts-Styles.md) document for more. 
+See the [Global Styles and Scripts](global-scripts-styles.md) document for more. 
 
 ### Layout Parts
 
@@ -131,7 +131,7 @@ A typical Layout consists of several parts. The theme should include the necessa
 
 **Example: The Basic Theme has the following parts for the Application Layout**
 
-![basic-theme-application-layout-parts](../../images/basic-theme-application-layout-parts.png)
+![basic-theme-application-layout-parts](../../../images/basic-theme-application-layout-parts.png)
 
 The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a toolbar item, to change the application name in the branding area...) they should use the ABP Framework APIs.
 
@@ -143,7 +143,7 @@ The following sections explain the fundamental parts pre-defined by the ABP Fram
 
 `IBrandingProvider` service should be used to get the name and the logo URL of the application to render in the Branding part.
 
-The [Application Startup Template](../../Startup-Templates/Application.md) has an implementation of this interface to set the values by the application developer.
+The [Application Startup Template](../../../solution-templates/layered-web-application) has an implementation of this interface to set the values by the application developer.
 
 #### Main Menu
 
@@ -170,7 +170,7 @@ public partial class NavMenu
 }
 ```
 
-See the [Navigation / Menus](Navigation-Menu.md) document to learn more about the navigation system.
+See the [Navigation / Menus](navigation-menu.md) document to learn more about the navigation system.
 
 #### Main Toolbar
 
@@ -180,7 +180,7 @@ See the [Navigation / Menus](Navigation-Menu.md) document to learn more about th
 var toolbar = await _toolbarManager.GetAsync(StandardToolbars.Main);
 ````
 
-> See the [Toolbars](Toolbars.md) document to learn more on the toolbar system.
+> See the [Toolbars](toolbars.md) document to learn more on the toolbar system.
 
 The theme has a responsibility to add two pre-defined items to the main toolbar: Language Selection and User Menu. To do that, create a class implementing the `IToolbarContributor` interface and add it to the `AbpToolbarOptions` as shown below:
 
@@ -258,8 +258,8 @@ User menu includes links related to the user account. `IMenuManager` is used jus
 var menu = await _menuManager.GetAsync(StandardMenus.User);
 ````
 
-[ICurrentUser](../../CurrentUser.md) and [ICurrentTenant](../../Multi-Tenancy.md) services can be used to obtain the current user and tenant names.
+[ICurrentUser](../../infrastructure/current-user.md) and [ICurrentTenant](../../architecture/multi-tenancy) services can be used to obtain the current user and tenant names.
 
 #### Page Alerts
 
-`IAlertManager` service is used to get the current page alerts to render on the layout. See the [Page Alerts](Page-Alerts.md) document to learn more.
+`IAlertManager` service is used to get the current page alerts to render on the layout. See the [Page Alerts](page-alerts.md) document to learn more.

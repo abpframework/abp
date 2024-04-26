@@ -4,7 +4,7 @@
 
 ## Quick Example
 
-Simply [inject](../../Dependency-Injection.md) `IUiNotificationService` to your page or component and call the `Success` method to show a success message.
+Simply [inject](../../fundamentals/dependency-injection.md) `IUiNotificationService` to your page or component and call the `Success` method to show a success message.
 
 ```csharp
 namespace MyProject.Blazor.Pages
@@ -28,7 +28,7 @@ namespace MyProject.Blazor.Pages
 }
 ```
 
-![blazor-notification-sucess](../../images/blazor-notification-success.png)
+![blazor-notification-sucess](../../../images/blazor-notification-success.png)
 
 If you inherit your page or component from the `AbpComponentBase` class, you can use the the `Notify` property to access the `IUiNotificationService` as a pre-injected property.
 
@@ -89,7 +89,7 @@ Here, the list of all available options;
 
 ### Global Configuration
 
-You can also configure global notification options to control the it in a single point. Configure the `UiNotificationOptions` [options class](../../Options.md) in the `ConfigureServices` of your [module](../../Module-Development-Basics.md):
+You can also configure global notification options to control the it in a single point. Configure the `UiNotificationOptions` [options class](../../fundamentals/options.md) in the `ConfigureServices` of your [module](../../architecture/modularity/basics.md):
 
 ````csharp
 Configure<UiNotificationOptions>(options =>

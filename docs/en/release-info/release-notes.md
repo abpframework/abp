@@ -39,15 +39,15 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-3-Final-Has-Been-Released)** for the v7.3 release.
 
 * [Account Module](../modules/account.md): Using Authenticator App for Two-Factor Authentication.
-* Support for the [Module Entity Extensions](../framework/architecture/modularity/extending/module-entity-extensions.md) in the [CMS Kit Pro Module](../modules/cms-kit/index.md).
-* New Account Layout Design for [LeptonX Theme](../ui-themes/lepton-x/index.md).
+* Support for the [Module Entity Extensions](../framework/architecture/modularity/extending/module-entity-extensions.md) in the [CMS Kit Pro Module](../modules/cms-kit).
+* New Account Layout Design for [LeptonX Theme](../ui-themes/lepton-x).
 * Many enhancements and fixes for the 7.3 version.
 
 ## 7.2 (2023-05-03)
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-2-Final-Has-Been-Released)** for the v7.2 release.
 
-* **[LeptonX Theme](../ui-themes/lepton-x/index.md)** - Navigation Menu Item Grouping.
+* **[LeptonX Theme](../ui-themes/lepton-x)** - Navigation Menu Item Grouping.
 * Support for the **Authority Delegation** in the **[Account Module](../modules/account.md)**.
 * Forcing Password Change at Next Logon.
 * Periodic Password Changes / Password Aging.
@@ -95,7 +95,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-5.3-Final-Has-Been-Released)** for the v5.3 release.
 
 * New module: **GDPR** (currently, allows to download/delete user's personal data).
-* **Polling** feature for the [CMS Kit module](../modules/cms-kit/index.md).
+* **Polling** feature for the [CMS Kit module](../modules/cms-kit).
 * OAuth as **external login provider** for the [Identity module](../modules/identity.md).
 * **ABP Suite**: Support for the no-layers startup template, concurrency stamp support on code generation, downloading Suite logs, using ABP CLI to trigger code generation.
 * **Docker-compose** configuration for the no-layers startup template.
@@ -105,7 +105,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Platform-5-2-Final-Has-Been-Released)** for the v5.2 release.
 
-* Code generation with **many to many relation** support for the [ABP Suite](../suite/index.md).
+* Code generation with **many to many relation** support for the [ABP Suite](../suite).
 * The new **single-layer**, simpler startup solution template.
 * Migrated to **Blazorise 1.0** for the Blazor UI.
 * Improvements on the microservice startup solution, pre-built application modules and other existing features.
@@ -141,7 +141,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 * **Subscription** system & **payment** integration for the [SaaS module](../modules/saas.md).
 * SaaS module: Allow to make a **tenant active/passive** and **limit user count**.
-* [ABP Suite](../suite/index.md) **code generation** for the [microservice solution](../solution-templates/microservice/index.md).
+* [ABP Suite](../suite) **code generation** for the [microservice solution](../solution-templates/microservice).
 * Allow to set **multiple connection strings** for each tenant, to separate a tenant's database per module/microservice.
 * Angular UI: **Two-factor** authentication for resource owner password flow.
 * **New localizations**: Hindi, Italian, Arabic, Finnish, French.

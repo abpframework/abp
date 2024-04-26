@@ -10,7 +10,7 @@ In this version, the `Microsoft.Extensions.FileProviders.Embedded` (and other `M
 
 ## Renamed the `AddGlobalFilters<>` method as `FilterQueryable<>` in `IMongoDbRepositoryFilterer`
 
-ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../../framework/data/mongodb/index.md).
+ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../../framework/data/mongodb).
 
 In this version, the `AddGlobalFilters<>` method is renamed as `FilterQueryable<>`. Therefore, you need to update the method name if you have used data filtering for MongoDB, in your application.
 

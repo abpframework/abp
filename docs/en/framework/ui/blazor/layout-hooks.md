@@ -1,6 +1,6 @@
 # Blazor UI: Layout Hooks
 
-ABP Framework theming system places the page layout into the [theme](Theming.md) NuGet packages. That means the final application doesn't include a layout, so you can't directly change the layout code to customize it.
+ABP Framework theming system places the page layout into the [theme](theming.md) NuGet packages. That means the final application doesn't include a layout, so you can't directly change the layout code to customize it.
 
 > If you create a Blazor WASM project, the `index.html` file will be included within the template. You can also customize it to your needs.
 
@@ -12,7 +12,7 @@ The **Layout Hook System** allows you to **add code** at some specific parts of 
 
 Assume that you need to add a simple banner to the layout (that will be available for all the pages) to make an announcement about your new product. First, **create a razor component** in your project:
 
-![bookstore-banner-component](../../images/bookstore-banner-component.png)
+![bookstore-banner-component](../../../images/bookstore-banner-component.png)
 
 **AnnouncementComponent.razor.cs**
 
@@ -122,4 +122,4 @@ You can find the `MainLayout.razor` [here](https://github.com/abpframework/abp/b
 
 ## See Also
 
-* [Customization / Overriding Components](Customization-Overriding-Components.md)
+* [Customization / Overriding Components](customization-overriding-components.md)

@@ -2,21 +2,21 @@
 
 Entity action extension system allows you to add a **new action** to the action menu for an entity. A **Click Me** action was added to the *User Management* page below:
 
-![user-action-extension-click-me](../../images/user-action-blazor-extension-click-me.png)
+![user-action-extension-click-me](../../../images/user-action-blazor-extension-click-me.png)
 
 You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can access to the current entity in your code.
 
 ## How to Set Up
 
-In this example, we will add a "Click Me!" action and execute a C# code for the user management page of the [Identity Module](../../../../../modules/identity.md).
+In this example, we will add a "Click Me!" action and execute a C# code for the user management page of the [Identity Module](../../../modules/identity.md).
 
 ### Create a C# File
 
 First, add a new C# file to your solution. We added inside the `/Pages/Identity/` folder of the `.Blazor` project:
 
-![user-action-extension-on-solution](../../images/user-action-extension-on-blazor-project.png)
+![user-action-extension-on-solution](../../../images/user-action-extension-on-blazor-project.png)
 
-We will use the [component override system](Customization-Overriding-Components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetEntityActionsAsync` method and add the entity action programmatically.
+We will use the [component override system](customization-overriding-components.md) in the Blazor. After creating a class inherits from the `UserManagement` component, we will override the `SetEntityActionsAsync` method and add the entity action programmatically.
 
 Here, the content of the overridden `SetEntityActionsAsync` method.
 

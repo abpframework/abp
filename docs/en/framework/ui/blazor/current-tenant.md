@@ -1,6 +1,6 @@
 # Blazor UI: Current Tenant
 
-`ICurrentTenant` service can be used to get information about the current tenant in a [multi-tenant](../../Multi-Tenancy.md) application. `ICurrentTenant` defines the following properties;
+`ICurrentTenant` service can be used to get information about the current tenant in a [multi-tenant](../../architecture/multi-tenancy) application. `ICurrentTenant` defines the following properties;
 
 * `Id` (`Guid`): Id of the current tenant. Can be `null` if the current user is a host user or the tenant could not be determined.
 * `Name` (`string`): Name of the current tenant. Can be `null` if the current user is a host user or the tenant could not be determined.
@@ -20,4 +20,4 @@
 
 ## See Also
 
-* [Multi-Tenancy](../../Multi-Tenancy.md)
+* [Multi-Tenancy](../../architecture/multi-tenancy)

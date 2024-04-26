@@ -4,7 +4,7 @@ ABP startup templates use `OpenIddict` OpenID provider from v6.0.0 by default an
 
 ## IdentityServer4 Migration Steps
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](index.md) based on your application version.
+Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](../migration-guides) based on your application version.
 
 ### Domain.Shared Layer
 

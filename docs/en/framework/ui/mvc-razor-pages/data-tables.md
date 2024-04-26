@@ -22,7 +22,7 @@ First, add an `abp-table` as shown below, with an `id`:
 <abp-table striped-rows="true" id="BooksTable"></abp-table>
 ````
 
-> `abp-table` is a [Tag Helper](tag-helpers/index.md) defined by the ABP Framework, but a simple `<table...>` tag would also work.
+> `abp-table` is a [Tag Helper](tag-helpers) defined by the ABP Framework, but a simple `<table...>` tag would also work.
 
 Then call the `DataTable` plugin on the table selector:
 

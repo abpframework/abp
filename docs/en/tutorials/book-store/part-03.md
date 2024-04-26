@@ -141,7 +141,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
 </abp-dynamic-form>
 ````
 
-* This modal uses `abp-dynamic-form` [tag helper](../../framework/ui/mvc-razor-pages/tag-helpers/index.md) to automatically create the form from the `CreateUpdateBookDto` model class.
+* This modal uses `abp-dynamic-form` [tag helper](../../framework/ui/mvc-razor-pages/tag-helpers) to automatically create the form from the `CreateUpdateBookDto` model class.
 * `abp-model` attribute indicates the model object where it's the `Book` property in this case.
 * `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
 

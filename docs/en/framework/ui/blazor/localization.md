@@ -1,6 +1,6 @@
 # Blazor UI: Localization
 
-Blazor applications can reuse the same `IStringLocalizer<T>` service that is explained in the [localization document](../../Localization.md).
+Blazor applications can reuse the same `IStringLocalizer<T>` service that is explained in the [localization document](../../fundamentals/localization.md).
 
 All the localization resources and texts available in the server side are usable in the Blazor application.
 
@@ -75,5 +75,5 @@ Format arguments can be passed after the localization key. If your message is `H
 
 ## See Also
 
-* [Localization](../../Localization.md)
+* [Localization](../../fundamentals/localization.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/localization)

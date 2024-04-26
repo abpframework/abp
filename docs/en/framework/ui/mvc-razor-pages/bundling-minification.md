@@ -12,13 +12,13 @@ ABP offers a simple, dynamic, powerful, modular and built-in way.
 
 > This package is already installed by default with the startup templates. So, most of the time, you don't need to install it manually.
 
-If you're not using a startup template, you can use the [ABP CLI](../../../cli/index.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
+If you're not using a startup template, you can use the [ABP CLI](../../../cli) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Bundling).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Bundling).
 
 ## Razor Bundling Tag Helpers
 
@@ -294,13 +294,13 @@ Using the built-in contributors for standard packages;
 
 > This package is already installed by default in the startup templates. So, most of the time, you don't need to install it manually.
 
-If you're not using a startup template, you can use the [ABP CLI](../../../cli/index.md) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
+If you're not using a startup template, you can use the [ABP CLI](../../../cli) to install it to your project. Execute the following command in the folder that contains the .csproj file of your project:
 
 ````
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Packages
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Packages).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Packages).
 
 ### Bundle Inheritance
 

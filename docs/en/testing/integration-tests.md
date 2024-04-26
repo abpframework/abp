@@ -363,7 +363,7 @@ public abstract class MyDbContext_Tests<TStartupModule> : MyProjectDomainTestBas
 
 Just like we've done in the *Dealing with Unit of Work in Integration Tests* section, we should perform `DbContext` operations inside an active unit of work.
 
-For [MongoDB](../framework/data/mongodb/index.md), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
+For [MongoDB](../framework/data/mongodb), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
 
 ## Implementing unit tests in EF Core and MongoDB
 

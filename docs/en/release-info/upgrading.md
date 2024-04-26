@@ -4,7 +4,7 @@ This document explains how to upgrade your existing solution when a new ABP vers
 
 ## ABP UPDATE Command
 
-ABP platform consist of hundreds of NuGet and NPM packages. It would be tedious to manually update all these packages to upgrade your application. [ABP CLI](../cli/index.md) provides a handy command to update all the ABP related NuGet and NPM packages in your solution with a single command:
+ABP platform consist of hundreds of NuGet and NPM packages. It would be tedious to manually update all these packages to upgrade your application. [ABP CLI](../cli) provides a handy command to update all the ABP related NuGet and NPM packages in your solution with a single command:
 
 ````bash
 abp update
@@ -31,7 +31,7 @@ Whenever you upgrade your solution, it is strongly suggested to check the [ABP B
 
 ### Migration Guides
 
-We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](migration-guides/index.md) document for all the guides.
+We prepare migration guides if the new version brings breaking changes for existing applications. See the [Migration Guides](migration-guides) document for all the guides.
 
 ### Upgrading the Startup Template
 
@@ -57,4 +57,4 @@ Preview releases and nightly builds can help you to try new features and adapt y
 
 ## See Also
 
-* [Migration Guides](migration-guides/index.md)
+* [Migration Guides](migration-guides)

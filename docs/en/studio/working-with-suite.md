@@ -1,6 +1,6 @@
 # ABP Studio: Working with ABP Suite
 
-ABP Studio (Studio) has a shortcut for running [ABP Suite](../suite/index.md) (Suite) to allow using it without starting it externally and using it on a browser. Thus you can use both Studio and Suite as a united platform.
+ABP Studio (Studio) has a shortcut for running [ABP Suite](../suite) (Suite) to allow using it without starting it externally and using it on a browser. Thus you can use both Studio and Suite as a united platform.
 
 ## Running Suite From Studio
 
@@ -36,4 +36,4 @@ You can generate code on the services of the microservice solution. UI code gene
 
 ## See Also
 
-* [ABP Suite](../suite/index.md) 
+* [ABP Suite](../suite) 

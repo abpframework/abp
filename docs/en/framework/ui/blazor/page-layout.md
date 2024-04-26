@@ -14,7 +14,7 @@ Title is used to render page title in the PageHeader.
 ```
 
 ## MenuItemName
-Indicates current selected menu item name. Menu item name should match a unique menu item name defined using the [Navigation / Menu system](../Blazor/Navigation-Menu.md). In this case, it is expected from the theme to make the menu item "active" in the main menu. 
+Indicates current selected menu item name. Menu item name should match a unique menu item name defined using the [Navigation / Menu system](navigation-menu.md). In this case, it is expected from the theme to make the menu item "active" in the main menu. 
 
 ```csharp
 @inject PageLayout PageLayout
@@ -43,10 +43,10 @@ Menu item name can be set on runtime too.
 ```
 
 
-![leptonx selected menu item](../../images/leptonx-selected-menu-item-example.gif)
+![leptonx selected menu item](../../../images/leptonx-selected-menu-item-example.gif)
 
 
-> Be aware, The [Basic Theme](../Blazor/Basic-Theme.md) currently doesn't support the selected menu item since it is not applicable to the top menu. 
+> Be aware, The [Basic Theme](basic-theme.md) currently doesn't support the selected menu item since it is not applicable to the top menu. 
 
 ## BreadCrumbs
 BreadCrumbItems are used to render breadcrumbs in the PageHeader.
@@ -61,7 +61,7 @@ BreadCrumbItems are used to render breadcrumbs in the PageHeader.
 ## Toolbar
 ToolbarItems are used to render action toolbar items in the PageHeader.
 
-Check out [Page Toolbar](../blazor/page-header.md/#page-toolbar)
+Check out [Page Toolbar](page-header.md/#page-toolbar)
 
 ```csharp
 @inject PageLayout PageLayout

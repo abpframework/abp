@@ -25,13 +25,13 @@ You have multiple options to initiate a new Angular project that works with ABP:
 
 ### 1. Using ABP CLI
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with an Angular frontend. Simply [install the ABP CLI](../../../cli/index.md) and run the following command in your terminal:
+ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with an Angular frontend. Simply [install the ABP CLI](../../../cli) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u angular
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](../../../cli/index.md).
+> To see further options in the CLI, please visit the [CLI manual](../../../cli).
 
 This command will prepare a solution with an Angular and a .NET Core project in it. Please visit [Getting Started section](../../../_deleted/getting-started.md?UI=NG&DB=EF&Tiered=No#abp-cli-commands-options) for further instructions on how to set up the backend of your solution.
 
@@ -39,7 +39,7 @@ To continue reading without checking other methods, visit [Angular project struc
 
 ### 2. Generating a CLI Command from Get Started Page
 
-You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../Startup-Templates/Index.md).
+You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../../solution-templates).
 
 ## Angular Project Structure
 

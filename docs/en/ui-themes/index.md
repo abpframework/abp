@@ -9,10 +9,10 @@ ABP Framework provides a complete UI theming system. While you can build your ow
 
 LeptonX theme has two versions:
 
-* [LeptonX Theme](lepton-x/index.md) is included in paid licenses.
-* [LeptonX Lite Theme](lepton-x-lite/Index.md) is provided as free.
+* [LeptonX Theme](lepton-x) is included in paid licenses.
+* [LeptonX Lite Theme](lepton-x-lite) is provided as free.
 
-> If you are looking for the legacy Lepton Theme documentation, please [click here](lepton/index.md).
+> If you are looking for the legacy Lepton Theme documentation, please [click here](lepton).
 
 ## The Basic Theme
 

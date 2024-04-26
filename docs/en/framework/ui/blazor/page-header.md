@@ -15,9 +15,9 @@ Once you add the `PageHeader` component to your page, you can control the relate
 
 ## Breadcrumb
 
-> **The [Basic Theme](Basic-Theme.md) currently doesn't implement the breadcrumbs.**
+> **The [Basic Theme](basic-theme.md) currently doesn't implement the breadcrumbs.**
 > 
-> The [LeptonX Lite Theme](../../Themes/LeptonXLite/Blazor.md) supports breadcrumbs.
+> The [LeptonX Lite Theme](../../../ui-themes/lepton-x-lite/blazor.md) supports breadcrumbs.
 
 Breadcrumbs can be added using the `BreadcrumbItems` property.
 
@@ -45,7 +45,7 @@ Navigate back to the razor page.
 
 The theme then renders the breadcrumb. An example render result can be:
 
-![breadcrumbs-example](../../images/breadcrumbs-example.png)
+![breadcrumbs-example](../../../images/breadcrumbs-example.png)
 
 * The Home icon is rendered by default. Set `BreadcrumbShowHome` to `false` to hide it.
 * Breadcrumb items will be activated based on current navigation. Set `BreadcrumbShowCurrent` to `false` to disable it.
@@ -88,7 +88,7 @@ Navigate back to the razor page and set the `Toolbar` parameter.
 
 An example render result can be:
 
-![breadcrumbs-example](../../images/page-header-toolbar-blazor.png)
+![breadcrumbs-example](../../../images/page-header-toolbar-blazor.png)
 
 ---
 

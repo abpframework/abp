@@ -8,7 +8,7 @@
 
 ## Introduction
 
-One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices/index.md).
+One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices).
 
 This sample aims to demonstrate a simple yet complete microservice solution;
 
@@ -132,7 +132,7 @@ Microservices have no UI, but exposes some REST APIs.
 
 ### Modules
 
-* **Product**: A layered module that is developed with the [module development best practices](../framework/architecture/best-practices/index.md). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
+* **Product**: A layered module that is developed with the [module development best practices](../framework/architecture/best-practices). It can be embedded into a monolithic application or can be hosted as a microservice by separately deploying API and UI (as done in this demo solution).
 
 ### Databases
 
@@ -570,7 +570,7 @@ This configuration uses standard MVC middleware when request path starts with `/
 
 #### Swagger
 
-This gateway is configured to use the [swagger UI](https://swagger.io/tools/swagger-ui/), a popular tool to discover & test HTTP APIs. Normally, Ocelot does not support to show APIs on the swagger, because it can not know details of each microservice API. But it is possible when you follow ABP layered module architecture [best practices](../framework/architecture/best-practices/index.md).
+This gateway is configured to use the [swagger UI](https://swagger.io/tools/swagger-ui/), a popular tool to discover & test HTTP APIs. Normally, Ocelot does not support to show APIs on the swagger, because it can not know details of each microservice API. But it is possible when you follow ABP layered module architecture [best practices](../framework/architecture/best-practices).
 
 `BackendAdminAppGatewayHostModule` adds dependency to `AbpIdentityHttpApiModule` (*[Volo.Abp.Identity.HttpApi](https://www.nuget.org/packages/Volo.Abp.Identity.HttpApi)* package) and `ProductManagementHttpApiModule` (*ProductManagement.HttpApi* project) to include their HTTP API Controllers. In this way, swagger can discover them. While it references to the API layer, it does not reference to the implementation of application services, because they will be running in the related microservice endpoints and redirected by the Ocelot based on the request URL.
 
@@ -1030,9 +1030,9 @@ Swagger UI is configured and is the default page for this service. If you naviga
 
 ## Modules
 
-ABP provides a strong infrastructure to make modular application development easier by providing services and architecture (see the [module development best practices guide](../framework/architecture/best-practices/index.md)).
+ABP provides a strong infrastructure to make modular application development easier by providing services and architecture (see the [module development best practices guide](../framework/architecture/best-practices)).
 
-This solution demonstrate how to use [prebuilt application modules](../modules/index.md) in a distributed architecture. The solution also includes a simple "Product Management" module to show the implementation of a well layered module example.
+This solution demonstrate how to use [prebuilt application modules](../modules) in a distributed architecture. The solution also includes a simple "Product Management" module to show the implementation of a well layered module example.
 
 ### Product Management
 
@@ -1175,7 +1175,7 @@ private Product SetStockCountInternal(int stockCount, bool triggerEvent = true)
 
 This method also triggers a **distributed event** with the `ProductStockCountChangedEto` parameter (Eto is a conventional postfix stands for **E**vent **T**ransfer **O**bject, but not required) to notify listeners that stock count of a product has changed. Any subscriber can receive this event and perform an action based on that knowledge.
 
-Events are distributed by RabbitMQ for this solution. But ABP is message broker independent by providing necessary abstractions (see the [Event Bus](../framework/infrastructure/event-bus/index.md) document).
+Events are distributed by RabbitMQ for this solution. But ABP is message broker independent by providing necessary abstractions (see the [Event Bus](../framework/infrastructure/event-bus) document).
 
 As said before, this module forces to always use the `ProductManager` to create a new `Product`. `ProductManager` is a simple domain service defined as shown:
 
@@ -1331,7 +1331,7 @@ public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
 
 All the integration and communication are done by the ABP framework when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
 
-See the [Event Bus](../framework/infrastructure/event-bus/index.md) documentation for more information about the distributed event system.
+See the [Event Bus](../framework/infrastructure/event-bus) documentation for more information about the distributed event system.
 
 #### RabbitMQ Configuration
 
@@ -1418,4 +1418,4 @@ An Audit Log record has a `CorrelationId` property that can be used to track a r
 
 ### Multi-Tenancy
 
-The solution has been configured to provide a [multi-tenant](../framework/architecture/multi-tenancy/index.md) system, where each tenant can have their isolated users, roles, permissions and other data.
+The solution has been configured to provide a [multi-tenant](../framework/architecture/multi-tenancy) system, where each tenant can have their isolated users, roles, permissions and other data.

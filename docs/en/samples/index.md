@@ -71,11 +71,11 @@ The following samples uses the pro modules.
   * [Widget documentation](../framework/ui/mvc-razor-pages/widgets.md)
 * **RabbitMQ Event Bus Demo**: A solution consists of two applications communicating to each other via distributed events with RabbitMQ integration.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/RabbitMqEventBus)
-  * [Distributed event bus document](../framework//infrastructure/event-bus/distributed/index.md)
+  * [Distributed event bus document](../framework/infrastructure/event-bus/distributed)
   * [RabbitMQ distributed event bus integration document](../framework/infrastructure/event-bus/distributed/rabbitmq.md)
 * **Text Templates Demo**: Shows different use cases of the text templating system.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
-  * [Text templating documentation](../framework/infrastructure/text-templating/index.md)
+  * [Text templating documentation](../framework/infrastructure/text-templating)
 * **Stored Procedure Demo**: Demonstrates how to use stored procedures, database views and functions with best practices.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
 * **Passwordless Authentication**: Shows how to add a custom token provider to authenticate a user with a link, instead of entering a password.

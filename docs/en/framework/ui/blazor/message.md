@@ -4,7 +4,7 @@ UI message service is used to show nice-looking messages to the user as a blocki
 
 ## Quick Example
 
-Simply [inject](../../Dependency-Injection.md) `IUiMessageService` to your page or component and call the `Success` method to show a success message.
+Simply [inject](../../fundamentals/dependency-injection.md) `IUiMessageService` to your page or component and call the `Success` method to show a success message.
 
 ```csharp
 namespace MyProject.Blazor.Pages
@@ -30,7 +30,7 @@ namespace MyProject.Blazor.Pages
 
 It will show a dialog on the UI:
 
-![blazor-message-success](../../images/blazor-message-success.png)
+![blazor-message-success](../../../images/blazor-message-success.png)
 
 If you inherit your page or component from the `AbpComponentBase` class, you can use the `Message` property to access the `IUiMessageService` as a pre-injected property.
 
@@ -71,7 +71,7 @@ All of these methods get three parameters:
 _uiMessageService.Error('Your credit card number is not valid!');
 ````
 
-![blazor-message-success](../../images/blazor-message-error.png)
+![blazor-message-success](../../../../images/blazor-message-error.png)
 
 
 ## Confirmation Message
@@ -95,7 +95,7 @@ public async Task DeleteAsync()
 
 The resulting UI will be like shown below:
 
-![blazor-message-confirm](../../images/blazor-message-confirm.png)
+![blazor-message-confirm](../../../images/blazor-message-confirm.png)
 
 If the user has clicked the `Yes` button, the `Confirm` method's return value will be `true`.
 

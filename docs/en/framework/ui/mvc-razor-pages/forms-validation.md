@@ -160,7 +160,7 @@ The error message below is shown if the language is French:
 
 ![abp-form-input-validation-error](../../../images/abp-form-input-validation-error-french.png)
 
-Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../Contribution/Index.md) to the translation for your own language or override the texts for your own application by following the [localization](../../fundamentals/localization.md) documentation.
+Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../Contribution) to the translation for your own language or override the texts for your own application by following the [localization](../../fundamentals/localization.md) documentation.
 
 ## Display Name Localization
 

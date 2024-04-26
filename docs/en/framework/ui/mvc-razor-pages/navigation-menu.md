@@ -13,7 +13,7 @@ So, ABP Framework **provides a menu infrastructure** where;
 
 In order to add menu items (or manipulate the existing items) you need to create a class implementing the `IMenuContributor` interface.
 
-> The [application startup template](../../../solution-templates/layered-web-application/index.md) already contains an implementation of the `IMenuContributor`. So, you can add items inside that class instead of creating a new one.
+> The [application startup template](../../../solution-templates/layered-web-application) already contains an implementation of the `IMenuContributor`. So, you can add items inside that class instead of creating a new one.
 
 **Example: Add a *CRM* menu item with *Customers* and *Orders* sub menu items**
 
@@ -157,7 +157,7 @@ var myService = context.ServiceProvider.GetRequiredService<IMyService>();
 
 ### The Administration Menu
 
-There is a special menu item in the menu menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../../modules/index.md):
+There is a special menu item in the menu menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../../modules):
 
 ![nav-main-menu-administration](../../../images/nav-main-menu-administration.png)
 

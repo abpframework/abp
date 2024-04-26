@@ -53,7 +53,7 @@ See the [Component Replacement](component-replacement.md) to learn how you can r
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../../cli/index.md) command in **Angular** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../../cli) command in **Angular** project directory to copy the source code to your solution:
 
 `abp add-package @abp/ng.theme.basic --with-source-code`
 

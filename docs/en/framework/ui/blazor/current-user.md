@@ -18,5 +18,5 @@
 
 `ICurrentUser` provides `Id`, `Name`, `SurName`, `Email`, `Roles` and some other properties.
 
-> See the [Server Side Current User](../../CurrentUser) service for more information.
+> See the [Server Side Current User](../../infrastructure/current-user.md) service for more information.
 

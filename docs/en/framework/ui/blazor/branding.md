@@ -6,7 +6,7 @@
 
 The screenshot below shows *MyProject* as the application name:
 
-![branding-nobrand](../../images/branding-nobrand.png)
+![branding-nobrand](../../../images/branding-nobrand.png)
 
 You can implement the `IBrandingProvider` interface or inherit from the `DefaultBrandingProvider` to set the application name:
 
@@ -24,11 +24,11 @@ namespace MyCompanyName.MyProjectName.Blazor
 }
 ````
 
-> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../Themes/Basic.md), it does not have any effect on the other [official themes](../../Themes/Index.md).
+> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../Themes/Basic.md), it does not have any effect on the other [official themes](../../../ui-themes).
 
 The result will be like shown below:
 
-![branding-appname](../../images/branding-appname.png)
+![branding-appname](../../../images/branding-appname.png)
 
 `IBrandingProvider` has the following properties:
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This template provides a layered application structure based on the [Domain Driven Design](../../framework/architecture/domain-driven-design/index.md) (DDD) practices. 
+This template provides a layered application structure based on the [Domain Driven Design](../../framework/architecture/domain-driven-design) (DDD) practices. 
 
 This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
 
@@ -11,7 +11,7 @@ This document explains **the solution structure** and projects in details. If yo
 
 ## How to Start With?
 
-You can use the [ABP CLI](../../cli/index.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../../cli) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed it before:
 
@@ -80,7 +80,7 @@ If you don't specify any additional options, you will have a solution as shown b
 
 ![bookstore-rider-solution-v6](../images/solution-structure-solution-explorer-rider.png)
 
-Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../../framework/architecture/domain-driven-design/index.md) principles as mentioned before.
+Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../../framework/architecture/domain-driven-design) principles as mentioned before.
 
 The diagram below shows the layers & project dependencies of the application:
 

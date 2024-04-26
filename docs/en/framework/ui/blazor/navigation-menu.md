@@ -2,18 +2,18 @@
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.
 
-ABP Framework is a [modular](../../Module-Development-Basics.md) application development framework. **Every module may need to add items to the menu**.
+ABP Framework is a [modular](../../architecture/modularity/basics.md) application development framework. **Every module may need to add items to the menu**.
 
 So, ABP Framework **provides a menu infrastructure** where;
 
 * The application or the modules can add items to a menu, without knowing how the menu is rendered.
-* The [theme](Theming.md) properly renders the menu.
+* The [theme](theming.md) properly renders the menu.
 
 ## Adding Menu Items
 
 In order to add menu items (or manipulate the existing items) you need to create a class implementing the `IMenuContributor` interface.
 
-> The [application startup template](../../Startup-Templates/Application.md) already contains an implementation of the `IMenuContributor`. So, you can add items inside that class instead of creating a new one.
+> The [application startup template](../../../solution-templates/layered-web-application/index.md) already contains an implementation of the `IMenuContributor`. So, you can add items inside that class instead of creating a new one.
 
 **Example: Add a *CRM* menu item with *Customers* and *Orders* sub menu items**
 
@@ -56,7 +56,7 @@ namespace MyProject.Web.Menus
 ```
 
 * This example adds items only to the main menu (`StandardMenus.Main`: see the *Standard Menus* section below).
-* It gets a `IStringLocalizer` from `context` to [localize](../../Localization.md) the display names of the menu items.
+* It gets a `IStringLocalizer` from `context` to [localize](../../fundamentals/localization.md) the display names of the menu items.
 * Adds the Customers and Orders as children of the CRM menu.
 
 Once you create a menu contributor, you need to add it to the `AbpNavigationOptions` in the `ConfigureServices` method of your module:
@@ -76,13 +76,13 @@ This example uses some localization keys as display names those should be define
 "Menu:Customers": "Customers"
 ````
 
-See the [localization document](../../Localization.md) to learn more about the localization.
+See the [localization document](../../fundamentals/localization.md) to learn more about the localization.
 
 When you run the application, you will see the menu items added to the main menu:
 
-![nav-main-menu](../../images/nav-main-menu.png)
+![nav-main-menu](../../../images/nav-main-menu.png)
 
-> The menu is rendered by the current UI [theme](Theming.md). So, the look of the main menu can be completely different based on your theme.
+> The menu is rendered by the current UI [theme](theming.md). So, the look of the main menu can be completely different based on your theme.
 
 Here, a few notes on the menu contributors;
 
@@ -96,7 +96,7 @@ Here, a few notes on the menu contributors;
 There are more options of a menu item (the constructor of the `ApplicationMenuItem` class). Here, the list of all available options;
 
 * `name` (`string`, required): The **unique name** of the menu item.
-* `displayName` (`string`, required): Display name/text of the menu item. You can [localize](../../Localization.md) this as shown before.
+* `displayName` (`string`, required): Display name/text of the menu item. You can [localize](../../fundamentals/localization.md) this as shown before.
 * `url` (`string`): The URL of the menu item.
 * `icon` (`string`): An icon name. Free [Font Awesome](https://fontawesome.com/) icon classes are supported out of the box. Example: `fa fa-book`. You can use any CSS font icon class as long as you include the necessary CSS files to your application.
 * `order` (`int`): The order of the menu item. Default value is `1000`. Items are sorted by the adding order unless you specify an order value.
@@ -110,7 +110,7 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 
 As seen above, a menu contributor contributes to the menu dynamically. So, you can perform any custom logic or get menu items from any source.
 
-One use case is the [authorization](Authorization.md). You typically want to add menu items by checking a permission.
+One use case is the [authorization](authorization.md). You typically want to add menu items by checking a permission.
 
 **Example: Check if the current user has a permission**
 
@@ -138,9 +138,9 @@ var myService = context.ServiceProvider.GetRequiredService<IMyService>();
 
 ### The Administration Menu
 
-There is a special menu item in the menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../Modules/Index.md):
+There is a special menu item in the menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../../modules):
 
-![nav-main-menu-administration](../../images/nav-main-menu-administration.png)
+![nav-main-menu-administration](../../../images/nav-main-menu-administration.png)
 
 If you want to add menu items under the *Administration* menu item, you can use the `context.Menu.GetAdministration()` extension method:
 
@@ -150,9 +150,9 @@ context.Menu.GetAdministration().AddItem(...)
 
 ### Manipulating the Existing Menu Items
 
-ABP Framework executes the menu contributors by the [module dependency order](../../Module-Development-Basics.md). So, you can manipulate the menu items that your application or module (directly or indirectly) depends on.
+ABP Framework executes the menu contributors by the [module dependency order](../../architecture/modularity/basics.md). So, you can manipulate the menu items that your application or module (directly or indirectly) depends on.
 
-**Example: Set an icon for the `Users` menu item added by the [Identity Module](../../../../../modules/identity.md)**
+**Example: Set an icon for the `Users` menu item added by the [Identity Module](../../../modules/identity.md)**
 
 ````csharp
 var userMenu = context.Menu.FindMenuItem(IdentityMenuNames.Users);
@@ -222,7 +222,7 @@ A menu is a **named** component. An application may contain more than one menus 
 
 The `Main` menu already covered above. The `User` menu is available when a user has logged in:
 
-![user-menu](../../images/user-menu.png)
+![user-menu](../../../images/user-menu.png)
 
 You can add items to the `User` menu by checking the `context.Menu.Name` as shown below:
 
@@ -235,7 +235,7 @@ if (context.Menu.Name == StandardMenus.User)
 
 ## IMenuManager
 
-`IMenuManager` is generally used by the UI [theme](Theming.md) to render the menu items on the UI. So, **you generally don't need to directly use** the `IMenuManager`.
+`IMenuManager` is generally used by the UI [theme](theming.md) to render the menu items on the UI. So, **you generally don't need to directly use** the `IMenuManager`.
 
 **Example: Get the Main Menu to render in a razor component**
 

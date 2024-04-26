@@ -281,7 +281,7 @@ There are some adjustments you may need to make before generating CRUD pages for
 
 ## Generating CRUD Pages via Command Line
 
-You can generate CRUD pages via [ABP CLI](../cli/index.md), without opening ABP Suite's user interface. 
+You can generate CRUD pages via [ABP CLI](../cli), without opening ABP Suite's user interface. 
 To do this, you need to pass your entity JSON file and your solution path to the ABP CLI.
 
 Example:
