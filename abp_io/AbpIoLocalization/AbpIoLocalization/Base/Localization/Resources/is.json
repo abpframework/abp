@@ -230,6 +230,19 @@
     "CommunityProfile": "Samfélagssnið",
     "BlogProfile": "Bloggprófíll",
     "Tickets": "Miðar",
-    "DisplayName:CommunityIndexPagePoll": "Samfélagssnið"
+    "MeetTheABPCommunity": "Kynnistuðu ABP <span class=\"gradient-community\">Samfélagið</span>",
+    "DisplayName:CommunityIndexPagePoll": "Samfélagssnið",
+    "OrganizationOverview": "Yfirlit yfir stofnun",
+    "EmailPreferences": "Tölvupóststillingar",
+    "VideoCourses": "Nauðsynleg myndbönd",
+    "Resources": "Auðlindir",
+    "DoYouAgreePrivacyPolicy": "Með því að smella <b>Gerast áskrifandi</b> hnappinn sem þú samþykkir <a href=\"https://account.abp.io/Account/TermsConditions\">Skilmálar</a> og <a href=\"https://account.abp.io/Account/Privacy\">Friðhelgisstefna</a>.",
+    "PromotionalOffers": "Kynningartilboð",
+    "PromotionalOffersDefinition": "Afslættir, árstíðabundnar herferðir o.fl.",
+    "EventsDefinition": "Community Talks, Webinars, ABP .NET ráðstefna o.fl.",
+    "ReleaseNotesDefinition": "ABP.IO Platform útgáfur, nýjar vörur o.fl.",
+    "Newsletter": "Fréttabréf",
+    "NewsletterDefinition": "Bloggfærslur, samfélagsfréttir o.fl.",
+    "AbpConferenceDescription": "ABP Conference er sýndarviðburður fyrir .NET forritara til að læra og tengjast samfélaginu."
   }
 }

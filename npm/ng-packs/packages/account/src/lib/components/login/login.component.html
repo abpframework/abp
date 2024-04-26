@@ -1,10 +1,12 @@
 <h4>{{ 'AbpAccount::Login' | abpLocalization }}</h4>
-<strong *ngIf="isSelfRegistrationEnabled">
-  {{ 'AbpAccount::AreYouANewUser' | abpLocalization }}
-  <a class="text-decoration-none" routerLink="/account/register" queryParamsHandling="preserve">{{
-    'AbpAccount::Register' | abpLocalization
-  }}</a>
-</strong>
+@if (isSelfRegistrationEnabled) {
+  <strong>
+    {{ 'AbpAccount::AreYouANewUser' | abpLocalization }}
+    <a class="text-decoration-none" routerLink="/account/register" queryParamsHandling="preserve">{{
+      'AbpAccount::Register' | abpLocalization
+    }}</a>
+  </strong>
+}
 <form [formGroup]="form" (ngSubmit)="onSubmit()" validateOnSubmit class="mt-4">
   <div class="mb-3 form-group">
     <label for="login-input-user-name-or-email-address" class="form-label">{{
@@ -20,7 +22,9 @@
     />
   </div>
   <div class="mb-3 form-group">
-    <label for="login-input-password" class="form-label">{{ 'AbpAccount::Password' | abpLocalization }}</label>
+    <label for="login-input-password" class="form-label">{{
+      'AbpAccount::Password' | abpLocalization
+    }}</label>
     <input
       class="form-control"
       type="password"

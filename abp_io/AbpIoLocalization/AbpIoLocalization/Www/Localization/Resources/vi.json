@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework không chỉ là một framework mà còn là một hướng dẫn để phát triển/quản lý dự án vì nó cung cấp các khóa đào tạo về DDD, GenericRepository, DI, Microservice, moduleity. Ngay cả khi bạn không sử dụng framework, bạn vẫn có thể tự phát triển với docs.abp.io được chuẩn bị kỹ lưỡng và chuyên nghiệp. (OpenIddict, Redis, Quartz, v.v.) \n Bởi vì có nhiều thứ được xây dựng sẵn nên nó rút ngắn đáng kể thời gian phát triển dự án. (Chẳng hạn như trang đăng nhập, xử lý ngoại lệ, lọc dữ liệu, ghi nhật ký kiểm tra, bản địa hóa, bộ điều khiển api tự động, v.v.) \n Là một ví dụ từ ứng dụng của chúng tôi, tôi đã sử dụng Local Event Bus để kiểm soát hàng tồn kho. Vì vậy, tôi có thể quản lý việc di chuyển đơn hàng bằng cách viết trình xử lý hàng tồn kho. \n Thật tuyệt vời khi không lãng phí thời gian cho CreationTime, CreatorId. Chúng được điền tự động.",
     "VideosLoginAndRegisterMessage": "Bạn phải đăng nhập để xem video. Bạn có thể tạo một tài khoản để xem nếu chưa có.",
     "Filter": "Lọc",
-    "VideoCourses": "Khóa học video",
+    "VideoCourses": "Video cần thiết",
     "TestimonialText": "Lời chứng thực của bạn",
     "Position": "Chức vụ",
     "ExperienceYear": "Số năm kinh nghiệm",
@@ -448,7 +448,7 @@
     "CompanySize": "Quy mô công ty",
     "Image": "Hình ảnh cá nhân của bạn",
     "TestimonialTitle": "Hãy nghe lời chứng thực của bạn",
-    "TestimonialInfo": "Những gì khách hàng của chúng tôi nói là quan trọng! ",
+    "TestimonialInfo": "Những gì khách hàng nói là quan trọng! Hãy cho chúng tôi biết về trải nghiệm của bạn với sản phẩm và dịch vụ của chúng tôi. Bạn nên viết lời chứng thực bằng tiếng Anh để tiếp cận nhiều đối tượng hơn.",
     "Country": "Quốc gia",
     "TestimonialTextPlaceholder": "Viết một câu chuyện ngắn gọn về cách ABP đã giúp bạn xây dựng và thực hiện dự án của mình. ",
     "PositionPlaceholder": "Vị trí của bạn tại công ty của bạn.",
@@ -467,6 +467,11 @@
     "Title": "Tiêu đề",
     "TitlePlaceholder": "Nhà phát triển phần mềm, CTO, v.v.",
     "Characters": "Ký tự",
-    "ABPTestimonialDescription": "Khung ABP: Hãy nghe lời chứng thực của bạn"
+    "ABPTestimonialDescription": "Khung ABP: Hãy nghe lời chứng thực của bạn",
+    "LeaveUsReview": "Để lại cho chúng tôi xem xét",
+    "DocumentationButtonTitle": "Tài liệu",
+    "ABPVideoCoursesDescription": "Tìm hiểu những kiến ​​thức cơ bản về Khung ABP thông qua các khóa học video do nhóm ABP tạo.",
+    "ABPVideoCoursesPageDescription": "Tìm hiểu những kiến ​​thức cơ bản về Khung ABP thông qua các khóa học video do nhóm ABP tạo ra. Trong loạt video này, bạn sẽ tìm hiểu các chủ đề thiết yếu của Khung ABP. Các con số trên mỗi video được viết theo quy trình học tập.",
+    "ABPVideoCoursesTitle": "Video cần thiết của ABP"
   }
 }
