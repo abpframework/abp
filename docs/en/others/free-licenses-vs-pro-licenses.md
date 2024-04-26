@@ -156,7 +156,7 @@ ABP Framework provides a theming system that has the following goals:
 
 The following themes are available:
 
-[The Basic Theme](https://docs.abp.io/en/abp/latest/Themes/Basic) is open-source and free but this theme **is not being used** in the new application templates. Our new open-source theme is [LeptonX Lite](https://x.leptontheme.com/side-menu/index.html).
+[The Basic Theme](../basic.md) is open-source and free but this theme **is not being used** in the new application templates. Our new open-source theme is [LeptonX Lite](https://x.leptontheme.com/side-menu/index.html).
 
 A screenshot of the LeptonX Lite (free version):
 

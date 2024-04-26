@@ -42,7 +42,7 @@ ABP Framework uses the interception system to make the `[RequiresFeature]` attri
 
 However, there are **some rules should be followed** in order to make it working;
 
-* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](Dynamic-Proxying-Interceptors.md) system can not work.
+* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](../../dynamic-proxying-interceptors.md) system can not work.
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
 
 > There is an exception for the **controller and razor page methods**. They **don't require** the following the rules above, since ABP Framework uses the action/page filters to implement the feature checking in this case.

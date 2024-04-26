@@ -115,7 +115,7 @@ The social/External login system is compatible with the multi-tenancy. Each tena
 
 Follow the steps below to install a new external/social login. We will show Facebook authentication as an example.
 
-> When you follow the steps below, the provider settings (e.g., ClientId and ClientSecret) will be managed on the settings page on the UI and will support multi-tenancy as explained above. If you don't want these features, follow [the standard way](https://docs.abp.io/en/abp/latest/Authentication/Social-External-Logins) to install and configure the provider.
+> When you follow the steps below, the provider settings (e.g., ClientId and ClientSecret) will be managed on the settings page on the UI and will support multi-tenancy as explained above. If you don't want these features, follow [the standard way](../social-external-logins.md) to install and configure the provider.
 
 #### Add the NuGet Package
 

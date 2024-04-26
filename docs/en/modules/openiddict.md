@@ -512,4 +512,4 @@ After running the `OpenIddict.Demo.API` project, then you can run the rest of th
 
 ## Migrating Guide
 
-[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../Migration-Guides/OpenIddict-Step-by-Step.md)
+[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../release-info/migration-guides/openiddict-step-by-step.md)

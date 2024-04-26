@@ -309,7 +309,7 @@ Configure<AbpAuditingOptions>(options =>
 
 This section explains the `IAuditLogScope` & `IAuditingManager` services for advanced use cases.
 
-An **audit log scope** is an [ambient scope](Ambient-Context-Pattern.md) that **builds** and **saves** an audit log object (explained before). By default, an audit log scope is created for a web request by the Audit Log Middleware (see `UseAuditing()` section above).
+An **audit log scope** is an [ambient scope](../../ambient-context-pattern.md) that **builds** and **saves** an audit log object (explained before). By default, an audit log scope is created for a web request by the Audit Log Middleware (see `UseAuditing()` section above).
 
 ### Access to the Current Audit Log Scope
 

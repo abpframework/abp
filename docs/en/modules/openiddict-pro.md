@@ -10,7 +10,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.OpenIdd
 
 ## How to Install
 
-OpenIddict is pre-installed in [the startup templates](../solution-templates) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../migration-guides/openIddict-step-by-step).
+OpenIddict is pre-installed in [the startup templates](../solution-templates) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../release-info/migration-guides/openiddict-step-by-step.md).
 
 ## Packages
 
@@ -523,4 +523,4 @@ In **Angular** applications, add `offline_access` to **oAuthConfig**  scopes in 
 
 ## Migrating Guide
 
-[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../migration-guides/openIddict-step-by-step)
+[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../release-info/migration-guides/openiddict-step-by-step.md)
