@@ -28,11 +28,11 @@ Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`cli`**: Update or remove ABP CLI.
-* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
+* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates).
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
-* **`add-module`**: Adds a [multi-package application module](../modules/index.md) to a solution.
+* **`add-module`**: Adds a [multi-package application module](../modules) to a solution.
 * **`list-modules`**: Lists names of open-source application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
 * **`get-source`**: Downloads the source code of a module.
@@ -89,7 +89,7 @@ abp cli remove
 
 ### new
 
-Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
+Generates a new solution based on the ABP [startup templates](../solution-templates).
 
 Usage:
 
@@ -111,7 +111,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 #### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
-  * **`app`** (default): [Application template](../solution-templates/layered-web-application/index.md). Additional options:
+  * **`app`** (default): [Application template](../solution-templates/layered-web-application). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
@@ -134,10 +134,10 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
         * `leptonx-lite`: [LeptonX Lite Theme](../ui-themes/lepton-x-lite/asp-net-core.md).
         * `basic`: [Basic Theme](../framework/ui/mvc-razor-pages/basic-theme.md).
-  * **`module`**: [Module template](../solution-templates/application-module/index.md). Additional options:
+  * **`module`**: [Module template](../solution-templates/application-module). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
   * **`console`**: [Console template](../get-started/console.md).
-  * **`app-nolayers`**: [Single-layer application template](../solution-templates/single-layer-web-application/index.md). Additional options:
+  * **`app-nolayers`**: [Single-layer application template](../solution-templates/single-layer-web-application). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
@@ -246,7 +246,7 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 
 ### add-module
 
-Adds a [multi-package application module](../modules/index.md) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
+Adds a [multi-package application module](../modules) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
 It can also create a new module for your solution and add it to your solution. See `--new` option.
 
