@@ -11,14 +11,14 @@ LeptonX Lite has implementation for the ABP Framework Blazor WebAssembly & Blazo
 
 >   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
 
-> See the [Theming document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) to learn about themes.
+> See the [Theming document](../../framework/ui/mvc-razor-pages/theming.md) to learn about themes.
 
 ## Installation
 
 This theme is **already installed** when you create a new solution using the startup templates. If you are using any other template, you can install this theme by following the steps below:
 
 {{if UI == "Blazor"}}
-- Complete the [MVC Razor Pages Installation](AspNetCore.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if Auth Server is separated, install to the **OpenIddict**_.
+- Complete the [MVC Razor Pages Installation](asp-net-core.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if Auth Server is separated, install to the **OpenIddict**_.
 
 
 - Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor WebAssembly** application with the following command:
@@ -55,7 +55,7 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
 
 {{if UI == "BlazorServer"}}
 
-- Complete the [MVC Razor Pages Installation](AspNetCore.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **AuthServer**_.
+- Complete the [MVC Razor Pages Installation](asp-net-core.md#installation) first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and **AuthServer**_.
 
 - Add **Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme** package to your **Blazor server** application with the following command:
 
@@ -184,7 +184,7 @@ public async Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
 
 {{if UI == "BlazorServer"}}
 
-> _You can visit the [Toolbars Documentation](https://docs.abp.io/en/abp/latest/UI/Blazor/Toolbars) for better understanding._
+> _You can visit the [Toolbars Documentation](../../framework/ui/blazor/toolbars.md) for better understanding._
 
 {{end}}
 

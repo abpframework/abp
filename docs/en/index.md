@@ -4,7 +4,7 @@ ABP offers an **opinionated architecture** to build enterprise software solution
 
 ### Why ABP.IO Platform?
 
-Wondering why you should use the ABP Platform instead of creating a new solution from scratch? [Continue reading here](others/why-abp-io-platform.md).
+Wondering why you should use the ABP Platform instead of creating a new solution from scratch? [Continue reading here](./others/why-abp-platform.md).
 
 ## Get Started
 
@@ -30,20 +30,20 @@ ABP has a **comprehensive documentation** that not only explains the ABP Framewo
 
 #### Architecture
 
-ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](Domain-Driven-Design.md) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
+ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](./framework/architecture/domain-driven-design/index.md) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
-* See the [Modularity](Module-Development-Basics.md) document to understand the module system.
+* See the [Modularity](./framework/architecture/modularity/basics.md) document to understand the module system.
 * [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
-* [Microservice Architecture](Microservice-Architecture.md) document explains how ABP helps to create a microservice solution.
-* [Multi-Tenancy](Multi-Tenancy.md) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
+* [Microservice Architecture](./framework/architecture/microservices/index.md) document explains how ABP helps to create a microservice solution.
+* [Multi-Tenancy](./framework/architecture/multi-tenancy/index.md) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
 #### Infrastructure
 
-There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](Event-Bus.md), [Background Job System](Background-Jobs.md), [Audit Logging](Audit-Logging.md), [BLOB Storing](Blob-Storing.md), [Data Seeding](Data-Seeding.md), [Data Filtering](Data-Filtering.md).
+There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus/index.md), [Background Job System](./framework/infrastructure/background-jobs/index.md), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing/index.md), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
 
 #### Cross Cutting Concerns
 
-ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](Exception-Handling.md), [Validation](Validation.md), [Authorization](Authorization.md), [Localization](Localization.md), [Caching](Caching.md), [Dependency Injection](Dependency-Injection.md), [Setting Management](Settings.md), etc. 
+ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](./framework/fundamentals/exception-handling.md), [Validation](./framework/fundamentals/validation.md), [Authorization](./framework/fundamentals/authorization.md), [Localization](./framework/fundamentals/localization.md), [Caching](./framework/fundamentals/caching.md), [Dependency Injection](./framework/fundamentals/dependency-injection.md), [Setting Management](./framework/fundamentals/settings.md), etc. 
 
 ### Tooling
 
@@ -59,15 +59,15 @@ ABP.IO Platform provides tooling to help you in your daily development.
 
 #### ABP CLI
 
-[ABP CLI](CLI.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
+[ABP CLI](cli/index.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
 
 ### Startup Templates
 
-The [Startup templates](Startup-Templates/Index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
+The [Startup templates](./solution-templates/index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
 
 ### Application Modules
 
-Application Modules provides pre-built application modules those implement common business requirements. See the [Application Modules](Modules/Index.md) document for all pre-built modules.
+Application Modules provides pre-built application modules those implement common business requirements. See the [Application Modules](modules/index.md) document for all pre-built modules.
 
 ### UI Themes
 
@@ -93,7 +93,7 @@ A **practical guide** for implementing Domain Driven Design (DDD). While the imp
 
 ## Samples
 
-See the [sample projects](Samples/Index.md) built with ABP.
+See the [sample projects](samples/index.md) built with ABP.
 
 ## ABP Community
 
@@ -109,4 +109,4 @@ ABP Framework's source code is hosted on GitHub. See [the source code](https://g
 
 ### Want to Contribute?
 
-ABP Framework is a community-driven open source project. See [the contribution guide](Contribution/Index.md) if you want to be a part of this project.
+ABP Framework is a community-driven open source project. See [the contribution guide](contribution/index.md) if you want to be a part of this project.

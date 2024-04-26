@@ -25,7 +25,7 @@ Check your dotnet version. It should be at least 3.1.x
 dotnet --version
 ```
 
-Install or update the [ABP CLI](https://docs.abp.io/en/abp/latest/cli) with the following command:
+Install or update the [ABP CLI](./cli/index.md) with the following command:
 
 ```bash
 dotnet tool install -g Volo.Abp.Cli || dotnet tool update -g Volo.Abp.Cli

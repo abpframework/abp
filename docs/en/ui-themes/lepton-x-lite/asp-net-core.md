@@ -3,7 +3,7 @@ LeptonX Lite has implementation for the ABP Framework Razor Pages. It's a simpli
 
 >   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
 
-> See the [Theming document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming) to learn about themes.
+> See the [Theming document](../../framework/ui/mvc-razor-pages/theming.md) to learn about themes.
 
 ## Installation
 
@@ -51,7 +51,7 @@ Configure<AbpBundlingOptions>(options =>
 
 ### Layouts
 
-LeptonX Lite MVC provides **layouts** for your **user interface** based [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Theming). You can use **layouts** to **organize your user interface**. 
+LeptonX Lite MVC provides **layouts** for your **user interface** based [ABP Framework Theming](../../framework/ui/mvc-razor-pages/theming.md). You can use **layouts** to **organize your user interface**. 
 
 The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
 
@@ -94,7 +94,7 @@ public class MyProjectNameMainToolbarContributor : IToolbarContributor
 
 ABP **helps** you make **highly customizable UI**. You can easily **customize** your themes to fit your needs. **The Virtual File System** makes it possible to **manage files** that **do not physically** exist on the **file system** (disk). It's mainly used to embed **(js, css, image..)** files into assemblies and **use them like** physical files at runtime. An application (or another module) can **override** a **virtual file of a module** just like placing a file with the **same name** and **extension** into the **same folder** of the **virtual file**.
 
-LeptonX Lite is built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core MVC user interface by following [Abp Mvc UI Customization](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-User-Interface).
+LeptonX Lite is built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core MVC user interface by following [Abp Mvc UI Customization](../../framework/ui/mvc-razor-pages/customization-user-interface.md).
 
 ## Branding Component
 

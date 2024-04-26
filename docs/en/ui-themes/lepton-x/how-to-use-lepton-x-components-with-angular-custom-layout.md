@@ -2,7 +2,7 @@
 
 
 First, The custom layout component should be created and implemented for the Angular application.
-Related content can be found in the [Component Replacement Document](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement#how-to-replace-a-layout)
+Related content can be found in the [Component Replacement Document](../../framework/ui/angular/component-replacement.md#how-to-replace-a-layout)
 
 
  

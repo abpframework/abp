@@ -142,7 +142,7 @@ Abp **helps** you make **highly customizable UI**. You can easily **customize** 
 
 An application (or another module) can **override** a **virtual file of a module** just like placing a file with the **same name** and **extension** into the **same folder** of the **virtual file**.
 
-LeptonX is built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core Mvc user interface by following [Abp Mvc UI Customization](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-User-Interface).
+LeptonX is built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core Mvc user interface by following [Abp Mvc UI Customization](../../framework/ui/mvc-razor-pages/customization-user-interface.md).
 
 ## Common Components
 
@@ -190,7 +190,7 @@ General Settings can be replaced with following files.
 
 ![Main header branding](images/leptonx-main-header-branding.png)
 
-Application name and logo can be customized by using the `IBrandingProvider` service. See [Razor Pages: Branding](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Branding) for more information.
+Application name and logo can be customized by using the `IBrandingProvider` service. See [Razor Pages: Branding](../../framework/ui/mvc-razor-pages/branding.md) for more information.
 
 If you need to replace the component, you can follow the steps below.
 
@@ -254,7 +254,7 @@ Components used in the side menu layout.
 
 * The **user menu component (C# file)** is defined in the `Themes/LeptonX/Components/SideMenu/Toolbar/UserMenu/UserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-> LeptonX implements the ABP Framework Menu [ABP Naviation/Menus]([#user-menu](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Navigation-Menu#standard-menus)). So you can check it out to learn how to add/remove menu items to the user menu.
+> LeptonX implements the ABP Framework Menu [ABP Naviation/Menus]([#user-menu](../../framework/ui/mvc-razor-pages/navigation-menu.md#standard-menus)). So you can check it out to learn how to add/remove menu items to the user menu.
 
 ---
 
@@ -279,7 +279,7 @@ Components used in the top menu layout.
 * The **main header toolbar component (C# file)** is defined in the `Themes/LeptonX/Components/TopMenu/MainHeaderToolbar/MainHeaderToolbarViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
 
-> Before replacing the main header toolbar component, make a visit to the [ABP Toolbars](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Toolbars) documentation to learn how to add/remove menu items to the main header toolbar.
+> Before replacing the main header toolbar component, make a visit to the [ABP Toolbars](../../framework/ui/mvc-razor-pages/toolbars.md) documentation to learn how to add/remove menu items to the main header toolbar.
 
 ### Main Menu
 
@@ -297,4 +297,4 @@ Components used in the top menu layout.
 
 * The **user menu component (C# file)** is defined in the `Themes/LeptonX/Components/TopMenu/UserMenu/UserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-> Before replacing the user menu component, make a visit to the [ABP Naviation/Menus](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Navigation-Menu#standard-menus) documentation to learn how to add/remove menu items to the user menu.
+> Before replacing the user menu component, make a visit to the [ABP Naviation/Menus](../../framework/ui/mvc-razor-pages/navigation-menu.md#standard-menus) documentation to learn how to add/remove menu items to the user menu.
