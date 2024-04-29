@@ -1,9 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 
@@ -15,18 +15,18 @@ namespace Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 /// </summary>
 public class AbpEfCoreNavigationHelper : ITransientDependency
 {
-    protected Dictionary<string, List<AbpEntityEntryNavigationProperty>> EntityEntryNavigationProperties { get; } = new Dictionary<string, List<AbpEntityEntryNavigationProperty>>();
+    protected Dictionary<string, AbpEntityEntry> EntityEntries { get; } = new();
 
-    public virtual void ChangeTracker_Tracked(ChangeTracker changeTracker, object? sender, EntityTrackedEventArgs e)
+    public virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
         EntityEntryTrackedOrStateChanged(e.Entry);
-        DetectChanges();
+        DetectChanges(e.Entry);
     }
 
-    public virtual void ChangeTracker_StateChanged(ChangeTracker changeTracker, object? sender, EntityStateChangedEventArgs e)
+    public virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
         EntityEntryTrackedOrStateChanged(e.Entry);
-        DetectChanges();
+        DetectChanges(e.Entry);
     }
 
     protected virtual void EntityEntryTrackedOrStateChanged(EntityEntry entityEntry)
@@ -36,156 +36,166 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return;
         }
 
-        var entryId = GetEntityId(entityEntry);
+        var entryId = GetEntityEntryIdentity(entityEntry);
         if (entryId == null)
         {
             return;
         }
 
-        var navigationProperties = EntityEntryNavigationProperties.GetOrAdd(entryId, () => new List<AbpEntityEntryNavigationProperty>());
-        var index = 0;
-        foreach (var navigationEntry in entityEntry.Navigations.Where(navigation => !navigation.IsModified))
+        if (EntityEntries.ContainsKey(entryId))
         {
-            var navigationProperty = navigationProperties.FirstOrDefault(x => x.Index == index);
-            if (navigationProperty != null)
-            {
-                if (navigationProperty.Value == null || IsCollectionAndEmpty(navigationProperty.Value))
-                {
-                    navigationProperty.Value = navigationEntry.CurrentValue;
-                }
-            }
-            else
-            {
-                navigationProperties.Add(new AbpEntityEntryNavigationProperty(index, navigationEntry.Metadata.Name, navigationEntry.CurrentValue, false, entityEntry, navigationEntry));
-            }
-
-            index++;
+            return;
         }
+
+        EntityEntries.Add(entryId, new AbpEntityEntry(entryId, entityEntry));
     }
 
-    protected virtual void DetectChanges()
+    protected virtual void DetectChanges(EntityEntry entityEntry)
     {
-        foreach (var entityEntryNavigationProperties in EntityEntryNavigationProperties)
+        if (entityEntry.State != EntityState.Added &&
+            entityEntry.State != EntityState.Deleted &&
+            entityEntry.State != EntityState.Modified)
         {
-            foreach (var navigationProperty in entityEntryNavigationProperties.Value.Where(x => !x.IsChanged && x.EntityEntry.State == EntityState.Unchanged))
+            return;
+        }
+
+        RecursiveDetectChanges(entityEntry);
+    }
+
+    protected virtual void RecursiveDetectChanges(EntityEntry entityEntry)
+    {
+        #pragma warning disable EF1001
+        var stateManager = entityEntry.Context.GetDependencies().StateManager;
+        var internalEntityEntityEntry = stateManager.Entries.FirstOrDefault(x => x.Entity == entityEntry.Entity);
+        if (internalEntityEntityEntry == null)
+        {
+            return;
+        }
+
+        var foreignKeys = entityEntry.Metadata.GetForeignKeys().ToList();
+        foreach (var foreignKey in foreignKeys)
+        {
+            var principal = stateManager.FindPrincipal(internalEntityEntityEntry, foreignKey);
+            if (principal == null)
             {
-                if (navigationProperty.NavigationEntry.IsModified)
+                continue;
+            }
+
+            var entryId = GetEntityEntryIdentity(principal.ToEntityEntry());
+            if (entryId == null || !EntityEntries.TryGetValue(entryId, out var abpEntityEntry))
+            {
+                continue;
+            }
+
+            if (!abpEntityEntry.IsModified)
+            {
+                abpEntityEntry.IsModified = true;
+                RecursiveDetectChanges(abpEntityEntry.EntityEntry);
+            }
+
+            var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == foreignKey) ??
+                                  abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == foreignKey);
+            if (navigationEntry != null)
+            {
+                navigationEntry.IsModified = true;
+            }
+        }
+
+        var skipNavigations = entityEntry.Metadata.GetSkipNavigations().ToList();
+        foreach (var skipNavigation in skipNavigations)
+        {
+            var joinEntityType = skipNavigation.JoinEntityType;
+            var foreignKey = skipNavigation.ForeignKey;
+            var inverseForeignKey = skipNavigation.Inverse.ForeignKey;
+            foreach (var joinEntry in stateManager.Entries)
+            {
+                if (joinEntry.EntityType != joinEntityType || stateManager.FindPrincipal(joinEntry, foreignKey) != internalEntityEntityEntry)
                 {
-                    navigationProperty.IsChanged = true;
                     continue;
                 }
 
-                if (navigationProperty.Value == null || IsCollectionAndEmpty(navigationProperty.Value))
+                var principal = stateManager.FindPrincipal(joinEntry, inverseForeignKey);
+                if (principal == null)
                 {
-                    if (navigationProperty.NavigationEntry.CurrentValue != null || IsCollectionAndNotEmpty(navigationProperty.NavigationEntry.CurrentValue))
-                    {
-                        if (navigationProperty.NavigationEntry.CurrentValue is ICollection collection)
-                        {
-                            navigationProperty.Value = collection.Cast<object?>().ToList();
-                        }
-                        else
-                        {
-                            navigationProperty.Value = navigationProperty.NavigationEntry.CurrentValue;
-                        }
-                    }
+                    continue;
                 }
 
-                if (navigationProperty.Value != null || IsCollectionAndNotEmpty(navigationProperty.Value))
+                var entryId = GetEntityEntryIdentity(principal.ToEntityEntry());
+                if (entryId == null || !EntityEntries.TryGetValue(entryId, out var abpEntityEntry))
                 {
-                    if (navigationProperty.NavigationEntry.CurrentValue == null || IsCollectionAndEmpty(navigationProperty.NavigationEntry.CurrentValue))
-                    {
-                        if (IsCollectionAndEmpty(navigationProperty.Value) && IsCollectionAndEmpty(navigationProperty.NavigationEntry.CurrentValue))
-                        {
-                            continue;
-                        }
+                    continue;
+                }
 
-                        navigationProperty.IsChanged = true;
-                    }
+                if (!abpEntityEntry.IsModified)
+                {
+                    abpEntityEntry.IsModified = true;
+                    RecursiveDetectChanges(abpEntityEntry.EntityEntry);
+                }
+
+                var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == inverseForeignKey) ??
+                                      abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == inverseForeignKey);
+                if (navigationEntry != null)
+                {
+                    navigationEntry.IsModified = true;
                 }
             }
         }
+#pragma warning restore EF1001
     }
 
     public virtual List<EntityEntry> GetChangedEntityEntries()
     {
-        DetectChanges();
-        return EntityEntryNavigationProperties
-            .SelectMany(x => x.Value)
-            .Where(x => x.NavigationEntry.IsModified || x.IsChanged)
-            .Select(x => x.EntityEntry)
+        return EntityEntries
+            .Where(x => x.Value.IsModified)
+            .Select(x => x.Value.EntityEntry)
             .ToList();
     }
 
-    public virtual bool IsEntityEntryNavigationChanged(EntityEntry entityEntry)
+    public virtual bool IsEntityEntryModified(EntityEntry entityEntry)
     {
-        DetectChanges();
         if (entityEntry.State == EntityState.Modified)
         {
             return true;
         }
 
-        var entryId = GetEntityId(entityEntry);
+        var entryId = GetEntityEntryIdentity(entityEntry);
         if (entryId == null)
         {
             return false;
         }
 
-        if (EntityEntryNavigationProperties.TryGetValue(entryId, out var navigationProperties))
-        {
-            return navigationProperties.Any(x => x.IsChanged) ||
-                   navigationProperties.Any(x => x.NavigationEntry.IsModified) ||
-                   navigationProperties.Any(x =>
-                       x.NavigationEntry is ReferenceEntry &&
-                       x.NavigationEntry.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified);
-        }
-
-        return false;
+        return EntityEntries.TryGetValue(entryId, out var abpEntityEntry) && abpEntityEntry.IsModified;
     }
 
-    public virtual bool IsEntityEntryNavigationChanged(NavigationEntry navigationEntry, int index)
+    public virtual bool IsNavigationEntryModified(EntityEntry entityEntry,  int navigationEntryIndex)
     {
-        if (navigationEntry.IsModified || (navigationEntry is ReferenceEntry && navigationEntry.As<ReferenceEntry>().TargetEntry?.State == EntityState.Modified))
-        {
-            return true;
-        }
-
-        var entryId = GetEntityId(navigationEntry.EntityEntry);
+        var entryId = GetEntityEntryIdentity(entityEntry);
         if (entryId == null)
         {
             return false;
         }
 
-        if (EntityEntryNavigationProperties.TryGetValue(entryId, out var navigationProperties))
+        if (!EntityEntries.TryGetValue(entryId, out var abpEntityEntry))
         {
-            var navigationProperty = navigationProperties.FirstOrDefault(x => x.Index == index);
-            if (navigationProperty != null && navigationProperty.IsChanged)
-            {
-                return true;
-            }
+            return false;
         }
 
-        return false;
+        var navigationEntryProperty = abpEntityEntry.NavigationEntries.ElementAtOrDefault(navigationEntryIndex);
+        return navigationEntryProperty != null && navigationEntryProperty.IsModified;
+    }
+
+    protected virtual string? GetEntityEntryIdentity(EntityEntry entityEntry)
+    {
+        if (entityEntry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1)
+        {
+            return $"{entityEntry.Metadata.ClrType.FullName}:{entryEntity.GetKeys().FirstOrDefault()}";
+        }
+
+        return null;
     }
 
     public void Clear()
     {
-        EntityEntryNavigationProperties.Clear();
-    }
-
-    private string? GetEntityId(EntityEntry entityEntry)
-    {
-        return entityEntry.Entity is IEntity entryEntity && entryEntity.GetKeys().Length == 1
-            ? entryEntity.GetKeys().FirstOrDefault()?.ToString()
-            : null;
-    }
-
-    private bool IsCollectionAndEmpty(object? value)
-    {
-        return value is ICollection && value is ICollection collection && collection.Count == 0;
-    }
-
-    private bool IsCollectionAndNotEmpty(object? value)
-    {
-        return value is ICollection && value is ICollection collection && collection.Count != 0;
+        EntityEntries.Clear();
     }
 }

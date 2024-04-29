@@ -9,6 +9,7 @@ export namespace ABP {
     environment: Partial<Environment>;
     registerLocaleFn: (locale: string) => Promise<any>;
     skipGetAppConfiguration?: boolean;
+    skipInitAuthService?: boolean;
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
     localizations?: Localization[];

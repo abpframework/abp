@@ -9,6 +9,8 @@ public class ComponentsComponentsBundleContributor : IBundleContributor
         context.Add("_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js");
         context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js");
         context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/lang-utils.js");
+        context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/lang-utils.js");
+        context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/authentication-state-listener.js");
     }
 
     public void AddStyles(BundleContext context)
