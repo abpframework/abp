@@ -78,13 +78,13 @@ Based on the options you've specified, you will get a slightly different solutio
 
 If you don't specify any additional options, you will have a solution as shown below:
 
-![bookstore-rider-solution-v6](../images/solution-structure-solution-explorer-rider.png)
+![bookstore-rider-solution-v6](../../images/solution-structure-solution-explorer-rider.png)
 
 Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../../framework/architecture/domain-driven-design) principles as mentioned before.
 
 The diagram below shows the layers & project dependencies of the application:
 
-![layered-project-dependencies](../images/layered-project-dependencies.png)
+![layered-project-dependencies](../../images/layered-project-dependencies.png)
 
 Each section below will explain the related project & its dependencies.
 
@@ -212,7 +212,7 @@ See [Getting Started With the ASP.NET Core MVC Template](../../_deleted/getting-
 
 If you have selected the ASP.NET Core UI and specified the `--tiered` option, the solution created will be a tiered solution. The purpose of the tiered structure is to be able to **deploy Web applications and HTTP API to different servers**:
 
-![bookstore-visual-studio-solution-v3](../images/tiered-solution-servers.png)
+![bookstore-visual-studio-solution-v3](../../images/tiered-solution-servers.png)
 
 * Browser runs your UI by executing HTML, CSS & JavaScript.
 * Web servers host static UI files (CSS, JavaScript, image... etc.) & dynamic components (e.g. Razor pages). It performs HTTP requests to the API server to execute the business logic of the application.
@@ -225,7 +225,7 @@ So, the resulting solution allows a 4-tiered deployment, by comparing to 3-tiere
 
 The solution structure is shown below:
 
-![bookstore-rider-solution-v6](../images/bookstore-rider-solution-tiered.png)
+![bookstore-rider-solution-v6](../../images/bookstore-rider-solution-tiered.png)
 
 As different from the default structure, two new projects come into play: `.AuthServer` & `.HttpApi.Host`.
 
@@ -233,7 +233,7 @@ As different from the default structure, two new projects come into play: `.Auth
 
 This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the AuthServer. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
-![tiered-solution-applications](../images/tiered-solution-applications-authserver.png)
+![tiered-solution-applications](../../images/tiered-solution-applications-authserver.png)
 
 ABP uses the [OpenIddict Module](../../modules/openiddict.md) that uses the open-source [OpenIddict-core](https://github.com/openiddict/openiddict-core) library for the authentication between applications. See [OpenIddict documentation](https://documentation.openiddict.com/) for details about the OpenIddict and OpenID Connect protocol.
 
@@ -267,12 +267,12 @@ If you choose `Blazor` as the UI Framework (using the `-u blazor` or `-u blazor-
 #### .Blazor Project (Server)
 The Blazor Server project is similar to the ASP.NET Core MVC project. It replaces `.Web` project with `.Blazor` in the solution structure above. It has the same folder structure and the same application flow. Since it's an ASP.NET Core application, it can contain **.cshtml** files and **.razor** components at the same time. If routing matches a razor component, the Blazor UI will be used. Otherwise, the request will be handled by the MVC framework.
 
-![abp solution structure blazor server](../images/layered-project-dependencies-blazor-server.png)
+![abp solution structure blazor server](../../images/layered-project-dependencies-blazor-server.png)
 
 #### .Blazor Project (WebAssembly)
 The Blazor WebAssembly project is a single page application that runs on the browser. You'll see it as `.Blazor` project in the solution. It uses the `.HttpApi.Host` project to communicate with the backend. It can't be used without the backend application. It contains only **.razor** components. It's a pure client-side application. It doesn't have any server-side code. Everything in this layer will be for the client side.
 
-![abp solution structure blazor wasm](../images/layered-project-dependencies-blazor-wasm.png)
+![abp solution structure blazor wasm](../../images/layered-project-dependencies-blazor-wasm.png)
 
 ### Angular UI
 
@@ -285,7 +285,7 @@ The server-side is similar to the solution described above. `*.HttpApi.Host` pro
 
 Angular application folder structure looks like below:
 
-![angular-folder-structure](../images/angular-folder-structure.png)
+![angular-folder-structure](../../images/angular-folder-structure.png)
 
 
 Each of ABP Commercial modules is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules install with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
@@ -296,7 +296,7 @@ yarn list --pattern abp
 
 Angular application module structure:
 
-![Angular template structure diagram](../images/angular-template-structure-diagram.png)
+![Angular template structure diagram](../../images/angular-template-structure-diagram.png)
 
 #### AppModule
 
@@ -378,7 +378,7 @@ The React Native application was generated with [Expo](https://expo.io/). Expo i
 
 React Native application folder structure as like below:
 
-![react-native-folder-structure](../images/react-native-folder-structure.png)
+![react-native-folder-structure](../../images/react-native-folder-structure.png)
 
 * `App.js` is the bootstrap component of the application.
 * `Environment.js` file has the essential configuration of the application. `prod` and `dev` configurations are defined in this file. 
@@ -394,7 +394,7 @@ Components that can be used on all screens are created in the `src/components` f
 
 #### Screens
 
-![react-native-navigation-structure](../images/react-native-navigation-structure.png)
+![react-native-navigation-structure](../../images/react-native-navigation-structure.png)
 
 Screens are created by creating folders that separate their names in the `src/screens` folder. Certain parts of some screens can be split into components.
 
@@ -410,7 +410,7 @@ Each screen is used in a navigator in the `src/navigators` folder.
 
 Actions, reducers, sagas and selectors are created in the `src/store` folder. Store folder is as below:
 
-![react-native-store-folder](../images/react-native-store-folder.png)
+![react-native-store-folder](../../images/react-native-store-folder.png)
 
 * [**Store**](https://redux.js.org/basics/store) is defined in the `src/store/index.js` file.
 * [**Actions**](https://redux.js.org/basics/actions/) are payloads of information that send data from your application to your store.

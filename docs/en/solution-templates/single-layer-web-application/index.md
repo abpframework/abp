@@ -62,7 +62,7 @@ abp new Acme.BookStore -t app-nolayers -d mongodb
 
 If you don't specify any additional options while creating an `app-nolayers` template, you will have a solution as shown below:
 
-![](../images/bookstore-single-layer-solution-structure.png)
+![](../../images/bookstore-single-layer-solution-structure.png)
 
 In the next sections, we will explain the structure based on this example. Your startup solution can be slightly different based on your preferences.
 
@@ -70,7 +70,7 @@ In the next sections, we will explain the structure based on this example. Your 
 
 Since this template provides a single-project solution, we've separated concerns into folders instead of projects. You can see the pre-defined folders as shown below:
 
-![](../images/single-layer-folder-structure.png)
+![](../../images/single-layer-folder-structure.png)
 
 * Define your database mappings (for [EF Core](../../framework/data/entity-framework-core) or [MongoDB](../../framework/data/mongodb) and [repositories](../Repositories.md) in the `Data` folder.
 * Define your [entities](../../framework/architecture/domain-driven-design/entities.md) in the `Entities` folder.
@@ -103,7 +103,7 @@ The server-side is similar to the solution described in the *Solution Structure*
 
 The client-side application consumes the HTTP APIs as mentioned. You can see the folder structure of the Angular project shown below:
 
-![](../images/single-layer-angular-folder-structure.png)
+![](../../images/single-layer-angular-folder-structure.png)
 
   ## See Also
 

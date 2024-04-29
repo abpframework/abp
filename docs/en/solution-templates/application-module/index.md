@@ -32,7 +32,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 Based on the options you've specified, you will get a slightly different solution structure. If you don't specify any option, you will have a solution like shown below:
 
-![issuemanagement-module-solution](../images/issuemanagement-module-solution.png)
+![issuemanagement-module-solution](../../images/issuemanagement-module-solution.png)
 
 Projects are organized as `src`, `test` and `host` folders:
 
@@ -42,7 +42,7 @@ Projects are organized as `src`, `test` and `host` folders:
 
 The diagram below shows the layers & project dependencies of the module:
 
-![layered-project-dependencies-module](../images/layered-project-dependencies-module.png)
+![layered-project-dependencies-module](../../images/layered-project-dependencies-module.png)
 
 Each section below will explain the related project & its dependencies.
 
@@ -145,7 +145,7 @@ In this scenario, there are three applications;
 
 The diagram below shows the relation of the applications:
 
-![tiered-solution-applications](../images/tiered-solution-applications.png)
+![tiered-solution-applications](../../images/tiered-solution-applications.png)
 
 `.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.AuthServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
@@ -167,7 +167,7 @@ You should run the application with the given order:
 
 The solution will have a folder called `angular` in it. This is where the Angular client-side code is located. When you open that folder in an IDE, the folder structure will look like below:
 
-![Folder structure of ABP Angular module project](../images/angular-module-folder-structure.png)
+![Folder structure of ABP Angular module project](../../images/angular-module-folder-structure.png)
 
 * _angular/projects/issue-management_ folder contains the Angular module project.
 * _angular/projects/dev-app_ folder contains a development application that runs your module.
@@ -199,7 +199,7 @@ Once all dependencies are installed, follow the steps below to serve your develo
 2. Open your terminal at the root folder, i.e. `angular`.
 3. Run `yarn start` or `npm start`.
 
-![ABP Angular module dev-app project](../images/angular-module-dev-app-project.png)
+![ABP Angular module dev-app project](../../images/angular-module-dev-app-project.png)
 
 The issue management page is empty in the beginning. You may change the content in `IssueManagementComponent` at the _angular/projects/issue-management/src/lib/issue-management.component.ts_ path and observe that the view changes accordingly.
 
