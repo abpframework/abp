@@ -4,12 +4,13 @@ import {
   Injector,
   Input,
   TrackByFunction,
+  inject,
 } from '@angular/core';
 import { EntityAction, EntityActionList } from '../../models/entity-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { LocalizationModule, PermissionDirective } from '@abp/ng.core';
+import { LocalizationModule, PermissionDirective, PermissionService } from '@abp/ng.core';
 import { EllipsisDirective } from '@abp/ng.theme.shared';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
@@ -23,7 +24,7 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
     NgClass,
     LocalizationModule,
     NgTemplateOutlet,
-    NgbTooltipModule
+    NgbTooltipModule,
   ],
   selector: 'abp-grid-actions',
   templateUrl: './grid-actions.component.html',
@@ -43,8 +44,19 @@ export class GridActionsComponent<R = any> extends AbstractActionsComponent<Enti
   @Input() text = '';
 
   readonly trackByFn: TrackByFunction<EntityAction<R>> = (_, item) => item.text;
+  public readonly permissionService = inject(PermissionService);
 
   constructor(injector: Injector) {
     super(injector);
+  }
+
+  hasAvailableActions(): boolean {
+    return this.actionList.toArray().some(action => {
+      if (!action) return false;
+
+      const { permission, visible } = action;
+
+      return this.permissionService.getGrantedPolicy(permission) && visible(this.data);
+    });
   }
 }
