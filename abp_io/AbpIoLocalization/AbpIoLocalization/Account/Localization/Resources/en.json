@@ -13,7 +13,6 @@
     "ManageAccount": "My Account | ABP.IO",
     "ManageYourProfile": "Manage your profile",
     "ReturnToApplication": "Return to application",
-    "IdentityUserNotAvailable:Deleted": "This email address is not available. Reason: already deleted.",
-    "IdentityUserNotAvailable:Inactive": "This email address is not available. Reason: inactive."
+    "IdentityUserNotAvailable:Deleted": "This email address is not available. Reason: already deleted."
   }
 }
