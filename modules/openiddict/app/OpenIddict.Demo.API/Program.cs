@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using OpenIddict.Demo.API;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -22,13 +23,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    .AddAbpJwtBearer(options =>
     {
         options.Authority = "https://localhost:44301";
         options.Audience = "AbpAPIResource";
     });
 
+await builder.AddApplicationAsync<OpenIddictApiModule>();
 var app = builder.Build();
+await app.InitializeApplicationAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -38,11 +41,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
-
+app.UseConfiguredEndpoints(options =>
+{
+    options.MapFallback("{**slug}", context =>
+    {
+        context.Response.Redirect("/swagger");
+        return Task.CompletedTask;
+    });
+});
 app.Run();
