@@ -6,11 +6,11 @@ This template provides a simple solution structure with a single project. This d
 
 ### The Difference Between the Application Startup Templates
 
-ABP's [Application Startup Template](Application.md) provides a well-organized and layered solution to create maintainable business applications based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. However, some developers find this template a little bit complex for simple and short-term applications. The single-layer application template has been created to provide a simpler development model for such applications. This template has the same functionality, features and modules on runtime with the [Application Startup Template](Application.md) but the development model is minimal and everything is in a single project (`.csproj`).
+ABP's [Application Startup Template](../layered-web-application) provides a well-organized and layered solution to create maintainable business applications based on the [Domain Driven Design](../../framework/architecture/domain-driven-design) (DDD) practices. However, some developers find this template a little bit complex for simple and short-term applications. The single-layer application template has been created to provide a simpler development model for such applications. This template has the same functionality, features and modules on runtime with the [Application Startup Template](../layered-web-application) but the development model is minimal and everything is in a single project (`.csproj`).
 
 ## How to Start with It?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command for this startup template from the [Get Started](https://abp.io/get-started) page. In this section, we will use the ABP CLI.
+You can use the [ABP CLI](..//../cli) to create a new project using this startup template. Alternatively, you can generate a CLI command for this startup template from the [Get Started](https://abp.io/get-started) page. In this section, we will use the ABP CLI.
 
 Firstly, install the ABP CLI if you haven't installed it before:
 
@@ -62,7 +62,7 @@ abp new Acme.BookStore -t app-nolayers -d mongodb
 
 If you don't specify any additional options while creating an `app-nolayers` template, you will have a solution as shown below:
 
-![](../images/bookstore-single-layer-solution-structure.png)
+![](../../images/bookstore-single-layer-solution-structure.png)
 
 In the next sections, we will explain the structure based on this example. Your startup solution can be slightly different based on your preferences.
 
@@ -70,15 +70,15 @@ In the next sections, we will explain the structure based on this example. Your 
 
 Since this template provides a single-project solution, we've separated concerns into folders instead of projects. You can see the pre-defined folders as shown below:
 
-![](../images/single-layer-folder-structure.png)
+![](../../images/single-layer-folder-structure.png)
 
-* Define your database mappings (for [EF Core](../Entity-Framework-Core.md) or [MongoDB](../MongoDB.md)) and [repositories](../Repositories.md) in the `Data` folder.
-* Define your [entities](../Entities.md) in the `Entities` folder.
+* Define your database mappings (for [EF Core](../../framework/data/entity-framework-core) or [MongoDB](../../framework/data/mongodb) and [repositories](../Repositories.md) in the `Data` folder.
+* Define your [entities](../../framework/architecture/domain-driven-design/entities.md) in the `Entities` folder.
 * Define your UI localization keys/values in the `Localization` folder.
 * Define your UI menu items in the `Menus` folder.
-* Define your [object-to-object mapping](../Object-To-Object-Mapping.md) classes in the `ObjectMapping` folder.
+* Define your [object-to-object mapping](../../framework/infrastructure/object-to-object-mapping.md) classes in the `ObjectMapping` folder.
 * Define your UI pages (Razor Pages) in the `Pages` folder (create `Controllers` and `Views` folder yourself if you prefer the MVC pattern).
-* Define your [application services](../Application-Services.md) in the `Services` folder. 
+* Define your [application services](../../framework/architecture/domain-driven-design/application-services.md) in the `Services` folder. 
 
 ### How to Run?
 
@@ -103,7 +103,7 @@ The server-side is similar to the solution described in the *Solution Structure*
 
 The client-side application consumes the HTTP APIs as mentioned. You can see the folder structure of the Angular project shown below:
 
-![](../images/single-layer-angular-folder-structure.png)
+![](../../images/single-layer-angular-folder-structure.png)
 
   ## See Also
 

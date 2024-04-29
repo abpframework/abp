@@ -12,9 +12,9 @@ If you haven't installed yet, please see [the installation guide](installation.m
 
 The following guides are great resources to start with, until we fully document all ABP Studio features:
 
-* [Quick Start: Creating a Single Layer Web Application with ABP Studio](quick-starts/single-layer-web-application.md)
-* [Quick Start: Creating a Layered Web Application with ABP Studio](quick-starts/layered-web-application.md)
-* [Quick Start: Creating a Microservice Solution with ABP Studio](quick-starts/microservice.md)
+* [Quick Start: Creating a Single Layer Web Application with ABP Studio](../get-started/single-layer-web-application.md)
+* [Quick Start: Creating a Layered Web Application with ABP Studio](../get-started/layered-web-application.md)
+* [Quick Start: Creating a Microservice Solution with ABP Studio](../get-started/microservice.md)
 
 ## Solution Templates
 
@@ -23,7 +23,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
 * Empty
 * Application (Single Layer)
 * Application (Layered)
-* [Microservice](solution-templates/microservice/index.md)
+* [Microservice](../solution-templates/microservice)
 
 ## Other Resources
 

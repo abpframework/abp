@@ -30,16 +30,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
 - **Part 8: Author: Application Layer (this part)**
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -49,7 +49,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 ## Introduction
 
@@ -57,7 +57,7 @@ This part explains to create an application layer for the `Author` entity create
 
 ## IAuthorAppService
 
-We will first create the [application service](../Application-Services.md) interface and the related [DTO](../Data-Transfer-Objects.md)s. Create a new interface, named `IAuthorAppService`, in the `Authors` namespace (folder) of the `Acme.BookStore.Application.Contracts` project:
+We will first create the [application service](../../framework/architecture/domain-driven-design/application-services.md) interface and the related [DTO](../../framework/architecture/domain-driven-design/data-transfer-objects.md)s. Create a new interface, named `IAuthorAppService`, in the `Authors` namespace (folder) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
@@ -124,7 +124,7 @@ public class GetAuthorListDto : PagedAndSortedResultRequestDto
 * `Filter` is used to search authors. It can be `null` (or empty string) to get all the authors.
 * `PagedAndSortedResultRequestDto` has the standard paging and sorting properties: `int MaxResultCount`, `int SkipCount` and `string Sorting`.
 
-> ABP Framework has such base DTO classes to simplify and standardize your DTOs. See the [DTO documentation](../Data-Transfer-Objects.md) for all.
+> ABP Framework has such base DTO classes to simplify and standardize your DTOs. See the [DTO documentation](../../framework/architecture/domain-driven-design/data-transfer-objects.md) for all.
 
 ### CreateAuthorDto
 
@@ -147,7 +147,7 @@ public class CreateAuthorDto
 }
 ````
 
-Data annotation attributes can be used to validate the DTO. See the [validation document](../Validation.md) for details.
+Data annotation attributes can be used to validate the DTO. See the [validation document](../../framework/fundamentals/validation.md) for details.
 
 ### UpdateAuthorDto
 
@@ -206,7 +206,7 @@ public class AuthorAppService : BookStoreAppService, IAuthorAppService
 }
 ````
 
-* `[Authorize(BookStorePermissions.Authors.Default)]` is a declarative way to check a permission (policy) to authorize the current user. See the [authorization document](../Authorization.md) for more. `BookStorePermissions` class will be updated below, don't worry for the compile error for now.
+* `[Authorize(BookStorePermissions.Authors.Default)]` is a declarative way to check a permission (policy) to authorize the current user. See the [authorization document](../../framework/fundamentals/authorization.md) for more. `BookStorePermissions` class will be updated below, don't worry for the compile error for now.
 * Derived from the `BookStoreAppService`, which is a simple base class comes with the startup template. It is derived from the standard `ApplicationService` class.
 * Implemented the `IAuthorAppService` which was defined above.
 * Injected the `IAuthorRepository` and `AuthorManager` to use in the service methods.
@@ -223,7 +223,7 @@ public async Task<AuthorDto> GetAsync(Guid id)
 }
 ````
 
-This method simply gets the `Author` entity by its `Id`, converts to the `AuthorDto` using the [object to object mapper](../Object-To-Object-Mapping.md). This requires to configure the AutoMapper, which will be explained later.
+This method simply gets the `Author` entity by its `Id`, converts to the `AuthorDto` using the [object to object mapper](../../framework/infrastructure/object-to-object-mapping.md). This requires to configure the AutoMapper, which will be explained later.
 
 ### GetListAsync
 

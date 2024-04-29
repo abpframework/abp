@@ -1,10 +1,10 @@
 # Module Startup Template
 
-This template can be used to create a **reusable [application module](../Modules/Index.md)** based on the [module development best practices & conventions](../Best-Practices/Index.md). It is also suitable for creating **microservices** (with or without UI).
+This template can be used to create a **reusable [application module](../../modules)** based on the [module development best practices & conventions](../../framework/architecture/best-practices). It is also suitable for creating **microservices** (with or without UI).
 
 ## How to Start With?
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+You can use the [ABP CLI](../../cli) to create a new project using this startup template. Alternatively, you can generate a CLI command from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
 First, install the ABP CLI if you haven't installed before:
 
@@ -32,7 +32,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 Based on the options you've specified, you will get a slightly different solution structure. If you don't specify any option, you will have a solution like shown below:
 
-![issuemanagement-module-solution](../images/issuemanagement-module-solution.png)
+![issuemanagement-module-solution](../../images/issuemanagement-module-solution.png)
 
 Projects are organized as `src`, `test` and `host` folders:
 
@@ -42,7 +42,7 @@ Projects are organized as `src`, `test` and `host` folders:
 
 The diagram below shows the layers & project dependencies of the module:
 
-![layered-project-dependencies-module](../images/layered-project-dependencies-module.png)
+![layered-project-dependencies-module](../../images/layered-project-dependencies-module.png)
 
 Each section below will explain the related project & its dependencies.
 
@@ -56,7 +56,7 @@ An `IssueType` enum and an `IssueConsts` class (which may have some constant fie
 
 ### .Domain Project
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), value types, [repository interfaces](../Repositories.md) and other domain objects.
+This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../../framework/architecture/domain-driven-design/entities.md), [domain services](../../framework/architecture/domain-driven-design/domain-services.md), value types, [repository interfaces](../../framework/architecture/domain-driven-design/repositories.md) and other domain objects.
 
 An `Issue` entity, an `IssueManager` domain service and an `IIssueRepository` interface are good candidates for this project.
 
@@ -64,7 +64,7 @@ An `Issue` entity, an `IssueManager` domain service and an `IIssueRepository` in
 
 ### .Application.Contracts Project
 
-This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
+This project mainly contains [application service](../../framework/architecture/domain-driven-design/application-services.md) **interfaces** and [Data Transfer Objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
 
 An `IIssueAppService` interface and an `IssueCreationDto` class are good candidates for this project.
 
@@ -72,7 +72,7 @@ An `IIssueAppService` interface and an `IssueCreationDto` class are good candida
 
 ### .Application Project
 
-This project contains the [application service](../Application-Services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
+This project contains the [application service](../../framework/architecture/domain-driven-design/application-services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
 
 An `IssueAppService` class is a good candidate for this project.
 
@@ -145,7 +145,7 @@ In this scenario, there are three applications;
 
 The diagram below shows the relation of the applications:
 
-![tiered-solution-applications](../images/tiered-solution-applications.png)
+![tiered-solution-applications](../../images/tiered-solution-applications.png)
 
 `.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.AuthServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
@@ -167,7 +167,7 @@ You should run the application with the given order:
 
 The solution will have a folder called `angular` in it. This is where the Angular client-side code is located. When you open that folder in an IDE, the folder structure will look like below:
 
-![Folder structure of ABP Angular module project](../images/angular-module-folder-structure.png)
+![Folder structure of ABP Angular module project](../../images/angular-module-folder-structure.png)
 
 * _angular/projects/issue-management_ folder contains the Angular module project.
 * _angular/projects/dev-app_ folder contains a development application that runs your module.
@@ -199,7 +199,7 @@ Once all dependencies are installed, follow the steps below to serve your develo
 2. Open your terminal at the root folder, i.e. `angular`.
 3. Run `yarn start` or `npm start`.
 
-![ABP Angular module dev-app project](../images/angular-module-dev-app-project.png)
+![ABP Angular module dev-app project](../../images/angular-module-dev-app-project.png)
 
 The issue management page is empty in the beginning. You may change the content in `IssueManagementComponent` at the _angular/projects/issue-management/src/lib/issue-management.component.ts_ path and observe that the view changes accordingly.
 
@@ -222,7 +222,7 @@ Now, let's have a closer look at some key elements of your project.
 - Loads `DynamicLayoutComponent` at base path it is given.
 - Loads `IssueManagementComponent` as child to the layout, again at the given base path.
 
-You can rearrange this module to load more than one component at different routes, but you need to update the route provider at _angular/projects/issue-management/config/src/providers/route.provider.ts_ to match the new routing structure with the routes in the menu. Please check [Modifying the Menu](../UI/Angular/Modifying-the-Menu.md) to see how route providers work.
+You can rearrange this module to load more than one component at different routes, but you need to update the route provider at _angular/projects/issue-management/config/src/providers/route.provider.ts_ to match the new routing structure with the routes in the menu. Please check [Modifying the Menu](../../framework/ui/angular/modifying-the-menu.md) to see how route providers work.
 
 #### Config Module
 
@@ -247,4 +247,4 @@ The difference between the `forRoot` method of the config module and the `forLaz
 
 #### Testing Angular UI
 
-Please see the [testing document](../UI/Angular/Testing.md).
+Please see the [testing document](../../framework/ui/angular/testing.md).

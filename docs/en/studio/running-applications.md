@@ -43,7 +43,7 @@ We can start/stop the applications with this option. Go to root of the tree and 
 
 - `Start All`: Start all(CLI, C#) applications.
 - `Stop All`: Stop all(CLI, C#) applications.
-- `Build & Start All`: Builds each C# application in the [Background Tasks](./overview/index.md#background-tasks) and starts all (CLI, C#) applications after the build tasks are completed.
+- `Build & Start All`: Builds each C# application in the [Background Tasks](./overview#background-tasks) and starts all (CLI, C#) applications after the build tasks are completed.
 
 > `Start All` doesn't build the C# applications before running. If you're running it for the first time or if you've made changes, you should build the applications. You can simply use the `Build & Start All`.
 
@@ -60,7 +60,7 @@ We can use common [dotnet](https://learn.microsoft.com/en-us/dotnet/core/tools) 
 - `Restore`: Restores the dependencies for C# applications.
 - `Clean`: Cleans the output of the previous build for C# applications.
 
-> Since *Solution Runner* may contain numerous C# projects, the *Build* options uses the [Background Tasks](./overview/index.md#background-tasks), ensuring a seamless experience while using ABP Studio.
+> Since *Solution Runner* may contain numerous C# projects, the *Build* options uses the [Background Tasks](./overview#background-tasks), ensuring a seamless experience while using ABP Studio.
 
 ### Add
 
@@ -77,7 +77,7 @@ When we go to root of the tree and right-click, in this example *Acme.BookStore(
 - `Select application`: First we have to select an application, you have the option to add the same application multiple times.
 - `Name`: Give an arbitrary name to see in solution runner. This name should be unique for each profile even the selected application already exists.
 - `Launch url`: Is the url when we want to browse.
-- `Kubernetes service`: If you're not using the *Kubernetes* panel leave it empty. It's necessary for browse, when we connect the kubernetes cluster we should browse the kubernetes services instead *Launch url*. In [microservice](./solution-templates/microservice/index.md) template this option already configured and you can copy the existing regex pattern from your selected application [properties](#properties). If you create a custom helm chart you can also give the regex pattern that matches with your helm chart kubernetes service name.
+- `Kubernetes service`: If you're not using the *Kubernetes* panel leave it empty. It's necessary for browse, when we connect the kubernetes cluster we should browse the kubernetes services instead *Launch url*. In [microservice](../get-started/microservice.md) template this option already configured and you can copy the existing regex pattern from your selected application [properties](#properties). If you create a custom helm chart you can also give the regex pattern that matches with your helm chart kubernetes service name.
 
 You can click the `OK` button to add the C# application to the profile.
 

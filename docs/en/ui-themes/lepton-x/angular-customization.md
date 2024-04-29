@@ -2,8 +2,8 @@
 
 ### Layouts
 
-The Angular version of LeptonX provides **layout components** for your **user interface** on [ABP Framework Theming](https://docs.abp.io/en/abp/latest/UI/Angular/Theming).
-You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component system](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement).
+The Angular version of LeptonX provides **layout components** for your **user interface** on [ABP Framework Theming](../../framework/ui/angular/theming.md).
+You can use layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component system](../../framework/ui/angular/component-replacement.md).
 
 The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
 
@@ -34,7 +34,7 @@ export class AppComponent {
 }
 ```
 
-See the [Component Replacement](https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement) documentation for more information on how to replace components.
+See the [Component Replacement]() documentation for more information on how to replace components.
 
 ### Brand Component
 

@@ -30,16 +30,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
 - **Part 5: Authorization (this part)**
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -49,7 +49,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -61,7 +61,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Permissions
 
-ABP Framework provides an [authorization system](../Authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+ABP Framework provides an [authorization system](../../framework/fundamentals/authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
 
 ### Permission Names
 
@@ -184,7 +184,7 @@ public class BookAppService :
 }
 ````
 
-Added code to the constructor. Base `CrudAppService` automatically uses these permissions on the CRUD operations. This makes the **application service** secure, but also makes the **HTTP API** secure since this service is automatically used as an HTTP API as explained before (see [auto API controllers](../API/Auto-API-Controllers.md)).
+Added code to the constructor. Base `CrudAppService` automatically uses these permissions on the CRUD operations. This makes the **application service** secure, but also makes the **HTTP API** secure since this service is automatically used as an HTTP API as explained before (see [auto API controllers](../../framework/api-development/auto-controllers.md)).
 
 > You will see the declarative authorization, using the `[Authorize(...)]` attribute, later while developing the author management functionality.
 

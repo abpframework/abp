@@ -29,16 +29,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts:
 
-- [Part 1: Creating the server side](Part-1.md)
+- [Part 1: Creating the server side](part-01.md)
 - **Part 2: The book list page (this part)**
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -48,7 +48,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -64,7 +64,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
-ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)** for all the API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
+ABP **dynamically** creates **[JavaScript Proxies](../../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md)** for all the API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
 ### Testing in the Developer Console
 
@@ -165,7 +165,7 @@ Open the `en.json` (*the English translations*) file and change the content as s
 
 If a text is not defined in the localization file, it **falls back** to the localization key (as ASP.NET Core's standard behavior).
 
-> ABP's localization system is built on the [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. Check the [localization document](../Localization.md) for details.
+> ABP's localization system is built on the [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. Check the [localization document](../../framework/fundamentals/localization.md) for details.
 
 {{if UI == "MVC"}}
 
@@ -260,8 +260,8 @@ Change the `Pages/Books/Index.cshtml` as the following:
 </abp-card>
 ````
 
-* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to the standard `script` tag. It handles **minification** and **versioning**. Check the [bundling & minification document](../UI/AspNetCore/Bundling-Minification.md) for details.
-* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../UI/AspNetCore/Tag-Helpers/Index.md) document.
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to the standard `script` tag. It handles **minification** and **versioning**. Check the [bundling & minification document](../../framework/ui/mvc-razor-pages/bundling-minification.md) for details.
+* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../../framework/ui/mvc-razor-pages/tag-helpers) document.
 
 #### Index.js
 
@@ -346,7 +346,7 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## Install NPM packages
 
-> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
+> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../../framework/ui/angular/migration-guide-v3.md) if you are upgrading an existing project with v2.x.
 
 If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run the `yarn` command to install the NPM packages:
 
@@ -453,16 +453,16 @@ function configureRoutes(routes: RoutesService) {
 `RoutesService` is a service provided by the ABP Framework to configure the main menu and the routes.
 
 * `path` is the URL of the route.
-* `name` is the localized menu item name (check the [localization document](../UI/Angular/Localization.md) for details).
+* `name` is the localized menu item name (check the [localization document](../../framework/ui/angular/localization.md) for details).
 * `iconClass` is the icon of the menu item (you can use [Font Awesome](https://fontawesome.com/) icons by default).
 * `order` is the order of the menu item.
 * `layout` is the layout of the BooksModule's routes (there are three types of pre-defined layouts: `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty`).
 
-For more information, check the [RoutesService document](../UI/Angular/Modifying-the-Menu.md#via-routesservice).
+For more information, check the [RoutesService document](../../framework/ui/angular/modifying-the-menu.md#via-routesservice).
 
 ### Service Proxy Generation
 
-[ABP CLI](../CLI.md) provides a `generate-proxy` command that generates client proxies for your HTTP APIs to make your HTTP APIs easy to consume by the client side. Before running the `generate-proxy` command, your host must be up and running.
+[ABP CLI](../../cli) provides a `generate-proxy` command that generates client proxies for your HTTP APIs to make your HTTP APIs easy to consume by the client side. Before running the `generate-proxy` command, your host must be up and running.
 
 > **Warning**: There is a problem with IIS Express; it doesn't allow connecting to the application from another process. If you are using Visual Studio, select the `Acme.BookStore.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
@@ -509,7 +509,7 @@ export class BookComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We are using the [ListService](../UI/Angular/List-Service.md), a utility service from the ABP Framework which provides easy pagination, sorting and searching.
+* We are using the [ListService](../../framework/ui/angular/list-service.md), a utility service from the ABP Framework which provides easy pagination, sorting and searching.
 
 Open the `/src/app/book/book.component.html` and replace the content as shown below:
 
@@ -671,7 +671,7 @@ While the code above is pretty easy to understand, you can check the Blazorise [
 
 #### About the AbpCrudPageBase
 
-We will continue benefitting from  `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../API/Dynamic-CSharp-API-Clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call the server side HTTP APIs in your Blazor applications.
+We will continue benefitting from  `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../../framework/api-development/dynamic-csharp-clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call the server side HTTP APIs in your Blazor applications.
 
 ## Run the Final Application
 

@@ -2,7 +2,7 @@
 
 ## Creating a new ABP module via ABP Suite
 
-Creating a new ABP module via ABP Suite is an alternative way of creating an ABP module project rather than using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#new) or [abp.io](https://abp.io/get-started) website. To create a new ABP module solution, click the **Create a new solution** button. Then choose **module template** from the opening dialog.
+Creating a new ABP module via ABP Suite is an alternative way of creating an ABP module project rather than using [ABP CLI](../cli#new) or [abp.io](https://abp.io/get-started) website. To create a new ABP module solution, click the **Create a new solution** button. Then choose **module template** from the opening dialog.
 
 ![Create a new ABP Module Solution](../images/suite-create-a-new-module-solution.png)
 

@@ -4,7 +4,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
 
 > **This document explains the Microservice solution template in every details. So, it is a reference document to fully understand the solution and refer when you have trouble.**
 >
-> **If you just want to quickly create a microservice solution, please refer to *[Quick Start: Creating a Microservice Solution with ABP Studio](../../quick-starts/microservice.md)* document.**
+> **If you just want to quickly create a microservice solution, please refer to *[Quick Start: Creating a Microservice Solution with ABP Studio](../../get-started/microservice.md)* document.**
 
 ## Contents
 

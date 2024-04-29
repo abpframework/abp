@@ -59,7 +59,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Creating a New Solution
 
-In this tutorial, we will use the [ABP CLI](../../../CLI.md) to create the sample application with the ABP Framework. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
+In this tutorial, we will use the [ABP CLI](../../../cli) to create the sample application with the ABP Framework. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -105,7 +105,7 @@ This command will create the database and seed the initial data for you. Then yo
 
 #### Installing the Client-Side Packages
 
-[ABP CLI](../../../CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../../../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -121,7 +121,7 @@ abp install-libs
 
 #### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../CLI.md).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../cli).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
@@ -129,7 +129,7 @@ However, sometimes you might need to run this command manually. To update script
 abp bundle
 ```
 
-> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../../../UI/Blazor/Global-Scripts-Styles.md).
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../../../framework/ui/blazor/global-scripts-styles.md).
 
 {{end}}
 
@@ -178,7 +178,7 @@ All right. We can start coding!
 
 ## Defining the Entity
 
-This application will have a single [entity](../../../Entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of {{if UI=="Blazor"}}the `TodoApp.Host` project{{else}}the project{{end}}:
+This application will have a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we can start by creating it. So, create a new `TodoItem` class under the `Entities` folder of {{if UI=="Blazor"}}the `TodoApp.Host` project{{else}}the project{{end}}:
 
 ````csharp
 using Volo.Abp.Domain.Entities;
@@ -197,7 +197,7 @@ public class TodoItem : BasicAggregateRoot<Guid>
 
 {{if DB=="EF"}}
 
-Next step is to setup the [Entity Framework Core](../../../Entity-Framework-Core.md) configuration.
+Next step is to setup the [Entity Framework Core](../../../framework/data/entity-framework-core) configuration.
 
 ### Mapping Configuration
 
@@ -251,7 +251,7 @@ dotnet ef database update
 
 {{else if DB=="Mongo"}}
 
-The next step is to setup the [MongoDB](../../../MongoDB.md) configuration. Open the `TodoAppDbContext` class (under the **Data** folder) in your project and make the following changes:
+The next step is to setup the [MongoDB](../../../framework/data/mongodb) configuration. Open the `TodoAppDbContext` class (under the **Data** folder) in your project and make the following changes:
 
 1. Add a new property to the class:
 
@@ -274,7 +274,7 @@ After the database integrations, now we can start to create application service 
 
 ## Creating the Application Service
 
-An [application service](../../../Application-Services.md) is used to perform the use cases of the application. We need to perform the following use cases in this application:
+An [application service](../../../framework/architecture/domain-driven-design/application-services.md) is used to perform the use cases of the application. We need to perform the following use cases in this application:
 
 * Get the list of the todo items
 * Create a new todo item
@@ -284,7 +284,7 @@ Before starting to implement these use cases, first we need to create a DTO clas
 
 ### Creating the Data Transfer Object (DTO)
 
-[Application services](../../../Application-Services.md) typically get and return DTOs ([Data Transfer Objects](../../../Data-Transfer-Objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder{{if UI=="Blazor"}} of your `TodoApp.Contracts` project{{end}}:
+[Application services](../../../framework/architecture/domain-driven-design/application-services.md) typically get and return DTOs ([Data Transfer Objects](../../../framework/architecture/domain-driven-design/data-transfer-objects.md)) instead of entities. So, create a new `TodoItemDto` class under the `Services/Dtos` folder{{if UI=="Blazor"}} of your `TodoApp.Contracts` project{{end}}:
 
 ```csharp
 namespace TodoApp.Services.Dtos;
@@ -354,7 +354,7 @@ public class TodoAppService : TodoAppAppService{{if UI=="Blazor"}}, ITodoAppServ
 }
 ```
 
-This class inherits from the `TodoAppAppService`, which inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../Repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../Dependency-Injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
+This class inherits from the `TodoAppAppService`, which inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
 
 #### Getting the Todo Items
 
@@ -496,7 +496,7 @@ Open the `Index.cshtml` file in the `Pages` folder and replace it with the follo
 </div>
 ```
 
-We are using ABP's [card tag helper](../../../UI/AspNetCore/Tag-Helpers/Cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../../UI/AspNetCore/Tag-Helpers/Index.md) make it much easier and type safe.
+We are using ABP's [card tag helper](../../../framework/ui/mvc-razor-pages/tag-helpers/cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../../framework/ui/mvc-razor-pages/tag-helpers) make it much easier and type safe.
 
 This page imports a CSS and a JavaScript file, so we should also create them.
 
@@ -576,11 +576,11 @@ Now, you can run the application again and see the result.
 
 ### Dynamic JavaScript Proxies & Auto API Controllers
 
-In the `Index.cshtml.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../UI/AspNetCore/Dynamic-JavaScript-Proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+In the `Index.cshtml.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
 > `services` keyword comes from the namespace (`namespace TodoApp.Services;`). It's a naming convention.
 
-However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../API/Auto-API-Controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
+However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
 
 If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
@@ -872,4 +872,4 @@ You can find the source code of the completed application [here](https://github.
 
 ## See Also
 
-* Check the [Web Application Development Tutorial](../../Part-1.md) to see a real-life web application development in a layered architecture using the [Application Startup Template](../../../Startup-Templates/Application.md).
+* Check the [Web Application Development Tutorial](../../book-store/part-01.md) to see a real-life web application development in a layered architecture using the [Application Startup Template](../../../solution-templates/layered-web-application).

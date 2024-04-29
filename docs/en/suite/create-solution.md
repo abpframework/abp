@@ -2,7 +2,7 @@
 
 ## Create a new solution
 
-Creates a new ABP solution. It's an alternative way of creating an ABP project rather than [ABP CLI](https://docs.abp.io/en/abp/latest/CLI#new) or [abp.io](https://abp.io/get-started) website.  To create a new ABP Solution, click the **Create a new solution** button. It will open a new dialog for the options.
+Creates a new ABP solution. It's an alternative way of creating an ABP project rather than [ABP CLI](../cli#new) or [abp.io](https://abp.io/get-started) website.  To create a new ABP Solution, click the **Create a new solution** button. It will open a new dialog for the options.
 
 ![Create a new ABP Solution](../images/suite-create-a-new-solution.png)
 
@@ -12,7 +12,7 @@ Also, you can add a *public web site* project to your solution, separate tenant 
 
 ![Create a new solution](../images/suite-new-solution.png)
 
-- **Template type:** This is the startup template type of your solution. You can check the all available templates from [here](../startup-templates/index.md).
+- **Template type:** This is the startup template type of your solution. You can check the all available templates from [here](../startup-templates).
 
 - **Project name:** This is the solution name and also the prefix for the namespace of your solution. In this example `Acme.BookStore` is the project name. The solution file will be named as `Acme.BookStore.sln`. And the namespaces of `c#` files will start with `Acme.BookStore.*`
 

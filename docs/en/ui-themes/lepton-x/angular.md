@@ -7,7 +7,7 @@ To add `LeptonX` into your existing projects, follow the steps below.
 
 * Then, edit `angular.json` as follows:
 
-Add theme-specific styles into the `styles` array of the file. Check the [Theme Configurations](https://docs.abp.io/en/abp/latest/UI/Angular/Theme-Configurations#lepton-x-commercial) documentation for more information.
+Add theme-specific styles into the `styles` array of the file. Check the [Theme Configurations](../../framework/ui/angular/theme-configurations.md#lepton-x-commercial) documentation for more information.
 
 Importing a CSS file as an ECMA module is not supported in Angular 14. Therefore, we need to add the styles in the angular.json file.
 
