@@ -91,8 +91,6 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
         this.showConfirmation(title, message).subscribe();
         break;
       case 403:
-        this.authService.logout();
-        break;
       case 500:
         this.showPage();
         break;

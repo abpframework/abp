@@ -4,6 +4,7 @@ import { TenantResolveErrorHandlerService } from '../services/tenant-resolve-err
 import { AbpFormatErrorHandlerService } from '../services/abp-format-error-handler.service';
 import { StatusCodeErrorHandlerService } from '../services/status-code-error-handler.service';
 import { UnknownStatusCodeErrorHandlerService } from '../services/unknown-status-code-error-handler.service';
+import { AbpSessionErrorHandlerService } from '../services/session-error-handler.service';
 
 export const DEFAULT_HANDLERS_PROVIDERS: Provider[] = [
   {
@@ -25,5 +26,10 @@ export const DEFAULT_HANDLERS_PROVIDERS: Provider[] = [
     provide: CUSTOM_ERROR_HANDLERS,
     multi: true,
     useExisting: UnknownStatusCodeErrorHandlerService,
+  },
+  {
+    provide: CUSTOM_ERROR_HANDLERS,
+    multi: true,
+    useExisting: AbpSessionErrorHandlerService,
   },
 ];
