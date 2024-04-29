@@ -91,7 +91,7 @@ Next, we will take a look at the commands used to prepare, build, and serve our 
 
 Now that you know about the files and folders, we can get the application up and running.
 
-1. Make sure the [database migration is complete](../../Getting-Started?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../Getting-Started?UI=NG&DB=EF&Tiered=No#run-the-application).
+1. Make sure the [database migration is complete](../../../_deleted/getting-started.md?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../../_deleted/getting-started?UI=NG&DB=EF&Tiered=No#run-the-application).
 2. Run `yarn` or `npm install` if you have not already.
 3. Run `yarn start` or `npm start`. The first compilation may take a while. This will start a [live development server](#angular-live-development-server) and launch your default browser in the end.
 4. Visit the browser page that opens after the compilation <sup id="a-certificate-error">[1](#f-certificate-error)</sup>.
