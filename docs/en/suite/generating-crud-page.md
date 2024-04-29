@@ -95,7 +95,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
 * **Create unit & integration tests:** Generates unit and integrations tests for your entity.
 
-*  **Concurrency check:** Implements the `IHasConcurrencyStamp` interface of the entity. If the base class is `AggregateRoot`, concurrency control is enabled by default. For more details see the [Concurrency Check](https://docs.abp.io/en/abp/latest/Concurrency-Check) document.
+*  **Concurrency check:** Implements the `IHasConcurrencyStamp` interface of the entity. If the base class is `AggregateRoot`, concurrency control is enabled by default. For more details see the [Concurrency Check](../framework/infrastructure/concurrency-check.md) document.
 
 ![Entity info](../images/suite-entity-create-info-8.1.png)
 
@@ -271,7 +271,7 @@ Alternatively, you can add `IdentityUser` entity (or any other entity) as a navi
 
 There are some adjustments you may need to make before generating CRUD pages for your legacy ABP app using the latest version of the suite. 
 
-- Check if your environment variables have `rootNamespace` defined as explained [here](https://docs.abp.io/en/abp/latest/UI/Angular/Service-Proxies#angular-project-configuration).
+- Check if your environment variables have `rootNamespace` defined as explained [here](../framework/ui/angular/service-proxies.md#angular-project-configuration).
 
 - Check if your [workspace configuration](https://angular.io/guide/workspace-config) satisfies one of the following. Examples assume your solution namespace is `BookStore`, `Acme.BookStore`, or `Acme.Retail.BookStore`.
   - Project key is in pascal case. E.g. `BookStore`.
@@ -281,7 +281,7 @@ There are some adjustments you may need to make before generating CRUD pages for
 
 ## Generating CRUD Pages via Command Line
 
-You can generate CRUD pages via [ABP CLI](https://docs.abp.io/en/abp/latest/CLI), without opening ABP Suite's user interface. 
+You can generate CRUD pages via [ABP CLI](../cli), without opening ABP Suite's user interface. 
 To do this, you need to pass your entity JSON file and your solution path to the ABP CLI.
 
 Example:

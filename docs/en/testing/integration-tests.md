@@ -21,7 +21,7 @@ Using in-memory SQLite database has two main advantages;
 
 Writing tests against an empty database is not practical. In most cases, you need to some initial data in the database. For example, if you write a test class that query, update and delete the products, it would be helpful to have a few products in the database before executing the test case.
 
-ABP's [Data Seeding](Data-Seeding.md) system is a powerful way to seed the initial data. The application startup template has a *YourProject*TestDataSeedContributor class in the `.TestBase` project. You can fill it to have an initial data that you can use for each test method.
+ABP's [Data Seeding](../framework/infrastructure/data-seeding.md) system is a powerful way to seed the initial data. The application startup template has a *YourProject*TestDataSeedContributor class in the `.TestBase` project. You can fill it to have an initial data that you can use for each test method.
 
 **Example: Create some Issues as the seed data**
 
@@ -166,7 +166,7 @@ Writing such an integration test class is very straightforward. Another benefit 
 
 ## Example: Testing an Application Service
 
-Testing an [Application Service](Application-Services.md) is not so different. Assume that you've created an `IssueAppService` as defined below:
+Testing an [Application Service](../framework/architecture/domain-driven-design/application-services.md) is not so different. Assume that you've created an `IssueAppService` as defined below:
 
 ````csharp
 using System.Collections.Generic;
@@ -194,7 +194,7 @@ namespace MyProject.Issues
 }
 ````
 
-*(assuming you've also defined the `IIssueAppService` and `IssueDto` and created the [object mapping](Object-To-Object-Mapping.md) between `Issue` and the `IssueDto`)*
+*(assuming you've also defined the `IIssueAppService` and `IssueDto` and created the [object mapping](../framework/infrastructure/object-to-object-mapping.md) between `Issue` and the `IssueDto`)*
 
 Now, you can write a test class inside the `.Application.Tests` project:
 
@@ -234,9 +234,9 @@ It's that simple. This test method tests everything, including the application s
 
 ## Dealing with Unit of Work in Integration Tests
 
-ABP's [unit of work](Unit-Of-Work.md) system controls the database connection and transaction management in your application. It seamlessly works while you writing your application code, so you may not aware of it.
+ABP's [object mapping](../framework/architecture/domain-driven-design/unit-of-work.md) system controls the database connection and transaction management in your application. It seamlessly works while you writing your application code, so you may not aware of it.
 
-In the ABP Framework, all the database operations must be performed inside a unit of work scope. When you test an [application service](Application-Services.md) method, the unit of work scope will be the scope of your application service method. If you are testing a [repository](Repositories.md) method, the unit of work scope will be the scope of your repository method.
+In the ABP Framework, all the database operations must be performed inside a unit of work scope. When you test an [application service](../framework/architecture/domain-driven-design/application-services.md) method, the unit of work scope will be the scope of your application service method. If you are testing a [repository](../framework/architecture/domain-driven-design/repositories.md) method, the unit of work scope will be the scope of your repository method.
 
 In some cases, you may need to manually control the unit of work scope. Consider the following test method:
 
@@ -363,7 +363,7 @@ public abstract class MyDbContext_Tests<TStartupModule> : MyProjectDomainTestBas
 
 Just like we've done in the *Dealing with Unit of Work in Integration Tests* section, we should perform `DbContext` operations inside an active unit of work.
 
-For [MongoDB](MongoDB.md), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
+For [MongoDB](../framework/data/mongodb), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
 
 ## Implementing unit tests in EF Core and MongoDB
 

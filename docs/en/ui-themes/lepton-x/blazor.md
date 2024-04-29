@@ -255,7 +255,7 @@ Commonly used components in all layouts.
 
 ![Breadcrumb](images/leptonx-breadcrumb.png)
 
-Breadcrumbs can be customized by using the `PageLayout` service. See the [PageLayout - BreadCrumb](https://docs.abp.io/en/abp/latest/UI/Blazor/Page-Layout#breadcrumbs) section for more information.
+Breadcrumbs can be customized by using the `PageLayout` service. See the [PageLayout - BreadCrumb](../../framework/ui/blazor/page-layout.mdt#breadcrumbs) section for more information.
 
 If you need to replace the component, you can follow the steps below.
 
@@ -527,7 +527,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 
 ![Main Header Branding](images/leptonx-blazor-side-menu-main-header-branding.png)
 
-Application branding can be customized with the `IBrandingProvider`. See the [Branding](https://docs.abp.io/en/abp/latest/UI/Blazor/Branding) section for more information.
+Application branding can be customized with the `IBrandingProvider`. See the [Branding](../../framework/ui/blazor/branding.md) section for more information.
 
 If you need to replace the component, you can follow the steps below.
 
@@ -564,7 +564,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 
 ![Main Header Toolbar](images/leptonx-blazor-sidemenu-main-toolbar.png)
 
-The main toolbar can be managed by using the `ToolbarContributor` classes. See the [Toolbars](https://docs.abp.io/en/abp/latest/UI/Blazor/Toolbars) section for more information.
+The main toolbar can be managed by using the `ToolbarContributor` classes. See the [Toolbars](../../framework/ui/blazor/toolbars.md) section for more information.
 
 If you need to replace the component, you can follow the steps below.
 
@@ -737,7 +737,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 
 ![Main Header Branding](images/leptonx-blazor-topmenu-main-header-branding.png)
 
-Application branding can be customized with the `IBrandingProvider`. See the [Branding](https://docs.abp.io/en/abp/latest/UI/Blazor/Branding) section for more information.
+Application branding can be customized with the `IBrandingProvider`. See the [Branding](../../framework/ui/blazor/branding.md) section for more information.
 
 * Create a razor page, like `MyMainHeaderBranding.razor`, in your blazor application as shown below:
 
@@ -772,7 +772,7 @@ namespace LeptonXLite.DemoApp.Blazor.MyComponents
 
 ![Main Header Toolbar](images/leptonx-blazor-topmenu-main-header-toolbar.png)
 
-The main toolbar can be managed by using the `ToolbarContributor` classes. See the [Toolbars](https://docs.abp.io/en/abp/latest/UI/Blazor/Toolbars) section for more information.
+The main toolbar can be managed by using the `ToolbarContributor` classes. See the [Toolbars](../../framework/ui/blazor/toolbars.md) section for more information.
 
 If you need to replace the component, you can follow the steps below.
 

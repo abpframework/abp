@@ -6,9 +6,9 @@ ABP Studio offers a comprehensive centralized monitoring solution, enabling you 
 
 ## Collecting Telemetry Information
 
-There are two application [types](./running-applications.md#abp-studio-running-applications): C# and CLI. Only C# applications can establish a connection with ABP Studio and transmit telemetry information via the `Volo.Abp.Studio.Client.AspNetCore` package. However, we can view the *Logs* and *Browse* (if there is a *Launch URL*) for both CLI and C# application types. Upon starting C# applications, they attempt to establish a connection with ABP Studio. When connection successful, you should see a chain icon next to the application name in [Solution Runner](./running-applications.md#run-1). Applications can connect the ABP Studio with *Solution Runner* -> *C# Application* -> *Run* -> *Start* or  from an outside environment such as debugging with Visual Studio. Additionally, they can establish a connection from a Kubernetes Cluster through the ABP Studio [Kubernetes Integration: Connecting to the Cluster](./quick-starts/microservice.md#kubernetes-integration-connecting-to-the-cluster).
+There are two application [types](./running-applications.md#abp-studio-running-applications): C# and CLI. Only C# applications can establish a connection with ABP Studio and transmit telemetry information via the `Volo.Abp.Studio.Client.AspNetCore` package. However, we can view the *Logs* and *Browse* (if there is a *Launch URL*) for both CLI and C# application types. Upon starting C# applications, they attempt to establish a connection with ABP Studio. When connection successful, you should see a chain icon next to the application name in [Solution Runner](./running-applications.md#run-1). Applications can connect the ABP Studio with *Solution Runner* -> *C# Application* -> *Run* -> *Start* or  from an outside environment such as debugging with Visual Studio. Additionally, they can establish a connection from a Kubernetes Cluster through the ABP Studio [Kubernetes Integration: Connecting to the Cluster](../get-started/microservice.md#kubernetes-integration-connecting-to-the-cluster).
 
-You can [configure](https://docs.abp.io/en/abp/latest/Options) the `AbpStudioClientOptions` to disable send telemetry information. The package automatically gets the [configuration](https://docs.abp.io/en/abp/latest/Configuration) from the `IConfiguration`. So, you can set your configuration inside the `appsettings.json`:
+You can [configure](../framework/fundamentals/options.md) the `AbpStudioClientOptions` to disable send telemetry information. The package automatically gets the [configuration](../framework/fundamentals/configuration.md) from the `IConfiguration`. So, you can set your configuration inside the `appsettings.json`:
 
 - `StudioUrl`: The ABP Studio URL for sending telemetry information. Mostly, you don't need to change this value. The default value is `http://localhost:38271`.
 - `IsLinkEnabled`: If this value is `true`, it starts the connection to ABP Studio and transmits telemetry information. You can switch this to `false` for deactivation. In a production deployment, you should explicitly set this value to `false`. The default value is `true`.
@@ -21,7 +21,7 @@ You can [configure](https://docs.abp.io/en/abp/latest/Options) the `AbpStudioCli
 }
 ```
 
-Alternatively you can configure the standard [Options](https://docs.abp.io/en/abp/latest/Options) pattern in the `ConfigureServices` method of the `YourApplicationModule` class.
+Alternatively you can configure the standard [Options](../framework/fundamentals/options.md) pattern in the `ConfigureServices` method of the `YourApplicationModule` class.
 
 ```csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -40,7 +40,7 @@ In this tab, you can view comprehensive overall information. You have the option
 
 - `Apps Running`: The number of applications running. It includes CLI and C# applications. In the example two C# microservice applications and one CLI application is running.
 - `Requests`: The number of HTTP requests received by all C# applications.
-- `Events`: The number of [Distributed Event](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) sent or received by all C# applications.
+- `Events`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed) sent or received by all C# applications.
 - `Exceptions`: The number of exceptions thrown by all C# applications.
 
 ![overall](./images/monitoring-applications/overall.png)
@@ -52,11 +52,11 @@ In the data grid, details for each application are displayed. It's possible to s
 - `Instances`: Indicates the count of running instances for the application. This value is particularly helpful when scaling the application within a Kubernetes, providing visibility into the number of currently active instances.
 - `Uptime`: The time elapsed since the application started.
 - `Requests`: The number of HTTP requests received by the application.
-- `Events (R/S)`: The number of [Distributed Event](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) received or sent by the application.
+- `Events (R/S)`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed) received or sent by the application.
 - `Exceptions`: The number of exceptions thrown by the application.
 - `Actions`: The actions that can be performed on the application. You can start and stop the application.
 
-> For the events system, you can exclusively view the [Distributed Events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus). Generally, the [Local Events](https://docs.abp.io/en/abp/latest/Local-Event-Bus) is not included.
+> For the events system, you can exclusively view the [Distributed Events](../framework/infrastructure/event-bus/distributed). Generally, the [Local Events](../framework/infrastructure/event-bus/distributed) is not included.
 
 ## Browse
 
@@ -94,11 +94,11 @@ Furthermore, by clicking the gear icon in the *HTTP Requests* tab, you can acces
 
 ## Events
 
-In this tab, you can view all [Distributed Events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) sent or received by your C# applications. You can filter them by [Event Name](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#event-name) using the search textbox or by selecting a specific application. Additionally, you can choose the *Direction* (Received/Send) and *Source* (Direct/Inbox/Outbox) of events. The *Clear Events* button removes all events.
+In this tab, you can view all [Distributed Events](../framework/infrastructure/event-bus/distributed) sent or received by your C# applications. You can filter them by [Event Name](../framework/infrastructure/event-bus/distributed#event-name) using the search textbox or by selecting a specific application. Additionally, you can choose the *Direction* (Received/Send) and *Source* (Direct/Inbox/Outbox) of events. The *Clear Events* button removes all events.
 
 ![events](./images/monitoring-applications/events.png)
 
-> In the *Direction* section, there are two options: *Received*, indicating events received by the application, and *Sent*, indicating events sent by the application. Within the *Source* section, three options are available, and their significance comes into play when utilizing the [Inbox/Outbox pattern](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#outbox-inbox-for-transactional-events). *Inbox* refers to events received by the application, *Outbox* refers to events sent by the application and *Direct* signifies events sent or received by the application without involving Inbox/Outbox pattern.
+> In the *Direction* section, there are two options: *Received*, indicating events received by the application, and *Sent*, indicating events sent by the application. Within the *Source* section, three options are available, and their significance comes into play when utilizing the [Inbox/Outbox pattern](../framework/infrastructure/event-bus/distributed#outbox-inbox-for-transactional-events). *Inbox* refers to events received by the application, *Outbox* refers to events sent by the application and *Direct* signifies events sent or received by the application without involving Inbox/Outbox pattern.
 
 Clicking on a row enables you to view the details of each event; `Application`, `Event Name`, `Direction`, `Source`, `Timestamp` and `Event Data`.
 
@@ -106,7 +106,7 @@ Clicking on a row enables you to view the details of each event; `Application`, 
 
 ## Exceptions
 
-This tab displays all exceptions by your C# applications. You can apply filters using the search textbox based on *Message*, *Source*, *ExceptionType*, and *StackTrace* or by choosing a specific application. Additionally, you have the option to select the [Log Level](https://docs.abp.io/en/abp/latest/Exception-Handling#log-level) for adding a filter. To clear all exceptions, use the *Clear Exceptions* button.
+This tab displays all exceptions by your C# applications. You can apply filters using the search textbox based on *Message*, *Source*, *ExceptionType*, and *StackTrace* or by choosing a specific application. Additionally, you have the option to select the [Log Level](../framework/fundamentals/exception-handling.md#log-level) for adding a filter. To clear all exceptions, use the *Clear Exceptions* button.
 
 ![exceptions](./images/monitoring-applications/exceptions.png)
 

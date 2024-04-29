@@ -26,15 +26,15 @@ In this tutorial series, you will build an ABP based web application named `Acme
 This tutorial is organized as the following parts:
 
 - **Part 1: Creating the server side (this part)**
-- [Part 2: The book list page](Part-2.md)
-- [Part 3: Creating, updating and deleting books](Part-3.md)
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 2: The book list page](part-02.md)
+- [Part 3: Creating, updating and deleting books](part-03.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -44,7 +44,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 > After downloading the source code, you might need to run some commands before running the application. See the _After Creating the Solution_ section below for more information.
 
@@ -58,13 +58,13 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Creating the Solution
 
-Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started.md).
+Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../../get-started).
 
 ## After Creating the Solution
 
 ### Installing the Client-Side Packages
 
-[ABP CLI](../CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -80,7 +80,7 @@ abp install-libs
 
 ### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../CLI.md).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../cli).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
@@ -88,7 +88,7 @@ However, sometimes you might need to run this command manually. To update script
 abp bundle
 ```
 
-> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../UI/Blazor/Global-Scripts-Styles.md).
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../../framework/ui/blazor/global-scripts-styles.md).
 
 {{end}}
 
@@ -96,7 +96,7 @@ abp bundle
 
 **Domain layer** in the startup template is separated into two projects:
 
-- `Acme.BookStore.Domain` contains your [entities](../Entities.md), [domain services](../Domain-Services.md) and other core domain objects.
+- `Acme.BookStore.Domain` contains your [entities](../../framework/architecture/domain-driven-design/entities.md), [domain services](../../framework/architecture/domain-driven-design) and other core domain objects.
 - `Acme.BookStore.Domain.Shared` contains `constants`, `enums` or other domain related objects that can be shared with clients.
 
 So, define your entities in the domain layer (`Acme.BookStore.Domain` project) of the solution. 
@@ -121,11 +121,11 @@ public class Book : AuditedAggregateRoot<Guid>
 }
 ````
 
-* ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../Domain-Driven-Design.md) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../Entities.md) for more).
-* The `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../Audit-Logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
+* ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../../framework/architecture/domain-driven-design) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../../framework/architecture/domain-driven-design/entities.md) for more).
+* The `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../../framework/infrastructure/audit-logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
 * `Guid` is the **primary key type** of the `Book` entity.
 
-> This tutorial leaves the entity properties with **public get/set** for the sake of simplicity. See the [entities document](../Entities.md) if you want to learn more about DDD best practices.
+> This tutorial leaves the entity properties with **public get/set** for the sake of simplicity. See the [entities document](../../framework/architecture/domain-driven-design/entities.md) if you want to learn more about DDD best practices.
 
 ### BookType Enum
 
@@ -246,7 +246,7 @@ This will add a new migration class to the project:
 
 ### Add Sample Seed Data
 
-> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
+> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../../framework/infrastructure/data-seeding.md) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
 
 Create a class that implements the `IDataSeedContributor` interface in the `*.Domain` project by copying the following code:
 
@@ -300,7 +300,7 @@ public class BookStoreDataSeederContributor
 }
 ```
 
-* This code simply uses the `IRepository<Book, Guid>` (the default [repository](../Repositories.md)) to insert two books to the database in case there weren't any books in it.
+* This code simply uses the `IRepository<Book, Guid>` (the default [repository](../../framework/architecture/best-practices/repositories.md)) to insert two books to the database in case there weren't any books in it.
 
 ### Update the Database
 
@@ -314,7 +314,7 @@ Run the `Acme.BookStore.DbMigrator` application to update the database:
 
 The application layer is separated into two projects:
 
-* `Acme.BookStore.Application.Contracts` contains your [DTO](../Data-Transfer-Objects.md)s and [application service](../Application-Services.md) interfaces.
+* `Acme.BookStore.Application.Contracts` contains your [DTO](../../framework/architecture/domain-driven-design/data-transfer-objects.md)s and [application service](../../framework/architecture/domain-driven-design/application-services.md) interfaces.
 * `Acme.BookStore.Application` contains the implementations of your application services.
 
 In this section, you will create an application service to get, create, update and delete books using the `CrudAppService` base class of the ABP Framework.
@@ -341,7 +341,7 @@ public class BookDto : AuditedEntityDto<Guid>
 }
 ````
 
-* **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](https://docs.abp.io/en/abp/latest/Data-Transfer-Objects) for more details.
+* **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](../../framework/architecture/domain-driven-design/data-transfer-objects.md) for more details.
 * The `BookDto` is used to transfer the book data to the presentation layer in order to show the book information on the UI.
 * The `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` entity defined above.
 
@@ -362,7 +362,7 @@ public class BookStoreApplicationAutoMapperProfile : Profile
 }
 ````
 
-> See the [object to object mapping](../Object-To-Object-Mapping.md) document for details.
+> See the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) document for details.
 
 ### CreateUpdateBookDto
 
@@ -393,7 +393,7 @@ public class CreateUpdateBookDto
 ````
 
 * This `DTO` class is used to get a book information from the user interface while creating or updating the book.
-* It defines data annotation attributes (like `[Required]`) to define validations for the properties. `DTO`s are [automatically validated](https://docs.abp.io/en/abp/latest/Validation) by the ABP framework.
+* It defines data annotation attributes (like `[Required]`) to define validations for the properties. `DTO`s are [automatically validated](../../framework/fundamentals/validation.md) by the ABP framework.
 
 As done to the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be as shown below:
 
@@ -469,14 +469,14 @@ public class BookAppService :
 ````
 
 * `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD (create, read, update, delete) methods defined by the `ICrudAppService`.
-* `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](https://docs.abp.io/en/abp/latest/Repositories).
-* `BookAppService` uses `IObjectMapper` service ([see](../Object-To-Object-Mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
+* `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](../../framework/architecture/domain-driven-design/repositories.md).
+* `BookAppService` uses `IObjectMapper` service ([see](../../framework/infrastructure/object-to-object-mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
 
 ## Auto API Controllers
 
 In a typical ASP.NET Core application, you create **API Controllers** to expose the application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP.
 
-ABP can [**automagically**](../API/Auto-API-Controllers.md) configure your application services as MVC API Controllers by convention.
+ABP can [**automagically**](../../framework/api-development/auto-controllers.md) configure your application services as MVC API Controllers by convention.
 
 ### Swagger UI
 

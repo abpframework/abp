@@ -103,4 +103,4 @@ The **[SaaS module](../../modules/saas.md)** is included as an option. When you 
 
 ## See Also
 
-* [Quick Start: Creating a Microservice Solution with ABP Studio](../../quick-starts/microservice.md)
+* [Quick Start: Creating a Microservice Solution with ABP Studio](../../get-started/microservice.md)

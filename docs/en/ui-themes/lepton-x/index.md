@@ -20,11 +20,11 @@ A screenshot from the light style of the theme:
 
 ## How to Install
 
-LeptonX Theme module is pre-installed in [the startup templates](../startup-templates/application/create-solution.md). So, no need to manually install it.
+LeptonX Theme module is pre-installed in [the startup templates](../../_deleted/Getting-Started-Create-Solution.md). So, no need to manually install it.
 
 ## Packages
 
-This module follows the [module development best practices guide](https://docs.abp.io/en/abp/latest/Best-Practices/Index) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+This module follows the [module development best practices guide](../../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
 ### NuGet Packages
 
@@ -92,7 +92,7 @@ If you want to download the source code of the preview version, you can use the 
 abp get-source Volo.Abp.LeptonXTheme.Pro --preview
 ```
 
-> You can download the source code of a certain version by using the `--version` parameter. See the [ABP CLI documentation](https://docs.abp.io/en/abp/latest/CLI#get-source) for other possible options.
+> You can download the source code of a certain version by using the `--version` parameter. See the [ABP CLI documentation](../../cli/index#get-source) for other possible options.
 
 ABP Commercial customers can also download the source code of the [https://x.leptontheme.com/](https://x.leptontheme.com/) from [https://abp.io/api/download/samples/leptonx-demo](https://abp.io/api/download/samples/leptonx-demo).
 

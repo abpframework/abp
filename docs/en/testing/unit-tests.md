@@ -8,7 +8,7 @@ In this simplest case, the class you want to test has no dependencies. In this c
 
 ### Example: Testing an Entity
 
-Assume that you've an `Issue` [entity](Entities.md) as shown below:
+Assume that you've an `Issue` [entity](../framework/architecture/domain-driven-design/entities.md) as shown below:
 
 ````csharp
 using System;
@@ -52,7 +52,7 @@ namespace MyProject.Issues
 
 Notice that the `IsClosed` and `CloseDate` properties have private setters to force some business rules by using the `Open()` and `Close()` methods;
 
-* Whenever you close an issue, the `CloseDate` should be set to the [current time](Timing.md).
+* Whenever you close an issue, the `CloseDate` should be set to the [current time](../framework/infrastructure/virtual-file-system.md).
 * An issue can not be re-opened if it is locked. And if it is re-opened, the `CloseDate` should be set to `null`.
 
 Since the `Issue` entity is a part of the Domain Layer, we should test it in the `Domain.Tests` project. Create an `Issue_Tests` class inside the `Domain.Tests` project:

@@ -36,7 +36,7 @@ The top menu is the main menu bar in ABP Studio. It offers access to various fun
 ### Help Menu
 
 - **License Information:** Shows your organization's license information.
-- **Framework Documentation:** Opens the official [framework documentation](https://docs.abp.io/en/abp/latest/) website in your browser.
+- **Framework Documentation:** Opens the official [framework documentation](../index.md) website in your browser.
 - **Commercial Documentation:** Opens the official [commercial documentation](https://docs.abp.io/en/commercial/latest/) website in your browser.
 - **Community:** Opens the official [ABP Community](https://community.abp.io/) website in your browser.
 - **Support:** Opens the official [Support](https://support.abp.io/QA/Questions) website in your browser.
@@ -51,17 +51,17 @@ The Welcome Screen is the initial user interface users encounter upon starting A
 
 ## Sidebar
 
-Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](../solution-explorer.md), [Solution Runner](../running-applications.md), and Kubernetes Integration. Now let's examine each item.
+Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), and Kubernetes Integration. Now let's examine each item.
 
 ### Solution Explorer
 
-The [Solution Explorer](../solution-explorer.md) is a feature for managing your project's structure, allowing operations such as add package reference, add new package, new module creation, and etc. within ABP Studio.
+The [Solution Explorer](./solution-explorer.md) is a feature for managing your project's structure, allowing operations such as add package reference, add new package, new module creation, and etc. within ABP Studio.
 
 ![solution-explorer](./images/overview/solution-explorer.png)
 
 ### Solution Runner
 
-[Solution Runner](../running-applications.md) is a tool within ABP Studio that enables users to build, run, and monitor their applications directly from the user interface.
+[Solution Runner](./running-applications.md) is a tool within ABP Studio that enables users to build, run, and monitor their applications directly from the user interface.
 
 ![solution-runner](./images/overview/solution-runner.png)
 
@@ -83,7 +83,7 @@ This pane is dedicated to managing Kubernetes services. It simplifies the proces
 
 ## Application Monitoring Area
 
-The [Application Monitoring Area](../monitoring-applications.md) is a functional component within ABP Studio that displays real-time operational status and metrics for applications. It indicates the active state of applications, the count of running instances, and so on. The user interface is organized into several tabs: Overall, Browse, HTTP Requests, Events, Exceptions, and Logs. Now let's examine the **Overall** tab.
+The [Application Monitoring Area](./monitoring-applications.md) is a functional component within ABP Studio that displays real-time operational status and metrics for applications. It indicates the active state of applications, the count of running instances, and so on. The user interface is organized into several tabs: Overall, Browse, HTTP Requests, Events, Exceptions, and Logs. Now let's examine the **Overall** tab.
 
 ![application-monitor-overall](./images/overview/application-monitor-overall.png)
 
@@ -119,7 +119,7 @@ This tab provides a log of all HTTP requests across applications, complete with 
 
 ### Events
 
-The Events tab is a centralized stream where all the [distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) across applications are recorded. It allows filtering by name, application, direction, and source, providing a transparent view of the inter-service communication. So far, so good. Now let's move on to the next tab.
+The Events tab is a centralized stream where all the [distributed events](../framework/infrastructure/event-bus/distributed/index) across applications are recorded. It allows filtering by name, application, direction, and source, providing a transparent view of the inter-service communication. So far, so good. Now let's move on to the next tab.
 
 ![application-monitor-events](./images/overview/application-monitor-events.png)
 

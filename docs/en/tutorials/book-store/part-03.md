@@ -30,16 +30,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts:
 
-- [Part 1: Creating the server side](Part-1.md)
-- [Part 2: The book list page](Part-2.md)
+- [Part 1: Creating the server side](part-01.md)
+- [Part 2: The book list page](part-02.md)
 - **Part 3: Creating, updating and deleting books (this part)**
-- [Part 4: Integration tests](Part-4.md)
-- [Part 5: Authorization](Part-5.md)
-- [Part 6: Authors: Domain layer](Part-6.md)
-- [Part 7: Authors: Database Integration](Part-7.md)
-- [Part 8: Authors: Application Layer](Part-8.md)
-- [Part 9: Authors: User Interface](Part-9.md)
-- [Part 10: Book to Author Relation](Part-10.md)
+- [Part 4: Integration tests](part-04.md)
+- [Part 5: Authorization](part-05.md)
+- [Part 6: Authors: Domain layer](part-06.md)
+- [Part 7: Authors: Database Integration](part-07.md)
+- [Part 8: Authors: Application Layer](part-08.md)
+- [Part 9: Authors: User Interface](part-09.md)
+- [Part 10: Book to Author Relation](part-10.md)
 
 ### Download the Source Code
 
@@ -49,7 +49,7 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 * [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../KB/Windows-Path-Too-Long-Fix.md).
+> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
 {{if UI == "MVC" && DB == "EF"}}
 
@@ -141,7 +141,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
 </abp-dynamic-form>
 ````
 
-* This modal uses `abp-dynamic-form` [tag helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) to automatically create the form from the `CreateUpdateBookDto` model class.
+* This modal uses `abp-dynamic-form` [tag helper](../../framework/ui/mvc-razor-pages/tag-helpers) to automatically create the form from the `CreateUpdateBookDto` model class.
 * `abp-model` attribute indicates the model object where it's the `Book` property in this case.
 * `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
 
@@ -1113,7 +1113,7 @@ delete(id: string) {
 * We injected `ConfirmationService` to the constructor.
 * Added a `delete` method.
 
-> Check out the [Confirmation Popup documentation](../UI/Angular/Confirmation-Service) for more about this service.
+> Check out the [Confirmation Popup documentation](../../framework/ui/angular/confirmation-service.md) for more about this service.
 
 ### Add a Delete Button
 
@@ -1328,7 +1328,7 @@ We can now define a modal to edit the book. Add the following code to the end of
 
 ### AutoMapper Configuration
 
-The base `AbpCrudPageBase` uses the [object to object mapping](../Object-To-Object-Mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
+The base `AbpCrudPageBase` uses the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
 
 Open the `BookStoreBlazorAutoMapperProfile` inside the `Acme.BookStore.Blazor` project and change the content as the following:
 
