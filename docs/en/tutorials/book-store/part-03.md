@@ -1113,7 +1113,7 @@ delete(id: string) {
 * We injected `ConfirmationService` to the constructor.
 * Added a `delete` method.
 
-> Check out the [Confirmation Popup documentation](../UI/Angular/Confirmation-Service) for more about this service.
+> Check out the [Confirmation Popup documentation](../../framework/ui/angular/confirmation-service.md) for more about this service.
 
 ### Add a Delete Button
 

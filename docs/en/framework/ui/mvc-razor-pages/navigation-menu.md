@@ -171,7 +171,7 @@ context.Menu.GetAdministration().AddItem(...)
 
 ABP Framework executes the menu contributors by the [module dependency order](../../architecture/modularity/basics.md). So, you can manipulate the menu items that your application or module (directly or indirectly) depends on.
 
-**Example: Set an icon for the `Users` menu item added by the [Identity Module](.././../../../../../modules/identity.md)**
+**Example: Set an icon for the `Users` menu item added by the [Identity Module](../../../modules/identity.md)**
 
 ````csharp
 var userMenu = context.Menu.FindMenuItem(IdentityMenuNames.Users);

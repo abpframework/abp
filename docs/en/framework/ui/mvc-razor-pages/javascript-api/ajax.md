@@ -37,7 +37,7 @@ All kinds of errors are automatically handled by `abp.ajax`, unless you want to 
 
 ### Standard Error Response
 
-`abp.ajax` is compatible with the [exception handling system](../../fundamentals/exception-handling.md) of the ABP Framework and it properly handles the standard error format returned from the server. A typical error message is a JSON as like below:
+`abp.ajax` is compatible with the [exception handling system](../../../fundamentals/exception-handling.md) of the ABP Framework and it properly handles the standard error format returned from the server. A typical error message is a JSON as like below:
 
 ````json
 {

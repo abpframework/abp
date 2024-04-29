@@ -10,7 +10,7 @@ You will have access to the current entity in your code and display its value, m
 
 ## How to Set Up
 
-In this example, we will add a "Name" column and display the value of the `name` field in the user management page of the [Identity Module](../../../../../modules/identity.md).
+In this example, we will add a "Name" column and display the value of the `name` field in the user management page of the [Identity Module](../../../modules/identity.md).
 
 ### Step 1. Create Entity Prop Contributors
 
