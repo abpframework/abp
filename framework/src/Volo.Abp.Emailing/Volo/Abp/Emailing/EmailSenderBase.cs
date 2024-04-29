@@ -112,7 +112,7 @@ public abstract class EmailSenderBase : IEmailSender
                     Body = mail.Body,
                     Sender = mail.Sender,
                     MailFailDescription = ex.Message
-                });
+                }, false);
 
             throw;
         }
