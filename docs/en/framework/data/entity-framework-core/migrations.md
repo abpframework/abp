@@ -1,8 +1,8 @@
 # EF Core Database Migrations
 
-This document begins by **introducing the default structure** provided by [the application startup template](Startup-Templates/Application.md) and **discusses various scenarios** you may want to implement for your own application.
+This document begins by **introducing the default structure** provided by [the application startup template](../../../solution-templates/layered-web-application) and **discusses various scenarios** you may want to implement for your own application.
 
-> This document is for who want to fully understand and customize the database structure comes with [the application startup template](Startup-Templates/Application.md). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](Tutorials/Part-1.md).
+> This document is for who want to fully understand and customize the database structure comes with [the application startup template](../../../solution-templates/layered-web-application). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](../../../tutorials/book-store/part-01.md).
 
 ### Source Code
 
@@ -10,7 +10,7 @@ You can find the source code of the example project referenced by this document 
 
 ## About the EF Core Code First Migrations
 
-Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](Startup-Templates/Index.md) take the advantage of this system to allow you to develop your application in a standard way.
+Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](../../../get-started) take the advantage of this system to allow you to develop your application in a standard way.
 
 However, EF Core migration system is **not so good in a modular environment** where each module maintains its **own database schema** while two or more modules may **share a single database** in practical.
 
@@ -22,7 +22,7 @@ Since ABP Framework cares about modularity in all aspects, it provides a **solut
 
 When you [create a new web application](https://abp.io/get-started) (with EF Core, which is the default database provider), your solution structure will be similar to the picture below:
 
-![bookstore-visual-studio-solution-v3](images/bookstore-visual-studio-solution-v3.png)
+![bookstore-visual-studio-solution-v3](../../../images/bookstore-visual-studio-solution-v3.png)
 
 Actual solution structure may be a bit different based on your preferences, but the database part will be same.
 
@@ -30,17 +30,17 @@ Actual solution structure may be a bit different based on your preferences, but 
 
 ### The Database Structure
 
-The startup template has some [application modules](Modules/Index.md) pre-installed. Each layer of the solution has corresponding module **package references**. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
+The startup template has some [application modules](../../../modules) pre-installed. Each layer of the solution has corresponding module **package references**. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
 
-![bookstore-efcore-dependencies](images/bookstore-efcore-dependencies.png)
+![bookstore-efcore-dependencies](../../../images/bookstore-efcore-dependencies.png)
 
 In this way, you collect all the **EF Core dependencies** under the `.EntityFrameworkCore` project.
 
-> In addition to the module references, it references to the `Volo.Abp.EntityFrameworkCore.SqlServer` package since the startup template is pre-configured for the **SQL Server**. See the documentation if you want to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md).
+> In addition to the module references, it references to the `Volo.Abp.EntityFrameworkCore.SqlServer` package since the startup template is pre-configured for the **SQL Server**. See the documentation if you want to [switch to another DBMS](../../data/entity-framework-core/other-dbms.md).
 
 While every module has its own `DbContext` class by design and can use its **own physical database**, the solution is configured to use a **single shared database** as shown in the figure below:
 
-![single-database-usage](images/single-database-usage.png)
+![single-database-usage](../../../images/single-database-usage.png)
 
 This is **the simplest configuration** and suitable for most of the applications. `appsettings.json` file has a **single connection string**, named `Default`:
 
@@ -52,7 +52,7 @@ This is **the simplest configuration** and suitable for most of the applications
 
 So, you have a **single database schema** which contains all the tables of the modules **sharing** this database.
 
-ABP Framework's [connection string](Connection-Strings.md) system allows you to easily **set a different connection string** for a desired module:
+ABP Framework's [connection string](../../fundamentals/connection-strings.md) system allows you to easily **set a different connection string** for a desired module:
 
 ````json
 "ConnectionStrings": {
@@ -61,7 +61,7 @@ ABP Framework's [connection string](Connection-Strings.md) system allows you to 
 }
 ````
 
-The example configuration tells to the ABP Framework to use the second connection string for the [Audit Logging module](Modules/Audit-Logging.md) (if you don't specify connection string for a module, it uses the `Default` connection string).
+The example configuration tells to the ABP Framework to use the second connection string for the [Audit Logging module](../../../modules/audit-logging.md) (if you don't specify connection string for a module, it uses the `Default` connection string).
 
 **However, this can work only if the audit log database with the given connection string is available**. So, you need to create the second database, create audit log tables inside it and maintain the database tables. No problem if you manually do all these. However, the recommended approach is the code first migrations. One of the main purposes of this document is to guide you on such **database separation** scenarios.
 
@@ -73,7 +73,7 @@ Every module uses its **own databases tables**. For example, the [Identity Modul
 
 Since it is allowed to share a single database by all modules (it is the default configuration), a module typically uses a **table name prefix** to group its own tables.
 
-The fundamental modules, like [Identity](Modules/Identity.md), [Tenant Management](Modules/Tenant-Management.md) and [Audit Logs](Modules/Audit-Logging.md), use the `Abp` prefix, while some other modules use their own prefixes. [Identity Server](Modules/IdentityServer.md) module uses the `IdentityServer` prefix for example.
+The fundamental modules, like [Identity](../../../modules/identity.md), [Tenant Management](../../../modules/tenant-management.md) and [Audit Logs](../../../modules/audit-logging.md), use the `Abp` prefix, while some other modules use their own prefixes. [Identity Server](../../../modules/identity-server.md) module uses the `IdentityServer` prefix for example.
 
 If you want, you can **change the database table name prefix** for a module for your application. Example:
 
@@ -81,7 +81,7 @@ If you want, you can **change the database table name prefix** for a module for 
 Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = "Ids";
 ````
 
-This code changes the prefix of the [Identity Server](Modules/IdentityServer.md) module. Write this code **at the very beginning** in your application.
+This code changes the prefix of the [Identity Server](../../../modules/identity-server.md) module. Write this code **at the very beginning** in your application.
 
 > Every module also defines `DbSchema` property (near to `DbTablePrefix`), so you can set it for the databases support the schema usage.
 
@@ -89,7 +89,7 @@ This code changes the prefix of the [Identity Server](Modules/IdentityServer.md)
 
 The solution contains a project, which's name ends with `.EntityFrameworkCore`. This project has the `DbContext` class (`BookStoreDbContext` for this sample) of your application.
 
-**Every module uses its own `DbContext` class** to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your [repositories](Repositories.md) if you follow the best practices and hide your data access code behind the repositories). It is almost an empty `DbContext` since your application don't have any entities at the beginning:
+**Every module uses its own `DbContext` class** to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your [repositories](../../architecture/domain-driven-design/repositories.md) if you follow the best practices and hide your data access code behind the repositories). It is almost an empty `DbContext` since your application don't have any entities at the beginning:
 
 ````csharp
 [ReplaceDbContext(typeof(IIdentityDbContext))]
@@ -139,7 +139,7 @@ This `DbContext` class needs some explanations:
 
 * It defines `[ReplaceDbContext]` attributes for `IIdentityDbContext` and `ITenantManagementDbContext` those replaces Identity and Tenant Management module's `DbContext`s by your `DbContext` on runtime. This allows us to easily perform LINQ queries by joining your entities with the entities (over the repositories) coming from those modules.
 * It defines a `[ConnectionStringName]` attribute which tells ABP to always use the `Default` connection string for this `Dbcontext`.
-* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](Entity-Framework-Core.md) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you.
+* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](../../data/entity-framework-core) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you.
 * It declares `DbSet` properties for entities from the replaced `DbContext`s (by implementing the corresponding interfaces). These `DbSet` properties are not shown above (for the sake of brevity), but you can find in your application's code in a `region`.
 * The constructor takes a `DbContextOptions<T>` instance.
 * It overrides the `OnModelCreating` method to define the EF Core mappings.
@@ -165,7 +165,7 @@ This section will explain how to move Audit Logging, Setting Management and Perm
 
 The resulting structure will be like the figure below:
 
-![single-database-usage](images/multiple-database-usage.png)
+![single-database-usage](../../../images/multiple-database-usage.png)
 
 ### Change the Connection Strings Section
 
@@ -190,7 +190,7 @@ Change it as shown below:
 
 Added **three more connection strings** for the related module to target the `BookStore_SecondDb` database (they are all the same). For example, `AbpPermissionManagement` is the connection string name used by the permission management module.
 
-The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP Framework [connection string selection system](Connection-Strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
+The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP Framework [connection string selection system](../../fundamentals/connection-strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
 
 ### Create a Second DbContext
 
@@ -490,9 +490,9 @@ Integration tests now will work. I've used the same database in the tests to kee
 
 In a multi-tenant solution, you may want to separate your database schemas, so host-related tables don't locate in the tenant databases when tenants have separate databases.
 
-Some pre-built ABP modules are related only with the host side, like the [Tenant Management](Modules/Tenant-Management.md) module. So, in the tenant `DbContext` class you don't call `modelBuilder.ConfigureTenantManagement()` and that's all. 
+Some pre-built ABP modules are related only with the host side, like the [Tenant Management](../../../modules/tenant-management.md) module. So, in the tenant `DbContext` class you don't call `modelBuilder.ConfigureTenantManagement()` and that's all. 
 
-Some modules, like the [Identity](Modules/Identity.md) module, is both used in host and tenant sides. It stores tenant users in the tenant database and host users in the host database. However, it stores some entities, like `IdentityClaimType`, only in the host side. In this case, you don't want to add these tables in the tenant database, even if they are not used and will always be empty for tenants.
+Some modules, like the [Identity](../../../modules/identity.md) module, is both used in host and tenant sides. It stores tenant users in the tenant database and host users in the host database. However, it stores some entities, like `IdentityClaimType`, only in the host side. In this case, you don't want to add these tables in the tenant database, even if they are not used and will always be empty for tenants.
 
 ABP provides a simple way to set the multi-tenancy side for a `DbContext`, so the modules can check it and decide to map tables to the database, or not.
 
@@ -546,7 +546,7 @@ There are four methods to check the current side:
 * `IsTenantDatabase()`: Returns `true` if you should create tenant-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide().HasFlag(MultiTenancySides.Tenant)`.
 * `IsTenantOnlyDatabase()`: Returns `true` if you should only create tenant-related tables, but should not create host-related tables. It is equivalent of checking `modelBuilder.GetMultiTenancySide() == MultiTenancySides.Tenant`.
 
-All pre-built ABP [modules](Modules/Index.md) checks this value in their `modelBuilder.ConfigureXXX()` methods.
+All pre-built ABP [modules](../../../modules) checks this value in their `modelBuilder.ConfigureXXX()` methods.
 
 ## Conclusion
 

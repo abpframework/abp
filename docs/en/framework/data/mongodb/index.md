@@ -4,15 +4,15 @@ This document explains how to integrate MongoDB as a database provider to ABP ba
 
 ## Installation
 
-`Volo.Abp.MongoDB` is the main NuGet package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer), You can use the [ABP CLI](CLI.md) to install it to your project. Execute the following command in the folder of the .csproj file of the layer:
+`Volo.Abp.MongoDB` is the main NuGet package for the MongoDB integration. Install it to your project (for a layered application, to your data/infrastructure layer), You can use the [ABP CLI](../../../cli) to install it to your project. Execute the following command in the folder of the .csproj file of the layer:
 
 ```
 abp add-package Volo.Abp.MongoDB
 ```
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.MongoDB).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.MongoDB).
 
-Then add `AbpMongoDbModule` module dependency to your [module](Module-Development-Basics.md):
+Then add `AbpMongoDbModule` module dependency to your [module](../../architecture/modularity/basics.md):
 
 ```c#
 using Volo.Abp.MongoDB;
@@ -126,7 +126,7 @@ If you don't configure, the `Default` connection string is used. If you configur
 
 ## Registering DbContext To Dependency Injection
 
-Use `AddAbpDbContext` method in your module to register your DbContext class for [dependency injection](Dependency-Injection.md) system.
+Use `AddAbpDbContext` method in your module to register your DbContext class for [dependency injection](../../fundamentals/dependency-injection.md) system.
 
 ```c#
 using Microsoft.Extensions.DependencyInjection;
@@ -150,7 +150,7 @@ namespace MyCompany.MyProject
 
 ### Add Default Repositories
 
-ABP can automatically create default [generic repositories](Repositories.md) for the entities in your DbContext. Just use `AddDefaultRepositories()` option on the registration:
+ABP can automatically create default [generic repositories](../../architecture/domain-driven-design/repositories.md) for the entities in your DbContext. Just use `AddDefaultRepositories()` option on the registration:
 
 ````C#
 services.AddMongoDbContext<MyDbContext>(options =>
@@ -159,7 +159,7 @@ services.AddMongoDbContext<MyDbContext>(options =>
 });
 ````
 
-This will create a repository for each [aggregate root entity](Entities.md) (classes derived from `AggregateRoot`) by default. If you want to create repositories for other entities too, then set `includeAllEntities` to `true`:
+This will create a repository for each [aggregate root entity](../../architecture/domain-driven-design/entities.md) (classes derived from `AggregateRoot`) by default. If you want to create repositories for other entities too, then set `includeAllEntities` to `true`:
 
 ```c#
 services.AddMongoDbContext<MyDbContext>(options =>
@@ -179,7 +179,7 @@ public class Book : AggregateRoot<Guid>
 }
 ```
 
-(`BookType` is a simple `enum` here) And you want to create a new `Book` entity in a [domain service](Domain-Services.md):
+(`BookType` is a simple `enum` here) And you want to create a new `Book` entity in a [domain service](../../architecture/domain-driven-design/domain-services.md):
 
 ```csharp
 public class BookManager : DomainService
@@ -254,7 +254,7 @@ public class BookRepository :
 }
 ```
 
-Now, it's possible to [inject](Dependency-Injection.md) the `IBookRepository` and use the `DeleteBooksByType` method when needed.
+Now, it's possible to [inject](../../fundamentals/dependency-injection.md) the `IBookRepository` and use the `DeleteBooksByType` method when needed.
 
 #### Override Default Generic Repository
 
@@ -309,7 +309,7 @@ public class BookService
 
 ### Transactions
 
-MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](Startup-Templates/Index.md) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+MongoDB supports multi-document transactions starting from the version 4.0 and the ABP Framework supports it. However, the [startup template](../../../solution-templates) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
 
 ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>
@@ -324,7 +324,7 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 
 ### Controlling the Multi-Tenancy
 
-If your solution is [multi-tenant](Multi-Tenancy.md), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](Connection-Strings.md), even if you are in a tenant context.
+If your solution is [multi-tenant](../../architecture/multi-tenancy), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.
 
 **Example:**
 
@@ -368,7 +368,7 @@ public class MyRepositoryBase<TEntity, TKey>
 }
 ```
 
-First one is for [entities with composite keys](Entities.md), second one is for entities with single primary key.
+First one is for [entities with composite keys](../../architecture/domain-driven-design/entities.md), second one is for entities with single primary key.
 
 It's suggested to inherit from the `MongoDbRepository` class and override methods if needed. Otherwise, you will have to implement all standard repository methods manually.
 
@@ -447,7 +447,7 @@ In this example, `OtherMongoDbContext` implements `IBookStoreMongoDbContext`. Th
 
 #### Replacing with Multi-Tenancy
 
-It is also possible to replace a DbContext based on the [multi-tenancy](Multi-Tenancy.md) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
+It is also possible to replace a DbContext based on the [multi-tenancy](../../architecture/multi-tenancy) side. `ReplaceDbContext` attribute and  `ReplaceDbContext` method can get a `MultiTenancySides` option with a default value of `MultiTenancySides.Both`.
 
 **Example:** Replace DbContext only for tenants, using the `ReplaceDbContext` attribute
 
@@ -508,6 +508,6 @@ public class MyCustomMongoDbBulkOperationProvider
 
 ## See Also
 
-* [Entities](Entities.md)
-* [Repositories](Repositories.md)
+* [Entities](../../architecture/domain-driven-design/entities.md)
+* [Repositories](../../architecture/domain-driven-design/repositories.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/abp-mongodb)

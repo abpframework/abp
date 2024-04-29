@@ -15,7 +15,7 @@ Welcome to ABP Studio. In this quick start guide, you will learn how to create a
 
 > ABP Commercial startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
-Assuming that you have [installed and logged in](../installation.md) to the application, you should see the following screen when you open ABP Studio:
+Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:
 
 ![abp-studio-welcome-screen](images/abp-studio-welcome-screen.png)
 
@@ -51,7 +51,7 @@ Pick the one best for you, or select the *None* if you don't want a mobile appli
 
 ![abp-studio-new-solution-dialog-additional-ui-options](images/abp-studio-new-solution-dialog-additional-ui-options.png)
 
-That startup solution template also provides an option to create a second web application inside the solution. The second application is called the Public website, an ASP.NET Core MVC / Razor Page application. It can be used to create a public landing/promotion for your product. It is well integrated into the solution (can share the same services, entities, database, and the same authentication logic, for example). If you want, you can also include the [CMS Kit module](../../modules/cms-kit/index.md) to your solution to add dynamic content features to your web application.
+That startup solution template also provides an option to create a second web application inside the solution. The second application is called the Public website, an ASP.NET Core MVC / Razor Page application. It can be used to create a public landing/promotion for your product. It is well integrated into the solution (can share the same services, entities, database, and the same authentication logic, for example). If you want, you can also include the [CMS Kit module](../modules/cms-kit) to your solution to add dynamic content features to your web application.
 
 So, either select the *Public website* or skip it and click the Next button for the *Solution Structure* selection:
 
@@ -142,7 +142,7 @@ The *Browse* command opens the UI of the web application in the built-in browser
 
 You can browse your application in a full-featured web browser in ABP Studio. Click the *Login* button in the application UI, enter `admin` as username and `1q2w3E*` as password to login to the application.
 
-The following screenshot was taken from the *User Management* page of the [Identity module](../../modules/identity.md) that is pre-installed in the application:
+The following screenshot was taken from the *User Management* page of the [Identity module](../modules/identity.md) that is pre-installed in the application:
 
 ![abp-studio-quick-start-browse-user-list](images/abp-studio-quick-start-browse-user-list.png)
 
@@ -152,7 +152,7 @@ You can use any IDE (e.g. Visual Studio, Visual Studio Code or Rider) to develop
 
 First of all, we can stop the application(s) in ABP Studio, so it won't conflict when we run it in Visual Studio.{{ if Tiered == "Yes" }} Do not stop the `Docker-Dependencies`, because the application will need the services it runs at runtime.{{ end }}
 
-You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../concepts.md), and select the *Open with* -> *Visual Studio* command:
+You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../modules), and select the *Open with* -> *Visual Studio* command:
 
 ![abp-studio-open-in-visual-studio](images/abp-studio-open-in-visual-studio.png)
 

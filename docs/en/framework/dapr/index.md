@@ -13,10 +13,10 @@ ABP and Dapr can perfectly work together in the same application. ABP offers som
 ABP provides the following NuGet packages for the Dapr integration:
 
 * [Volo.Abp.Dapr](https://www.nuget.org/packages/Volo.Abp.Dapr): The main Dapr integration package. All other packages depend on this package.
-* [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr): Integration package for ABP's [dynamic](../API/Dynamic-CSharp-API-Clients.md) and [static](../API/Static-CSharp-API-Clients.md) C# API Client Proxies systems with Dapr's [service invocation](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/service-invocation-overview/) building block.
+* [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr): Integration package for ABP's [dynamic](../api-development/dynamic-csharp-clients.md) and [static](../api-development/static-csharp-clients.md) C# API Client Proxies systems with Dapr's [service invocation](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/service-invocation-overview/) building block.
 * [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr): Implements ABP's distributed event bus with Dapr's [publish & subscribe](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) building block. With this package, you can send events, but can not receive.
 * [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus): Provides the endpoints to receive events from Dapr's [publish & subscribe](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) building block. Use this package to send and receive events.
-* [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr): Uses Dapr's [distributed lock](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/) building block for [distributed locking](../Distributed-Locking.md) service of the ABP Framework.
+* [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr): Uses Dapr's [distributed lock](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/) building block for [distributed locking](../infrastructure/distributed-locking.md) service of the ABP Framework.
 
 In the following sections, we will see how to use these packages to use Dapr in your ABP based solutions.
 
@@ -28,15 +28,15 @@ In the following sections, we will see how to use these packages to use Dapr in 
 
 Use the ABP CLI to add the [Volo.Abp.Dapr](https://www.nuget.org/packages/Volo.Abp.Dapr) NuGet package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.Dapr` package.
 * Run the `abp add-package Volo.Abp.Dapr` command.
 
-If you want to do it manually, install the [Volo.Abp.Dapr](https://www.nuget.org/packages/Volo.Abp.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpDaprModule))]` to the [ABP module](../Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.Dapr](https://www.nuget.org/packages/Volo.Abp.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpDaprModule))]` to the [ABP module](../architecture/modularity/basics.md) class inside your project.
 
 ### AbpDaprOptions
 
-`AbpDaprOptions` is the main [options class](../Options.md) that you can configure the global Dapr settings with. **All settings are optional and you mostly don't need to configure them.** If you need, you can configure it in the `ConfigureServices` method of your [module class](../Module-Development-Basics.md):
+`AbpDaprOptions` is the main [options class](../fundamentals/options.md) that you can configure the global Dapr settings with. **All settings are optional and you mostly don't need to configure them.** If you need, you can configure it in the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md):
 
 ````csharp
 Configure<AbpDaprOptions>(options =>
@@ -101,21 +101,21 @@ public class MyService : ITransientDependency
 
 ## C# API Client Proxies Integration
 
-ABP can [dynamically](../API/Dynamic-CSharp-API-Clients.md) or [statically](../API/Static-CSharp-API-Clients.md) generate proxy classes to invoke your HTTP APIs from a Dotnet client application. It makes perfect sense to consume HTTP APIs in a distributed system. The [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) package configures the client-side proxies system, so it uses Dapr's service invocation building block for the communication between your applications.
+ABP can [dynamically](../api-development/dynamic-csharp-clients.md) or [statically](../api-development/static-csharp-clients.md) generate proxy classes to invoke your HTTP APIs from a Dotnet client application. It makes perfect sense to consume HTTP APIs in a distributed system. The [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) package configures the client-side proxies system, so it uses Dapr's service invocation building block for the communication between your applications.
 
 ### Installation
 
 Use the ABP CLI to add the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package to your project (to the client side):
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.Http.Client.Dapr` package to.
 * Run the `abp add-package Volo.Abp.Http.Client.Dapr` command.
 
-If you want to do it manually, install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpHttpClientDaprModule))]` to the [ABP module](../Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpHttpClientDaprModule))]` to the [ABP module](../architecture/modularity/basics.md) class inside your project.
 
 ### Configuration
 
-Once you install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package, all you need to do is to configure ABP's remote services option either in `appsettings.json` or using the `AbpRemoteServiceOptions` [options class](../Options.md).
+Once you install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr) NuGet package, all you need to do is to configure ABP's remote services option either in `appsettings.json` or using the `AbpRemoteServiceOptions` [options class](../fundamentals/options.md).
 
 **Example:**
 
@@ -133,11 +133,11 @@ Once you install the [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/
 
 The remote service name (`Default` in this example) should match the remote service name specified in the `AddHttpClientProxies` call for dynamic client proxies or the `AddStaticHttpClientProxies` call for static client proxies. Using `Default` is fine if your client communicates to a single server. However, if your client uses multiple servers, you typically have multiple keys in the `RemoteServices` configuration. Once you configure the remote service endpoints as Dapr application ids, it will automatically work and make the HTTP calls through Dapr when you use ABP's client proxy system.
 
-> See the [dynamic](../API/Dynamic-CSharp-API-Clients.md) and [static](../API/Static-CSharp-API-Clients.md) client proxy documents for details about the ABP's client proxy system.
+> See the [dynamic](../api-development/dynamic-csharp-clients.md) and [static](../api-development/static-csharp-clients.md) client proxy documents for details about the ABP's client proxy system.
 
 ## Distributed Event Bus Integration
 
-[ABP's distributed event bus](../Distributed-Event-Bus.md) system provides a convenient abstraction to allow applications to communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
+[ABP's distributed event bus](../infrastructure/event-bus/distributed) system provides a convenient abstraction to allow applications to communicate asynchronously via events. ABP has integration packages with various distributed messaging systems, like RabbitMQ, Kafka, and Azure. Dapr also has a [publish & subscribe building block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/pubsub-overview/) for the same purpose: distributed messaging / events.
 
 ABP's [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) and [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) packages make it possible to use the Dapr infrastructure for ABP's distributed event bus.
 
@@ -147,25 +147,25 @@ The [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Da
 
 If your application is an ASP.NET Core application and you want to send and receive events, you need to install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package as described below:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` package to.
 * Run the `abp add-package Volo.Abp.AspNetCore.Mvc.Dapr.EventBus` command.
 
-If you want to do it manually, install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) NuGet package to your project and add `[DependsOn(typeof(AbpAspNetCoreMvcDaprEventBusModule))]` to the [ABP module](../Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) NuGet package to your project and add `[DependsOn(typeof(AbpAspNetCoreMvcDaprEventBusModule))]` to the [ABP module](../architecture/modularity/basics.md) class inside your project.
 
 > **If you install the [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus) package, you don't need to install the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) package, because the first one already has a reference to the latter one.**
 
 If your application is not an ASP.NET Core application, you can't receive events from Dapr, at least with ABP's integration packages (see [Dapr's document](https://docs.dapr.io/developing-applications/building-blocks/pubsub/howto-publish-subscribe/) if you want to receive events in a different type of application). However, you can still publish messages using the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) package. In this case, follow the steps below to install that package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.Dapr` package to.
 * Run the `abp add-package Volo.Abp.EventBus.Dapr` command.
 
-If you want to do it manually, install the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusDaprModule))]` to the [ABP module](../Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusDaprModule))]` to the [ABP module](../architecture/modularity/basics.md) class inside your project.
 
 ### Configuration
 
-You can configure the `AbpDaprEventBusOptions` [options class](../Options.md) for Dapr configuration:
+You can configure the `AbpDaprEventBusOptions` [options class](../fundamentals/options.md) for Dapr configuration:
 
 ````csharp
 Configure<AbpDaprEventBusOptions>(options =>
@@ -191,7 +191,7 @@ ABP provides the following endpoints to receive events from Dapr:
 
 #### The ABP Way
 
-You can follow [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub. ABP will automatically subscribe to Dapr for your event handler classes (that implement the `IDistributedEventHandler` interface).
+You can follow [ABP's distributed event bus documentation](../infrastructure/event-bus/distributed) to learn how to publish and subscribe to events in the ABP way. No change required in your application code to use Dapr pub-sub. ABP will automatically subscribe to Dapr for your event handler classes (that implement the `IDistributedEventHandler` interface).
 
 ABP provides `api/abp/dapr/event`
 
@@ -233,7 +233,7 @@ public class MyHandler :
 }
 ````
 
-See [ABP's distributed event bus documentation](../Distributed-Event-Bus.md) to learn the details.
+See [ABP's distributed event bus documentation](../infrastructure/event-bus/distributed) to learn the details.
 
 #### Using the Dapr API
 
@@ -293,21 +293,21 @@ See the [Dapr documentation](https://docs.microsoft.com/en-us/dotnet/architectur
 
 > Dapr's distributed lock feature is currently in the Alpha stage and may not be stable yet. It is not suggested to replace ABP's distributed lock with Dapr in that point.
 
-ABP provides a [Distributed Locking](../Distributed-Locking.md) abstraction to control access to a shared resource by multiple applications. Dapr also has a [distributed lock building block](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/). The [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) package makes ABP use Dapr's distributed locking system.
+ABP provides a [Distributed Locking](../infrastructure/distributed-locking.md) abstraction to control access to a shared resource by multiple applications. Dapr also has a [distributed lock building block](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/). The [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) package makes ABP use Dapr's distributed locking system.
 
 ### Installation
 
 Use the ABP CLI to add the [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) NuGet package to your project (to the client side):
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed it before.
+* Install the [ABP CLI](../../cli) if you haven't installed it before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.DistributedLocking.Dapr` package to.
 * Run the `abp add-package Volo.Abp.DistributedLocking.Dapr` command.
 
-If you want to do it manually, install the [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpDistributedLockingDaprModule))]` to the [ABP module](../Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr) NuGet package to your project and add `[DependsOn(typeof(AbpDistributedLockingDaprModule))]` to the [ABP module](../architecture/modularity/basics.md) class inside your project.
 
 ### Configuration
 
-You can use the `AbpDistributedLockDaprOptions` options class in the `ConfigureServices` method of [your module](../Module-Development-Basics.md) to configure the Dapr distributed lock:
+You can use the `AbpDistributedLockDaprOptions` options class in the `ConfigureServices` method of [your module](../architecture/modularity/basics.md) to configure the Dapr distributed lock:
 
 ````csharp
 Configure<AbpDistributedLockDaprOptions>(options =>
@@ -324,7 +324,7 @@ The following options are available:
 
 ### Usage
 
-You can inject and use the `IAbpDistributedLock` service, just like explained in the [Distributed Locking document](../Distributed-Locking.md).
+You can inject and use the `IAbpDistributedLock` service, just like explained in the [Distributed Locking document](../infrastructure/distributed-locking.md).
 
 **Example:**
 
@@ -357,7 +357,7 @@ There are two points we should mention about the `TryAcquireAsync` method, as di
 * The `timeout` parameter is currently not used (even if you specify it), because Dapr doesn't support waiting to obtain the lock.
 * Dapr uses the expiration timeout system (that means the lock is automatically released after that timeout even if you don't release the lock by disposing the handler). However, ABP's `TryAcquireAsync` method has no such a parameter. Currently, you can set `AbpDistributedLockDaprOptions.DefaultExpirationTimeout` as a global value in your application.
 
-As mentioned first, Dapr's distributed lock feature is currently in the Alpha stage and its API is a candidate to change. You should use it as is if you want, but be ready for the changes in the future. For now, we are recommending to use the [DistributedLock](https://github.com/madelson/DistributedLock) library as explained in ABP's [Distributed Locking document](../Distributed-Locking.md).
+As mentioned first, Dapr's distributed lock feature is currently in the Alpha stage and its API is a candidate to change. You should use it as is if you want, but be ready for the changes in the future. For now, we are recommending to use the [DistributedLock](https://github.com/madelson/DistributedLock) library as explained in ABP's [Distributed Locking document](../infrastructure/distributed-locking.md).
 
 ## Security
 

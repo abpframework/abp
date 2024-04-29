@@ -9,6 +9,6 @@ Please select one of the following documents best fits for your application:
 - **[Microservice Solution](microservice.md)**: A **distributed solution** to build **microservice systems**. It includes pre-built services, API gateways, web and mobile applications, Kubernetes and Helm configuration, and everything you need to start your large-scale microservice solution.
 - **Others**
   - [Empty ASP.NET Core Application](empty-aspnet-core-application.md)
-  - [MAUI Application](MAUI.md)
-  - [WPF Application](WPF.md)
+  - [MAUI Application](maui.md)
+  - [WPF Application](wpf.md)
   - [Console Application](console.md)

@@ -1,26 +1,26 @@
 # Distributed Event Bus Rebus Integration
 
-> This document explains **how to configure the [Rebus](http://mookid.dk/category/rebus/)** as the distributed event bus provider. See the [distributed event bus document](Distributed-Event-Bus.md) to learn how to use the distributed event bus system
+> This document explains **how to configure the [Rebus](http://mookid.dk/category/rebus/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus) NuGet package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.EventBus.Rebus` package.
 * Run `abp add-package Volo.Abp.EventBus.Rebus` command.
 
-If you want to do it manually, install the [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusRebusModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.EventBus.Rebus](https://www.nuget.org/packages/Volo.Abp.EventBus.Rebus) NuGet package to your project and add `[DependsOn(typeof(AbpEventBusRebusModule))]` to the [ABP module](../../../architecture/modularity/basics.md) class inside your project.
 
 ## Configuration
 
-You can configure using the standard [configuration system](Configuration.md), like using the [options](Options.md) classes.
+You can configure using the standard [configuration system](../../../fundamentals/configuration.md), like using the [options](../../../fundamentals/options.md) classes.
 
 ### The Options Classes
 
 `AbpRebusEventBusOptions` class can be used to configure the event bus options for the Rebus.
 
-You can configure this options inside the `PreConfigureServices` of your [module](Module-Development-Basics.md).
+You can configure this options inside the `PreConfigureServices` of your [module](../../../architecture/modularity/basics.md).
 
 **Example: Minimize configuration**
 

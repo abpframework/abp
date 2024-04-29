@@ -6,7 +6,7 @@
 
 ### Server Side
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package.
+It is suggested to use the [ABP CLI](../../cli) to install this package.
 
 #### Using the ABP CLI
 
@@ -18,7 +18,7 @@ abp add-package Volo.Abp.AspNetCore.SignalR
 
 > You typically want to add this package to the web or API layer of your application, depending on your architecture.
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.SignalR).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.SignalR).
 
 #### Manual Installation
 
@@ -72,7 +72,7 @@ This will add the `@abp/signalr` to the dependencies in the `package.json` of yo
 }
 ```
 
-Run the following [ABP CLI](CLI.md) command in the root folder of your web project:
+Run the following [ABP CLI](../../cli) command in the root folder of your web project:
 
 ```bash
 abp install-libs
@@ -80,7 +80,7 @@ abp install-libs
 
 This will copy the SignalR JavaScript files into your project:
 
-![signal-js-file](images/signal-js-file.png)
+![signal-js-file](../../images/signal-js-file.png)
 
 Finally, add the following code to your page/view to include the `signalr.js` file
 
@@ -92,7 +92,7 @@ Finally, add the following code to your page/view to include the `signalr.js` fi
 
 It requires to add `@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR` to your page/view.
 
-> You could add the `signalr.js` file in a standard way. But using the `SignalRBrowserScriptContributor` has additional benefits. See the [Client Side Package Management](UI/AspNetCore/Client-Side-Package-Management.md) and [Bundling & Minification](UI/AspNetCore/Bundling-Minification.md) documents for details.
+> You could add the `signalr.js` file in a standard way. But using the `SignalRBrowserScriptContributor` has additional benefits. See the [Client Side Package Management](../ui/mvc-razor-pages/client-side-package-management.md) and [Bundling & Minification](../ui/mvc-razor-pages/bundling-minification.md) documents for details.
 
 That's all. you can use the [SignalR JavaScript API](https://docs.microsoft.com/en-us/aspnet/core/signalr/javascript-client) in your page.
 
@@ -106,7 +106,7 @@ This section covers the additional benefits when you use the ABP Framework integ
 
 ### Hub Route & Mapping
 
-ABP automatically registers all the hubs to the [dependency injection](Dependency-Injection.md) (as transient) and maps the hub endpoint. So, you don't have to use the ` app.UseEndpoints(...)` to map your hubs. Hub route (URL) is determined conventionally based on your hub name.
+ABP automatically registers all the hubs to the [dependency injection](../fundamentals/dependency-injection.md) (as transient) and maps the hub endpoint. So, you don't have to use the ` app.UseEndpoints(...)` to map your hubs. Hub route (URL) is determined conventionally based on your hub name.
 
 Example:
 
@@ -153,7 +153,7 @@ public class MessagingHub : AbpHub
 
 ### Manual Registration / Mapping
 
-ABP automatically registers all the hubs to the [dependency injection](Dependency-Injection.md) as a **transient service**. If you want to **disable auto dependency injection** registration for your hub class, just add a `DisableConventionalRegistration` attribute. You can still register your hub class to dependency injection in the `ConfigureServices` method of your module if you like:
+ABP automatically registers all the hubs to the [dependency injection](../fundamentals/dependency-injection.md) as a **transient service**. If you want to **disable auto dependency injection** registration for your hub class, just add a `DisableConventionalRegistration` attribute. You can still register your hub class to dependency injection in the `ConfigureServices` method of your module if you like:
 
 ```csharp
 context.Services.AddTransient<MessagingHub>();
@@ -163,7 +163,7 @@ When **you or ABP** register the class to the dependency injection, it is automa
 
 For manual mapping, you have two options:
 
-1. Use the `AbpSignalROptions` to add your map configuration (in the `ConfigureServices` method of your [module](Module-Development-Basics.md)), so ABP still performs the endpoint mapping for your hub:
+1. Use the `AbpSignalROptions` to add your map configuration (in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md)), so ABP still performs the endpoint mapping for your hub:
 
 ```csharp
 Configure<AbpSignalROptions>(options =>
@@ -206,7 +206,7 @@ Configure<AbpSignalROptions>(options =>
 
 This is the way you can modify the options of a hub class defined in a depended module (where you don't have the source code access).
 
-2. Change `app.UseConfiguredEndpoints` in the `OnApplicationInitialization` method of your [module](Module-Development-Basics.md) as shown below (added a lambda method as the parameter).
+2. Change `app.UseConfiguredEndpoints` in the `OnApplicationInitialization` method of your [module](../architecture/modularity/basics.md) as shown below (added a lambda method as the parameter).
 
 ```csharp
 app.UseConfiguredEndpoints(endpoints =>
@@ -220,13 +220,13 @@ app.UseConfiguredEndpoints(endpoints =>
 
 ### UserIdProvider
 
-ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP framework (see [the current user service](CurrentUser.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.
+ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP framework (see [the current user service](../infrastructure/current-user.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.
 
 ## Example Application
 
 See the [SignalR Integration Demo](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo) as a sample application. It has a simple Chat page to send messages between (authenticated) users.
 
-![signalr-demo-chat](images/signalr-demo-chat.png)
+![signalr-demo-chat](../../images/signalr-demo-chat.png)
 
 ## Remarks
 

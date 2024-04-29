@@ -1,12 +1,12 @@
 # Hangfire Background Worker Manager
 
-[Hangfire](https://www.hangfire.io/) is an advanced background jobs and worker manager. You can integrate Hangfire with the ABP Framework to use it instead of the [default background worker manager](Background-Workers.md).
+[Hangfire](https://www.hangfire.io/) is an advanced background jobs and worker manager. You can integrate Hangfire with the ABP Framework to use it instead of the [default background worker manager](../background-workers).
 
 The major advantage is that you can use the same server farm to manage your Background Jobs and Workers, as well as leverage the advanced scheduling that is available from Hangfire for [Recurring Jobs](https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html?highlight=recurring), aka Background Workers.
 
 ## Installation
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -38,7 +38,7 @@ public class YourModule : AbpModule
 }
 ````
 
-> Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](Background-Workers.md).
+> Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](../background-workers).
 
 ## Configuration
 

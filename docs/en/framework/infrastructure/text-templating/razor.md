@@ -6,7 +6,7 @@ The Razor template is a standard C# class, so you can freely use the functions o
 
 ## Installation
 
-It is suggested to use the [ABP CLI](CLI.md) to install this package.
+It is suggested to use the [ABP CLI](../../../cli) to install this package.
 
 ### Using the ABP CLI
 
@@ -16,7 +16,7 @@ Open a command line window in the folder of the project (.csproj file) and type 
 abp add-package Volo.Abp.TextTemplating.Razor
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.TextTemplating.Razor).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.TextTemplating.Razor).
 
 ### Manual Installation
 
@@ -111,7 +111,7 @@ There are some useful properties in the base class that can be used in templates
 
 `WithVirtualFilePath` indicates that we are using the [Virtual File System](Virtual-File-System.md) to store the template content. Create a `Hello.cshtml` file inside your project and mark it as "**embedded resource**" on the properties window:
 
-![hello-template-razor](images/hello-template-razor.png)
+![hello-template-razor](../../../images/hello-template-razor.png)
 
 Example `Hello.cshtml` content is shown below:
 
@@ -131,7 +131,7 @@ namespace HelloModelNamespace
 }
 ````
 
-The [Virtual File System](Virtual-File-System.md) requires to add your files in the `ConfigureServices` method of your [module](Module-Development-Basics.md) class:
+The [Virtual File System](../../infrastructure/virtual-file-system.md) requires to add your files in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) class:
 
 ````csharp
 Configure<AbpVirtualFileSystemOptions>(options =>
@@ -190,7 +190,7 @@ It is possible to localize a template content based on the current culture. Ther
 
 ### Inline localization
 
-Inline localization uses the [localization system](Localization.md) to localize texts inside templates.
+Inline localization uses the [localization system](../../fundamentals/localization.md) to localize texts inside templates.
 
 #### Example: Reset Password Link
 
@@ -255,7 +255,7 @@ You will see the localized result:
 <a title="Reset my password" href="https://abp.io/example-link?userId=123&token=ABC">Hi john, Click here to reset your password</a>
 ````
 
-> If you define the [default localization resource](Localization.md) for your application, then no need to declare the resource type for the template definition.
+> If you define the [default localization resource](../../fundamentals/localization.md) for your application, then no need to declare the resource type for the template definition.
 
 ### Multiple Contents Localization
 
@@ -267,7 +267,7 @@ Assuming that you want to send a welcome email to your users, but want to define
 
 First, create a folder and put your templates inside it, like `en.cshtml`, `tr.cshtml`... one for each culture you support:
 
-![multiple-file-template-razor](images/multiple-file-template-razor.png)
+![multiple-file-template-razor](../../../images/multiple-file-template-razor.png)
 
 Then add your template definition in the template definition provider class:
 
@@ -401,17 +401,17 @@ It is possible to replace a template defined by a module that used in your appli
 
 ### Option-1: Using the Virtual File System
 
-The [Virtual File System](Virtual-File-System.md) allows you to override any file by placing the same file into the same path in your project.
+The [Virtual File System](../../infrastructure/virtual-file-system.md) allows you to override any file by placing the same file into the same path in your project.
 
 #### Example: Replace the Standard Email Layout Template
 
-ABP Framework provides an [email sending system](Emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.cshtml` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
+ABP Framework provides an [email sending system](../../infrastructure/emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.cshtml` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
 
 Do the following steps to replace the template file with your own;
 
 **1)** Add a new file into the same location (`/Volo/Abp/Emailing/Templates/Layout.cshtml`) in your project:
 
-![replace-email-layout-razor](images/replace-email-layout-razor.png)
+![replace-email-layout-razor](../../../images/replace-email-layout-razor.png)
 
 **2)** Prepare your email layout template:
 
@@ -453,7 +453,7 @@ This makes the template files "embedded resource".
 
 **4)** Configure the virtual file system
 
-Configure the `AbpVirtualFileSystemOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) to add the embedded files into the virtual file system:
+Configure the `AbpVirtualFileSystemOptions` in the `ConfigureServices` method of your [module](../../architecture/modularity/basics.md) to add the embedded files into the virtual file system:
 
 ```csharp
 Configure<AbpVirtualFileSystemOptions>(options =>
@@ -576,5 +576,5 @@ Return `null` if your source can not find the content, so `ITemplateContentProvi
 ## See Also
 
 * [The source code of the sample application](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo) developed and referred through this document.
-* [Localization system](Localization.md).
-* [Virtual File System](Virtual-File-System.md).
+* [Localization system](../../fundamentals/localization.md).
+* [Virtual File System](../../infrastructure/virtual-file-system.md).

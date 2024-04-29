@@ -111,7 +111,7 @@ Configure<AbpSecurityHeadersOptions>(options =>
 });
 ```
 
-> See [the documentation](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers) for more info.
+> See [the documentation](../framework/ui/mvc-razor-pages/security-headers.md) for more info.
 
 ### Cross-Domain Misconfiguration [Risk: Medium] - False Positive
 

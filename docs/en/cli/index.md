@@ -28,21 +28,21 @@ Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`cli`**: Update or remove ABP CLI.
-* **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
+* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates).
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
-* **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
+* **`add-module`**: Adds a [multi-package application module](../modules) to a solution.
 * **`list-modules`**: Lists names of open-source application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
 * **`get-source`**: Downloads the source code of a module.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
-* **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
+* **`switch-to-nightly`**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
-* **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
+* **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
@@ -89,7 +89,7 @@ abp cli remove
 
 ### new
 
-Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
+Generates a new solution based on the ABP [startup templates](../solution-templates).
 
 Usage:
 
@@ -106,12 +106,12 @@ abp new Acme.BookStore
 * `Acme.BookStore` is the solution name here.
 * Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
 
-For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Samples.md)
+For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md)
 
 #### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
-  * **`app`** (default): [Application template](Startup-Templates/Application.md). Additional options:
+  * **`app`** (default): [Application template](../solution-templates/layered-web-application). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
@@ -132,12 +132,12 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
-        * `leptonx-lite`: [LeptonX Lite Theme](Themes/LeptonXLite/AspNetCore.md).
-        * `basic`: [Basic Theme](UI/AspNetCore/Basic-Theme.md).
-  * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
+        * `leptonx-lite`: [LeptonX Lite Theme](../ui-themes/lepton-x-lite/asp-net-core.md).
+        * `basic`: [Basic Theme](../framework/ui/mvc-razor-pages/basic-theme.md).
+  * **`module`**: [Module template](../solution-templates/application-module). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
-  * **`console`**: [Console template](Startup-Templates/Console.md).
-  * **`app-nolayers`**: [Single-layer application template](Startup-Templates/Application-Single-Layer.md). Additional options:
+  * **`console`**: [Console template](../get-started/console.md).
+  * **`app-nolayers`**: [Single-layer application template](../solution-templates/single-layer-web-application). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC.
       * `angular`: Angular UI.
@@ -148,15 +148,15 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
-        * `leptonx-lite`: [LeptonX Lite Theme](Themes/LeptonXLite/AspNetCore.md).
-        * `basic`: [Basic Theme](UI/AspNetCore/Basic-Theme.md).    
+        * `leptonx-lite`: [LeptonX Lite Theme](../ui-themes/lepton-x-lite).
+        * `basic`: [Basic Theme](../framework/ui/mvc-razor-pages/basic-theme.md).    
   * **`maui`**: .NET MAUI. A minimalist .NET MAUI application will be created if you specify this option.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--preview`: Use latest preview version.
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D:\local-template` or `https://.../my-template-file.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
-* `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+* `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
 * `--database-management-system` or `-dbms`: Sets the database management system. Default is **SQL Server**. Supported DBMS's:
   * `SqlServer`
   * `MySQL`
@@ -170,7 +170,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
 * `--skip-cache` or `-sc`:  Always download the latest from our server and refresh their templates folder cache.
 * `--with-public-website`: **Public Website** is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
 
-See some [examples for the new command](CLI-New-Command-Samples.md) here.
+See some [examples for the new command](./new-command-samples.md) here.
 
 ### update
 
@@ -213,7 +213,7 @@ abp clean
 Adds an ABP package to a project by,
 
 * Adding related nuget package as a dependency to the project.
-* Adding `[DependsOn(...)]` attribute to the module class in the project (see the [module development document](Module-Development-Basics.md)).
+* Adding `[DependsOn(...)]` attribute to the module class in the project (see the [module development document](../framework/architecture/modularity/basics.md)).
 
 > Notice that the added module may require additional configuration which is generally indicated in the documentation of the related package.
 
@@ -225,7 +225,7 @@ abp add-package <package-name> [options]
 
 Example:
 
-````
+````bash
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 ````
 
@@ -237,7 +237,7 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 * `--with-source-code`: Downloads the source code of the package to your solution folder and uses local project references instead of NuGet/NPM packages.
 * `--add-to-solution-file`: Adds the downloaded package to your solution file, so you will also see the package when you open the solution on a IDE. (only available when `--with-source-code` is True)
 
-> Currently only the source code of the basic theme packages([MVC](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme) and [Blazor](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme)) can be downloaded.
+> Currently only the source code of the basic theme packages([MVC](../framework/ui/mvc-razor-pages/basic-theme.md) and [Blazor](../framework/ui/blazor/basic-theme.md)) can be downloaded.
 > - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 > - Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
 > - Volo.Abp.AspNetCore.Components.Web.BasicTheme
@@ -246,7 +246,7 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 
 ### add-module
 
-Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
+Adds a [multi-package application module](../modules) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
 It can also create a new module for your solution and add it to your solution. See `--new` option.
 
@@ -334,7 +334,7 @@ abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
 
 * `--output-folder` or `-o`: Specifies the directory that source code will be downloaded in. If not specified, current directory is used.
 * `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
-* `--preview`: If no version option is specified, this option specifies if latest [preview version](Previews.md) will be used instead of latest stable version.
+* `--preview`: If no version option is specified, this option specifies if latest [preview version](../release-info/previews.md) will be used instead of latest stable version.
 * `--local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
 
 ### generate-proxy
@@ -377,7 +377,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
 * `--url` or `-u`: API definition URL from.
 * `--service-type` or `-st`: Specifies the service type to generate. `application`, `integration` and `all`, Default value: `all` for C#, `application` for JavaScript / Angular.
 
-> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
+> See the [Angular Service Proxies document](../framework/ui/angular/service-proxies.md) for more.
 
 ### remove-proxy
 
@@ -416,7 +416,7 @@ abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 * `--working-directory` or `-wd`: Execution directory. For `csharp` and `js` client types.
 * `--url` or `-u`: API definition URL from.
 
-> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
+> See the [Angular Service Proxies document](../framework/ui/angular/service-proxies.md) for more.
 
 ### switch-to-preview
 
@@ -435,7 +435,7 @@ abp switch-to-preview [options]
 
 ### switch-to-nightly
 
-You can use this command to switch your solution or project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
+You can use this command to switch your solution or project to latest [nightly](../release-info/nightly-builds.md) preview version of the ABP framework packages.
 
 Usage:
 
@@ -483,7 +483,7 @@ abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
 
 ### translate
 
-Simplifies to translate [localization](Localization.md) files when you have multiple JSON [localization](Localization.md) files in a source control repository.
+Simplifies to translate [localization](../framework/fundamentals/localization.md) files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
 
 * This command will create a unified json file based on the reference culture. 
 * It searches all the localization `JSON` files in the current directory and all subdirectories (recursively). Then creates a single file (named `abp-translation.json` by default) that includes all the entries need to be translated.
@@ -588,13 +588,13 @@ abp bundle [options]
   * `webassembly`
   * `maui-blazor`
 
-`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md)
+`bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md)
 
 ### install-libs
 
 This command install NPM Packages for MVC / Razor Pages and Blazor Server UI types. Its **executing directory** or passed ```--working-directory``` parameter's directory must contain a project file(*.csproj).
 
-`install-libs` command reads the `abp.resourcemapping.js` file to manage package. For more details see [Client Side Package Management](UI/AspNetCore/Client-Side-Package-Management.md).
+`install-libs` command reads the `abp.resourcemapping.js` file to manage package. For more details see [Client Side Package Management](../framework/ui/mvc-razor-pages/client-side-package-management.md).
 
 Usage:
 
@@ -608,5 +608,5 @@ abp install-libs [options]
 
 ## See Also
 
-* [Examples for the new command](CLI-New-Command-Samples.md)
+* [Examples for the new command](./new-command-samples.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/abp-cli)

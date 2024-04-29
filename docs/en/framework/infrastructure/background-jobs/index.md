@@ -67,7 +67,7 @@ namespace MyProject
 }
 ````
 
-This job simply uses `IEmailSender` to send emails (see [email sending document](Emailing.md)).
+This job simply uses `IEmailSender` to send emails (see [email sending document](../../infrastructure/emailing.md)).
 
 > `AsyncBackgroundJob` is used to create a job needs to perform async calls. You can inherit from `BackgroundJob<TJob>` and override the `Execute` method if the method doesn't need to perform any async call.
 
@@ -77,7 +77,7 @@ A background job should not hide exceptions. If it throws an exception, the back
 
 #### Cancelling Background Jobs
 
-If your background task is cancellable, then you can use the standard [Cancellation Token](Cancellation-Token-Provider.md) system to obtain a `CancellationToken` to cancel your job when requested. See the following example that uses the `ICancellationTokenProvider` to obtain the cancellation token:
+If your background task is cancellable, then you can use the standard [Cancellation Token](../cancellation-token-provider.md) system to obtain a `CancellationToken` to cancel your job when requested. See the following example that uses the `ICancellationTokenProvider` to obtain the cancellation token:
 
 ```csharp
 using System;
@@ -205,7 +205,7 @@ ABP framework includes a simple `IBackgroundJobManager` implementation that;
 
 ### Configuration
 
-Use `AbpBackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
+Use `AbpBackgroundJobWorkerOptions` in your [module class](../../architecture/modularity/basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -225,15 +225,15 @@ public class MyModule : AbpModule
 
 The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction to store the jobs.
 
-Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md). If you don't want to use this module, you should implement the `IBackgroundJobStore` interface yourself.
+Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](../../../modules/background-jobs.md). If you don't want to use this module, you should implement the `IBackgroundJobStore` interface yourself.
 
 > Background Jobs module is already installed to the startup templates by default and it works based on your ORM/data access choice.
 
 ### Clustered Deployment
 
-The default background job manager is compatible with [clustered environments](Deployment/Clustered-Environment.md) (where multiple instances of your application run concurrently). It uses a [distributed lock](Distributed-Locking.md) to ensure that the jobs are executed only in a single application instance at a time.
+The default background job manager is compatible with [clustered environments](../../../deployment/clustered-environment.md) (where multiple instances of your application run concurrently). It uses a [distributed lock](../distributed-locking.md) to ensure that the jobs are executed only in a single application instance at a time.
 
-However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, **please follow the [distributed lock](Distributed-Locking.md) document to configure a provider for your application**, if it is not already configured.
+However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, **please follow the [distributed lock](../distributed-locking.md) document to configure a provider for your application**, if it is not already configured.
 
 If you don't want to use a distributed lock provider, you may go with the following options:
 
@@ -246,9 +246,9 @@ Background job system is extensible and you can change the default background jo
 
 See pre-built job manager alternatives:
 
-* [Hangfire Background Job Manager](Background-Jobs-Hangfire.md)
-* [RabbitMQ Background Job Manager](Background-Jobs-RabbitMq.md)
-* [Quartz Background Job Manager](Background-Jobs-Quartz.md)
+* [Hangfire Background Job Manager](./hangfire.md)
+* [RabbitMQ Background Job Manager](./rabbitmq.md)
+* [Quartz Background Job Manager](./quartz.md)
 
 ## See Also
-* [Background Workers](Background-Workers.md)
+* [Background Workers](../background-workers)

@@ -4,17 +4,17 @@ RabbitMQ is an industry standard message broker. While it is typically used for 
 
 ABP Framework provides the [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to use the RabbitMQ for background job execution.
 
-> See the [background jobs document](Background-Jobs.md) to learn how to use the background job system. This document only shows how to install and configure the RabbitMQ integration.
+> See the [background jobs document](../background-jobs) to learn how to use the background job system. This document only shows how to install and configure the RabbitMQ integration.
 
 ## Installation
 
 Use the ABP CLI to add [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](../../../cli) if you haven't installed before.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BackgroundJobs.RabbitMQ` package.
 * Run `abp add-package Volo.Abp.BackgroundJobs.RabbitMQ` command.
 
-If you want to do it manually, install the [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to your project and add `[DependsOn(typeof(AbpBackgroundJobsRabbitMqModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to your project and add `[DependsOn(typeof(AbpBackgroundJobsRabbitMqModule))]` to the [ABP module](../../architecture/modularity/basics.md) class inside your project.
 
 ## Configuration
 
@@ -24,7 +24,7 @@ The default configuration automatically connects to the local RabbitMQ server (l
 
 ### RabbitMQ Connection(s)
 
-You can configure the RabbitMQ connections using the standard [configuration system](Configuration.md), like using the `appsettings.json` file, or using the [options](Options.md) classes.
+You can configure the RabbitMQ connections using the standard [configuration system](../../fundamentals/configuration.md), like using the `appsettings.json` file, or using the [options](../../fundamentals/options.md) classes.
 
 #### `appsettings.json` file configuration
 
@@ -88,7 +88,7 @@ If you need to connect to the RabbitMQ cluster, you can use the `;` character to
 
 #### AbpRabbitMqOptions
 
-`AbpRabbitMqOptions` class can be used to configure the connection strings for the RabbitMQ. You can configure this options inside the `ConfigureServices` of your [module](Module-Development-Basics.md).
+`AbpRabbitMqOptions` class can be used to configure the connection strings for the RabbitMQ. You can configure this options inside the `ConfigureServices` of your [module](../../architecture/modularity/basics.md).
 
 **Example: Configure the connection**
 
@@ -156,4 +156,4 @@ See the RabbitMQ documentation if you want to understand the `durable`, `exclusi
 
 ## See Also
 
-* [Background Jobs](Background-Jobs.md)
+* [Background Jobs](../background-jobs)

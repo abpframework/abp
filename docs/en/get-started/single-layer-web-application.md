@@ -12,7 +12,7 @@ Welcome to ABP Studio. In this quick start guide, you will learn how to create a
 
 ## Creating a New Solution
 
-Assuming that you have [installed and logged in](../installation.md) to the application, you should see the following screen when you open ABP Studio:
+Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:
 
 ![abp-studio-welcome-screen](images/abp-studio-welcome-screen.png)
 
@@ -94,7 +94,7 @@ The *Browse* command opens the UI of the web application in the built-in browser
 
 You can browse your application in a full-featured web browser in ABP Studio. Click the *Login* button in the application UI, enter `admin` as username and `1q2w3E*` as password to login to the application.
 
-The following screenshot was taken from the *User Management* page of the [Identity module](../../modules/identity.md) that is pre-installed in the application:
+The following screenshot was taken from the *User Management* page of the [Identity module](../modules/identity.md) that is pre-installed in the application:
 
 ![abp-studio-quick-start-browse-user-list](images/abp-studio-no-layers-quick-start-browse-user-list.png)
 
@@ -104,7 +104,7 @@ You can use any IDE (e.g. Visual Studio, Visual Studio Code or Rider) to develop
 
 First of all, we can stop the application(s) in ABP Studio, so it won't conflict when we run it in Visual Studio.
 
-You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../concepts.md), and select the *Open with* -> *Visual Studio* command:
+You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../modules), and select the *Open with* -> *Visual Studio* command:
 
 ![abp-studio-open-in-visual-studio](images/abp-studio-no-layers-open-in-visual-studio.png)
 

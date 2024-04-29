@@ -1,30 +1,30 @@
 # Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](../_deleted//getting-started-asp-net-core-mvc-template.md)**.
 
 ## Create a New Project
 
 1. Create a new AspNet Core Web Application with Visual Studio 2022 (17.0.0+):
 
-![](images/create-new-aspnet-core-application-v2.png)
+![](../images/create-new-aspnet-core-application-v2.png)
 
 2. Configure your new project:
 
-![](images/select-empty-web-application-v2.png)
+![](../images/select-empty-web-application-v2.png)
 
 3. Press the create button:
 
-![create-aspnet-core-application](images/create-aspnet-core-application.png)
+![create-aspnet-core-application](../images/create-aspnet-core-application.png)
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 
-You can use the [ABP CLI](CLI.md) to install the Volo.Abp.AspNetCore.Mvc package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
+You can use the [ABP CLI](../cli) to install the Volo.Abp.AspNetCore.Mvc package to your project. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ````bash
 abp add-package Volo.Abp.AspNetCore.Mvc
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](CLI.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc).
+> If you haven't done it yet, you first need to install the [ABP CLI](../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc).
 
 ## Create the First ABP Module
 

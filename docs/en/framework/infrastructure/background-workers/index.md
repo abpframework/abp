@@ -12,7 +12,7 @@ Background workers are simple independent threads in the application running in 
 
 A background worker should directly or indirectly implement the `IBackgroundWorker` interface.
 
-> A background worker is inherently [singleton](Dependency-Injection.md). So, only a single instance of your worker class is instantiated and run.
+> A background worker is inherently [singleton](../../fundamentals/dependency-injection.md). So, only a single instance of your worker class is instantiated and run.
 
 ### BackgroundWorkerBase
 
@@ -112,11 +112,11 @@ While we generally add workers in `OnApplicationInitializationAsync`, there are 
 
 ## Options
 
-`AbpBackgroundWorkerOptions` class is used to [set options](Options.md) for the background workers. Currently, there is only one option:
+`AbpBackgroundWorkerOptions` class is used to [set options](../../fundamentals/options.md) for the background workers. Currently, there is only one option:
 
 * `IsEnabled` (default: true): Used to **enable/disable** the background worker system for your application.
 
-> See the [Options](Options.md) document to learn how to set options.
+> See the [Options](../../fundamentals/options.md) document to learn how to set options.
 
 ## Making Your Application Always Run
 
@@ -128,7 +128,7 @@ Be careful if you run multiple instances of your application simultaneously in a
 
 If that's a problem for your workers, you have the following options:
 
-* Implement your background workers so that they work in a clustered environment without any problem. Using the [distributed lock](Distributed-Locking.md) to ensure concurrency control is a way of doing that. A background worker in an application instance may handle a distributed lock, so the workers in other application instances will wait for the lock. In this way, only one worker does the actual work, while others wait in idle. If you implement this, your workers run safely without caring about how the application is deployed.
+* Implement your background workers so that they work in a clustered environment without any problem. Using the [distributed lock](../../infrastructure/distributed-locking.md) to ensure concurrency control is a way of doing that. A background worker in an application instance may handle a distributed lock, so the workers in other application instances will wait for the lock. In this way, only one worker does the actual work, while others wait in idle. If you implement this, your workers run safely without caring about how the application is deployed.
 * Stop the background workers (set `AbpBackgroundWorkerOptions.IsEnabled` to `false`) in all application instances except one of them, so only the single instance runs the workers.
 * Stop the background workers (set `AbpBackgroundWorkerOptions.IsEnabled` to `false`) in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in the background) to execute all the background tasks. This can be a good option if your background workers consume high system resources (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background tasks don't affect your application's performance.
 
@@ -138,9 +138,9 @@ Background worker system is extensible and you can change the default background
 
 See pre-built worker manager alternatives:
 
-* [Quartz Background Worker Manager](Background-Workers-Quartz.md) 
-* [Hangfire Background Worker Manager](Background-Workers-Hangfire.md) 
+* [Quartz Background Worker Manager](./quartz.md) 
+* [Hangfire Background Worker Manager](./hangfire.md) 
 
 ## See Also
 
-* [Background Jobs](Background-Jobs.md)
+* [Background Jobs](../background-jobs)
