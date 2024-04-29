@@ -68,13 +68,15 @@ public class MyProjectNameMenuContributor : IMenuContributor
     {
         var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
+        var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
+
         context.Menu.AddItem(new ApplicationMenuItem(
             "Account.Manage",
             accountStringLocalizer["MyAccount"],
-            $"Account/Manage",
+            $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
             icon: "fa fa-cog",
             order: 1000,
-            null).RequireAuthenticated());
+            target: "_blank").RequireAuthenticated());
 
         return Task.CompletedTask;
     }

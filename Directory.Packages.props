@@ -10,7 +10,7 @@
     <PackageVersion Include="Autofac" Version="8.0.0" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
-    <PackageVersion Include="AutoMapper" Version="12.0.1" />
+    <PackageVersion Include="AutoMapper" Version="13.0.1" />
     <PackageVersion Include="Asp.Versioning.Mvc" Version="7.1.0" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.300.2" />
     <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.2" />
@@ -131,8 +131,8 @@
     <PackageVersion Include="Quartz.Plugins.TimeZoneConverter" Version="3.7.0" />
     <PackageVersion Include="Quartz.Serialization.Json" Version="3.7.0" />
     <PackageVersion Include="RabbitMQ.Client" Version="6.6.0" />
-    <PackageVersion Include="Rebus" Version="8.0.1" />
-    <PackageVersion Include="Rebus.ServiceProvider" Version="10.0.0" />
+    <PackageVersion Include="Rebus" Version="8.4.2" />
+    <PackageVersion Include="Rebus.ServiceProvider" Version="10.1.2" />
     <PackageVersion Include="Scriban" Version="5.9.0" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />

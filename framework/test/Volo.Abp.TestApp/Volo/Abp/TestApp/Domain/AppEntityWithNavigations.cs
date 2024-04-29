@@ -36,7 +36,6 @@ public class AppEntityWithValueObjectAddress : ValueObject
 {
     public AppEntityWithValueObjectAddress(string country)
     {
-
         Country = country;
     }
 
@@ -48,8 +47,14 @@ public class AppEntityWithValueObjectAddress : ValueObject
     }
 }
 
-
 public class AppEntityWithNavigationChildOneToOne : Entity<Guid>
+{
+    public string ChildName { get; set; }
+
+    public virtual AppEntityWithNavigationChildOneToOneAndOneToOne OneToOne { get; set; }
+}
+
+public class AppEntityWithNavigationChildOneToOneAndOneToOne : Entity<Guid>
 {
     public string ChildName { get; set; }
 }
@@ -57,6 +62,15 @@ public class AppEntityWithNavigationChildOneToOne : Entity<Guid>
 public class AppEntityWithNavigationChildOneToMany : Entity<Guid>
 {
     public Guid AppEntityWithNavigationId { get; set; }
+
+    public string ChildName { get; set; }
+
+    public virtual List<AppEntityWithNavigationChildOneToManyAndOneToMany> OneToMany { get; set; }
+}
+
+public class AppEntityWithNavigationChildOneToManyAndOneToMany : Entity<Guid>
+{
+    public Guid AppEntityWithNavigationChildOneToManyId { get; set; }
 
     public string ChildName { get; set; }
 }

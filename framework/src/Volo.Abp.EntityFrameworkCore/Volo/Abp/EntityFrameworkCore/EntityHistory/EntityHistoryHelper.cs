@@ -193,21 +193,18 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
         }
 
-        if (entityEntry.State == EntityState.Unchanged && Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null)
+        if (Options.SaveEntityHistoryWhenNavigationChanges && AbpEfCoreNavigationHelper != null)
         {
-            var index = 0;
-            foreach (var navigation in entityEntry.Navigations)
+            foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
             {
-                if (navigation.IsModified || AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(navigation, index))
+                if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
                 {
                     propertyChanges.Add(new EntityPropertyChangeInfo
                     {
-                        PropertyName = navigation.Metadata.Name,
-                        PropertyTypeFullName = navigation.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
+                        PropertyName = navigationEntry.Metadata.Name,
+                        PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!
                     });
                 }
-
-                index++;
             }
         }
 
@@ -255,10 +252,9 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
     protected virtual bool HasNavigationPropertiesChanged(EntityEntry entityEntry)
     {
-        return entityEntry.State == EntityState.Unchanged &&
-               Options.SaveEntityHistoryWhenNavigationChanges &&
+        return Options.SaveEntityHistoryWhenNavigationChanges &&
                AbpEfCoreNavigationHelper != null &&
-               AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(entityEntry);
+               AbpEfCoreNavigationHelper.IsEntityEntryModified(entityEntry);
     }
 
     protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)

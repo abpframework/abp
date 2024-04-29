@@ -2,9 +2,6 @@
 
 `RouterEvents` is a utility service for filtering specific router events and reacting to them. Please see [this page in Angular docs](https://angular.io/api/router/Event) for available router events.
 
-
-
-
 ## Benefit
 
 You can use router events directly and filter them as seen below:
@@ -50,13 +47,9 @@ class SomeService {
 
 `RouterEvents` also delivers improved type-safety. In the example above, `navigationFinish$` has inferred type of `Observable<NavigationCancel | NavigationEnd | NavigationError>` whereas it would have `Observable<Event>` when router events are filtered directly.
 
-
-
-
 ## Usage
 
 You do not have to provide `RouterEvents` at the module or component level, because it is already **provided in root**. You can inject and start using it immediately in your components.
-
 
 ### How to Get Specific Navigation Events
 
@@ -85,7 +78,6 @@ class SomeService {
 }
 ```
 
-
 ### How to Get All Navigation Events
 
 You can use `getAllNavigationEvents` to get a stream of all navigation events without passing any keys.
@@ -108,6 +100,30 @@ class SomeService {
 }
 ```
 
+### How to get Current and Previous Navigation
+
+You can use `previousNavigation` and `currentNavigation` properties to retrieve navigations in a reactive way.
+
+```ts
+previousNavigation: Signal<string>;
+currentNavigation: Signal<string>;
+```
+
+```ts
+import { RouterEvents } from "@abp/ng.core";
+
+@Injectable()
+class SomeService {
+  readonly routerEvents = inject(RouterEvents);
+
+  someAction() {
+    const previousNavUrl = this.routerEvents.previousNavigation();
+    if (previousNavUrl) {
+      // perform some action
+    }
+  }
+}
+```
 
 ### How to Get Specific Router Events
 
@@ -126,7 +142,6 @@ class SomeService {
 }
 ```
 
-
 ### How to Get All Router Events
 
 You can use `getEvents` to get a stream of all router events without passing any event constructors. This is nothing different from accessing `events` property of `Router` and is added to the service just for convenience.
@@ -143,4 +158,3 @@ class SomeService {
   constructor(private routerEvents: RouterEvents) {}
 }
 ```
-
