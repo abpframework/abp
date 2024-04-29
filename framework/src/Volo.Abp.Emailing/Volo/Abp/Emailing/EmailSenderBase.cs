@@ -90,7 +90,6 @@ public abstract class EmailSenderBase : IEmailSender
     {     
         try
         {
-            throw new Exception("Mail Error");
             if (normalize)
             {
                 await NormalizeMailAsync(mail);
@@ -115,6 +114,7 @@ public abstract class EmailSenderBase : IEmailSender
                     MailFailDescription = ex.Message
                 });
 
+            throw;
         }
     }
 
