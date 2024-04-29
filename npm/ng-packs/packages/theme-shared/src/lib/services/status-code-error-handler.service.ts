@@ -17,7 +17,7 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
   protected readonly authService = inject(AuthService);
 
   protected readonly handledStatusCodes = [401, 403, 404, 500] as const;
-  protected status: typeof this.handledStatusCodes[number];
+  protected status: (typeof this.handledStatusCodes)[number];
 
   readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.normal;
 
@@ -90,8 +90,9 @@ export class StatusCodeErrorHandlerService implements CustomHttpErrorHandlerServ
 
         this.showConfirmation(title, message).subscribe();
         break;
-
       case 403:
+        this.authService.logout();
+        break;
       case 500:
         this.showPage();
         break;
