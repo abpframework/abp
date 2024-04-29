@@ -192,6 +192,21 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         try
         {
+            if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
+            {
+                foreach (var entityEntry in AbpEfCoreNavigationHelper.GetChangedEntityEntries())
+                {
+                    if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
+                    {
+                        EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
+                    }
+                    else
+                    {
+                        EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
+                    }
+                }
+            }
+
             var auditLog = AuditingManager?.Current?.Log;
             List<EntityChangeInfo>? entityChangeList = null;
             if (auditLog != null)
@@ -289,14 +304,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
-        AbpEfCoreNavigationHelper.ChangeTracker_Tracked(ChangeTracker, sender, e);
+        AbpEfCoreNavigationHelper.ChangeTracker_Tracked(sender, e);
         FillExtraPropertiesForTrackedEntities(e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
     protected virtual void ChangeTracker_StateChanged(object? sender, EntityStateChangedEventArgs e)
     {
-        AbpEfCoreNavigationHelper.ChangeTracker_StateChanged(ChangeTracker, sender, e);
+        AbpEfCoreNavigationHelper.ChangeTracker_StateChanged(sender, e);
         PublishEventsForTrackedEntity(e.Entry);
     }
 
@@ -374,8 +389,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
-                else if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges &&
-                         (entry.Navigations.Any(x => x.IsModified) || AbpEfCoreNavigationHelper.IsEntityEntryNavigationChanged(entry)))
+                else if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges && AbpEfCoreNavigationHelper.IsEntityEntryModified(entry))
                 {
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
@@ -392,21 +406,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 ApplyAbpConceptsForDeletedEntity(entry);
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
-        }
-
-        if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
-        {
-            foreach (var entityEntry in AbpEfCoreNavigationHelper.GetChangedEntityEntries())
-            {
-                if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
-                {
-                    EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
-                }
-                else
-                {
-                    EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
-                }
-            }
         }
     }
 

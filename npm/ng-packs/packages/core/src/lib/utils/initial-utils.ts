@@ -29,7 +29,7 @@ export function getInitialData(injector: Injector) {
     const checkAuthenticationState = injector.get(CHECK_AUTHENTICATION_STATE_FN_KEY, noop, {
       optional: true,
     });
-    if (authService) {
+    if (!options.skipInitAuthService && authService) {
       await authService.init();
     }
     if (options.skipGetAppConfiguration) return;

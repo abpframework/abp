@@ -70,10 +70,22 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<AppEntityWithNavigations>(b =>
         {
             b.ConfigureByConvention();
-            b.OwnsOne(v => v.AppEntityWithValueObjectAddress);
+            b.OwnsOne(x => x.AppEntityWithValueObjectAddress);
             b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
             b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigationChildOneToOne>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOneAndOneToOne>(x => x.Id);
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigationChildOneToMany>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationChildOneToManyId);
         });
     }
 }
