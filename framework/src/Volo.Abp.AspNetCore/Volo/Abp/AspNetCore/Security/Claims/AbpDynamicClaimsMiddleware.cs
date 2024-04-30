@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
@@ -20,8 +21,8 @@ public class AbpDynamicClaimsMiddleware : AbpMiddlewareBase, ITransientDependenc
             {
                 var authenticationType = context.User.Identity.AuthenticationType;
                 var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
-                context.User = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
-
+                var newPrinciple = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
+                context.Features.Get<IHttpAuthenticationFeature>()!.User = newPrinciple;
                 if (context.User.Identity?.IsAuthenticated == false)
                 {
                     if (!authenticationType.IsNullOrWhiteSpace())
