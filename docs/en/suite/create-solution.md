@@ -12,7 +12,7 @@ Also, you can add a *public web site* project to your solution, separate tenant 
 
 ![Create a new solution](../images/suite-new-solution.png)
 
-- **Template type:** This is the startup template type of your solution. You can check the all available templates from [here](../startup-templates).
+- **Template type:** This is the startup template type of your solution. You can check the all available templates from [here](../solution-templates).
 
 - **Project name:** This is the solution name and also the prefix for the namespace of your solution. In this example `Acme.BookStore` is the project name. The solution file will be named as `Acme.BookStore.sln`. And the namespaces of `c#` files will start with `Acme.BookStore.*`
 

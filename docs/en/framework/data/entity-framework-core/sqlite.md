@@ -1,6 +1,6 @@
 # Switch to EF Core SQLite Provider
 
-> [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with SQLite. See [that document](Entity-Framework-Core-Other-DBMS.md) to learn how to use. This document provides guidance for who wants to manually switch to SQLite after creating the solution.
+> [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with SQLite. See [that document](other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to SQLite after creating the solution.
 
 This document explains how to switch to the **SQLite** database provider for **[the application startup template](../../../solution-templates/layered-web-application)** which comes with SQL Server provider pre-configured.
 
@@ -23,7 +23,7 @@ Find `UseSqlServer()` calls in your solution, replace with `UseSqlite()`. Check 
 
 ## Change the Connection Strings
 
-SQLite connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/sqlite/ ) for details of SQLite connection string options.
+SQLite connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com](https://www.connectionstrings.com/sqlite/ ) for details of SQLite connection string options.
 
 An example connection string is
 

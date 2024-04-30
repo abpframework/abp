@@ -283,7 +283,7 @@ Overriding controllers, framework services, view component classes and any other
 
 ## Extending Data Transfer Objects
 
-**Extending [entities](Entities.md)** is possible as described in the [Extending Entities document](./customizing-application-modules-extending-entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
+**Extending [entities](../../../architecture/domain-driven-design/entities.md)** is possible as described in the [Extending Entities document](./customizing-application-modules-extending-entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
 
 It is also possible to extend Data Transfer Objects (**DTOs**) used by the application services. In this way, you can get extra properties from the UI (or client) and return extra properties from the service.
 

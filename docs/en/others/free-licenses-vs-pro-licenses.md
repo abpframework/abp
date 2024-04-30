@@ -1,6 +1,6 @@
 # Free (Open Source) License vs Paid (Pro) Licenses
 
-[ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates), [CLI](../cli), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/AspNetCore.md) and ready to use [application modules](../modules). 
+[ABP Framework](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates), [CLI](../cli), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/asp-net-core.md) and ready to use [application modules](../modules). 
 
 [ABP Pro licenses](https://commercial.abp.io) adds important benefits on top of the open-source ABP framework project with a set of professional [application modules](https://commercial.abp.io/modules), [UI themes](https://commercial.abp.io/themes), CRUD page generator: [ABP Suite](https://commercial.abp.io/tools/suite), [premium support](https://commercial.abp.io/support) and [additional services](https://commercial.abp.io/additional-services). 
 

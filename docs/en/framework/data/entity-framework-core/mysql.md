@@ -2,7 +2,7 @@
 
 > [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with MySQL. See [that document](./other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to MySQL after creating the solution.
 
-This document explains how to switch to the **MySQL** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
+This document explains how to switch to the **MySQL** database provider for **[the application startup template](../../../solution-templates/layered-web-application)** which comes with SQL Server provider pre-configured.
 
 ## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package
 
@@ -23,7 +23,7 @@ Find `UseSqlServer()` calls in your solution. Check the following files:
 
 ## Change the Connection Strings
 
-MySQL connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/mysql/ ) for details of MySQL connection string options.
+MySQL connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com](https://www.connectionstrings.com/mysql) for details of MySQL connection string options.
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 

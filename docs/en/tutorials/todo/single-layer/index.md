@@ -10,7 +10,7 @@
 
 This is a single-part quick-start tutorial to build a simple todo application with the ABP Framework. Here's a screenshot from the final application:
 
-![todo-list](../todo-list.png)
+![todo-list](../images/todo-list.png)
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp-SingleLayer).
 
@@ -156,7 +156,7 @@ It is good to run the application before starting the development. The solution 
 
 Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run` CLI command on your project directory) to see the server-side HTTP API on [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
-![todo-swagger-ui-initial](./todo-single-layer-ui-initial.png)
+![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. If it works, then we can run the Angular client application.
 
@@ -170,7 +170,7 @@ This command takes time, but eventually runs and opens the application in your d
 
 {{end}}
 
-![todo-ui-initial](../todo-ui-initial.png)
+![todo-ui-initial](../images/todo-ui-initial.png)
 
 You can click on the *Login* button and use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
@@ -413,7 +413,7 @@ The application service is ready to be used from the UI layer. So, let's impleme
 
 It is time to show the todo items on the UI! Before starting to write the code, it would be good to remember what we are trying to build. Here's a sample screenshot from the final UI:
 
-![todo-list](../todo-list.png)
+![todo-list](../images/todo-list.png)
 
 {{if UI=="MVC"}}
 
@@ -584,7 +584,7 @@ However, you may notice that we haven't created any API Controllers, so how does
 
 If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
-![todo-api](../todo-api.png)
+![todo-api](../images/todo-api.png)
 
 {{else if UI=="Blazor" || UI=="BlazorServer"}}
 

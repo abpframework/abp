@@ -67,7 +67,7 @@ The example configuration tells to the ABP Framework to use the second connectio
 
 #### Module Tables
 
-Every module uses its **own databases tables**. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system.
+Every module uses its **own databases tables**. For example, the [Identity Module](../../../modules/identity.md) has some tables to manage the users and roles in the system.
 
 ##### Table Prefixes
 

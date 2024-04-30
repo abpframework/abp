@@ -10,7 +10,7 @@
 
 This is a single-part quick-start tutorial to build a simple todo application with the ABP Framework. Here's a screenshot from the final application:
 
-![todo-list](todo-list.png)
+![todo-list](../images/todo-list.png)
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
@@ -144,7 +144,7 @@ It is good to run the application before starting the development. The solution 
 
 Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
-![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
+![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
 
@@ -157,7 +157,7 @@ It is good to run the application before starting the development. The solution 
 
 Ensure that the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
-![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
+![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
 
@@ -244,7 +244,7 @@ dotnet ef migrations add Added_TodoItem
 
 This will add a new migration class to the project:
 
-![todo-efcore-migration](todo-efcore-migration.png)
+![todo-efcore-migration](../images/todo-efcore-migration.png)
 
 You can apply changes to the database using the following command, in the same command-line terminal:
 
@@ -412,7 +412,7 @@ The application service is ready to be used from the UI layer.
 
 It is time to show the todo items on the UI! Before starting to write the code, it would be good to remember what we are trying to build. Here's a sample screenshot from the final UI:
 
-![todo-list](todo-list.png)
+![todo-list](../images/todo-list.png)
 
 > **We will keep the UI side minimal for this tutorial to make the tutorial simple and focused. See the [web application development tutorial](../../book-store/part-01.md) to build real-life pages with all aspects.**
 
@@ -581,7 +581,7 @@ However, you may notice that we haven't created any API Controllers, so how does
 
 If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
-![todo-api](todo-api.png)
+![todo-api](../images/todo-api.png)
 
 {{else if UI=="Blazor" || UI=="BlazorServer"}}
 
@@ -723,7 +723,7 @@ However, you may ask that we haven't created any API Controller, so how does the
 
 If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
-![todo-api](todo-api.png)
+![todo-api](../images/todo-api.png)
 
 {{end # Blazor}}
 
@@ -737,7 +737,7 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 
 > **Warning**: There is an issue with IIS Express: it doesn't allow connecting to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
-![run-without-iisexpress](run-without-iisexpress.png)
+![run-without-iisexpress](../images/run-without-iisexpress.png)
 
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 

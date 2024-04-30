@@ -305,7 +305,7 @@ spec:
 ```
 
 **Update all the application, gateway and microservice ingress.yaml files.** Eventually, when deploy the application, you will be seeing:
-![updated-ingress](D:\Github\abp-commercial-docs\en\images\updated-ingress.png)
+![updated-ingress](../images/updated-ingress.png)
 
 ### Overriding Environment Variables
 

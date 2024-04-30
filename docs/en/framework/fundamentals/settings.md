@@ -158,7 +158,7 @@ For example, you can configure  [IEmailSender](../infrastructure/emailing.md) se
 
 Setting values should be configured under the `Settings` section as like in this example.
 
-> `IConfiguration`  is an .NET Core service and it can read values not only from the `appsettings.json`, but also from the environment, user secrets... etc. See [Microsoft's documentation]( https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ ) for more.
+> `IConfiguration`  is an .NET Core service and it can read values not only from the `appsettings.json`, but also from the environment, user secrets... etc. See [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) for more.
 
 ### Custom Setting Value Providers
 

@@ -17,7 +17,7 @@ You can follow the documents below to start with the ABP Framework and the Blazo
 
 ## Modularity
 
-[Modularity](../../Module-Development-Basics.md) is one of the key goals of the ABP Framework. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
+[Modularity](../../architecture/modularity/basics.md) is one of the key goals of the ABP Framework. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
 
 The [application startup template](../../../solution-templates/layered-web-application) comes with some application modules pre-installed. These modules have their own UI pages embedded into their own NuGet packages. You don't see their code in your solution, but they work as expected on runtime.
 

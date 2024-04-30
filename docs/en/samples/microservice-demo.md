@@ -791,7 +791,7 @@ This service actually just hosts the ABP Identity package/module. Does not inclu
 * `AbpIdentityApplicationModule` (*[Volo.Abp.Identity.Application](https://www.nuget.org/packages/Volo.Abp.Identity.Application)* package) to host the implementation of the application and domain layers of the module.
 * `AbpIdentityEntityFrameworkCoreModule` (*[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use EF Core as database API.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+See the [module architecture best practice guide](../framework/architecture/best-practices/module-architecture.md) to understand the layering better.
 
 #### Authentication
 
@@ -857,7 +857,7 @@ This service actually just hosts the ABP Blogging package/module. Does not inclu
 - `BloggingApplicationModule` (*[Volo.Blogging.Application](https://www.nuget.org/packages/Volo.Blogging.Application)* package) to host the implementation of the application and domain layers of the module.
 - `BloggingMongoDbModule` (*[Volo.Blogging.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use MongoDB as the database.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+See the [module architecture best practice guide](../framework/architecture/best-practices/module-architecture.md) to understand the layering better.
 
 #### Authentication
 
@@ -985,7 +985,7 @@ This service actually just hosts the Product Management module. Does not include
 - `ProductManagementApplicationModule` to host the implementation of the application and domain layers of the module.
 - `ProductManagementEntityFrameworkCoreModule` to use EF Core as database API.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better. See the Product Management module section below for more information about this module.
+See the [module architecture best practice guide](../framework/architecture/best-practices/module-architecture.md) to understand the layering better. See the Product Management module section below for more information about this module.
 
 #### Authentication
 
@@ -1268,7 +1268,7 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 * Uses the related methods (like `SetName`) of the `Product` class to change properties, because they are with private setters and the only way to change a value is to use an entity method.
 * Returns an updated `ProductDto` to the client (client may need it for some reason) by using the [ObjectMapper](../framework/infrastructure/object-to-object-mapping.md).
 
-The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../framework/architecture/best-practices/application-services.md).
+The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../framework/architecture/best-practices).
 
 #### Other Layers
 

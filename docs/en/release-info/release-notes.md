@@ -277,7 +277,7 @@ This post also covers the [road map](road-map.md) and other news for the ABP.IO 
 
 * Completely renewed the **[Lepton Theme](https://commercial.abp.io/themes) styles** and add a new one.
 * New module: Created a **real time [Chat Module](https://commercial.abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
-* Implemented **[module entity extension](guides/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
+* Implemented **[module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
 * **Gravatar** integration for the Angular UI.
 * Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
 

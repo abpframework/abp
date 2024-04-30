@@ -48,7 +48,7 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 
 ## IdentityServer Integration
 
-[Volo.Abp.Account.Web.IdentityServer](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) package provides integration for the [IdentityServer](https://github.com/IdentityServer). This package comes as installed with the [application startup template](../Startup-Templates/Application.md). See the [IdentityServer Module](./identity-server.md) documentation.
+[Volo.Abp.Account.Web.IdentityServer](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) package provides integration for the [IdentityServer](https://github.com/IdentityServer). This package comes as installed with the [application startup template](../solution-templates/layered-web-application/index.md). See the [IdentityServer Module](./identity-server.md) documentation.
 
 ## Social/External Logins
 

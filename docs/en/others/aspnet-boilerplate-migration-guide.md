@@ -328,7 +328,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-See the ABP Framework [dependency injection document](..//framework/fundamentals/dependency-injection.md) for details.
+See the ABP Framework [dependency injection document](../framework/fundamentals/dependency-injection.md) for details.
 
 ### Configuration vs Options System
 

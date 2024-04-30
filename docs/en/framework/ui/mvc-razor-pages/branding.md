@@ -26,7 +26,7 @@ namespace MyProject.Web
 }
 ````
 
-> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../../themes/basic.md), it does not have any effect on the other [official themes](../../../ui-themes).
+> Currently, setting the `AppName` is only applicable to the [Basic Theme](../../../basic.md), it does not have any effect on the other [official themes](../../../ui-themes).
 
 The result will be like shown below:
 

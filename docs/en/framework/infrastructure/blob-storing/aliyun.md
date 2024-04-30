@@ -12,7 +12,7 @@ Use the ABP CLI to add [Volo.Abp.BlobStoring.Aliyun](https://www.nuget.org/packa
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring.Aliyun` package.
 * Run `abp add-package Volo.Abp.BlobStoring.Aliyun` command.
 
-If you want to do it manually, install the [Volo.Abp.BlobStoring.Aliyun](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Aliyun) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringAliyunModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.BlobStoring.Aliyun](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Aliyun) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringAliyunModule))]` to the [ABP module](../../architecture/modularity/basics.md) class inside your project.
 
 ## Configuration
 

@@ -26,7 +26,7 @@ See https://github.com/abpframework/abp/issues/17864 for more information.
 
 ## Replaced `IdentityUserLookupAppService` with the `IIdentityUserIntegrationService`
 
-[Integration Services](../../framework/api-development/integration-services.mdd) are built for module-to-module (or microservice-to-microservice) communication rather than consumed from a UI or a client application as [Application Services](../../framework/architecture/domain-driven-design/application-services.md) are intended to do.
+[Integration Services](../../framework/api-development/integration-services.md) are built for module-to-module (or microservice-to-microservice) communication rather than consumed from a UI or a client application as [Application Services](../../framework/architecture/domain-driven-design/application-services.md) are intended to do.
 
 In that regard, we are discarding the `IIdentityUserLookupAppService` in the Identity Module and moving its functionality to the `IIdentityUserIntegrationService`. Therefore, if you have used that application service directly, use the integration service (`IIdentityUserIntegrationService`) instead. `IIdentityUserLookupAppService` will be removed in thes next versions, so you may need to create a similar service in your application.
 
@@ -111,7 +111,7 @@ In this version, `AbpAspNetCoreAsyncIntegratedTestBase` class has been set as `O
 
 ## Use NoTracking for Readonly Repositories for EF Core 
 
-In this version, ABP Framework provides read-only [repository](Repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
+In this version, ABP Framework provides read-only [repository](../../framework/architecture/domain-driven-design/repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
 
 Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository.
 

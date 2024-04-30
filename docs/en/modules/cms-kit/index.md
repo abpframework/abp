@@ -30,7 +30,7 @@ All features are individually usable. If you disable a feature, it completely di
 
 ## How to Install
 
-[ABP CLI](../../CLI.md) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
+[ABP CLI](../../cli) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:
 
 ```bash
 abp add-module Volo.CmsKit --skip-db-migrations

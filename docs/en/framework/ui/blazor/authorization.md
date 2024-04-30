@@ -55,7 +55,7 @@ public partial class Index
 }
 ````
 
-If your component directly or indirectly inherits from the `AbpComponentBase`, `AuthorizationService` becomes pre-injected and ready to use. If not, you can always [inject](../../Dependency-Injection.md) the `IAuthorizationService` yourself.
+If your component directly or indirectly inherits from the `AbpComponentBase`, `AuthorizationService` becomes pre-injected and ready to use. If not, you can always [inject](../../fundamentals/dependency-injection.md) the `IAuthorizationService` yourself.
 
 `IAuthorizationService` can also be used in the view side where `AuthorizeView` component is not enough.
 
@@ -71,5 +71,5 @@ There are some useful extension methods for the `IAuthorizationService`:
 
 * [Authorization](../../fundamentals/authorization.md) (server side)
 * [Blazor Security](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/) (Microsoft documentation)
-* [ICurrentUser Service](CurrentUser.md)
+* [ICurrentUser Service](../../infrastructure/current-user.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/authorization)

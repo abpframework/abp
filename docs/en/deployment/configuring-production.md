@@ -93,7 +93,7 @@ Note that ABP CLI automatically sets the password to a random value on a new pro
 
 ## Logging
 
-ABP uses .NET's standard [Logging services](../Logging.md). So, it is compatible with any logging provider that works with .NET. ABP's startup solution templates come with [Serilog](https://serilog.net/) pre-installed and configured for you. It writes logs to file system and console with the initial configuration. File system is useful for development environment, but it is suggested you to use a different provider for your production environment, like Elasticsearch, database or any other provider that can properly work.
+ABP uses .NET's standard [Logging services](../framework/fundamentals/logging.md). So, it is compatible with any logging provider that works with .NET. ABP's startup solution templates come with [Serilog](https://serilog.net/) pre-installed and configured for you. It writes logs to file system and console with the initial configuration. File system is useful for development environment, but it is suggested you to use a different provider for your production environment, like Elasticsearch, database or any other provider that can properly work.
 
 ## The Swagger UI
 

@@ -2,7 +2,7 @@
 
 This document explains how you can create a new storage provider for the BLOB storing system with an example.
 
-> Read the [BLOB Storing document](.../blob-storing) to understand how to use the BLOB storing system. This document only covers how to create a new storage provider.
+> Read the [BLOB Storing document](../blob-storing) to understand how to use the BLOB storing system. This document only covers how to create a new storage provider.
 
 ## Example Implementation
 
@@ -58,7 +58,7 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
-> See the [BLOB Storing document](.../blob-storing) if you want to configure a specific container.
+> See the [BLOB Storing document](../blob-storing) if you want to configure a specific container.
 
 ### BlobContainerConfiguration Extension Method
 

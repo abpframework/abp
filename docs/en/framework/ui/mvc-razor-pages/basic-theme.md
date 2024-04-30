@@ -28,7 +28,7 @@ The Basic Theme implements the standard layouts. All the layouts implement the f
 
 ### The Application Layout
 
-![basic-theme-application-layout](../../images/basic-theme-application-layout.png)
+![basic-theme-application-layout](../../../images/basic-theme-application-layout.png)
 
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
@@ -83,7 +83,7 @@ See the [User Interface Customization Guide](customization-user-interface.md) to
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../cli.md) command in **Web** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../../cli) command in **Web** project directory to copy the source code to your solution:
 
 `abp add-module Volo.BasicTheme --with-source-code --add-to-solution-file`
 

@@ -157,7 +157,7 @@ Then change the `Default.cshtml` as you like. Example content can be like that:
 
 Now, you can run the application to see the result:
 
-![bookstore-added-logo](../../images/bookstore-added-logo.png)
+![bookstore-added-logo](../../../images/bookstore-added-logo.png)
 
 If you need, you can also replace [the code behind c# class](https://github.com/abpframework/abp/blob/dev/modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs) of the component just using the dependency injection system.
 
@@ -254,7 +254,7 @@ Assume that you want to run a **JavaScript code** once the user enters to the **
 
 First, create a standard JavaScript file under the `wwwroot`, `Pages` or `Views` folder (ABP support to add static resources inside these folders by default). We prefer the `Pages/Identity/Roles` folder to follow the conventions:
 
-![bookstore-added-role-js-file](../../images/bookstore-added-role-js-file.png)
+![bookstore-added-role-js-file](../../../images/bookstore-added-role-js-file.png)
 
 Content of the file is simple:
 

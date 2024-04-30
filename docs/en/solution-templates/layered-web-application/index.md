@@ -139,7 +139,7 @@ This is a console application that simplifies the execution of database migratio
 
 > This project has its own `appsettings.json` file. So, if you want to change the database connection string, remember to change this file too.
 
-Especially, seeding initial data is important at this point. ABP has a modular data seed infrastructure. See [its documentation](../Data-Seeding.md) for more about the data seeding.
+Especially, seeding initial data is important at this point. ABP has a modular data seed infrastructure. See [its documentation](../../framework/infrastructure/data-seeding.md) for more about the data seeding.
 
 While creating database & applying migrations seem only necessary for relational databases, this project comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds the initial data which is necessary for the application.
 
@@ -453,7 +453,7 @@ See the [Testing Overview](https://reactjs.org/docs/testing.html) document.
 
 ## Social / External Logins
 
-If you want to configure social/external logins for your application, please follow the [Social/External Logins](../Authentication/Social-External-Logins.md) document.
+If you want to configure social/external logins for your application, please follow the [Social/External Logins](../../social-external-logins.md) document.
 
 ## What's Next?
 

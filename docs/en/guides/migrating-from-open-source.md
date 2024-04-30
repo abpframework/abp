@@ -48,25 +48,25 @@ After that, you can obtain an `AbpLicenseCode` by creating a startup template an
 
 ### 2. Installing the ABP Commercial Modules
 
-After, you have added the `ApiKey` and `AbpLicenseCode` to the relevant places, now you can add [ABP Commercial's modules](modules) to your solution. ABP Commercial provides plenty of modules that extend the ABP Framework modules, such as the `Account Pro` module over the `Account` module or the `Identity Pro` module over the `Identity` module. 
+After, you have added the `ApiKey` and `AbpLicenseCode` to the relevant places, now you can add [ABP Commercial's modules](../modules) to your solution. ABP Commercial provides plenty of modules that extend the ABP Framework modules, such as the `Account Pro` module over the `Account` module or the `Identity Pro` module over the `Identity` module. 
 
 To replace these modules and also add the additional modules provided by ABP Commercial, you can use the `abp add-module` command (and then remove the free modules as described in the next section). This command finds all packages of the specified module, finds the related projects in the solution, and adds each package to the corresponding project in the solution. Therefore, by using this command, you don't need to manually add the package references to the `*.csproj` files and add related `[DependsOn(typeof(<>))]` statements to the module classes, instead, this command does this on behalf of you.
 
-You can run the following commands one after another in your solution directory and add all the related modules into your solution as you would have started with [one of the startup templates of ABP Commercial](startup-templates):
+You can run the following commands one after another in your solution directory and add all the related modules into your solution as you would have started with [one of the startup templates of ABP Commercial](../solution-templates):
 
-1. `abp add-module Volo.Identity.Pro --skip-db-migrations` → [Identity Module](modules/identity.md)
-2. `abp add-module Volo.OpenIddict.Pro --skip-db-migrations` → [OpenIddict Module](modules/openiddict.md)
-3. `abp add-module Volo.Saas --skip-db-migrations` → [SaaS Module](modules/saas.md)
-4. `abp add-module Volo.AuditLogging.Ui --skip-db-migrations` → [Audit Logging UI Module](modules/audit-logging.md)
-5. `abp add-module Volo.Account.Pro --skip-db-migrations` → [Account Module](modules/account.md)
-6. `abp add-module Volo.TextTemplateManagement --skip-db-migrations` → [Text Template Management Module](modules/text-template-management.md)
-7. `abp add-module Volo.LanguageManagement --skip-db-migrations` → [Language Management Module](modules/language-management.md)
-8. `abp add-module Volo.Gdpr --skip-db-migrations` → [GDPR Module](modules/gdpr.md)
-9. `abp add-module Volo.Abp.BlobStoring.Database --skip-db-migrations` → [Blob Storing - Database Provider](https://docs.abp.io/en/abp/latest/Blob-Storing-Database)
+1. `abp add-module Volo.Identity.Pro --skip-db-migrations` → [Identity Module](../modules/identity.md)
+2. `abp add-module Volo.OpenIddict.Pro --skip-db-migrations` → [OpenIddict Module](../modules/openiddict.md)
+3. `abp add-module Volo.Saas --skip-db-migrations` → [SaaS Module](../modules/saas.md)
+4. `abp add-module Volo.AuditLogging.Ui --skip-db-migrations` → [Audit Logging UI Module](../modules/audit-logging.md)
+5. `abp add-module Volo.Account.Pro --skip-db-migrations` → [Account Module](../modules/account.md)
+6. `abp add-module Volo.TextTemplateManagement --skip-db-migrations` → [Text Template Management Module](../modules/text-template-management.md)
+7. `abp add-module Volo.LanguageManagement --skip-db-migrations` → [Language Management Module](../modules/language-management.md)
+8. `abp add-module Volo.Gdpr --skip-db-migrations` → [GDPR Module](../modules/gdpr.md)
+9. `abp add-module Volo.Abp.BlobStoring.Database --skip-db-migrations` → [Blob Storing - Database Provider](../framework/infrastructure/blob-storing/database.md)
 
-> These 9 modules are pre-installed on the [startup templates of ABP Commercial](startup-templates). Therefore, you can install all of them if you want to align your project with the startup templates, but it's totally optional, so you can skip running the command above for a module that you don't want to add to your solution.
+> These 9 modules are pre-installed on the [startup templates of ABP Commercial](../solution-templates). Therefore, you can install all of them if you want to align your project with the startup templates, but it's totally optional, so you can skip running the command above for a module that you don't want to add to your solution.
 
-After running the commands above, all of the related commercial packages and their dependencies will be added to your solution. In addition to these module packages, you can add `Volo.Abp.Commercial.SuiteTemplates` package into your domain application to be able to use ABP Suite later on. By doing that you will be able to add your solution from [ABP Suite UI](abp-suite) and generate CRUD pages for your applications whenever you want. 
+After running the commands above, all of the related commercial packages and their dependencies will be added to your solution. In addition to these module packages, you can add `Volo.Abp.Commercial.SuiteTemplates` package into your domain application to be able to use ABP Suite later on. By doing that you will be able to add your solution from [ABP Suite UI](../suite) and generate CRUD pages for your applications whenever you want. 
 
 So, open your `*Domain.csproj` file and add the line below (don't forget to replace the `<Version>` placeholder):
 
@@ -331,7 +331,7 @@ Remove the unnecessary references from the `*Web.csproj`:
 
 ```
 
-> Notice, that you have also changed the LeptonXLite theme reference with the [LeptonX Theme](themes/lepton-x), which is a commercial theme provided by ABP Commercial and has superior features to the LeptonX Lite theme.
+> Notice, that you have also changed the LeptonXLite theme reference with the [LeptonX Theme](../ui-themes/lepton-x), which is a commercial theme provided by ABP Commercial and has superior features to the LeptonX Lite theme.
 
 Update namespaces for the `*WebModule.cs`:
 
@@ -413,7 +413,7 @@ Then, we can update the configurations and add missing middlewares to the reques
     }    
 ```
 
-> **Note:** In the startup templates of ABP Commercial, besides these configurations, there are some additional configurations, such as [configuring impersonation](modules/account/impersonation.md), [configuring external providers](https://docs.abp.io/en/abp/latest/Modules/Account#configure-the-provider), and configuring health checks. These configurations are optional, and for the sake of simplicity, in this documentation, we did not mention them. You can apply the related configurations by checking the related documentation and from the default startup templates.
+> **Note:** In the startup templates of ABP Commercial, besides these configurations, there are some additional configurations, such as [configuring impersonation](../modules/account/impersonation.md), [configuring external providers](https://docs.abp.io/en/abp/latest/Modules/Account#configure-the-provider), and configuring health checks. These configurations are optional, and for the sake of simplicity, in this documentation, we did not mention them. You can apply the related configurations by checking the related documentation and from the default startup templates.
 
 Update the namespaces in the `BookStoreMenuContributor` file as follows:
 

@@ -100,7 +100,7 @@ public class IdentityServiceDbContext :
 ````
 
 * That class implements `IIdentityProDbContext` and `IOpenIddictDbContext`, so these modules can use it.
-* It also implements `IHasEventInbox` and `IHasEventOutbox` interfaces, so the transactional [inbox/outbox patterns](inbox/outbox patterns) can work while sending and receiving [distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+* It also implements `IHasEventInbox` and `IHasEventOutbox` interfaces, so the transactional [inbox/outbox patterns](inbox/outbox patterns) can work while sending and receiving [distributed events](../../framework/infrastructure/event-bus/distributed).
 
 As the next part, the `IdentityServiceDbContext` class defines the following properties those are forced by the implemented interfaces:
 

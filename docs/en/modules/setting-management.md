@@ -114,7 +114,7 @@ The order of the providers are important. Providers are executed in the reverse 
 
 ## See Also
 
-* [Settings](../Settings.md)
+* [Settings](../framework/fundamentals/settings.md )
 
 ## Setting Management UI
 

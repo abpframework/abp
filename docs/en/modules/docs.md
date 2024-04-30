@@ -672,4 +672,4 @@ See the following examples:
 
 ## Next
 
-Docs Module is also available as a standalone application. Check out [VoloDocs](../Apps/VoloDocs).
+Docs Module is also available as a standalone application. Check out [VoloDocs](../apps/volo-docs.md).

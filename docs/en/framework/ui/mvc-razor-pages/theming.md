@@ -112,7 +112,7 @@ Here, the account layout of the Lepton Theme:
 
 The [Lepton Theme](https://commercial.abp.io/themes) shows the application logo and footer in this layout.
 
-> You can override theme layouts completely or partially in an application to [customize](sustomization-user-interface.md) it.
+> You can override theme layouts completely or partially in an application to [customize](customization-user-interface.md) it.
 
 #### The Empty Layout
 
