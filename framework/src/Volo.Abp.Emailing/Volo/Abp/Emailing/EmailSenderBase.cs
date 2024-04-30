@@ -90,6 +90,7 @@ public abstract class EmailSenderBase : IEmailSender
     {     
         try
         {
+            throw new Exception("Error email sending");
             if (normalize)
             {
                 await NormalizeMailAsync(mail);
@@ -106,11 +107,11 @@ public abstract class EmailSenderBase : IEmailSender
                 new EmailExceptionEvent
                 {
                     Date = DateTime.Now,
-                    From = mail.From,
-                    To = mail.To,
+                    From = mail.From?.Address,
+                    To = mail.To.Select(x=>x.Address).ToList(),
                     Subject = mail.Subject,
                     Body = mail.Body,
-                    Sender = mail.Sender,
+                    Sender = mail.Sender?.Address,
                     MailFailDescription = ex.Message
                 }, false);
 
