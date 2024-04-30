@@ -121,7 +121,7 @@ public class Book : AuditedAggregateRoot<Guid>
 }
 ````
 
-* ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../../framework/architecture/domain-driven-design) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../../framework/architecture/domain-driven-design/entities.md) for more).
+* ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../../framework/architecture/domain-driven-design) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../../framework/architecture/domain-driven-design/entities.md) for more).
 * The `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../../framework/infrastructure/audit-logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
 * `Guid` is the **primary key type** of the `Book` entity.
 
@@ -246,7 +246,7 @@ This will add a new migration class to the project:
 
 ### Add Sample Seed Data
 
-> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../../framework/infrastructure/data-seeding.md) system of the ABP framework. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP Framework feature.
+> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../../framework/infrastructure/data-seeding.md) system of the ABP. You can skip this section if you don't want to create the data seeding, but it is suggested to follow along and learn this useful ABP feature.
 
 Create a class that implements the `IDataSeedContributor` interface in the `*.Domain` project by copying the following code:
 
@@ -317,7 +317,7 @@ The application layer is separated into two projects:
 * `Acme.BookStore.Application.Contracts` contains your [DTO](../../framework/architecture/domain-driven-design/data-transfer-objects.md)s and [application service](../../framework/architecture/domain-driven-design/application-services.md) interfaces.
 * `Acme.BookStore.Application` contains the implementations of your application services.
 
-In this section, you will create an application service to get, create, update and delete books using the `CrudAppService` base class of the ABP Framework.
+In this section, you will create an application service to get, create, update and delete books using the `CrudAppService` base class of the ABP.
 
 ### BookDto
 
@@ -393,7 +393,7 @@ public class CreateUpdateBookDto
 ````
 
 * This `DTO` class is used to get a book information from the user interface while creating or updating the book.
-* It defines data annotation attributes (like `[Required]`) to define validations for the properties. `DTO`s are [automatically validated](../../framework/fundamentals/validation.md) by the ABP framework.
+* It defines data annotation attributes (like `[Required]`) to define validations for the properties. `DTO`s are [automatically validated](../../framework/fundamentals/validation.md) by the ABP.
 
 As done to the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be as shown below:
 

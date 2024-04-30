@@ -1,6 +1,6 @@
 # Object Extensions
 
-ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](../../modules), especially when you want to [extend entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) and [DTOs](../architecture/modularity/extending/customizing-application-modules-overriding-services.md) defined by the module.
+ABP provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](../../modules), especially when you want to [extend entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) and [DTOs](../architecture/modularity/extending/customizing-application-modules-overriding-services.md) defined by the module.
 
 > Object extension system normally is not needed for your own objects since you can easily add regular properties to your own classes.
 
@@ -329,7 +329,7 @@ This section offers some **good practices** to control your extra properties on 
 
 ### MapExtraPropertiesTo
 
-`MapExtraPropertiesTo` is an extension method provided by the ABP Framework to copy extra properties from an object to another in a controlled manner. Example usage:
+`MapExtraPropertiesTo` is an extension method provided by the ABP to copy extra properties from an object to another in a controlled manner. Example usage:
 
 ````csharp
 identityUser.MapExtraPropertiesTo(identityUserDto);
@@ -377,7 +377,7 @@ Ignored properties are not copied to the target object.
 
 #### AutoMapper Integration
 
-If you're using the [AutoMapper](https://automapper.org/) library, the ABP Framework also provides an extension method to utilize the `MapExtraPropertiesTo` method defined above.
+If you're using the [AutoMapper](https://automapper.org/) library, the ABP also provides an extension method to utilize the `MapExtraPropertiesTo` method defined above.
 
 You can use the `MapExtraProperties()` method inside your mapping profile.
 

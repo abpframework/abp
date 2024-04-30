@@ -109,7 +109,7 @@ In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an a
 
 Test projects are prepared for integration testing;
 
-- It is fully integrated to ABP framework and all services in your application.
+- It is fully integrated to ABP and all services in your application.
 - It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) library.
 - Authorization is disabled, so any application service can be easily used in tests.
 

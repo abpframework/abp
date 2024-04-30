@@ -2,7 +2,7 @@
 
 ABP offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, pre-built application modules, UI themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
-### Why ABP.IO Platform?
+### Why ABP Platform?
 
 Wondering why you should use the ABP Platform instead of creating a new solution from scratch? [Continue reading here](./others/why-abp-platform.md).
 
@@ -24,7 +24,7 @@ ABP can work with any database provider, while the following providers are suppo
 
 ## Exploring the Documentation
 
-ABP has a **comprehensive documentation** that not only explains the ABP Framework, but also includes **guides** and **samples** to help you on creating a **maintainable solution** by introducing and discussing common **software development principle and best practices**.
+ABP has a **comprehensive documentation** that not only explains the ABP, but also includes **guides** and **samples** to help you on creating a **maintainable solution** by introducing and discussing common **software development principle and best practices**.
 
 ### The Framework
 
@@ -33,13 +33,13 @@ ABP has a **comprehensive documentation** that not only explains the ABP Framewo
 ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](./framework/architecture/domain-driven-design) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
 * See the [Modularity](./framework/architecture/modularity/basics.md) document to understand the module system.
-* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP Framework.
+* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP.
 * [Microservice Architecture](./framework/architecture/microservices) document explains how ABP helps to create a microservice solution.
 * [Multi-Tenancy](./framework/architecture/multi-tenancy) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
 #### Infrastructure
 
-There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus), [Background Job System](./framework/infrastructure/background-jobs), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
+There are a lot of features provided by the ABP to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus), [Background Job System](./framework/infrastructure/background-jobs), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
 
 #### Cross Cutting Concerns
 
@@ -47,7 +47,7 @@ ABP also simplifies (and even automates wherever possible) cross cutting concern
 
 ### Tooling
 
-ABP.IO Platform provides tooling to help you in your daily development.
+ABP Platform provides tooling to help you in your daily development.
 
 #### ABP Studio
 
@@ -75,11 +75,11 @@ ABP provides a UI theming system where you can use [pre-built themes](ui-themes)
 
 ## Books
 
-### Mastering ABP Framework
+### Mastering ABP
 
-<img width="302" height="372" src="images/abp-book.png" alt="Mastering ABP Framework - Halil İbrahim Kalkan" />
+<img width="302" height="372" src="images/abp-book.png" alt="Mastering ABP - Halil İbrahim Kalkan" />
 
-*Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
+*Mastering ABP* is an ultimate guide to get started and expertise with the ABP. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP.
 
 **[Click here to see the details and order the book](https://abp.io/books/mastering-abp-framework)**.
 
@@ -87,7 +87,7 @@ ABP provides a UI theming system where you can use [pre-built themes](ui-themes)
 
 <img width="441" height="331" src="images/implementing-domain-driven-design-book.png" alt="Implementing Domain Driven Design">
 
-A **practical guide** for implementing Domain Driven Design (DDD). While the implementation details are **based on the ABP Framework** infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
+A **practical guide** for implementing Domain Driven Design (DDD). While the implementation details are **based on the ABP** infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.
 
 **[Click here to get your free copy](https://abp.io/books/implementing-domain-driven-design?ref=doc).**
 
@@ -97,16 +97,16 @@ See the [sample projects](samples) built with ABP.
 
 ## ABP Community
 
-The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about the ABP Framework.
+The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about the ABP.
 
 ## Blog
 
-Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP.IO Platform.
+Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP Platform.
 
 ## The Source Code
 
-ABP Framework's source code is hosted on GitHub. See [the source code](https://github.com/abpframework).
+ABP's source code is hosted on GitHub. See [the source code](https://github.com/abpframework).
 
 ### Want to Contribute?
 
-ABP Framework is a community-driven open source project. See [the contribution guide](contribution) if you want to be a part of this project.
+ABP is a community-driven open source project. See [the contribution guide](contribution) if you want to be a part of this project.

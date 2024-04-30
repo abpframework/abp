@@ -193,7 +193,7 @@ public class MyModule : AbpModule
 
 ## Default Background Job Manager
 
-ABP framework includes a simple `IBackgroundJobManager` implementation that;
+ABP includes a simple `IBackgroundJobManager` implementation that;
 
 - Works as **FIFO** in a **single thread**.
 - **Retries** job execution until the job **successfully runs** or **timeouts**. Default timeout is 2 days for a job. Logs all exceptions.

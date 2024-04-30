@@ -2,7 +2,7 @@
 
 This document is a guide for upgrading ABP v7.x solutions to ABP v8.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
-> ABP Framework upgraded to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use the ABP 8.0. You can check the [Migrate from ASP.NET Core 7.0 to 8.0](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80) documentation.
+> ABP upgraded to .NET 8.0, so you need to move your solutions to .NET 8.0 if you want to use the ABP 8.0. You can check the [Migrate from ASP.NET Core 7.0 to 8.0](https://learn.microsoft.com/en-us/aspnet/core/migration/70-80) documentation.
 
 ## Upgraded to OpenIddict to 5.0.0
 
@@ -20,7 +20,7 @@ Therefore, you might need to update the `IdentityUserManager`'s constructor if y
 
 ## Updated Method Signatures in the Bundling System
 
-In this version, ABP Framework introduced the CDN support for bundling. During the development, we have made some improvements on the bundling system and changed some method signatures.
+In this version, ABP introduced the CDN support for bundling. During the development, we have made some improvements on the bundling system and changed some method signatures.
 
 See https://github.com/abpframework/abp/issues/17864 for more information.
 
@@ -99,7 +99,7 @@ If you haven't override the comment view component, then you don't need to make 
 
 ## Disabled Logging for `HEAD` HTTP Methods
 
-HTTP GET requests should not make any change in the database normally and audit log system of ABP Framework doesn't save audit log objects for GET requests by default. You can configure the `AbpAuditingOptions` and set the `IsEnabledForGetRequests` to **true** if you want to record _GET_ requests as described in [the documentation](../../framework/infrastructure/audit-logging.md).
+HTTP GET requests should not make any change in the database normally and audit log system of ABP doesn't save audit log objects for GET requests by default. You can configure the `AbpAuditingOptions` and set the `IsEnabledForGetRequests` to **true** if you want to record _GET_ requests as described in [the documentation](../../framework/infrastructure/audit-logging.md).
 
 Prior to this version, only the _GET_ requests were not saved as audit logs. From this version on, also the _HEAD_ requests will not be saved as audit logs, if the `IsEnabledForGetRequests` explicitly set as **true**.
 
@@ -111,7 +111,7 @@ In this version, `AbpAspNetCoreAsyncIntegratedTestBase` class has been set as `O
 
 ## Use NoTracking for Readonly Repositories for EF Core 
 
-In this version, ABP Framework provides read-only [repository](../../framework/architecture/domain-driven-design/repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
+In this version, ABP provides read-only [repository](../../framework/architecture/domain-driven-design/repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
 
 Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository.
 

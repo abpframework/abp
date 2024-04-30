@@ -2,7 +2,7 @@
 
 Page Progress is used to show a progress bar indicator on top of the page and to show to the user that currently a long running process is in the work.
 
-By default you don't need to do anything to show the progress indicator, as all the work is done automatically by the ABP Framework internals. This means that all calls to the ABP backend (through your HTTP API) will activate page progress and show the loading indicator.
+By default you don't need to do anything to show the progress indicator, as all the work is done automatically by the ABP internals. This means that all calls to the ABP backend (through your HTTP API) will activate page progress and show the loading indicator.
 
 This doesn't mean that you don't have the control over it. On the contrary, if you want to show progress for your own processes, it is really easy to do. All you have to do is to use inject and use the `IUiPageProgressService`.
 

@@ -149,7 +149,7 @@ namespace AbpDemo
 }
 ````
 
-That's all. `MyHandler` is **automatically discovered** by the ABP Framework and `HandleEventAsync` is called whenever a `StockCountChangedEvent` occurs. You can inject any service and perform any required logic in your handler class.
+That's all. `MyHandler` is **automatically discovered** by the ABP and `HandleEventAsync` is called whenever a `StockCountChangedEvent` occurs. You can inject any service and perform any required logic in your handler class.
 
 * **One or more handlers** can subscribe to the same event.
 * A single event handler class can **subscribe to multiple events** by implementing the `ILocalEventHandler<TEvent>` interface for each event type.
@@ -191,7 +191,7 @@ When you call `ILocalEventBus.PublishAsync`, the event handlers are not immediat
 
 ## Pre-Built Events
 
-It is very common to **publish events on entity create, update and delete** operations. ABP Framework **automatically** publish these events for all entities. You can just subscribe to the related event.
+It is very common to **publish events on entity create, update and delete** operations. ABP **automatically** publish these events for all entities. You can just subscribe to the related event.
 
 **Example: Subscribe to an event that published when a user was created**
 

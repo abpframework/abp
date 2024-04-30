@@ -8,7 +8,7 @@
 
 ## Introduction
 
-One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices).
+One of the major goals of the ABP is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices).
 
 This sample aims to demonstrate a simple yet complete microservice solution;
 
@@ -284,7 +284,7 @@ Backend admin application uses the Identity and Product microservices for all op
 
 ##### HTTP Clients
 
-ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
 
 For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
 
@@ -1046,7 +1046,7 @@ Product Management is a module that consists of several layers and packages/proj
 * `ProductManagement.Application` contains the implementation of application services.
 * `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
 * `ProductManagement.HttpApi` contains API Controllers.
-* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP framework.
+* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP.
 * `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
 
 By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
@@ -1329,7 +1329,7 @@ public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
 }
 ````
 
-All the integration and communication are done by the ABP framework when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
+All the integration and communication are done by the ABP when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
 
 See the [Event Bus](../framework/infrastructure/event-bus) documentation for more information about the distributed event system.
 

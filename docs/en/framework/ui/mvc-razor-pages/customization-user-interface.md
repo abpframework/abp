@@ -133,7 +133,7 @@ You don't have to inherit from the original page model class (like done in the p
 
 ## Overriding a View Component
 
-The ABP Framework, pre-built themes and modules define some **re-usable view components**. These view components can be replaced just like a page described above.
+The ABP, pre-built themes and modules define some **re-usable view components**. These view components can be replaced just like a page described above.
 
 ### Example
 
@@ -175,7 +175,7 @@ The [Bundling & Minification](bundling-minification.md) system provides an **ext
 
 ### Example: Add a Global CSS File
 
-For example, ABP Framework defines a **global style bundle** which is added to every page (actually, added to the layout by the themes). Let's add a **custom style file** to the end of the bundle files, so we can override any global style.
+For example, ABP defines a **global style bundle** which is added to every page (actually, added to the layout by the themes). Let's add a **custom style file** to the end of the bundle files, so we can override any global style.
 
 First, create a CSS file and locate it in a folder inside the `wwwroot`:
 
@@ -293,7 +293,7 @@ There are some common ways to **customize the layout** described in the next sec
 
 ### Menu Contributors
 
-There are two **standard menus** defined by the ABP Framework:
+There are two **standard menus** defined by the ABP:
 
 ![bookstore-menus-highlighted](../../../images/bookstore-menus-highlighted.png)
 
@@ -458,7 +458,7 @@ You can find the layout files [here](https://github.com/abpframework/abp/blob/de
 
 #### ITheme
 
-ABP Framework uses the `ITheme` service to get the layout location by the layout name. You can replace this service to dynamically select the layout location.
+ABP uses the `ITheme` service to get the layout location by the layout name. You can replace this service to dynamically select the layout location.
 
 #### IThemeManager
 

@@ -2,7 +2,7 @@
 
 [Wikipedia](https://en.wikipedia.org/wiki/Audit_trail): "*An audit trail (also called **audit log**) is a security-relevant chronological record, set of records, and/or destination and source of records that provide documentary evidence of the sequence of activities that have affected at any time a specific operation, procedure, or event*".
 
-ABP Framework provides an **extensible audit logging system** that automates the audit logging by **convention** and provides **configuration** points to control the level of the audit logs.
+ABP provides an **extensible audit logging system** that automates the audit logging by **convention** and provides **configuration** points to control the level of the audit logs.
 
 An **audit log object** (see the Audit Log Object section below) is typically created & saved per web request. It includes;
 
@@ -214,7 +214,7 @@ public class MyUser : Entity<Guid>
 
 ## IAuditingStore
 
-`IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP Framework. If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](../fundamentals/dependency-injection.md).
+`IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP. If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](../fundamentals/dependency-injection.md).
 
 `SimpleLogAuditingStore` is used if no audit store was registered. It simply writes the audit object to the standard [logging system](../fundamentals/logging.md).
 

@@ -39,7 +39,7 @@ Check the **connection string** in the `appsettings.json` file under the {{if Ti
 >
 > The solution is configured to use **Entity Framework Core** with **MS SQL Server** by default. However, if you've selected another DBMS using the `-dbms` parameter on the ABP CLI `new` command (like `-dbms MySQL`), the connection string might be different for you.
 >
-> EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers and you can use any supported DBMS. See [the Entity Framework integration document](Entity-Framework-Core.md) to learn how to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md) if you need later.
+> EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers and you can use any supported DBMS. See [the Entity Framework integration document](../framework/data/entity-framework-core) to learn how to [switch to another DBMS](../framework/data/entity-framework-core/other-dbms.md) if you need later.
 
 ### Database Migrations
 
@@ -63,13 +63,13 @@ For the next time, you can just run it in your IDE as you normally do.
 
 Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
-![set-as-startup-project](images/set-as-startup-project.png)
+![set-as-startup-project](../images/set-as-startup-project.png)
 
  Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown below:
 
- ![db-migrator-output](images/db-migrator-output.png)
+ ![db-migrator-output](../images/db-migrator-output.png)
 
-> Initial [seed data](Data-Seeding.md) creates the `admin` user in the database (with the password is `1q2w3E*`) which is then used to login to the application. So, you need to use `.DbMigrator` at least once for a new database.
+> Initial [seed data](../framework/infrastructure/data-seeding.md) creates the `admin` user in the database (with the password is `1q2w3E*`) which is then used to login to the application. So, you need to use `.DbMigrator` at least once for a new database.
 
 {{ else if DB == "Mongo" }}
 
@@ -89,13 +89,13 @@ The solution comes with a `.DbMigrator` console application which **seeds the in
 
 Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
-![set-as-startup-project](images/set-as-startup-project.png)
+![set-as-startup-project](../images/set-as-startup-project.png)
 
  Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown below:
 
- ![db-migrator-output](images/db-migrator-output.png)
+ ![db-migrator-output](../images/db-migrator-output.png)
 
-> Initial [seed data](Data-Seeding.md) creates the `admin` user in the database (with the password is `1q2w3E*`) which is then used to login to the application. So, you need to use `.DbMigrator` at least once for a new database.
+> Initial [seed data](../framework/infrastructure/data-seeding.md) creates the `admin` user in the database (with the password is `1q2w3E*`) which is then used to login to the application. So, you need to use `.DbMigrator` at least once for a new database.
 
 {{ end }}
 
@@ -103,7 +103,7 @@ Right click to the `.DbMigrator` project and select **Set as StartUp Project**
 
 ### Installing the Client-Side Packages
 
-[ABP CLI](CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -119,7 +119,7 @@ abp install-libs
 
 ### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](CLI.md).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../cli).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
@@ -127,7 +127,7 @@ However, sometimes you might need to run this command manually. To update script
 abp bundle
 ```
 
-> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md).
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md).
 
 {{end}}
 
@@ -172,17 +172,17 @@ You can login, but you cannot enter to the main application here. This is **just
 
 2. Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a **Swagger UI** in your browser.
 
-![swagger-ui](images/swagger-ui.png)
+![swagger-ui](../images/swagger-ui.png)
 
 This is the HTTP API that is used by the web application.
 
 3. Lastly, ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the startup project and run the application which will open a **welcome** page in your browser
 
-![mvc-tiered-app-home](images/bookstore-home-2.png)
+![mvc-tiered-app-home](../images/bookstore-home-2.png)
 
 Click to the **login** button which will redirect you to the *authentication server* to login to the application:
 
-![bookstore-login](images/bookstore-login-2.png)
+![bookstore-login](../images/bookstore-login-2.png)
 
 {{ else # Tiered != "Yes" }}
 
@@ -190,7 +190,7 @@ Ensure that the {{if UI=="MVC"}}`.Web`{{else}}`.Blazor`{{end}} project is the st
 
 > Use Ctrl+F5 in Visual Studio (instead of F5) to run the application without debugging. If you don't have a debug purpose, this will be faster.
 
-![bookstore-login](images/bookstore-login-2.png)
+![bookstore-login](../images/bookstore-login-2.png)
 
 {{ end # Tiered }}
 
@@ -218,7 +218,7 @@ Ensure that the `.HttpApi.Host` project is the startup project and run the appli
 
 {{ end # Tiered }}
 
-![swagger-ui](images/swagger-ui.png)
+![swagger-ui](../images/swagger-ui.png)
 
 You can see the application APIs and test them here. Get [more info](https://swagger.io/tools/swagger-ui/) about the Swagger UI.
 
@@ -244,7 +244,7 @@ Ensure that the `.Blazor` project is the startup project and run the application
 
 Once the application starts, click to the **Login** link on to header, which redirects you to the authentication server to enter a username and password:
 
-![bookstore-login](images/bookstore-login-2.png)
+![bookstore-login](../images/bookstore-login-2.png)
 
 {{ else if UI == "NG" }}
 
@@ -264,7 +264,7 @@ yarn start
 
 It may take a longer time for the first build. Once it finishes, it opens the Angular UI in your default browser with the [localhost:4200](http://localhost:4200/) address.
 
-![bookstore-login](images/bookstore-login-2.png)
+![bookstore-login](../images/bookstore-login-2.png)
 
 {{ end }}
 

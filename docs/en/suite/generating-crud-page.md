@@ -20,7 +20,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
 * **Page title**: Specifies the page title for the current entity. It will be used in the page title as the localization key, so you can localize it for different languages later on.
 
-* **Base class**: There are several base classes that comes out of the box from the ABP Framework. Basically there are 2 main types of entity. `AggregateRoot` and simple `Entity`. And these two have 2 more variants with `Audited` and `FullAudited` derivatives. 
+* **Base class**: There are several base classes that comes out of the box from the ABP. Basically there are 2 main types of entity. `AggregateRoot` and simple `Entity`. And these two have 2 more variants with `Audited` and `FullAudited` derivatives. 
 
   If your entity consists of child entities like an `Order` with its `OrderDetail ` entities, then you should choose [AggregateRoot](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Ddd.Domain/Volo/Abp/Domain/Entities/AggregateRoot.cs) / [AuditedAggregateRoot](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Ddd.Domain/Volo/Abp/Domain/Entities/Auditing/AuditedAggregateRoot.cs) / [FullAuditedAggregateRoot](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Ddd.Domain/Volo/Abp/Domain/Entities/Auditing/FullAuditedAggregateRoot.cs).  
 
@@ -58,7 +58,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
     * `DeletionTime`
 
-      It extends the audited entity features with soft delete functionality. When the data is deleted, it sets the `IsDeleted` field to `true` instead of physically removing it. The ABP Framework automatically filters the soft deleted data on data fetch. Also it saves who and when deleted.
+      It extends the audited entity features with soft delete functionality. When the data is deleted, it sets the `IsDeleted` field to `true` instead of physically removing it. The ABP automatically filters the soft deleted data on data fetch. Also it saves who and when deleted.
 
 * **Primary key type**:  Primary key is a field in a table or collection which uniquely identifies each record.  ABP Suite allows you to create an entity with one of the 4 types: `Int`,`Long`,`Guid` and `String`. ABP Suite recommends `Guid `  because,
 
@@ -67,7 +67,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
   * Better migration and replication! When working with other databases it's easy to migrate data with all its child entities because unique across every table, database and server.
   * Allows easy distribution of databases across multiple servers
   * The performance is not bad as `String` because database systems handle `Guids` nicely.
-  * It's being generated as sequentially by the ABP Framework, so that the physical order of the data in your database will be creation order.
+  * It's being generated as sequentially by the ABP, so that the physical order of the data in your database will be creation order.
   * `Guids` use 16 bytes. When comparing to `Int` as 4 bytes,  additional 12 bytes do come at a cost.
 
   On the other hand `Int` and `Long` types have some other advantages:

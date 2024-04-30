@@ -39,7 +39,7 @@ Please add a sql script to your migration to set the `NormalizedName` property o
 
 > This script is for the SQL Server database. You can change it for your database.
 
-> The table name `SaasTenants` is used for ABP commercial Saas module. `AbpTenants` is for the ABP open-source Tenant Management module. 
+> The table name `SaasTenants` is used for ABP Saas module. `AbpTenants` is for the ABP open-source Tenant Management module. 
 
 ```sql
 UPDATE SaasTenants SET NormalizedName = UPPER(Name) WHERE NormalizedName IS NULL OR NormalizedName = ''

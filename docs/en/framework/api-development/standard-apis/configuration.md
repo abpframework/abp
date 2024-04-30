@@ -1,6 +1,6 @@
 # Application Configuration Endpoint
 
-ABP Framework provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, is the list of some fundamental information at this endpoint:
+ABP provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, is the list of some fundamental information at this endpoint:
 
 * Granted [policies](../../fundamentals/authorization.md) (permissions) for the current user.
 * [Setting](../../fundamentals/settings.md) values for the current user.
@@ -12,7 +12,7 @@ ABP Framework provides a pre-built and standard endpoint that contains some usef
 
 ## HTTP API
 
-If you navigate to the `/api/abp/application-configuration` URL of an ABP Framework based web application or HTTP Service, you can access the configuration as a JSON object. This endpoint is useful to create the client of your application.
+If you navigate to the `/api/abp/application-configuration` URL of an ABP based web application or HTTP Service, you can access the configuration as a JSON object. This endpoint is useful to create the client of your application.
 
 ## Script
 
@@ -58,4 +58,4 @@ namespace Acme.BookStore.Web
 * `IApplicationConfigurationContributor` defines the `ContributeAsync` method to extend the **application-configuration** endpoint with the specified additional data.
 * You can inject services and perform any logic needed to extend the endpoint as you wish.
 
-> Application configuration contributors are automatically discovered by the ABP Framework and executed as a part of the application configuration initialization process.
+> Application configuration contributors are automatically discovered by the ABP and executed as a part of the application configuration initialization process.

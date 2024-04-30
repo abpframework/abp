@@ -38,7 +38,7 @@ abp.dom.onNodeRemoved(function(args){
 
 ## Pre-Build Initializers
 
-ABP Framework is using the DOM events to initialize some kind of HTML elements when they are added to the DOM after than the page was already initialized.
+ABP is using the DOM events to initialize some kind of HTML elements when they are added to the DOM after than the page was already initialized.
 
 > Note that the same initializers also work if these elements were already included in the initial DOM. So, whether they are initially or lazy loaded, they work as expected.
 
@@ -89,7 +89,7 @@ MyCustomClass = function(){
 };
 ````
 
-`initDom` is the function that is called by the ABP Framework. The `$el` argument is the loaded HTML element as a JQuery selection.
+`initDom` is the function that is called by the ABP. The `$el` argument is the loaded HTML element as a JQuery selection.
 
 Finally, you can load the component inside the container after an AJAX call:
 

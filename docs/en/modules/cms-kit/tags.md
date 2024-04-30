@@ -4,7 +4,7 @@ CMS kit provides a **tag** system to tag any kind of resources, like a blog post
 
 ## Enabling the Tag Management Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
 > Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
@@ -23,7 +23,7 @@ Configure<CmsKitTagOptions>(options =>
 });
 ```
 
-> If you're using the [Blogging Feature](./blogging.md), the ABP framework defines an entity type for the blog feature automatically.
+> If you're using the [Blogging Feature](./blogging.md), the ABP defines an entity type for the blog feature automatically.
 
 `CmsKitTagOptions` properties:
 

@@ -210,9 +210,9 @@ public class BlogModule : AbpModule
 
 ### Replace a Service
 
-If you need to replace an existing service (defined by the ABP framework or another module dependency), you have two options;
+If you need to replace an existing service (defined by the ABP or another module dependency), you have two options;
 
-1. Use the `Dependency` attribute of the ABP framework as explained above.
+1. Use the `Dependency` attribute of the ABP as explained above.
 2. Use the `IServiceCollection.Replace` method of the Microsoft Dependency Injection library. Example:
 
 ````csharp
@@ -496,7 +496,7 @@ Since `ICachedServiceProvider` and `ITransientCachedServiceProvider` extends the
 
 Use `ICachedServiceProvider` (instead of `ITransientCachedServiceProvider`) unless you need to create the service cache per usage. `ITransientCachedServiceProvider` guarantees that the created service instances are not shared with any other service, even they are in the same service scope. The services resolved from `ICachedServiceProvider` are shared with other services in the same service scope (in the same HTTP Request, for example), so it can be thought as more optimized.
 
-> ABP Framework also provides the `IAbpLazyServiceProvider` service. It does exists for backward compatibility and works exactly same with the `ITransientCachedServiceProvider` service. So, use the `ITransientCachedServiceProvider` since the `IAbpLazyServiceProvider` might be removed in future ABP versions.
+> ABP also provides the `IAbpLazyServiceProvider` service. It does exists for backward compatibility and works exactly same with the `ITransientCachedServiceProvider` service. So, use the `ITransientCachedServiceProvider` since the `IAbpLazyServiceProvider` might be removed in future ABP versions.
 
 ## Advanced Features
 

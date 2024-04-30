@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ABP Framework has been designed with testability in mind. There are some different levels of automated testing;
+ABP has been designed with testability in mind. There are some different levels of automated testing;
 
 * **Unit Tests**: You typically test a single class (or a very few classes together). These tests will be fast. However, you generally need to deal with mocking for the dependencies of your service(s).
 * **Integration Tests**: You typically test a service, but this time you don't mock the fundamental infrastructure and services to see if they properly working together.

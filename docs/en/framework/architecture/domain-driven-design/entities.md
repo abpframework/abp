@@ -26,7 +26,7 @@ public class Book : Entity<Guid>
 If your entity's Id type is `Guid`, there are some good practices to implement:
 
 * Create a constructor that gets the Id as a parameter and passes to the base class.
-  * If you don't set a GUID Id, **ABP Framework sets it on save**, but it is good to have a valid Id on the entity even before saving it to the database.
+  * If you don't set a GUID Id, **ABP sets it on save**, but it is good to have a valid Id on the entity even before saving it to the database.
 * If you create an entity with a constructor that takes parameters, also create a `private` or `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
 * Don't use the `Guid.NewGuid()` to set the Id! **Use [the `IGuidGenerator` service](../../infrastructure/guid-generation.md)** while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
 
@@ -243,7 +243,7 @@ While this example may not implement all the best practices of an aggregate root
 * `Order.AddProduct` implements the business rule to add a product to an order.
 * All properties have `protected` setters. This is to prevent the entity from arbitrary changes from outside of the entity. For example, it would be dangerous to set `TotalItemCount` without adding a new product to the order. Its value is maintained by the `AddProduct` method.
 
-ABP Framework does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
+ABP does not force you to apply any DDD rule or patterns. However, it tries to make it possible and easier when you do want to apply them. The documentation also follows the same principle.
 
 ### Aggregate Roots with Composite Keys
 
@@ -251,13 +251,13 @@ While it's not common (and not suggested) for aggregate roots, it is in fact pos
 
 ### BasicAggregateRoot Class
 
-`AggregateRoot` class implements the `IHasExtraProperties` and `IHasConcurrencyStamp` interfaces which brings two properties to the derived class. `IHasExtraProperties` makes the entity extensible (see the *Extra Properties* section below) and `IHasConcurrencyStamp` adds a `ConcurrencyStamp` property that is managed by the ABP Framework to implement the [optimistic concurrency](https://docs.microsoft.com/en-us/ef/core/saving/concurrency). In most cases, these are wanted features for aggregate roots.
+`AggregateRoot` class implements the `IHasExtraProperties` and `IHasConcurrencyStamp` interfaces which brings two properties to the derived class. `IHasExtraProperties` makes the entity extensible (see the *Extra Properties* section below) and `IHasConcurrencyStamp` adds a `ConcurrencyStamp` property that is managed by the ABP to implement the [optimistic concurrency](https://docs.microsoft.com/en-us/ef/core/saving/concurrency). In most cases, these are wanted features for aggregate roots.
 
 However, if you don't need these features, you can inherit from the `BasicAggregateRoot<TKey>` (or `BasicAggregateRoot`) for your aggregate root.
 
 ## Base Classes & Interfaces for Audit Properties
 
-There are some properties like `CreationTime`, `CreatorId`, `LastModificationTime`... which are very common in all applications. ABP Framework provides some interfaces and base classes to **standardize** these properties and also **sets their values automatically**.
+There are some properties like `CreationTime`, `CreatorId`, `LastModificationTime`... which are very common in all applications. ABP provides some interfaces and base classes to **standardize** these properties and also **sets their values automatically**.
 
 ### Auditing Interfaces
 
@@ -300,7 +300,7 @@ There are a lot of auditing interfaces, so you can implement the one that you ne
   * `DeletionTime` 
   * `DeleterId`
 
-Once you implement any of the interfaces, or derive from a class defined in the next section, ABP Framework automatically manages these properties wherever possible.
+Once you implement any of the interfaces, or derive from a class defined in the next section, ABP automatically manages these properties wherever possible.
 
 > Implementing `ISoftDelete`, `IDeletionAuditedObject` or `IFullAuditedObject` makes your entity **soft-delete**. See the [data filtering document](../../infrastructure/data-filtering.md) to learn about the soft-delete pattern.
 
@@ -318,7 +318,7 @@ All these base classes also have `...WithUser` pairs, like `FullAuditedAggregate
 
 ## Caching Entities
 
-ABP Framework provides a [Distributed Entity Cache System](../../infrastructure/entity-cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
+ABP provides a [Distributed Entity Cache System](../../infrastructure/entity-cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
 
 It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
 
@@ -418,7 +418,7 @@ So, you can directly use the `ExtraProperties` property to use  the dictionary A
 The way to store this dictionary in the database depends on the database provider you're using.
 
 * For [Entity Framework Core](../../data/entity-framework-core), here are two type of configurations;
-  * By default, it is stored in a single `ExtraProperties` field as a `JSON` string (that means all extra properties stored in a single database table field). Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP Framework using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
+  * By default, it is stored in a single `ExtraProperties` field as a `JSON` string (that means all extra properties stored in a single database table field). Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
   * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](../../../modules) and want to [extend its entities](../modularity/extending/customizing-application-modules-extending-entities.md). See the [EF Core integration document](../../data/entity-framework-core) to learn how to use the `ObjectExtensionManager`.
 * For [MongoDB](../../data/mongodb), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
 

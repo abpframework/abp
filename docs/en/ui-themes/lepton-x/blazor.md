@@ -7,7 +7,7 @@
 }
 ````
 
-LeptonX theme is implemented and ready to use with ABP Commercial. No custom implementation is needed for Blazor Server & WebAssembly.
+LeptonX theme is implemented and ready to use with ABP. No custom implementation is needed for Blazor Server & WebAssembly.
 
 ## Installation
 
@@ -99,7 +99,7 @@ LeptonX theme is implemented and ready to use with ABP Commercial. No custom imp
 ---
 
 ## Source-Code
-You can download the source-code of the LeptonX Theme according to you your ABP Commercial License.
+You can download the source-code of the LeptonX Theme according to you your ABP License.
 
 Visit the [LeptonX Source Code](index#source-code) section to download the source-code.
 

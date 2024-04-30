@@ -1,6 +1,6 @@
 # Distributed Caching
 
-ABP Framework extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
+ABP extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
 
 > **Default implementation of the `IDistributedCache` interface is` MemoryDistributedCache` which works in-memory.** See [ASP.NET Core's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to see how to switch to Redis or another cache provider. Also, see the [Redis Cache](./redis-cache.md) document if you want to use Redis as the distributed cache server.
 
@@ -33,7 +33,7 @@ See [ASP.NET Core's distributed caching document](https://docs.microsoft.com/en-
 
 ### `IDistributedCache<TCacheItem>` Interface
 
-ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object stored in the cache. 
+ABP defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object stored in the cache. 
 
 `IDistributedCache<TCacheItem>` solves the difficulties explained above;
 
@@ -98,7 +98,7 @@ namespace MyProject
 }
 ````
 
-* This sample service uses the `GetOrAddAsync()` method to get a book item from the cache. `GetOrAddAsync` is an additional method that was added by the ABP Framework to the standard ASP.NET Core distributed cache methods.
+* This sample service uses the `GetOrAddAsync()` method to get a book item from the cache. `GetOrAddAsync` is an additional method that was added by the ABP to the standard ASP.NET Core distributed cache methods.
 * If the book was not found in the cache, it calls the factory method (`GetBookFromDatabaseAsync` in this case) to retrieve the book item from the original source.
 * `GetOrAddAsync` optionally gets a `DistributedCacheEntryOptions` which can be used to set the lifetime of the cached item.
 
@@ -234,7 +234,7 @@ Configure<AbpDistributedCacheOptions>(options =>
 
 When you design a cache for your objects, you typically try to get the value from cache first. If not found in the cache, you query the object from the **original source**. It may be located in a **database** or may require to perform an HTTP call to a remote server.
 
-In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP Framework does by default.
+In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP does by default.
 
 ABP's Distributed Cache [handle](./exception-handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
 
@@ -254,7 +254,7 @@ ABP's distributed cache interfaces provide methods to perform batch methods thos
 
 ## Caching Entities
 
-ABP Framework provides a [Distributed Entity Cache System](../infrastructure/entity-cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
+ABP provides a [Distributed Entity Cache System](../infrastructure/entity-cache.md) for caching entities. It is useful if you want to use caching for quicker access to the entity rather than repeatedly querying it from the database.
 
 It's designed as read-only and automatically invalidates a cached entity if the entity is updated or deleted.
 

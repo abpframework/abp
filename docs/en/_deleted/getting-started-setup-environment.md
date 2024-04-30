@@ -34,7 +34,7 @@ The following tools should be installed on your development machine:
 * [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[1](#f-yarn)</sup> or npm v6+ (already installed with Node)
 {{ end }}
 {{ if Tiered == "Yes" }}
-* [Redis](https://redis.io/) (the startup solution uses the Redis as the [distributed cache](Caching.md)).
+* [Redis](https://redis.io/) (the startup solution uses the Redis as the [distributed cache](../framework/fundamentals/caching.md)).
 {{ end }}
 
 {{ if UI != "Blazor" }}
@@ -45,7 +45,7 @@ The following tools should be installed on your development machine:
 
 ### Install the ABP CLI
 
-[ABP CLI](./CLI.md) is a command line interface that is used to automate some common tasks for ABP based solutions. First, you need to install the ABP CLI using the following command:
+[ABP CLI](../cli) is a command line interface that is used to automate some common tasks for ABP based solutions. First, you need to install the ABP CLI using the following command:
 
 ````shell
 dotnet tool install -g Volo.Abp.Cli

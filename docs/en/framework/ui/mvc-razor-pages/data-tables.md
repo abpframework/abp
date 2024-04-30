@@ -1,6 +1,6 @@
 # ASP.NET Core MVC / Razor Pages: Data Tables
 
-A Data Table (aka Data Grid) is a UI component to show tabular data to the users. There are a lot of Data table components/libraries and **you can use any one you like** with the ABP Framework. However, the startup templates come with the [DataTables.Net](https://datatables.net/) library as **pre-installed and configured**. ABP Framework provides adapters for this library and make it easy to use with the API endpoints.
+A Data Table (aka Data Grid) is a UI component to show tabular data to the users. There are a lot of Data table components/libraries and **you can use any one you like** with the ABP. However, the startup templates come with the [DataTables.Net](https://datatables.net/) library as **pre-installed and configured**. ABP provides adapters for this library and make it easy to use with the API endpoints.
 
 An example screenshot from the user management page that shows the user list in a data table:
 
@@ -22,7 +22,7 @@ First, add an `abp-table` as shown below, with an `id`:
 <abp-table striped-rows="true" id="BooksTable"></abp-table>
 ````
 
-> `abp-table` is a [Tag Helper](tag-helpers) defined by the ABP Framework, but a simple `<table...>` tag would also work.
+> `abp-table` is a [Tag Helper](tag-helpers) defined by the ABP, but a simple `<table...>` tag would also work.
 
 Then call the `DataTable` plugin on the table selector:
 
@@ -99,7 +99,7 @@ Here, the all configuration options;
 
 ### AJAX Adapter
 
-DataTables.Net has its own expected data format while getting results of an AJAX call to the server to get the table data. They are especially related how paging and sorting parameters are sent and received. ABP Framework also offers its own conventions for the client-server [AJAX](javascript-api/ajax.md) communication. 
+DataTables.Net has its own expected data format while getting results of an AJAX call to the server to get the table data. They are especially related how paging and sorting parameters are sent and received. ABP also offers its own conventions for the client-server [AJAX](javascript-api/ajax.md) communication. 
 
 The `abp.libs.datatables.createAjax` method (used in the example above) adapts request and response data format and perfectly works with the [Dynamic JavaScript Client Proxy](dynamic-javascript-proxies.md) system.
 
@@ -142,7 +142,7 @@ ajax: abp.libs.datatables.createAjax(
 
 ### Row Actions
 
-`rowAction` is an option defined by the ABP Framework to the column definitions to show a drop down button to take actions for a row in the table.
+`rowAction` is an option defined by the ABP to the column definitions to show a drop down button to take actions for a row in the table.
 
 The example screenshot below shows the actions for each user in the user management table:
 

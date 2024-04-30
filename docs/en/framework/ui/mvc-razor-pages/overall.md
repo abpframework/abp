@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ABP Framework provides a convenient and comfortable way of creating web applications using the ASP.NET Core MVC / Razor Pages as the User Interface framework.
+ABP provides a convenient and comfortable way of creating web applications using the ASP.NET Core MVC / Razor Pages as the User Interface framework.
 
 > ABP doesn't offer a new/custom way of UI development. You can continue to use your current skills to create the UI. However, it offers a lot of features to make your development easier and have a more maintainable code base.
 
@@ -13,17 +13,17 @@ ASP.NET Core provides two models for UI development:
 * **[MVC (Model-View-Controller)](https://docs.microsoft.com/en-us/aspnet/core/mvc/)** is the classic way that exists from the version 1.0. This model can be used to create UI pages/components and HTTP APIs.
 * **[Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/)** was introduced with the ASP.NET Core 2.0 as a new way to create web pages.
 
-**ABP Framework supports both** of the MVC and the Razor Pages models. However, it is suggested to create the **UI pages with Razor Pages** approach and use the **MVC model to build HTTP APIs**. So, all the pre-build modules, samples and the documentation is based on the Razor Pages for the UI development, while you can always apply the MVC pattern to create your own pages.
+**ABP supports both** of the MVC and the Razor Pages models. However, it is suggested to create the **UI pages with Razor Pages** approach and use the **MVC model to build HTTP APIs**. So, all the pre-build modules, samples and the documentation is based on the Razor Pages for the UI development, while you can always apply the MVC pattern to create your own pages.
 
 ### Modularity
 
-[Modularity](../../architecture/modularity/basics.md) is one of the key goals of the ABP Framework. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
+[Modularity](../../architecture/modularity/basics.md) is one of the key goals of the ABP. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
 
 The [application startup template](../../../solution-templates/application-module) comes with some application modules pre-installed. These modules have their own UI pages embedded into their own NuGet packages. You don't see their code in your solution, but they work as expected on runtime.
 
 ## Theme System
 
-ABP Framework provides a complete [Theming](theming.md) system with the following goals:
+ABP provides a complete [Theming](theming.md) system with the following goals:
 
 * Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
@@ -35,10 +35,10 @@ ABP Framework provides a complete [Theming](theming.md) system with the followin
 Currently, three themes are **officially provided**:
 
 * The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
-* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://commercial.abp.io/) license.
 * The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/mvc) and [lite](../../../ui-themes/lepton-x-lite/asp-net-core.md) choices.
 
-There are also some community-driven themes for the ABP Framework (you can search on the web).
+There are also some community-driven themes for the ABP (you can search on the web).
 
 ### Base Libraries
 
@@ -75,7 +75,7 @@ A typical layout consists of multiple parts. The [Theming](theming.md) system pr
 
 ## Features
 
-This section highlights some of the features provided by the ABP Framework for the ASP.NET Core MVC / Razor Pages UI.
+This section highlights some of the features provided by the ABP for the ASP.NET Core MVC / Razor Pages UI.
 
 ### Dynamic JavaScript API Client Proxies
 
@@ -148,7 +148,7 @@ See the [Bundling & Minification](bundling-minification.md) and [Client Side Pac
 
 ### Modals, Alerts, Widgets and More
 
-ABP Framework provides a lot of built-in solutions to common application requirements;
+ABP provides a lot of built-in solutions to common application requirements;
 
 * [Widget System](widgets.md) can be used to create reusable widgets & create dashboards.
 * [Page Alerts](page-alerts.md) makes it easy to show alerts to the user.

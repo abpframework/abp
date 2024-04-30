@@ -175,7 +175,7 @@ namespace AbpDemo
 
 That's all.
 
-* `MyHandler` is **automatically discovered** by the ABP Framework and `HandleEventAsync` is called whenever a `StockCountChangedEto` event occurs.
+* `MyHandler` is **automatically discovered** by the ABP and `HandleEventAsync` is called whenever a `StockCountChangedEto` event occurs.
 * If you are using a distributed message broker, like RabbitMQ, ABP automatically **subscribes to the event on the message broker**, gets the message, executes the handler.
 * It sends **confirmation (ACK)** to the message broker if the event handler was successfully executed (did not throw any exception).
 
@@ -187,7 +187,7 @@ If you perform **database operations** and use the [repositories](../../../archi
 
 ## Monitoring Distributed Events
 
-The ABP Framework allows you to stay informed when your application **receives** or **sends** a distributed event. This capability enables you to track the event flow within your application and take appropriate actions based on the received or sent distributed events.
+The ABP allows you to stay informed when your application **receives** or **sends** a distributed event. This capability enables you to track the event flow within your application and take appropriate actions based on the received or sent distributed events.
 
 ### Received Events
 
@@ -233,7 +233,7 @@ You can seamlessly integrate event-tracking capabilities into your application b
 
 ## Pre-Defined Events
 
-ABP Framework **automatically publishes** distributed events for **create, update and delete** operations for an [entity](../../../architecture/domain-driven-design/entities.md) once you configure it.
+ABP **automatically publishes** distributed events for **create, update and delete** operations for an [entity](../../../architecture/domain-driven-design/entities.md) once you configure it.
 
 ### Event Types
 
@@ -306,7 +306,7 @@ You can add more than one selector. If one of the selectors match for an entity 
 
 ### Event Transfer Object
 
-Once you enable **auto events** for an entity, ABP Framework starts to publish events on the changes on this entity. If you don't specify a corresponding **E**vent **T**ransfer **O**bject (ETO) for the entity, ABP Framework uses a standard type, named `EntityEto`, which has only two properties:
+Once you enable **auto events** for an entity, ABP starts to publish events on the changes on this entity. If you don't specify a corresponding **E**vent **T**ransfer **O**bject (ETO) for the entity, ABP uses a standard type, named `EntityEto`, which has only two properties:
 
 * `EntityType` (`string`): Full name (including namespace) of the entity class.
 * `KeysAsString` (`string`): Primary key(s) of the changed entity. If it has a single key, this property will be the primary key value. For a composite key, it will contain all keys separated by `,` (comma).
@@ -361,7 +361,7 @@ public class ProductEto : EntityEto<Guid>
 
 `ProductEto` can be put in a shared project (DLL) that is referenced by the Catalog and the Ordering microservices. Alternatively, you can put a copy of the `ProductEto` class in the Ordering microservice if you don't want to introduce a common project dependency between the services. In this case, the `EventName` attribute becomes critical to map the `ProductEto` classes across two services (you should use the same event name).
 
-Once you define an ETO class, you should configure the ABP Framework to publish auto (create, update and delete) events for the `Product` entity, as explained in the previous section:
+Once you define an ETO class, you should configure the ABP to publish auto (create, update and delete) events for the `Product` entity, as explained in the previous section:
 
 ````csharp
 Configure<AbpDistributedEntityEventOptions>(options =>

@@ -1,6 +1,6 @@
 # TODO Application Tutorial
 
-**Welcome to the ABP Framework**. This is a single-part, quick-start tutorial to build a simple application. Start with this tutorial if you want to quickly understand how ABP Framework works.
+**Welcome to the ABP**. This is a single-part, quick-start tutorial to build a simple application. Start with this tutorial if you want to quickly understand how ABP works.
 
 ## Select the Solution Architecture
 

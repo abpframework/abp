@@ -81,7 +81,7 @@ Next section describes the packages in more details.
   * **Do** create a Controller for each application service (generally by implementing their interfaces). These controllers uses the application service interfaces to delegate the actions. It just configures routes, HTTP methods and other web related stuffs if needed.
 * **Do** create an **HTTP API Client** package, named as *CompanyName.ModuleName.HttpApi.Client*, to provide client services for the HTTP API package. Those client services implement application interfaces as clients to a remote endpoint.
   * HTTP API Client package only depends on the **Application.Contracts** package.
-  * **Do** use dynamic HTTP C# client proxy feature of the ABP framework.
+  * **Do** use dynamic HTTP C# client proxy feature of the ABP.
 
 #### Web Layer
 

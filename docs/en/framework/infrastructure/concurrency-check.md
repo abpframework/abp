@@ -26,8 +26,8 @@ public interface IHasConcurrencyStamp
 ```
 
 * It is the base interface for **concurrency control** and only has a simple property named `ConcurrencyStamp`. 
-* While a new record is **creating**, if the entity implements the `IHasConcurrencyStamp` interface, ABP Framework automatically sets a unique value to the **ConcurrencyStamp** property.
-* While a record is **updating**, ABP Framework compares the **ConcurrencyStamp** property of the entity with the provided **ConcurrencyStamp** value by the user and if the values match, it automatically updates the **ConcurrencyStamp** property with the new unique value. If there is a mismatch, `AbpDbConcurrencyException` is thrown.
+* While a new record is **creating**, if the entity implements the `IHasConcurrencyStamp` interface, ABP automatically sets a unique value to the **ConcurrencyStamp** property.
+* While a record is **updating**, ABP compares the **ConcurrencyStamp** property of the entity with the provided **ConcurrencyStamp** value by the user and if the values match, it automatically updates the **ConcurrencyStamp** property with the new unique value. If there is a mismatch, `AbpDbConcurrencyException` is thrown.
 
 > If there is a unit of work, you need to call the [SaveChangesAsync](../architecture/domain-driven-design/unit-of-work.md#savechangesasync) method to get the generated `ConcurrencyStamp` when creating or updating.
 
@@ -142,8 +142,8 @@ public class BookAppService : ApplicationService, IBookAppService
 }
 ```
 
-After that, when multiple users try to update the same record at the same time, the concurrency stamp mismatch occurs and `AbpDbConcurrencyException` is thrown. You can either handle the exception manually or let the ABP Framework handle it for you. 
+After that, when multiple users try to update the same record at the same time, the concurrency stamp mismatch occurs and `AbpDbConcurrencyException` is thrown. You can either handle the exception manually or let the ABP handle it for you. 
 
-ABP Framework shows a user-friendly error message as in the image below, if you don't handle the exception manually.
+ABP shows a user-friendly error message as in the image below, if you don't handle the exception manually.
 
 ![Optimistic Concurrency](../../images/optimistic-concurrency.png)

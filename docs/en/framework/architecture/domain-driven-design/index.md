@@ -2,7 +2,7 @@
 
 ## What is DDD?
 
-ABP framework provides an **infrastructure** to make **Domain Driven Design** based development easier to implement. DDD is [defined in the Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design) as below:
+ABP provides an **infrastructure** to make **Domain Driven Design** based development easier to implement. DDD is [defined in the Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design) as below:
 
 > **Domain-driven design** (**DDD**) is an approach to software development for complex needs by connecting the implementation to an evolving model. The premise of domain-driven design is the following:
 >
@@ -19,7 +19,7 @@ ABP follows DDD principles and patterns to achieve a layered application model w
 - **Domain Layer**: Includes business objects and the core (domain) business rules. This is the heart of the application.
 - **Infrastructure Layer**: Provides generic technical capabilities that support higher layers mostly using 3rd-party libraries.
 
-DDD mostly interest in the **Domain** and the **Application** layers, rather than the Infrastructure and the Presentation layers. The following documents explains the **infrastructure** provided by the ABP Framework to implement **Building Blocks** of the DDD:
+DDD mostly interest in the **Domain** and the **Application** layers, rather than the Infrastructure and the Presentation layers. The following documents explains the **infrastructure** provided by the ABP to implement **Building Blocks** of the DDD:
 
 * **Domain Layer**
   * [Entities & Aggregate Roots](./entities.md)

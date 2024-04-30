@@ -68,7 +68,7 @@ Although working, this had a few disadvantages:
 
 - Every module came in two independent packages, but in reality, those packages were interdependent.
 - Configuring lazy loaded modules required a wrapper module.
-- ABP Commercial had extensibility system and configuring extensible modules at the root module was increasing the bundle size.
+- ABP had extensibility system and configuring extensible modules at the root module was increasing the bundle size.
 
 In ABP v3.0, we have introduced a secondary entry points for each config module as well as a new way to configure lazy loaded modules without the wrappers. Now, the module configuration looks like this:
 

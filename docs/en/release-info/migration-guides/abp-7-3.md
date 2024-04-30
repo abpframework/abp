@@ -17,7 +17,7 @@ Please check [this PR](https://github.com/abpframework/abp/pull/16537) if you en
 
 ## Nonce attribute support for Content Security Policy (CSP)
 
-ABP Framework supports adding unique value to nonce attribute for script tags which can be used by Content Security Policy to determine whether or not a given fetch will be allowed to proceed for a given element. In other words, it provides a mechanism to execute only correct script tags with the correct nonce value. 
+ABP supports adding unique value to nonce attribute for script tags which can be used by Content Security Policy to determine whether or not a given fetch will be allowed to proceed for a given element. In other words, it provides a mechanism to execute only correct script tags with the correct nonce value. 
 
 > See the [Security Headers](../../framework/ui/mvc-razor-pages/security-headers.md) documentation for more information.
 
@@ -28,4 +28,4 @@ For example, `<script @string.Empty></script>` will no longer work. However, you
 > Note: You should not use any C# code used inside the script tag, even if you don't use this feature. Because it might cause errors.
 
 ## Angular UI
-We would like  to inform you that ABP Framework version 7.3 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)
+We would like  to inform you that ABP version 7.3 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)

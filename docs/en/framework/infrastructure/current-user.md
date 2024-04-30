@@ -86,7 +86,7 @@ Beside these standard methods, there are some extension methods:
 
 ## ICurrentPrincipalAccessor
 
-`ICurrentPrincipalAccessor` is the service that should be used (by the ABP Framework and your application code) whenever the current principal of the current user is needed.
+`ICurrentPrincipalAccessor` is the service that should be used (by the ABP and your application code) whenever the current principal of the current user is needed.
 
 For a web application, it gets the `User` property of the current `HttpContext`. For a non-web application, it returns the `Thread.CurrentPrincipal`.
 
@@ -158,10 +158,10 @@ This can be a way to simulate a user login for a scope of the application code, 
 
 ## AbpClaimTypes
 
-`AbpClaimTypes` is a static class that defines the names of the standard claims and used by the ABP Framework.
+`AbpClaimTypes` is a static class that defines the names of the standard claims and used by the ABP.
 
 * Default values for the `UserName`, `UserId`, `Role` and `Email` properties are set from the [System.Security.Claims.ClaimTypes](https://docs.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) class, but you can change them.
-* Other properties, like `EmailVerified`, `PhoneNumber`, `TenantId`... are defined by the ABP Framework by following the standard names wherever possible.
+* Other properties, like `EmailVerified`, `PhoneNumber`, `TenantId`... are defined by the ABP by following the standard names wherever possible.
 
 It is suggested to use properties of this class instead of magic strings for claim names.
 

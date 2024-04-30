@@ -1,8 +1,8 @@
-# ABP Framework 3.3 to 4.0 Migration Guide
+# ABP 3.3 to 4.0 Migration Guide
 
-This document introduces the breaking changes done in the ABP Framework 4.0 and explains how to fix your 3.x based solutions while upgrading to the ABP Framework 4.0.
+This document introduces the breaking changes done in the ABP 4.0 and explains how to fix your 3.x based solutions while upgrading to the ABP 4.0.
 
-> See [the blog post](https://blog.abp.io/abp/ABP.IO-Platform-v4.0-RC-Has-Been-Released-based-on-.NET-5.0) to learn what's new with the ABP Framework 4.0. This document only focuses on the breaking changes.
+> See [the blog post](https://blog.abp.io/abp/ABP.IO-Platform-v4.0-RC-Has-Been-Released-based-on-.NET-5.0) to learn what's new with the ABP 4.0. This document only focuses on the breaking changes.
 
 ## Overall
 
@@ -22,13 +22,13 @@ Here, the overall list of the changes;
 
 ## Upgraded to .NET 5.0
 
-ABP Framework has been moved to .NET 5.0. So, if you want to upgrade to the ABP Framework 4.0, you also need to upgrade to .NET 5.0.
+ABP has been moved to .NET 5.0. So, if you want to upgrade to the ABP 4.0, you also need to upgrade to .NET 5.0.
 
 See the [Migrate from ASP.NET Core 3.1 to 5.0](https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50) document to learn how to upgrade your solution to .NET 5.0.
 
 ## Moved to System.Text.Json
 
-ABP Framework 4.0 uses the System.Text.Json by default as the JSON serialization library. It, actually, using a hybrid approach: Continues to use the Newtonsoft.Json when it needs to use features not supported by the System.Text.Json.
+ABP 4.0 uses the System.Text.Json by default as the JSON serialization library. It, actually, using a hybrid approach: Continues to use the Newtonsoft.Json when it needs to use features not supported by the System.Text.Json.
 
 ### Unsupported Types
 
@@ -56,7 +56,7 @@ PreConfigure<AbpJsonOptions>(options =>
 
 ## Upgraded to Identity Server 4.1.1
 
-ABP Framework upgrades the [IdentityServer4](https://www.nuget.org/packages/IdentityServer4) library from 3.x to 4.1.1 with the ABP Framework version 4.0. IdentityServer 4.x has a lot of changes. Some of them are **breaking changes in the data structure**.
+ABP upgrades the [IdentityServer4](https://www.nuget.org/packages/IdentityServer4) library from 3.x to 4.1.1 with the ABP version 4.0. IdentityServer 4.x has a lot of changes. Some of them are **breaking changes in the data structure**.
 
 ### Entity Changes
 
@@ -136,7 +136,7 @@ app.Use((httpContext, next) =>
 
 ## Auto API Controller Route Changes
 
-The route calculation for the [Auto API Controllers](../../framework/api-development/auto-controllers.md) is changing with the ABP Framework version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
+The route calculation for the [Auto API Controllers](../../framework/api-development/auto-controllers.md) is changing with the ABP version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
 
 **A typical auto API before v4.0**
 
@@ -211,7 +211,7 @@ If you create a new solution, you can find the same configuration in the `.HttpA
 
 Removed setters from the `IHasCreationTime.CreationTime`, ` IMustHaveCreator.CreatorId` and `IMayHaveCreator.CreatorId` properties to accidently set the creation properties while updating an existing entity.
 
-Since the ABP Framework automatically sets these properties, you normally don't need to directly set them. If you want to set them, as a best practice, it is suggested to make it in the constructor to not provide a way to change it later.
+Since the ABP automatically sets these properties, you normally don't need to directly set them. If you want to set them, as a best practice, it is suggested to make it in the constructor to not provide a way to change it later.
 
 These properties implemented with `protected set` in the `Entity` and `AggregateRoot` base classes. That means you can still set in a derived class, if you need it. Alternatively, you can use reflection to set them (Or use `ObjectHelper.TrySetProperty` which internally uses reflection) out of the class if you have to do.
 

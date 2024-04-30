@@ -46,7 +46,7 @@ The following modules are pre-installed and configured for the solution:
 * **[Identity](../../modules/identity.md)** to manage roles and users
 * **[OpenIddict](https://docs.abp.io/en/abp/latest/Modules/OpenIddict)** (the core part) to implement the OAuth authentication flows
 
-In addition these, [Feature Management](https://docs.abp.io/en/abp/latest/Modules/Feature-Management), [Permission Management](https://docs.abp.io/en/abp/latest/Modules/Permission-Management) and [Setting Management](https://docs.abp.io/en/abp/latest/Modules/Setting-Management) modules are pre-installed as they are the fundamental feature modules of the ABP Framework.
+In addition these, [Feature Management](https://docs.abp.io/en/abp/latest/Modules/Feature-Management), [Permission Management](https://docs.abp.io/en/abp/latest/Modules/Permission-Management) and [Setting Management](https://docs.abp.io/en/abp/latest/Modules/Setting-Management) modules are pre-installed as they are the fundamental feature modules of the ABP.
 
 ## Optional Modules
 

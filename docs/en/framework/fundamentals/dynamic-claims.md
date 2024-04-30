@@ -67,7 +67,7 @@ There are three pre-built implementations of `IAbpDynamicClaimsPrincipalContribu
 
 ### IAbpDynamicClaimsPrincipalContributor
 
-If you want to add your own dynamic claims contributor, you can create a class that implement the `IAbpDynamicClaimsPrincipalContributor` interface (and register it to the [dependency injection](./dependency-injection.md) system. ABP Framework will call the `ContributeAsync` method to get the claims. It better to use a kind of cache to improve the performance since that is a frequently executed method (in every HTTP request).
+If you want to add your own dynamic claims contributor, you can create a class that implement the `IAbpDynamicClaimsPrincipalContributor` interface (and register it to the [dependency injection](./dependency-injection.md) system. ABP will call the `ContributeAsync` method to get the claims. It better to use a kind of cache to improve the performance since that is a frequently executed method (in every HTTP request).
 
 ## AbpClaimsPrincipalFactoryOptions
 

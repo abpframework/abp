@@ -25,7 +25,7 @@ The top menu is the main menu bar in ABP Studio. It offers access to various fun
 
 ### ABP Suite
 
-[ABP Suite](https://commercial.abp.io/tools/suite) is a complementary tool to the ABP Commercial Platform, designed to enable the rapid construction of web pages in just a few minutes. With the ABP Suite button in the Top Menu, you can access the Suite from the browser embedded in ABP Studio.
+[ABP Suite](https://commercial.abp.io/tools/suite) is a complementary tool to the ABP Platform, designed to enable the rapid construction of web pages in just a few minutes. With the ABP Suite button in the Top Menu, you can access the Suite from the browser embedded in ABP Studio.
 
 ### Tools Menu
 

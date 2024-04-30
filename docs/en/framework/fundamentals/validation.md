@@ -35,7 +35,7 @@ public class CreateBookDto
 }
 ````
 
-When you use this class as a parameter to an [application service](../architecture/domain-driven-design/application-services.md) or a controller, it is automatically validated and a localized validation exception is thrown ([and handled](../fundamentals/exception-handling.md) by the ABP framework).
+When you use this class as a parameter to an [application service](../architecture/domain-driven-design/application-services.md) or a controller, it is automatically validated and a localized validation exception is thrown ([and handled](../fundamentals/exception-handling.md) by the ABP).
 
 ### IValidatableObject
 
@@ -87,11 +87,11 @@ var myService = validationContext.GetRequiredService<IMyService>();
 
 ## Validation Infrastructure
 
-This section explains a few additional services provided by the ABP framework.
+This section explains a few additional services provided by the ABP.
 
 ### IValidationEnabled Interface
 
-`IValidationEnabled` is an empty marker interface that can be implemented by any class (registered to and resolved from the [DI](./dependency-injection.md)) to let the ABP framework perform the validation system for the methods of the class. Example:
+`IValidationEnabled` is an empty marker interface that can be implemented by any class (registered to and resolved from the [DI](./dependency-injection.md)) to let the ABP perform the validation system for the methods of the class. Example:
 
 ````csharp
 using System.Threading.Tasks;
@@ -110,7 +110,7 @@ namespace Acme.BookStore
 }
 ````
 
-> ABP framework uses the [dynamic proxying / interception](../../dynamic-proxying-interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
+> ABP uses the [dynamic proxying / interception](../../dynamic-proxying-interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
 
 #### Enabling/Disabling Validation
 
@@ -141,7 +141,7 @@ Once ABP determines a validation error, it throws an exception of type `AbpValid
 
 * `ValidationErrors` property of the `AbpValidationException` contains the validation error list.
 * Log level of the `AbpValidationException` is set to `Warning`. It logs all the validation errors to the [logging system](../fundamentals/logging.md).
-* `AbpValidationException` is automatically caught by the ABP framework and converted to a usable error into with HTTP 400 status code. See the [exception handling](./exception-handling.md) document for more.
+* `AbpValidationException` is automatically caught by the ABP and converted to a usable error into with HTTP 400 status code. See the [exception handling](./exception-handling.md) document for more.
 
 ## Advanced Topics
 

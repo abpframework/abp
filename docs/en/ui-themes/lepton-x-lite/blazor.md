@@ -7,9 +7,9 @@
 }
 ````
 
-LeptonX Lite has implementation for the ABP Framework Blazor WebAssembly & Blazor Server. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
+LeptonX Lite has implementation for the ABP Blazor WebAssembly & Blazor Server. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
 
->   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
+>   If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP](https://commercial.abp.io/).
 
 > See the [Theming document](../../framework/ui/mvc-razor-pages/theming.md) to learn about themes.
 

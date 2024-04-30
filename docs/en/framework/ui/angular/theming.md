@@ -2,14 +2,14 @@
 
 ## Introduction
 
-ABP Framework provides a complete **UI Theming** system with the following goals:
+ABP provides a complete **UI Theming** system with the following goals:
 
 * Reusable [application modules](../../../modules/index.md) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
 * The theme is distributed via an NPM package, so it is **easily upgradable**.
 * The final application can **customize** the selected theme.
 
-In order to accomplish these goals, ABP Framework;
+In order to accomplish these goals, ABP;
 
 * Determines a set of **base libraries** used and adapted by all the themes. So, module and application developers can depend on and use these libraries without depending on a particular theme.
 * Provides a system that consists of layout parts (like navigation menus and toolbars) that is implemented by all the themes. So, the modules and the application contribute to the layout to compose a consistent application UI.
@@ -19,7 +19,7 @@ In order to accomplish these goals, ABP Framework;
 Currently, three themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
-* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://commercial.abp.io/) license.
 * The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular) and [lite](../../../ui-themes/lepton-x-lite/angular.md) choices.
 
 ## Overall
@@ -85,9 +85,9 @@ A typical layout consists of several parts. The theme should include the necessa
 
 ![basic-theme-application-layout-parts](images/basic-theme-application-layout-parts.png)
 
-The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a nav item, to change the application name in the logo area...) they should use the ABP Framework APIs.
+The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a nav item, to change the application name in the logo area...) they should use the ABP APIs.
 
-The following sections explain the fundamental parts pre-defined by the ABP Framework and can be implemented by the themes.
+The following sections explain the fundamental parts pre-defined by the ABP and can be implemented by the themes.
 
 > It is a good practice to split the layout into components/partials, so the final application can override them partially for customization purpose.
 

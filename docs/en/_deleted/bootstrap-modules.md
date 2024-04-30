@@ -1,6 +1,6 @@
 # Bootstrap Modules
 
-ABP framework can be bootstrapped in various applications. like ASP NET Core or Console, WPF, etc.
+ABP can be bootstrapped in various applications. like ASP NET Core or Console, WPF, etc.
 
 Modules can be started sync or async, Corresponds to various event methods in the module. We recommend using **async**, Especially if you want to make async calls in the module's methods.
 

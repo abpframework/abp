@@ -201,7 +201,7 @@ Use `IHtmlLocalizer<T>` in razor views/pages;
 
 ### Special Base Classes
 
-Some ABP Framework base classes provide a `L` property to use the localizer even easier.
+Some ABP base classes provide a `L` property to use the localizer even easier.
 
 **Example: Localize a text in an application service method**
 

@@ -1,6 +1,6 @@
 # ABP Penetration Test Report
 
-The ABP Commercial MVC `v8.0.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
+The ABP MVC `v8.0.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
 
 Many of these alerts are **false-positive**, meaning the vulnerability scanner detected these issues, but they are not exploitable. It's clearly explained for each false-positive alert why this alert is a false-positive. 
 
@@ -27,7 +27,7 @@ The Path Traversal attack technique allows an attacker access to files, director
 
 **Solution**:
 
-This is a **false-positive** alert since ABP Framework does all related checks for this kind of attack on the backend side for these endpoints.
+This is a **false-positive** alert since ABP does all related checks for this kind of attack on the backend side for these endpoints.
 
 ### SQL Injection [Risk: High] - False Positive
 
@@ -55,7 +55,7 @@ authentication mechanism to be bypassed.
 
 **Solution**:
 
-This alert indicates that we must not trust client side input (even if there is client side validation in place) and check all data on the server side. ABP Framework already does that and makes server-side validations while authenticating a user. Therefore this is a **false-positive** alert.
+This alert indicates that we must not trust client side input (even if there is client side validation in place) and check all data on the server side. ABP already does that and makes server-side validations while authenticating a user. Therefore this is a **false-positive** alert.
 
 ### Absence of Anti-CSRF Tokens [Risk: Medium] — False Positive
 
@@ -123,7 +123,7 @@ Web browser data loading may be possible, due to a Cross Origin Resource Sharing
 
 **Explanation**: 
 
-This is a **false-positive** alert. ABP Framework Startup Templates come with pre-configured CORS options.
+This is a **false-positive** alert. ABP Startup Templates come with pre-configured CORS options.
 
 ### Format String Error [Risk: Medium] - False Positive
 
@@ -245,7 +245,7 @@ The reported page contains an error/warning message that may disclose sensitive 
 
 **Explanation:** 
 
-This vulnerability was reported as a **positive** alert because the application ran in `Development` mode. ABP Framework throws exceptions for developers in the `Development` environment. We set the environment to `Production` and re-run the test, then the server sent a *500-Internal Error* without the error disclosed. Therefore this alert is **false-positive**. Further information can be found in the following issue:  https://github.com/abpframework/abp/issues/14177.
+This vulnerability was reported as a **positive** alert because the application ran in `Development` mode. ABP throws exceptions for developers in the `Development` environment. We set the environment to `Production` and re-run the test, then the server sent a *500-Internal Error* without the error disclosed. Therefore this alert is **false-positive**. Further information can be found in the following issue:  https://github.com/abpframework/abp/issues/14177.
 
 ### Cookie No `HttpOnly` Flag [Risk: Low] — Positive (No need for a fix)
 

@@ -1,6 +1,6 @@
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Message API
 
-Message API is used to show nice looking messages to the user as a blocking dialog. Message API is an abstraction provided by the ABP Framework and implemented using the [SweetAlert](https://sweetalert.js.org/) library by default.
+Message API is used to show nice looking messages to the user as a blocking dialog. Message API is an abstraction provided by the ABP and implemented using the [SweetAlert](https://sweetalert.js.org/) library by default.
 
 ## Quick Example
 

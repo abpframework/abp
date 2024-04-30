@@ -1,6 +1,6 @@
 # LeptonX Theme Module
 
-The LeptonX Theme is a professional theme for the ABP Commercial. 
+The LeptonX Theme is a professional theme for the ABP. 
 
 * Check out the website of LeptonX on https://leptontheme.com/.
 * Check out the live demo to see it in action. https://x.leptontheme.com/.
@@ -94,7 +94,7 @@ abp get-source Volo.Abp.LeptonXTheme.Pro --preview
 
 > You can download the source code of a certain version by using the `--version` parameter. See the [ABP CLI documentation](../../cli/index#get-source) for other possible options.
 
-ABP Commercial customers can also download the source code of the [https://x.leptontheme.com/](https://x.leptontheme.com/) from [https://abp.io/api/download/samples/leptonx-demo](https://abp.io/api/download/samples/leptonx-demo).
+ABP customers can also download the source code of the [https://x.leptontheme.com/](https://x.leptontheme.com/) from [https://abp.io/api/download/samples/leptonx-demo](https://abp.io/api/download/samples/leptonx-demo).
 
 In order to understand structure of LeptonX's source code and build it from its source code, you can check [LeptonX source code documentation](source-files.md).
 

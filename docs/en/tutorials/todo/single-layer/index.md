@@ -8,7 +8,7 @@
 }
 ````
 
-This is a single-part quick-start tutorial to build a simple todo application with the ABP Framework. Here's a screenshot from the final application:
+This is a single-part quick-start tutorial to build a simple todo application with the ABP. Here's a screenshot from the final application:
 
 ![todo-list](../images/todo-list.png)
 
@@ -59,7 +59,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Creating a New Solution
 
-In this tutorial, we will use the [ABP CLI](../../../cli) to create the sample application with the ABP Framework. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
+In this tutorial, we will use the [ABP CLI](../../../cli) to create the sample application with the ABP. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -354,7 +354,7 @@ public class TodoAppService : TodoAppAppService{{if UI=="Blazor"}}, ITodoAppServ
 }
 ```
 
-This class inherits from the `TodoAppAppService`, which inherits from the `ApplicationService` class of the ABP Framework and implements our use-cases. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
+This class inherits from the `TodoAppAppService`, which inherits from the `ApplicationService` class of the ABP and implements our use-cases. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/repositories.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement our use cases.
 
 #### Getting the Todo Items
 
@@ -576,11 +576,11 @@ Now, you can run the application again and see the result.
 
 ### Dynamic JavaScript Proxies & Auto API Controllers
 
-In the `Index.cshtml.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+In the `Index.cshtml.js` file, we've used the `todoApp.services.todo.delete(...)` and `todoApp.services.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP, thanks to the [Dynamic JavaScript Client Proxy](../../../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
 > `services` keyword comes from the namespace (`namespace TodoApp.Services;`). It's a naming convention.
 
-However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP Framework. It automatically converts the application services to **API Controllers** by convention.
+However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP. It automatically converts the application services to **API Controllers** by convention.
 
 If you open [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
@@ -864,7 +864,7 @@ Now, you can run the application again to see the result.
 
 ## Conclusion 
 
-In this tutorial, we've built a very simple application to warm up with the ABP Framework.
+In this tutorial, we've built a very simple application to warm up with the ABP.
 
 ## Source Code
 

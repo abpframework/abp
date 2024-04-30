@@ -131,7 +131,7 @@ Open the `en.json` (*the English translations*) file and change the content as s
   "Texts": {
     "Menu:Home": "Home",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP. For more information, visit abp.io.",
     "Menu:BookStore": "Book Store",
     "Menu:Books": "Books",
     "Actions": "Actions",
@@ -261,7 +261,7 @@ Change the `Pages/Books/Index.cshtml` as the following:
 ````
 
 * `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to the standard `script` tag. It handles **minification** and **versioning**. Check the [bundling & minification document](../../framework/ui/mvc-razor-pages/bundling-minification.md) for details.
-* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../../framework/ui/mvc-razor-pages/tag-helpers) document.
+* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP to easily use most of  [bootstrap](https://getbootstrap.com/)'s components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by the help of the IntelliSense and compiles time type checking. For further information, check the [tag helpers](../../framework/ui/mvc-razor-pages/tag-helpers) document.
 
 #### Index.js
 
@@ -327,7 +327,7 @@ $(function () {
 ````
 
 * `abp.localization.getResource` gets a function that is used to localize text using the same JSON file defined on the server side. In this way, you can share the localization values with the client side.
-* `abp.libs.datatables.normalizeConfiguration` is a helper function defined by the ABP Framework. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional default values for missing options.
+* `abp.libs.datatables.normalizeConfiguration` is a helper function defined by the ABP. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional default values for missing options.
 * `abp.libs.datatables.createAjax` is another helper function to adapt the ABP's dynamic JavaScript API proxies to the [Datatable](https://datatables.net/)'s expected parameter format
 * `acme.bookStore.books.book.getList` is the dynamic JavaScript proxy function introduced before.
 * [luxon](https://moment.github.io/luxon/) library is also a standard library that is pre-configured in the solution, so you can use to perform date/time operations easily.
@@ -346,7 +346,7 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## Install NPM packages
 
-> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../../framework/ui/angular/migration-guide-v3.md) if you are upgrading an existing project with v2.x.
+> Notice: This tutorial is based on the ABP v3.1.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../../framework/ui/angular/migration-guide-v3.md) if you are upgrading an existing project with v2.x.
 
 If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run the `yarn` command to install the NPM packages:
 
@@ -450,7 +450,7 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
-`RoutesService` is a service provided by the ABP Framework to configure the main menu and the routes.
+`RoutesService` is a service provided by the ABP to configure the main menu and the routes.
 
 * `path` is the URL of the route.
 * `name` is the localized menu item name (check the [localization document](../../framework/ui/angular/localization.md) for details).
@@ -509,7 +509,7 @@ export class BookComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We are using the [ListService](../../framework/ui/angular/list-service.md), a utility service from the ABP Framework which provides easy pagination, sorting and searching.
+* We are using the [ListService](../../framework/ui/angular/list-service.md), a utility service from the ABP which provides easy pagination, sorting and searching.
 
 Open the `/src/app/book/book.component.html` and replace the content as shown below:
 
@@ -602,7 +602,7 @@ When you click on the Books menu item under the Book Store parent, you will be r
 
 We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including Bootstrap.
 
-ABP Framework provides a generic base class - `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible with the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
+ABP provides a generic base class - `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible with the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
 
 Open the `Books.razor` and replace the content as the following:
 
@@ -671,7 +671,7 @@ While the code above is pretty easy to understand, you can check the Blazorise [
 
 #### About the AbpCrudPageBase
 
-We will continue benefitting from  `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../../framework/api-development/dynamic-csharp-clients.md) system of the ABP Framework). We will do it manually for the authors page to demonstrate how to call the server side HTTP APIs in your Blazor applications.
+We will continue benefitting from  `AbpCrudPageBase` for the books page. You could just inject the `IBookAppService` and perform all the server side calls yourself (thanks to the [Dynamic C# HTTP API Client Proxy](../../framework/api-development/dynamic-csharp-clients.md) system of the ABP). We will do it manually for the authors page to demonstrate how to call the server side HTTP APIs in your Blazor applications.
 
 ## Run the Final Application
 

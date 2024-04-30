@@ -2,14 +2,14 @@
 
 ## Introduction
 
-ABP Framework provides a complete **UI Theming** system with the following goals:
+ABP provides a complete **UI Theming** system with the following goals:
 
 * Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
 * The theme is distributed via NuGet/NPM packages, so it is **easily upgradable**.
 * The final application can **customize** the selected theme.
 
-In order to accomplish these goals, ABP Framework;
+In order to accomplish these goals, ABP;
 
 * Determines a set of **base libraries** used and adapted by all the themes. So, module and application developers can depend on and use these libraries without depending on a particular theme.
 * Provides a system that consists of [navigation menus](navigation-menu.md), [toolbars](toolbars.md), [layout hooks](layout-hooks.md)... that is implemented by all the themes. So, the modules and the application to contribute to the layout to compose a consistent application UI.
@@ -20,10 +20,10 @@ Currently, four themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [LeptonX Lite Theme](../../../ui-themes/lepton-x-lite/asp-net-core.md) is modern and stylish Bootstrap UI theme. It is ideal if you want to have a production ready UI theme. It is also **open source and free**.
-* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
-* The [LeptonX Theme](https://docs.abp.io/en/commercial/latest/themes/lepton-x/index) is also a **commercial** theme developed by the core ABP theme and is a part of the [ABP Commercial](https://commercial.abp.io/) license. This is the default theme after ABP v6.0.0.
+* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://commercial.abp.io/) license.
+* The [LeptonX Theme](https://docs.abp.io/en/commercial/latest/themes/lepton-x/index) is also a **commercial** theme developed by the core ABP theme and is a part of the [ABP](https://commercial.abp.io/) license. This is the default theme after ABP v6.0.0.
 
-There are also some community-driven themes for the ABP Framework (you can search on the web).
+There are also some community-driven themes for the ABP (you can search on the web).
 
 ## Overall
 
@@ -50,7 +50,7 @@ These libraries are selected as the base libraries and available to the applicat
 
 #### Abstractions / Wrappers
 
-There are some abstractions in the ABP Framework to make your code independent from some of these libraries too. Examples;
+There are some abstractions in the ABP to make your code independent from some of these libraries too. Examples;
 
 * [Tag Helpers](tag-helpers) makes it easy to generate the Bootstrap UIs.
 * JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provides abstractions to use the Sweetalert and Toastr.
@@ -134,7 +134,7 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic --with-source-code --add-
 
 ### The ITheme Interface
 
-`ITheme` interface is used by the ABP Framework to select the layout for the current page. A theme must implement this interface to provide the requested layout path.
+`ITheme` interface is used by the ABP to select the layout for the current page. A theme must implement this interface to provide the requested layout path.
 
 This is the `ITheme` implementation of the [Basic Theme](basic-theme.md).
 
@@ -183,11 +183,11 @@ Configure<AbpThemingOptions>(options =>
 
 #### The IThemeSelector Service
 
-ABP Framework allows to use multiple themes together. This is why `options.Themes` is a list. `IThemeSelector` service selects the theme on the runtime. The application developer can set the `AbpThemingOptions.DefaultThemeName` to set the theme to be used, or replace the `IThemeSelector` service implementation (the default implementation is `DefaultThemeSelector`) to completely control the theme selection on runtime.
+ABP allows to use multiple themes together. This is why `options.Themes` is a list. `IThemeSelector` service selects the theme on the runtime. The application developer can set the `AbpThemingOptions.DefaultThemeName` to set the theme to be used, or replace the `IThemeSelector` service implementation (the default implementation is `DefaultThemeSelector`) to completely control the theme selection on runtime.
 
 ### Bundles
 
-[Bundling system](bundling-minification.md) provides a standard way to import style & script files into pages. There are two standard bundles defined by the ABP Framework:
+[Bundling system](bundling-minification.md) provides a standard way to import style & script files into pages. There are two standard bundles defined by the ABP:
 
 * `StandardBundles.Styles.Global`: The global bundle that includes the style files used in all the pages. Typically, it includes the CSS files of the Base Libraries.
 * `StandardBundles.Scripts.Global`: The global bundle that includes the script files used in all the pages. Typically, it includes the JavaScript files of the Base Libraries.
@@ -247,9 +247,9 @@ A typical Layout consists of several parts. The theme should include the necessa
 
 ![basic-theme-application-layout-parts](../../../images/basic-theme-application-layout-parts.png)
 
-The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a toolbar item, to change the application name in the branding area...) they should use the ABP Framework APIs.
+The application code and the modules can only show contents in the Page Content part. If they need to change the other parts (to add a menu item, to add a toolbar item, to change the application name in the branding area...) they should use the ABP APIs.
 
-The following sections explain the fundamental parts pre-defined by the ABP Framework and can be implemented by the themes.
+The following sections explain the fundamental parts pre-defined by the ABP and can be implemented by the themes.
 
 > It is a good practice to split the layout into components/partials, so the final application can override them partially for customization purpose.
 
@@ -314,7 +314,7 @@ Language Selection toolbar item is generally a dropdown that is used to switch b
 * `uiCulture`: The selected UI culture, like `en-US` or `en`.
 * `returnUrl` (optional): Can be used to return a given URL after switching the language.
 
-`culture` and `uiCulture` should match one of the available languages. ABP Framework sets a culture cookie in the `/Abp/Languages/Switch` endpoint.
+`culture` and `uiCulture` should match one of the available languages. ABP sets a culture cookie in the `/Abp/Languages/Switch` endpoint.
 
 ##### User Menu
 

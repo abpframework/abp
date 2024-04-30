@@ -4,7 +4,7 @@ An event bus is a mediator that transfers a message from a sender to a receiver.
 
 ## Event Bus Types
 
-ABP Framework provides two type of event buses;
+ABP provides two type of event buses;
 
 * **[Local Event Bus](local)** is suitable for in-process messaging.
 * **[Distributed Event Bus](distributed)** is suitable for inter-process messaging, like microservices publishing and subscribing to distributed events.

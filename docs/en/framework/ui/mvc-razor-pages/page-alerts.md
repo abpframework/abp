@@ -34,7 +34,7 @@ It is typical to show alerts when you manually handle exceptions (with try/catch
 
 ![page-alert-account-layout](../../../images/page-alert-account-layout.png)
 
-> Note that you generally don't need to manually handle exceptions since ABP Framework provides an automatic [exception handling](../../fundamentals/exception-handling.md) system.
+> Note that you generally don't need to manually handle exceptions since ABP provides an automatic [exception handling](../../fundamentals/exception-handling.md) system.
 
 ### Alert Types
 

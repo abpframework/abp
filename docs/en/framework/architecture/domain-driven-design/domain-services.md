@@ -9,7 +9,7 @@ In a [Domain Driven Design](../domain-driven-design) (DDD) solution, the core bu
 
 ## ABP Domain Service Infrastructure
 
-Domain Services are simple, stateless classes. While you don't have to derive from any service or interface, ABP Framework provides some useful base classes and conventions.
+Domain Services are simple, stateless classes. While you don't have to derive from any service or interface, ABP provides some useful base classes and conventions.
 
 ### DomainService & IDomainService
 
@@ -31,7 +31,7 @@ namespace MyProject.Issues
 
 When you do that;
 
-* ABP Framework automatically registers the class to the Dependency Injection system with a Transient lifetime.
+* ABP automatically registers the class to the Dependency Injection system with a Transient lifetime.
 * You can directly use some common services as base properties, without needing to manually inject (e.g. [ILogger](../../fundamentals/logging.md) and [IGuidGenerator](../../infrastructure/guid-generation.md)).
 
 > It is suggested to name a Domain Service with a `Manager` or `Service` suffix. We typically use the `Manager` suffix as used in the sample above.

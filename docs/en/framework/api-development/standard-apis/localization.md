@@ -1,6 +1,6 @@
 # Application Localization Endpoint
 
-ABP Framework provides a pre-built and standard endpoint that returns all the [localization](../../fundamentals/localization.md) resources and texts defined in the server.
+ABP provides a pre-built and standard endpoint that returns all the [localization](../../fundamentals/localization.md) resources and texts defined in the server.
 
 > If you have started with ABP's startup solution templates and using one of the official UI options, then all these are set up for you and you don't need to know these details. However, if you are building a UI application from scratch, you may want to know this endpoint.
 

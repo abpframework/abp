@@ -38,7 +38,7 @@ Check the **connection string** in the `appsettings.json` file under the `YourPr
 >
 > The solution is configured to use **Entity Framework Core** with **MS SQL Server** by default. However, if you've selected another DBMS using the `-dbms` parameter on the ABP CLI `new` command (like `-dbms MySQL`), the connection string might be different for you.
 >
-> EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers and you can use any supported DBMS. See [the Entity Framework integration document](Entity-Framework-Core.md) to learn how to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md) if you need later.
+> EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers and you can use any supported DBMS. See [the Entity Framework integration document](../framework/data/entity-framework-core) to learn how to [switch to another DBMS](../framework/data/entity-framework-core/other-dbms.md) if you need later.
 
 {{ else if DB == "Mongo" }}
 
@@ -64,7 +64,7 @@ dotnet run --migrate-database
 
 ### Installing the Client-Side Packages
 
-[ABP CLI](CLI.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -80,7 +80,7 @@ abp install-libs
 
 ### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](CLI.md).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../cli).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
@@ -88,7 +88,7 @@ However, sometimes you might need to run this command manually. To update script
 abp bundle
 ```
 
-> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](UI/Blazor/Global-Scripts-Styles.md).
+> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md).
 
 {{end}}
 
@@ -115,7 +115,7 @@ The solution has two main applications:
 
 Firstly, run the `TodoApp` project in your favorite IDE (or run the `dotnet run` CLI command on your project directory) to see the server-side HTTP API on [Swagger UI](https://swagger.io/tools/swagger-ui/).
 
-![swagger-ui](images/swagger-ui.png)
+![swagger-ui](../images/swagger-ui.png)
 
 You can explore and test your HTTP API with this UI. If it works, then we can run the Angular client application.
 
@@ -131,8 +131,8 @@ This command takes time, but eventually runs and opens the application in your d
 
 After running the project, the index page should be seen as below:
 
-![single-layer-index-page](images/single-layer-index-page.png)
+![single-layer-index-page](../images/single-layer-index-page.png)
 
 Enter **admin** as the username and **1q2w3E*** as the password to login to the application. The application is up and running. You can start developing your application based on this startup template.
 
-![bookstore-login-2](images/bookstore-login-2.png)
+![bookstore-login-2](../images/bookstore-login-2.png)

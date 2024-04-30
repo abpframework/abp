@@ -223,7 +223,7 @@ abpc add-package-ref "Acme.BookStore.Domain Acme.BookStore.Domain.Shared" -t Acm
 
 ### add-source
 
-Downloads the source code of a module and replaces package references with project references. This command only works if your ABP Commercial License has source-code access, or if source-code of the target module is free to all type of ABP Commercial Licenses.
+Downloads the source code of a module and replaces package references with project references. This command only works if your ABP License has source-code access, or if source-code of the target module is free to all type of ABP Licenses.
 
 ````bash
 abpc add-source <module-name> [options]

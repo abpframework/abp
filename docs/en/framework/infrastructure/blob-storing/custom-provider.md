@@ -174,4 +174,4 @@ public class MyCustomBlobProvider : BlobProviderBase, ITransientDependency
 
 ## Contribute?
 
-If you create a new provider and you think it can be useful for other developers, please consider to [contribute](../../../contribution) to the ABP Framework on GitHub.
+If you create a new provider and you think it can be useful for other developers, please consider to [contribute](../../../contribution) to the ABP on GitHub.

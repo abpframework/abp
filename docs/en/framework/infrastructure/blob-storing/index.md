@@ -4,17 +4,17 @@ It is typical to **store file contents** in an application and read these file c
 
 A BLOB is a typically **byte array**. There are various places to store a BLOB item; storing in the local file system, in a shared database or on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/) can be options.
 
-The ABP Framework provides an abstraction to work with BLOBs and provides some pre-built storage providers that you can easily integrate to. Having such an abstraction has some benefits;
+The ABP provides an abstraction to work with BLOBs and provides some pre-built storage providers that you can easily integrate to. Having such an abstraction has some benefits;
 
 * You can **easily integrate** to your favorite BLOB storage provides with a few lines of configuration.
 * You can then **easily change** your BLOB storage without changing your application code.
 * If you want to create **reusable application modules**, you don't need to make assumption about how the BLOBs are stored.
 
-ABP BLOB Storage system is also compatible to other ABP Framework features like [multi-tenancy](../../architecture/multi-tenancy).
+ABP BLOB Storage system is also compatible to other ABP features like [multi-tenancy](../../architecture/multi-tenancy).
 
 ## BLOB Storage Providers
 
-The ABP Framework has already the following storage provider implementations:
+The ABP has already the following storage provider implementations:
 
 * [File System](./file-system.md): Stores BLOBs in a folder of the local file system, as standard files.
 * [Database](./database.md): Stores BLOBs in a database.
@@ -23,7 +23,7 @@ The ABP Framework has already the following storage provider implementations:
 * [Minio](./minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
 * [Aws](./aws.md): Stores BLOBs on the [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 
-More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution) to the ABP Framework.
+More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution) to the ABP.
 
 Multiple providers **can be used together** by the help of the **container system**, where each container can uses a different provider.
 
@@ -133,7 +133,7 @@ namespace AbpDemo
 }
 ````
 
-> If you don't use the `BlobContainerName` attribute, ABP Framework uses the full name of the class (with namespace), but it is always recommended to use a container name which is stable and does not change even if you rename the class.
+> If you don't use the `BlobContainerName` attribute, ABP uses the full name of the class (with namespace), but it is always recommended to use a container name which is stable and does not change even if you rename the class.
 
 Once you create the container class, you can inject `IBlobContainer<T>` for your container type.
 

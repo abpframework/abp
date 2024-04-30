@@ -6,7 +6,7 @@ Blazor applications can use the same authorization system and permissions define
 
 ## Basic Usage
 
-> ABP Framework is **100% compatible** with the Authorization infrastructure provided by the Blazor. See the [Blazor Security Document](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/) to learn all authorization options. This section **only shows some common scenarios**.
+> ABP is **100% compatible** with the Authorization infrastructure provided by the Blazor. See the [Blazor Security Document](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/) to learn all authorization options. This section **only shows some common scenarios**.
 
 ### Authorize Attribute
 
@@ -62,7 +62,7 @@ If your component directly or indirectly inherits from the `AbpComponentBase`, `
 There are some useful extension methods for the `IAuthorizationService`:
 
 * `IsGrantedAsync` simply returns `true` or `false` for the given policy/permission.
-* `CheckAsync` checks and throws `AbpAuthorizationException` if given policy/permission hasn't granted. You don't have to handle these kind of exceptions since ABP Framework automatically [handles errors](Error-Handling.md).
+* `CheckAsync` checks and throws `AbpAuthorizationException` if given policy/permission hasn't granted. You don't have to handle these kind of exceptions since ABP automatically [handles errors](Error-Handling.md).
 * `AuthorizeAsync` returns `AuthorizationResult` as the standard way provided by the ASP.NET Core authorization system.
 
 > See the [Blazor Security Document](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/) to learn all authorization options

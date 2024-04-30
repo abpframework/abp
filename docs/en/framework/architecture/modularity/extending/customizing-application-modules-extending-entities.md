@@ -35,7 +35,7 @@ As mentioned above, all extra properties of an entity are stored as a single JSO
 * Write **SQL** or **LINQ** using the extra property (search table by the property value, for example).
 * Creating your **own entity** maps to the same table, but defines an extra property as a **regular property** in the entity (see the [EF Core migration document](../../../data/entity-framework-core/migrations.md) for more).
 
-To overcome the difficulties described above, ABP Framework entity extension system for the Entity Framework Core that allows you to use the same extra properties API defined above, but store a desired property as a separate field in the database table.
+To overcome the difficulties described above, ABP entity extension system for the Entity Framework Core that allows you to use the same extra properties API defined above, but store a desired property as a separate field in the database table.
 
 Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](../../../../modules/identity.md). You can use the `ObjectExtensionManager`:
 

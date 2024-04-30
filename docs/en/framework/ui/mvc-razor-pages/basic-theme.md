@@ -4,7 +4,7 @@ The Basic Theme is a theme implementation for the ASP.NET Core MVC / Razor Pages
 
 The Basic Theme has RTL (Right-to-Left language) support.
 
-> If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP Commercial](https://commercial.abp.io/).
+> If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP](https://commercial.abp.io/).
 
 > See the [Theming document](theming.md) to learn about themes.
 

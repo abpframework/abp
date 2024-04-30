@@ -61,7 +61,7 @@ There are two ways to use the distributed locking API: ABP's `IAbpDistributedLoc
 
 ### Using the IAbpDistributedLock Service
 
-`IAbpDistributedLock` is a simple service provided by the ABP framework for simple usage of distributed locking.
+`IAbpDistributedLock` is a simple service provided by the ABP for simple usage of distributed locking.
 
 **Example: Using the `IAbpDistributedLock.TryAcquireAsync` method**
 
@@ -124,7 +124,7 @@ Configure<AbpDistributedLockOptions>(options =>
 
 ### Using DistributedLock Library's API
 
-ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP Framework. For your own applications, you can use the DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.
+ABP's `IAbpDistributedLock` service is very limited and mainly designed to be internally used by the ABP. For your own applications, you can use the DistributedLock library's own API. See its [own documentation](https://github.com/madelson/DistributedLock) for details.
 
 ## The Volo.Abp.DistributedLocking.Abstractions Package
 

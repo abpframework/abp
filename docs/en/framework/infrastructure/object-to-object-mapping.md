@@ -147,7 +147,7 @@ options.AddProfile<MyProfile>(validate: true);
 
 ### Mapping the Object Extensions
 
-[Object extension system](../fundamentals/object-extensions.md) allows to define extra properties for existing classes. ABP Framework provides a mapping definition extension to properly map extra properties of two objects.
+[Object extension system](../fundamentals/object-extensions.md) allows to define extra properties for existing classes. ABP provides a mapping definition extension to properly map extra properties of two objects.
 
 ````csharp
 public class MyProfile : Profile

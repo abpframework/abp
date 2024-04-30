@@ -38,14 +38,14 @@ public class ReportingAppService : ApplicationService, IReportingAppService
 
 #### About the Interception
 
-ABP Framework uses the interception system to make the `[RequiresFeature]` attribute working. So, it can work with any class (application services, controllers...) that is injected from the [dependency injection](../fundamentals/dependency-injection.md).
+ABP uses the interception system to make the `[RequiresFeature]` attribute working. So, it can work with any class (application services, controllers...) that is injected from the [dependency injection](../fundamentals/dependency-injection.md).
 
 However, there are **some rules should be followed** in order to make it working;
 
 * If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](../../dynamic-proxying-interceptors.md) system can not work.
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
 
-> There is an exception for the **controller and razor page methods**. They **don't require** the following the rules above, since ABP Framework uses the action/page filters to implement the feature checking in this case.
+> There is an exception for the **controller and razor page methods**. They **don't require** the following the rules above, since ABP uses the action/page filters to implement the feature checking in this case.
 
 ### IFeatureChecker Service
 

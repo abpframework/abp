@@ -1,6 +1,6 @@
 # Quartz Background Job Manager
 
-[Quartz](https://www.quartz-scheduler.net/) is an advanced background job manager. You can integrate Quartz with the ABP Framework to use it instead of the [default background job manager](../background-jobs). In this way, you can use the same background job API for Quartz and your code will be independent of Quartz. If you like, you can directly use Quartz's API, too.
+[Quartz](https://www.quartz-scheduler.net/) is an advanced background job manager. You can integrate Quartz with the ABP to use it instead of the [default background job manager](../background-jobs). In this way, you can use the same background job API for Quartz and your code will be independent of Quartz. If you like, you can directly use Quartz's API, too.
 
 > See the [background jobs document](../background-jobs) to learn how to use the background job system. This document only shows how to install and configure the Quartz integration.
 
@@ -42,7 +42,7 @@ public class YourModule : AbpModule
 
 ## Configuration
 
-Quartz is a very configurable library,and the ABP framework provides `AbpQuartzOptions` for this. You can use the `PreConfigure` method in your module class to pre-configure this option. ABP will use it when initializing the Quartz module. For example:
+Quartz is a very configurable library,and the ABP provides `AbpQuartzOptions` for this. You can use the `PreConfigure` method in your module class to pre-configure this option. ABP will use it when initializing the Quartz module. For example:
 
 ````csharp
 [DependsOn(

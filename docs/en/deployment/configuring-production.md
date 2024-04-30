@@ -1,6 +1,6 @@
 # Configuring Your Application for Production Environments
 
-ABP Framework has a lot of options to configure and fine-tune its features. They are all explained in their own documents. Default values for these options are pretty well for most of the deployment environments. However, you may need to care about some options based on how you've structured your deployment environment. In this document, we will highlight these kind of options. So, it is highly recommended to read this document in order to not have unexpected behaviors in your system in production.
+ABP has a lot of options to configure and fine-tune its features. They are all explained in their own documents. Default values for these options are pretty well for most of the deployment environments. However, you may need to care about some options based on how you've structured your deployment environment. In this document, we will highlight these kind of options. So, it is highly recommended to read this document in order to not have unexpected behaviors in your system in production.
 
 ## Distributed Cache Prefix
 
@@ -68,7 +68,7 @@ public class MySmsSender : ISmsSender, ITransientDependency
 }
 ````
 
-> [ABP Commercial](https://commercial.abp.io/) provides a [Twilio SMS Module](../modules/twilio-sms.md) as a pre-built integration with the popular [Twilio](https://www.twilio.com/) platform.
+> [ABP](https://commercial.abp.io/) provides a [Twilio SMS Module](../modules/twilio-sms.md) as a pre-built integration with the popular [Twilio](https://www.twilio.com/) platform.
 
 ## BLOB Provider
 
@@ -76,7 +76,7 @@ If you use ABP's [BLOB Storing](../framework/infrastructure/blob-storing) infras
 
 Check the [BLOB Storing](../framework/infrastructure/blob-storing) document to see all the available BLOB storage providers.
 
-> **Warning**: Even if you don't directly use the BLOB Storage system, a module you are depending on may use it. For example, ABP Commercial's [File Management](../modules/file-management.md) module stores file contents, and the [Account](../modules/account.md) module stores user profile pictures in the BLOB Storage system. So, be careful with the BLOB Storing configuration in production. Note that ABP Commercial uses the [Database Provider](../framework/infrastructure/blob-storing/database.md) as a pre-configured BLOB storage provider, which works in production without any problem, but you may still want to use another provider.
+> **Warning**: Even if you don't directly use the BLOB Storage system, a module you are depending on may use it. For example, ABP's [File Management](../modules/file-management.md) module stores file contents, and the [Account](../modules/account.md) module stores user profile pictures in the BLOB Storage system. So, be careful with the BLOB Storing configuration in production. Note that ABP uses the [Database Provider](../framework/infrastructure/blob-storing/database.md) as a pre-configured BLOB storage provider, which works in production without any problem, but you may still want to use another provider.
 
 ## String Encryption
 

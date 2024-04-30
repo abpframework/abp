@@ -4,7 +4,7 @@ ABP is an [open source](https://github.com/abpframework) and community driven pr
 
 ## ABP Community Website
 
-If you want to write **articles** or **how to guides** related to the ABP Framework and ASP.NET Core, please submit your article to the [community.abp.io](https://community.abp.io/) website.
+If you want to write **articles** or **how to guides** related to the ABP and ASP.NET Core, please submit your article to the [community.abp.io](https://community.abp.io/) website.
 
 ## Code Contribution
 
@@ -48,7 +48,7 @@ A new language is published after these minimum translations have been completed
 
 ## Resource Localization
 
-ABP framework has a flexible [localization system](../framework/fundamentals/localization.md). You can create localized user interfaces for your own application.
+ABP has a flexible [localization system](../framework/fundamentals/localization.md). You can create localized user interfaces for your own application.
 
 In addition to that, the framework and the [pre-build modules](../modules) have localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
 
@@ -74,4 +74,4 @@ If you find any bug, please [create an issue on the Github repository](https://g
 ## See Also
 
 * [Contribution Guide for the Angular UI](angular-ui.md)
-* [ABP Community Talks 2022.4: How can you contribute to the open source ABP Framework?](https://www.youtube.com/watch?v=Wz4Z-O-YoPg&list=PLsNclT2aHJcOsPustEkzG6DywiO8eh0lB)
+* [ABP Community Talks 2022.4: How can you contribute to the open source ABP?](https://www.youtube.com/watch?v=Wz4Z-O-YoPg&list=PLsNclT2aHJcOsPustEkzG6DywiO8eh0lB)

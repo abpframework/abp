@@ -196,7 +196,7 @@ In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an a
 
 Test projects are prepared for integration testing;
 
-* It is fully integrated into the ABP framework and all services in your application.
+* It is fully integrated into the ABP and all services in your application.
 * It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) library.
 * Authorization is disabled, so any application service can be easily used in tests.
 
@@ -288,7 +288,7 @@ Angular application folder structure looks like below:
 ![angular-folder-structure](../../images/angular-folder-structure.png)
 
 
-Each of ABP Commercial modules is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules install with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
+Each of ABP modules is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules install with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
 
 ```bash
 yarn list --pattern abp

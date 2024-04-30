@@ -20,7 +20,7 @@ Also, the `switch-to-nightly` command creates `.npmrc` files containing two NPM 
 
 > You can check the [ABP Nightly Gallery](https://www.myget.org/gallery/abp-nightly) (for the open source NPM & NuGet packages) and [ABP Pro Nightly Gallery](https://www.myget.org/gallery/abp-commercial-npm-nightly) (for the pro NPM packages) to see the all nightly preview packages.
 
-If you're using the ABP Framework nightly preview packages, you can switch back to the stable version by using the following command:
+If you're using the ABP nightly preview packages, you can switch back to the stable version by using the following command:
 
 ```bash
 abp switch-to-stable

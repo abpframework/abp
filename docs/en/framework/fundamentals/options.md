@@ -2,13 +2,13 @@
 
 Microsoft has introduced [the options pattern](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options) that is used to configure a group of settings used by the framework services. This pattern is implemented by the [Microsoft.Extensions.Options](https://www.nuget.org/packages/Microsoft.Extensions.Options) NuGet package, so it is usable by any type of applications in addition to ASP.NET Core based applications.
 
-ABP framework follows this option pattern and defines options classes to configure the framework and the modules (they are explained in the documents of the related feature).
+ABP follows this option pattern and defines options classes to configure the framework and the modules (they are explained in the documents of the related feature).
 
 Since [the Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options) explains the pattern in detail, no reason to repeat all. However, ABP adds a few more features and they will be explained here.
 
 ## Configure Options
 
-You typically configure options in the `ConfigureServices` of the `Startup` class. However, since ABP framework provides a modular infrastructure, you configure options in the `ConfigureServices` of your [module](../architecture/modularity/basics.md). Example:
+You typically configure options in the `ConfigureServices` of the `Startup` class. However, since ABP provides a modular infrastructure, you configure options in the `ConfigureServices` of your [module](../architecture/modularity/basics.md). Example:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)

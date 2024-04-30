@@ -2,7 +2,7 @@
 
 You may need to **change behavior (business logic)** of a depended module for your application. In this case, you can use the power of the [dependency injection system](../../../fundamentals/dependency-injection.md) to replace a service, controller or even a page model of the depended module by your own implementation.
 
-**Replacing a service** is possible for any type of class registered to the dependency injection, including services of the ABP Framework.
+**Replacing a service** is possible for any type of class registered to the dependency injection, including services of the ABP.
 
 You have different options can be used based on your requirement those will be explained in the next sections.
 

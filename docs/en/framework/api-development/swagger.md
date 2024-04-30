@@ -5,7 +5,7 @@
 - Minimize the amount of work needed to connect decoupled services.
 - Reduce the amount of time needed to accurately document a service.
 
-ABP Framework offers a prebuilt module for full Swagger integration with small configurations. 
+ABP offers a prebuilt module for full Swagger integration with small configurations. 
 
 ## Installation
 
@@ -107,7 +107,7 @@ services.AddAbpSwaggerGen(
 
 For non MVC/Tiered applications, we need to configure Swagger with OAUTH to handle authorization.  
 
-> ABP Framework uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../../modules/openiddict.md). 
+> ABP uses OpenIddict by default. To get more information about OpenIddict, check this [documentation](../../modules/openiddict.md). 
 
 To do that, we need to use `AddAbpSwaggerGenWithOAuth` extension to configure Swagger with OAuth issuer and scopes in `ConfigureServices` method of our module:
 

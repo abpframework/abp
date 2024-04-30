@@ -47,7 +47,7 @@ ASP.NET Core provides different kind of caching features. [In-memory cache](http
 
 [ABP's Distributed Cache](../framework/fundamentals/caching.md) extends [ASP.NET Core's distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) infrastructure. It works in-memory by default. You should configure an actual distributed cache provider when you want to deploy your application to a clustered environment.
 
-> You should configure the cache provider for clustered deployment, even if your application doesn't directly use `IDistributedCache`. Because the ABP Framework and the pre-built [application modules](../modules) are using distributed cache.
+> You should configure the cache provider for clustered deployment, even if your application doesn't directly use `IDistributedCache`. Because the ABP and the pre-built [application modules](../modules) are using distributed cache.
 
 ASP.NET Core provides multiple integrations to use as your distributed cache provider, like [Redis](https://redis.io/) and [NCache](https://www.alachisoft.com/ncache/). You can follow [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to learn how to use them in your applications.
 
@@ -61,7 +61,7 @@ If you have used ABP's [BLOB Storing](../framework/infrastructure/blob-storing) 
 
 The [Database BLOB provider](../framework/infrastructure/blob-storing/database.md) is the easiest way since it uses your application's main database (or another database if you configure) to store BLOBs. However, you should remember that BLOBs are large objects and may quickly increase your database's size.
 
-> [ABP Commercial](https://commercial.abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
+> [ABP](https://commercial.abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
 
 Check the [BLOB Storing](../framework/infrastructure/blob-storing) document to see all the available BLOB storage providers.
 
@@ -80,7 +80,7 @@ If you don't want to use a distributed lock provider, you may go with the follow
 
 ## Configuring a Distributed Lock Provider
 
-ABP provides a distributed locking abstraction with an implementation made with the [DistributedLock](https://github.com/madelson/DistributedLock) library. A distributed lock is used to control concurrent access to a shared resource by multiple applications to prevent corruption of the resource because of concurrent writes. The ABP Framework and some pre-built [application modules](../modules) are using distributed locking for several reasons.
+ABP provides a distributed locking abstraction with an implementation made with the [DistributedLock](https://github.com/madelson/DistributedLock) library. A distributed lock is used to control concurrent access to a shared resource by multiple applications to prevent corruption of the resource because of concurrent writes. The ABP and some pre-built [application modules](../modules) are using distributed locking for several reasons.
 
 However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, please follow the [distributed lock](../framework/infrastructure/distributed-locking.md) document to configure a provider for your application, if it is not already configured.
 

@@ -249,7 +249,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 * New **File Management Module** that is used to store and manage files in your application.
 * Migrated the Angular UI to the **Angular 10**.
-* Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP Commercial.
+* Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP.
 
 ## 2.9 (2020-06-04)
 
@@ -271,7 +271,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 See the detailed **blog post / announcement** for the v2.8 release: [https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map](https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map)
 
-This post also covers the [road map](road-map.md) and other news for the ABP.IO Platform.
+This post also covers the [road map](road-map.md) and other news for the ABP Platform.
 
 ### Major Features / Enhancements
 
