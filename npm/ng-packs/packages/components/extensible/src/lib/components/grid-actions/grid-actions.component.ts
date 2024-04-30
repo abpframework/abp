@@ -49,14 +49,4 @@ export class GridActionsComponent<R = any> extends AbstractActionsComponent<Enti
   constructor(injector: Injector) {
     super(injector);
   }
-
-  hasAvailableActions(): boolean {
-    return this.actionList.toArray().some(action => {
-      if (!action) return false;
-
-      const { permission, visible } = action;
-
-      return this.permissionService.getGrantedPolicy(permission) && visible(this.data);
-    });
-  }
 }
