@@ -160,7 +160,7 @@
     "ABPCLIExplanation": "Az ABP CLI (Command Line Interface) egy parancssori eszköz az ABP alapú megoldások általános műveleteinek végrehajtására.",
     "ABPSuiteEasilyCURD": "Az ABP Suite egy olyan eszköz, amellyel könnyedén hozhat létre CRUD oldalakat",
     "WeAreHereToHelp": "Azért vagyunk itt, hogy <span class=\"zero-text\">segítsünk</span>",
-    "BrowseOrAskQuestion": "Böngésszen a súgótémáink között, kereshet a gyakran ismételt kérdések között, vagy feltehet nekünk kérdést a <a href=\"{0}\" class=\"text-success\">kapcsolatfelvételi űrlap</a> használatával.",
+    "BrowseOrAskQuestion": "Böngésszen a súgótémáink között, kereshet a gyakran ismételt kérdések között, vagy feltehet nekünk kérdést a <a href=\"{0}\">kapcsolatfelvételi űrlap</a> használatával.",
     "SearchQuestionPlaceholder": "Keressen a gyakran ismételt kérdések között",
     "WhatIsTheABPCommercial": "Mi az az ABP Commercial?",
     "WhatAreDifferencesThanAbpFramework": "Mi a különbség a nyílt forráskódú ABP Framework és az ABP Commercial között?",
