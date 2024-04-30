@@ -23,6 +23,8 @@ public class AppEntityWithNavigations : AggregateRoot<Guid>
 
     public string FullName { get; set; }
 
+    public AppEntityWithValueObjectAddress AppEntityWithValueObjectAddress { get; set; }
+
     public virtual AppEntityWithNavigationChildOneToOne OneToOne { get; set; }
 
     public virtual List<AppEntityWithNavigationChildOneToMany> OneToMany { get; set; }
@@ -45,7 +47,16 @@ public class AppEntityWithNavigationChildOneToMany : Entity<Guid>
 }
 
 [Audited]
-public class AppEntityWithNavigationChildManyToMany : Entity<Guid>
+public class AppEntityWithNavigationChildManyToMany : AggregateRoot<Guid>
 {
     public string ChildName { get; set; }
+
+    public virtual List<AppEntityWithNavigations> ManyToMany { get; set; }
+}
+
+public class AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany
+{
+    public Guid AppEntityWithNavigationsId { get; set; }
+
+    public Guid AppEntityWithNavigationChildManyToManyId { get; set; }
 }

@@ -1,9 +1,10 @@
-````json
+```json
 //[doc-params]
 {
-	"Tiered": ["No", "Yes"]
+  "Tiered": ["No", "Yes"]
 }
-````
+```
+
 # Getting Started with the React Native
 
 ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
@@ -50,17 +51,17 @@ A React Native application running on an Android emulator or a physical phone **
 {{ if Tiered == "No"}}
 ![React Native host project local IP entry](images/rn-host-local-ip.png)
 
--   Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `SelfUrl` and `Authority` properties with your local IP address.
--   Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+- Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `SelfUrl` and `Authority` properties with your local IP address.
+- Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 
 {{ else if Tiered == "Yes" }}
 
 ![React Native tiered project local IP entry](images/rn-tiered-local-ip.png)
 
--   Open the `appsettings.json` file in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
--   Open the `launchSettings.json` file in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
--   Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `Authority` property with your local IP address.
--   Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+- Open the `appsettings.json` file in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
+- Open the `launchSettings.json` file in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+- Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `Authority` property with your local IP address.
+- Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 
 {{ end }}
 
@@ -74,7 +75,7 @@ Open the {{ if Tiered == "No" }}`MyProjectNameHttpApiHostModule`{{ else if Tiere
 
 ```csharp
 #if DEBUG
-    PreConfigure<OpenIddictServerBuilder>(options => 
+    PreConfigure<OpenIddictServerBuilder>(options =>
     {
         options.UseAspNetCore()
             .DisableTransportSecurityRequirement();
@@ -108,7 +109,16 @@ Open the {{ if Tiered == "No" }}`MyProjectNameHttpApiHostModule`{{ else if Tiere
 
 In the above image, you can start the application with an Android emulator, an iOS simulator or a physical phone by scanning the QR code with the [Expo Client](https://expo.io/tools#client) or choosing the option.
 
+### Expo
+
 ![React Native login screen on iPhone 11](images/rn-login-iphone.png)
+
+### Android Studio
+
+1. Start the emulator in **Android Studio** before running the `yarn start` or `npm start` command.
+2. Press **a** to open in Android Studio.
+
+![React Native login screen on iPhone 11](images/rn-login-android-studio.png)
 
 Enter **admin** as the username and **1q2w3E\*** as the password to login to the application.
 
@@ -116,4 +126,4 @@ The application is up and running. You can continue to develop your application 
 
 ## See Also
 
--   [React Native project structure](./Startup-Templates/Application#react-native)
+- [React Native project structure](./Startup-Templates/Application#react-native)

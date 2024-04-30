@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, inject, signal } from '@angular/core';
 import {
   NavigationCancel,
   NavigationEnd,
@@ -6,8 +6,10 @@ import {
   NavigationStart,
   Router,
   RouterEvent,
-  Event
+  Event,
+  RouterState,
 } from '@angular/router';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 export const NavigationEvent = {
@@ -19,12 +21,31 @@ export const NavigationEvent = {
 
 @Injectable({ providedIn: 'root' })
 export class RouterEvents {
-  constructor(private router: Router) {}
+  protected readonly router = inject(Router);
+
+  readonly #previousNavigation = signal<string | undefined>(undefined);
+  previousNavigation = this.#previousNavigation.asReadonly();
+
+  readonly #currentNavigation = signal<string | undefined>(undefined);
+  currentNavigation = this.#currentNavigation.asReadonly();
+
+  constructor() {
+    this.listenToNavigation();
+  }
+
+  protected listenToNavigation(): void {
+    const routerEvent$ = this.router.events.pipe(
+      filter(e => e instanceof NavigationEvent.End && !e.url.includes('error'))
+    ) as Observable<NavigationEnd>;
+    
+    routerEvent$.subscribe(event => {
+      this.#previousNavigation.set(this.currentNavigation());
+      this.#currentNavigation.set(event.url);
+    });
+  }
 
   getEvents<T extends RouterEventConstructors>(...eventTypes: T) {
-
-    const filterRouterEvents = (event: Event) =>
-      eventTypes.some(type => event instanceof type);
+    const filterRouterEvents = (event: Event) => eventTypes.some(type => event instanceof type);
 
     return this.router.events.pipe(filter(filterRouterEvents));
   }

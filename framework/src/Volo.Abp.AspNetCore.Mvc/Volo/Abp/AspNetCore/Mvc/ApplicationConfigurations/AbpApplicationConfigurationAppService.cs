@@ -158,7 +158,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             EmailVerified = _currentUser.EmailVerified,
             PhoneNumber = _currentUser.PhoneNumber,
             PhoneNumberVerified = _currentUser.PhoneNumberVerified,
-            Roles = _currentUser.Roles
+            Roles = _currentUser.Roles,
+            SessionId = _currentUser.FindSessionId()
         };
     }
 
