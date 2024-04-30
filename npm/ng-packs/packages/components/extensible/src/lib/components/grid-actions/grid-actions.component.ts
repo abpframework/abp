@@ -4,13 +4,12 @@ import {
   Injector,
   Input,
   TrackByFunction,
-  inject,
 } from '@angular/core';
 import { EntityAction, EntityActionList } from '../../models/entity-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { LocalizationModule, PermissionDirective, PermissionService } from '@abp/ng.core';
+import { LocalizationModule, PermissionDirective } from '@abp/ng.core';
 import { EllipsisDirective } from '@abp/ng.theme.shared';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 
@@ -44,7 +43,6 @@ export class GridActionsComponent<R = any> extends AbstractActionsComponent<Enti
   @Input() text = '';
 
   readonly trackByFn: TrackByFunction<EntityAction<R>> = (_, item) => item.text;
-  public readonly permissionService = inject(PermissionService);
 
   constructor(injector: Injector) {
     super(injector);
