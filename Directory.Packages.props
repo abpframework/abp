@@ -144,7 +144,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.0.2" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.4" />
     <PackageVersion Include="SixLabors.ImageSharp.Drawing" Version="2.0.1" />
     <PackageVersion Include="SkiaSharp" Version="2.88.6" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
