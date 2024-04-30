@@ -16,7 +16,7 @@ public class DatatablesNetScriptContributor : BundleContributor
         }
         else
         {
-            //TODO: Compatibility code, Remove it after 8.2 rc1.
+            //TODO: Compatible code, Remove it after 8.3 rc1.
             context.Files.AddIfNotContains("/libs/datatables.net/js/jquery.dataTables.js");
         }
     }
