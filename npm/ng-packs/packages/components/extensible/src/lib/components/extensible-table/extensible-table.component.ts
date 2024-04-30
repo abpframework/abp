@@ -109,6 +109,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
   #injector = inject(Injector);
   getInjected = this.#injector.get.bind(this.#injector);
+  permissionService = this.#injector.get(PermissionService);
 
   constructor() {
     const extensions = this.#injector.get(ExtensionsService);
@@ -117,9 +118,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.actionList = extensions['entityActions'].get(name)
       .actions as unknown as EntityActionList<R>;
 
-    const permissionService = this.#injector.get(PermissionService);
     this.hasAtLeastOnePermittedAction =
-      permissionService.filterItemsByPolicy(
+      this.permissionService.filterItemsByPolicy(
         this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
       ).length > 0;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
@@ -204,5 +204,10 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
       return record;
     });
+  }
+
+  hasAvailableActions(index, row): boolean {
+    const { permission, visible } = this.actionList.get(index).value;
+    return this.permissionService.getGrantedPolicy(permission) && visible(row);
   }
 }
