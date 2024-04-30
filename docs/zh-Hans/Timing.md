@@ -76,7 +76,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 `Normalize` 方法的工作原理如下:
 
 * 如果当前时钟为UTC,并且给定的 `DateTime` 为本地时间,将给定的 `DateTime` 转换为UTC(通过使用 `DateTime.ToUniversalTime()` 方法).
-* 如果当前时钟是本地的,并且给定的 `DateTime` 是UTC,将给定的 `DateTime` 转换为本地时间(通过使用 `DateTime.ToUniversalTime()` 方法).
+* 如果当前时钟是本地的,并且给定的 `DateTime` 是UTC,将给定的 `DateTime` 转换为本地时间(通过使用 `DateTime.ToLocalTime()` 方法).
 * 如果未指定给定的 `DateTime` 的 `Kind`,将给定的 `DateTime` 的 `Kind`(使用 `DateTime.SpecifyKind(...)` 方法)设置为当前时钟的 `Kind`.
 
 当获取的 `DateTime` 不是由 `IClock` 创建且可能与当前Clock类型不兼容的时候,ABP框架会使用 `Normalize` 方法. 例如;
