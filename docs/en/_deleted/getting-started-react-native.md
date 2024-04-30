@@ -9,7 +9,7 @@
 
 ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
 
-![React Native gif](./images/react-native-introduction.gif)
+![React Native gif](../images/react-native-introduction.gif)
 
 ## How to Prepare Development Environment
 
