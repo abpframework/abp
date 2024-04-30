@@ -1,3 +1,4 @@
+# Build and test whenever there is a change to a dotnet related file.
 name: "build and test"
 on:
   push:
@@ -47,25 +48,28 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     if: ${{ !github.event.pull_request.draft }}
+    timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@master
-      with:
-        dotnet-version: 8.0.100
+      - name: Checkout repository
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
 
-    - name: chown
-      run: |
-        sudo chown -R $USER:$USER /home/runneradmin
+      - name: Setup dotnet 8.0.100
+        uses: actions/setup-dotnet@5d1464d
+        with:
+          dotnet-version: 8.0.100
 
-    - name: Build All
-      run: ./build-all.ps1
-      working-directory: ./build
-      shell: pwsh
+      - name: chown
+        run: sudo chown -R $USER:$USER /home/runneradmin
 
-    - name: Test All
-      run: ./test-all.ps1
-      working-directory: ./build
-      shell: pwsh
+      - name: Build All
+        run: ./build-all.ps1
+        working-directory: ./build
+        shell: pwsh
 
-    - name: Codecov
-      uses: codecov/codecov-action@v2
+      - name: Test All
+        run: ./test-all.ps1
+        working-directory: ./build
+        shell: pwsh
+
+      - name: Codecov
+        uses: codecov/codecov-action@f32b3a3

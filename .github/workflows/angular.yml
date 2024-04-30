@@ -1,3 +1,5 @@
+# Run build, lint and test specifically for angular.
+# This workflow is only run when angular files are changed in a pull-request.
 name: 'Angular'
 on:
   pull_request:
@@ -22,17 +24,21 @@ jobs:
   build-test-lint:
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
         with:
           fetch-depth: 0
 
-      - uses: actions/cache@v2
+      - name: Setup cache for ng-pack node modules
+        uses: actions/cache@8492260343ad570701412c2f464a5877dc76bace # v2
         with:
           path: 'npm/ng-packs/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('npm/ng-packs/yarn.lock') }}
 
-      - uses: actions/cache@v2
+      - name: Setup cache for anguler node_modules
+        uses: actions/cache@8492260343ad570701412c2f464a5877dc76bace # v2
         with:
           path: 'templates/app/angular/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('templates/app/angular/yarn.lock') }}
