@@ -85,6 +85,11 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         OutboxConfig outboxConfig
     );
 
+    public abstract Task PublishManyFromOutboxAsync(
+        IEnumerable<OutgoingEventInfo> outgoingEvents,
+        OutboxConfig outboxConfig
+    );
+
     public abstract Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig);
@@ -101,7 +106,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
-                var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
+                var eventOutbox =
+                    (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
                 var eventName = EventNameAttribute.GetNameOrDefault(eventType);
                 await eventOutbox.EnqueueAsync(
                     new OutgoingEventInfo(
@@ -135,7 +141,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             {
                 if (inboxConfig.EventSelector == null || inboxConfig.EventSelector(eventType))
                 {
-                    var eventInbox = (IEventInbox)scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
+                    var eventInbox =
+                        (IEventInbox)scope.ServiceProvider.GetRequiredService(inboxConfig.ImplementationType);
 
                     if (!messageId.IsNullOrEmpty())
                     {

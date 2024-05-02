@@ -18,15 +18,15 @@ public class ElasticsearchExternalLogger : IExternalLogger
 {
     public async Task LogAsync(string logText)
     {
-        //TODO...
+        // TODO...
     }
 }
 
 public class AzureExternalLogger : IExternalLogger
 {
-    public Task LogAsync(string logText)
+    public async Task LogAsync(string logText)
     {
-        throw new System.NotImplementedException();
+        // TODO...
     }
 }
 ````

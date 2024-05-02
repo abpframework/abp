@@ -95,6 +95,24 @@ export class AppRoutingModule {}
 
 Before v4.3, the "My account" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account module instead.
 
+### Personal Info Page Confirm Message
+
+When the user changes their own data on the personal settings tab in My Account, The data can not update the CurrentUser key of Application-Configuration. The information of the user is stored in claims. The only way to apply this information to the CurrentUser of Application-Configuration is user should log out and log in. When the Refresh-Token feature is implemented, it will be fixed. So We've added a confirmation alert. 
+
+If you want to disable these warning, You should set  `isPersonalSettingsChangedConfirmationActive` false 
+
+```js
+// app-routing.module.ts
+const routes: Routes = [
+  //...
+  {
+    path: 'account',
+    loadChildren: () => import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy({ isPersonalSettingsChangedConfirmationActive:false })),
+  },
+  //...
+export class AppRoutingModule {}
+```
+
 ### Security Logs Page [COMMERCIAL]
 
 Before v4.3, the "Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's security logs page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account public module instead.

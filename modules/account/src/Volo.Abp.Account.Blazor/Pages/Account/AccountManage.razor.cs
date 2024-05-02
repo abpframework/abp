@@ -53,6 +53,8 @@ public partial class AccountManage
             NewPassword = ChangePasswordModel.NewPassword
         });
 
+        ChangePasswordModel.Clear();
+
         await UiMessageService.Success(L["PasswordChanged"]);
     }
 
@@ -75,6 +77,13 @@ public class ChangePasswordModel
     public string NewPasswordConfirm { get; set; }
 
     public bool HideOldPasswordInput { get; set; }
+
+    public void Clear()
+    {
+        CurrentPassword = string.Empty;
+        NewPassword = string.Empty;
+        NewPasswordConfirm = string.Empty;
+    }
 }
 
 public class PersonalInfoModel
@@ -92,4 +101,6 @@ public class PersonalInfoModel
     public bool PhoneNumberConfirmed { get; set; }
 
     public bool EmailConfirmed { get; set; }
+
+    public string ConcurrencyStamp { get; set; }
 }

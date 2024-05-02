@@ -34,6 +34,22 @@ namespace MyCompany.MyProject
 
 > 随着"Multi-tenancy ready"的概念,我们打算开发我们的代码和多租户方法兼容.然后它可以被用于多租户和非多租户的程序中,这取决于最终程序的需求.
 
+### AbpMultiTenancyOptions: 处理不活跃或不存在的租户
+
+`MultiTenancyMiddlewareErrorPageBuilder` 或 `AbpMultiTenancyOptions` 用于 处理不活跃或不存在的租户.
+
+默认情况下会响应错误页面, 你可以根据自己的需要更改它, 比如: 只输出错误日志并继续ASP NET Core的请求管道
+
+```csharp
+Configure<AbpMultiTenancyOptions>(options =>
+{
+    options.MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
+    {
+        // Handle the exception.
+    };
+});
+```
+
 #### 定义实体
 
 你可以在你的实体中实现 **IMultiTenant** 接口来实现多租户,例如:

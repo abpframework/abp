@@ -21,6 +21,10 @@ public class AbpLocalizationOptions
 
     public Dictionary<string, List<NameValue>> LanguageFilesMap { get; }
 
+    public bool TryToGetFromBaseCulture { get; set; }
+
+    public bool TryToGetFromDefaultCulture { get; set; }
+
     public AbpLocalizationOptions()
     {
         Resources = new LocalizationResourceDictionary();
@@ -28,5 +32,7 @@ public class AbpLocalizationOptions
         Languages = new List<LanguageInfo>();
         LanguagesMap = new Dictionary<string, List<NameValue>>();
         LanguageFilesMap = new Dictionary<string, List<NameValue>>();
+        TryToGetFromBaseCulture = true;
+        TryToGetFromDefaultCulture = true;
     }
 }

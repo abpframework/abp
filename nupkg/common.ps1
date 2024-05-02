@@ -177,6 +177,7 @@ $projects = (
     "framework/src/Volo.Abp.ExceptionHandling",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
+    "framework/src/Volo.Abp.Gdpr.Abstractions",
     "framework/src/Volo.Abp.GlobalFeatures",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",

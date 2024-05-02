@@ -26,6 +26,7 @@ public interface ICmsKitDbContext : IEfCoreDbContext
     DbSet<Page> Pages { get; }
     DbSet<Blog> Blogs { get; }
     DbSet<BlogPost> BlogPosts { get; }
+    DbSet<BlogFeature> BlogFeatures { get; }
     DbSet<MediaDescriptor> MediaDescriptors { get; }
     DbSet<MenuItem> MenuItems { get; }
     DbSet<GlobalResource> GlobalResources { get; }

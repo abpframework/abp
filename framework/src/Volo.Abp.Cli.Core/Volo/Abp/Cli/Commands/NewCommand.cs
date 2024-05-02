@@ -10,7 +10,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -21,8 +23,6 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 {
     public const string Name = "new";
 
-    public ILogger<NewCommand> Logger { get; set; }
-
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
 
@@ -30,13 +30,14 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         , ITemplateInfoProvider templateInfoProvider,
         ConnectionStringProvider connectionStringProvider,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
-        ICmdHelper cmdHelper)
-    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper)
+        ICmdHelper cmdHelper,
+        CliService cliService,
+        IInstallLibsService installLibsService,
+        AngularPwaSupportAdder angularPwaSupportAdder)
+    : base(connectionStringProvider, solutionPackageVersionFinder, cmdHelper, installLibsService,  cliService, angularPwaSupportAdder)
     {
         TemplateProjectBuilder = templateProjectBuilder;
         TemplateInfoProvider = templateInfoProvider;
-
-        Logger = NullLogger<NewCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
@@ -68,7 +69,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
             Logger.LogInformation("Tiered: yes");
         }
 
-        var projectArgs = GetProjectBuildArgs(commandLineArgs, template, projectName);
+        var projectArgs = await GetProjectBuildArgsAsync(commandLineArgs, template, projectName);
 
         var result = await TemplateProjectBuilder.BuildAsync(
             projectArgs
@@ -79,7 +80,15 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
-        RunInstallLibsForWebTemplate(projectArgs);
+
+        var skipInstallLibs = commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Long) || commandLineArgs.Options.ContainsKey(Options.SkipInstallingLibs.Short);
+        if (!skipInstallLibs)
+        {
+            await RunInstallLibsForWebTemplateAsync(projectArgs);
+        }
+        
+        ConfigurePwaSupportForAngular(projectArgs);
+        
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 
@@ -109,6 +118,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("--no-ui                                     (if supported by the template)");
         sb.AppendLine("--no-random-port                            (Use template's default ports)");
         sb.AppendLine("--separate-identity-server                  (if supported by the template)");
+        sb.AppendLine("-sib|--skip-installing-libs                 (skip installing client side packages)");
         sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");

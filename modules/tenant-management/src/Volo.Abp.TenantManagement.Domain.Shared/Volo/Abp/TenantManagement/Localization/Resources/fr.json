@@ -1,6 +1,7 @@
 {
  "culture": "fr",
  "texts": {
+  "Volo.Abp.TenantManagement:DuplicateTenantName": "Le nom du locataire existe déjà: {Name}",
   "Menu:TenantManagement": "Gestion des locataires",
   "Tenants": "Locataires",
   "NewTenant": "Nouveau locataire",

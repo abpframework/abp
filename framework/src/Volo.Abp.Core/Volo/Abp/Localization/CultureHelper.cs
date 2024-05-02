@@ -57,8 +57,6 @@ public static class CultureHelper
 
     public static string GetBaseCultureName(string cultureName)
     {
-        return cultureName.Contains("-")
-            ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))
-            : cultureName;
+        return new CultureInfo(cultureName).Parent.Name;
     }
 }

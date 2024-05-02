@@ -7,7 +7,7 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { NzFormatEmitEvent, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
@@ -44,6 +44,7 @@ export class TreeComponent {
   @Input() nodes = [];
   @Input() expandedKeys: string[] = [];
   @Input() selectedNode: any;
+  @Input() changeCheckboxWithNode: boolean;
   @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
   @Input() beforeDrop = (event: NzFormatBeforeDropEvent) => {
     this.dropPosition = event.pos;
@@ -52,7 +53,14 @@ export class TreeComponent {
 
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
-    this.selectedNodeChange.emit(node.origin.entity);
+    if (this.changeCheckboxWithNode) {
+      this.selectedNodeChange.emit(node);
+      const newVal = [...this.checkedKeys, node.key];
+      this.checkedKeys = newVal;
+      this.checkedKeysChange.emit(newVal);
+    } else {
+      this.selectedNodeChange.emit(node.origin.entity);
+    }
   }
 
   onCheckboxChange(event) {

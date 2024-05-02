@@ -1,6 +1,7 @@
 {
   "culture": "de-DE",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Der Name des Mandanten ist bereits vorhanden: {Name}",
     "Menu:TenantManagement": "Mandantenverwaltung",
     "Tenants": "Mandanten",
     "NewTenant": "Neuer Mandant",

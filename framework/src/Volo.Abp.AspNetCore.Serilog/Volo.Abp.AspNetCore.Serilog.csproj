@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="2.10.0" />
+      <PackageReference Include="Serilog" Version="2.11.0" />
     </ItemGroup>
 
 </Project>

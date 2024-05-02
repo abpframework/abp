@@ -2,6 +2,7 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
+using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
@@ -25,4 +26,6 @@ public class BlogPostDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTi
     public DateTime? LastModificationTime { get; set; }
 
     public string ConcurrencyStamp { get; set; }
+    
+    public BlogPostStatus Status { get; set; }
 }

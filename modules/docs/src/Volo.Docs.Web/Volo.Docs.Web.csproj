@@ -23,7 +23,7 @@
     <ProjectReference Include="..\Volo.Docs.Application.Contracts\Volo.Docs.Application.Contracts.csproj" />
     <PackageReference Include="Markdig.Signed" Version="0.26.0" />
     <PackageReference Include="Scriban" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.5" />
   </ItemGroup>
 
 

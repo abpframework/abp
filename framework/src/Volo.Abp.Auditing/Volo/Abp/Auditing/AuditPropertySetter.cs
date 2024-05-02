@@ -21,25 +21,25 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         Clock = clock;
     }
 
-    public void SetCreationProperties(object targetObject)
+    public virtual void SetCreationProperties(object targetObject)
     {
         SetCreationTime(targetObject);
         SetCreatorId(targetObject);
     }
 
-    public void SetModificationProperties(object targetObject)
+    public virtual void SetModificationProperties(object targetObject)
     {
         SetLastModificationTime(targetObject);
         SetLastModifierId(targetObject);
     }
 
-    public void SetDeletionProperties(object targetObject)
+    public virtual void SetDeletionProperties(object targetObject)
     {
         SetDeletionTime(targetObject);
         SetDeleterId(targetObject);
     }
 
-    private void SetCreationTime(object targetObject)
+    protected virtual void SetCreationTime(object targetObject)
     {
         if (!(targetObject is IHasCreationTime objectWithCreationTime))
         {
@@ -52,7 +52,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         }
     }
 
-    private void SetCreatorId(object targetObject)
+    protected virtual void SetCreatorId(object targetObject)
     {
         if (!CurrentUser.Id.HasValue)
         {
@@ -95,7 +95,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         }
     }
 
-    private void SetLastModificationTime(object targetObject)
+    protected virtual void SetLastModificationTime(object targetObject)
     {
         if (targetObject is IHasModificationTime objectWithModificationTime)
         {
@@ -103,7 +103,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         }
     }
 
-    private void SetLastModifierId(object targetObject)
+    protected virtual void SetLastModifierId(object targetObject)
     {
         if (!(targetObject is IModificationAuditedObject modificationAuditedObject))
         {
@@ -137,7 +137,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         modificationAuditedObject.LastModifierId = CurrentUser.Id;
     }
 
-    private void SetDeletionTime(object targetObject)
+    protected virtual void SetDeletionTime(object targetObject)
     {
         if (targetObject is IHasDeletionTime objectWithDeletionTime)
         {
@@ -148,7 +148,7 @@ public class AuditPropertySetter : IAuditPropertySetter, ITransientDependency
         }
     }
 
-    private void SetDeleterId(object targetObject)
+    protected virtual void SetDeleterId(object targetObject)
     {
         if (!(targetObject is IDeletionAuditedObject deletionAuditedObject))
         {

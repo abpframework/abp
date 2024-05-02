@@ -367,6 +367,7 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                     blog,
                     _cmsKitTestData.BlogPost_1_Title,
                     _cmsKitTestData.BlogPost_1_Slug,
+                    BlogPostStatus.Published,
                     "Short desc 1",
                     "Blog Post 1 Content"))).Id;
 
@@ -377,6 +378,7 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                     blog,
                     _cmsKitTestData.BlogPost_2_Title,
                     _cmsKitTestData.BlogPost_2_Slug,
+                    BlogPostStatus.Published,
                     "Short desc 2",
                     "Blog Post 2 Content"))).Id;
     }

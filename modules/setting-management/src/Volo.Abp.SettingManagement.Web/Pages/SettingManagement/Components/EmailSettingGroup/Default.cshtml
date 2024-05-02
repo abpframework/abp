@@ -1,27 +1,29 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.SettingManagement.Localization
 @inject IHtmlLocalizer<AbpSettingManagementResource> L
-@model Volo.Abp.SettingManagement.EmailSettingsDto
+@model Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup.EmailSettingGroupViewComponent.UpdateEmailSettingsViewModel
 
-<form id="EmailSettingsForm">
+<form id="EmailSettingsForm" method="post">
     <abp-row>
         <abp-column size-md="_12">
             <div>
-                <abp-input asp-for="DefaultFromDisplayName" label="@L["DefaultFromDisplayName"].Value" />
-                <abp-input asp-for="DefaultFromAddress" label="@L["DefaultFromAddress"].Value" />
-                <abp-input asp-for="SmtpHost" label="@L["SmtpHost"].Value" />
-                <abp-input asp-for="SmtpPort" label="@L["SmtpPort"].Value" />
-                <abp-input asp-for="SmtpEnableSsl" label="@L["SmtpEnableSsl"].Value" />
-                <abp-input asp-for="SmtpUseDefaultCredentials" label="@L["SmtpUseDefaultCredentials"].Value" />
+                <abp-input asp-for="DefaultFromDisplayName"/>
+                <abp-input asp-for="DefaultFromAddress"/>
+                <abp-input asp-for="SmtpHost"/>
+                <abp-input asp-for="SmtpPort"/>
+                <abp-input asp-for="SmtpEnableSsl"/>
+                <abp-input asp-for="SmtpUseDefaultCredentials"/>
                 <div id="HideSectionWhenUseDefaultCredentialsIsChecked" @Html.Raw(Model.SmtpUseDefaultCredentials ? "style=\"display: none;\"" : "")>
-                    <abp-input asp-for="SmtpDomain" label="@L["SmtpDomain"].Value" />
-                    <abp-input asp-for="SmtpUserName" label="@L["SmtpUserName"].Value" />
-                    <abp-input type="password" asp-for="SmtpPassword" label="@L["SmtpPassword"].Value" />
+                    <abp-input asp-for="SmtpDomain"/>
+                    <abp-input asp-for="SmtpUserName"/>
+                    <abp-input type="password" asp-for="SmtpPassword"/>
                 </div>
             </div>
-            <hr class="my-4" />
+            <hr class="my-4"/>
             <div>
-                <abp-button button-type="Primary" type="submit"><i class="fa fa-save"></i> @L["Save"]</abp-button>
+                <abp-button button-type="Primary" type="submit">
+                    <i class="fa fa-save"></i> @L["Save"]
+                </abp-button>
             </div>
         </abp-column>
     </abp-row>

@@ -108,6 +108,10 @@ ABP is a community-driven open source project. See [the contribution guide](http
 
 Love ABP Framework? **Please give a star** to this repository :star:
 
+## Discord Channel
+
+You can use this link to join the ABP Community Discord Server: https://discord.gg/abp
+
 ## ABP Commercial
 
 See also [ABP Commercial](https://commercial.abp.io/) if you are looking for pre-built application modules, professional themes, code generation tooling and premium support for the ABP Framework.

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="$(MicrosoftAspNetCorePackageVersion)" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿@page
 
 @using System.Globalization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
 @using Volo.CmsKit.Admin.Web.Pages
@@ -22,6 +23,9 @@
     <abp-script type="typeof(TuiEditorScriptContributor)" />
     <abp-script type="typeof(UppyScriptContributor)" />
     <abp-script type="typeof(SlugifyScriptContributor)" />
+    <abp-script type="typeof(CodemirrorScriptContributor)"/>
+    <abp-script src="/libs/codemirror/mode/css/css.js"/>
+    <abp-script src="/libs/codemirror/mode/javascript/javascript.js"/>
     <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
     <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
     <abp-script src="/Pages/CmsKit/Pages/create.js" />
@@ -31,6 +35,7 @@
 @section styles {
 <abp-style-bundle>
     <abp-style type="typeof(TuiEditorStyleContributor)" />
+    <abp-style type="typeof(CodemirrorStyleContributor)" />
     <abp-style src="/Pages/CmsKit/Pages/create.css"/>
 </abp-style-bundle>
 }
@@ -56,11 +61,11 @@
                 </abp-tab>
 
                 <abp-tab title="@L["Script"]">
-                    <abp-input asp-for="ViewModel.Script" suppress-label="true" class="cms-kit-editor" />
+                    <abp-input asp-for="ViewModel.Script" suppress-label="true" />
                 </abp-tab>
 
                 <abp-tab title="@L["Style"]">
-                    <abp-input asp-for="ViewModel.Style"  suppress-label="true" class="cms-kit-editor"/>
+                    <abp-input asp-for="ViewModel.Style"  suppress-label="true"/>
                 </abp-tab>
 
             </abp-tabs>

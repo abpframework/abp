@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
@@ -22,18 +24,30 @@ public abstract class ProjectCreationCommandBase
     public ConnectionStringProvider ConnectionStringProvider { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
     public ICmdHelper CmdHelper { get; }
+    public IInstallLibsService InstallLibsService { get; }
+    public CliService CliService { get; }
+    public AngularPwaSupportAdder AngularPwaSupportAdder { get; }
     public ILogger<NewCommand> Logger { get; set; }
 
-    public ProjectCreationCommandBase(ConnectionStringProvider connectionStringProvider, SolutionPackageVersionFinder solutionPackageVersionFinder, ICmdHelper cmdHelper)
+    public ProjectCreationCommandBase(
+        ConnectionStringProvider connectionStringProvider, 
+        SolutionPackageVersionFinder solutionPackageVersionFinder, 
+        ICmdHelper cmdHelper, 
+        IInstallLibsService installLibsService,
+        CliService cliService,
+        AngularPwaSupportAdder angularPwaSupportAdder)
     {
         ConnectionStringProvider = connectionStringProvider;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
         CmdHelper = cmdHelper;
+        InstallLibsService = installLibsService;
+        CliService = cliService;
+        AngularPwaSupportAdder = angularPwaSupportAdder;
 
         Logger = NullLogger<NewCommand>.Instance;
     }
 
-    protected ProjectBuildArgs GetProjectBuildArgs(CommandLineArgs commandLineArgs, string template, string projectName)
+    protected async Task<ProjectBuildArgs> GetProjectBuildArgsAsync(CommandLineArgs commandLineArgs, string template, string projectName)
     {
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
 
@@ -46,6 +60,21 @@ public abstract class ProjectCreationCommandBase
         if (preview)
         {
             Logger.LogInformation("Preview: yes");
+
+            var cliVersion = await CliService.GetCurrentCliVersionAsync(typeof(CliService).Assembly);
+
+            if (!cliVersion.IsPrerelease)
+            {
+                throw new CliUsageException(
+                    "You can only create a new preview solution with preview CLI version." +
+                    " Update your ABP CLI to the preview version.");
+            }
+        }
+
+        var pwa = commandLineArgs.Options.ContainsKey(Options.ProgressiveWebApp.Short);
+        if (pwa)
+        {
+            Logger.LogInformation("Progressive Web App: yes");
         }
 
         var databaseProvider = GetDatabaseProvider(commandLineArgs);
@@ -112,18 +141,38 @@ public abstract class ProjectCreationCommandBase
         SolutionName solutionName;
         if (MicroserviceServiceTemplateBase.IsMicroserviceServiceTemplate(template))
         {
-            var slnFile = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            var slnPath = commandLineArgs.Options.GetOrNull(Options.MainSolution.Short, Options.MainSolution.Long);
 
-            if (slnFile == null)
+            if (slnPath == null)
             {
-                throw new CliUsageException("This command should be run inside a folder that contains a microservice solution!");
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            }
+            else if (slnPath.EndsWith(".sln"))
+            {
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(slnPath));
+                outputFolderRoot = Path.GetDirectoryName(slnPath);
+            }
+            else if (!Directory.Exists(slnPath))
+            {
+                slnPath = null;
+            }
+            else
+            {
+                Directory.SetCurrentDirectory(slnPath);
+                outputFolderRoot = slnPath;
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+            }
+            
+            if (slnPath == null)
+            {
+                throw new CliUsageException($"This command should be run inside a folder that contains a microservice solution! Or use -{Options.MainSolution.Short} parameter.");
             }
 
-            var microserviceSolutionName = Path.GetFileName(slnFile).RemovePostFix(".sln");
+            var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".sln");
 
-            version ??= SolutionPackageVersionFinder.Find(slnFile);
+            version ??= SolutionPackageVersionFinder.Find(slnPath);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);
-            outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, projectName);
+            outputFolder = MicroserviceServiceTemplateBase.CalculateTargetFolder(outputFolderRoot, solutionName.ProjectName);
             uiFramework = uiFramework == UiFramework.NotSpecified ? FindMicroserviceSolutionUiFramework(outputFolderRoot) : uiFramework;
         }
         else
@@ -162,7 +211,8 @@ public abstract class ProjectCreationCommandBase
             gitHubVoloLocalRepositoryPath,
             templateSource,
             commandLineArgs.Options,
-            connectionString
+            connectionString,
+            pwa
         );
     }
 
@@ -307,14 +357,27 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual void RunInstallLibsForWebTemplate(ProjectBuildArgs projectArgs)
+    protected async Task RunInstallLibsForWebTemplateAsync(ProjectBuildArgs projectArgs)
     {
         if (AppTemplateBase.IsAppTemplate(projectArgs.TemplateName) ||
             ModuleTemplateBase.IsModuleTemplate(projectArgs.TemplateName) ||
             AppNoLayersTemplateBase.IsAppNoLayersTemplate(projectArgs.TemplateName) ||
             MicroserviceServiceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
-            CmdHelper.RunCmd("abp install-libs", projectArgs.OutputFolder);
+            Logger.LogInformation("Installing client-side packages...");
+            await InstallLibsService.InstallLibsAsync(projectArgs.OutputFolder);
+        }
+    }
+
+    protected void ConfigurePwaSupportForAngular(ProjectBuildArgs projectArgs)
+    {
+        var isAngular = projectArgs.UiFramework == UiFramework.Angular;
+        var isPwa = projectArgs.Pwa;
+
+        if (isAngular && isPwa)
+        {
+            Logger.LogInformation("Adding PWA Support to Angular app.");
+            AngularPwaSupportAdder.AddPwaSupport(projectArgs.OutputFolder);
         }
     }
 
@@ -467,6 +530,12 @@ public abstract class ProjectCreationCommandBase
             public const string Long = "create-solution-folder";
         }
 
+        public static class SkipInstallingLibs
+        {
+            public const string Short = "sib";
+            public const string Long = "skip-installing-libs";
+        }
+
         public static class Tiered
         {
             public const string Long = "tiered";
@@ -475,6 +544,17 @@ public abstract class ProjectCreationCommandBase
         public static class Preview
         {
             public const string Long = "preview";
+        }
+
+        public static class ProgressiveWebApp
+        {
+            public const string Short = "pwa";
+        }
+
+        public static class MainSolution
+        {
+            public const string Short = "ms";
+            public const string Long = "main-solution";
         }
     }
 }

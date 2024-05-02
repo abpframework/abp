@@ -12,6 +12,7 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -26,7 +27,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public SourceCodeDownloadService SourceCodeDownloadService { get; }
     public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
     public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
-    public InstallLibsCommand InstallLibsCommand { get; }
+    public IInstallLibsService InstallLibsService { get; }
     public ICmdHelper CmdHelper { get; }
     private readonly CliHttpClientFactory _cliHttpClientFactory;
     public ILogger<ProjectNpmPackageAdder> Logger { get; set; }
@@ -36,14 +37,14 @@ public class ProjectNpmPackageAdder : ITransientDependency
         SourceCodeDownloadService sourceCodeDownloadService,
         AngularSourceCodeAdder angularSourceCodeAdder,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-        InstallLibsCommand ınstallLibsCommand,
+        IInstallLibsService installLibsService,
         ICmdHelper cmdHelper)
     {
         JsonSerializer = jsonSerializer;
         SourceCodeDownloadService = sourceCodeDownloadService;
         AngularSourceCodeAdder = angularSourceCodeAdder;
         RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
-        InstallLibsCommand = ınstallLibsCommand;
+        InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
@@ -142,9 +143,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
                 return;
             }
 
-            await InstallLibsCommand.ExecuteAsync(
-                new CommandLineArgs("install-libs")
-            );
+            Logger.LogInformation("Installing client-side packages...");
+            await InstallLibsService.InstallLibsAsync(directory);
         }
     }
 

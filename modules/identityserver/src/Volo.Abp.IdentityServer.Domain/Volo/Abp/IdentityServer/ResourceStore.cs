@@ -61,14 +61,14 @@ public class ResourceStore : IResourceStore
     /// </summary>
     public virtual async Task<IEnumerable<IdentityServer4.Models.IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
-        return await GetCacheItemsAsync(
+        return (await GetCacheItemsAsync(
             IdentityResourceCache,
             scopeNames,
             async keys => await IdentityResourceRepository.GetListByScopeNameAsync(keys, includeDetails: true),
             (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.IdentityResource>>>
             {
                     models.Select(x => new KeyValuePair<string, IdentityServer4.Models.IdentityResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
-            });
+            })).DistinctBy(x => x.Name);
     }
 
     /// <summary>
@@ -76,14 +76,14 @@ public class ResourceStore : IResourceStore
     /// </summary>
     public virtual async Task<IEnumerable<IdentityServer4.Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
     {
-        return await GetCacheItemsAsync(
+        return (await GetCacheItemsAsync(
             ApiScopeCache,
             scopeNames,
             async keys => await ApiScopeRepository.GetListByNameAsync(keys, includeDetails: true),
             (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiScope>>>
             {
                     models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiScope>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
-            });
+            })).DistinctBy(x => x.Name);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class ResourceStore : IResourceStore
     /// </summary>
     public virtual async Task<IEnumerable<IdentityServer4.Models.ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
-        return await GetCacheItemsAsync<ApiResource, IdentityServer4.Models.ApiResource>(
+        return (await GetCacheItemsAsync(
             ApiResourceCache,
             scopeNames,
             async keys => await ApiResourceRepository.GetListByScopesAsync(keys, includeDetails: true),
@@ -100,7 +100,7 @@ public class ResourceStore : IResourceStore
                 return models
                     .Select(model => model.Scopes.Select(scope => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(AddCachePrefix(scope, cacheKeyPrefix), model)).ToList())
                     .Where(scopes => scopes.Any()).Cast<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>().ToList();
-            }, ApiResourceScopeNameCacheKeyPrefix);
+            }, ApiResourceScopeNameCacheKeyPrefix)).DistinctBy(x => x.Name);
     }
 
     /// <summary>
@@ -108,14 +108,14 @@ public class ResourceStore : IResourceStore
     /// </summary>
     public virtual async Task<IEnumerable<IdentityServer4.Models.ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
     {
-        return await GetCacheItemsAsync(
+        return (await GetCacheItemsAsync(
             ApiResourceCache,
             apiResourceNames,
             async keys => await ApiResourceRepository.FindByNameAsync(keys, includeDetails: true),
             (models, cacheKeyPrefix) => new List<IEnumerable<KeyValuePair<string, IdentityServer4.Models.ApiResource>>>
             {
                     models.Select(x => new KeyValuePair<string, IdentityServer4.Models.ApiResource>(AddCachePrefix(x.Name, cacheKeyPrefix), x))
-            }, ApiResourceNameCacheKeyPrefix);
+            }, ApiResourceNameCacheKeyPrefix)).DistinctBy(x => x.Name);
     }
 
     /// <summary>

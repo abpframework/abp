@@ -54,3 +54,5 @@ Thumbs.db
 
 !**/[Pp]ackages/*
 *.internal.*
+
+.angular

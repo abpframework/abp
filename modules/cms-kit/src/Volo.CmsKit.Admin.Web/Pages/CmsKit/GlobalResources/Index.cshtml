@@ -2,6 +2,7 @@
 
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.GlobalResources
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.CmsKit.Localization
@@ -17,8 +18,15 @@
     PageLayout.Content.MenuItemName = CmsKitAdminMenus.GlobalResources.GlobalResourcesMenu;
 }
 
+@section styles{
+    <abp-style type="typeof(CodemirrorStyleContributor)" />
+}
+
 @section scripts {
     <abp-script-bundle>
+        <abp-script type="typeof(CodemirrorScriptContributor )"/>
+        <abp-script src="/libs/codemirror/mode/css/css.js"/>
+        <abp-script src="/libs/codemirror/mode/javascript/javascript.js"/>
         <abp-script src="/client-proxies/cms-kit-common-proxy.js"/>
         <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
         <abp-script src="/Pages/CmsKit/GlobalResources/index.js"/>

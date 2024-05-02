@@ -33,6 +33,21 @@ public class AutoRegistrationHelper_Tests
         exposedServices.ShouldContain(typeof(IDerivedService));
     }
 
+    [Fact]
+    public void Should_Get_Conventional_Exposed_Generic_Types_By_Default()
+    {
+        //Act
+        var exposedServices = ExposedServiceExplorer.GetExposedServices(typeof(DefaultGenericService));
+
+        //Assert
+        exposedServices.Count.ShouldBe(4);
+        exposedServices.ShouldContain(typeof(IService));
+        exposedServices.ShouldContain(typeof(IGenericService<string>));
+        exposedServices.ShouldContain(typeof(IGenericService<int>));
+        exposedServices.ShouldContain(typeof(DefaultGenericService));
+    }
+
+
     public class DefaultDerivedService : IDerivedService
     {
     }
@@ -47,6 +62,16 @@ public class AutoRegistrationHelper_Tests
 
     [ExposeServices(typeof(IDerivedService))]
     public class ExplicitDerivedService : IDerivedService
+    {
+
+    }
+
+    public interface IGenericService<T>
+    {
+
+    }
+
+    public class DefaultGenericService : IService, IGenericService<string>, IGenericService<int>
     {
 
     }

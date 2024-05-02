@@ -13,7 +13,7 @@ Prism.languages.erlang = {
 		alias: 'atom'
 	},
 	'boolean': /\b(?:false|true)\b/,
-	'keyword': /\b(?:after|case|catch|end|fun|if|of|receive|try|when)\b/,
+	'keyword': /\b(?:after|begin|case|catch|end|fun|if|of|receive|try|when)\b/,
 	'number': [
 		/\$\\?./,
 		/\b\d+#[a-z0-9]+/i,

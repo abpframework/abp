@@ -9,6 +9,7 @@ using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Text;
 
 namespace Volo.Abp.Cli.ProjectModification;
 
@@ -17,6 +18,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
     private readonly NuGetService _nuGetService;
     private readonly MyGetPackageListFinder _myGetPackageListFinder;
     public ILogger<VoloNugetPackagesVersionUpdater> Logger { get; set; }
+    public static Encoding DefaultEncoding = Encoding.UTF8;
 
     public VoloNugetPackagesVersionUpdater(NuGetService nuGetService, MyGetPackageListFinder myGetPackageListFinder)
     {
@@ -41,17 +43,30 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
             async Task UpdateAsync(string filePath)
             {
-                var fileContent = File.ReadAllText(filePath);
-                var updatedContent = await UpdateVoloPackagesAsync(fileContent,
-                    includePreviews,
-                    includeReleaseCandidates,
-                    switchToStable,
-                    latestVersionFromNuget,
-                    latestReleaseCandidateVersionFromNuget,
-                    latestVersionFromMyGet,
-                    version);
+                using (var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                {
+                    using (var sr = new StreamReader(fs, Encoding.Default, true))
+                    {
+                        var fileContent = await sr.ReadToEndAsync();
 
-                File.WriteAllText(filePath, updatedContent);
+                        var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                            includePreviews,
+                            includeReleaseCandidates,
+                            switchToStable,
+                            latestVersionFromNuget,
+                            latestReleaseCandidateVersionFromNuget,
+                            latestVersionFromMyGet,
+                            version);
+
+                        fs.Seek(0, SeekOrigin.Begin);
+                        fs.SetLength(0);
+                        using (var sw = new StreamWriter(fs, DefaultEncoding))
+                        {
+                            await sw.WriteAsync(updatedContent);
+                            await sw.FlushAsync();
+                        }
+                    }
+                }
             }
 
             Task.WaitAll(projectPaths.Select(UpdateAsync).ToArray());
@@ -70,27 +85,54 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
             var latestReleaseCandidateVersionFromNuget = await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Core", includeReleaseCandidates: true);
             var latestVersionFromMyGet = await GetLatestVersionFromMyGet("Volo.Abp.Core");
 
-            var fileContent = File.ReadAllText(projectPath);
+            using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                using (var sr = new StreamReader(fs, Encoding.Default, true))
+                {
+                    var fileContent = await sr.ReadToEndAsync();
 
-            var updatedContent = await UpdateVoloPackagesAsync(fileContent,
-                includeNightlyPreviews,
-                includeReleaseCandidates,
-                switchToStable,
-                latestVersionFromNuget,
-                latestReleaseCandidateVersionFromNuget,
-                latestVersionFromMyGet,
-                version);
+                    var updatedContent = await UpdateVoloPackagesAsync(fileContent,
+                        includeNightlyPreviews,
+                        includeReleaseCandidates,
+                        switchToStable,
+                        latestVersionFromNuget,
+                        latestReleaseCandidateVersionFromNuget,
+                        latestVersionFromMyGet,
+                        version);
 
-            File.WriteAllText(projectPath, updatedContent);
+                    fs.Seek(0, SeekOrigin.Begin);
+                    fs.SetLength(0);
+
+                    using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+                    {
+                        await sw.WriteAsync(updatedContent);
+                        await sw.FlushAsync();
+                    }
+                }
+            }
         }
     }
 
     protected virtual async Task UpdateInternalAsync(string projectPath, bool includeNightlyPreviews = false, bool includeReleaseCandidates = false, bool switchToStable = false)
     {
-        var fileContent = File.ReadAllText(projectPath);
-        var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
+        using (var fs = File.Open(projectPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        {
+            using (var sr = new StreamReader(fs, Encoding.Default, true))
+            {
+                var fileContent = await sr.ReadToEndAsync();
 
-        File.WriteAllText(projectPath, updatedContent);
+                var updatedContent = await UpdateVoloPackagesAsync(fileContent, includeNightlyPreviews, includeReleaseCandidates, switchToStable);
+
+                fs.Seek(0, SeekOrigin.Begin);
+                fs.SetLength(0);
+
+                using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
+                {
+                    await sw.WriteAsync(updatedContent);
+                    await sw.FlushAsync();
+                }
+            }
+        }
     }
 
     protected virtual async Task<bool> SpecifiedVersionExists(string version, string packageId)
@@ -210,7 +252,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         }
         catch (Exception ex)
         {
-            Logger.LogError("Cannot update Volo.* packages! An error occured while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
+            Logger.LogError("Cannot update Volo.* packages! An error occurred while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
             Logger.LogException(ex);
         }
 

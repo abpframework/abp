@@ -228,7 +228,7 @@ namespace AbpDemo
 ````
 
 * `MyHandler` implements the `IDistributedEventHandler<EntityUpdatedEto<ProductEto>>`.
-* It is required to register your handler class to the [dependency injection](Dependency-Injection.md) system. Implementing `ITransient` like in this example is an easy way.
+* It is required to register your handler class to the [dependency injection](Dependency-Injection.md) system. Implementing `ITransientDependency` like in this example is an easy way.
 
 ### Configuration
 

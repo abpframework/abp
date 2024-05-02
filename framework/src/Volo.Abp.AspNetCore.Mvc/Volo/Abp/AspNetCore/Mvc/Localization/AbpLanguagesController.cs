@@ -25,7 +25,7 @@ public class AbpLanguagesController : AbpController
     {
         if (!CultureHelper.IsValidCultureCode(culture))
         {
-            throw new AbpException("Unknown language: " + culture + ". It must be a valid culture!");
+            throw new AbpException("The selected culture is not valid! Make sure you enter a valid culture code.");
         }
 
         AbpRequestCultureCookieHelper.SetCultureCookie(

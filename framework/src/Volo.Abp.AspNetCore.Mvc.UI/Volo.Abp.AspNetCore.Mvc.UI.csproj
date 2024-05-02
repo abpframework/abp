@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUglify" Version="1.16.0" />
+    <PackageReference Include="NUglify" Version="$(NUglifyPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -37,6 +37,7 @@ public abstract class AppTemplateBase : TemplateInfo
         RandomizeSslPorts(context, steps);
         RandomizeStringEncryption(context, steps);
         UpdateNuGetConfig(context, steps);
+        ConfigureDockerFiles(context, steps);
         ChangeConnectionString(context, steps);
         CleanupFolderHierarchy(context, steps);
 
@@ -289,6 +290,19 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
+        }
+        else
+        {
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.js"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.published.js"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/manifest.json"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-192.png"));
+            steps.Add(new RemoveFileStep("/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/icon-512.png"));
+        }
     }
 
     protected void ConfigureWithBlazorServerUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -365,6 +379,11 @@ public abstract class AppTemplateBase : TemplateInfo
             steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
             steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
         }
+
+        if (context.BuildArgs.ExtraProperties.ContainsKey(NewCommand.Options.ProgressiveWebApp.Short))
+        {
+            context.Symbols.Add("PWA");
+        }
     }
 
     protected void RemoveUnnecessaryPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -387,7 +406,12 @@ public abstract class AppTemplateBase : TemplateInfo
                         "https://localhost:44301",
                         "https://localhost:44302",
                         "https://localhost:44303",
-                        "https://localhost:44305"
+                        "https://localhost:44304",
+                        "https://localhost:44305",
+                        "https://localhost:44306",
+                        "https://localhost:44307",
+                        "https://localhost:44308",
+                        "https://localhost:44309"
                 }
             )
         );
@@ -446,6 +470,38 @@ public abstract class AppTemplateBase : TemplateInfo
             context.BuildArgs.MobileApp == MobileApp.None)
         {
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
+        }
+    }
+
+    private void ConfigureDockerFiles(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        switch (context.BuildArgs.UiFramework)
+        {
+            case UiFramework.None:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
+            case UiFramework.Angular:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
+            case UiFramework.Blazor:
+            case UiFramework.BlazorServer:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
+            case UiFramework.NotSpecified:
+            case UiFramework.Mvc:
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Blazor.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/docker-compose.Angular.yml"));
+                steps.Add(new RemoveFileStep("/aspnet-core/etc/docker/dynamic-env.json"));
+                steps.Add(new MoveFileStep("/aspnet-core/etc/docker/docker-compose.Mvc.yml", "/aspnet-core/etc/docker/docker-compose.yml"));
+                break;
         }
     }
 }

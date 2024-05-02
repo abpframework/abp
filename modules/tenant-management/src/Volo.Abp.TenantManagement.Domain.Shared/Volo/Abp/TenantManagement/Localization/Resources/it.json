@@ -1,6 +1,7 @@
 {
   "culture": "it",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Il nome del tenant esiste già: {Name}",
     "Menu:TenantManagement": "Gestione tenants",
     "Tenants": "Tenants",
     "NewTenant": "Nuovo Tenant",

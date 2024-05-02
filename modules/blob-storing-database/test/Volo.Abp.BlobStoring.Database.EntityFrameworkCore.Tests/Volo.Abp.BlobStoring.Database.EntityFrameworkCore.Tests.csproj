@@ -8,8 +8,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
     <ProjectReference Include="..\..\src\Volo.Abp.BlobStoring.Database.EntityFrameworkCore\Volo.Abp.BlobStoring.Database.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Volo.Abp.BlobStoring.Database.TestBase\Volo.Abp.BlobStoring.Database.TestBase.csproj" />
   </ItemGroup>

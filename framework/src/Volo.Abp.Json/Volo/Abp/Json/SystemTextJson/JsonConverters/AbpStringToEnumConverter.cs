@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -47,5 +46,15 @@ public class AbpStringToEnumConverter<T> : JsonConverter<T>
             x.GetType() == typeof(AbpStringToEnumFactory));
 
         JsonSerializer.Serialize(writer, value, _writeJsonSerializerOptions);
+    }
+
+    public override T ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        return (T)Enum.Parse(typeToConvert, reader.GetString());
+    }
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(Enum.GetName(typeof(T), value));
     }
 }

@@ -10,8 +10,9 @@ public class ValueObject_Tests
     public void ValueObjects_With_Same_Properties_Should_Be_Equals()
     {
         var cityId = Guid.NewGuid();
-        var address1 = new Address(cityId, "Baris Manco", 42);
-        var address2 = new Address(cityId, "Baris Manco", 42);
+
+        var address1 = new Address(cityId, "Baris Manco", 42, "home", "office");
+        var address2 = new Address(cityId, "Baris Manco", 42, "home", "office");
 
         address1.ValueEquals(address2).ShouldBeTrue();
     }
@@ -25,5 +26,15 @@ public class ValueObject_Tests
         var address2 = new Address(cityId, "Baris Manco", 43);
 
         address1.ValueEquals(address2).ShouldBeFalse();
+
+        address1 = new Address(cityId, "Baris Manco", 42, "home", "office");
+        address2 = new Address(cityId, "Baris Manco", 42, "home");
+
+        address1.ValueEquals(address2).ShouldBeFalse();
+
+        var emailAddress1 = new EmailAddress("test@abp.io");
+        var emailAddress2 = new EmailAddress(null);
+
+        emailAddress1.ValueEquals(emailAddress2).ShouldBeFalse();
     }
 }

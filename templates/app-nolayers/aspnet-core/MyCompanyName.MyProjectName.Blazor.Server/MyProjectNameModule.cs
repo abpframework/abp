@@ -1,5 +1,7 @@
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
@@ -20,6 +22,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Emailing;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
@@ -124,6 +127,11 @@ public class MyProjectNameModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
+        if (hostingEnvironment.IsDevelopment())
+        {
+            context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        }
+
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureAutoMapper(context);
@@ -182,6 +190,8 @@ public class MyProjectNameModule : AbpModule
                 options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
                 options.Audience = "MyProjectName";
             });
+
+        context.Services.ForwardIdentityAuthenticationForBearer();
     }
 
     private void ConfigureLocalizationServices()

@@ -9,7 +9,7 @@
     Layout = null;
 }
 
-<form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement">
+<form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
     <abp-modal size="Large">
         <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
         <abp-modal-body class="custom-scroll-container">
@@ -43,7 +43,7 @@
                                                disabled="@permission.IsDisabled(Model.ProviderName)"
                                                group-data-permission-name="@permission.Name"
                                                group-data-parent-name="@(permission.ParentName ?? "")"
-                                               group-style="margin-left: @(permission.Depth * 20)px"/>
+                                               group-style="margin-inline-start: @(permission.Depth * 20)px"/>
                                     <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name"/>
                                 }
                             </div>

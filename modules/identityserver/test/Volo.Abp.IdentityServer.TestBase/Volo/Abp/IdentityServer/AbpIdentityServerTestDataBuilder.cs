@@ -103,6 +103,7 @@ public class AbpIdentityServerTestDataBuilder : ITransientDependency
 
         apiResource2.AddSecret("secret".Sha256());
         apiResource2.AddScope("Test-ApiResource-ApiScope-Name-1");
+        apiResource2.AddScope("Test-ApiResource-ApiScope-Name-2");
         apiResource2.AddScope("Test-ApiResource-ApiScope-DisplayName-1");
         apiResource2.AddUserClaim("Test-ApiResource-Claim-Type-1");
 

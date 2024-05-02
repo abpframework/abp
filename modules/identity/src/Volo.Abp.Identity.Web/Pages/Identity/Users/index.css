@@ -1,0 +1,7 @@
+/* 
+    By default Microsoft Edge, adds password reveal button inside the password input.
+    https://docs.microsoft.com/en-us/microsoft-edge/web-platform/password-reveal
+ */
+::-ms-reveal {
+    display: none;
+}

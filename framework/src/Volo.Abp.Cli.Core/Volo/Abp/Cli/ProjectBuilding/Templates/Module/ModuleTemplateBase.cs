@@ -90,7 +90,9 @@ public abstract class ModuleTemplateBase : TemplateInfo
                 "https://localhost:44300",
                 "https://localhost:44301",
                 "https://localhost:44302",
-                "https://localhost:44303"
+                "https://localhost:44303",
+                "https://localhost:44304",
+                "https://localhost:44305"
             }));
     }
 

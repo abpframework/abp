@@ -1,4 +1,8 @@
-<div class="mb-3 form-group" *abpPermission="prop.permission" [ngSwitch]="getComponent(prop)">
+<div
+  class="mb-3 form-group"
+  *abpPermission="prop.permission; runChangeDetection: false"
+  [ngSwitch]="getComponent(prop)"
+>
   <ng-template ngSwitchCase="input">
     <ng-template [ngTemplateOutlet]="label"></ng-template>
     <input

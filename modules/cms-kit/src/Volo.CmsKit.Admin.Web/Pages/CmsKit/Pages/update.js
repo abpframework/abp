@@ -7,12 +7,30 @@ $(function () {
 
     $formUpdate.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
 
+    var scriptEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Script"), {
+        mode: "javascript",
+        lineNumbers: true
+    });
+
+    var styleEditor = CodeMirror.fromTextArea(document.getElementById("ViewModel_Style"), {
+        mode: "css",
+        lineNumbers: true
+    });
+
+    $('.nav-tabs a').on('shown.bs.tab', function () {
+        scriptEditor.refresh();
+        styleEditor.refresh();
+    });
+
     $formUpdate.on('submit', function (e) {
         e.preventDefault();
 
         if ($formUpdate.valid()) {
 
             abp.ui.setBusy();
+
+            $("#ViewModel_Style").val(styleEditor.getValue());
+            $("#ViewModel_Script").val(scriptEditor.getValue());
 
             $formUpdate.ajaxSubmit({
                 success: function (result) {

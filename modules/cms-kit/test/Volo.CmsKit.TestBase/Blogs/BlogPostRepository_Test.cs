@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Modularity;
+using Volo.CmsKit.Users;
 using Xunit;
 
 namespace Volo.CmsKit.Blogs;
@@ -15,11 +16,16 @@ public abstract class BlogPostRepository_Test<TStartupModule> : CmsKitTestBase<T
 {
     private readonly CmsKitTestData testData;
     private readonly IBlogPostRepository blogPostRepository;
-
+    private readonly BlogPostManager blogPostManager;
+    private readonly ICmsUserRepository userRepository;
+    private readonly IBlogRepository blogRepository;
     public BlogPostRepository_Test()
     {
         testData = GetRequiredService<CmsKitTestData>();
         blogPostRepository = GetRequiredService<IBlogPostRepository>();
+        blogPostManager = GetRequiredService<BlogPostManager>();
+        userRepository = GetRequiredService<ICmsUserRepository>();
+        blogRepository = GetRequiredService<IBlogRepository>();
     }
 
     [Fact]
@@ -144,5 +150,128 @@ public abstract class BlogPostRepository_Test<TStartupModule> : CmsKitTestBase<T
         result.ShouldNotBeNull();
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task GetAuthorsHasBlogPosts_ShouldWorkProperly()
+    {
+        var authors = await blogPostRepository.GetAuthorsHasBlogPostsAsync(0, 100, null, null);
+
+        authors.ShouldNotBeNull();
+        authors.ShouldNotBeEmpty();
+        authors.ShouldContain(x => x.Id == testData.User1Id);
+    }
+    
+    [Fact]
+    public async Task ShouldCreateItem_WithDraftStatus()
+    {
+        var user2 = await userRepository.GetAsync(testData.User2Id);
+        var blog = await blogRepository.GetAsync(testData.Blog_Id);
+        
+        var draftPost = await blogPostManager.CreateAsync(
+            user2,
+            blog,
+            testData.BlogPost_1_Title + "draft",
+            testData.BlogPost_1_Slug + "draft",
+            BlogPostStatus.Draft,
+            "Short desc 1",
+            "Blog Post 1 Content"
+        );
+        
+        
+        await blogPostRepository.InsertAsync(draftPost);
+
+        var draftPostFromDb = await blogPostRepository.GetAsync(draftPost.Id);
+
+        draftPostFromDb.Title.ShouldBe(draftPost.Title);
+        draftPostFromDb.Slug.ShouldBe(draftPost.Slug);
+        draftPostFromDb.ShortDescription.ShouldBe(draftPost.ShortDescription);
+        draftPostFromDb.Content.ShouldBe(draftPost.Content);
+        draftPostFromDb.Status.ShouldBe(BlogPostStatus.Draft);
+    }
+    
+    [Fact]
+    public async Task ShouldCreateItem_WithPublishedStatus()
+    {
+        var user2 = await userRepository.GetAsync(testData.User2Id);
+        var blog = await blogRepository.GetAsync(testData.Blog_Id);
+        
+        var publishedPost = await blogPostManager.CreateAsync(
+            user2,
+            blog,
+            testData.BlogPost_1_Title + "published",
+            testData.BlogPost_1_Slug + "published",
+            BlogPostStatus.Published,
+            "Short desc 1",
+            "Blog Post 1 Content"
+        );
+        
+        await blogPostRepository.InsertAsync(publishedPost);
+
+        var publishedPostFromDb = await blogPostRepository.GetAsync(publishedPost.Id);
+
+        publishedPostFromDb.Title.ShouldBe(publishedPost.Title);
+        publishedPostFromDb.Slug.ShouldBe(publishedPost.Slug);
+        publishedPostFromDb.ShortDescription.ShouldBe(publishedPost.ShortDescription);
+        publishedPostFromDb.Content.ShouldBe(publishedPost.Content);
+        publishedPostFromDb.Status.ShouldBe(BlogPostStatus.Published);
+    }
+    
+    [Fact]
+    public async Task GetListAsync_ShouldFilter_ByStatus()
+    {
+        var user2 = await userRepository.GetAsync(testData.User2Id);
+        var blog = await blogRepository.GetAsync(testData.Blog_Id);
+        
+        var draftPost = await blogPostManager.CreateAsync(
+            user2,
+            blog,
+            testData.BlogPost_1_Title + "draft",
+            testData.BlogPost_1_Slug + "draft",
+            BlogPostStatus.Draft,
+            "Short desc 1",
+            "Blog Post 1 Content"
+        );
+        
+        var publishedPost = await blogPostManager.CreateAsync(
+            user2,
+            blog,
+            testData.BlogPost_1_Title + "published",
+            testData.BlogPost_1_Slug + "published",
+            BlogPostStatus.Published,
+            "Short desc 1",
+            "Blog Post 1 Content"
+        );
+        
+        await blogPostRepository.InsertAsync(draftPost);
+        await blogPostRepository.InsertAsync(publishedPost);
+        
+        var draftPostFromDb = await blogPostRepository.GetAsync(draftPost.Id);
+
+        draftPostFromDb.Title.ShouldBe(draftPost.Title);
+        draftPostFromDb.Slug.ShouldBe(draftPost.Slug);
+        draftPostFromDb.ShortDescription.ShouldBe(draftPost.ShortDescription);
+        draftPostFromDb.Content.ShouldBe(draftPost.Content);
+        draftPostFromDb.Status.ShouldBe(BlogPostStatus.Draft);
+
+        var publishedPostFromDb = await blogPostRepository.GetAsync(publishedPost.Id);
+
+        publishedPostFromDb.Title.ShouldBe(publishedPost.Title);
+        publishedPostFromDb.Slug.ShouldBe(publishedPost.Slug);
+        publishedPostFromDb.ShortDescription.ShouldBe(publishedPost.ShortDescription);
+        publishedPostFromDb.Content.ShouldBe(publishedPost.Content);
+        publishedPostFromDb.Status.ShouldBe(BlogPostStatus.Published);
+
+        var draftPosts = await blogPostRepository.GetListAsync(null, statusFilter: BlogPostStatus.Draft);
+        draftPosts.ShouldNotBeNull();
+        draftPosts.Count.ShouldBe(1);
+        draftPosts.Any(x => x.Id == draftPost.Id).ShouldBeTrue();
+        draftPosts.Any(x => x.Id == publishedPost.Id).ShouldBeFalse();
+        
+        var publishedPosts = await blogPostRepository.GetListAsync(null, statusFilter: BlogPostStatus.Published);
+        publishedPosts.ShouldNotBeNull();
+        publishedPosts.Count.ShouldBe(3);//1 new added 2 already existing
+        publishedPosts.Any(x => x.Id == draftPost.Id).ShouldBeFalse();
+        publishedPosts.Any(x => x.Id == publishedPost.Id).ShouldBeTrue();
     }
 }

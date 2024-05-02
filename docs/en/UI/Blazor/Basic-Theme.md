@@ -87,7 +87,7 @@ See the [Customization / Overriding Components](Customization-Overriding-Compone
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../CLI.md) command in **Blazor WebAssembly** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../CLI.md) command in **Blazor{{if UI == "Blazor"}}WebAssembly{{else}} Server{{end}}** project directory to copy the source code to your solution:
 
 {{if UI == "Blazor"}}
 

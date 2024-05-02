@@ -15,10 +15,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(MicrosoftPackageVersion)" />
@@ -26,10 +26,10 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="System.Text.Encodings.Web" Version="$(MicrosoftPackageVersion)" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.12" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2021.2.0" />
-    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.0" />
-    <PackageReference Include="Nito.AsyncEx.Context" Version="5.1.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+    <PackageReference Include="Nito.AsyncEx.Context" Version="5.1.2" />
   </ItemGroup>
 </Project>

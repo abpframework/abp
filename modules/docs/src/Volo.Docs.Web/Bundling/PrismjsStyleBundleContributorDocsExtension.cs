@@ -10,6 +10,7 @@ namespace Volo.Docs.Bundling
             context.Files.ReplaceOne("/libs/prismjs/themes/prism.css","/libs/prismjs/themes/prism-okaidia.css");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/line-highlight/prism-line-highlight.css");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/toolbar/prism-toolbar.css");
+            context.Files.AddIfNotContains("/libs/prismjs/plugins/diff-highlight/prism-diff-highlight.css");
         }
     }
 }

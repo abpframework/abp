@@ -1,6 +1,7 @@
 {
   "culture": "ru",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Имя арендатора уже существует: {Name}",
     "Menu:TenantManagement": "Управление арендаторами",
     "Tenants": "Арендаторы",
     "NewTenant": "Новый арендатор",

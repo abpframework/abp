@@ -36,7 +36,7 @@ public class TenantManager : DomainService, ITenantManager
         var tenant = await TenantRepository.FindByNameAsync(name);
         if (tenant != null && tenant.Id != expectedId)
         {
-            throw new UserFriendlyException("Duplicate tenancy name: " + name); //TODO: A domain exception would be better..?
+            throw new BusinessException("Volo.Abp.TenantManagement:DuplicateTenantName").WithData("Name", name);
         }
     }
 }

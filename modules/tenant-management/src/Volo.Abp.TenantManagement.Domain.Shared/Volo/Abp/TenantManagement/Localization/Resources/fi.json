@@ -1,6 +1,7 @@
 {
   "culture": "fi",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Vuokralaisen nimi on jo olemassa: {Name}",
     "Menu:TenantManagement": "Vuokralaisten hallinta",
     "Tenants": "Vuokralaiset",
     "NewTenant": "Uusi vuokralainen",

@@ -34,6 +34,8 @@
     "DisplayName:PhoneNumber": "Phone number",
     "PersonalSettings": "Personal settings",
     "PersonalSettingsSaved": "Personal settings saved",
+    "PersonalSettingsChangedConfirmationModalTitle": "Personal info changed",
+    "PersonalSettingsChangedConfirmationModalDescription": "If you want to apply these changes, you have to login. Do you want to log out?",
     "PasswordChanged": "Password changed",
     "NewPasswordConfirmFailed": "Please confirm the new password.",
     "Manage": "Manage",

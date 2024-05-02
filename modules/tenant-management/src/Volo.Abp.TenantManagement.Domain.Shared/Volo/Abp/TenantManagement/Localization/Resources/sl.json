@@ -1,6 +1,7 @@
 {
   "culture": "sl",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Ime najemnika že obstaja: {Name}",
     "Menu:TenantManagement": "Upravljanje najemnikov",
     "Tenants": "Najemniki",
     "NewTenant": "Nov najemnik",

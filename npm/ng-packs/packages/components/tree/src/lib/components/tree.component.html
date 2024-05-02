@@ -16,7 +16,6 @@
 ></nz-tree>
 <ng-template #treeTemplate let-node>
   <div
-    class="node-wrapper"
     [class.selected]="isNodeSelected(node)"
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"

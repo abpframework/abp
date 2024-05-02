@@ -32,6 +32,22 @@ Configure<AbpMultiTenancyOptions>(options =>
 
 > Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](Startup-Templates/Application.md). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
 
+### AbpMultiTenancyOptions: Handle inactive and non-existent tenants.
+
+The `MultiTenancyMiddlewareErrorPageBuilder` of `AbpMultiTenancyOptions` is used to handle inactive and non-existent tenants.
+
+It will respond to an error page by default, you can change it if you want, eg: only output the error log and continue ASP NET Core's request pipeline.
+
+```csharp
+Configure<AbpMultiTenancyOptions>(options =>
+{
+    options.MultiTenancyMiddlewareErrorPageBuilder = async (context, exception) =>
+    {
+        // Handle the exception.
+    };
+});
+```
+
 ### Database Architecture
 
 ABP Framework supports all the following approaches to store the tenant data in the database;

@@ -231,11 +231,16 @@ namespace Volo.Blogging.Posts
             return url;
         }
 
-        private async Task SaveTags(ICollection<string> newTags, Post post)
+        private async Task SaveTags(ICollection<string> tags, Post post)
         {
-            await RemoveOldTags(newTags, post);
+            tags = tags
+                .Select(t => t.ToLowerInvariant())
+                .Distinct()
+                .ToList();
+            
+            await RemoveOldTags(tags, post);
 
-            await AddNewTags(newTags, post);
+            await AddNewTags(tags, post);
         }
 
         private async Task RemoveOldTags(ICollection<string> newTags, Post post)

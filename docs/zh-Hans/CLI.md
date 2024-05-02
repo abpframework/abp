@@ -39,6 +39,7 @@ dotnet tool update -g Volo.Abp.Cli
 * **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
 * **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
 * **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
+* **`login-info`**: 展示当前登录用户信息.
 * **`logout`**: 在你的计算机注销认证.
 * **`install-libs`**: 为 MVC / Razor Pages 和 Blazor Server UI 类型安装NPM包.
 
@@ -167,16 +168,22 @@ abp add-package <包名> [options]
 示例:
 
 ````
-abp add-package Volo.Abp.MongoDB
+abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 ````
 
-* 示例中将Volo.Abp.MongoDB包添加到项目中.
+* 示例中将`Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic`包添加到项目中.
 
 #### Options
 
 * `--project` 或 `-p`: 指定项目 (.csproj) 路径. 如果未指定,Cli会尝试在当前目录查找.csproj文件.
 * `--with-source-code`: 下载包的源码到你的解决方案文件夹，而不是NuGet/NPM软件包.
 * `--add-to-solution-file`: 添加下载/创建的包添加到解决方案文件中,你在IDE中打开解决方案时也会看到包的项目. (仅当 `--with-source-code` 为 `True` 时可用.)
+
+> 当前只有基本主题包([MVC](https://docs.abp.io/zh-Hans/abp/latest/UI/AspNetCore/Basic-Theme) 和 [Blazor](https://docs.abp.io/zh-Hans/abp/latest/UI/Blazor/Basic-Theme)) 可以下载.
+> - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
+> - Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
+> - Volo.Abp.AspNetCore.Components.Web.BasicTheme
+> - Volo.Abp.AspNetCore.Components.Server.BasicTheme
 
 ### add-module
 
@@ -384,6 +391,14 @@ abp login <username> -p <password> -o <organization>  # You can enter both your 
 > 当使用-p参数,请注意,因为你的密码是可见的. 它对于CI / CD自动化管道很有用.
 
 请注意,新的登录将终止先前的会话并创建一个新的会话.
+
+### login-info
+
+展示你的登录信息, 如 **名称** , **用户名** , **地址** 和 **组织**.
+
+```bash
+abp login-info
+```
 
 ### logout
 

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Rebus.Bus;
 using Rebus.Pipeline;
+using Rebus.Transport;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Guids;
@@ -150,6 +151,11 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
+        await PublishAsync(eventType, eventData);
+    }
+
+    protected virtual async Task PublishAsync(Type eventType, object eventData)
+    {
         if (AbpRebusEventBusOptions.Publish != null)
         {
             await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
@@ -218,7 +224,22 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return PublishToEventBusAsync(eventType, eventData);
     }
 
-    public override async Task ProcessFromInboxAsync(
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
+    {
+        var outgoingEventArray = outgoingEvents.ToArray();
+
+        using (var scope = new RebusTransactionScope())
+        {
+            foreach (var outgoingEvent in outgoingEventArray)
+            {
+                await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+            }
+            
+            await scope.CompleteAsync();
+        }
+    }
+
+    public async override Task ProcessFromInboxAsync(
         IncomingEventInfo incomingEvent,
         InboxConfig inboxConfig)
     {

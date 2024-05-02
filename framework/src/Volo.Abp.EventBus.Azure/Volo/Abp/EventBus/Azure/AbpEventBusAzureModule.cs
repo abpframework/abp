@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AzureServiceBus;
 using Volo.Abp.Modularity;
 
@@ -19,9 +20,15 @@ public class AbpEventBusAzureModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        context
-            .ServiceProvider
-            .GetRequiredService<AzureDistributedEventBus>()
-            .Initialize();
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAzureEventBusOptions>>().Value;
+
+        if (!options.IsServiceBusDisabled)
+        {
+            context
+                .ServiceProvider
+                .GetRequiredService<AzureDistributedEventBus>()
+                .Initialize();
+        }
+
     }
 }

@@ -34,6 +34,11 @@ public class AbpEventBusBoxesOptions
     /// Default: 2 hours
     /// </summary>
     public TimeSpan WaitTimeToDeleteProcessedInboxEvents { get; set; }
+    
+    /// <summary>
+    /// Default: true
+    /// </summary>
+    public bool BatchPublishOutboxEvents { get; set; }
 
     public AbpEventBusBoxesOptions()
     {
@@ -43,5 +48,6 @@ public class AbpEventBusBoxesOptions
         PeriodTimeSpan = TimeSpan.FromSeconds(2);
         DistributedLockWaitDuration = TimeSpan.FromSeconds(15);
         WaitTimeToDeleteProcessedInboxEvents = TimeSpan.FromHours(2);
+        BatchPublishOutboxEvents = true;
     }
 }

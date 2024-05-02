@@ -11,38 +11,42 @@
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @using Volo.Docs.Pages.Documents.Shared.ErrorComponent
+@using Volo.Docs.Pages.Shared.Components.Head
 @inject IThemeManager ThemeManager
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
+
 @model IndexModel
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
     PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
     ViewBag.Description = Model.GetDescription();
+    ViewBag.CanonicalUrl = Model.IsLatestVersion ? null : Model.GetFullUrlOfTheLatestDocument(); //issue #12355
 }
+
 @section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style type="@typeof(PrismjsStyleBundleContributor)" />
-        <abp-style type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
-        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
-        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
-        <abp-style src="/Pages/Documents/Project/index.css"/>
-    </abp-style-bundle>
+<abp-style-bundle name="@typeof(IndexModel).FullName">
+    <abp-style type="@typeof(PrismjsStyleBundleContributor)" />
+    <abp-style type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
+    <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
+    <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+    <abp-style src="/Pages/Documents/Project/index.css" />
+</abp-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
-        <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
-        <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
-        <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
-        <abp-script src="/client-proxies/docs-proxy.js" />
-        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
-        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />
-        <abp-script src="/Pages/Documents/Project/index.js" />
-        <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js" />
-    </abp-script-bundle>
+<abp-script-bundle name="@typeof(IndexModel).FullName">
+    <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
+    <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
+    <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
+    <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
+    <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
+    <abp-script src="/client-proxies/docs-proxy.js" />
+    <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
+    <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />
+    <abp-script src="/Pages/Documents/Project/index.js" />
+    <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js" />
+</abp-script-bundle>
 }
 @if (Model.LoadSuccess)
 {
@@ -93,8 +97,8 @@
                                         </span>
 
                                         <select asp-items="Model.ProjectSelectItems"
-                                                class="form-select"
-                                                onchange="window.location.pathname = this.value">
+                                        class="form-select"
+                                        onchange="window.location.pathname = this.value">
                                         </select>
                                     </div>
                                 </div>
@@ -112,11 +116,11 @@
                                                 <span class="input-group-text">
                                                     <i class="fas fa-code-branch" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Version"]"></i>
                                                 </span>
-        
+
 
                                                 <select asp-items="Model.VersionSelectItems"
-                                                        class="form-select"
-                                                        onchange="if (this.value) { window.location.replace(this.value) }">
+                                                class="form-select"
+                                                onchange="if (this.value) { window.location.replace(this.value) }">
                                                 </select>
                                             </div>
                                         </div>
@@ -131,11 +135,11 @@
                                         <div class="version-select">
                                             <div class="input-group">
                                                 @*<span class="input-group-text">
-                                                            <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
-                                                 </span>*@
+                                                    <i class="fa fa-globe" aria-hidden="true" data-bs-toggle="tooltip" title="@L["Language"]"></i>
+                                                    </span>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
-                                                        class="form-select"
-                                                        onchange="window.location.replace(this.value)">
+                                                class="form-select"
+                                                onchange="window.location.replace(this.value)">
                                                 </select>
                                             </div>
                                         </div>
@@ -149,11 +153,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa fa-filter"></i></span>
                                     <input class="form-control"
-                                           id="filter"
-                                           type="search"
-                                           data-search-url="@Model."
-                                           placeholder="@L["FilterTopics"].Value"
-                                           aria-label="Filter">
+                                       id="filter"
+                                       type="search"
+                                       data-search-url="@Model."
+                                       placeholder="@L["FilterTopics"].Value"
+                                       aria-label="Filter">
                                 </div>
                             </div>
                         </div>
@@ -168,13 +172,13 @@
                         else
                         {
                             <ul root-node="@Model.Navigation"
-                                version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
-                                project-name="@Model.ProjectName"
-                                project-format="@Model.Project.Format"
-                                selected-document-name="@Model.DocumentNameWithExtension"
-                                language="@Model.LanguageCode"
-                                id="sidebar-scroll"
-                                class="nav nav-list"></ul>
+                        version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
+                        project-name="@Model.ProjectName"
+                        project-format="@Model.Project.Format"
+                        selected-document-name="@Model.DocumentNameWithExtension"
+                        language="@Model.LanguageCode"
+                        id="sidebar-scroll"
+                        class="nav nav-list"></ul>
                         }
                     </div>
 
@@ -194,11 +198,11 @@
                                             <span class="input-group-text"><i class="fa fa-search"></i></span>
 
                                             <input class="form-control"
-                                                   id="fullsearch"
-                                                   type="search"
-                                                   data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
-                                                   placeholder="@L["FullSearch"].Value"
-                                                   aria-label="Filter">
+                                       id="fullsearch"
+                                       type="search"
+                                       data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
+                                       placeholder="@L["FullSearch"].Value"
+                                       aria-label="Filter">
                                         </div>
                                     </div>
                                 }
@@ -210,15 +214,15 @@
                                         <span class="for-desktop me-3">
                                             @(L["Contributors"].Value)
                                         </span>
-                                        @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c=> c.CommitCount).ToList())
+                                        @foreach (var contributor in Model.Document.Contributors.OrderByDescending(c => c.CommitCount).ToList())
                                         {
                                             <a href="@contributor.UserProfileUrl" target="_blank" class="cont-avatar">
                                                 <img src="@contributor.AvatarUrl"
-                                                     class="rounded-circle"
-                                                     alt="Avatar"
-                                                     height="21"
-                                                     width="21"
-                                                     title="@contributor.Username" />
+                                     class="rounded-circle"
+                                     alt="Avatar"
+                                     height="21"
+                                     width="21"
+                                     title="@contributor.Username" />
                                             </a>
                                         }
                                     }
@@ -261,8 +265,8 @@
                                                     <div class="input-group">
                                                         <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
                                                         <select class="doc-section-combobox form-select"
-                                                                aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
-                                                                id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
+                                                aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
+                                                id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
                                                             @foreach (var value in parameter.Values)
                                                             {
                                                                 @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))

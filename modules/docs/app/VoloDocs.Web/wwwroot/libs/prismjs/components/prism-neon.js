@@ -11,7 +11,7 @@ Prism.languages.neon = {
 	'key': {
 		pattern: /(^|[[{(,\s])[^,:=[\]{}()'"\s]+(?=\s*:(?:$|[\]}),\s])|\s*=)/,
 		lookbehind: true,
-		alias: 'atrule'
+		alias: 'property'
 	},
 	'number': {
 		pattern: /(^|[[{(=:,\s])[+-]?(?:0x[\da-fA-F]+|0o[0-7]+|0b[01]+|(?:\d+(?:\.\d*)?|\.?\d+)(?:[eE][+-]?\d+)?)(?=$|[\]}),:=\s])/,

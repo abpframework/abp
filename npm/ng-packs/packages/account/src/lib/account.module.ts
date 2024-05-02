@@ -15,6 +15,7 @@ import { accountConfigOptionsFactory } from './utils/factory-utils';
 import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { RE_LOGIN_CONFIRMATION_TOKEN } from './tokens';
 
 const declarations = [
   LoginComponent,
@@ -48,6 +49,10 @@ export class AccountModule {
           provide: 'ACCOUNT_OPTIONS',
           useFactory: accountConfigOptionsFactory,
           deps: [ACCOUNT_CONFIG_OPTIONS],
+        },
+        {
+          provide: RE_LOGIN_CONFIRMATION_TOKEN,
+          useValue: options.isPersonalSettingsChangedConfirmationActive ?? true,
         },
       ],
     };

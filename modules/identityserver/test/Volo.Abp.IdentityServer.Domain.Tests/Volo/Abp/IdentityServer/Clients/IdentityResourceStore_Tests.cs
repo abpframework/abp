@@ -53,7 +53,7 @@ public class IdentityResourceStore_Tests : AbpIdentityServerTestBase
         //Assert
         apiResources.ShouldNotBe(null);
 
-        apiResources[0].Scopes.Count.ShouldBe(3);
+        apiResources[0].Scopes.Count.ShouldBe(4);
     }
 
     [Fact]

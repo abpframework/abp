@@ -68,7 +68,8 @@ public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLoca
         return new StringLocalizerCacheItem(
             new AbpDictionaryBasedStringLocalizer(
                 resource,
-                resource.BaseResourceTypes.Select(Create).ToList()
+                resource.BaseResourceTypes.Select(Create).ToList(),
+                AbpLocalizationOptions
             )
         );
     }

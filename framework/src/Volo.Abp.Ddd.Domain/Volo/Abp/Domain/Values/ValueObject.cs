@@ -16,26 +16,34 @@ public abstract class ValueObject
             return false;
         }
 
-        ValueObject other = (ValueObject)obj;
+        var other = (ValueObject)obj;
 
-        IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
-        IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
+        var thisValues = GetAtomicValues().GetEnumerator();
+        var otherValues = other.GetAtomicValues().GetEnumerator();
 
-        while (thisValues.MoveNext() && otherValues.MoveNext())
+        var thisMoveNext = thisValues.MoveNext();
+        var otherMoveNext = otherValues.MoveNext();
+        while (thisMoveNext && otherMoveNext)
         {
-            if (ReferenceEquals(thisValues.Current, null) ^
-                ReferenceEquals(otherValues.Current, null))
+            if (ReferenceEquals(thisValues.Current, null) ^ ReferenceEquals(otherValues.Current, null))
             {
                 return false;
             }
 
-            if (thisValues.Current != null &&
-                !thisValues.Current.Equals(otherValues.Current))
+            if (thisValues.Current != null && !thisValues.Current.Equals(otherValues.Current))
+            {
+                return false;
+            }
+
+            thisMoveNext = thisValues.MoveNext();
+            otherMoveNext = otherValues.MoveNext();
+
+            if (thisMoveNext != otherMoveNext)
             {
                 return false;
             }
         }
 
-        return !thisValues.MoveNext() && !otherValues.MoveNext();
+        return !thisMoveNext && !otherMoveNext;
     }
 }

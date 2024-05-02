@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftPackageVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftPackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftAspNetCorePackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftAspNetCorePackageVersion)" />
   </ItemGroup>
   
 </Project>

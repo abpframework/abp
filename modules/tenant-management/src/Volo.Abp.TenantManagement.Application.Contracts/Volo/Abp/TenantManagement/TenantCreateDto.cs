@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
 
 namespace Volo.Abp.TenantManagement;
 
@@ -11,5 +12,6 @@ public class TenantCreateDto : TenantCreateOrUpdateDtoBase
 
     [Required]
     [MaxLength(128)]
+    [DisableAuditing]
     public virtual string AdminPassword { get; set; }
 }

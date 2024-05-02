@@ -86,7 +86,7 @@ Defining multiple connections is allowed. In this case, you can specify the conn
 
 This allows you to use multiple RabbitMQ server in your application, but select one of them for the event bus.
 
-You can use any of the [ConnectionFactry](http://rabbitmq.github.io/rabbitmq-dotnet-client/api/RabbitMQ.Client.ConnectionFactory.html#properties) properties as the connection properties.
+You can use any of the [ConnectionFactory](http://rabbitmq.github.io/rabbitmq-dotnet-client/api/RabbitMQ.Client.ConnectionFactory.html#properties) properties as the connection properties.
 
 **Example: Specify the connection port**
 

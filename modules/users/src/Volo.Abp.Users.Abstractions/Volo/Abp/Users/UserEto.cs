@@ -1,10 +1,11 @@
 ﻿using System;
+using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 
 namespace Volo.Abp.Users;
 
 [EventName("Volo.Abp.Users.User")]
-public class UserEto : IUserData
+public class UserEto : IUserData, IHasExtraProperties
 {
     public Guid Id { get; set; }
 
@@ -23,4 +24,6 @@ public class UserEto : IUserData
     public string PhoneNumber { get; set; }
 
     public bool PhoneNumberConfirmed { get; set; }
+
+    public ExtraPropertyDictionary ExtraProperties { get; set; }
 }

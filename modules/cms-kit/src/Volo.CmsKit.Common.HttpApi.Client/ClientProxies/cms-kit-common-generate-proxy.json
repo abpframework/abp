@@ -7,6 +7,8 @@
         "Volo.CmsKit.MediaDescriptors.MediaDescriptorController": {
           "controllerName": "MediaDescriptor",
           "controllerGroupName": "MediaDescriptor",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.MediaDescriptors.MediaDescriptorController",
           "interfaces": [
             {
@@ -56,6 +58,8 @@
         "Volo.CmsKit.Blogs.BlogFeatureController": {
           "controllerName": "BlogFeature",
           "controllerGroupName": "BlogFeature",
+          "isRemoteService": true,
+          "apiVersion": null,
           "type": "Volo.CmsKit.Blogs.BlogFeatureController",
           "interfaces": [
             {

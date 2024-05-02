@@ -47,7 +47,7 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
             connectionName, new Lazy<ServiceBusAdministrationClient>(() =>
             {
                 var config = _options.Connections.GetOrDefault(connectionName);
-                return new ServiceBusAdministrationClient(config.ConnectionString);
+                return new ServiceBusAdministrationClient(config.ConnectionString, config.Admin);
             })
         ).Value;
     }

@@ -98,7 +98,7 @@ public class CommandLineArgumentParser : ICommandLineArgumentParser, ITransientD
         {
             if (argument.Length <= 1)
             {
-                throw new ArgumentException("Should specify an option name after '--' prefix!");
+                throw new ArgumentException("Should specify an option name after '-' prefix!");
             }
 
             return argument.RemovePreFix("-");

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Public.Blogs;
 
@@ -31,8 +33,22 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
 
     [HttpGet]
     [Route("{blogSlug}")]
-    public virtual Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, PagedAndSortedResultRequestDto input)
+    public virtual Task<PagedResultDto<BlogPostPublicDto>> GetListAsync(string blogSlug, BlogPostGetListInput input)
     {
         return BlogPostPublicAppService.GetListAsync(blogSlug, input);
+    }
+
+    [HttpGet]
+    [Route("authors")]
+    public Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
+    {
+        return BlogPostPublicAppService.GetAuthorsHasBlogPostsAsync(input);
+    }
+
+    [HttpGet]
+    [Route("authors/{id}")]
+    public Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)
+    {
+        return BlogPostPublicAppService.GetAuthorHasBlogPostAsync(id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Localization;
 using Shouldly;
@@ -182,6 +182,60 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.Tes
         using (CultureHelper.Use(CultureInfo.GetCultureInfo("es")))
         {
             _localizer["CarPlural"].Value.ShouldBe("Autos");
+        }
+
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hans")))
+        {
+            _localizer["Car"].Value.ShouldBe("汽车");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hans")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("汽车");
+        }
+
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-CN")))
+        {
+            _localizer["Car"].Value.ShouldBe("汽车");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-CN")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("汽车");
+        }
+        
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hans-CN")))
+        {
+            _localizer["Car"].Value.ShouldBe("汽车");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hans-CN")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("汽车");
+        }
+
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hant")))
+        {
+            _localizer["Car"].Value.ShouldBe("汽車");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hant")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("汽車");
+        }
+        
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-TW")))
+        {
+            _localizer["Car"].Value.ShouldBe("汽車");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-TW")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("汽車");
+        }
+        
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hant-TW")))
+        {
+            _localizer["Car"].Value.ShouldBe("汽車");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hant-TW")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("汽車");
         }
     }
 

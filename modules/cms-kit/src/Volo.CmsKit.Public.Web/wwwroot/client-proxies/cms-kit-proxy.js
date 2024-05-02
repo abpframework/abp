@@ -188,7 +188,21 @@
 
     volo.cmsKit.public.blogs.blogPostPublic.getList = function(blogSlug, input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '' + abp.utils.buildQueryString([{ name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }, { name: 'sorting', value: input.sorting }]) + '',
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '' + abp.utils.buildQueryString([{ name: 'authorId', value: input.authorId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.blogs.blogPostPublic.getAuthorsHasBlogPosts = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/authors' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.blogs.blogPostPublic.getAuthorHasBlogPost = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/authors/' + id + '',
         type: 'GET'
       }, ajaxParams));
     };

@@ -14,6 +14,7 @@ using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
@@ -87,6 +88,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         {
             Auth = await GetAuthConfigAsync(),
             Features = await GetFeaturesConfigAsync(),
+            GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
             Localization = await GetLocalizationConfigAsync(),
             CurrentUser = GetCurrentUser(),
             Setting = await GetSettingConfigAsync(),
@@ -282,6 +284,18 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         }
 
         return result;
+    }
+
+    protected virtual Task<ApplicationGlobalFeatureConfigurationDto> GetGlobalFeaturesConfigAsync()
+    {
+        var result = new ApplicationGlobalFeatureConfigurationDto();
+
+        foreach (var enabledFeatureName in GlobalFeatureManager.Instance.GetEnabledFeatureNames())
+        {
+            result.EnabledFeatures.AddIfNotContains(enabledFeatureName);
+        }
+
+        return Task.FromResult(result);
     }
 
     protected virtual async Task<TimingDto> GetTimingConfigAsync()
