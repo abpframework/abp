@@ -1,4 +1,4 @@
-(function(Prism) {
+(function (Prism) {
 	Prism.languages.xeora = Prism.languages.extend('markup', {
 		'constant': {
 			pattern: /\$(?:DomainContents|PageRenderDuration)\$/,
@@ -20,7 +20,7 @@
 			}
 		},
 		'function-inline': {
-			pattern: /\$F:[-\w.]+\?[-\w.]+(?:,(?:\|?(?:[-#.^+*~]*(?:[\w+][^$]*)|=(?:[\S+][^$]*)|@[-#]*(?:\w+.)[\w+.]+)?)*)?\$/,
+			pattern: /\$F:[-\w.]+\?[-\w.]+(?:,(?:(?:@[-#]*\w+\.[\w+.]\.*)*\|)*(?:(?:[\w+]|[-#*.~^]+[\w+]|=\S)(?:[^$=]|=+[^=])*=*|(?:@[-#]*\w+\.[\w+.]\.*)+(?:(?:[\w+]|[-#*~^][-#*.~^]*[\w+]|=\S)(?:[^$=]|=+[^=])*=*)?)?)?\$/,
 			inside: {
 				'variable': {
 					pattern: /(?:[,|])@?(?:#+|[-+*~=^])?[\w.]+/,
@@ -40,7 +40,7 @@
 			alias: 'function'
 		},
 		'function-block': {
-			pattern: /\$XF:{[-\w.]+\?[-\w.]+(?:,(?:\|?(?:[-#.^+*~]*(?:[\w+][^$]*)|=(?:[\S+][^$]*)|@[-#]*(?:\w+.)[\w+.]+)?)*)?}:XF\$/,
+			pattern: /\$XF:\{[-\w.]+\?[-\w.]+(?:,(?:(?:@[-#]*\w+\.[\w+.]\.*)*\|)*(?:(?:[\w+]|[-#*.~^]+[\w+]|=\S)(?:[^$=]|=+[^=])*=*|(?:@[-#]*\w+\.[\w+.]\.*)+(?:(?:[\w+]|[-#*~^][-#*.~^]*[\w+]|=\S)(?:[^$=]|=+[^=])*=*)?)?)?\}:XF\$/,
 			inside: {
 				'punctuation': {
 					pattern: /[$:{}?.,|]/
@@ -49,7 +49,7 @@
 			alias: 'function'
 		},
 		'directive-inline': {
-			pattern: /\$\w(?:#\d+\+?)?(?:\[[-\w.]+])?:[-\/\w.]+\$/,
+			pattern: /\$\w(?:#\d+\+?)?(?:\[[-\w.]+\])?:[-\/\w.]+\$/,
 			inside: {
 				'punctuation': {
 					pattern: /\$(?:\w:|C(?:\[|#\d))?|[:{[\]]/,
@@ -63,7 +63,7 @@
 			alias: 'function'
 		},
 		'directive-block-open': {
-			pattern: /\$\w+:{|\$\w(?:#\d+\+?)?(?:\[[-\w.]+])?:[-\w.]+:{(?:![A-Z]+)?/,
+			pattern: /\$\w+:\{|\$\w(?:#\d+\+?)?(?:\[[-\w.]+\])?:[-\w.]+:\{(?:![A-Z]+)?/,
 			inside: {
 				'punctuation': {
 					pattern: /\$(?:\w:|C(?:\[|#\d))?|[:{[\]]/,
@@ -86,7 +86,7 @@
 			alias: 'function'
 		},
 		'directive-block-separator': {
-			pattern: /}:[-\w.]+:{/,
+			pattern: /\}:[-\w.]+:\{/,
 			inside: {
 				'punctuation': {
 					pattern: /[:{}]/
@@ -95,7 +95,7 @@
 			alias: 'function'
 		},
 		'directive-block-close': {
-			pattern: /}:[-\w.]+\$/,
+			pattern: /\}:[-\w.]+\$/,
 			inside: {
 				'punctuation': {
 					pattern: /[:{}$]/
@@ -107,7 +107,7 @@
 
 	Prism.languages.insertBefore('inside', 'punctuation', {
 		'variable': Prism.languages.xeora['function-inline'].inside['variable']
-	}, Prism.languages.xeora["function-block"]);
+	}, Prism.languages.xeora['function-block']);
 
 	Prism.languages.xeoracube = Prism.languages.xeora;
 

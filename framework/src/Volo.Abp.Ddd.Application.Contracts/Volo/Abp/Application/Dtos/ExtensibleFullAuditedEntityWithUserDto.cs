@@ -1,5 +1,6 @@
 using System;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Application.Dtos;
 
@@ -21,6 +22,18 @@ public abstract class ExtensibleFullAuditedEntityWithUserDto<TPrimaryKey, TUserD
 
     /// <inheritdoc />
     public TUserDto Deleter { get; set; }
+
+    protected ExtensibleFullAuditedEntityWithUserDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleFullAuditedEntityWithUserDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
 }
 
 /// <summary>
@@ -41,4 +54,16 @@ public abstract class ExtensibleFullAuditedEntityWithUserDto<TUserDto> : Extensi
 
     /// <inheritdoc />
     public TUserDto Deleter { get; set; }
+
+    protected ExtensibleFullAuditedEntityWithUserDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleFullAuditedEntityWithUserDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
 }

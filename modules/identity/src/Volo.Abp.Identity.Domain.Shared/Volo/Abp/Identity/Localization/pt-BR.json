@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Sua senha foi alterada com sucesso.",
     "PersonalSettingsSavedMessage": "Suas configurações pessoais foram salvas com sucesso.",
     "Volo.Abp.Identity:DefaultError": "Ocorreu uma falha desconhecida.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Falha de concorrência otimista, o objeto foi modificado.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "A verificação de simultaneidade otimista falhou. A entidade em que você está trabalhando foi modificada por outro usuário. Por favor, descarte suas alterações e tente novamente.",
     "Volo.Abp.Identity:DuplicateEmail": "O e-mail '{0}' já está em uso.",
     "Volo.Abp.Identity:DuplicateRoleName": "O nome de perfil '{0}' já está em uso.",
     "Volo.Abp.Identity:DuplicateUserName": "O usuário '{0}' já está em uso.",

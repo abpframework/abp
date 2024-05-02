@@ -47,7 +47,7 @@ Prism.languages.livescript = {
 	],
 	'regex': [
 		{
-			pattern: /\/\/(?:\[.+?]|\\.|(?!\/\/)[^\\])+\/\/[gimyu]{0,5}/,
+			pattern: /\/\/(?:\[[^\r\n\]]*\]|\\.|(?!\/\/)[^\\\[])+\/\/[gimyu]{0,5}/,
 			greedy: true,
 			inside: {
 				'comment': {
@@ -57,7 +57,7 @@ Prism.languages.livescript = {
 			}
 		},
 		{
-			pattern: /\/(?:\[.+?]|\\.|[^/\\\r\n])+\/[gimyu]{0,5}/,
+			pattern: /\/(?:\[[^\r\n\]]*\]|\\.|[^/\\\r\n\[])+\/[gimyu]{0,5}/,
 			greedy: true
 		}
 	],
@@ -66,7 +66,7 @@ Prism.languages.livescript = {
 		lookbehind: true
 	},
 	'keyword-operator': {
-		pattern: /(^|[^-])\b(?:(?:delete|require|typeof)!|(?:and|by|delete|export|from|import(?: all)?|in|instanceof|is(?:nt| not)?|not|of|or|til|to|typeof|with|xor)(?!-)\b)/m,
+		pattern: /(^|[^-])\b(?:(?:delete|require|typeof)!|(?:and|by|delete|export|from|import(?: all)?|in|instanceof|is(?: not|nt)?|not|of|or|til|to|typeof|with|xor)(?!-)\b)/m,
 		lookbehind: true,
 		alias: 'operator'
 	},

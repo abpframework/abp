@@ -36,7 +36,7 @@ public partial class UiNotificationAlert : ComponentBase, IDisposable
             UiNotificationType.Success => SnackbarColor.Success,
             UiNotificationType.Warning => SnackbarColor.Warning,
             UiNotificationType.Error => SnackbarColor.Danger,
-            _ => SnackbarColor.None,
+            _ => SnackbarColor.Default,
         };
     }
 

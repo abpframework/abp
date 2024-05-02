@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Salasanasi on vaihdettu onnistuneesti.",
     "PersonalSettingsSavedMessage": "Henkilökohtaiset asetuksesi on tallennettu.",
     "Volo.Abp.Identity:DefaultError": "Tuntematon vika on tapahtunut.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistinen samanaikaisuuden epäonnistuminen, kohdetta on muokattu.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistinen samanaikaisuuden tarkistus epäonnistui. Toinen käyttäjä on muokannut entiteettiä, jonka parissa työskentelet. Hylkää muutokset ja yritä uudelleen.",
     "Volo.Abp.Identity:DuplicateEmail": "Sähköposti {0} on jo otettu.",
     "Volo.Abp.Identity:DuplicateRoleName": "Roolin nimi {0} on jo otettu.",
     "Volo.Abp.Identity:DuplicateUserName": "Käyttäjätunnus {0} on jo otettu.",

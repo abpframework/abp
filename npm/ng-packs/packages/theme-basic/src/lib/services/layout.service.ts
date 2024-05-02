@@ -1,4 +1,4 @@
-import { SubscriptionService } from '@abp/ng.core';
+import {RouterEvents, SubscriptionService} from '@abp/ng.core';
 import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -16,7 +16,13 @@ export class LayoutService {
 
   navItemsComponentKey = eThemeBasicComponents.NavItems;
 
-  constructor(private subscription: SubscriptionService, private cdRef: ChangeDetectorRef) {}
+  constructor(private subscription: SubscriptionService,
+              private cdRef: ChangeDetectorRef,
+              routerEvents:RouterEvents) {
+    subscription.addOne(routerEvents.getNavigationEvents("End"),() => {
+      this.isCollapsed = true;
+    })
+  }
 
   private checkWindowWidth() {
     const isSmallScreen = window.innerWidth < 992;

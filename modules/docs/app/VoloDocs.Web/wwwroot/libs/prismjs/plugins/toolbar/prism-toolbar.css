@@ -4,6 +4,7 @@ div.code-toolbar {
 
 div.code-toolbar > .toolbar {
 	position: absolute;
+	z-index: 10;
 	top: .3em;
 	right: .2em;
 	transition: opacity 0.3s ease-in-out;
@@ -20,15 +21,15 @@ div.code-toolbar:focus-within > .toolbar {
 	opacity: 1;
 }
 
-div.code-toolbar > .toolbar .toolbar-item {
+div.code-toolbar > .toolbar > .toolbar-item {
 	display: inline-block;
 }
 
-div.code-toolbar > .toolbar a {
+div.code-toolbar > .toolbar > .toolbar-item > a {
 	cursor: pointer;
 }
 
-div.code-toolbar > .toolbar button {
+div.code-toolbar > .toolbar > .toolbar-item > button {
 	background: none;
 	border: 0;
 	color: inherit;
@@ -41,9 +42,9 @@ div.code-toolbar > .toolbar button {
 	-ms-user-select: none;
 }
 
-div.code-toolbar > .toolbar a,
-div.code-toolbar > .toolbar button,
-div.code-toolbar > .toolbar span {
+div.code-toolbar > .toolbar > .toolbar-item > a,
+div.code-toolbar > .toolbar > .toolbar-item > button,
+div.code-toolbar > .toolbar > .toolbar-item > span {
 	color: #bbb;
 	font-size: .8em;
 	padding: 0 .5em;
@@ -53,12 +54,12 @@ div.code-toolbar > .toolbar span {
 	border-radius: .5em;
 }
 
-div.code-toolbar > .toolbar a:hover,
-div.code-toolbar > .toolbar a:focus,
-div.code-toolbar > .toolbar button:hover,
-div.code-toolbar > .toolbar button:focus,
-div.code-toolbar > .toolbar span:hover,
-div.code-toolbar > .toolbar span:focus {
+div.code-toolbar > .toolbar > .toolbar-item > a:hover,
+div.code-toolbar > .toolbar > .toolbar-item > a:focus,
+div.code-toolbar > .toolbar > .toolbar-item > button:hover,
+div.code-toolbar > .toolbar > .toolbar-item > button:focus,
+div.code-toolbar > .toolbar > .toolbar-item > span:hover,
+div.code-toolbar > .toolbar > .toolbar-item > span:focus {
 	color: inherit;
 	text-decoration: none;
 }

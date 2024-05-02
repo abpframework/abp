@@ -1377,6 +1377,10 @@
 			"alias": ["uscript", "uc"],
 			"owner": "RunDevelopment"
 		},
+		"uorazor": {
+			"title": "UO Razor Script",
+			"owner": "jaseowns"
+		},
 		"uri": {
 			"title": "URI",
 			"alias": "url",

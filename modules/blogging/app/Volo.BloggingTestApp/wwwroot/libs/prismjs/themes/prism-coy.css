@@ -32,10 +32,12 @@ pre[class*="language-"] {
 	position: relative;
 	margin: .5em 0;
 	overflow: visible;
-	padding: 0;
+	padding: 1px;
 }
-pre[class*="language-"]>code {
+
+pre[class*="language-"] > code {
 	position: relative;
+	z-index: 1;
 	border-left: 10px solid #358ccb;
 	box-shadow: -1px 0px 0px 0px #358ccb, 0px 0px 0px 1px #dfdfdf;
 	background-color: #fdfdfd;
@@ -45,7 +47,7 @@ pre[class*="language-"]>code {
 	background-attachment: local;
 }
 
-code[class*="language"] {
+code[class*="language-"] {
 	max-height: inherit;
 	height: inherit;
 	padding: 0 1em;
@@ -77,7 +79,6 @@ pre[class*="language-"] {
 pre[class*="language-"]:before,
 pre[class*="language-"]:after {
 	content: '';
-	z-index: -2;
 	display: block;
 	position: absolute;
 	bottom: 0.75em;
@@ -93,7 +94,6 @@ pre[class*="language-"]:after {
 	transform: rotate(-2deg);
 }
 
-:not(pre) > code[class*="language-"]:after,
 pre[class*="language-"]:after {
 	right: 0.75em;
 	left: auto;
@@ -189,13 +189,6 @@ pre[class*="language-"]:after {
 		box-shadow: none;
 	}
 
-}
-
-/* Plugin styles */
-.token.tab:not(:empty):before,
-.token.cr:before,
-.token.lf:before {
-	color: #e0d7d1;
 }
 
 /* Plugin styles: Line Numbers */

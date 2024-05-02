@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,11 @@ public class MyProjectNameDbContextFactory : IDesignTimeDbContextFactory<MyProje
 {
     public MyProjectNameDbContext CreateDbContext(string[] args)
     {
+//<TEMPLATE-REMOVE IF-NOT='dbms:PostgreSQL'>
+        // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+//</TEMPLATE-REMOVE>
         MyProjectNameEfCoreEntityExtensionMappings.Configure();
 
         var configuration = BuildConfiguration();

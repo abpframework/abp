@@ -23,7 +23,7 @@ public class SettingManagementFeatureDefinitionProvider : FeatureDefinitionProvi
             SettingManagementFeatures.AllowTenantsToChangeEmailSettings,
             "false",
             L("Feature:AllowTenantsToChangeEmailSettings"),
-            L("AllowTenantsToChangeEmailSettingsDescription"),
+            L("Feature:AllowTenantsToChangeEmailSettingsDescription"),
             new ToggleStringValueType(),
             isAvailableToHost: false);
     }

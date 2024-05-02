@@ -1,33 +1,38 @@
 (function () {
 
-	if (typeof Prism === 'undefined' || !Prism.languages['diff']) {
+	if (typeof Prism === 'undefined') {
 		return;
 	}
 
 
-	var LANGUAGE_REGEX = /diff-([\w-]+)/i;
-	var HTML_TAG = /<\/?(?!\d)[^\s>\/=$<%]+(?:\s(?:\s*[^\s>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+(?=[\s>]))|(?=[\s/>])))+)?\s*\/?>/gi;
+	var LANGUAGE_REGEX = /^diff-([\w-]+)/i;
+	var HTML_TAG = /<\/?(?!\d)[^\s>\/=$<%]+(?:\s(?:\s*[^\s>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+(?=[\s>]))|(?=[\s/>])))+)?\s*\/?>/g;
 	//this will match a line plus the line break while ignoring the line breaks HTML tags may contain.
 	var HTML_LINE = RegExp(/(?:__|[^\r\n<])*(?:\r\n?|\n|(?:__|[^\r\n<])(?![^\r\n]))/.source.replace(/__/g, function () { return HTML_TAG.source; }), 'gi');
 
-	var PREFIXES = Prism.languages.diff.PREFIXES;
-
+	var warningLogged = false;
 
 	Prism.hooks.add('before-sanity-check', function (env) {
 		var lang = env.language;
 		if (LANGUAGE_REGEX.test(lang) && !env.grammar) {
-			env.grammar = Prism.languages[lang] = Prism.languages['diff'];
+			env.grammar = Prism.languages[lang] = Prism.languages.diff;
 		}
 	});
 	Prism.hooks.add('before-tokenize', function (env) {
+		if (!warningLogged && !Prism.languages.diff && !Prism.plugins.autoloader) {
+			warningLogged = true;
+			console.warn("Prism's Diff Highlight plugin requires the Diff language definition (prism-diff.js)." +
+				"Make sure the language definition is loaded or use Prism's Autoloader plugin.");
+		}
+
 		var lang = env.language;
 		if (LANGUAGE_REGEX.test(lang) && !Prism.languages[lang]) {
-			Prism.languages[lang] = Prism.languages['diff'];
+			Prism.languages[lang] = Prism.languages.diff;
 		}
 	});
 
 	Prism.hooks.add('wrap', function (env) {
-		var diffLanguage, diffGrammar;
+		var diffLanguage; var diffGrammar;
 
 		if (env.language !== 'diff') {
 			var langMatch = LANGUAGE_REGEX.exec(env.language);
@@ -39,8 +44,10 @@
 			diffGrammar = Prism.languages[diffLanguage];
 		}
 
+		var PREFIXES = Prism.languages.diff && Prism.languages.diff.PREFIXES;
+
 		// one of the diff tokens without any nested tokens
-		if (env.type in PREFIXES) {
+		if (PREFIXES && env.type in PREFIXES) {
 			/** @type {string} */
 			var content = env.content.replace(HTML_TAG, ''); // remove all HTML tags
 
@@ -63,9 +70,9 @@
 			var prefix = Prism.Token.stringify(prefixToken, env.language);
 
 			// add prefix
-			var lines = [], m;
+			var lines = []; var m;
 			HTML_LINE.lastIndex = 0;
-			while (m = HTML_LINE.exec(highlighted)) {
+			while ((m = HTML_LINE.exec(highlighted))) {
 				lines.push(prefix + m[0]);
 			}
 			if (/(?:^|[\r\n]).$/.test(decoded)) {

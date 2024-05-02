@@ -25,7 +25,7 @@ public partial class FeatureManagementModal
 
     [Inject] protected IOptions<AbpLocalizationOptions> LocalizationOptions { get; set; }
 
-    [Inject] private ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
+    [Inject] protected ICurrentApplicationConfigurationCacheResetService CurrentApplicationConfigurationCacheResetService { get; set; }
 
     protected Modal Modal;
 

@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Uw wachtwoord is met succes veranderd.",
     "PersonalSettingsSavedMessage": "Uw persoonlijke instellingen zijn succesvol opgeslagen.",
     "Volo.Abp.Identity:DefaultError": "Er is een onbekende fout opgetreden.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistische gelijktijdigheidsfout, object is al gewijzigd.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistische gelijktijdigheidscontrole is mislukt. De entiteit waaraan u werkt, is gewijzigd door een andere gebruiker. Negeer uw wijzigingen en probeer het opnieuw.",
     "Volo.Abp.Identity:DuplicateEmail": "E-mail '{0}' is al in gebruik.",
     "Volo.Abp.Identity:DuplicateRoleName": "De rol naam '{0}' is al in gebruik.",
     "Volo.Abp.Identity:DuplicateUserName": "Gebruikersnaam '{0}' is al in gebruik.",

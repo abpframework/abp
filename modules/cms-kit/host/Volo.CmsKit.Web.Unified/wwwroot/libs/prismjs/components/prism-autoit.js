@@ -19,7 +19,7 @@ Prism.languages.autoit = {
 		}
 	},
 	'directive': {
-		pattern: /(^[\t ]*)#\w+/m,
+		pattern: /(^[\t ]*)#[\w-]+/m,
 		lookbehind: true,
 		alias: 'keyword'
 	},

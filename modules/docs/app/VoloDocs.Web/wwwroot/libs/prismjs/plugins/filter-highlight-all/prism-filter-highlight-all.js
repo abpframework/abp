@@ -1,6 +1,6 @@
 (function () {
 
-	if (typeof self !== 'undefined' && !self.Prism) {
+	if (typeof Prism === 'undefined' || typeof document === 'undefined') {
 		return;
 	}
 
@@ -94,10 +94,12 @@
 
 	if (script) {
 		var attr;
-		if (attr = script.getAttribute('data-filter-selector')) {
+		attr = script.getAttribute('data-filter-selector');
+		if (attr) {
 			config.addSelector(attr);
 		}
-		if (attr = script.getAttribute('data-reject-selector')) {
+		attr = script.getAttribute('data-reject-selector');
+		if (attr) {
 			config.reject.addSelector(attr);
 		}
 	}

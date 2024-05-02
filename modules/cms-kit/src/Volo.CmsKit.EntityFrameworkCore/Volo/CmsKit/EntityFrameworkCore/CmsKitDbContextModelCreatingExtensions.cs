@@ -6,6 +6,7 @@ using Volo.Abp.Users.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -262,6 +263,24 @@ public static class CmsKitDbContextModelCreatingExtensions
         else
         {
             builder.Ignore<MenuItem>();
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<GlobalResourcesFeature>())
+        {
+            builder.Entity<GlobalResource>(b =>
+            {
+                b.ToTable(CmsKitDbProperties.DbTablePrefix + "GlobalResources", CmsKitDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Name).IsRequired().HasMaxLength(GlobalResourceConsts.MaxNameLength);
+
+                b.Property(x => x.Value).IsRequired().HasMaxLength(GlobalResourceConsts.MaxValueLength);
+            });
+        }
+        else
+        {
+            builder.Ignore<GlobalResource>();
         }
 
         builder.TryConfigureObjectExtensions<CmsKitDbContext>();

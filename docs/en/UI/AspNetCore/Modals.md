@@ -480,4 +480,4 @@ Here, the list of all available functions to register to events of the `ModalMan
 
 * `onOpen(callback)`: Registers a callback function to get notified once the modal is opened. It is triggered when the modal is completely visible on the UI.
 * `onClose(callback)`: Registers a callback function to get notified once the modal is closed. It is triggered when the modal is completely invisible on the UI.
-* `onResult(callback)`: Registers a callback function that is triggered when the ``setResult(...)` method is called. All the parameters sent to the `setResult` method is passed to the callback.
+* `onResult(callback)`: Registers a callback function that is triggered when the `setResult(...)` method is called. All the parameters sent to the `setResult` method is passed to the callback.

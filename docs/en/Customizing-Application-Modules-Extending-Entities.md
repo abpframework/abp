@@ -109,68 +109,27 @@ public class MyLocalIdentityUserChangeEventHandler :
 
 [Distributed Event Bus](Distributed-Event-Bus.md) system is a way to publish an event in one application and receive the event in the same or different application running on the same or different server.
 
-Assume that you want to get informed when a `IdentityUser` entity created, updated or deleted. You can create a class like below:
+Assume that you want to get informed when `Tenant` entity (of the [Tenant Management](Modules/Tenant-Management.md) module) has created. In this case, you can subscribe to the `EntityCreatedEto<TenantEto>` event as shown in the following example:
 
 ````csharp
-public class MyDistributedIdentityUserChangeEventHandler :
-    IDistributedEventHandler<EntityCreatedEto<EntityEto>>,
-    IDistributedEventHandler<EntityUpdatedEto<EntityEto>>,
-    IDistributedEventHandler<EntityDeletedEto<EntityEto>>,
+public class MyDistributedEventHandler :
+    IDistributedEventHandler<EntityCreatedEto<TenantEto>>,
     ITransientDependency
 {
-    public async Task HandleEventAsync(EntityCreatedEto<EntityEto> eventData)
+    public async Task HandleEventAsync(EntityCreatedEto<TenantEto> eventData)
     {
-        if (eventData.Entity.EntityType == "Volo.Abp.Identity.IdentityUser")
-        {
-            var userId = Guid.Parse(eventData.Entity.KeysAsString);
-            //...handle the "created" event
-        }
-    }
-
-    public async Task HandleEventAsync(EntityUpdatedEto<EntityEto> eventData)
-    {
-        if (eventData.Entity.EntityType == "Volo.Abp.Identity.IdentityUser")
-        {
-            var userId = Guid.Parse(eventData.Entity.KeysAsString);
-            //...handle the "updated" event
-        }
-    }
-
-    public async Task HandleEventAsync(EntityDeletedEto<EntityEto> eventData)
-    {
-        if (eventData.Entity.EntityType == "Volo.Abp.Identity.IdentityUser")
-        {
-            var userId = Guid.Parse(eventData.Entity.KeysAsString);
-            //...handle the "deleted" event
-        }
-    }
-}
-````
-
-* It implements multiple `IDistributedEventHandler` interfaces: **Created**, **Updated** and **Deleted**. Because, the distributed event bus system publishes events individually. There is no "Changed" event like the local event bus.
-* It subscribes to `EntityEto`, which is a generic event class that is **automatically published** for all type of entities by the ABP framework. This is why it checks the **entity type** (checking the entity type as string since we assume that there is no type safe reference to the `IdentityUser` entity).
-
-Pre-built application modules do not define specialized event types yet (like `UserEto` - "ETO" means "Event Transfer Object"). This feature is on the road map and will be available in a short term ([follow this issue](https://github.com/abpframework/abp/issues/3033)). Once it is implemented, you will be able to subscribe to individual entity types. Example:
-
-````csharp
-public class MyDistributedIdentityUserCreatedEventHandler :
-    IDistributedEventHandler<EntityCreatedEto<UserEto>>,
-    ITransientDependency
-{
-    public async Task HandleEventAsync(EntityCreatedEto<UserEto> eventData)
-    {
-        var userId = eventData.Entity.Id;
-        var userName = eventData.Entity.UserName;
-        //...handle the "created" event
+        var tenantId = eventData.Entity.Id;
+        var tenantName = eventData.Entity.Name;
+        //...your custom logic
     }
 
     //...
 }
 ````
 
-* This handler is executed only when a new user has been created.
+This handler is executed only when a new tenant has been created. All the pre-built ABP [application modules](Modules/Index.md) define corresponding `ETO` types for their entities. So, you can easily get informed when they changes.
 
-> The only pre-defined specialized event class is the `UserEto`. For example, you can subscribe to the `EntityCreatedEto<UserEto>` to get notified when a user has created. This event also works for the Identity module.
+> Notice that ABP doesn't publish distributed events for an entity by default. Because it has a cost and should be enabled by intention. See the [distributed event bus document](Distributed-Event-Bus.md) to learn more.
 
 ## See Also
 

@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Ваш пароль был успешно изменен.",
     "PersonalSettingsSavedMessage": "Ваши персональные настройки были успешно сохранены.",
     "Volo.Abp.Identity:DefaultError": "Возникла непредвиденная ошибка.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Ошибка оптимального управления многопоточностью, объект был изменен.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Проверка оптимистического параллелизма не удалась. Объект, над которым вы работаете, был изменен другим пользователем. Отмените изменения и повторите попытку.",
     "Volo.Abp.Identity:DuplicateEmail": "Электронная почта '{0}' уже зарегистрирована.",
     "Volo.Abp.Identity:DuplicateRoleName": "Имя роли '{0}' уже занято.",
     "Volo.Abp.Identity:DuplicateUserName": "Имя пользователя '{0}' уже занято.",

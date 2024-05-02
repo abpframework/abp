@@ -1,5 +1,41 @@
 # Prism Changelog
 
+
+## 1.27.0 (2022-02-17)
+
+### New components
+
+* __UO Razor Script__ (#3309) [`3f8cc5a0`](https://github.com/PrismJS/prism/commit/3f8cc5a0)
+
+### Updated components
+
+* __AutoIt__
+    * Allow hyphen in directive (#3308) [`bcb2e2c8`](https://github.com/PrismJS/prism/commit/bcb2e2c8)
+* __EditorConfig__
+    * Change alias of `section` from `keyword` to `selector` (#3305) [`e46501b9`](https://github.com/PrismJS/prism/commit/e46501b9)
+* __Ini__
+    * Swap out `header` for `section` (#3304) [`deb3a97f`](https://github.com/PrismJS/prism/commit/deb3a97f)
+* __MongoDB__
+    * Added v5 support (#3297) [`8458c41f`](https://github.com/PrismJS/prism/commit/8458c41f)
+* __PureBasic__
+    * Added missing keyword and fixed constants ending with `$` (#3320) [`d6c53726`](https://github.com/PrismJS/prism/commit/d6c53726)
+* __Scala__
+    * Added support for interpolated strings (#3293) [`441a1422`](https://github.com/PrismJS/prism/commit/441a1422)
+* __Systemd configuration file__
+    * Swap out `operator` for `punctuation` (#3306) [`2eb89e15`](https://github.com/PrismJS/prism/commit/2eb89e15)
+
+### Updated plugins
+
+* __Command Line__
+    * Escape markup in command line output (#3341) [`e002e78c`](https://github.com/PrismJS/prism/commit/e002e78c)
+    * Add support for line continuation and improved colors (#3326) [`1784b175`](https://github.com/PrismJS/prism/commit/1784b175)
+    * Added span around command and output (#3312) [`82d0ca15`](https://github.com/PrismJS/prism/commit/82d0ca15)
+
+### Other
+
+* __Core__
+    * Added better error message for missing grammars (#3311) [`2cc4660b`](https://github.com/PrismJS/prism/commit/2cc4660b)
+
 ## 1.26.0 (2022-01-06)
 
 ### New components

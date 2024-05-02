@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.Commands;
 public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransientDependency
 {
     public const string Name = "new";
-    
+
     public ILogger<NewCommand> Logger { get; set; }
 
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
@@ -79,6 +79,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         Logger.LogInformation($"'{projectName}' has been successfully created to '{projectArgs.OutputFolder}'");
 
         RunGraphBuildForMicroserviceServiceTemplate(projectArgs);
+        RunInstallLibsForWebTemplate(projectArgs);
         OpenRelatedWebPage(projectArgs, template, isTiered, commandLineArgs);
     }
 

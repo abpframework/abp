@@ -1,23 +1,67 @@
-/* TODO
-	Add support for variables inside double quoted strings
-	Add support for {php}
-*/
-
-(function(Prism) {
+(function (Prism) {
 
 	Prism.languages.smarty = {
-		'comment': /\{\*[\s\S]*?\*\}/,
+		'comment': {
+			pattern: /^\{\*[\s\S]*?\*\}/,
+			greedy: true
+		},
+		'embedded-php': {
+			pattern: /^\{php\}[\s\S]*?\{\/php\}/,
+			greedy: true,
+			inside: {
+				'smarty': {
+					pattern: /^\{php\}|\{\/php\}$/,
+					inside: null // see below
+				},
+				'php': {
+					pattern: /[\s\S]+/,
+					alias: 'language-php',
+					inside: Prism.languages.php
+				}
+			}
+		},
+		'string': [
+			{
+				pattern: /"(?:\\.|[^"\\\r\n])*"/,
+				greedy: true,
+				inside: {
+					'interpolation': {
+						pattern: /\{[^{}]*\}|`[^`]*`/,
+						inside: {
+							'interpolation-punctuation': {
+								pattern: /^[{`]|[`}]$/,
+								alias: 'punctuation'
+							},
+							'expression': {
+								pattern: /[\s\S]+/,
+								inside: null // see below
+							}
+						}
+					},
+					'variable': /\$\w+/
+				}
+			},
+			{
+				pattern: /'(?:\\.|[^'\\\r\n])*'/,
+				greedy: true
+			},
+		],
+		'keyword': {
+			pattern: /(^\{\/?)[a-z_]\w*\b(?!\()/i,
+			lookbehind: true,
+			greedy: true
+		},
 		'delimiter': {
-			pattern: /^\{|\}$/i,
+			pattern: /^\{\/?|\}$/,
+			greedy: true,
 			alias: 'punctuation'
 		},
-		'string': /(["'])(?:\\.|(?!\1)[^\\\r\n])*\1/,
-		'number': /\b0x[\dA-Fa-f]+|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee][-+]?\d+)?/,
+		'number': /\b0x[\dA-Fa-f]+|(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:[Ee][-+]?\d+)?/,
 		'variable': [
 			/\$(?!\d)\w+/,
 			/#(?!\d)\w+#/,
 			{
-				pattern: /(\.|->)(?!\d)\w+/,
+				pattern: /(\.|->|\w\s*=)(?!\d)\w+\b(?!\()/,
 				lookbehind: true
 			},
 			{
@@ -25,52 +69,52 @@
 				lookbehind: true
 			}
 		],
-		'function': [
-			{
-				pattern: /(\|\s*)@?(?!\d)\w+/,
-				lookbehind: true
-			},
-			/^\/?(?!\d)\w+/,
-			/(?!\d)\w+(?=\()/
-		],
-		'attr-name': {
-			// Value is made optional because it may have already been tokenized
-			pattern: /\w+\s*=\s*(?:(?!\d)\w+)?/,
-			inside: {
-				"variable": {
-					pattern: /(=\s*)(?!\d)\w+/,
-					lookbehind: true
-				},
-				"operator": /=/
-			}
+		'function': {
+			pattern: /(\|\s*)@?[a-z_]\w*|\b[a-z_]\w*(?=\()/i,
+			lookbehind: true
 		},
-		'punctuation': [
-			/[\[\]().,:`]|->/
-		],
+		'attr-name': /\b[a-z_]\w*(?=\s*=)/i,
+		'boolean': /\b(?:false|no|off|on|true|yes)\b/,
+		'punctuation': /[\[\](){}.,:`]|->/,
 		'operator': [
 			/[+\-*\/%]|==?=?|[!<>]=?|&&|\|\|?/,
 			/\bis\s+(?:not\s+)?(?:div|even|odd)(?:\s+by)?\b/,
-			/\b(?:eq|neq?|gt|lt|gt?e|lt?e|not|mod|or|and)\b/
-		],
-		'keyword': /\b(?:false|off|on|no|true|yes)\b/
+			/\b(?:and|eq|gt?e|gt|lt?e|lt|mod|neq?|not|or)\b/
+		]
 	};
 
+	Prism.languages.smarty['embedded-php'].inside.smarty.inside = Prism.languages.smarty;
+	Prism.languages.smarty.string[0].inside.interpolation.inside.expression.inside = Prism.languages.smarty;
+
+	var string = /"(?:\\.|[^"\\\r\n])*"|'(?:\\.|[^'\\\r\n])*'/;
+	var smartyPattern = RegExp(
+		// comments
+		/\{\*[\s\S]*?\*\}/.source +
+		'|' +
+		// php tags
+		/\{php\}[\s\S]*?\{\/php\}/.source +
+		'|' +
+		// smarty blocks
+		/\{(?:[^{}"']|<str>|\{(?:[^{}"']|<str>|\{(?:[^{}"']|<str>)*\})*\})*\}/.source
+			.replace(/<str>/g, function () { return string.source; }),
+		'g'
+	);
+
 	// Tokenize all inline Smarty expressions
-	Prism.hooks.add('before-tokenize', function(env) {
-		var smartyPattern = /\{\*[\s\S]*?\*\}|\{[\s\S]+?\}/g;
-		var smartyLitteralStart = '{literal}';
-		var smartyLitteralEnd = '{/literal}';
-		var smartyLitteralMode = false;
+	Prism.hooks.add('before-tokenize', function (env) {
+		var smartyLiteralStart = '{literal}';
+		var smartyLiteralEnd = '{/literal}';
+		var smartyLiteralMode = false;
 
 		Prism.languages['markup-templating'].buildPlaceholders(env, 'smarty', smartyPattern, function (match) {
 			// Smarty tags inside {literal} block are ignored
-			if(match === smartyLitteralEnd) {
-				smartyLitteralMode = false;
+			if (match === smartyLiteralEnd) {
+				smartyLiteralMode = false;
 			}
 
-			if(!smartyLitteralMode) {
-				if(match === smartyLitteralStart) {
-					smartyLitteralMode = true;
+			if (!smartyLiteralMode) {
+				if (match === smartyLiteralStart) {
+					smartyLiteralMode = true;
 				}
 
 				return true;
@@ -80,7 +124,7 @@
 	});
 
 	// Re-insert the tokens after tokenizing
-	Prism.hooks.add('after-tokenize', function(env) {
+	Prism.hooks.add('after-tokenize', function (env) {
 		Prism.languages['markup-templating'].tokenizePlaceholders(env, 'smarty');
 	});
 

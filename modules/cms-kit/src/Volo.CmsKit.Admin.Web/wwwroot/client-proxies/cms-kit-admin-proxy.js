@@ -223,6 +223,30 @@
 
   })();
 
+  // controller volo.cmsKit.admin.globalResources.globalResourceAdmin
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.admin.globalResources.globalResourceAdmin');
+
+    volo.cmsKit.admin.globalResources.globalResourceAdmin.get = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/global-resources',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.globalResources.globalResourceAdmin.setGlobalResources = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/global-resources',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.cmsKit.admin.comments.commentAdmin
 
   (function(){

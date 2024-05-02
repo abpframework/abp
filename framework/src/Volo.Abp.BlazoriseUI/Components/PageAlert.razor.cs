@@ -64,11 +64,11 @@ public partial class PageAlert : ComponentBase, IDisposable
             AlertType.Warning => Color.Warning,
             AlertType.Danger => Color.Danger,
             AlertType.Dark => Color.Dark,
-            AlertType.Default => Color.None,
+            AlertType.Default => Color.Default,
             AlertType.Light => Color.Light,
             AlertType.Primary => Color.Primary,
             AlertType.Secondary => Color.Secondary,
-            _ => Color.None,
+            _ => Color.Default,
         };
 
         return color;

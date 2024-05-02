@@ -26,6 +26,9 @@ export class FormSubmitDirective implements OnInit {
 
   @Input()
   notValidateOnSubmit: string | boolean;
+  
+  @Input()
+  markAsDirtyWhenSubmit:  boolean = true
 
   @Output() readonly ngSubmit = new EventEmitter();
 
@@ -40,7 +43,10 @@ export class FormSubmitDirective implements OnInit {
 
   ngOnInit() {
     this.subscription.addOne(this.formGroupDirective.ngSubmit, () => {
-      this.markAsDirty();
+      if(this.markAsDirtyWhenSubmit){
+        this.markAsDirty();
+      }
+      
       this.executedNgSubmit = true;
     });
 

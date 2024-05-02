@@ -90,7 +90,7 @@ Beside these standard methods, there are some extension methods:
 
 For a web application, it gets the `User` property of the current `HttpContext`. For a non-web application, it returns the `Thread.CurrentPrincipal`.
 
-> You generally don't need to this low level `ICurrentPrincipalAccessor` service and directly work with the `ICurrentUser` explained above.
+> You generally don't need to use this low level `ICurrentPrincipalAccessor` service and just directly work with the `ICurrentUser` explained above.
 
 ### Basic Usage
 

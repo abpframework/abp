@@ -257,3 +257,6 @@ host/MyCompanyName.MyProjectName.HttpApi.Host/Logs/logs.txt
 host/MyCompanyName.MyProjectName.Web.Host/Logs/logs.txt
 host/MyCompanyName.MyProjectName.Web.Unified/Logs/logs.txt
 host/MyCompanyName.MyProjectName.Blazor.Server.Host/Logs/logs.txt
+
+# Use abp install-libs to restore.
+**/wwwroot/libs/*

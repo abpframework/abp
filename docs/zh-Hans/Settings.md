@@ -65,7 +65,7 @@ public class MySettingDefinitionProvider : SettingDefinitionProvider
 }
 ````
 
-> 使用常量作为设置名称是一种好习惯,ABP的包就是这样做的. `Abp.Mailing.Smtp`设置名称是在`EmailSettingNames`类(在Volo.Abp.Emailing名称空间中)定义的常量.
+> 使用常量作为设置名称是一种好习惯,ABP的包就是这样做的. `Abp.Mailing.Smtp.Host`设置名称是在`EmailSettingNames`类(在Volo.Abp.Emailing命名空间中)定义的常量.
 
 ## 读取设置值
 
@@ -141,7 +141,7 @@ var requireDigit = abp.setting.getBoolean('Abp.Identity.Password.RequireDigit');
 * `TenantSettingValueProvider`: 获取当前租户的设置值(参阅 [多租户](Multi-Tenancy.md)文档).
 * `UserSettingValueProvider`: 获取当前用户的设置值(参阅 [当前用户](CurrentUser.md) 文档).
 
-> 设置回退系统从底部 (用户) 到 (默认) 方向起用用.
+> 设置回退系统从底部 (用户) 到 顶部(默认) 方向起作用.
 
 全局,租户和用户设置值提供程序使用 `ISettingStore` 从数据源读取值(参见下面的小节).
 
@@ -222,7 +222,7 @@ Configure<AbpSettingOptions>(options =>
 
 `ISettingEncryptionService` 用于在设置定义的 `isencryption` 属性设置为 `true` 时加密/解密设置值.
 
-你可以在依赖项入系统中替换此服务,自定义实现加密/解密过程. 默认实现 `StringEncryptionService` 使用AES算法(参见字符串[加密文档](String-Encryption.md)学习更多).
+你可以在依赖注入系统中替换此服务,自定义实现加密/解密过程. 默认实现 `StringEncryptionService` 使用AES算法(参见字符串[加密文档](String-Encryption.md)学习更多).
 
 ## 设置管理模块
 

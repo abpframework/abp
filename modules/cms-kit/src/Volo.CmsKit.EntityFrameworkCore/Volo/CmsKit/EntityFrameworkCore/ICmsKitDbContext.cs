@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -27,4 +28,5 @@ public interface ICmsKitDbContext : IEfCoreDbContext
     DbSet<BlogPost> BlogPosts { get; }
     DbSet<MediaDescriptor> MediaDescriptors { get; }
     DbSet<MenuItem> MenuItems { get; }
+    DbSet<GlobalResource> GlobalResources { get; }
 }

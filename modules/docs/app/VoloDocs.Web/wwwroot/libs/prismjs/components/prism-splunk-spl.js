@@ -10,8 +10,8 @@ Prism.languages['splunk-spl'] = {
 		pattern: /\b(?:and|as|by|not|or|xor)\b/i,
 		alias: 'operator'
 	},
-	'function': /\w+(?=\s*\()/,
-	'property': /\w+(?=\s*=(?!=))/,
+	'function': /\b\w+(?=\s*\()/,
+	'property': /\b\w+(?=\s*=(?!=))/,
 	'date': {
 		// MM/DD/YYYY(:HH:MM:SS)?
 		pattern: /\b\d{1,2}\/\d{1,2}\/\d{1,4}(?:(?::\d{1,2}){3})?\b/,
@@ -21,4 +21,4 @@ Prism.languages['splunk-spl'] = {
 	'boolean': /\b(?:f|false|t|true)\b/i,
 	'operator': /[<>=]=?|[-+*/%|]/,
 	'punctuation': /[()[\],]/
-}
+};

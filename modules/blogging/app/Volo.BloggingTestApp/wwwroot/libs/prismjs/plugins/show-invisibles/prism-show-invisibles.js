@@ -1,9 +1,6 @@
 (function () {
 
-	if (
-		typeof self !== 'undefined' && !self.Prism ||
-		typeof global !== 'undefined' && !global.Prism
-	) {
+	if (typeof Prism === 'undefined') {
 		return;
 	}
 
@@ -44,6 +41,7 @@
 				break;
 
 			default: // 'Object'
+				// eslint-disable-next-line no-redeclare
 				var inside = value.inside || (value.inside = {});
 				addInvisibles(inside);
 				break;
@@ -67,6 +65,7 @@
 			}
 		}
 
+		// eslint-disable-next-line no-redeclare
 		for (var name in grammar) {
 			if (grammar.hasOwnProperty(name) && !invisibles[name]) {
 				if (name === 'rest') {
@@ -81,4 +80,4 @@
 	Prism.hooks.add('before-highlight', function (env) {
 		addInvisibles(env.grammar);
 	});
-})();
+}());

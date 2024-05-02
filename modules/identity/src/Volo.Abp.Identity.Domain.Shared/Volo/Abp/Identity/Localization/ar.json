@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "تم تغيير كلمة مرورك بنجاح.",
     "PersonalSettingsSavedMessage": "تم حفظ إعداداتك الشخصية بنجاح.",
     "Volo.Abp.Identity:DefaultError": "حدث خطأ.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "فشل التزامن المتفائل ، تم تعديل الكائن.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "فشل التحقق من التزامن المتفائل. تم تعديل الكيان الذي تعمل عليه بواسطة مستخدم آخر. الرجاء تجاهل التغييرات الخاصة بك وحاول مرة أخرى.",
     "Volo.Abp.Identity:DuplicateEmail": "البريد الإلكتروني '{0}' مستخدم بالفعل.",
     "Volo.Abp.Identity:DuplicateRoleName": "اسم الدور '{0}' مأخوذ بالفعل.",
     "Volo.Abp.Identity:DuplicateUserName": "اسم المستخدم '{0}' مأخوذ بالفعل.",

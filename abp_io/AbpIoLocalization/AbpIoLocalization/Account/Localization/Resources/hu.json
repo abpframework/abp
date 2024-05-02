@@ -10,6 +10,7 @@
     "CommercialHomePage": "Kereskedelmi honlap",
     "CommercialSupportWebSite": "Kereskedelmi támogatási webhely",
     "CommunityWebSite": "ABP közösségi webhely",
-    "ManageAccount": "Saját fiók | ABP.IO"
+    "ManageAccount": "Saját fiók | ABP.IO",
+    "ManageYourAccount": "Fiók kezelése"
   }
 }

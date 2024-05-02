@@ -109,11 +109,12 @@ public partial class TenantManagement
                     new TableColumn
                     {
                         Title = L["Actions"],
-                        Actions = EntityActions.Get<TenantManagement>()
+                        Actions = EntityActions.Get<TenantManagement>(),
                     },
                     new TableColumn
                     {
                         Title = L["TenantName"],
+                        Sortable = true,
                         Data = nameof(TenantDto.Name),
                     },
             });

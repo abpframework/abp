@@ -1,5 +1,6 @@
 using System;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Application.Dtos;
 
@@ -19,6 +20,18 @@ public abstract class ExtensibleFullAuditedEntityDto<TPrimaryKey> : ExtensibleAu
 
     /// <inheritdoc />
     public DateTime? DeletionTime { get; set; }
+
+    protected ExtensibleFullAuditedEntityDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleFullAuditedEntityDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
 }
 
 /// <summary>
@@ -36,4 +49,16 @@ public abstract class ExtensibleFullAuditedEntityDto : ExtensibleAuditedEntityDt
 
     /// <inheritdoc />
     public DateTime? DeletionTime { get; set; }
+
+    protected ExtensibleFullAuditedEntityDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleFullAuditedEntityDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
 }

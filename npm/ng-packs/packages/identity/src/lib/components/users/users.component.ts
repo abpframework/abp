@@ -59,6 +59,8 @@ export class UsersComponent implements OnInit {
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
+  entityDisplayName: string;
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   onVisiblePermissionChange = event => {
@@ -176,8 +178,9 @@ export class UsersComponent implements OnInit {
     this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
   }
 
-  openPermissionsModal(providerKey: string) {
+  openPermissionsModal(providerKey: string, entityDisplayName?: string) {
     this.providerKey = providerKey;
+    this.entityDisplayName = entityDisplayName;
     setTimeout(() => {
       this.visiblePermissions = true;
     }, 0);

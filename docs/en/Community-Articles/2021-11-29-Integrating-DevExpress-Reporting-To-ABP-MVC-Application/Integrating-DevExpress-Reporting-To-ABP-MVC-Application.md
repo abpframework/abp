@@ -604,7 +604,7 @@ This will allow binding the `data-source` for your report designer. Also update 
 You can now see the **Add New DataSource** icon in the Field List:
 ![data-source](data-source.png)
 
-> You can check [DevExpress Reporting Use Data Sources and Connections documentations](https://docs.devexpress.com/XtraReports/401896/web-reporting/asp-net-core-reporting/end-user-report-designer-in-asp-net-applications/use-data-sources-and-connections) for more information.
+> You can check [DevExpress Reporting Use Data Sources and Connections documentation](https://docs.devexpress.com/XtraReports/401896/web-reporting/asp-net-core-reporting/end-user-report-designer-in-asp-net-applications/use-data-sources-and-connections) for more information.
 
 ## Document Viewer Integration
 

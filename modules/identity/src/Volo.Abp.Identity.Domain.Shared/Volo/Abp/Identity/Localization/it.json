@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "La tua password è stata modificata con successo.",
     "PersonalSettingsSavedMessage": "Le tue impostazioni personali sono state salvate con successo.",
     "Volo.Abp.Identity:DefaultError": "Si è verificato un errore sconosciuto.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Errore di concorrenza ottimistica, l'oggetto è stato modificato.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Il controllo della concorrenza ottimistica non è riuscito. L'entità su cui stai lavorando è stata modificata da un altro utente. Annulla le modifiche e riprova.",
     "Volo.Abp.Identity:DuplicateEmail": "L'email '{0}' è già stata accettata.",
     "Volo.Abp.Identity:DuplicateRoleName": "Il nome del ruolo '{0}' è già stato utilizzato.",
     "Volo.Abp.Identity:DuplicateUserName": "Il nome utente '{0}' è già in uso.",

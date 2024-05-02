@@ -17,7 +17,7 @@
             
             @if (_groups != null)
             {
-                <Tabs TabPosition="TabPosition.Left" Pills="true" @bind-SelectedTab="@_selectedTabName">
+                <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@_selectedTabName">
                     <Items>
                         @foreach (var group in _groups)
                         {

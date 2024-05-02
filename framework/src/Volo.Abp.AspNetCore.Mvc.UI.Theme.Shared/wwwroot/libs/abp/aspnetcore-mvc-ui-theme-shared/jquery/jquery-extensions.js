@@ -35,7 +35,7 @@
                 //change text
                 if ($buttonInnerSpan.length && $button.attr('data-busy-text')) {
                     $button.data('buttonOriginalText', $buttonInnerSpan.html());
-                    
+
                     if ($button.data('busy-text-is-html')) {
                         $buttonInnerSpan.html($button.attr('data-busy-text'));
                     } else {
@@ -118,7 +118,25 @@
             });
 
         //map to object
+
+        var getVarName = function (v) {
+            return v.toString().replace(/\(\)\s?=\>\s?/, '');
+        }
+
+        var getNames = function (index, variable) {
+            var name = '';
+            for (var i = 0; i <= index; i++) {
+                if (i == 0) {
+                    name = variable + '[' + i + ']'
+                } else {
+                    name += '][' + variable + '[' + i + ']'
+                }
+            }
+            return name;
+        }
+
         var obj = {};
+        var objName = getVarName(() => obj);
 
         if (camelCase !== undefined ? camelCase : true) {
             data.forEach(function (d) {
@@ -127,18 +145,19 @@
         }
 
         data.map(function (x) {
-            //TODO: improve mapping. it only supports one level deep object.
             var names = x.name.split(".");
-            if (names.length === 1 && !obj[names[0]]) {
-                obj[names[0]] = x.value;
+            var xName = getVarName(() => x);
+            var namesName = getVarName(() => names);
+
+            var i = obj ? 0 : 1;
+            for (i = 0; i < names.length; i++) {
+                if (eval('!' + objName + '[' + getNames(i, '' + namesName + '') + ']')) {
+                    eval('' + objName + '[' + getNames(i, '' + namesName + '') + '] = {}');
+                }
             }
-            else if (names.length === 2) {
-                if (!obj[names[0]]) {
-                    obj[names[0]] = {};
-                }
-                if (!obj[names[0]][names[1]]) {
-                    obj[names[0]][names[1]] = x.value;
-                }
+
+            if ($.isEmptyObject(eval('' + objName + '[' + getNames(names.length - 1, '' + namesName + '') + ']'))) {
+                eval('' + objName + '[' + getNames(names.length - 1, '' + namesName + '') + '] = ' + xName + '.value');
             }
         });
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -134,22 +135,14 @@ namespace Volo.Docs.Admin.Projects
                 throw new Exception("Cannot find the project with the Id " + projectId);
             }
 
-            var docs = await _documentRepository.GetListByProjectId(project.Id);
+            var docs = (await _documentRepository.GetListByProjectId(project.Id))
+                .Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName)
+                .ToList();
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
 
-            foreach (var doc in docs)
+            if(docs.Any())
             {
-                if (doc.FileName == project.NavigationDocumentName)
-                {
-                    continue;
-                }
-
-                if (doc.FileName == project.ParametersDocumentName)
-                {
-                    continue;
-                }
-
-                await _elasticSearchService.AddOrUpdateAsync(doc);
+                await _elasticSearchService.AddOrUpdateManyAsync(docs);    
             }
         }
 

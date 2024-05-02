@@ -81,12 +81,12 @@ public class DatabaseManagementSystemChangeStep : ProjectBuildPipelineStep
 
     private void ChangeEntityFrameworkCoreDependency(ProjectBuildContext context, string newPackageName, string newModuleNamespace, string newModuleClass)
     {
-        var efCoreProjectFile = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCore.csproj", StringComparison.OrdinalIgnoreCase));
-        efCoreProjectFile.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newPackageName);
+        var efCoreProjectFile = context.Files.FirstOrDefault(f => f.Name.EndsWith("EntityFrameworkCore.csproj", StringComparison.OrdinalIgnoreCase));
+        efCoreProjectFile?.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newPackageName);
 
-        var efCoreModuleClass = context.Files.First(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
-        efCoreModuleClass.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newModuleNamespace);
-        efCoreModuleClass.ReplaceText("AbpEntityFrameworkCoreSqlServerModule", newModuleClass);
+        var efCoreModuleClass = context.Files.FirstOrDefault(f => f.Name.EndsWith("EntityFrameworkCoreModule.cs", StringComparison.OrdinalIgnoreCase));
+        efCoreModuleClass?.ReplaceText("Volo.Abp.EntityFrameworkCore.SqlServer", newModuleNamespace);
+        efCoreModuleClass?.ReplaceText("AbpEntityFrameworkCoreSqlServerModule", newModuleClass);
     }
 
     private void ChangeUseSqlServer(ProjectBuildContext context, string newUseMethodForEfModule, string newUseMethodForDbContext = null)

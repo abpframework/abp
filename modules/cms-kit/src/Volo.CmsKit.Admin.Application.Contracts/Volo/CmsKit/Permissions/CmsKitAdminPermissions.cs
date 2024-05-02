@@ -60,4 +60,9 @@ public class CmsKitAdminPermissions
         public const string Update = Default + ".Update";
         public const string Delete = Default + ".Delete";
     }
+
+    public static class GlobalResources
+    {
+        public const string Default = GroupName + ".GlobalResources";
+    }
 }

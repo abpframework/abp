@@ -48,9 +48,10 @@ public class EfCoreMigrationManager : ITransientDependency
             ? string.Empty
             : $"--context {dbContext}";
 
-        CmdHelper.RunCmd($"cd \"{dbMigrationsProjectFolder}\" && dotnet ef migrations add {migrationName}" +
+        CmdHelper.RunCmd($"dotnet ef migrations add {migrationName}" +
                          $" --output-dir {outputDirectory}" +
-                         $" {dbContextOption}");
+                         $" {dbContextOption}", 
+            workingDirectory: dbMigrationsProjectFolder);
     }
 
     protected virtual string ParseModuleName(string fullModuleName)

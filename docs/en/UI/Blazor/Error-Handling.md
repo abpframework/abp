@@ -1,5 +1,12 @@
 # Blazor UI: Error Handling
 
+````json
+//[doc-params]
+{
+    "UI": ["Blazor", "BlazorServer"]
+}
+````
+
 Blazor, by default, shows a yellow line at the bottom of the page if any unhandled exception occurs. However, this is not useful in a real application.
 
 ABP provides an automatic error handling system for the Blazor UI.
@@ -20,6 +27,8 @@ There are different type of `Exception` classes handled differently by the ABP F
 
 **Example**
 
+{{if UI == "BlazorServer"}}
+
 ````csharp
 @page "/"
 @using Volo.Abp
@@ -28,13 +37,6 @@ There are different type of `Exception` classes handled differently by the ABP F
 
 @code
 {
-    //for Blazor WASM
-    private void TestException()
-    {
-        throw new UserFriendlyException("A user friendly error message!");
-    }
-
-    //for Blazor Server
     private async Task TestException()
     {
         try 
@@ -48,6 +50,26 @@ There are different type of `Exception` classes handled differently by the ABP F
     }
 }
 ````
+
+{{end}}
+
+{{if UI == "Blazor"}}
+
+````csharp
+@page "/"
+@using Volo.Abp
+
+<Button Clicked="TestException">Throw test exception</Button>
+
+@code
+{
+    private void TestException()
+    {
+        throw new UserFriendlyException("A user friendly error message!");
+    }
+}
+````
+{{end}}
 
 ABP automatically handle the exception and show an error message to the user:
 

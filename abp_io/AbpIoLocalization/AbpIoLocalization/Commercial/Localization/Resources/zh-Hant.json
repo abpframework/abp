@@ -18,6 +18,8 @@
     "Developers": "開發者",
     "LicenseType": "許可證類型",
     "Manage": "管理",
+    "SetDefault": "設爲默認",
+    "DefaultOrganization": "默認",
     "StartDate": "開始日期",
     "EndDate": "結束日期",
     "Modules": "模組",

@@ -9,16 +9,16 @@ Prism.languages.nasm = {
 	'keyword': [
 		/\[?BITS (?:16|32|64)\]?/,
 		{
-			pattern: /(^\s*)section\s*[a-zA-Z.]+:?/im,
+			pattern: /(^\s*)section\s*[a-z.]+:?/im,
 			lookbehind: true
 		},
 		/(?:extern|global)[^;\r\n]*/i,
-		/(?:CPU|FLOAT|DEFAULT).*$/m
+		/(?:CPU|DEFAULT|FLOAT).*$/m
 	],
 	'register': {
-		pattern: /\b(?:st\d|[xyz]mm\d\d?|[cdt]r\d|r\d\d?[bwd]?|[er]?[abcd]x|[abcd][hl]|[er]?(?:bp|sp|si|di)|[cdefgs]s)\b/i,
+		pattern: /\b(?:st\d|[xyz]mm\d\d?|[cdt]r\d|r\d\d?[bwd]?|[er]?[abcd]x|[abcd][hl]|[er]?(?:bp|di|si|sp)|[cdefgs]s)\b/i,
 		alias: 'variable'
 	},
-	'number': /(?:\b|(?=\$))(?:0[hx][\da-f]*\.?[\da-f]+(?:p[+-]?\d+)?|\d[\da-f]+[hx]|\$\d[\da-f]*|0[oq][0-7]+|[0-7]+[oq]|0[by][01]+|[01]+[by]|0[dt]\d+|\d*\.?\d+(?:\.?e[+-]?\d+)?[dt]?)\b/i,
+	'number': /(?:\b|(?=\$))(?:0[hx](?:\.[\da-f]+|[\da-f]+(?:\.[\da-f]+)?)(?:p[+-]?\d+)?|\d[\da-f]+[hx]|\$\d[\da-f]*|0[oq][0-7]+|[0-7]+[oq]|0[by][01]+|[01]+[by]|0[dt]\d+|(?:\d+(?:\.\d+)?|\.\d+)(?:\.?e[+-]?\d+)?[dt]?)\b/i,
 	'operator': /[\[\]*+\-\/%<>=&|$!]/
 };

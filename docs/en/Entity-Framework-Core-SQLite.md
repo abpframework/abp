@@ -1,5 +1,7 @@
 # Switch to EF Core SQLite Provider
 
+> [ABP CLI](CLI.md) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with SQLite. See [that document](Entity-Framework-Core-Other-DBMS.md) to learn how to use. This document provides guidance for who wants to manually switch to SQLite after creating the solution.
+
 This document explains how to switch to the **SQLite** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 
 ## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package

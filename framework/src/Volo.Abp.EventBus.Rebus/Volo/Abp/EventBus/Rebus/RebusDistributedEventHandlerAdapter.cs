@@ -3,7 +3,7 @@ using Rebus.Handlers;
 
 namespace Volo.Abp.EventBus.Rebus;
 
-public class RebusDistributedEventHandlerAdapter<TEventData> : IHandleMessages<TEventData>
+public class RebusDistributedEventHandlerAdapter<TEventData> : IHandleMessages<TEventData> , IRebusDistributedEventHandlerAdapter
 {
     protected RebusDistributedEventBus RebusDistributedEventBus { get; }
 

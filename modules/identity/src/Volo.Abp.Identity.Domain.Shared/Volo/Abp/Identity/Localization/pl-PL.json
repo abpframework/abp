@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Twoje hasło zostało zmienione pomyślnie.",
     "PersonalSettingsSavedMessage": "Twoje personalne ustawienia zostały zapisane pomyślnie.",
     "Volo.Abp.Identity:DefaultError": "Wystąpił niespodziewany błąd.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Optymistyczny błąd współbierzności, obiekt został zmodyfikowany.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optymistyczne sprawdzenie współbieżności nie powiodło się. Jednostka, nad którą pracujesz, została zmodyfikowana przez innego użytkownika. Odrzuć zmiany i spróbuj ponownie.",
     "Volo.Abp.Identity:DuplicateEmail": "Email '{0}' już istnieje.",
     "Volo.Abp.Identity:DuplicateRoleName": "Rola '{0}' już istnieje.",
     "Volo.Abp.Identity:DuplicateUserName": "Nazwa użytkownika '{0}' już istnieje.",

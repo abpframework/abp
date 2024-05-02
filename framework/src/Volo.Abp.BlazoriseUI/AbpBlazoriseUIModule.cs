@@ -23,8 +23,8 @@ public class AbpBlazoriseUIModule : AbpModule
     {
         context.Services.AddBlazorise(options =>
         {
-            options.DelayTextOnKeyPress = true;
-            options.DelayTextOnKeyPressInterval = 800;
+            options.Debounce = true;
+            options.DebounceInterval = 800;
         });
 
         context.Services.AddSingleton(typeof(AbpBlazorMessageLocalizerHelper<>));

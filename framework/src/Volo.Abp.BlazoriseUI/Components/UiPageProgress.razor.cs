@@ -51,7 +51,7 @@ public partial class UiPageProgress : ComponentBase, IDisposable
             UiPageProgressType.Success => Color.Success,
             UiPageProgressType.Warning => Color.Warning,
             UiPageProgressType.Error => Color.Danger,
-            _ => Color.None,
+            _ => Color.Default,
         };
     }
 }

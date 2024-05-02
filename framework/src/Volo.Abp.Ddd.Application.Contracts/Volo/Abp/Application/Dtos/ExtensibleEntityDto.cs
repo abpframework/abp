@@ -11,6 +11,18 @@ public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<T
     /// </summary>
     public TKey Id { get; set; }
 
+    protected ExtensibleEntityDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleEntityDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
+
     public override string ToString()
     {
         return $"[DTO: {GetType().Name}] Id = {Id}";
@@ -20,6 +32,18 @@ public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<T
 [Serializable]
 public abstract class ExtensibleEntityDto : ExtensibleObject, IEntityDto
 {
+    protected ExtensibleEntityDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleEntityDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
+
     public override string ToString()
     {
         return $"[DTO: {GetType().Name}]";

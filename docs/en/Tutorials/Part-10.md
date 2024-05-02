@@ -325,7 +325,7 @@ This new method will be used from the UI to get a list of authors and fill a dro
 
 ### BookAppService
 
-Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
+Open the `BookAppService` class in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
 
 {{if DB=="EF"}}
 
@@ -449,7 +449,7 @@ namespace Acme.BookStore.Books
             {
                 return sorting.Replace(
                     "authorName",
-                    "author.Name", 
+                    "author.Name",
                     StringComparison.OrdinalIgnoreCase
                 );
             }
@@ -533,7 +533,7 @@ namespace Acme.BookStore.Books
             {
                 input.Sorting = nameof(Book.Name);
             }
-            
+
             //Get the IQueryable<Book> from the repository
             var queryable = await Repository.GetQueryableAsync();
 
@@ -582,7 +582,7 @@ namespace Acme.BookStore.Books
                 .ToArray();
 
             var queryable = await _authorRepository.GetQueryableAsync();
-            
+
             var authors = await AsyncExecuter.ToListAsync(
                 queryable.Where(a => authorIds.Contains(a.Id))
             );

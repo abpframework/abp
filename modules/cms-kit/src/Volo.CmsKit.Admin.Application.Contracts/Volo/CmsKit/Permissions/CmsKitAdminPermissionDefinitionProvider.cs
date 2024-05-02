@@ -65,6 +65,9 @@ public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvi
             .RequireGlobalFeatures(typeof(MenuFeature));
         menuManagement.AddChild(CmsKitAdminPermissions.Menus.Delete, L("Permission:MenuManagement.Delete"))
             .RequireGlobalFeatures(typeof(MenuFeature));
+
+        cmsGroup.AddPermission(CmsKitAdminPermissions.GlobalResources.Default, L("Permission:GlobalResources"))
+            .RequireGlobalFeatures(typeof(GlobalResourcesFeature));
     }
 
     private static LocalizableString L(string name)

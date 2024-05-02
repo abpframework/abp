@@ -1,5 +1,6 @@
 using System;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.Application.Dtos;
 
@@ -14,6 +15,18 @@ namespace Volo.Abp.Application.Dtos;
 public abstract class ExtensibleCreationAuditedEntityWithUserDto<TPrimaryKey, TUserDto> : ExtensibleCreationAuditedEntityDto<TPrimaryKey>, ICreationAuditedObject<TUserDto>
 {
     public TUserDto Creator { get; set; }
+
+    protected ExtensibleCreationAuditedEntityWithUserDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleCreationAuditedEntityWithUserDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
 }
 
 /// <summary>
@@ -27,4 +40,16 @@ public abstract class ExtensibleCreationAuditedEntityWithUserDto<TUserDto> : Ext
     ICreationAuditedObject<TUserDto>
 {
     public TUserDto Creator { get; set; }
+
+    protected ExtensibleCreationAuditedEntityWithUserDto()
+        : this(true)
+    {
+
+    }
+
+    protected ExtensibleCreationAuditedEntityWithUserDto(bool setDefaultsForExtraProperties)
+        : base(setDefaultsForExtraProperties)
+    {
+
+    }
 }

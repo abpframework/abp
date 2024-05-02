@@ -22,7 +22,7 @@
 - [Part 5: 授权](Part-5.md)
 - [Part 6: 作者: 领域层](Part-6.md)
 - [Part 7: 作者: 数据库集成](Part-7.md)
-- [Part 8: 作者: 应用服务层](本章)
+- **Part 8: 作者: 应用服务层 (本章)**
 - [Part 9: 作者: 用户页面](Part-9.md)
 - [Part 10: 图书到作者的关系](Part-10.md)
 
@@ -393,7 +393,7 @@ authorsPermission.AddChild(
 CreateMap<Author, AuthorDto>();
 ````
 
-## 种子数据
+## 数据种子
 
 如同图书管理部分所做的, 在数据库中生成一些初始作者实体. 不仅当第一次运行应用程序时是有用的, 对自动化测试也是很有用的.
 

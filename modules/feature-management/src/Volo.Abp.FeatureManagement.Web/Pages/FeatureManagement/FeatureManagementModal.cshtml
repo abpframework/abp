@@ -56,6 +56,10 @@
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
                                                            group-style="margin-left: @(feature.Depth * 20)px"/>
+                                                @if (feature.Description != null)
+                                                {
+                                                    <div class="form-text">@feature.Description</div>
+                                                }
 
                                             }
 
@@ -75,6 +79,10 @@
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
                                                            group-style="margin-left: @(feature.Depth * 25)px"/>
+                                                @if (feature.Description != null)
+                                                {
+                                                    <div class="form-text">@feature.Description</div>
+                                                }
                                             }
 
                                             @if (feature.ValueType is SelectionStringValueType selectType)
@@ -95,6 +103,10 @@
                                                             }
                                                         }
                                                     </select>
+                                                    @if (feature.Description != null)
+                                                    {
+                                                        <div class="form-text">@feature.Description</div>
+                                                    }
                                                 </div>
                                             }
 

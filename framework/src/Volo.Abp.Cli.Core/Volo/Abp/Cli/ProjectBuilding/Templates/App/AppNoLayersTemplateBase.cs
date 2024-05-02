@@ -12,6 +12,12 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
 
     }
 
+    public static bool IsAppNoLayersTemplate(string templateName)
+    {
+        return templateName == AppNoLayersTemplate.TemplateName ||
+               templateName == AppNoLayersProTemplate.TemplateName;
+    }
+
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
         var steps = new List<ProjectBuildPipelineStep>();
@@ -33,6 +39,11 @@ public abstract class AppNoLayersTemplateBase : AppTemplateBase
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Host.Mongo", "MyCompanyName.MyProjectName.Host"));
                 steps.Add(new ProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server.Mongo", "MyCompanyName.MyProjectName.Blazor.Server"));
                 break;
+        }
+
+        if (context.BuildArgs.DatabaseManagementSystem == DatabaseManagementSystem.PostgreSQL)
+        {
+            context.Symbols.Add("dbms:PostgreSQL");
         }
 
         switch (context.BuildArgs.UiFramework)

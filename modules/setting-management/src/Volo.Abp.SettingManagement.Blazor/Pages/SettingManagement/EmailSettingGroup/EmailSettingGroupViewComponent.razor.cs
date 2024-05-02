@@ -29,7 +29,7 @@ public partial class EmailSettingGroupViewComponent
         LocalizationResource = typeof(AbpSettingManagementResource);
     }
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         try
         {

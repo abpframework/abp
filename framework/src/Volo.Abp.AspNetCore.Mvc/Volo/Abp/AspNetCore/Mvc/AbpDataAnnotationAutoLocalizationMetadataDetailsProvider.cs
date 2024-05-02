@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,14 +17,16 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
 
     private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
     private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
+    private readonly ConcurrentDictionary<DisplayMetadataProviderContext, string> _displayNameKeys;
 
     public AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(IServiceCollection services)
     {
         _stringLocalizerFactory = services.GetRequiredServiceLazy<IStringLocalizerFactory>();
         _localizationOptions = services.GetRequiredServiceLazy<IOptions<MvcDataAnnotationsLocalizationOptions>>();
+        _displayNameKeys = new ConcurrentDictionary<DisplayMetadataProviderContext, string>();
     }
 
-    public void CreateDisplayMetadata(DisplayMetadataProviderContext context)
+    public virtual void CreateDisplayMetadata(DisplayMetadataProviderContext context)
     {
         var displayMetadata = context.DisplayMetadata;
         if (displayMetadata.DisplayName != null)
@@ -54,36 +57,58 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
 
         displayMetadata.DisplayName = () =>
         {
-                /*
-                 * DisplayName:ClassName:PropertyName
-                 * DisplayName:PropertyName
-                 * ClassName:PropertyName
-                 * PropertyName
-                 */
-
-            LocalizedString localizedString = null;
-
-            if (context.Key.ContainerType != null)
-            {
-                localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.ContainerType.Name + ":" + context.Key.Name];
-            }
-
-            if (localizedString == null || localizedString.ResourceNotFound)
-            {
-                localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
-            }
-
-            if (localizedString.ResourceNotFound && context.Key.ContainerType != null)
-            {
-                localizedString = localizer[context.Key.ContainerType.Name + ":" + context.Key.Name];
-            }
-
-            if (localizedString.ResourceNotFound)
-            {
-                localizedString = localizer[context.Key.Name];
-            }
-
-            return localizedString;
+            var key = _displayNameKeys.GetOrAdd(context, _ => GetDisplayNameKey(context, localizer));
+            return key != null ? localizer[key] : null;
         };
+    }
+
+    protected virtual string GetDisplayNameKey(DisplayMetadataProviderContext context, IStringLocalizer localizer)
+    {
+        /*
+        * DisplayName:ClassName:PropertyName
+        * DisplayName:PropertyName
+        * ClassName:PropertyName
+        * PropertyName
+        */
+
+        LocalizedString localizedString = null;
+
+        if (context.Key.ContainerType != null)
+        {
+            localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.ContainerType.Name + ":" + context.Key.Name];
+            if (!localizedString.ResourceNotFound)
+            {
+                return localizedString.Name;
+            }
+        }
+
+        if (localizedString == null || localizedString.ResourceNotFound)
+        {
+            localizedString = localizer[PropertyLocalizationKeyPrefix + context.Key.Name];
+            if (!localizedString.ResourceNotFound)
+            {
+                return localizedString.Name;
+            }
+        }
+
+        if (localizedString.ResourceNotFound && context.Key.ContainerType != null)
+        {
+            localizedString = localizer[context.Key.ContainerType.Name + ":" + context.Key.Name];
+            if (!localizedString.ResourceNotFound)
+            {
+                return localizedString.Name;
+            }
+        }
+
+        if (localizedString.ResourceNotFound)
+        {
+            localizedString = localizer[context.Key.Name];
+            if (!localizedString.ResourceNotFound)
+            {
+                return localizedString.Name;
+            }
+        }
+
+        return null;
     }
 }

@@ -39,6 +39,15 @@
         "index": 3
       },
       "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+    },
+    "url": {
+      "description": "Url for API definition",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 4
+      },
+      "x-prompt": "Please enter URL for API definition (default: API Name's url in environment file)"
     }
   },
   "required": []

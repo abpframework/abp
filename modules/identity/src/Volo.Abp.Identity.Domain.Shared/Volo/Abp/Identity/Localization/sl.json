@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "Vaše geslo je bilo uspešno spremenjeno.",
     "PersonalSettingsSavedMessage": "Vaše osebne nastavitve so bile uspešno shranjene.",
     "Volo.Abp.Identity:DefaultError": "Zgodila se je neznana napaka.",
-    "Volo.Abp.Identity:ConcurrencyFailure": "Napaka pri optimistični sočasnosti, objekt je bil spremenjen.",
+    "Volo.Abp.Identity:ConcurrencyFailure": "Optimistično preverjanje sočasnosti ni uspelo. Entitet, na katerem delate, je spremenil drug uporabnik. Zavrzite spremembe in poskusite znova.",
     "Volo.Abp.Identity:DuplicateEmail": "E-poštni naslov '{0}' je že zaseden.",
     "Volo.Abp.Identity:DuplicateRoleName": "Naziv vloge '{0}' je že zasedeno.",
     "Volo.Abp.Identity:DuplicateUserName": "Uporabniško ime '{0}' je že zasedeno.",

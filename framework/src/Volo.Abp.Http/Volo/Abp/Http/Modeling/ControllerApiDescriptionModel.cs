@@ -12,6 +12,10 @@ public class ControllerApiDescriptionModel
 
     public string ControllerGroupName { get; set; }
 
+    public bool IsRemoteService { get; set; }
+
+    public string ApiVersion { get; set; }
+
     public string Type { get; set; }
 
     public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; }
@@ -23,12 +27,14 @@ public class ControllerApiDescriptionModel
 
     }
 
-    public static ControllerApiDescriptionModel Create(string controllerName, string groupName, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    public static ControllerApiDescriptionModel Create(string controllerName, string groupName, bool isRemoteService, string apiVersion, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
     {
         return new ControllerApiDescriptionModel
         {
             ControllerName = controllerName,
             ControllerGroupName = groupName,
+            IsRemoteService = isRemoteService,
+            ApiVersion = apiVersion,
             Type = type.FullName,
             Actions = new Dictionary<string, ActionApiDescriptionModel>(),
             Interfaces = type

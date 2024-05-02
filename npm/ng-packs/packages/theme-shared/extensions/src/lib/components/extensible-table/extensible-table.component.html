@@ -32,6 +32,7 @@
               (click)="
                 prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
               "
+              [ngClass]="entityPropTypeClasses[prop.type]"
               [class.pointer]="prop.action"
             ></div>
           </ng-container>

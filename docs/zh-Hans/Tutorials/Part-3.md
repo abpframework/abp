@@ -17,7 +17,7 @@
 
 - [Part 1: 创建服务端](Part-1.md)
 - [Part 2: 图书列表页面](Part-2.md)
-- **Part 3: 创建,更新和删除图书**(本章)
+- **Part 3: 创建,更新和删除图书 (本章)**
 - [Part 4: 集成测试](Part-4.md)
 - [Part 5: 授权](Part-5.md)
 - [Part 6: 作者: 领域层](Part-6.md)

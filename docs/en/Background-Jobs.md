@@ -155,8 +155,6 @@ public class MyModule : AbpModule
 }
 ````
 
-> Default background manager (see below) does not support multiple processes execute the same job queue. So, if you have multiple running instance of your application and you are using the default background job manager, you should only enable one application instance process the job queue.
-
 ## Default Background Job Manager
 
 ABP framework includes a simple `IBackgroundJobManager` implementation that;
@@ -189,11 +187,22 @@ public class MyModule : AbpModule
 
 ### Data Store
 
-The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction. So, you can replace the implementation if you want.
+The default background job manager needs a data store to save and read jobs. It defines `IBackgroundJobStore` as an abstraction to store the jobs.
 
-Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md).
+Background Jobs module implements `IBackgroundJobStore` using various data access providers. See its own [documentation](Modules/Background-Jobs.md). If you don't want to use this module, you should implement the `IBackgroundJobStore` interface yourself.
 
 > Background Jobs module is already installed to the startup templates by default and it works based on your ORM/data access choice.
+
+### Clustered Deployment
+
+The default background job manager is compatible with [clustered environments](Deployment/Clustered-Environment.md) (where multiple instances of your application run concurrently). It uses a [distributed lock](Distributed-Locking.md) to ensure that the jobs are executed only in a single application instance at a time.
+
+However, the distributed lock system works in-process by default. That means it is not distributed actually, unless you configure a distributed lock provider. So, **please follow the [distributed lock](Distributed-Locking.md) document to configure a provider for your application**, if it is not already configured.
+
+If you don't want to use a distributed lock provider, you may go with the following options:
+
+* Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section) in all application instances except one of them, so only the single instance executes the jobs (while other application instances can still queue jobs).
+* Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section)  in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in the background) to execute all the background jobs. This can be a good option if your background jobs consume high system resources (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
 
 ## Integrations
 

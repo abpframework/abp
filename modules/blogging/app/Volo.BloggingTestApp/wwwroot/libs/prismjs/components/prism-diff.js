@@ -7,7 +7,7 @@
 			// Match "@@ ... @@" coord lines in unified diff.
 			/^@@.*@@$/m,
 			// Match coord lines in normal diff (starts with a number).
-			/^\d+.*$/m
+			/^\d.*$/m
 		]
 
 		// deleted, inserted, unchanged, diff
@@ -35,15 +35,25 @@
 		if (!/^\w+$/.test(name)) { // "deleted-sign" -> "deleted"
 			alias.push(/\w+/.exec(name)[0]);
 		}
-		if (name === "diff") {
-			alias.push("bold");
+		if (name === 'diff') {
+			alias.push('bold');
 		}
 
 		Prism.languages.diff[name] = {
-			// pattern: /^(?:[_].*(?:\r\n?|\n|(?![\s\S])))+/m
 			pattern: RegExp('^(?:[' + prefix + '].*(?:\r\n?|\n|(?![\\s\\S])))+', 'm'),
-			alias: alias
+			alias: alias,
+			inside: {
+				'line': {
+					pattern: /(.)(?=[\s\S]).*(?:\r\n?|\n)?/,
+					lookbehind: true
+				},
+				'prefix': {
+					pattern: /[\s\S]/,
+					alias: /\w+/.exec(name)[0]
+				}
+			}
 		};
+
 	});
 
 	// make prefixes available to Diff plugin

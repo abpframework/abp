@@ -117,5 +117,5 @@ db.AbpUsers.updateMany({},{$set:{ IsActive : true }})
 ## See Also
 
 * [Angular UI 4.x to 5.0 Migration Guide](Abp-5_0-Angular.md)
-* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide]()
+* [ASP.NET Core MVC / Razor Pages UI 4.x to 5.0 Migration Guide](Abp-5-0-MVC.md)
 * [Blazor UI 4.x to 5.0 Migration Guide](Abp-5-0-Blazor.md)

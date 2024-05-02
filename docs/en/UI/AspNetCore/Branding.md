@@ -21,7 +21,7 @@ namespace MyProject.Web
     {
         public override string AppName => "Book Store";
 
-        public override string LogoUrl => "logo.png";
+        public override string LogoUrl => "/logo.png";
     }
 }
 ````

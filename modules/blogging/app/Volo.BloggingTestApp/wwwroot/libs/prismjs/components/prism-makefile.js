@@ -8,27 +8,27 @@ Prism.languages.makefile = {
 		greedy: true
 	},
 
-	// Built-in target names
-	'builtin': /\.[A-Z][^:#=\s]+(?=\s*:(?!=))/,
+	'builtin-target': {
+		pattern: /\.[A-Z][^:#=\s]+(?=\s*:(?!=))/,
+		alias: 'builtin'
+	},
 
-	// Targets
-	'symbol': {
-		pattern: /^[^:=\r\n]+(?=\s*:(?!=))/m,
+	'target': {
+		pattern: /^(?:[^:=\s]|[ \t]+(?![\s:]))+(?=\s*:(?!=))/m,
+		alias: 'symbol',
 		inside: {
-			'variable': /\$+(?:[^(){}:#=\s]+|(?=[({]))/
+			'variable': /\$+(?:(?!\$)[^(){}:#=\s]+|(?=[({]))/
 		}
 	},
-	'variable': /\$+(?:[^(){}:#=\s]+|\([@*%<^+?][DF]\)|(?=[({]))/,
+	'variable': /\$+(?:(?!\$)[^(){}:#=\s]+|\([@*%<^+?][DF]\)|(?=[({]))/,
 
-	'keyword': [
-		// Directives
-		/-include\b|\b(?:define|else|endef|endif|export|ifn?def|ifn?eq|include|override|private|sinclude|undefine|unexport|vpath)\b/,
-		// Functions
-		{
-			pattern: /(\()(?:addsuffix|abspath|and|basename|call|dir|error|eval|file|filter(?:-out)?|findstring|firstword|flavor|foreach|guile|if|info|join|lastword|load|notdir|or|origin|patsubst|realpath|shell|sort|strip|subst|suffix|value|warning|wildcard|word(?:s|list)?)(?=[ \t])/,
-			lookbehind: true
-		}
-	],
+	// Directives
+	'keyword': /-include\b|\b(?:define|else|endef|endif|export|ifn?def|ifn?eq|include|override|private|sinclude|undefine|unexport|vpath)\b/,
+
+	'function': {
+		pattern: /(\()(?:abspath|addsuffix|and|basename|call|dir|error|eval|file|filter(?:-out)?|findstring|firstword|flavor|foreach|guile|if|info|join|lastword|load|notdir|or|origin|patsubst|realpath|shell|sort|strip|subst|suffix|value|warning|wildcard|word(?:list|s)?)(?=[ \t])/,
+		lookbehind: true
+	},
 	'operator': /(?:::|[?:+!])?=|[|@]/,
 	'punctuation': /[:;(){}]/
 };

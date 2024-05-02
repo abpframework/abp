@@ -26,10 +26,7 @@ public static class TemplateProjectBuildPipelineBuilder
         pipeline.Steps.Add(new TemplateCodeDeleteStep());
         pipeline.Steps.Add(new SolutionRenameStep());
 
-        if (context.Template.Name == AppProTemplate.TemplateName ||
-            context.Template.Name == MicroserviceProTemplate.TemplateName ||
-            context.Template.Name == MicroserviceServiceProTemplate.TemplateName ||
-            context.Template.Name == ModuleProTemplate.TemplateName)
+        if (context.Template.IsPro())
         {
             pipeline.Steps.Add(new LicenseCodeReplaceStep()); // todo: move to custom steps?
         }

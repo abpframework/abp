@@ -6,12 +6,14 @@ import { timer } from 'rxjs';
 import { ConfirmationComponent } from '../components';
 import { Confirmation } from '../models';
 import { ConfirmationService } from '../services';
+import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from '../tokens/confirmation-icons.token';
 
 @NgModule({
   exports: [ConfirmationComponent],
   entryComponents: [ConfirmationComponent],
   declarations: [ConfirmationComponent],
   imports: [CoreTestingModule.withConfig()],
+  providers: [{ provide: CONFIRMATION_ICONS, useValue: DEFAULT_CONFIRMATION_ICONS }],
 })
 export class MockModule {}
 
@@ -60,6 +62,29 @@ describe('ConfirmationService', () => {
     expect(selectConfirmationContent('.custom-yes')).toBe('YES');
   }));
 
+  test('should display custom FA icon', fakeAsync(() => {
+    service.show('MESSAGE', 'TITLE', undefined, {
+      icon: 'fa fa-info',
+    });
+
+    tick();
+    expect(selectConfirmationElement('.icon').className).toBe('icon fa fa-info');
+  }));
+
+  test('should display custom icon as html element', fakeAsync(() => {
+    const className = 'custom-icon';
+    const selector = '.' + className;
+
+    service.show('MESSAGE', 'TITLE', undefined, {
+      iconTemplate: `<span class="${className}">I am icon</span>`,
+    });
+
+    tick();
+
+    const element = selectConfirmationElement(selector);
+    expect(element).toBeTruthy();
+    expect(element.innerHTML).toBe('I am icon');
+  }));
   test.each`
     type         | selector      | icon
     ${'info'}    | ${'.info'}    | ${'.fa-info-circle'}

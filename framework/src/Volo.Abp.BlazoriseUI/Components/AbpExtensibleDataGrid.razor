@@ -9,7 +9,9 @@
           TotalItems="@TotalItems"
           ShowPager="@ShowPager"
           CurrentPage="@CurrentPage"
-          PageSize="@PageSize">
+          PageSize="@PageSize"
+          Responsive="@Responsive"
+          Class="@Class">
     <LoadingTemplate>
         <Row Class="w-100 align-items-center" Style="height: 150px;">
             <Column>
@@ -52,7 +54,7 @@
                                     {
                                         <EntityAction TItem="TItem"
                                                       Clicked="async () => await action.Clicked(context)"
-                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.None)"
+                                                      Color="@(action.Color != null ? (Blazorise.Color) action.Color : Blazorise.Color.Default)"
                                                       Icon="@action.Icon"
                                                       Visible="@(action.Visible != null ? action.Visible(context) : true)"
                                                       Text="@action.Text"

@@ -37,7 +37,7 @@
     "PasswordChangedMessage": "तुम्हारा पासवर्ड सफलतापूर्वक बदल दिया गया है।",
     "PersonalSettingsSavedMessage": "आपकी व्यक्तिगत सेटिंग्स सफलतापूर्वक सहेज ली गई हैं।",
     "Volo.Abp.Identity:DefaultError": "एक अज्ञात विफलता हुई है।",
-    "Volo.Abp.Identity:ConcurrencyFailure": "आशावादी संगरोध विफलता, ऑब्जेक्ट संशोधित किया गया है।",
+    "Volo.Abp.Identity:ConcurrencyFailure": "आशावादी समवर्ती जाँच विफल हो गई है। आप जिस निकाय पर काम कर रहे हैं, उसे किसी अन्य उपयोगकर्ता द्वारा संशोधित किया गया है। कृपया अपने परिवर्तन त्यागें और पुनः प्रयास करें।",
     "Volo.Abp.Identity:DuplicateEmail": "ईमेल '{0}' पहले से ही लिया गया है।",
     "Volo.Abp.Identity:DuplicateRoleName": "भूमिका नाम '{0}' पहले से ही लिया गया है।",
     "Volo.Abp.Identity:DuplicateUserName": "उपयोगकर्ता नाम '{0}' पहले से ही लिया गया है।",
