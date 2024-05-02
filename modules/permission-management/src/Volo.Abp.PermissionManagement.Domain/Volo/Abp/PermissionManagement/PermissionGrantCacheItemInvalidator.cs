@@ -31,7 +31,7 @@ public class PermissionGrantCacheItemInvalidator :
 
         using (CurrentTenant.Change(eventData.Entity.TenantId))
         {
-            await Cache.RemoveAsync(cacheKey);
+            await Cache.RemoveAsync(cacheKey, considerUow: true);
         }
     }
 
