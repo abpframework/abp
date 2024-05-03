@@ -123,7 +123,7 @@ You can get the application configuration response and set the `ConfigStateServi
 import {AbpApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
 
 constructor(private abpApplicationConfigurationService: AbpApplicationConfigurationService, private config: ConfigStateService) {
-  this.abpApplicationConfigurationService.get().subscribe(config => {
+  this.abpApplicationConfigurationService.get({ includeLocalizationResources: false }).subscribe(config => {
     this.config.setState(config);
   })
 }

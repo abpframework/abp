@@ -152,6 +152,24 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
 export class AppModule {}
 ```
 
+### Singularize Route Item
+- `name` property is must be a unique key. If there are multiple items with the same name, the last one will be displayed in the menu.
+- If you want to display multiple items in different parent with the same name, you can call the **setSingularizeStatus(false)** method of the `RoutesService` to disable the singularization.
+  - **This method should be called before adding the routes.**
+- To enable the singularization of the names, you can call the **setSingularizeStatus(true) `(default value: true)`** method of the `RoutesService`.
+
+```typescript
+import { RoutesService } from '@abp/ng.core';
+import { Component } from '@angular/core';
+
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(private routes: RoutesService) {
+    routes.setSingularizeStatus(false);
+  }
+}
+```
+
 Here is what every property works as:
 
 - `path` is the absolute path of the navigation element.
@@ -226,7 +244,7 @@ After adding the `routes` property as described above, the navigation menu looks
 
 ## How to Patch or Remove a Navigation Element
 
-The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children.
+The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children. Also you can use `removeByParam` method to delete the routes with given properties.
 
 ```js
 // this.routes is instance of RoutesService
@@ -249,6 +267,9 @@ const newHomeRouteConfig: Partial<ABP.Route> = {
 this.routes.add([dashboardRouteConfig]);
 this.routes.patch('::Menu:Home', newHomeRouteConfig);
 this.routes.remove(['Your navigation']);
+
+// or
+this.routes.removeByParam({ name: 'Your navigation' });
 ```
 
 - Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.

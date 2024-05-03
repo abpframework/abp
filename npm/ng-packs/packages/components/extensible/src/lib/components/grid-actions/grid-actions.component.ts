@@ -23,7 +23,7 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
     NgClass,
     LocalizationModule,
     NgTemplateOutlet,
-    NgbTooltipModule
+    NgbTooltipModule,
   ],
   selector: 'abp-grid-actions',
   templateUrl: './grid-actions.component.html',

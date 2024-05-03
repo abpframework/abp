@@ -45,6 +45,6 @@ public class TenantConfigurationCacheItemInvalidator :
                 TenantConfigurationCacheItem.CalculateCacheKey(id, null),
                 TenantConfigurationCacheItem.CalculateCacheKey(null, normalizedName),
                 TenantConfigurationCacheItem.CalculateCacheKey(id, normalizedName),
-            });
+            }, considerUow: true);
     }
 }
