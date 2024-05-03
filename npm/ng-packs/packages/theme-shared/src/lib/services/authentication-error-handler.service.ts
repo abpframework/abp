@@ -3,13 +3,11 @@ import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CustomHttpErrorHandlerService } from '../models/common';
 import { CUSTOM_HTTP_ERROR_HANDLER_PRIORITY } from '../constants/default-errors';
-import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AbpAuthenticationErrorHandler implements CustomHttpErrorHandlerService {
   readonly priority = CUSTOM_HTTP_ERROR_HANDLER_PRIORITY.veryHigh;
   protected readonly authService = inject(AuthService);
-  protected readonly router = inject(Router);
   protected readonly configStateService = inject(ConfigStateService);
 
   canHandle(error: unknown): boolean {
