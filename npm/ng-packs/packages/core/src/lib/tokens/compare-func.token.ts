@@ -21,10 +21,6 @@ export function compareFuncFactory() {
     if (!Number.isInteger(aNumber)) return 1;
     if (!Number.isInteger(bNumber)) return -1;
 
-    if (!a?.name || !b?.name) {
-      return -1;
-    }
-
     const aName = localizationService.instant(a.name);
     const bName = localizationService.instant(b.name);
 
