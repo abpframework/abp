@@ -1,6 +1,6 @@
 import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
-import { Observable, from, of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { isTokenExpired } from '../utils';
 
