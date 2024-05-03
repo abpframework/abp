@@ -6,12 +6,12 @@ import { registerLocale } from '@abp/ng.core/locale';
 import { InternetConnectionStatusComponent, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
 import { SideMenuLayoutModule } from '@abp/ng.theme.lepton-x/layouts';
-import { IdentityConfigModule } from '@abp/ng.identity/config';
 import { AbpOAuthModule } from '@abp/ng.oauth';
 import { SettingManagementConfigModule } from '@abp/ng.setting-management/config';
-import { TenantManagementConfigModule } from '@abp/ng.tenant-management/config';
-import { FeatureManagementModule } from '@abp/ng.feature-management';
-import { AccountConfigModule } from '@abp/ng.account/config';
+import { provideAccountConfig } from '@abp/ng.account/config';
+import { provideIdentityConfig } from '@abp/ng.identity/config';
+import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
+import { provideFeatureManagement } from '@abp/ng.feature-management';
 import { AccountLayoutModule } from '@abp/ng.theme.lepton-x/account';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -31,17 +31,19 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     }),
     AbpOAuthModule.forRoot(),
     ThemeSharedModule.forRoot(),
-    AccountConfigModule.forRoot(),
-    IdentityConfigModule.forRoot(),
-    TenantManagementConfigModule.forRoot(),
-    FeatureManagementModule.forRoot(),
     SettingManagementConfigModule.forRoot(),
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
     AccountLayoutModule.forRoot(),
     InternetConnectionStatusComponent,
   ],
-  providers: [APP_ROUTE_PROVIDER],
+  providers: [
+    APP_ROUTE_PROVIDER,
+    provideAccountConfig(),
+    provideIdentityConfig(),
+    provideTenantManagementConfig(),
+    provideFeatureManagement(),
+  ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

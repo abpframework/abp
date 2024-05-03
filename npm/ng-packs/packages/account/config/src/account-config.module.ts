@@ -1,4 +1,4 @@
-import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { Injector, ModuleWithProviders, NgModule, makeEnvironmentProviders } from '@angular/core';
 import { NAVIGATE_TO_MANAGE_PROFILE } from '@abp/ng.core';
 import { ACCOUNT_ROUTE_PROVIDERS } from './providers/route.provider';
 import { navigateToManageProfileFactory } from './utils/factories';
@@ -18,4 +18,15 @@ export class AccountConfigModule {
       ],
     };
   }
+}
+
+export function provideAccountConfig() {
+  return makeEnvironmentProviders([
+    ACCOUNT_ROUTE_PROVIDERS,
+    {
+      provide: NAVIGATE_TO_MANAGE_PROFILE,
+      useFactory: navigateToManageProfileFactory,
+      deps: [Injector],
+    },
+  ]);
 }

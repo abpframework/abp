@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, makeEnvironmentProviders } from '@angular/core';
 import { IDENTITY_ROUTE_PROVIDERS } from './providers/route.provider';
 
 @NgModule()
@@ -9,4 +9,8 @@ export class IdentityConfigModule {
       providers: [IDENTITY_ROUTE_PROVIDERS],
     };
   }
+}
+
+export function provideIdentityConfig() {
+  return makeEnvironmentProviders([IDENTITY_ROUTE_PROVIDERS]);
 }

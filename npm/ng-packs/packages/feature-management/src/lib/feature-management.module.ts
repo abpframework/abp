@@ -1,6 +1,6 @@
 import { CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, makeEnvironmentProviders } from '@angular/core';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { FeatureManagementComponent } from './components/feature-management/feature-management.component';
 import { FreeTextInputDirective } from './directives/free-text-input.directive';
@@ -14,8 +14,7 @@ const exported = [
 ];
 
 @NgModule({
-  declarations: [...exported],
-  imports: [CoreModule, ThemeSharedModule, NgbNavModule],
+  imports: [CoreModule, ThemeSharedModule, NgbNavModule, ...exported],
   exports: [...exported],
 })
 export class FeatureManagementModule {
@@ -25,4 +24,8 @@ export class FeatureManagementModule {
       providers: [FEATURE_MANAGEMENT_SETTINGS_PROVIDERS],
     };
   }
+}
+
+export function provideFeatureManagement() {
+  return makeEnvironmentProviders([FEATURE_MANAGEMENT_SETTINGS_PROVIDERS]);
 }
