@@ -137,7 +137,7 @@ namespace Volo.Docs.Admin.Projects
             
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
             
-            var docsCount = await _documentRepository.GetCountByProjectId(projectId);
+            var docsCount = await _documentRepository.GetUniqueDocumentCountByProjectIdAsync(projectId);
             
             if (docsCount == 0)
             {
@@ -149,7 +149,7 @@ namespace Volo.Docs.Admin.Projects
             var skipCount = 0;
             while(skipCount < docsCount)
             {
-                var docs = await _documentRepository.GetListByProjectId(projectId, skipCount, maxResultCount);
+                var docs = await _documentRepository.GetUniqueDocumentsByProjectIdPagedAsync(projectId, skipCount, maxResultCount);
                 docs = docs.Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName).ToList();
                 if (!docs.Any())
                 {

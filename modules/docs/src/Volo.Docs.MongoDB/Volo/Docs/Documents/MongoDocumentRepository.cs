@@ -54,19 +54,24 @@ namespace Volo.Docs.Documents
             return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Document>> GetListByProjectId(Guid projectId, int skipCount, int maxResultCount,
+        public virtual async Task<List<Document>> GetUniqueDocumentsByProjectIdPagedAsync(Guid projectId, int skipCount, int maxResultCount,
             CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId)
-                .OrderBy(x => x.Name)
+            return await (await GetMongoQueryableAsync(cancellationToken))
+                .Where(d => d.ProjectId == projectId)
+                .OrderBy(x => x.LastCachedTime)
+                .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
+                .Select(group => group.First())
                 .Skip(skipCount)
                 .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<long> GetCountByProjectId(Guid projectId, CancellationToken cancellationToken = default)
+        public virtual async Task<long> GetUniqueDocumentCountByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken)).LongCountAsync(x => x.ProjectId == projectId, GetCancellationToken(cancellationToken));
+            return await (await GetMongoQueryableAsync(cancellationToken)).Where(d => d.ProjectId == projectId)
+                .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task UpdateProjectLastCachedTimeAsync(Guid projectId, DateTime cachedTime,
