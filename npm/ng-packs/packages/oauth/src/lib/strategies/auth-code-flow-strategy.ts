@@ -1,6 +1,6 @@
 import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
-import { from, of } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { isTokenExpired } from '../utils';
 
@@ -51,6 +51,10 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
   logout(queryParams?: Params) {
     this.rememberMeService.remove();
+    if (queryParams?.noRedirectToLogoutUrl) {
+      this.router.navigate(['/']);
+      return from(this.oAuthService.revokeTokenAndLogout(true));
+    }
     return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 
