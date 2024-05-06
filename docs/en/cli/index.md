@@ -29,6 +29,8 @@ Here, is the list of all available commands before explaining their details:
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`cli`**: Update or remove ABP CLI.
 * **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates).
+* **`new-module`**: Generates a new module based on the given template.
+* **`new-package`**: Generates a new package based on the given template.
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
@@ -199,6 +201,84 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * `-no-language-management`: Skips the Language Management module.
   * `-no-text-template-management`: Skips the Text Template Management module.
   * `-no-chat`: Skips the Chat module.
+
+### new-module
+
+Generates a new module.
+
+````bash
+abp new-module <module-name> [options]
+````
+
+Example:
+
+````bash
+abp new-module Acme.BookStore -t module:ddd
+````
+
+#### options
+
+* `--template` or `-t`: Specifies the template name. Default template name is `empty`, which generates a empty module. Module templates are provided by the main template, see their own startup template documentation for available modules. `empty` and `module:ddd` template is available for all solution structure.
+* `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
+* `--target-solution` or `-ts`: If set, the new module will be added to the given solution. Otherwise the new module will added to the closest solution in the file system. If no solution found, it will throw an error.
+* `--solution-folder` or `-sf`: Specifies the target folder in the [Solution Explorer](./solution-explorer.md#folder)  virtual folder system.
+* `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `ef, mongodb` if the module template supports it. Available providers:
+  * `ef`: Entity Framework Core.
+  * `mongodb`: MongoDB.
+* `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `mvc,angular` if the module template supports it. Available frameworks:
+  * `mvc`: ASP.NET Core MVC.
+  * `angular`: Angular UI.
+  * `blazor`: Blazor UI.
+  * `blazor-server`: Blazor Server UI.
+
+### new-package
+
+Generates a new package.
+
+````bash
+abp new-package [options]
+````
+
+Example:
+
+````bash
+abp new-package --name Acme.BookStore.Domain --template lib.domain
+````
+
+#### options
+
+* `--template` or `-t`: Specifies the template name. This parameter doesn't have a default value and must be set. Available templates and their sub-options:
+	* `lib.class-library`
+	* `lib.domain-shared`
+	* `lib.domain`
+	* `lib.application-contracts`
+	* `lib.application`
+		* `--with-automapper`:  Adds automapper configuration. 
+	* `lib.ef`
+		* `--include-migrations`: Allows migration operations on this package.
+		* `--connection-string-name`: Default value is the last part of the package's namespace (or package name simply).
+		* `--connection-string`: Connection string value. Defaut value is null. You can set it alter.
+	* `lib.mongodb`
+	* `lib.http-api`
+	* `lib.http-api-client`
+	* `lib.mvc`
+	* `lib.blazor`
+	* `lib.blazor-wasm`
+	* `lib.blazor-server`
+	* `host.http-api`
+		* `--with-serilog`: Includes Serilog configuration.
+		* `--with-swagger`: Includes Swagger configuration.
+	* `host.mvc`
+		* `--with-serilog`: Includes Serilog configuration.
+		* `--with-swagger`: Includes Swagger configuration.
+	* `host.blazor-wasm`
+		* `--backend`: Name of the backend project in the module (not path).
+	* `host.blazor-server`
+	* `csharp.console`
+	* `csharp.library`
+* `--module-file` or `-m`: If set, the new package will be added to the given module. Otherwise the new package will added to the closest module in the file system. If no module found, it will throw an error.
+* `--name` or `-n`: Specifies the name of the package. If not set, a name based on the template type and module name will be generated.
+* `--folder` or `-f`: Specifies the target folder in the target module's virtual folder system.
 
 ### update
 
