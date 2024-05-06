@@ -28,7 +28,6 @@ builder.Services.Configure<AbpLocalizationOptions>(options =>
 });
 
 await builder.AddApplicationAsync<OpenIddictServerModule>();
-
 var app = builder.Build();
 await app.InitializeApplicationAsync();
 
@@ -51,15 +50,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
-
-// Use Microsoft.AspNetCore.Authentication.JwtBearer instead of OpenIddict.Validation.AspNetCore
-//app.UseJwtTokenMiddleware();
-
 app.UseAuthentication();
 app.UseAbpOpenIddictValidation();
 app.UseMultiTenancy();
 app.UseAuthorization();
-
 app.UseConfiguredEndpoints();
-
 app.Run();

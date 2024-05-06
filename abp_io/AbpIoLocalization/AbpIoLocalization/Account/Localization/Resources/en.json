@@ -12,6 +12,7 @@
     "CommunityWebSite": "ABP community website",
     "ManageAccount": "My Account | ABP.IO",
     "ManageYourProfile": "Manage your profile",
-    "ReturnToApplication": "Return to application"
+    "ReturnToApplication": "Return to application",
+    "IdentityUserNotAvailable:Deleted": "This email address is not available. Reason: Already deleted."
   }
 }
