@@ -26,6 +26,6 @@ export class FeatureManagementModule {
   }
 }
 
-export function provideFeatureManagement() {
+export function provideFeatureManagementConfig() {
   return makeEnvironmentProviders([FEATURE_MANAGEMENT_SETTINGS_PROVIDERS]);
 }

@@ -231,7 +231,7 @@ export class CoreModule {
   }
 }
 
-export function provideCoreModule(options = {} as ABP.Root) {
+export function provideCoreModuleConfig(options = {} as ABP.Root) {
   return makeEnvironmentProviders([
     LocaleProvider,
     CookieLanguageProvider,

@@ -78,7 +78,7 @@ export class AbpOAuthModule {
   }
 }
 
-export function provideAbpOAuth() {
+export function provideAbpOAuthConfig() {
   const providers = [
     {
       provide: AuthService,

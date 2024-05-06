@@ -156,7 +156,7 @@ export class ThemeSharedModule {
   }
 }
 
-export function provideThemeShared(
+export function provideThemeSharedConfig(
   { httpErrorConfig, validation = {}, confirmationIcons = {} } = {} as RootParams,
 ) {
   const providers = [
