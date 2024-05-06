@@ -34,10 +34,18 @@ Here, is the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
-* **`add-module`**: Adds a [multi-package application module](../modules) to a solution.
+* **`add-package-ref`**: Adds package to given project.
+* **`install-module`**: Adds a [multi-package application module](../modules) to a given module.
+* **`install-local-module`**: Installs a local module to given module.
 * **`list-modules`**: Lists names of open-source application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
-* **`get-source`**: Downloads the source code of a module.
+* **`add-source-code`**: Downloads the source code and replaces package references with project references.
+* **`init-solution`**: Creates ABP Studio configuration files for a given solution.
+* **`kube-connect`**: Connects to kubernetes environment.
+* **`kube-intercept`**: Intercepts a service running in Kubernetes environment.
+* **`list-module-sources`**: Lists the remote module sources.
+* **`add-module-source`**: Adds a remote module source.
+* **`delete-module-source`**: Deletes a remote module source.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
@@ -351,6 +359,24 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 > - Volo.Abp.AspNetCore.Components.Web.BasicTheme
 > - Volo.Abp.AspNetCore.Components.Server.BasicTheme
 
+### add-package-ref
+
+Adds one or more package reference to target project, also adds ABP module dependency. Both reference and target projects must belong to same module.
+
+````bash
+abp add-package-ref <package-names> [options]
+````
+
+Example:
+
+````bash
+abp add-package-ref Acme.BookStore.Domain
+abp add-package-ref "Acme.BookStore.Domain Acme.BookStore.Domain.Shared" -t Acme.BookStore.Web
+````
+
+#### options
+
+* `--target-project` or `-t`: Name of the project that reference will be added. If not set, project in the current directory will be used.
 
 ### add-module
 
