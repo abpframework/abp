@@ -58,6 +58,12 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         public virtual async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
         {
             var client = _clientProvider.GetClient();
+            
+            var existsResponse = await client.DocumentExistsAsync(DocumentPath<Document>.Id(NormalizeField(document.Id)), x => x.Index(_options.IndexName), cancellationToken);
+            if (existsResponse.Exists)
+            {
+                await DeleteAsync(document.Id, cancellationToken);
+            }
 
             var esDocument = new EsDocument
             {
