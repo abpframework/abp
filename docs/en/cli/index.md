@@ -399,6 +399,26 @@ abp install-module Volo.Blogging -t "modules/crm/Acme.Crm.abpmdl"
 * `--target-module` or `-t`: Path (or folder path) of the target module that the other module will be installed to. If not set, the closest module to the current directory will be used.
 * `--version` or `-v`: Nuget version of the module to be installed.
 
+### install-local-module
+
+Installs one module to another. Project relations are created according the types of the projects. For example: a `lib.domain-shared` project is added to `lib.domain-shared` project
+
+````bash
+abp install-local-module <module-path> [options]
+````
+
+Example:
+
+````bash
+abp install-local-module Acme.OrderManagement
+
+abp install-local-module Acme.OrderManagement -t "modules/crm/Acme.Crm.abpmdl"
+````
+
+#### Options
+
+* `--target-module` or `-t`: Path (or folder path) of the target module that the other module will be installed to. If not set, the closest module to the current directory will be used.
+
 ### list-modules
 
 Lists names of open-source application modules.
