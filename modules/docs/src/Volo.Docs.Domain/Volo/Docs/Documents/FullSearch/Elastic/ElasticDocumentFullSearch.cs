@@ -59,10 +59,26 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         {
             var client = _clientProvider.GetClient();
             
-            var existsResponse = await client.DocumentExistsAsync(DocumentPath<Document>.Id(NormalizeField(document.Id)), x => x.Index(_options.IndexName), cancellationToken);
-            if (existsResponse.Exists)
+            // exist by name, project id, language code and version
+            var existResponse = await client.SearchAsync<EsDocument>(s => s
+                .Query(q => q
+                    .Bool(b => b
+                        .Must(m => m
+                            .Term(t => t.ProjectId, NormalizeField(document.ProjectId))
+                            && m.Term(t => t.LanguageCode, NormalizeField(document.LanguageCode))
+                            && m.Term(t => t.Version, NormalizeField(document.Version))
+                            && m.Term(t => t.Name, document.Name)
+                        )
+                    )
+                ), cancellationToken);
+            
+            HandleError(existResponse);
+            
+            if (existResponse.Documents.Count != 0)
             {
-                await DeleteAsync(document.Id, cancellationToken);
+                // delete many
+                var ids = existResponse.Documents.Select(x => x.Id).ToList();
+                HandleError(await client.DeleteManyAsync(ids, _options.IndexName, cancellationToken));
             }
 
             var esDocument = new EsDocument
