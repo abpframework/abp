@@ -83,7 +83,7 @@ Following custom repositories are defined for this module:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions]( ../framework/architecture/best-practices/domain-services.md) guide.
+This module follows the [Domain Services Best Practices & Conventions](../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### QuestionManager
 

@@ -1,6 +1,6 @@
 # Blazor UI: Layout Hooks
 
-ABP Framework theming system places the page layout into the [theme](theming.md) NuGet packages. That means the final application doesn't include a layout, so you can't directly change the layout code to customize it.
+ABP theming system places the page layout into the [theme](theming.md) NuGet packages. That means the final application doesn't include a layout, so you can't directly change the layout code to customize it.
 
 > If you create a Blazor WASM project, the `index.html` file will be included within the template. You can also customize it to your needs.
 

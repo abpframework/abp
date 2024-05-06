@@ -1,5 +1,5 @@
 # JSON
-The ABP Framework provides an abstraction to work with JSON. Having such an abstraction has some benefits;
+The ABP provides an abstraction to work with JSON. Having such an abstraction has some benefits;
 
 * You can write library independent code. Therefore, you can change the underlying library with the minimum effort and code change.
 * You can use the predefined converters defined in the ABP without worrying about the underlying library's internal details.
@@ -42,7 +42,7 @@ public class ProductManager
 
 ### AbpJsonOptions
 
-`AbpJsonOptions` type provides options for the JSON operations in the ABP Framework.
+`AbpJsonOptions` type provides options for the JSON operations in the ABP.
 
 Properties:
 * **InputDateTimeFormats(`List<string>`)**: Formats of input JSON date, Empty string means default format. You can provide multiple formats to parse the date.

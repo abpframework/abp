@@ -36,7 +36,7 @@ Based on the options you've specified, you will get a slightly different solutio
 
 Projects are organized as `src`, `test` and `host` folders:
 
-* `src` folder contains the actual module which is layered based on [DDD](../Domain-Driven-Design.md) principles.
+* `src` folder contains the actual module which is layered based on [DDD](../../framework/architecture/domain-driven-design) principles.
 * `test` folder contains unit & integration tests.
 * `host` folder contains applications with different configurations to demonstrate how to host the module in an application. These are not a part of the module, but useful on development.
 
@@ -109,7 +109,7 @@ In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an a
 
 Test projects are prepared for integration testing;
 
-- It is fully integrated to ABP framework and all services in your application.
+- It is fully integrated to ABP and all services in your application.
 - It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [EphemeralMongo](https://github.com/asimmon/ephemeral-mongo) library.
 - Authorization is disabled, so any application service can be easily used in tests.
 

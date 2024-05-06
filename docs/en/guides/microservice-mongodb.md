@@ -606,6 +606,6 @@ MongoDB connection strings are different than SQL Server connection strings. So,
 
 ### Run the project
 
-Now we are basically done, you can run the application according to the [documentation](../startup-templates/microservice/get-started.md).
+Now we are basically done, you can run the application according to the [documentation](../solution-templates/microservice).
 
 > We did not change the project name and folder in the guide, you can change it if you need, eg: `BookStore.ProductService.EntityFrameworkCore` to `BookStore.ProductService.MongoDB`.

@@ -10,11 +10,11 @@ You can find the source code of the example project referenced by this document 
 
 ## About the EF Core Code First Migrations
 
-Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](../../../get-started) take the advantage of this system to allow you to develop your application in a standard way.
+Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP [startup templates](../../../get-started) take the advantage of this system to allow you to develop your application in a standard way.
 
 However, EF Core migration system is **not so good in a modular environment** where each module maintains its **own database schema** while two or more modules may **share a single database** in practical.
 
-Since ABP Framework cares about modularity in all aspects, it provides a **solution** to this problem. It is important to understand this solution if you need to **customize your database structure**.
+Since ABP cares about modularity in all aspects, it provides a **solution** to this problem. It is important to understand this solution if you need to **customize your database structure**.
 
 > See [EF Core's own documentation](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to fully learn the EF Core Code First Migrations and why you need to such a system.
 
@@ -52,7 +52,7 @@ This is **the simplest configuration** and suitable for most of the applications
 
 So, you have a **single database schema** which contains all the tables of the modules **sharing** this database.
 
-ABP Framework's [connection string](../../fundamentals/connection-strings.md) system allows you to easily **set a different connection string** for a desired module:
+ABP's [connection string](../../fundamentals/connection-strings.md) system allows you to easily **set a different connection string** for a desired module:
 
 ````json
 "ConnectionStrings": {
@@ -61,13 +61,13 @@ ABP Framework's [connection string](../../fundamentals/connection-strings.md) sy
 }
 ````
 
-The example configuration tells to the ABP Framework to use the second connection string for the [Audit Logging module](../../../modules/audit-logging.md) (if you don't specify connection string for a module, it uses the `Default` connection string).
+The example configuration tells to the ABP to use the second connection string for the [Audit Logging module](../../../modules/audit-logging.md) (if you don't specify connection string for a module, it uses the `Default` connection string).
 
 **However, this can work only if the audit log database with the given connection string is available**. So, you need to create the second database, create audit log tables inside it and maintain the database tables. No problem if you manually do all these. However, the recommended approach is the code first migrations. One of the main purposes of this document is to guide you on such **database separation** scenarios.
 
 #### Module Tables
 
-Every module uses its **own databases tables**. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system.
+Every module uses its **own databases tables**. For example, the [Identity Module](../../../modules/identity.md) has some tables to manage the users and roles in the system.
 
 ##### Table Prefixes
 
@@ -139,11 +139,11 @@ This `DbContext` class needs some explanations:
 
 * It defines `[ReplaceDbContext]` attributes for `IIdentityDbContext` and `ITenantManagementDbContext` those replaces Identity and Tenant Management module's `DbContext`s by your `DbContext` on runtime. This allows us to easily perform LINQ queries by joining your entities with the entities (over the repositories) coming from those modules.
 * It defines a `[ConnectionStringName]` attribute which tells ABP to always use the `Default` connection string for this `Dbcontext`.
-* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](../../data/entity-framework-core) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you.
+* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](../../data/entity-framework-core) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP to automate some common tasks for you.
 * It declares `DbSet` properties for entities from the replaced `DbContext`s (by implementing the corresponding interfaces). These `DbSet` properties are not shown above (for the sake of brevity), but you can find in your application's code in a `region`.
 * The constructor takes a `DbContextOptions<T>` instance.
 * It overrides the `OnModelCreating` method to define the EF Core mappings.
-  * It first calls the the `base.OnModelCreating` method to let the ABP Framework to implement the base mappings for us.
+  * It first calls the the `base.OnModelCreating` method to let the ABP to implement the base mappings for us.
   * It then calls some `builder.ConfigureXXX()` methods for the used modules. This makes possible to add database mappings for these modules to this `DbContext`, so it creates the database tables of the modules when we add a new EF Core database migration.
   * You can configure the mappings for your own entities as commented in the example code. At this point, you can also change mappings for the modules you are using.
 
@@ -159,7 +159,7 @@ An alternative approach would be to allow each module to have its own migrations
 
 ## Using Multiple Databases
 
-The default startup template is organized to use a **single database** used by all the modules and by your application. However, the ABP Framework and all the pre-built modules are designed so that **they can use multiple databases**. Each module can use its own database or you can group modules into a few databases.
+The default startup template is organized to use a **single database** used by all the modules and by your application. However, the ABP and all the pre-built modules are designed so that **they can use multiple databases**. Each module can use its own database or you can group modules into a few databases.
 
 This section will explain how to move Audit Logging, Setting Management and Permission Management module tables to a **second database** while the remaining modules continue to use the main ("Default") database.
 
@@ -190,7 +190,7 @@ Change it as shown below:
 
 Added **three more connection strings** for the related module to target the `BookStore_SecondDb` database (they are all the same). For example, `AbpPermissionManagement` is the connection string name used by the permission management module.
 
-The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP Framework [connection string selection system](../../fundamentals/connection-strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
+The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP [connection string selection system](../../fundamentals/connection-strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
 
 ### Create a Second DbContext
 
@@ -231,7 +231,7 @@ namespace BookStore.EntityFrameworkCore
 }
 ````
 
-> `[ConnectionStringName(...)]` attribute is important here and tells to the ABP Framework which connection string should be used for this `DbContext`. We've used `AbpPermissionManagement`, but all are the same.
+> `[ConnectionStringName(...)]` attribute is important here and tells to the ABP which connection string should be used for this `DbContext`. We've used `AbpPermissionManagement`, but all are the same.
 
 We need to register this `BookStoreSecondDbContext` class to the dependency injection system. Open the `BookStoreEntityFrameworkCoreModule` class in the `BookStore.EntityFrameworkCore` project and add the following line into the `ConfigureServices` method:
 

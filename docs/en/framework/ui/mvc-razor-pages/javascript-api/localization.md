@@ -72,7 +72,7 @@ Returns `true` if the `ProductName` text was localized for the `MyResource` reso
 
 ### abp.localization.defaultResourceName
 
-`abp.localization.defaultResourceName` can be set to change the default localization resource. You normally don't set this since the ABP Framework automatically sets is based on the server side configuration.
+`abp.localization.defaultResourceName` can be set to change the default localization resource. You normally don't set this since the ABP automatically sets is based on the server side configuration.
 
 ### abp.localization.currentCulture
 

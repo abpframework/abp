@@ -9,7 +9,7 @@
 
 ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
 
-![React Native gif](./images/react-native-introduction.gif)
+![React Native gif](../images/react-native-introduction.gif)
 
 ## How to Prepare Development Environment
 
@@ -26,19 +26,19 @@ You have multiple options to initiate a new React Native project that works with
 
 ### 1. Using ABP CLI
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](CLI.md) and run the following command in your terminal:
+ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](../cli) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u <angular or mvc> -m react-native
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](CLI.md).
+> To see further options in the CLI, please visit the [CLI manual](../cli).
 
 This command will prepare a solution with an **Angular** or an **MVC** (depends on your choice), a **.NET Core**, and a **React Native** project in it.
 
 ### 2. Generating a CLI Command from Get Started Page
 
-You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](./Startup-Templates/Index.md).
+You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../solution-templates).
 
 ## How to Configure & Run the Backend
 
@@ -49,14 +49,14 @@ You can generate a CLI command on the [get started page of the abp.io website](h
 A React Native application running on an Android emulator or a physical phone **can not connect to the backend** on `localhost`. To fix this problem, it is necessary to run the backend application on your **local IP address**.
 
 {{ if Tiered == "No"}}
-![React Native host project local IP entry](images/rn-host-local-ip.png)
+![React Native host project local IP entry](../images/rn-host-local-ip.png)
 
 - Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `SelfUrl` and `Authority` properties with your local IP address.
 - Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
 
 {{ else if Tiered == "Yes" }}
 
-![React Native tiered project local IP entry](images/rn-tiered-local-ip.png)
+![React Native tiered project local IP entry](../images/rn-tiered-local-ip.png)
 
 - Open the `appsettings.json` file in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
 - Open the `launchSettings.json` file in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
@@ -65,7 +65,7 @@ A React Native application running on an Android emulator or a physical phone **
 
 {{ end }}
 
-Run the backend application as described in the [getting started document](Getting-Started.md).
+Run the backend application as described in the [getting started document](getting-started.md).
 
 > You should turn off the "Https Restriction" if you're using OpenIddict as a central identity management solution. Because the IOS Simulator doesn't support self-signed certificates and OpenIddict is set to only work with HTTPS by default.
 
@@ -89,7 +89,7 @@ Open the {{ if Tiered == "No" }}`MyProjectNameHttpApiHostModule`{{ else if Tiere
 2. Open `react-native` folder and run `yarn` or `npm install` if you have not already.
 3. Open the `Environment.js` in the `react-native` folder and replace the `localhost` address on the `apiUrl` and `issuer` properties with your local IP address as shown below:
 
-![react native environment local IP](images/rn-environment-local-ip.png)
+![react native environment local IP](../images/rn-environment-local-ip.png)
 
 {{ if Tiered == "Yes" }}
 
@@ -105,20 +105,20 @@ Open the {{ if Tiered == "No" }}`MyProjectNameHttpApiHostModule`{{ else if Tiere
 
 > The React Native application was generated with [Expo](https://expo.io/). Expo is a set of tools built around React Native to help you quickly start an app and, while it has many features.
 
-![expo-cli-options](images/rn-options.png)
+![expo-cli-options](../images/rn-options.png)
 
 In the above image, you can start the application with an Android emulator, an iOS simulator or a physical phone by scanning the QR code with the [Expo Client](https://expo.io/tools#client) or choosing the option.
 
 ### Expo
 
-![React Native login screen on iPhone 11](images/rn-login-iphone.png)
+![React Native login screen on iPhone 11](../images/rn-login-iphone.png)
 
 ### Android Studio
 
 1. Start the emulator in **Android Studio** before running the `yarn start` or `npm start` command.
 2. Press **a** to open in Android Studio.
 
-![React Native login screen on iPhone 11](images/rn-login-android-studio.png)
+![React Native login screen on iPhone 11](../images/rn-login-android-studio.png)
 
 Enter **admin** as the username and **1q2w3E\*** as the password to login to the application.
 
@@ -126,4 +126,4 @@ The application is up and running. You can continue to develop your application 
 
 ## See Also
 
-- [React Native project structure](./Startup-Templates/Application#react-native)
+- [React Native project structure](../solution-templates/layered-web-application#react-native)

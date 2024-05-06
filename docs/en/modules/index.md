@@ -20,13 +20,13 @@ Here are all the free and pro application modules developed and maintained as a 
 * [**CMS Kit**](cms-kit): A set of reusable *Content Management System* features.
 * **[CMS Kit (Pro)](cms-kit-pro)**: A set of reusable CMS (Content Management System) building blocks.
 * [**Docs**](docs.md): Used to create technical documentation website. ABP's [own documentation](../modules) already using this module.
-* [**Feature Management**](feature-management.md): Used to persist and manage the [features](../features.md).
+* [**Feature Management**](feature-management.md): Used to persist and manage the [features](../framework/infrastructure/features.md).
 * **[File Management (Pro)](file-management.md)**: Upload, download and organize files in a hierarchical folder structure.
 * **[Forms (Pro)](forms.md)**: Create forms and surveys.
 * **[GDPR (Pro)](gdpr.md)**: Personal data management.
 * **[Identity](identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
 * **[Identity (Pro)](identity-pro.md)**: User, role, claims and permission management.
-* [**IdentityServer**](IdentityServer.md): Integrates to IdentityServer4.
+* [**IdentityServer**](identity-server.md): Integrates to IdentityServer4.
 * **[Identity Server (Pro)](identity-server-pro.md)**: Managing the identity server objects like clients, API resources, identity resources, secrets, application URLs, claims and more.
 * **[Language management (Pro)](language-management.md)**: Add or remove languages and localize the application UI on the fly.
 * [**OpenIddict**](openiddict.md): Integrates to OpenIddict.
@@ -34,8 +34,8 @@ Here are all the free and pro application modules developed and maintained as a 
 * **[Payment (Pro)](payment.md)**: Payment gateway integrations.
 * [**Permission Management**](permission-management.md): Used to persist permissions.
 * **[SaaS (Pro)](saas.md)**: Manage tenants, editions and features to create your multi-tenant / SaaS application.
-* **[Setting Management](setting-management.md)**: Used to persist and manage the [settings](../Settings.md).
-* [**Tenant Management**](tenant-management.md): Manages tenants for a [multi-tenant](../Multi-Tenancy.md) application.
+* **[Setting Management](setting-management.md)**: Used to persist and manage the [settings](../framework/fundamentals/settings.md).
+* [**Tenant Management**](tenant-management.md): Manages tenants for a [multi-tenant](../framework/architecture/multi-tenancy) application.
 * **[Text template management (Pro)](text-template-management.md)**: Manage text templates in the system.
 * **[Twilio SMS (Pro)](twilio-sms.md)**: Send SMS messages with [Twilio](https://www.twilio.com/) cloud service.
 * [**Virtual File Explorer**](virtual-file-explorer.md): Provided a simple UI to view files in [virtual file system](../framework/infrastructure/virtual-file-system.md).

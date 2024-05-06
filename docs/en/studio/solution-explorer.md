@@ -24,7 +24,7 @@ It is the main solution that you can open with ABP Studio, an ABP solution can c
   - `Install Libs`: Install NPM Packages for UI projects in your solution.
   - `Upgrade ABP Packages`: Update all the ABP related NuGet and NPM packages in your solution.
   - `Clean`: Deletes all `BIN` and `OBJ` folders in your solution.
-  - `Switch to`: It is switch your solution to the selected version of the ABP framework.
+  - `Switch to`: It is switch your solution to the selected version of the ABP.
     - `Stable`: Switches your solution to the latest stable version.
     - `Preview`: Switches your solution to the preview version.
     - `Nightly Build`: Switches your solution to the nightly version.
@@ -58,7 +58,7 @@ You can click the *OK* button to add the folder to the solution. When you right-
 - `ABP CLI`
   - `Install Libs`: Install NPM Packages for UI projects in your selected folder.
   - `Upgrade ABP Packages`: Update all the ABP related NuGet and NPM packages in your selected folder.
-  - `Switch to`: It switches your selected folder to the specified version of the ABP framework.
+  - `Switch to`: It switches your selected folder to the specified version of the ABP.
     - `Stable`: Switches your selected folder to the latest stable version.
     - `Preview`: Switches your selected folder to the preview version.
     - `Nightly Build`: Switches your selected folder to the nightly version.
@@ -90,7 +90,7 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
 - `ABP CLI`
   - `Install Libs`: Install NPM Packages for UI projects in your selected module.
   - `Upgrade ABP Packages`: Update all the ABP related NuGet and NPM packages in your module.
-  - `Switch to`: It switches your selected module to the specified version of the ABP framework.
+  - `Switch to`: It switches your selected module to the specified version of the ABP.
     - `Stable`: Switches your selected module to the latest stable version.
     - `Preview`: Switches your selected module to the preview version.
     - `Nightly Build`: Switches your selected module to the nightly version.
@@ -143,15 +143,15 @@ ABP modules have their own file extension `.abpmdl`, and they are located in the
 
 > The added module can be located outside of the solution folder. The path will be [normalized](https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#path-normalization), allowing flexibility in the module's location as long as it's accessible from the current [ABP Solution](./concepts.md#solution) path.
 
-### Difference Between ABP Framework Module Template and ABP Studio Module Approach
+### Difference Between ABP Module Template and ABP Studio Module Approach
 
-In ABP Framework, creating a module solution using the [CLI](https://docs.abp.io/en/commercial/latest/startup-templates/module/creating-a-new-solution) results in a solution with numerous projects, some of which may not be necessary for a specific use case. The ABP Studio module approach differs from the ABP Framework module template, offering greater flexibility. With ABP Studio, we can create a module containing only the required projects; for example, an empty module with only the `Domain` and `Application` projects. In this approach, the term [Package](./concepts.md#package) is used for module projects.
+In ABP, creating a module solution using the [CLI](https://docs.abp.io/en/commercial/latest/startup-templates/module/creating-a-new-solution) results in a solution with numerous projects, some of which may not be necessary for a specific use case. The ABP Studio module approach differs from the ABP module template, offering greater flexibility. With ABP Studio, we can create a module containing only the required projects; for example, an empty module with only the `Domain` and `Application` projects. In this approach, the term [Package](./concepts.md#package) is used for module projects.
 
 Furthermore, it's important to mention that we can create not just DDD-principled modules. The [Modularity](../framework/architecture/modularity/basics.md) document clarifies the difference between *Framework* and *Application* modules. Basically, every C# project refers to the `Volo.Abp.Core` package and defines the *Module* class as an ABP Class Library. We have the option to develop an infrastructure module using only the *ABP Class Library* packages and provide a module reference to other modules.
 
 ## Imports
 
-ABP Framework [Modularity](../framework/architecture/modularity/basics.md) has a significant advantage in developing a module in a solution and adding it as a module reference to your application or another module. This approach allows each module to maintain its own solution and be used in different applications. Importing a module into another module grants access to all module features within our current module. In ABP Studio, importing one module into another is a straightforward process. You can import a module using the *Imports* section on a module in the solution explorer. You can also import a module using the *Import Module* button on the module context-menu.
+ABP [Modularity](../framework/architecture/modularity/basics.md) has a significant advantage in developing a module in a solution and adding it as a module reference to your application or another module. This approach allows each module to maintain its own solution and be used in different applications. Importing a module into another module grants access to all module features within our current module. In ABP Studio, importing one module into another is a straightforward process. You can import a module using the *Imports* section on a module in the solution explorer. You can also import a module using the *Import Module* button on the module context-menu.
 
 ![imports-context-menu](./images/solution-explorer/imports-context-menu.png)
 
@@ -215,7 +215,7 @@ A [package](./concepts.md#package) is a project that can be added to a module, a
 - `ABP CLI`
   - `Install Libs`: Install NPM Packages for UI projects in your selected package.
   - `Upgrade ABP Packages`: Update all the ABP related NuGet and NPM packages in your selected package.
-  - `Switch to`: It switches your selected package to the specified version of the ABP framework.
+  - `Switch to`: It switches your selected package to the specified version of the ABP.
     - `Stable`: Switches your selected package to the latest stable version.
     - `Preview`: Switches your selected package to the preview version.
     - `Nightly Build`: Switches your selected package to the nightly version.

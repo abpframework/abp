@@ -1,8 +1,8 @@
 # LeptonX Lite Angular UI
 
-LeptonX Lite has implementation for the ABP Framework Angular Client. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
+LeptonX Lite has implementation for the ABP Angular Client. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
 
-> If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP Commercial](https://commercial.abp.io/).
+> If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP](https://commercial.abp.io/).
 
 > See the [Theming document](../../framework/ui/mvc-razor-pages/theming.md) to learn about themes.
 
@@ -29,7 +29,7 @@ yarn add bootstrap-icons
 * [Styles - Angular UI](../../framework/ui/angular/theme-configurations.md)
 
 Note: You should remove the old theme styles from "angular.json" if you are switching from "ThemeBasic" or "Lepton."
-Look at the [Theme Configurations](../../UI/Angular/Theme-Configurations) list of styles. Depending on your theme, you can alter your styles in angular.json.
+Look at the [Theme Configurations](../../framework/ui/angular/theme-configurations.md) list of styles. Depending on your theme, you can alter your styles in angular.json.
 
 - Finally, remove `ThemeBasicModule` from `app.module.ts`, and import the related modules in `app.module.ts`
 
@@ -90,7 +90,7 @@ In order to migrate to LeptonX on your server side projects (Host and/or AuthSer
 
 ### Layouts
 
-The Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Framework Theming](../../framework/ui/angular/theming.md). You can use the layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component system](../../framework/ui/angular/component-replacement.md).
+The Angular version of LeptonX Lite provides **layout components** for your **user interface** on [ABP Theming](../../framework/ui/angular/theming.md). You can use the layouts to **organize your user interface**. You can replace the **layout components** and some parts of the **layout components** with the [ABP replaceable component system](../../framework/ui/angular/component-replacement.md).
 
 The main responsibility of a theme is to **provide** the layouts. There are **three pre-defined layouts that must be implemented by all the themes:**
 

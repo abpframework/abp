@@ -77,7 +77,7 @@ This is a **typical migration problem** and the decision depends on your case;
 * You can update the existing data programmatically on data migration or seed phase.
 * You can manually handle it on the database.
 
-We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP Framework, we don't go deeper for all the scenarios.
+We prefer to **delete the database** {{if DB=="EF"}}(you can run the `Drop-Database` in the *Package Manager Console*){{end}} since this is just an example project and data loss is not important. Since this topic is not related to the ABP, we don't go deeper for all the scenarios.
 
 {{if DB=="EF"}}
 

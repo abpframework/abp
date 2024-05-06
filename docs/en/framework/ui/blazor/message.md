@@ -71,7 +71,7 @@ All of these methods get three parameters:
 _uiMessageService.Error('Your credit card number is not valid!');
 ````
 
-![blazor-message-success](../../../../images/blazor-message-error.png)
+![blazor-message-success](../../../images/blazor-message-error.png)
 
 
 ## Confirmation Message

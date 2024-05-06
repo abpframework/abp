@@ -68,7 +68,7 @@ namespace Demo
 Features Management Module is extensible, just like the [features system](../framework/infrastructure/features.md).  You can extend it by defining feature management providers. There are 3 pre-built feature management providers registered it the following order:
 
 * `DefaultValueFeatureManagementProvider`: Gets the value from the default value of the feature definition. It can not set the default value since default values are hard-coded on the feature definition.
-* `EditionFeatureManagementProvider`: Gets or sets the feature values for an edition. Edition is a group of features assigned to tenants. Edition system has not implemented by the Tenant Management module. You can implement it yourself or purchase the ABP Commercial [SaaS Module](https://commercial.abp.io/modules/Volo.Saas) which implements it and also provides more SaaS features, like subscription and payment.
+* `EditionFeatureManagementProvider`: Gets or sets the feature values for an edition. Edition is a group of features assigned to tenants. Edition system has not implemented by the Tenant Management module. You can implement it yourself or purchase the ABP [SaaS Module](https://commercial.abp.io/modules/Volo.Saas) which implements it and also provides more SaaS features, like subscription and payment.
 * `TenantFeatureManagementProvider`: Gets or sets the features values for tenants.
 
 `IFeatureManager` uses these providers on get/set methods. Typically, every feature management provider defines extension methods on the `IFeatureManager` service (like `SetForTenantAsync` defined by the tenant feature management provider).

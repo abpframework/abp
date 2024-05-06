@@ -30,7 +30,7 @@ This table can store information about the Chat user messages, including the mes
 
 ### CmsNewsletterPreferences
 
-This table maintains the user's preferred settings for receiving newsletters through the [CMS Kit Newsletters system](cms-kit/newsletter.md). The information stored in this table helps the CMS system to deliver preferred and specific newsletters to each user, providing a more personalized experience for subscribers.
+This table maintains the user's preferred settings for receiving newsletters through the [CMS Kit Newsletters system](./cms-kit-pro/newsletter.md). The information stored in this table helps the CMS system to deliver preferred and specific newsletters to each user, providing a more personalized experience for subscribers.
 
 #### Foreign Keys
 
@@ -44,7 +44,7 @@ This table stores information about users that are registered for the newsletter
 
 ### CmsPolls
 
-This table stores information about the polls created using the [CMS Kit Poll system](cms-kit/poll.md). Polls can be used to gather user feedback or opinions on a topic, and this table stores details such as the poll question and vote count.
+This table stores information about the polls created using the [CMS Kit Poll system](./cms-kit-pro/poll.md). Polls can be used to gather user feedback or opinions on a topic, and this table stores details such as the poll question and vote count.
 
 ### CmsPollOptions
 
@@ -62,7 +62,7 @@ This table stores the user votes for the polls that are managed by the CMS Kit M
 
 ### CmsShortenedUrls
 
-This table stores URL mappings in the system and is used by the [URL Forwarding](cms-kit/url-forwarding.md) feature of the CMS Kit Module. The [URL forwarding system](cms-kit/url-forwarding.md) allows the creation of URLs that redirect to other pages or external websites. 
+This table stores URL mappings in the system and is used by the [URL Forwarding](./cms-kit-pro/url-forwarding.md) feature of the CMS Kit Module. The [URL forwarding system](./cms-kit-pro/url-forwarding.md) allows the creation of URLs that redirect to other pages or external websites. 
 
 ## [File Management Module](file-management.md)
 

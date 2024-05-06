@@ -10,7 +10,7 @@ Data seeding is also useful for [testing](../../testing/overall.md) purpose, so 
 
 While EF Core Data Seeding system provides a way, it is very limited and doesn't cover production scenarios. Also, it is only for EF Core.
 
-ABP Framework provides a data seed system that is;
+ABP provides a data seed system that is;
 
 * **Modular**: Any [module](../architecture/modularity/basics.md) can silently contribute to the data seeding process without knowing and effecting each other. In this way, a module seeds its own initial data.
 * **Database Independent**: It is not only for EF Core, it also works for other database providers (like [MongoDB](../data/mongodb)).
@@ -78,7 +78,7 @@ namespace Acme.BookStore
 * It is typical to **check database** if the seeding data is already present.
 * You can **inject** service and perform any logic needed to seed the data.
 
-> Data seed contributors are automatically discovered by the ABP Framework and executed as a part of the data seed process.
+> Data seed contributors are automatically discovered by the ABP and executed as a part of the data seed process.
 
 ### DataSeedContext
 

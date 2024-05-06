@@ -12,7 +12,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Account
 
 ## How to Install
 
-The account is pre-installed in [the startup templates](../startup-templates/application). So, no need to manually install it.
+The account is pre-installed in [the startup templates](../solution-templates/layered-web-application/index.md). So, no need to manually install it.
 
 ## Packages
 

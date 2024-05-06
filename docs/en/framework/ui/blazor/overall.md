@@ -6,18 +6,18 @@
 
 ABP provides infrastructure and integrations that make your Blazor development even easier, comfortable and enjoyable.
 
-This document provides an overview for the ABP Framework Blazor UI integration and highlights some major features.
+This document provides an overview for the ABP Blazor UI integration and highlights some major features.
 
 ### Getting Started
 
-You can follow the documents below to start with the ABP Framework and the Blazor UI now:
+You can follow the documents below to start with the ABP and the Blazor UI now:
 
-* [Get started](../../../_deleted/Getting-Started.md) with the Blazor UI for the ABP Framework.
+* [Get started](../../../_deleted/Getting-Started.md) with the Blazor UI for the ABP.
 * [Web Application Development Tutorial](../../../tutorials/book-store/part-01.md) with the Blazor UI.
 
 ## Modularity
 
-[Modularity](../../Module-Development-Basics.md) is one of the key goals of the ABP Framework. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
+[Modularity](../../architecture/modularity/basics.md) is one of the key goals of the ABP. It is not different for the UI; It is possible to develop modular applications and reusable application modules with isolated and reusable UI pages and components.
 
 The [application startup template](../../../solution-templates/layered-web-application) comes with some application modules pre-installed. These modules have their own UI pages embedded into their own NuGet packages. You don't see their code in your solution, but they work as expected on runtime.
 
@@ -60,13 +60,13 @@ Dynamic C# Client Proxy system makes extremely easy to consume server side HTTP 
 * It uses `BookAppService.GetListAsync` in the `OnInitializedAsync` and gets the list of the books, just like a regular C# method call.
 * Finally, the page renders the books in a list on the UI.
 
-ABP Framework handles all the low level details for you, including a proper HTTP call, JSON serialization, exception handling and authentication.
+ABP handles all the low level details for you, including a proper HTTP call, JSON serialization, exception handling and authentication.
 
 See the [Dynamic C# Client Proxies](../../api-development/dynamic-csharp-clients.md) document for more.
 
 ## Theming System
 
-ABP Framework provides a complete [Theming](theming.md) system with the following goals:
+ABP provides a complete [Theming](theming.md) system with the following goals:
 
 * Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
 * UI theme is **decided by the final application**.
@@ -78,7 +78,7 @@ ABP Framework provides a complete [Theming](theming.md) system with the followin
 Currently, three themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
-* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP Commercial](https://commercial.abp.io/) license.
+* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://commercial.abp.io/) license.
 * The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/blazor) and [lite](../../../ui-themes/lepton-x-lite/blazor.md) choices.
 
 ### Base Libraries
@@ -94,7 +94,7 @@ These libraries are selected as the base libraries and available to the applicat
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
-> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP Commercial and commercial customers doesn’t need to buy an extra Blazorise license.
+> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP and commercial customers doesn’t need to buy an extra Blazorise license.
 
 ### The Layout
 

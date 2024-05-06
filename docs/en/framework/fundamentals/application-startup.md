@@ -1,16 +1,16 @@
 ## ABP Application Startup
 
-You typically use the [ABP CLI](../../cli)'s `abp new` command to [get started](../../get-started/layered-web-application.md) with one of the pre-built [startup solution templates](../../solution-templates). When you do that, you generally don't need to know the details of how the ABP Framework is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](../../modules) are pre-installed and configured for you.
+You typically use the [ABP CLI](../../cli)'s `abp new` command to [get started](../../get-started/layered-web-application.md) with one of the pre-built [startup solution templates](../../solution-templates). When you do that, you generally don't need to know the details of how the ABP is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](../../modules) are pre-installed and configured for you.
 
-> It is always suggested to [get started with a startup template](../../get-started) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP Framework starts.
+> It is always suggested to [get started with a startup template](../../get-started) and modify it for your requirements. Read this document only if you want to understand the details or if you need to modify how the ABP starts.
 
-While the ABP Framework has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NPM packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](../../get-started/empty-aspnet-core-application.md) document, you'll see how easy it is to install the ABP Framework into an empty ASP.NET Core project from scratch. You only need to install a single NuGet package and make a few small changes.
+While the ABP has a lot of features and integrations, it is built as a lightweight and modular framework. It consists of [hundreds of NuGet and NPM packages](https://abp.io/packages), so you can only use the features you need. If you follow the [Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application](../../get-started/empty-aspnet-core-application.md) document, you'll see how easy it is to install the ABP into an empty ASP.NET Core project from scratch. You only need to install a single NuGet package and make a few small changes.
 
-This document is for who wants to better understand how the ABP Framework is initialized and configured on startup.
+This document is for who wants to better understand how the ABP is initialized and configured on startup.
 
 ## Installing to a Console Application
 
-A .NET Console application is the minimalist .NET application. So, it is best to show the installing of the ABP Framework to a console application as a minimalist example.
+A .NET Console application is the minimalist .NET application. So, it is best to show the installing of the ABP to a console application as a minimalist example.
 
 If you [create a new console application with Visual Studio](https://learn.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio) (for .NET 8.0 or later), you will see the following solution structure (I named the solution as `MyConsoleDemo`):
 
@@ -18,7 +18,7 @@ If you [create a new console application with Visual Studio](https://learn.micro
 
 This example uses the [top level statements](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/top-level-statements), so it consists of only a single line of code.
 
-The first step is to install the [Volo.Abp.Core](https://www.nuget.org/packages/Volo.Abp.Core) NuGet package, which is the most core NuGet package of the ABP framework. You can install it using the ABP CLI. Execute the following command in the folder of the .csproj file that you want to install the package on:
+The first step is to install the [Volo.Abp.Core](https://www.nuget.org/packages/Volo.Abp.Core) NuGet package, which is the most core NuGet package of the ABP. You can install it using the ABP CLI. Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ````bash
 abp add-package Volo.Abp.Core
@@ -56,16 +56,16 @@ using Volo.Abp;
 // 1: Create the ABP application container
 using var application = await AbpApplicationFactory.CreateAsync<MyConsoleDemoModule>();
 
-// 2: Initialize/start the ABP Framework (and all the modules)
+// 2: Initialize/start the ABP (and all the modules)
 await application.InitializeAsync();
 
-Console.WriteLine("ABP Framework has been started...");
+Console.WriteLine("ABP has been started...");
 
-// 3: Stop the ABP Framework (and all the modules)
+// 3: Stop the ABP (and all the modules)
 await application.ShutdownAsync();
 ````
 
-That's all. Now, ABP Framework is installed, integrated, started and stopped in your application. From now, you can install [ABP packages](https://abp.io/packages) to your application whenever you need them.
+That's all. Now, ABP is installed, integrated, started and stopped in your application. From now, you can install [ABP packages](https://abp.io/packages) to your application whenever you need them.
 
 ## Installing a Framework Package
 
@@ -158,17 +158,17 @@ using Volo.Abp;
 // 1: Manually created the IServiceCollection
 IServiceCollection services = new ServiceCollection();
 
-// 2: Pass the IServiceCollection externally to the ABP Framework
+// 2: Pass the IServiceCollection externally to the ABP
 using var application = await AbpApplicationFactory
     .CreateAsync<MyConsoleDemoModule>(services);
 
 // 3: Manually built the IServiceProvider object
 IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-// 4: Pass the IServiceProvider externally to the ABP Framework
+// 4: Pass the IServiceProvider externally to the ABP
 await application.InitializeAsync(serviceProvider);
 
-Console.WriteLine("ABP Framework has been started...");
+Console.WriteLine("ABP has been started...");
 
 await application.ShutdownAsync();
 ````
@@ -179,7 +179,7 @@ In this example, we've used .NET's standard dependency injection container. The 
 IServiceProvider serviceProvider = services.BuildServiceProviderFromFactory();
 ````
 
-> You can check the [Autofac Integration](./autofac-integration.md) document if you want to learn how you can integrate the [Autofac](https://autofac.org/) dependency injection container with the ABP Framework.
+> You can check the [Autofac Integration](./autofac-integration.md) document if you want to learn how you can integrate the [Autofac](https://autofac.org/) dependency injection container with the ABP.
 
 Finally, the `CreateAsync` method has a last overload that takes the module class name as a `Type` parameter and a `IServiceCollection` object. So, we could re-write the last `CreateAsync` method usage as in the following code block:
 
@@ -214,7 +214,7 @@ We've passed a lambda method to configure the `ApplicationName` option. Here's a
 
 As defined above, the `ApplicationName` option is a human-readable name for the application. It is a unique value for an application.
 
-`ApplicationName` is used by the ABP Framework in several places to distinguish the application. For example, the [audit logging](../infrastructure/audit-logging.md) system saves the `ApplicationName` in each audit log record written by the related application, so you can understand which application has created the audit log entry. So, if your system consists of multiple applications (like a microservice solution) that are saving audit logs to a single point, you should be sure that each application has a different `ApplicationName`.
+`ApplicationName` is used by the ABP in several places to distinguish the application. For example, the [audit logging](../infrastructure/audit-logging.md) system saves the `ApplicationName` in each audit log record written by the related application, so you can understand which application has created the audit log entry. So, if your system consists of multiple applications (like a microservice solution) that are saving audit logs to a single point, you should be sure that each application has a different `ApplicationName`.
 
 The `ApplicationName` property's value is set automatically from the **entry assembly's name** (generally, the project name in a .NET solution) by default, which is proper for most cases, since each application typically has a unique entry assembly name.
 
@@ -260,7 +260,7 @@ The `IAbpApplication` interface extends the `IApplicationInfoAccessor` interface
 
 Sometimes, while creating an application, we need to get the current hosting environment and take actions according to that. In such cases, we can use some services such as [IWebHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.iwebhostenvironment?view=aspnetcore-8.0) or [IWebAssemblyHostEnvironment](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.webassembly.hosting.iwebassemblyhostenvironment) provided by .NET, in the final application. 
 
-However, we can not use these services in a class library, which is used by the final application. ABP Framework provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP Framework in several places to perform specific actions by the environment. For example, ABP Framework reduces the cache duration on the **Development** environment for some services.
+However, we can not use these services in a class library, which is used by the final application. ABP provides the `IAbpHostEnvironment` service, which allows you to get the current environment name whenever you want. `IAbpHostEnvironment` is used by the ABP in several places to perform specific actions by the environment. For example, ABP reduces the cache duration on the **Development** environment for some services.
 
 `IAbpHostEnvironment` obtains the current environment name by the following order:
 

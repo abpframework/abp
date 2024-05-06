@@ -2,7 +2,7 @@
 
 You may need to **change behavior (business logic)** of a depended module for your application. In this case, you can use the power of the [dependency injection system](../../../fundamentals/dependency-injection.md) to replace a service, controller or even a page model of the depended module by your own implementation.
 
-**Replacing a service** is possible for any type of class registered to the dependency injection, including services of the ABP Framework.
+**Replacing a service** is possible for any type of class registered to the dependency injection, including services of the ABP.
 
 You have different options can be used based on your requirement those will be explained in the next sections.
 
@@ -283,7 +283,7 @@ Overriding controllers, framework services, view component classes and any other
 
 ## Extending Data Transfer Objects
 
-**Extending [entities](Entities.md)** is possible as described in the [Extending Entities document](./customizing-application-modules-extending-entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
+**Extending [entities](../../../architecture/domain-driven-design/entities.md)** is possible as described in the [Extending Entities document](./customizing-application-modules-extending-entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
 
 It is also possible to extend Data Transfer Objects (**DTOs**) used by the application services. In this way, you can get extra properties from the UI (or client) and return extra properties from the service.
 

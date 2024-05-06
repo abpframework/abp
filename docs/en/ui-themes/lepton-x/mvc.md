@@ -1,5 +1,5 @@
 # LeptonX MVC UI
-LeptonX theme is implemented and ready to use with ABP Commercial. No custom implementation is needed for Razor Pages.
+LeptonX theme is implemented and ready to use with ABP. No custom implementation is needed for Razor Pages.
 
 ## Installation
 
@@ -36,7 +36,7 @@ abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonX
 ```
 
 ## Source-Code
-You can download the source code of the LeptonX Theme according to your ABP Commercial License.
+You can download the source code of the LeptonX Theme according to your ABP License.
 
 Visit the [LeptonX Source Code](index#source-code) section to download the source-code.
 
@@ -142,7 +142,7 @@ Abp **helps** you make **highly customizable UI**. You can easily **customize** 
 
 An application (or another module) can **override** a **virtual file of a module** just like placing a file with the **same name** and **extension** into the **same folder** of the **virtual file**.
 
-LeptonX is built on the [Abp Framework](https://abp.io/), so you can **easily** customize your Asp.Net Core Mvc user interface by following [Abp Mvc UI Customization](../../framework/ui/mvc-razor-pages/customization-user-interface.md).
+LeptonX is built on the [ABP](https://abp.io/), so you can **easily** customize your Asp.Net Core Mvc user interface by following [Abp Mvc UI Customization](../../framework/ui/mvc-razor-pages/customization-user-interface.md).
 
 ## Common Components
 
@@ -254,7 +254,7 @@ Components used in the side menu layout.
 
 * The **user menu component (C# file)** is defined in the `Themes/LeptonX/Components/SideMenu/Toolbar/UserMenu/UserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-> LeptonX implements the ABP Framework Menu [ABP Naviation/Menus]([#user-menu](../../framework/ui/mvc-razor-pages/navigation-menu.md#standard-menus)). So you can check it out to learn how to add/remove menu items to the user menu.
+> LeptonX implements the ABP Menu [ABP Naviation/Menus]([#user-menu](../../framework/ui/mvc-razor-pages/navigation-menu.md#standard-menus)). So you can check it out to learn how to add/remove menu items to the user menu.
 
 ---
 

@@ -12,7 +12,7 @@ Use the ABP CLI to add [Volo.Abp.BlobStoring.Aws](https://www.nuget.org/packages
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring.Aws` package.
 * Run `abp add-package Volo.Abp.BlobStoring.Aws` command.
 
-If you want to do it manually, install the [Volo.Abp.BlobStoring.Aws](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Aws) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringAwsModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.BlobStoring.Aws](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Aws) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringAwsModule))]` to the [ABP module](../../architecture/modularity/basics.md) class inside your project.
 
 ## Configuration
 
@@ -46,7 +46,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 ````
 
-> See the [BLOB Storing document](.../blob-storing) to learn how to configure this provider for a specific container.
+> See the [BLOB Storing document](../blob-storing) to learn how to configure this provider for a specific container.
 
 ### Options
 
@@ -60,7 +60,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **Region** (string): The system name of the service.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using sub-accounts operated OSS,if the value is 0.
-* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](.../blob-storing)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
+* **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](../blob-storing)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
     * Bucket names must be between **3** and **63** characters long.
     * Bucket names can consist only of **lowercase** letters, numbers, dots (.), and hyphens (-).
     * Bucket names must begin and end with a letter or number.
@@ -74,7 +74,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 Aws Blob Provider organizes BLOB name and implements some conventions. The full name of a BLOB is determined by the following rules by default:
 
-* Appends `host` string if [current tenant](../../architecture/multi-tenancy) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](.../blob-storing) to learn how to disable multi-tenancy for a container).
+* Appends `host` string if [current tenant](../../architecture/multi-tenancy) is `null` (or multi-tenancy is disabled for the container - see the [BLOB Storing document](../blob-storing) to learn how to disable multi-tenancy for a container).
 * Appends `tenants/<tenant-id>` string if current tenant is not `null`.
 * Appends the BLOB name.
 

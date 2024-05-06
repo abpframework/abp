@@ -353,7 +353,7 @@ The [Virtual File System](../../infrastructure/virtual-file-system.md) allows yo
 
 #### Example: Replace the Standard Email Layout Template
 
-ABP Framework provides an [email sending system](../../infrastructure/emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.tpl` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
+ABP provides an [email sending system](../../infrastructure/emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.tpl` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
 
 Do the following steps to replace the template file with your own;
 

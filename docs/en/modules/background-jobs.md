@@ -1,6 +1,6 @@
 # Background Jobs Module
 
-The Background Jobs module implements the `IBackgroundJobStore` interface and makes possible to use the default background job manager of the ABP Framework. If you don't want to use this module, then you should implement the `IBackgroundJobStore` interface yourself.
+The Background Jobs module implements the `IBackgroundJobStore` interface and makes possible to use the default background job manager of the ABP. If you don't want to use this module, then you should implement the `IBackgroundJobStore` interface yourself.
 
 > This document covers only the background jobs module which persists background jobs to a database. See [the background jobs](../framework/infrastructure/background-jobs) document for more about the background jobs system.
 

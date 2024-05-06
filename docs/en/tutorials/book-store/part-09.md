@@ -302,7 +302,7 @@ Create a new razor page, `CreateModal.cshtml` under the `Pages/Authors` folder o
 </form>
 ```
 
-We had used [dynamic forms](../../framework/ui/mvc-razor-pages/tag-helpers/dynamic-forms.md) of the ABP Framework for the books page before. We could use the same approach here, but we wanted to show how to do it manually. Actually, not so manually, because we've used `abp-input` tag helper in this case to simplify creating the form elements.
+We had used [dynamic forms](../../framework/ui/mvc-razor-pages/tag-helpers/dynamic-forms.md) of the ABP for the books page before. We could use the same approach here, but we wanted to show how to do it manually. Actually, not so manually, because we've used `abp-input` tag helper in this case to simplify creating the form elements.
 
 You can definitely use the standard Bootstrap HTML structure, but it requires to write a lot of code. `abp-input` automatically adds validation, localization and other standard elements based on the data type.
 

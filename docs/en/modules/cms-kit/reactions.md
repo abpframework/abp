@@ -10,7 +10,7 @@ You can also customize the reaction icons shown in the reaction component.
 
 ## Enabling the Reaction Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
 > Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
@@ -38,7 +38,7 @@ Configure<CmsKitReactionOptions>(options =>
 });
 ```
 
-> If you're using the [Comment](./comments.md) or [Blogging](./blogging.md) features, the ABP framework defines predefined reactions for these features automatically.
+> If you're using the [Comment](./comments.md) or [Blogging](./blogging.md) features, the ABP defines predefined reactions for these features automatically.
 
 `CmsKitReactionOptions` properties:
 

@@ -2,7 +2,7 @@
 
 > Connection string system is especially needed when you want to create or use a modular system. If you have a monolithic application with a single database, you can go with the [ABP startup solution template](../../solution-templates/layered-web-application), which is properly configured for you.
 
-ABP Framework is designed to be [modular](../architecture/modularity/basics.md) and [multi-tenancy](../architecture/multi-tenancy) aware. Connection string management is also designed to support these scenarios;
+ABP is designed to be [modular](../architecture/modularity/basics.md) and [multi-tenancy](../architecture/multi-tenancy) aware. Connection string management is also designed to support these scenarios;
 
 * Allows to set separate connection strings for every module, so every module can have its own physical database. Modules even might be configured to use different database providers.
 * Allows to set separate connection string and use a separate database per tenant (in a SaaS application).
@@ -11,7 +11,7 @@ It also supports hybrid scenarios;
 
 * Allows to group modules into databases (e.g., all modules into a single shared database or two modules to database A, three modules to database B, one module to database C and rest of the modules to database D)
 * Allows to group tenants into databases, just like the modules.
-* Allows to separate databases per tenant per module (which might be hard to maintain for you because of too many databases, but the ABP framework supports it).
+* Allows to separate databases per tenant per module (which might be hard to maintain for you because of too many databases, but the ABP supports it).
 
 All the [pre-built application modules](../../modules) are designed to be compatible these scenarios.
 

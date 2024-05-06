@@ -15,7 +15,7 @@ We will create two solutions to compare the changes;
 
 Assume that we are upgrading from the version **4.2.2** to version **4.3.0-rc.1**. First, create two empty folders:
 
-![upgrade-diff-empty-folders](../images/upgrade-diff-empty-folders.png)
+![upgrade-diff-empty-folders](../../images/upgrade-diff-empty-folders.png)
 
 **A)** Open a command-line terminal inside the `4_2_2` folder and create a new solution with the version `4.2.2` using the ABP [CLI](../../cli) (install it if you haven't installed before).
 
@@ -53,17 +53,17 @@ This will update all NuGet & NPM packages in your solution. We are ready to comp
 
 We will use the [WinMerge](https://winmerge.org/) utility for the comparison. So, please install it if it wasn't installed before. After installation, open the WinMerge application, select the the *File > Open* menu item, select the folders you want to compare:
 
-![winmerge-open-folders](../images/winmerge-open-folders.png)
+![winmerge-open-folders](../../images/winmerge-open-folders.png)
 
 Now, we can click to the *Compare* button to see all the differences. Here, a screenshot from the comparison:
 
-![winmerge-comparison-result](../images/winmerge-comparison-result.png)
+![winmerge-comparison-result](../../images/winmerge-comparison-result.png)
 
 See the *Comparison result* column or the yellow coloring to understand if two files or folder are different. It shows almost all folders are different. However, don't worry. Generally a few files will be different in a folder and a few lines will be different in a file comparison.
 
 For example, I select the `MyCompareApp.Blazor.csproj` to understand what's changed in this file:
 
-![winmerge-file-diff](../images/winmerge-file-diff.png)
+![winmerge-file-diff](../../images/winmerge-file-diff.png)
 
 We see that;
 

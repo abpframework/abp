@@ -17,7 +17,7 @@ ABP provides an automatic error handling system for the Blazor UI.
 
 ## Basic Usage
 
-There are different type of `Exception` classes handled differently by the ABP Framework.
+There are different type of `Exception` classes handled differently by the ABP.
 
 ### UserFriendlyException
 

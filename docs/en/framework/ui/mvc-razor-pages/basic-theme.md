@@ -4,7 +4,7 @@ The Basic Theme is a theme implementation for the ASP.NET Core MVC / Razor Pages
 
 The Basic Theme has RTL (Right-to-Left language) support.
 
-> If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP Commercial](https://commercial.abp.io/).
+> If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://commercial.abp.io/themes), which is a part of the [ABP](https://commercial.abp.io/).
 
 > See the [Theming document](theming.md) to learn about themes.
 
@@ -28,7 +28,7 @@ The Basic Theme implements the standard layouts. All the layouts implement the f
 
 ### The Application Layout
 
-![basic-theme-application-layout](../../images/basic-theme-application-layout.png)
+![basic-theme-application-layout](../../../images/basic-theme-application-layout.png)
 
 Application Layout implements the following parts, in addition to the common parts mentioned above;
 
@@ -83,7 +83,7 @@ See the [User Interface Customization Guide](customization-user-interface.md) to
 
 ### Copy & Customize
 
-You can run the following [ABP CLI](../../cli.md) command in **Web** project directory to copy the source code to your solution:
+You can run the following [ABP CLI](../../../cli) command in **Web** project directory to copy the source code to your solution:
 
 `abp add-module Volo.BasicTheme --with-source-code --add-to-solution-file`
 

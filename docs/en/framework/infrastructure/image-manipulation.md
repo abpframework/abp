@@ -1,5 +1,5 @@
 # Image Manipulation
-ABP Framework provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/) and [Magick.NET](https://github.com/dlemstra/Magick.NET) libraries. You can use these services in your reusable modules, libraries and applications, so you don't depend on a specific imaging library.
+ABP provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/) and [Magick.NET](https://github.com/dlemstra/Magick.NET) libraries. You can use these services in your reusable modules, libraries and applications, so you don't depend on a specific imaging library.
 
 > The image resizer/compressor system is designed to be extensible. You can implement your own image resizer/compressor contributor and use it in your application.
 
@@ -39,7 +39,7 @@ public class YourModule : AbpModule
 
 ## Providers
 
-ABP Framework provides two image resizer/compressor implementations out of the box:
+ABP provides two image resizer/compressor implementations out of the box:
 
 * [Magick.NET](#magick-net-provider)
 * [ImageSharp](#imagesharp-provider)

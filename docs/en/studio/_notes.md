@@ -3,7 +3,7 @@
     * **Disable the DEMO PLUGIN and re-take all screenshots**. Also, wait for the followings done:
       * Re-take welcome page screenshot when the large logo is removed
       * Re-take *Create new solution* wizard screenshot when we change it to Application (Layered)
-      * Re-take *Solution Properties* wizard page screenshot to hide *Use local ABP Framework* option
+      * Re-take *Solution Properties* wizard page screenshot to hide *Use local ABP* option
       * Re-take *UI Theme* wizard page screenshot to remove the old *Lepton theme* selection
       * Re-take *Database Configurations* wizard page screenshot to change connection string to LocalDb.
       * Re-take the abp-studio-created-new-solution.png (after ABP Studio logo is removed from the welcome page).

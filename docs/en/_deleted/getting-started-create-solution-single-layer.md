@@ -28,7 +28,7 @@
 
 We will use the ABP CLI to create a new ABP project.
 
-> You can also use the ABP CLI Command Generator on the [ABP Framework website](https://abp.io/get-started) by easily selecting all options from the page.
+> You can also use the ABP CLI Command Generator on the [ABP website](https://abp.io/get-started) by easily selecting all options from the page.
 
 Use the `new` command of the ABP CLI to create a new project:
 
@@ -38,17 +38,17 @@ abp new Acme.BookStore -t app-nolayers{{if UI == "NG"}} -u angular{{else if UI =
 
 *You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.* 
 
-> [ABP CLI document](./CLI.md) covers all of the available commands and options.
+> [ABP CLI document](../cli) covers all of the available commands and options.
 
 ## The Solution Structure
 
-The solution structure is based on the [Single-Layer Startup Template](Startup-Templates/Application-Single-Layer.md) where everything is in one project instead of the [Domain Driven Design](Domain-Driven-Design.md). You can check its [documentation](Startup-Templates/Application-Single-Layer.md) for more details.
+The solution structure is based on the [Single-Layer Startup Template](../solution-templates/single-layer-web-application) where everything is in one project instead of the [Domain Driven Design](../framework/architecture/domain-driven-design). You can check its [documentation](../solution-templates/single-layer-web-application) for more details.
 
 {{ if DB == "Mongo" }}
 
 ## MongoDB Transactions
 
-The [startup template](Startup-Templates/Index.md) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectModule* class's `ConfigureMongoDB` method:
+The [startup template](../solution-templates) **disables** transactions in the `.MongoDB` project by default. If your MongoDB server supports transactions, you can enable it in the *YourProjectModule* class's `ConfigureMongoDB` method:
 
   ```csharp
 Configure<AbpUnitOfWorkDefaultOptions>(options =>

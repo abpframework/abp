@@ -16,7 +16,7 @@ ABP provides the following NuGet packages for the Dapr integration:
 * [Volo.Abp.Http.Client.Dapr](https://www.nuget.org/packages/Volo.Abp.Http.Client.Dapr): Integration package for ABP's [dynamic](../api-development/dynamic-csharp-clients.md) and [static](../api-development/static-csharp-clients.md) C# API Client Proxies systems with Dapr's [service invocation](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/service-invocation-overview/) building block.
 * [Volo.Abp.EventBus.Dapr](https://www.nuget.org/packages/Volo.Abp.EventBus.Dapr): Implements ABP's distributed event bus with Dapr's [publish & subscribe](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) building block. With this package, you can send events, but can not receive.
 * [Volo.Abp.AspNetCore.Mvc.Dapr.EventBus](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus): Provides the endpoints to receive events from Dapr's [publish & subscribe](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) building block. Use this package to send and receive events.
-* [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr): Uses Dapr's [distributed lock](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/) building block for [distributed locking](../infrastructure/distributed-locking.md) service of the ABP Framework.
+* [Volo.Abp.DistributedLocking.Dapr](https://www.nuget.org/packages/Volo.Abp.DistributedLocking.Dapr): Uses Dapr's [distributed lock](https://docs.dapr.io/developing-applications/building-blocks/distributed-lock/) building block for [distributed locking](../infrastructure/distributed-locking.md) service of the ABP.
 
 In the following sections, we will see how to use these packages to use Dapr in your ABP based solutions.
 
@@ -416,7 +416,7 @@ public class MyController : AbpController
 }
 ````
 
-`HttpContext.ValidateDaprAppApiToken()` is an extension method provided by the ABP Framework. It throws an `AbpAuthorizationException` if the token was missing or wrong in the HTTP header (the header name is `dapr-api-token`). You can also inject `IDaprAppApiTokenValidator` and use its methods to validate the token in any service (not only in a controller class).
+`HttpContext.ValidateDaprAppApiToken()` is an extension method provided by the ABP. It throws an `AbpAuthorizationException` if the token was missing or wrong in the HTTP header (the header name is `dapr-api-token`). You can also inject `IDaprAppApiTokenValidator` and use its methods to validate the token in any service (not only in a controller class).
 
 You can configure `AbpDaprOptions.AppApiToken` if you want to set (or override) the App API token value. The default value is set by the `APP_API_TOKEN` environment variable. You can change it in the `ConfigureServices` method of your module class as shown in the following code block:
 

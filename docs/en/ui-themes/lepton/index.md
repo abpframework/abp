@@ -1,6 +1,6 @@
 # Lepton Theme Module
 
-The Lepton Theme is a professional theme for the ABP Commercial.
+The Lepton Theme is a professional theme for the ABP.
 
 * Built on the [Bootstrap 5](https://getbootstrap.com) library.
 * 100% compatible with  [Bootstrap 5](https://getbootstrap.com) HTML structure and CSS classes

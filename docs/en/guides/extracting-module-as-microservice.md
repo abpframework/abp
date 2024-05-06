@@ -14,7 +14,7 @@ If we decided to run Auditing Management as an isolated microservice, then we ne
 ## Adding New Logging Microservice
 
 Create a new microservice called LoggingService to host the audit-logging management using the cli command `abp new LoggingService -t microservice-service-pro`.
-Follow the guide: [Adding a new Microservice](add-microservice.md).
+Follow the guide: [Adding a new Microservice](add-module-to-microservice.md).
 
 At the end, you should have a `logging` folder under services that contains the LoggingService solution directory.
 

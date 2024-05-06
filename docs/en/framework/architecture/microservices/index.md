@@ -6,7 +6,7 @@
 
 ## Introduction
 
-One of the major goals of the ABP framework is to provide a convenient infrastructure to create microservice solutions. To make this possible,
+One of the major goals of the ABP is to provide a convenient infrastructure to create microservice solutions. To make this possible,
 
 * Provides a [module system](../modularity/basics.md) that allows you to split your application into modules where each module may have its own database, entities, services, APIs, UI components/pages... etc.
 * Offers an [architectural model](../best-practices/module-architecture.md) to develop your modules to be compatible to microservice development and deployment.
@@ -27,4 +27,4 @@ ABP can help you in that point by offering a **microservice-compatible, strict m
 
 ## Microservice Demo Solution: eShopOnAbp
 
-The [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) demonstrates a complete microservice solution based on the ABP framework.
+The [eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) demonstrates a complete microservice solution based on the ABP.

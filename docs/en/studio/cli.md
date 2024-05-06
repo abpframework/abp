@@ -65,7 +65,7 @@ abpc new-solution Acme.BookStore
       * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
           * `ef`: Entity Framework Core.
           * `mongodb`: MongoDB.
-      * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+      * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
       * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
           * `leptonx`: LeptonX Theme.
           * `basic`: Basic Theme.
@@ -80,7 +80,7 @@ abpc new-solution Acme.BookStore
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-    * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+    * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
       * `leptonx`: LeptonX Theme.
       * `basic`: Basic Theme.
@@ -223,7 +223,7 @@ abpc add-package-ref "Acme.BookStore.Domain Acme.BookStore.Domain.Shared" -t Acm
 
 ### add-source
 
-Downloads the source code of a module and replaces package references with project references. This command only works if your ABP Commercial License has source-code access, or if source-code of the target module is free to all type of ABP Commercial Licenses.
+Downloads the source code of a module and replaces package references with project references. This command only works if your ABP License has source-code access, or if source-code of the target module is free to all type of ABP Licenses.
 
 ````bash
 abpc add-source <module-name> [options]

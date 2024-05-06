@@ -14,7 +14,7 @@ Each leaf item (e.g. `Acme.CloudCrm.IdentityService`, `Acme.CloudCrm.Web`, `Acme
 
 **Each ABP Studio module has a separate .NET solution**; this allows your team to develop them individually, in keeping with the nature of the microservices architecture.
 
-> Refer to the *[Concepts](../../concepts.md)* document for a full definition of ABP Studio solution, module and package terms.
+> Refer to the *[Concepts](../../studio/concepts.md)* document for a full definition of ABP Studio solution, module and package terms.
 
 ## Exploring the Folder Structure
 

@@ -100,9 +100,9 @@ That's all. you can use the [SignalR JavaScript API](https://docs.microsoft.com/
 
 Please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) for other type of clients.
 
-## The ABP Framework Integration
+## The ABP Integration
 
-This section covers the additional benefits when you use the ABP Framework integration packages.
+This section covers the additional benefits when you use the ABP integration packages.
 
 ### Hub Route & Mapping
 
@@ -220,7 +220,7 @@ app.UseConfiguredEndpoints(endpoints =>
 
 ### UserIdProvider
 
-ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP framework (see [the current user service](../infrastructure/current-user.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.
+ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP (see [the current user service](../infrastructure/current-user.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.
 
 ## Example Application
 
@@ -230,7 +230,7 @@ See the [SignalR Integration Demo](https://github.com/abpframework/abp-samples/t
 
 ## Remarks
 
-ABP Framework doesn't change the SignalR. It works in your ABP Framework based application just like any other ASP.NET Core application.
+ABP doesn't change the SignalR. It works in your ABP based application just like any other ASP.NET Core application.
 
 Refer to the Microsoft's documentation to [host and scale](https://docs.microsoft.com/en-us/aspnet/core/signalr/scale) your application, integrate to [Azure](https://docs.microsoft.com/en-us/aspnet/core/signalr/publish-to-azure-web-app) or [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane)... etc.
 

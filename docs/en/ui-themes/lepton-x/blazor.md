@@ -7,7 +7,7 @@
 }
 ````
 
-LeptonX theme is implemented and ready to use with ABP Commercial. No custom implementation is needed for Blazor Server & WebAssembly.
+LeptonX theme is implemented and ready to use with ABP. No custom implementation is needed for Blazor Server & WebAssembly.
 
 ## Installation
 
@@ -99,7 +99,7 @@ LeptonX theme is implemented and ready to use with ABP Commercial. No custom imp
 ---
 
 ## Source-Code
-You can download the source-code of the LeptonX Theme according to you your ABP Commercial License.
+You can download the source-code of the LeptonX Theme according to you your ABP License.
 
 Visit the [LeptonX Source Code](index#source-code) section to download the source-code.
 
@@ -255,7 +255,7 @@ Commonly used components in all layouts.
 
 ![Breadcrumb](images/leptonx-breadcrumb.png)
 
-Breadcrumbs can be customized by using the `PageLayout` service. See the [PageLayout - BreadCrumb](../../framework/ui/blazor/page-layout.mdt#breadcrumbs) section for more information.
+Breadcrumbs can be customized by using the `PageLayout` service. See the [PageLayout - BreadCrumb](../../framework/ui/blazor/page-layout.md#breadcrumbs) section for more information.
 
 If you need to replace the component, you can follow the steps below.
 

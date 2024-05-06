@@ -1,4 +1,4 @@
-# ABP Framework v4.x to v5.0 Migration Guide
+# ABP v4.x to v5.0 Migration Guide
 
 This document is a guide for upgrading ABP 4.x solutions to ABP 5.0. Please read them all since 5.0 has some important breaking changes.
 
@@ -14,13 +14,13 @@ ABP 5.0 uses the Bootstrap 5 as the fundamental HTML/CSS framework. We've migrat
 
 The startup template has changed. You don't need to apply all the changes, but it is strongly suggested to follow [this guide](upgrading-startup-template.md) and make the necessary changes for your solution.
 
-## ABP Framework
+## ABP
 
-This section contains breaking changes in the ABP Framework.
+This section contains breaking changes in the ABP.
 
 ### MongoDB
 
-ABP Framework will serialize the datetime based on [AbpClockOptions](../../framework/infrastructure/timing.md#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
+ABP will serialize the datetime based on [AbpClockOptions](../../framework/infrastructure/timing.md#clock-options) starting from ABP v5.0. It was saving `DateTime` values as UTC in MongoDB. Check out [MongoDB Datetime Serialization Options](https://mongodb.github.io/mongo-csharp-driver/2.13/reference/bson/mapping/#datetime-serialization-options).
 
 If you want to revert back this feature, set `UseAbpClockHandleDateTime` to `false` in `AbpMongoDbOptions`:
 

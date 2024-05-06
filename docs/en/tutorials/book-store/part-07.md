@@ -175,7 +175,7 @@ public class EfCoreAuthorRepository
 ````
 
 * Inherited from the `EfCoreRepository`, so it inherits the standard repository method implementations.
-* `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
+* `WhereIf` is a shortcut extension method of the ABP. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
 > See the [EF Core Integration document](../../framework/data/entity-framework-core) for more information on the EF Core based repositories.
@@ -236,7 +236,7 @@ public class MongoDbAuthorRepository
 ```
 
 * Inherited from the `MongoDbRepository`, so it inherits the standard repository method implementations.
-* `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
+* `WhereIf` is a shortcut extension method of the ABP. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
 > See the [MongoDB Integration document](../../framework/data/mongodb) for more information on the MongoDB based repositories.

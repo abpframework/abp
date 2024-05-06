@@ -60,4 +60,4 @@ public class MyService : ITransientDependency
 
 ## See Also
 
-* [Settings](../../Settings.md)
+* [Settings](../../fundamentals/settings.md)

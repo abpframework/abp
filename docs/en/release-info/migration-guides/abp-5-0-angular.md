@@ -79,7 +79,7 @@ After you have implemented the necessary changes explained by Bootstrap, it shou
 
 ## NGXS has been removed
 
-We aim to make the ABP Framework free of any state-management solutions. ABP developers should be able to use the ABP Framework with any library/framework of their choice. So, we decided to remove NGXS from ABP packages.
+We aim to make the ABP free of any state-management solutions. ABP developers should be able to use the ABP with any library/framework of their choice. So, we decided to remove NGXS from ABP packages.
 
 If you'd like to use NGXS after upgrading to v5.0, you have to install the NGXS to your project. The package can be installed with the following command:
 

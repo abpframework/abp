@@ -287,7 +287,7 @@ See the `IdentitySettingNames` class members for all settings defined for this m
 * `IdentityRoleAppService` (implement `IIdentityRoleAppService`): Implements the use cases of the role management UI.
 * `IdentityClaimTypeAppService` (implements `IIdentityClaimTypeAppService`): Implements the use cases of the claim type management UI.
 * `IdentitySettingsAppService` (implements `IIdentitySettingsAppService`): Used to get and update settings for the Identity module.
-* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Used to get information for a user by `id` or `userName`. It is aimed to be used internally by the ABP framework.
+* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Used to get information for a user by `id` or `userName`. It is aimed to be used internally by the ABP.
 * `ProfileAppService` (implements `IProfileAppService`): Used to change a user's profile and the password.
 * ```IdentitySecurityLogAppService``` (implements ```IIdentitySecurityLogAppService```): Implements the use cases of the security logs UI.
 * ```OrganizationUnitAppService``` (implements ```OrganizationUnitAppService```): Implements the use cases of the organization unit management UI.
@@ -431,7 +431,7 @@ This module doesn't define any additional distributed event. See the [standard d
 ## See Also
 
 * [Import External Users](./identity/import-external-users.md)
-* [LDAP Login](./identity/ldap.md)
+* [LDAP Login](./identity/idap.md)
 * [OAuth Login](./identity/oauth-login.md)
 * [Periodic Password Change (Password Aging)](./identity/periodic-password-change.md)
 * [Two Factor Authentication](./identity/two-factor-authentication.md)

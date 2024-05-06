@@ -1,10 +1,10 @@
 # ASP.NET Core MVC / Razor Pages: Forms & Validation
 
-ABP Framework provides infrastructure and conventions to make easier to create forms, localize display names for the form elements and handle server & client side validation;
+ABP provides infrastructure and conventions to make easier to create forms, localize display names for the form elements and handle server & client side validation;
 
 * [abp-dynamic-form](tag-helpers/dynamic-forms.md) tag helper automates **creating a complete form** from a C# model class: Creates the input elements, handles localization and client side validation.
 * [ABP Form tag helpers](tag-helpers/form-elements.md) (`abp-input`, `abp-select`, `abp-radio`...) render **a single form element** with handling localization and client side validation.
-* ABP Framework automatically **localizes the display name** of a form element without needing to add a `[DisplayName]` attribute.
+* ABP automatically **localizes the display name** of a form element without needing to add a `[DisplayName]` attribute.
 * **Validation errors** are automatically localized based on the user culture.
 
 > This document is for the **client side validation** and it doesn't cover the server side validation. Check the [validation document](../../fundamentals/validation.md) for server side validation infrastructure.
@@ -160,13 +160,13 @@ The error message below is shown if the language is French:
 
 ![abp-form-input-validation-error](../../../images/abp-form-input-validation-error-french.png)
 
-Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../Contribution) to the translation for your own language or override the texts for your own application by following the [localization](../../fundamentals/localization.md) documentation.
+Validation errors are already [translated](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.Validation/Volo/Abp/Validation/Localization) a lot of languages. You can [contribute](../../../contribution) to the translation for your own language or override the texts for your own application by following the [localization](../../fundamentals/localization.md) documentation.
 
 ## Display Name Localization
 
-ABP Framework uses the property name as the field name on the user interface. You typically want to [localize](../../fundamentals/localization.md) this name based on the current culture.
+ABP uses the property name as the field name on the user interface. You typically want to [localize](../../fundamentals/localization.md) this name based on the current culture.
 
-ABP Framework can conventionally localize the fields on the UI when you add the localization keys to the localization JSON files.
+ABP can conventionally localize the fields on the UI when you add the localization keys to the localization JSON files.
 
 Example: French localization for the *Name* property (add into the `fr.json` in the application):
 
@@ -199,7 +199,7 @@ public string Name { get; set; }
 
 In this case, you can add an entry to the localization file using the key `MyNameKey`.
 
-> If you use the `[DisplayName]` but not add a corresponding entity to the localization file, then ABP Framework shows the given key as the field name, `MyNameKey` for this case. So, it provides a way to specify a hard coded display name even if you don't need to use the localization system.
+> If you use the `[DisplayName]` but not add a corresponding entity to the localization file, then ABP shows the given key as the field name, `MyNameKey` for this case. So, it provides a way to specify a hard coded display name even if you don't need to use the localization system.
 
 ### Enum Localization
 

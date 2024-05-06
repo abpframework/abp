@@ -1,6 +1,6 @@
 # API Versioning System
 
-ABP Framework integrates the [ASPNET-API-Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) feature and adapts to C# and JavaScript Static Client Proxies and [Auto API Controller](./auto-controllers.md).
+ABP integrates the [ASPNET-API-Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) feature and adapts to C# and JavaScript Static Client Proxies and [Auto API Controller](./auto-controllers.md).
 
 
 ## Enable API Versioning
@@ -202,10 +202,10 @@ We have made a default version in the JS proxy. Of course, you can also manually
 ```js
 
 bookStore.books.bookV4.get("4.0") // Manually change the version.
-//Title: Mastering ABP Framework V4.0
+//Title: Mastering ABP V4.0
 
 bookStore.books.bookV4.get() // The latest supported version is used by default.
-//Title: Mastering ABP Framework V4.1
+//Title: Mastering ABP V4.1
 ```
 
 ## Auto API Controller
@@ -339,7 +339,7 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
 
 ## Custom multi-version API controller
 
-ABP Framework will not affect to your APIs, you can freely implement your APIs according to the Microsoft's documentation.
+ABP will not affect to your APIs, you can freely implement your APIs according to the Microsoft's documentation.
 
 Further information, see https://github.com/dotnet/aspnet-api-versioning/wiki
 

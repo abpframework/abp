@@ -2,7 +2,7 @@
 
 ### Frontend Choices 
 
-LeptonX comes in all shapes and sizes. You can use it for free or commercially with or without the ABP Framework.
+LeptonX comes in all shapes and sizes. You can use it for free or commercially with or without the ABP.
 
 | Type    | Standalone (Lite) | Standalone (Commercial) | ABP (Open-Source) | ABP (Commercial) |
 | ------- | ----------------- | ----------------------- | ----------------- | ---------------- |

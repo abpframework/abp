@@ -1,6 +1,6 @@
 # Unit of Work
 
-ABP Framework's Unit Of Work (UOW) implementation provides an abstraction and control on a **database connection and transaction** scope in an application.
+ABP's Unit Of Work (UOW) implementation provides an abstraction and control on a **database connection and transaction** scope in an application.
 
 Once a new UOW started, it creates an **ambient scope** that is participated by **all the database operations** performed in the current scope and considered as a **single transaction boundary**. The operations are **committed** (on success) or **rolled back** (on exception) all together.
 
@@ -21,11 +21,11 @@ The following method types are considered as a unit of work:
 
 A UOW automatically begins for these methods **except** if there is already a **surrounding (ambient)** UOW in action. Examples;
 
-* If you call a [repository](./repositories.md) method and there is no UOW started yet, it automatically **begins a new transactional UOW** that involves all the operations done in the repository method and **commits the transaction** if the repository method **doesn't throw any exception.** The repository method doesn't know about UOW or transaction at all. It just works on a regular database objects (`DbContext` for [EF Core](../../data/entity-framework-core), for example) and the UOW is handled by the ABP Framework.
-* If you call an [application service](./application-services.md) method, the same UOW system works just as explained above. If the application service method uses some repositories, the repositories **don't begin a new UOW**, but **participates to the current unit of work** started by the ABP Framework for the application service method.
+* If you call a [repository](./repositories.md) method and there is no UOW started yet, it automatically **begins a new transactional UOW** that involves all the operations done in the repository method and **commits the transaction** if the repository method **doesn't throw any exception.** The repository method doesn't know about UOW or transaction at all. It just works on a regular database objects (`DbContext` for [EF Core](../../data/entity-framework-core), for example) and the UOW is handled by the ABP.
+* If you call an [application service](./application-services.md) method, the same UOW system works just as explained above. If the application service method uses some repositories, the repositories **don't begin a new UOW**, but **participates to the current unit of work** started by the ABP for the application service method.
 * The same is true for an ASP.NET Core controller action. If the operation has started with a controller action, then the **UOW scope is the controller action's method body**.
 
-All of these are automatically handled by the ABP Framework.
+All of these are automatically handled by the ABP.
 
 ### Database Transaction Behavior
 
@@ -333,7 +333,7 @@ If your intent is just to save the changes after creating/updating/deleting an e
 
 * `OnCompleted` method gets a callback action which is called when the unit of work successfully completed (where you can be sure that all changes are saved).
 * `Failed` and `Disposed` events can be used to be notified if the UOW fails or when it is disposed.
-* `Complete` and `Rollback` methods are used to complete (commit) or roll backs the current UOW, which are normally used internally by the ABP Framework but can be used if you manually start a transaction using the `IUnitOfWorkManager.Begin` method.
+* `Complete` and `Rollback` methods are used to complete (commit) or roll backs the current UOW, which are normally used internally by the ABP but can be used if you manually start a transaction using the `IUnitOfWorkManager.Begin` method.
 * `Options` can be used to get options that was used while starting the UOW.
 * `Items` dictionary can be used to store and get arbitrary objects inside the same unit of work, which can be a point to implement custom logics.
 

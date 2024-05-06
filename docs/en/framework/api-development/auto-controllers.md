@@ -92,7 +92,7 @@ Then the route for getting a book will be '**/api/volosoft/book-store/book/{id}*
 
 #### Version 3.x Style Route Calculation
 
-The route calculation was different before the version 4.0. It was using camelCase conventions, while the ABP Framework version 4.0+ uses kebab-case. If you use the old route calculation strategy, follow one of the approaches;
+The route calculation was different before the version 4.0. It was using camelCase conventions, while the ABP version 4.0+ uses kebab-case. If you use the old route calculation strategy, follow one of the approaches;
 
 * Set `UseV3UrlStyle` to `true` in the options of the `options.ConventionalControllers.Create(...)` method. Example:
 

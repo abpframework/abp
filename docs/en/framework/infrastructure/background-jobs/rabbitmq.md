@@ -2,7 +2,7 @@
 
 RabbitMQ is an industry standard message broker. While it is typically used for inter-process communication (messaging / distributed events), it is pretty useful to store and execute background jobs in FIFO (First In First Out) order.
 
-ABP Framework provides the [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to use the RabbitMQ for background job execution.
+ABP provides the [Volo.Abp.BackgroundJobs.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.BackgroundJobs.RabbitMQ) NuGet package to use the RabbitMQ for background job execution.
 
 > See the [background jobs document](../background-jobs) to learn how to use the background job system. This document only shows how to install and configure the RabbitMQ integration.
 

@@ -81,9 +81,9 @@ public interface IAuthorAppService : IApplicationService
 }
 ````
 
-* `IApplicationService` is a conventional interface that is inherited by all the application services, so the ABP Framework can identify the service.
+* `IApplicationService` is a conventional interface that is inherited by all the application services, so the ABP can identify the service.
 * Defined standard methods to perform CRUD operations on the `Author` entity.
-* `PagedResultDto` is a pre-defined DTO class in the ABP Framework. It has an `Items` collection and a `TotalCount` property to return a paged result.
+* `PagedResultDto` is a pre-defined DTO class in the ABP. It has an `Items` collection and a `TotalCount` property to return a paged result.
 * Preferred to return an `AuthorDto` (for the newly created author) from the `CreateAsync` method, while it is not used by this application - just to show a different usage.
 
 This interface is using the DTOs defined below (create them for your project).
@@ -124,7 +124,7 @@ public class GetAuthorListDto : PagedAndSortedResultRequestDto
 * `Filter` is used to search authors. It can be `null` (or empty string) to get all the authors.
 * `PagedAndSortedResultRequestDto` has the standard paging and sorting properties: `int MaxResultCount`, `int SkipCount` and `string Sorting`.
 
-> ABP Framework has such base DTO classes to simplify and standardize your DTOs. See the [DTO documentation](../../framework/architecture/domain-driven-design/data-transfer-objects.md) for all.
+> ABP has such base DTO classes to simplify and standardize your DTOs. See the [DTO documentation](../../framework/architecture/domain-driven-design/data-transfer-objects.md) for all.
 
 ### CreateAuthorDto
 
@@ -312,7 +312,7 @@ public async Task UpdateAsync(Guid id, UpdateAuthorDto input)
 
 {{if DB == "EF"}}
 
-> **EF Core Tip**: Entity Framework Core has a **change tracking** system and **automatically saves** any change to an entity at the end of the unit of work (You can simply think that the ABP Framework automatically calls `SaveChanges` at the end of the method). So, it will work as expected even if you don't call the `_authorRepository.UpdateAsync(...)` in the end of the method. If you don't consider to change the EF Core later, you can just remove this line.
+> **EF Core Tip**: Entity Framework Core has a **change tracking** system and **automatically saves** any change to an entity at the end of the unit of work (You can simply think that the ABP automatically calls `SaveChanges` at the end of the method). So, it will work as expected even if you don't call the `_authorRepository.UpdateAsync(...)` in the end of the method. If you don't consider to change the EF Core later, you can just remove this line.
 
 {{end}}
 

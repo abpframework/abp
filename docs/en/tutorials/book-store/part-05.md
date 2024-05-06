@@ -61,7 +61,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Permissions
 
-ABP Framework provides an [authorization system](../../framework/fundamentals/authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+ABP provides an [authorization system](../../framework/fundamentals/authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
 
 ### Permission Names
 
@@ -492,7 +492,7 @@ Update the `EntityActions` section as shown below:
 
 You can run and test the permissions. Remove a book related permission from the admin role to see the related button/action disappears from the UI.
 
-**ABP Framework caches the permissions** of the current user in the client side. So, when you change a permission for yourself, you need to manually **refresh the page** to take the effect. If you don't refresh and try to use the prohibited action you get an HTTP 403 (forbidden) response from the server.
+**ABP caches the permissions** of the current user in the client side. So, when you change a permission for yourself, you need to manually **refresh the page** to take the effect. If you don't refresh and try to use the prohibited action you get an HTTP 403 (forbidden) response from the server.
 
 > Changing a permission for a role or user immediately available on the server side. So, this cache system doesn't cause any security problem.
 

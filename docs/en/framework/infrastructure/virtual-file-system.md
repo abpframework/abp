@@ -175,7 +175,7 @@ Virtual File System creates a unified file system on runtime, where the actual f
 
 If two modules adds a file to the same virtual path (like `my-path/my-file.css`), the one added later overrides/replaces the previous one ([module dependency](../architecture/modularity/basics.md) order determines the order of the files being added).
 
-This feature allows your application to override/replace any virtual file defined a module that is used by your application. This is one of the fundamental extensibility features of the ABP Framework.
+This feature allows your application to override/replace any virtual file defined a module that is used by your application. This is one of the fundamental extensibility features of the ABP.
 
 So, if you need to replace a file of a module, just create the file in the exactly same path in your module/application
 
