@@ -1,19 +1,19 @@
 # ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.
+ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
 
 ## Installation
 
 ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Install it using a command line window:
 
 ````bash
-dotnet tool install -g Volo.Abp.Cli
+dotnet tool install -g Volo.Abp.Studio.Cli
 ````
 
 To update an existing installation:
 
 ````bash
-dotnet tool update -g Volo.Abp.Cli
+dotnet tool update -g Volo.Abp.Studio.Cli
 ````
 
 ## Global Options
