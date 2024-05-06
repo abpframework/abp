@@ -255,7 +255,7 @@ Commonly used components in all layouts.
 
 ![Breadcrumb](images/leptonx-breadcrumb.png)
 
-Breadcrumbs can be customized by using the `PageLayout` service. See the [PageLayout - BreadCrumb](../../framework/ui/blazor/page-layout.mdt#breadcrumbs) section for more information.
+Breadcrumbs can be customized by using the `PageLayout` service. See the [PageLayout - BreadCrumb](../../framework/ui/blazor/page-layout.md#breadcrumbs) section for more information.
 
 If you need to replace the component, you can follow the steps below.
 
