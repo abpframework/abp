@@ -76,9 +76,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             
             if (existResponse.Documents.Count != 0)
             {
-                // delete many
-                var ids = existResponse.Documents.Select(x => x.Id).ToList();
-                HandleError(await client.DeleteManyAsync(ids, _options.IndexName, cancellationToken));
+                HandleError(await client.DeleteManyAsync(existResponse.Documents, _options.IndexName, cancellationToken));
             }
 
             var esDocument = new EsDocument
