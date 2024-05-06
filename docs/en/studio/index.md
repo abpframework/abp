@@ -8,6 +8,11 @@ ABP Studio is a **cross-platform** desktop application for ABP and .NET develope
 
 If you haven't installed yet, please see [the installation guide](installation.md) to prepare your environment and install ABP Studio on your computer.
 
-## Other Resources
+## Feature Learning
 
-* [ABP Studio Concepts](concepts.md)
+- [Overview](./overview.md)
+- Fundamentals
+  - [Solution Explorer](./solution-explorer.md)
+  - [Running Applications](./running-applications.md)
+  - [Working with Kubernetes](./kubernetes.md)
+  - [CLI](./cli.md)
