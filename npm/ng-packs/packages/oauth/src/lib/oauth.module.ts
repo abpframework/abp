@@ -1,4 +1,10 @@
-import { APP_INITIALIZER, ModuleWithProviders, NgModule, Provider } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ModuleWithProviders,
+  NgModule,
+  Provider,
+  makeEnvironmentProviders,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
@@ -70,4 +76,50 @@ export class AbpOAuthModule {
       ],
     };
   }
+}
+
+export function provideAbpOAuth() {
+  const providers = [
+    {
+      provide: AuthService,
+      useClass: AbpOAuthService,
+    },
+    {
+      provide: AuthGuard,
+      useClass: AbpOAuthGuard,
+    },
+    {
+      provide: authGuard,
+      useValue: abpOAuthGuard,
+    },
+    {
+      provide: ApiInterceptor,
+      useClass: OAuthApiInterceptor,
+    },
+    {
+      provide: PIPE_TO_LOGIN_FN_KEY,
+      useValue: pipeToLogin,
+    },
+    {
+      provide: CHECK_AUTHENTICATION_STATE_FN_KEY,
+      useValue: checkAccessToken,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useExisting: ApiInterceptor,
+      multi: true,
+    },
+    NavigateToManageProfileProvider,
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [OAuthConfigurationHandler],
+      useFactory: noop,
+    },
+    OAuthModule.forRoot().providers as Provider[],
+    { provide: OAuthStorage, useClass: AbpLocalStorageService },
+    { provide: AuthErrorFilterService, useExisting: OAuthErrorFilterService },
+  ];
+
+  return makeEnvironmentProviders(providers);
 }

@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  Injector,
+  ModuleWithProviders,
+  NgModule,
+  makeEnvironmentProviders,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, TitleStrategy } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -40,11 +46,10 @@ import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
 import { AuthErrorFilterService } from './abstracts';
-import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
-import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
+import { DYNAMIC_LAYOUTS_TOKEN } from './tokens/dynamic-layout.token';
+import { DEFAULT_DYNAMIC_LAYOUTS } from './constants';
 import { AbpTitleStrategy } from './services/title-strategy.service';
 import { LocalStorageListenerService } from './services/local-storage-listener.service';
-
 
 const standaloneDirectives = [
   AutofocusDirective,
@@ -201,12 +206,12 @@ export class CoreModule {
         IncludeLocalizationResourcesProvider,
         {
           provide: DYNAMIC_LAYOUTS_TOKEN,
-          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
+          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS,
         },
         {
           provide: TitleStrategy,
-          useExisting: AbpTitleStrategy
-        }
+          useExisting: AbpTitleStrategy,
+        },
       ],
     };
   }
@@ -224,4 +229,79 @@ export class CoreModule {
       ],
     };
   }
+}
+
+export function provideCoreModule(options = {} as ABP.Root) {
+  return makeEnvironmentProviders([
+    LocaleProvider,
+    CookieLanguageProvider,
+    {
+      provide: 'CORE_OPTIONS',
+      useValue: options,
+    },
+    {
+      provide: CORE_OPTIONS,
+      useFactory: coreOptionsFactory,
+      deps: ['CORE_OPTIONS'],
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [Injector],
+      useFactory: getInitialData,
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [Injector],
+      useFactory: localeInitializer,
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [LocalizationService],
+      useFactory: noop,
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [LocalStorageListenerService],
+      useFactory: noop,
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [RoutesHandler],
+      useFactory: noop,
+    },
+    { provide: TENANT_KEY, useValue: options.tenantKey || '__tenant' },
+    {
+      provide: LOCALIZATIONS,
+      multi: true,
+      useValue: localizationContributor(options.localizations),
+      deps: [LocalizationService],
+    },
+    {
+      provide: SORT_COMPARE_FUNC,
+      useFactory: compareFuncFactory,
+    },
+    {
+      provide: QUEUE_MANAGER,
+      useClass: DefaultQueueManager,
+    },
+    {
+      provide: OTHERS_GROUP,
+      useValue: options.othersGroup || 'AbpUi::OthersGroup',
+    },
+    AuthErrorFilterService,
+    IncludeLocalizationResourcesProvider,
+    {
+      provide: DYNAMIC_LAYOUTS_TOKEN,
+      useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS,
+    },
+    {
+      provide: TitleStrategy,
+      useExisting: AbpTitleStrategy,
+    },
+  ]);
 }
