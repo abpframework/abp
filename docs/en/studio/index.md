@@ -8,23 +8,6 @@ ABP Studio is a **cross-platform** desktop application for ABP and .NET develope
 
 If you haven't installed yet, please see [the installation guide](installation.md) to prepare your environment and install ABP Studio on your computer.
 
-## Quick Starts
-
-The following guides are great resources to start with, until we fully document all ABP Studio features:
-
-* [Quick Start: Creating a Single Layer Web Application with ABP Studio](../get-started/single-layer-web-application.md)
-* [Quick Start: Creating a Layered Web Application with ABP Studio](../get-started/layered-web-application.md)
-* [Quick Start: Creating a Microservice Solution with ABP Studio](../get-started/microservice.md)
-
-## Solution Templates
-
-ABP Studio provides pre-architected and production-ready templates to jump start a new solution. The following solution templates are provided out of the box:
-
-* Empty
-* Application (Single Layer)
-* Application (Layered)
-* [Microservice](../solution-templates/microservice)
-
 ## Other Resources
 
 * [ABP Studio Concepts](concepts.md)
