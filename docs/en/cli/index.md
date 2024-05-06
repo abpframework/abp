@@ -374,47 +374,30 @@ abp add-package-ref Acme.BookStore.Domain
 abp add-package-ref "Acme.BookStore.Domain Acme.BookStore.Domain.Shared" -t Acme.BookStore.Web
 ````
 
-#### options
+#### Options
 
 * `--target-project` or `-t`: Name of the project that reference will be added. If not set, project in the current directory will be used.
 
-### add-module
+### install-module
 
-Adds a [multi-package application module](../modules) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
-
-It can also create a new module for your solution and add it to your solution. See `--new` option.
-
-> A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
-
-Usage:
+Installs a module, that is published as nuget packages, to a local module. Project relations are created according the types of the projects. For example: a `lib.domain-shared` project is added to `lib.domain-shared` project
 
 ````bash
-abp add-module <module-name> [options]
+abp install-module <module-name> [options]
 ````
 
-Examples:
+Example:
 
-```bash
-abp add-module Volo.Blogging
-```
+````bash
+abp install-module Volo.Blogging
 
-* This example adds the `Volo.Blogging` module to the solution.
-
-```bash
-abp add-module ProductManagement --new --add-to-solution-file
-```
-
-* This command creates a fresh new module customized for your solution (named `ProductManagement`) and adds it to your solution.
-
+abp install-module Volo.Blogging -t "modules/crm/Acme.Crm.abpmdl"
+````
 
 #### Options
 
-* `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
-* `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
-* `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
-* `--new`: Creates a fresh new module (customized for your solution) and adds it to your solution.
-* `--with-source-code`: Downloads the source code of the module to your solution folder and uses local project references instead of NuGet/NPM packages. This options is always `True` if `--new` is used.
-* `--add-to-solution-file`: Adds the downloaded/created module to your solution file, so you will also see the projects of the module when you open the solution on a IDE. (only available when `--with-source-code` is `True`.)
+* `--target-module` or `-t`: Path (or folder path) of the target module that the other module will be installed to. If not set, the closest module to the current directory will be used.
+* `--version` or `-v`: Nuget version of the module to be installed.
 
 ### list-modules
 
