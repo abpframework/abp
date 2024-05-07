@@ -121,10 +121,10 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 
 #### Options
 
-* `--template` or `-t`: Specifies the template name. Default template name is `empty`, which generates a empty solution. Available templates:
+* `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a application solution. Available templates:
   * **`empty`**: Empty solution template.
 
-  * **`app-pro`**: Application template. Additional options:
+  * **`app`**: Application template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
@@ -152,41 +152,41 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
         * `leptonx`: LeptonX Theme.
         * `basic`: Basic Theme.
-  
-* **`app-nolayers-pro`**: Single-layer application template. Additional options:
-  * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
-    * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
-    * `angular`: Angular UI. There are some additional options for this template:
-    * `blazor`: Blazor UI. There are some additional options for this template:
-    * `blazor-server`: Blazor Server UI. There are some additional options for this template:
-    * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
-  * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
-    * `ef`: Entity Framework Core.
-    * `mongodb`: MongoDB.
-  * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
-  * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
-    * `leptonx`: LeptonX Theme.
-    * `basic`: Basic Theme.
 
-* **`microservice-pro`**: Microservice solution template. Additional options:
-  * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
-    * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
-    * `angular`: Angular UI. There are some additional options for this template:
-    * `blazor`: Blazor UI. There are some additional options for this template:
-    * `blazor-server`: Blazor Server UI. There are some additional options for this template:
-    * `maui-blazor`: Blazor Maui UI. There are some additional options for this template:
-    * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
-  * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
-    * `none`: Without any mobile application.
-    * `react-native`: React Native.
-    * `maui`: MAUI.
-  * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
-    * `ef`: Entity Framework Core.
-    * `mongodb`: MongoDB.
-  * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
-    * `leptonx`: LeptonX Theme.
-    * `basic`: Basic Theme.
-  * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
+  * **`app-nolayers`**: Single-layer application template. Additional options:
+    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+      * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
+      * `angular`: Angular UI. There are some additional options for this template:
+      * `blazor`: Blazor UI. There are some additional options for this template:
+      * `blazor-server`: Blazor Server UI. There are some additional options for this template:
+      * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
+    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+      * `ef`: Entity Framework Core.
+      * `mongodb`: MongoDB.
+    * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
+    * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
+      * `leptonx`: LeptonX Theme.
+      * `basic`: Basic Theme.
+
+  * **`microservice-pro`**: Microservice solution template. Additional options:
+    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+      * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
+      * `angular`: Angular UI. There are some additional options for this template:
+      * `blazor`: Blazor UI. There are some additional options for this template:
+      * `blazor-server`: Blazor Server UI. There are some additional options for this template:
+      * `maui-blazor`: Blazor Maui UI. There are some additional options for this template:
+      * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
+    * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
+      * `none`: Without any mobile application.
+      * `react-native`: React Native.
+      * `maui`: MAUI.
+    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+      * `ef`: Entity Framework Core.
+      * `mongodb`: MongoDB.
+    * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
+      * `leptonx`: LeptonX Theme.
+      * `basic`: Basic Theme.
+    * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
 
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--local-framework-ref` or `-lfr`: Uses local projects references to the ABP framework instead of using the NuGet packages. It tries to find the paths from `ide-state.json`. The file is located at `%UserProfile%\.abp\studio\ui\ide-state.json` (for Windows) and `~/.abp/studio/ui/ide-state.json` (for MAC).
@@ -195,9 +195,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * `SqlServer`
   * `MySQL`
   * `PostgreSQL`
-  * `SQLite`  (`app-pro` & `app-nolayers-pro`)
-  * `Oracle` (`app-pro` & `app-nolayers-pro`)
-  * `Oracle-Devart`  (`app-pro` & `app-nolayers-pro`)
+  * `SQLite`  (`app` & `app-nolayers`)
+  * `Oracle` (`app` & `app-nolayers`)
+  * `Oracle-Devart`  (`app` & `app-nolayers`)
 * `--dont-run-install-libs`: Skip installing client side packages.
 * `--dont-run-bundling`: Skip bundling for Blazor packages.
 * `--no-kubernetes-configuration` or `-nkc`: Skips the Kubernetes configuration files.
@@ -227,7 +227,7 @@ abp new-module Acme.BookStore -t module:ddd
 
 #### options
 
-* `--template` or `-t`: Specifies the template name. Default template name is `empty`, which generates a empty module. Module templates are provided by the main template, see their own startup template documentation for available modules. `empty` and `module:ddd` template is available for all solution structure.
+* `--template` or `-t`: Specifies the template name. Default template name is `module:ddd`, which generates a DDD module. Module templates are provided by the main template, see their own startup template documentation for available modules. `empty:empty` and `module:ddd` template is available for all solution structure.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--target-solution` or `-ts`: If set, the new module will be added to the given solution. Otherwise the new module will added to the closest solution in the file system. If no solution found, it will throw an error.
 * `--solution-folder` or `-sf`: Specifies the target folder in the [Solution Explorer](./solution-explorer.md#folder)  virtual folder system.
