@@ -99,7 +99,7 @@ export class LocalizationService {
 
           return local;
         }),
-        filter(Boolean)
+        filter(Boolean),
       )
       .subscribe(val => this.localizations$.next(val));
   }
@@ -211,8 +211,11 @@ export class LocalizationService {
     key: string | LocalizationWithDefault,
     ...interpolateParams: string[]
   ) {
-    if (!key) key = '';
     let defaultValue = '';
+
+    if (!key) {
+      return defaultValue;
+    }
 
     if (typeof key !== 'string') {
       defaultValue = key.defaultValue;
@@ -265,7 +268,10 @@ export class LocalizationService {
   }
 }
 
-function recursivelyMergeBaseResources(baseResourceName: string, source: ResourceDto): ApplicationLocalizationResourceDto {
+function recursivelyMergeBaseResources(
+  baseResourceName: string,
+  source: ResourceDto,
+): ApplicationLocalizationResourceDto {
   const item = source[baseResourceName];
 
   if (item.baseResources.length === 0) {
@@ -280,10 +286,12 @@ function recursivelyMergeBaseResources(baseResourceName: string, source: Resourc
 }
 
 function mergeResourcesWithBaseResource(resource: ResourceDto): ResourceDto {
-  const entities: Array<[string, ApplicationLocalizationResourceDto]> = Object.keys(resource).map(key => {
-    const newValue = recursivelyMergeBaseResources(key, resource);
-    return [key, newValue];
-  });
+  const entities: Array<[string, ApplicationLocalizationResourceDto]> = Object.keys(resource).map(
+    key => {
+      const newValue = recursivelyMergeBaseResources(key, resource);
+      return [key, newValue];
+    },
+  );
   return entities.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 }
 
