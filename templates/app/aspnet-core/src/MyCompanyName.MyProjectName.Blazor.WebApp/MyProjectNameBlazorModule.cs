@@ -11,8 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Client;
+using MyCompanyName.MyProjectName.Blazor.WebApp.Client.Menus;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Components;
-using MyCompanyName.MyProjectName.Blazor.WebApp.Menus;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -226,7 +226,7 @@ public class MyProjectNameBlazorModule : AbpModule
     {
         Configure<AbpNavigationOptions>(options =>
         {
-            options.MenuContributors.Add(new MyProjectNameMenuContributor());
+            options.MenuContributors.Add(new MyProjectNameMenuContributor(context.Services.GetConfiguration()));
         });
     }
 
