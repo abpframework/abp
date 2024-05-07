@@ -148,7 +148,8 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
     * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
-    * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
+    * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
+    * `--separate-tenant-schema`: Creates a different DbContext for tenant schema. If not specified, the tenant schema is shared with the host schema. This option is only included in PRO templates.
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
         * `leptonx`: LeptonX Theme.
         * `basic`: Basic Theme.
@@ -186,7 +187,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
       * `leptonx`: LeptonX Theme.
       * `basic`: Basic Theme.
-    * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website.
+    * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
 
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--local-framework-ref` or `-lfr`: Uses local projects references to the ABP framework instead of using the NuGet packages. It tries to find the paths from `ide-state.json`. The file is located at `%UserProfile%\.abp\studio\ui\ide-state.json` (for Windows) and `~/.abp/studio/ui/ide-state.json` (for MAC).
@@ -234,7 +235,7 @@ abp new-module Acme.BookStore -t module:ddd
 * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `ef, mongodb` if the module template supports it. Available providers:
   * `ef`: Entity Framework Core.
   * `mongodb`: MongoDB.
-* `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `mvc,angular` if the module template supports it. Available frameworks:
+* `--ui-framework` or `-u`: Specifies the UI framework. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `mvc,angular` if the module template supports it. Available frameworks:
   * `mvc`: ASP.NET Core MVC.
   * `angular`: Angular UI.
   * `blazor`: Blazor UI.
