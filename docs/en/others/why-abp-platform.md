@@ -1,8 +1,8 @@
-# Why ABP.IO Platform?
+# Why ABP Platform?
 
 This document aims to answer the big question:
 
-> "Why should you use the ABP.IO Platform instead of creating a new solution from scratch?"
+> "Why should you use the ABP Platform instead of creating a new solution from scratch?"
 
 The document introduces the challenges of building a modern software solution and explains how ABP addresses these challenges.
 
@@ -37,7 +37,7 @@ When it comes to the UI, there are a lot of challenges, including preparing a fo
 
 Even if you buy a pre-built theme, **integrating** it into your solution may take **days of development**. Upgrading such a theme is another problem. Most of the time, the theme's HTML/CSS structure is mixed with your UI code, and it is not easy to **upgrade** or **change** the theme later.
 
-ABP Framework provides a [theming](../framework/ui/mvc-razor-pages/theming.md) system that makes your UI code independent from the theme. Themes are isolated, and they are **NuGet/NPM packages**. Installing or upgrading a theme is just a minute. While you can build your theme (or integrate an existing theme), ABP Commercial offers **professional and modern** [themes](https://commercial.abp.io/themes).
+ABP provides a [theming](../framework/ui/mvc-razor-pages/theming.md) system that makes your UI code independent from the theme. Themes are isolated, and they are **NuGet/NPM packages**. Installing or upgrading a theme is just a minute. While you can build your theme (or integrate an existing theme), ABP offers **professional and modern** [themes](https://commercial.abp.io/themes).
 
 > There are also UI **component providers** (like Telerik and DevExpress). But they only provide individual components. You are responsible for creating your own **layout system**. You **can use** such libraries in your ABP-based solutions just like in any other project.
 
@@ -45,7 +45,7 @@ ABP Framework provides a [theming](../framework/ui/mvc-razor-pages/theming.md) s
 
 Preparing a robust test environment takes time. You need to **setup test projects** in your solution, select the tools, **mock the services and database**, create the required base classes and utility services to reduce repeating code in the tests and so on.
 
-ABP Startup Templates comes with the test projects already configured for you, and you can immediately write your first unit or integration test code on day 1. Writing unit tests is very clear with the ABP Framework; see [how to write tests](../testing/overall.md).
+ABP Startup Templates comes with the test projects already configured for you, and you can immediately write your first unit or integration test code on day 1. Writing unit tests is very clear with the ABP; see [how to write tests](../testing/overall.md).
 
 ### Coding Standards & Training
 
@@ -55,7 +55,7 @@ ABP solution is already **well-defined** and **well-documented**. [Tutorials](..
 
 ### Keeping Your Solution Up to Date
 
-After you start your development, you must keep track of the new versions of the libraries you use for upgrades & patches. We regularly update all packages to the latest versions and test them before the stable release. When you update the ABP Framework, all its dependencies are upgraded to edge technology.
+After you start your development, you must keep track of the new versions of the libraries you use for upgrades & patches. We regularly update all packages to the latest versions and test them before the stable release. When you update the ABP, all its dependencies are upgraded to edge technology.
 
 `abp update` [CLI](../cli) command automatically discovers and upgrades all ABP-dependant NuGet and NPM packages in a solution. With ABP, it is easier to stay with the latest versions.
 
@@ -69,7 +69,7 @@ ABP automates and simplifies repeating code as much as possible by following the
 
 Single Sign On, Active Directory / LDAP Integration, OpenIddict integration, social logins, two-factor authentication, forgot/reset password, email activation, new user registration, password complexity control, locking account on failed attempts, showing failed login attemps ... etc. We know that all these generic requirements are familiar to you. You are not alone!
 
-ABP Framework and the commercial version provide all these standard stuff pre-implemented for you as a re-usable account module. You just enable and configure what you need.
+ABP and the commercial version provide all these standard stuff pre-implemented for you as a re-usable account module. You just enable and configure what you need.
 
 ### Cross-Cutting Concerns
 
@@ -79,11 +79,11 @@ Cross-Cutting Concerns are the fundamental repeating logic that should be implem
 *   **Handling and reporting exceptions**, returning a proper error response to the clients and handling error cases on the client-side.
 *   Implementing **authorization** and **validation**, returning proper responses and handling these on the client-side.
 
-ABP Framework automates or simplifies all the common cross-cutting concerns. You only write code that matters for your business and ABP handles the rest by conventions.
+ABP automates or simplifies all the common cross-cutting concerns. You only write code that matters for your business and ABP handles the rest by conventions.
 
 ### Architectural Infrastructure
 
-You typically need to build **infrastructure** to implement your **architecture properly**. For example, you generally implement the **Repository** pattern. You define some **base classes** to **simplify** and **standardize** to create entities, services, controllers and other objects. ABP Framework provides all these and more out of the box. It is mature and well-documented.
+You typically need to build **infrastructure** to implement your **architecture properly**. For example, you generally implement the **Repository** pattern. You define some **base classes** to **simplify** and **standardize** to create entities, services, controllers and other objects. ABP provides all these and more out of the box. It is mature and well-documented.
 
 ### Enterprise Application Requirements
 
@@ -129,27 +129,27 @@ SaaS applications, modular or microservice systems are most used enterprise soft
 
 Building a truly modular system is not easy! All the aspects of the system (database, entities, APIs, UI pages/components) can be split into modules, and each module can be re-usable without others. The plain ASP.NET Core doesn't provide such a modular architecture. If you need it, you should think about it from scratch.
 
-The ABP Framework is born to be a modular application development structure. Every feature in the framework is developed to be compatible with modularity. Documentation and guides explain how to develop re-usable modules in a standard way.
+The ABP is born to be a modular application development structure. Every feature in the framework is developed to be compatible with modularity. Documentation and guides explain how to develop re-usable modules in a standard way.
 
 ### SaaS / Multi-Tenancy
 
 [Multi-Tenancy](../framework/architecture/multi-tenancy) is a common way to implement SaaS systems. However, implementing a consistent multi-tenant infrastructure may become complicated.
 
-ABP Framework provides a complete multi-tenant infrastructure and abstract complexity from your business code. Your application code will be mostly multi-tenancy aware while the ABP Framework automatically isolates the database, cache and other details of the tenants from each other. It supports single database, per tenant database and hybrid approaches. It properly configures the libraries like Microsoft Identity and OpenIddict, which are not normally multi-tenancy compatible.
+ABP provides a complete multi-tenant infrastructure and abstract complexity from your business code. Your application code will be mostly multi-tenancy aware while the ABP automatically isolates the database, cache and other details of the tenants from each other. It supports single database, per tenant database and hybrid approaches. It properly configures the libraries like Microsoft Identity and OpenIddict, which are not normally multi-tenancy compatible.
 
 ### Microservices
 
 Building a microservice system requires many infrastructure details: Authenticating and authorizing applications and microservices and implementing asynchronous messaging and synchronous (Rest/GRPC) communication patterns between microservices are the most fundamental issues.
 
-The ABP Framework provides services, [guides](../framework/architecture/microservices), and samples to help you implement your microservice solution using the industry standard tools.
+The ABP provides services, [guides](../framework/architecture/microservices), and samples to help you implement your microservice solution using the industry standard tools.
 
-ABP Commercial even goes one step further and provides a complete [startup template](../solution-templates/microservice) to kick-start your microservice solution.
+ABP even goes one step further and provides a complete [startup template](../solution-templates/microservice) to kick-start your microservice solution.
 
 ## Pre-Built Modules
 
 All of us have similar but slightly different business requirements. However, we all should re-invent the wheel since no one's code can directly work in our solution. They are all embedded parts of a larger solution.
 
-ABP Commercial [modules](https://commercial.abp.io/modules) provides a lot of **re-usable application modules** like payment, chat, file management, audit log reporting... etc. All of these modules are easily installed into your solution and directly work. We are constantly adding more modules.
+ABP [modules](https://commercial.abp.io/modules) provides a lot of **re-usable application modules** like payment, chat, file management, audit log reporting... etc. All of these modules are easily installed into your solution and directly work. We are constantly adding more modules.
 
 All modules are designed as customizable for your business requirements. If you need complete control, you can download the full source code of any module and completely customize based on your specific business requirements.
 
@@ -165,19 +165,19 @@ When you hire a developer who worked before with the ABP architecture will immed
 
 ### Is the learning curve high?
 
-The learning curve is much lower than not using the ABP Framework. That may sound surprising to you, but let's explain it;
+The learning curve is much lower than not using the ABP. That may sound surprising to you, but let's explain it;
 
 ABP creates a full stack, production-ready, working solution for you in seconds. Many of the real-life problems are already solved and many fine tune configurations are already applied for the ASP.NET Core and the other used libraries. If you start from scratch, you will experience and learn all these details yourself to truly implement your solution.
 
-ABP uses the industry standard frameworks, libraries and systems you already know (or need to learn to build a real-world product) like Angular, Blazor, MAUI, EF Core, AutoMapper, OpenIddict, Bootstrap, Redis, SignalR... etc. So, all your knowledge is directly re-usable with the ABP Framework. ABP even simplifies using these libraries and systems and solves the integration problems. If you don't know these tools now, learning them will be easier within the ABP Framework.
+ABP uses the industry standard frameworks, libraries and systems you already know (or need to learn to build a real-world product) like Angular, Blazor, MAUI, EF Core, AutoMapper, OpenIddict, Bootstrap, Redis, SignalR... etc. So, all your knowledge is directly re-usable with the ABP. ABP even simplifies using these libraries and systems and solves the integration problems. If you don't know these tools now, learning them will be easier within the ABP.
 
 ABP provides an excellent infrastructure to apply DDD principles and other best practices. It provides a lot of sweet abstractions and automation to reduce the repeating code. However, it doesn't force you to use or apply all these. A common mistake is to see that ABP has a lot of features, and it is hard to learn all of them. Having a lot of features is an advantage when you come to the point that you need them. However, you don't need to know a feature until you need it, and you can continue with the development approach you are used to. You can still write code as you are used to as if ABP doesn't provide all these benefits. Learning the ABP infrastructure is progressive. You will love it whenever you learn a new feature but can continue developing without knowing its existence.
 
-Finally, learning an ABP Framework feature is much easier than building the same feature yourself. We've done the hard work for you and documented it well. You will enjoy and love it as you learn.
+Finally, learning an ABP feature is much easier than building the same feature yourself. We've done the hard work for you and documented it well. You will enjoy and love it as you learn.
 
 ### Is it overhead for simple CRUD applications?
 
-ABP Framework simplifies building CRUD applications because CRUD applications are more suitable to automate.
+ABP simplifies building CRUD applications because CRUD applications are more suitable to automate.
 
 ABP provides default repositories, CRUD application service base class, pre-built DTO classes, simplified client-to-server communication approach, UI components, helpers, and more to build CRUD functionalities for your applications in the production quality.
 
@@ -187,7 +187,7 @@ Finally, most of the applications and systems are considered simple at the begin
 
 ### Is it sufficient for complex systems?
 
-ABP Framework is designed to solve real-world problems and build complex systems. It provides a lot of infrastructure requirements already implemented for your system and provides lots of integrations to enterprise systems and tools.
+ABP is designed to solve real-world problems and build complex systems. It provides a lot of infrastructure requirements already implemented for your system and provides lots of integrations to enterprise systems and tools.
 
 We definitely know that there is no limit to the **mountain of complexity** and no one can provide everything to you. **ABP Platform is a helicopter that puts you at a high mountain point and provides many useful tools to help you climb the rest yourself.**
 
@@ -195,12 +195,12 @@ We definitely know that there is no limit to the **mountain of complexity** and 
 
 Customization has different types and levels;
 
-* ABP Framework itself is highly customizable. You can almost replace and override any service. 3rd-party dependencies are abstracted, and generally, multiple alternatives are provided. You can implement your integrations to extend the framework.
+* ABP itself is highly customizable. You can almost replace and override any service. 3rd-party dependencies are abstracted, and generally, multiple alternatives are provided. You can implement your integrations to extend the framework.
 * Modules are designed to be customizable and extensible from the database to the user interface. The Framework provides a [standard extensibility model](../framework/architecture/modularity/extending/customizing-application-modules-guide.md) implemented wherever possible.
 * Modules are designed as layered and compatible with [different architectures](../framework/architecture/best-practices). They can be used as part of a monolithic application or deployed as standalone microservices with their own databases.
 * Modules are independent of each other. You can remove one module without touching others.
 
-For most of the applications, these are more than necessary. However, it can be different from the code in your solution. You can always replace a module with its source code when you want to change it completely. For ABP Commercial modules, we always provide a source code option.
+For most of the applications, these are more than necessary. However, it can be different from the code in your solution. You can always replace a module with its source code when you want to change it completely. For ABP modules, we always provide a source code option.
 
 ### What if I need to bypass ABP abstractions?
 
@@ -212,7 +212,7 @@ For example, ABP provides repositories to simplify data access. However, if you 
 
 ABP provides Entity Framework Core (you can use almost any relational database system) and MongoDB integrations out of the box. In addition, it provides EF Core compatible Dapper integration. All pre-built modules have EF Core and MongoDB options.
 
-If you need to use any other database system, you can use its libraries and APIs. The ABP Framework doesn't have any restrictions here. For example, you can use Cassandra for your application code. If you use a pre-built module, it will probably not have a Cassandra integration package. You have two options here: You can implement the Cassandra integration yourself (by implementing a few repository interfaces defined by the module) or let the module continue using its database. Multiple database systems can run in a single application without any problem.
+If you need to use any other database system, you can use its libraries and APIs. The ABP doesn't have any restrictions here. For example, you can use Cassandra for your application code. If you use a pre-built module, it will probably not have a Cassandra integration package. You have two options here: You can implement the Cassandra integration yourself (by implementing a few repository interfaces defined by the module) or let the module continue using its database. Multiple database systems can run in a single application without any problem.
 
 ### Does ABP slows my application?
 
@@ -226,8 +226,8 @@ So, for most systems, the performance overhead can be safely ignored. For others
 
 **ABP is not a CMS** (Content Management System). It is a **generic business application development framework**. The Framework doesn't make any assumption for CMS or any applications. It is well-layered so that the core modules are Web or ASP.NET Core independent and can be used to develop console applications, background services or any .NET compatible application.
 
-By the way, the ABP Framework provides modularity, and a CMS module or CMS system can be developed on top of it. We are already providing a [CMS Kit module](../modules/cms-kit) that provides some common CMS primitives so that you can build your CMS on top of it.
+By the way, the ABP provides modularity, and a CMS module or CMS system can be developed on top of it. We are already providing a [CMS Kit module](../modules/cms-kit) that provides some common CMS primitives so that you can build your CMS on top of it.
 
 ## See Also
 
-* **[ABP Community Talk 2023.2: Why Should You Use the ABP Framework as a .NET Developer?](https://community.abp.io/events/why-should-you-use-the-abp-framework-as-a-.net-developer-xd489a48)**
+* **[ABP Community Talk 2023.2: Why Should You Use the ABP as a .NET Developer?](https://community.abp.io/events/why-should-you-use-the-abp-framework-as-a-.net-developer-xd489a48)**

@@ -1,6 +1,6 @@
 # GUID Generation
 
-GUID is a common **primary key type** that is used in database management systems. ABP Framework prefers GUID as the primary for pre-built [application modules](../../modules). Also, `ICurrentUser.Id` property ([see](./current-user.md)) is type of GUID, that means the ABP Framework assumes that the User Id is always GUID.
+GUID is a common **primary key type** that is used in database management systems. ABP prefers GUID as the primary for pre-built [application modules](../../modules). Also, `ICurrentUser.Id` property ([see](./current-user.md)) is type of GUID, that means the ABP assumes that the User Id is always GUID.
 
 ## Why Prefer GUID?
 
@@ -14,7 +14,7 @@ GUID has advantages and disadvantages. You can find many articles on the web rel
   * You are creating **distributed systems**.
 * GUIDs are impossible to guess, so they can be **more secure** compared to auto-increment Id values in some cases.
 
-While there are some disadvantages (just search it on the web), we found these advantages much more important while designing the ABP Framework.
+While there are some disadvantages (just search it on the web), we found these advantages much more important while designing the ABP.
 
 ## IGuidGenerator
 
@@ -22,7 +22,7 @@ The most important problem with GUID is that it is **not sequential by default**
 
 So, **never use `Guid.NewGuid()` to create Ids** for your entities!
 
-One good solution to this problem is to generate **sequential GUIDs**, which is provided by the ABP Framework out of the box. `IGuidGenerator` service creates sequential GUIDs (implemented by the `SequentialGuidGenerator` by default). Use `IGuidGenerator.Create()` when you need to manually set Id of an [entity](../architecture/domain-driven-design/entities.md).
+One good solution to this problem is to generate **sequential GUIDs**, which is provided by the ABP out of the box. `IGuidGenerator` service creates sequential GUIDs (implemented by the `SequentialGuidGenerator` by default). Use `IGuidGenerator.Create()` when you need to manually set Id of an [entity](../architecture/domain-driven-design/entities.md).
 
 **Example: An entity with GUID primary key and creating the entity**
 

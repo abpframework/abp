@@ -20,7 +20,7 @@ dotnet build
 
 ## Using the static proxy
 
-ABP Framework supports [dynamic](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies) and [static](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Static-JavaScript-Proxies) proxies. Both have advantages and disadvantages. By default, the static proxy is used in the microservice template to remove the coupling between services. The static proxy should be configured manually in the `HttpApiClientModule` of the microservice you have installed your module on as below:
+ABP supports [dynamic](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies) and [static](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Static-JavaScript-Proxies) proxies. Both have advantages and disadvantages. By default, the static proxy is used in the microservice template to remove the coupling between services. The static proxy should be configured manually in the `HttpApiClientModule` of the microservice you have installed your module on as below:
 
 ```csharp
 public class ProductServiceHttpApiClientModule : AbpModule
@@ -99,7 +99,7 @@ After running the add module command, you should see your migration files under 
 dotnet ef migrations add "InitialCmsKit"
 ```
 
-If you create your migrations properly, you just need to run the project. ABP Framework will handle it automatically.
+If you create your migrations properly, you just need to run the project. ABP will handle it automatically.
 
 ```csharp
 [ConnectionStringName(ProductServiceDbProperties.ConnectionStringName)]

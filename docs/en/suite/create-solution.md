@@ -12,7 +12,7 @@ Also, you can add a *public web site* project to your solution, separate tenant 
 
 ![Create a new solution](../images/suite-new-solution.png)
 
-- **Template type:** This is the startup template type of your solution. You can check the all available templates from [here](../startup-templates).
+- **Template type:** This is the startup template type of your solution. You can check the all available templates from [here](../solution-templates).
 
 - **Project name:** This is the solution name and also the prefix for the namespace of your solution. In this example `Acme.BookStore` is the project name. The solution file will be named as `Acme.BookStore.sln`. And the namespaces of `c#` files will start with `Acme.BookStore.*`
 
@@ -42,7 +42,7 @@ Also, you can add a *public web site* project to your solution, separate tenant 
 
 - **Mobile:** You can create the template with React Native and MAUI as a mobile framework or without any mobile application support.
 
-- **Database Provider:** ABP framework supports 2 database providers: `Entity Framework Core` and `MongoDB`.  `Entity Framework Core` supports a variety of database management systems like `MS SQL Server`, `Oracle`, `MySQL` or  `PostgreSQL`. See the full list https://docs.microsoft.com/ef/core/providers/?tabs=dotnet-core-cli. On the other hand [MongoDB](https://www.mongodb.com/) is a document-oriented NoSQL database used for high volume data storage. If you have a requirement to work with relational database systems, choose  `Entity Framework Core` otherwise choose `MongoDB`.
+- **Database Provider:** ABP supports 2 database providers: `Entity Framework Core` and `MongoDB`.  `Entity Framework Core` supports a variety of database management systems like `MS SQL Server`, `Oracle`, `MySQL` or  `PostgreSQL`. See the full list https://docs.microsoft.com/ef/core/providers/?tabs=dotnet-core-cli. On the other hand [MongoDB](https://www.mongodb.com/) is a document-oriented NoSQL database used for high volume data storage. If you have a requirement to work with relational database systems, choose  `Entity Framework Core` otherwise choose `MongoDB`.
 
 - **Database management system:** You can choose your **Database Management System (DBMS)** while creating a new solution. There are 6 types of database management system: `SqlServer` (default), `MySQL`, `SQLite`, `Oracle`, `Oracle-Devart` and `PostgreSQL`.
 

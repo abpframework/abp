@@ -493,7 +493,7 @@ Once you update your database, you will see that the `AbpUsers` table has the ne
 
 > If you first created a property without a database table field, then you later needed to move this property to  a database table field, it is suggested to execute an SQL command in your migration to copy the old values to the new field.
 >
-> However, if you don't make it, the ABP Framework seamlessly manages it. It uses the new database field, but fallbacks to the `ExtraProperties` field if it is null. When you save the entity, it moves the value to the new field.
+> However, if you don't make it, the ABP seamlessly manages it. It uses the new database field, but fallbacks to the `ExtraProperties` field if it is null. When you save the entity, it moves the value to the new field.
 
 See the [Extending Entities](./customizing-application-modules-extending-entities.md) document for more.
 

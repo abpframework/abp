@@ -8,7 +8,7 @@
 
 ## Introduction
 
-One of the major goals of the ABP framework is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices).
+One of the major goals of the ABP is to provide a [convenient infrastructure to create microservice solutions](../framework/architecture/microservices).
 
 This sample aims to demonstrate a simple yet complete microservice solution;
 
@@ -284,7 +284,7 @@ Backend admin application uses the Identity and Product microservices for all op
 
 ##### HTTP Clients
 
-ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
 
 For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
 
@@ -791,7 +791,7 @@ This service actually just hosts the ABP Identity package/module. Does not inclu
 * `AbpIdentityApplicationModule` (*[Volo.Abp.Identity.Application](https://www.nuget.org/packages/Volo.Abp.Identity.Application)* package) to host the implementation of the application and domain layers of the module.
 * `AbpIdentityEntityFrameworkCoreModule` (*[Volo.Abp.Identity.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use EF Core as database API.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+See the [module architecture best practice guide](../framework/architecture/best-practices/module-architecture.md) to understand the layering better.
 
 #### Authentication
 
@@ -857,7 +857,7 @@ This service actually just hosts the ABP Blogging package/module. Does not inclu
 - `BloggingApplicationModule` (*[Volo.Blogging.Application](https://www.nuget.org/packages/Volo.Blogging.Application)* package) to host the implementation of the application and domain layers of the module.
 - `BloggingMongoDbModule` (*[Volo.Blogging.MongoDB](https://www.nuget.org/packages/Volo.Abp.Identity.EntityFrameworkCore)* package) to use MongoDB as the database.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better.
+See the [module architecture best practice guide](../framework/architecture/best-practices/module-architecture.md) to understand the layering better.
 
 #### Authentication
 
@@ -985,7 +985,7 @@ This service actually just hosts the Product Management module. Does not include
 - `ProductManagementApplicationModule` to host the implementation of the application and domain layers of the module.
 - `ProductManagementEntityFrameworkCoreModule` to use EF Core as database API.
 
-See the [module architecture best practice guide](../Best-Practices/Module-Architecture) to understand the layering better. See the Product Management module section below for more information about this module.
+See the [module architecture best practice guide](../framework/architecture/best-practices/module-architecture.md) to understand the layering better. See the Product Management module section below for more information about this module.
 
 #### Authentication
 
@@ -1046,7 +1046,7 @@ Product Management is a module that consists of several layers and packages/proj
 * `ProductManagement.Application` contains the implementation of application services.
 * `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
 * `ProductManagement.HttpApi` contains API Controllers.
-* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP framework.
+* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../framework/api-development/dynamic-csharp-clients.md) feature of the ABP.
 * `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
 
 By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
@@ -1268,7 +1268,7 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 * Uses the related methods (like `SetName`) of the `Product` class to change properties, because they are with private setters and the only way to change a value is to use an entity method.
 * Returns an updated `ProductDto` to the client (client may need it for some reason) by using the [ObjectMapper](../framework/infrastructure/object-to-object-mapping.md).
 
-The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../framework/architecture/best-practices/application-services.md).
+The implementation may vary based on the requirements. This implementation follows the [best practices offered here](../framework/architecture/best-practices).
 
 #### Other Layers
 
@@ -1329,7 +1329,7 @@ public class MyHandler : IDistributedEventHandler<ProductStockCountChangedEto>
 }
 ````
 
-All the integration and communication are done by the ABP framework when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
+All the integration and communication are done by the ABP when you use the [Volo.Abp.EventBus.RabbitMQ](https://www.nuget.org/packages/Volo.Abp.EventBus.RabbitMQ) package. If you need to publish events out of an entity, just inject the `IDistributedEventBus` and use the `PublishAsync` method.
 
 See the [Event Bus](../framework/infrastructure/event-bus) documentation for more information about the distributed event system.
 

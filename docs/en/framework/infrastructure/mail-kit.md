@@ -1,6 +1,6 @@
 # MailKit Integration
 
-[MailKit](http://www.mimekit.net/) is a cross-platform, popular open source mail client library for .net. ABP Framework provides an integration package to use the MailKit as the [email sender](./emailing.md).
+[MailKit](http://www.mimekit.net/) is a cross-platform, popular open source mail client library for .net. ABP provides an integration package to use the MailKit as the [email sender](./emailing.md).
 
 ## Installation
 
@@ -16,7 +16,7 @@ If you haven't done it yet, you first need to install the ABP CLI. For other ins
 
 ### IEmailSender
 
-[Inject](Dependency-Injection.md) the standard `IEmailSender` into any service and use the `SendAsync` method to send emails. See the [email sending document](./emailing.md) for details.
+[Inject](../fundamentals/dependency-injection.md) the standard `IEmailSender` into any service and use the `SendAsync` method to send emails. See the [email sending document](./emailing.md) for details.
 
 > `IEmailSender` is the suggested way to send emails even if you use MailKit, since it makes your code provider independent.
 

@@ -170,9 +170,9 @@ The default database management system (DBMS) is `Entity Framework Core` / ` SQL
   abp new Acme.BookStore -u angular --database-management-system PostgreSQL -csf
   ```
 
-## Use local ABP framework references
+## Use local ABP references
 
-ABP libraries are referenced from NuGet by default in the ABP solutions. Sometimes you need to reference ABP libraries locally to your solution. This is useful to debug the framework itself. Your local ABP Framework 's root directory must have the `Volo.Abp.sln` file. You can copy the content of the following directory to your file system https://github.com/abpframework/abp/tree/dev/framework
+ABP libraries are referenced from NuGet by default in the ABP solutions. Sometimes you need to reference ABP libraries locally to your solution. This is useful to debug the framework itself. Your local ABP 's root directory must have the `Volo.Abp.sln` file. You can copy the content of the following directory to your file system https://github.com/abpframework/abp/tree/dev/framework
 
 * MVC UI,  Entity Framework Core, **ABP libraries are local project references**:
 
@@ -185,7 +185,7 @@ If `C:\source\abp\framework\Volo.Abp.sln` is your framework solution path, then 
 
 **Output**:
 
-As seen below, ABP Framework libraries are local project references.
+As seen below, ABP libraries are local project references.
 
 ```xml
 <ItemGroup>

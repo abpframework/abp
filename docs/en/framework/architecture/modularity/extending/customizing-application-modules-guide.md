@@ -1,6 +1,6 @@
 # Customizing the Existing Modules
 
-ABP Framework has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules) those are **ready to use** in any kind of application.
+ABP has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules) those are **ready to use** in any kind of application.
 
 For example, you can **re-use** the [Identity Management Module](../../../../modules/identity.md) to add user, role and permission management to your application. The [application startup template](../../../../solution-templates/layered-web-application) already comes with Identity and some other modules **pre-installed**.
 

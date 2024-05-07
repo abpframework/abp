@@ -1,12 +1,12 @@
 # ASP.NET Core MVC / Razor Pages UI: Modals
 
-While you can continue to use the standard [Bootstrap way](https://getbootstrap.com/docs/4.5/components/modal/) to create, open and manage modals in your applications, ABP Framework provides a **flexible** way to manage modals by **automating common tasks** for you.
+While you can continue to use the standard [Bootstrap way](https://getbootstrap.com/docs/4.5/components/modal/) to create, open and manage modals in your applications, ABP provides a **flexible** way to manage modals by **automating common tasks** for you.
 
 **Example: A modal dialog to create a new role entity**
 
 ![modal-manager-example-modal](../../../images/modal-manager-example-modal.png)
 
-ABP Framework provides the following benefits for such a modal with a form inside it;
+ABP provides the following benefits for such a modal with a form inside it;
 
 * **Lazy loads** the modal HTML into the page and **removes** it from the DOM once its closed. This makes easy to consume a reusable modal dialog. Also, every time you open the modal, it will be a fresh new modal, so you don't have to deal with resetting the modal content.
 * **Auto-focuses** the first input of the form once the modal has been opened. You can also specify it using a `function` or `jquery selector`.

@@ -4,7 +4,7 @@ This guide provides guidance for migrating your existing microservice applicatio
 
 ## History
 
-Until this version, ABP Commercial was using the [Ocelot](https://github.com/ThreeMammals/Ocelot) for the API Gateway, in the [Microservice Startup Template](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index). Since the **Ocelot** library is not actively maintained, we have searched for an alternative and decided to switch from Ocelot to [YARP](https://github.com/microsoft/reverse-proxy) for the API Gateway. YARP is maintained by Microsoft and is actively being developed and seems a better alternative than Ocelot and provides the same feature stack and even more.
+Until this version, ABP was using the [Ocelot](https://github.com/ThreeMammals/Ocelot) for the API Gateway, in the [Microservice Startup Template](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index). Since the **Ocelot** library is not actively maintained, we have searched for an alternative and decided to switch from Ocelot to [YARP](https://github.com/microsoft/reverse-proxy) for the API Gateway. YARP is maintained by Microsoft and is actively being developed and seems a better alternative than Ocelot and provides the same feature stack and even more.
 
 ## YARP Migration Steps
 
@@ -924,4 +924,4 @@ reRoutes:
 
 ## See Also
 
-* [ABP Commercial Version 8.0 Migration Guide](v8-0.md)
+* [ABP Version 8.0 Migration Guide](v8-0.md)

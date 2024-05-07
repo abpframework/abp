@@ -10,7 +10,7 @@ In this version, the `Microsoft.Extensions.FileProviders.Embedded` (and other `M
 
 ## Renamed the `AddGlobalFilters<>` method as `FilterQueryable<>` in `IMongoDbRepositoryFilterer`
 
-ABP Framework provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../../framework/data/mongodb).
+ABP provides services to automatically filter data on querying from a database. Prior to this version, creating a new class that derives from the `MongoDbRepositoryFilterer` and overriding its `AddGlobalFilters` method was needed for implementing a data filter for [MongoDB](../../framework/data/mongodb).
 
 In this version, the `AddGlobalFilters<>` method is renamed as `FilterQueryable<>`. Therefore, you need to update the method name if you have used data filtering for MongoDB, in your application.
 
@@ -60,7 +60,7 @@ Therefore, if you've used this method in your application, you might want to mak
 
 ## Dynamic Setting Store - Setting Management Module
 
-In this version, ABP Framework introduces Dynamic Setting Store, which is an important feature that allows us to collect and get all setting definitions from a single point. This feature requires some actions that need to be taken care of as the following:
+In this version, ABP introduces Dynamic Setting Store, which is an important feature that allows us to collect and get all setting definitions from a single point. This feature requires some actions that need to be taken care of as the following:
 
 *  You need to create a new migration and apply it to your database because a new database table has been added.
 * `ISettingDefinitionManager`'s sync methods have been removed and instead, asynchronous versions of the existing methods have been added.
@@ -81,7 +81,7 @@ public interface ISettingDefinitionManager
 
 ## `IdentityUserIntegrationService` - Identity Module
 
-In this version, ABP Framework introduces the `IdentityUserIntegrationService`, which is designed to get the current user's information, such as his/her role names within a non-authorized integration service. 
+In this version, ABP introduces the `IdentityUserIntegrationService`, which is designed to get the current user's information, such as his/her role names within a non-authorized integration service. 
 
 > For more information, see the related PR: [#16962](https://github.com/abpframework/abp/pull/16962)
 
@@ -116,4 +116,4 @@ The following packages are included in the templates by default:
 In this version, the `Microsoft.AspNetCore.Components.*` dependencies are upgraded to the `7.0.10` version. Therefore, you should upgrade the `Microsoft.AspNetCore.Components.Web` and `Microsoft.AspNetCore.Components.WebAssembly` packages to `7.0.10` in your `Blazor.csproj` file.
 
 ## Angular UI
-We would like to inform you that ABP Framework version 7.4 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)
+We would like to inform you that ABP version 7.4 uses Angular version 16. Please migrate your applications to Angular 16. [Update angular](https://update.angular.io/)

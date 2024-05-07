@@ -109,15 +109,15 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
    Here's a sample project information that uses GitHub source.
 
-   We will configure the VoloDocs to show ABP Framework's documentation that's stored in GitHub.
+   We will configure the VoloDocs to show ABP's documentation that's stored in GitHub.
 
-   Here's the link to ABP Framework GitHub docs folder:
+   Here's the link to ABP GitHub docs folder:
 
    https://github.com/abpframework/abp/tree/master/docs/en
 
    
 
-   * **Name**: `ABP Framework`
+   * **Name**: `ABP`
 
    * **Short name**: `abp`
 

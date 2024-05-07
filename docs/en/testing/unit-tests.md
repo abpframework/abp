@@ -147,7 +147,7 @@ If your service has dependencies and you want to unit test this service, you nee
 
 ### Example: Testing a Domain Service
 
-Assume that you've an `IssueManager` [Domain Service](Domain-Services.md) that is defined as below:
+Assume that you've an `IssueManager` [Domain Service](../framework/architecture/domain-driven-design/domain-services.md) that is defined as below:
 
 ````csharp
 using System;

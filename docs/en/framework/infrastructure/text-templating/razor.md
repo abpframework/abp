@@ -109,7 +109,7 @@ There are some useful properties in the base class that can be used in templates
 
 ### The Template Content
 
-`WithVirtualFilePath` indicates that we are using the [Virtual File System](Virtual-File-System.md) to store the template content. Create a `Hello.cshtml` file inside your project and mark it as "**embedded resource**" on the properties window:
+`WithVirtualFilePath` indicates that we are using the [Virtual File System](../../infrastructure/virtual-file-system.md) to store the template content. Create a `Hello.cshtml` file inside your project and mark it as "**embedded resource**" on the properties window:
 
 ![hello-template-razor](../../../images/hello-template-razor.png)
 
@@ -405,7 +405,7 @@ The [Virtual File System](../../infrastructure/virtual-file-system.md) allows yo
 
 #### Example: Replace the Standard Email Layout Template
 
-ABP Framework provides an [email sending system](../../infrastructure/emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.cshtml` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
+ABP provides an [email sending system](../../infrastructure/emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.cshtml` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
 
 Do the following steps to replace the template file with your own;
 
@@ -464,7 +464,7 @@ Configure<AbpVirtualFileSystemOptions>(options =>
 
 `BookStoreDomainModule` should be your module name, in this example code.
 
-> Be sure that your module (directly or indirectly) [depends on](Module-Development-Basics.md) the `AbpEmailingModule`. Because the VFS can override files based on the dependency order.
+> Be sure that your module (directly or indirectly) [depends on](../../architecture/modularity/basics.md) the `AbpEmailingModule`. Because the VFS can override files based on the dependency order.
 
 Now, your template will be used when you want to render the email layout template.
 

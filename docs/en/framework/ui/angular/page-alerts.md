@@ -1,6 +1,6 @@
 # Page Alerts
 
-A page alert is useful for displaying an important message to the user. The ABP Framework provides an easy way to show the following alert to the user.
+A page alert is useful for displaying an important message to the user. The ABP provides an easy way to show the following alert to the user.
 
 ![angular-page-alert-example](./images/page-alert-warning-example.png)
 

@@ -1,13 +1,13 @@
 # Entity Cache
 
-ABP Framework provides an entity caching system that works on top of the [distributed caching](../fundamentals/caching.md) system. It does the following operations on behalf of you:
+ABP provides an entity caching system that works on top of the [distributed caching](../fundamentals/caching.md) system. It does the following operations on behalf of you:
 
 * Gets the entity from the database (by using the [repositories](../architecture/domain-driven-design/repositories.md)) in its first call and then gets it from the cache in subsequent calls.
 * Automatically invalidates the cached entity if the entity is updated or deleted. Thus, it will be retrieved from the database in the next call and will be re-cached.
 
 ## Caching Entity Objects
 
-`IEntityCache<TEntityCacheItem, TKey>` is a simple service provided by the ABP Framework for caching entities. Assume that you have a `Product` entity as shown below:
+`IEntityCache<TEntityCacheItem, TKey>` is a simple service provided by the ABP for caching entities. Assume that you have a `Product` entity as shown below:
 
 ```csharp
 public class Product : AggregateRoot<Guid>

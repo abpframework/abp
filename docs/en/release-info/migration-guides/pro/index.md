@@ -1,6 +1,6 @@
 # Migration Guides
 
-The following documents explain how to migrate your existing ABP Commercial applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../../upgrading.md).
+The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../../upgrading.md).
 
 > **The following guides are only for paid license holders. Please also see the [ABP (open source) migration guides](../index.md) while upgrading your solution.**
 

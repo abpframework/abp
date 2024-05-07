@@ -100,7 +100,7 @@ In this way, we can use these known Issues and the User `Id`s to perform the tes
 
 ## Example: Testing a Domain Service
 
-`AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP Framework. `T` is the Type of the root module to setup and initialize the application.
+`AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP. `T` is the Type of the root module to setup and initialize the application.
 
 The application startup template has base classes in each test project, so you can derive from these base classes to make it easier.
 
@@ -236,7 +236,7 @@ It's that simple. This test method tests everything, including the application s
 
 ABP's [object mapping](../framework/architecture/domain-driven-design/unit-of-work.md) system controls the database connection and transaction management in your application. It seamlessly works while you writing your application code, so you may not aware of it.
 
-In the ABP Framework, all the database operations must be performed inside a unit of work scope. When you test an [application service](../framework/architecture/domain-driven-design/application-services.md) method, the unit of work scope will be the scope of your application service method. If you are testing a [repository](../framework/architecture/domain-driven-design/repositories.md) method, the unit of work scope will be the scope of your repository method.
+In the ABP, all the database operations must be performed inside a unit of work scope. When you test an [application service](../framework/architecture/domain-driven-design/application-services.md) method, the unit of work scope will be the scope of your application service method. If you are testing a [repository](../framework/architecture/domain-driven-design/repositories.md) method, the unit of work scope will be the scope of your repository method.
 
 In some cases, you may need to manually control the unit of work scope. Consider the following test method:
 

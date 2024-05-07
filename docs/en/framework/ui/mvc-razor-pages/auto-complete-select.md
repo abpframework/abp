@@ -9,7 +9,7 @@ A screenshot can be shown below.
 
 ## Getting Started
 
-This is a core feature and it's used by the ABP Framework. There is no custom installation or additional packages required.
+This is a core feature and it's used by the ABP. There is no custom installation or additional packages required.
 
 ## Usage
 

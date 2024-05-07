@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ABP Framework was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;
+ABP was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;
 
 * This document introduces the basics of the module system.
 * [Module development best practice guide](../best-practices) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.

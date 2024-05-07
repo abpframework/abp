@@ -2,7 +2,7 @@
 
 "*Cross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user’s web browser to perform an unwanted action on a trusted site for which the user is currently authenticated*" ([OWASP](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet)).
 
-**ABP Framework completely automates CSRF preventing** and works out of the box without any configuration. Read this documentation only if you want to understand it better or need to customize.
+**ABP completely automates CSRF preventing** and works out of the box without any configuration. Read this documentation only if you want to understand it better or need to customize.
 
 ## The Problem
 
@@ -21,9 +21,9 @@ Especially, the second point is a pain for your clients and unnecessarily consum
 
 ## The Solution
 
-ABP Framework provides `[AbpValidateAntiForgeryToken]` and `[AbpAutoValidateAntiforgeryToken]` attributes, just like the attributes explained above. `[AbpAutoValidateAntiforgeryToken]` is already added to the global filters, so you should do nothing to enable it for your application.
+ABP provides `[AbpValidateAntiForgeryToken]` and `[AbpAutoValidateAntiforgeryToken]` attributes, just like the attributes explained above. `[AbpAutoValidateAntiforgeryToken]` is already added to the global filters, so you should do nothing to enable it for your application.
 
-ABP Framework also automates the following infrastructure;
+ABP also automates the following infrastructure;
 
 * Server side sets a **special cookie**, named `XSRF-TOKEN` by default, that is used make the antiforgery token value available to the browser. This is **done automatically** (by the [application configuration](../api-development/standard-apis/configuration.md) endpoint). Nothing to do in the client side.
 * In the client side, it reads the token from the cookie and sends it in the **HTTP header** (named `RequestVerificationToken` by default). This is implemented for all the supported UI types.
@@ -67,7 +67,7 @@ This configuration;
 
 `AntiforgeryOptions` is the standard [options class](../fundamentals/options.md) of the ASP.NET Core. **You can find all the information about this class in its [own documentation](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery)**.
 
-`HeaderName` option is especially important for the ABP Framework point of view. Default value of this value is `RequestVerificationToken` and the clients uses this name while sending the token value in the header. So, if you change this option, you should also arrange your clients to align the change. If you don't have a good reason, leave it as default.
+`HeaderName` option is especially important for the ABP point of view. Default value of this value is `RequestVerificationToken` and the clients uses this name while sending the token value in the header. So, if you change this option, you should also arrange your clients to align the change. If you don't have a good reason, leave it as default.
 
 ### AbpValidateAntiForgeryToken Attribute
 
@@ -98,7 +98,7 @@ namespace MyCompanyName.MyProjectName.Controllers
 
 ### Angular UI
 
-Angular supports CSRF Token out of box, but the token header name is `X-XSRF-TOKEN`. Since ABP Framework follows the ASP.NET Core conventions, it changes this value to `RequestVerificationToken` in the core package. 
+Angular supports CSRF Token out of box, but the token header name is `X-XSRF-TOKEN`. Since ABP follows the ASP.NET Core conventions, it changes this value to `RequestVerificationToken` in the core package. 
 
 You don't need to make anything unless you need to change the `AntiforgeryOptions.HeaderName` as explained before. If you change it, remember to change the header name for the Angular application too. To do that, add an import declaration for the `HttpClientXsrfModule` into your root module.
 

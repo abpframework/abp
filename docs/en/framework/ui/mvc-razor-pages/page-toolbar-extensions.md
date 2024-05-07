@@ -8,7 +8,7 @@ You can add any type of view component item to the page toolbar or modify existi
 
 ## How to Set Up
 
-In this example, we will add an "Import users from excel" button and execute a JavaScript code for the user management page of the [Identity Module](../../../../../../modules/identity.md).
+In this example, we will add an "Import users from excel" button and execute a JavaScript code for the user management page of the [Identity Module](../../../modules/identity.md).
 
 ### Add a New Button to the User Management Page
 
@@ -72,7 +72,7 @@ Configure<AbpBundlingOptions>(options =>
 });
 ````
 
-This configuration adds `my-user-extensions.js` to the user management page of the Identity Module. `typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel).FullName` is the name of the bundle in the user management page. This is a common convention used for all the ABP Commercial modules.
+This configuration adds `my-user-extensions.js` to the user management page of the Identity Module. `typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel).FullName` is the name of the bundle in the user management page. This is a common convention used for all the ABP modules.
 
 ## Advanced Use Cases
 

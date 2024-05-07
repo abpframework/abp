@@ -8,9 +8,9 @@
 }
 ````
 
-This is a single-part quick-start tutorial to build a simple todo application with the ABP Framework. Here's a screenshot from the final application:
+This is a single-part quick-start tutorial to build a simple todo application with the ABP. Here's a screenshot from the final application:
 
-![todo-list](todo-list.png)
+![todo-list](../images/todo-list.png)
 
 You can find the source code of the completed application [here](https://github.com/abpframework/abp-samples/tree/master/TodoApp).
 
@@ -144,7 +144,7 @@ It is good to run the application before starting the development. The solution 
 
 Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
-![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
+![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
 
@@ -157,7 +157,7 @@ It is good to run the application before starting the development. The solution 
 
 Ensure that the `TodoApp.HttpApi.Host` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the server-side HTTP API on the [Swagger UI](https://swagger.io/tools/swagger-ui/):
 
-![todo-swagger-ui-initial](todo-swagger-ui-initial.png)
+![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. If it works, we can run the Angular client application.
 
@@ -244,7 +244,7 @@ dotnet ef migrations add Added_TodoItem
 
 This will add a new migration class to the project:
 
-![todo-efcore-migration](todo-efcore-migration.png)
+![todo-efcore-migration](../images/todo-efcore-migration.png)
 
 You can apply changes to the database using the following command, in the same command-line terminal:
 
@@ -353,7 +353,7 @@ namespace TodoApp
 }
 ````
 
-This class inherits from the `ApplicationService` class of the ABP Framework and implements the `ITodoAppService` that was defined before. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/entities.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
+This class inherits from the `ApplicationService` class of the ABP and implements the `ITodoAppService` that was defined before. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/entities.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
 
 #### Getting Todo Items
 
@@ -412,7 +412,7 @@ The application service is ready to be used from the UI layer.
 
 It is time to show the todo items on the UI! Before starting to write the code, it would be good to remember what we are trying to build. Here's a sample screenshot from the final UI:
 
-![todo-list](todo-list.png)
+![todo-list](../images/todo-list.png)
 
 > **We will keep the UI side minimal for this tutorial to make the tutorial simple and focused. See the [web application development tutorial](../../book-store/part-01.md) to build real-life pages with all aspects.**
 
@@ -575,13 +575,13 @@ Now, you can run the application again and see the result.
 
 ### Dynamic JavaScript Proxies & Auto API Controllers
 
-In the `Index.js` file, we've used the `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP Framework, thanks to the [Dynamic JavaScript Client Proxy](../../../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
+In the `Index.js` file, we've used the `todoApp.todo.delete(...)` and `todoApp.todo.create(...)` functions to communicate with the server. These functions are dynamically created by the ABP, thanks to the [Dynamic JavaScript Client Proxy](../../../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) system. They perform HTTP API calls to the server and return a promise, so you can register a callback to the `then` function as we've done above.
 
-However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
+However, you may notice that we haven't created any API Controllers, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP. It automatically converts the application services to API Controllers by convention.
 
 If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering the `/swagger` URL in your application, you can see the Todo API:
 
-![todo-api](todo-api.png)
+![todo-api](../images/todo-api.png)
 
 {{else if UI=="Blazor" || UI=="BlazorServer"}}
 
@@ -717,13 +717,13 @@ Now, you can run the application again to see the result.
 
 In the `Index.razor.cs` file, we've injected (with the `[Inject]` attribute) and used the `ITodoAppService` just like using a local service. Remember that the Blazor application is running on the browser while the implementation of this application service is running on the server.
 
-The magic is done by the ABP Framework's [Dynamic C# Client Proxy](../../../framework/api-development/dynamic-csharp-clients.md) system. It uses the standard `HttpClient` and performs HTTP API requests to the remote server. It also handles all the standard tasks for us, including authorization, JSON serialization and exception handling.
+The magic is done by the ABP's [Dynamic C# Client Proxy](../../../framework/api-development/dynamic-csharp-clients.md) system. It uses the standard `HttpClient` and performs HTTP API requests to the remote server. It also handles all the standard tasks for us, including authorization, JSON serialization and exception handling.
 
-However, you may ask that we haven't created any API Controller, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP Framework. It automatically converts the application services to API Controllers by convention.
+However, you may ask that we haven't created any API Controller, so how does the server handle these requests? This question brings us to the [Auto API Controller](../../../framework/api-development/auto-controllers.md) feature of the ABP. It automatically converts the application services to API Controllers by convention.
 
 If you run the `TodoApp.HttpApi.Host` application, you can see the Todo API:
 
-![todo-api](todo-api.png)
+![todo-api](../images/todo-api.png)
 
 {{end # Blazor}}
 
@@ -737,7 +737,7 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 
 > **Warning**: There is an issue with IIS Express: it doesn't allow connecting to the application from another process. If you are using Visual Studio, select the `TodoApp.HttpApi.Host` instead of IIS Express in the run button drop-down list, as shown in the figure below:
 
-![run-without-iisexpress](run-without-iisexpress.png)
+![run-without-iisexpress](../images/run-without-iisexpress.png)
 
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
@@ -878,7 +878,7 @@ Now, you can run the application again to see the result.
 
 ## Conclusion
 
-In this tutorial, we've built a very simple application to warm up for the ABP Framework. If you are looking to build a serious application, please check the [web application development tutorial](../../book-store/part-01.md) which covers all the aspects of real-life web application development.
+In this tutorial, we've built a very simple application to warm up for the ABP. If you are looking to build a serious application, please check the [web application development tutorial](../../book-store/part-01.md) which covers all the aspects of real-life web application development.
 
 ## Source Code
 

@@ -11,7 +11,7 @@ This document explains how to override the user interface of a depended [applica
 
 ## Overriding a Razor Component
 
-The ABP Framework, pre-built themes and modules define some **re-usable razor components and pages**. These pages and components can be replaced by your application or module.
+The ABP, pre-built themes and modules define some **re-usable razor components and pages**. These pages and components can be replaced by your application or module.
 
 > Since pages are just the razor components, the same principle is valid for pages too.
 

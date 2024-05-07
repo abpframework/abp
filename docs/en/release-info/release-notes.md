@@ -249,7 +249,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 * New **File Management Module** that is used to store and manage files in your application.
 * Migrated the Angular UI to the **Angular 10**.
-* Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP Commercial.
+* Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP.
 
 ## 2.9 (2020-06-04)
 
@@ -271,13 +271,13 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 See the detailed **blog post / announcement** for the v2.8 release: [https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map](https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map)
 
-This post also covers the [road map](road-map.md) and other news for the ABP.IO Platform.
+This post also covers the [road map](road-map.md) and other news for the ABP Platform.
 
 ### Major Features / Enhancements
 
 * Completely renewed the **[Lepton Theme](https://commercial.abp.io/themes) styles** and add a new one.
 * New module: Created a **real time [Chat Module](https://commercial.abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
-* Implemented **[module entity extension](guides/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
+* Implemented **[module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
 * **Gravatar** integration for the Angular UI.
 * Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
 

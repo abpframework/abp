@@ -2,7 +2,7 @@
 
 Working with times & [time zones](https://en.wikipedia.org/wiki/Time_zone) is always tricky, especially if you need to build a **global system** that is used by users in **different time zones**.
 
-ABP provides a basic infrastructure to make it easy and handle automatically wherever possible. This document covers the ABP Framework services and systems related to time and time zones.
+ABP provides a basic infrastructure to make it easy and handle automatically wherever possible. This document covers the ABP services and systems related to time and time zones.
 
 > If you are creating a local application that runs in a single time zone region, you may not need all these systems. But even in this case, it is suggested to use the `IClock` service introduced in this document.
 
@@ -79,7 +79,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 * Converts the given `DateTime` to the local (by using the `DateTime.ToLocalTime()` method) if current Clock is local and given `DateTime` is UTC.
 * Sets `Kind` of the given `DateTime` (using the `DateTime.SpecifyKind(...)` method) to the `Kind` of the current Clock if given `DateTime`'s `Kind` is `Unspecified`.
 
-`Normalize` method is used by the ABP Framework when the it gets a `DateTime` that is not created by `IClock.Now` and may not be compatible with the current Clock type. Examples;
+`Normalize` method is used by the ABP when the it gets a `DateTime` that is not created by `IClock.Now` and may not be compatible with the current Clock type. Examples;
 
 * `DateTime` type binding in the ASP.NET Core MVC model binding.
 * Saving data to and reading data from database via [Entity Framework Core](../data/entity-framework-core).
@@ -98,11 +98,11 @@ In addition to the `Now`, `IClock` service has the following properties:
 
 ## Time Zones
 
-This section covers the ABP Framework infrastructure related to managing time zones.
+This section covers the ABP infrastructure related to managing time zones.
 
 ### TimeZone Setting
 
-ABP Framework defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](../architecture/multi-tenancy) or globally for the application. The default value is `UTC`.
+ABP defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](../architecture/multi-tenancy) or globally for the application. The default value is `UTC`.
 
 See the [setting documentation](../fundamentals/settings.md) to learn more about the setting system.
 

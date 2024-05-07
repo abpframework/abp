@@ -75,7 +75,7 @@ For authentication, we use angular-oauth2-oidc. Please check their [docs](https:
 ## RemoteEnvironment
 
 Some applications need to integrate an existing config into the `environment` used throughout the application.
-Abp Framework supports this out of box.
+ABP supports this out of box.
 
 To integrate an existing config json into the `environment`, you need to set `remoteEnv`
 

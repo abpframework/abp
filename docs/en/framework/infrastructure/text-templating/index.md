@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ABP Framework provides a simple, yet efficient text template system. Text templating is used to dynamically render contents based on a template and a model (a data object):
+ABP provides a simple, yet efficient text template system. Text templating is used to dynamically render contents based on a template and a model (a data object):
 
 Template + Model =renderer=> Rendered Content
 
@@ -19,7 +19,7 @@ Template rendering engine is very powerful;
 * You can define **layout templates** to be used as the layout while rendering other templates.
 * You can pass arbitrary objects to the template context (beside the model) for advanced scenarios.
 
-ABP Framework provides two templating engines;
+ABP provides two templating engines;
 
 * **[Razor](./razor.md)**
 * **[Scriban](./scriban.md)**

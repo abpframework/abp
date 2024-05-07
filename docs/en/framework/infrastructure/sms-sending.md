@@ -1,6 +1,6 @@
 # SMS Sending
 
-The ABP Framework provides an abstraction to sending SMS. Having such an abstraction has some benefits;
+The ABP provides an abstraction to sending SMS. Having such an abstraction has some benefits;
 
 - You can then **easily change** your SMS sender without changing your application code.
 - If you want to create **reusable application modules**, you don't need to make assumption about how the SMS are sent.
@@ -110,4 +110,4 @@ namespace AbpDemo
 
 ## More
 
-[ABP Commercial](https://commercial.abp.io/) provides Twilio integration package to send SMS over [Twilio service](https://docs.abp.io/en/commercial/latest/modules/twilio-sms).
+[ABP](https://commercial.abp.io/) provides Twilio integration package to send SMS over [Twilio service](https://docs.abp.io/en/commercial/latest/modules/twilio-sms).

@@ -1,6 +1,6 @@
 # String Encryption
 
-ABP Framework provides string encryption feature that allows to **Encrypt** and **Decrypt** strings.
+ABP provides string encryption feature that allows to **Encrypt** and **Decrypt** strings.
 
 ##  Installation
 

@@ -17,7 +17,7 @@ abp add-package Volo.Abp.EntityFrameworkCore
 
 ### Database Management System Selection
 
-Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document don't depend on any specific DBMS. If you are creating a [reusable application module](../../../modules), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
+Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP and this document don't depend on any specific DBMS. If you are creating a [reusable application module](../../../modules), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
 
 > See [Switch to Another DBMS for Entity Framework Core](./other-dbms.md) document to learn how to switch the DBMS.
 
@@ -49,7 +49,7 @@ The [application startup template](../../../solution-templates/layered-web-appli
 
 You can still use the **data annotation attributes** (like `[Required]`) on the properties of your entity while the ABP documentation generally follows the **fluent mapping API** approach. It is up to you.
 
-ABP Framework has some **base entity classes** and **conventions** (see the [entities document](../../architecture/domain-driven-design/entities.md)) and it provides some useful **extension methods** to configure the properties inherited from the base entity classes.
+ABP has some **base entity classes** and **conventions** (see the [entities document](../../architecture/domain-driven-design/entities.md)) and it provides some useful **extension methods** to configure the properties inherited from the base entity classes.
 
 #### ConfigureByConvention Method
 
@@ -402,7 +402,7 @@ builder.Entity<OrderLine>(b =>
 
 When you query an `Order`, you may want to **include** all the `OrderLine`s in a single query or you may want to **load them later** on demand.
 
-> Actually these are not directly related to the ABP Framework. You can follow the [EF Core documentation](https://docs.microsoft.com/en-us/ef/core/querying/related-data/) to learn all the details. This section will cover some topics related to the ABP Framework.
+> Actually these are not directly related to the ABP. You can follow the [EF Core documentation](https://docs.microsoft.com/en-us/ef/core/querying/related-data/) to learn all the details. This section will cover some topics related to the ABP.
 
 ### Eager Loading / Load With Details
 
@@ -620,7 +620,7 @@ See also [lazy loading document](https://docs.microsoft.com/en-us/ef/core/queryi
 
 ## Read-Only Repositories
 
-ABP Framework provides read-only [repository](../../architecture/domain-driven-design/repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
+ABP provides read-only [repository](../../architecture/domain-driven-design/repositories.md) interfaces (`IReadOnlyRepository<...>` or `IReadOnlyBasicRepository<...>`) to explicitly indicate that your purpose is to query data, but not change it. If so, you can inject these interfaces into your services.
 
 Entity Framework Core read-only repository implementation uses [EF Core's No-Tracking feature](https://learn.microsoft.com/en-us/ef/core/querying/tracking#no-tracking-queries). That means the entities returned from the repository will not be tracked by the EF Core [change tracker](https://learn.microsoft.com/en-us/ef/core/change-tracking/), because it is expected that you won't update entities queried from a read-only repository. If you need to track the entities, you can still use the [AsTracking()](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.entityframeworkqueryableextensions.astracking) extension method on the LINQ expression, or `EnableTracking()` extension method on the repository object (See *Enabling / Disabling the Change Tracking* section in this document).
 
@@ -751,7 +751,7 @@ public static class QADbContextModelCreatingExtensions
 }
 ````
 
-> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
+> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP internally calls the `ConfigureObjectExtensions` and `ConfigureEfCoreEntity` methods. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
 > The `Object Extension` feature need the `Change Tracking`, which means you can't use the read-only repositories for the entities that have `extension properties(MapEfCoreProperty)`, Please see the [Repositories documentation](../../architecture/domain-driven-design/repositories.md) to learn the change tracking behavior.
 

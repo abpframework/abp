@@ -23,7 +23,7 @@ Find `UseSqlServer()` call in *YourProjectName*DbContextFactory.cs inside the `.
 
 ## Change the Connection Strings
 
-PostgreSql connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/postgresql/ ) for details of PostgreSql connection string options.
+PostgreSql connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com](https://www.connectionstrings.com/postgresql/) for details of PostgreSql connection string options.
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 

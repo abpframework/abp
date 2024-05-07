@@ -61,9 +61,9 @@ Let's examine this class:
 
 Then you can [inject](../../fundamentals/dependency-injection.md) `PersonDapperRepository` to any service to perform these database operations. If you want to implement a layered solution, we suggest to introduce an `IPersonDapperRepository` interface in your domain layer, implement it in your database later, then inject the interface to use the repository service.
 
-> If you want to learn more details and examples of using Dapper with the ABP Framework, [check this community article](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l).
+> If you want to learn more details and examples of using Dapper with the ABP, [check this community article](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l).
 
 ## See Also
 
-* [Community Article: Using Dapper with the ABP Framework](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l)
+* [Community Article: Using Dapper with the ABP](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l)
 * [Entity Framework Core integration document](../../data/entity-framework-core)

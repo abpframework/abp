@@ -49,7 +49,7 @@ Here, is the list of all available commands before explaining their details:
 * **`delete-module-source`**: Deletes a remote module source.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
-* **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
+* **`switch-to-preview`**: Switches to the latest preview version of the ABP.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
@@ -143,7 +143,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
       * `none`: Without any mobile application.
       * `react-native`: React Native.
-      * `maui`: MAUI.
+      * `maui`: MAUI. This mobile option is only available for ABP.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
@@ -474,7 +474,7 @@ abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
 * `--output-folder` or `-o`: Specifies the directory that source code will be downloaded in. If not specified, current directory is used.
 * `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
 * `--preview`: If no version option is specified, this option specifies if latest [preview version](../release-info/previews.md) will be used instead of latest stable version.
-* `--local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
+* `--local-framework-ref --abp-path`: Path of [ABP GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
 
 ### add-source-code
 
@@ -710,7 +710,7 @@ abp remove-proxy -t csharp --folder MyProxies/InnerFolder
 
 ### switch-to-preview
 
-You can use this command to switch your solution or project to latest preview version of the ABP framework.
+You can use this command to switch your solution or project to latest preview version of the ABP.
 
 Usage:
 
@@ -725,7 +725,7 @@ abp switch-to-preview [options]
 
 ### switch-to-nightly
 
-You can use this command to switch your solution or project to latest [nightly](../release-info/nightly-builds.md) preview version of the ABP framework packages.
+You can use this command to switch your solution or project to latest [nightly](../release-info/nightly-builds.md) preview version of the ABP packages.
 
 Usage:
 
@@ -739,7 +739,7 @@ abp switch-to-nightly [options]
 
 ### switch-to-stable
 
-If you're using the ABP Framework preview packages (including nightly previews), you can switch back to latest stable version using this command.
+If you're using the ABP preview packages (including nightly previews), you can switch back to latest stable version using this command.
 
 Usage:
 
@@ -752,7 +752,7 @@ abp switch-to-stable [options]
 
 ### switch-to-local
 
-Changes all NuGet package references to local project references for all the .csproj files in the specified folder (and all its subfolders with any deep). It is not limited to ABP Framework or Module packages.
+Changes all NuGet package references to local project references for all the .csproj files in the specified folder (and all its subfolders with any deep). It is not limited to ABP or Module packages.
 
 Usage:
 
@@ -779,7 +779,7 @@ Simplifies to translate [localization](../framework/fundamentals/localization.md
 * It searches all the localization `JSON` files in the current directory and all subdirectories (recursively). Then creates a single file (named `abp-translation.json` by default) that includes all the entries need to be translated.
 * Once you translate the entries in this file, you can then apply your changes to the original localization files using the `--apply` command.
 
-> The main purpose of this command is to translate ABP Framework localization files (since the [abp repository](https://github.com/abpframework/abp) has tens of localization files to be translated in different directories).
+> The main purpose of this command is to translate ABP localization files (since the [abp repository](https://github.com/abpframework/abp) has tens of localization files to be translated in different directories).
 
 #### Creating the Translation File
 
@@ -812,7 +812,7 @@ abp translate --apply  # apply all changes
 abp translate -a       # shortcut for --apply
 ````
 
-Then review changes on your source control system to be sure that it has changed the proper files and send a Pull Request if you've translated ABP Framework resources. Thank you in advance for your contribution.
+Then review changes on your source control system to be sure that it has changed the proper files and send a Pull Request if you've translated ABP resources. Thank you in advance for your contribution.
 
 ##### Additional Options
 
@@ -830,7 +830,7 @@ abp translate -c zh-Hans --online --deepl-auth-key <auth-key>
 
 ### login
 
-Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
+Some features of the CLI requires to be logged in to ABP Platform. To login with your username write:
 
 ```bash
 abp login <username>                                  # Allows you to enter your password hidden

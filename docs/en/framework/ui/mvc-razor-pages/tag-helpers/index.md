@@ -1,6 +1,6 @@
 # ABP Tag Helpers
 
-ABP Framework defines a set of **tag helper components** to simply the user interface development for ASP.NET Core (MVC / Razor Pages) applications.
+ABP defines a set of **tag helper components** to simply the user interface development for ASP.NET Core (MVC / Razor Pages) applications.
 
 ## Bootstrap Component Wrappers
 
@@ -8,9 +8,9 @@ Most of the tag helpers are [Bootstrap](https://getbootstrap.com/) (v5+) wrapper
 
 We don't aim to wrap bootstrap components 100%. Writing **native bootstrap style code** is still possible (actually, tag helpers generates native bootstrap code in the end), but we suggest to use the tag helpers wherever possible.
 
-ABP Framework also adds some **useful features** to the standard bootstrap components.
+ABP also adds some **useful features** to the standard bootstrap components.
 
-Here, the list of components those are wrapped by the ABP Framework:
+Here, the list of components those are wrapped by the ABP:
 
 * [Alerts](alerts.md)
 * [Badges](badges.md)

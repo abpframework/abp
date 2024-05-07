@@ -8,7 +8,7 @@ You can add any type of view component item to the page toolbar or modify existi
 
 ## How to Set Up
 
-In this example, we will add an "Import users from excel" button and execute a C# code for the user management page of the [Identity Module](../../../../../modules/identity.md). 
+In this example, we will add an "Import users from excel" button and execute a C# code for the user management page of the [Identity Module](../../../modules/identity.md). 
 
 ### Create a C# File
 

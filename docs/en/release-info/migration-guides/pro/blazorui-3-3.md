@@ -129,7 +129,7 @@ Add the following lines in the `head` section, before the `main.css`:
 <link href="flag-icon-css/css/flag-icon.min.css" rel="stylesheet"/>
 ````
 
-Remove the following code (since the ABP Framework now provides a better error handling system):
+Remove the following code (since the ABP now provides a better error handling system):
 
 ````html
 <div id="blazor-error-ui">

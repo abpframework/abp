@@ -88,7 +88,7 @@ The second important part of that class is the `ReplaceDbContext` attribute's us
     )]
 ````
 
-The Identity microservice utilizes the [Identity](../../modules/identity.md) and [OpenIddict](../../modules/openiddict.md) modules and creates a single database that contains these modules' database schemas. These modules define their own `DbContext` class normally. But [the `ReplaceDbContext` attribute](https://docs.abp.io/en/abp/8.0/Entity-Framework-Core#replace-other-dbcontextes) tells to ABP framework to use this (`IdentityServiceDbContext`) `DbContext` class instead of the `DbContext` classes defined by these modules. Technically, it replaces the given `DbContext` classes on runtime. We are doing that to ensure that we have a single (merged) database schema, single database migration path and a single database transaction operation when we work these multiple modules. When we replace a `DbContext`, we should implement its interface as done with the `IdentityServiceDbContext` class:
+The Identity microservice utilizes the [Identity](../../modules/identity.md) and [OpenIddict](../../modules/openiddict.md) modules and creates a single database that contains these modules' database schemas. These modules define their own `DbContext` class normally. But [the `ReplaceDbContext` attribute](https://docs.abp.io/en/abp/8.0/Entity-Framework-Core#replace-other-dbcontextes) tells to ABP to use this (`IdentityServiceDbContext`) `DbContext` class instead of the `DbContext` classes defined by these modules. Technically, it replaces the given `DbContext` classes on runtime. We are doing that to ensure that we have a single (merged) database schema, single database migration path and a single database transaction operation when we work these multiple modules. When we replace a `DbContext`, we should implement its interface as done with the `IdentityServiceDbContext` class:
 
 ````csharp
 public class IdentityServiceDbContext :
@@ -100,7 +100,7 @@ public class IdentityServiceDbContext :
 ````
 
 * That class implements `IIdentityProDbContext` and `IOpenIddictDbContext`, so these modules can use it.
-* It also implements `IHasEventInbox` and `IHasEventOutbox` interfaces, so the transactional [inbox/outbox patterns](inbox/outbox patterns) can work while sending and receiving [distributed events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus).
+* It also implements `IHasEventInbox` and `IHasEventOutbox` interfaces, so the transactional [inbox/outbox patterns](inbox/outbox patterns) can work while sending and receiving [distributed events](../../framework/infrastructure/event-bus/distributed).
 
 As the next part, the `IdentityServiceDbContext` class defines the following properties those are forced by the implemented interfaces:
 
@@ -124,7 +124,7 @@ public DbSet<OpenIddictScope> Scopes { get; set; }
 public DbSet<OpenIddictToken> Tokens { get; set; }
 ````
 
-Finally, we are executing the extension properties provided by the ABP Framework and the modules to configure the entity mappings for them:
+Finally, we are executing the extension properties provided by the ABP and the modules to configure the entity mappings for them:
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
@@ -330,7 +330,7 @@ public class IdentityServiceRuntimeDatabaseMigrator
 }
 ````
 
-Since the migration logic is very common, ABP Framework provides a base class to implement the fundamental migration logic. `IdentityServiceRuntimeDatabaseMigrator` inherits from the `EfCoreRuntimeDatabaseMigratorBase` class which perform the actual migration operation. 
+Since the migration logic is very common, ABP provides a base class to implement the fundamental migration logic. `IdentityServiceRuntimeDatabaseMigrator` inherits from the `EfCoreRuntimeDatabaseMigratorBase` class which perform the actual migration operation. 
 
 Here, we are just overriding the `SeedAsync` method that runs just after the database schema migration. If you check the source code, you will see that `IdentityServiceDataSeeder` creates the `admin` user, `admin` role and their permissions, so you can be able to login to the application.
 

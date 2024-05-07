@@ -1,6 +1,6 @@
 # ASP.NET Core MVC / Razor Pages: Testing
 
-> You can follow the [ASP.NET Core Integration Tests documentation](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests) to learn details of ASP.NET Core integration tests. This document explains the additional test infrastructure provided by the ABP Framework.
+> You can follow the [ASP.NET Core Integration Tests documentation](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests) to learn details of ASP.NET Core integration tests. This document explains the additional test infrastructure provided by the ABP.
 
 ## The Application Startup Template
 
@@ -190,11 +190,11 @@ namespace MyProject.Pages
 
 ## Testing the JavaScript Code
 
-ABP Framework doesn't provide any infrastructure to test your JavaScript code. You can use any test framework and tooling to test your JavaScript code.
+ABP doesn't provide any infrastructure to test your JavaScript code. You can use any test framework and tooling to test your JavaScript code.
 
 ## The Test Infrastructure
 
-[Volo.Abp.AspNetCore.TestBase](https://www.nuget.org/packages/Volo.Abp.AspNetCore.TestBase) package provides the test infrastructure that is integrated to the ABP Framework and ASP.NET Core.
+[Volo.Abp.AspNetCore.TestBase](https://www.nuget.org/packages/Volo.Abp.AspNetCore.TestBase) package provides the test infrastructure that is integrated to the ABP and ASP.NET Core.
 
 > Volo.Abp.AspNetCore.TestBase package is already installed in the `.Web.Tests` project.
 

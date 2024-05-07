@@ -43,7 +43,7 @@ Create a simple **Class Library Project** in a solution:
 
 ![simple-plugin-library](../../../images/simple-plugin-library.png)
 
-You can add the ABP Framework packages that you need to use in the module. At least, you should add the `Volo.Abp.Core` package to the project, Execute the following command in the folder of the .csproj file that you want to install the package on:
+You can add the ABP packages that you need to use in the module. At least, you should add the `Volo.Abp.Core` package to the project, Execute the following command in the folder of the .csproj file that you want to install the package on:
 
 ````bash
 abp add-package Volo.Abp.Core

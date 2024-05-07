@@ -408,7 +408,7 @@ var people = ((IMongoQueryable<Person>) queryable
 
 ### Option-2: Use the IRepository Async Extension Methods
 
-ABP Framework provides async extension methods for the repositories, just similar to async LINQ extension methods.
+ABP provides async extension methods for the repositories, just similar to async LINQ extension methods.
 
 **Example: Use `CountAsync` and `FirstOrDefaultAsync` methods on the repositories**
 
@@ -488,14 +488,14 @@ namespace AbpDemo
 
 > `ApplicationService` and `DomainService` base classes already have `AsyncExecuter` properties pre-injected and usable without needing an explicit constructor injection.
 
-ABP Framework executes the query asynchronously using the actual database provider's API. While that is not the usual way to execute a query, it is the best way to use the async API without depending on the database provider.
+ABP executes the query asynchronously using the actual database provider's API. While that is not the usual way to execute a query, it is the best way to use the async API without depending on the database provider.
 
 This method is suggested;
 
 * If you want to develop your application code **without depending** on the database provider.
 * If you are building a **reusable library** that doesn't have a database provider integration package, but needs to execute an `IQueryable<T>` object in some case.
 
-For example, ABP Framework uses the `IAsyncQueryableExecuter` in the `CrudAppService` base class (see the [application services](./application-services.md) document).
+For example, ABP uses the `IAsyncQueryableExecuter` in the `CrudAppService` base class (see the [application services](./application-services.md) document).
 
 ### Option-4: Custom Repository Methods
 

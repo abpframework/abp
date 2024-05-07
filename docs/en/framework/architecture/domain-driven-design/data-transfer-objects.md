@@ -32,7 +32,7 @@ Almost all O/RM frameworks support lazy-loading. It's a feature that loads entit
 
 More problems can arise if you use Entities in the presentation layer. **It's best not to reference the domain/business layer assembly in the presentation layer.**
 
-If you are convinced about using DTOs, we can continue to what ABP Framework provides and suggests about DTOs.
+If you are convinced about using DTOs, we can continue to what ABP provides and suggests about DTOs.
 
 > ABP doesn't force you to use DTOs, however using DTOs is **strongly suggested as a best practice**.
 
@@ -44,7 +44,7 @@ A DTO is a simple class that has no dependency and you can design it in any way.
 
 ### Entity Related DTOs
 
-You typically create DTOs corresponding to your entities, which results similar classes to your entities. ABP Framework provides some base classes to simplify while creating such DTOs.
+You typically create DTOs corresponding to your entities, which results similar classes to your entities. ABP provides some base classes to simplify while creating such DTOs.
 
 #### EntityDto
 
@@ -231,7 +231,7 @@ namespace AbpDemo
 }
 ````
 
-ABP Framework also defines a `PageBy` extension method (that is compatible with the `IPagedResultRequest`) that can be used instead of `Skip` + `Take` calls:
+ABP also defines a `PageBy` extension method (that is compatible with the `IPagedResultRequest`) that can be used instead of `Skip` + `Take` calls:
 
 ````csharp
 var query = _productRepository

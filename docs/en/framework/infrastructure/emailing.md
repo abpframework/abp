@@ -1,6 +1,6 @@
 # Email Sending
 
-ABP Framework provides various services, settings and integrations for sending emails;
+ABP provides various services, settings and integrations for sending emails;
 
 * Provides `IEmailSender` service that is used to send emails.
 * Defines [settings](../fundamentals/settings.md) to configure email sending.
@@ -134,7 +134,7 @@ If you don't want to use the setting system to store the email sending configura
 
 ## Text Template Integration
 
-ABP Framework provides a strong and flexible [text templating system](./text-templating). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
+ABP provides a strong and flexible [text templating system](./text-templating). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
 
 While you can define and use your own text templates, email sending system provides two simple built-in text templates.
 

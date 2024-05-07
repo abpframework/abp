@@ -82,7 +82,7 @@ app.Use(async (httpContext, next) =>
 
 When Web & API tiers are separated, it is impossible to directly send a server-to-client message from the HTTP API. This is also true for a microservice architected application. **Chat Module** uses the distributed event bus to deliver the message from API application to the web application, then to the client.
 
-If your project has such an architecture (example: MVC + tiered option), then you need a Distributed Event Bus. See [related ABP documentation](../framework/infrastructure/event-bus/distributed) to understand Distributed Event Bus system in ABP framework. Also see [RabbitMQ Integration documentation](../framework/infrastructure/event-bus/distributed/rabbitmq.md) if your choice is to use RabbitMQ.
+If your project has such an architecture (example: MVC + tiered option), then you need a Distributed Event Bus. See [related ABP documentation](../framework/infrastructure/event-bus/distributed) to understand Distributed Event Bus system in ABP. Also see [RabbitMQ Integration documentation](../framework/infrastructure/event-bus/distributed/rabbitmq.md) if your choice is to use RabbitMQ.
 
 ## Packages
 

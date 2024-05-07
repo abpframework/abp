@@ -1,6 +1,6 @@
 # Static JavaScript API Client Proxies
 
-It is typical to consume your HTTP APIs from your JavaScript code. To do that, you normally deal with low level AJAX calls, like $.ajax, or better [abp.ajax](javascript-api/ajax.md). ABP Framework provides **a better way** to call your HTTP APIs from your JavaScript code: JavaScript API Client Proxies!
+It is typical to consume your HTTP APIs from your JavaScript code. To do that, you normally deal with low level AJAX calls, like $.ajax, or better [abp.ajax](javascript-api/ajax.md). ABP provides **a better way** to call your HTTP APIs from your JavaScript code: JavaScript API Client Proxies!
 
 ## Static vs Dynamic JavaScript Client Proxies
 

@@ -8,7 +8,7 @@ See [the module description page](https://commercial.abp.io/modules/Volo.Payment
 
 ## How to install
 
-Payment module is not installed in [the startup templates](../startup-templates/application). So, it needs to be installed manually. There are two ways of installing a module into your application.
+Payment module is not installed in [the startup templates](../solution-templates/layered-web-application). So, it needs to be installed manually. There are two ways of installing a module into your application.
 
 
 ### Using ABP CLI

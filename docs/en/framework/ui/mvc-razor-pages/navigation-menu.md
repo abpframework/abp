@@ -2,9 +2,9 @@
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.
 
-ABP Framework is a [modular](../../architecture/modularity/basics.md) application development framework. **Every module may need to add items to the menu**.
+ABP is a [modular](../../architecture/modularity/basics.md) application development framework. **Every module may need to add items to the menu**.
 
-So, ABP Framework **provides a menu infrastructure** where;
+So, ABP **provides a menu infrastructure** where;
 
 * The application or the modules can add items to a menu, without knowing how the menu is rendered.
 * The [theme](theming.md) properly renders the menu.
@@ -86,7 +86,7 @@ When you run the application, you will see the menu items added to the main menu
 
 Here, a few notes on the menu contributors;
 
-* ABP Framework calls the `ConfigureMenuAsync` method **whenever need to render** the menu.
+* ABP calls the `ConfigureMenuAsync` method **whenever need to render** the menu.
 * Every menu item can have **children**. So, you can add menu items with **unlimited depth** (however, your UI theme may not support unlimited depth).
 * Only leaf menu items have `url`s normally. When you click to a parent menu, its sub menu is opened or closed, you don't navigate the `url` of a parent menu item.
 * If a menu item has no children and has no `url` defined, then it is not rendered on the UI. This simplifies to authorize the menu items: You only authorize the child items (see the next section). If none of the children are authorized, then the parent automatically disappears.
@@ -153,11 +153,11 @@ var myService = context.ServiceProvider.GetRequiredService<IMyService>();
 //...use the service
 ````
 
-> You don't need to care about releasing/disposing services. ABP Framework handles it.
+> You don't need to care about releasing/disposing services. ABP handles it.
 
 ### The Administration Menu
 
-There is a special menu item in the menu menu that is added by the ABP Framework: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../../modules):
+There is a special menu item in the menu menu that is added by the ABP: The *Administration* menu. It is typically used by the pre-built admin [application modules](../../../modules):
 
 ![nav-main-menu-administration](../../../images/nav-main-menu-administration.png)
 
@@ -169,7 +169,7 @@ context.Menu.GetAdministration().AddItem(...)
 
 ### Manipulating the Existing Menu Items
 
-ABP Framework executes the menu contributors by the [module dependency order](../../architecture/modularity/basics.md). So, you can manipulate the menu items that your application or module (directly or indirectly) depends on.
+ABP executes the menu contributors by the [module dependency order](../../architecture/modularity/basics.md). So, you can manipulate the menu items that your application or module (directly or indirectly) depends on.
 
 **Example: Set an icon for the `Users` menu item added by the [Identity Module](../../../modules/identity.md)**
 

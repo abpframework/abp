@@ -293,7 +293,7 @@ services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 
 ## Subscribing to the Exceptions
 
-It is possible to be informed when the ABP Framework **handles an exception**. It automatically **logs** all the exceptions to the standard [logger](./logging.md), but you may want to do more.
+It is possible to be informed when the ABP **handles an exception**. It automatically **logs** all the exceptions to the standard [logger](./logging.md), but you may want to do more.
 
 In this case, create a class derived from the `ExceptionSubscriber` class in your application:
 

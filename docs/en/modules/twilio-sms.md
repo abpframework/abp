@@ -69,4 +69,4 @@ Twilio allows you to create a free trial to send test SMS. Get your Twilio `Acco
 
 ## Sending SMS
 
-See [SMS Sending](../framework/infrastructure/sms-sending.md) document of the ABP Framework.
+See [SMS Sending](../framework/infrastructure/sms-sending.md) document of the ABP.

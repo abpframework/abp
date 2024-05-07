@@ -4,7 +4,7 @@ Authority Delegation is a way of delegating the responsibility of the current us
 
 ## Enable/Disable Authority Delegation
 
-Authority Delegation is enabled by default in [ABP Commercial Startup Templates](../../solution-templates) since v7.2. However, if your ABP version is lower than 7.2, you need to manually enable it. 
+Authority Delegation is enabled by default in [ABP Startup Templates](../../solution-templates) since v7.2. However, if your ABP version is lower than 7.2, you need to manually enable it. 
 
 >The Authority Delegation feature uses the impersonation system internally, therefore make sure you have correctly configured the [impersonation feature](./impersonation.md) before enabling the Authority Delegation.
 

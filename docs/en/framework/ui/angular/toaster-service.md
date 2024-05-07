@@ -87,7 +87,7 @@ this.toaster.clear();
 
 ## Replacing ToasterService with 3rd party toaster libraries
 
-If you want the ABP Framework to utilize 3rd party libraries for the toasters instead of the built-in one, you can provide a service that implements `Toaster.Service` interface, and provide it as follows (ngx-toastr library used in example):
+If you want the ABP to utilize 3rd party libraries for the toasters instead of the built-in one, you can provide a service that implements `Toaster.Service` interface, and provide it as follows (ngx-toastr library used in example):
 
 > You can use _LocalizationService_ for toaster messages translations.
 

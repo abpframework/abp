@@ -2,7 +2,7 @@
 
 The ABP Studio microservice solution template contains a few web applications. These applications are fully integrated to the solution, uses the [microservices](microservices.md) through the [API gateways](api-gateways.md). 
 
-The following figure shows the application in the *[Solution Explorer](../../solution-explorer.md)* pane of ABP Studio:
+The following figure shows the application in the *[Solution Explorer](../../studio/solution-explorer.md)* pane of ABP Studio:
 
 ![applications-in-microservice-solution](images/applications-in-microservice-solution.png)
 

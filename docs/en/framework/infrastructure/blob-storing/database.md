@@ -4,16 +4,16 @@ BLOB Storing Database Storage Provider can store BLOBs in a relational or non-re
 
 There are two database providers implemented;
 
-* [Volo.Abp.BlobStoring.Database.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Database.EntityFrameworkCore) package implements for [EF Core](Entity-Framework-Core.md), so it can store BLOBs in [any DBMS supported](https://docs.microsoft.com/en-us/ef/core/providers/) by the EF Core.
+* [Volo.Abp.BlobStoring.Database.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Database.EntityFrameworkCore) package implements for [EF Core](../../data/entity-framework-core), so it can store BLOBs in [any DBMS supported](https://docs.microsoft.com/en-us/ef/core/providers/) by the EF Core.
 * [Volo.Abp.BlobStoring.Database.MongoDB](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Database.MongoDB) package implements for [MongoDB](../../data/mongodb).
 
-> Read the [BLOB Storing document](.../blob-storing) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a database as the storage provider.
+> Read the [BLOB Storing document](../blob-storing) to understand how to use the BLOB storing system. This document only covers how to configure containers to use a database as the storage provider.
 
 ## Installation
 
 ### Automatic Installation
 
-If you've created your solution based on the [application startup template](Startup-Templates/Application.md), you can use the `abp add-module` [CLI](../../../cli) command to automatically add related packages to your solution.
+If you've created your solution based on the [application startup template](../../../solution-templates/layered-web-application), you can use the `abp add-module` [CLI](../../../cli) command to automatically add related packages to your solution.
 
 Open a command prompt (terminal) in the folder containing your solution (`.sln`) file and run the following command:
 

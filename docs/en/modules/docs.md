@@ -2,7 +2,7 @@
 
 ## What is Docs Module?
 
-Docs module is an application module for ABP framework. It simplifies software documentation. This module is free and open-source.
+Docs module is an application module for ABP. It simplifies software documentation. This module is free and open-source.
 
 ### Integration
 
@@ -16,7 +16,7 @@ Docs module is an application module and does not offer any hosting solution. Yo
 
 When you use GitHub to store your docs, Docs Module supports versioning. If you have multiple versions for your docs, there will be a combo-box on the UI to switch between versions. If you choose file system to store your docs, it does not support multiple versions. 
 
-[The documents](../modules) for ABP framework is also using this module.
+[The documents](../modules) for ABP is also using this module.
 
 > Docs module follows the [module architecture best practices](../framework/architecture/best-practices/module-architecture.md) guide.
 
@@ -303,7 +303,7 @@ Final look of **en.json**
   "texts": {
     "Menu:Home": "Home",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP. For more information, visit abp.io.",
     "Menu:Docs": "Documents"
   }
 }
@@ -336,9 +336,9 @@ Open `DocsProjects` in your database, and insert a new record with the following
 
 #### Sample Project Record for "GitHub"
 
-You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documents to configure your GitHub document store.
+You can use [ABP](https://github.com/abpframework/abp/) GitHub documents to configure your GitHub document store.
 
-- Name: `ABP framework (GitHub)`
+- Name: `ABP (GitHub)`
 
 - ShortName: `abp`
 
@@ -367,7 +367,7 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'', N'12f21123e08e4f15bedbae0b2d939659')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'', N'12f21123e08e4f15bedbae0b2d939659')
 ```
 
 Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
@@ -376,9 +376,9 @@ Now you can run the application and navigate to `/Documents`.
 
 #### Sample Project Record for "FileSystem"
 
-You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documents to configure your GitHub document store.
+You can use [ABP](https://github.com/abpframework/abp/) GitHub documents to configure your GitHub document store.
 
-- Name: `ABP framework (FileSystem)`
+- Name: `ABP (FileSystem)`
 
 - ShortName: `abp`
 
@@ -398,7 +398,7 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
   {"Path":"C:\\Github\\abp\\docs"}
   ```
 
-  Note that `Path` must be replaced with your local docs directory. You can fetch the ABP Framework's documents from https://github.com/abpframework/abp/tree/master/docs and copy to the directory `C:\\Github\\abp\\docs` to get it work.
+  Note that `Path` must be replaced with your local docs directory. You can fetch the ABP's documents from https://github.com/abpframework/abp/tree/master/docs and copy to the directory `C:\\Github\\abp\\docs` to get it work.
 
 - MainWebsiteUrl: `/`
 
@@ -407,7 +407,7 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'')
 ```
 
 Add one of the sample projects above and run the application. In the menu you will see `Documents` link, click the menu link to open the documents page. 
@@ -447,7 +447,7 @@ public class Person
 ```
 ~~~
 
-As an example you can see ABP Framework documentation:
+As an example you can see ABP documentation:
 
 [https://github.com/abpframework/abp/blob/master/docs/en/](https://github.com/abpframework/abp/blob/master/docs/en/)
 
@@ -672,4 +672,4 @@ See the following examples:
 
 ## Next
 
-Docs Module is also available as a standalone application. Check out [VoloDocs](../Apps/VoloDocs).
+Docs Module is also available as a standalone application. Check out [VoloDocs](../apps/volo-docs.md).

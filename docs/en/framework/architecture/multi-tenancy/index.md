@@ -1,6 +1,6 @@
 # Multi-Tenancy
 
-Multi-Tenancy is a widely used architecture to create **SaaS applications** where the hardware and software **resources are shared by the customers** (tenants). ABP Framework provides all the base functionalities to create **multi tenant applications**. 
+Multi-Tenancy is a widely used architecture to create **SaaS applications** where the hardware and software **resources are shared by the customers** (tenants). ABP provides all the base functionalities to create **multi tenant applications**. 
 
 Wikipedia [defines](https://en.wikipedia.org/wiki/Multitenancy) the multi-tenancy as like that:
 
@@ -30,11 +30,11 @@ Configure<AbpMultiTenancyOptions>(options =>
 });
 ```
 
-> Multi-Tenancy is disabled in the ABP Framework by default. However, it is **enabled by default** when you create a new solution using the [startup template](../../../solution-templates/layered-web-application). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
+> Multi-Tenancy is disabled in the ABP by default. However, it is **enabled by default** when you create a new solution using the [startup template](../../../solution-templates/layered-web-application). `MultiTenancyConsts` class in the solution has a constant to control it in a single place.
 
 ### Database Architecture
 
-ABP Framework supports all the following approaches to store the tenant data in the database;
+ABP supports all the following approaches to store the tenant data in the database;
 
 * **Single Database**: All tenants are stored in a single database.
 * **Database per Tenant**: Every tenant has a separate, dedicated database to store the data related to that tenant.
@@ -70,7 +70,7 @@ namespace MultiTenancyDemo.Products
 }
 ````
 
-`IMultiTenant` interface just defines a `TenantId` property. When you implement this interface, ABP Framework **automatically** [filters](../../infrastructure/data-filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
+`IMultiTenant` interface just defines a `TenantId` property. When you implement this interface, ABP **automatically** [filters](../../infrastructure/data-filtering.md) entities for the current tenant when you query from database. So, you don't need to manually add `TenantId` condition while performing queries. A tenant can not access to data of another tenant by default.
 
 #### Why the TenantId Property is Nullable?
 
@@ -102,7 +102,7 @@ If you set the `TenantId` value for a specific entity object, it will override t
 
 #### Change the Current Tenant
 
-ABP Framework automatically filters the resources (database, cache...) based on the `ICurrentTenant.Id`. However, in some cases you may want to perform an operation on behalf of a specific tenant, generally when you are in the host context.
+ABP automatically filters the resources (database, cache...) based on the `ICurrentTenant.Id`. However, in some cases you may want to perform an operation on behalf of a specific tenant, generally when you are in the host context.
 
 `ICurrentTenant.Change` method changes the current tenant for a limited scope, so you can safely perform operations for the tenant.
 
@@ -144,7 +144,7 @@ namespace MultiTenancyDemo.Products
 
 ### Data Filtering: Disable the Multi-Tenancy Filter
 
-As mentioned before, ABP Framework handles data isolation between tenants using the [Data Filtering](../../infrastructure/data-filtering.md) system. In some cases, you may want to disable it and perform a query on all the data, without filtering for the current tenant.
+As mentioned before, ABP handles data isolation between tenants using the [Data Filtering](../../infrastructure/data-filtering.md) system. In some cases, you may want to disable it and perform a query on all the data, without filtering for the current tenant.
 
 **Example: Get count of products in the database, including all the products of all the tenants.**
 
@@ -193,7 +193,7 @@ See the [Data Filtering document](../../infrastructure/data-filtering.md) for mo
 
 The first thing for a multi-tenant application is to determine the current tenant on the runtime.
 
-ABP Framework provides an extensible **Tenant Resolving** system for that purpose. Tenant Resolving system then used in the **Multi-Tenancy Middleware** to determine the current tenant for the current HTTP request.
+ABP provides an extensible **Tenant Resolving** system for that purpose. Tenant Resolving system then used in the **Multi-Tenancy Middleware** to determine the current tenant for the current HTTP request.
 
 #### Tenant Resolvers
 
@@ -428,13 +428,13 @@ The [tenant management module](../../../modules/tenant-management.md) is **inclu
 
 ### Other Multi-Tenancy Infrastructure
 
-ABP Framework was designed to respect to the multi-tenancy in every aspect and most of the times everything will work as expected.
+ABP was designed to respect to the multi-tenancy in every aspect and most of the times everything will work as expected.
 
 BLOB Storing, Caching, Data Filtering, Data Seeding, Authorization and all the other services are designed to properly work in a multi-tenant system.
 
 ## The Tenant Management Module
 
-ABP Framework provides all the the infrastructure to create a multi-tenant application, but doesn't make any assumption about how you manage (create, delete...) your tenants.
+ABP provides all the the infrastructure to create a multi-tenant application, but doesn't make any assumption about how you manage (create, delete...) your tenants.
 
 The [Tenant Management module](../../../modules/tenant-management.md) provides a basic UI to manage your tenants and set their connection strings. It is pre-configured for the [application startup template](../../../solution-templates/layered-web-application).
 
