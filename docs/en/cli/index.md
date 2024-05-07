@@ -39,6 +39,7 @@ Here, is the list of all available commands before explaining their details:
 * **`install-local-module`**: Installs a local module to given module.
 * **`list-modules`**: Lists names of open-source application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
+* **`get-source`**: Downloads the source code of a module.
 * **`add-source-code`**: Downloads the source code and replaces package references with project references.
 * **`init-solution`**: Creates ABP Studio configuration files for a given solution.
 * **`kube-connect`**: Connects to kubernetes environment.
@@ -473,6 +474,25 @@ abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
 * `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
 * `--preview`: If no version option is specified, this option specifies if latest [preview version](../release-info/previews.md) will be used instead of latest stable version.
 * `--local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
+
+### add-source-code
+
+Downloads the source code of a module and replaces package references with project references. This command only works if your ABP Commercial License has source-code access, or if source-code of the target module is free to all type of ABP Commercial Licenses.
+
+````bash
+abp add-source-code <module-name> [options]
+````
+
+Example:
+
+````bash
+abp add-source-code Volo.Chat --add-to-solution-file
+````
+
+#### Options
+
+* `--target-module` or `-t`: The module that will refer the downloaded source code. If not set, the module in the current directory will be used.
+* `--add-to-solution-file`: Adds the downloaded source code to C# solution file and ABP Studio solution file.
 
 ### generate-proxy
 
