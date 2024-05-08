@@ -1,6 +1,6 @@
 # Using Blob Storage with ABP
 
- ABP Framework is a comprehensive development framework for modern web applications and microservice architectures. This framework offers its users the possibility to quickly build scalable and modular applications. An advantage of this framework is the flexibility to integrate different cloud services or infrastructure components. 
+ ABP Framework is a comprehensive development framework for modern web applications and microservice architectures. ABP Framework [provides an abstraction to work with BLOBs and provides some pre-built storage providers](https://docs.abp.io/en/abp/latest/Blob-Storing) that you can easily integrate into your application. In this article, I will show you how to store BLOBs in a relational or non-relational database by using the [Database Provider](https://docs.abp.io/en/abp/latest/Blob-Storing-Database) 
 
 ## What is Blob Storage ?
 
@@ -13,35 +13,65 @@
 
    Nowadays, storing large files such as users' profile pictures has become an important requirement in web applications. Storing such data in the database can negatively impact performance and increase the database size. To solve this problem, Blob storage services can be used. ABP Framework provides a powerful solution to handle such scenarios. So, how do we store user profile pictures with Blob Storage using ABP Framework?
 
-- #### Step 1: Blob Container Identification
+- #### Step 1: Configure the Blob Container
 
 The first step is to define a Blob Container for storing profile pictures. The Blob Container represents the storage space that will be used to store the profile pictures.
 
-   ![Step 1](./images/step1.png)
+````csharp
+  public class ProfilePictureContainer : IBlobContainer
+{
+    public string Name => "profile-pictures";
+}
+````
+- #### Step 2: Create the ProfileAppService (Saving & Reading BLOBs)
 
-- #### Step 2: Create ProfileAppService
+Create the `ProfileAppService` class and derive it from the `ApplicationService` class. This class will perform the necessary operations to store and retrieve profile pictures.
 
-Create the ProfileAppService class and derive it from the ApplicationService class. This class will perform the necessary operations to store and retrieve profile pictures.
+````csharp
+using Volo.Abp.Application.Services;
 
-   ![Step 2](./images/step2.png)
+public class ProfileAppService : ApplicationService
+{
+    // Code snippets will come here
+}
+````
 
-- #### Step 3: Blob Container Connection
+- #### Step 3: Inject the `IBlobContainer` Service
 
-In the constructor method, inject the dependency into the IBlobContainer interface. This interface is used to interact with the Blob Container.
+Inject the `IBlobContainer` service, in the constructor of the `ProfileAppService` class. The `IBlobContainer` is the main interface to store and read BLOB and is used to interact with the container.
 
-   ![Step 3](./images/step3.png)
+````csharp
+private readonly IBlobContainer<ProfilePictureContainer> _blobContainer;
+
+public ProfileAppService(IBlobContainer<ProfilePictureContainer> blobContainer)
+{
+    _blobContainer = blobContainer;
+}
+````
 
 - #### Step 4: Save Profile Picture
 
 The SaveProfilePictureAsync method is used to store the user's profile picture. A unique name is generated based on the user's credentials and the profile picture byte array with this name is saved in the Blob Container.
 
-   ![Step 4](./images/step4.png)
+````csharp
+public async Task SaveProfilePictureAsync(byte[] bytes)
+{
+    var blobName = CurrentUser.GetId().ToString();
+    await _blobContainer.SaveAsync(blobName, bytes);
+}
+````
 
 - #### Step 5: Getting Profile Picture
 
 The GetProfilePictureAsync method is used to get the user's profile picture. A profile picture byte array is retrieved from the Blob Container with a specified name based on the user's credential.
 
-   ![Step 5](./images/step5.png)
+````csharp
+public async Task<byte[]> GetProfilePictureAsync()
+{
+    var blobName = CurrentUser.GetId().ToString();
+    return await _blobContainer.GetAllBytesOrNullAsync(blobName);
+}
+````
 
 
 Finally, add controls in the user interface that will allow users to upload and view their profile pictures. These controls will perform the operations by calling the corresponding methods in the ProfileAppService class.
@@ -49,7 +79,7 @@ Finally, add controls in the user interface that will allow users to upload and 
 These steps cover the basic steps to store user profile pictures with Blob Storage using the ABP Framework. [Check out the documentation for more information.](https://docs.abp.io/en/abp/latest/Blob-Storing)
 
 
-## What are the advantages/disadvantages of keeping in Blob Storage database? 
+## What are the Advantages/Disadvantages of Keeping the BLOBs in a Database? 
 
 #### Advantages:
 
@@ -68,7 +98,9 @@ These steps cover the basic steps to store user profile pictures with Blob Stora
 - Backup and Recovery Challenges: Storing blob data in a database can make backup and recovery difficult. The large size of blob data can make backup and recovery time-consuming and data recovery difficult. 
 
 
-## Information about Blob Storage entagrations  
+## Other Blob Storage Providers
+
+ABP Framework provides some other [pre-built storage providers](https://docs.abp.io/en/abp/latest/Blob-Storing#blob-storage-providers) besides the [Database Provider](https://docs.abp.io/en/abp/latest/Blob-Storing-Database) shown in this article:
 
 - Azure Blob Storage: A cloud storage service offered on the Microsoft Azure platform. It is used to store and access large amounts of data. It supports various data types such as files, images, videos and provides high scalability. To learn more about [Azure Blob Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Azure), visit the Azure Blob Storage page. 
 
