@@ -4,7 +4,7 @@
 
 A web application may use one or more authentication schemes to obtain the current user's information, Such as `Cookies`, `JwtBearer`, `OpenID Connect`, `Google` etc.
 
-After authentication, we will get a set of claims that can be issued using a trusted identity provider. A claim is a type/name-value pair representing the subject. The type property provides the semantic content of the claim; that is, it states what the claim is about. 
+After authentication, we will get a set of claims that can be issued using a trusted identity provider. A claim is a type/name-value pair representing the subject. The type property provides the semantic content of the claim, that is, it states what the claim is about. 
 
 The [`ICurrentUser`](https://docs.abp.io/en/abp/latest/CurrentUser) service of the ABP framework provides a convenient way to access the current user's information from the claims.
 
@@ -26,10 +26,6 @@ As you can see, the default claim type of `AbpClaimTypes` comes from the [`Syste
 ## Claim type in different authentication schemes
 
 We usually see two types of claim types in our daily development. One is the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) and the other one is the `OpenId Connect` [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims)
-
-### OpenIddict AuthServer
-
-The `OpenIddict` will use the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) as the claim type of the `id_token` or `access_token` and `UserInfo` endpoint response.
 
 ### ASP NET Core Identity
 
@@ -192,8 +188,16 @@ ClaimActions.MapJsonKey(ClaimTypes.Locality, "locale");
 ClaimActions.MapJsonKey("urn:facebook:timezone", "timezone");
 ```
 
+### OpenIddict AuthServer
+
+The `OpenIddict` will use the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) as the claim type of the `id_token` or `access_token` and `UserInfo` endpoint response, etc.
+
+* For JWT token, It will also use the [azure-activedirectory-identitymodel-extensions-for-dotnet](https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet) to get the claims from the `id_token` or `access_token`.
+* For reference token, It will get the claims from the `database`.
+
 ## Summary
 
 Once you find the claims you received do not meet your expectations, follow the instructions above to troubleshoot the problem. 
 
 This article can help you understand the claim type in the ABP framework and ASP NET Core.
+
