@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.OpenApi.Models;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client;
+using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.Menus;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Components;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Menus;
 using MyCompanyName.MyProjectName.Localization;
