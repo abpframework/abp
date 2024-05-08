@@ -10,7 +10,6 @@ Validations make your application run more efficiently as they are not directly 
 ## What is Fluent Validation?
 Fluent validation is a library for checking whether data is valid or not. Fluent validation can be applied to your code in a fluent and understandable way.
 
-
 ## Why We Should Use Fluent Validation?
 Fluent Validation allows you to define your validation rules in a clear and flexible way. This means you can comfortably handle complex validation scenarios in your code. This makes your development process much more manageable. The readability that Fluent Validation offers really makes things easier. Having a clear understanding of what your validation rules do is a huge advantage when working on your code. In short, your code is cleaner and clearer. Fluent Validation is also very functional in terms of testability. By defining your validation rules in separate classes, you can easily test and maintain these rules. Fluent Validation is a widely used validation library on the .NET platform. As such, it has become a common standard among .NET developers. This provides advantages in terms of community support and compatibility. So, using Fluent Validation simplifies your development process by making your code more understandable, manageable and testable.
 
@@ -110,6 +109,7 @@ If one of the validation rules does not meet the rules, then the following error
 
 ![Error](./images/error.png)
  
-For more information on Fluent validation, see the [documentation](https://docs.fluentvalidation.net/en/latest/)
- 
+For more information on fluent validation with abp framework, see the [documentation](https://docs.abp.io/en/abp/latest/FluentValidation)
+
+For more information on fluent validation, see the [documentation](https://docs.fluentvalidation.net/en/latest/) 
 
