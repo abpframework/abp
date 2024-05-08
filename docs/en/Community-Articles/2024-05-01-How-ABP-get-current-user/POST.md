@@ -2,13 +2,13 @@
 
 ## The Claim Type
 
-A web application may use one or more authentication schemes to obtain the current user's information, Such as `Cookies`, `JwtBearer`, `OpenID Connect`, `Google` etc.
+A web application may use one or more authentication schemes to obtain the current user's information, such as `Cookies`, `JwtBearer`, `OpenID Connect`, `Google` etc.
 
-After authentication, we will get a set of claims that can be issued using a trusted identity provider. A claim is a type/name-value pair representing the subject. The type property provides the semantic content of the claim, that is, it states what the claim is about. 
+After authentication, we get a set of claims that can be issued using a trusted identity provider. A claim is a type/name-value pair representing the subject. The type property provides the semantic content of the claim, that is, it states what the claim is about. 
 
-The [`ICurrentUser`](https://docs.abp.io/en/abp/latest/CurrentUser) service of the ABP framework provides a convenient way to access the current user's information from the claims.
+The [`ICurrentUser`](https://docs.abp.io/en/abp/latest/CurrentUser) service of the ABP Framework provides a convenient way to access the current user's information from the claims.
 
-The claim type is the key to getting the correct value of the current user, and We have a static `AbpClaimTypes` class that defines the names of the standard claims in the abp framework.
+The claim type is the key to getting the correct value of the current user, and we have a static `AbpClaimTypes` class that defines the names of the standard claims in the ABP Framework:
 
 ```cs
 public static class AbpClaimTypes
@@ -21,15 +21,15 @@ public static class AbpClaimTypes
 }
 ```
 
-As you can see, the default claim type of `AbpClaimTypes` comes from the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) class. Which is the recommended practice in NET.
+As you can see, the default claim type of `AbpClaimTypes` comes from the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) class, which is the recommended practice in NET.
 
 ## Claim type in different authentication schemes
 
-We usually see two types of claim types in our daily development. One is the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) and the other one is the `OpenId Connect` [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims)
+We usually see two types of claim types in our daily development. One of them is the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) and the other one is the `OpenId Connect` [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims).
 
 ### ASP NET Core Identity
 
-There is a [`ClaimsIdentityOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.claimsidentityoptions) property in the `IdentityOptions` which can be used to configure the claim type.
+There is a [`ClaimsIdentityOptions`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.claimsidentityoptions) property in the `IdentityOptions`, which can be used to configure the claim type:
 
 | Property             | Description                                                                                                   |
 |----------------------|---------------------------------------------------------------------------------------------------------------|
@@ -39,14 +39,14 @@ There is a [`ClaimsIdentityOptions`](https://learn.microsoft.com/en-us/dotnet/ap
 | UserIdClaimType      | Gets or sets the ClaimType used for the user identifier claim. Defaults to NameIdentifier.                    |
 | UserNameClaimType    | Gets or sets the ClaimType used for the user name claim. Defaults to Name.                                    |
 
-The Identity will create a `ClaimsIdentity` object with the claim type that you have configured in the `ClaimsIdentityOptions` class. 
-The ABP framework will configure it based on `AbpClaimTypes,` so you shouldn't usually worry about it.
+* The Identity creates a `ClaimsIdentity` object with the claim type that you have configured in the `ClaimsIdentityOptions` class. 
+* The ABP Framework configures it based on `AbpClaimTypes,` so usually you don't need to worry about it.
 
 ### JwtBearer/OpenID Connect Client
 
-The `JwtBearer/OpenID Connect` will get claims from `id_token` or fetch user information from the `AuthServer`, and then map/add it to the current `ClaimsIdentity`.
+The `JwtBearer/OpenID Connect` gets claims from `id_token` or fetches user information from the `AuthServer`, and then maps/adds it to the current `ClaimsIdentity`.
 
-To map the [standard claim](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) type to the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) via [azure-activedirectory-identitymodel-extensions-for-dotnet](https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet) library by default, which is maintained by the Microsoft team.
+To map the [standard claim](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) type to the [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes) via [azure-activedirectory-identitymodel-extensions-for-dotnet](https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet) library by default, which is maintained by the Microsoft team:
 
 ```cs
 Dictionary<string, string> ClaimTypeMapping = new Dictionary<string, string>
@@ -129,7 +129,7 @@ Dictionary<string, string> ClaimTypeMapping = new Dictionary<string, string>
 
 #### Disable JwtBearer/OpenID Connect Client Claim Type Mapping
 
-To turn off the claim type mapping, you can set the `MapInboundClaims` property of `JwtBearerOptions` or `OpenIdConnectOptions` to `false`. Then, you can get the original claim types from the token(`access_token` or `id_token`).
+To turn off the claim type mapping, you can set the `MapInboundClaims` property of `JwtBearerOptions` or `OpenIdConnectOptions` to `false`. Then, you can get the original claim types from the token(`access_token` or `id_token`):
 
 JWT Example:
 
@@ -153,11 +153,9 @@ JWT Example:
 
 ### OAuth2(Google, Facebook, Twitter, Microsoft) Extenal Login Client
 
-The `OAuth2 handler` will fetch a JSON containing user information from the `OAuth2` server. The third-party provider will issue the claim type based on their standard server and then map/add it to the current `ClaimsIdentity`.
+The `OAuth2 handler` fetchs a JSON containing user information from the `OAuth2` server. The third-party provider issues the claim type based on their standard server and then maps/adds it to the current `ClaimsIdentity`. The ASP NET Core provides some built-in claim-type mappings for different providers as can be seen below examples:
 
-The ASP NET Core built-in some claim type mapping for different providers.
-
-Example: The `ClaimActions` of `GoogleOptions` will map the Google's claim types to [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes)
+**Example**: The `ClaimActions` property of the `GoogleOptions` maps the Google's claim types to [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes):
 
 ```cs
 ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id"); // v2
@@ -169,7 +167,7 @@ ClaimActions.MapJsonKey("urn:google:profile", "link");
 ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
 ```
 
-Example: The `ClaimActions` of `FacebookOptions` will map the Facebook's claim types to [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes)
+**Example**: The `ClaimActions` property of the `FacebookOptions` maps the Facebook's claim types to [`System.Security.Claims.ClaimTypes`](https://learn.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes):
 
 ```cs
 ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
@@ -190,14 +188,14 @@ ClaimActions.MapJsonKey("urn:facebook:timezone", "timezone");
 
 ### OpenIddict AuthServer
 
-The `OpenIddict` will use the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) as the claim type of the `id_token` or `access_token` and `UserInfo` endpoint response, etc.
+The `OpenIddict` uses the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims) as the claim type of the `id_token` or `access_token` and `UserInfo` endpoint response, etc.
 
-* For JWT token, It will also use the [azure-activedirectory-identitymodel-extensions-for-dotnet](https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet) to get the claims from the `id_token` or `access_token`.
-* For reference token, It will get the claims from the `database`.
+* For JWT token, it also uses the [azure-activedirectory-identitymodel-extensions-for-dotnet](https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet) to get the claims from the `id_token` or `access_token`.
+* For reference token, it gets the claims from the `database`.
 
 ## Summary
 
 Once you find the claims you received do not meet your expectations, follow the instructions above to troubleshoot the problem. 
 
-This article can help you understand the claim type in the ABP framework and ASP NET Core.
+This article can help you understand the claim type in the ABP Framework and ASP NET Core.
 
