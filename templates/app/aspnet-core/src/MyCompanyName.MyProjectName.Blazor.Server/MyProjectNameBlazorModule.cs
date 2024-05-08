@@ -168,7 +168,7 @@ public class MyProjectNameBlazorModule : AbpModule
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
                     //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.styles.css");
+                    bundle.AddFiles(new BundleFile("/MyCompanyName.MyProjectName.Blazor.Server.styles.css", true));
                 }
             );
         });
