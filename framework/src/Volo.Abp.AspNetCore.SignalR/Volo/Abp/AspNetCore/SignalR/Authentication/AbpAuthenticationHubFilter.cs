@@ -16,7 +16,7 @@ public class AbpAuthenticationHubFilter : IHubFilter
     {
         var currentPrincipalAccessor = invocationContext.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
         var claimsPrincipal = invocationContext.Context.User;
-        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, invocationContext.ServiceProvider, invocationContext.Context);
+        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, invocationContext.ServiceProvider, invocationContext.Context, false);
         using (currentPrincipalAccessor.Change(claimsPrincipal!))
         {
             return await next(invocationContext);
@@ -27,7 +27,7 @@ public class AbpAuthenticationHubFilter : IHubFilter
     {
         var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
         var claimsPrincipal = context.Context.User;
-        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, context.ServiceProvider, context.Context);
+        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, context.ServiceProvider, context.Context, true);
         using (currentPrincipalAccessor.Change(claimsPrincipal!))
         {
             await next(context);
@@ -38,21 +38,23 @@ public class AbpAuthenticationHubFilter : IHubFilter
     {
         var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
         var claimsPrincipal = context.Context.User;
-        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, context.ServiceProvider, context.Context);
+        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, context.ServiceProvider, context.Context, true);
         using (currentPrincipalAccessor.Change(claimsPrincipal!))
         {
             await next(context, exception);
         }
     }
 
-    protected virtual async Task HandleDynamicClaimsPrincipalAsync(ClaimsPrincipal? claimsPrincipal, IServiceProvider serviceProvider, HubCallerContext hubCallerContext)
+    protected virtual async Task HandleDynamicClaimsPrincipalAsync(ClaimsPrincipal? claimsPrincipal, IServiceProvider serviceProvider, HubCallerContext hubCallerContext, bool skipCheckDynamicClaimsInterval)
     {
         if (claimsPrincipal?.Identity != null &&
             claimsPrincipal.Identity.IsAuthenticated &&
-            serviceProvider.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value.IsDynamicClaimsEnabled)
+            serviceProvider.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value
+                .IsDynamicClaimsEnabled)
         {
             var checkDynamicClaimsInterval = serviceProvider.GetRequiredService<IOptions<AbpSignalROptions>>().Value.CheckDynamicClaimsInterval;
-            if (checkDynamicClaimsInterval.HasValue &&
+            if (!skipCheckDynamicClaimsInterval &&
+                checkDynamicClaimsInterval.HasValue &&
                 hubCallerContext.Items.TryGetValue(nameof(HandleDynamicClaimsPrincipalAsync), out var lastCheckDynamicClaimsTime) &&
                 lastCheckDynamicClaimsTime is DateTime lastCheckDynamicClaimsTimeValue)
             {
@@ -66,10 +68,13 @@ public class AbpAuthenticationHubFilter : IHubFilter
             hubCallerContext.Items[nameof(HandleDynamicClaimsPrincipalAsync)] = DateTime.UtcNow;
 
             claimsPrincipal = claimsPrincipal.Identity is ClaimsIdentity identity
-                ? new ClaimsPrincipal(new ClaimsIdentity(claimsPrincipal.Claims, claimsPrincipal.Identity.AuthenticationType, identity.NameClaimType, identity.RoleClaimType))
-                : new ClaimsPrincipal(new ClaimsIdentity(claimsPrincipal.Claims, claimsPrincipal.Identity.AuthenticationType));
+                ? new ClaimsPrincipal(new ClaimsIdentity(claimsPrincipal.Claims,
+                    claimsPrincipal.Identity.AuthenticationType, identity.NameClaimType, identity.RoleClaimType))
+                : new ClaimsPrincipal(new ClaimsIdentity(claimsPrincipal.Claims,
+                    claimsPrincipal.Identity.AuthenticationType));
 
-            claimsPrincipal = await serviceProvider.GetRequiredService<IAbpClaimsPrincipalFactory>().CreateDynamicAsync(claimsPrincipal);
+            claimsPrincipal = await serviceProvider.GetRequiredService<IAbpClaimsPrincipalFactory>()
+                .CreateDynamicAsync(claimsPrincipal);
             if (claimsPrincipal.Identity?.IsAuthenticated == false)
             {
                 hubCallerContext.Abort();
