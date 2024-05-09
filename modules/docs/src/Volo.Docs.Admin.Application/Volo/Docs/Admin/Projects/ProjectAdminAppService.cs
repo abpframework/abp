@@ -134,15 +134,29 @@ namespace Volo.Docs.Admin.Projects
             {
                 throw new Exception("Cannot find the project with the Id " + projectId);
             }
-
-            var docs = (await _documentRepository.GetListByProjectId(project.Id))
-                .Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName)
-                .ToList();
+            
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
-
-            if(docs.Any())
+            
+            var docsCount = await _documentRepository.GetUniqueDocumentCountByProjectIdAsync(projectId);
+            
+            if (docsCount == 0)
             {
-                await _elasticSearchService.AddOrUpdateManyAsync(docs);    
+                return;
+            }
+            
+            const int maxResultCount = 1000;
+            
+            var skipCount = 0;
+            while(skipCount < docsCount)
+            {
+                var docs = await _documentRepository.GetUniqueDocumentsByProjectIdPagedAsync(projectId, skipCount, maxResultCount);
+                docs = docs.Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName).ToList();
+                if (!docs.Any())
+                {
+                    return;
+                }
+                await _elasticSearchService.AddOrUpdateManyAsync(docs);
+                skipCount += maxResultCount;
             }
         }
 

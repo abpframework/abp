@@ -66,16 +66,22 @@ public class MyProjectNameMenuContributor : IMenuContributor
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
     {
-        var accountStringLocalizer = context.GetLocalizer<AccountResource>();
+        if (!OperatingSystem.IsBrowser())
+        {
+            return Task.CompletedTask;
+        }
 
         var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
+        var accountStringLocalizer = context.GetLocalizer<AccountResource>();
+
         context.Menu.AddItem(new ApplicationMenuItem(
-            "Account.Manage",
-            accountStringLocalizer["MyAccount"],
-            $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
-            icon: "fa fa-cog",
-            order: 1000,
-            target: "_blank").RequireAuthenticated());
+                "Account.Manage",
+                accountStringLocalizer["MyAccount"],
+                $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
+                icon: "fa fa-cog",
+                order: 1000,
+                target: "_blank")
+            .RequireAuthenticated());
 
         return Task.CompletedTask;
     }

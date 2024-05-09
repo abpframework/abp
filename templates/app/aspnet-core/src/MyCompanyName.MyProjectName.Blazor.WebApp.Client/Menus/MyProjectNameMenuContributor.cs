@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -65,15 +66,22 @@ public class MyProjectNameMenuContributor : IMenuContributor
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
     {
+        if (!OperatingSystem.IsBrowser())
+        {
+            return Task.CompletedTask;
+        }
+
+        var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
         var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
         context.Menu.AddItem(new ApplicationMenuItem(
-            "Account.Manage",
-            accountStringLocalizer["MyAccount"],
-            $"Account/Manage",
-            icon: "fa fa-cog",
-            order: 1000,
-            null).RequireAuthenticated());
+                "Account.Manage",
+                accountStringLocalizer["MyAccount"],
+                $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
+                icon: "fa fa-cog",
+                order: 1000,
+                target: "_blank")
+            .RequireAuthenticated());
 
         return Task.CompletedTask;
     }
