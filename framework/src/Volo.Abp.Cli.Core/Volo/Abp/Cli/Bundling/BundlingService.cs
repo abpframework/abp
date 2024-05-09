@@ -107,7 +107,8 @@ public class BundlingService : IBundlingService, ITransientDependency
         if (!bundleConfig.InteractiveAuto)
         {
             var fileName = bundleConfig.IsBlazorWebApp
-                ? Directory.GetFiles(Path.GetDirectoryName(projectFilePath)!.Replace(".Client", ""), "App.razor", SearchOption.AllDirectories).FirstOrDefault()
+                ? Directory.GetFiles(Path.GetDirectoryName(projectFilePath)!.Replace(".Client", ""), "App.razor", SearchOption.AllDirectories).FirstOrDefault() ??
+                  Directory.GetFiles(Path.GetDirectoryName(projectFilePath)!.Replace(".Blazor", ".Host"), "App.razor", SearchOption.AllDirectories).FirstOrDefault()
                 : Path.Combine(PathHelper.GetWwwRootPath(directory), "index.html");
 
             await UpdateDependenciesInBlazorFileAsync(fileName, styleDefinitions, scriptDefinitions);
