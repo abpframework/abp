@@ -48,6 +48,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         bool isPersistent,
         bool lockoutOnFailure)
     {
+        IdentityUser user;
         foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
         {
             var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
@@ -55,7 +56,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
             if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
             {
-                var user = await UserManager.FindByNameAsync(userName);
+                user = await UserManager.FindByNameAsync(userName);
                 if (user == null)
                 {
                     if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
@@ -82,8 +83,15 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 return await SignInOrTwoFactorAsync(user, isPersistent);
             }
         }
+        
+        user = await UserManager.FindByNameAsync(userName);
 
-        return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        if (user == null || !await UserManager.CheckPasswordAsync(user, password))
+        {
+            return SignInResult.Failed;
+        }
+
+        return await base.PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
     }
 
     protected async override Task<SignInResult> PreSignInCheck(IdentityUser user)
