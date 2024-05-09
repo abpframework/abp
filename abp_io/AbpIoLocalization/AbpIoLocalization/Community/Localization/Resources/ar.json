@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> أيد.",
     "Preview": "معاينة",
     "VisitVideoCourseDescription": "إذا كنت ترغب في تعلم أساسيات إطار عمل برنامج ABP، فاطلع على دورات الفيديو الخاصة ببرنامج ABP Essentials.",
-    "VisitPage": "زر الصفحة"
+    "VisitPage": "زر الصفحة",
+    "ConfirmEmailForPost": "لتتمكن من النشر، تحتاج إلى تأكيد بريدك الإلكتروني. انتقل إلى account.abp.io/Account/Manage وتحقق من بريدك الإلكتروني في علامة التبويب \"المعلومات الشخصية\".",
+    "DailyPostCreateLimitation": "لقد وصلت إلى الحد الأقصى اليومي لإنشاء المنشورات. يمكنك إنشاء مشاركة جديدة في {0}."
   }
 }
