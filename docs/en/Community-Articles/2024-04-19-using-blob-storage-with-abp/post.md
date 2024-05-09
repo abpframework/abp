@@ -1,26 +1,29 @@
 # Using Blob Storage with ABP
+ABP Framework provides a comprehensive solution to meet the needs of modern application development, while addressing the important requirement of BLOB Storing. ABP Framework [provides an easy integration for Blob Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) and offers many storage services that you can easily integrate. In addition to efficiently storing large files, these services offer significant advantages such as scalability, security and backup. 
 
- ABP Framework is a comprehensive development framework for modern web applications and microservice architectures. ABP Framework [provides an abstraction to work with BLOBs and provides some pre-built storage providers](https://docs.abp.io/en/abp/latest/Blob-Storing) that you can easily integrate into your application. In this article, I will show you how to store BLOBs in a relational or non-relational database by using the [Database Provider](https://docs.abp.io/en/abp/latest/Blob-Storing-Database) 
 
 ## What is Blob Storage ?
 
-   Blob Storage is a cloud storage service for storing large amounts of data. This service is ideal for storing files, images or other types of data at high scale. The advantages of Blob Storage include scalability, high performance, durability and low cost. In addition, Blob Storage's APIs make it easy to access and manage data. The Blob Storage integration with ABP Framework offers a powerful combination to effectively meet the big data storage needs of your applications. This integration can help you optimize storage costs while improving the performance of your application.
+Blob Storage is a service for storing unstructured data. It is becoming increasingly important to efficiently store and manage large data types (e.g. images, videos, documents). Blob Storage was developed to meet these needs and offers a secure solution with the advantages of scalability, durability and low cost. 
 
    ![Blob Stroge](./images/blob-storage.png)
 
 
 ## How to use Blob Storage ?
 
-   Nowadays, storing large files such as users' profile pictures has become an important requirement in web applications. Storing such data in the database can negatively impact performance and increase the database size. To solve this problem, Blob storage services can be used. ABP Framework provides a powerful solution to handle such scenarios. So, how do we store user profile pictures with Blob Storage using ABP Framework?
+I would like to explain this to you with an example.For example, storing large files such as user profile pictures in the database negatively affects the performance and database.You can store this data using Blob storage. One of the advantages of storing user profile pictures in blob storage is that it improves database performance. Blob storage is a more efficient option than storing large size files in the database and allows database queries to run faster. Furthermore, blob storage provides scalability, so that the number of profile pictures can grow with the number of users, but without storage issues. This approach also maintains database normalization and makes the database design cleaner. 
+
+ How do we store user profile pictures with Blob Storage using ABP Framework? 
 
 - #### Step 1: Configure the Blob Container
 
-The first step is to define a Blob Container for storing profile pictures. The Blob Container represents the storage space that will be used to store the profile pictures.
+Define a Blob Container named `profile-pictures` using the `[BlobContainerName("profile-pictures")]` attribute. 
 
 ````csharp
-  public class ProfilePictureContainer : IBlobContainer
+[BlobContainerName("profile-pictures")]
+public class ProfilePictureContainer
 {
-    public string Name => "profile-pictures";
+    
 }
 ````
 - #### Step 2: Create the ProfileAppService (Saving & Reading BLOBs)
@@ -100,12 +103,13 @@ These steps cover the basic steps to store user profile pictures with Blob Stora
 
 ## Other Blob Storage Providers
 
-ABP Framework provides some other [pre-built storage providers](https://docs.abp.io/en/abp/latest/Blob-Storing#blob-storage-providers) besides the [Database Provider](https://docs.abp.io/en/abp/latest/Blob-Storing-Database) shown in this article:
+ABP Framework provides developers with a variety of options and flexibility by offering integration infrastructure for multiple cloud providers. This makes it easy for users to choose between different cloud platforms and select the most suitable solution for their business needs. 
 
-- Azure Blob Storage: A cloud storage service offered on the Microsoft Azure platform. It is used to store and access large amounts of data. It supports various data types such as files, images, videos and provides high scalability. To learn more about [Azure Blob Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Azure), visit the Azure Blob Storage page. 
 
-- Aliyun Object Storage Service (OSS): OSS, Alibaba Cloud's cloud storage service, is an ideal solution for use cases such as big data storage, backup, and media storage. It offers flexible storage options and provides a high level of security. For more information, please visit [Aliyun Object Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Aliyun) Service (OSS) page.
+- Azure Blob Storage: A cloud storage service offered on the Microsoft Azure platform. It is used to store and access large amounts of data. It supports various data types such as files, images, videos and provides high scalability. ABP Framework provides integration with  [Azure Blob Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Azure). 
 
-- MinIO: MinIO is known as an open source object storage system and offers an Amazon S3 compatible cloud storage solution. It is a high-performance, scalable and fast storage service. It can be used especially in private cloud or hybrid cloud environments. For more information, you can visit [MinIO's Official](https://docs.abp.io/en/abp/latest/Blob-Storing-Minio) Website. 
+-  Aliyun Object Storage Service (OSS): OSS, Alibaba Cloud's cloud storage service, is an ideal solution for use cases such as big data storage, backup and media storage. It offers flexible storage options and provides a high level of security. ABP Framework interfaces with [Aliyun Blob Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Aliyun), making it easier for developers to manage data storage and access.
 
-- Amazon Simple Storage Service (S3): Amazon S3 is a cloud storage service offered on the Amazon Web Services (AWS) platform. It can be used to store virtually nlimited amounts of data. It provides high durability, scalability and low cost. For more information, you can visit the [Amazon S3 Documentation page](https://docs.abp.io/en/abp/latest/Blob-Storing-Aws). 
+- MinIO: MinIO is known as an open source object storage system and offers an Amazon S3 compatible cloud storage solution. It is a high-performance, scalable and fast storage service. ABP Framework integrates with [MinIO Blob Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Minio) to provide developers with cloud-based file and object storage.
+
+- Amazon Simple Storage Service (S3): Amazon S3 is a cloud storage service offered on the Amazon Web Services (AWS) platform. It can be used to store virtually unlimited amounts of data. It provides high durability, scalability and low cost.ABP Framework integrates with [Amazon S3 Blob Storage](https://docs.abp.io/en/abp/latest/Blob-Storing-Aws) to provide developers with cloud-based file and object storage.
