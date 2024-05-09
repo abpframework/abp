@@ -61,7 +61,7 @@ public class AccountController : AbpControllerBase
         await ReplaceEmailToUsernameOfInputIfNeeds(login);
 
         await IdentityOptions.SetAsync();
-        
+
         var signInResult = await SignInManager.PasswordSignInAsync(
             login.UserNameOrEmailAddress,
             login.Password,
