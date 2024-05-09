@@ -1,6 +1,5 @@
 # Using Blob Storage with ABP
-ABP Framework provides a comprehensive solution to meet the needs of modern application development, while addressing the important requirement of BLOB Storing. ABP Framework [provides an easy integration for Blob Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) and offers many storage services that you can easily integrate. In addition to efficiently storing large files, these services offer significant advantages such as scalability, security and backup. 
-
+ABP Framework provides a comprehensive solution to meet the needs of modern application development, while addressing the important requirement of BLOB Storing. ABP Framework [provides an easy integration for Blob Storing](https://docs.abp.io/en/abp/latest/Blob-Storing) and offers many storage services that you can easily integrate. In addition to efficiently storing large files, these services offer significant advantages such as scalability, security and backup.
 
 ## What is Blob Storage ?
 
