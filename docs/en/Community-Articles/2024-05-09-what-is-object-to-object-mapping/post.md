@@ -114,7 +114,8 @@ CreateMap<Customer, CustomerGetDto>().ForMember(c=>c.FullName,opt=> opt.MapFrom(
     .ForMember(c=>c.Age, opt=> opt.MapFrom(src=> DateTime.UtcNow.Year -src.BirthDay.Year));
 
 ````
-When you make the request, your output will look like this.
+This script concatenates and matches **FirstName** and **LastName** in the **FullName** field and subtracts **BirthDate** from today's year and assigns it to the customer's **Age**
+When you make a request, your output will look like the one below.
 
 ![Swagger](./images/swagger2.png)
 
