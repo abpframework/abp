@@ -702,7 +702,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 context,
                 $"_Host.cshtml",
                 $"{defaultThemeName}Theme.Components",
-                Basic
+                "BasicTheme.Themes.Basic" 
             );
 
             ReplaceAllKeywords(
