@@ -29,7 +29,7 @@ import { LocaleProvider } from './locale.provider';
 
 export enum CoreFeatureKind {
   Options,
-  compareFuncFactory,
+  CompareFunctionFactory,
   TitleStrategy,
 }
 
@@ -88,8 +88,8 @@ export function withTitleStrategy(strategy: any): CoreFeature<CoreFeatureKind.Ti
 
 export function withCompareFuncFactory(
   factory: any,
-): CoreFeature<CoreFeatureKind.compareFuncFactory> {
-  return makeCoreFeature(CoreFeatureKind.compareFuncFactory, [
+): CoreFeature<CoreFeatureKind.CompareFunctionFactory> {
+  return makeCoreFeature(CoreFeatureKind.CompareFunctionFactory, [
     {
       provide: SORT_COMPARE_FUNC,
       useFactory: factory,
