@@ -18,6 +18,7 @@ As ABP Studio CLI extends [ABP CLI](../cli), all commands provided by [ABP CLI](
 * init-solution: Creates ABP Studio configuration files for a given solution.
 * install-local-module: Installs a local module to given module.
 * install-module:  Installs a module to given module via NuGet packages.
+* upgrade: Upgrades solution with Pro modules
 * kube-connect: Connects to kubernetes environment.
 * kube-intercept: Intercepts a service running in Kubernetes environment.
 
@@ -298,6 +299,26 @@ abpc install-module Volo.Blogging -t "modules/crm/Acme.Crm.abpmdl"
 
 * `--target-module` or `-t`: Path (or folder path) of the target module that the other module will be installed to. If not set, the closest module to the current directory will be used.
 * `--version` or `-v`: Nuget version of the module to be installed.
+
+### upgrade
+
+Upgrades the solution with Pro modules. Especially designed for users who already started their development before having a license. Therefore this command requires license. For more info, see the related document.
+
+````bash
+abpc upgrade [options]
+````
+
+Example:
+
+````bash
+abpc upgrade -t app
+
+abpc upgrade -t app-nolayers
+````
+
+#### options
+
+* `--template` or `-t`: The template type of the solution. Only `app` and `app-nolayers` are valid currently.
 
 ### kube-connect
 
