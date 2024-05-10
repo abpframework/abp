@@ -1,26 +1,32 @@
 # Sentiment Analysis Within ABP-Based Application
 
-In this article, first I will briefly explain what sentiment analysis is and then show you how you can apply sentiment analysis in an ABP-Based application (or any kind of .NET application). We will use ML.NET Framework, which is an open-source machine learning framework that created by the dotnet team and also we will create a layered ABP Solution by using the application template and finally we will use CMS Kit's Comment Feature and extend its behaviour by adding spam detection while creating or updating a comment, at that point we will make sentiment analysis.
+In this article, first I will briefly explain what sentiment analysis is and then show you how you can apply sentiment analysis in an ABP-Based application (or any kind of .NET application). 
+
+We will use ML.NET Framework, which is an open-source machine learning framework created by the dotnet team and also we will create a layered ABP Solution by using the application template and finally we will use CMS Kit's Comment Feature and extend its behavior by adding spam detection while creating or updating a comment, at that point we will make sentiment analysis.
 
 ## Sentiment Analysis
 
-[Sentiment Analysis (or opinion mining)](https://en.wikipedia.org/wiki/Sentiment_analysis) refers to determining the emotion from the given input. The primary goal of sentiment analysis is identify, extract and categorize (positive, negative or neutral) the sentiments expressed in textual data.
+[Sentiment Analysis (or opinion mining)](https://en.wikipedia.org/wiki/Sentiment_analysis) refers to determining the emotion from the given input. The primary goal of sentiment analysis is to identify, extract, and categorize (positive, negative, or neutral) the sentiments expressed in textual data.
 
-Let's check the following figure and examine the comments:
+To understand it better, let's check the following figure and examine the comments:
 
 ![](sentiment-analysis.png)
 
-If you look at these comments, you will notice that comments have ratings and it's easy to understand the emotion or thoughts of the users who commented about the related product. But even if there was not any rating specified for the given comments we still could get the emotion of the users. Because, as you can see, the comments specified some obvious words that express emotions, for example, in the first comment, the user says **he/she liked the product**, **it's easy to use** and **its battery is good**, and therefore this is obviously a positive comment. On the other hand, if we look at the second comment, we will notice some negative statements such as **useless phone**, **cannot maintain any data connection** and the user suggests **do not buy this phone**. Actually, this is what sentiment analysis is all about, abstracting the emotion from a given input, it's comment in that case but it can be any kind of input or input-group.
+* If you look at these comments, you will notice that comments have ratings and it's easy to understand the emotion or thoughts of the users who commented about the related product. 
+* But even if there was not any rating specified for the given comments we still can get the emotion of the users. Because, as you can see, the comments specified some obvious words that express emotions, for example, in the first comment, the user says **he/she liked the product**, **it's easy to use** and **its battery is good**, and therefore this is obviously a positive comment. 
+* On the other hand, if we look at the second comment, we will notice some negative statements such as **useless phone**, **cannot maintain any data connection** and the user suggests **do not buy this phone**. Actually, this is what sentiment analysis is all about, abstracting the emotion from a given input, it's comment in that case but it can be any kind of input or input-group.
 
 ## Demo: Spam Detection (Applying Sentiment Analysis)
 
 > You can get the source code of the demo from [https://github.com/EngincanV/SentimentAnalysisDemo](https://github.com/EngincanV/SentimentAnalysisDemo).
 
-In this demo application, we will create an [ABP-based application](https://docs.abp.io/en/abp/8.1/Startup-Templates/Application) and integrate the [ABP's CMS Kit Module's Comment Feature](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments), which provides a comment system to add a comment to any kind of resource, such as blog posts or products. By default, CMS Kit's Comment Feature does not provide spam detection and in this sample application, we will add [spam detection](https://github.com/EngincanV/SentimentAnalysisDemo/blob/master/src/SentimentAnalysisDemo.Application/ML/SpamDetector.cs) while creating or updating a comment. Thus, whenever a comment is being added or updated, the spam detection service will validate the comment and reject it if it contains spam content otherwise it will make the other validations and save the comment:
+In this demo application, we will create an [ABP-based application](https://docs.abp.io/en/abp/8.1/Startup-Templates/Application) and integrate the [ABP's CMS Kit Module's Comment Feature](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Comments), which provides a comment system to add a comment to any kind of resource, such as blog posts or products. 
+
+By default, CMS Kit's Comment Feature does not provide spam detection and therefore in this sample application, we will add [spam detection](https://github.com/EngincanV/SentimentAnalysisDemo/blob/master/src/SentimentAnalysisDemo.Application/ML/SpamDetector.cs) while creating or updating a comment. Thus, whenever a comment is being added or updated, the spam detection service will validate the comment and reject it if it contains spam content otherwise it will make the other validations and save the comment:
 
 ![](sentiment-analysis-steps.png)
 
-To get started, we will first create an application, and add the CMS Kit Module to the solution and then we will enable the Comment Feature of the CMS Kit Module, and finally we will add the Comment Component to the homepage and add spam detection by extending the behaviour. Let's start with creating the application!
+To get started, we will first create an application, and add the CMS Kit Module to the solution and then we will enable the Comment Feature of the CMS Kit Module, and finally, we will add the Comment Component to the homepage and add spam detection by extending the behavior. Let's start with creating the application!
 
 ### Creating an ABP-Based Application
 
@@ -32,7 +38,7 @@ abp new SentimentAnalysisDemo -t app -d mongodb --version 8.1.1
 
 ### Installing the CMS Kit Module
 
-After creating the project, now we can add the CMS Kit module into our project. [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) provides the `add-module` command to install a specific module to a solution. 
+After creating the project, we can add the CMS Kit module to our project. [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) provides the `add-module` command to install a specific module to a solution. 
 
 You can use the following command to install the CMS Kit module into your application (run this command in the solution directory):
 
@@ -40,7 +46,7 @@ You can use the following command to install the CMS Kit module into your applic
 abp add-module Volo.CmsKit --skip-db-migrations
 ```
 
-After this command executed, the all related CMS Kit packages will be added to the correct layers and then you can enable any CMS Kit feature you want.
+After this command is executed, all related CMS Kit packages will be added to the correct layers and then you can enable any CMS Kit feature you want.
 
 ### Enabling the Comment Feature
 
@@ -77,7 +83,6 @@ After enabling the feature, now we can make the final configurations and directl
 
 Open the `SentimentAnalysisDemoDomainModule` class and add the following code-block into the `ConfigureServices` method:
 
-
 ```csharp
         Configure<CmsKitCommentOptions>(options =>
         {
@@ -108,13 +113,13 @@ Here, we simply defining what should be the entity-type name of our comment and 
 
 ```
 
-After adding the related component, now you can run the web project and see the comment component, if you want.
+After adding the related component, now you can run the web project and see the comment component if you want.
 
 ### Applying Sentiment Analysis (Creating the Spam Detection Service)
 
 By default, CMS Kit's Comment Feature does not provide a spam detection system. In this demo application, we will override the `CommentPublicAppService`'s `CreateAsync` and `UpdateAsync` methods and then will add the spam detection control whenever a new comment has been submitted or an existing one is being updated.
 
-To override the `CommentPublicAppService` and extend its use-case implementations, create a `MyCommentAppService` class and update it's content as below:
+To override the `CommentPublicAppService` and extend its use-case implementations, create a `MyCommentAppService` class and update its content as below:
 
 ```csharp
 using System;
@@ -166,7 +171,7 @@ public class MyCommentAppService : CommentPublicAppService
 }
 ```
 
-Here, we simply just injected the `ISpamDetector` service, which we will create in a minute and use it's `CheckAsync` method to make a spam check before the comment being created or updated.
+Here, we simply just inject the `ISpamDetector` service, which we will create in a minute, and use its `CheckAsync` method to make a spam check before the comment is created or updated.
 
 Now, we can create the `ISpamDetector` service in the `*.Application.Contracts` project as follows:
 
@@ -204,13 +209,13 @@ public class SpamDetector : ISpamDetector, ITransientDependency
 }
 ```
 
-The `CheckAsync` method is where we need to make the sentiment analysis and detect if the comment contains a spam content or not. If it's spam, then we should throw an [UserFriendlyException](https://docs.abp.io/en/abp/latest/Exception-Handling#user-friendly-exception) and notify the user that the comment should be updated and should not be contain any spam content.
+The `CheckAsync` method is where we need to make the sentiment analysis and detect if the comment contains spam content or not. If it's spam, then we should throw a [UserFriendlyException](https://docs.abp.io/en/abp/latest/Exception-Handling#user-friendly-exception) and notify the user that the comment should be updated and should not contain any spam content.
 
 #### Spam Detection
 
-Before, making the spam check, we should have a dataset to train a machine-learning model and add the `Microsoft.ML` package into our project. For that purpose, I search in the [Kaggle](https://www.kaggle.com/) for spam datasets, found the **Spam-Mail-Detection-Dataset** from Kaggle and downloaded the csv file to use in my application. Therefore, [you should also download the dataset from the link and put it under the **/ML/Data/spam_data.csv** directory of the `*.Web` project](https://github.com/EngincanV/SentimentAnalysisDemo/blob/master/src/SentimentAnalysisDemo.Web/ML/Data/spam_data.csv).
+Before, making the spam check, we should have a dataset to train a machine-learning model and add `Microsoft.ML` package into our project. For that purpose, I searched in [Kaggle](https://www.kaggle.com/) for spam datasets, found the **Spam-Mail-Detection-Dataset** from Kaggle, and downloaded the csv file to use in my application. Therefore, [you should also download the dataset from the link and put it under the **/ML/Data/spam_data.csv** directory of the `*.Web` project](https://github.com/EngincanV/SentimentAnalysisDemo/blob/master/src/SentimentAnalysisDemo.Web/ML/Data/spam_data.csv).
 
-Here is how our dataset is look like (0 -> not spam / 1 -> spam):
+Here is what our dataset looks like (**0 -> not spam / 1 -> spam**):
 
 | Category | Message |
 |----------|---------|
@@ -275,13 +280,13 @@ Finally, we can implement the `CheckAsync` method and use sentiment analysis to 
 
 ```
 
-Here, we done the following things:
+Here, we have done the following things:
 
-1. **First, we loaded the data**: For that reason, we created a `MLContext` object, which is a main class for all ML.NET operations. Then, we used it's `LoadFromTextFile` method and specify the dataset path in our application. Also, we mapped the dataset columns to the `SentimentAnalyzeInput` class, which we will create later on.
-2. **For the second step, we splitted the data as training and testing data**: To be able to train a machine learning model and then evaluate it's accuracy, we should not use the all the data for training purposes, instead we should split the data as training and testing data and after training the model, compare the training data accuracy with the testing data.
-3. **For the third step, we should make data transformations and convert the text-based data into numeric vectors and then choose a training algorithm**: After splitting the data as training and testing purposes, now we can apply some data transformations for the *Message* column in our dataset. Because, as you would see, messages are text-based inputs and machine-learning algorithms works best with the numeric vectors. So, we are making data transformations and representing the data as numeric values. Then, we can apply `BinaryClassification` with the **SdcaLogicticRegression** algorithm to our training data.
-4. **Train the model**: Since, we make the data-transormations and choose the correct algorithm for our model, now we can train the model.
-5. **Predict the sample data**: Finally, we can provide a comment to this method and make spam check and either approve our reject the comment according to the predicted result. (To make predictions, we need to create a **PredictionEngine** and get the final results in the output class that we specified, `SentimentAnalyzeResult` in our example)
+1. **First, we loaded the data**: For that reason, we created a `MLContext` object, which is a main class for all ML.NET operations. Then, we used its `LoadFromTextFile` method and specified the dataset path in our application. Also, we mapped the dataset columns to the `SentimentAnalyzeInput` class, which we will create later on.
+2. **For the second step, we split the data as training and testing data**: To be able to train a machine learning model and then evaluate its accuracy, we should not use all the data for training purposes, instead, we should split the data as training and testing data and after training the model, compare the training data accuracy with the testing data.
+3. **For the third step, we should make data transformation, convert the text-based data into numeric vectors and then choose a training algorithm**: After splitting the data for training and testing purposes, now we can apply some data transformations for the *Message* column in our dataset. Because, as you would see, messages are text-based inputs and machine-learning algorithms work best with the numeric vectors. So, we are making data transformations and representing the data as numeric values. Then, we can apply `BinaryClassification` with the **SdcaLogicticRegression** algorithm to our training data.
+4. **Train the model**:  Since we make the data transformations and chose the correct algorithm for our model, now we can train the model.
+5. **Predict the sample data**: Finally, we can pass a comment to this method and make spam check and either approve our reject the comment according to the predicted result. (To make predictions, we need to create a **PredictionEngine** and get the final results in the output class that we specified, `SentimentAnalyzeResult` in our example)
 
 Let's create the `SentimentAnalyzeInput` and `SentimentAnalyzeResult` classes as follows.
 
@@ -326,6 +331,6 @@ Then, finally we can run the application to see the final results:
 
 ## Conclusion
 
-In this article, I briefly explain what sentiment analysis is, created a sample ABP-based application, integrated the CMS Kit Module and finally, we applied sentiment analysis to make spam checks whenever a new comment has been submitted or updated. You can get the source code of the demo from [https://github.com/EngincanV/SentimentAnalysisDemo](https://github.com/EngincanV/SentimentAnalysisDemo)
+In this article, I briefly explain what sentiment analysis is, created a sample ABP-based application, integrated the CMS Kit Module and finally, applied sentiment analysis to make spam checks whenever a new comment has been submitted or updated. You can get the source code of the demo from [https://github.com/EngincanV/SentimentAnalysisDemo](https://github.com/EngincanV/SentimentAnalysisDemo)
 
 Thanks for reading :)
