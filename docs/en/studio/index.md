@@ -17,4 +17,3 @@ If you haven't installed yet, please see [the installation guide](installation.m
   - [Solution Explorer](./solution-explorer.md)
   - [Running Applications](./running-applications.md)
   - [Working with Kubernetes](./kubernetes.md)
-  - [CLI](./cli.md)
