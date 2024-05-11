@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> tuettu.",
     "Preview": "Esikatselu",
     "VisitPage": "Vieraile sivulla",
-    "VisitVideoCourseDescription": "Jos haluat oppia ABP Frameworkin perusteet, katso ABP Essentials Video -kurssit."
+    "VisitVideoCourseDescription": "Jos haluat oppia ABP Frameworkin perusteet, katso ABP Essentials Video -kurssit.",
+    "ConfirmEmailForPost": "Jotta voit lähettää viestejä, sinun on vahvistettava sähköpostiosoitteesi. Siirry osoitteeseen account.abp.io/Account/Manage ja vahvista sähköpostiosoitteesi Henkilökohtaiset tiedot -välilehdessä.",
+    "DailyPostCreateLimitation": "Olet saavuttanut päivittäisen viestien luomisrajan. Voit luoda uuden viestin kohteessa {0}."
   }
 }

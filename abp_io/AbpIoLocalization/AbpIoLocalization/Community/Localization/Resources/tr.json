@@ -244,6 +244,8 @@
     "BuyTicket": "Bilet al",
     "SeeEvent": "Etkinliği Gör",
     "Cancel": "Vazgeç",
-    "Continue": "Devam"
+    "Continue": "Devam",
+    "ConfirmEmailForPost": "Gönderi paylaşabilmek için e-posta adresinizi onaylamanız gerekir. account.abp.io/Account/Manage adresine gidin ve Kişisel Bilgiler sekmesinden e-posta adresinizi doğrulayın.",
+    "DailyPostCreateLimitation": "Günlük gönderi paylaşma sınırına ulaştınız. {0}'da yeni bir gönderi paylaşabilirsiniz."
   }
 }
