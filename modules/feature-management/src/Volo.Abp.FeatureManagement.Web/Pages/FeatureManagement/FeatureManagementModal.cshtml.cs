@@ -77,6 +77,11 @@ public class FeatureManagementModal : AbpPageModel
         return NoContent();
     }
 
+    public virtual bool IsDisabled(string providerName)
+    {
+        return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+    }
+
     public class FeatureGroupViewModel
     {
         public List<FeatureViewModel> Features { get; set; }
