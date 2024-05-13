@@ -43,6 +43,7 @@
                                     @for (var j = 0; j < featureGroup.Features.Count; j++)
                                     {
                                         var feature = featureGroup.Features[j];
+                                        var disabled = Model.IsDisabled(feature.Provider.Name);
                                         <div class="mt-2">
 
                                             <input type="text" abp-id-name="@Model.FeatureGroups[i].Features[j].Type" value="@feature.ValueType?.Name" hidden/>
@@ -53,6 +54,7 @@
                                                            type="checkbox"
                                                            abp-id-name="@Model.FeatureGroups[i].Features[j].BoolValue"
                                                            label="@feature.DisplayName"
+                                                           disabled="@disabled"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
                                                            group-style="margin-inline-start: @(feature.Depth * 20)px"/>
@@ -74,6 +76,7 @@
                                                 <abp-input asp-for="@feature.Value"
                                                            label="@feature.DisplayName"
                                                            abp-id-name="@Model.FeatureGroups[i].Features[j].Value"
+                                                           disabled="@disabled"
                                                            type="@type"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
