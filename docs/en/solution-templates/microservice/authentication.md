@@ -1,6 +1,6 @@
 # Microservice Solution: Authentication
 
-The ABP Studio [microservice solution template](index.md) is fully configured for authentication. All the services and applications are configured to use the [OpenIddict](https://documentation.openiddict.com) library for authentication and authorization. They are configured in a common way for authentication. This document explains that common authentication structure.
+The [microservice solution template](index.md) is fully configured for authentication. All the services and applications are configured to use the [OpenIddict](https://documentation.openiddict.com) library for authentication and authorization. They are configured in a common way for authentication. This document explains that common authentication structure.
 
 ## OpenIddict
 
@@ -22,10 +22,10 @@ The OpenIddict UI module provides a user interface to manage the OpenIddict enti
 
 The solution has an authentication server(auth-server) application to provide the token generation, validation and login page. Additionally, it adds the [account](../../modules/account-pro.md) module to the auth-server application to provide the such as register, forgot password and etc features.
 
-Additionally, the [account](../../modules/account-pro.md) module provides the [social logins](../../modules/account-pro.md#social--external-logins) (Google, Facebook, etc.) feature. You can enable/disable and configure the social logins from the application UI.
+Also, the [account](../../modules/account-pro.md) module provides the [social logins](../../modules/account-pro.md#social--external-logins) (Google, Facebook, etc.) feature. You can enable/disable and configure the social logins from the application UI.
 
 ![account-external-provider](images/account-external-provider.png)
 
 ## Authentication Flow
 
-TODO:
+The applications use several flows to authenticate users based on the application type. The MVC UI web application uses the [hybrid flow](https://openid.net/specs/openid-connect-core-1_0.html#HybridFlowAuth) (OpenID Connect Authentication) to authenticate users, while the SPA and Swagger applications use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) to authenticate users. After the user logs into the system and receives the token from the authentication server, the applications (microservices) use [JWT Bearer Authentication](https://jwt.io/introduction/) to authorize users.
