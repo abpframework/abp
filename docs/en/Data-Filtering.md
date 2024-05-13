@@ -217,9 +217,9 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>();
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
