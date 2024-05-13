@@ -31,7 +31,7 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
         var defaultThemeStyleName = "LeptonXStyleNames.System";
         var newThemeStyleName = $"LeptonXStyleNames.{themeStyleName}";
 
-        var filePaths = new List<string> 
+        var filePaths = new List<string>
         {
             "/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
             "/MyCompanyName.MyProjectName.Web.Host/MyProjectNameWebModule.cs",
@@ -40,6 +40,10 @@ public class ChangeThemeStyleStep : ProjectBuildPipelineStep
             "/MyCompanyName.MyProjectName.Blazor/MyProjectNameBlazorModule.cs",
             "/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameBlazorModule.cs",
             "/MyCompanyName.MyProjectName.Blazor.Server/MyProjectNameModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.WebApp/MyProjectNameBlazorModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.WebApp.Client/MyProjectNameBlazorClientModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.WebApp.Tiered/MyProjectNameBlazorModule.cs",
+            "/MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client/MyProjectNameBlazorClientModule.cs",
             "/MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyProjectNameModule.cs",
             "/MyCompanyName.MyProjectName.Host/MyProjectNameModule.cs",
             "/MyCompanyName.MyProjectName.Host.Mongo/MyProjectNameModule.cs",
