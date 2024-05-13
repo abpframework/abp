@@ -74,4 +74,14 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
         var comment = await CommentRepository.GetAsync(id);
         await CommentRepository.DeleteWithRepliesAsync(comment);
     }
+
+
+
+    public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto commentApprovalDto)
+    {
+		var comment = await CommentRepository.GetAsync(id);
+		comment.IsApproved = commentApprovalDto.IsApproved;
+
+		await CommentRepository.UpdateAsync(comment);
+	}
 }

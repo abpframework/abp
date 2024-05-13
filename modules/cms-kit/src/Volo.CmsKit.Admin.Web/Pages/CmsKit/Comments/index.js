@@ -86,6 +86,26 @@ $(function (){
                                         abp.notify.success(l('DeletedSuccessfully'));
                                     });
                             }
+                        },
+                        {
+                            text: function (data) {
+                                return data.isApproved ? l('Revoke Approval') : l('Approve');
+                            },
+                            action: function (data) {
+                                var newApprovalStatus = !data.record?.isApproved;
+
+                                commentsService
+                                    .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
+                                    .then(function () {
+                                        _dataTable.ajax.reloadEx();
+                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                                        abp.notify.success(message);
+                                    })
+                                    .catch(function (error) {
+                                        console.log("error", error)
+                                        abp.notify.error(error.message);
+                                    });
+                            }
                         }
                     ]
                 }
@@ -153,6 +173,28 @@ $(function (){
                 data: "creationTime",
                 orderable: true,
                 dataFormat: "datetime"
+            },
+            {
+                width: "5%",
+                title: l("Status"),
+                orderable: false,
+
+                data: "isApproved",
+                render: function (data, type, row) {
+                    var icons = ''
+
+                    if (data === null) {
+                        icons = '<i class="fa-solid fa-hourglass-start"></i>';
+                    } else if (typeof data === "boolean") {
+                        if (data) {
+                            icons = '<i class="fa-solid fa-check" style="color: #63E6BE;"></i>';
+                        } else {
+                            icons = '<i class="fa-solid fa-x" style="color: #e0102f;"></i>';
+                        }
+                    }
+
+                    return icons;
+                }
             }
         ]
     }));

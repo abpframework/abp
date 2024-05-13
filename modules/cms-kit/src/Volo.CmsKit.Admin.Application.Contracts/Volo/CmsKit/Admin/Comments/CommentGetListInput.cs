@@ -17,4 +17,6 @@ public class CommentGetListInput : PagedAndSortedResultRequestDto
     public DateTime? CreationStartDate { get; set; }
 
     public DateTime? CreationEndDate { get; set; }
+	public bool? IsApproved { get; set; }
+
 }

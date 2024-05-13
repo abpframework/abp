@@ -26,8 +26,9 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
     public virtual string Url { get; set; } 
 
     public virtual string IdempotencyToken { get; set; }
+	public virtual bool? IsApproved { get; set; }
 
-    protected Comment()
+	protected Comment()
     {
         
     }

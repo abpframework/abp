@@ -12,4 +12,6 @@ public interface ICommentAdminAppService : IApplicationService
     Task<CommentWithAuthorDto> GetAsync(Guid id);
 
     Task DeleteAsync(Guid id);
+    Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto commentApprovalDto);
+
 }
