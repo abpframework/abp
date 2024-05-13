@@ -454,10 +454,19 @@ public abstract class ProjectCreationCommandBase
         var searchPattern = isWebassembly ? "*.Blazor.csproj" : "*.MauiBlazor.csproj";
         var path = projectArgs.OutputFolder;
 
+        if (isWebassembly && Directory.GetFiles(path, "*.Blazor.Client.csproj", SearchOption.AllDirectories).Any())
+        {
+            searchPattern = "*.Blazor.Client.csproj";
+        }
+
         if (isModuleTemplate)
         {
             path = Path.Combine(path, "host");
             searchPattern = "*.Blazor.Host.csproj";
+            if (Directory.GetFiles(path, "*.Blazor.Host.Client.csproj", SearchOption.AllDirectories).Any())
+            {
+                searchPattern = "*.Blazor.Host.Client.csproj";
+            }
         }
         else if (MicroserviceTemplateBase.IsMicroserviceTemplate(projectArgs.TemplateName))
         {
@@ -668,6 +677,8 @@ public abstract class ProjectCreationCommandBase
                 return UiFramework.Blazor;
             case "blazor-server":
                 return UiFramework.BlazorServer;
+            case "blazor-webapp":
+                return UiFramework.BlazorWebApp;
             case "maui-blazor" when template == AppProTemplate.TemplateName:
                 return UiFramework.MauiBlazor;
             default:

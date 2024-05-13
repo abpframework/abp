@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "رقم الهاتف",
     "DisplayName:TwoFactorEnabled": "التحقق من عاملين",
     "DisplayName:IsActive": "نشيط",
-    "DisplayName:LockoutEnabled": "تأمين الحساب بعد محاولات تسجيل الدخول الفاشلة",
+    "DisplayName:LockoutEnabled": "تأمين الحساب",
     "NewRole": "دور جديد",
     "RoleName": "اسم الدور",
     "CreationTime": "وقت الإنشاء",

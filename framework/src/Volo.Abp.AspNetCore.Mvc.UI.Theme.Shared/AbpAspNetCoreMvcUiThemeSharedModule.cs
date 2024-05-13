@@ -30,7 +30,7 @@ public class AbpAspNetCoreMvcUiThemeSharedModule : AbpModule
         {
             options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared");
         });
-
+        
         Configure<AbpBundlingOptions>(options =>
         {
             options

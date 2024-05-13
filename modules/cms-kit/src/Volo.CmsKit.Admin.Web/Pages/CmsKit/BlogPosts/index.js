@@ -95,7 +95,7 @@ $(function () {
                                     .draft(data.record.id)
                                     .then(function () {
                                         dataTable.ajax.reloadEx();
-                                        abp.notify.success(l('SuccessfullySaved'));
+                                        abp.notify.success(l('SavedSuccessfully'));
                                         checkHasBlogPostWaitingForReview();
                                     });
                             }
@@ -111,7 +111,7 @@ $(function () {
                                     .delete(data.record.id)
                                     .then(function () {
                                         dataTable.ajax.reloadEx();
-                                        abp.notify.success(l('SuccessfullyDeleted'));
+                                        abp.notify.success(l('DeletedSuccessfully'));
                                     });
                             }
                         }
