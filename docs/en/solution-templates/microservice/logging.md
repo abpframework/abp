@@ -1,6 +1,6 @@
 # Microservice Solution: Logging
 
-The ABP Studio [microservice solution template](index.md) is fully configured for [logging](https://docs.abp.io/en/abp/latest/Logging). All the services, applications and gateways are configured to use the [Serilog](https://serilog.net/) library for structured logging. They are configured in a common way for logging. This document explains that common logging structure.
+The ABP Studio [microservice solution template](index.md) is fully configured for [logging](../../framework/fundamentals/logging.md). All the services, applications and gateways are configured to use the [Serilog](https://serilog.net/) library for structured logging. They are configured in a common way for logging. This document explains that common logging structure.
 
 ## The Serilog Sinks
 
@@ -21,6 +21,6 @@ The `Program.cs` file is the main point that configures the logging system. It i
 
 You can easily understand the Serilog configuration when you check your `Program.cs`. However, there are a few things worth mentioning here:
 
-* We are adding an `Application` property to every log record, so you can filter logs by the application name. It is done in the `Program.cs` file with the `.Enrich.WithProperty("Application", applicationName)` line. The `applicationName` value is taken from [the `IApplicationInfoAccessor` service](https://docs.abp.io/en/abp/8.0/Application-Startup#the-applicationname-option) of ABP. By default, it is the name of the entrance assembly (that contains the `Program.cs` file) of the application.
-* We are using ABP Serilog Enrichers in the module class of the application. It is done by the `app.UseAbpSerilogEnrichers();` line in the `OnApplicationInitialization` method of your module class. That ASP.NET Core middleware adds current [tenant](https://docs.abp.io/en/abp/latest/Multi-Tenancy), [user](https://docs.abp.io/en/abp/latest/CurrentUser), client and correlation id information to the log records.
+* We are adding an `Application` property to every log record, so you can filter logs by the application name. It is done in the `Program.cs` file with the `.Enrich.WithProperty("Application", applicationName)` line. The `applicationName` value is taken from [the `IApplicationInfoAccessor` service](../../framework/fundamentals/application-startup.md#the-applicationname-option) of ABP. By default, it is the name of the entrance assembly (that contains the `Program.cs` file) of the application.
+* We are using ABP Serilog Enrichers in the module class of the application. It is done by the `app.UseAbpSerilogEnrichers();` line in the `OnApplicationInitialization` method of your module class. That ASP.NET Core middleware adds current [tenant](../../framework/architecture/multi-tenancy/index.md), [user](../../framework/infrastructure/current-user.md), client and correlation id information to the log records.
 
