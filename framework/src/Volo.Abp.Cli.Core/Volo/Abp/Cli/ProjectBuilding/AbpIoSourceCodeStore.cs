@@ -158,19 +158,12 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             throw new Exception("There is no version found with given version: " + version);
         }
 
-        var nugetVersion = await GetTemplateNugetVersionAsync(name, type, version) ?? version;
+        var nugetVersion = version;
 
-        if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
-        {
-            Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
-            return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
-                version, latestVersion, nugetVersion);
-        }
-
-        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
+        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + ".zip");
 
 #if DEBUG
-        if (File.Exists(localCacheFile))
+        if (File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
         {
             return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
         }
@@ -180,6 +173,16 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         {
             Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
             return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+        }
+
+        if (!skipCache && !templateSource.IsNullOrWhiteSpace() && type == SourceCodeTypes.Template)
+        {
+            var templateFilePath = templateSource.EndsWith(".zip")
+                ? templateSource
+                : Path.Combine(templateSource, name.Replace("/", ".").EnsureEndsWith('-') + version + ".zip");
+            
+            Logger.LogInformation("Using cached template: " + name + ", version: " + version + " from template source: " + templateFilePath);            
+            return new TemplateFile(File.ReadAllBytes(templateFilePath), version, latestVersion, nugetVersion);
         }
 
         Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);

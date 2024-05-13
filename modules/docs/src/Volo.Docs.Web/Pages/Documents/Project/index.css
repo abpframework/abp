@@ -1,8 +1,23 @@
 .code-toolbar .line-highlight {
   margin-top: 1.5em !important;
   background: rgba(233, 237, 241, 0.34) !important;
-  padding: 1px !important; }
-
-.input-group .input-group-text{
-    background-color: transparent!important;
+  padding: 1px !important;
 }
+
+.input-group .input-group-text {
+  background-color: transparent !important;
+}
+
+.navigation .next-link .desc, .navigation .prev-link .desc {
+  color: #0D6EFD;
+}
+.navigation .next-link .desc .fa, .navigation .prev-link .desc .fa {
+  font-size: 12px;
+}
+.navigation .next-link .title, .navigation .prev-link .title {
+  font-weight: 600;
+  font-size: 18px;
+  color: #0B1621;
+}
+
+/*# sourceMappingURL=Index.css.map */

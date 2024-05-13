@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Auf dieser Verlosungsseite möchten wir Ihnen unsere Wertschätzung dafür zeigen, dass Sie ein aktives Community-Mitglied sind. Wir veranstalten <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">und ABP .NET Conferences</a> , nehmen an .NET-bezogenen Veranstaltungen teil oder sponsern diese, bei denen wir einige Geschenke verschenken.<br><br> Sie können dieser Seite folgen, um die bevorstehenden Verlosungen zu sehen, daran teilzunehmen oder frühere Verlosungen, die wir verlosen, einschließlich der Gewinner, anzusehen.<br><br> Vielen Dank, dass Sie ein aktives Mitglied sind! Wir sehen uns bei den kommenden Gewinnspielen.",
     "RafflesInfoTitle": "ABP-Community- <span class=\"gradient-community\">Verlosungen</span>",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> unterstützt.",
-    "Preview": "Vorschau"
+    "Preview": "Vorschau",
+    "VisitPage": "Seite besuchen",
+    "VisitVideoCourseDescription": "Wenn Sie die Grundlagen des ABP Framework erlernen möchten, schauen Sie sich die ABP Essentials-Videokurse an."
   }
 }

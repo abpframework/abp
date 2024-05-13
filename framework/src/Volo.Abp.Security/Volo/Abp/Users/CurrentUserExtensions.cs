@@ -70,4 +70,16 @@ public static class CurrentUserExtensions
     {
         return currentUser.FindClaimValue(AbpClaimTypes.ImpersonatorUserName);
     }
+
+    public static string GetSessionId([NotNull] this ICurrentUser currentUser)
+    {
+        var sessionId = currentUser.FindSessionId();
+        Debug.Assert(sessionId != null, "sessionId != null");
+        return sessionId!;
+    }
+
+    public static string? FindSessionId([NotNull] this ICurrentUser currentUser)
+    {
+        return currentUser.FindClaimValue(AbpClaimTypes.SessionId);
+    }
 }

@@ -400,7 +400,59 @@
             },
             {
               "text": "最佳实践",
-              "path": "Best-Practices/Index.md"
+              "items": [
+                {
+                  "text": "总体",
+                  "path": "Best-Practices/Index.md"
+                },
+                {
+                  "text": "模块架构",
+                  "path": "Best-Practices/Module-Architecture.md"
+                },
+                {
+                  "text": "领域层",
+                  "items": [
+                    {
+                      "text": "实体",
+                      "path": "Best-Practices/Entities.md"
+                    },
+                    {
+                      "text": "仓储",
+                      "path": "Best-Practices/Repositories.md"
+                    },
+                    {
+                      "text": "领域服务",
+                      "path": "Best-Practices/Domain-Services.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "应用程序层",
+                  "items": [
+                    {
+                      "text": "应用程序服务",
+                      "path": "Best-Practices/Application-Services.md"
+                    },
+                    {
+                      "text": "数据传输对象",
+                      "path": "Best-Practices/Data-Transfer-Objects.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "数据访问",
+                  "items": [
+                    {
+                      "text": "Entity Framework Core 集成",
+                      "path": "Best-Practices/Entity-Framework-Core-Integration.md"
+                    },
+                    {
+                      "text": "MongoDB 集成",
+                      "path": "Best-Practices/MongoDB-Integration.md"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },

@@ -57,6 +57,12 @@ public partial class PageHeader : ComponentBase
         if (Toolbar != null)
         {
             var toolbarItems = await PageToolbarManager.GetItemsAsync(Toolbar);
+
+            if (!ShouldRenderToolbarItems(toolbarItems))
+            {
+                return;
+            }
+            
             ToolbarItemRenders.Clear();
 
             if (!Options.Value.RenderToolbar)
@@ -87,6 +93,16 @@ public partial class PageHeader : ComponentBase
                 });
             }
         }
+    }
+    
+    protected virtual bool ShouldRenderToolbarItems(PageToolbarItem[] items)
+    {
+        if (items.Length != PageLayout.ToolbarItems.Count)
+        {
+            return true;
+        }
+
+        return items.Where((t, i) => t.ComponentType != PageLayout.ToolbarItems[i].ComponentType).Any();
     }
 
     protected async override Task OnInitializedAsync()
