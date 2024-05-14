@@ -1,32 +1,24 @@
+import { makeEnvironmentProviders, APP_INITIALIZER, Injector, Provider } from '@angular/core';
+import { TitleStrategy } from '@angular/router';
 import {
-  ABP,
-  AuthErrorFilterService,
   CORE_OPTIONS,
-  DEFAULT_DYNAMIC_LAYOUTS,
-  DefaultQueueManager,
   LOCALIZATIONS,
-  LocalStorageListenerService,
-  LocalizationService,
+  DYNAMIC_LAYOUTS_TOKEN,
   OTHERS_GROUP,
   QUEUE_MANAGER,
   SORT_COMPARE_FUNC,
-  SortableItem,
   TENANT_KEY,
   compareFuncFactory,
   coreOptionsFactory,
-  getInitialData,
-  localeInitializer,
   localizationContributor,
-  noop,
-} from '@abp/ng.core';
-import { makeEnvironmentProviders, APP_INITIALIZER, Injector, Provider } from '@angular/core';
-import { TitleStrategy } from '@angular/router';
+} from '../tokens';
 import { RoutesHandler } from '../handlers';
-import { AbpTitleStrategy } from '../services/title-strategy.service';
-import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
-import { CookieLanguageProvider } from './cookie-language.provider';
-import { IncludeLocalizationResourcesProvider } from './include-localization-resources.provider';
-import { LocaleProvider } from './locale.provider';
+import { ABP, SortableItem } from '../models';
+import { AuthErrorFilterService } from '../abstracts';
+import { DEFAULT_DYNAMIC_LAYOUTS } from '../constants';
+import { LocalizationService, LocalStorageListenerService, AbpTitleStrategy } from '../services';
+import { DefaultQueueManager, getInitialData, localeInitializer, noop } from '../utils';
+import { CookieLanguageProvider, IncludeLocalizationResourcesProvider, LocaleProvider } from './';
 
 export enum CoreFeatureKind {
   Options,

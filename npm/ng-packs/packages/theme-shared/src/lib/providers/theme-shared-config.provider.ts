@@ -6,22 +6,25 @@ import {
   VALIDATION_MAP_ERRORS_FN,
   defaultMapErrorsFn,
   VALIDATION_VALIDATE_ON_SUBMIT,
+  Validation,
 } from '@ngx-validate/core';
 import { DEFAULT_VALIDATION_BLUEPRINTS } from '../constants';
 import { DocumentDirHandlerService, ErrorHandler } from '../handlers';
 import { HttpErrorConfig } from '../models';
-import { THEME_SHARED_APPEND_CONTENT, HTTP_ERROR_CONFIG } from '../tokens';
 import {
+  THEME_SHARED_APPEND_CONTENT,
+  HTTP_ERROR_CONFIG,
   CONFIRMATION_ICONS,
   ConfirmationIcons,
   DEFAULT_CONFIRMATION_ICONS,
-} from '../tokens/confirmation-icons.token';
+} from '../tokens';
 import { DateParserFormatter } from '../utils';
-import { DEFAULT_HANDLERS_PROVIDERS } from './error-handlers.provider';
-import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './ng-bootstrap-config.provider';
-import { THEME_SHARED_ROUTE_PROVIDERS } from './route.provider';
-import { tenantNotFoundProvider } from './tenant-not-found.provider';
-import { Validation } from '@ngx-validate/core';
+import {
+  DEFAULT_HANDLERS_PROVIDERS,
+  NG_BOOTSTRAP_CONFIG_PROVIDERS,
+  THEME_SHARED_ROUTE_PROVIDERS,
+  tenantNotFoundProvider,
+} from './';
 
 export enum ThemeSharedFeatureKind {
   HttpErrorConfig,

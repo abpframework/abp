@@ -15,7 +15,8 @@ const exported = [
 
 /**
  * @deprecated FeatureManagementModule is deprecated .
- * @description use `provideFeatureManagementConfig` *function* for config settings. You can import directives and pipes directly, it has been switched to standalone.
+ * @description use `provideFeatureManagementConfig` *function* for config settings.
+ * You can import directives and pipes directly whichs were belongs to FeatureManagementModule are switched to standalone.
  */
 @NgModule({
   imports: [CoreModule, ThemeSharedModule, NgbNavModule, ...exported],

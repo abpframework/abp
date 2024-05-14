@@ -10,6 +10,7 @@ import {
   noop,
 } from '@abp/ng.core';
 import { APP_INITIALIZER, Provider, makeEnvironmentProviders } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbpOAuthGuard, abpOAuthGuard } from '../guards';
 import { OAuthConfigurationHandler } from '../handlers';
@@ -17,8 +18,6 @@ import { OAuthApiInterceptor } from '../interceptors';
 import { AbpOAuthService, OAuthErrorFilterService } from '../services';
 import { pipeToLogin, checkAccessToken } from '../utils';
 import { NavigateToManageProfileProvider } from './navigate-to-manage-profile.provider';
-
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 export function provideAbpOAuth() {
   const providers = [

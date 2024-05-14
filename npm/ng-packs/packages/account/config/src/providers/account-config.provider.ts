@@ -1,7 +1,7 @@
 import { NAVIGATE_TO_MANAGE_PROFILE } from '@abp/ng.core';
 import { makeEnvironmentProviders, Injector } from '@angular/core';
-import { navigateToManageProfileFactory } from '../utils/factories';
-import { ACCOUNT_ROUTE_PROVIDERS } from './route.provider';
+import { navigateToManageProfileFactory } from '../utils';
+import { ACCOUNT_ROUTE_PROVIDERS } from './';
 
 export function provideAccountConfig() {
   return makeEnvironmentProviders([
