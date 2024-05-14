@@ -556,12 +556,32 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
         {
             if (!lines[i].Contains(oldKeyword))
             {
-                continue;;
+                continue;
             }
             
             lines[i] = lines[i].Replace(oldKeyword, newKeyword);
         }
 
+        file.SetLines(lines);
+    }
+
+    private static void AddNamespaces(ProjectBuildContext context, string targetModuleFilePath, params string[] namespaces)
+    {
+        var file = context.Files.FirstOrDefault(x => x.Name.Contains(targetModuleFilePath));
+        if (file == null)
+        {
+            return;
+        }
+
+        file.NormalizeLineEndings();
+
+        var lines = file.GetLines().ToList();
+
+        foreach (var @namespace in namespaces)
+        {
+            lines.AddFirst(@namespace);
+        }
+        
         file.SetLines(lines);
     }
 
@@ -601,6 +621,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 defaultThemeName,
                 Basic
             );
+
+            AddNamespaces(
+                context,
+                moduleFile.Name,
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;",
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;"
+            );
         }
     }
 
@@ -635,7 +662,7 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 context,
                 $"/Pages/_Host.cshtml",
                 $"{defaultThemeName}Theme.Components",
-                Basic
+                "BasicTheme.Themes.Basic" 
             );
             
             ReplaceAllKeywords(

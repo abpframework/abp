@@ -3,11 +3,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc;
 
-public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
+public class FakeAuthenticationMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly FakeUserClaims _fakeUserClaims;
 
@@ -16,7 +17,7 @@ public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
         _fakeUserClaims = fakeUserClaims;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         if (_fakeUserClaims.Claims.Any())
         {

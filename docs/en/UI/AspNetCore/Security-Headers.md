@@ -38,7 +38,7 @@ Security Headers middleware is an ASP.NET Core request pipeline [middleware](htt
 app.UseAbpSecurityHeaders();
 ```
 
-> You can add this middleware into the `OnApplicationInitialization` method of your module class to register it to the request pipeline. This middleware is already configured in the [ABP Commercial Startup Templates](https://docs.abp.io/en/commercial/latest/startup-templates/index), so you don't need to manually add it if you are using one of these startup templates.
+> You can add this middleware after `app.UseRouting()` in your module class's `OnApplicationInitialization` method to register it to the request pipeline. This middleware is already configured in the [ABP Commercial Startup Templates](https://docs.abp.io/en/commercial/latest/startup-templates/index), so you don't need to manually add it if you are using one of these startup templates.
 
 After that, you have registered the `UseAbpSecurityHeaders` middleware into the request pipeline, the defined security headers will be shown in the response headers as in the figure below:
 

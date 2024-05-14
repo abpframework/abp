@@ -90,13 +90,14 @@
                 </Column>
             </Row>
         </Validations>
+        <hr />
         <Row>
             <Column>
-                <SubmitButton Clicked="@UpdateSettingsAsync"/>
                 @if (HasSendTestEmailPermission)
                 {
-                    <Button style="margin: 0.25rem" Color="Color.Primary" Clicked="OpenSendTestEmailModalAsync">@L["SendTestEmail"]</Button>
+                    <Button style="margin: 0.25rem" Color="Color.Primary" Outline Clicked="OpenSendTestEmailModalAsync">@L["SendTestEmail"]</Button>
                 }
+                <SubmitButton Clicked="@UpdateSettingsAsync"/>
             </Column>
             
         </Row>

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Volo.Abp.AutoMapper;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.Admin.Pages;
@@ -37,7 +38,7 @@ public class CmsKitAdminWebAutoMapperProfile : Profile
     {
         CreateMap<Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel, MenuItemCreateInput>().MapExtraProperties();
         CreateMap<Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.UpdateModalModel.MenuItemUpdateViewModel, MenuItemUpdateInput>().MapExtraProperties();
-        CreateMap<MenuItemDto, Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.UpdateModalModel.MenuItemUpdateViewModel>().MapExtraProperties();
+        CreateMap<MenuItemWithDetailsDto, Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.UpdateModalModel.MenuItemUpdateViewModel>().MapExtraProperties();
     }
 
     protected virtual void CreatePageMappings()

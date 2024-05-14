@@ -84,6 +84,7 @@
     "Permission:Edit": "Επεξεργασία",
     "Permission:Delete": "Διαγραφή",
     "Permission:ChangePermissions": "Αλλαγές στα δικαιώματα",
+    "Permission:ManageRoles": "Διαχείριση ρόλων",
     "Permission:UserManagement": "Διαχείριση χρηστών",
     "Permission:UserLookup": "Αναζήτηση χρήστη",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Απαιτούμενο μήκος",
