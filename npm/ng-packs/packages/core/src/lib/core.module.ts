@@ -20,14 +20,12 @@ import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { ToInjectorPipe } from './pipes/to-injector.pipe';
-import { LocalizationService } from './services/localization.service';
-import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
 import './utils/date-extensions';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import { provideCoreModuleConfig, provideCoreModuleConfigChild, withOptions } from './providers';
+import { provideAbpCoreChild, provideAbpCore, withOptions } from './providers';
 
 const standaloneDirectives = [
   AutofocusDirective,
@@ -116,22 +114,22 @@ export class RootCoreModule {}
 })
 export class CoreModule {
   /**
-   * @deprecated forRoot method is deprecated, use `provideCoreModuleConfig` *function* for config settings.
+   * @deprecated forRoot method is deprecated, use `provideAbpCore` *function* for config settings.
    */
   static forRoot(options = {} as ABP.Root): ModuleWithProviders<RootCoreModule> {
     return {
       ngModule: RootCoreModule,
-      providers: [provideCoreModuleConfig(withOptions(options))],
+      providers: [provideAbpCore(withOptions(options))],
     };
   }
 
   /**
-   * @deprecated forChild method is deprecated, use `provideCoreModuleConfig` *function* for config settings.
+   * @deprecated forChild method is deprecated, use `provideAbpCoreChild` *function* for config settings.
    */
   static forChild(options = {} as ABP.Child): ModuleWithProviders<RootCoreModule> {
     return {
       ngModule: RootCoreModule,
-      providers: [provideCoreModuleConfigChild(options)],
+      providers: [provideAbpCoreChild(options)],
     };
   }
 }

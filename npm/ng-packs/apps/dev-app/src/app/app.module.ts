@@ -1,21 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  CoreModule,
-  provideCoreModuleConfig, withOptions
-} from '@abp/ng.core';
+import { CoreModule, provideAbpCore, withOptions } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
 import {
   InternetConnectionStatusComponent,
   ThemeSharedModule,
-  provideThemeSharedConfig,
+  provideAbpThemeShared,
 } from '@abp/ng.theme.shared';
 import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
 import { SideMenuLayoutModule } from '@abp/ng.theme.lepton-x/layouts';
-import { AbpOAuthModule, provideAbpOAuthConfig } from '@abp/ng.oauth';
+import { provideAbpOAuth } from '@abp/ng.oauth';
 import { provideSettingManagementConfig } from '@abp/ng.setting-management/config';
-import { AccountConfigModule, provideAccountConfig } from '@abp/ng.account/config';
+import { provideAccountConfig } from '@abp/ng.account/config';
 import { provideIdentityConfig } from '@abp/ng.identity/config';
 import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
 import { provideFeatureManagementConfig } from '@abp/ng.feature-management';
@@ -39,7 +36,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
   ],
   providers: [
     APP_ROUTE_PROVIDER,
-    provideCoreModuleConfig(
+    provideAbpCore(
       withOptions({
         environment,
         registerLocaleFn: registerLocale(),
@@ -47,8 +44,8 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
         skipGetAppConfiguration: false,
       }),
     ),
-    provideAbpOAuthConfig(),
-    provideThemeSharedConfig(),
+    provideAbpOAuth(),
+    provideAbpThemeShared(),
     provideSettingManagementConfig(),
     provideAccountConfig(),
     provideIdentityConfig(),

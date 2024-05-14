@@ -20,7 +20,7 @@ import { NavigateToManageProfileProvider } from './navigate-to-manage-profile.pr
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-export function provideAbpOAuthConfig() {
+export function provideAbpOAuth() {
   const providers = [
     {
       provide: AuthService,

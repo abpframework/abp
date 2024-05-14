@@ -10,6 +10,7 @@ import {
   OTHERS_GROUP,
   QUEUE_MANAGER,
   SORT_COMPARE_FUNC,
+  SortableItem,
   TENANT_KEY,
   compareFuncFactory,
   coreOptionsFactory,
@@ -77,7 +78,7 @@ export function withOptions(options = {} as ABP.Root): CoreFeature<CoreFeatureKi
   ]);
 }
 
-export function withTitleStrategy(strategy: any): CoreFeature<CoreFeatureKind.TitleStrategy> {
+export function withTitleStrategy(strategy: unknown): CoreFeature<CoreFeatureKind.TitleStrategy> {
   return makeCoreFeature(CoreFeatureKind.TitleStrategy, [
     {
       provide: TitleStrategy,
@@ -87,7 +88,7 @@ export function withTitleStrategy(strategy: any): CoreFeature<CoreFeatureKind.Ti
 }
 
 export function withCompareFuncFactory(
-  factory: any,
+  factory: (a: SortableItem, b: SortableItem) => 1 | -1 | 0,
 ): CoreFeature<CoreFeatureKind.CompareFunctionFactory> {
   return makeCoreFeature(CoreFeatureKind.CompareFunctionFactory, [
     {
@@ -97,7 +98,7 @@ export function withCompareFuncFactory(
   ]);
 }
 
-export function provideCoreModuleConfig(...features: CoreFeature<CoreFeatureKind>[]) {
+export function provideAbpCore(...features: CoreFeature<CoreFeatureKind>[]) {
   const providers = [
     LocaleProvider,
     CookieLanguageProvider,
@@ -154,7 +155,7 @@ export function provideCoreModuleConfig(...features: CoreFeature<CoreFeatureKind
   return makeEnvironmentProviders(providers);
 }
 
-export function provideCoreModuleConfigChild(options = {} as ABP.Child) {
+export function provideAbpCoreChild(options = {} as ABP.Child) {
   return makeEnvironmentProviders([
     {
       provide: LOCALIZATIONS,

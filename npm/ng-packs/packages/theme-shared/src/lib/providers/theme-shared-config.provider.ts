@@ -18,7 +18,7 @@ import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './ng-bootstrap-config.provider';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './route.provider';
 import { tenantNotFoundProvider } from './tenant-not-found.provider';
 
-export function provideThemeSharedConfig(
+export function provideAbpThemeShared(
   { httpErrorConfig, validation = {}, confirmationIcons = {} } = {} as RootParams,
 ) {
   const providers = [
