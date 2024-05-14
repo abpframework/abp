@@ -237,7 +237,7 @@
     "ClientSideDevelopmentDocumentationMessage": "Check out the {0} document  to learn the key points for the user interface (client side) development.",
     "DatabaseProviderDocumentationMessage": "Check out the {0} document   to learn the key points for the database layer development.",
     "ABPCommercialExplanationMessage": "ABP Commercial provides premium modules, themes, tooling and support for the ABP Framework.",
-    "ImplementingDDD": "Implementing Domain Driven Design",
+    "ImplementingDDD": "IMPLEMENTING DOMAIN DRIVEN DESIGN",
     "DDDBookExplanation": "A practical guide for implementing the Domain Driven Design with the ABP Framework.",
     "Overview": "Overview",
     "DDDBookPracticalGuide": "This is a practical guide for implementing the Domain Driven Design (DDD). While the implementation details are based on the ABP Framework infrastructure, the basic concepts, principles and models can be applied to any solution, even if it is not a .NET solution.",
