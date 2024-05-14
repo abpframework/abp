@@ -21,7 +21,9 @@ export class TimeAdapter extends NgbTimeAdapter<string | Date> {
   }
 
   toModel(value: NgbTimeStruct | null): string {
-    if (!value) return '';
+    if (!value) {
+      return null;
+    }
 
     const date = new Date(0, 0, 1, value.hour, value.minute, value.second);
     const formattedDate = formatDate(date, 'HH:mm:ss', 'en');
