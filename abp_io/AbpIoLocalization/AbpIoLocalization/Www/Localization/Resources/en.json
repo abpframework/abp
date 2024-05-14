@@ -535,6 +535,7 @@
     "MicroserviceSupportExplanation3": "ABP.IO Platform paid licenses also includes a <a href=\"{0}\">microservice startup template</a> which can be used to directly create <strong>a production ready base solution for your microservice system.</strong>",
     "MicroserviceSupportExplanation4": "For the non-paid users, we are also providing an <a href=\"{0}\">example e-commerce solution</a> that you can check to understand how you can build your microservice solution based on the ABP Framework.",
     "MicroserviceSupportExplanation5": "However, a microservice system is a solution, and every solution will have different requirements, including network topology, communication scenarios, authentication possibilities, database sharding/partitioning decisions, runtime configurations, 3rd party system integrations and many more aspects. The ABP.IO platform provides infrastructure for microservice scenarios, microservice-compatible modules, samples, and documentation to assist in building your own solution. However, don't expect to directly download your ideal, custom solution pre-built for you. You will need to understand it and bring specific parts together based on your requirements.",
-    "WhereCanIDownloadSourceCodeExplanation": "You can download the source code of all the ABP modules, Angular packages and themes via ABP Suite, ABP Studio or ABP CLI. Check out the forum question: <a href=\"{0}\">How to download the source-code</a>?"
+    "WhereCanIDownloadSourceCodeExplanation": "You can download the source code of all the ABP modules, Angular packages and themes via ABP Suite, ABP Studio or ABP CLI. Check out the forum question: <a href=\"{0}\">How to download the source-code</a>?",
+    "PaidLicenses": "Paid Licenses"
   }
 }
