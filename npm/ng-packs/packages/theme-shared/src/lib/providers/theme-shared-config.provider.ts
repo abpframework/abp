@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ErrorHandler, makeEnvironmentProviders } from '@angular/core';
+import { APP_INITIALIZER, Provider, makeEnvironmentProviders } from '@angular/core';
 import { noop } from '@abp/ng.core';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -8,19 +8,104 @@ import {
   VALIDATION_VALIDATE_ON_SUBMIT,
 } from '@ngx-validate/core';
 import { DEFAULT_VALIDATION_BLUEPRINTS } from '../constants';
-import { DocumentDirHandlerService } from '../handlers';
-import { RootParams } from '../models';
+import { DocumentDirHandlerService, ErrorHandler } from '../handlers';
+import { HttpErrorConfig } from '../models';
 import { THEME_SHARED_APPEND_CONTENT, HTTP_ERROR_CONFIG } from '../tokens';
-import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from '../tokens/confirmation-icons.token';
+import {
+  CONFIRMATION_ICONS,
+  ConfirmationIcons,
+  DEFAULT_CONFIRMATION_ICONS,
+} from '../tokens/confirmation-icons.token';
 import { DateParserFormatter } from '../utils';
 import { DEFAULT_HANDLERS_PROVIDERS } from './error-handlers.provider';
 import { NG_BOOTSTRAP_CONFIG_PROVIDERS } from './ng-bootstrap-config.provider';
 import { THEME_SHARED_ROUTE_PROVIDERS } from './route.provider';
 import { tenantNotFoundProvider } from './tenant-not-found.provider';
+import { Validation } from '@ngx-validate/core';
 
-export function provideAbpThemeShared(
-  { httpErrorConfig, validation = {}, confirmationIcons = {} } = {} as RootParams,
-) {
+export enum ThemeSharedFeatureKind {
+  HttpErrorConfig,
+  ValidationBluePrint,
+  ValidationErrorsFn,
+  ValidateOnSubmit,
+  Validation,
+  ConfirmationIcons,
+}
+
+export interface ThemeSharedFeature<KindT extends ThemeSharedFeatureKind> {
+  ɵkind: KindT;
+  ɵproviders: Provider[];
+}
+
+function makeThemeSharedFeature<KindT extends ThemeSharedFeatureKind>(
+  kind: KindT,
+  providers: Provider[],
+): ThemeSharedFeature<KindT> {
+  return {
+    ɵkind: kind,
+    ɵproviders: providers,
+  };
+}
+
+export function withHttpErrorConfig(
+  httpErrorConfig: HttpErrorConfig,
+): ThemeSharedFeature<ThemeSharedFeatureKind.HttpErrorConfig> {
+  return makeThemeSharedFeature(ThemeSharedFeatureKind.HttpErrorConfig, [
+    {
+      provide: HTTP_ERROR_CONFIG,
+      useValue: httpErrorConfig,
+    },
+  ]);
+}
+
+export function withValidationBluePrint(
+  bluePrints: Validation.Blueprints,
+): ThemeSharedFeature<ThemeSharedFeatureKind.ValidationBluePrint> {
+  return makeThemeSharedFeature(ThemeSharedFeatureKind.ValidationBluePrint, [
+    {
+      provide: VALIDATION_BLUEPRINTS,
+      useValue: {
+        ...DEFAULT_VALIDATION_BLUEPRINTS,
+        ...(bluePrints || {}),
+      },
+    },
+  ]);
+}
+
+export function withValidationMapErrorsFn(
+  mapErrorsFn: Validation.MapErrorsFn,
+): ThemeSharedFeature<ThemeSharedFeatureKind.ValidationErrorsFn> {
+  return makeThemeSharedFeature(ThemeSharedFeatureKind.ValidationErrorsFn, [
+    {
+      provide: VALIDATION_MAP_ERRORS_FN,
+      useValue: mapErrorsFn || defaultMapErrorsFn,
+    },
+  ]);
+}
+
+export function withValidateOnSubmit(
+  validateOnSubmit: boolean,
+): ThemeSharedFeature<ThemeSharedFeatureKind.ValidateOnSubmit> {
+  return makeThemeSharedFeature(ThemeSharedFeatureKind.ValidateOnSubmit, [
+    {
+      provide: VALIDATION_VALIDATE_ON_SUBMIT,
+      useValue: validateOnSubmit,
+    },
+  ]);
+}
+
+export function withConfirmationIcon(
+  confirmationIcons: Partial<ConfirmationIcons>,
+): ThemeSharedFeature<ThemeSharedFeatureKind.HttpErrorConfig> {
+  return makeThemeSharedFeature(ThemeSharedFeatureKind.HttpErrorConfig, [
+    {
+      provide: CONFIRMATION_ICONS,
+      useValue: { ...DEFAULT_CONFIRMATION_ICONS, ...(confirmationIcons || {}) },
+    },
+  ]);
+}
+
+export function provideAbpThemeShared(...features: ThemeSharedFeature<ThemeSharedFeatureKind>[]) {
   const providers = [
     {
       provide: APP_INITIALIZER,
@@ -35,41 +120,33 @@ export function provideAbpThemeShared(
       deps: [THEME_SHARED_APPEND_CONTENT],
       useFactory: noop,
     },
-    { provide: HTTP_ERROR_CONFIG, useValue: httpErrorConfig },
+    { provide: HTTP_ERROR_CONFIG, useValue: undefined },
     { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
     NG_BOOTSTRAP_CONFIG_PROVIDERS,
     {
       provide: VALIDATION_BLUEPRINTS,
-      useValue: {
-        ...DEFAULT_VALIDATION_BLUEPRINTS,
-        ...(validation.blueprints || {}),
-      },
+      useValue: { ...DEFAULT_VALIDATION_BLUEPRINTS },
     },
     {
       provide: VALIDATION_MAP_ERRORS_FN,
-      useValue: validation.mapErrorsFn || defaultMapErrorsFn,
+      useValue: defaultMapErrorsFn,
     },
     {
       provide: VALIDATION_VALIDATE_ON_SUBMIT,
-      useValue: validation.validateOnSubmit,
+      useValue: undefined,
     },
     DocumentDirHandlerService,
     {
-      provide: APP_INITIALIZER,
-      useFactory: noop,
-      multi: true,
-      deps: [DocumentDirHandlerService],
-    },
-    {
       provide: CONFIRMATION_ICONS,
-      useValue: {
-        ...DEFAULT_CONFIRMATION_ICONS,
-        ...(confirmationIcons || {}),
-      },
+      useValue: { ...DEFAULT_CONFIRMATION_ICONS },
     },
     tenantNotFoundProvider,
     DEFAULT_HANDLERS_PROVIDERS,
   ];
+
+  for (const feature of features) {
+    providers.push(...feature.ɵproviders);
+  }
 
   return makeEnvironmentProviders(providers);
 }

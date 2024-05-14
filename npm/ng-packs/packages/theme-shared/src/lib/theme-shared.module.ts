@@ -20,7 +20,14 @@ import { LoadingDirective } from './directives/loading.directive';
 import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { RootParams } from './models/common';
-import { provideAbpThemeShared } from './providers';
+import {
+  provideAbpThemeShared,
+  withConfirmationIcon,
+  withHttpErrorConfig,
+  withValidateOnSubmit,
+  withValidationBluePrint,
+  withValidationMapErrorsFn,
+} from './providers';
 import { PasswordComponent } from './components/password/password.component';
 import { CardModule } from './components/card/card.module';
 import { AbpVisibleDirective, DisabledDirective } from './directives';
@@ -86,7 +93,15 @@ export class ThemeSharedModule {
   ): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
-      providers: [provideAbpThemeShared({ httpErrorConfig, validation, confirmationIcons })],
+      providers: [
+        provideAbpThemeShared(
+          withHttpErrorConfig(httpErrorConfig),
+          withValidationBluePrint(validation.blueprints),
+          withValidationMapErrorsFn(validation.mapErrorsFn),
+          withValidateOnSubmit(validation.validateOnSubmit),
+          withConfirmationIcon(confirmationIcons),
+        ),
+      ],
     };
   }
 }
