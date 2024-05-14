@@ -19,7 +19,7 @@
     "@abp/ng.oauth": "~8.0.6",
     "@abp/ng.setting-management": "~8.0.6",
     "@abp/ng.tenant-management": "~8.0.6",
-    "@abp/ng.theme.lepton-x": "~3.1.2",
+    "@abp/ng.theme.lepton-x": "~3.0.6",
     "@abp/ng.theme.shared": "~8.0.6",
     "@angular/animations": "~17.0.0",
     "@angular/common": "~17.0.0",
