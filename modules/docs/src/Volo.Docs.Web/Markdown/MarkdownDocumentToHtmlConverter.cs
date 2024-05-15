@@ -51,7 +51,7 @@ namespace Volo.Docs.Markdown
                 _uiOptions.SingleProjectMode.Enable ? projectShortName : projectShortName ?? project.ShortName,
                 version,
                 document.LocalDirectory,
-                languageCode
+                !_uiOptions.MultiLanguageMode ? languageCode : languageCode ?? document.LanguageCode
             );
 
             var html = _markdownConverter.ConvertToHtml(content);

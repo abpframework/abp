@@ -80,6 +80,7 @@ namespace VoloDocs.Web
                 options.RoutePrefix = null;
                 options.SingleProjectMode.Enable = true;
                 options.SingleProjectMode.ProjectName = "abp";
+                options.MultiLanguageMode = false;
             });
 
             Configure<DocsElasticSearchOptions>(options =>

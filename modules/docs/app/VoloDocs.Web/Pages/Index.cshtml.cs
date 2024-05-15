@@ -27,10 +27,7 @@ namespace VoloDocs.Web.Pages
         {
             if (_urlUiOptions.SingleProjectMode.Enable)
             {
-                return RedirectToPage("/Documents/Project/Index", new Dictionary<string, object> {
-                    { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), "en" },
-                    { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), DocsAppConsts.Latest }
-                });
+                return Redirect(GetUrlForProject());
             }
             var projects = await _projectAppService.GetListAsync();
 
@@ -53,18 +50,22 @@ namespace VoloDocs.Web.Pages
         }
 
         //Eg: "/en/abp/latest"
-        public string GetUrlForProject(ProjectDto project, string language = "en", string version = null)
+        public string GetUrlForProject(ProjectDto project = null, string language = "en", string version = null)
         {
             var routeValues = new Dictionary<string, object> {
-                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), language },
-                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), version ?? DocsAppConsts.Latest },
-                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), project.ShortName }
+                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), version ?? DocsAppConsts.Latest }
             };
 
             if (!_urlUiOptions.SingleProjectMode.Enable)
             {
-                routeValues.Add(nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), project.ShortName);
+                routeValues.Add(nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), project?.ShortName);
             }
+            
+            if(_urlUiOptions.MultiLanguageMode)
+            {
+                routeValues.Add(nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), language);
+            }
+            
             return Url.Page("/Documents/Project/Index", routeValues);
         }
     }

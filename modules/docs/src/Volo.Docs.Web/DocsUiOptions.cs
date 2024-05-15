@@ -33,6 +33,8 @@ namespace Volo.Docs
         /// </summary>
         public bool SectionRendering = true;
         
+        public bool MultiLanguageMode { get; set; } = true;
+        
         public SingleProjectModeOptions SingleProjectMode { get; } = new ();
         
         public Func<DocsUrlNormalizerContext, string> UrlNormalizer { get; set; }

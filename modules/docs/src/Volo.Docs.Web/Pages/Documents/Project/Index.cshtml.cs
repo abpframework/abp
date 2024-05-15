@@ -165,13 +165,15 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return RedirectToDefaultDocument();
             }
+            
+            var usingSingleLanguageMode = !_uiOptions.MultiLanguageMode && LanguageCode.IsNullOrWhiteSpace();
 
-            if (!CheckLanguage())
+            if (!usingSingleLanguageMode && !CheckLanguage())
             {
                 return RedirectToDefaultLanguage();
             }
 
-            if (IsDocumentCultureDifferentThanCurrent())
+            if (!usingSingleLanguageMode && IsDocumentCultureDifferentThanCurrent())
             {
                 return ReloadPageWithCulture();
             }
@@ -445,7 +447,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     new GetNavigationDocumentInput
                     {
                         ProjectId = Project.Id,
-                        LanguageCode = LanguageCode,
+                        LanguageCode = DocumentLanguageCode,
                         Version = Version
                     }
                 );
@@ -488,7 +490,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" }.Distinct().ToArray();
-            var languages = new[] { LanguageCode, DefaultLanguageCode }.Distinct().ToArray();
+            var languages = new[] { LanguageCode, DefaultLanguageCode }.Where(x => !x.IsNullOrWhiteSpace()).Distinct().ToArray();
             var sb = new StringBuilder();
             foreach (var documentName in documentNames)
             {
@@ -516,6 +518,11 @@ namespace Volo.Docs.Pages.Documents.Project
         private void SetLanguageSelectListItems()
         {
             LanguageSelectListItems = new List<SelectListItem>();
+
+            if (!_uiOptions.MultiLanguageMode)
+            {
+                return;
+            }
 
             foreach (var language in LanguageConfig.Languages)
             {

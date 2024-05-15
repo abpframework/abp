@@ -60,6 +60,8 @@ namespace Volo.Docs
                     .Value.Value;
 
                 var routePrefix = docsOptions.RoutePrefix;
+                
+                var languageCode = docsOptions.MultiLanguageMode ? "{languageCode}/" : string.Empty;
 
                 if (docsOptions.SingleProjectMode.Enable)
                 {
@@ -67,16 +69,22 @@ namespace Volo.Docs
                     {
                         options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix);
                     }
-                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}");
-                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{version}/{*documentName}");
-                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{version}");
+                    if(routePrefix + languageCode != "/")
+                    {
+                        options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode);
+                    }
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode + "{version}/{*documentName}");
+                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/" + languageCode + "{version}");
                 }
                 else
                 {
-                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
-                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
-                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
-                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}");
+                    if(routePrefix + languageCode != "/")
+                    {
+                        options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
+                    }
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode +  "{projectName}");
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode + "{projectName}/{version}/{*documentName}");
+                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/" + languageCode + "{projectName}/{version}");
                 }
             });
 
