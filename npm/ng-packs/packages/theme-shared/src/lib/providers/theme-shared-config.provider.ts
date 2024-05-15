@@ -140,6 +140,12 @@ export function provideAbpThemeShared(...features: ThemeSharedFeature<ThemeShare
     },
     DocumentDirHandlerService,
     {
+      provide: APP_INITIALIZER,
+      useFactory: noop,
+      multi: true,
+      deps: [DocumentDirHandlerService],
+    },
+    {
       provide: CONFIRMATION_ICONS,
       useValue: { ...DEFAULT_CONFIRMATION_ICONS },
     },

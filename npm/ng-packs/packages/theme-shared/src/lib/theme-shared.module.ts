@@ -86,7 +86,7 @@ export class BaseThemeSharedModule {}
 })
 export class ThemeSharedModule {
   /**
-   * @deprecated forRoot method is deprecated, use `provideThemeSharedConfig` *function* for config settings.
+   * @deprecated forRoot method is deprecated, use `provideAbpThemeShared` *function* for config settings.
    */
   static forRoot(
     { httpErrorConfig, validation = {}, confirmationIcons = {} } = {} as RootParams,
