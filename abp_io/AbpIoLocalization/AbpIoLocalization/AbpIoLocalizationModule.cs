@@ -28,9 +28,7 @@ namespace AbpIoLocalization
 
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("Volo.AbpIo.Commercial", typeof(AbpIoCommercialResource));
                 options.MapCodeNamespace("Volo.AbpIo.Domain", typeof(AbpIoBaseResource));
-                options.MapCodeNamespace("Volo.AbpIo.Community", typeof(AbpIoCommunityResource));
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -58,11 +56,6 @@ namespace AbpIoLocalization
                     .AddBaseTypes(typeof(AbpIoBaseResource));
 
                 options.Resources
-                    .Add<AbpIoCommercialResource>("en")
-                    .AddVirtualJson("/Commercial/Localization/Resources")
-                    .AddBaseTypes(typeof(AbpIoBaseResource));
-
-                options.Resources
                     .Add<AbpIoDocsResource>("en")
                     .AddVirtualJson("/Docs/Localization/Resources")
                     .AddBaseTypes(typeof(AbpIoBaseResource));
@@ -75,11 +68,6 @@ namespace AbpIoLocalization
                 options.Resources
                     .Add<AbpIoWwwResource>("en")
                     .AddVirtualJson("/Www/Localization/Resources")
-                    .AddBaseTypes(typeof(AbpIoBaseResource));
-
-                options.Resources
-                    .Add<AbpIoCommunityResource>("en")
-                    .AddVirtualJson("/Community/Localization/Resources")
                     .AddBaseTypes(typeof(AbpIoBaseResource));
             });
         }
