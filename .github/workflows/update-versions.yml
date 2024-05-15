@@ -1,10 +1,11 @@
+# Create a PR after updating the version in latest-version.json
 name: Update Latest Versions
 
 on:
   release:
     types:
       - published
-      
+
 permissions:
   contents: write
   pull-requests: write
@@ -12,22 +13,22 @@ permissions:
 jobs:
   update-versions:
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@e9aba2c
         with:
           python-version: 3.x
 
+      - name: Get latest version of pip
+        run: python -m pip install --upgrade pip
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install PyGithub
+        run: pip install PyGithub==2.3.0
 
       - name: Update latest-versions.json and create PR
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        run: |
-          python .github/scripts/update_versions.py
+        run: python .github/scripts/update_versions.py
