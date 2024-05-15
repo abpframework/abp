@@ -2,8 +2,6 @@
 using AbpIoLocalization.Admin.Localization;
 using AbpIoLocalization.Base.Localization;
 using AbpIoLocalization.Blog.Localization;
-using AbpIoLocalization.Commercial.Localization;
-using AbpIoLocalization.Community.Localization;
 using AbpIoLocalization.Docs.Localization;
 using AbpIoLocalization.Support.Localization;
 using AbpIoLocalization.Www;
