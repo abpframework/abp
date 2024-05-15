@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Shouldly;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Xunit;
@@ -53,9 +54,25 @@ public class AbpStringToEnum_Tests
         var testClassJson = JsonSerializer.Serialize(new TestClass()
         {
             Day = DayOfWeek.Monday
-        });
+        }, options);
 
         testClassJson.ShouldBe("{\"Day\":1}");
+
+        options = new JsonSerializerOptions()
+        {
+            Converters =
+            {
+                new AbpStringToEnumFactory(),
+                new JsonStringEnumConverter()
+            }
+        };
+
+        testClassJson = JsonSerializer.Serialize(new TestClass()
+        {
+            Day = DayOfWeek.Monday
+        }, options);
+
+        testClassJson.ShouldBe("{\"Day\":\"Monday\"}");
 
         testClassJson = JsonSerializer.Serialize(new Dictionary<DayOfWeek, string>
         {

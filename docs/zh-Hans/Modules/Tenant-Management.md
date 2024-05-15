@@ -16,7 +16,7 @@
 
 ### 源代码
 
-可以 [在此处](https://github.com/abpframework/abp/tree/dev/modules/identity) 访问源代码。源代码使用 [MIT](https://choosealicense.com/licenses/mit/) 许可, 所以你可以免费使用和自定义它.
+可以 [在此处](https://github.com/abpframework/abp/tree/dev/modules/tenant-management) 访问源代码。源代码使用 [MIT](https://choosealicense.com/licenses/mit/) 许可, 所以你可以免费使用和自定义它.
 
 ## 用户界面
 

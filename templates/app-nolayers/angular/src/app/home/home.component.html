@@ -7,9 +7,10 @@
     </div>
     <div class="card-body">
       @if(!hasLoggedIn){
-        <button class="btn btn-primary mb-2" (click)="login()">{{ 'AbpUi::Login' | abpLocalization }}</button>
+        <button class="btn btn-primary mb-2" (click)="login()">
+          {{ 'AbpUi::Login' | abpLocalization }}
+        </button>
       }
-      
       <p>{{ '::Welcome_Text' | abpLocalization }}</p>
     </div>
   </div>

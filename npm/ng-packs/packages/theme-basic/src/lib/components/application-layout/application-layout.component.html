@@ -13,12 +13,18 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse" [class.overflow-hidden]="service.smallScreen" id="main-navbar-collapse">
+    <div
+      class="navbar-collapse"
+      [class.overflow-hidden]="service.smallScreen"
+      id="main-navbar-collapse"
+    >
       <ng-container *ngTemplateOutlet="!service.smallScreen ? navigations : null"></ng-container>
 
-      <div *ngIf="service.smallScreen" [@collapseWithMargin]="service.isCollapsed ? 'collapsed' : 'expanded'">
-        <ng-container *ngTemplateOutlet="navigations"></ng-container>
-      </div>
+      @if (service.smallScreen) {
+        <div [@collapseWithMargin]="service.isCollapsed ? 'collapsed' : 'expanded'">
+          <ng-container *ngTemplateOutlet="navigations"></ng-container>
+        </div>
+      }
 
       <ng-template #navigations>
         <abp-routes

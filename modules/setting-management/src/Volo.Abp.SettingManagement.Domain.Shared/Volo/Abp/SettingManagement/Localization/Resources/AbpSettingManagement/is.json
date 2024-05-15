@@ -2,7 +2,7 @@
   "culture": "is",
   "texts": {
     "Settings": "Stillingar",
-    "SuccessfullySaved": "Tókst að vista",
+    "SavedSuccessfully": "Tókst að vista",
     "Permission:SettingManagement": "Stillingar",
     "Permission:Emailing": "Senda tölvupóst",
     "Permission:EmailingTest": "Próf í tölvupósti",
