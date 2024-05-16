@@ -109,6 +109,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
 	public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
 		string entityType,
 		string entityId,
+		bool ? isApproved = null,
 		CancellationToken cancellationToken = default)
 	{
 		Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -116,15 +117,20 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
 
 		var query = from comment in (await GetDbSetAsync())
 					join user in (await GetDbContextAsync()).Set<CmsUser>() on comment.CreatorId equals user.Id
-					where entityType == comment.EntityType && entityId == comment.EntityId
-					orderby comment.CreationTime
+					where entityType == comment.EntityType && entityId == comment.EntityId 
+                    orderby comment.CreationTime
 					select new CommentWithAuthorQueryResultItem
 					{
 						Comment = comment,
 						Author = user
 					};
 
-		return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        if (isApproved.HasValue)
+        {
+            query = query.Where(c => c.Comment.IsApproved == isApproved.Value);
+        }
+
+        return await query.ToListAsync(GetCancellationToken(cancellationToken));
 	}
 
 	public virtual async Task DeleteWithRepliesAsync(

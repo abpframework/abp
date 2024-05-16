@@ -7,6 +7,8 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Web.Icons;
 using Markdig;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Settings;
+using Volo.CmsKit.Settings;
 
 namespace Volo.CmsKit.Web;
 
@@ -52,6 +54,7 @@ public class CmsKitCommonWebModule : AbpModule
         {
             options.DisableModule(CmsKitCommonRemoteServiceConsts.ModuleName);
         });
+
     }
 }
 

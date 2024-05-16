@@ -22,6 +22,7 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 {
     protected ICommentAdminAppService CommentAdminAppService { get; }
 
+
     public CommentAdminController(ICommentAdminAppService commentAdminAppService)
     {
         CommentAdminAppService = commentAdminAppService;
@@ -55,4 +56,17 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 		return CommentAdminAppService.UpdateApprovalStatusAsync(id, commentApprovalDto);
 
 	}
+    [HttpPost]
+    [Route("settings")]
+    public Task SetSettings(SettingsDto settingsDto)
+    {
+       return CommentAdminAppService.SetSettings(settingsDto);
+    }
+    [HttpGet]
+    [Route("settings")]
+
+    public Task<SettingsDto> GetSettings()
+    {
+       return CommentAdminAppService.GetSettings();
+    }
 }

@@ -17,4 +17,10 @@
     <Folder Include="Volo\CmsKit\Admin\Contents\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Volo.Abp.SettingManagement.Domain">
+      <HintPath>..\..\..\setting-management\src\Volo.Abp.SettingManagement.Domain\obj\Debug\net8.0\ref\Volo.Abp.SettingManagement.Domain.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

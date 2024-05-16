@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -9,11 +10,13 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Admin.Web.Menus;
+using Volo.CmsKit.Admin.Web.Settings;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Web;
@@ -52,7 +55,15 @@ public class CmsKitAdminWebModule : AbpModule
         {
             options.MenuContributors.Add(new CmsKitAdminMenuContributor());
         });
-
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.ScriptBundles
+                .Configure(typeof(IndexModel).FullName,
+                    configuration =>
+                    {
+                        configuration.AddFiles("/client-proxies/cms-kit-admin-proxy.js");
+                    });
+        });
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<CmsKitAdminWebModule>("Volo.CmsKit.Admin.Web");
@@ -173,6 +184,12 @@ public class CmsKitAdminWebModule : AbpModule
         {
             options.ConventionalControllers.FormBodyBindingIgnoredTypes.Add(typeof(CreateMediaInputWithStream));
         });
+
+        Configure<SettingManagementPageOptions>(options =>
+        {
+            options.Contributors.Add(new BookStoreSettingPageContributor());
+        });
+
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)

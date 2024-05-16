@@ -30,15 +30,23 @@
     <EmbeddedResource Include="wwwroot\**\*.css" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Components\**\*.js" />
-    <Content Remove="Components\**\*.css" />
     <Content Remove="wwwroot\**\*.js" />
     <Content Remove="wwwroot\**\*.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\CommentsSetting\Index.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Admin\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Admin\_ViewImports.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Volo.Abp.SettingManagement.Web">
+      <HintPath>..\..\..\setting-management\src\Volo.Abp.SettingManagement.Web\obj\Debug\net8.0\ref\Volo.Abp.SettingManagement.Web.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

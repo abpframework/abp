@@ -176,7 +176,7 @@
 
     volo.cmsKit.admin.comments.commentAdmin.getList = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/comments' + abp.utils.buildQueryString([{ name: 'entityType', value: input.entityType }, { name: 'text', value: input.text }, { name: 'repliedCommentId', value: input.repliedCommentId }, { name: 'author', value: input.author }, { name: 'creationStartDate', value: input.creationStartDate }, { name: 'creationEndDate', value: input.creationEndDate }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-admin/comments' + abp.utils.buildQueryString([{ name: 'entityType', value: input.entityType }, { name: 'text', value: input.text }, { name: 'repliedCommentId', value: input.repliedCommentId }, { name: 'author', value: input.author }, { name: 'creationStartDate', value: input.creationStartDate }, { name: 'creationEndDate', value: input.creationEndDate }, { name: 'isApproved', value: input.isApproved }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };
@@ -202,6 +202,22 @@
         type: 'POST',
         dataType: null,
         data: JSON.stringify(commentApprovalDto)
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.comments.commentAdmin.setSettings = function(settingsDto, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/comments/settings',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(settingsDto)
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.comments.commentAdmin.getSettings = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/comments/settings',
+        type: 'GET'
       }, ajaxParams));
     };
 

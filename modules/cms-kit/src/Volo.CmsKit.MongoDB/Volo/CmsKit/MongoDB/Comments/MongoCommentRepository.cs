@@ -113,6 +113,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 	public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
 		string entityType,
 		string entityId,
+		bool? isApproved = null,
 		CancellationToken cancellationToken = default)
 	{
 		Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -126,10 +127,22 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 
 		var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(GetCancellationToken(cancellationToken));
 
-		var comments = await (await GetMongoQueryableAsync(cancellationToken))
-			.Where(c => c.EntityId == entityId && c.EntityType == entityType)
-			.OrderBy(c => c.CreationTime)
-			.ToListAsync(GetCancellationToken(cancellationToken));
+        var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
+        .Where(c => c.EntityId == entityId && c.EntityType == entityType);
+
+        if (isApproved.HasValue)
+        {
+            commentsQuery = commentsQuery.Where(c => c.IsApproved == isApproved.Value);
+        }
+
+        var comments = await commentsQuery
+            .OrderBy(c => c.CreationTime)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+   //     var comments = await (await GetMongoQueryableAsync(cancellationToken))
+			//.Where(c => c.EntityId == entityId && c.EntityType == entityType )
+   //         .OrderBy(c => c.CreationTime)
+			//.ToListAsync(GetCancellationToken(cancellationToken));
 
 		return comments
 			.Select(

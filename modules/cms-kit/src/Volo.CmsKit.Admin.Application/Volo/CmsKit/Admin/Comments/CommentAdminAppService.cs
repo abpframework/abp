@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.SettingManagement;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
+using Volo.CmsKit.Settings;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Comments;
@@ -20,9 +22,11 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 {
     protected ICommentRepository CommentRepository { get; }
 
-    public CommentAdminAppService(ICommentRepository commentRepository)
+    private readonly ISettingManager _settingManager;
+    public CommentAdminAppService(ICommentRepository commentRepository, ISettingManager settingManager)
     {
         CommentRepository = commentRepository;
+        _settingManager = settingManager;
     }
 
     public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
@@ -84,4 +88,24 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 
 		await CommentRepository.UpdateAsync(comment);
 	}
+
+    public async Task SetSettings(SettingsDto settingsDto)
+    {
+        await _settingManager.SetGlobalAsync(AppSettings.RequireApprovement, settingsDto.RequireApprovement.ToString());
+    }
+
+    public async Task<SettingsDto> GetSettings()
+    {
+        string approvalSettingValue = await _settingManager.GetOrNullGlobalAsync(AppSettings.RequireApprovement);
+
+        if (bool.TryParse(approvalSettingValue, out bool isApprovalRequired))
+        {
+            SettingsDto settings = new SettingsDto
+            {
+                RequireApprovement = isApprovalRequired
+            };
+            return settings;
+        }
+        return null;
+    }
 }

@@ -41,12 +41,12 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
         });
     }
 
-    public virtual async Task UpdateCommentStatusAsync(Guid id, bool isApproved)
+    public virtual async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto commentApprovalDto)
     {
-        await RequestAsync(nameof(UpdateCommentStatusAsync), new ClientProxyRequestTypeValue
+        await RequestAsync(nameof(UpdateApprovalStatusAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id },
-            { typeof(bool), isApproved }
+            { typeof(CommentApprovalDto), commentApprovalDto }
         });
     }
 }

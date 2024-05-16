@@ -9,5 +9,8 @@ public class CmsKitSettingDefinitionProvider : SettingDefinitionProvider
         /* Define module settings here.
          * Use names from CmsKitSettings class.
          */
+        context.Add(
+            new SettingDefinition(AppSettings.RequireApprovement, "true")
+            ) ;
     }
 }
