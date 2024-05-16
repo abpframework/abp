@@ -1,7 +1,7 @@
 import { Injectable, effect, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { LocalizationService } from './localization.service';
 import { DISABLE_PROJECT_NAME } from '../tokens';
 
@@ -29,8 +29,6 @@ export class AbpTitleStrategy extends TitleStrategy {
     this.routerState = routerState;
     const title = this.buildTitle(routerState);
 
-    let localizedText = '';
-
     const projectName = this.localizationService.instant({
       key: '::AppName',
       defaultValue: 'MyProjectName',
@@ -39,8 +37,8 @@ export class AbpTitleStrategy extends TitleStrategy {
     if (!title) {
       return this.title.setTitle(projectName);
     }
-    localizedText = this.localizationService.instant({ key: title, defaultValue: title });
-
+    
+    let localizedText = this.localizationService.instant({ key: title, defaultValue: title });
     if (!this.disableProjectName) {
       localizedText += ` | ${projectName}`;
     }
