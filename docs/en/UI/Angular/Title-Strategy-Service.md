@@ -4,7 +4,7 @@
 
 This strategy is based on the title property. Provide a title property when setting a new route.
 
-**Example:**
+**Example**
 
 ```ts
 {
@@ -13,8 +13,6 @@ This strategy is based on the title property. Provide a title property when sett
   title: 'AbpCustomers::Roles'
 },
 ```
-
-**`Note:`**
 
 - It is better to use localized text in the title property. It will be translated by **LocalizationService**.
 - The **`title`** property is already set in **ABP internal packages**.

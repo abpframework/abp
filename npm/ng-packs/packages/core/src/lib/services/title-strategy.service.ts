@@ -11,7 +11,7 @@ import { DISABLE_PROJECT_NAME } from '../tokens';
 export class AbpTitleStrategy extends TitleStrategy {
   protected readonly title = inject(Title);
   protected readonly localizationService = inject(LocalizationService);
-  protected readonly disableProjectName = inject(DISABLE_PROJECT_NAME, { optional: true }) || false;
+  protected readonly disableProjectName = inject(DISABLE_PROJECT_NAME, { optional: true });
   protected routerState: RouterStateSnapshot;
 
   langugageChange = toSignal(this.localizationService.languageChange$);
@@ -26,7 +26,6 @@ export class AbpTitleStrategy extends TitleStrategy {
   }
 
   override updateTitle(routerState: RouterStateSnapshot) {
-    // routerState assignment is necessary for the language change
     this.routerState = routerState;
     const title = this.buildTitle(routerState);
 
