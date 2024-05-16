@@ -11,9 +11,6 @@ public class ScriptTagHelper : AbpTagHelper
 {
     protected AbpBundlingOptions Options { get; }
     
-    [HtmlAttributeName("src")]
-    public string Src { get; set; } = default!;
-    
     public ScriptTagHelper(IOptions<AbpBundlingOptions> options)
     {
         Options = options.Value;
@@ -25,7 +22,9 @@ public class ScriptTagHelper : AbpTagHelper
             output.Attributes.Add("defer", "");
         }
         
-        if (!Src.IsNullOrWhiteSpace() && Options.DeferScripts.Any(x => Src.Equals(x, StringComparison.OrdinalIgnoreCase)))
+        var src = output.Attributes["src"]?.Value?.ToString();
+        
+        if (!src.IsNullOrWhiteSpace() && Options.DeferScripts.Any(x => src.Equals(x, StringComparison.OrdinalIgnoreCase)))
         {
             output.Attributes.Add("defer", "");
         }
