@@ -303,7 +303,7 @@
     "SeeMore": "See More",
     "DetailsOfTheEBook": "Details of the E-Book",
     "JoinOurMarketingNewsletter": "Join our marketing newsletter",
-    "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "FrameworkNewsletterConfirmationMessage": "I agree to the <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://abp.io/TermsConditions\">Terms & Conditions</a> and <a  class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://abp.io/Privacy\">Privacy Policy</a>.",
     "GetYourFreeEBook": "Get Your <span class=\"gradient-framework d-block\">Free DDD E-book </span>",
     "EverythingYouNeedToKnow": "Everything you need to know.",
     "PreOrderNow": "Pre-Order Now",
@@ -624,7 +624,7 @@
     "MaybeLater": "Maybe later",
     "JoinOurPostNewsletter": "Join our post newsletter",
     "Marketing": "Marketing",
-    "CommunityPrivacyPolicyConfirmation": "I agree to the Terms & Conditions and <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://commercial.abp.io/Privacy\">Privacy Policy</a>.",
+    "CommunityPrivacyPolicyConfirmation": "I agree to the Terms & Conditions and <a class=\"text-white fw-6 text-decoration-underline opacity-50\" href=\"https://abp.io/Privacy\">Privacy Policy</a>.",
     "PostRequestMessageTitle": "<a href=\"https://github.com/abpframework/abp/issues/new\">Open an issue</a> on GitHub to request a post/tutorial you want to see on this website.",
     "PostRequestMessageBody": "Here's a list of the requested posts by the community. Do you want to write a requested post? Please click on the request and join the discussion.",
     "Language": "Language",
@@ -1314,7 +1314,7 @@
     "UpgradePaymentInfoSection_WantToExtendLicense": "Do you want to extend your license for 1 more year?",
     "UpgradePaymentInfoSection_UpgradingWillNotExtendLicense": "Upgrading will not extend your license expiration date!",
     "UpgradePaymentInfoSection_LicenseUpgradeDescription": "By upgrading your license, you will be promoted to a higher license type, which will allow you to get additional benefits. See the <a href=\"/Pricing\" target=\"_blank\">license comparison table</a> to check the differences between the license types.",
-    "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://commercial.abp.io\" class=\"text-primary\">commercial.abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>.",
+    "Welcome_Page_UseSameCredentialForCommercialWebsites": "Use the same credentials for both <a href=\"https://abp.io\" class=\"text-primary\">abp.io</a> and <a href=\"https://support.abp.io\" class=\"text-primary\">support.abp.io</a>.",
     "WatchCrudPagesVideo": "Watch the \"Creating CRUD Pages with ABP Suite\" Video!",
     "WatchGeneratingFromDatabaseVideo": "Watch the \"ABP Suite: Generating CRUD Pages From Existing Database Tables\" Video!",
     "WatchTakeCloserLookVideo": "Watch the \"Take a closer look at the code generation: ABP Suite\" Video!",
@@ -1770,6 +1770,6 @@
     "RegisterDemo": "Register",
     "TrainingDescription": "We are offering the following training packages for who want to get expertise on the ABP Platform.",
     "PurchaseDevelopers": "developers",
-    "LinkExpiredMessage": "The payment link has expired! Contact us at <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> to update the link or <a href='https://commercial.abp.io/contact'>click here</a> to navigate to the contact page."
+    "LinkExpiredMessage": "The payment link has expired! Contact us at <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> to update the link or <a href='https://abp.io/contact'>click here</a> to navigate to the contact page."
   }
 }
