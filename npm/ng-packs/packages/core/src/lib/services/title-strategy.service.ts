@@ -1,22 +1,19 @@
 import { Injectable, effect, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { ConfigStateService } from './config-state.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { LocalizationService } from './localization.service';
+import { DISABLE_PROJECT_NAME } from '../tokens';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AbpTitleStrategy extends TitleStrategy {
   protected readonly title = inject(Title);
-  protected readonly configState = inject(ConfigStateService);
   protected readonly localizationService = inject(LocalizationService);
+  protected readonly disableProjectName = inject(DISABLE_PROJECT_NAME, { optional: true }) || false;
   protected routerState: RouterStateSnapshot;
 
-  projectName = toSignal(this.configState.getDeep$('localization.defaultResourceName'), {
-    initialValue: 'MyProjectName',
-  });
   langugageChange = toSignal(this.localizationService.languageChange$);
 
   constructor() {
@@ -29,15 +26,26 @@ export class AbpTitleStrategy extends TitleStrategy {
   }
 
   override updateTitle(routerState: RouterStateSnapshot) {
+    // routerState assignment is necessary for the language change
     this.routerState = routerState;
-    let title = this.buildTitle(routerState);
+    const title = this.buildTitle(routerState);
+
+    let localizedText = '';
+
+    const projectName = this.localizationService.instant({
+      key: '::AppName',
+      defaultValue: 'MyProjectName',
+    });
 
     if (!title) {
-      this.title.setTitle(this.projectName());
-      return;
+      return this.title.setTitle(projectName);
+    }
+    localizedText = this.localizationService.instant({ key: title, defaultValue: title });
+
+    if (!this.disableProjectName) {
+      localizedText += ` | ${projectName}`;
     }
 
-    const localizedTitle = this.localizationService.instant({ key: title, defaultValue: title });
-    this.title.setTitle(`${localizedTitle} | ${this.projectName()}`);
+    this.title.setTitle(localizedText);
   }
 }
