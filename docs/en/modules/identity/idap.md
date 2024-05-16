@@ -1,4 +1,4 @@
-# LDAP External login Provider
+# LDAP External Login Provider
 
 ## Introduction
 

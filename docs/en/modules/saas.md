@@ -1,4 +1,6 @@
-# SaaS module
+# SaaS Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module is used to manage your tenants and editions in multi-tenant applications;
 

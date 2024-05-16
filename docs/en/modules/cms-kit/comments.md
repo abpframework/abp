@@ -1,6 +1,6 @@
 # CMS Kit: Comments
 
-CMS kit provides a **comment** system to add the comment feature to any kind of resource, like blog posts, products, etc.
+CMS Kit provides a **comment** system to add the comment feature to any kind of resource, like blog posts, products, etc.
 
 ## Enabling the Comment Feature
 

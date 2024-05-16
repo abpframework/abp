@@ -1,6 +1,6 @@
 # Newsletter System
 
-CMS kit provides a **newsletter** system to allow users to subscribe to newsletters. Here a screenshot of the newsletter subscription widget:
+CMS Kit provides a **newsletter** system to allow users to subscribe to newsletters. Here a screenshot of the newsletter subscription widget:
 
 ![cmskit-module-newsletter-widget](../../images/cmskit-module-newsletter-widget.png)
 

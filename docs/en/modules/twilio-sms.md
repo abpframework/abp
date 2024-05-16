@@ -1,4 +1,6 @@
-# Twilio SMS Module
+# Twilio SMS Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 [Twilio](https://www.twilio.com) is a cloud communication provider that makes it easy to send and receive SMS. ABP Twilio SMS module implements the SMS sending feature of `ISmsSender` interface with Twilio.
 

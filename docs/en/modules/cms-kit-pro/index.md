@@ -1,4 +1,6 @@
-# CMS Kit Pro Module
+# CMS Kit Pro Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module extends the [open-source CMS Kit module](../cms-kit) and adds additional CMS (Content Management System) capabilities to your application.
 

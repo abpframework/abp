@@ -1,4 +1,6 @@
-# Identity module
+# Identity Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module implements the User and Role system of an application;
 

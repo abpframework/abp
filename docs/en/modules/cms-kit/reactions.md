@@ -1,6 +1,6 @@
 # Reaction System
 
-CMS kit provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments.
+CMS Kit provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments.
 
 Reaction component allows users to react to your content via pre-defined icons/emojis. Here how the reactions component may looks like: 
 

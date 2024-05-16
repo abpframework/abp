@@ -1,4 +1,6 @@
-# Text Template Management Module
+# Text Template Management Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module is used to store and edit template contents for [the text templating system](https://docs.abp.io/en/abp/latest/Text-Templating) of the ABP. So, you may need to understand it to better understand the purpose of this module.
 

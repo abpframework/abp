@@ -1,6 +1,6 @@
 # URL Forwarding System
 
-CMS kit provides a **URL forwarding** system to create URLs that redirect to other pages or external websites.
+CMS Kit provides a **URL forwarding** system to create URLs that redirect to other pages or external websites.
 
 ## Enabling the URL Forwarding System
 

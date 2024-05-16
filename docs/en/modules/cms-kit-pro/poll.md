@@ -1,6 +1,6 @@
 # Poll System
 
-CMS kit provides a **poll** system to allow users to create, edit and delete polls. Here is a screenshot of the poll widget:
+CMS Kit provides a **poll** system to allow users to create, edit and delete polls. Here is a screenshot of the poll widget:
 
 ![cmskit-module-poll-widget](../../images/cmskit-module-poll-widget.png)
 
