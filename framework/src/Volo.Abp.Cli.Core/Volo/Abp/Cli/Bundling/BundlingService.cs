@@ -345,14 +345,15 @@ public class BundlingService : IBundlingService, ITransientDependency
                 break;
         }
 
-        var targetFramework = document.SelectSingleNode("//TargetFramework")?.InnerText;
+        var targetFramework = document.SelectSingleNode("//TargetFramework")?.InnerText ??
+                              document.SelectNodes("//TargetFrameworks")[0].InnerText;
         var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
 
         if (targetFramework.IsNullOrWhiteSpace() ||
-            !targetFramework.StartsWith($"net{currentCliVersion.Major}", StringComparison.OrdinalIgnoreCase))
+            targetFramework.IndexOf($"net{currentCliVersion.Major}.0", StringComparison.OrdinalIgnoreCase) < 0)
         {
-            throw new BundlingException($"Your project target framework is {targetFramework}. " + Environment.NewLine +
-                                        $"ABP CLI version is {currentCliVersion}. " + Environment.NewLine +
+            throw new BundlingException($"Your project({projectFilePath}) target framework is {targetFramework}. " + Environment.NewLine +
+                                        $"But ABP CLI version is {currentCliVersion}. " + Environment.NewLine +
                                         $"Please use the ABP CLI that is compatible with your project target framework.");
         }
     }
