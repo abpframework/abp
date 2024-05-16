@@ -206,7 +206,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     });
   }
 
-  hasAvailableActions(rowData: any): boolean {
+  hasVisibleActions(rowData: any): boolean {
     const actions = this.actionList.toArray();
     const visibleActions = actions.filter(action => {
       const { visible, permission } = action;
