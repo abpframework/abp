@@ -217,7 +217,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
         return visibilityCheck && permissionCheck;
       }
 
-      return false;
+      return true;
     });
 
     return visibleActions.length > 0;
