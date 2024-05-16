@@ -211,21 +211,17 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     const visibleActions = actions.filter(action => {
       const { visible, permission } = action;
 
-      // Case 1: assuming that the action has neither permission nor visible properties, so no need to make an extra check
       let isVisible = true;
       let hasPermission = true;
 
-      // Case 2: action has visible condition
       if (visible) {
         isVisible = visible({ record: rowData, getInjected: this.getInjected });
       }
 
-      // Case 3: action has permission condition
       if (permission) {
         hasPermission = this.permissionService.getGrantedPolicy(permission);
       }
 
-      // Return true if the action is both visible and has permission, otherwise return false
       return isVisible && hasPermission;
     });
 
