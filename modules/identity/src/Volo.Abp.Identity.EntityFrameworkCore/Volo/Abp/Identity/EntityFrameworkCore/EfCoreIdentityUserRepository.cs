@@ -152,11 +152,10 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         if (userClaims.Any())
         {
             (await GetDbContextAsync()).Set<IdentityUserClaim>().RemoveRange(userClaims);
-        }
-
-        if (autoSave)
-        {
-            await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+            }
         }
     }
 
