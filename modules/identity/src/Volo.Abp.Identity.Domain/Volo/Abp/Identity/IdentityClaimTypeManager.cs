@@ -51,7 +51,7 @@ public class IdentityClaimTypeManager : DomainService
         }
 
         //Remove claim of this type from all users
-        await IdentityUserRepository.RemoveClaimFromAllUsers(claimType.Name);
+        await IdentityUserRepository.RemoveClaimFromAllUsersAsync(claimType.Name);
         await IdentityClaimTypeRepository.DeleteAsync(id);
     }
 }

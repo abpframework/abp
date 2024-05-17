@@ -44,7 +44,7 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         CancellationToken cancellationToken = default
     );
 
-    Task RemoveClaimFromAllUsers(
+    Task RemoveClaimFromAllUsersAsync(
         string claimType,
         bool autoSave = false,
         CancellationToken cancellationToken = default

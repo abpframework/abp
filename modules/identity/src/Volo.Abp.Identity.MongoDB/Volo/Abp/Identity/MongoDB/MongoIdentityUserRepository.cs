@@ -108,7 +108,7 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task RemoveClaimFromAllUsers(string claimType, bool autoSave, CancellationToken cancellationToken = default)
+    public virtual async Task RemoveClaimFromAllUsersAsync(string claimType, bool autoSave, CancellationToken cancellationToken = default)
     {
         var users = await (await GetMongoQueryableAsync(cancellationToken))
             .Where(u => u.Claims.Any(c => c.ClaimType == claimType))

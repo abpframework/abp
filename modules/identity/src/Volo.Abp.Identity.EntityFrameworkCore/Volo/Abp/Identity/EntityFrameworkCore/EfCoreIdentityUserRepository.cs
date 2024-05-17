@@ -145,7 +145,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task RemoveClaimFromAllUsers(string claimType, bool autoSave, CancellationToken cancellationToken = default)
+    public virtual async Task RemoveClaimFromAllUsersAsync(string claimType, bool autoSave, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
         var userClaims = await dbContext.Set<IdentityUserClaim>().Where(uc => uc.ClaimType == claimType).ToListAsync(cancellationToken: cancellationToken);

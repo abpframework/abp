@@ -80,7 +80,7 @@ public abstract class IdentityClaimTypeRepository_Tests<TStartupModule> : AbpIde
         }
 
         await ClaimTypeRepository.DeleteAsync(ageClaim.Id);
-        await UserRepository.RemoveClaimFromAllUsers(ageClaim.Name);
+        await UserRepository.RemoveClaimFromAllUsersAsync(ageClaim.Name);
 
         using (var uow = UnitOfWorkManager.Begin())
         {
