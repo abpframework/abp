@@ -223,7 +223,14 @@
 
     volo.cmsKit.admin.comments.commentAdmin.getPendingCommentCount = function(ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/comments/pending-count',
+        url: abp.appPath + 'api/cms-kit-admin/comments/waiting-count',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.comments.commentAdmin.getWaitingCommentsWithReplies = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/comments/waiting' + abp.utils.buildQueryString([{ name: 'entityType', value: input.entityType }, { name: 'text', value: input.text }, { name: 'repliedCommentId', value: input.repliedCommentId }, { name: 'author', value: input.author }, { name: 'creationStartDate', value: input.creationStartDate }, { name: 'creationEndDate', value: input.creationEndDate }, { name: 'isApproved', value: input.isApproved }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };

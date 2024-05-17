@@ -27,12 +27,11 @@
     <abp-script-bundle>
         <abp-script src="/client-proxies/cms-kit-common-proxy.js" />
         <abp-script src="/client-proxies/cms-kit-admin-proxy.js" />
-        <abp-script src="/Pages/CmsKit/Comments/index.js" />
+        <abp-script src="/Pages/CmsKit/Comments/Waiting/index.js" />
     </abp-script-bundle>
 }
 
-<abp-alert id="commentsAlert" alert-type="Warning" style="display: none;">
-</abp-alert>
+
 
 <abp-card class="mb-4">
     <abp-card-body>
@@ -50,22 +49,15 @@
                         </abp-row>
                     </abp-column>
 
-                    <abp-column size-lg="_2" size-md="_6">
+                    <abp-column size-lg="_3" size-md="_6">
                         <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text" />
                     </abp-column>
 
-                    <abp-column size-lg="_2" size-md="_6">
+                    <abp-column size-lg="_3" size-md="_6">
                         <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text" />
                     </abp-column>
 
-                    <abp-column size-lg="_2" size-md="_6">
-                        <select asp-for="@Model.IsApproved" label="@L["IsApproved"].Value">
-                            <option value="">@L["All"].Value</option>
-                            <option value="true">@L["Approved"].Value</option>
-                            <option value="false">@L["Rejected"].Value</option>
-                            <option value="null">@L["Pending"].Value</option>
-                        </select>
-                    </abp-column>
+              
 
                     <abp-column size-lg="_2" size-md="_6">
                         <abp-button class="w-100 mb-3" button-type="Primary" type="submit">

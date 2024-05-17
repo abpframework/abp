@@ -118,4 +118,41 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 		return (int)(count == null ? 0 : count);
 
 	}
+
+    public async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input)
+    {
+        var totalCount = await CommentRepository.GetCountAsync(
+         input.Text,
+         input.EntityType,
+         input.RepliedCommentId,
+         input.Author,
+         input.CreationStartDate,
+         input.CreationEndDate,
+         "null"
+         );
+
+
+        var comments = await CommentRepository.GetListAsync(
+            input.Text,
+            input.EntityType,
+            input.RepliedCommentId,
+            input.Author,
+            input.CreationStartDate,
+            input.CreationEndDate,
+            input.Sorting,
+            input.MaxResultCount,
+            input.SkipCount,
+           "null"
+        );
+
+        var dtos = comments.Select(queryResultItem =>
+        {
+            var dto = ObjectMapper.Map<Comment, CommentWithAuthorDto>(queryResultItem.Comment);
+            dto.Author = ObjectMapper.Map<CmsUser, CmsUserDto>(queryResultItem.Author);
+
+            return dto;
+        }).ToList();
+
+        return new PagedResultDto<CommentWithAuthorDto>(totalCount, dtos);
+    }
 }

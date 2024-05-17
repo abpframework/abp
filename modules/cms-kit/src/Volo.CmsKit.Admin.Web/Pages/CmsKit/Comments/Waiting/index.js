@@ -57,7 +57,7 @@
         scrollX: true,
         searching: false,
         scrollCollapse: true,
-        ajax: abp.libs.datatables.createAjax(commentsService.getList, getFilter),
+        ajax: abp.libs.datatables.createAjax(commentsService.getWaitingCommentsWithReplies, getFilter),
         columnDefs: [
             {
                 width: "10%",
@@ -173,28 +173,6 @@
                 data: "creationTime",
                 orderable: true,
                 dataFormat: "datetime"
-            },
-            {
-                width: "5%",
-                title: l("Status"),
-                orderable: false,
-
-                data: "isApproved",
-                render: function (data, type, row) {
-                    var icons = ''
-
-                    if (data === null) {
-                        icons = '<i class="fa-solid fa-hourglass-start"></i>';
-                    } else if (typeof data === "boolean") {
-                        if (data) {
-                            icons = '<i class="fa-solid fa-check" style="color: #63E6BE;"></i>';
-                        } else {
-                            icons = '<i class="fa-solid fa-x" style="color: #e0102f;"></i>';
-                        }
-                    }
-
-                    return icons;
-                }
             }
         ]
     }));
@@ -215,16 +193,5 @@
     filterForm.submit(function (e) {
         e.preventDefault();
         _dataTable.ajax.reloadEx();
-    });
-    // Get and display pending comment count
-    commentsService.getPendingCommentCount().then(function (count) {
-        console.log(count)
-        if (count > 0) {
-            var alertMessage = 'You have pending comments: ' + count;
-            var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
-            console.log(count)
-            $('#commentsAlert').html(alertElement);
-            $('#commentsAlert').show()
-        }
     });
 });

@@ -71,9 +71,17 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
        return CommentAdminAppService.GetSettings();
     }
 	[HttpGet]
-	[Route("pending-count")]
+	[Route("waiting-count")]
 	public Task<int> GetPendingCommentCount()
 	{
 		return CommentAdminAppService.GetPendingCommentCount();
 	}
+
+    [HttpGet]
+    [Route("waiting")]
+
+    public Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input)
+    {
+        return CommentAdminAppService.GetWaitingCommentsWithRepliesAsync(input);
+    }
 }

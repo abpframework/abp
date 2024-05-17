@@ -222,9 +222,20 @@ $(function (){
         if (count > 0) {
             var alertMessage = 'You have pending comments: ' + count;
             var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
-            console.log(count)
             $('#commentsAlert').html(alertElement);
             $('#commentsAlert').show()
+            $('#commentsAlert').click(function () {
+                window.location.href = '/Cms/Comments/Waiting'
+            });
         }
     });
+
+    //
+    commentsService.getSettings().then(function (data) {
+        if (data.requireApprovement) {
+            $('#CommentsTable').DataTable().column(6).visible(true);
+        } else {
+            $('#CommentsTable').DataTable().column(6).visible(false);
+        }
+    })
 });

@@ -18,5 +18,8 @@ public interface ICommentAdminAppService : IApplicationService
     Task<SettingsDto> GetSettings();
 	Task<int> GetPendingCommentCount();
 
+    Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input);
+
+
 
 }
