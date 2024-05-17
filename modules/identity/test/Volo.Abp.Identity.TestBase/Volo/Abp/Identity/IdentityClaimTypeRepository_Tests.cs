@@ -17,19 +17,25 @@ public abstract class IdentityClaimTypeRepository_Tests<TStartupModule> : AbpIde
     where TStartupModule : IAbpModule
 {
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
+    protected IdentityClaimTypeManager IdentityClaimTypeManager { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IdentityUserManager IdentityUserManager { get; }
+    protected IIdentityRoleRepository RoleRepository { get; }
+    protected IdentityRoleManager IdentityRoleManager { get; }
     protected IdentityTestData IdentityTestData { get; }
 
     public IdentityClaimTypeRepository_Tests()
     {
         ClaimTypeRepository = ServiceProvider.GetRequiredService<IIdentityClaimTypeRepository>();
+        IdentityClaimTypeManager = ServiceProvider.GetRequiredService<IdentityClaimTypeManager>();
         GuidGenerator = ServiceProvider.GetRequiredService<IGuidGenerator>();
         UnitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
         IdentityUserManager = ServiceProvider.GetRequiredService<IdentityUserManager>();
         UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
+        RoleRepository = ServiceProvider.GetRequiredService<IIdentityRoleRepository>();
+        IdentityRoleManager = ServiceProvider.GetRequiredService<IdentityRoleManager>();
         IdentityTestData = ServiceProvider.GetRequiredService<IdentityTestData>();
     }
 
@@ -72,24 +78,31 @@ public abstract class IdentityClaimTypeRepository_Tests<TStartupModule> : AbpIde
             var john = await UserRepository.FindAsync(IdentityTestData.UserJohnId);
             john.ShouldNotBeNull();
             await IdentityUserManager.AddClaimAsync(john, new Claim(ageClaim.Name, "18"));
-
             var userClaims = await IdentityUserManager.GetClaimsAsync(john);
             userClaims.ShouldContain(c => c.Type == ageClaim.Name && c.Value == "18");
+
+            var saleRole = await RoleRepository.FindAsync(IdentityTestData.RoleSaleId);
+            saleRole.ShouldNotBeNull();
+            await IdentityRoleManager.AddClaimAsync(saleRole, new Claim(ageClaim.Name, "18"));
+            var roleClaims = await IdentityRoleManager.GetClaimsAsync(saleRole);
+            roleClaims.ShouldContain(c => c.Type == ageClaim.Name && c.Value == "18");
 
             await uow.CompleteAsync();
         }
 
-        await ClaimTypeRepository.DeleteAsync(ageClaim.Id);
-        await UserRepository.RemoveClaimFromAllUsersAsync(ageClaim.Name);
+        await IdentityClaimTypeManager.DeleteAsync(ageClaim.Id);
 
         using (var uow = UnitOfWorkManager.Begin())
         {
             var john = await UserRepository.FindAsync(IdentityTestData.UserJohnId);
             john.ShouldNotBeNull();
-
             var userClaims = await IdentityUserManager.GetClaimsAsync(john);
-
             userClaims.ShouldNotContain(c => c.Type == ageClaim.Name && c.Value == "18");
+
+            var saleRole = await RoleRepository.FindAsync(IdentityTestData.RoleSaleId);
+            saleRole.ShouldNotBeNull();
+            var roleClaims = await IdentityRoleManager.GetClaimsAsync(saleRole);
+            roleClaims.ShouldNotContain(c => c.Type == ageClaim.Name && c.Value == "18");
 
             await uow.CompleteAsync();
         }
