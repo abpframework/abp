@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.Identity;
@@ -16,11 +18,19 @@ public abstract class IdentityClaimTypeRepository_Tests<TStartupModule> : AbpIde
 {
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
     protected IGuidGenerator GuidGenerator { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+    protected IIdentityUserRepository UserRepository { get; }
+    protected IdentityUserManager IdentityUserManager { get; }
+    protected IdentityTestData IdentityTestData { get; }
 
     public IdentityClaimTypeRepository_Tests()
     {
         ClaimTypeRepository = ServiceProvider.GetRequiredService<IIdentityClaimTypeRepository>();
         GuidGenerator = ServiceProvider.GetRequiredService<IGuidGenerator>();
+        UnitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+        IdentityUserManager = ServiceProvider.GetRequiredService<IdentityUserManager>();
+        UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
+        IdentityTestData = ServiceProvider.GetRequiredService<IdentityTestData>();
     }
 
     [Fact]
@@ -42,12 +52,46 @@ public abstract class IdentityClaimTypeRepository_Tests<TStartupModule> : AbpIde
     {
         (await ClaimTypeRepository.GetCountAsync("Age")).ShouldBe(1);
     }
-    
+
     [Fact]
     public async Task GetListAsyncByNames()
     {
         var result = await ClaimTypeRepository.GetListByNamesAsync(new List<string> { "Age", "Education" });
 
         result.Count.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        var ageClaim = await ClaimTypeRepository.FindAsync(IdentityTestData.AgeClaimId);
+        ageClaim.ShouldNotBeNull();
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var john = await UserRepository.FindAsync(IdentityTestData.UserJohnId);
+            john.ShouldNotBeNull();
+            await IdentityUserManager.AddClaimAsync(john, new Claim(ageClaim.Name, "18"));
+
+            var userClaims = await IdentityUserManager.GetClaimsAsync(john);
+            userClaims.ShouldContain(c => c.Type == ageClaim.Name && c.Value == "18");
+
+            await uow.CompleteAsync();
+        }
+
+        await ClaimTypeRepository.DeleteAsync(ageClaim.Id);
+        await UserRepository.RemoveClaimFromAllUsers(ageClaim.Name);
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var john = await UserRepository.FindAsync(IdentityTestData.UserJohnId);
+            john.ShouldNotBeNull();
+
+            var userClaims = await IdentityUserManager.GetClaimsAsync(john);
+
+            userClaims.ShouldNotContain(c => c.Type == ageClaim.Name && c.Value == "18");
+
+            await uow.CompleteAsync();
+        }
     }
 }
