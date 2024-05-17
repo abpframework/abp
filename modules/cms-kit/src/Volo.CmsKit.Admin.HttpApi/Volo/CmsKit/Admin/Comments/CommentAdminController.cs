@@ -62,6 +62,7 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     {
        return CommentAdminAppService.SetSettings(settingsDto);
     }
+
     [HttpGet]
     [Route("settings")]
 
@@ -69,4 +70,10 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     {
        return CommentAdminAppService.GetSettings();
     }
+	[HttpGet]
+	[Route("pending-count")]
+	public Task<int> GetPendingCommentCount()
+	{
+		return CommentAdminAppService.GetPendingCommentCount();
+	}
 }

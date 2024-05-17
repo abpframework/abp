@@ -1,22 +1,22 @@
-$(function (){
+﻿$(function () {
     var l = abp.localization.getResource("CmsKit");
-    
+
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
 
     var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
-    
+
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
-    
+
     var getFormattedDate = function ($datePicker) {
-        if(!$datePicker.val()) {
+        if (!$datePicker.val()) {
             return null;
         }
         var momentDate = moment($datePicker.val(), $datePicker.data('daterangepicker').locale.format);
         return momentDate.isValid() ? momentDate.toISOString() : null;
     };
-    
-    
+
+
     var defaultStartDate = moment().add(-7, 'days');
     $("#CreationStartDate").val(defaultStartDate.format('L'));
 
@@ -29,27 +29,27 @@ $(function (){
         "drops": "auto"
     });
 
-    
+
 
     $('.singledatepicker').attr('autocomplete', 'off');
 
     $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
     });
-    
-    
+
+
     var filterForm = $('#CmsKitCommentsFilterForm');
-    
+
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
 
         filterObj.creationStartDate = getFormattedDate($('#CreationStartDate'));
         filterObj.creationEndDate = getFormattedDate($('#CreationEndDate'));
-        
+
         return filterObj;
     };
-  
-    
+
+
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
@@ -139,7 +139,7 @@ $(function (){
                 data: "url",
                 render: function (data, type, row) {
                     if (data !== null) {
-                        return '<a href="' + data + '#comment-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
+                        return '<a href="' + data + '#comment-' + row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
                     }
                     return "";
                 }
@@ -198,21 +198,21 @@ $(function (){
             }
         ]
     }));
-    
-    function GetFilterableDatatableContent(filterSelector, data){
-        return '<span class="datatableCell" data-field="'+ filterSelector +'" data-val="'+ data +'">' + data + '</span>';
+
+    function GetFilterableDatatableContent(filterSelector, data) {
+        return '<span class="datatableCell" data-field="' + filterSelector + '" data-val="' + data + '">' + data + '</span>';
     }
-    
+
     $(document).on('click', '.datatableCell', function () {
         var inputSelector = $(this).attr('data-field');
         var value = $(this).attr('data-val');
-        
+
         $(inputSelector).val(value);
-        
+
         _dataTable.ajax.reloadEx();
     });
 
-    filterForm.submit(function (e){
+    filterForm.submit(function (e) {
         e.preventDefault();
         _dataTable.ajax.reloadEx();
     });

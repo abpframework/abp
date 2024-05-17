@@ -1,6 +1,8 @@
-﻿@*
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.CmsKit.Localization
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-  
+
 *@
 
 @section scripts {
@@ -12,23 +14,22 @@
     </abp-script-bundle>
 }
 @{
-    // <p>sdf</p>
-    // <input type="checkbox" id="checkbox" />
-    // <button id="save">Save</button>
+    @inject IHtmlLocalizer<CmsKitResource> L
+
     <abp-form #form="ngForm">
-        <h4>Checkbox Ayarları</h4>
+        <h4>@L["CommentSettings:Title"].Value</h4>
         <hr />
         <div class="form-group">
             <div class="form-check">
                 <input type="checkbox" id="checkbox" class="form-check-input" name="checkbox" ngModel />
-                <label for="checkbox" class="form-check-label">Açıklama:</label>
+                <label for="checkbox" class="form-check-label">@L["CommentSettings:RequireApprovement"].Value</label>
             </div>
-            <small id="checkboxHelp" class="form-text text-muted">Checkbox açıklama metni buraya gelecek.</small>
+            <small id="checkboxHelp" class="form-text text-muted">@L["CommentSettings:RequireApprovementDescription"].Value</small>
         </div>
 
         <div style="float:right" class="text-right mt-3">
             <abp-button id="save" type="submit" class="btn btn-primary">
-                Kaydet
+                @L["SaveChanges"].Value
             </abp-button>
         </div>
     </abp-form>
@@ -36,54 +37,7 @@
 
 
 }
-@* <script>
-    var service = volo.cmsKit.admin.comments.commentAdmin;
 
-    $(document).ready(function () {
-        service.getSettings().done(function (response) {
-            var isChecked = response.requireApprovement
-            $('#checkbox').prop('checked', isChecked);
-            console.log('CheckBox durumu başarıyla güncellendi:', response.requireApprovement);
-        }).fail(function (error) {
-            console.error('CheckBox durumu alınırken bir hata oluştu:', error);
-        });
-
-        $('#save').click(function () {
-            var isChecked = $('#checkbox').prop('checked');
-
-            service.setSettings({ RequireApprovement: isChecked }).done(function (response) {
-                console.log('CheckBox durumu başarıyla güncellendi:', response);
-                alert('CheckBox durumu başarıyla kaydedildi.');
-            }).fail(function (error) {
-                console.error('CheckBox durumu güncellenirken bir hata oluştu:', error);
-                alert('CheckBox durumu kaydedilirken bir hata oluştu.');
-            });
-        });
-    });
-</script> *@
-@* <script>
-    var _service = volo.cmsKit.admin.comments.commentAdmin;
-    $(document).ready(function () {
-        _service.getSettings().done(function (response) {
-            var isChecked = response.requireApprovement;
-            $('#checkbox').prop('checked', isChecked);
-            console.log('CheckBox durumu başarıyla güncellendi:', response.requireApprovement);
-        }).fail(function (error) {
-            console.error('CheckBox durumu alınırken bir hata oluştu:', error);
-        });
-        $('#save').click(function () {
-            var isChecked = $('#checkbox').prop('checked');
-
-            _service.setSettings({ requireApprovement: isChecked }).done(function (response) {
-                console.log('CheckBox durumu başarıyla güncellendi:', response);
-                abp.notify.success('CheckBox durumu başarıyla kaydedildi.');
-            }).fail(function (error) {
-                console.error('CheckBox durumu güncellenirken bir hata oluştu:', error);
-                abp.notify.error('CheckBox durumu kaydedilirken bir hata oluştu.');
-            });
-        });
-    })
-</script> *@
 <script>
     var app = app || {};
 
@@ -99,7 +53,7 @@
             _service.getSettings().done(function (response) {
                 var isChecked = response.requireApprovement;
                 $('#checkbox').prop('checked', isChecked);
-                console.log('CheckBox durumu başarıyla güncellendii:', response.requireApprovement);
+                console.log('CheckBox durumu başarıyla güncellendi:', response.requireApprovement);
             }).fail(function (error) {
                 console.error('CheckBox durumu alınırken bir hata oluştu:', error);
             });

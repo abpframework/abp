@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <None Remove="Components\CommentsSetting\Index.js" />
+    <None Remove="Pages\CmsKit\Comments\Waiting\index.js" />
   </ItemGroup>
 
   <ItemGroup>

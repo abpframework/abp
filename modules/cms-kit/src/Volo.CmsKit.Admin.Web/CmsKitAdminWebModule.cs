@@ -110,6 +110,8 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Comments/{Id}");
             options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/Items");
             options.Conventions.AddPageRoute("/CmsKit/GlobalResources/Index", "/Cms/GlobalResources");
+            options.Conventions.AddPageRoute("/CmsKit/Comments/Waiting/Index", "/Cms/Comments/Waiting");
+
         });
 
         Configure<AbpPageToolbarOptions>(options =>

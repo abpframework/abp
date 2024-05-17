@@ -31,27 +31,31 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 
     public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
     {
-        var totalCount = await CommentRepository.GetCountAsync(
-            input.Text,
-            input.EntityType,
-            input.RepliedCommentId,
-            input.Author,
-            input.CreationStartDate,
-            input.CreationEndDate);
+		var totalCount = await CommentRepository.GetCountAsync(
+				input.Text,
+				input.EntityType,
+				input.RepliedCommentId,
+				input.Author,
+				input.CreationStartDate,
+				input.CreationEndDate,
+				input.IsApproved
+				);
 
-        var comments = await CommentRepository.GetListAsync(
-            input.Text,
-            input.EntityType,
-            input.RepliedCommentId,
-            input.Author,
-            input.CreationStartDate,
-            input.CreationEndDate,
-            input.Sorting,
-            input.MaxResultCount,
-            input.SkipCount
-        );
 
-        var dtos = comments.Select(queryResultItem =>
+		var comments = await CommentRepository.GetListAsync(
+			input.Text,
+			input.EntityType,
+			input.RepliedCommentId,
+			input.Author,
+			input.CreationStartDate,
+			input.CreationEndDate,
+			input.Sorting,
+			input.MaxResultCount,
+			input.SkipCount,
+			input.IsApproved
+		);
+
+		var dtos = comments.Select(queryResultItem =>
         {
             var dto = ObjectMapper.Map<Comment, CommentWithAuthorDto>(queryResultItem.Comment);
             dto.Author = ObjectMapper.Map<CmsUser, CmsUserDto>(queryResultItem.Author);
@@ -108,4 +112,10 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
         }
         return null;
     }
+	public async Task<int> GetPendingCommentCount()
+	{
+		var count = await CommentRepository.GetCountAsync(isApproved: "null");
+		return (int)(count == null ? 0 : count);
+
+	}
 }

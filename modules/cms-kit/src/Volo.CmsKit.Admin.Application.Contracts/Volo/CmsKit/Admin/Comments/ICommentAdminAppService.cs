@@ -16,5 +16,7 @@ public interface ICommentAdminAppService : IApplicationService
 
     Task SetSettings(SettingsDto settingsDto);
     Task<SettingsDto> GetSettings();
+	Task<int> GetPendingCommentCount();
+
 
 }

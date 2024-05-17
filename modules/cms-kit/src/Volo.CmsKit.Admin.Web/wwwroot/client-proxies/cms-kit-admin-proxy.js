@@ -221,6 +221,13 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.admin.comments.commentAdmin.getPendingCommentCount = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/comments/pending-count',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
   })();
 
   // controller volo.cmsKit.admin.globalResources.globalResourceAdmin

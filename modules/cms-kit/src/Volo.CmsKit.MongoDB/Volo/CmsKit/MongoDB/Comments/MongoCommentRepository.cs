@@ -45,10 +45,13 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 		string sorting = null,
 		int maxResultCount = int.MaxValue,
 		int skipCount = 0,
-		bool? isApproved = null,
+		string isApproved = null,
 		CancellationToken cancellationToken = default
 	)
+
 	{
+		//bool? isApprovedValue = ParseIsApproved(isApproved);
+
 		var token = GetCancellationToken(cancellationToken);
 		var query = await GetListQueryAsync(
 			filter,
@@ -92,10 +95,11 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 		string authorUsername = null,
 		DateTime? creationStartDate = null,
 		DateTime? creationEndDate = null,
-		bool? isApproved = null,
+		string isApproved = null,
 		CancellationToken cancellationToken = default
 	)
 	{
+		//bool? isApprovedValue = ParseIsApproved(isApproved);
 		var query = await GetListQueryAsync(
 			text,
 			entityType,
@@ -127,22 +131,22 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 
 		var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(GetCancellationToken(cancellationToken));
 
-        var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
-        .Where(c => c.EntityId == entityId && c.EntityType == entityType);
+		var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
+		.Where(c => c.EntityId == entityId && c.EntityType == entityType);
 
-        if (isApproved.HasValue)
-        {
-            commentsQuery = commentsQuery.Where(c => c.IsApproved == isApproved.Value);
-        }
+		if (isApproved.HasValue)
+		{
+			commentsQuery = commentsQuery.Where(c => c.IsApproved == isApproved.Value);
+		}
 
-        var comments = await commentsQuery
-            .OrderBy(c => c.CreationTime)
-            .ToListAsync(GetCancellationToken(cancellationToken));
+		var comments = await commentsQuery
+			.OrderBy(c => c.CreationTime)
+			.ToListAsync(GetCancellationToken(cancellationToken));
 
-   //     var comments = await (await GetMongoQueryableAsync(cancellationToken))
-			//.Where(c => c.EntityId == entityId && c.EntityType == entityType )
-   //         .OrderBy(c => c.CreationTime)
-			//.ToListAsync(GetCancellationToken(cancellationToken));
+		//     var comments = await (await GetMongoQueryableAsync(cancellationToken))
+		//.Where(c => c.EntityId == entityId && c.EntityType == entityType )
+		//         .OrderBy(c => c.CreationTime)
+		//.ToListAsync(GetCancellationToken(cancellationToken));
 
 		return comments
 			.Select(
@@ -189,7 +193,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 		string authorUsername = null,
 		DateTime? creationStartDate = null,
 		DateTime? creationEndDate = null,
-		bool? isApproved = null,
+		string isApproved = null,
 		CancellationToken cancellationToken = default
 	)
 	{
@@ -204,11 +208,46 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 			queryable = queryable.Where(x => x.CreatorId == authorId);
 		}
 
-		return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
-			.WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
-			.WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
-			.WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
-			.WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate)
-			.WhereIf(isApproved.HasValue, c => c.IsApproved == isApproved);
+		queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
+		   .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
+		   .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
+		   .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
+		   .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
+		//.WhereIf(isApproved.HasValue, c => c.IsApproved == isApproved.Value) 
+		//.WhereIf(isApproved == null, c => c.IsApproved == null);
+		if (!string.IsNullOrWhiteSpace(isApproved))
+		{
+			bool? isApprovedValue = ParseIsApproved(isApproved);
+			if (isApprovedValue.HasValue)
+			{
+				queryable = queryable.Where(c => c.IsApproved == isApprovedValue);
+			}
+			else if (isApprovedValue == null)
+			{
+				queryable = queryable.Where(c => c.IsApproved == null);
+			}
+
+		}
+
+
+		return queryable;
+
+
+	}
+	public static bool? ParseIsApproved(string isApproved)
+	{
+		if (string.IsNullOrWhiteSpace(isApproved))
+		{
+			return null;
+		}
+
+		return isApproved.ToLower() switch
+		{
+			"true" => true,
+			"false" => false,
+			"null" => (bool?)null,
+			_ => null
+
+		};
 	}
 }

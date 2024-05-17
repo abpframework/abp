@@ -21,10 +21,8 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
 		string sorting = null,
 		int maxResultCount = int.MaxValue,
 		int skipCount = 0,
-		bool? isApproved = null,
-
+		string isApproved = null,
 		CancellationToken cancellationToken = default
-
 	);
 
 	Task<long> GetCountAsync(
@@ -34,7 +32,7 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
 		string authorUsername = null,
 		DateTime? creationStartDate = null,
 		DateTime? creationEndDate = null,
-		bool? isApproved = null,
+		string isApproved = null,
 		CancellationToken cancellationToken = default
 	);
 
