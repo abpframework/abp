@@ -27,7 +27,7 @@ When you create a new route and provide a **`title`** property, it will look lik
 
 ### Disable `projectName`
 
-- If you dont want to show **`projectName`** in the title, you can disable it.
+- If you don't want to show **`projectName`** in the title, you can disable it.
 
 **app.module.ts**
 
