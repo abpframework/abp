@@ -213,8 +213,12 @@ $(function () {
         if (shorDescriptionEdited) {
             return;
         }
-
-        var plainValue = jQuery('<div>').html(htmlContent).text().replace(/\n/g, ' ').substring(0, 120);
+        
+        var htmlValue = jQuery('<div>').html(htmlContent);
+        htmlValue[0].querySelectorAll(
+            "div, p, h1, h2, h3, h4, h5, h6, ul, ol, pre, address, blockquote, dl, fieldset, form, hr, menu, table"
+        ).forEach(x => x.innerText += " \n");
+        var plainValue = htmlValue.text().replace(/\n/g, ' ').substring(0, 120);
 
         $shortDescription.val(plainValue);
     }
