@@ -57,7 +57,9 @@ Create a domain entity similar to this one:
         public DateTime MembershipDate { get; set; }
     }
 ````
-`Custumer` contains a lot of attributes. we don't want to give all of these attributes to users, so create dto with only the necessary attributes: 
+`Customer` entity contains some properties (such as `FirstName`, `LastName`, ... and other audited properties coming from the base class - `DeleterId`, `IsDeleted`, `CreationTime` etc. -). Typically, you would not want to show/return all of these properties to end users, at that point, you can create a DTO class and only define the properties that you want to return to the end users.
+
+Let's create the `CustomerGetDto` class in the `*.Application.Contracts` project as follows:
 
 ````csharp
     public class CustomerGetDto
