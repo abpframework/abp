@@ -2,7 +2,7 @@
   "culture": "de",
   "texts": {
     "Settings": "Einstellungen",
-    "SuccessfullySaved": "Erfolgreich gespeichert",
+    "SavedSuccessfully": "Erfolgreich gespeichert",
     "Permission:SettingManagement": "Einstellungsmanagement",
     "Permission:Emailing": "E-Mail senden",
     "Permission:EmailingTest": "E-Mail-Test",

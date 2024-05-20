@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
@@ -41,5 +42,19 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
     {
         return context.Request.Path.Value != null &&
                _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase));
+    }
+
+    protected async override Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)
+    {
+        // Blazor components will render concurrently, so we need to skip the middleware for them.
+        // Otherwise, We will get the following exception:
+        // A second operation started on this context before a previous operation completed.
+        // This is usually caused by different threads using the same instance of DbContext.
+        if (context.GetEndpoint()?.Metadata?.GetMetadata<RootComponentMetadata>() != null)
+        {
+            return true;
+        }
+
+        return await base.ShouldSkipAsync(context, next);
     }
 }

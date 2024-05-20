@@ -8,7 +8,8 @@
 
     <ItemGroup>
         <PackageReference Include="IdentityModel" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Authentication.OpenIdConnect\Volo.Abp.AspNetCore.Authentication.OpenIdConnect.csproj" />
     </ItemGroup>
 
 </Project>

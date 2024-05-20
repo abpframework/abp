@@ -6,9 +6,11 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
   selector: 'abp-form-input',
   template: `
     <div class="mb-3">
-      <label *ngIf="label" [ngClass]="labelClass" [for]="inputId">
-        {{ label | abpLocalization }}
-      </label>
+      @if (label) {
+        <label [ngClass]="labelClass" [for]="inputId">
+          {{ label | abpLocalization }}
+        </label>
+      }
       <input
         type="text"
         [id]="inputId"

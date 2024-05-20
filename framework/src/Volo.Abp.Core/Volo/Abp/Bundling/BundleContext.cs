@@ -6,6 +6,7 @@ public class BundleContext
 {
     public List<BundleDefinition> BundleDefinitions { get; set; }
     public BundleParameterDictionary Parameters { get; set; }
+    public bool InteractiveAuto { get; set; }
 
     public BundleContext()
     {
