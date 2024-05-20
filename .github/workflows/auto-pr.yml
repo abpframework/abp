@@ -1,13 +1,13 @@
-name: Merge branch dev with prerel-8.2
+name: Merge branch dev with rel-8.2
 on:
   push:
     branches:
-      - prerel-8.2
+      - rel-8.2
 permissions:
   contents: read
 
 jobs:
-  merge-dev-with-prerel-8-2:
+  merge-dev-with-rel-8-2:
     permissions:
       contents: write  # for peter-evans/create-pull-request to create branch
       pull-requests: write  # for peter-evans/create-pull-request to create a PR
@@ -18,19 +18,19 @@ jobs:
           ref: dev
       - name: Reset promotion branch
         run: |
-          git fetch origin prerel-8.2:prerel-8.2
-          git reset --hard prerel-8.2
+          git fetch origin rel-8.2:rel-8.2
+          git reset --hard rel-8.2
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: auto-merge/prerel-8-2/${{github.run_number}}
-          title: Merge branch dev with prerel-8.2
-          body: This PR generated automatically to merge dev with prerel-8.2. Please review the changed files before merging to prevent any errors that may occur.
+          branch: auto-merge/rel-8-2/${{github.run_number}}
+          title: Merge branch dev with rel-8.2
+          body: This PR generated automatically to merge dev with rel-8.2. Please review the changed files before merging to prevent any errors that may occur.
           reviewers: maliming
           token: ${{ github.token }}
       - name: Merge Pull Request
         env:
           GH_TOKEN: ${{ secrets.BOT_SECRET }}
         run: |
-          gh pr review auto-merge/prerel-8-2/${{github.run_number}} --approve
-          gh pr merge auto-merge/prerel-8-2/${{github.run_number}} --merge --auto --delete-branch
+          gh pr review auto-merge/rel-8-2/${{github.run_number}} --approve
+          gh pr merge auto-merge/rel-8-2/${{github.run_number}} --merge --auto --delete-branch
