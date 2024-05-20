@@ -44,7 +44,9 @@ As can be seen here, it's repetitive and tedious to manually map an object to an
 
 ![Swagger](./images/automapper.png)
 
-Automapper is a .net library that automates object to object mapping. The implementation of Automapper is quite simple. In this chapter I will show you how to use the Automapper library in an ABP-based application. For this reason, I assume that you already have an ABP-based application created. If you have not yet created an ABP-based application, please follow the [Getting Started documentation](https://docs.abp.io/en/abp/latest/Getting-Started-Create-Solution?UI=MVC&DB=EF&Tiered=No).
+Automapper is a .NET library that automates object-to-object mapping. ABP provides abstractions for object-to-object mapping and has an integration package to use [AutoMapper](http://automapper.org/) as the object mapper. 
+
+In this chapter, I will show you how to use the AutoMapper library in an ABP-based application. For this reason, I assume that you already have an ABP-based application created. If you have not yet created an ABP-based application, please follow the [Getting Started documentation](https://docs.abp.io/en/abp/latest/Getting-Started-Create-Solution?UI=MVC&DB=EF&Tiered=No).
 
 Create a domain entity similar to this one: 
 
