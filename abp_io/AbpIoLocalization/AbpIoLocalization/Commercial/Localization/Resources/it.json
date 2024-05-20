@@ -430,6 +430,7 @@
     "ErrorExceptionMessage": "Si è verificato un errore durante l'elaborazione della richiesta",
     "WatchTakeCodeGeneration": "Guarda il video \"Esplora il potenziale della generazione di codice: ABP Suite\"!",
     "ExtendNow": "Estendi/Rinnova",
-    "RegisterDemo": "Registrati"
+    "RegisterDemo": "Registrati",
+    "AbpStudio_ComingSoon": "Prossimamente <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Se vuoi provare ABP Studio prima di chiunque altro, diventa un BETA tester</span>"
   }
 }
