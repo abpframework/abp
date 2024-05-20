@@ -99,7 +99,7 @@ public class YourApplicationAutoMapperProfile : Profile
     }
 }
 ````
-The swagger image of the request will be like this. Only the fields in Dtoda will appear.
+Finally, we can run our application and navigate to the **/swagger** endpoint to try our endpoint. When we send a request, we should get the result as follows:
 
 ![Swagger](./images/swagger1.png)
 
