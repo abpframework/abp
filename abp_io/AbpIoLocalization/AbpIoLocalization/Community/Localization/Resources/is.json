@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> stutt.",
     "Preview": "Forskoðun",
     "VisitPage": "Heimsæktu síðu",
-    "VisitVideoCourseDescription": "Ef þú vilt læra grunnatriði ABP Framework skaltu skoða ABP Essentials Video námskeiðin."
+    "VisitVideoCourseDescription": "Ef þú vilt læra grunnatriði ABP Framework skaltu skoða ABP Essentials Video námskeiðin.",
+    "ConfirmEmailForPost": "Til að geta sent færslur þarftu að staðfesta netfangið þitt. Farðu á account.abp.io/Account/Manage og staðfestu tölvupóstinn þinn á Persónulegum upplýsingum flipanum.",
+    "DailyPostCreateLimitation": "Þú hefur náð daglegu takmörkunum fyrir færslu færslu. Þú getur búið til nýja færslu í {0}."
   }
 }
