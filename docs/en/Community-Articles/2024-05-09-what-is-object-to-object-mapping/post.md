@@ -70,7 +70,7 @@ Let's create the `CustomerGetDto` class in the `*.Application.Contracts` project
     }
 ````
 
-You can use this code to list customers:
+After creating our entity and output DTO classes, now in the application service implementation, we can return the `CustomerGetDto` class, as a result of listing the customers. For that reason, we can write a code as follows:
 
 ````csharp
 public virtual async Task<PagedResultDto<CustomerGetDto>> GetListAsync(GetCustomersInput input)
