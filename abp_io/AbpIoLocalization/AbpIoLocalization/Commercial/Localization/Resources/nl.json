@@ -409,6 +409,6 @@
     "ErrorExceptionMessage": "Er is een fout opgetreden bij het verwerken van uw verzoek",
     "WatchTakeCodeGeneration": "Bekijk de video 'Ontdek het potentieel van codegeneratie: ABP Suite'!",
     "ExtendNow": "Verlengen / Verlengen",
-    "AbpStudio_ComingSoon": "Binnenkort beschikbaar <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Als u ABP Studio als eerste wilt testen, wordt dan BETA-tester</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Als u ABP Studio als eerste wilt testen, wordt dan BETA-tester</span>"
   }
 }

@@ -409,6 +409,6 @@
     "ErrorExceptionMessage": "Villa kom upp við úrvinnslu beiðni þinnar",
     "WatchTakeCodeGeneration": "Horfðu á \"Kannaðu möguleika kóðaframleiðslu: ABP Suite\" myndbandið!",
     "ExtendNow": "Framlengja / endurnýja",
-    "AbpStudio_ComingSoon": "Kemur bráðum <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Ef þú vilt prófa ABP Studio á undan öllum öðrum skaltu gerast BETA prófari</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Ef þú vilt prófa ABP Studio á undan öllum öðrum skaltu gerast BETA prófari</span>"
   }
 }

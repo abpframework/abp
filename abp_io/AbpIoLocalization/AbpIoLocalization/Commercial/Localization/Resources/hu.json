@@ -778,6 +778,6 @@
     "ErrorExceptionMessage": "Hiba történt a kérése feldolgozása során",
     "WatchTakeCodeGeneration": "Nézze meg a \"Fedezze fel a kódgenerálás lehetőségét: ABP Suite\" videót!",
     "ExtendNow": "Bővítés / Megújítás",
-    "AbpStudio_ComingSoon": "Hamarosan <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Ha bárki más előtt szeretné tesztelni az ABP Studio-t, legyen BÉTA tesztelő</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Ha bárki más előtt szeretné tesztelni az ABP Studio-t, legyen BÉTA tesztelő</span>"
   }
 }

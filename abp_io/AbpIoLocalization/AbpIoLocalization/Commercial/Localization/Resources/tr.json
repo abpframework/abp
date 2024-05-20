@@ -1140,6 +1140,6 @@
     "TrainingPack": "Eğitim paketi",
     "TrainingPackDiscount": "Eğitim paketi indirimi",
     "LinkExpiredMessage": "Ödeme bağlantısının süresi doldu! Bağlantıyı güncellemek için <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> adresinden bizimle iletişime geçin veya iletişim sayfasına gitmek için  <a href='https://commercial.abp.io/contact'>buraya</a> tıklayın.",
-    "AbpStudio_ComingSoon": "Yakında <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">ABP Studio'yu herkesten önce test etmek istiyorsanız BETA test kullanıcısı olun</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">ABP Studio'yu herkesten önce test etmek istiyorsanız BETA test kullanıcısı olun</span>"
   }
 }

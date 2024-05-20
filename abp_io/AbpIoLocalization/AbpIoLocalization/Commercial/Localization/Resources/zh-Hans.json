@@ -1110,6 +1110,6 @@
     "WatchTakeCodeGeneration": "观看“探索代码生成的潜力：ABP Suite”视频！",
     "PreBuiltApplicationModulesTitle": "预构建应用程序 <span class=\"gradient-commercial\">模块</span>",
     "RegisterDemo": "登记",
-    "AbpStudio_ComingSoon": "即将推出 <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">如果您想先于其他人测试 ABP Studio，请成为 BETA 测试员</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">如果您想先于其他人测试 ABP Studio，请成为 BETA 测试员</span>"
   }
 }

@@ -431,6 +431,6 @@
     "WatchTakeCodeGeneration": "\"कोड जनरेशन की क्षमता का अन्वेषण करें: एबीपी सुइट\" वीडियो देखें!",
     "ExtendNow": "विस्तार/नवीनीकरण",
     "RegisterDemo": "पंजीकरण करवाना",
-    "AbpStudio_ComingSoon": "जल्द आ रहा है <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">यदि आप किसी और से पहले एबीपी स्टूडियो का परीक्षण करना चाहते हैं, तो बीटा परीक्षक बनें</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">यदि आप किसी और से पहले एबीपी स्टूडियो का परीक्षण करना चाहते हैं, तो बीटा परीक्षक बनें</span>"
   }
 }

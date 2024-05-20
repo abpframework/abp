@@ -409,6 +409,6 @@
     "ErrorExceptionMessage": "Đã xảy ra lỗi trong khi xử lý yêu cầu của bạn",
     "WatchTakeCodeGeneration": "Xem video \"Khám phá tiềm năng tạo mã: ABP Suite\"!",
     "ExtendNow": "Gia hạn/Gia hạn",
-    "AbpStudio_ComingSoon": "Sắp ra mắt <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Nếu bạn muốn thử nghiệm ABP Studio trước bất kỳ ai khác, hãy trở thành người thử nghiệm BETA</span>"
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Nếu bạn muốn thử nghiệm ABP Studio trước bất kỳ ai khác, hãy trở thành người thử nghiệm BETA</span>"
   }
 }
