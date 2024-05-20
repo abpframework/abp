@@ -1,4 +1,4 @@
-# What is Object to Object Mapping
+# What is Object to Object Mapping?
 
 Mapping the properties of one object to the properties of another object is called Object to object mapping. Most of the time we don't want to show the data we store to end users as it is. We only give users the information they will use for that operation. In tables that contain relationships, we analyze the relationships and present meaningful data to users. For example, suppose we have a product and a category object, we keep an attribute called categoryId in the product object. However, it would be illogical to show the categoryId attribute to users. Therefore, we create dto's (data transfer objects) and show the category name attribute to users instead of the category Id attribute. 
 
