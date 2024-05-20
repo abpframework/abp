@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework to nie tylko framework, to także wytyczne dotyczące opracowywania/zarządzania projektami, ponieważ zapewnia szkolenia z DDD, GenericRepository, DI, Microservice, Modularity. Nawet jeśli nie będziesz korzystał z samego frameworka, możesz rozwijać się dzięki dobrze i profesjonalnie przygotowanemu docs.abp.io. (OpenIddict, Redis, Quartz itp.) \n Ponieważ wiele rzeczy jest gotowych, znacznie skraca to czas opracowywania projektu. (Takie jak strona logowania, obsługa wyjątków, filtrowanie danych, rejestrowanie audytu, lokalizacja, automatyczny kontroler API itp.) \n Jako przykład z naszej aplikacji użyłem lokalnej magistrali zdarzeń do kontroli zapasów. Mogę więc zarządzać ruchami zamówień, pisząc moduł obsługi zapasów. \n Wspaniale jest nie tracić czasu na CreationTime, CreatorId. Są one wypełniane automatycznie.",
     "VideosLoginAndRegisterMessage": "Aby oglądać filmy, musisz się zalogować. Jeśli jeszcze tego nie zrobiłeś, możesz utworzyć konto na zegarku.",
     "Filter": "Filtr",
-    "VideoCourses": "Kursy wideo",
+    "VideoCourses": "Niezbędne filmy",
     "TestimonialText": "Twoje świadectwo",
     "Position": "Pozycja",
     "ExperienceYear": "lata doświadczenia",
@@ -448,7 +448,7 @@
     "CompanySize": "Rozmiar firmy",
     "Image": "Twoje zdjęcie profilowe",
     "TestimonialTitle": "Posłuchajmy Twojej opinii",
-    "TestimonialInfo": "To, co mówią nasi klienci, ma znaczenie! ",
+    "TestimonialInfo": "To, co mówią nasi klienci, ma znaczenie! Opowiedz nam o swoich doświadczeniach z naszymi produktami i usługami. Zalecamy napisanie referencji w języku angielskim, aby dotrzeć do szerszego grona odbiorców.",
     "Country": "Kraj",
     "TestimonialTextPlaceholder": "Napisz krótką historię o tym, jak firma ABP pomogła Ci w budowie i realizacji projektu. ",
     "PositionPlaceholder": "Twoje stanowisko w Twojej firmie.",
@@ -467,6 +467,11 @@
     "Title": "Tytuł",
     "TitlePlaceholder": "Programista, CTO itp.",
     "Characters": "znaki",
-    "ABPTestimonialDescription": "Struktura ABP: Posłuchajmy Twojej opinii"
+    "ABPTestimonialDescription": "Struktura ABP: Posłuchajmy Twojej opinii",
+    "LeaveUsReview": "Zostaw nam recenzję",
+    "DocumentationButtonTitle": "Dokumentacja",
+    "ABPVideoCoursesDescription": "Naucz się podstaw ABP Framework dzięki kursom wideo stworzonym przez zespół ABP.",
+    "ABPVideoCoursesPageDescription": "Naucz się podstaw Ramy ABP poprzez kursy wideo stworzone przez zespół ABP. W tej serii filmów poznasz podstawowe tematy Ramy ABP. Liczby na każdym filmie są zapisane zgodnie z procesem uczenia się.",
+    "ABPVideoCoursesTitle": "Niezbędne filmy ABP"
   }
 }

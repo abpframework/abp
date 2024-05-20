@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework ist nicht nur ein Framework, sondern auch eine Anleitung für die Projektentwicklung/-verwaltung, da es DDD-, GenericRepository-, DI-, Microservice- und Modularitätsschulungen bereitstellt. Auch wenn Sie das Framework selbst nicht verwenden, können Sie sich mit docs.abp.io selbst entwickeln, das gut und professionell vorbereitet ist. (OpenIddict, Redis, Quartz usw.) \n Da viele Dinge vorgefertigt sind, verkürzt es die Projektentwicklungszeit erheblich. (Zum Beispiel Anmeldeseite, Ausnahmebehandlung, Datenfilterung/Seeding, Audit-Protokollierung, Lokalisierung, automatischer API-Controller usw.) \n Als Beispiel aus unserer App habe ich Local Event Bus für die Bestandskontrolle verwendet. Daher bin ich in der Lage, Auftragsbewegungen zu verwalten, indem ich „Stock Handler“ schreibe. \n Es ist wunderbar, keine Zeit für CreationTime und CreatorId zu verlieren. Sie werden automatisch ausgefüllt.",
     "VideosLoginAndRegisterMessage": "Sie müssen sich anmelden, um Videos anzusehen. Sie können ein Konto für die Uhr erstellen, wenn Sie noch kein Konto haben.",
     "Filter": "Filter",
-    "VideoCourses": "Videokurse",
+    "VideoCourses": "Wichtige Videos",
     "TestimonialText": "Ihre Bewertung",
     "Position": "Position",
     "ExperienceYear": "Jahre Erfahrung",
@@ -448,7 +448,7 @@
     "CompanySize": "Firmengröße",
     "Image": "Ihr Profilbild",
     "TestimonialTitle": "Lassen Sie uns Ihre Bewertung hören",
-    "TestimonialInfo": "Was unsere Kunden sagen, ist wichtig! Erzählen Sie uns von Ihrer Erfahrung mit unserem Produkt und Service.",
+    "TestimonialInfo": "Was unsere Kunden sagen, zählt! Erzählen Sie uns von Ihren Erfahrungen mit unserem Produkt und unserer Dienstleistung. Es wird empfohlen, den Erfahrungsbericht auf Englisch zu verfassen, um ein breiteres Publikum zu erreichen.",
     "Country": "Land",
     "TestimonialTextPlaceholder": "Schreiben Sie eine kurze Geschichte darüber, wie Ihnen ABP geholfen hat, Ihr Projekt zu entwickeln und zu liefern.",
     "PositionPlaceholder": "Ihre Position in Ihrem Unternehmen.",
@@ -467,6 +467,11 @@
     "Title": "Titel",
     "TitlePlaceholder": "Softwareentwickler, CTO usw.",
     "Characters": "zeichen",
-    "ABPTestimonialDescription": "ABP Framework: Lass uns deine Bewertung hören"
+    "ABPTestimonialDescription": "ABP Framework: Lass uns deine Bewertung hören",
+    "LeaveUsReview": "Hinterlassen Sie uns eine Bewertung",
+    "DocumentationButtonTitle": "Dokumentation",
+    "ABPVideoCoursesDescription": "Lernen Sie die Grundlagen des ABP-Frameworks durch vom ABP-Team erstellte Videokurse.",
+    "ABPVideoCoursesPageDescription": "Lernen Sie die Grundlagen des ABP-Frameworks durch Videokurse, die vom ABP-Team erstellt wurden. In dieser Videoserie lernen Sie die wesentlichen Themen des ABP-Frameworks kennen. Die Zahlen in jedem Video werden entsprechend dem Lernfluss geschrieben.",
+    "ABPVideoCoursesTitle": "ABP Essential Videos"
   }
 }

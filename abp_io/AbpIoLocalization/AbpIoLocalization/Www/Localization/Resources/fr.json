@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework n&#39;est pas seulement un framework, c&#39;est aussi un guide pour le développement/gestion de projets, car il propose des formations DDD, GenericRepository, DI, Microservice, Modularité. Même si vous n&#39;utilisez pas le framework lui-même, vous pouvez vous développer avec docs.abp.io qui est bien préparé de manière professionnelle. (OpenIddict, Redis, Quartz, etc.) \n Parce que de nombreux éléments sont pré-construits, cela réduit considérablement le temps de développement du projet. (Tels que la page de connexion, la gestion des exceptions, le filtrage-ensemencement des données, la journalisation d&#39;audit, la localisation, le contrôleur API automatique, etc.) \n À titre d&#39;exemple de notre application, j&#39;ai utilisé Local Event Bus pour le contrôle des stocks. Ainsi, je suis capable de gérer les mouvements de commandes en écrivant stock handler. \n C&#39;est merveilleux de ne pas perdre de temps pour CreationTime, CreatorId. Ils sont remplis automatiquement.",
     "VideosLoginAndRegisterMessage": "Vous devez vous connecter pour regarder des vidéos. Vous pouvez créer un compte pour regarder si vous ne l&#39;avez pas encore fait.",
     "Filter": "Filtre",
-    "VideoCourses": "Cours vidéo",
+    "VideoCourses": "Vidéos essentielles",
     "TestimonialText": "Votre témoignage",
     "Position": "Poste",
     "ExperienceYear": "Années d'expérience",
@@ -448,7 +448,7 @@
     "CompanySize": "Taille de l'entreprise",
     "Image": "Votre photo de profil",
     "TestimonialTitle": "Écoutons votre témoignage",
-    "TestimonialInfo": "Ce que disent nos clients est important ! Parlez-nous de votre expérience avec notre produit et notre service.",
+    "TestimonialInfo": "Ce que disent nos clients est important ! Parlez-nous de votre expérience avec notre produit et service. Il est recommandé de rédiger le témoignage en anglais pour toucher un public plus large.",
     "Country": "Pays",
     "TestimonialTextPlaceholder": "Rédigez une brève histoire sur la manière dont ABP vous a aidé à construire et livrer votre projet.",
     "PositionPlaceholder": "Votre poste dans votre entreprise.",
@@ -467,6 +467,11 @@
     "Title": "Titre",
     "TitlePlaceholder": "Développeur de logiciels, CTO, etc.",
     "Characters": "caractères",
-    "ABPTestimonialDescription": "ABP Framework : Écoutons votre témoignage"
+    "ABPTestimonialDescription": "ABP Framework : Écoutons votre témoignage",
+    "LeaveUsReview": "Laissez-nous votre avis",
+    "DocumentationButtonTitle": "Documentation",
+    "ABPVideoCoursesDescription": "Apprenez les bases du framework ABP grâce à des cours vidéo créés par l'équipe ABP.",
+    "ABPVideoCoursesPageDescription": "Apprenez les bases du framework ABP à travers des cours vidéo créés par l'équipe ABP. Dans cette série de vidéos, vous apprendrez les sujets essentiels du framework ABP. Les nombres sur chaque vidéo sont écrits en fonction du flux d'apprentissage.",
+    "ABPVideoCoursesTitle": "Vidéos essentielles du ABP"
   }
 }
