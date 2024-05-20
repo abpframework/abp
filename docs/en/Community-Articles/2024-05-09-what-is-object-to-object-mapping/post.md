@@ -1,8 +1,10 @@
 # What is Object to Object Mapping?
 
-Mapping the properties of one object to the properties of another object is called Object to object mapping. Most of the time we don't want to show the data we store to end users as it is. We only give users the information they will use for that operation. In tables that contain relationships, we analyze the relationships and present meaningful data to users. For example, suppose we have a product and a category object, we keep an attribute called categoryId in the product object. However, it would be illogical to show the categoryId attribute to users. Therefore, we create dto's (data transfer objects) and show the category name attribute to users instead of the category Id attribute. 
+Mapping the properties of one object to the properties of another object is called **Object to Object Mapping**. Most of the time, you don't want to show the data you store in your database to end users as it is. Instead, you only return users the information they need for that operation and reduce the output size. 
 
-DTOs are used to transfer data of objects from one place to another. We often need to convert our Domain objects to DTOs and DTOs to Domain objects, for this you can use a code like this. 
+For example, in database tables that contain relationships, we analyze the relationships and present meaningful data to users. For example, suppose we have a product and a category object, we keep a property called `categoryId` in the `Product` entity. However, it would be illogical to show the `categoryId ` property to users. Therefore, we can create a DTO (data transfer object) and show the **category name**  to the end users, instead of the `categoryId` directly. 
+
+DTOs are used to transfer data of objects from one object to another one. We often need to map our entities to DTOs and DTOs to entities. For example, consider the code below:
 
 ````csharp
     public virtual async Task<CustomerDto> CreateAsync(CustomerCreateDto input)
