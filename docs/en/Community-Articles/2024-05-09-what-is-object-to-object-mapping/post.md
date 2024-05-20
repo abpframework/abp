@@ -88,7 +88,7 @@ public virtual async Task<PagedResultDto<CustomerGetDto>> GetListAsync(GetCustom
  }
 ````
 
-Update your `YourApplicationAutoMapperProfile` class so that `Customer` and `CustomerGetDto` entities can convert to each other.
+After mapping the `Customer` entity to the `CustomerGetDto` class. Before running our application, we should define the mappings in the `*AutoMapperProfile` class in the `*.Application` project as follows:
 
 ````csharp
 public class YourApplicationAutoMapperProfile : Profile
