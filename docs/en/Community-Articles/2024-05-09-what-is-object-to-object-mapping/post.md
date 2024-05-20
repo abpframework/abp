@@ -23,7 +23,7 @@ DTOs are used to transfer data of objects from one place to another. We often ne
     }
 
 ````
-This code is repetitive, tedious to write. It violates DRY principles, makes your code very complex and reduces readability.  Instead of using this approach, you can use the automapper which does the matching automatically. Here is a better code:
+As can be seen here, it's repetitive and tedious to manually map an object to another similar object. Also, it violates the [DRY principle](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), makes your code more complicated and reduces readability. Instead of manually mapping objects, you can use the  [AutoMapper](https://automapper.org/) library to automatically map two objects' properties:
 
 
 ````csharp
