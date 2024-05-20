@@ -17,7 +17,7 @@
           *ngTemplateOutlet="actionsTemplate || gridActions; context: { $implicit: row, index: i }"
         ></ng-container>
         <ng-template #gridActions>
-          @if (hasAvailableActions(row)) {
+          @if (isVisibleActions(row)) {
             <abp-grid-actions [index]="i" [record]="row" text="AbpUi::Actions"></abp-grid-actions>
           }
         </ng-template>
