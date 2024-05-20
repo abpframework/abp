@@ -103,7 +103,9 @@ Finally, we can run our application and navigate to the **/swagger** endpoint to
 
 ![Swagger](./images/swagger1.png)
 
-In some scenarios you may want to make some customizations when matching. If you want to use `CustomerGetDto` in this way:
+## Advanced: Mapping Configurations
+
+In some scenarios, you may want to make some customizations when mapping two objects. For example, let's assume that you want to create the `CustomerGetDto` class as follows:
 
 ````csharp
   public class CustomerGetDto
