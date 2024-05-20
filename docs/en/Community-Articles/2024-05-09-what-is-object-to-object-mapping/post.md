@@ -108,7 +108,7 @@ In some scenarios you may want to make some customizations when matching. If you
       public int Age { get; set; }
   }
 ````
-Autommapper cannot map this automatically, you need to specify the exception. Update your `YourApplicationAutoMapperProfile`.
+AutoMapper can't map these properties automatically, because they do not exist in the source object, which is the `Customer` entity. Therefore, you need to specify the exception and update your `YourApplicationAutoMapperProfile` class as follows:
 
 ````csharp
 
