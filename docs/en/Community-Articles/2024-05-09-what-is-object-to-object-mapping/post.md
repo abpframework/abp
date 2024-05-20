@@ -121,4 +121,4 @@ When you make a request, your output will look like the one below.
 
 ![Swagger](./images/swagger2.png)
 
-For more information on object to object mapping with abp framework, see the [documentation](https://docs.abp.io/en/abp/latest/Object-To-Object-Mapping)
+For more information on object-to-object mapping with [ABP Framework](https://abp.io/), see the [documentation](https://docs.abp.io/en/abp/latest/Object-To-Object-Mapping).
