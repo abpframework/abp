@@ -39,12 +39,15 @@ As can be seen here, it's repetitive and tedious to manually map an object to an
             return ObjectMapper.Map<Customer, CustomerDto>(customer);
         }
 ````
+The **ObjectMapper.Map** method allows you to convert your `Customer` entity to `CustomerDto`. Let's learn more about **AutoMapper**
 
 # What is AutoMapper?
 
-![Swagger](./images/automapper.png)
-
 Automapper is a .NET library that automates object-to-object mapping. ABP provides abstractions for object-to-object mapping and has an integration package to use [AutoMapper](http://automapper.org/) as the object mapper. 
+
+Automapper is a library that transforms similar objects into each other. We can imagine Automapper as a machine that transforms an apple with a hat into an apple without a hat.
+
+![AutoMapper](./images/automapper.png)
 
 In this chapter, I will show you how to use the AutoMapper library in an ABP-based application. For this reason, I assume that you already have an ABP-based application created. If you have not yet created an ABP-based application, please follow the [Getting Started documentation](https://docs.abp.io/en/abp/latest/Getting-Started-Create-Solution?UI=MVC&DB=EF&Tiered=No).
 
@@ -87,6 +90,7 @@ public virtual async Task<PagedResultDto<CustomerGetDto>> GetListAsync(GetCustom
      };
  }
 ````
+In this code, we first get the total number of our customers and all customers according to the specified filters, then we map List<Customer> to List<CustomerGetDto> using the ObjectMapper.Map method from the ApplicationService base class. This way we have full control over which properties are returned to the end users.
 
 After mapping the `Customer` entity to the `CustomerGetDto` class. Before running our application, we should define the mappings in the `*AutoMapperProfile` class in the `*.Application` project as follows:
 
