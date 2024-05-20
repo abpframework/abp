@@ -29,14 +29,17 @@ public class AbpAuditActionFilter : IAsyncActionFilter, IAbpFilter, ITransientDe
             {
                 var result = await next();
 
-                if (result.Exception != null && !result.ExceptionHandled)
+                if (result.Exception != null && !auditLog!.Exceptions.Contains(result.Exception))
                 {
                     auditLog!.Exceptions.Add(result.Exception);
                 }
             }
             catch (Exception ex)
             {
-                auditLog!.Exceptions.Add(ex);
+                if (!auditLog!.Exceptions.Contains(ex))
+                {
+                    auditLog!.Exceptions.Add(ex);
+                }
                 throw;
             }
             finally
