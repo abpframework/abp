@@ -160,7 +160,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
         var nugetVersion = version;
 
-        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + ".zip");
+        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
 
 #if DEBUG
         if (File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
