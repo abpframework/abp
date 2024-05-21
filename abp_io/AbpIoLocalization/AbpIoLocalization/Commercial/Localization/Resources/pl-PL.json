@@ -409,6 +409,7 @@
     "ErrorExceptionMessage": "Podczas przetwarzania żądania wystąpił błąd",
     "WatchTakeCodeGeneration": "Obejrzyj film „Odkryj potencjał generowania kodu: pakiet ABP”!",
     "ExtendNow": "Przedłuż/Odnów",
-    "RegisterDemo": "Rejestr"
+    "RegisterDemo": "Rejestr",
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Jeśli chcesz przetestować ABP Studio zanim ktokolwiek inny, zostań testerem BETA</span>"
   }
 }

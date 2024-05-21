@@ -24,7 +24,7 @@ import { ToInjectorPipe } from './pipes/to-injector.pipe';
 import { CookieLanguageProvider } from './providers/cookie-language.provider';
 import { LocaleProvider } from './providers/locale.provider';
 import { LocalizationService } from './services/localization.service';
-import { OTHERS_GROUP } from './tokens';
+import { DISABLE_PROJECT_NAME, OTHERS_GROUP } from './tokens';
 import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
 import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
 import { TENANT_KEY } from './tokens/tenant-key.token';
@@ -40,11 +40,10 @@ import { DefaultQueueManager } from './utils/queue';
 import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
 import { AuthErrorFilterService } from './abstracts';
-import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
-import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
+import { DYNAMIC_LAYOUTS_TOKEN } from './tokens/dynamic-layout.token';
+import { DEFAULT_DYNAMIC_LAYOUTS } from './constants';
 import { AbpTitleStrategy } from './services/title-strategy.service';
 import { LocalStorageListenerService } from './services/local-storage-listener.service';
-
 
 const standaloneDirectives = [
   AutofocusDirective,
@@ -201,12 +200,16 @@ export class CoreModule {
         IncludeLocalizationResourcesProvider,
         {
           provide: DYNAMIC_LAYOUTS_TOKEN,
-          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
+          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS,
         },
         {
           provide: TitleStrategy,
-          useExisting: AbpTitleStrategy
-        }
+          useExisting: AbpTitleStrategy,
+        },
+        {
+          provide: DISABLE_PROJECT_NAME,
+          useValue: options.disableProjectNameInTitle || false,
+        },
       ],
     };
   }
