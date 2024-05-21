@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments;
 
@@ -11,6 +12,6 @@ public class IndexModel : CmsKitAdminPageModel
     public DateTime? CreationStartDate { get; set; } = null;
 
     public DateTime? CreationEndDate { get; set; }
-    public string IsApproved { get; set; }
+    public CommentApproveStateType commentApproveStateType { get; set; }
 
 }

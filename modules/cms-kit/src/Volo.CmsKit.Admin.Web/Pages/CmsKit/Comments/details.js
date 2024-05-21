@@ -200,7 +200,14 @@ $(function (){
         
         _dataTable.ajax.reloadEx();
     });
-
+    commentsService.getSettings().then(function (data) {
+        if (data.requireApprovement) {
+            $('#CommentsTable').DataTable().column(4).visible(true);
+        } else {
+            $('#CommentsTable').DataTable().column(4).visible(false);
+            $('#isApprovedColumn').hide();
+        }
+    })
     filterForm.submit(function (e){
         e.preventDefault();
         _dataTable.ajax.reloadEx();

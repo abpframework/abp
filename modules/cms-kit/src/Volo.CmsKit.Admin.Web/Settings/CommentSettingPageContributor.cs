@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.CmsKit.Admin.Web.Components.MySettingGroup;
 using Volo.CmsKit.Localization;
@@ -9,7 +10,6 @@ namespace Volo.CmsKit.Admin.Web.Settings;
 
 public class CommentSettingPageContributor : ISettingPageContributor
 {
-
     public Task ConfigureAsync(SettingPageCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<CmsKitResource>>();
@@ -21,6 +21,7 @@ public class CommentSettingPageContributor : ISettingPageContributor
                 order: 1
             )
         );
+
 
         return Task.CompletedTask;
     }

@@ -21,26 +21,26 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
 		string sorting = null,
 		int maxResultCount = int.MaxValue,
 		int skipCount = 0,
-		string isApproved = null,
-		CancellationToken cancellationToken = default
+        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CancellationToken cancellationToken = default
 	);
 
 	Task<long> GetCountAsync(
-		string text = null,
+        string text = null,
 		string entityType = null,
 		Guid? repliedCommentId = null,
 		string authorUsername = null,
 		DateTime? creationStartDate = null,
 		DateTime? creationEndDate = null,
-		string isApproved = null,
-		CancellationToken cancellationToken = default
+        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CancellationToken cancellationToken = default
 	);
 
 	Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
 		[NotNull] string entityType,
 		[NotNull] string entityId,
-		bool? isApproved,
-		CancellationToken cancellationToken = default
+        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CancellationToken cancellationToken = default
 	);
 
 	Task DeleteWithRepliesAsync(

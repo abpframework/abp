@@ -4,6 +4,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
 @using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Comments
 @using Volo.CmsKit.Localization
 
 @inject IPageLayout PageLayout
@@ -59,13 +60,13 @@
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
-                        <div class="mb-3">
+                        <div class="mb-3" id="isApprovedColumn">
                             <label class="mb-1" for="isApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
-                            <select id="isApprovedSelect" asp-for="@Model.IsApproved" class="form-control">
-                                <option value="">@L["CommentFilter:All"].Value</option>
-                                <option value="true">@L["CommentFilter:Approved"].Value</option>
-                                <option value="false">@L["CommentFilter:Disapproved"].Value</option>
-                                <option value="null">@L["CommentFilter:Waiting"].Value</option>
+                            <select id="isApprovedSelect" asp-for="@Model.commentApproveStateType" class="form-control">
+                                <option value="@CommentApproveStateType.All">@L["CommentFilter:All"].Value</option>
+                                <option value="@CommentApproveStateType.True">@L["CommentFilter:Approved"].Value</option>
+                                <option value="@CommentApproveStateType.False">@L["CommentFilter:Disapproved"].Value</option>
+                                <option value="@CommentApproveStateType.Null">@L["CommentFilter:Waiting"].Value</option>
                             </select>
                         </div>
                     </abp-column>

@@ -236,11 +236,11 @@ $(function (){
         e.preventDefault();
         _dataTable.ajax.reloadEx();
     });
+
     // Get and display pending comment count
     commentsService.getPendingCommentCount().then(function (count) {
-        console.log(count)
         if (count > 0) {
-            var alertMessage = l("CommentAlertMessage")  + count + "";
+            var alertMessage = l("CommentAlertMessage", count);
             var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
             $('#commentsAlert').html(alertElement);
             $('#commentsAlert').show()
@@ -256,6 +256,7 @@ $(function (){
             $('#CommentsTable').DataTable().column(6).visible(true);
         } else {
             $('#CommentsTable').DataTable().column(6).visible(false);
+            $('#isApprovedColumn').hide();
         }
     })
 });

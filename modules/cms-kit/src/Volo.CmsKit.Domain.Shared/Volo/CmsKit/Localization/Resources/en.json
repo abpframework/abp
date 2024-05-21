@@ -246,7 +246,7 @@
         "Approve":"Approve",
         "Disapproved":"Disapproved",
 
-        "CommentAlertMessage":"You have waiting comments: ",
+        "CommentAlertMessage":"There are {0} comments waiting for approval",
 
         "Menu:CmsKitCommentOptions":"CmsKit Comment Options"
     }
