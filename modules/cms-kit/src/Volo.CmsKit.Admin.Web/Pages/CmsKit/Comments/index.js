@@ -17,8 +17,8 @@ $(function (){
     };
     
     
-    var defaultStartDate = moment().add(-7, 'days');
-    $("#CreationStartDate").val(defaultStartDate.format('L'));
+    //var defaultStartDate = moment().add(-7, 'days');
+    //$("#CreationStartDate").val(defaultStartDate.format('L'));
 
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
@@ -89,7 +89,7 @@ $(function (){
                         },
                         {
                             text: function (data) {
-                                return data.isApproved ? l('Revoke Approval') : l('Approve');
+                                return data.isApproved ? l('Disapproved') : l('Approve');
                             },
                             action: function (data) {
                                 var newApprovalStatus = !data.record?.isApproved;
@@ -102,7 +102,27 @@ $(function (){
                                         abp.notify.success(message);
                                     })
                                     .catch(function (error) {
-                                        console.log("error", error)
+                                        abp.notify.error(error.message);
+                                    });
+                            }
+                        },
+                        {
+                            text: function (data) {
+                                if (data.isApproved == null) {
+                                    return l('Disapproved')
+                                }
+                            },
+                            action: function (data) {
+                                var newApprovalStatus = false;
+
+                                commentsService
+                                    .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
+                                    .then(function () {
+                                        _dataTable.ajax.reloadEx();
+                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                                        abp.notify.success(message);
+                                    })
+                                    .catch(function (error) {
                                         abp.notify.error(error.message);
                                     });
                             }
@@ -220,12 +240,12 @@ $(function (){
     commentsService.getPendingCommentCount().then(function (count) {
         console.log(count)
         if (count > 0) {
-            var alertMessage = 'You have pending comments: ' + count;
+            var alertMessage = l("CommentAlertMessage")  + count + "";
             var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
             $('#commentsAlert').html(alertElement);
             $('#commentsAlert').show()
             $('#commentsAlert').click(function () {
-                window.location.href = '/Cms/Comments/Waiting'
+                window.location.href = '/Cms/Comments/Approve'
             });
         }
     });

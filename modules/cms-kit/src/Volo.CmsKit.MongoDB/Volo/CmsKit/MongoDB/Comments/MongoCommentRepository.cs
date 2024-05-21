@@ -117,7 +117,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 	public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
 		string entityType,
 		string entityId,
-		bool? isApproved = null,
+		bool? isApproved,
 		CancellationToken cancellationToken = default)
 	{
 		Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -134,19 +134,15 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 		var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
 		.Where(c => c.EntityId == entityId && c.EntityType == entityType);
 
-		if (isApproved.HasValue)
-		{
-			commentsQuery = commentsQuery.Where(c => c.IsApproved == isApproved.Value);
-		}
+
+        commentsQuery = isApproved.Value ? 
+			 commentsQuery.Where(c => c.IsApproved == true) :
+             commentsQuery.Where(c => c.IsApproved == true || c.IsApproved == null);
+      
 
 		var comments = await commentsQuery
 			.OrderBy(c => c.CreationTime)
 			.ToListAsync(GetCancellationToken(cancellationToken));
-
-		//     var comments = await (await GetMongoQueryableAsync(cancellationToken))
-		//.Where(c => c.EntityId == entityId && c.EntityType == entityType )
-		//         .OrderBy(c => c.CreationTime)
-		//.ToListAsync(GetCancellationToken(cancellationToken));
 
 		return comments
 			.Select(
@@ -213,8 +209,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 		   .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
 		   .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
 		   .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
-		//.WhereIf(isApproved.HasValue, c => c.IsApproved == isApproved.Value) 
-		//.WhereIf(isApproved == null, c => c.IsApproved == null);
+
 		if (!string.IsNullOrWhiteSpace(isApproved))
 		{
 			bool? isApprovedValue = ParseIsApproved(isApproved);
@@ -229,9 +224,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 
 		}
 
-
 		return queryable;
-
 
 	}
 	public static bool? ParseIsApproved(string isApproved)

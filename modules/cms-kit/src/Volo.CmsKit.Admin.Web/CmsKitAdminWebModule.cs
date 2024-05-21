@@ -110,7 +110,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AddPageRoute("/CmsKit/Comments/Details", "/Cms/Comments/{Id}");
             options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/Items");
             options.Conventions.AddPageRoute("/CmsKit/GlobalResources/Index", "/Cms/GlobalResources");
-            options.Conventions.AddPageRoute("/CmsKit/Comments/Waiting/Index", "/Cms/Comments/Waiting");
+            options.Conventions.AddPageRoute("/CmsKit/Comments/Approve/Index", "/Cms/Comments/Approve");
 
         });
 
@@ -189,7 +189,7 @@ public class CmsKitAdminWebModule : AbpModule
 
         Configure<SettingManagementPageOptions>(options =>
         {
-            options.Contributors.Add(new BookStoreSettingPageContributor());
+            options.Contributors.Add(new CommentSettingPageContributor());
         });
 
     }

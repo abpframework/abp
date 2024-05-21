@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Waiting;
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Approve;
 
 public class IndexModel : CmsKitAdminPageModel
 {

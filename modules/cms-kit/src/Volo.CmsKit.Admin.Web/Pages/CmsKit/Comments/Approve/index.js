@@ -17,8 +17,8 @@
     };
 
 
-    var defaultStartDate = moment().add(-7, 'days');
-    $("#CreationStartDate").val(defaultStartDate.format('L'));
+    //var defaultStartDate = moment().add(-7, 'days');
+    //$("#CreationStartDate").val(defaultStartDate.format('L'));
 
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
@@ -67,32 +67,31 @@
                 rowAction: {
                     items: [
                         {
-                            text: l('Details'),
-                            action: function (data) {
-                                location.href = 'Comments/' + data.record.id;
-                            }
-                        },
-                        {
-                            text: l('Delete'),
-                            visible: abp.auth.isGranted('CmsKit.Comments.Delete'),
-                            confirmMessage: function (data) {
-                                return l("CommentDeletionConfirmationMessage")
+                            text: function (data) {
+                                return  l('Approve');
                             },
                             action: function (data) {
+                                var newApprovalStatus = true;
+
                                 commentsService
-                                    .delete(data.record.id)
+                                    .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
-                                        abp.notify.success(l('DeletedSuccessfully'));
+                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                                        abp.notify.success(message);
+                                    })
+                                    .catch(function (error) {
+                                        console.log("error", error)
+                                        abp.notify.error(error.message);
                                     });
                             }
                         },
                         {
                             text: function (data) {
-                                return data.isApproved ? l('Revoke Approval') : l('Approve');
+                                return  l('Revoke Approval') ;
                             },
                             action: function (data) {
-                                var newApprovalStatus = !data.record?.isApproved;
+                                var newApprovalStatus = false;
 
                                 commentsService
                                     .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
@@ -135,36 +134,19 @@
                 }
             },
             {
-                title: l("URL"),
-                data: "url",
-                render: function (data, type, row) {
-                    if (data !== null) {
-                        return '<a href="' + data + '#comment-' + row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
-                    }
-                    return "";
-                }
-            },
-            {
                 title: l("Text"),
                 data: "text",
                 orderable: false,
                 render: function (data) {
                     data = $.fn.dataTable.render.text().display(data || "");
 
-                    var maxChars = 64;
-
-                    if (data.length > maxChars) {
                         return (
                             '<span data-toggle="tooltip" title="' +
                             data +
-                            '">' +
-                            data.substring(0, maxChars) +
-                            "..." +
+                            '" style="white-space: normal; word-break: break-all;">' +
+                            data +
                             "</span>"
                         );
-                    } else {
-                        return data;
-                    }
                 }
             },
             {

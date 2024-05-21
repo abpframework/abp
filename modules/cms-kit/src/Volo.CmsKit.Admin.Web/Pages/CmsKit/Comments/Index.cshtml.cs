@@ -8,7 +8,7 @@ public class IndexModel : CmsKitAdminPageModel
 
     public string Author { get; set; }
 
-    public DateTime? CreationStartDate { get; set; }
+    public DateTime? CreationStartDate { get; set; } = null;
 
     public DateTime? CreationEndDate { get; set; }
     public string IsApproved { get; set; }

@@ -15,6 +15,7 @@ public class DetailsModel : CmsKitAdminPageModel
     public DateTime? CreationStartDate { get; set; }
 
     public DateTime? CreationEndDate { get; set; }
+    public string IsApproved { get; set; }
 
     public CommentWithAuthorDto CommentWithAuthorDto { get; protected set; }
 

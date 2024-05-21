@@ -1,17 +1,22 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.CmsKit.Admin.Web.Components.MySettingGroup;
+using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit.Admin.Web.Settings;
 
-public class BookStoreSettingPageContributor : ISettingPageContributor
+public class CommentSettingPageContributor : ISettingPageContributor
 {
+
     public Task ConfigureAsync(SettingPageCreationContext context)
     {
+        var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<CmsKitResource>>();
         context.Groups.Add(
             new SettingPageGroup(
                 "Volo.Abp.MySettingGroup",
-                "MySettingGroup",
+                l["Menu:CmsKitCommentOptions"],
                 typeof(CommentSettingViewComponent),
                 order: 1
             )

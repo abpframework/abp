@@ -39,7 +39,7 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
 	Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
 		[NotNull] string entityType,
 		[NotNull] string entityId,
-		bool? isApproved = null,
+		bool? isApproved,
 		CancellationToken cancellationToken = default
 	);
 

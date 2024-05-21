@@ -57,11 +57,9 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
     {
-        string checkboxState = await SettingManager.GetOrNullGlobalAsync(AppSettings.RequireApprovement);
+        string state = await SettingManager.GetOrNullGlobalAsync(AppSettings.RequireApprovement);
 
-        var commentsWithAuthor = bool.Parse(checkboxState) ?
-            await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, true) :
-            await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
+        var commentsWithAuthor = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, bool.Parse(state));
 
         return new ListResultDto<CommentWithDetailsDto>(
             ConvertCommentsToNestedStructure(commentsWithAuthor)

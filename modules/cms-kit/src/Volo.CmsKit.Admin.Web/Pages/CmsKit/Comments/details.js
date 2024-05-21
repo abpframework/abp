@@ -81,7 +81,7 @@ $(function (){
                         },
                         {
                             text: function (data) {
-                                return data.isApproved ? l('Revoke Approval') : l('Approve');
+                                return data.isApproved ? l('Disapproved') : l('Approve');
                             },
                             action: function (data) {
                                 var newApprovalStatus = !data.record?.isApproved;
@@ -94,7 +94,27 @@ $(function (){
                                         abp.notify.success(message);
                                     })
                                     .catch(function (error) {
-                                        console.log("error", error)
+                                        abp.notify.error(error.message);
+                                    });
+                            }
+                        },
+                        {
+                            text: function (data) {
+                                if (data.isApproved == null) {
+                                    return l('Disapproved')
+                                }
+                            },
+                            action: function (data) {
+                                var newApprovalStatus = false;
+
+                                commentsService
+                                    .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
+                                    .then(function () {
+                                        _dataTable.ajax.reloadEx();
+                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                                        abp.notify.success(message);
+                                    })
+                                    .catch(function (error) {
                                         abp.notify.error(error.message);
                                     });
                             }

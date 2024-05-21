@@ -42,7 +42,7 @@
                     <abp-column size-lg="_4" size-md="_12">
                         <abp-row>
                             <abp-column size-lg="_6" size-md="_6">
-                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" />
+                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" value="" />
                             </abp-column>
                             <abp-column size-lg="_6" size-md="_6">
                                 <abp-input asp-for="@Model.CreationEndDate" class="singledatepicker" label="@L["EndDate"].Value" type="text" />
@@ -59,12 +59,15 @@
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
-                        <select asp-for="@Model.IsApproved" label="@L["IsApproved"].Value">
-                            <option value="">@L["All"].Value</option>
-                            <option value="true">@L["Approved"].Value</option>
-                            <option value="false">@L["Rejected"].Value</option>
-                            <option value="null">@L["Pending"].Value</option>
-                        </select>
+                        <div class="mb-3">
+                            <label class="mb-1" for="isApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
+                            <select id="isApprovedSelect" asp-for="@Model.IsApproved" class="form-control">
+                                <option value="">@L["CommentFilter:All"].Value</option>
+                                <option value="true">@L["CommentFilter:Approved"].Value</option>
+                                <option value="false">@L["CommentFilter:Disapproved"].Value</option>
+                                <option value="null">@L["CommentFilter:Waiting"].Value</option>
+                            </select>
+                        </div>
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">

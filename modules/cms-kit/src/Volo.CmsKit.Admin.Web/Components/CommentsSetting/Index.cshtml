@@ -17,14 +17,14 @@
     @inject IHtmlLocalizer<CmsKitResource> L
 
     <abp-form #form="ngForm">
-        <h4>@L["CommentSettings:Title"].Value</h4>
+        <h4>@L["CmsKitCommentOptions:Title"].Value</h4>
         <hr />
         <div class="form-group">
             <div class="form-check">
                 <input type="checkbox" id="checkbox" class="form-check-input" name="checkbox" ngModel />
-                <label for="checkbox" class="form-check-label">@L["CommentSettings:RequireApprovement"].Value</label>
+                <label for="checkbox" class="form-check-label">@L["CmsKitCommentOptions:RequireApprovement"].Value</label>
             </div>
-            <small id="checkboxHelp" class="form-text text-muted">@L["CommentSettings:RequireApprovementDescription"].Value</small>
+            <small id="checkboxHelp" class="form-text text-muted">@L["CmsKitCommentOptions:RequireApprovementDescription"].Value</small>
         </div>
 
         <div style="float:right" class="text-right mt-3">

@@ -230,8 +230,24 @@
         "DuplicateCommentAttemptMessage": "Duplicate comment post attempt detected. Your comment has already been submitted.",
         "NoBlogPostYet": "No blog post yet!",
 
-        "CommentSettings:Title": "Comment Settings.",
-        "CommentSettings:RequireApprovement": "Require approval for comments",
-        "CommentSettings:RequireApprovementDescription": "When enabled, comments will require approval before being published."
+        "CmsKitCommentOptions:Title": "Comment Settings.",
+        "CmsKitCommentOptions:RequireApprovement": "Require approval for comments",
+        "CmsKitCommentOptions:RequireApprovementDescription": "When enabled, comments will require approval before being published.",
+
+        "CommentFilter:ApproveState":"Approve State",
+        "CommentFilter:All":"All",
+        "CommentFilter:Approved":"Approved",
+        "CommentFilter:Disapproved":"Disapproved",
+        "CommentFilter:Waiting":"Waiting",
+
+        "ApprovedSuccessfully":"Approved Successfully",
+        "ApprovalRevokedSuccessfully":"Approval Revoked Successfully",
+
+        "Approve":"Approve",
+        "Disapproved":"Disapproved",
+
+        "CommentAlertMessage":"You have waiting comments: ",
+
+        "Menu:CmsKitCommentOptions":"CmsKit Comment Options"
     }
 }
