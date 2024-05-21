@@ -43,9 +43,9 @@ The following figure shows the Administration microservice's module structure in
 
 ![administration-microservice-in-solution-explorer](images/administration-microservice-in-solution-explorer.png)
 
-Administration service is basically used to to manage **permissions** (using the [Permission Management](https://docs.abp.io/en/abp/latest/Modules/Permission-Management) module), **features** (using the [Feature Management](https://docs.abp.io/en/abp/latest/Modules/Feature-Management) module), **settings** (using the [Setting Management](https://docs.abp.io/en/abp/latest/Modules/Setting-Management) module) and **languages** (using the [Language Management](../../modules/language-management.md) module) (maybe some others based on your preferences) of the system. These are the common infrastructure services that are used by all the services and applications in the solution. Administration service is responsible to serve management HTTP APIs to UI for these services, and it also maintains the database schema for them.
+Administration service is basically used to to manage **permissions** (using the [Permission Management](../../modules/permission-management.md) module), **features** (using the [Feature Management](../../modules/feature-management.md) module), **settings** (using the [Setting Management](../../modules/setting-management.md) module) and **languages** (using the [Language Management](../../modules/language-management.md) module) (maybe some others based on your preferences) of the system. These are the common infrastructure services that are used by all the services and applications in the solution. Administration service is responsible to serve management HTTP APIs to UI for these services, and it also maintains the database schema for them.
 
-In addition to these fundamental infrastructure services, Administration service also creates the [BLOB Storing database](https://docs.abp.io/en/abp/latest/Blob-Storing-Database), so other services can easily store BLOBs.
+In addition to these fundamental infrastructure services, Administration service also creates the [BLOB Storing database](../../framework/infrastructure/blob-storing/database.md), so other services can easily store BLOBs.
 
 ### Identity Microservice
 
@@ -63,7 +63,7 @@ If you've selected the [SaaS](../../modules/saas.md) module while [creating your
 
 This microservice serves the [SaaS](../../modules/saas.md) module's HTTP API, creates and manages its database.
 
-> [Multi-Tenancy](https://docs.abp.io/en/abp/latest/Multi-Tenancy) is a common feature of the solution. If you install the SaaS module, multi-tenancy is automatically enabled for all the services and applications in the solution and the necessary configurations are done for you.
+> [Multi-Tenancy](../../framework/architecture/multi-tenancy/index.md) is a common feature of the solution. If you install the SaaS module, multi-tenancy is automatically enabled for all the services and applications in the solution and the necessary configurations are done for you.
 
 ### Audit Logging Microservice (optional)
 

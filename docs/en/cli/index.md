@@ -211,6 +211,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * `-no-language-management`: Skips the Language Management module.
   * `-no-text-template-management`: Skips the Text Template Management module.
   * `-no-chat`: Skips the Chat module.
+* `--legacy`: Generates a legacy solution.
 
 ### new-module
 
