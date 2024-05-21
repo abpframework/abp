@@ -13,17 +13,17 @@ This document is a guide for upgrading ABP v8.x solutions to ABP v8.2. There are
 * `*.HttpApi.Client`
 * `*.Host.Shared` (for module template)
 
-Before this version, all of the projects above were targeting multiple frameworks (**netstandard2.0**, **netstandard2.1** and **net8.0**), with this version, we started to only target **net8.0** for these template projects. All other shared libraries still targets multiple frameworks.
+Before this version, all of the projects above were targeting multiple frameworks (**netstandard2.0**, **netstandard2.1** and **net8.0**), with this version, we started to only target **net8.0** for these template projects. Note that, all other shared libraries still target multiple frameworks.
 
 > This change should not affect your pre-existing solutions and you don't need to make any changes in your application. See the PR for more info: https://github.com/abpframework/abp/pull/19565
 
 ## Upgraded AutoMapper to 13.0.1
 
-In this version, AutoMapper library version upgraded to 13.0.1. See [the release notes of AutoMapper v13.0.1](https://github.com/AutoMapper/AutoMapper/releases/tag/v13.0.1) for more information.
+In this version, **AutoMapper** library version upgraded to 13.0.1. See [the release notes of AutoMapper v13.0.1](https://github.com/AutoMapper/AutoMapper/releases/tag/v13.0.1) for more information.
 
 ## Added default padding to `.tab-content` class for Basic Theme
 
-In this version, default padding (padding-top: 1.5rem and padding-bottom: 1.5rem) has been added to the tab-content for the Basic Theme. See [#19475](https://github.com/abpframework/abp/pull/19475).
+In this version, default padding (padding-top: 1.5rem and padding-bottom: 1.5rem) has been added to the tab-content for the Basic Theme. See [#19475](https://github.com/abpframework/abp/pull/19475) for more information.
 
 ## Moved members page directory for Blogging Module
 
@@ -31,7 +31,7 @@ With this version on, ABP Framework allows you to use single blog mode, without 
 * `Volo.Blogging.Pages.Blog` -> `Volo.Blogging.Pages.Blogs`
 * `Volo.Blogging.Pages.Members` -> `Volo.Blogging.Pages.Blogs.Members` (members folder)
 
-If you haven't overriden the pages above, then you don't need to make any additional changes. See [#19418](https://github.com/abpframework/abp/pull/19418) for more information.
+> If you haven't overridden the pages above, then you don't need to make any additional changes. See [#19418](https://github.com/abpframework/abp/pull/19418) for more information.
 
 ## Removed `FlagIcon` property from the `ILanguageInfo`
 
@@ -50,9 +50,9 @@ If the flag icon has been specified while defining the localization languages, t
 
 ## Blazor Full-Stack Web UI
 
-In this version, ABP Framework provides a new UI option called **Blazor Full-Stack WebApp**. We have already creating a introduction/migration guide for you to check it out, from [here](Abp-8-2-Blazor-Web-App.md). 
+In this version, ABP Framework provides a new UI option called **Blazor Full-Stack WebApp**. We have already created an introduction/migration guide for you to check it: [Migrating to Blazor Web App](Abp-8-2-Blazor-Web-App.md)
 
-> Please read the documentation carefully if you are considering to migrate your existing **Blazor** project to **Blazor WebApp**.
+> Please read the documentation carefully if you are considering migrating your existing **Blazor** project to **Blazor WebApp**.
 
 ## Session Management Infrastructure
 
