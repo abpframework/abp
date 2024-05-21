@@ -72,7 +72,7 @@
     "Menu:NpmPackages": "NPM Packages",
     "Menu:Modules": "Modules",
     "Menu:Maintenance": "Maintenance",
-    "Menu:NugetPackages": "Nuget Packages",
+    "Menu:NugetPackages": "NuGet Packages",
     "CreateAnOrganization": "Create an organization",
     "Organizations": "Organizations",
     "LongName": "Long name",
@@ -219,7 +219,7 @@
     "ReIndexAllPostsConfirmationMessage": "Are you sure you want to reindex all posts?",
     "SuccessfullyReIndexAllPosts": "All posts have been successfully reindexed.",
     "Permission:FullSearch": "Full text search",
-    "Menu:CliAnalytics": "Cli Analytics",
+    "Menu:CliAnalytics": "CLI Analytics",
     "Menu:Reports": "Reports",
     "TemplateName": "Template name",
     "TemplateVersion": "Template version",
@@ -589,7 +589,7 @@
     "OrganizationDoesNotHaveACreditCard": "Organization does not have a credit card!",
     "Permission:EditWinners": "Edit Winners",
     "Permission:ChangeDrawingStatus": "Change Drawing Status",
-    "Menu:Licenses": "Licenses",
+    "Menu:Licenses": "Licensing",
     "OrganizationId": "Organization Id",
     "RemoveAllWinnersConfirmationMessage": "Are you sure you want to remove all winners?",
     "AutoRenewals": "Auto Renewals",
@@ -621,6 +621,10 @@
     "DeleteImageConfirmationMessage": "Are you sure you want to delete the image for \"{0}\"?",
     "DeleteImageSuccessMessage": "Image successfully deleted",
     "DeleteImage": "Delete Image",
-    "NetTerms": "Terms (Days)"
+    "NetTerms": "Terms (Days)",
+    "Menu:DynamicReports": "Dynamic Reports",
+    "Menu:Others": "Others",
+    "Menu:Packs&Modules": "Packs & Modules",
+    "ReleaseCaches": "Release Cache"
   }
 }
