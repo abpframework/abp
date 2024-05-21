@@ -160,10 +160,11 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
         var nugetVersion = version;
 
+
         var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + ".zip");
 
 #if DEBUG
-        if (File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
+        if (File.Exists(localCacheFile))
         {
             return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
         }
@@ -173,16 +174,6 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         {
             Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
             return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
-        }
-
-        if (!skipCache && !templateSource.IsNullOrWhiteSpace() && type == SourceCodeTypes.Template)
-        {
-            var templateFilePath = templateSource.EndsWith(".zip")
-                ? templateSource
-                : Path.Combine(templateSource, name.Replace("/", ".").EnsureEndsWith('-') + version + ".zip");
-            
-            Logger.LogInformation("Using cached template: " + name + ", version: " + version + " from template source: " + templateFilePath);            
-            return new TemplateFile(File.ReadAllBytes(templateFilePath), version, latestVersion, nugetVersion);
         }
 
         Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
