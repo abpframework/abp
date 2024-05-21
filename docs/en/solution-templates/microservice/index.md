@@ -22,7 +22,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Database configurations](database-configurations.md)
   * [Logging (with Serilog and Elasticsearch)](logging.md)
   * [Monitoring (with Prometheus and Grafana)](monitoring.md)
-  * Swagger integration
+  * [Swagger integration](swagger-integration.md)
   * Permission management
   * Feature management
   * Localization system
