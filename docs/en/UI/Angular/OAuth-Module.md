@@ -1,7 +1,7 @@
 # ABP OAuth Package
 The authentication functionality has been moved from @abp/ng.core to @abp/ng.ouath since v7.0.
 
-If your app is version 7.0 or higher, you should include "AbpOAuthModule.forRoot()" in your app.module.ts as an import after "CoreModule.forRoot(...)".
+If your app is version 7.0 or higher, you should include "provideAbpOAuth()" in your app.module.ts as an providers after "provideAbpCore()".
 
 Those abstractions can be found in the @abp/ng-core packages.
 - `AuthService` (the class that implements the IAuthService interface).
