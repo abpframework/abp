@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.Collections;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 public class AbpApplicationConfigurationOptions
 {
-    public List<IApplicationConfigurationContributor> Contributors { get; }
+    public ITypeList<IApplicationConfigurationContributor> Contributors { get; }
 
     public AbpApplicationConfigurationOptions()
     {
-        Contributors = new List<IApplicationConfigurationContributor>();
+        Contributors = new TypeList<IApplicationConfigurationContributor>();
     }
 }

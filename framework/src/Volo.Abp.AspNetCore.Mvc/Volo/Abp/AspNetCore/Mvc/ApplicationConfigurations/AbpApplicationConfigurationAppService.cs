@@ -112,7 +112,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
                 var context = new ApplicationConfigurationContributorContext(scope.ServiceProvider, result);
                 foreach (var contributor in _options.Contributors)
                 {
-                    await contributor.ContributeAsync(context);
+                    await scope.ServiceProvider.GetRequiredService(contributor).As<IApplicationConfigurationContributor>().ContributeAsync(context);
                 }
             }
         }

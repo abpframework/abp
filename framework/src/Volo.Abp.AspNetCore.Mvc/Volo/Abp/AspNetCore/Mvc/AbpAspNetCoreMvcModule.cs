@@ -26,6 +26,7 @@ using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationModels;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
@@ -69,6 +70,8 @@ public class AbpAspNetCoreMvcModule : AbpModule
         DynamicProxyIgnoreTypes.Add<ViewComponent>();
 
         context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
+
+        AutoAddApplicationConfigurationContributors(context.Services);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -276,5 +279,23 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
         }
+    }
+
+    private static void AutoAddApplicationConfigurationContributors(IServiceCollection services)
+    {
+        var contributorTypes = new List<Type>();
+
+        services.OnRegistered(context =>
+        {
+            if (typeof(IApplicationConfigurationContributor).IsAssignableFrom(context.ImplementationType))
+            {
+                contributorTypes.Add(context.ImplementationType);
+            }
+        });
+
+        services.Configure<AbpApplicationConfigurationOptions>(options =>
+        {
+            options.Contributors.AddIfNotContains(contributorTypes);
+        });
     }
 }

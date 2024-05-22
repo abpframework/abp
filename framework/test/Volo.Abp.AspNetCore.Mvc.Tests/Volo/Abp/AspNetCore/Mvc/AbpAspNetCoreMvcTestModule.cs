@@ -132,11 +132,6 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
             options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
             options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
         });
-
-        Configure<AbpApplicationConfigurationOptions>(options =>
-        {
-            options.Contributors.Add(new TestApplicationConfigurationContributor());
-        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
