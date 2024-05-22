@@ -314,7 +314,7 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
     app.UseAbpRequestLocalization();
 
     app.UseSwagger();
-    app.UseSwaggerUI(
+    app.UseAbpSwaggerUI(
         options =>
         {
             var provider = app.ApplicationServices.GetRequiredService<IApiVersionDescriptionProvider>();
