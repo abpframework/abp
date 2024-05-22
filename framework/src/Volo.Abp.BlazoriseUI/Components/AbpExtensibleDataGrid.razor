@@ -45,9 +45,9 @@
                                         <EntityAction TItem="TItem"
                                                       Color="@(action.Color != null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
-                                                      Clicked="async () => await action.Clicked(context)"
-                                                      ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context)"
-                                                      Visible="@(action.Visible != null ? action.Visible(context) : true)"
+                                                      Clicked="async () => await action.Clicked(context!)"
+                                                      ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context!)"
+                                                      Visible="@(action.Visible != null ? action.Visible(context!) : true)"
                                                       Text="@action.Text"
                                                       Disabled="@action.Disabled">
                                         </EntityAction>
@@ -55,10 +55,10 @@
                                     else
                                     {
                                         <EntityAction TItem="TItem"
-                                                      Clicked="async () => await action.Clicked(context)"
+                                                      Clicked="async () => await action.Clicked(context!)"
                                                       Color="@(action.Color != null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
-                                                      Visible="@(action.Visible != null ? action.Visible(context) : true)"
+                                                      Visible="@(action.Visible != null ? action.Visible(context!) : true)"
                                                       Text="@action.Text"
                                                       Disabled="@action.Disabled">
                                         </EntityAction>
@@ -76,7 +76,7 @@
                         {
                             <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable" DisplayFormat="@column.DisplayFormat" DisplayFormatProvider="@column.DisplayFormatProvider" Displayable="column.Visible" >
                                 <DisplayTemplate>
-                                    @RenderCustomTableColumnComponent(column.Component, context)
+                                    @RenderCustomTableColumnComponent(column.Component, context!)
                                 </DisplayTemplate>
                             </DataGridColumn>
                         }
@@ -84,7 +84,7 @@
                         {
                             <DataGridColumn TItem="TItem" Field="@column.Data" Caption="@column.Title" Sortable="@column.Sortable" Displayable="column.Visible">
                                 <DisplayTemplate>
-                                    @RenderCustomTableColumnComponent(column.Component, context)
+                                    @RenderCustomTableColumnComponent(column.Component, context!)
                                 </DisplayTemplate>
                             </DataGridColumn>
                         }

@@ -16,3 +16,4 @@ export * from './others-group.token';
 export * from './tenant-not-found-by-name';
 export * from './compare-func.token';
 export * from './dynamic-layout.token';
+export * from './title-strategy-disable-project-name.token';

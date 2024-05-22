@@ -154,6 +154,9 @@ public class MyProjectNameModule : AbpModule
         {
             options.IsBlazorWebApp = true;
         });
+        
+        MyProjectNameGlobalFeatureConfigurator.Configure();
+        MyProjectNameModuleExtensionConfigurator.Configure();
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -222,7 +225,7 @@ public class MyProjectNameModule : AbpModule
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
                     //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.Mongo.styles.css");
+                    bundle.AddFiles(new BundleFile("/MyCompanyName.MyProjectName.Blazor.Server.Mongo.styles.css", true));
                 }
             );
         });

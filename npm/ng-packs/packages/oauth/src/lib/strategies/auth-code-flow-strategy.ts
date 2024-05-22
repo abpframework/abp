@@ -51,6 +51,10 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
   logout(queryParams?: Params) {
     this.rememberMeService.remove();
+    if (queryParams?.noRedirectToLogoutUrl) {
+      this.router.navigate(['/']);
+      return from(this.oAuthService.revokeTokenAndLogout(true));
+    }
     return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 

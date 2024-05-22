@@ -206,8 +206,25 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     });
   }
 
-  hasAvailableActions(index, row): boolean {
-    const { permission, visible } = this.actionList.get(index).value;
-    return this.permissionService.getGrantedPolicy(permission) && visible(row);
+  isVisibleActions(rowData: any): boolean {
+    const actions = this.actionList.toArray();
+    const visibleActions = actions.filter(action => {
+      const { visible, permission } = action;
+
+      let isVisible = true;
+      let hasPermission = true;
+
+      if (visible) {
+        isVisible = visible({ record: rowData, getInjected: this.getInjected });
+      }
+
+      if (permission) {
+        hasPermission = this.permissionService.getGrantedPolicy(permission);
+      }
+
+      return isVisible && hasPermission;
+    });
+
+    return visibleActions.length > 0;
   }
 }

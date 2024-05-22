@@ -16,10 +16,10 @@
     <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.2" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageVersion Include="Blazorise" Version="1.5.0" />
-    <PackageVersion Include="Blazorise.Components" Version="1.5.0" />
-    <PackageVersion Include="Blazorise.DataGrid" Version="1.5.0" />
-    <PackageVersion Include="Blazorise.Snackbar" Version="1.5.0" />
+    <PackageVersion Include="Blazorise" Version="1.5.2" />
+    <PackageVersion Include="Blazorise.Components" Version="1.5.2" />
+    <PackageVersion Include="Blazorise.DataGrid" Version="1.5.2" />
+    <PackageVersion Include="Blazorise.Snackbar" Version="1.5.2" />
     <PackageVersion Include="Castle.Core" Version="5.1.1" />
     <PackageVersion Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
     <PackageVersion Include="CommonMark.NET" Version="0.15.1" />
@@ -49,36 +49,36 @@
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
     <PackageVersion Include="MailKit" Version="4.3.0" />
     <PackageVersion Include="Markdig.Signed" Version="0.33.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.4" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
@@ -86,7 +86,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Composite" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="8.0.0" />
@@ -96,10 +96,10 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Localization" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
@@ -123,7 +123,7 @@
     <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="5.5.0" />
     <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="5.5.0" />
     <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="5.5.0" />
-    <PackageVersion Include="Oracle.EntityFrameworkCore" Version="8.21.121" />
+    <PackageVersion Include="Oracle.EntityFrameworkCore" Version="8.23.40" />
     <PackageVersion Include="Polly" Version="8.2.0" />
     <PackageVersion Include="Polly.Extensions.Http" Version="3.0.0" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
