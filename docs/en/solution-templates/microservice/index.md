@@ -23,7 +23,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Logging (with Serilog and Elasticsearch)](logging.md)
   * [Monitoring (with Prometheus and Grafana)](monitoring.md)
   * [Swagger integration](swagger-integration.md)
-  * Permission management
+  * [Permission management](permission-management.md)
   * Feature management
   * Localization system
   * Background Jobs
