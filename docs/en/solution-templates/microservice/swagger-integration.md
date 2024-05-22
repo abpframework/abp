@@ -1,4 +1,4 @@
-## Microservice Solution: Swagger Integration
+# Microservice Solution: Swagger Integration
 
 In a microservice system, it is important to have a well-documented API. [Swagger](https://swagger.io/) is a tool that helps to create, document, and consume RESTful web services. It provides a user interface to interact with the APIs and also a way to generate client SDKs for the APIs.
 

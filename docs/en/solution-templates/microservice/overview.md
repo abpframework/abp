@@ -57,6 +57,8 @@ The following modules are optionally included in the solution, so you can select
 * **[Language Management](../../modules/language-management.md)**
 * **[OpenIddict (Management UI)](../../modules/openiddict.md)**
 * **[SaaS](../../modules/saas.md) (Multi-Tenancy)** (with its own microservice)
+* **[Chat](../../modules/chat.md)** (with its own microservice)
+* **[File Management](../../modules/file-management.md)** (with its own microservice)
 * **[Text Template Management](../../modules/text-template-management.md)**
 
 ## UI Theme
