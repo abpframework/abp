@@ -11,7 +11,7 @@ import {
 import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
 import { SideMenuLayoutModule } from '@abp/ng.theme.lepton-x/layouts';
 import { provideAbpOAuth } from '@abp/ng.oauth';
-import { provideSettingManagementConfig } from '@abp/ng.setting-management/config';
+import { SettingManagementConfigModule, provideSettingManagementConfig } from '@abp/ng.setting-management/config';
 import { provideAccountConfig } from '@abp/ng.account/config';
 import { provideIdentityConfig } from '@abp/ng.identity/config';
 import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
@@ -29,6 +29,7 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     AppRoutingModule,
     CoreModule,
     ThemeSharedModule,
+    SettingManagementConfigModule,
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
     AccountLayoutModule.forRoot(),
