@@ -211,6 +211,14 @@ namespace AbpDemo
 * 对于 EF Core, 他们在 `DbContext.SaveChanges` 发布.
 * 对于 MongoDB, 在你调用仓储的 `InsertAsync`, `UpdateAsync` 或 `DeleteAsync` 方法发布(因为MongoDB没有更改追踪系统).
 
+
+#### AbpEntityChangeOptions
+
+`AbpEntityChangeOptions`类中有一个`PublishEntityUpdatedEventWhenNavigationChanges`选项，默认值为`true`。
+如果将其设置为`false`，则当导航属性更改时，将不会发布`EntityUpdatedEventData<T>`事件。
+
+> 此选项仅用于EF Core
+
 ## 另请参阅
 
 * [分布式事件总线](Distributed-Event-Bus.md)
