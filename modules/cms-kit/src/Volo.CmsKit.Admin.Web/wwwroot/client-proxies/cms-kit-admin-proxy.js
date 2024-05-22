@@ -221,7 +221,7 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.comments.commentAdmin.getPendingCommentCount = function(ajaxParams) {
+    volo.cmsKit.admin.comments.commentAdmin.getWaitingCommentCount = function(ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/comments/waiting-count',
         type: 'GET'

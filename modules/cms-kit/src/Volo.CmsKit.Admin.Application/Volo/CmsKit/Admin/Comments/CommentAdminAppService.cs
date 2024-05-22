@@ -112,7 +112,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
         }
         return null;
     }
-	public async Task<int> GetPendingCommentCount()
+	public async Task<int> GetWaitingCommentCount()
 	{
 		var count = await CommentRepository.GetCountAsync(commentApproveStateType: CommentApproveStateType.Waiting);
 		return (int)(count);

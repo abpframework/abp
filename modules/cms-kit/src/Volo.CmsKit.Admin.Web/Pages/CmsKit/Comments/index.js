@@ -16,9 +16,6 @@ $(function (){
         return momentDate.isValid() ? momentDate.toISOString() : null;
     };
     
-    
-    //var defaultStartDate = moment().add(-7, 'days');
-    //$("#CreationStartDate").val(defaultStartDate.format('L'));
 
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
@@ -237,8 +234,8 @@ $(function (){
         _dataTable.ajax.reloadEx();
     });
 
-    // Get and display pending comment count
-    commentsService.getPendingCommentCount().then(function (count) {
+    // Get and display waiting comment count
+    commentsService.getWaitingCommentCount().then(function (count) {
         if (count > 0) {
             var alertMessage = l("CommentAlertMessage", count);
             var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';

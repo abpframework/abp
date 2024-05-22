@@ -32,7 +32,10 @@ $(function (){
     });
     
     var filterForm = $('#CmsKitCommentsFilterForm');
-    
+    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('l'));
+        $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
+    });
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
 

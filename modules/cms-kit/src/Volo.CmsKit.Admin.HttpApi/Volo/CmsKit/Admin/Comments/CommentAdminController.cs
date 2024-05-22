@@ -77,9 +77,9 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 	[HttpGet]
 	[Route("waiting-count")]
     [Authorize(CmsKitAdminPermissions.Comments.Default)]
-    public Task<int> GetPendingCommentCount()
+    public Task<int> GetWaitingCommentCount()
 	{
-		return CommentAdminAppService.GetPendingCommentCount();
+		return CommentAdminAppService.GetWaitingCommentCount();
 	}
 
     [HttpGet]

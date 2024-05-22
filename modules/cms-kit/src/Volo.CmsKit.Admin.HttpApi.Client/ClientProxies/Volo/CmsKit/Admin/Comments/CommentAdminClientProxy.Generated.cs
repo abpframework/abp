@@ -49,4 +49,30 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
             { typeof(CommentApprovalDto), commentApprovalDto }
         });
     }
+
+    public virtual void SetSettings(SettingsDto settingsDto)
+    {
+        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice
+        throw new System.NotImplementedException(); 
+    }
+
+    public virtual SettingsDto GetSettings()
+    {
+        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice
+        throw new System.NotImplementedException(); 
+    }
+
+    public virtual int GetWaitingCommentCount()
+    {
+        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice
+        throw new System.NotImplementedException(); 
+    }
+
+    public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input)
+    {
+        return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetWaitingCommentsWithRepliesAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(CommentGetListInput), input }
+        });
+    }
 }

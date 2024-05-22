@@ -6,7 +6,6 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Shared.Components.Comments;
 [ViewComponent(Name = "CmsCommentSetting")]
 [Widget(
     ScriptTypes = new[] { typeof(CommentSettingScriptBundleContributor) },
-    // RefreshUrl = "/CmsKitPublicWidgets/Commenting",
     AutoInitialize = true
 )]
 public class CommentSettingViewComponent : AbpViewComponent

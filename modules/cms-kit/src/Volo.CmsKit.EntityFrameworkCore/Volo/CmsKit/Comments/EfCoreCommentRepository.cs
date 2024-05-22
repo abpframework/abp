@@ -125,19 +125,13 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
                         Author = user
                     };
 
-        if (CommentApproveStateType.Approved == commentApproveStateType)
+        query = commentApproveStateType switch
         {
-            query = query.Where(c => c.Comment.IsApproved == true);
-        }
-        else if (CommentApproveStateType.Disapproved == commentApproveStateType)
-        {
-            query = query.Where(c => c.Comment.IsApproved == false);
-        }
-        else if (CommentApproveStateType.Waiting == commentApproveStateType)
-        {
-            query = query.Where(c => c.Comment.IsApproved == null);
-        }
-
+            CommentApproveStateType.Approved => query.Where(c => c.Comment.IsApproved == true),
+            CommentApproveStateType.Disapproved => query.Where(c => c.Comment.IsApproved == true || c.Comment.IsApproved == null),
+            _ => query
+        };
+       
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -198,6 +192,5 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             .WhereIf(CommentApproveStateType.Approved == commentApproveStateType, c => c.Comment.IsApproved == true)
             .WhereIf(CommentApproveStateType.Disapproved == commentApproveStateType, c => c.Comment.IsApproved == false)
             .WhereIf(CommentApproveStateType.Waiting == commentApproveStateType, c => c.Comment.IsApproved == null);
-            //.WhereIf(isApproved.HasValue, c => c.Comment.IsApproved == isApproved);
     }
 }
