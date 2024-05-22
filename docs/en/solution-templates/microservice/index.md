@@ -24,7 +24,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Monitoring (with Prometheus and Grafana)](monitoring.md)
   * [Swagger integration](swagger-integration.md)
   * [Permission management](permission-management.md)
-  * Feature management
+  * [Feature management](feature-management.md)
   * Localization system
   * Background Jobs
   * Background Workers
