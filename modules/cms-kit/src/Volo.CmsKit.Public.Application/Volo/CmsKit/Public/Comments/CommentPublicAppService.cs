@@ -59,8 +59,8 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     {
         string state = await SettingManager.GetOrNullGlobalAsync(AppSettings.RequireApprovement);
         var commentsWithAuthor = bool.Parse(state) ?
-         await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveStateType.True) :
-         await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveStateType.False);
+         await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveStateType.Approved) :
+         await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveStateType.Disapproved);
 
 
         return new ListResultDto<CommentWithDetailsDto>(

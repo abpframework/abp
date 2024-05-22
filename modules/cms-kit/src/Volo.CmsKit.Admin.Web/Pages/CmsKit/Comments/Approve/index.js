@@ -1,4 +1,7 @@
-﻿$(function () {
+﻿
+
+$(function () {
+
     var l = abp.localization.getResource("CmsKit");
 
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
@@ -81,14 +84,13 @@
                                         abp.notify.success(message);
                                     })
                                     .catch(function (error) {
-                                        console.log("error", error)
                                         abp.notify.error(error.message);
                                     });
                             }
                         },
                         {
                             text: function (data) {
-                                return  l('Revoke Approval') ;
+                                return l('Disapproved') ;
                             },
                             action: function (data) {
                                 var newApprovalStatus = false;
@@ -101,7 +103,6 @@
                                         abp.notify.success(message);
                                     })
                                     .catch(function (error) {
-                                        console.log("error", error)
                                         abp.notify.error(error.message);
                                     });
                             }
@@ -138,6 +139,8 @@
                 data: "text",
                 orderable: false,
                 render: function (data) {
+                    //var markdownData = marked(data || "");
+                    //var sanitizedData = DOMPurify.sanitize(markdownData);
                     data = $.fn.dataTable.render.text().display(data || "");
 
                         return (

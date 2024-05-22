@@ -114,7 +114,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
     }
 	public async Task<int> GetPendingCommentCount()
 	{
-		var count = await CommentRepository.GetCountAsync(commentApproveStateType: CommentApproveStateType.Null);
+		var count = await CommentRepository.GetCountAsync(commentApproveStateType: CommentApproveStateType.Waiting);
 		return (int)(count);
 
 	}
@@ -128,7 +128,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
          input.Author,
          input.CreationStartDate,
          input.CreationEndDate,
-          CommentApproveStateType.Null
+          CommentApproveStateType.Waiting
          );
 
 
@@ -142,7 +142,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
             input.Sorting,
             input.MaxResultCount,
             input.SkipCount,
-            CommentApproveStateType.Null
+            CommentApproveStateType.Waiting
         );
 
         var dtos = comments.Select(queryResultItem =>

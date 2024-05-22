@@ -48,9 +48,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
         CancellationToken cancellationToken = default
     )
-
     {
-        //bool? isApprovedValue = ParseIsApproved(isApproved);
 
         var token = GetCancellationToken(cancellationToken);
         var query = await GetListQueryAsync(
@@ -99,7 +97,6 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         CancellationToken cancellationToken = default
     )
     {
-        //bool? isApprovedValue = ParseIsApproved(isApproved);
         var query = await GetListQueryAsync(
             text,
             entityType,
@@ -180,15 +177,15 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
     }
 
     protected virtual async Task<IQueryable<Comment>> GetListQueryAsync(
-        string filter = null,
-        string entityType = null,
-        Guid? repliedCommentId = null,
-        string authorUsername = null,
-        DateTime? creationStartDate = null,
-        DateTime? creationEndDate = null,
-        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
-        CancellationToken cancellationToken = default
-    )
+      string filter = null,
+      string entityType = null,
+      Guid? repliedCommentId = null,
+      string authorUsername = null,
+      DateTime? creationStartDate = null,
+      DateTime? creationEndDate = null,
+      CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+      CancellationToken cancellationToken = default
+  )
     {
         var queryable = await GetMongoQueryableAsync(cancellationToken);
 
@@ -201,42 +198,23 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             queryable = queryable.Where(x => x.CreatorId == authorId);
         }
 
-        queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
-           .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
-           .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
-           .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
-           .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
-        //.WhereIf(CommentApproveStateType.True == commentApproveStateType, c => c.IsApproved == true)
-        //.WhereIf(CommentApproveStateType.False == commentApproveStateType, c => c.IsApproved == false)
-        //.WhereIf(CommentApproveStateType.Null == commentApproveStateType, c => c.IsApproved == null);
-
-        if (CommentApproveStateType.True == commentApproveStateType)
-        {
-            queryable = queryable.Where(c => c.IsApproved == true);
-        }
-        else if (CommentApproveStateType.False == commentApproveStateType)
-        {
-            queryable = queryable.Where(c => c.IsApproved == false);
-
-        }
-        else if (CommentApproveStateType.Null == commentApproveStateType)
-        {
-            queryable = queryable.Where(c => c.IsApproved == null);
-        }
-
-
-        return queryable;
-
+        return queryable.WhereIf(!filter.IsNullOrWhiteSpace(), c => c.Text.Contains(filter))
+            .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
+            .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
+            .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
+            .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate)
+            .WhereIf(CommentApproveStateType.Approved == commentApproveStateType, c => c.IsApproved == true)
+            .WhereIf(CommentApproveStateType.Disapproved == commentApproveStateType, c => c.IsApproved == false)
+            .WhereIf(CommentApproveStateType.Waiting == commentApproveStateType, c => c.IsApproved == null);
     }
-
     public IQueryable<Comment> FilterCommentsByApprovalState(IQueryable<Comment> commentsQuery, CommentApproveStateType approveState)
     {
         switch (approveState)
         {
-            case CommentApproveStateType.True:
+            case CommentApproveStateType.Approved:
                 commentsQuery = commentsQuery.Where(c => c.IsApproved == true);
                 break;
-            case CommentApproveStateType.False:
+            case CommentApproveStateType.Disapproved:
                 commentsQuery = commentsQuery.Where(c => c.IsApproved == true || c.IsApproved == null);
                 break;
         }

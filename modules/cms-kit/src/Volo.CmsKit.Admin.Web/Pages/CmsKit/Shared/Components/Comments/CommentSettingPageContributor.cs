@@ -1,12 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
-using Volo.CmsKit.Admin.Web.Components.MySettingGroup;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Admin.Web.Settings;
+namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Shared.Components.Comments;
 
 public class CommentSettingPageContributor : ISettingPageContributor
 {
@@ -32,4 +30,3 @@ public class CommentSettingPageContributor : ISettingPageContributor
         return Task.FromResult(true);
     }
 }
-

@@ -16,7 +16,7 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Admin.Web.Menus;
-using Volo.CmsKit.Admin.Web.Settings;
+using Volo.CmsKit.Admin.Web.Pages.CmsKit.Shared.Components.Comments;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Permissions;
 using Volo.CmsKit.Web;

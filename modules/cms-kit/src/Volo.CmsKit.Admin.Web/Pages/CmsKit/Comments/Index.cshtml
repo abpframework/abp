@@ -64,9 +64,9 @@
                             <label class="mb-1" for="isApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
                             <select id="isApprovedSelect" asp-for="@Model.commentApproveStateType" class="form-control">
                                 <option value="@CommentApproveStateType.All">@L["CommentFilter:All"].Value</option>
-                                <option value="@CommentApproveStateType.True">@L["CommentFilter:Approved"].Value</option>
-                                <option value="@CommentApproveStateType.False">@L["CommentFilter:Disapproved"].Value</option>
-                                <option value="@CommentApproveStateType.Null">@L["CommentFilter:Waiting"].Value</option>
+                                <option value="@CommentApproveStateType.Approved">@L["CommentFilter:Approved"].Value</option>
+                                <option value="@CommentApproveStateType.Disapproved">@L["CommentFilter:Disapproved"].Value</option>
+                                <option value="@CommentApproveStateType.Waiting">@L["CommentFilter:Waiting"].Value</option>
                             </select>
                         </div>
                     </abp-column>

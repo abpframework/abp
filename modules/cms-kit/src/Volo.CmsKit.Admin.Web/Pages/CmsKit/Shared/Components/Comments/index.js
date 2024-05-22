@@ -21,6 +21,7 @@
 //        });
 //    });
 //});
+console.log("dsf")
 var service = volo.cmsKit.admin.comments.commentAdmin;
 
 $(document).ready(function () {

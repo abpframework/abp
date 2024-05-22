@@ -125,15 +125,15 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
                         Author = user
                     };
 
-        if (CommentApproveStateType.True == commentApproveStateType)
+        if (CommentApproveStateType.Approved == commentApproveStateType)
         {
             query = query.Where(c => c.Comment.IsApproved == true);
         }
-        else if (CommentApproveStateType.False == commentApproveStateType)
+        else if (CommentApproveStateType.Disapproved == commentApproveStateType)
         {
             query = query.Where(c => c.Comment.IsApproved == false);
         }
-        else if (CommentApproveStateType.Null == commentApproveStateType)
+        else if (CommentApproveStateType.Waiting == commentApproveStateType)
         {
             query = query.Where(c => c.Comment.IsApproved == null);
         }
@@ -195,9 +195,9 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             .WhereIf(!authorUsername.IsNullOrWhiteSpace(), c => c.Author.UserName.Contains(authorUsername))
             .WhereIf(creationStartDate.HasValue, c => c.Comment.CreationTime >= creationStartDate)
             .WhereIf(creationEndDate.HasValue, c => c.Comment.CreationTime <= creationEndDate)
-            .WhereIf(CommentApproveStateType.True == commentApproveStateType, c => c.Comment.IsApproved == true)
-            .WhereIf(CommentApproveStateType.False == commentApproveStateType, c => c.Comment.IsApproved == false)
-            .WhereIf(CommentApproveStateType.Null == commentApproveStateType, c => c.Comment.IsApproved == null);
+            .WhereIf(CommentApproveStateType.Approved == commentApproveStateType, c => c.Comment.IsApproved == true)
+            .WhereIf(CommentApproveStateType.Disapproved == commentApproveStateType, c => c.Comment.IsApproved == false)
+            .WhereIf(CommentApproveStateType.Waiting == commentApproveStateType, c => c.Comment.IsApproved == null);
             //.WhereIf(isApproved.HasValue, c => c.Comment.IsApproved == isApproved);
     }
 }

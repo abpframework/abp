@@ -6,7 +6,7 @@ namespace Volo.CmsKit.Comments;
 public enum CommentApproveStateType
 {
     All,
-    True,
-    False,
-    Null
+    Approved,
+    Disapproved,
+    Waiting
 }

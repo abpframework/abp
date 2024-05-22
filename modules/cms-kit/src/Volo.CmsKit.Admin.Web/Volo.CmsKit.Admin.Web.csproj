@@ -24,8 +24,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="Components\**\*.js" />
-    <EmbeddedResource Include="Components\**\*.css" />
     <EmbeddedResource Include="wwwroot\**\*.js" />
     <EmbeddedResource Include="wwwroot\**\*.css" />
     <Content Remove="Pages\**\*.css" />
@@ -35,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Components\CommentsSetting\Index.js" />
     <None Remove="Pages\CmsKit\Comments\Approve\index.js" />
   </ItemGroup>
 
