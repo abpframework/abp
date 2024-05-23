@@ -139,7 +139,7 @@ export class FeatureManagementComponent
       .subscribe(() => {
         this.visible = false;
 
-        this.toasterService.success('AbpFeatureManagement::SavedSuccessfully');
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         if (!this.providerKey) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();
