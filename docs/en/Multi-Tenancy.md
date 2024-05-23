@@ -38,7 +38,7 @@ ABP Framework supports all the following approaches to store the tenant data in 
 
 - **Single Database**: All tenants are stored in a single database.
 - **Database per Tenant**: Every tenant has a separate, dedicated database to store the data related to that tenant.
-- **Hybrid**: Some tenants share a single databases while some tenants may have their own databases.
+- **Hybrid**: Some tenants share a single database while some tenants may have their own databases.
 
 [Tenant management module](Modules/Tenant-Management.md) (which comes pre-installed with the startup projects) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
 
