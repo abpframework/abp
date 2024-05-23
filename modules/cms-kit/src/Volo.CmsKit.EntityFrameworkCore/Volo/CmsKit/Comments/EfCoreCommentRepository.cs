@@ -54,7 +54,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
-        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     )
     {
@@ -66,7 +66,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             authorUsername,
             creationStartDate,
             creationEndDate,
-            commentApproveStateType,
+            commentApproveState,
             token);
 
         if (!sorting.IsNullOrEmpty())
@@ -87,7 +87,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
-        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
 
     )
@@ -100,7 +100,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             authorUsername,
             creationStartDate,
             creationEndDate,
-            commentApproveStateType,
+            commentApproveState,
             token);
 
         return await query.LongCountAsync(token);
@@ -109,7 +109,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
     public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
         string entityType,
         string entityId,
-        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -125,10 +125,10 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
                         Author = user
                     };
 
-        query = commentApproveStateType switch
+        query = commentApproveState switch
         {
-            CommentApproveStateType.Approved => query.Where(c => c.Comment.IsApproved == true),
-            CommentApproveStateType.Disapproved => query.Where(c => c.Comment.IsApproved == true || c.Comment.IsApproved == null),
+            CommentApproveState.Approved => query.Where(c => c.Comment.IsApproved == true),
+            CommentApproveState.Approved | CommentApproveState.Waiting => query.Where(c => c.Comment.IsApproved == true || c.Comment.IsApproved == null),
             _ => query
         };
        
@@ -166,9 +166,8 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
-        CommentApproveStateType commentApproveStateType = CommentApproveStateType.All,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
-
     )
     {
         var commentDbSet = await GetDbSetAsync();
@@ -189,8 +188,8 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             .WhereIf(!authorUsername.IsNullOrWhiteSpace(), c => c.Author.UserName.Contains(authorUsername))
             .WhereIf(creationStartDate.HasValue, c => c.Comment.CreationTime >= creationStartDate)
             .WhereIf(creationEndDate.HasValue, c => c.Comment.CreationTime <= creationEndDate)
-            .WhereIf(CommentApproveStateType.Approved == commentApproveStateType, c => c.Comment.IsApproved == true)
-            .WhereIf(CommentApproveStateType.Disapproved == commentApproveStateType, c => c.Comment.IsApproved == false)
-            .WhereIf(CommentApproveStateType.Waiting == commentApproveStateType, c => c.Comment.IsApproved == null);
+            .WhereIf(CommentApproveState.Approved == commentApproveState, c => c.Comment.IsApproved == true)
+            .WhereIf(CommentApproveState.Disapproved == commentApproveState, c => c.Comment.IsApproved == false)
+            .WhereIf(CommentApproveState.Waiting == commentApproveState, c => c.Comment.IsApproved == null);
     }
 }

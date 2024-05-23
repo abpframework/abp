@@ -13,14 +13,13 @@ public interface ICommentAdminAppService : IApplicationService
 
     Task DeleteAsync(Guid id);
 
-    Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto commentApprovalDto);
+    Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input);
 
-    Task SetSettings(SettingsDto settingsDto);
+    Task SetSettingsAsync(SettingsDto input);
 
-    Task<SettingsDto> GetSettings();
+    Task<SettingsDto> GetSettingsAsync();
 
-	Task<int> GetWaitingCommentCount();
+	Task<int> GetWaitingCountAsync();
 
-    Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input);
-
+    Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input);
 }

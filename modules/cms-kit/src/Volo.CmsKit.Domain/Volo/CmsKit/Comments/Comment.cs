@@ -27,7 +27,7 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
 
     public virtual string IdempotencyToken { get; set; }
 
-	public virtual bool? IsApproved { get; set; }
+	public virtual bool? IsApproved { get; private set; }
 
 	protected Comment()
     {
@@ -63,5 +63,11 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
     protected virtual void SetTextInternal(string text)
     {
         Text = Check.NotNullOrWhiteSpace(text, nameof(text), CommentConsts.MaxTextLength);
+    }
+    
+    public virtual Comment SetApprovalStatus([NotNull] bool isApproved)
+    {
+        IsApproved = isApproved;
+        return this;
     }
 }

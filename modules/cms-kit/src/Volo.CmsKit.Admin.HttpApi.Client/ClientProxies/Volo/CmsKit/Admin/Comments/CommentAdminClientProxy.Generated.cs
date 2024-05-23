@@ -41,12 +41,12 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
         });
     }
 
-    public virtual async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto commentApprovalDto)
+    public virtual async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
         await RequestAsync(nameof(UpdateApprovalStatusAsync), new ClientProxyRequestTypeValue
         {
             { typeof(Guid), id },
-            { typeof(CommentApprovalDto), commentApprovalDto }
+            { typeof(CommentApprovalDto), input }
         });
     }
 
@@ -68,9 +68,9 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
         throw new System.NotImplementedException(); 
     }
 
-    public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input)
+    public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input)
     {
-        return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetWaitingCommentsWithRepliesAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetWaitingWithRepliesAsync), new ClientProxyRequestTypeValue
         {
             { typeof(CommentGetListInput), input }
         });

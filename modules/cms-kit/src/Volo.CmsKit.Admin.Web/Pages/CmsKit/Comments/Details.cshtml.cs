@@ -17,7 +17,7 @@ public class DetailsModel : CmsKitAdminPageModel
 
     public DateTime? CreationEndDate { get; set; }
 
-    public CommentApproveStateType commentApproveStateType { get; set; }
+    public CommentApproveState CommentApproveState { get; set; }
 
     public CommentWithAuthorDto CommentWithAuthorDto { get; protected set; }
 

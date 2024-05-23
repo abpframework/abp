@@ -12,6 +12,6 @@ public class IndexModel : CmsKitAdminPageModel
     public DateTime? CreationStartDate { get; set; } = null;
 
     public DateTime? CreationEndDate { get; set; }
-    public CommentApproveStateType? commentApproveStateType { get; set; }
-
+    
+    public CommentApproveState CommentApproveStateType { get; set; }
 }

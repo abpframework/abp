@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -57,6 +59,7 @@ public class CmsKitAdminWebModule : AbpModule
         {
             options.MenuContributors.Add(new CmsKitAdminMenuContributor());
         });
+        
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
@@ -64,8 +67,14 @@ public class CmsKitAdminWebModule : AbpModule
                     configuration =>
                     {
                         configuration.AddFiles("/client-proxies/cms-kit-admin-proxy.js");
+                    })
+                .Configure(StandardBundles.Scripts.Global,
+                    configuration =>
+                    {
+                        configuration.AddContributors(typeof(MarkdownItScriptContributor));
                     });
         });
+        
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<CmsKitAdminWebModule>("Volo.CmsKit.Admin.Web");
@@ -96,6 +105,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/UpdateModal", CmsKitAdminPermissions.Menus.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/GlobalResources", CmsKitAdminPermissions.GlobalResources.Default);
+            // TODO: Add /CmsKit/Comments/Approve/Index page
         });
 
         Configure<RazorPagesOptions>(options =>
@@ -179,21 +189,7 @@ public class CmsKitAdminWebModule : AbpModule
                 });
 
         });
-        //Configure<AbpBundleContributorOptions>(options =>
-        //{
-        //           options
-        //        .Extensions<PrismjsScriptBundleContributor>()
-        //        .Add<PrismjsScriptBundleContributorDocsExtension>();
-        //});
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options.ScriptBundles.Configure(
-                "Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt.MarkdownItScriptContributor",
-                bundle =>
-                {
-                    bundle.AddFiles("/libs/markdown-it/markdown-it.min.js");
-                });
-        });
+       
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(CmsKitAdminRemoteServiceConsts.ModuleName);

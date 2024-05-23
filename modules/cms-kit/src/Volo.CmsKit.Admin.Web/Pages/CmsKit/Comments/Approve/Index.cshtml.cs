@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Approve;
 
+
 public class IndexModel : CmsKitAdminPageModel
 {
     public string EntityType { get; set; }

@@ -38,7 +38,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 				input.Author,
 				input.CreationStartDate,
 				input.CreationEndDate,
-				input.commentApproveStateType
+				input.CommentApproveState
                 );
 
 
@@ -52,7 +52,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 			input.Sorting,
 			input.MaxResultCount,
 			input.SkipCount,
-            input.commentApproveStateType
+            input.CommentApproveState
         );
 
 		var dtos = comments.Select(queryResultItem =>
@@ -85,41 +85,35 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 
 
 
-    public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto commentApprovalDto)
+    public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
 		var comment = await CommentRepository.GetAsync(id);
-		comment.IsApproved = commentApprovalDto.IsApproved;
+		comment.SetApprovalStatus(input.IsApproved);
 
 		await CommentRepository.UpdateAsync(comment);
 	}
 
-    public async Task SetSettings(SettingsDto settingsDto)
+    public async Task SetSettingsAsync(SettingsDto input)
     {
-        await _settingManager.SetGlobalAsync(AppSettings.RequireApprovement, settingsDto.RequireApprovement.ToString());
+        await _settingManager.SetGlobalAsync(AppSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
     }
 
-    public async Task<SettingsDto> GetSettings()
+    public async Task<SettingsDto> GetSettingsAsync()
     {
-        string approvalSettingValue = await _settingManager.GetOrNullGlobalAsync(AppSettings.RequireApprovement);
-
-        if (bool.TryParse(approvalSettingValue, out bool isApprovalRequired))
+        var isRequireApprovementEnabled = bool.Parse(await _settingManager.GetOrNullGlobalAsync(AppSettings.CommentRequireApprovement));
+        
+	    return new SettingsDto
         {
-            SettingsDto settings = new SettingsDto
-            {
-                RequireApprovement = isApprovalRequired
-            };
-            return settings;
-        }
-        return null;
+	        CommentRequireApprovement = isRequireApprovementEnabled
+        };
     }
-	public async Task<int> GetWaitingCommentCount()
+    
+	public async Task<int> GetWaitingCountAsync()
 	{
-		var count = await CommentRepository.GetCountAsync(commentApproveStateType: CommentApproveStateType.Waiting);
-		return (int)(count);
-
+		return (int) await CommentRepository.GetCountAsync(commentApproveState: CommentApproveState.Waiting);
 	}
 
-    public async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingCommentsWithRepliesAsync(CommentGetListInput input)
+    public async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input)
     {
         var totalCount = await CommentRepository.GetCountAsync(
          input.Text,
@@ -128,9 +122,8 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
          input.Author,
          input.CreationStartDate,
          input.CreationEndDate,
-         CommentApproveStateType.Waiting
+         CommentApproveState.Waiting
          );
-
 
         var comments = await CommentRepository.GetListAsync(
             input.Text,
@@ -142,7 +135,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
             input.Sorting,
             input.MaxResultCount,
             input.SkipCount,
-            CommentApproveStateType.Waiting
+            CommentApproveState.Waiting
         );
 
         var dtos = comments.Select(queryResultItem =>

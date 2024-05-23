@@ -10,7 +10,7 @@ public class CmsKitSettingDefinitionProvider : SettingDefinitionProvider
          * Use names from CmsKitSettings class.
          */
         context.Add(
-            new SettingDefinition(AppSettings.RequireApprovement, "true")
+            new SettingDefinition(AppSettings.CommentRequireApprovement, "true")
             ) ;
     }
 }

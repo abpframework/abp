@@ -234,7 +234,7 @@ $(function (){
         _dataTable.ajax.reloadEx();
     });
 
-    // Get and display waiting comment count
+    // TODO: Replace these methods because ther are replaced in appservice
     commentsService.getWaitingCommentCount().then(function (count) {
         if (count > 0) {
             var alertMessage = l("CommentAlertMessage", count);
@@ -247,7 +247,6 @@ $(function (){
         }
     });
 
-    //
     commentsService.getSettings().then(function (data) {
         if (data.requireApprovement) {
             $('#CommentsTable').DataTable().column(6).visible(true);
@@ -256,4 +255,6 @@ $(function (){
             $('#isApprovedColumn').hide();
         }
     })
+    
+    // TODO: if I change the state of the comment, you should update the alert message
 });

@@ -19,7 +19,5 @@ public class CommentGetListInput : PagedAndSortedResultRequestDto
 
     public DateTime? CreationEndDate { get; set; }
 
-    public CommentApproveStateType commentApproveStateType { get; set; }
-
-
+    public CommentApproveState CommentApproveState { get; set; }
 }
