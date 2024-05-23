@@ -19,7 +19,6 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { OTHERS_GROUP } from '../tokens';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from '../tokens/compare-func.token';
-import { CoreModule } from '../core.module';
 import { AuthService } from '../abstracts';
 
 describe('PermissionGuard', () => {
