@@ -176,7 +176,7 @@ Here's how you can do it:
 export class AppModule {}
 ```
 
-In this code, `myDynamicLayouts` is the map of dynamic layouts you defined earlier. We pass this map to the `CoreModule` using the `forRoot` method.
+In this code, `myDynamicLayouts` is the map of dynamic layouts you defined earlier. We pass this map to the `provideAbpCore` using the `withOptions` method.
 
 Now that you have defined the new layout, you can use it in the router definition. You do this by adding a new route that uses the new layout.
 
