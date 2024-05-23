@@ -20,6 +20,4 @@ public interface ICommentAdminAppService : IApplicationService
     Task<SettingsDto> GetSettingsAsync();
 
 	Task<int> GetWaitingCountAsync();
-
-    Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input);
 }

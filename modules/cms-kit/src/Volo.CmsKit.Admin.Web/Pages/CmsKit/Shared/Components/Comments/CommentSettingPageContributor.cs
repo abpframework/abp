@@ -20,12 +20,12 @@ public class CommentSettingPageContributor : ISettingPageContributor
             )
         );
 
-
         return Task.CompletedTask;
     }
 
     public Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
     {
+        // Add permission
         return Task.FromResult(true);
     }
 }

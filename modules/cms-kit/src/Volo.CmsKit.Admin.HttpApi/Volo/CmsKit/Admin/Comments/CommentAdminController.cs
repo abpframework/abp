@@ -49,18 +49,17 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
         return CommentAdminAppService.DeleteAsync(id);
     }
 
-	[HttpPost]
-	[Route("{id}")]
+	[HttpPut]
+	[Route("{id}/approval-status")]
     [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
 		return CommentAdminAppService.UpdateApprovalStatusAsync(id, input);
-
 	}
 
     [HttpPost]
     [Route("settings")]
-    [Authorize(CmsKitAdminPermissions.Comments.Default)]
+    [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public Task SetSettingsAsync(SettingsDto input)
     {
        return CommentAdminAppService.SetSettingsAsync(input);
@@ -81,12 +80,4 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 	{
 		return CommentAdminAppService.GetWaitingCountAsync();
 	}
-
-    [HttpGet]
-    [Route("waiting")]
-    [Authorize(CmsKitAdminPermissions.Comments.Default)]
-    public Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input)
-    {
-        return CommentAdminAppService.GetWaitingWithRepliesAsync(input);
-    }
 }

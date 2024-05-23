@@ -83,8 +83,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
         await CommentRepository.DeleteWithRepliesAsync(comment);
     }
 
-
-
+    [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
 		var comment = await CommentRepository.GetAsync(id);
@@ -93,6 +92,7 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 		await CommentRepository.UpdateAsync(comment);
 	}
 
+    [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public async Task SetSettingsAsync(SettingsDto input)
     {
         await _settingManager.SetGlobalAsync(AppSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
@@ -112,40 +112,4 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 	{
 		return (int) await CommentRepository.GetCountAsync(commentApproveState: CommentApproveState.Waiting);
 	}
-
-    public async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input)
-    {
-        var totalCount = await CommentRepository.GetCountAsync(
-         input.Text,
-         input.EntityType,
-         input.RepliedCommentId,
-         input.Author,
-         input.CreationStartDate,
-         input.CreationEndDate,
-         CommentApproveState.Waiting
-         );
-
-        var comments = await CommentRepository.GetListAsync(
-            input.Text,
-            input.EntityType,
-            input.RepliedCommentId,
-            input.Author,
-            input.CreationStartDate,
-            input.CreationEndDate,
-            input.Sorting,
-            input.MaxResultCount,
-            input.SkipCount,
-            CommentApproveState.Waiting
-        );
-
-        var dtos = comments.Select(queryResultItem =>
-        {
-            var dto = ObjectMapper.Map<Comment, CommentWithAuthorDto>(queryResultItem.Comment);
-            dto.Author = ObjectMapper.Map<CmsUser, CmsUserDto>(queryResultItem.Author);
-
-            return dto;
-        }).ToList();
-
-        return new PagedResultDto<CommentWithAuthorDto>(totalCount, dtos);
-    }
 }
