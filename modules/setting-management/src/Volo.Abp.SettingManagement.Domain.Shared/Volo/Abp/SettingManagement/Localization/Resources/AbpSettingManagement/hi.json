@@ -2,7 +2,7 @@
   "culture": "hi",
   "texts": {
     "Settings": "समायोजन",
-    "SuccessfullySaved": "सफलतापूर्वक संचित कर लिया गया है",
+    "SavedSuccessfully": "सफलतापूर्वक संचित कर लिया गया है",
     "Permission:SettingManagement": "प्रबंधन की स्थापना",
     "Permission:Emailing": "ईमेल से भेजना",
     "Permission:EmailingTest": "ईमेल परीक्षण",

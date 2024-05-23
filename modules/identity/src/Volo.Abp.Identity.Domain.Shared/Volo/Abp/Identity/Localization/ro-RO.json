@@ -27,7 +27,7 @@
     "DisplayName:PhoneNumber": "Număr de telefon",
     "DisplayName:TwoFactorEnabled": "Autentificare în doi paşi",
     "DisplayName:IsActive": "Activ",
-    "DisplayName:LockoutEnabled": "Blocaţi contul după încercări eşuate de autentificare",
+    "DisplayName:LockoutEnabled": "Blocare cont",
     "NewRole": "Rol nou",
     "RoleName": "Nume rol",
     "CreationTime": "Data creării",

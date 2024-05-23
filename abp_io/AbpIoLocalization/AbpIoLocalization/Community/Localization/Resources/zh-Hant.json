@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>這是抽獎頁面，旨在表達我們對您作為活躍社區成員的感謝。我們舉辦<a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP 社群講座</a><a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">、ABP .NET 會議</a>、參加或贊助 .NET 相關活動，並在活動中贈送一些禮物。<br><br>您可以關注此頁面查看即將舉行的抽獎活動、參加抽獎活動或查看我們之前抽獎的抽獎活動（包括獲獎者）。<br><br>感謝您成為活躍會員！在即將到來的抽獎活動中再見。",
     "RafflesInfoTitle": "ABP 社區<span class=\"gradient-community\">萊佛士</span>",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> 支持的。",
-    "Preview": "预览"
+    "Preview": "预览",
+    "VisitPage": "访问页面",
+    "VisitVideoCourseDescription": "如果您想学习 ABP 框架的基础知识，请查看 ABP Essentials 视频课程。"
   }
 }

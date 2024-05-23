@@ -46,8 +46,8 @@ public static class ProjectFinder
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Client");
             case NuGetPackageTarget.SignalR:
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".SignalR") ??
-                       FindProjectEndsWith(projectFiles, assemblyNames, ".Web") ??
-                       FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host");
+                       FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host") ??
+                       FindProjectEndsWith(projectFiles, assemblyNames, ".Web");
             case NuGetPackageTarget.Blazor:
                 return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor")
                     ?? FindProjectEndsWith(projectFiles, assemblyNames, ".MauiBlazor");;

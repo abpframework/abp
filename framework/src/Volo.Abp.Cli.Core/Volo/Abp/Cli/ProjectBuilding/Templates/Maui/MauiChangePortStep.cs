@@ -20,7 +20,7 @@ public class MauiChangePortStep : ProjectBuildPipelineStep
         }
 
         var ports = GetPorts(context);
-        
+
         appsettingsFile.NormalizeLineEndings();
         var lines = appsettingsFile.GetLines();
 
@@ -43,7 +43,7 @@ public class MauiChangePortStep : ProjectBuildPipelineStep
 
         appsettingsFile.SetLines(lines);
     }
-    
+
     private (string AuthServerPort, string ApiHostPort) GetPorts(ProjectBuildContext context)
     {
         var authServerPort = string.Empty;
@@ -57,6 +57,7 @@ public class MauiChangePortStep : ProjectBuildPipelineStep
                 authServerPort = "44305";
                 apiHostPort = "44305";
                 break;
+            case UiFramework.BlazorWebApp:
             case UiFramework.BlazorServer:
                 authServerPort = "44308";
                 apiHostPort = "44308";

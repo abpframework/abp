@@ -23,11 +23,13 @@
             </ul>
           </div>
           <div class="col-12 col-md-9">
-            <div *ngIf="settings.length" class="tab-content">
-              <div class="tab-pane fade show active" [id]="selected.name + '-tab'" role="tabpanel">
-                <ng-container *ngComponentOutlet="selected.component"></ng-container>
+            @if (settings.length) {
+              <div class="tab-content">
+                <div class="tab-pane fade show active" [id]="selected.name + '-tab'" role="tabpanel">
+                  <ng-container *ngComponentOutlet="selected.component"></ng-container>
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>

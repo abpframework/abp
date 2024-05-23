@@ -63,6 +63,11 @@ public abstract class ModuleTemplateBase : TemplateInfo
         ));
 
         steps.Add(new RemoveProjectFromSolutionStep(
+            "MyCompanyName.MyProjectName.Blazor.Host.Client",
+            projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Host.Client"
+        ));
+
+        steps.Add(new RemoveProjectFromSolutionStep(
             "MyCompanyName.MyProjectName.Blazor.Server.Host",
             projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host"
         ));

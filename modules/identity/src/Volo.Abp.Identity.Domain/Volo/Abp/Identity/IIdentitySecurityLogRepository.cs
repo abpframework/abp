@@ -10,7 +10,7 @@ public interface IIdentitySecurityLogRepository : IBasicRepository<IdentitySecur
 {
     Task<List<IdentitySecurityLog>> GetListAsync(
         string sorting = null,
-        int maxResultCount = 50,
+        int maxResultCount = int.MaxValue,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
