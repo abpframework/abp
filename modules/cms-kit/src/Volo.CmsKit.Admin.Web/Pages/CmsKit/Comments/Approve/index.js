@@ -136,10 +136,14 @@
                     title: l("Text"),
                     data: "text",
                     orderable: false,
+
+             
                     render: function (data) {
 
-                        var converter = new showdown.Converter();
-                        var htmlContent = converter.makeHtml(data);
+                        //var converter = new showdown.Converter();
+                        //var htmlContent = converter.makeHtml(data);
+                        var md = window.markdownit();
+                        var htmlContent = md.render(data);
                         return (htmlContent);
                     }
                 },

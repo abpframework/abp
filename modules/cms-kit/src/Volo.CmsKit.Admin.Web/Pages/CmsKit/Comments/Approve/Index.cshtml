@@ -5,6 +5,7 @@
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.CmsKit.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt
 
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<CmsKitResource> L
@@ -29,7 +30,8 @@
         <abp-script src="/client-proxies/cms-kit-admin-proxy.js" />
         <abp-script src="/Pages/CmsKit/Comments/Approve/index.js" />
     </abp-script-bundle>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+    <abp-script type="typeof(MarkdownItScriptContributor)" />
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script> *@
 }
 
 

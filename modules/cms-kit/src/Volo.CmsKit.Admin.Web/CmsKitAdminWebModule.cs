@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -16,6 +17,7 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Admin.Web.Menus;
+using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Approve;
 using Volo.CmsKit.Admin.Web.Pages.CmsKit.Shared.Components.Comments;
 using Volo.CmsKit.Localization;
 using Volo.CmsKit.Permissions;
@@ -58,7 +60,7 @@ public class CmsKitAdminWebModule : AbpModule
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
-                .Configure(typeof(IndexModel).FullName,
+                .Configure(typeof(Abp.SettingManagement.Web.Pages.SettingManagement.IndexModel).FullName,
                     configuration =>
                     {
                         configuration.AddFiles("/client-proxies/cms-kit-admin-proxy.js");
@@ -175,8 +177,23 @@ public class CmsKitAdminWebModule : AbpModule
                         requiredPolicyName: CmsKitAdminPermissions.Menus.Update
                         );
                 });
-        });
 
+        });
+        //Configure<AbpBundleContributorOptions>(options =>
+        //{
+        //           options
+        //        .Extensions<PrismjsScriptBundleContributor>()
+        //        .Add<PrismjsScriptBundleContributorDocsExtension>();
+        //});
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.ScriptBundles.Configure(
+                "Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt.MarkdownItScriptContributor",
+                bundle =>
+                {
+                    bundle.AddFiles("/libs/markdown-it/markdown-it.min.js");
+                });
+        });
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(CmsKitAdminRemoteServiceConsts.ModuleName);

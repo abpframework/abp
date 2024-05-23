@@ -26,7 +26,6 @@ public class CommentSettingPageContributor : ISettingPageContributor
 
     public Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
     {
-        // You can check the permissions here
         return Task.FromResult(true);
     }
 }

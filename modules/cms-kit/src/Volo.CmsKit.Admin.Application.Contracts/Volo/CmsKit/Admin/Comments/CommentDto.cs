@@ -19,6 +19,7 @@ public class CommentDto : ExtensibleObject
     public Guid CreatorId { get; set; }
 
     public DateTime CreationTime { get; set; }
+
 	public bool? IsApproved { get; set; }
 
 }

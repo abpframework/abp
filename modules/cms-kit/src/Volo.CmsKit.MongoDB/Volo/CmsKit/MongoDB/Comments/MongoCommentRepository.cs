@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -131,8 +132,12 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
         .Where(c => c.EntityId == entityId && c.EntityType == entityType);
 
-
-        commentsQuery = (IMongoQueryable<Comment>)FilterCommentsByApprovalState(commentsQuery, commentApproveStateType);
+        commentsQuery = commentApproveStateType switch
+        {
+            CommentApproveStateType.Approved => commentsQuery.Where(c => c.IsApproved == true),
+            CommentApproveStateType.Disapproved => commentsQuery.Where(c => c.IsApproved == true || c.IsApproved == null),
+            _ => commentsQuery
+        };
 
         var comments = await commentsQuery
             .OrderBy(c => c.CreationTime)
@@ -207,18 +212,18 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             .WhereIf(CommentApproveStateType.Disapproved == commentApproveStateType, c => c.IsApproved == false)
             .WhereIf(CommentApproveStateType.Waiting == commentApproveStateType, c => c.IsApproved == null);
     }
-    public IQueryable<Comment> FilterCommentsByApprovalState(IQueryable<Comment> commentsQuery, CommentApproveStateType approveState)
-    {
-        switch (approveState)
-        {
-            case CommentApproveStateType.Approved:
-                commentsQuery = commentsQuery.Where(c => c.IsApproved == true);
-                break;
-            case CommentApproveStateType.Disapproved:
-                commentsQuery = commentsQuery.Where(c => c.IsApproved == true || c.IsApproved == null);
-                break;
-        }
+    //public IQueryable<Comment> FilterCommentsByApprovalState(IQueryable<Comment> commentsQuery, CommentApproveStateType approveState)
+    //{
+    //    switch (approveState)
+    //    {
+    //        case CommentApproveStateType.Approved:
+    //            commentsQuery = commentsQuery.Where(c => c.IsApproved == true);
+    //            break;
+    //        case CommentApproveStateType.Disapproved:
+    //            commentsQuery = commentsQuery.Where(c => c.IsApproved == true || c.IsApproved == null);
+    //            break;
+    //    }
 
-        return commentsQuery;
-    }
+    //    return commentsQuery;
+    //}
 }
