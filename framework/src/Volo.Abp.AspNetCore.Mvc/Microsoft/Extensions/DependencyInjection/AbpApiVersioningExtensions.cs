@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class AbpApiVersioningExtensions
 {
-    public static IServiceCollection AddAbpApiVersioning(
+    public static IApiVersioningBuilder AddAbpApiVersioning(
         this IServiceCollection services,
         Action<ApiVersioningOptions>? apiVersioningOptionsSetupAction = null,
         Action<MvcApiVersioningOptions>? mvcApiVersioningOptionsSetupAction = null)
@@ -21,9 +21,7 @@ public static class AbpApiVersioningExtensions
 
         apiVersioningOptionsSetupAction ??= _ => { };
         mvcApiVersioningOptionsSetupAction ??= _ => { };
-        services.AddApiVersioning(apiVersioningOptionsSetupAction).AddMvc(mvcApiVersioningOptionsSetupAction);
-
-        return services;
+        return services.AddApiVersioning(apiVersioningOptionsSetupAction).AddMvc(mvcApiVersioningOptionsSetupAction);
     }
 
     public static void ConfigureAbp(this MvcApiVersioningOptions options, AbpAspNetCoreMvcOptions mvcOptions)
