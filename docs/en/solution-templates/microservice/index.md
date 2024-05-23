@@ -25,7 +25,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Swagger integration](swagger-integration.md)
   * [Permission management](permission-management.md)
   * [Feature management](feature-management.md)
-  * Localization system
+  * [Localization system](localization-system.md)
   * Background Jobs
   * Background Workers
   * Distributed Locking
