@@ -56,6 +56,27 @@ namespace Volo.Docs.Documents
             return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public virtual async Task<List<Document>> GetUniqueDocumentsByProjectIdPagedAsync(Guid projectId, int skipCount, int maxResultCount,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .Where(d => d.ProjectId == projectId)
+                .OrderBy(x => x.LastCachedTime)
+                .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
+                .Select(group => group.First())
+                .Skip(skipCount)
+                .Take(maxResultCount)
+                .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<long> GetUniqueDocumentCountByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .Where(d => d.ProjectId == projectId)
+                .GroupBy(x => new {x.FileName, x.Version, x.LanguageCode})
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task UpdateProjectLastCachedTimeAsync(Guid projectId, DateTime cachedTime,
             CancellationToken cancellationToken = default)
         {
