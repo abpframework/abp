@@ -12,4 +12,41 @@ The *Administration* microservice provides a set of APIs to manage localization.
 
 > The *Language Management* module is optional. If you don't need to manage localization resources from the UI, you can uncheck the *Language Management* module while creating the solution. However, each microservice's localization resources are still registered to the database and can be used by the applications.
 
+## Creating a New Localization Resource
 
+To create a new localization resource, you can create a class named *MicroservicenameResource* in the *Contracts* project for the related microservice, which is already created by the solution template. For example, the *Identity* microservice has an *IdentityServiceResource* class and localization JSON files.
+
+```csharp
+[LocalizationResourceName("IdentityService")]
+public class IdentityServiceResource
+{
+
+}
+```
+
+Additionally, it configures the localization resource in the *IdentityServiceContractsModule* class.
+
+```csharp	
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpVirtualFileSystemOptions>(options =>
+    {
+        options.FileSets.AddEmbedded<BookstoreIdentityServiceContractsModule>();
+    });
+
+    Configure<AbpLocalizationOptions>(options =>
+    {
+        options.Resources
+            .Add<IdentityServiceResource>("en")
+            .AddBaseTypes(typeof(AbpValidationResource), typeof(AbpUiResource))
+            .AddVirtualJson("/Localization/IdentityService");
+    });
+
+    Configure<AbpExceptionLocalizationOptions>(options =>
+    {
+        options.MapCodeNamespace("IdentityService", typeof(IdentityServiceResource));
+    });
+}
+```
+
+> Existing microservices in the solution don't contain the localization text. These localization resources are defined in their own modules. You can add new localization resources to the existing microservices by following the steps above.
