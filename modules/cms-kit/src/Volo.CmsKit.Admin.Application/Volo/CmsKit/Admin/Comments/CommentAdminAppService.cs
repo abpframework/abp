@@ -22,11 +22,11 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 {
     protected ICommentRepository CommentRepository { get; }
 
-    private readonly ISettingManager _settingManager;
+    private readonly ISettingManager SettingManager;
     public CommentAdminAppService(ICommentRepository commentRepository, ISettingManager settingManager)
     {
         CommentRepository = commentRepository;
-        _settingManager = settingManager;
+        SettingManager = settingManager;
     }
 
     public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
@@ -95,12 +95,12 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
     [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public async Task SetSettingsAsync(CommentSettingsDto input)
     {
-        await _settingManager.SetGlobalAsync(AppSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
+        await SettingManager.SetGlobalAsync(AppSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
     }
 
     public async Task<CommentSettingsDto> GetSettingsAsync()
     {
-        var isRequireApprovementEnabled = bool.Parse(await _settingManager.GetOrNullGlobalAsync(AppSettings.CommentRequireApprovement));
+        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(AppSettings.CommentRequireApprovement));
         
 	    return new CommentSettingsDto
         {

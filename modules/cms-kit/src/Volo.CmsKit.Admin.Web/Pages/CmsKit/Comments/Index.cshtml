@@ -62,7 +62,7 @@
                     <abp-column size-lg="_2" size-md="_6">
                         <div class="mb-3" id="isApprovedColumn">
                             <label class="mb-1" for="isApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
-                            <select id="isApprovedSelect" asp-for="@Model.CommentApproveStateType" class="form-control">
+                            <select id="isApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
                                 <option value="@CommentApproveState.All">@L["CommentFilter:All"].Value</option>
                                 <option value="@CommentApproveState.Approved">@L["CommentFilter:Approved"].Value</option>
                                 <option value="@CommentApproveState.Disapproved">@L["CommentFilter:Disapproved"].Value</option>
