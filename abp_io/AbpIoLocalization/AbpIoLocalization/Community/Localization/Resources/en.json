@@ -261,6 +261,8 @@
     "Preview": "Preview",
     "VisitPage": "Visit Page",
     "VisitVideoCourseDescription": "If you want to learn the basics of the ABP Framework, check out the ABP Essentials Video courses.",
-    "EditProfile": "Edit Profile"
+    "EditProfile": "Edit Profile",
+    "ConfirmEmailForPost": "To be able to post, you need to confirm your email. Go to account.abp.io/Account/Manage and verify your email in the Personal Info tab.",
+    "DailyPostCreateLimitation": "You have reached the daily post creation limit. You can create a new post in {0}."
   }
 }

@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> ondersteund.",
     "Preview": "Voorbeeld",
     "VisitPage": "Bezoek pagina",
-    "VisitVideoCourseDescription": "Als je de basis van het ABP Framework wilt leren, bekijk dan de ABP Essentials Videocursussen."
+    "VisitVideoCourseDescription": "Als je de basis van het ABP Framework wilt leren, bekijk dan de ABP Essentials Videocursussen.",
+    "ConfirmEmailForPost": "Om te kunnen posten, moet u uw e-mailadres bevestigen. Ga naar account.abp.io/Account/Manage en verifieer uw e-mailadres op het tabblad Persoonlijke informatie.",
+    "DailyPostCreateLimitation": "Je hebt de dagelijkse limiet voor het maken van berichten bereikt. Je kunt een nieuw bericht maken in {0}."
   }
 }

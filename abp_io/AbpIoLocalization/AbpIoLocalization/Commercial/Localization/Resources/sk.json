@@ -427,6 +427,7 @@
     "SendUsEmail": "Pošlite nám e-mail",
     "ErrorExceptionMessage": "Nastala chyba pri spracovaní vašej žiadosti",
     "WatchTakeCodeGeneration": "Pozrite si video „Preskúmajte potenciál generovania kódu: ABP Suite“!",
-    "ExtendNow": "Predĺžiť / obnoviť"
+    "ExtendNow": "Predĺžiť / obnoviť",
+    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Ak chcete otestovať ABP Studio skôr ako ktokoľvek iný, staňte sa BETA testerom</span>"
   }
 }

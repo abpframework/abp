@@ -1188,6 +1188,10 @@
                 {
                   "text": "Abp Window Service",
                   "path": "UI/Angular/Abp-Window-Service.md"
+                },
+                {
+                  "text": "Title Strategy",
+                  "path": "UI/Angular/Title-Strategy-Service.md"
                 }
               ]
             },
