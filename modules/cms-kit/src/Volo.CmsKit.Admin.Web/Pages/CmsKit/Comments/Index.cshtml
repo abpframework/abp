@@ -56,6 +56,18 @@
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
+                        <div class="mb-3" id="isApprovedColumn">
+                            <label class="mb-1" for="isApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
+                            <select id="isApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
+                                <option value="@CommentApproveState.All">@L["CommentFilter:All"].Value</option>
+                                <option value="@CommentApproveState.Approved">@L["CommentFilter:Approved"].Value</option>
+                                <option value="@CommentApproveState.Disapproved">@L["CommentFilter:Disapproved"].Value</option>
+                                <option value="@CommentApproveState.Waiting">@L["CommentFilter:Waiting"].Value</option>
+                            </select>
+                        </div>
+                    </abp-column>
+
+                    <abp-column size-lg="_2" size-md="_6">
                         <abp-button class="w-100 mb-3" button-type="Primary" type="submit">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </abp-button>

@@ -20,9 +20,11 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 {
     protected ICommentRepository CommentRepository { get; }
 
-    public CommentAdminAppService(ICommentRepository commentRepository)
+    private readonly ISettingManager SettingManager;
+    public CommentAdminAppService(ICommentRepository commentRepository, ISettingManager settingManager)
     {
         CommentRepository = commentRepository;
+        SettingManager = settingManager;
     }
 
     public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
@@ -74,4 +76,34 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
         var comment = await CommentRepository.GetAsync(id);
         await CommentRepository.DeleteWithRepliesAsync(comment);
     }
+
+    [Authorize(CmsKitAdminPermissions.Comments.Update)]
+    public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
+    {
+		var comment = await CommentRepository.GetAsync(id);
+		comment.SetApprovalStatus(input.IsApproved);
+
+		await CommentRepository.UpdateAsync(comment);
+	}
+
+    [Authorize(CmsKitAdminPermissions.Comments.Update)]
+    public async Task SetSettingsAsync(CommentSettingsDto input)
+    {
+        await SettingManager.SetGlobalAsync(AppSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
+    }
+
+    public async Task<CommentSettingsDto> GetSettingsAsync()
+    {
+        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(AppSettings.CommentRequireApprovement));
+        
+	    return new CommentSettingsDto
+        {
+	        CommentRequireApprovement = isRequireApprovementEnabled
+        };
+    }
+    
+	public async Task<int> GetWaitingCountAsync()
+	{
+		return (int) await CommentRepository.GetCountAsync(commentApproveState: CommentApproveState.Waiting);
+	}
 }

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Web" />
   </ItemGroup>
 
   <ItemGroup>
