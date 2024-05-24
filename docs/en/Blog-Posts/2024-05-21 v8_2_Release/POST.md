@@ -8,16 +8,16 @@ Try this version and provide feedback for a more stable version of ABP v8.2! Tha
 
 Follow the steps below to try version 8.2.0 RC today:
 
-1) **Upgrade** the ABP CLI to version `8.2.0-rc.2` using a command line terminal:
+1) **Upgrade** the ABP CLI to version `8.2.0-rc.3` using a command line terminal:
 
 ````bash
-dotnet tool update Volo.Abp.Cli -g --version 8.2.0-rc.2
+dotnet tool update Volo.Abp.Cli -g --version 8.2.0-rc.3
 ````
 
 **or install** it if you haven't before:
 
 ````bash
-dotnet tool install Volo.Abp.Cli -g --version 8.2.0-rc.2
+dotnet tool install Volo.Abp.Cli -g --version 8.2.0-rc.3
 ````
 
 2) Create a **new application** with the `--preview` option:
@@ -37,8 +37,8 @@ You can use any IDE that supports .NET 8.x, like [Visual Studio 2022](https://vi
 There are a few breaking changes in this version that may affect your application.
 Please see the following migration documents, if you are upgrading from v8.x or earlier:
 
-* [ABP Framework 8.x to 8.1 Migration Guide](https://docs.abp.io/en/abp/8.2/Migration-Guides/Abp-8_2)
-* [ABP Commercial 8.x to 8.1 Migration Guide](https://docs.abp.io/en/commercial/8.2/migration-guides/v8_2)
+* [ABP Framework 8.x to 8.2 Migration Guide](https://docs.abp.io/en/abp/8.2/Migration-Guides/Abp-8_2)
+* [ABP Commercial 8.x to 8.2 Migration Guide](https://docs.abp.io/en/commercial/8.2/migration-guides/v8_2)
 
 ## What's New with ABP Framework 8.2?
 
@@ -55,21 +55,39 @@ We've also worked on ABP Commercial to align the features and changes made in th
 
 ## Community News
 
-### Devnot Dotnet Conference 2024
+### ABP Dotnet Conf 2024 Wrap Up
 
-//TODO: ...
+![](abp-dotnet-conf-2024.png)
 
-### DevOps Pro Europe
+We organized ABP Dotnet Conference 2024 on May 2024 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 29 great line up of speakers which includes .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talks attracted a great amount of interest and a lot of questions, sparking curiosity in the attendees.
 
-//TODO: ...
+Thanks to all speakers and attendees for joining our event. 🙏
+
+> We shared our takeaways in a blog post, which you can read at [https://blog.abp.io/abp/ABP-Dotnet-Conference-2024-Wrap-Up](https://blog.abp.io/abp/ABP-Dotnet-Conference-2024-Wrap-Up).
 
 ### DevDays Europe 2024
 
-//TODO: ...
+![](devdays-europe.jpg)
 
-### ABP Dotnet Conf 2024 Wrap Up
+Co-founder of [Volosoft](https://volosoft.com/), Alper Ebiçoğlu gave a speech about "How to Build a Multi-Tenant ASP.NET Core Application" in the [DevDays Europe 2024](https://devdays.lt/) on the 20th of May.
 
-//TODO: ...
+### DevOps Pro Europe 2024
+
+![](devops-pro-europe.jpg)
+
+We are thrilled to announce that the co-founder of [Volosoft](https://volosoft.com/) and Lead Developer of the [ABP Framework](https://abp.io/), Halil Ibrahim Kalkan gave a speech about "Building a Kubernetes Integrated Local Development Environment" in the [DevOps Pro Europe](https://devopspro.lt/) on the 24th of May.
+
+### Devnot Dotnet Conference 2024
+
+We are happy to announce that core team members of the [ABP Framework](https://abp.io/), [Alper Ebiçoğlu](https://twitter.com/alperebicoglu) and [Enis Necipoğlu](https://twitter.com/EnisNecipoglu) will give speeches at the [Devnot Dotnet Conference 2024](https://dotnet.devnot.com/) on 25th of May.
+
+[Alper Ebiçoğlu](https://twitter.com/alperebicoglu) will talk about **"AspNet Core & Multitenancy"**:
+
+![](devnot-dotnet-conference-alper-ebicoglu.png)
+
+On the other hand, [Enis Necipoğlu](https://twitter.com/EnisNecipoglu) will talk about **"Reactive Programming with .NET MAUI"**:
+
+![](devnot-dotnet-conference-enis-necipoglu.png)
 
 ### New ABP Community Articles
 
