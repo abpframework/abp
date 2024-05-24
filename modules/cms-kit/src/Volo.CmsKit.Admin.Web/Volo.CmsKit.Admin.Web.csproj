@@ -43,10 +43,4 @@
     <_ContentIncludedByDefault Remove="Pages\Admin\_ViewImports.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Volo.Abp.SettingManagement.Web">
-      <HintPath>..\..\..\setting-management\src\Volo.Abp.SettingManagement.Web\obj\Debug\net8.0\ref\Volo.Abp.SettingManagement.Web.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
