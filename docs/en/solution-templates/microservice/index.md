@@ -26,7 +26,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Permission management](permission-management.md)
   * [Feature management](feature-management.md)
   * [Localization system](localization-system.md)
-  * Background Jobs
+  * [Background Jobs](background-jobs.md)
   * Background Workers
   * Distributed Locking
   * Distributed Cache
