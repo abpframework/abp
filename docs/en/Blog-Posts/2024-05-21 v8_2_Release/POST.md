@@ -45,7 +45,108 @@ Please see the following migration documents, if you are upgrading from v8.x or 
 In this section, I will introduce some major features released in this version.
 Here is a brief list of titles explained in the next sections:
 
-//TODO: list topics...
+* Blazor Full-Stack Web App UI
+* Introducing the `IBlockUiService` for Blazor UI
+* Allowing Case-Insensitive Indexes for MongoDB
+* Other News...
+
+### Blazor Full-Stack Web App UI
+
+ASP.NET Blazor in .NET 8 allows you to use a single powerful component model to handle all of your web UI needs, including server-side rendering, client-side rendering, streaming rendering, progressive enhancement, and much more!
+
+ABP v8.2.x supports the new Blazor Web App template, which you can directly create with the following command:
+
+```bash
+abp new BookStore -t app -u blazor-webapp
+```
+
+When you create the project, you will typically see two main projects for Blazor UI, besides other projects:
+
+* **MyCompanyName.MyProjectName.Blazor.WebApp** (startup project of your application, and contains `App.razor` component, which is the root component of your application)
+* **MyCompanyName.MyProjectName.Blazor.WebApp.Client**
+
+This new template overcomes the disadvantages of both Blazor WASM and Blazor Server applications and allows you to decide which approaches to use for a specific page or component. Therefore, you can image this new web ui as a combination of both Blazor Server and Blazor WASM. 
+
+> This approach mainly overcomes the **large binary downloads of Blazor WASM**, and it resolves the Blazor Server's problem, which **always needs to be connected to the server via SignalR**.
+
+If you are considering migrating your existing Blazor project to Blazor WebApp or want to learn more about this new template, please read the [Migrating to Blazor Web App](https://docs.abp.io/en/abp/8.2/Migration-Guides/Abp-8-2-Blazor-Web-App) guide.
+
+### Introducing the `IBlockUiService` for Blazor UI
+
+In this version, ABP Framework introduces the [`IBlockUiService`](https://docs.abp.io/en/abp/8.2/UI/Blazor/Block-Busy) for Blazor UI. This service uses UI Block API to disable/block the page or a part of the page. 
+
+You just need to simply inject the `IBlockUiService` to your page or component and call the `Block` or `UnBlock` method to block/unblock the specified element:
+
+```csharp
+namespace MyProject.Blazor.Pages
+{
+    public partial class Index
+    {
+        private readonly IBlockUiService _blockUiService;
+
+        public Index(IBlockUiService _blockUiService)
+        {
+            _blockUiService = blockUiService;
+        }
+
+        public async Task BlockForm()
+        {
+            /*
+              Parameters of Block method:
+                selectors: A string containing one or more selectors to match. https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector#selectors
+                busy : Set to true to show a progress indicator on the blocked area.
+            */
+            await _blockUiService.Block(selectors: "#MySelectors", busy: true);
+
+            //Unblocking the element
+            await _blockUiService.UnBlock(selectors: "#MySelectors");
+        }
+    }
+}
+
+```
+
+Here is the resulting UI with all possible options (**block**, **block busy** and **unblock**):
+
+![](block-ui-service-blazor.gif)
+
+### Allowing Case-Insensitive Indexes for MongoDB
+
+MongoDB allows case-insensitive string comparisons by using the case-insensitive indexes. You can create a case-insensitive index by specifying a **collation**. 
+
+To do that, you should override the `CreateModal` method, configure the `CreateCollectionOptions` and specify the **collation** as below:
+
+```csharp
+protected override void CreateModel(IMongoModelBuilder modelBuilder)
+{
+    base.CreateModel(modelBuilder);
+
+    modelBuilder.Entity<Question>(b =>
+    {
+        b.CreateCollectionOptions.Collation = new Collation(locale:"en_US", strength: CollationStrength.Secondary);
+
+        b.ConfigureIndexes(indexes =>
+            {
+                indexes.CreateOne(
+                    new CreateIndexModel<BsonDocument>(
+                        Builders<BsonDocument>.IndexKeys.Ascending("MyProperty"),
+                        new CreateIndexOptions { Unique = true }
+                    )
+                );
+            }
+        );
+    });
+}
+```
+
+After this configuration, a unique index will be created for the `MyProperty` property and then you can perform case-insensitive string comparisons without need to worry. See [#19073](https://github.com/abpframework/abp/pull/19073) for more information.
+
+### Other News
+
+* Angular package version updated to v17.3.0. See [#19915](https://github.com/abpframework/abp/pull/19915) for more info.
+* OpenIddict [5.4.0 has been released on March 26](https://github.com/openiddict/openiddict-core/releases/tag/5.4.0). Therefore, we decided to upgrade the OpenIddict packages to v5.4.0. See [#19427](https://github.com/abpframework/abp/issues/19427).
+* AutoMapper [13.0.1 has been released on February 8](https://github.com/AutoMapper/AutoMapper/releases/tag/v13.0.1) and in this version, we upgraded AutoMapper packages to v13.0.1. See [#19564](https://github.com/abpframework/abp/pull/19564/).
+* Other completed tasks in this version: [https://github.com/abpframework/abp/releases?q=8.2.0-rc&expanded=true](https://github.com/abpframework/abp/releases?q=8.2.0-rc&expanded=true)
 
 ## What's New with ABP Commercial 8.2?
 
