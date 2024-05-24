@@ -8,11 +8,10 @@ ABP Framework integrates the [ASPNET-API-Versioning](https://github.com/dotnet/a
 ```cs
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
+    // Show neutral/versionless APIs.
+    context.Services.AddTransient<IApiControllerFilter, NoControllerFilter>();
     context.Services.AddAbpApiVersioning(options =>
     {
-        // Show neutral/versionless APIs.
-        options.UseApiBehavior = false;
-
         options.ReportApiVersions = true;
         options.AssumeDefaultVersionWhenUnspecified = true;
     });
@@ -239,11 +238,10 @@ public override void ConfigureServices(ServiceConfigurationContext context)
         preActions.Configure(options);
     });
 
+    // Show neutral/versionless APIs.
+    context.Services.AddTransient<IApiControllerFilter, NoControllerFilter>();
     context.Services.AddAbpApiVersioning(options =>
     {
-        // Show neutral/versionless APIs.
-        options.UseApiBehavior = false;
-
         options.ReportApiVersions = true;
         options.AssumeDefaultVersionWhenUnspecified = true;
 
@@ -263,26 +261,21 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
+    // Show neutral/versionless APIs.
+    context.Services.AddTransient<IApiControllerFilter, NoControllerFilter>();
     context.Services.AddAbpApiVersioning(options =>
     {
-        // Show neutral/versionless APIs.
-        options.UseApiBehavior = false;
-
         options.ReportApiVersions = true;
         options.AssumeDefaultVersionWhenUnspecified = true;
+    }).AddApiExplorer(options => {
+        // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+        // note: the specified format code will format the version as "'v'major[.minor][-status]"
+        options.GroupNameFormat = "'v'VVV";
+
+        // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+        // can also be used to control the format of the API version in route templates
+        options.SubstituteApiVersionInUrl = true;
     });
-
-    context.Services.AddVersionedApiExplorer(
-        options =>
-        {
-            // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-            // note: the specified format code will format the version as "'v'major[.minor][-status]"
-            options.GroupNameFormat = "'v'VVV";
-
-            // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-            // can also be used to control the format of the API version in route templates
-            options.SubstituteApiVersionInUrl = true;
-        });
 
     context.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
@@ -322,7 +315,7 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
     app.UseAbpRequestLocalization();
 
     app.UseSwagger();
-    app.UseSwaggerUI(
+    app.UseAbpSwaggerUI(
         options =>
         {
             var provider = app.ApplicationServices.GetRequiredService<IApiVersionDescriptionProvider>();

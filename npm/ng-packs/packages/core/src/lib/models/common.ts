@@ -15,6 +15,7 @@ export namespace ABP {
     localizations?: Localization[];
     othersGroup?: string;
     dynamicLayouts?: Map<string, string>;
+    disableProjectNameInTitle?: boolean;
   }
 
   export interface Child {
