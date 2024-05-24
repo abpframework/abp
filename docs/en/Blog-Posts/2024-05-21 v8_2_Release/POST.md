@@ -65,11 +65,11 @@ When you create the project, you will typically see two main projects for Blazor
 * **MyCompanyName.MyProjectName.Blazor.WebApp** (startup project of your application, and contains `App.razor` component, which is the root component of your application)
 * **MyCompanyName.MyProjectName.Blazor.WebApp.Client**
 
-This new template overcomes the disadvantages of both Blazor WASM and Blazor Server applications and allows you to decide which approaches to use for a specific page or component. Therefore, you can image this new web ui as a combination of both Blazor Server and Blazor WASM. 
+This new template overcomes the disadvantages of both Blazor WASM and Blazor Server applications and allows you to decide which approaches to use for a specific page or component. Therefore, you can imagine this new web UI as a combination of both Blazor Server and Blazor WASM. 
 
 > This approach mainly overcomes the **large binary downloads of Blazor WASM**, and it resolves the Blazor Server's problem, which **always needs to be connected to the server via SignalR**.
 
-If you are considering migrating your existing Blazor project to Blazor WebApp or want to learn more about this new template, please read the [Migrating to Blazor Web App](https://docs.abp.io/en/abp/8.2/Migration-Guides/Abp-8-2-Blazor-Web-App) guide.
+> If you are considering migrating your existing Blazor project to Blazor WebApp or want to learn more about this new template, please read the [Migrating to Blazor Web App](https://docs.abp.io/en/abp/8.2/Migration-Guides/Abp-8-2-Blazor-Web-App) guide.
 
 ### Introducing the `IBlockUiService` for Blazor UI
 
@@ -106,15 +106,15 @@ namespace MyProject.Blazor.Pages
 
 ```
 
-Here is the resulting UI with all possible options (**block**, **block busy** and **unblock**):
+Here is the resulting UI with all possible options (**block**, **block busy**, and **unblock**):
 
 ![](block-ui-service-blazor.gif)
 
 ### Allowing Case-Insensitive Indexes for MongoDB
 
-MongoDB allows case-insensitive string comparisons by using the case-insensitive indexes. You can create a case-insensitive index by specifying a **collation**. 
+MongoDB allows case-insensitive string comparisons by using case-insensitive indexes. You can create a case-insensitive index by specifying a **collation**. 
 
-To do that, you should override the `CreateModal` method, configure the `CreateCollectionOptions` and specify the **collation** as below:
+To do that, you should override the `CreateModal` method, configure the `CreateCollectionOptions`, and specify the **collation** as below:
 
 ```csharp
 protected override void CreateModel(IMongoModelBuilder modelBuilder)
@@ -139,14 +139,14 @@ protected override void CreateModel(IMongoModelBuilder modelBuilder)
 }
 ```
 
-After this configuration, a unique index will be created for the `MyProperty` property and then you can perform case-insensitive string comparisons without need to worry. See [#19073](https://github.com/abpframework/abp/pull/19073) for more information.
+After this configuration, a unique index will be created for the `MyProperty` property and then you can perform case-insensitive string comparisons without the need to worry. See [#19073](https://github.com/abpframework/abp/pull/19073) for more information.
 
 ### Other News
 
-* Angular package version updated to v17.3.0. See [#19915](https://github.com/abpframework/abp/pull/19915) for more info.
+* Angular package version has been updated to v17.3.0. See [#19915](https://github.com/abpframework/abp/pull/19915) for more info.
 * OpenIddict [5.4.0 has been released on March 26](https://github.com/openiddict/openiddict-core/releases/tag/5.4.0). Therefore, we decided to upgrade the OpenIddict packages to v5.4.0. See [#19427](https://github.com/abpframework/abp/issues/19427).
-* AutoMapper [13.0.1 has been released on February 8](https://github.com/AutoMapper/AutoMapper/releases/tag/v13.0.1) and in this version, we upgraded AutoMapper packages to v13.0.1. See [#19564](https://github.com/abpframework/abp/pull/19564/).
-* Other completed tasks in this version: [https://github.com/abpframework/abp/releases?q=8.2.0-rc&expanded=true](https://github.com/abpframework/abp/releases?q=8.2.0-rc&expanded=true)
+* AutoMapper [13.0.1 was released on February 8](https://github.com/AutoMapper/AutoMapper/releases/tag/v13.0.1) and in this version, we upgraded AutoMapper packages to v13.0.1. See [#19564](https://github.com/abpframework/abp/pull/19564/).
+* See other completed tasks in this version: [https://github.com/abpframework/abp/releases?q=8.2.0-rc](https://github.com/abpframework/abp/releases?q=8.2.0-rc&expanded=true)
 
 ## What's New with ABP Commercial 8.2?
 
@@ -154,7 +154,7 @@ We've also worked on ABP Commercial to align the features and changes made in th
 
 ### Session Management
 
-[Session Management](https://docs.abp.io/en/commercial/8.2/modules/identity/session-management) feature allows you to prevent concurrent login and manage user sessions. You can allow concurrent login, allow only one session of the same device type or logout from all other devices when a new session is created, by specifying in the settings page:
+The [Session Management](https://docs.abp.io/en/commercial/8.2/modules/identity/session-management) feature allows you to prevent concurrent login and manage user sessions. You can allow concurrent login, allow only one session of the same device type, or logout from all other devices when a new session is created, by specifying in the settings page:
 
 ![](concurrent-login-settings.png)
 
@@ -165,15 +165,15 @@ Also, you can view and manage users sessions on the `Users` page of the [Identit
 
 ### Suite: File/Image Property
 
-In this version, ABP Suite allows you to add a file/image property for an entity. You can select "File" as the property type for your properties:
+In this version, ABP Suite allows you to add a file/image property for an entity. You can select "File" as the property type for your properties as in the following figure:
 
 ![](suite-file-property.png)
 
-Then, when you generate your entity and try to insert a record, you will see the file upload component on the create/update modals:
+Then, when you generate your entity and try to insert a record, you will see the file upload component on the create/update models:
 
 ![](suite-file-property-create.png)
 
-You can upload a file with any supported extensions and under 10mb (this can be increased in the generated code, if you wish) and after that, you can download, delete and update the existing file any time you want:
+You can upload a file with any supported extensions and under 10MB (this can be increased in the generated code, if you wish) and after that, you can download, delete and update the existing file any time you want:
 
 ![](suite-file-upload-in-action.gif)
 
@@ -189,11 +189,11 @@ Then, all related configurations (including db configurations) will be made by A
 
 ![](suite-dateonly-timeonly-ui.png)
 
-> **Note**: The `DateOnly` and `TimeOnly` types were introduced with .NET 6. Therefore, please make sure that all of your projects' target frameworks are .NET8+. With ABP v8.2, all startup template target single target framework, which is .NET8, so if you created your project with version 8.2+, you don't need to make any changes.
+> **Note**: The `DateOnly` and `TimeOnly` types were introduced with .NET 6. Therefore, please make sure that all of your projects' target frameworks are .NET8+. With ABP v8.2, all startup templates target a single target framework, which is .NET8, so if you created your project with version 8.2+, you don't need to make any changes.
 
 ### Periodic Log Deletion for Audit Logs
 
-In this version, [Audit Logging Module](https://docs.abp.io/en/commercial/8.2/modules/audit-logging) provides built-in periodic log deletion system. You can enable/disable the clean up service system wide, in this way, you can turn off the clean up service for all tenants and its hosts:
+In this version, the [Audit Logging Module](https://docs.abp.io/en/commercial/8.2/modules/audit-logging) provides a built-in periodic log deletion system. You can enable/disable the clean-up service system wide, in this way, you can turn off the clean up service for all tenants and their hosts:
 
 ![](audit-logging-module-global-settings.png)
 
@@ -221,7 +221,7 @@ Thanks to all speakers and attendees for joining our event. 🙏
 
 ![](devdays-europe.jpg)
 
-Co-founder of [Volosoft](https://volosoft.com/), [Alper Ebiçoğlu](https://twitter.com/alperebicoglu) gave a speech about "How to Build a Multi-Tenant ASP.NET Core Application" in the [DevDays Europe 2024](https://devdays.lt/) on the 20th of May.
+Co-founder of [Volosoft](https://volosoft.com/), [Alper Ebiçoğlu](https://twitter.com/alperebicoglu) gave a speech about "How to Build a Multi-Tenant ASP.NET Core Application" at the [DevDays Europe 2024](https://devdays.lt/) on the 20th of May.
 
 ### DevOps Pro Europe 2024
 
