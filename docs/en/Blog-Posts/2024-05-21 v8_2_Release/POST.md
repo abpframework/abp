@@ -51,7 +51,58 @@ Here is a brief list of titles explained in the next sections:
 
 We've also worked on ABP Commercial to align the features and changes made in the ABP Framework. The following sections introduce a few new features coming with ABP Commercial 8.2.
 
-//TODO: explain new features...
+### Session Management
+
+[Session Management](https://docs.abp.io/en/commercial/8.2/modules/identity/session-management) feature allows you to prevent concurrent login and manage user sessions. You can allow concurrent login, allow only one session of the same device type or logout from all other devices when a new session is created, by specifying in the settings page:
+
+![](concurrent-login-settings.png)
+
+Also, you can view and manage users sessions on the `Users` page of the [Identity Module](https://docs.abp.io/en/commercial/8.2/modules/identity):
+
+![](manage-user-sessions-1.png)
+![](manage-user-sessions-2.png)
+
+### Suite: File/Image Property
+
+In this version, ABP Suite allows you to add a file/image property for an entity. You can select "File" as the property type for your properties:
+
+![](suite-file-property.png)
+
+Then, when you generate your entity and try to insert a record, you will see the file upload component on the create/update modals:
+
+![](suite-file-property-create.png)
+
+You can upload a file with any supported extensions and under 10mb (this can be increased in the generated code, if you wish) and after that, you can download, delete and update the existing file any time you want:
+
+![](suite-file-upload-in-action.gif)
+
+> **Note:** This feature has already been implemented for MVC & Blazor UIs, but not implemented for Angular UI yet. We aim to implement it for Angular UI with v8.2.0.
+
+### Suite: DateOnly & TimeOnly Types
+
+In this version on, ABP Suite provides `DateOnly` and `TimeOnly` types as property types. You can select these types when you create an entity:
+
+![](suite-dateonly-timeonly-properties.png)
+
+Then, all related configurations (including db configurations) will be made by ABP Suite, and you will be able to see the fields in the UI:
+
+![](suite-dateonly-timeonly-ui.png)
+
+> **Note**: The `DateOnly` and `TimeOnly` types were introduced with .NET 6. Therefore, please make sure that all of your projects' target frameworks are .NET8+. With ABP v8.2, all startup template target single target framework, which is .NET8, so if you created your project with version 8.2+, you don't need to make any changes.
+
+### Periodic Log Deletion for Audit Logs
+
+In this version, [Audit Logging Module](https://docs.abp.io/en/commercial/8.2/modules/audit-logging) provides built-in periodic log deletion system. You can enable/disable the clean up service system wide, in this way, you can turn off the clean up service for all tenants and its hosts:
+
+![](audit-logging-module-global-settings.png)
+
+> If the system wide clean up service is enabled, you can configure the global *Expired Item Deletion Period* for all tenants and hosts.
+
+When configuring the global settings for the audit log module from the host side in this manner, ensure that each tenant and host uses the global values. If you want to set tenant/host-specific values, you can do so under *Settings* -> *Audit Log* -> *General*. This way, you can disable the clean up service for specific tenants or host. It overrides the global settings:
+
+![](audit-logging-module-general-settings.png)
+
+> **Note**: To view the audit log settings, you need to enable the feature. For the host side, navigate to *Settings* -> *Feature Management* -> *Manage Host Features* -> *Audit Logging* -> *Enable audit log setting management*.
 
 ## Community News
 
@@ -59,7 +110,7 @@ We've also worked on ABP Commercial to align the features and changes made in th
 
 ![](abp-dotnet-conf-2024.png)
 
-We organized ABP Dotnet Conference 2024 on May 2024 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 29 great line up of speakers which includes .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talks attracted a great amount of interest and a lot of questions, sparking curiosity in the attendees.
+We organized [ABP Dotnet Conference 2024](https://abp.io/conference/2024) on May 2024 and we are happy to share the success of the conference, which captivated overwhelmingly interested live viewers from all over the world. 29 great line up of speakers which includes .NET experts and Microsoft MVPs delivered captivating talks that resonated with the audiences. Each of the talks attracted a great amount of interest and a lot of questions, sparking curiosity in the attendees.
 
 Thanks to all speakers and attendees for joining our event. 🙏
 
@@ -69,13 +120,13 @@ Thanks to all speakers and attendees for joining our event. 🙏
 
 ![](devdays-europe.jpg)
 
-Co-founder of [Volosoft](https://volosoft.com/), Alper Ebiçoğlu gave a speech about "How to Build a Multi-Tenant ASP.NET Core Application" in the [DevDays Europe 2024](https://devdays.lt/) on the 20th of May.
+Co-founder of [Volosoft](https://volosoft.com/), [Alper Ebiçoğlu](https://twitter.com/alperebicoglu) gave a speech about "How to Build a Multi-Tenant ASP.NET Core Application" in the [DevDays Europe 2024](https://devdays.lt/) on the 20th of May.
 
 ### DevOps Pro Europe 2024
 
 ![](devops-pro-europe.jpg)
 
-We are thrilled to announce that the co-founder of [Volosoft](https://volosoft.com/) and Lead Developer of the [ABP Framework](https://abp.io/), Halil Ibrahim Kalkan gave a speech about "Building a Kubernetes Integrated Local Development Environment" in the [DevOps Pro Europe](https://devopspro.lt/) on the 24th of May.
+We are thrilled to announce that the co-founder of [Volosoft](https://volosoft.com/) and Lead Developer of the [ABP Framework](https://abp.io/), [Halil Ibrahim Kalkan](https://x.com/hibrahimkalkan) gave a speech about "Building a Kubernetes Integrated Local Development Environment" in the [DevOps Pro Europe](https://devopspro.lt/) on the 24th of May.
 
 ### Devnot Dotnet Conference 2024
 
