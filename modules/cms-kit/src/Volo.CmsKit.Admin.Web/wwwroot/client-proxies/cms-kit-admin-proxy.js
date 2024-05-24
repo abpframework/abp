@@ -176,7 +176,7 @@
 
     volo.cmsKit.admin.comments.commentAdmin.getList = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/comments' + abp.utils.buildQueryString([{ name: 'entityType', value: input.entityType }, { name: 'text', value: input.text }, { name: 'repliedCommentId', value: input.repliedCommentId }, { name: 'author', value: input.author }, { name: 'creationStartDate', value: input.creationStartDate }, { name: 'creationEndDate', value: input.creationEndDate }, { name: 'commentApproveStateType', value: input.commentApproveStateType }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-admin/comments' + abp.utils.buildQueryString([{ name: 'entityType', value: input.entityType }, { name: 'text', value: input.text }, { name: 'repliedCommentId', value: input.repliedCommentId }, { name: 'author', value: input.author }, { name: 'creationStartDate', value: input.creationStartDate }, { name: 'creationEndDate', value: input.creationEndDate }, { name: 'commentApproveState', value: input.commentApproveState }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };
@@ -196,21 +196,21 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.comments.commentAdmin.updateApprovalStatus = function(id, commentApprovalDto, ajaxParams) {
+    volo.cmsKit.admin.comments.commentAdmin.updateApprovalStatus = function(id, input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/comments/' + id + '',
-        type: 'POST',
+        url: abp.appPath + 'api/cms-kit-admin/comments/' + id + '/approval-status',
+        type: 'PUT',
         dataType: null,
-        data: JSON.stringify(commentApprovalDto)
+        data: JSON.stringify(input)
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.comments.commentAdmin.setSettings = function(settingsDto, ajaxParams) {
+    volo.cmsKit.admin.comments.commentAdmin.setSettings = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/comments/settings',
         type: 'POST',
         dataType: null,
-        data: JSON.stringify(settingsDto)
+        data: JSON.stringify(input)
       }, ajaxParams));
     };
 
@@ -221,16 +221,9 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.comments.commentAdmin.getWaitingCommentCount = function(ajaxParams) {
+    volo.cmsKit.admin.comments.commentAdmin.getWaitingCount = function(ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/comments/waiting-count',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.cmsKit.admin.comments.commentAdmin.getWaitingCommentsWithReplies = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/comments/waiting' + abp.utils.buildQueryString([{ name: 'entityType', value: input.entityType }, { name: 'text', value: input.text }, { name: 'repliedCommentId', value: input.repliedCommentId }, { name: 'author', value: input.author }, { name: 'creationStartDate', value: input.creationStartDate }, { name: 'creationEndDate', value: input.creationEndDate }, { name: 'commentApproveStateType', value: input.commentApproveStateType }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };

@@ -3,7 +3,7 @@
 namespace Volo.CmsKit.Admin.Comments;
 
 [Serializable]
-public class SettingsDto
+public class CommentSettingsDto
 {
     public bool CommentRequireApprovement { get; set; }
 }

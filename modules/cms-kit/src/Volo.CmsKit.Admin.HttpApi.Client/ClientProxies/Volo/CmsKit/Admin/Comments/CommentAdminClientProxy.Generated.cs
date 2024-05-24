@@ -50,29 +50,21 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
         });
     }
 
-    public virtual void SetSettings(SettingsDto settingsDto)
+    public virtual async Task SetSettingsAsync(CommentSettingsDto input)
     {
-        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice
-        throw new System.NotImplementedException(); 
-    }
-
-    public virtual SettingsDto GetSettings()
-    {
-        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice
-        throw new System.NotImplementedException(); 
-    }
-
-    public virtual int GetWaitingCommentCount()
-    {
-        //Client Proxy does not support the synchronization method, you should always use asynchronous methods as a best practice
-        throw new System.NotImplementedException(); 
-    }
-
-    public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetWaitingWithRepliesAsync(CommentGetListInput input)
-    {
-        return await RequestAsync<PagedResultDto<CommentWithAuthorDto>>(nameof(GetWaitingWithRepliesAsync), new ClientProxyRequestTypeValue
+        await RequestAsync(nameof(SetSettingsAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(CommentGetListInput), input }
+            { typeof(CommentSettingsDto), input }
         });
+    }
+
+    public virtual async Task<CommentSettingsDto> GetSettingsAsync()
+    {
+        return await RequestAsync<CommentSettingsDto>(nameof(GetSettingsAsync));
+    }
+
+    public virtual async Task<int> GetWaitingCountAsync()
+    {
+        return await RequestAsync<int>(nameof(GetWaitingCountAsync));
     }
 }

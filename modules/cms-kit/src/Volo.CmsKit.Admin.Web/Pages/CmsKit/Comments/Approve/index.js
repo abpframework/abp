@@ -42,6 +42,7 @@
 
         filterObj.creationStartDate = getFormattedDate($('#CreationStartDate'));
         filterObj.creationEndDate = getFormattedDate($('#CreationEndDate'));
+        filterObj.commentApproveState = "Waiting";
 
         return filterObj;
     };
@@ -54,7 +55,7 @@
         scrollX: true,
         searching: false,
         scrollCollapse: true,
-        ajax: abp.libs.datatables.createAjax(commentsService.getWaitingCommentsWithReplies, getFilter),
+        ajax: abp.libs.datatables.createAjax(commentsService.getList, getFilter),
         columnDefs: [
             {
                 width: "10%",
@@ -132,12 +133,7 @@
                 title: l("Text"),
                 data: "text",
                 orderable: false,
-
-
                 render: function (data) {
-
-                    //var converter = new showdown.Converter();
-                    //var htmlContent = converter.makeHtml(data);
                     var md = window.markdownit();
                     var htmlContent = md.render(data);
                     return (htmlContent);

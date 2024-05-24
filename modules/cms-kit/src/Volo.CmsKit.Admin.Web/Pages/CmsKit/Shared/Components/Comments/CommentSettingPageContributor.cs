@@ -8,6 +8,7 @@ namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Shared.Components.Comments;
 
 public class CommentSettingPageContributor : ISettingPageContributor
 {
+
     public Task ConfigureAsync(SettingPageCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<CmsKitResource>>();

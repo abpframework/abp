@@ -1,21 +1,21 @@
-$(function (){
+$(function () {
     var l = abp.localization.getResource("CmsKit");
-    
+
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
 
     var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
-    
+
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
-    
+
     var getFormattedDate = function ($datePicker) {
-        if(!$datePicker.val()) {
+        if (!$datePicker.val()) {
             return null;
         }
         var momentDate = moment($datePicker.val(), $datePicker.data('daterangepicker').locale.format);
         return momentDate.isValid() ? momentDate.toISOString() : null;
     };
-    
+
 
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
@@ -26,27 +26,27 @@ $(function (){
         "drops": "auto"
     });
 
-    
+
 
     $('.singledatepicker').attr('autocomplete', 'off');
 
     $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
     });
-    
-    
+
+
     var filterForm = $('#CmsKitCommentsFilterForm');
-    
+
     var getFilter = function () {
         var filterObj = filterForm.serializeFormToObject();
 
         filterObj.creationStartDate = getFormattedDate($('#CreationStartDate'));
         filterObj.creationEndDate = getFormattedDate($('#CreationEndDate'));
-        
+
         return filterObj;
     };
-  
-    
+
+
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
@@ -80,6 +80,7 @@ $(function (){
                                     .delete(data.record.id)
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
+                                        checkWaitingComments()
                                         abp.notify.success(l('DeletedSuccessfully'));
                                     });
                             }
@@ -95,6 +96,7 @@ $(function (){
                                     .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
+                                        checkWaitingComments()
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
@@ -116,6 +118,7 @@ $(function (){
                                     .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
+                                        checkWaitingComments()
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
@@ -156,7 +159,7 @@ $(function (){
                 data: "url",
                 render: function (data, type, row) {
                     if (data !== null) {
-                        return '<a href="' + data + '#comment-'+ row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
+                        return '<a href="' + data + '#comment-' + row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
                     }
                     return "";
                 }
@@ -215,46 +218,47 @@ $(function (){
             }
         ]
     }));
-    
-    function GetFilterableDatatableContent(filterSelector, data){
-        return '<span class="datatableCell" data-field="'+ filterSelector +'" data-val="'+ data +'">' + data + '</span>';
+
+    function GetFilterableDatatableContent(filterSelector, data) {
+        return '<span class="datatableCell" data-field="' + filterSelector + '" data-val="' + data + '">' + data + '</span>';
     }
-    
+
     $(document).on('click', '.datatableCell', function () {
         var inputSelector = $(this).attr('data-field');
         var value = $(this).attr('data-val');
-        
+
         $(inputSelector).val(value);
-        
+
         _dataTable.ajax.reloadEx();
     });
 
-    filterForm.submit(function (e){
+    filterForm.submit(function (e) {
         e.preventDefault();
         _dataTable.ajax.reloadEx();
     });
 
-    // TODO: Replace these methods because ther are replaced in appservice
-    commentsService.getWaitingCommentCount().then(function (count) {
-        if (count > 0) {
-            var alertMessage = l("CommentAlertMessage", count);
-            var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
-            $('#commentsAlert').html(alertElement);
-            $('#commentsAlert').show()
-            $('#commentsAlert').click(function () {
-                window.location.href = '/Cms/Comments/Approve'
-            });
-        }
-    });
-
+    function checkWaitingComments() {
+        commentsService.getWaitingCount().then(function (count) {
+            if (count > 0) {
+                var alertMessage = l("CommentAlertMessage", count);
+                var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
+                $('#commentsAlert').html(alertElement);
+                $('#commentsAlert').show()
+                $('#commentsAlert').click(function () {
+                    window.location.href = '/Cms/Comments/Approve'
+                });
+            } else {
+                $('#commentsAlert').hide()
+            }
+        });
+    }
+    checkWaitingComments()
     commentsService.getSettings().then(function (data) {
-        if (data.requireApprovement) {
+        if (data.commentRequireApprovement) {
             $('#CommentsTable').DataTable().column(6).visible(true);
         } else {
             $('#CommentsTable').DataTable().column(6).visible(false);
             $('#isApprovedColumn').hide();
         }
     })
-    
-    // TODO: if I change the state of the comment, you should update the alert message
 });

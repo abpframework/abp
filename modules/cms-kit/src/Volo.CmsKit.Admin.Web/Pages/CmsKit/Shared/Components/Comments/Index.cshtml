@@ -9,19 +9,18 @@
     <abp-script-bundle>
         <abp-script src="/client-proxies/cms-kit-admin-proxy.js" />
         <abp-script src="/client-proxies/cms-kit-common-proxy.js" />
-        @* <abp-script src="" /> *@
         <abp-script src="/Pages/CmsKit/Shared/Components/Comments/index.js"></abp-script>
     </abp-script-bundle>
 }
 @{
     @inject IHtmlLocalizer<CmsKitResource> L
 
-    <abp-form #form="ngForm">
+    <abp-form id="deneme1" form="CmsKitCommentSettingsForm">
         <h4>@L["CmsKitCommentOptions:Title"].Value</h4>
         <hr />
         <div class="form-group">
             <div class="form-check">
-                <input type="checkbox" id="checkbox" class="form-check-input" name="checkbox" ngModel />
+                <input type="checkbox" id="checkbox" class="form-check-input" name="checkbox"  />
                 <label for="checkbox" class="form-check-label">@L["CmsKitCommentOptions:RequireApprovement"].Value</label>
             </div>
             <small id="checkboxHelp" class="form-text text-muted">@L["CmsKitCommentOptions:RequireApprovementDescription"].Value</small>
@@ -33,55 +32,6 @@
             </abp-button>
         </div>
     </abp-form>
-
-
-
 }
 
-<script>
-    var l = abp.localization.getResource("CmsKit");
-    var app = app || {};
 
-    app.commentAdmin = (function () {
-        var _service = volo.cmsKit.admin.comments.commentAdmin;
-
-        var _init = function () {
-            _getSettings();
-            _bindEvents();
-        };
-
-        var _getSettings = function () {
-            _service.getSettings().done(function (response) {
-                var isChecked = response.requireApprovement;
-                $('#checkbox').prop('checked', isChecked);
-                console.log('CheckBox durumu başarıyla güncellendi:', response.requireApprovement);
-            }).fail(function (error) {
-                console.error('CheckBox durumu alınırken bir hata oluştu:', error);
-            });
-        };
-
-        var _bindEvents = function () {
-            $('#save').click(function () {
-                var isChecked = $('#checkbox').prop('checked');
-
-                _service.setSettings({ requireApprovement: isChecked }).done(function (response) {
-                    console.log('CheckBox durumu başarıyla güncellendi:', response);
-                    
-                    abp.notify.success(l("SavedSuccessfully"));
-                }).fail(function (error) {
-                    console.error('CheckBox durumu güncellenirken bir hata oluştu:', error);
-                    abp.notify.error('CheckBox durumu kaydedilirken bir hata oluştu.');
-                });
-            });
-        };
-
-        return {
-            init: _init
-        };
-    })();
-
-    $(document).ready(function () {
-        app.commentAdmin.init();
-    });
-
-</script>

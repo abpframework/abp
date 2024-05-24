@@ -15,9 +15,9 @@ public interface ICommentAdminAppService : IApplicationService
 
     Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input);
 
-    Task SetSettingsAsync(SettingsDto input);
+    Task SetSettingsAsync(CommentSettingsDto input);
 
-    Task<SettingsDto> GetSettingsAsync();
+    Task<CommentSettingsDto> GetSettingsAsync();
 
 	Task<int> GetWaitingCountAsync();
 }

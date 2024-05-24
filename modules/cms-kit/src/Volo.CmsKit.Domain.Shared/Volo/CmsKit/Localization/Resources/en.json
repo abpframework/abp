@@ -229,25 +229,19 @@
         "ThisPartOfContentCouldntBeLoaded": "This part of content couldn't be loaded.",
         "DuplicateCommentAttemptMessage": "Duplicate comment post attempt detected. Your comment has already been submitted.",
         "NoBlogPostYet": "No blog post yet!",
-
         "CmsKitCommentOptions:Title": "Comment Settings.",
         "CmsKitCommentOptions:RequireApprovement": "Require approval for comments",
         "CmsKitCommentOptions:RequireApprovementDescription": "When enabled, comments will require approval before being published.",
-
         "CommentFilter:ApproveState":"Approve State",
         "CommentFilter:All":"All",
         "CommentFilter:Approved":"Approved",
         "CommentFilter:Disapproved":"Disapproved",
         "CommentFilter:Waiting":"Waiting",
-
         "ApprovedSuccessfully":"Approved Successfully",
         "ApprovalRevokedSuccessfully":"Approval Revoked Successfully",
-
         "Approve":"Approve",
         "Disapproved":"Disapproved",
-
         "CommentAlertMessage":"There are {0} comments waiting for approval",
-
         "Menu:CmsKitCommentOptions":"CmsKit Comment Options"
     }
 }

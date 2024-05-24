@@ -60,7 +60,7 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     [HttpPost]
     [Route("settings")]
     [Authorize(CmsKitAdminPermissions.Comments.Update)]
-    public Task SetSettingsAsync(SettingsDto input)
+    public Task SetSettingsAsync(CommentSettingsDto input)
     {
        return CommentAdminAppService.SetSettingsAsync(input);
     }
@@ -68,7 +68,7 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     [HttpGet]
     [Route("settings")]
     [Authorize(CmsKitAdminPermissions.Comments.Default)]
-    public Task<SettingsDto> GetSettingsAsync()
+    public Task<CommentSettingsDto> GetSettingsAsync()
     {
        return CommentAdminAppService.GetSettingsAsync();
     }

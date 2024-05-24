@@ -1280,7 +1280,7 @@
                       "defaultValue": null
                     },
                     {
-                      "name": "commentApprovalDto",
+                      "name": "input",
                       "typeAsString": "Volo.CmsKit.Admin.Comments.CommentApprovalDto, Volo.CmsKit.Admin.Application.Contracts",
                       "type": "Volo.CmsKit.Admin.Comments.CommentApprovalDto",
                       "typeSimple": "Volo.CmsKit.Admin.Comments.CommentApprovalDto",
@@ -1294,13 +1294,13 @@
                   }
                 },
                 {
-                  "name": "SetSettings",
+                  "name": "SetSettingsAsync",
                   "parametersOnMethod": [
                     {
-                      "name": "settingsDto",
-                      "typeAsString": "Volo.CmsKit.Admin.Comments.SettingsDto, Volo.CmsKit.Admin.Application.Contracts",
-                      "type": "Volo.CmsKit.Admin.Comments.SettingsDto",
-                      "typeSimple": "Volo.CmsKit.Admin.Comments.SettingsDto",
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.Comments.CommentSettingsDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
+                      "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
                       "isOptional": false,
                       "defaultValue": null
                     }
@@ -1311,36 +1311,19 @@
                   }
                 },
                 {
-                  "name": "GetSettings",
+                  "name": "GetSettingsAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
-                    "type": "Volo.CmsKit.Admin.Comments.SettingsDto",
-                    "typeSimple": "Volo.CmsKit.Admin.Comments.SettingsDto"
+                    "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
+                    "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto"
                   }
                 },
                 {
-                  "name": "GetWaitingCommentCount",
+                  "name": "GetWaitingCountAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "System.Int32",
                     "typeSimple": "number"
-                  }
-                },
-                {
-                  "name": "GetWaitingCommentsWithRepliesAsync",
-                  "parametersOnMethod": [
-                    {
-                      "name": "input",
-                      "typeAsString": "Volo.CmsKit.Admin.Comments.CommentGetListInput, Volo.CmsKit.Admin.Application.Contracts",
-                      "type": "Volo.CmsKit.Admin.Comments.CommentGetListInput",
-                      "typeSimple": "Volo.CmsKit.Admin.Comments.CommentGetListInput",
-                      "isOptional": false,
-                      "defaultValue": null
-                    }
-                  ],
-                  "returnValue": {
-                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Comments.CommentWithAuthorDto>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Comments.CommentWithAuthorDto>"
                   }
                 }
               ]
@@ -1438,7 +1421,7 @@
                 },
                 {
                   "nameOnMethod": "input",
-                  "name": "commentApproveStateType",
+                  "name": "CommentApproveState",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
@@ -1566,11 +1549,11 @@
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
             },
-            "UpdateApprovalStatusAsyncByIdAndCommentApprovalDto": {
-              "uniqueName": "UpdateApprovalStatusAsyncByIdAndCommentApprovalDto",
+            "UpdateApprovalStatusAsyncByIdAndInput": {
+              "uniqueName": "UpdateApprovalStatusAsyncByIdAndInput",
               "name": "UpdateApprovalStatusAsync",
-              "httpMethod": "POST",
-              "url": "api/cms-kit-admin/comments/{id}",
+              "httpMethod": "PUT",
+              "url": "api/cms-kit-admin/comments/{id}/approval-status",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -1582,7 +1565,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "commentApprovalDto",
+                  "name": "input",
                   "typeAsString": "Volo.CmsKit.Admin.Comments.CommentApprovalDto, Volo.CmsKit.Admin.Application.Contracts",
                   "type": "Volo.CmsKit.Admin.Comments.CommentApprovalDto",
                   "typeSimple": "Volo.CmsKit.Admin.Comments.CommentApprovalDto",
@@ -1604,8 +1587,8 @@
                   "descriptorName": ""
                 },
                 {
-                  "nameOnMethod": "commentApprovalDto",
-                  "name": "commentApprovalDto",
+                  "nameOnMethod": "input",
+                  "name": "input",
                   "jsonName": null,
                   "type": "Volo.CmsKit.Admin.Comments.CommentApprovalDto",
                   "typeSimple": "Volo.CmsKit.Admin.Comments.CommentApprovalDto",
@@ -1623,29 +1606,29 @@
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
             },
-            "SetSettingsBySettingsDto": {
-              "uniqueName": "SetSettingsBySettingsDto",
-              "name": "SetSettings",
+            "SetSettingsAsyncByInput": {
+              "uniqueName": "SetSettingsAsyncByInput",
+              "name": "SetSettingsAsync",
               "httpMethod": "POST",
               "url": "api/cms-kit-admin/comments/settings",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
-                  "name": "settingsDto",
-                  "typeAsString": "Volo.CmsKit.Admin.Comments.SettingsDto, Volo.CmsKit.Admin.Application.Contracts",
-                  "type": "Volo.CmsKit.Admin.Comments.SettingsDto",
-                  "typeSimple": "Volo.CmsKit.Admin.Comments.SettingsDto",
+                  "name": "input",
+                  "typeAsString": "Volo.CmsKit.Admin.Comments.CommentSettingsDto, Volo.CmsKit.Admin.Application.Contracts",
+                  "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
+                  "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
               ],
               "parameters": [
                 {
-                  "nameOnMethod": "settingsDto",
-                  "name": "settingsDto",
+                  "nameOnMethod": "input",
+                  "name": "input",
                   "jsonName": null,
-                  "type": "Volo.CmsKit.Admin.Comments.SettingsDto",
-                  "typeSimple": "Volo.CmsKit.Admin.Comments.SettingsDto",
+                  "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
+                  "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1660,24 +1643,24 @@
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
             },
-            "GetSettings": {
-              "uniqueName": "GetSettings",
-              "name": "GetSettings",
+            "GetSettingsAsync": {
+              "uniqueName": "GetSettingsAsync",
+              "name": "GetSettingsAsync",
               "httpMethod": "GET",
               "url": "api/cms-kit-admin/comments/settings",
               "supportedVersions": [],
               "parametersOnMethod": [],
               "parameters": [],
               "returnValue": {
-                "type": "Volo.CmsKit.Admin.Comments.SettingsDto",
-                "typeSimple": "Volo.CmsKit.Admin.Comments.SettingsDto"
+                "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
+                "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto"
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
             },
-            "GetWaitingCommentCount": {
-              "uniqueName": "GetWaitingCommentCount",
-              "name": "GetWaitingCommentCount",
+            "GetWaitingCountAsync": {
+              "uniqueName": "GetWaitingCountAsync",
+              "name": "GetWaitingCountAsync",
               "httpMethod": "GET",
               "url": "api/cms-kit-admin/comments/waiting-count",
               "supportedVersions": [],
@@ -1686,151 +1669,6 @@
               "returnValue": {
                 "type": "System.Int32",
                 "typeSimple": "number"
-              },
-              "allowAnonymous": false,
-              "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
-            },
-            "GetWaitingCommentsWithRepliesAsyncByInput": {
-              "uniqueName": "GetWaitingCommentsWithRepliesAsyncByInput",
-              "name": "GetWaitingCommentsWithRepliesAsync",
-              "httpMethod": "GET",
-              "url": "api/cms-kit-admin/comments/waiting",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "Volo.CmsKit.Admin.Comments.CommentGetListInput, Volo.CmsKit.Admin.Application.Contracts",
-                  "type": "Volo.CmsKit.Admin.Comments.CommentGetListInput",
-                  "typeSimple": "Volo.CmsKit.Admin.Comments.CommentGetListInput",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "EntityType",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Text",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "RepliedCommentId",
-                  "jsonName": null,
-                  "type": "System.Guid?",
-                  "typeSimple": "string?",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Author",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "CreationStartDate",
-                  "jsonName": null,
-                  "type": "System.DateTime?",
-                  "typeSimple": "string?",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "CreationEndDate",
-                  "jsonName": null,
-                  "type": "System.DateTime?",
-                  "typeSimple": "string?",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "commentApproveStateType",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Sorting",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "SkipCount",
-                  "jsonName": null,
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "MaxResultCount",
-                  "jsonName": null,
-                  "type": "System.Int32",
-                  "typeSimple": "number",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Comments.CommentWithAuthorDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.CmsKit.Admin.Comments.CommentWithAuthorDto>"
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"

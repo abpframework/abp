@@ -201,7 +201,7 @@ $(function (){
         _dataTable.ajax.reloadEx();
     });
     commentsService.getSettings().then(function (data) {
-        if (data.requireApprovement) {
+        if (data.commentRequireApprovement) {
             $('#CommentsTable').DataTable().column(4).visible(true);
         } else {
             $('#CommentsTable').DataTable().column(4).visible(false);

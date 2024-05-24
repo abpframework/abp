@@ -66,7 +66,7 @@ public class CmsKitAdminWebModule : AbpModule
                 .Configure(typeof(Abp.SettingManagement.Web.Pages.SettingManagement.IndexModel).FullName,
                     configuration =>
                     {
-                        configuration.AddFiles("/client-proxies/cms-kit-admin-proxy.js");
+                        configuration.AddContributors(typeof(CommentSettingScriptBundleContributor));
                     })
                 .Configure(StandardBundles.Scripts.Global,
                     configuration =>
@@ -99,13 +99,13 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AuthorizeFolder("/CmsKit/BlogPosts/Create", CmsKitAdminPermissions.BlogPosts.Create);
             options.Conventions.AuthorizeFolder("/CmsKit/BlogPosts/Update", CmsKitAdminPermissions.BlogPosts.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/Comments/", CmsKitAdminPermissions.Comments.Default);
+            options.Conventions.AuthorizeFolder("/CmsKit/Comments/Approve", CmsKitAdminPermissions.Comments.Default);
             options.Conventions.AuthorizeFolder("/CmsKit/Comments/Details", CmsKitAdminPermissions.Comments.Default);
             options.Conventions.AuthorizeFolder("/CmsKit/Menus", CmsKitAdminPermissions.Menus.Default);
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/CreateModal", CmsKitAdminPermissions.Menus.Create);
             options.Conventions.AuthorizePage("/CmsKit/Menus/MenuItems/UpdateModal", CmsKitAdminPermissions.Menus.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/Menus/MenuItems", CmsKitAdminPermissions.Menus.Update);
             options.Conventions.AuthorizeFolder("/CmsKit/GlobalResources", CmsKitAdminPermissions.GlobalResources.Default);
-            // TODO: Add /CmsKit/Comments/Approve/Index page
         });
 
         Configure<RazorPagesOptions>(options =>

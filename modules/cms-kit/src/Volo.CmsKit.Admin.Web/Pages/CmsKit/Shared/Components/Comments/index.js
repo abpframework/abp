@@ -1,47 +1,30 @@
 ﻿
-//$(document).ready(function () {
-//    var service = volo.cmsKit.admin.comments.commentAdmin;
-//    service.getSettings().done(function (response) {
-//        var isChecked = response.requireApprovement
-//        $('#checkbox').prop('checked', isChecked);
-//        console.log('CheckBox durumu başarıyla güncellendi:', response.requireApprovement);
-//    }).fail(function (error) {
-//        console.error('CheckBox durumu alınırken bir hata oluştu:', error);
-//    });
+var l = abp.localization.getResource("CmsKit");
+(function () {
+    abp.widgets.CmsCommentSetting = function ($wrapper) {
 
-//    $('#save').click(function () {
-//        var isChecked = $('#checkbox').prop('checked');
+            var _service = volo.cmsKit.admin.comments.commentAdmin;
+            var _init = function () {
+                _getSettings();
+                _bindEvents();
+            };
+            var _getSettings = function () {
+                _service.getSettings().then(function (response) {
+                    $('#checkbox').prop('checked', response.commentRequireApprovement);
+                })
+            };
 
-//        service.setSettings({ RequireApprovement: isChecked }).done(function (response) {
-//            console.log('CheckBox durumu başarıyla güncellendi:', response);
-//            alert('CheckBox durumu başarıyla kaydedildi.');
-//        }).fail(function (error) {
-//            console.error('CheckBox durumu güncellenirken bir hata oluştu:', error);
-//            alert('CheckBox durumu kaydedilirken bir hata oluştu.');
-//        });
-//    });
-//});
-console.log("dsf")
-var service = volo.cmsKit.admin.comments.commentAdmin;
+            var _bindEvents = function () {
+                $('#save').click(function () {
+                    var isChecked = $('#checkbox').prop('checked');
+                    _service.setSettings({ commentRequireApprovement: isChecked }).then(function (response) {
+                        abp.notify.success(l("SavedSuccessfully"));
+                    })
+                });
+            };
 
-$(document).ready(function () {
-    service.getSettings().done(function (response) {
-        var isChecked = response.requireApprovement
-        $('#checkbox').prop('checked', isChecked);
-        console.log('CheckBox durumu başarıyla güncellendi:', response.requireApprovement);
-    }).fail(function (error) {
-        console.error('CheckBox durumu alınırken bir hata oluştu:', error);
-    });
-
-    $('#save').click(function () {
-        var isChecked = $('#checkbox').prop('checked');
-
-        service.setSettings({ RequireApprovement: isChecked }).done(function (response) {
-            console.log('CheckBox durumu başarıyla güncellendi:', response);
-            alert('CheckBox durumu başarıyla kaydedildi.');
-        }).fail(function (error) {
-            console.error('CheckBox durumu güncellenirken bir hata oluştu:', error);
-            alert('CheckBox durumu kaydedilirken bir hata oluştu.');
-        });
-    });
-});
+        return {
+            init: _init
+        };
+    };
+})();
