@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -156,7 +157,6 @@ public abstract class EmailSenderBase : IEmailSender
         mail.SubjectEncoding ??= Encoding.UTF8;
 
         mail.BodyEncoding ??= Encoding.UTF8;
-
     }
 
     /// <summary>
@@ -168,7 +168,6 @@ public abstract class EmailSenderBase : IEmailSender
     private static void NormalizeMailForBase64Image(MailMessage mail)
     {
         var htmlBody = mail.Body;
-        Dictionary<string, byte[]> inlineImages = [];
 
         // Find all base64 image tags in the html message.
         var base64ImageTags = Regex.Matches(htmlBody, @"<img src=""data:image/(png|jpeg|gif);base64,([^""]+)""[^>]*>");
@@ -184,22 +183,34 @@ public abstract class EmailSenderBase : IEmailSender
 
             // Create a unique image name and a MemoryStream containing the image data.
             var imageName = Guid.NewGuid().ToString();
-            var imageStream = new MemoryStream(imageByte);
+            MemoryStream imageStream = new(imageByte);
 
             // Replace the base64 image tag with cid: image tag.
-            var newImageTag = base64ImageTag.Value.Replace(@"src=""data:image/" + format + @";base64,[^""]+""", $"src=\"cid:{imageName}\"");
+            var newImageTag = base64ImageTag.Value.Replace($"<img src=\"data:image/{format};base64,{base64Data}\"", $"<img src =\"cid:{imageName}\"");
+            // Create the HTML view
             htmlBody = htmlBody.Replace(base64ImageTag.Value, newImageTag);
+            var htmlView = AlternateView.CreateAlternateViewFromString(
+                                                         htmlBody,
+                                                         Encoding.UTF8,
+                                                         MediaTypeNames.Text.Html);
+            // Create a plain text message for client that don't support HTML
+            var plainView = AlternateView.CreateAlternateViewFromString(htmlBody,
+                                                        Encoding.UTF8,
+                                                        MediaTypeNames.Text.Plain);
 
-            inlineImages[imageName] = imageByte;
+            var img = new LinkedResource(imageStream, $"image/{format}")
+            {
+                ContentId = imageName
+            };
+            img.ContentType.MediaType = $"image/{format}";
+            img.TransferEncoding = TransferEncoding.Base64;
+            img.ContentType.Name = img.ContentId;
+            img.ContentLink = new Uri("cid:" + img.ContentId);
+            htmlView.LinkedResources.Add(img);
+            mail.AlternateViews.Add(plainView);
+            mail.AlternateViews.Add(htmlView);
         }
-
-        // Attach the inline images
-        foreach (var image in inlineImages)
-        {
-            mail.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(
-                $"<img src=\"cid:{image.Key}\">", null, "text/html"));
-            mail.Attachments.Add(new Attachment(new MemoryStream(image.Value), image.Key, "image"));
-        }
+        mail.Body = htmlBody;
     }
 
     private static void ValidateEmailAddress(string emailAddress)
