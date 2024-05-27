@@ -28,7 +28,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Localization system](localization-system.md)
   * [Background Jobs](background-jobs.md)
   * [Background Workers](background-workers.md)
-  * Distributed Locking
+  * [Distributed Locking](distributed-locking.md)
   * Distributed Cache
   * Multi-Tenancy
   * BLOB Storing
