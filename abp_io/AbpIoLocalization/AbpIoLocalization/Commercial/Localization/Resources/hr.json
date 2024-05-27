@@ -1107,6 +1107,6 @@
     "ErrorExceptionMessage": "Pojavila se greška prilikom obrade Vašeg zahtjeva",
     "WatchTakeCodeGeneration": "Pogledajte video \"Istražite potencijal generiranja koda: ABP Suite\"!",
     "ExtendNow": "Produži / obnovi",
-    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Ako želite testirati ABP Studio prije svih ostalih, postanite BETA tester</span>"
+    "AbpStudio_ComingSoon": "Ako želite testirati ABP Studio prije svih ostalih, postanite BETA tester"
   }
 }
