@@ -136,7 +136,13 @@
                 render: function (data) {
                     var md = window.markdownit();
                     var htmlContent = md.render(data);
-                    return (htmlContent);
+                    return (
+                        '<span data-toggle="tooltip" title="' +
+                        htmlContent +
+                        '" style="display: block; white-space: normal; word-break: break-all; max-width: 100%; overflow: hidden;">' +
+                        htmlContent +
+                        "</span>"
+                    );
                 }
             },
             {
