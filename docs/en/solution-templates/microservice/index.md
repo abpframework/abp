@@ -30,7 +30,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Background Workers](background-workers.md)
   * [Distributed Locking](distributed-locking.md)
   * [Distributed Cache](distributed-cache.md)
-  * Multi-Tenancy
+  * [Multi-Tenancy](multi-tenancy.md)
   * BLOB Storing
   * CORS configuration
 * Communication
