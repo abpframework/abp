@@ -502,7 +502,7 @@
     "ChangingLicenseTypeExplanation": "You can upgrade to a higher license by paying the difference during your active license period. When you upgrade to a higher license plan, you get the benefits of the new plan, however the license upgrade does not change the license expiry date. Besides, you can add new developer seats to your existing license. For details on how many developers can work on solutions using the ABP Platform, please see the <a href=\"#how-many-developers\">'How many developers can work on the solutions using the ABP Platform?'</a> question.",
     "DowngradeLicensePlanExplanation": "You cannot downgrade your existing license plan. However, you can purchase a new, lower license plan and continue your development under this new license. After purchasing a lower license, you simply need to log in to your new license plan using the ABP CLI command: abp login -o.",
     "LicenseTransferExplanation": "Yes! When you purchase a license, you become the license holder, which grants you access to the organization management page. An organization includes roles for owners and developers. Owners can manage developer seats and assign developers. Each assigned developer will log in to the system using the ABP CLI command and will have permissions for development and support.",
-    "LicenseExtendUpgradeDiff": "What is the difference between license renewal and upgrading?",    
+    "LicenseExtendUpgradeDiff": "What is the difference between license renewal and upgrading?",
     "LicenseExtendUpgradeDiffExplanation1": "<strong>Renewal</strong>: By renewing your license, you will continue to receive premium support and updates, both major and minor, for modules, tools, and themes. Additionally, you will be able to create new projects and use ABP Suite and ABP Studio, which can significantly speed up your development process. When you renew your license, one year is added to your license's expiry date.",
     "LicenseExtendUpgradeDiffExplanation2": "<strong>Upgrading</strong>: By upgrading your license, you will be promoted to a higher license plan, allowing you to receive additional benefits. Check out the <a href=\"{0}\">pricing page</a> to see the differences between the license plans. <strong>On the other hand, when you upgrade, your license expiry date will not change!</strong> To extend your license end date, you need to renew your license.",
     "WhatHappensWhenLicenseEndsExplanation1": "ABP licenses are perpetual licenses. After your license expires, you can continue developing your project without the obligation to renew. Your license comes with a one-year update and premium support plan out of the box. To receive new features, performance enhancements, bug fixes, and continued support, as well as to use ABP Suite and ABP Studio, you need to renew your license. When your license expires;",
@@ -1770,6 +1770,8 @@
     "RegisterDemo": "Register",
     "TrainingDescription": "We are offering the following training packages for who want to get expertise on the ABP Platform.",
     "PurchaseDevelopers": "developers",
-    "LinkExpiredMessage": "The payment link has expired! Contact us at <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> to update the link or <a href='https://abp.io/contact'>click here</a> to navigate to the contact page."
+    "LinkExpiredMessage": "The payment link has expired! Contact us at <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> to update the link or <a href='https://abp.io/contact'>click here</a> to navigate to the contact page.",
+    "YourAccountDisabled": "Your user account is disabled!"
+
   }
 }
