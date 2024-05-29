@@ -1,9 +1,6 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Approve;
-
 
 public class IndexModel : CmsKitAdminPageModel
 {
@@ -16,5 +13,4 @@ public class IndexModel : CmsKitAdminPageModel
     public DateTime? CreationEndDate { get; set; }
 
     public string IsApproved { get; set; }
-
 }

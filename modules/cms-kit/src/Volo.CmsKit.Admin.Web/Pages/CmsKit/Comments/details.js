@@ -93,7 +93,7 @@ $(function (){
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) {
+                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
                                         abp.notify.error(error.message);
                                     });
                             }
@@ -114,7 +114,7 @@ $(function (){
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) {
+                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
                                         abp.notify.error(error.message);
                                     });
                             }

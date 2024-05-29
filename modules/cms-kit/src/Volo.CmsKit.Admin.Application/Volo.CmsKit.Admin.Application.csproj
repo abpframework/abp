@@ -11,8 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.CmsKit.Admin.Application.Contracts\Volo.CmsKit.Admin.Application.Contracts.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Common.Application\Volo.CmsKit.Common.Application.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Domain/Volo.Abp.SettingManagement.Domain.csproj" />
-
   </ItemGroup>
 
   <ItemGroup>

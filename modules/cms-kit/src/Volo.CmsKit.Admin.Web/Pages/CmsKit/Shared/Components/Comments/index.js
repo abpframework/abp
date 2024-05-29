@@ -1,16 +1,16 @@
-﻿
-var l = abp.localization.getResource("CmsKit");
+﻿var l = abp.localization.getResource("CmsKit");
 (function () {
     abp.widgets.CmsCommentSetting = function ($wrapper) {
-
-            var _service = volo.cmsKit.admin.comments.commentAdmin;
+            var _service = volo.cmsKit.admin.comments.commentAdmin
+            ;
             var _init = function () {
                 _getSettings();
                 _bindEvents();
             };
             var _getSettings = function () {
                 _service.getSettings().then(function (response) {
-                    $('#checkbox').prop('checked', response.commentRequireApprovement);
+                    // TODO: Rename checkbox id to something more meaningful.
+                    $('#checkbox').prop('checked', response.commentRequireApprovement); // TODO: use $wrapper.find('#checkbox').prop('checked', response.commentRequireApprovement);
                 })
             };
 

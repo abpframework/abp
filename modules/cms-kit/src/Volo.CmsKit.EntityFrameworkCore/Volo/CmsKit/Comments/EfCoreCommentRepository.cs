@@ -89,7 +89,6 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         DateTime? creationEndDate = null,
         CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
-
     )
     {
         var token = GetCancellationToken(cancellationToken);
@@ -125,13 +124,9 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
                         Author = user
                     };
 
-        query = commentApproveState switch
-        {
-            CommentApproveState.Approved => query.Where(c => c.Comment.IsApproved == true),
-            CommentApproveState.Approved | CommentApproveState.Waiting => query.Where(c => c.Comment.IsApproved == true || c.Comment.IsApproved == null),
-            _ => query
-        };
-       
+        query.WhereIf(commentApproveState == CommentApproveState.Approved, c => c.Comment.IsApproved == true);
+        query.WhereIf(commentApproveState == (CommentApproveState.Approved | CommentApproveState.Waiting), c => c.Comment.IsApproved == true || c.Comment.IsApproved == null);
+
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 

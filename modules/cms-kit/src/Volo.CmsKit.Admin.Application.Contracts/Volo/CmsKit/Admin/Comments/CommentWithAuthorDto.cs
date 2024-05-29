@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.Comments;
@@ -24,6 +24,5 @@ public class CommentWithAuthorDto : ExtensibleObject
     
     public string Url { get; set; }
 
-	public bool? IsApproved { get; set; }
-
+    public bool? IsApproved { get; set; }
 }

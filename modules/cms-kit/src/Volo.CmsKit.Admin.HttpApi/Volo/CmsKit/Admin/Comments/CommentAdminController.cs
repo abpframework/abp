@@ -22,7 +22,6 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 {
     protected ICommentAdminAppService CommentAdminAppService { get; }
 
-
     public CommentAdminController(ICommentAdminAppService commentAdminAppService)
     {
         CommentAdminAppService = commentAdminAppService;
@@ -49,17 +48,17 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
         return CommentAdminAppService.DeleteAsync(id);
     }
 
-	[HttpPut]
-	[Route("{id}/approval-status")]
+    [HttpPut]
+    [Route("{id}/approval-status")]
     [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
-		return CommentAdminAppService.UpdateApprovalStatusAsync(id, input);
-	}
+        return CommentAdminAppService.UpdateApprovalStatusAsync(id, input);
+    }
 
     [HttpPost]
     [Route("settings")]
-    [Authorize(CmsKitAdminPermissions.Comments.Update)]
+    [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
     public Task SetSettingsAsync(CommentSettingsDto input)
     {
        return CommentAdminAppService.SetSettingsAsync(input);
@@ -67,17 +66,16 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 
     [HttpGet]
     [Route("settings")]
-    [Authorize(CmsKitAdminPermissions.Comments.Default)]
+    [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
     public Task<CommentSettingsDto> GetSettingsAsync()
     {
        return CommentAdminAppService.GetSettingsAsync();
     }
 
-	[HttpGet]
-	[Route("waiting-count")]
-    [Authorize(CmsKitAdminPermissions.Comments.Default)]
+    [HttpGet]
+    [Route("waiting-count")]
     public Task<int> GetWaitingCountAsync()
-	{
-		return CommentAdminAppService.GetWaitingCountAsync();
-	}
+    {
+        return CommentAdminAppService.GetWaitingCountAsync();
+    }
 }

@@ -1,14 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.CmsKit.Localization
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-*@
 
 @section scripts {
     <abp-script-bundle>
-        <abp-script src="/client-proxies/cms-kit-admin-proxy.js" />
-        <abp-script src="/client-proxies/cms-kit-common-proxy.js" />
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js" /> // TODO: Remove this line and then check
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js" />  // TODO: Remove this line and then check
         <abp-script src="/Pages/CmsKit/Shared/Components/Comments/index.js"></abp-script>
     </abp-script-bundle>
 }

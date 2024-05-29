@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.Comments;
@@ -20,6 +20,5 @@ public class CommentDto : ExtensibleObject
 
     public DateTime CreationTime { get; set; }
 
-	public bool? IsApproved { get; set; }
-
+    public bool? IsApproved { get; set; }
 }

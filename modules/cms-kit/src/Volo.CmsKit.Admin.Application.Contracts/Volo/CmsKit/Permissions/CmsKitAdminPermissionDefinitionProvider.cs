@@ -19,6 +19,8 @@ public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvi
             .RequireGlobalFeatures(typeof(CommentsFeature));
         contentGroup.AddChild(CmsKitAdminPermissions.Comments.Update, L("Permission:Comments.Update"))
             .RequireGlobalFeatures(typeof(CommentsFeature));
+        contentGroup.AddChild(CmsKitAdminPermissions.Comments.SettingManagement, L("Permission:Comments.SettingManagement"))
+            .RequireGlobalFeatures(typeof(CommentsFeature));
 
         var tagGroup = cmsGroup.AddPermission(CmsKitAdminPermissions.Tags.Default, L("Permission:TagManagement"))
             .RequireGlobalFeatures(typeof(TagsFeature));

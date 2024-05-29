@@ -7,7 +7,7 @@ public class CommentSettingScriptBundleContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/client-proxies/cms-kit-admin-proxy.js");
+        context.Files.AddIfNotContains("/client-proxies/cms-kit-admin-proxy.js"); // TODO: is it necessary?
         context.Files.AddIfNotContains("/Pages/CmsKit/Shared/Components/Comments/index.js");
     }
 }

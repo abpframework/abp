@@ -3,8 +3,6 @@ $(function () {
 
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
 
-    var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
-
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
 
@@ -16,7 +14,6 @@ $(function () {
         return momentDate.isValid() ? momentDate.toISOString() : null;
     };
 
-
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
@@ -26,14 +23,11 @@ $(function () {
         "drops": "auto"
     });
 
-
-
     $('.singledatepicker').attr('autocomplete', 'off');
 
     $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
     });
-
 
     var filterForm = $('#CmsKitCommentsFilterForm');
 
@@ -100,7 +94,7 @@ $(function () {
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) {
+                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
                                         abp.notify.error(error.message);
                                     });
                             }
@@ -122,7 +116,7 @@ $(function () {
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) {
+                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
                                         abp.notify.error(error.message);
                                     });
                             }
@@ -237,7 +231,7 @@ $(function () {
         _dataTable.ajax.reloadEx();
     });
 
-    function checkWaitingComments() {
+    function checkWaitingComments() { // TODO: Rename this function. CheckWaitingComments is not a good name for this function. 
         commentsService.getWaitingCount().then(function (count) {
             if (count > 0) {
                 var alertMessage = l("CommentAlertMessage", count);

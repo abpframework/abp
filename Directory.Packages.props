@@ -167,8 +167,6 @@
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />
-    <PackageVersion Include="Volo.Abp.SettingManagement.Domain" Version="8.1.3" />
-    <PackageVersion Include="Volo.Abp.SettingManagement.Web" Version="8.1.3" />
     <PackageVersion Include="xunit" Version="2.6.1" />
     <PackageVersion Include="xunit.extensibility.execution" Version="2.6.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />

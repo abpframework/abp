@@ -123,7 +123,6 @@ public class CmsKitAdminWebModule : AbpModule
             options.Conventions.AddPageRoute("/CmsKit/Menus/MenuItems/Index", "/Cms/Menus/Items");
             options.Conventions.AddPageRoute("/CmsKit/GlobalResources/Index", "/Cms/GlobalResources");
             options.Conventions.AddPageRoute("/CmsKit/Comments/Approve/Index", "/Cms/Comments/Approve");
-
         });
 
         Configure<AbpPageToolbarOptions>(options =>
@@ -187,7 +186,6 @@ public class CmsKitAdminWebModule : AbpModule
                         requiredPolicyName: CmsKitAdminPermissions.Menus.Update
                         );
                 });
-
         });
        
         Configure<DynamicJavaScriptProxyOptions>(options =>
@@ -204,7 +202,6 @@ public class CmsKitAdminWebModule : AbpModule
         {
             options.Contributors.Add(new CommentSettingPageContributor());
         });
-
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)

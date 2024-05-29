@@ -95,7 +95,7 @@
                                 <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_12">
-                                <div class="mb-3" id="isApprovedColumn">
+                                <div class="mb-3" id="isApprovedColumn"> // TODO: Use standard id naming convention. For example: IsApprovedSelectInput
                                     <label class="mb-1" for="isApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
                                     <select id="isApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
                                         <option value="@CommentApproveState.All">@L["CommentFilter:All"].Value</option>

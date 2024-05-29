@@ -6,11 +6,8 @@ public class CmsKitSettingDefinitionProvider : SettingDefinitionProvider
 {
     public override void Define(ISettingDefinitionContext context)
     {
-        /* Define module settings here.
-         * Use names from CmsKitSettings class.
-         */
         context.Add(
-            new SettingDefinition(AppSettings.CommentRequireApprovement, "true")
-            ) ;
+            new SettingDefinition(AppSettings.CommentRequireApprovement, "true") // Check the default value
+        );
     }
 }

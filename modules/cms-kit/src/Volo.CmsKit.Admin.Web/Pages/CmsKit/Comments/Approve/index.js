@@ -1,10 +1,7 @@
 ﻿$(function () {
-
     var l = abp.localization.getResource("CmsKit");
 
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
-
-    var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
 
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
@@ -17,7 +14,6 @@
         return momentDate.isValid() ? momentDate.toISOString() : null;
     };
 
-
     $('.singledatepicker').daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
@@ -27,13 +23,11 @@
         "drops": "auto"
     });
 
-
     $('.singledatepicker').attr('autocomplete', 'off');
 
     $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
     });
-
 
     var filterForm = $('#CmsKitCommentsFilterForm');
 
@@ -46,7 +40,6 @@
 
         return filterObj;
     };
-
 
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
@@ -78,8 +71,8 @@
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) {
-                                        abp.notify.error(error.message);
+                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
+                                        abp.notify.error(error.message); 
                                     });
                             }
                         },
@@ -97,7 +90,7 @@
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) {
+                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
                                         abp.notify.error(error.message);
                                     });
                             }
