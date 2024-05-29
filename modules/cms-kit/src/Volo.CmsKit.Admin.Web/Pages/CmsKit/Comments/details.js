@@ -93,9 +93,6 @@ $(function (){
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
-                                        abp.notify.error(error.message);
-                                    });
                             }
                         },
                         {
@@ -114,9 +111,6 @@ $(function (){
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
-                                        abp.notify.error(error.message);
-                                    });
                             }
                         }
                     ]
@@ -173,12 +167,12 @@ $(function (){
                     var icons = ''
 
                     if (data === null) {
-                        icons = '<i class="fa-solid fa-hourglass-start"></i>';
+                        icons = '<i class="fa-solid fa-hourglass-half text-muted"></i>';
                     } else if (typeof data === "boolean") {
                         if (data) {
-                            icons = '<i class="fa-solid fa-check" style="color: #63E6BE;"></i>';
+                            icons = '<i class="fa-solid fa-check text-success"></i>';
                         } else {
-                            icons = '<i class="fa-solid fa-x" style="color: #e0102f;"></i>';
+                            icons = '<i class="fa-solid fa-x text-danger"></i>';
                         }
                     }
 
@@ -205,7 +199,7 @@ $(function (){
             $('#CommentsTable').DataTable().column(4).visible(true);
         } else {
             $('#CommentsTable').DataTable().column(4).visible(false);
-            $('#isApprovedColumn').hide();
+            $('#IsApprovedSelectInput').hide();
         }
     })
     filterForm.submit(function (e){

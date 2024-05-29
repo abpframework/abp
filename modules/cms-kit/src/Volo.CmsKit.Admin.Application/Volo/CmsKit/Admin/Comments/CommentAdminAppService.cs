@@ -95,15 +95,15 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
     }
 
     [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
-    public async Task SetSettingsAsync(CommentSettingsDto input)
+    public async Task UpdateSettingsAsync(CommentSettingsDto input)
     {
-        await SettingManager.SetGlobalAsync(AppSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
+        await SettingManager.SetGlobalAsync(CmsKitSettings.CommentRequireApprovement, input.CommentRequireApprovement.ToString());
     }
 
     [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
     public async Task<CommentSettingsDto> GetSettingsAsync()
     {
-        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(AppSettings.CommentRequireApprovement));
+	    var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.CommentRequireApprovement));
 
         return new CommentSettingsDto {CommentRequireApprovement = isRequireApprovementEnabled};
     }

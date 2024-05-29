@@ -74,7 +74,7 @@ $(function () {
                                     .delete(data.record.id)
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
-                                        checkWaitingComments()
+                                        CheckWaitingComments()
                                         abp.notify.success(l('DeletedSuccessfully'));
                                     });
                             }
@@ -90,13 +90,10 @@ $(function () {
                                     .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
-                                        checkWaitingComments()
+                                        CheckWaitingComments()
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
-                                        abp.notify.error(error.message);
-                                    });
                             }
                         },
                         {
@@ -112,13 +109,10 @@ $(function () {
                                     .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
                                     .then(function () {
                                         _dataTable.ajax.reloadEx();
-                                        checkWaitingComments()
+                                        CheckWaitingComments()
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                                    .catch(function (error) { // TODO: Is it necessary in ABP Framework?
-                                        abp.notify.error(error.message);
-                                    });
                             }
                         }
                     ]
@@ -198,12 +192,12 @@ $(function () {
                     var icons = ''
 
                     if (data === null) {
-                        icons = '<i class="fa-solid fa-hourglass-start"></i>';
+                        icons = '<i class="fa-solid fa-hourglass-half text-muted"></i>';
                     } else if (typeof data === "boolean") {
                         if (data) {
-                            icons = '<i class="fa-solid fa-check" style="color: #63E6BE;"></i>';
+                            icons = '<i class="fa-solid fa-check text-success"></i>';
                         } else {
-                            icons = '<i class="fa-solid fa-x" style="color: #e0102f;"></i>';
+                            icons = '<i class="fa-solid fa-x text-danger"></i>';
                         }
                     }
 
@@ -231,28 +225,28 @@ $(function () {
         _dataTable.ajax.reloadEx();
     });
 
-    function checkWaitingComments() { // TODO: Rename this function. CheckWaitingComments is not a good name for this function. 
+    function CheckWaitingComments() { 
         commentsService.getWaitingCount().then(function (count) {
             if (count > 0) {
                 var alertMessage = l("CommentAlertMessage", count);
                 var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
-                $('#commentsAlert').html(alertElement);
-                $('#commentsAlert').show()
-                $('#commentsAlert').click(function () {
+                $('#CommentsWaitingAlert').html(alertElement);
+                $('#CommentsWaitingAlert').show()
+                $('#CommentsWaitingAlert').click(function () {
                     window.location.href = '/Cms/Comments/Approve'
                 });
             } else {
-                $('#commentsAlert').hide()
+                $('#CommentsWaitingAlert').hide()
             }
         });
     }
-    checkWaitingComments()
+    CheckWaitingComments()
     commentsService.getSettings().then(function (data) {
         if (data.commentRequireApprovement) {
             $('#CommentsTable').DataTable().column(6).visible(true);
         } else {
             $('#CommentsTable').DataTable().column(6).visible(false);
-            $('#isApprovedColumn').hide();
+            $('#IsApprovedSelectInput').hide();
         }
     })
 });

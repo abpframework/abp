@@ -59,9 +59,9 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     [HttpPost]
     [Route("settings")]
     [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
-    public Task SetSettingsAsync(CommentSettingsDto input)
+    public Task UpdateSettingsAsync(CommentSettingsDto input)
     {
-       return CommentAdminAppService.SetSettingsAsync(input);
+       return CommentAdminAppService.UpdateSettingsAsync(input);
     }
 
     [HttpGet]

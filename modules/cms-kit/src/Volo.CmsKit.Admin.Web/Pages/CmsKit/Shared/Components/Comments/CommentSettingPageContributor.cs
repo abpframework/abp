@@ -15,7 +15,7 @@ public class CommentSettingPageContributor : ISettingPageContributor
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<CmsKitResource>>();
         context.Groups.Add(
             new SettingPageGroup(
-                "Volo.Abp.MySettingGroup",
+                "Cms.Comments",
                 l["Menu:CmsKitCommentOptions"],
                 typeof(CommentSettingViewComponent),
                 order: 1

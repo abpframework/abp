@@ -29,7 +29,7 @@ public class Comment : AggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, 
 
     public virtual bool? IsApproved { get; set; }
 
-	protected Comment()
+    protected Comment()
     {
         
     }

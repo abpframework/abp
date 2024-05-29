@@ -205,7 +205,7 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.comments.commentAdmin.setSettings = function(input, ajaxParams) {
+    volo.cmsKit.admin.comments.commentAdmin.updateSettings = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/comments/settings',
         type: 'POST',

@@ -57,7 +57,7 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
     {
-        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(AppSettings.CommentRequireApprovement));
+        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.CommentRequireApprovement));
         
         var commentsWithAuthor = isRequireApprovementEnabled
             ? await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveState.Approved)

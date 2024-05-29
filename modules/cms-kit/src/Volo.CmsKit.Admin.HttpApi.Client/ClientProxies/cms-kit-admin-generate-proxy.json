@@ -1294,7 +1294,7 @@
                   }
                 },
                 {
-                  "name": "SetSettingsAsync",
+                  "name": "UpdateSettingsAsync",
                   "parametersOnMethod": [
                     {
                       "name": "input",
@@ -1606,9 +1606,9 @@
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
             },
-            "SetSettingsAsyncByInput": {
-              "uniqueName": "SetSettingsAsyncByInput",
-              "name": "SetSettingsAsync",
+            "UpdateSettingsAsyncByInput": {
+              "uniqueName": "UpdateSettingsAsyncByInput",
+              "name": "UpdateSettingsAsync",
               "httpMethod": "POST",
               "url": "api/cms-kit-admin/comments/settings",
               "supportedVersions": [],

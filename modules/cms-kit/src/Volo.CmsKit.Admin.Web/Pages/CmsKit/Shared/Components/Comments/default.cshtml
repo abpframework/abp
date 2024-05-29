@@ -3,9 +3,7 @@
 
 @section scripts {
     <abp-script-bundle>
-        <abp-script src="/client-proxies/cms-kit-admin-proxy.js" /> // TODO: Remove this line and then check
-        <abp-script src="/client-proxies/cms-kit-common-proxy.js" />  // TODO: Remove this line and then check
-        <abp-script src="/Pages/CmsKit/Shared/Components/Comments/index.js"></abp-script>
+        <abp-script src="/Pages/CmsKit/Shared/Components/Comments/default.js"></abp-script>
     </abp-script-bundle>
 }
 @{
@@ -16,7 +14,7 @@
         <hr />
         <div class="form-group">
             <div class="form-check">
-                <input type="checkbox" id="checkbox" class="form-check-input" name="checkbox"  />
+                <input type="checkbox" id="RequireApprovementCheckbox" class="form-check-input"/>
                 <label for="checkbox" class="form-check-label">@L["CmsKitCommentOptions:RequireApprovement"].Value</label>
             </div>
             <small id="checkboxHelp" class="form-text text-muted">@L["CmsKitCommentOptions:RequireApprovementDescription"].Value</small>

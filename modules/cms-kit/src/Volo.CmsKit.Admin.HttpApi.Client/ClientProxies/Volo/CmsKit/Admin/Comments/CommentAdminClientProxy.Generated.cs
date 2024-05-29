@@ -50,9 +50,9 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
         });
     }
 
-    public virtual async Task SetSettingsAsync(CommentSettingsDto input)
+    public virtual async Task UpdateSettingsAsync(CommentSettingsDto input)
     {
-        await RequestAsync(nameof(SetSettingsAsync), new ClientProxyRequestTypeValue
+        await RequestAsync(nameof(UpdateSettingsAsync), new ClientProxyRequestTypeValue
         {
             { typeof(CommentSettingsDto), input }
         });
