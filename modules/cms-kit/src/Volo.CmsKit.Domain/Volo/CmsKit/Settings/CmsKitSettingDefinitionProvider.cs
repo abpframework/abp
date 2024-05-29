@@ -7,7 +7,7 @@ public class CmsKitSettingDefinitionProvider : SettingDefinitionProvider
     public override void Define(ISettingDefinitionContext context)
     {
         context.Add(
-            new SettingDefinition(AppSettings.CommentRequireApprovement, "true") // Check the default value
+            new SettingDefinition(AppSettings.CommentRequireApprovement, "true") // TODO: Check the default value
         );
     }
 }

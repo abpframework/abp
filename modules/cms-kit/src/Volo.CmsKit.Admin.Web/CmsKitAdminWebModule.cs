@@ -59,7 +59,7 @@ public class CmsKitAdminWebModule : AbpModule
         {
             options.MenuContributors.Add(new CmsKitAdminMenuContributor());
         });
-        
+
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
