@@ -2,7 +2,7 @@
 
 ![ABP Framework Angular Project](abp-angular-aks-helm.png)
 
-In my previous article on [deploying an ABP Framework Mvc project to Azure App Service](https://docs.abp.io/en/abp/latest/Deployment/Azure-App-Service), I talked about how ABP Mvc project can be easily deployed to Azure App Service. Now I will show how we can deploy to kubernetes environment, which looks a bit more complex but is more preferred for production, using a Helm chart.
+In my previous article on [Deploy Your ABP Framework MVC Project to Azure Container Apps](https://community.abp.io/posts/deploy-your-abp-framework-mvc-project-to-azure-container-apps-r93u9c6d), I talked about how ABP Mvc project can be easily deployed to Azure Container Apps. Now I will show how we can deploy to kubernetes environment, which looks a bit more complex but is more preferred for production, using a Helm chart.
 
 ### Getting Started with ABP Framework Angular and Azure Kubernetes Service
 
