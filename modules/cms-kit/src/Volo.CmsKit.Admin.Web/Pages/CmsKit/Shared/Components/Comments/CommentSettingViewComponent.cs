@@ -13,6 +13,6 @@ public class CommentSettingViewComponent : AbpViewComponent
 {
     public virtual IViewComponentResult Invoke()
     {
-        return View("~/Pages/CmsKit/Shared/Components/Comments/default.cshtml");
+        return View("~/Pages/CmsKit/Shared/Components/Comments/Default.cshtml");
     }
 }
