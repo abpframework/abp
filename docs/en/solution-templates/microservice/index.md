@@ -17,7 +17,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [API Gateways](api-gateways.md)
   * [Web Applications](web-applications.md)
   * [Mobile Applications](mobile-applications.md)
-* Built-In Features
+* [Built-In Features](built-in-features.md)
   * [Authentication](authentication.md)
   * [Database configurations](database-configurations.md)
   * [Logging (with Serilog and Elasticsearch)](logging.md)
@@ -32,7 +32,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Distributed Cache](distributed-cache.md)
   * [Multi-Tenancy](multi-tenancy.md)
   * [BLOB Storing](blob-storing.md)
-  * CORS configuration
+  * [CORS configuration](cors-configuration.md)
 * Communication
   * Distributed Events
   * HTTP API Calls
