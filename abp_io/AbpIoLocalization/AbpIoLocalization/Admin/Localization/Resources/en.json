@@ -220,7 +220,7 @@
     "SuccessfullyReIndexAllPosts": "All posts have been successfully reindexed.",
     "Permission:FullSearch": "Full text search",
     "Menu:CliAnalytics": "CLI Analytics",
-    "Menu:Reports": "Reports",
+    "Menu:Reports": "Dynamic Reports",
     "TemplateName": "Template name",
     "TemplateVersion": "Template version",
     "DatabaseProvider": "Database provider",
@@ -232,7 +232,7 @@
     "UiFramework": "Ui framework",
     "Options": "Options",
     "CliAnalytics": "Cli Analytics",
-    "Reports": "Reports",
+    "Reports": "Dynamic Reports",
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Reports",
@@ -625,6 +625,10 @@
     "Menu:DynamicReports": "Dynamic Reports",
     "Menu:Others": "Others",
     "Menu:Packs&Modules": "Packs & Modules",
-    "ReleaseCaches": "Release Cache"
+    "ReleaseCaches": "Release Cache",
+    "Menu:InfoSliderItems": "Info Slider Items",
+    "InfoSliderItems": "Info Slider Items",
+    "DynamicReports": "Dynamic Reports",
+    "Menu:ReportsMenu": "Reports"
   }
 }
