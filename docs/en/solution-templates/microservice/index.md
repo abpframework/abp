@@ -35,7 +35,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [CORS configuration](cors-configuration.md)
 * Communication
   * [Distributed Events](distributed-events.md)
-  * HTTP API Calls
+  * [HTTP API Calls](http-api-calls.md)
   * gRPC Calls
 * Helm Charts and Kubernetes
 * Guides
