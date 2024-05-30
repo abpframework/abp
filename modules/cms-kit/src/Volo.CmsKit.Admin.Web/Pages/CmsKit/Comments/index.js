@@ -5,6 +5,19 @@ $(function () {
 
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
+    
+    var commentRequireApprovement = false;
+
+    commentsService.getSettings().then(function (data) {
+        commentRequireApprovement = data.commentRequireApprovement;
+        if (data.commentRequireApprovement) {
+            $('#CommentsTable').DataTable().column(6).visible(true);
+        } else {
+            $('#CommentsWaitingAlert').hide()
+            $('#CommentsTable').DataTable().column(6).visible(false);
+            $('#IsApprovedSelectInput').hide();
+        }
+    })
 
     var getFormattedDate = function ($datePicker) {
         if (!$datePicker.val()) {
@@ -95,7 +108,9 @@ $(function () {
                                         abp.notify.success(message);
                                     })
                             },
-                            visible: abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")
+                            visible: function (data) {
+                                return commentRequireApprovement;
+                            }
                         },
                         {
                             text: function (data) {
@@ -115,7 +130,9 @@ $(function () {
                                         abp.notify.success(message);
                                     })
                             },
-                            visible: abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")
+                            visible: function (data) {
+                                return commentRequireApprovement;
+                            }
                         }
                     ]
                 }
@@ -231,7 +248,7 @@ $(function () {
         commentsService.getWaitingCount().then(function (count) {
             if (count > 0) {
                 var alertMessage = l("CommentAlertMessage", count);
-                var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
+                var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + ' ' + ' <i class="fa-solid fa-arrow-up-right-from-square"></i> </abp-alert>';
                 $('#CommentsWaitingAlert').html(alertElement);
                 $('#CommentsWaitingAlert').click(function () {
                     window.location.href = '/Cms/Comments/Approve'
@@ -243,14 +260,4 @@ $(function () {
     }
     
     CheckWaitingComments()
-    
-    commentsService.getSettings().then(function (data) {
-        if (data.commentRequireApprovement) {
-            $('#CommentsTable').DataTable().column(6).visible(true);
-        } else {
-            $('#CommentsWaitingAlert').hide()
-            $('#CommentsTable').DataTable().column(6).visible(false);
-            $('#IsApprovedSelectInput').hide();
-        }
-    })
 });
