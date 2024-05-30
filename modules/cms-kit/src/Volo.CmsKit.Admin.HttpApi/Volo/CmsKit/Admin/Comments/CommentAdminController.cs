@@ -50,7 +50,6 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
 
     [HttpPut]
     [Route("{id}/approval-status")]
-    [Authorize(CmsKitAdminPermissions.Comments.Update)]
     public Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
         return CommentAdminAppService.UpdateApprovalStatusAsync(id, input);

@@ -8,27 +8,24 @@ using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Shared.Components.Comments;
 
-public class CommentSettingPageContributor : ISettingPageContributor
+public class CommentSettingPageContributor : SettingPageContributorBase
 {
-    public Task ConfigureAsync(SettingPageCreationContext context)
+    public CommentSettingPageContributor()
+    {
+        RequiredPermissions(CmsKitAdminPermissions.Comments.SettingManagement);
+    }
+
+    public override Task ConfigureAsync(SettingPageCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<CmsKitResource>>();
         context.Groups.Add(
             new SettingPageGroup(
-                "Cms.Comments",
-                l["Menu:CmsKitCommentOptions"],
-                typeof(CommentSettingViewComponent),
-                order: 1
+                "Volo.Abp.CmsKitPro",
+                l["Settings:Menu:CmsKit"],
+                typeof(CommentSettingViewComponent)
             )
         );
 
         return Task.CompletedTask;
-    }
-
-    public async Task<bool> CheckPermissionsAsync(SettingPageCreationContext context)
-    {
-        var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-
-        return await authorizationService.IsGrantedAsync(CmsKitAdminPermissions.Comments.SettingManagement);
     }
 }

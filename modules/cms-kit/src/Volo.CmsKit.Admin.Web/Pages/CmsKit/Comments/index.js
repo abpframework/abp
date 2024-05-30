@@ -94,7 +94,8 @@ $(function () {
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                            }
+                            },
+                            visible: abp.setting.getBoolean("Cms.Comments.RequireApprovement")
                         },
                         {
                             text: function (data) {
@@ -113,7 +114,9 @@ $(function () {
                                         var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
                                         abp.notify.success(message);
                                     })
-                            }
+                            },
+                            visible: abp.setting.getBoolean("Cms.Comments.RequireApprovement")
+
                         }
                     ]
                 }
@@ -231,7 +234,6 @@ $(function () {
                 var alertMessage = l("CommentAlertMessage", count);
                 var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + '</abp-alert>';
                 $('#CommentsWaitingAlert').html(alertElement);
-                $('#CommentsWaitingAlert').show()
                 $('#CommentsWaitingAlert').click(function () {
                     window.location.href = '/Cms/Comments/Approve'
                 });
@@ -245,8 +247,20 @@ $(function () {
         if (data.commentRequireApprovement) {
             $('#CommentsTable').DataTable().column(6).visible(true);
         } else {
+            $('#CommentsWaitingAlert').hide()
             $('#CommentsTable').DataTable().column(6).visible(false);
             $('#IsApprovedSelectInput').hide();
         }
     })
+    async function GetSettings() {
+        var result = false;
+        await commentsService.getSettings().then(function (data) {
+            result = data.commentRequireApprovement;
+        });
+        return result;
+    }
+    (async () => {
+        var commentRequireApprovement = await GetSettings();
+        console.log(commentRequireApprovement);
+    })();
 });
