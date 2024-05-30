@@ -158,9 +158,16 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             throw new Exception("There is no version found with given version: " + version);
         }
 
-        var nugetVersion = version;
+        var nugetVersion = await GetTemplateNugetVersionAsync(name, type, version) ?? version;
 
-        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + ".zip");
+        if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
+        {
+            Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
+            return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
+                version, latestVersion, nugetVersion);
+        }
+
+        var localCacheFile = Path.Combine(CliPaths.TemplateCache, name.Replace("/", ".") + "-" + version + ".zip");
 
 #if DEBUG
         if (File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())

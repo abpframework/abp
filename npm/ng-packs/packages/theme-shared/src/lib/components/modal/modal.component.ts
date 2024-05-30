@@ -1,20 +1,22 @@
 import { SubscriptionService, uuid } from '@abp/ng.core';
 import {
   Component,
-  ContentChild,
-  EventEmitter,
-  Inject,
-  Input,
+  DestroyRef,
   OnDestroy,
   OnInit,
-  Optional,
-  Output,
   TemplateRef,
-  ViewChild,
+  contentChild,
+  effect,
+  inject,
+  input,
+  model,
+  output,
+  viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
 import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
@@ -30,65 +32,50 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   providers: [SubscriptionService],
 })
 export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
-  @Input()
-  get visible(): boolean {
-    return this._visible;
-  }
-  set visible(value: boolean) {
-    if (typeof value !== 'boolean') return;
-    this.toggle$.next(value);
-  }
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly modal = inject(NgbModal);
+  protected readonly modalRefService = inject(ModalRefService);
+  protected readonly suppressUnsavedChangesWarningToken = inject(SUPPRESS_UNSAVED_CHANGES_WARNING, {
+    optional: true,
+  });
+  protected readonly destroyRef = inject(DestroyRef);
 
-  @Input()
-  get busy(): boolean {
-    return this._busy;
-  }
-  set busy(value: boolean) {
-    if (this.abpSubmit && this.abpSubmit instanceof ButtonComponent) {
-      this.abpSubmit.loading = value;
-    }
+  visible = model<boolean>(false);
 
-    this._busy = value;
-  }
+  busy = input(false, {
+    transform: (value: boolean) => {
+      if (this.abpSubmit() && this.abpSubmit() instanceof ButtonComponent) {
+        this.abpSubmit().loading = value;
+      }
+      return value;
+    },
+  });
 
-  @Input() options: NgbModalOptions = {
-    keyboard: true,
-  };
+  options = input<NgbModalOptions>({ keyboard: true });
 
-  @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
+  suppressUnsavedChangesWarning = input(this.suppressUnsavedChangesWarningToken);
 
-  @ViewChild('modalContent') modalContent?: TemplateRef<any>;
+  modalContent = viewChild<TemplateRef<any>>('modalContent');
 
-  @ContentChild('abpHeader', { static: false }) abpHeader?: TemplateRef<any>;
+  abpHeader = contentChild<TemplateRef<any>>('abpHeader');
 
-  @ContentChild('abpBody', { static: false }) abpBody?: TemplateRef<any>;
+  abpBody = contentChild<TemplateRef<any>>('abpBody');
 
-  @ContentChild('abpFooter', { static: false }) abpFooter?: TemplateRef<any>;
+  abpFooter = contentChild<TemplateRef<any>>('abpFooter');
 
-  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
-  abpSubmit?: ButtonComponent;
+  abpSubmit = contentChild(ButtonComponent, { read: ButtonComponent });
 
-  @Output() readonly visibleChange = new EventEmitter<boolean>();
+  readonly init = output();
 
-  @Output() readonly init = new EventEmitter<void>();
+  readonly appear = output();
 
-  @Output() readonly appear = new EventEmitter<void>();
-
-  @Output() readonly disappear = new EventEmitter<void>();
-
-  _visible = false;
-
-  _busy = false;
+  readonly disappear = output();
 
   modalRef!: NgbModalRef;
 
   isConfirmationOpen = false;
 
-  destroy$ = new Subject<void>();
-
   modalIdentifier = `modal-${uuid()}`;
-
-  private toggle$ = new Subject<boolean>();
 
   get modalWindowRef() {
     return document.querySelector(`ngb-modal-window.${this.modalIdentifier}`);
@@ -98,17 +85,12 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     return Boolean(this.modalWindowRef?.querySelector('.ng-dirty'));
   }
 
-  constructor(
-    private confirmationService: ConfirmationService,
-    private subscription: SubscriptionService,
-    @Optional()
-    @Inject(SUPPRESS_UNSAVED_CHANGES_WARNING)
-    private suppressUnsavedChangesWarningToken: boolean,
-    private modal: NgbModal,
-    private modalRefService: ModalRefService,
-  ) {
-    this.initToggleStream();
+  constructor() {
+    effect(() => {
+      this.toggle(this.visible());
+    });
   }
+
   ngOnInit(): void {
     this.modalRefService.register(this);
   }
@@ -116,7 +98,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   dismiss(mode: ModalDismissMode) {
     switch (mode) {
       case 'hard':
-        this.visible = false;
+        this.visible.set(false);
         break;
       case 'soft':
         this.close();
@@ -126,37 +108,29 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     }
   }
 
-  private initToggleStream() {
-    this.subscription.addOne(this.toggle$.pipe(debounceTime(0), distinctUntilChanged()), value =>
-      this.toggle(value),
-    );
-  }
-
-  private toggle(value: boolean) {
-    this._visible = value;
-    this.visibleChange.emit(value);
+  protected toggle(value: boolean) {
+    this.visible.set(value);
 
     if (!value) {
       this.modalRef?.dismiss();
       this.disappear.emit();
-      this.destroy$.next();
       return;
     }
 
     setTimeout(() => this.listen(), 0);
-    this.modalRef = this.modal.open(this.modalContent, {
+    this.modalRef = this.modal.open(this.modalContent(), {
       size: 'md',
       centered: false,
       keyboard: false,
       scrollable: true,
       beforeDismiss: () => {
-        if (!this.visible) return true;
+        if (!this.visible()) return true;
 
         this.close();
-        return !this.visible;
+        return !this.visible();
       },
-      ...this.options,
-      windowClass: `${this.options.windowClass || ''} ${this.modalIdentifier}`,
+      ...this.options(),
+      windowClass: `${this.options().windowClass || ''} ${this.modalIdentifier}`,
     });
 
     this.appear.emit();
@@ -165,30 +139,27 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   ngOnDestroy(): void {
     this.modalRefService.unregister(this);
     this.toggle(false);
-    this.destroy$.next();
   }
 
   close() {
-    if (this.busy) return;
+    if (this.busy()) return;
 
-    if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
+    if (this.isFormDirty && !this.suppressUnsavedChangesWarning()) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;
       this.confirmationService
-        .warn(
-          'AbpUi::AreYouSureYouWantToCancelEditingWarningMessage',
-          'AbpUi::AreYouSure',
-          { dismissible: false },
-        )
+        .warn('AbpUi::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpUi::AreYouSure', {
+          dismissible: false,
+        })
         .subscribe((status: Confirmation.Status) => {
           this.isConfirmationOpen = false;
           if (status === Confirmation.Status.confirm) {
-            this.visible = false;
+            this.visible.set(false);
           }
         });
     } else {
-      this.visible = false;
+      this.visible.set(false);
     }
   }
 
@@ -196,17 +167,17 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     if (this.modalWindowRef) {
       fromEvent<KeyboardEvent>(this.modalWindowRef, 'keyup')
         .pipe(
-          takeUntil(this.destroy$),
+          takeUntilDestroyed(this.destroyRef),
           debounceTime(150),
-          filter((key: KeyboardEvent) => key && key.key === 'Escape' && this.options.keyboard),
+          filter((key: KeyboardEvent) => key && key.key === 'Escape' && this.options().keyboard),
         )
         .subscribe(() => this.close());
     }
 
     fromEvent(window, 'beforeunload')
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(event => {
-        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
+        if (this.isFormDirty && !this.suppressUnsavedChangesWarning()) {
           event.preventDefault();
         }
       });
