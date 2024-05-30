@@ -1440,7 +1440,7 @@
     "SimpleMonolithApplicationTemplate": "Simple monolith application template",
     "LayeredApplicationTemplate": "Layered application template",
     "MicroserviceSolutionTemplate": "Microservice solution template",
-    "CreateEmptySolutionAndUseAbp": "Or create a new empty .NET solution and install ABP NuGet & NPM <a href=\"https://abp.io/packages\" target=\"_blank\">packages</a> yourself.",
+    "CreateEmptySolutionAndUseAbp": "Or create a new empty .NET solution and install ABP NuGet & NPM <a href=\"/packages\">packages</a> yourself.",
     "CreatingSolutionWithMultipleOptions": "There are multiple User Interface and Database options while creating a new solution.",
     "UIFrameworkOptions": "UI Framework Options",
     "DotnetSolutionWithoutDependency": "Now, you have a regular .NET solution in your local computer that has no dependency on a cloud platform or external service.",
