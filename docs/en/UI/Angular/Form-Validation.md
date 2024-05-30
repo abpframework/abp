@@ -13,9 +13,11 @@ import { provideAbpThemeShared, withValidationBluePrint } from '@abp/ng.theme.sh
 
 @NgModule({
   providers: [
-    provideAbpThemeShared(withValidationBluePrint({
-      uniqueUsername: "::AlreadyExists[{%{{{ username }}}%}]"
-    })),
+    provideAbpThemeShared(
+      withValidationBluePrint({
+        uniqueUsername: "::AlreadyExists[{%{{{ username }}}%}]"
+      })
+    ),
     ...
   ],
 })
