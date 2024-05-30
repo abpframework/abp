@@ -33,7 +33,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [Multi-Tenancy](multi-tenancy.md)
   * [BLOB Storing](blob-storing.md)
   * [CORS configuration](cors-configuration.md)
-* Communication
+* [Communication](communication.md)
   * [Distributed Events](distributed-events.md)
   * [HTTP API Calls](http-api-calls.md)
   * [gRPC Calls](grpc-calls.md)
