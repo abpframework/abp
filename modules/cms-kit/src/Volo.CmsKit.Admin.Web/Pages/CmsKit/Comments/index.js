@@ -95,7 +95,7 @@ $(function () {
                                         abp.notify.success(message);
                                     })
                             },
-                            visible: abp.setting.getBoolean("Cms.Comments.RequireApprovement")
+                            visible: abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")
                         },
                         {
                             text: function (data) {
@@ -115,8 +115,7 @@ $(function () {
                                         abp.notify.success(message);
                                     })
                             },
-                            visible: abp.setting.getBoolean("Cms.Comments.RequireApprovement")
-
+                            visible: abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")
                         }
                     ]
                 }
@@ -242,7 +241,9 @@ $(function () {
             }
         });
     }
+    
     CheckWaitingComments()
+    
     commentsService.getSettings().then(function (data) {
         if (data.commentRequireApprovement) {
             $('#CommentsTable').DataTable().column(6).visible(true);
@@ -252,15 +253,4 @@ $(function () {
             $('#IsApprovedSelectInput').hide();
         }
     })
-    async function GetSettings() {
-        var result = false;
-        await commentsService.getSettings().then(function (data) {
-            result = data.commentRequireApprovement;
-        });
-        return result;
-    }
-    (async () => {
-        var commentRequireApprovement = await GetSettings();
-        console.log(commentRequireApprovement);
-    })();
 });

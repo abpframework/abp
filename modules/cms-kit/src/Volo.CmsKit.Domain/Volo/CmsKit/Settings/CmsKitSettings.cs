@@ -2,11 +2,11 @@
 
 public static class CmsKitSettings
 {
-    public const string GroupName = "CmsKit";
-    public const string CommentRequireApprovement = "Cms.Comments.RequireApprovement";
-    // TODO : Refactor
-
-    /* Add constants for setting names. Example:
-     * public const string MySettingName = GroupName + ".MySettingName";
-     */
+    private const string GroupName = "CmsKit";
+    
+    public static class Comments
+    {
+        private const string Default = GroupName + ".Comments";
+        public const string RequireApprovement = Default + ".RequireApprovement";
+    } 
 }
