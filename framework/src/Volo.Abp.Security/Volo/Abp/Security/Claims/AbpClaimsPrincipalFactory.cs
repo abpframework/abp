@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,14 +11,14 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
 {
     public static string AuthenticationType => "Abp.Application";
 
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
+    protected IServiceProvider ServiceProvider { get; }
     protected AbpClaimsPrincipalFactoryOptions Options { get; }
 
     public AbpClaimsPrincipalFactory(
-        IServiceScopeFactory serviceScopeFactory,
+        IServiceProvider serviceProvider,
         IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimOptions)
     {
-        ServiceScopeFactory = serviceScopeFactory;
+        ServiceProvider = serviceProvider;
         Options = abpClaimOptions.Value;
     }
 
@@ -33,33 +34,30 @@ public class AbpClaimsPrincipalFactory : IAbpClaimsPrincipalFactory, ITransientD
 
     public virtual async Task<ClaimsPrincipal> InternalCreateAsync(AbpClaimsPrincipalFactoryOptions options, ClaimsPrincipal? existsClaimsPrincipal = null, bool isDynamic = false)
     {
-        using (var scope = ServiceScopeFactory.CreateScope())
+        var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
+            AuthenticationType,
+            AbpClaimTypes.UserName,
+            AbpClaimTypes.Role));
+
+        var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, ServiceProvider);
+
+        if (!isDynamic)
         {
-            var claimsPrincipal = existsClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity(
-                AuthenticationType,
-                AbpClaimTypes.UserName,
-                AbpClaimTypes.Role));
-
-            var context = new AbpClaimsPrincipalContributorContext(claimsPrincipal, scope.ServiceProvider);
-
-            if (!isDynamic)
+            foreach (var contributorType in options.Contributors)
             {
-                foreach (var contributorType in options.Contributors)
-                {
-                    var contributor = (IAbpClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
-                    await contributor.ContributeAsync(context);
-                }
+                var contributor = (IAbpClaimsPrincipalContributor)ServiceProvider.GetRequiredService(contributorType);
+                await contributor.ContributeAsync(context);
             }
-            else
-            {
-                foreach (var contributorType in options.DynamicContributors)
-                {
-                    var contributor = (IAbpDynamicClaimsPrincipalContributor)scope.ServiceProvider.GetRequiredService(contributorType);
-                    await contributor.ContributeAsync(context);
-                }
-            }
-
-            return context.ClaimsPrincipal;
         }
+        else
+        {
+            foreach (var contributorType in options.DynamicContributors)
+            {
+                var contributor = (IAbpDynamicClaimsPrincipalContributor)ServiceProvider.GetRequiredService(contributorType);
+                await contributor.ContributeAsync(context);
+            }
+        }
+
+        return context.ClaimsPrincipal;
     }
 }

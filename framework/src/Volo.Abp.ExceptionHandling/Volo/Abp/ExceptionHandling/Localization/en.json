@@ -21,6 +21,9 @@
     "404Message": "Page not found",
     "500Message": "Internal Server Error",
     "403MessageDetail": "You are not authorized to perform this operation!",
-    "404MessageDetail": "Sorry, there's nothing at this address."
+    "404MessageDetail": "Sorry, there's nothing at this address.",
+    "Unauthorized": "Unauthorized",
+    "invalid_token": "Invalid token",
+    "The token is no longer valid because the user's session expired.": "The token is no longer valid because the user's session expired."
   }
 }

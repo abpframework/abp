@@ -21,6 +21,9 @@
     "404Message": "Không tìm thấy trang",
     "500Message": "Lỗi máy chủ nội bộ",
     "403MessageDetail": "Bạn không được phép thực hiện thao tác này!",
-    "404MessageDetail": "Xin lỗi, không có gì ở địa chỉ này."
+    "404MessageDetail": "Xin lỗi, không có gì ở địa chỉ này.",
+    "Unauthorized": "Không được phép",
+    "invalid_token": "Token không hợp lệ",
+    "The token is no longer valid because the user's session expired.": "Token không còn hợp lệ vì phiên làm việc của người dùng đã hết hạn."
   }
 }
