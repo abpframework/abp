@@ -32,13 +32,13 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   providers: [SubscriptionService],
 })
 export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
-  private confirmationService = inject(ConfirmationService);
-  private modal = inject(NgbModal);
-  private modalRefService = inject(ModalRefService);
-  private suppressUnsavedChangesWarningToken = inject(SUPPRESS_UNSAVED_CHANGES_WARNING, {
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly modal = inject(NgbModal);
+  protected readonly modalRefService = inject(ModalRefService);
+  protected readonly suppressUnsavedChangesWarningToken = inject(SUPPRESS_UNSAVED_CHANGES_WARNING, {
     optional: true,
   });
-  private destroyRef = inject(DestroyRef);
+  protected readonly destroyRef = inject(DestroyRef);
 
   visible = model<boolean>(false);
 
@@ -108,7 +108,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     }
   }
 
-  private toggle(value: boolean) {
+  protected toggle(value: boolean) {
     this.visible.set(value);
 
     if (!value) {
