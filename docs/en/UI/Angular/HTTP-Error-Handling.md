@@ -5,22 +5,20 @@
 ABP offers a configurations for errors handling like below
 
 ```ts
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { provideAbpThemeShared, withHttpErrorConfig } from '@abp/ng.theme.shared';
 import { MyCustomRouteErrorComponent } from './my-custom-route.component';
 
 @NgModule({
-  imports: [
-    ThemeSharedModule.forRoot({
-      httpErrorConfig: {
-        skipHandledErrorCodes: [403],
-        errorScreen: {
-          forWhichErrors: [404],
-          component: CustomErrorComponent,
-          hideCloseIcon: false
-        }
+  providers: [
+    // ...
+    provideAbpThemeShared(withHttpErrorConfig({
+      skipHandledErrorCodes: [403],
+      errorScreen: {
+        forWhichErrors: [404],
+        component: MyCustomRouteErrorComponent,
+        hideCloseIcon: false
       }
-    }),
-    ...
+    })),
   ],
 })
 export class AppModule {}

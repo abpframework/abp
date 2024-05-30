@@ -30,7 +30,6 @@ export class AppComponent {
 
 ![Example Usage](./images/component-replacement.gif)
 
-
 ## How to Replace a Layout
 
 Each ABP theme module has 3 layouts named `ApplicationLayoutComponent`, `AccountLayoutComponent`, `EmptyLayoutComponent`. These layouts can be replaced the same way.
@@ -88,11 +87,13 @@ This component should have a 'router-outlet' for dynamic content loading. You ca
 ```bash
 ng generate component new-layout
 ```
+
 This command will create a new component named `new-layout`. Now, open the new-layout.component.html file and add a `router-outlet` to it:
 
 ```html
-  <router-outlet></router-outlet>
+<router-outlet></router-outlet>
 ```
+
 This 'router-outlet' will act as a placeholder that Angular dynamically fills based on the current router state.
 
 note: (don't forget: you should add the app in the app.module.ts file)
@@ -103,10 +104,11 @@ Although this step is optional, it can be useful if you're going to use the layo
 
 ```javascript
 export const eCustomLayout = {
-    key: 'CustomLayout',
-    component: 'CustomLayoutComponent',
+  key: "CustomLayout",
+  component: "CustomLayoutComponent",
 };
 ```
+
 In this variable, `key` is a unique identifier for the layout component, and `component` is the name of the layout component.
 You can use this variable when you need to refer to the layout component.
 
@@ -120,19 +122,24 @@ Here's how you can do it:
 
 ```javascript
 export const CUSTOM_LAYOUT_PROVIDERS = [
-    { provide: APP_INITIALIZER, useFactory: configureLayoutFn, deps: [ReplaceableComponentsService], multi: true },
-    
+  {
+    provide: APP_INITIALIZER,
+    useFactory: configureLayoutFn,
+    deps: [ReplaceableComponentsService],
+    multi: true,
+  },
 ];
 function configureLayoutFn() {
-    const service= inject( ReplaceableComponentsService)
-    return () =>{
-        service.add({
-            key: eCustomLayout.component,
-            component: CustomLayoutComponent,
-        })
-    }
+  const service = inject(ReplaceableComponentsService);
+  return () => {
+    service.add({
+      key: eCustomLayout.component,
+      component: CustomLayoutComponent,
+    });
+  };
 }
 ```
+
 In this code, `configureLayoutFn` is a factory function that adds the new layout component to the `ReplaceableComponentsService`. The `APP_INITIALIZER` provider runs this function when the application starts.
 
 note: (don't forget: you should add the CUSTOM_LAYOUT_PROVIDERS in the app.module.ts file)
@@ -149,34 +156,31 @@ export const myDynamicLayouts = new Map<string, string>([...DEFAULT_DYNAMIC_LAYO
 
 #### Step 5: Pass the Dynamic Layouts to the CoreModule
 
-The final step is to pass the dynamic layouts to the `CoreModule` using the `forRoot` method. This method allows you to configure the module with a static method.
+The final step is to pass the dynamic layouts to the `provideAbpCore` using the `withOptions` method. This method allows you to configure the module with a static method.
 
 Here's how you can do it:
 
-```javascript
+```ts
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    // other imports...
-    CoreModule.forRoot({
-      dynamicLayouts: myDynamicLayouts,
-      environment,
-      registerLocaleFn: registerLocale(),
-    }),
-    // other imports...
-    NewLayoutComponent
+  providers: [
+    // ...
+    provideAbpCore(
+      withOptions({
+        dynamicLayouts: myDynamicLayouts,
+        environment,
+        registerLocaleFn: registerLocale(),
+      }),
+    ),
   ],
-  providers: [APP_ROUTE_PROVIDER, CUSTOM_LAYOUT_PROVIDERS],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
-In this code, `myDynamicLayouts` is the map of dynamic layouts you defined earlier. We pass this map to the `CoreModule` using the `forRoot` method. 
 
+In this code, `myDynamicLayouts` is the map of dynamic layouts you defined earlier. We pass this map to the `provideAbpCore` using the `withOptions` method.
 
 Now that you have defined the new layout, you can use it in the router definition. You do this by adding a new route that uses the new layout.
 
-Here's how you can do it: 
+Here's how you can do it:
 
 ```javascript
 // route.provider.ts
@@ -221,14 +225,13 @@ Run the following command in `angular` folder to create a new component called `
 yarn ng generate component logo --inlineTemplate --inlineStyle
 ```
 
-
 Open the generated `logo.component.ts` in `src/app/logo` folder and replace its content with the following:
 
 ```js
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-logo',
+  selector: "app-logo",
   template: `
     <a class="navbar-brand" routerLink="/">
       <!-- Change the img src -->
@@ -284,14 +287,14 @@ yarn ng generate component routes
 Open the generated `routes.component.ts` in `src/app/routes` folder and replace its content with the following:
 
 ```js
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding } from "@angular/core";
 
 @Component({
-  selector: 'app-routes',
-  templateUrl: 'routes.component.html',
+  selector: "app-routes",
+  templateUrl: "routes.component.html",
 })
 export class RoutesComponent {
-  @HostBinding('class.mx-auto')
+  @HostBinding("class.mx-auto")
   marginAuto = true;
 
   get smallScreen() {
@@ -321,11 +324,14 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
 <ul class="navbar-nav">
   <li class="nav-item">
     <a class="nav-link" routerLink="/"
-      ><i class="fas fa-home"></i> {%{{{ '::Menu:Home' | abpLocalization }}}%}</a
+      ><i class="fas fa-home"></i> {%{{{ '::Menu:Home' | abpLocalization
+      }}}%}</a
     >
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/my-page"><i class="fas fa-newspaper mr-1"></i>My Page</a>
+    <a class="nav-link" routerLink="/my-page"
+      ><i class="fas fa-newspaper mr-1"></i>My Page</a
+    >
   </li>
   <li
     #navbarRootDropdown
@@ -338,7 +344,11 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
         : (navbarRootDropdown.expand = true)
     "
   >
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+    <a
+      class="nav-link dropdown-toggle"
+      data-toggle="dropdown"
+      href="javascript:void(0)"
+    >
       <i class="fas fa-wrench"></i>
       {%{{{ 'AbpUiNavigation::Menu:Administration' | abpLocalization }}}%}
     </a>
@@ -401,7 +411,8 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
             class="btn d-block text-start dropdown-toggle"
           >
             <i class="fa fa-users"></i>
-            {%{{{ 'AbpTenantManagement::Menu:TenantManagement' | abpLocalization }}}%}
+            {%{{{ 'AbpTenantManagement::Menu:TenantManagement' | abpLocalization
+            }}}%}
           </a>
         </div>
         <div
@@ -409,7 +420,10 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
           class="dropdown-menu border-0 shadow-sm"
           [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
         >
-          <div class="dropdown-submenu" *abpPermission="'AbpTenantManagement.Tenants'">
+          <div
+            class="dropdown-submenu"
+            *abpPermission="'AbpTenantManagement.Tenants'"
+          >
             <a class="dropdown-item" routerLink="/tenant-management/tenants">
               {%{{{ 'AbpTenantManagement::Tenants' | abpLocalization }}}%}</a
             >
@@ -554,7 +568,11 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
 
 ```html
 <ul class="navbar-nav">
-  <input type="search" placeholder="Search" class="bg-transparent border-0 text-white" />
+  <input
+    type="search"
+    placeholder="Search"
+    class="bg-transparent border-0 text-white"
+  />
   <li class="nav-item d-flex align-items-center">
     <div
       *ngIf="(dropdownLanguages$ | async)?.length > 0"
@@ -592,9 +610,9 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
   </li>
   <li class="nav-item d-flex align-items-center">
     <ng-template #loginBtn>
-      <a role="button" class="nav-link pointer" (click)="navigateToLogin()">{%{{{
-        'AbpAccount::Login' | abpLocalization
-      }}}%}</a>
+      <a role="button" class="nav-link pointer" (click)="navigateToLogin()"
+        >{%{{{ 'AbpAccount::Login' | abpLocalization }}}%}</a
+      >
     </ng-template>
     <div
       *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn"
@@ -614,8 +632,7 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         aria-expanded="false"
       >
         <small *ngIf="(selectedTenant$ | async)?.name as tenantName"
-          ><i>{%{{{ tenantName }}}%}</i
-          >\</small
+          ><i>{%{{{ tenantName }}}%}</i>\</small
         >
         <strong>{%{{{ (currentUser$ | async)?.userName }}}%}</strong>
       </a>
@@ -625,10 +642,12 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
         <a class="dropdown-item pointer" (click)="navigateToManageProfile()"
-          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::MyAccount' | abpLocalization }}}%}</a
+          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::MyAccount' |
+          abpLocalization }}}%}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
-          ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a
+          ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' |
+          abpLocalization }}}%}</a
         >
       </div>
     </div>
