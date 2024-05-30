@@ -456,13 +456,13 @@ else
                     var post = Model.PostsList[index];
                     <div class="post-item">
                         <div class="post-type-cont">
-                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})" class="text-decoration-none">
+                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" class="text-decoration-none">
                                 <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
                             </a>                           
                         </div>
                         <div class="post-detail-cont">
                             <div class="post-info fs-12 mb-2">
-                                <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})" class="text-decoration-none">
+                                <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" class="text-decoration-none">
                                     <span class="text-dark dot">@Model.Post.Writer.UserName</span>
                                 </a>
                                 <span class="text-dark-200">@post.CreationTime.ToString("MMMM yyyy")</span>
