@@ -80,12 +80,6 @@ You can also view and manage replies on this page.
 
 ![comments-detail](../../images/cmskit-module-comments-detail.png)
 
-## Settings
-
-You can configure the approval status of comments using the CmsKit Comment Options tab on the Settings page.
-
-![comments-settings](../../images/cmskit-module-comments-settings.png)
-
 ## Internals
 
 ### Domain Layer
