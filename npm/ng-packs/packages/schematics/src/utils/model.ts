@@ -71,23 +71,30 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
       model.interfaces.forEach(_interface => {
         const { baseType } = types[_interface.ref];
 
-        if (baseType && parseNamespace(solution, baseType) !== model.namespace){
+        if (baseType && parseNamespace(solution, baseType) !== model.namespace) {
           const baseTypeWithGenericParams = parseBaseTypeWithGenericTypes(baseType);
           baseTypeWithGenericParams.forEach(t => {
             toBeImported.push({
               type: t,
               isEnum: false,
             });
-          })
+          });
+        }
 
-}
         [..._interface.properties, ..._interface.generics].forEach(prop => {
           prop.refs.forEach(ref => {
             const propType = types[ref];
-            if (!propType) return;
-            if (propType.isEnum) toBeImported.push({ type: ref, isEnum: true });
-            else if (parseNamespace(solution, ref) !== model.namespace)
+            if (!propType) {
+              return;
+            }
+
+            if (propType.isEnum) {
+              toBeImported.push({ type: ref, isEnum: true });
+            }
+
+            if (parseNamespace(solution, ref) !== model.namespace) {
               toBeImported.push({ type: ref, isEnum: false });
+            }
           });
         });
       });
@@ -176,20 +183,21 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return (prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired));
+  return prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired);
 }
 
-export function  parseBaseTypeWithGenericTypes(type: string): string[] {
+export function parseBaseTypeWithGenericTypes(type: string): string[] {
   const parsedTypeNode = parseGenerics(type);
-  const nodeToText = (node: TypeNode,acc:string[] = []): string[] => {
 
+  const nodeToText = (node: TypeNode, acc: string[] = []): string[] => {
     acc.push(node.data);
-    if(node.children && node.children.length > 0){
+    if (node.children && node.children.length > 0) {
       node.children.forEach(child => {
-        nodeToText(child,acc);
-      })
+        nodeToText(child, acc);
+      });
     }
     return acc;
-  }
+  };
+
   return nodeToText(parsedTypeNode);
 }

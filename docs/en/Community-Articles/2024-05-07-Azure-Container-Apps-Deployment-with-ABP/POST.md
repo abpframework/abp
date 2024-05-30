@@ -40,9 +40,10 @@ Secondly, create a new Azure Container Apps Job resource to migrate the database
 ConnectionStrings__Default - Server=tcp:demoabpapp.database.windows.net,1433;Initial Catalog=mvcapppro;Persist Security Info=False;User ID=demoapppro;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
 
 OpenIddict__Applications__mvcapppro_Web__RootUrl - https://mvcwebapp.victoriousgrass-8b06438d.northeurope.azurecontainerapps.io
+```
 
 To get ConnectionStrings of Sql Database and url of the web app, you can navigate to the Azure portal and check the properties of the Azure SQL database and Azure Container Apps resource.
-```
+
 
 ![Azure SQL Database Connection Strings](azure-sql-database-connection-strings.png)
 

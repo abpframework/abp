@@ -1058,7 +1058,6 @@
     "AbpStudio_Description": "ABP Studio hala geliştirme aşamasında. İlk kullanıcılardan biri olmak için aşağıdaki formu doldurabilirsiniz.",
     "AbpStudio_Description1": "ABP Studio, ABP geliştiricileri için <span class=\"text-highlight-white\">çok platformlu masaüstü uygulamasıdır</span>.",
     "AbpStudio_Description2": "ABP Studio, ABP Framework'e <span class=\"text-highlight-white\">iyi entegre edilmiştir</span> ve sizin için işleri <span class=\"text-highlight-white\">otomatikleştirerek, projeniz hakkında bilgi sağlayarak</span>, projelerinizi <span class=\"text-highlight-white\">geliştirmeyi, çalıştırmayı</span> ve <span class=\"text-highlight-white\">dağıtımını</span> çok daha kolay hale getirmeyi amaçlamaktadır.",
-    "AbpStudio_ComingSoon": "Yakında <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Planlanan beta sürüm tarihi: 2023'ün 4. çeyreği.</span>",
     "AbpStudio_PlannedPreviewDate": "Planlanan beta sürüm tarihi: 2023'ün 4. çeyreği.",
     "BetaRequest": "Beta Talebi",
     "CreateNewSolutions": "Yeni Projeler Oluştur",
@@ -1140,6 +1139,7 @@
     "RemoveBasket": "Sepetten kaldır",
     "TrainingPack": "Eğitim paketi",
     "TrainingPackDiscount": "Eğitim paketi indirimi",
-    "LinkExpiredMessage": "Ödeme bağlantısının süresi doldu! Bağlantıyı güncellemek için <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> adresinden bizimle iletişime geçin veya iletişim sayfasına gitmek için  <a href='https://commercial.abp.io/contact'>buraya</a> tıklayın."
+    "LinkExpiredMessage": "Ödeme bağlantısının süresi doldu! Bağlantıyı güncellemek için <a href='mailto:sales@volosoft.com'>sales@volosoft.com</a> adresinden bizimle iletişime geçin veya iletişim sayfasına gitmek için  <a href='https://commercial.abp.io/contact'>buraya</a> tıklayın.",
+    "AbpStudio_ComingSoon": "ABP Studio'yu herkesten önce test etmek istiyorsanız BETA test kullanıcısı olun"
   }
 }

@@ -41,13 +41,13 @@ yarn add @abp/ng.identity
 
 As of ABP v3.0, every lazy-loaded module has a config module available via a secondary entry point on the same package. Importing them in your root module looks like this:
 
-```js
-import { IdentityConfigModule } from "@abp/ng.identity/config";
+```ts
+import { provideIdentityConfig } from "@abp/ng.identity/config";
 
 @NgModule({
-  imports: [
+  providers: [
     // other imports
-    IdentityConfigModule.forRoot(),
+    provideIdentityConfig(),
   ],
   // providers, declarations, and bootstrap
 })

@@ -256,3 +256,5 @@ host/Volo.CmsKit.IdentityServer/Logs/logs.txt
 host/Volo.CmsKit.HttpApi.Host/Logs/logs.txt
 host/Volo.CmsKit.Web.Host/Logs/logs.txt
 host/Volo.CmsKit.Web.Unified/Logs/logs.txt
+
+**/wwwroot/libs/**
