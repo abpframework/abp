@@ -12,12 +12,10 @@ public class CommentAdminAppService_Tests : CmsKitApplicationTestBase
 {
     private readonly ICommentAdminAppService _commentAdminAppService;
     private readonly CmsKitTestData _cmsKitTestData;
-    private readonly ISettingManager _settingManager;
     public CommentAdminAppService_Tests()
     {
         _commentAdminAppService = GetRequiredService<ICommentAdminAppService>();
         _cmsKitTestData = GetRequiredService<CmsKitTestData>();
-        _settingManager = GetRequiredService<ISettingManager>();
     }
 
     [Fact]

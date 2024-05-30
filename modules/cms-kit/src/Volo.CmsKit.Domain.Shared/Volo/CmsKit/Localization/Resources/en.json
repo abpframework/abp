@@ -233,15 +233,15 @@
         "CmsKitCommentOptions:RequireApprovement": "Require approval for comments",
         "CmsKitCommentOptions:RequireApprovementDescription": "When enabled, comments will require approval before being published.",
         "CommentFilter:ApproveState":"Approve State",
-        "CommentFilter:All":"All",
-        "CommentFilter:Approved":"Approved",
-        "CommentFilter:Disapproved":"Disapproved",
-        "CommentFilter:Waiting":"Waiting",
+        "CommentFilter:0":"All",
+        "CommentFilter:1":"Approved",
+        "CommentFilter:2":"Disapproved",
+        "CommentFilter:4":"Waiting",
         "ApprovedSuccessfully":"Approved Successfully",
         "ApprovalRevokedSuccessfully":"Approval Revoked Successfully",
         "Approve":"Approve",
         "Disapproved":"Disapproved",
         "CommentAlertMessage":"There are {0} comments waiting for approval",
-        "Menu:CmsKitCommentOptions":"CmsKit Comment Options"
+        "Settings:Menu:CmsKit":"CmsKit Comment Options"
     }
 }

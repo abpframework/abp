@@ -63,10 +63,10 @@
                         <div class="mb-3" id="IsApprovedSelectInput">
                             <label class="mb-1" for="IsApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
                             <select id="IsApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
-                                <option value="@CommentApproveState.All">@L["CommentFilter:All"].Value</option>
-                                <option value="@CommentApproveState.Approved">@L["CommentFilter:Approved"].Value</option>
-                                <option value="@CommentApproveState.Disapproved">@L["CommentFilter:Disapproved"].Value</option>
-                                <option value="@CommentApproveState.Waiting">@L["CommentFilter:Waiting"].Value</option>
+                                @foreach (var status in (CommentApproveState[])Enum.GetValues(typeof(CommentApproveState)))
+                                {
+                                    <option value="@((int)status)">@L["CommentFilter:" + (int)status]</option>
+                                }
                             </select>
                         </div>
                     </abp-column>
