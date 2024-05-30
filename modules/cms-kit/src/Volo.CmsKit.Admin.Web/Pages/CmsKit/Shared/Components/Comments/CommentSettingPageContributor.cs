@@ -20,7 +20,7 @@ public class CommentSettingPageContributor : SettingPageContributorBase
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<CmsKitResource>>();
         context.Groups.Add(
             new SettingPageGroup(
-                "Volo.Abp.CmsKitPro",
+                "Volo.Abp.CmsKit",
                 l["Settings:Menu:CmsKit"],
                 typeof(CommentSettingViewComponent)
             )

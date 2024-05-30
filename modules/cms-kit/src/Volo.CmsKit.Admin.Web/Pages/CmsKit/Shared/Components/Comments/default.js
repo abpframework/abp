@@ -14,7 +14,7 @@
         };
 
         var _bindEvents = function () {
-            $('#save').click(function () {
+            $('#Save').click(function () {
                 var isChecked = $('#RequireApprovementCheckbox').prop('checked');
                 _service.updateSettings({ commentRequireApprovement: isChecked }).then(function (response) {
                     abp.notify.success(l("SavedSuccessfully"));

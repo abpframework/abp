@@ -6,26 +6,31 @@
         <abp-script src="/Pages/CmsKit/Shared/Components/Comments/default.js"></abp-script>
     </abp-script-bundle>
 }
+
 @{
     @inject IHtmlLocalizer<CmsKitResource> L
 
-    <abp-form id="deneme1" form="CmsKitCommentSettingsForm">
-        <h4>@L["CmsKitCommentOptions:Title"].Value</h4>
-        <hr />
-        <div class="form-group">
-            <div class="form-check">
-                <input type="checkbox" id="RequireApprovementCheckbox" class="form-check-input"/>
-                <label for="checkbox" class="form-check-label">@L["CmsKitCommentOptions:RequireApprovement"].Value</label>
-            </div>
-            <small id="checkboxHelp" class="form-text text-muted">@L["CmsKitCommentOptions:RequireApprovementDescription"].Value</small>
-        </div>
-
-        <div style="float:right" class="text-right mt-3">
-            <abp-button id="save" type="submit" class="btn btn-primary">
-                @L["SaveChanges"].Value
-            </abp-button>
-        </div>
-    </abp-form>
+    <abp-tabs>
+        <abp-tab active="true" title="@L["CmsKit:Comment"].Value">
+            <abp-form id="CmsKitCommentSettingsForm">
+                <abp-row>
+                    <abp-column size-md="_12">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="RequireApprovementCheckbox" class="form-check-input"/>
+                                <label for="RequireApprovementCheckbox" class="form-check-label">@L["CmsKitCommentOptions:RequireApprovement"].Value</label>
+                            </div>
+                            <small class="form-text text-muted">@L["CmsKitCommentOptions:RequireApprovementDescription"].Value</small>
+                            <hr class="my-4"/>
+                            <div>
+                                <abp-button id="Save" button-type="Primary" type="submit">
+                                    <i class="fa fa-save"></i> @L["Save"]
+                                </abp-button>
+                            </div>
+                        </div>
+                    </abp-column>
+                </abp-row>
+            </abp-form>
+        </abp-tab>
+    </abp-tabs>
 }
-
-
