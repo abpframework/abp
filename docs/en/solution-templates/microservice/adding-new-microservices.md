@@ -22,7 +22,7 @@ The new microservice is created and added to the solution. You can see the new m
 
 ![product-microservice](images/product-microservice.png)
 
-## Configuring the appsettings.json
+### Configuring the appsettings.json
 
 The new microservice is created with the necessary configurations and dependencies.We should configure the several sections by modifying the `appsettings.json` file. 
  * We should set the `Administration` & `AbpBlobStoring` connection strings.
@@ -84,7 +84,7 @@ You can copy the configurations from the existing microservices and modify them 
 }
 ```
 
-## Configuring the OpenId Options
+### Configuring the OpenId Options
 
 We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `ProductService` microservice.
 
@@ -187,3 +187,85 @@ private async Task CreateClientsAsync()
     );
 }
 ```
+
+Add the new service URL to the `appsettings.json` file in the `Identity` service.
+
+```json
+"OpenIddict": {
+  "Applications": {
+    ...
+  },
+  "Resources": {
+    ...
+    "ProductService": {
+      "RootUrl": "http://localhost:44350"
+    }
+  }
+}
+```
+
+
+### Configuring the AuthServer
+
+We should configure the AuthServer for *CORS* and *RedirectAllowedUrls*.
+
+```json
+"App": {
+  "SelfUrl": "http://localhost:***",
+  "CorsOrigins": "...... ,http://localhost:44350",
+  "EnablePII": false,
+  "RedirectAllowedUrls": "...... ,http://localhost:44350"
+}
+```
+
+### Configuring the API Gateway
+
+We should configure the API Gateway to allow the web gateway to access the new microservice. First, we should add the *ProductService* sections to the `appsettings.json` file in the `WebGateway` service.
+
+```json
+"ReverseProxy": {
+    "Routes": {
+      ...
+      "ProductService": {
+        "ClusterId": "ProductService",
+        "Match": {
+          "Path": "/api/productservice/{**catch-all}"
+        }
+      },
+      "ProductServiceSwagger": {
+        "ClusterId": "ProductService",
+        "Match": {
+          "Path": "/swagger-json/ProductService/swagger/v1/swagger.json"
+        },
+        "Transforms": [
+          { "PathRemovePrefix": "/swagger-json/ProductService" }
+        ]
+      }
+    },
+    "Clusters": {
+      ...
+      "ProductService": {
+        "Destinations": {
+          "ProductService": {
+            "Address": "http://localhost:44350/"
+          }
+        }
+      }
+    }
+}
+```
+
+Afterwards open the `ProjectNameWebGatewayModule` class in the `WebGateway` service and add the `ProductService` to the `ConfigureSwaggerUI` method.
+
+```csharp
+options.OAuthScopes(
+    "AdministrationService",
+    "AuthServer",
+    "IdentityService",
+    "ProductService" // new service
+);
+```
+
+## Creating Helm Chart for the New Microservice
+
+## Customizing the Microservice Template
