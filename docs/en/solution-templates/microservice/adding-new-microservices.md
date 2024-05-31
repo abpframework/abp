@@ -10,7 +10,7 @@ In ABP Studio [Solution Explorer](../../studio/solution-explorer.md#adding-a-new
 
 ![new-microservice](images/new-microservice.png)
 
-It opens the `Create New Module` dialog. Enter the name of the new microservice, you can specify the output directory, and click the `Next` button.
+It opens the `Create New Module` dialog. Enter the name of the new microservice, you can specify the output directory, and click the `Next` button. There is a name convention the *Module name* includes the solution name as a prefix, and the use of the dot(.) character in the *Module name* is not allowed.
 
 ![create-new-module](images/create-new-module.png)
 
@@ -21,3 +21,169 @@ Select the database provider and click the `Create` button.
 The new microservice is created and added to the solution. You can see the new microservice in the `services` folder.
 
 ![product-microservice](images/product-microservice.png)
+
+## Configuring the appsettings.json
+
+The new microservice is created with the necessary configurations and dependencies.We should configure the several sections by modifying the `appsettings.json` file. 
+ * We should set the `Administration` & `AbpBlobStoring` connection strings.
+ * We should set the correct `StringEncryption` key.
+ * We should set the `CorsOrigins` to allow the web gateway to access the microservice.
+ * We should set the `AuthServer` configurations to enable the microservice to authenticate and authorize the users.
+
+You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `appsettings.json` file for the `ProductService` microservice.
+
+```json
+{
+  "ConnectionStrings": {
+    "Administration": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_Administration; TrustServerCertificate=true",
+    "AbpBlobStoring": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_BlobStoring; TrustServerCertificate=true",
+    "ProductService": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_ProductService; TrustServerCertificate=true"
+  },
+  "App": {
+    "CorsOrigins": "http://localhost:44333",
+    "EnablePII": false
+  },
+  "Swagger": {
+    "IsEnabled": true
+  },
+  "AuthServer": {
+    "Authority": "http://localhost:44387",
+    "MetaAddress": "http://localhost:44387",
+    "RequireHttpsMetadata": "false",
+    "SwaggerClientId": "SwaggerTestUI",
+    "Audience": "ProductService"
+  },
+  "Redis": {
+    "Configuration": "localhost:6379"
+  },
+  "RabbitMQ": {
+    "Connections": {
+      "Default": {
+        "HostName": "localhost"
+      }
+    },
+    "EventBus": {
+      "ClientName": "Bookstore_ProductService",
+      "ExchangeName": "Bookstore"
+    }
+  },
+  "AbpDistributedCache": {
+    "KeyPrefix": "Bookstore:"
+  },
+  "DataProtection": {
+    "ApplicationName": "Bookstore",
+    "Keys": "Bookstore-Protection-Keys"
+  },
+  "ElasticSearch": {
+    "IsLoggingEnabled": "true",
+    "Url": "http://localhost:9200"
+  },
+  "StringEncryption": {
+    "DefaultPassPhrase": "PDAWjbshpwlOwNB6"
+  }
+}
+```
+
+## Configuring the OpenId Options
+
+We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `ProductService` microservice.
+
+Create API scopes and add the requested API scope for swagger clients in the `CreateApiScopesAsync` and `CreateSwaggerClientsAsync` methods in the `OpenIddictDataSeeder` class.
+
+```csharp
+private async Task CreateApiScopesAsync()
+{
+    await CreateScopesAsync("AuthServer");
+    await CreateScopesAsync("IdentityService");
+    await CreateScopesAsync("AdministrationService");
+    await CreateScopesAsync("ProductService"); // new service
+}
+
+private async Task CreateSwaggerClientsAsync()
+{
+    await CreateSwaggerClientAsync("SwaggerTestUI", new[]
+    {
+        "AuthServer",
+        "IdentityService",
+        "AdministrationService",
+        "ProductService" // new service
+    });
+}
+```
+
+Add redirect URL for the new service in the `CreateSwaggerClientAsync` method.
+
+```csharp
+private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
+{
+    ...
+    ...
+    ...
+    var administrationServiceRootUrl = _configuration["OpenIddict:Resources:AdministrationService:RootUrl"]!.TrimEnd('/');
+    var productServiceServiceRootUrl = _configuration["OpenIddict:Resources:ProductService:RootUrl"]!.TrimEnd('/'); // new service
+
+    await CreateOrUpdateApplicationAsync(
+        name: clientId,
+        type:  OpenIddictConstants.ClientTypes.Public,
+        consentType: OpenIddictConstants.ConsentTypes.Implicit,
+        displayName: "Swagger Test Client",
+        secret: null,
+        grantTypes: new List<string>
+        {
+            OpenIddictConstants.GrantTypes.AuthorizationCode,
+        },
+        scopes: commonScopes.Union(scopes).ToList(),
+        redirectUris: new List<string> {
+            $"{webGatewaySwaggerRootUrl}/swagger/oauth2-redirect.html",
+            $"{authServerRootUrl}/swagger/oauth2-redirect.html",
+            $"{identityServiceRootUrl}/swagger/oauth2-redirect.html",
+            $"{administrationServiceRootUrl}/swagger/oauth2-redirect.html",
+            $"{productServiceServiceRootUrl}/swagger/oauth2-redirect.html", // new service
+        }
+    );
+}
+```
+
+Add allowed scope for the web (front-end) application(s) in the `CreateClientsAsync` method. You might have different clients for different UI applications such as web, angular, react, etc. You should add the new service to the allowed scopes of the clients.
+
+```csharp
+private async Task CreateClientsAsync()
+{
+    var commonScopes = new List<string>
+    {
+        OpenIddictConstants.Permissions.Scopes.Address,
+        OpenIddictConstants.Permissions.Scopes.Email,
+        OpenIddictConstants.Permissions.Scopes.Phone,
+        OpenIddictConstants.Permissions.Scopes.Profile,
+        OpenIddictConstants.Permissions.Scopes.Roles
+    };
+
+    //Web Client
+    var webClientRootUrl = _configuration["OpenIddict:Applications:Web:RootUrl"]!.EnsureEndsWith('/');
+    await CreateOrUpdateApplicationAsync(
+        name: "Web",
+        type: OpenIddictConstants.ClientTypes.Confidential,
+        consentType: OpenIddictConstants.ConsentTypes.Implicit,
+        displayName: "Web Client",
+        secret: "1q2w3e*",
+        grantTypes: new List<string>
+        {
+            OpenIddictConstants.GrantTypes.AuthorizationCode,
+            OpenIddictConstants.GrantTypes.Implicit
+        },
+        scopes: commonScopes.Union(new[]
+        {
+            "AuthServer", 
+            "IdentityService",
+            "SaasService",
+            "AuditLoggingService",
+            "AdministrationService",
+            "ProductService" // new service
+        }).ToList(),
+        redirectUris: new List<string> { $"{webClientRootUrl}signin-oidc" },
+        postLogoutRedirectUris: new List<string>() { $"{webClientRootUrl}signout-callback-oidc" },
+        clientUri: webClientRootUrl,
+        logoUri: "/images/clients/aspnetcore.svg"
+    );
+}
+```
