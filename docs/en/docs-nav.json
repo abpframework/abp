@@ -1622,6 +1622,19 @@
       ]
     },
     {
+      "text": "UI Themes",
+      "items": [
+        {
+          "text": "The Basic Theme",
+          "path": "framework/ui/mvc-razor-pages/basic-theme.md"
+        },
+        {
+          "text": "LeptonX Theme",
+          "path": "ui-themes/lepton-x/index.md"
+        }
+      ]
+    },
+    {
       "text": "Testing",
       "items": [
         {
