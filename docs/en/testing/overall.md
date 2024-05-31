@@ -1,5 +1,15 @@
 # Automated Testing
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Unit tests",
+    "Path": "testing/unit-tests"
+  }
+}
+````
+
 ## Introduction
 
 ABP has been designed with testability in mind. There are some different levels of automated testing;
@@ -24,7 +34,7 @@ We suggest to go mixed: Write unit or integration test where it is necessary and
 
 ## The Application Startup Template
 
-The [Application Startup Template](../solution-templates/layered-web-application) comes with the test infrastructure properly installed and configured for you.
+The [Application Startup Template](../solution-templates/layered-web-application/index.md) comes with the test infrastructure properly installed and configured for you.
 
 ### The Test Projects
 
@@ -36,8 +46,8 @@ There are more than one test project, organized by the layers;
 
 * `Domain.Tests` is used to test your Domain Layer objects (like [Domain Services](../framework/architecture/best-practices/domain-services.md) and [Entities](../framework/architecture/domain-driven-design/entities.md)).
 * `Application.Tests` is used to test your Application Layer (like [Application Services](../framework/architecture/domain-driven-design/application-services.md)).
-* `EntityFrameworkCore.Tests` is used to implement abstract test classes and test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](../framework/data)).
-* `Web.Tests` is used to test the UI Layer (like Pages, Controllers and View Components). This project does exists only for MVC / Razor Page applications.
+* `EntityFrameworkCore.Tests` is used to implement abstract test classes and test your custom repository implementations or EF Core mappings (this project will be different if you use another [Database Provider](../framework/data/index.md)).
+* `Web.Tests` is used to test the UI Layer (like Pages, Controllers and View Components). This project does only exist for MVC / Razor Page applications.
 * `TestBase` contains some classes those are shared/used by the other projects.
 
 > `HttpApi.Client.ConsoleTestApp` is not an automated test application. It is an example Console Application that shows how to consume your HTTP APIs from a .NET Console Application.
@@ -66,7 +76,7 @@ Open the *Test Explorer*, under the *Tests* menu, if it is not already open:
 
 ### Run the Tests
 
-Then you can click to the Run All or Run buttons to run the tests. The initial startup template has some sample tests for you: 
+Then you can click to the *Run All* or *Run* buttons to run the tests. The initial startup template has some sample tests for you: 
 
 ![vs-startup-template-tests](../images/vs-startup-template-tests.png)
 

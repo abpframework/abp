@@ -1,10 +1,24 @@
 # Integration Tests
 
+````json
+//[doc-nav]
+{  
+  "Previous": {
+    "Name": "Unit tests",
+    "Path": "testing/unit-tests"
+  },
+  "Next": {
+    "Name": "UI tests",
+    "Path": "testing/ui-tests"
+  }
+}
+````
+
 > You can also follow the [web application development tutorial](../tutorials/book-store/part-01.md) to learn developing a full stack application, including the integration tests.
 
 ## The Integration Test Infrastructure
 
-ABP Provides a complete infrastructure to write integration tests. All the ABP infrastructure and services will perform in your tests. The application startup template comes with the necessary infrastructure pre-configured for you;
+ABP provides a complete infrastructure to write integration tests. All the ABP infrastructure and services will perform in your tests. The application startup template comes with the necessary infrastructure pre-configured for you;
 
 ### The Database
 
@@ -96,15 +110,15 @@ namespace MyProject
 }
 ````
 
-In this way, we can use these known Issues and the User `Id`s to perform the tests.
+In this way, we can use these known *Issues* and the Users' `Id`s to perform the tests.
 
 ## Example: Testing a Domain Service
 
 `AbpIntegratedTest<T>` class (defined in the [Volo.Abp.TestBase](https://www.nuget.org/packages/Volo.Abp.TestBase) package) is used to write tests integrated to the ABP. `T` is the Type of the root module to setup and initialize the application.
 
-The application startup template has base classes in each test project, so you can derive from these base classes to make it easier.
+The [application startup template](../solution-templates/index.md) has base classes in each test project, so you can derive from these base classes to make it easier.
 
-See the `IssueManager` tests are re-written as integration tests
+See the `IssueManager` tests are re-written as integration tests:
 
 ````csharp
 using System.Threading.Tasks;
@@ -194,7 +208,7 @@ namespace MyProject.Issues
 }
 ````
 
-*(assuming you've also defined the `IIssueAppService` and `IssueDto` and created the [object mapping](../framework/infrastructure/object-to-object-mapping.md) between `Issue` and the `IssueDto`)*
+> *(assuming you've also defined the `IIssueAppService` and `IssueDto` and created the [object mapping](../framework/infrastructure/object-to-object-mapping.md) between `Issue` and the `IssueDto`)*
 
 Now, you can write a test class inside the `.Application.Tests` project:
 
@@ -234,7 +248,7 @@ It's that simple. This test method tests everything, including the application s
 
 ## Dealing with Unit of Work in Integration Tests
 
-ABP's [object mapping](../framework/architecture/domain-driven-design/unit-of-work.md) system controls the database connection and transaction management in your application. It seamlessly works while you writing your application code, so you may not aware of it.
+ABP's [Unit of Work](../framework/architecture/domain-driven-design/unit-of-work.md) system controls the database connection and transaction management in your application. It seamlessly works while you writing your application code, so you may not aware of it.
 
 In the ABP, all the database operations must be performed inside a unit of work scope. When you test an [application service](../framework/architecture/domain-driven-design/application-services.md) method, the unit of work scope will be the scope of your application service method. If you are testing a [repository](../framework/architecture/domain-driven-design/repositories.md) method, the unit of work scope will be the scope of your repository method.
 
@@ -329,7 +343,7 @@ There are multiple overloads of the `WithUnitOfWorkAsync` method that you can us
 
 ## Working with DbContext
 
-In some cases, you may want to directory work with the Entity Framework's `DbContext` object to perform database operations in your test methods. In this case, you can use `IDbContextProvider<T>`service to obtain a `DbContext` instance inside a unit of work.
+In some cases, you may want to directory work with the [Entity Framework's `DbContext` object](https://learn.microsoft.com/en-us/dotnet/api/system.data.entity.dbcontext) to perform database operations in your test methods. In this case, you can use `IDbContextProvider<T>`service to obtain a `DbContext` instance inside a unit of work.
 
 The following example shows how you can create a `DbContext` object in a test method:
 
@@ -363,7 +377,7 @@ public abstract class MyDbContext_Tests<TStartupModule> : MyProjectDomainTestBas
 
 Just like we've done in the *Dealing with Unit of Work in Integration Tests* section, we should perform `DbContext` operations inside an active unit of work.
 
-For [MongoDB](../framework/data/mongodb), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
+For [MongoDB](../framework/data/mongodb/index.md), you can use the `IMongoDbContextProvider<T>` service to obtain a `DbContext` object and directly use MongoDB APIs in your test methods.
 
 ## Implementing unit tests in EF Core and MongoDB
 
