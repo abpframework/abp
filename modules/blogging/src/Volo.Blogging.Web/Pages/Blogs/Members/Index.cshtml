@@ -9,9 +9,7 @@
 @inject IStringLocalizer<BloggingResource> L
 @inject ICurrentUser CurrentUser
 @{
-    //ViewBag.Title = @Model.User.UserName.ToUpper() + " - " + L["Blogs"].Value;
-    ViewBag.Title = L["Member_Page_Title",Model.User.UserName].Value;
-    ViewBag.Description = L["Member_Page_Description", Model.User.UserName].Value;
+    ViewBag.Title = @Model.User.UserName.ToUpper() + " - " + L["Blogs"].Value;
 }
 
 @section scripts {
