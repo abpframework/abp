@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "~8.1.2",
-    "@abp/virtual-file-explorer": "~8.1.2"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "~8.2.0-rc.3",
+    "@abp/virtual-file-explorer": "~8.2.0-rc.3"
   }
 }

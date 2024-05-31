@@ -11,15 +11,16 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
-    <PackageVersion Include="Asp.Versioning.Mvc" Version="7.1.0" />
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.300.2" />
     <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.2" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageVersion Include="Blazorise" Version="1.5.0" />
-    <PackageVersion Include="Blazorise.Components" Version="1.5.0" />
-    <PackageVersion Include="Blazorise.DataGrid" Version="1.5.0" />
-    <PackageVersion Include="Blazorise.Snackbar" Version="1.5.0" />
+    <PackageVersion Include="Blazorise" Version="1.5.2" />
+    <PackageVersion Include="Blazorise.Components" Version="1.5.2" />
+    <PackageVersion Include="Blazorise.DataGrid" Version="1.5.2" />
+    <PackageVersion Include="Blazorise.Snackbar" Version="1.5.2" />
     <PackageVersion Include="Castle.Core" Version="5.1.1" />
     <PackageVersion Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
     <PackageVersion Include="CommonMark.NET" Version="0.15.1" />
@@ -60,7 +61,6 @@
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
@@ -88,7 +88,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Composite" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.4" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.FileSystemGlobbing" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />

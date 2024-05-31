@@ -3,8 +3,8 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "~8.1.2",
-    "@abp/prismjs": "~8.1.2",
-    "@abp/highlight.js": "~8.1.2"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "~8.2.0-rc.3",
+    "@abp/prismjs": "~8.2.0-rc.3",
+    "@abp/highlight.js": "~8.2.0-rc.3"
   }
 }

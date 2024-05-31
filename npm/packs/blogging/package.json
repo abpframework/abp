@@ -1,14 +1,14 @@
 {
-  "version": "8.1.2",
+  "version": "8.2.0-rc.3",
   "name": "@abp/blogging",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "~8.1.2",
-    "@abp/owl.carousel": "~8.1.2",
-    "@abp/prismjs": "~8.1.2",
-    "@abp/tui-editor": "~8.1.2"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "~8.2.0-rc.3",
+    "@abp/owl.carousel": "~8.2.0-rc.3",
+    "@abp/prismjs": "~8.2.0-rc.3",
+    "@abp/tui-editor": "~8.2.0-rc.3"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

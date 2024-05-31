@@ -1,14 +1,14 @@
 {
   "name": "@abp/ng.oauth",
-  "version": "8.1.2",
+  "version": "8.2.0-rc.3",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.core": "~8.1.2",
-    "@abp/utils": "~8.1.2",
+    "@abp/ng.core": "~8.2.0-rc.3",
+    "@abp/utils": "~8.2.0-rc.3",
     "angular-oauth2-oidc": "^17.0.0",
     "just-clone": "^6.0.0",
     "just-compare": "^2.0.0",

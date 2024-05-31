@@ -28,6 +28,8 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
 
+    public DbSet<AppEntityWithNavigationsForeign> AppEntityWithNavigationsForeign { get; set; }
+
     public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
         : base(options)
     {
@@ -74,6 +76,7 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
             b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
             b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
+            b.HasOne<AppEntityWithNavigationsForeign>().WithMany().HasForeignKey(x => x.AppEntityWithNavigationForeignId).IsRequired(false);
         });
 
         modelBuilder.Entity<AppEntityWithNavigationChildOneToOne>(b =>
@@ -86,6 +89,11 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         {
             b.ConfigureByConvention();
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationChildOneToManyId);
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigationsForeign>(b =>
+        {
+            b.ConfigureByConvention();
         });
     }
 }
