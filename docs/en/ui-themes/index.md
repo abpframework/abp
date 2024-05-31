@@ -9,7 +9,7 @@ ABP provides a complete UI theming system. While you can build your own themes, 
 
 LeptonX theme has two versions:
 
-* [LeptonX Theme](lepton-x) is included in paid licenses.
+* [LeptonX Theme](lepton-x) is included in commercial licenses.
 * [LeptonX Lite Theme](lepton-x-lite) is provided as free.
 
 > If you are looking for the legacy Lepton Theme documentation, please [click here](lepton).

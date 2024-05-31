@@ -1,12 +1,23 @@
 # Release Notes
 
-This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check [the related milestone](https://github.com/abpframework/abp/milestones?state=closed) and [the change logs page](https://commercial.abp.io/releases) (only for paid license holders).
+This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check [the related milestone](https://github.com/abpframework/abp/milestones?state=closed) and [the change logs page](https://commercial.abp.io/releases) (only for commercial license holders).
 
 > If you want to read detailed release posts for each version, please see the [official ABP blog](https://blog.abp.io).
 
+## 8.2 (2024-05-25)
+
+> This version is currently in preview. The final release date is planned for July, 2024.
+
+See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-2-release-candidate)** for the v8.2 release.
+
+* Session Management
+* ABP Suite: File/Image Property
+* ABP Suite: DateOnly & TimeOnly Types
+* Periodic Log Deletion for Audit Logs
+
 ## 8.1 (2024-04-04)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-1-release-candidate)** for the v8.1 release.
+See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-1-stable-release)** for the v8.1 release.
 
 * ABP Suite: Bulk delete
 * ABP Suite: Filterable properties
