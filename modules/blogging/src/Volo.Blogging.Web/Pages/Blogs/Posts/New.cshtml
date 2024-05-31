@@ -8,6 +8,7 @@
 @model Volo.Blogging.Pages.Blogs.Posts.NewModel
 @{
     ViewBag.PageTitle = @L["NewBlogPost"];
+    ViewBag.Description = @L["NewBlogPostDescription"];
 }
 @section styles {
     <abp-style-bundle name="@typeof(NewModel).FullName">

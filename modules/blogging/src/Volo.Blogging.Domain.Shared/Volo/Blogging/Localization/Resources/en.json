@@ -87,6 +87,11 @@
     "Views": "views",
     "Biography": "biography",
     "Social": "Social",
-    "NewBlogPost" : "New Blog Post"
+    "NewBlogPost": "New Blog Post",
+    "NewBlogPostDescription": "Create a new blog post and share your knowledge and experience with ABP.",
+    "BlogPage_Title": "ABP Blog",
+    "BlogPageDescription": "Stay updated with the latest news, updates and insights about ABP Platform.",
+    "Member_Page_Title": "{0} - Blog Posts",
+    "Member_Page_Description": "{0} is a member of the ABP Blog community. Read his blog posts and benefit from this experience."
   }
 }

@@ -13,7 +13,8 @@
 @inject IStringLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @{
-    ViewBag.Title = "Read All Blog Posts";
+    ViewBag.Title = L["BlogPage_Title"].Value;
+    ViewBag.Description = L["BlogPageDescription"].Value;
     var blogShortNameRouteParam = Model.BlogOptions.SingleBlogMode.Enabled ? null : Model.BlogShortName;
 }
 @section scripts {
