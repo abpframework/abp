@@ -39,7 +39,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [gRPC Calls](grpc-calls.md)
 * [Helm Charts and Kubernetes](helm-charts-and-kubernetes.md)
 * Guides
-  * Adding new microservices
+  * [Adding new microservices](adding-new-microservices.md)
   * Adding new applications
   * Adding new API gateways
   * Mono-repo vs multiple repository approaches
