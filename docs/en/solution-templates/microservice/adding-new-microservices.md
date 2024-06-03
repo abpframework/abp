@@ -266,6 +266,45 @@ options.OAuthScopes(
 );
 ```
 
+### Configuring the UI Services
+
+We should configure the UI application(s) to allow the new microservice to access through the web gateway. To do this, we should add the new service scope to the `ConfigureAuthentication` method in the `ProjectNameWebModule` class in the `Web` or `Blazor` application.
+
+```csharp
+context.Services.AddAuthentication(options =>
+{
+	options.DefaultScheme = "Cookies";
+	options.DefaultChallengeScheme = "oidc";
+})
+.AddCookie("Cookies", options =>
+{
+	options.ExpireTimeSpan = TimeSpan.FromDays(365);
+})
+.AddAbpOpenIdConnect("oidc", options =>
+{
+	...
+	options.Scope.Add("AuthServer");
+	options.Scope.Add("IdentityService");
+	options.Scope.Add("AdministrationService");
+	options.Scope.Add("ProductService"); // new servie
+});
+```
+
+Similarly, if you have a Angular application, you should add the new service scope to the oAuthConfig in `envrionment.ts`:
+
+```typescript
+const baseUrl = 'http://localhost:4200';
+
+const oAuthConfig = {
+  issuer: 'http://localhost:44387',
+  redirectUri: baseUrl,
+  clientId: 'Angular',
+  responseType: 'code',
+  scope: 'openid profile email roles AuthServer IdentityService AdministrationService ProductService', // new service
+  requireHttps: false
+};
+```
+
 ## Creating Helm Chart for the New Microservice
 
 ## Customizing the Microservice Template
