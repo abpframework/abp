@@ -325,4 +325,89 @@ If you want to monitor the new microservice with Prometheus when you debug the s
 
 ## Creating Helm Chart for the New Microservice
 
+If you want to deploy the new microservice to Kubernetes, you should create a Helm chart for the new microservice. 
+
+First, we need to add the new microservice to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `build-all-images.ps1` script for the `ProductService` microservice.
+
+```powershell
+./build-image.ps1 -ProjectPath "../../services/administration/Acme.Bookstore.AdministrationService/Acme.Bookstore.AdministrationService.csproj" -ImageName bookstore/administration
+./build-image.ps1 -ProjectPath "../../services/product-service/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
+```
+
+Then, we need to add connection string to the `values.projectname.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore.yaml` file for the `ProductService` microservice.
+
+```yaml
+global:
+  ...
+  connectionStrings:
+    administration: "Server=[RELEASE_NAME]-sqlserver,1433; Database=Bookstore_Administration; User Id=sa; Password=myPassw@rd; TrustServerCertificate=True"
+    productService: "Server=[RELEASE_NAME]-sqlserver,1433; Database=Bookstore_ProductService; User Id=sa; Password=myPassw@rd; TrustServerCertificate=True"
+  ...
+```
+
+Afterwards, we need to create a new Helm chart for the new microservice. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `productservice` Helm chart for the `ProductService` microservice.
+
+```yaml
+# values.yaml
+image:
+  repository: "bookstore/productservice"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+swagger:
+  isEnabled: "true"
+
+# Chart.yaml
+apiVersion: v2
+name: productservice
+version: 1.0.0
+appVersion: "1.0"
+description: Bookstore Product Service
+
+# product.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+        ports:
+        - name: "http"
+          containerPort: 80
+        env:
+        - name: "DOTNET_ENVIRONMENT"
+          value: "{{ .Values.global.dotnetEnvironment }}"
+        - name: "ConnectionStrings__Administration"
+          value: "{{ .Values.global.connectionStrings.administration | replace "[RELEASE_NAME]" .Release.Name }}"
+        - name: "ConnectionStrings__AbpBlobStoring"
+          value: "{{ .Values.global.connectionStrings.blobStoring | replace "[RELEASE_NAME]" .Release.Name }}"
+        - name: "ConnectionStrings__ProductService"
+          value: "{{ .Values.global.connectionStrings.productService | replace "[RELEASE_NAME]" .Release.Name }}"
+          ...
+
+# product-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  ports:
+    - name: "80"
+      port: 80
+  selector:
+    app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+```
+
 ## Customizing the Microservice Template
