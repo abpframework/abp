@@ -629,6 +629,7 @@
     "Menu:HeroSections": "Hero Sections",
     "HeroSections": "Hero Sections",
     "DynamicReports": "Dynamic Reports",
-    "Menu:ReportsMenu": "Reports"
+    "Menu:ReportsMenu": "Reports",
+    "Permission:HeroSections": "Hero Sections"
   }
 }
