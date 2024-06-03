@@ -626,8 +626,8 @@
     "Menu:Others": "Others",
     "Menu:Packs&Modules": "Packs & Modules",
     "ReleaseCaches": "Release Cache",
-    "Menu:InfoSliderItems": "Info Slider Items",
-    "InfoSliderItems": "Info Slider Items",
+    "Menu:HeroSections": "Hero Sections",
+    "HeroSections": "Hero Sections",
     "DynamicReports": "Dynamic Reports",
     "Menu:ReportsMenu": "Reports"
   }
