@@ -630,6 +630,8 @@
     "HeroSections": "Hero Sections",
     "DynamicReports": "Dynamic Reports",
     "Menu:ReportsMenu": "Reports",
-    "Permission:HeroSections": "Hero Sections"
+    "Permission:HeroSections": "Hero Sections",
+    "RedirectLink": "Redirect link",
+    "HeroSectionsDeletionConfirmationMessage": "Are you sure you want to delete the hero section?"
   }
 }
