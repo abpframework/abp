@@ -178,6 +178,9 @@
                         }),
                         success: function () {
                             widgetManager.refresh($widget);
+                            if (abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")) {
+                                abp.message.success(l("CommentSubmittedForApproval"), l("CommentSubmitted"));
+                            }
                             abp.ui.clearBusy();
                         },
                         error: function (data) {

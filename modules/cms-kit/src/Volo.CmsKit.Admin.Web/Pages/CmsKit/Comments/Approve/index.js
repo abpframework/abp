@@ -55,43 +55,26 @@
                 title: l("Actions"),
                 targets: 0,
                 orderable: false,
-                rowAction: {
-                    items: [
-                        {
-                            text: function (data) {
-                                return l('Approve');
-                            },
-                            action: function (data) {
-                                var newApprovalStatus = true;
+                visible: abp.auth.isGranted('CmsKit.Comments.Update'),
+                render: function (data, type, row) {
+                    let approveButton = $(`<button class="btn btn-xs btn-success change-status" data-id="${row.id}" data-status="true" data-toggle="tooltip" data-placement="top" title="${l('Approve')}"><i class="fa fa-check"></i></button>`);
+                    let rejectButton = $(`<button class="btn btn-xs btn-danger change-status" data-id="${row.id}" data-status="false" data-toggle="tooltip" data-placement="top" title="${l('Disapproved')}"><i class="fa fa-times"></i></button>`);
+                    let buttons = [];
+                    buttons.push(approveButton);
+                    buttons.push(rejectButton);
 
-                                commentsService
-                                    .updateApprovalStatus(data.record.id, {IsApproved: newApprovalStatus})
-                                    .then(function () {
-                                        _dataTable.ajax.reloadEx();
-                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
-                                        abp.notify.success(message);
-                                    })
-                            }
-                        },
-                        {
-                            text: function (data) {
-                                return l('Disapproved');
-                            },
-                            action: function (data) {
-                                var newApprovalStatus = false;
+                    let result = `<div class="btn-group">`;
 
-                                commentsService
-                                    .updateApprovalStatus(data.record.id, {IsApproved: newApprovalStatus})
-                                    .then(function () {
-                                        _dataTable.ajax.reloadEx();
-                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
-                                        abp.notify.success(message);
-                                    })
-                            }
+                    buttons.forEach(x => {
+                        if(x.data("status") !== data) {
+                            result += x.get(0).outerHTML;
                         }
-                    ]
+                    } );
+
+                    result += `</div>`;
+                    return result;
                 }
-            },
+            }, 
             {
                 width: "10%",
                 title: l("Username"),
@@ -152,11 +135,30 @@
 
         $(inputSelector).val(value);
 
-        _dataTable.ajax.reloadEx();
+        _dataTable.ajax.reload();
     });
 
     filterForm.submit(function (e) {
         e.preventDefault();
-        _dataTable.ajax.reloadEx();
+        _dataTable.ajax.reload();
+    });
+    
+    _dataTable.on('draw.dt', function () {
+        var changeStatusButton = $(".change-status");
+        changeStatusButton.click(function () {
+            $(this).html("<i class='fa fa-spinner fa-spin'></i>");
+            $(this).prop("disabled", true);
+
+            let id = $(this).data("id");
+            let isApproved = $(this).data("status");
+
+            commentsService
+                .updateApprovalStatus(id, {IsApproved: isApproved})
+                .then(function (data) {
+                    var message = isApproved ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                    abp.notify.success(message);
+                    _dataTable.ajax.reload();
+                })
+        });
     });
 });

@@ -243,6 +243,9 @@
         "Approve":"Approve",
         "Disapproved":"Disapproved",
         "CommentAlertMessage":"There are {0} comments waiting for approval",
-        "Settings:Menu:CmsKit":"CMS"
+        "Settings:Menu:CmsKit":"CMS",
+        "CommentsAwaitingApproval":"Comments Awaiting Approval",
+        "CommentSubmitted": "Your comment has been submitted.",
+        "CommentSubmittedForApproval": "Your comment has been submitted for approval."
     }
 }

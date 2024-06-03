@@ -73,7 +73,7 @@ $(function () {
                         {
                             text: l('Details'),
                             action: function (data) {
-                                location.href = 'Comments/' + data.record.id;
+                                location.href = data.record.id;
                             }
                         },
                         {
@@ -131,7 +131,7 @@ $(function () {
                                     })
                             },
                             visible: function (data) {
-                                return commentRequireApprovement;
+                                return commentRequireApprovement && data.isApproved == null;
                             }
                         }
                     ]
@@ -205,7 +205,6 @@ $(function () {
                 width: "5%",
                 title: l("ApproveState"),
                 orderable: false,
-
                 data: "isApproved",
                 render: function (data, type, row) {
                     var icons = ''
@@ -249,10 +248,14 @@ $(function () {
             if (count > 0) {
                 var alertMessage = l("CommentAlertMessage", count);
                 var alertElement = '<abp-alert alert-type="Warning">' + alertMessage + ' ' + ' <i class="fa-solid fa-arrow-up-right-from-square"></i> </abp-alert>';
-                $('#CommentsWaitingAlert').html(alertElement);
-                $('#CommentsWaitingAlert').click(function () {
+                
+                var commentAlert = $('#CommentsWaitingAlert');
+
+                commentAlert.html(alertElement);
+                commentAlert.click(function () {
                     window.location.href = '/Cms/Comments/Approve'
                 });
+                commentAlert.css('cursor', 'pointer');
             } else {
                 $('#CommentsWaitingAlert').hide()
             }

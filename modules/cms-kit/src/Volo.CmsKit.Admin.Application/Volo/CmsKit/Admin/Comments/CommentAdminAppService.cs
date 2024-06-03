@@ -10,7 +10,6 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
-using Volo.CmsKit.Settings;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Admin.Comments;
