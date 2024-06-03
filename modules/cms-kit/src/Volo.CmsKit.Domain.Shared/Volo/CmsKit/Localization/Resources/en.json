@@ -233,6 +233,7 @@
         "CmsKitCommentOptions:RequireApprovement": "Require approval for comments",
         "CmsKitCommentOptions:RequireApprovementDescription": "When enabled, comments will require approval before being published.",
         "CommentFilter:ApproveState":"Approve State",
+        "ApproveState": "Approve State",
         "CommentFilter:0":"All",
         "CommentFilter:1":"Approved",
         "CommentFilter:2":"Disapproved",

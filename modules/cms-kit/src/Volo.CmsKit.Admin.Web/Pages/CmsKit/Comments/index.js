@@ -203,7 +203,7 @@ $(function () {
             },
             {
                 width: "5%",
-                title: l("Status"),
+                title: l("ApproveState"),
                 orderable: false,
 
                 data: "isApproved",
