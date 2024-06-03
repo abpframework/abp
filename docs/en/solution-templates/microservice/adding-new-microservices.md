@@ -410,4 +410,16 @@ spec:
     app: "{{ .Release.Name }}-{{ .Chart.Name }}"
 ```
 
+After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
+
+![kubernetes-refresh-sub-charts](images/kubernetes-refresh-sub-charts.png)
+
+Then, update *Metadata* information right-click the *microservicename*, select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
+
+![microservice-chart-properties](images/microservice-chart-properties-metadata.png)
+
+Lastly, add the *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services* tab.
+
+![microservice-chart-properties-kubernetes-services](images/microservice-chart-properties-kubernetes-services.png)
+
 ## Customizing the Microservice Template
