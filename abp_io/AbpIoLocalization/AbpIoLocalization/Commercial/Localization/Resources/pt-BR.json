@@ -432,6 +432,6 @@
     "ErrorExceptionMessage": "Um erro ocorreu durante o processamento do seu pedido",
     "WatchTakeCodeGeneration": "Assista ao vídeo \"Explore o potencial de geração de código: ABP Suite\"!",
     "ExtendNow": "Estender/Renovar",
-    "AbpStudio_ComingSoon": "<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Se você quiser testar o ABP Studio antes de todo mundo, torne-se um testador BETA</span>"
+    "AbpStudio_ComingSoon": "Se você quiser testar o ABP Studio antes de todo mundo, torne-se um testador BETA"
   }
 }
