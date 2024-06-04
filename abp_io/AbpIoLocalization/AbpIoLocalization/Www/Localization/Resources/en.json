@@ -1806,6 +1806,7 @@
     "Raffle_Page_Description": "Participate in ABP raffles and stand a chance to win exciting prizes, engaging with the ABP Community.",
     "Docs_Page_Title": "ABP Documentation",
     "Docs_Page_Description": "Access comprehensive guides and API references in the ABP Documentation, aiding in development and troubleshooting.",
-    "Videos_Page_Title": "{0} - Video Post | ABP.IO"
+    "Videos_Page_Title": "{0} - Video Post | ABP.IO",
+    "AskQuestionsOnSupport": "You can ask questions on ABP Support."
   }
 }
