@@ -290,7 +290,7 @@ context.Services.AddAuthentication(options =>
 });
 ```
 
-Similarly, if you have a Angular application, you should add the new service scope to the oAuthConfig in `envrionment.ts`:
+Similarly, if you have an Angular application, you should add the new service scope to the oAuthConfig in `environment.ts`:
 
 ```typescript
 const baseUrl = 'http://localhost:4200';
@@ -334,7 +334,7 @@ First, we need to add the new microservice to the `build-all-images.ps1` script 
 ./build-image.ps1 -ProjectPath "../../services/product-service/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
 ```
 
-Then, we need to add connection string to the `values.projectname.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore.yaml` file for the `ProductService` microservice.
+Then, we need to add connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `ProductService` microservice.
 
 ```yaml
 global:
@@ -414,7 +414,7 @@ After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
 
 ![kubernetes-refresh-sub-charts](images/kubernetes-refresh-sub-charts.png)
 
-Then, update *Metadata* information right-click the *microservicename*, select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
+Then, update *Metadata* information right-click the *microservicename* [sub-chart](../../studio/kubernetes.md#subchart), select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
 
 ![microservice-chart-properties](images/microservice-chart-properties-metadata.png)
 
