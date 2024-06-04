@@ -1,8 +1,4 @@
-@using Volo.Abp
-@implements IDisposable
 @inject IComponentBundleManager BundleManager
-@inject PersistentComponentState PersistentComponentState
-
 @if (ScriptFiles != null)
 {
     foreach (var file in ScriptFiles)
@@ -20,37 +16,18 @@
 
     private List<string>? ScriptFiles { get; set; }
 
-    private PersistingComponentStateSubscription persistingSubscription;
-
     protected override async Task OnInitializedAsync()
     {
-        if (BundleName == null)
-        {
-            throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
-        }
+        ScriptFiles = new List<string>();
 
-        persistingSubscription = PersistentComponentState.RegisterOnPersisting(PersistScriptFiles);
-
-        if (PersistentComponentState.TryTakeFromJson<List<string>>(nameof(ScriptFiles), out var restoredStyleFiles))
-        {
-            ScriptFiles = restoredStyleFiles;
-        }
-        else
+        if (!BundleName.IsNullOrWhiteSpace())
         {
             ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
         }
 
-        if (WebAssemblyScriptFiles != null)
+        if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
         {
-            ScriptFiles?.AddRange(WebAssemblyScriptFiles);
+            ScriptFiles.AddIfNotContains(WebAssemblyScriptFiles);
         }
     }
-
-    private Task PersistScriptFiles()
-    {
-        PersistentComponentState.PersistAsJson(nameof(ScriptFiles), ScriptFiles);
-        return Task.CompletedTask;
-    }
-
-    public void Dispose() => persistingSubscription.Dispose();
 }
