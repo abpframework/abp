@@ -57,11 +57,12 @@ Here, is the list of all available commands before explaining their details:
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
 * **`logout`**: Logouts from your computer if you've authenticated before.
+* **`upgrade`**: Upgrades solution with Pro modules
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 * **`clear-download-cache`**: Clears the templates download cache.
 * **`trust-version`**: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
- 
+
 ### help
 
 Shows basic usages of the ABP CLI.
@@ -616,7 +617,7 @@ Deletes a remote module source from the list of sources that you can use to inst
 
 ````bash
 abp delete-module-source [options]
-````	
+````
 
 Example:
 
@@ -860,6 +861,25 @@ Logs you out by removing the session token from your computer.
 ```bash
 abp logout
 ```
+### upgrade
+
+Upgrades the solution with Pro modules. Especially designed for users who already started their development before having a license. Therefore this command requires license. For more info, see [the related document](../studio/upgrade-to-pro.md) .
+
+````bash
+abpc upgrade [options]
+````
+
+Example:
+
+````bash
+abpc upgrade -t app
+
+abpc upgrade -t app-nolayers
+````
+
+#### options
+
+* `--template` or `-t`: The template type of the solution. Only `app` and `app-nolayers` are valid currently.
 
 ### bundle
 
