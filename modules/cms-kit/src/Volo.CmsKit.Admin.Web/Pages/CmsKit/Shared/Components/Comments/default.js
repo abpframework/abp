@@ -13,11 +13,30 @@
         };
 
         var _bindEvents = function () {
+            var $requireApprovalCheckbox = $('#RequireApprovementCheckbox');
+            var previousValue = $requireApprovalCheckbox.prop('checked');
+
             $wrapper.find('#Save').click(function () {
-                var isChecked = $('#RequireApprovementCheckbox').prop('checked');
-                _service.updateSettings({ commentRequireApprovement: isChecked }).then(function (response) {
-                    abp.notify.success(l("SavedSuccessfully"));
-                })
+                var isRequireApproved = $requireApprovalCheckbox.prop('checked');
+
+                function UpdateSettings(commentRequireApprovement) {
+                    _service.updateSettings({commentRequireApprovement: commentRequireApprovement}).then(function (response) {
+                        abp.notify.success(l("SavedSuccessfully"));
+                        previousValue = commentRequireApprovement;
+                    })
+                }
+                
+                if (isRequireApproved && !previousValue) {
+                    abp.message.confirm(l("CommentRequireApprovementWarning"), function (ok) {
+                        if (ok) {
+                            UpdateSettings(isRequireApproved);
+                        } else {
+                            $('#RequireApprovementCheckbox').prop('checked', false);
+                        }
+                    });
+                } else {
+                    UpdateSettings(isRequireApproved);
+                }
             });
         };
 
