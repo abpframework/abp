@@ -18,11 +18,11 @@ public class CommentManager : DomainService
     }
 
     public virtual async Task<Comment> CreateAsync([NotNull] CmsUser creator,
-                                                   [NotNull] string entityType,
-                                                   [NotNull] string entityId,
-                                                   [NotNull] string text,
-                                                   [CanBeNull] string url = null,
-                                                   [CanBeNull] Guid? repliedCommentId = null)
+        [NotNull] string entityType,
+        [NotNull] string entityId,
+        [NotNull] string text,
+        [CanBeNull] string url = null,
+        [CanBeNull] Guid? repliedCommentId = null)
     {
         Check.NotNull(creator, nameof(creator));
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.MaxEntityTypeLength);

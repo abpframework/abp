@@ -115,6 +115,10 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
 
         comment.SetText(input.Text);
         comment.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        if (bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.Comments.RequireApprovement)))
+        {
+            comment.WaitForApproval();
+        }
 
         var updatedComment = await CommentRepository.UpdateAsync(comment);
 

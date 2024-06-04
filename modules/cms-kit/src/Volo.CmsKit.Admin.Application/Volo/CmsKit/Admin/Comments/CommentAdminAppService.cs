@@ -88,7 +88,15 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
     public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
     {
         var comment = await CommentRepository.GetAsync(id);
-        comment.IsApproved = input.IsApproved;
+
+        if (input.IsApproved)
+        {
+            comment.Approve();
+        }
+        else
+        {
+            comment.Reject();
+        }
 
         await CommentRepository.UpdateAsync(comment);
     }

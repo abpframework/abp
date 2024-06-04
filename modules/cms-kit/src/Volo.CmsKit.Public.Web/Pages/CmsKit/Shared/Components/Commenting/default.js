@@ -111,6 +111,10 @@
 
                 $form.submit(function (e) {
                     e.preventDefault();
+
+                    if (abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")) {
+                        abp.message.success(l("CommentUpdatedForApproval"), l("SavedSuccessfully"));
+                    }
                     
                     abp.ui.setBusy($form.find("button[type='submit']"));
 
