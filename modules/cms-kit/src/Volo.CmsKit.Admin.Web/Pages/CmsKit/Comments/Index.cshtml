@@ -32,7 +32,7 @@
     </abp-script-bundle>
 }
 
-<abp-alert id="CommentsWaitingAlert" alert-type="Warning">
+<abp-alert id="CommentsWaitingAlert" alert-type="Warning" style="display: none">
 </abp-alert>
 
 <abp-card class="mb-4">
@@ -60,7 +60,7 @@
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
-                        <div class="mb-3" id="IsApprovedSelectInput">
+                        <div class="mb-3" id="IsApprovedSelectInput" style="display: none">
                             <label class="mb-1" for="IsApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
                             <select id="IsApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
                                 @foreach (var status in (CommentApproveState[])Enum.GetValues(typeof(CommentApproveState)))

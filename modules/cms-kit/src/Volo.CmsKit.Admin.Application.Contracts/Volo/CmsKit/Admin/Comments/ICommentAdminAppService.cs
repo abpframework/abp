@@ -17,7 +17,5 @@ public interface ICommentAdminAppService : IApplicationService
 
     Task UpdateSettingsAsync(CommentSettingsDto input);
 
-    Task<CommentSettingsDto> GetSettingsAsync();
-
     Task<int> GetWaitingCountAsync();
 }

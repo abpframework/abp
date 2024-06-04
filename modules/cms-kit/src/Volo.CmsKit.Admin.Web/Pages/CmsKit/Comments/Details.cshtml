@@ -95,7 +95,7 @@
                                 <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text"/>
                             </abp-column>
                             <abp-column size-lg="_2" size-md="_12">
-                                <div class="mb-3" id="IsApprovedSelectInput">
+                                <div class="mb-3" id="IsApprovedSelectInput" style="display: none">
                                     <label class="mb-1" for="IsApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
                                     <select id="IsApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
                                         @foreach (var status in (CommentApproveState[])Enum.GetValues(typeof(CommentApproveState)))

@@ -214,13 +214,6 @@
       }, ajaxParams));
     };
 
-    volo.cmsKit.admin.comments.commentAdmin.getSettings = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/comments/settings',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
     volo.cmsKit.admin.comments.commentAdmin.getWaitingCount = function(ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/comments/waiting-count',

@@ -7,14 +7,13 @@
             _getSettings();
             _bindEvents();
         };
+        
         var _getSettings = function () {
-            _service.getSettings().then(function (response) {
-                $wrapper.find('#RequireApprovementCheckbox').prop('checked', response.commentRequireApprovement);
-            })
+            $wrapper.find('#RequireApprovementCheckbox').prop('checked', abp.setting.getBoolean("CmsKit.Comments.RequireApprovement"));
         };
 
         var _bindEvents = function () {
-            $('#Save').click(function () {
+            $wrapper.find('#Save').click(function () {
                 var isChecked = $('#RequireApprovementCheckbox').prop('checked');
                 _service.updateSettings({ commentRequireApprovement: isChecked }).then(function (response) {
                     abp.notify.success(l("SavedSuccessfully"));

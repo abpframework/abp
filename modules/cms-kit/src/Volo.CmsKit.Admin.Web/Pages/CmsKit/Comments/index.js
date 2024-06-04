@@ -5,19 +5,13 @@ $(function () {
 
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
-    
-    var commentRequireApprovement = false;
 
-    commentsService.getSettings().then(function (data) {
-        commentRequireApprovement = data.commentRequireApprovement;
-        if (data.commentRequireApprovement) {
-            $('#CommentsTable').DataTable().column(6).visible(true);
-        } else {
-            $('#CommentsWaitingAlert').hide()
-            $('#CommentsTable').DataTable().column(6).visible(false);
-            $('#IsApprovedSelectInput').hide();
-        }
-    })
+    var commentRequireApprovement = abp.setting.getBoolean("CmsKit.Comments.RequireApprovement");
+
+    if (commentRequireApprovement) {
+        $('#CommentsWaitingAlert').show()
+        $('#IsApprovedSelectInput').show();
+    }
 
     var getFormattedDate = function ($datePicker) {
         if (!$datePicker.val()) {
@@ -73,7 +67,7 @@ $(function () {
                         {
                             text: l('Details'),
                             action: function (data) {
-                                location.href = data.record.id;
+                                location.href = 'Comments/' + data.record.id;
                             }
                         },
                         {
@@ -206,6 +200,7 @@ $(function () {
                 title: l("ApproveState"),
                 orderable: false,
                 data: "isApproved",
+                visible: commentRequireApprovement,
                 render: function (data, type, row) {
                     var icons = ''
 

@@ -3,9 +3,12 @@ $(function (){
     
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
 
-    var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
-    
+    var commentRequireApprovement = abp.setting.getBoolean("CmsKit.Comments.RequireApprovement");
 
+    if (commentRequireApprovement) {
+        $('#IsApprovedSelectInput').show();
+    }
+    
     var getFormattedDate = function ($datePicker) {
         return $datePicker.data('date');
     };
@@ -83,6 +86,7 @@ $(function (){
                             text: function (data) {
                                 return data.isApproved ? l('Disapproved') : l('Approve');
                             },
+                            visible: commentRequireApprovement,
                             action: function (data) {
                                 var newApprovalStatus = !data.record?.isApproved;
 
@@ -101,6 +105,7 @@ $(function (){
                                     return l('Disapproved')
                                 }
                             },
+                            visible: commentRequireApprovement,
                             action: function (data) {
                                 var newApprovalStatus = false;
 
@@ -160,7 +165,8 @@ $(function (){
             },
             {
                 width: "10%",
-                title: l("Status"),
+                title: l("ApproveState"),
+                visible: commentRequireApprovement,
                 orderable: false,
                 data: "isApproved",
                 render: function (data, type, row) {
@@ -194,14 +200,7 @@ $(function (){
         
         _dataTable.ajax.reloadEx();
     });
-    commentsService.getSettings().then(function (data) {
-        if (data.commentRequireApprovement) {
-            $('#CommentsTable').DataTable().column(4).visible(true);
-        } else {
-            $('#CommentsTable').DataTable().column(4).visible(false);
-            $('#IsApprovedSelectInput').hide();
-        }
-    })
+        
     filterForm.submit(function (e){
         e.preventDefault();
         _dataTable.ajax.reloadEx();

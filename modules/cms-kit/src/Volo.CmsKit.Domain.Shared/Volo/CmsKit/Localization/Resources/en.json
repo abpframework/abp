@@ -168,7 +168,6 @@
         "YourReply": "Your reply",
         "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported.",
         "GlobalResources": "Global resources",
-        "SavedSuccessfully": "Saved successfully",
         "CmsKit.BlogPost.Status.0": "Draft",
         "CmsKit.BlogPost.Status.1": "Published",
         "CmsKit.BlogPost.Status.2": "Waiting for review",
@@ -245,7 +244,6 @@
         "CommentAlertMessage":"There are {0} comments waiting for approval",
         "Settings:Menu:CmsKit":"CMS",
         "CommentsAwaitingApproval":"Comments Awaiting Approval",
-        "CommentSubmitted": "Your comment has been submitted.",
         "CommentSubmittedForApproval": "Your comment has been submitted for approval."
     }
 }

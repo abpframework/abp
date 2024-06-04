@@ -63,13 +63,6 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     }
 
     [HttpGet]
-    [Route("settings")]
-    public Task<CommentSettingsDto> GetSettingsAsync()
-    {
-       return CommentAdminAppService.GetSettingsAsync();
-    }
-
-    [HttpGet]
     [Route("waiting-count")]
     public Task<int> GetWaitingCountAsync()
     {

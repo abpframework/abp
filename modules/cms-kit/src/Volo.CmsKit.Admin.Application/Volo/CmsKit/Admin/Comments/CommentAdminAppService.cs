@@ -99,14 +99,6 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
         await SettingManager.SetGlobalAsync(CmsKitSettings.Comments.RequireApprovement, input.CommentRequireApprovement.ToString());
     }
 
-    [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
-    public async Task<CommentSettingsDto> GetSettingsAsync()
-    {
-        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.Comments.RequireApprovement));
-
-        return new CommentSettingsDto {CommentRequireApprovement = isRequireApprovementEnabled};
-    }
-
     public async Task<int> GetWaitingCountAsync()
     {
         return (int)await CommentRepository.GetCountAsync(commentApproveState: CommentApproveState.Waiting);

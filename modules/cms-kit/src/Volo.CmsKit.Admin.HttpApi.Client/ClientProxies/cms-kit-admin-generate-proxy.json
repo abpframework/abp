@@ -1311,14 +1311,6 @@
                   }
                 },
                 {
-                  "name": "GetSettingsAsync",
-                  "parametersOnMethod": [],
-                  "returnValue": {
-                    "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
-                    "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto"
-                  }
-                },
-                {
                   "name": "GetWaitingCountAsync",
                   "parametersOnMethod": [],
                   "returnValue": {
@@ -1639,21 +1631,6 @@
               "returnValue": {
                 "type": "System.Void",
                 "typeSimple": "System.Void"
-              },
-              "allowAnonymous": false,
-              "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"
-            },
-            "GetSettingsAsync": {
-              "uniqueName": "GetSettingsAsync",
-              "name": "GetSettingsAsync",
-              "httpMethod": "GET",
-              "url": "api/cms-kit-admin/comments/settings",
-              "supportedVersions": [],
-              "parametersOnMethod": [],
-              "parameters": [],
-              "returnValue": {
-                "type": "Volo.CmsKit.Admin.Comments.CommentSettingsDto",
-                "typeSimple": "Volo.CmsKit.Admin.Comments.CommentSettingsDto"
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Comments.ICommentAdminAppService"

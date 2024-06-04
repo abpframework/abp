@@ -58,11 +58,6 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
         });
     }
 
-    public virtual async Task<CommentSettingsDto> GetSettingsAsync()
-    {
-        return await RequestAsync<CommentSettingsDto>(nameof(GetSettingsAsync));
-    }
-
     public virtual async Task<int> GetWaitingCountAsync()
     {
         return await RequestAsync<int>(nameof(GetWaitingCountAsync));
