@@ -30,8 +30,7 @@ public class MyProjectNameBlazorModule : AbpModule
 
         // Add services to the container.
         context.Services.AddRazorComponents()
-            .AddInteractiveWebAssemblyComponents()
-            .AddInteractiveServerComponents();
+            .AddInteractiveWebAssemblyComponents();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -59,7 +58,6 @@ public class MyProjectNameBlazorModule : AbpModule
         {
             builder.MapRazorComponents<App>()
                 .AddInteractiveWebAssemblyRenderMode()
-                .AddInteractiveServerRenderMode()
                 .AddAdditionalAssemblies(WebAppAdditionalAssembliesHelper.GetAssemblies<MyProjectNameBlazorClientModule>());
         });
     }

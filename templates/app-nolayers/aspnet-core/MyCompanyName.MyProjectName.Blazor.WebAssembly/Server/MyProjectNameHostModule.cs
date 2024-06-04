@@ -13,6 +13,7 @@ using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
+using Volo.Abp.AspNetCore.GlobalAssets;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -138,7 +139,7 @@ public class MyProjectNameHostModule : AbpModule
                     serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
                 });
             }
-            
+
             MyProjectNameEfCoreEntityExtensionMappings.Configure();
         }
 
@@ -180,6 +181,11 @@ public class MyProjectNameHostModule : AbpModule
 
         private void ConfigureBundles()
         {
+            Configure<AbpGlobalAssetsOptions>(options =>
+            {
+                options.StartupModuleType = typeof(MyProjectNameBlazorModule);
+            });
+
             Configure<AbpBundlingOptions>(options =>
             {
                 options.StyleBundles.Configure(
