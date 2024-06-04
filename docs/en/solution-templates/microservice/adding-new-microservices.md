@@ -305,7 +305,7 @@ const oAuthConfig = {
 };
 ```
 
-### Add the New Microservice to the Solutin Runner
+### Add the New Microservice to the Solution Runner
 
 We should add the new microservice to the solution runner [profile](../../studio/running-applications.md#profile) for running application in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new microservice to the solution runner profile. Afterwards you can start the new microservice by selecting the new microservice in the solution runner.
 
@@ -418,8 +418,29 @@ Then, update *Metadata* information right-click the *microservicename* [sub-char
 
 ![microservice-chart-properties](images/microservice-chart-properties-metadata.png)
 
-Lastly, add the *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services* tab.
+Add the *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services* tab.
 
 ![microservice-chart-properties-kubernetes-services](images/microservice-chart-properties-kubernetes-services.png)
+
+Last but not least, we need to configure the helm chart environments for identity, auth-server, and gateway applications.
+
+```yaml
+# identity.yaml 
+# Add this line to the "env:" section
+- name: "OpenIddict__Resources__ProductService__RootUrl"
+  value: "http://{{ .Release.Name }}-productservice"
+
+# authserver.yaml
+# Concat the following lines for "App__CorsOrigins" section
+- name: "App__CorsOrigins"
+  value: "...,http://{{ .Release.Name }}-administration,http://{{ .Release.Name }}-productservice"
+
+# webapigateway.yaml
+# Add this line to the "env:" section
+- name: "ReverseProxy__Clusters__ProductService__Destinations__ProductService__Address"
+  value: "http://{{ .Release.Name }}-productservice"
+```
+
+
 
 ## Customizing the Microservice Template
