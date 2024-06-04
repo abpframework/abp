@@ -1,4 +1,7 @@
-<ng-container [ngSwitch]="getComponent(prop)" *abpPermission="prop.permission; runChangeDetection: false">
+<ng-container
+  [ngSwitch]="getComponent(prop)"
+  *abpPermission="prop.permission; runChangeDetection: false"
+>
   <ng-template ngSwitchCase="template">
     <ng-container *ngComponentOutlet="prop.template; injector: injectorForCustomComponent">
     </ng-container>
@@ -50,9 +53,7 @@
         class="form-select form-control"
       >
         @for (option of options$ | async; track option.value) {
-          <option
-            [ngValue]="option.value"
-          >
+          <option [ngValue]="option.value">
             {{ option.key }}
           </option>
         }
@@ -152,7 +153,7 @@
             aria-hidden="true"
             [ngClass]="{
               'fa-eye-slash': !showPassword,
-              'fa-eye': showPassword
+              'fa-eye': showPassword,
             }"
           ></i>
         </button>
@@ -160,9 +161,7 @@
     </ng-template>
 
     @if (prop.formText) {
-    <small class="text-muted d-block">{{
-      prop.formText | abpLocalization
-    }}</small>
+      <small class="text-muted d-block">{{ prop.formText | abpLocalization }}</small>
     }
   </div>
 </ng-container>
@@ -171,12 +170,21 @@
   <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label'">
     @if (prop.displayTextResolver) {
       {{ prop.displayTextResolver(data) | abpLocalization }}
-    }@else{
-      {{ prop.displayName | abpLocalization }}
+    } @else {
+      @if (prop.isExtra) {
+        {{ '::' + prop.displayName | abpLocalization }}
+      } @else {
+        {{ prop.displayName | abpLocalization }}
+      }
     }
     {{ asterisk }}
     @if (prop.tooltip) {
-      <i [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"  container="body" class="bi bi-info-circle"></i>
+      <i
+        [ngbTooltip]="prop.tooltip.text | abpLocalization"
+        [placement]="prop.tooltip.placement || 'auto'"
+        container="body"
+        class="bi bi-info-circle"
+      ></i>
     }
   </label>
 </ng-template>
