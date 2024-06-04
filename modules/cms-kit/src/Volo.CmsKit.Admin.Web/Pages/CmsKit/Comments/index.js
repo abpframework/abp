@@ -47,7 +47,6 @@ $(function () {
         return filterObj;
     };
 
-
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
