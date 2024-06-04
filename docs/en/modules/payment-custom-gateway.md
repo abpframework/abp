@@ -1,7 +1,9 @@
 # Creating a Custom Payment Gateway
+
 This document explains creating custom a payment gateway that's different than the existing ones in the [Payment Module](payment#packages).
 
 ## Creating Core Operations
+
 - Create **MyPaymentGateway.cs** and implement `IPaymentGateway`
 
   ```csharp

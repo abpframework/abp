@@ -67,7 +67,7 @@ The following commands are for creating MVC UI projects:
 * **Public Website**, Entity Framework Core, no mobile app, creates the project in a new folder:
   
   ```bash
-  abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef -csf --with-public-website
+  abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef -csf --public-website
   ```
   
   _Note that Public Website is only included in PRO templates._
@@ -146,61 +146,18 @@ It's a template of a basic .NET console application with ABP module architecture
 
 ## Module
 
-Module are reusable sub applications used by your main project. Using ABP Module is a best practice if you are building a microservice solution. As modules are not final applications, each module has all the frontend UI projects and database providers. The module template comes with an MVC UI to be able to develop without the final solution. But if you will develop your module under a final solution, you add `--no-ui` parameter to exclude MVC UI project.
+Module are reusable sub applications used by your main project. Using ABP Module is a best practice if you are building a microservice solution. As modules are not final applications, each module could contains different frontend UI projects and database providers.
 
-* Included frontends: `MVC`, `Angular`, `Blazor`. Included database providers: `Entity Framework Core`, `MongoDB`. Includes MVC startup project.
-
-  ```bash
-  abp new Acme.IssueManagement -t module
-  ```
-* The same with the upper but doesn't include MVC startup project.
+* Available frontends: `MVC`, `Angular`, `Blazor`. Available database providers: `Entity Framework Core`, `MongoDB`. 
 
   ```bash
-  abp new Acme.IssueManagement -t module --no-ui
-  ```
-  
-* Creates the module and adds it to your solution
-
-  ```bash
-  abp new Acme.IssueManagement -t module --add-to-solution-file
+  abp new-module Acme.IssueManagement
   ```
 
-## Create a solution from a specific version
-
-When you create a solution, it always creates with the latest version. To create a project from an older version, you can pass the `--version` parameter.
-
-* Create a solution from v3.3.0, with Angular UI and Entity Framework Core.
+* The same with the upper but includes MVC and angular projects.
 
   ```bash
-  abp new Acme.BookStore -t app -u angular -m none --database-provider ef -csf --version 3.3.0
-  ```
-
-To get the ABP version list, checkout following link: https://www.nuget.org/packages/Volo.Abp.Core/
-
-## Create from a custom template
-
-ABP CLI uses the default [app template](https://github.com/abpframework/abp/tree/dev/templates/app) to create your project. If you want to create a new solution from your customized template, you can use the parameter `--template-source`. 
-
-* MVC UI, Entity Framework Core, no mobile app, using the template in `c:\MyProjects\templates\app` directory. 
-
-  ```bash
-  abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef --template-source "c:\MyProjects\templates\app"
-  ```
-
-* Same with the previous one except this command retrieves the template from the URL `https://myabp.com/app-template.zip`.
-
-  ```bash
-  abp new Acme.BookStore -t app -u mvc --mobile none --database-provider ef --template-source https://myabp.com/app-template.zip
-  ```
-
-## Create a preview version
-
-ABP CLI always uses the latest version. In order to create a solution from a preview (RC) version add the `--preview` parameter.
-
-* Blazor UI, Entity Framework Core, no mobile, **preview version**, creates the project in a new folder:
-
-  ```bash
-  abp new Acme.BookStore -t app -u blazor --mobile none -csf --preview
+  abp new-module Acme.IssueManagement -u mvc,angular
   ```
 
 ## Choose database management system
@@ -211,18 +168,6 @@ The default database management system (DBMS) is `Entity Framework Core` / ` SQL
 
   ```bash
   abp new Acme.BookStore -u angular --database-management-system PostgreSQL -csf
-  ```
-
-
-
-## Use static HTTP ports
-
-ABP CLI always assigns random ports to the hostable projects. If you need to keep the default ports and create a solution always with the same HTTP ports, add the parameter `--no-random-port`.
-
-* MVC UI,  Entity Framework Core, **static ports**, creates the project in a new folder:
-
-  ```bash
-  abp new Acme.BookStore --no-random-port -csf
   ```
 
 ## Use local ABP references

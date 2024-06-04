@@ -71,7 +71,7 @@ Let's examine that class. The first important thing is the `ConnectionStringName
 [ConnectionStringName(DatabaseName)]
 ````
 
-[The `ConnectionStringName` attribute](https://docs.abp.io/en/abp/latest/Connection-Strings#set-the-connection-string-name) defines the unique name of the connection string that is being used by that `DbContext` class. It matches with the connection string defined in the `appsettings.json` file. That name is also used in database migrations to distinguish different database schemas, and used as the key while storing tenant connection strings for a multi-tenant system. So, each physically separate database should have a unique connection string / database name as here.
+[The `ConnectionStringName` attribute](../../framework/fundamentals/connection-strings.md#set-the-connection-string-name) defines the unique name of the connection string that is being used by that `DbContext` class. It matches with the connection string defined in the `appsettings.json` file. That name is also used in database migrations to distinguish different database schemas, and used as the key while storing tenant connection strings for a multi-tenant system. So, each physically separate database should have a unique connection string / database name as here.
 
 The `DatabaseName` constant is defined in the `DbContext` class:
 
@@ -88,7 +88,7 @@ The second important part of that class is the `ReplaceDbContext` attribute's us
     )]
 ````
 
-The Identity microservice utilizes the [Identity](../../modules/identity.md) and [OpenIddict](../../modules/openiddict.md) modules and creates a single database that contains these modules' database schemas. These modules define their own `DbContext` class normally. But [the `ReplaceDbContext` attribute](https://docs.abp.io/en/abp/8.0/Entity-Framework-Core#replace-other-dbcontextes) tells to ABP to use this (`IdentityServiceDbContext`) `DbContext` class instead of the `DbContext` classes defined by these modules. Technically, it replaces the given `DbContext` classes on runtime. We are doing that to ensure that we have a single (merged) database schema, single database migration path and a single database transaction operation when we work these multiple modules. When we replace a `DbContext`, we should implement its interface as done with the `IdentityServiceDbContext` class:
+The Identity microservice utilizes the [Identity](../../modules/identity.md) and [OpenIddict](../../modules/openiddict.md) modules and creates a single database that contains these modules' database schemas. These modules define their own `DbContext` class normally. But [the `ReplaceDbContext` attribute](../../framework/data/entity-framework-core/index.md#replace-other-dbcontextes) tells to ABP to use this (`IdentityServiceDbContext`) `DbContext` class instead of the `DbContext` classes defined by these modules. Technically, it replaces the given `DbContext` classes on runtime. We are doing that to ensure that we have a single (merged) database schema, single database migration path and a single database transaction operation when we work these multiple modules. When we replace a `DbContext`, we should implement its interface as done with the `IdentityServiceDbContext` class:
 
 ````csharp
 public class IdentityServiceDbContext :
@@ -188,7 +188,7 @@ There are two important points in that class:
 
 ### The AbpDbConnectionOptions Configuration
 
-Every microservice (and the other applications that touches to a database) configures the `AbpDbConnectionOptions` [options class](https://docs.abp.io/en/abp/latest/Options). It is typically done in a method (named `ConfigureDatabase`) defined in the service's (or application's) [module class](https://docs.abp.io/en/abp/latest/Module-Development-Basics). For example, the Identity microservices has a `CloudCrmIdentityServiceModule` class that defines a `ConfigureDatabase` method:
+Every microservice (and the other applications that touches to a database) configures the `AbpDbConnectionOptions` [options class](../../framework/fundamentals/options.md). It is typically done in a method (named `ConfigureDatabase`) defined in the service's (or application's) [module class](../../framework/architecture/modularity/basics.md). For example, the Identity microservices has a `CloudCrmIdentityServiceModule` class that defines a `ConfigureDatabase` method:
 
 ````csharp
 private void ConfigureDatabase(ServiceConfigurationContext context)
@@ -236,7 +236,7 @@ Configure<AbpDbConnectionOptions>(options =>
 });
 ````
 
-That configuration basically defines the different databases that is accessed by that service/application and defines [the mapping](https://docs.abp.io/en/abp/latest/Connection-Strings#configuring-the-database-structures) between module database schemas to physical databases.
+That configuration basically defines the different databases that is accessed by that service/application and defines [the mapping](../../framework/fundamentals/connection-strings.md#configuring-the-database-structures) between module database schemas to physical databases.
 
 For example, Permission Management, Feature Management, Setting Management and the Language Management modules will use the `Administration` database, because we have merged that modules into the Administration microservice - we don't wanted to create separate services and databases for them.
 
@@ -271,7 +271,7 @@ We are basically setting the SQL Server as the default DBMS for this service (or
 
 ### Registering the `DbContext` Class
 
-Finally, the `ConfigureDatabase` method registers `IdentityServiceDbContext` class to the [dependency injection](https://docs.abp.io/en/abp/latest/Dependency-Injection) system and configures it:
+Finally, the `ConfigureDatabase` method registers `IdentityServiceDbContext` class to the [dependency injection](../../framework/fundamentals/dependency-injection.md) system and configures it:
 
 ````csharp
 context.Services.AddAbpDbContext<IdentityServiceDbContext>(options =>
@@ -280,7 +280,7 @@ context.Services.AddAbpDbContext<IdentityServiceDbContext>(options =>
 });
 ````
 
-`AddDefaultRepositories` is used to register the default [repository](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) implementations for all the aggregate root [entities](https://docs.abp.io/en/abp/latest/Best-Practices/Entities).
+`AddDefaultRepositories` is used to register the default [repository](../../framework/architecture/best-practices/repositories.md) implementations for all the aggregate root [entities](../../framework/architecture/best-practices/entities.md).
 
 ## Database Migrations
 
@@ -290,7 +290,7 @@ For example, if you have added a new field to a database table, you should also 
 
 Managing the schema changes manually is not a good practice and error-prone in a highly dynamic system like a microservice solution. The Microservice solution template uses [Entity Framework migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to maintain the database schema and automatically migrate it whenever you deploy a new version of your service/application.
 
-In addition to the schema changes, you may also need to insert some initial (seed) data to some tables in order to make your server properly works. That process is called as [data seeding](https://docs.abp.io/en/abp/latest/Data-Seeding). The Microservice solution is also configured so it can seed such initial data on the application startup.
+In addition to the schema changes, you may also need to insert some initial (seed) data to some tables in order to make your server properly works. That process is called as [data seeding](../../framework/infrastructure/data-seeding.md). The Microservice solution is also configured so it can seed such initial data on the application startup.
 
 > If you are using **MongoDB** as your database provider, the schema migration is not needed (But you should care about some kind of data and schema migrations in case of you made a breaking change on your database schema - this is something depends on your application, so you should understand how to work with a document database like MongoDB). However, the data seeding system is still used to insert initial data to the database.
 
@@ -337,7 +337,7 @@ Here, we are just overriding the `SeedAsync` method that runs just after the dat
 Let's explain how `EfCoreRuntimeDatabaseMigratorBase` behaves:
 
 * First of all, **it re-tries the migration operation** in case of any failure. It tries 3 times in total, then re-throws the exception and causes the application crash. Since Kubernetes (or ABP Studio [solution runner](../../studio/running-applications.md)) will re-start it on crash, it will continue to try until it succeed. Temporary failures are especially expected if the database server is not ready when the service starts. It waits a random value between 5 and 15 seconds before the next try.
-* It uses a [distributed lock](https://docs.abp.io/en/abp/latest/Distributed-Locking) to ensure that the migration operation is performed only by one service instance in a time. This is especially important if you run multiple instances of your service, which is usual in a microservice system. It uses a unique distributed key name based on the `DatabaseName` property, so different databases can be migrated in parallel.
+* It uses a [distributed lock](../../framework/infrastructure/distributed-locking.md) to ensure that the migration operation is performed only by one service instance in a time. This is especially important if you run multiple instances of your service, which is usual in a microservice system. It uses a unique distributed key name based on the `DatabaseName` property, so different databases can be migrated in parallel.
 * It uses Entity Framework's API to get a list of pending migrations and migrates the database if there were pending migrations.
 * It then seeds the database by calling the virtual `SeedAsync` method. Remember that we have overridden that method to seed the initial data for the identity microservice.
 * Finally, if a database schema migration has applied, it publishes a distributed event, `AppliedDatabaseMigrationsEto`, with the `DatabaseName`. This event is then used by the [SaaS module](../../modules/saas.md) to trigger migration of tenant databases in a multi-tenant system. See the *Database Migrations for Tenants* section in this document.
@@ -371,7 +371,7 @@ As explained above, `EfCoreRuntimeDatabaseMigratorBase` publishes a distributed 
 
 For all that events, we need to migrate the related database for the tenant (the migration system creates the initial database if it doesn't exists). The migration logic is like that:
 
-* Switches to the related tenant context using the [`ICurrentTenant.Change` method](https://docs.abp.io/en/abp/latest/Multi-Tenancy#change-the-current-tenant).
+* Switches to the related tenant context using the [`ICurrentTenant.Change` method](../../framework/architecture/multi-tenancy/index.md#change-the-current-tenant).
 * If the given tenant has a dedicated connection string for the current microservice, it migrates the database schema and seeds the initial data.
 * In case a failure, it re-tries a maximum of 3 times by waiting a random duration between 5 and 15 seconds. It does that by ignoring the error and re-publishing the event that is handled.
 

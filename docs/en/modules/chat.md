@@ -1,4 +1,6 @@
-# Chat module
+# Chat Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module implements real time messaging between users for an application.
 

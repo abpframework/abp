@@ -1,6 +1,6 @@
 # Tag Management
 
-CMS kit provides a **tag** system to tag any kind of resources, like a blog post.
+CMS Kit provides a **tag** system to tag any kind of resources, like a blog post.
 
 ## Enabling the Tag Management Feature
 

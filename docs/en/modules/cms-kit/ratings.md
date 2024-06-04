@@ -1,6 +1,6 @@
 # Rating System
 
-CMS kit provides a **rating** system to to add ratings feature to any kind of resource like blog posts, comments, etc. Here how the rating component looks like on a sample page:
+CMS Kit provides a **rating** system to to add ratings feature to any kind of resource like blog posts, comments, etc. Here how the rating component looks like on a sample page:
 
 ![ratings](../../images/cmskit-module-ratings.png)
 

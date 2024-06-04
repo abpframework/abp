@@ -1,6 +1,6 @@
 # Page Feedback System
 
-The CMS kit provides a **Page Feedback** system to collect feedback from users about pages.
+The CMS Kit provides a **Page Feedback** system to collect feedback from users about pages.
 
 | ![cmskit-module-page-feedback-widget](../../images/cmskit-module-page-feedback-widget.png) |![cmskit-module-page-feedback-widget](../../images/cmskit-module-page-feedback-widget-2.png) |
 | --- | --- |

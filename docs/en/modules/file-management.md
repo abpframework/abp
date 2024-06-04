@@ -1,4 +1,6 @@
-# File Management Module
+# File Management Module (Pro)
+
+> You must have an ABP Team or a higher license to use this module.
 
 This module is used to upload, download and organize files in a hierarchical folder structure. It is also compatible to multi-tenancy and you can determine total size limit for your tenants.
 

@@ -37,7 +37,7 @@ The folder structure basically matches to the solution in ABP Studio's *Solution
   * `k8s` folder contains some additional files to setup *Kubernetes Dashboard* on your local machine.
 * `gateways` folder contains one or more API Gateways (the count depends on if you've selected mobile application or other applications if available). This solution implements the [BFF](https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends) (Backend for frontend pattern), that means it has a dedicated API Gateway for each different UI application.
 * `services` folder contains the microservices. The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:
-  * `adminstration` microservice is used to manage permissions, languages and other fundamental settings of the system.
+  * `administration` microservice is used to manage permissions, languages and other fundamental settings of the system.
   * `identity` microservice is used to manage users, roles and their permissions. It basically serves to the [Identity](../../modules/identity.md) module's UI (and [OpenIddict](../../modules/openiddict.md) module's UI, if selected).
 
 ## Next
