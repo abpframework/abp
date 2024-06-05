@@ -9,6 +9,6 @@
     "angular-oauth2-oidc",
     "just-compare",
     "just-clone",
-    "ts-toolbelt"
+    "type-fest"
   ]
 }
