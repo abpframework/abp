@@ -1,6 +1,8 @@
 # Microservice Solution: Adding New Microservices
 
-This document explains how to add new microservices to the microservice solution template. In the microservice solution template, there is a folder named `services` in the root directory. This folder contains all the microservices in the solution. Each microservice is a separate ASP.NET Core application and can be developed, tested, and deployed independently. There is also a folder named `_templates` in the root directory. There are some templates in this folder that you can use to create new microservices, API gateways, and applications. You can customize these templates if you need to.
+This document explains how to add new microservices to the microservice solution template. In the solution template, there is a folder named `services` in the root directory, which contains all the microservices in the solution. Each microservice is a separate ASP.NET Core application that can be developed, tested, and deployed independently.
+
+Additionally, there is a folder named `_templates` in the root directory. This folder contains templates you can use to create new microservices, API gateways, and applications. These templates can be customized according to your needs.
 
 ## Adding a New Microservice
 
@@ -10,7 +12,7 @@ In ABP Studio [Solution Explorer](../../studio/solution-explorer.md#adding-a-new
 
 ![new-microservice](images/new-microservice.png)
 
-It opens the `Create New Module` dialog. Enter the name of the new microservice, you can specify the output directory, and click the `Next` button. There is a name convention the *Module name* includes the solution name as a prefix, and the use of the dot(.) character in the *Module name* is not allowed.
+It opens the `Create New Module` dialog. Enter the name of the new microservice, specify the output directory if needed, and click the `Next` button. There is a naming convention: the *Module name* should include the solution name as a prefix, and the use of the dot (.) character in the *Module name* is not allowed.
 
 ![create-new-module](images/create-new-module.png)
 
@@ -24,11 +26,11 @@ The new microservice is created and added to the solution. You can see the new m
 
 ### Configuring the appsettings.json
 
-The new microservice is created with the necessary configurations and dependencies.We should configure the several sections by modifying the `appsettings.json` file. 
- * We should set the `Administration` & `AbpBlobStoring` connection strings.
- * We should set the correct `StringEncryption` key.
- * We should set the `CorsOrigins` to allow the web gateway to access the microservice.
- * We should set the `AuthServer` configurations to enable the microservice to authenticate and authorize the users.
+The new microservice is created with the necessary configurations and dependencies. We should configure several sections by modifying the `appsettings.json` file:
+ * Set the `Administration` & `AbpBlobStoring` connection strings.
+ * Set the correct `StringEncryption` key.
+ * Set the `CorsOrigins` to allow the web gateway to access the microservice.
+ * Set the `AuthServer` configurations to enable the microservice to authenticate and authorize users.
 
 You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `appsettings.json` file for the `ProductService` microservice.
 
@@ -88,7 +90,7 @@ You can copy the configurations from the existing microservices and modify them 
 
 We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `ProductService` microservice.
 
-Create API scopes and add the requested API scope for swagger clients in the `CreateApiScopesAsync` and `CreateSwaggerClientsAsync` methods in the `OpenIddictDataSeeder` class.
+Create API scopes and add the required API scope for Swagger clients in the `CreateApiScopesAsync` and `CreateSwaggerClientsAsync` methods in the `OpenIddictDataSeeder` class.
 
 ```csharp
 private async Task CreateApiScopesAsync()
@@ -111,7 +113,7 @@ private async Task CreateSwaggerClientsAsync()
 }
 ```
 
-Add redirect URL for the new service in the `CreateSwaggerClientAsync` method.
+Add the redirect URL for the new service in the `CreateSwaggerClientAsync` method.
 
 ```csharp
 private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
@@ -144,7 +146,7 @@ private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
 }
 ```
 
-Add allowed scope for the web (front-end) application(s) in the `CreateClientsAsync` method. You might have different clients for different UI applications such as web, angular, react, etc. You should add the new service to the allowed scopes of the clients.
+Add the allowed scope for the web (front-end) application(s) in the `CreateClientsAsync` method. You might have different clients for different UI applications such as web, Angular, React, etc. Ensure you add the new service to the allowed scopes of these clients.
 
 ```csharp
 private async Task CreateClientsAsync()
@@ -204,10 +206,9 @@ Add the new service URL to the `appsettings.json` file in the `Identity` service
 }
 ```
 
-
 ### Configuring the AuthServer
 
-We should configure the AuthServer for *CORS* and *RedirectAllowedUrls*.
+We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
 
 ```json
 "App": {
@@ -220,7 +221,7 @@ We should configure the AuthServer for *CORS* and *RedirectAllowedUrls*.
 
 ### Configuring the API Gateway
 
-We should configure the API Gateway to allow the web gateway to access the new microservice. First, we should add the *ProductService* sections to the `appsettings.json` file in the `WebGateway` service.
+We should configure the API Gateway to allow the web gateway to access the new microservice. First, we should add the **ProductService** sections to the `appsettings.json` file in the `WebGateway` project.
 
 ```json
 "ReverseProxy": {
@@ -255,7 +256,7 @@ We should configure the API Gateway to allow the web gateway to access the new m
 }
 ```
 
-Afterwards open the `ProjectNameWebGatewayModule` class in the `WebGateway` service and add the `ProductService` to the `ConfigureSwaggerUI` method.
+Afterwards, open the `ProjectNameWebGatewayModule` class in the `WebGateway` and add the `ProductService` to the `ConfigureSwaggerUI` method.
 
 ```csharp
 options.OAuthScopes(
@@ -268,7 +269,7 @@ options.OAuthScopes(
 
 ### Configuring the UI Services
 
-We should configure the UI application(s) to allow the new microservice to access through the web gateway. To do this, we should add the new service scope to the `ConfigureAuthentication` method in the `ProjectNameWebModule` class in the `Web` or `Blazor` application.
+We should configure the UI application(s) to allow the new microservice to access through the web gateway. To do this, we should add the new service scope to the `ConfigureAuthentication` method in the `ProjectName...Module` class in the `Web` or `Blazor` application.
 
 ```csharp
 context.Services.AddAuthentication(options =>
@@ -290,7 +291,7 @@ context.Services.AddAuthentication(options =>
 });
 ```
 
-Similarly, if you have an Angular application, you should add the new service scope to the oAuthConfig in `environment.ts`:
+Similarly, if you have an Angular application, you should add the new service scope to the `oAuthConfig` in `environment.ts`:
 
 ```typescript
 const baseUrl = 'http://localhost:4200';
@@ -307,7 +308,7 @@ const oAuthConfig = {
 
 ### Add the New Microservice to the Solution Runner
 
-We should add the new microservice to the solution runner [profile](../../studio/running-applications.md#profile) for running application in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new microservice to the solution runner profile. Afterwards you can start the new microservice by selecting the new microservice in the solution runner.
+We should add the new microservice to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new microservice to the solution runner profile. Afterwards, you can start the new microservice by selecting it in the solution runner.
 
 ![product-service-solution-runner](images/product-service-solution-runner.png)
 
@@ -325,24 +326,22 @@ If you want to monitor the new microservice with Prometheus when you debug the s
 
 ## Creating Helm Chart for the New Microservice
 
-If you want to deploy the new microservice to Kubernetes, you should create a Helm chart for the new microservice. 
+If you want to deploy the new microservice to Kubernetes, you should create a Helm chart for the new microservice.
 
 First, we need to add the new microservice to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `build-all-images.ps1` script for the `ProductService` microservice.
 
 ```powershell
-./build-image.ps1 -ProjectPath "../../services/administration/Acme.Bookstore.AdministrationService/Acme.Bookstore.AdministrationService.csproj" -ImageName bookstore/administration
 ./build-image.ps1 -ProjectPath "../../services/product-service/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
 ```
 
-Then, we need to add connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `ProductService` microservice.
+Then, we need to add the connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `ProductService` microservice.
 
 ```yaml
 global:
   ...
   connectionStrings:
-    administration: "Server=[RELEASE_NAME]-sqlserver,1433; Database=Bookstore_Administration; User Id=sa; Password=myPassw@rd; TrustServerCertificate=True"
+    ...
     productService: "Server=[RELEASE_NAME]-sqlserver,1433; Database=Bookstore_ProductService; User Id=sa; Password=myPassw@rd; TrustServerCertificate=True"
-  ...
 ```
 
 Afterwards, we need to create a new Helm chart for the new microservice. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `productservice` Helm chart for the `ProductService` microservice.
@@ -441,6 +440,6 @@ Last but not least, we need to configure the helm chart environments for identit
   value: "http://{{ .Release.Name }}-productservice"
 ```
 
-
-
 ## Customizing the Microservice Template
+
+You can customize the microservice template if needed. Add new configurations, dependencies, or modules to the template by opening the `_templates` folder in the root directory and then the `service_nolayers` folder. Modify the `service_nolayers` template as required. The naming convention dictates that *microservicename* represents the name of the microservice when created. Use *microservicename* in the template files for dynamic naming. Existing `service_nolayers` template do not include the [SaaS](../../modules/saas.md) and [Audit Logging](../../modules/audit-logging-pro.md) modules by default. If creating a solution with these modules, add the necessary configurations to the `service_nolayers` template files.
