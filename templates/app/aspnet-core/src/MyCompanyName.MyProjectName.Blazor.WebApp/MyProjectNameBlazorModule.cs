@@ -23,7 +23,7 @@ using Volo.Abp.AspNetCore.Components.Server;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.AspNetCore.GlobalAssets;
+using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -58,6 +58,7 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpIdentityBlazorServerModule),
     typeof(AbpTenantManagementBlazorServerModule),
@@ -153,13 +154,11 @@ public class MyProjectNameBlazorModule : AbpModule
 
     private void ConfigureBundles()
     {
-        Configure<AbpGlobalAssetsOptions>(options =>
-        {
-            options.StartupModuleType = typeof(MyProjectNameBlazorClientModule);
-        });
-
         Configure<AbpBundlingOptions>(options =>
         {
+            // Blazor Web App
+            options.Parameters.InteractiveAuto = true;
+
             // MVC UI
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,

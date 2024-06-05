@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BasicTheme.Installer", "src\Volo.Abp.BasicTheme.Installer\Volo.Abp.BasicTheme.Installer.csproj", "{3068A87F-3348-4981-8241-2630BC496117}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling", "src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling.csproj", "{D02053D9-10EF-4717-A792-A53F83347816}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{3068A87F-3348-4981-8241-2630BC496117}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3068A87F-3348-4981-8241-2630BC496117}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3068A87F-3348-4981-8241-2630BC496117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D02053D9-10EF-4717-A792-A53F83347816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D02053D9-10EF-4717-A792-A53F83347816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D02053D9-10EF-4717-A792-A53F83347816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D02053D9-10EF-4717-A792-A53F83347816}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C8068E7F-4A04-4755-8976-C2A4C0ADC708} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
@@ -68,5 +74,6 @@ Global
 		{51B491ED-F959-4974-A876-528B5F16BC92} = {0BC55E3B-4964-48E3-A390-2ADD37980149}
 		{8C336CB8-F7A9-4203-AE55-D8F5FDB2A958} = {0BC55E3B-4964-48E3-A390-2ADD37980149}
 		{3068A87F-3348-4981-8241-2630BC496117} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
+		{D02053D9-10EF-4717-A792-A53F83347816} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}
 	EndGlobalSection
 EndGlobal

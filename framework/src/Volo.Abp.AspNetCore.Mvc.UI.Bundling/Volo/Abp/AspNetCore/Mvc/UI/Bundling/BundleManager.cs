@@ -240,7 +240,7 @@ public class BundleManager : IBundleManager, ITransientDependency
 
     protected virtual BundleConfigurationContext CreateBundleConfigurationContext()
     {
-        return new BundleConfigurationContext(ServiceProvider, HostingEnvironment.WebRootFileProvider);
+        return new BundleConfigurationContext(ServiceProvider, HostingEnvironment.WebRootFileProvider, Options.Parameters);
     }
 
     protected virtual List<IBundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)

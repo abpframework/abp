@@ -4,15 +4,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.Blazor.Client;
 using Volo.Abp;
-using Volo.Abp.AspNetCore;
+using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
-using Volo.Abp.AspNetCore.GlobalAssets;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName.Blazor;
 
-[DependsOn(typeof(AbpAutofacModule), typeof(AbpAspNetCoreModule), typeof(AbpAspNetCoreModule))]
+[DependsOn(
+    typeof(AbpAutofacModule),
+    typeof(AbpAspNetCoreMvcUiBundlingModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule)
+)]
 public class MyProjectNameBlazorModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -21,11 +25,6 @@ public class MyProjectNameBlazorModule : AbpModule
         Configure<RouteOptions>(options =>
         {
             options.SuppressCheckForUnhandledSecurityMetadata = true;
-        });
-
-        Configure<AbpGlobalAssetsOptions>(options =>
-        {
-            options.StartupModuleType = typeof(MyProjectNameBlazorClientModule);
         });
 
         // Add services to the container.
