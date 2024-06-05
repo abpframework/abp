@@ -245,7 +245,5 @@
         "Settings:Menu:CmsKit":"CMS",
         "CommentsAwaitingApproval":"Comments Awaiting Approval",
         "CommentSubmittedForApproval": "Your comment has been submitted for approval.",
-        "CommentUpdatedForApproval": "Your comment has been updated and submitted for approval.",
-        "CommentRequireApprovementWarning": "Once this setting is enabled, your existing comments will not appear in the UI if they are not approved. Do you want to continue the process?"
     }
 }

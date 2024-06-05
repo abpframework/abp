@@ -25,18 +25,8 @@
                         previousValue = commentRequireApprovement;
                     })
                 }
-                
-                if (isRequireApproved && !previousValue) {
-                    abp.message.confirm(l("CommentRequireApprovementWarning"), function (ok) {
-                        if (ok) {
-                            UpdateSettings(isRequireApproved);
-                        } else {
-                            $('#RequireApprovementCheckbox').prop('checked', false);
-                        }
-                    });
-                } else {
-                    UpdateSettings(isRequireApproved);
-                }
+
+                UpdateSettings(isRequireApproved);
             });
         };
 

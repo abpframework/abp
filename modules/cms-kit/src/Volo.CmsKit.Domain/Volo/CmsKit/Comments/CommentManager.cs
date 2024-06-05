@@ -1,9 +1,9 @@
-﻿
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.SettingManagement;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Comments;
@@ -11,10 +11,14 @@ namespace Volo.CmsKit.Comments;
 public class CommentManager : DomainService
 {
     protected ICommentEntityTypeDefinitionStore DefinitionStore { get; }
+    protected ISettingManager SettingManager { get; }
 
-    public CommentManager(ICommentEntityTypeDefinitionStore definitionStore)
+    public CommentManager(
+        ICommentEntityTypeDefinitionStore definitionStore, 
+        ISettingManager settingManager)
     {
         DefinitionStore = definitionStore;
+        SettingManager = settingManager;
     }
 
     public virtual async Task<Comment> CreateAsync([NotNull] CmsUser creator,
@@ -34,14 +38,27 @@ public class CommentManager : DomainService
             throw new EntityNotCommentableException(entityType);
         }
 
-        return new Comment(
-                GuidGenerator.Create(),
-                entityType,
-                entityId,
-                text,
-                repliedCommentId,
-                creator.Id,
-                url,
-                CurrentTenant.Id);
+        var comment =  new Comment(
+            GuidGenerator.Create(),
+            entityType,
+            entityId,
+            text,
+            repliedCommentId,
+            creator.Id,
+            url,
+            CurrentTenant.Id);
+        
+        
+        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.Comments.RequireApprovement));
+        if (isRequireApprovementEnabled)
+        {
+            comment.WaitForApproval();
+        }
+        else
+        {
+            comment.Approve();
+        }
+
+        return comment;
     }
 }
