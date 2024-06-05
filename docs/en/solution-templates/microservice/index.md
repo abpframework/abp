@@ -17,29 +17,29 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [API Gateways](api-gateways.md)
   * [Web Applications](web-applications.md)
   * [Mobile Applications](mobile-applications.md)
-* Built-In Features
+* [Built-In Features](built-in-features.md)
   * [Authentication](authentication.md)
   * [Database configurations](database-configurations.md)
   * [Logging (with Serilog and Elasticsearch)](logging.md)
   * [Monitoring (with Prometheus and Grafana)](monitoring.md)
-  * Swagger integration
-  * Permission management
-  * Feature management
-  * Localization system
-  * Background Jobs
-  * Background Workers
-  * Distributed Locking
-  * Distributed Cache
-  * Multi-Tenancy
-  * BLOB Storing
-  * CORS configuration
-* Communication
-  * Distributed Events
-  * HTTP API Calls
-  * gRPC Calls
-* Helm Charts and Kubernetes
+  * [Swagger integration](swagger-integration.md)
+  * [Permission management](permission-management.md)
+  * [Feature management](feature-management.md)
+  * [Localization system](localization-system.md)
+  * [Background Jobs](background-jobs.md)
+  * [Background Workers](background-workers.md)
+  * [Distributed Locking](distributed-locking.md)
+  * [Distributed Cache](distributed-cache.md)
+  * [Multi-Tenancy](multi-tenancy.md)
+  * [BLOB Storing](blob-storing.md)
+  * [CORS configuration](cors-configuration.md)
+* [Communication](communication.md)
+  * [Distributed Events](distributed-events.md)
+  * [HTTP API Calls](http-api-calls.md)
+  * [gRPC Calls](grpc-calls.md)
+* [Helm Charts and Kubernetes](helm-charts-and-kubernetes.md)
 * Guides
-  * Adding new microservices
+  * [Adding new microservices](adding-new-microservices.md)
   * Adding new applications
   * Adding new API gateways
   * Mono-repo vs multiple repository approaches
