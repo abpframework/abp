@@ -1,17 +1,17 @@
 import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
+import { ReadonlyDeep } from 'type-fest';
 
 export abstract class ActionList<R = any, A = Action<R>> extends LinkedList<A> {}
 
-export abstract class ActionData<R = any> {
+export abstract class ActionData<R = any, T = any> {
   abstract getInjected: <T>(
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
     flags?: InjectOptions | InjectFlags,
   ) => T;
   index?: number;
-  abstract record: R;
+  abstract record: T;
 
   get data(): ReadonlyActionData<R> {
     return {
@@ -22,7 +22,7 @@ export abstract class ActionData<R = any> {
   }
 }
 
-export type ReadonlyActionData<R = any> = O.Readonly<Omit<ActionData<R>, 'data'>>;
+export type ReadonlyActionData<R = any, T = any> = ReadonlyDeep<Omit<ActionData<R, T>, 'data'>>;
 
 export abstract class Action<R = any> {
   constructor(

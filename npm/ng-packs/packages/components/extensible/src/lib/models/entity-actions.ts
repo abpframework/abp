@@ -1,5 +1,4 @@
 import { Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
@@ -9,6 +8,7 @@ import {
   ActionsFactory,
 } from './actions';
 import { FormPropTooltip } from './form-props';
+import { Writable, SetOptional } from 'type-fest';
 
 export class EntityActionList<R = any> extends ActionList<R, EntityAction<R>> {}
 
@@ -47,8 +47,8 @@ export class EntityAction<R = any> extends Action<R> {
   }
 }
 
-export type EntityActionOptions<R = any> = O.Optional<
-  O.Writable<EntityAction<R>>,
+export type EntityActionOptions<R = any> = SetOptional<
+  Writable<EntityAction<R>>,
   'permission' | 'visible' | 'icon'
 >;
 

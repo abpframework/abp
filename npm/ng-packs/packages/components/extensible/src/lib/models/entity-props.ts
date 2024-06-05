@@ -1,7 +1,6 @@
 import { ABP, escapeHtmlChars } from '@abp/ng.core';
 import { InjectFlags, InjectOptions, InjectionToken, Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { O } from 'ts-toolbelt';
 import { ActionCallback } from './actions';
 import {
   Prop,
@@ -13,6 +12,7 @@ import {
   PropsFactory,
 } from './props';
 import { FormPropTooltip } from './form-props';
+import { SetOptional, Writable } from 'type-fest';
 
 export class EntityPropList<R = any> extends PropList<R, EntityProp<R>> {}
 
@@ -71,8 +71,8 @@ export class EntityProp<R = any> extends Prop<R> {
   }
 }
 
-export type EntityPropOptions<R = any> = O.Optional<
-  O.Writable<EntityProp<R>>,
+export type EntityPropOptions<R = any> = SetOptional<
+  Writable<EntityProp<R>>,
   | 'permission'
   | 'visible'
   | 'columnVisible'

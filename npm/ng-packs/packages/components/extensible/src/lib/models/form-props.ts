@@ -2,7 +2,6 @@ import { ABP } from '@abp/ng.core';
 import { Injector, Type } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { O } from 'ts-toolbelt';
 import {
   Prop,
   PropCallback,
@@ -15,6 +14,7 @@ import {
   Props,
   PropsFactory,
 } from './props';
+import { SetOptional, Writable } from 'type-fest';
 
 export class FormPropList<R = any> extends PropList<R, FormProp<R>> {}
 
@@ -121,15 +121,18 @@ export class FormProp<R = any> extends Prop<R> {
 export class FormPropData<R = any> extends PropData<R> {
   getInjected: PropData<R>['getInjected'];
 
-  constructor(injector: Injector, public readonly record: R) {
+  constructor(
+    injector: Injector,
+    public readonly record: R,
+  ) {
     super();
 
     this.getInjected = injector.get.bind(injector);
   }
 }
 
-export type FormPropOptions<R = any> = O.Optional<
-  O.Writable<FormProp<R>>,
+export type FormPropOptions<R = any> = SetOptional<
+  Writable<FormProp<R>>,
   | 'permission'
   | 'visible'
   | 'displayName'
