@@ -99,7 +99,7 @@ public abstract class EmailSenderBase : IEmailSender
 
     public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
     {
-        NormalizeMailForBase64Image(mail);
+        NormalizeMailForBase64Data(mail);
         if (normalize)
         {
             await NormalizeMailAsync(mail);
@@ -165,30 +165,32 @@ public abstract class EmailSenderBase : IEmailSender
     /// <param name="mail">Mail to be sent</param>
     protected abstract Task SendEmailAsync(MailMessage mail);
 
-    private static void NormalizeMailForBase64Image(MailMessage mail)
+    private static void NormalizeMailForBase64Data(MailMessage mail)
     {
         var htmlBody = mail.Body;
 
-        // Find all base64 image tags in the html message.
-        var base64ImageTags = Regex.Matches(htmlBody, @"<img src=""data:image/(png|jpeg|gif);base64,([^""]+)""[^>]*>");
+        // Find all base64 tags in the html message.
+        var base64Tags = Regex.Matches(htmlBody, @"src\s*=\s*(""|')\s*data\s*:\s*(?<mediaType>[\w/\-\.]+);(?<encoding>\w+),(?<data>.*)(""|')", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
-        foreach (Match base64ImageTag in base64ImageTags)
+        foreach (Match base64Tag in base64Tags)
         {
-            // Extract the base64-encoded image data from the tag.
-            var format = base64ImageTag.Groups[1].Value;
-            var base64Data = base64ImageTag.Groups[2].Value;
+            // Extract the base64-encoded data from the tag.
+            var tag = base64Tag.Groups[0].Value;
+            var mediaType = base64Tag.Groups["mediaType"].Value;
+            var encoding = base64Tag.Groups["encoding"].Value;
+            var data = base64Tag.Groups["data"].Value;
 
             // Convert the base64 data to binary.
-            var imageByte = Convert.FromBase64String(base64Data);
+            var dataBytes = Convert.FromBase64String(data);
 
-            // Create a unique image name and a MemoryStream containing the image data.
-            var imageName = Guid.NewGuid().ToString();
-            MemoryStream imageStream = new(imageByte);
+            // Create a unique name and a MemoryStream containing the data.
+            var name = Guid.NewGuid().ToString();
+            MemoryStream dataStream = new(dataBytes);
 
-            // Replace the base64 image tag with cid: image tag.
-            var newImageTag = base64ImageTag.Value.Replace($"<img src=\"data:image/{format};base64,{base64Data}\"", $"<img src =\"cid:{imageName}\"");
+            // Replace the base64 tag with cid: image tag.
+            var newTag = base64Tag.Value.Replace(tag, $"src=\"cid:{name}\"");
             // Create the HTML view
-            htmlBody = htmlBody.Replace(base64ImageTag.Value, newImageTag);
+            htmlBody = htmlBody.Replace(base64Tag.Value, newTag);
             var htmlView = AlternateView.CreateAlternateViewFromString(
                                                          htmlBody,
                                                          Encoding.UTF8,
@@ -198,11 +200,11 @@ public abstract class EmailSenderBase : IEmailSender
                                                         Encoding.UTF8,
                                                         MediaTypeNames.Text.Plain);
 
-            var img = new LinkedResource(imageStream, $"image/{format}")
+            LinkedResource img = new(dataStream, mediaType)
             {
-                ContentId = imageName
+                ContentId = name
             };
-            img.ContentType.MediaType = $"image/{format}";
+            img.ContentType.MediaType = mediaType;
             img.TransferEncoding = TransferEncoding.Base64;
             img.ContentType.Name = img.ContentId;
             img.ContentLink = new Uri("cid:" + img.ContentId);
