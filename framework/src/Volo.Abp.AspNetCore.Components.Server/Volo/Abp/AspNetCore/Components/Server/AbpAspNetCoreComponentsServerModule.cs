@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +31,6 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());
         context.Services.AddHttpClient(nameof(BlazorServerLookupApiRequestService))
             .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
