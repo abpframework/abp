@@ -108,6 +108,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Components.Web.Theming",
     "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly",
     "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling"
     "framework/src/Volo.Abp.AspNetCore.Components.Server",
     "framework/src/Volo.Abp.AspNetCore.Components.Server.Theming",
     "framework/src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming",    
@@ -280,6 +281,7 @@ $projects = (
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Server.BasicTheme",
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.Web.BasicTheme",
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
+    "modules/basic-theme/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling",
     "modules/basic-theme/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
     "modules/basic-theme/src/Volo.Abp.BasicTheme.Installer",
     "source-code/Volo.Abp.BasicTheme.SourceCode",
