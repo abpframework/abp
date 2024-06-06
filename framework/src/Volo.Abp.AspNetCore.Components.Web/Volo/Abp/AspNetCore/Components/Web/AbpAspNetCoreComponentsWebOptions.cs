@@ -1,4 +1,4 @@
-namespace Volo.Abp.AspNetCore.Components.Server;
+namespace Volo.Abp.AspNetCore.Components.Web;
 
 public class AbpAspNetCoreComponentsWebOptions
 {
