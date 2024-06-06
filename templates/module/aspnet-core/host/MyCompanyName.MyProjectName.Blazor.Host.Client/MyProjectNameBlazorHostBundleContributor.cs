@@ -1,16 +1,14 @@
-﻿using Volo.Abp.Bundling;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace MyCompanyName.MyProjectName.Blazor.Host.Client;
 
-public class MyProjectNameBlazorHostBundleContributor : IBundleContributor
+/* Add your global styles/scripts here.
+ * See https://docs.abp.io/en/abp/latest/UI/Blazor/Global-Scripts-Styles to learn how to use it
+ */
+public class MyProjectNameBlazorHostBundleContributor : BundleContributor
 {
-    public void AddScripts(BundleContext context)
+    public override void ConfigureBundle(BundleConfigurationContext context)
     {
-
-    }
-
-    public void AddStyles(BundleContext context)
-    {
-        context.Add("main.css", true);
+        context.Files.Add(new BundleFile("main.css", true));
     }
 }

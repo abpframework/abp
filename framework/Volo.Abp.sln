@@ -469,6 +469,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Abstrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling", "src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.csproj", "{2F9BA650-395C-4BE0-8CCB-9978E753562A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling", "src\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling.csproj", "{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1399,6 +1401,10 @@ Global
 		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F9BA650-395C-4BE0-8CCB-9978E753562A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1635,6 +1641,7 @@ Global
 		{DACD4485-61BE-4DE5-ACAE-4FFABC122500} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{E1051CD0-9262-4869-832D-B951723F4DDE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{2F9BA650-395C-4BE0-8CCB-9978E753562A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{7ADB6D92-82CC-4A2A-8BCF-FC6C6308796D} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
