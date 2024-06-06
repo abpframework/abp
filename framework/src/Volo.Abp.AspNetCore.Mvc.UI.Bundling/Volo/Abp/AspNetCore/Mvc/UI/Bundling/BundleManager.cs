@@ -172,7 +172,7 @@ public class BundleManager : IBundleManager, ITransientDependency
         );
     }
 
-    protected virtual bool IsBundlingEnabled()
+    public virtual bool IsBundlingEnabled()
     {
         switch (Options.Mode)
         {

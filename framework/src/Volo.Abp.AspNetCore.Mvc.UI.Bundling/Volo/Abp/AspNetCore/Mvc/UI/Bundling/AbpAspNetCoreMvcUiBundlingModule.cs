@@ -47,7 +47,7 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
              return;
          }
 
-         var bundleManager = context.ServiceProvider.GetRequiredService<IBundleManager>();
+         var bundleManager = context.ServiceProvider.GetRequiredService<BundleManager>();
          var webHostEnvironment = context.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
          var dynamicFileProvider = context.ServiceProvider.GetRequiredService<IDynamicFileProvider>();
          if (!bundlingOptions.GlobalAssets.GlobalStyleBundleName.IsNullOrWhiteSpace())
@@ -64,12 +64,18 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
                  }
 
                  var fileContent = await fileInfo.ReadAsStringAsync();
+                 if (!bundleManager.IsBundlingEnabled())
+                 {
+                     fileContent = CssRelativePath.Adjust(fileContent,
+                         file.FileName,
+                         Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
 
-                 fileContent = CssRelativePath.Adjust(fileContent,
-                     file.FileName,
-                     Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
-
-                 styles += $"/*{file.FileName}*/{Environment.NewLine}{fileContent}{Environment.NewLine}{Environment.NewLine}";
+                     styles += $"/*{file.FileName}*/{Environment.NewLine}{fileContent}{Environment.NewLine}{Environment.NewLine}";
+                 }
+                 else
+                 {
+                     styles += $"{fileContent}{Environment.NewLine}{Environment.NewLine}";
+                 }
              }
 
              dynamicFileProvider.AddOrUpdate(
@@ -91,8 +97,14 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
                  }
 
                  var fileContent = await fileInfo.ReadAsStringAsync();
-
-                 scripts += $"//{file.FileName}{Environment.NewLine}{fileContent.EnsureEndsWith(';')}{Environment.NewLine}{Environment.NewLine}";
+                 if (!bundleManager.IsBundlingEnabled())
+                 {
+                     scripts += $"{fileContent.EnsureEndsWith(';')}{Environment.NewLine}{Environment.NewLine}";
+                 }
+                 else
+                 {
+                     scripts += $"//{file.FileName}{Environment.NewLine}{fileContent.EnsureEndsWith(';')}{Environment.NewLine}{Environment.NewLine}";
+                 }
              }
 
              dynamicFileProvider.AddOrUpdate(
