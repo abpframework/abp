@@ -7,6 +7,8 @@ using MyCompanyName.MyProjectName.Blazor;
 using Serilog;
 using Serilog.Events;
 
+namespace MyCompanyName.MyProjectName.Blazor;
+
 public class Program
 {
     public async static Task<int> Main(string[] args)

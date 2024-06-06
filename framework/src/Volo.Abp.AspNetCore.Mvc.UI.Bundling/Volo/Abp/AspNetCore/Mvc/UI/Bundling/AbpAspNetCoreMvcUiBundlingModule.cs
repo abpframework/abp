@@ -44,7 +44,6 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
          var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpAspNetCoreMvcUiBundlingModule>>();
          if (!bundlingOptions.GlobalAssets.Enabled)
          {
-             logger.LogWarning("Global assets feature is disabled. Skipping the initialization...");
              return;
          }
 
