@@ -188,13 +188,6 @@ $(function () {
                 }
             },
             {
-                width: "15%",
-                title: l("CreationTime"),
-                data: "creationTime",
-                orderable: true,
-                dataFormat: "datetime"
-            },
-            {
                 width: "5%",
                 title: l("ApproveState"),
                 orderable: false,
@@ -215,6 +208,13 @@ $(function () {
 
                     return icons;
                 }
+            },
+            {
+                width: "15%",
+                title: l("CreationTime"),
+                data: "creationTime",
+                orderable: true,
+                dataFormat: "datetime"
             }
         ]
     }));
