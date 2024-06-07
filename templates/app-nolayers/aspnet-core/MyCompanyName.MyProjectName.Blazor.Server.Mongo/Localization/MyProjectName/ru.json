@@ -1,6 +1,7 @@
 {
   "culture": "ru",
   "texts": {
+    "AppName": "MyProjectName",
     "Welcome_Title": "Bine ati venit",
     "Welcome_Text": "Acesta este un șablon de pornire a aplicației minimaliste, cu un singur strat, pentru Cadrul ABP.",
     "Menu:Home": "Главная"
