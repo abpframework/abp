@@ -443,3 +443,17 @@ Last but not least, we need to configure the helm chart environments for identit
 ## Customizing the Microservice Template
 
 You can customize the microservice template if needed. Add new configurations, dependencies, or modules to the template by opening the `_templates` folder in the root directory and then the `service_nolayers` folder. Modify the `service_nolayers` template as required. The naming convention dictates that *microservicename* represents the name of the microservice when created. Use *microservicename* in the template files for dynamic naming. Existing `service_nolayers` template do not include the [SaaS](../../modules/saas.md) and [Audit Logging](../../modules/audit-logging-pro.md) modules by default. If creating a solution with these modules, add the necessary configurations to the `service_nolayers` template files.
+
+## Developing the UI for the New Microservice
+
+After adding the new microservice to the solution, you can develop the UI for the new microservice. For .NET applications, you can add the microservice *Contracts* package to the UI application(s) to access the services provided by the new microservice. Afterwards, you can use the [generate-proxy](../../cli/index.md#generate-proxy) command to generate the proxy classes for the new microservice.
+
+```bash
+abp generate-proxy -t csharp -url http://localhost:44333/ -m productService --without-contracts
+```
+
+Next, start creating *Pages* and *Components* for the new microservice in the UI application(s). Similarly, if you have an Angular application, you can use the [generate-proxy](../../cli/index.md#generate-proxy) command to generate the proxy classes for the new microservice and start developing the UI.
+
+```bash
+abp generate-proxy -t ng -url http://localhost:44333/ -m productService
+```
