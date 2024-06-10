@@ -161,7 +161,11 @@
     @if (prop.displayTextResolver) {
       {{ prop.displayTextResolver(data) | abpLocalization }}
     } @else {
-      {{ prop.displayName | abpLocalization }}
+      @if (prop.isExtra) {
+        {{ '::' + prop.displayName | abpLocalization }}
+      } @else {
+        {{ prop.displayName | abpLocalization }}
+      }
     }
     {{ asterisk }}
     @if (prop.tooltip) {
