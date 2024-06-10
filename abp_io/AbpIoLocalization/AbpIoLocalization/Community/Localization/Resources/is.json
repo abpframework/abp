@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Þetta er happdrættisíðan sem er tileinkuð þér að þakka þér fyrir að vera virkur samfélagsmeðlimur. Við gerum <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">ABP Community Talks</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, ABP .NET ráðstefnu</a> , sækjum eða styrkjum .NET tengda viðburði þar sem við gefum nokkrar gjafir.<br><br> Þú getur fylgst með þessari síðu til að sjá komandi happdrætti, mæta á þær eða sjá fyrri happdrætti sem við drögum út, þar á meðal vinningshafa.<br><br> Þakka þér fyrir að vera virkur meðlimur! Sjáumst í komandi happdrætti.",
     "RafflesInfoTitle": "ABP <span class=\"gradient-community\">samfélagshappdrætti</span>",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> stutt.",
-    "Preview": "Forskoðun"
+    "Preview": "Forskoðun",
+    "VisitPage": "Heimsæktu síðu",
+    "VisitVideoCourseDescription": "Ef þú vilt læra grunnatriði ABP Framework skaltu skoða ABP Essentials Video námskeiðin."
   }
 }

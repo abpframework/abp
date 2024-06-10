@@ -2,7 +2,7 @@
   "culture": "ru",
   "texts": {
     "Settings": "Настройки",
-    "SuccessfullySaved": "Успешно сохранено",
+    "SavedSuccessfully": "Успешно сохранено",
     "Permission:SettingManagement": "Управление настройками",
     "Permission:Emailing": "Отправка по электронной почте",
     "Permission:EmailingTest": "Тестовая рассылка по электронной почте",

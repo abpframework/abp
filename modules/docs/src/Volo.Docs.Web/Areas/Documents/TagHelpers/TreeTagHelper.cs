@@ -154,7 +154,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             
             return string.Format(LiItemTemplateWithLink,
                 listItemCss,
-                node.HasChildItems ? "chevron-right" : sb.Append("long-arrow-right ").Append(node.Path.IsNullOrEmpty() ?  "no-link" : "has-link").ToString(),
+                node.HasChildItems ? "chevron-right" : sb.Append(node.Path.IsNullOrEmpty() ?  "no-link" : "has-link").ToString(),
                 listInnerItem,
                 content);
         }

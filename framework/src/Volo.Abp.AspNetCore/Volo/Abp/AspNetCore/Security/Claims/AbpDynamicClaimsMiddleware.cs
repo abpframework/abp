@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -16,8 +18,22 @@ public class AbpDynamicClaimsMiddleware : AbpMiddlewareBase, ITransientDependenc
         {
             if (context.RequestServices.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value.IsDynamicClaimsEnabled)
             {
+                var authenticationType = context.User.Identity.AuthenticationType;
                 var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
                 context.User = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
+
+                if (context.User.Identity?.IsAuthenticated == false)
+                {
+                    var authenticationSchemeProvider = context.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
+                    if (!authenticationType.IsNullOrWhiteSpace())
+                    {
+                        var authenticationScheme = await authenticationSchemeProvider.GetSchemeAsync(authenticationType);
+                        if (authenticationScheme != null && typeof(IAuthenticationSignOutHandler).IsAssignableFrom(authenticationScheme.HandlerType))
+                        {
+                            await context.SignOutAsync(authenticationScheme.Name);
+                        }
+                    }
+                }
             }
         }
 

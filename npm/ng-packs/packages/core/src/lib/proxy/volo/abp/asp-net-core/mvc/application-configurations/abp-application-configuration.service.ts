@@ -1,5 +1,6 @@
 import type { ApplicationConfigurationDto, ApplicationConfigurationRequestOptions } from './models';
-import { RestService } from '../../../../../../services/rest.service';
+import { RestService } from '../../../../../../services';
+import { Rest } from '../../../../../../models';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -8,15 +9,14 @@ import { Injectable } from '@angular/core';
 export class AbpApplicationConfigurationService {
   apiName = 'abp';
 
-  get = (options: ApplicationConfigurationRequestOptions) =>
-    this.restService.request<any, ApplicationConfigurationDto>(
-      {
-        method: 'GET',
-        url: '/api/abp/application-configuration',
-        params: { includeLocalizationResources: options.includeLocalizationResources },
-      },
-      { apiName: this.apiName },
-    );
 
-  constructor(private restService: RestService) {}
+  get = (options: ApplicationConfigurationRequestOptions, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ApplicationConfigurationDto>({
+      method: 'GET',
+      url: '/api/abp/application-configuration',
+      params: { includeLocalizationResources: options.includeLocalizationResources },
+    },
+      { apiName: this.apiName, ...config });
+
+  constructor(private restService: RestService) { }
 }

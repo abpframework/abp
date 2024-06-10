@@ -25,7 +25,8 @@ namespace Volo.Abp.AspNetCore;
     typeof(AbpHttpModule),
     typeof(AbpAuthorizationModule),
     typeof(AbpValidationModule),
-    typeof(AbpExceptionHandlingModule)
+    typeof(AbpExceptionHandlingModule),
+    typeof(AbpAspNetCoreAbstractionsModule)
     )]
 public class AbpAspNetCoreModule : AbpModule
 {
