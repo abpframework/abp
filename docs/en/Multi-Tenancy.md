@@ -394,6 +394,8 @@ app.UseMultiTenancy();
 
 `ITenantStore` is used to get the tenant configuration from a data source.
 
+> Tenant names are not case-sensitive. `ITenantStore` will use the `NormalizedName` parameter to get tenants, You need to use `ITenantNormalizer` to normalize tenant names.
+
 #### Tenant Management Module
 
 The [tenant management module](Modules/Tenant-Management) is **included in the startup templates** and implements the `ITenantStore` interface to get the tenants and their configuration from a database. It also provides the necessary functionality and UI to manage the tenants and their connection strings.
@@ -408,11 +410,13 @@ The [tenant management module](Modules/Tenant-Management) is **included in the s
 "Tenants": [
     {
       "Id": "446a5211-3d72-4339-9adc-845151f8ada0",
-      "Name": "tenant1"
+      "Name": "tenant1",
+      "NormalizedName": "TENANT1"
     },
     {
       "Id": "25388015-ef1c-4355-9c18-f6b6ddbaf89d",
       "Name": "tenant2",
+      "NormalizedName": "TENANT2",
       "ConnectionStrings": {
         "Default": "...tenant2's db connection string here..."
       }

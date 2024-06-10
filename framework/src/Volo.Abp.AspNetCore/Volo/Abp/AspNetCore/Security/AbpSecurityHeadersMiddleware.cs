@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Security;
 
-public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
+public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     public IOptions<AbpSecurityHeadersOptions> Options { get; set; }
     protected const string ScriptSrcKey = "script-src";
@@ -20,7 +21,7 @@ public class AbpSecurityHeadersMiddleware : IMiddleware, ITransientDependency
         Options = options;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         /*X-Content-Type-Options header tells the browser to not try and “guess” what a mimetype of a resource might be, and to just take what mimetype the server has returned as fact.*/
         AddHeader(context, "X-Content-Type-Options", "nosniff");

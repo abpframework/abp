@@ -163,6 +163,8 @@ type FormPropOptions<R = any> = {
   options?: PropCallback<R, Observable<ABP.Option<any>[]>>;
   autocomplete?: string;
   isExtra? boolean;
+  formText?: string;
+  tooltip?: FormPropTooltip;
 };
 ```
 
@@ -182,6 +184,8 @@ As you see, passing `type` and `name` is enough to create a form prop. Here is w
 - **options** is a callback that is called when a dropdown is needed. It must return an observable. (_default:_ `undefined`)
 - **autocomplete** will be set as the `autocomplete` attribute of the input for the field. Please check [possible values](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete#Values). (_default:_ `'off'`)
 - **isExtra** indicates this prop is an object extension. When `true`, the value of the field will be mapped from and to `extraProperties` of the entity. (_default:_ `undefined`)
+- **formText** is the definition of the field. Placed under the field. (_default:_ `undefined`)
+- **tooltip** is the tooltip for the field placed near of the label (_default:_ `undefined`)
 
 > Important Note: Do not use `record` property of `PropData` in create form predicates and callbacks, because it will be `undefined`. You can use it on edit form contributors though.
 
@@ -235,7 +239,9 @@ const options: FormPropOptions<IdentityUserDto> = {
   },
   autocomplete: 'off',
   isExtra: true,
-  template: undefined | Type<any> // Custom angular component
+  template: undefined | Type<any>, // Custom angular component
+  tooltip: { text: 'Default::MyPropName_Tooltip', placement: 'top' },
+  formText: 'Default::MyPropName_Description',
 };
 
 const prop = new FormProp(options);

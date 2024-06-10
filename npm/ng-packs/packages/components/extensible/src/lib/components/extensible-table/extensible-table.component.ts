@@ -1,21 +1,4 @@
 import {
-  ABP,
-  ConfigStateService, 
-  getShortDateFormat,
-  getShortDateShortTimeFormat,
-  getShortTimeFormat,
-  ListService,
-  LocalizationModule,
-  PermissionDirective,
-  PermissionService,
-} from '@abp/ng.core';
-import {
-  AsyncPipe,
-  formatDate,
-  NgComponentOutlet, 
-  NgTemplateOutlet,
-} from '@angular/common';
-import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -29,8 +12,31 @@ import {
   TemplateRef,
   TrackByFunction,
 } from '@angular/core';
+import { AsyncPipe, formatDate, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
+import {
+  ABP,
+  ConfigStateService,
+  getShortDateFormat,
+  getShortDateShortTimeFormat,
+  getShortTimeFormat,
+  ListService,
+  LocalizationModule,
+  PermissionDirective,
+  PermissionService,
+} from '@abp/ng.core';
+import {
+  AbpVisibleDirective,
+  NgxDatatableDefaultDirective,
+  NgxDatatableListDirective,
+} from '@abp/ng.theme.shared';
+
 import { ePropType } from '../../enums/props.enum';
 import { EntityActionList } from '../../models/entity-actions';
 import { EntityProp, EntityPropList } from '../../models/entity-props';
@@ -41,14 +47,7 @@ import {
   EXTENSIONS_IDENTIFIER,
   PROP_DATA_STREAM,
 } from '../../tokens/extensions.token';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { GridActionsComponent } from '../grid-actions/grid-actions.component';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AbpVisibleDirective,
-  NgxDatatableDefaultDirective,
-  NgxDatatableListDirective,
-} from '@abp/ng.theme.shared';
 
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
@@ -110,6 +109,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
   #injector = inject(Injector);
   getInjected = this.#injector.get.bind(this.#injector);
+  permissionService = this.#injector.get(PermissionService);
 
   constructor() {
     const extensions = this.#injector.get(ExtensionsService);
@@ -118,9 +118,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.actionList = extensions['entityActions'].get(name)
       .actions as unknown as EntityActionList<R>;
 
-    const permissionService = this.#injector.get(PermissionService);
     this.hasAtLeastOnePermittedAction =
-      permissionService.filterItemsByPolicy(
+      this.permissionService.filterItemsByPolicy(
         this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
       ).length > 0;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
@@ -172,32 +171,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     );
   }
 
-  setPage({ offset }) {
-    this.list.page = offset;
-  }
-
-  ngOnChanges({ data, recordsTotal }: SimpleChanges) {
-    if (data?.currentValue.length < 1 && recordsTotal?.currentValue > 0) {
-      let maxPage = Math.floor(Number(recordsTotal?.currentValue / this.list.maxResultCount));
-      
-      if(recordsTotal?.currentValue < this.list.maxResultCount) {
-        this.list.page = 0;
-        return;
-      }
-
-      if (recordsTotal?.currentValue % this.list.maxResultCount === 0) {
-        maxPage -= 1;
-      }
-
-      if (this.list.page < maxPage) {
-        this.list.page = this.list.page;
-        return;
-      }
-
-      this.list.page = maxPage;
-      return;
-    }
-
+  ngOnChanges({ data }: SimpleChanges) {
     if (!data?.currentValue) return;
 
     if (data.currentValue.length < 1) {
@@ -230,5 +204,27 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
       return record;
     });
+  }
+
+  isVisibleActions(rowData: any): boolean {
+    const actions = this.actionList.toArray();
+    const visibleActions = actions.filter(action => {
+      const { visible, permission } = action;
+
+      let isVisible = true;
+      let hasPermission = true;
+
+      if (visible) {
+        isVisible = visible({ record: rowData, getInjected: this.getInjected });
+      }
+
+      if (permission) {
+        hasPermission = this.permissionService.getGrantedPolicy(permission);
+      }
+
+      return isVisible && hasPermission;
+    });
+
+    return visibleActions.length > 0;
   }
 }

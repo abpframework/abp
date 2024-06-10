@@ -11,8 +11,8 @@ First of all, need to import the `ChartModule` to your feature module as follows
 ```ts
 // your-feature.module.ts
 
-import { ChartModule } from '@abp/ng.components/chart.js';
-import { ChartDemoComponent } from './chart-demo.component';
+import { ChartModule } from "@abp/ng.components/chart.js";
+import { ChartDemoComponent } from "./chart-demo.component";
 
 @NgModule({
   imports: [
@@ -30,20 +30,20 @@ Then, `abp-chart` component can be used. See an example:
 ```ts
 // chart-demo.component.ts
 
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-chart-demo',
+  selector: "app-chart-demo",
   template: ` <abp-chart type="pie" [data]="data"></abp-chart> `,
 })
 export class ChartDemoComponent {
   data = {
-    labels: ['Data 1', 'Data 2', 'Data 3'],
+    labels: ["Data 1", "Data 2", "Data 3"],
     datasets: [
       {
-        label: 'Dataset 1',
+        label: "Dataset 1",
         data: [40, 15, 45],
-        backgroundColor: ['#ff7675', '#fdcb6e', '#0984e3'],
+        backgroundColor: ["#ff7675", "#fdcb6e", "#0984e3"],
       },
     ],
   };
@@ -61,10 +61,10 @@ See the result:
 ### Doughnut
 
 ```ts
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-chart-demo',
+  selector: "app-chart-demo",
   template: `
     <abp-chart
       type="doughnut"
@@ -72,17 +72,18 @@ import { Component } from '@angular/core';
       [options]="options"
       width="400px"
       height="400px"
+      [plugins]="myPlugin"
     ></abp-chart>
   `,
 })
 export class ChartDemoComponent {
   data = {
-    labels: ['Data 1', 'Data 2', 'Data 3'],
+    labels: ["Data 1", "Data 2", "Data 3"],
     datasets: [
       {
-        label: 'Dataset 1',
+        label: "Dataset 1",
         data: [40, 15, 45],
-        backgroundColor: ['#a0e6c3', '#f0ea4c', '#5b9dc3'],
+        backgroundColor: ["#a0e6c3", "#f0ea4c", "#5b9dc3"],
       },
     ],
   };
@@ -91,14 +92,22 @@ export class ChartDemoComponent {
     plugins: {
       title: {
         display: true,
-        text: 'Doughnut Chart',
+        text: "Doughnut Chart",
         fontSize: 16,
       },
       legend: {
-        position: 'bottom',
+        position: "bottom",
       },
     },
   };
+
+  myPlugin = [
+    {
+      afterRender: (chart, args, options) => {
+        console.log("chart has been rendered");
+      },
+    },
+  ];
 }
 ```
 
@@ -109,10 +118,10 @@ Result:
 ### Bar
 
 ```ts
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-chart-demo',
+  selector: "app-chart-demo",
   template: `
     <abp-chart
       type="bar"
@@ -124,16 +133,16 @@ import { Component } from '@angular/core';
 })
 export class ChartDemoComponent {
   data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
       {
-        label: 'First dataset',
-        backgroundColor: '#42A5F5',
+        label: "First dataset",
+        backgroundColor: "#42A5F5",
         data: [65, 59, 80, 81, 56, 55, 40],
       },
       {
-        label: 'Second dataset',
-        backgroundColor: '#FFA726',
+        label: "Second dataset",
+        backgroundColor: "#FFA726",
         data: [28, 48, 40, 19, 86, 27, 90],
       },
     ],
@@ -148,10 +157,10 @@ Result:
 ### Radar
 
 ```ts
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-chart-demo',
+  selector: "app-chart-demo",
   template: `
     <abp-chart
       type="radar"
@@ -168,30 +177,30 @@ import { Component } from '@angular/core';
 export class ChartDemoComponent {
   data = {
     labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ],
     datasets: [
       {
-        label: 'Dataset 1',
-        backgroundColor: 'rgba(179,181,198,0.2)',
-        borderColor: 'rgba(179,181,198,1)',
+        label: "Dataset 1",
+        backgroundColor: "rgba(179,181,198,0.2)",
+        borderColor: "rgba(179,181,198,1)",
         data: [65, 59, 90, 81, 56, 55, 40, 35, 82, 51, 62, 95],
       },
       {
-        label: 'Dataset 2',
-        backgroundColor: 'rgba(255,99,132,0.2)',
-        borderColor: 'rgba(255,99,132,1)',
+        label: "Dataset 2",
+        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "rgba(255,99,132,1)",
         data: [28, 48, 40, 58, 96, 27, 100, 44, 85, 77, 71, 39],
       },
     ],
@@ -203,9 +212,9 @@ export class ChartDemoComponent {
       datasets: [
         ...this.data.datasets,
         {
-          label: 'Dataset 3',
-          backgroundColor: 'rgba(54,162,235,0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          label: "Dataset 3",
+          backgroundColor: "rgba(54,162,235,0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
           data: [90, 95, 98, 91, 99, 96, 89, 95, 98, 93, 92, 90],
         },
       ],

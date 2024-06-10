@@ -84,6 +84,7 @@
     "Permission:Edit": "ویرایش",
     "Permission:Delete": "حذف",
     "Permission:ChangePermissions": "تغییر مجوزها",
+    "Permission:ManageRoles": "مدیریت نقشها و وظایف",
     "Permission:UserManagement": "مدیریت کاربر",
     "Permission:UserLookup": "جستجوی کاربر",
     "DisplayName:Abp.Identity.Password.RequiredLength": "طول مورد نیاز",

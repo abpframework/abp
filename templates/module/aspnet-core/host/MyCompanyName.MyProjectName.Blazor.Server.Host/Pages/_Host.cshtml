@@ -4,6 +4,7 @@
 @using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
 @using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
 @using Volo.Abp.Localization
+@using Microsoft.AspNetCore.Components.Web
 @{
     Layout = null;
     var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
@@ -18,6 +19,7 @@
     <base href="~/" />
 
     <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body class="abp-application-layout bg-light @rtl">
     <component type="typeof(App)" render-mode="Server" />

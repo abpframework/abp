@@ -12,6 +12,7 @@ import {
   Props,
   PropsFactory,
 } from './props';
+import { FormPropTooltip } from './form-props';
 
 export class EntityPropList<R = any> extends PropList<R, EntityProp<R>> {}
 
@@ -30,7 +31,7 @@ export class EntityProp<R = any> extends Prop<R> {
   readonly action?: ActionCallback<R>;
   readonly component?: Type<any>;
   readonly enumList?: Array<ABP.Option<any>>;
-  readonly tooltip?: string;
+  readonly tooltip?: FormPropTooltip;
   readonly columnVisible: ColumnPredicate;
 
   constructor(options: EntityPropOptions<R>) {

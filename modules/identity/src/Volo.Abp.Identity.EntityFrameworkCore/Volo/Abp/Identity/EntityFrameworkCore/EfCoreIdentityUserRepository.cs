@@ -74,7 +74,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             {
                 Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
             }).ToListAsync(cancellationToken: cancellationToken);
-        
+
         var orgUnitRoles = await (from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
             join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
             join role in dbContext.Roles on roleOu.RoleId equals role.Id
@@ -89,7 +89,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             {
                 Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
             }).ToListAsync(cancellationToken: cancellationToken);
-        
+
         return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames {Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray()}).ToList();
     }
 
@@ -145,6 +145,20 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task RemoveClaimFromAllUsersAsync(string claimType, bool autoSave, CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var userClaims = await dbContext.Set<IdentityUserClaim>().Where(uc => uc.ClaimType == claimType).ToListAsync(cancellationToken: cancellationToken);
+        if (userClaims.Any())
+        {
+            (await GetDbContextAsync()).Set<IdentityUserClaim>().RemoveRange(userClaims);
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+            }
+        }
+    }
+
     public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
         string normalizedRoleName,
         bool includeDetails = false,
@@ -197,33 +211,27 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
-        var upperFilter = filter?.ToUpperInvariant();
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
-            .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                u =>
-                    u.NormalizedUserName.Contains(upperFilter) ||
-                    u.NormalizedEmail.Contains(upperFilter) ||
-                    (u.Name != null && u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
-            )
-            .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
-            .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName.Contains(userName))
-            .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber.Contains(phoneNumber))
-            .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email.Contains(emailAddress))
-            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name.Contains(name))
-            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname.Contains(surname))
-            .WhereIf(isLockedOut.HasValue, x => (x.LockoutEnabled && x.LockoutEnd.HasValue && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0) == isLockedOut.Value)
-            .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
-            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
-            .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal.Value)
-            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
-            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
-            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
+        var query = await GetFilteredQueryableAsync(
+            filter,
+            roleId,
+            organizationUnitId,
+            userName,
+            phoneNumber,
+            emailAddress,
+            name,
+            surname,
+            isLockedOut,
+            notActive,
+            emailConfirmed,
+            isExternal,
+            maxCreationTime,
+            minCreationTime,
+            maxModifitionTime,
+            minModifitionTime,
+            cancellationToken
+        );
+
+        return await query.IncludeDetails(includeDetails)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -279,33 +287,25 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         DateTime? minModifitionTime = null,
         CancellationToken cancellationToken = default)
     {
-        var upperFilter = filter?.ToUpperInvariant();
-        return await (await GetDbSetAsync())
-            .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                u =>
-                    u.NormalizedUserName.Contains(upperFilter) ||
-                    u.NormalizedEmail.Contains(upperFilter) ||
-                    (u.Name != null && u.Name.Contains(filter)) ||
-                    (u.Surname != null && u.Surname.Contains(filter)) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
-            )
-            .WhereIf(roleId.HasValue, identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value))
-            .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
-            .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
-            .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
-            .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
-            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
-            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
-            .WhereIf(isLockedOut.HasValue, x => (x.LockoutEnabled && x.LockoutEnd.HasValue && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0) == isLockedOut.Value)
-            .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
-            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
-            .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal.Value)
-            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
-            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
-            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
-            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime)
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        return await (await GetFilteredQueryableAsync(
+            filter,
+            roleId,
+            organizationUnitId,
+            userName,
+            phoneNumber,
+            emailAddress,
+            name,
+            surname,
+            isLockedOut,
+            notActive,
+            emailConfirmed,
+            isExternal,
+            maxCreationTime,
+            minCreationTime,
+            maxModifitionTime,
+            minModifitionTime,
+            cancellationToken
+        )).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
@@ -428,5 +428,60 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         {
             await (await GetDbContextAsync()).Set<IdentityUserOrganizationUnit>().Where(x => x.OrganizationUnitId == sourceOrganizationId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
         }
+    }
+
+    protected virtual async Task<IQueryable<IdentityUser>> GetFilteredQueryableAsync(
+        string filter = null,
+        Guid? roleId = null,
+        Guid? organizationUnitId = null,
+        string userName = null,
+        string phoneNumber = null,
+        string emailAddress = null,
+        string name = null,
+        string surname = null,
+        bool? isLockedOut = null,
+        bool? notActive = null,
+        bool? emailConfirmed = null,
+        bool? isExternal = null,
+        DateTime? maxCreationTime = null,
+        DateTime? minCreationTime = null,
+        DateTime? maxModifitionTime = null,
+        DateTime? minModifitionTime = null,
+        CancellationToken cancellationToken = default)
+    {
+        var upperFilter = filter?.ToUpperInvariant();
+        var query = await GetQueryableAsync();
+
+        if (roleId.HasValue)
+        {
+            var dbContext = await GetDbContextAsync();
+            var organizationUnitIds = await dbContext.Set<OrganizationUnitRole>().Where(q => q.RoleId == roleId.Value).Select(q => q.OrganizationUnitId).ToArrayAsync(cancellationToken: cancellationToken);
+            query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
+        }
+
+        return query
+            .WhereIf(
+                !filter.IsNullOrWhiteSpace(),
+                u =>
+                    u.NormalizedUserName.Contains(upperFilter) ||
+                    u.NormalizedEmail.Contains(upperFilter) ||
+                    (u.Name != null && u.Name.Contains(filter)) ||
+                    (u.Surname != null && u.Surname.Contains(filter)) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+            )
+            .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId.Value))
+            .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
+            .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
+            .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)
+            .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name == name)
+            .WhereIf(!string.IsNullOrWhiteSpace(surname), x => x.Surname == surname)
+            .WhereIf(isLockedOut.HasValue, x => (x.LockoutEnabled && x.LockoutEnd.HasValue && x.LockoutEnd.Value.CompareTo(DateTime.UtcNow) > 0) == isLockedOut.Value)
+            .WhereIf(notActive.HasValue, x => x.IsActive == !notActive.Value)
+            .WhereIf(emailConfirmed.HasValue, x => x.EmailConfirmed == emailConfirmed.Value)
+            .WhereIf(isExternal.HasValue, x => x.IsExternal == isExternal.Value)
+            .WhereIf(maxCreationTime != null, p => p.CreationTime <= maxCreationTime)
+            .WhereIf(minCreationTime != null, p => p.CreationTime >= minCreationTime)
+            .WhereIf(maxModifitionTime != null, p => p.LastModificationTime <= maxModifitionTime)
+            .WhereIf(minModifitionTime != null, p => p.LastModificationTime >= minModifitionTime);
     }
 }

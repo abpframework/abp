@@ -1,7 +1,7 @@
 import { inject, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, filter, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 
 import { HttpErrorReporterService } from '@abp/ng.core';
 
@@ -22,9 +22,7 @@ export class ErrorHandler {
   protected readonly routerErrorHandlerService = inject(RouterErrorHandlerService);
   protected readonly httpErrorConfig = inject(HTTP_ERROR_CONFIG);
   protected readonly customErrorHandlers = inject(CUSTOM_ERROR_HANDLERS);
-  protected readonly defaultHttpErrorHandler = (_, err: HttpErrorResponse) => throwError(() => err);
-  protected readonly httpErrorHandler =
-    inject(HTTP_ERROR_HANDLER, { optional: true }) || this.defaultHttpErrorHandler;
+  protected readonly httpErrorHandler = inject(HTTP_ERROR_HANDLER, { optional: true });
 
   constructor(protected injector: Injector) {
     this.listenToRestError();
@@ -42,10 +40,11 @@ export class ErrorHandler {
   }
 
   protected executeErrorHandler = (error: HttpErrorResponse) => {
-    const errHandler = this.httpErrorHandler(this.injector, error);
-    const isObservable = errHandler instanceof Observable;
+    if (this.httpErrorHandler) {
+      return this.httpErrorHandler(this.injector, error);
+    }
 
-    return (isObservable ? errHandler : of(null)).pipe(catchError(err => of(err)));
+    return of(error);
   };
 
   protected sortHttpErrorHandlers(
@@ -57,12 +56,12 @@ export class ErrorHandler {
 
   protected handleError(err: unknown) {
     if (this.customErrorHandlers && this.customErrorHandlers.length) {
-      const canHandleService = this.customErrorHandlers
+      const errorHandlerService = this.customErrorHandlers
         .sort(this.sortHttpErrorHandlers)
         .find(service => service.canHandle(err));
 
-      if (canHandleService) {
-        canHandleService.execute();
+      if (errorHandlerService) {
+        errorHandlerService.execute();
         return;
       }
     }
@@ -88,7 +87,7 @@ export class ErrorHandler {
   protected filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
     if (typeof status !== 'number') return false;
 
-    if (!this.httpErrorConfig || !this.httpErrorConfig.skipHandledErrorCodes) {
+    if (!this.httpErrorConfig?.skipHandledErrorCodes) {
       return true;
     }
 

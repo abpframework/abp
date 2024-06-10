@@ -229,6 +229,7 @@
     "ManageAccount": "Gérer son compte",
     "CommunityProfile": "Profil de la communauté",
     "BlogProfile": "Profil du blog",
-    "Tickets": "Des billets"
+    "Tickets": "Des billets",
+    "DisplayName:CommunityIndexPagePoll": "Sondage de la page d&#39;accueil de la communauté"
   }
 }

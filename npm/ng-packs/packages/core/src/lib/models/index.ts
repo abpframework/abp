@@ -8,3 +8,4 @@ export * from './session';
 export * from './utility';
 export * from './auth';
 export * from './auth-events';
+export * from './sort';

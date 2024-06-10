@@ -51,7 +51,9 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     this._busy = value;
   }
 
-  @Input() options: NgbModalOptions = {};
+  @Input() options: NgbModalOptions = {
+    keyboard: true,
+  };
 
   @Input() suppressUnsavedChangesWarning = this.suppressUnsavedChangesWarningToken;
 
@@ -204,8 +206,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
-        // TODO: check this
-        if (!this.isFormDirty || this.suppressUnsavedChangesWarning) {
+        if (this.isFormDirty && !this.suppressUnsavedChangesWarning) {
           event.preventDefault();
         }
       });

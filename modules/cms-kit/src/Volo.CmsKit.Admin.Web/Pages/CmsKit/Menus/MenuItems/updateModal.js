@@ -7,9 +7,7 @@ $(function () {
             var $pageId = $('#ViewModel_PageId');
             var $url = $('#ViewModel_Url');
             var $displayName = $('#ViewModel_DisplayName');
-            var $pageIdClearButton = $('#url-tab');
-
-            initSelectPageId();
+            var $menuItemForm = $('#menu-item-form');
 
             $pageId.on('change', function (params) {
                 $url.prop('disabled', $pageId.val());
@@ -23,21 +21,9 @@ $(function () {
 
             $pageId.trigger('change');
 
-            $pageIdClearButton.click(function () {
-                $pageId.val('');
-                $pageId.trigger('change');
+            $menuItemForm.on('submit', function (e) {
+                $('[href="#url"]').tab('show');
             });
-
-            function initSelectPageId() {
-                $pageId.data('autocompleteApiUrl', '/api/cms-kit-admin/menu-items/lookup/pages');
-                $pageId.data('autocompleteDisplayProperty', 'title');
-                $pageId.data('autocompleteValueProperty', 'id');
-                $pageId.data('autocompleteItemsProperty', 'items');
-                $pageId.data('autocompleteFilterParamName', 'filter');
-                $pageId.data('autocompleteParentSelector', '#menu-update-modal');
-
-                abp.dom.initializers.initializeAutocompleteSelects($pageId);
-            }
         };
 
         return {

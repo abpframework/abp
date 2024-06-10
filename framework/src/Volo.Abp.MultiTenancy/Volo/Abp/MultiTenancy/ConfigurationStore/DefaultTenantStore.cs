@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -16,9 +17,9 @@ public class DefaultTenantStore : ITenantStore, ITransientDependency
         _options = options.CurrentValue;
     }
 
-    public Task<TenantConfiguration?> FindAsync(string name)
+    public Task<TenantConfiguration?> FindAsync(string normalizedName)
     {
-        return Task.FromResult(Find(name));
+        return Task.FromResult(Find(normalizedName));
     }
 
     public Task<TenantConfiguration?> FindAsync(Guid id)
@@ -26,9 +27,14 @@ public class DefaultTenantStore : ITenantStore, ITransientDependency
         return Task.FromResult(Find(id));
     }
 
-    public TenantConfiguration? Find(string name)
+    public Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
     {
-        return _options.Tenants?.FirstOrDefault(t => t.Name == name);
+        return Task.FromResult<IReadOnlyList<TenantConfiguration>>(_options.Tenants);
+    }
+
+    public TenantConfiguration? Find(string normalizedName)
+    {
+        return _options.Tenants?.FirstOrDefault(t => t.NormalizedName == normalizedName);
     }
 
     public TenantConfiguration? Find(Guid id)

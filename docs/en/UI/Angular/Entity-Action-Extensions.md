@@ -311,6 +311,8 @@ type EntityActionOptions<R = any> = {
   visible?: ActionPredicate<R>,
   btnClass?: string,
   btnStyle?: string,
+  showOnlyIcon?: boolean,
+  tooltip?: FormPropTooltip;
 };
 ```
 
@@ -323,7 +325,9 @@ As you see, passing `action` and `text` is enough to create an entity action. He
 - **visible** is a predicate that will be used to decide if the current record should have this grid action or not. (_default:_ `() => true`)
 - **btnClass** is the classes that will be applied to the button. (_default:_ `'btn btn-primary text-center'`)
 - **btnStyle** is the styles that will be applied to the button. (_default:_ `''`)
-
+- **showOnlyIcon** is shows only the icon itself. (_default:_ `false`)
+- **tooltip** is only available in single entity action button. Adds an tooltip for button. (_default:_ undefined)
+  
 You may find a full example below.
 
 ### EntityAction\<R = any\>
@@ -342,6 +346,8 @@ const options: EntityActionOptions<IdentityUserDto> = {
   visible: data => data.record.isLockedOut,
   btnClass:'btn btn-warning text-center',
   btnStyle: '', //Adds inline style
+  showOnlyIcon: true,
+  tooltip: { text: 'AbpIdentity::Edit', placement: 'top' }
 };
 
 const action = new EntityAction(options);

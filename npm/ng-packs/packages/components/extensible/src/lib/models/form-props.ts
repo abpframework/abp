@@ -27,8 +27,14 @@ export interface FormPropGroup {
   className?: string;
 }
 
+export interface FormPropTooltip {
+  text: string;
+  placement?: 'top' | 'end' | 'bottom' | 'start';
+}
+
 export class GroupedFormPropList<R = any> {
   public readonly items: GroupedFormPropItem[] = [];
+  count = 1;
   addItem(item: FormProp<R>) {
     const groupName = item.group?.name;
     let group = this.items.find(i => i.group?.name === groupName);
@@ -37,7 +43,7 @@ export class GroupedFormPropList<R = any> {
     } else {
       group = {
         formPropList: new FormPropList(),
-        group: item.group,
+        group: item.group || { name: `default${this.count++}`, className: item.group?.className },
       };
       group.formPropList.addHead(item);
       this.items.push(group);
@@ -72,6 +78,7 @@ export class FormProp<R = any> extends Prop<R> {
   readonly group?: FormPropGroup | undefined;
   readonly displayTextResolver?: PropDisplayTextResolver<R>;
   readonly formText?: string;
+  readonly tooltip?: FormPropTooltip;
 
   constructor(options: FormPropOptions<R>) {
     super(
@@ -84,10 +91,12 @@ export class FormProp<R = any> extends Prop<R> {
       options.template,
       options.className,
       options.formText,
+      options.tooltip,
     );
     this.group = options.group;
     this.className = options.className;
     this.formText = options.formText;
+    this.tooltip = options.tooltip;
     this.asyncValidators = options.asyncValidators || (_ => []);
     this.validators = options.validators || (_ => []);
     this.disabled = options.disabled || (_ => false);
@@ -135,6 +144,7 @@ export type FormPropOptions<R = any> = O.Optional<
   | 'id'
   | 'displayTextResolver'
   | 'formText'
+  | 'tooltip'
 >;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;
