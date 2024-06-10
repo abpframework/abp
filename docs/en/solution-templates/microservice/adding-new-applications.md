@@ -11,3 +11,19 @@ To add a new web application to the solution, you can use the `web` template. Th
 In ABP Studio [Solution Explorer](../../studio/solution-explorer.md#adding-a-new-microservice-module), right-click on the `apps` folder and select `Add` -> `New Module` -> `Web`.
 
 ![new-web-application](images/new-web-application.png)
+
+It opens the `Create New Module` dialog. Enter the name of the new application, specify the output directory if needed, and click the `Next` button. There is a naming convention: the *Module name* should include the solution name as a prefix, and the use of the dot (.) character in the *Module name* is not allowed.
+
+![create-new-web-app-module](images/create-new-web-app-module.png)
+
+Select the UI framework and click the `Next` button.
+
+![create-new-module-ui-framework](images/create-new-module-ui-framework.png)
+
+Select the UI theme and click the `Create` button.
+
+![create-new-module-ui-theme](images/create-new-module-ui-theme.png)
+
+The new application is created and added to the solution. You can see the new microservice in the `apps` folder.
+
+![public-web-app](images/public-web-app.png)
