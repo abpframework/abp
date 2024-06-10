@@ -1443,7 +1443,7 @@
     "CreateANewSolution_Description1": "Everything starts by creating a new ABP integrated .NET solution.",
     "StartWithStartupTemplates": "Start one of the pre-built <a href=\"/startup-templates\">startup solution templates</a>",
     "SimpleMonolithApplicationTemplate": "Simple monolith application template",
-    "LayeredApplicationTemplate": "Layered application template",
+    "LayeredApplicationTemplate": "Modular monolith application template",
     "MicroserviceSolutionTemplate": "Microservice solution template",
     "CreateEmptySolutionAndUseAbp": "Or create a new empty .NET solution and install ABP NuGet & NPM <a href=\"/packages\">packages</a> yourself.",
     "CreatingSolutionWithMultipleOptions": "There are multiple UI and Database options while creating a new solution.",
