@@ -181,6 +181,7 @@
                             if (abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")) {
                                 abp.message.success(l("CommentSubmittedForApproval"), l("SavedSuccessfully"));
                             }
+                            $form.trigger('reset');
                             abp.ui.clearBusy();
                         },
                         error: function (data) {
