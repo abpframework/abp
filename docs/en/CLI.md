@@ -131,7 +131,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
-    * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
+    * `--theme`: Specifies the theme. Default theme is `leptonx-lite`. Available themes:
         * `leptonx-lite`: [LeptonX Lite Theme](Themes/LeptonXLite/AspNetCore.md).
         * `basic`: [Basic Theme](UI/AspNetCore/Basic-Theme.md).
   * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
@@ -147,7 +147,7 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
-    * `--theme`: Specifes the theme. Default theme is `leptonx-lite`. Available themes:
+    * `--theme`: Specifies the theme. Default theme is `leptonx-lite`. Available themes:
         * `leptonx-lite`: [LeptonX Lite Theme](Themes/LeptonXLite/AspNetCore.md).
         * `basic`: [Basic Theme](UI/AspNetCore/Basic-Theme.md).    
   * **`maui`**: .NET MAUI. A minimalist .NET MAUI application will be created if you specify this option.
