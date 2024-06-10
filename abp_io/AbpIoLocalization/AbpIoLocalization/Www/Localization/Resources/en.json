@@ -1524,7 +1524,7 @@
     "TwoFrameworkOptions_Description": "ABP provides both <span class=\"text-highlight\">React Native</span> and <span class=\"text-highlight\">.NET MAUI</span> mobile startup templates. This way, you can choose the one that best suits your needs. Both apps reuse code at the highest rate between iOS and Android platforms.",
     "PreIntegratedToYourBackend": "Pre-integrated to Your Backend",
     "PreIntegratedToYourBackend_Description": "ABP Mobile applications are pre-integrated to your backend APIs. It gets a valid authentication token from the server and makes authenticated requests.",
-    "MultiLanguage": "Multi-Language",
+    "MultiLanguage": "Multi-language",
     "MultiLanguage_Description": "It already supports more than 10 languages out of the box. You can also add next languages.",
     "Arabic": "Arabic",
     "Czech": "Czech",
