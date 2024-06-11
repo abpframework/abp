@@ -76,14 +76,15 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
         ConnectMethod.Invoke(this, Array.Empty<object>());
     }
 
-    protected virtual async Task ConnectAsync(CancellationToken token = default)
+    protected virtual async ValueTask<IDatabase> ConnectAsync(CancellationToken token = default)
     {
-        if (GetRedisDatabase() != null)
+        var redisDatabase = GetRedisDatabase();
+        if (redisDatabase != null)
         {
-            return;
+            return redisDatabase;
         }
 
-        await (Task)ConnectAsyncMethod.Invoke(this, new object[] { token })!;
+        return await (ValueTask<IDatabase>)ConnectAsyncMethod.Invoke(this, new object[] { token })!;
     }
 
     public byte[]?[] GetMany(

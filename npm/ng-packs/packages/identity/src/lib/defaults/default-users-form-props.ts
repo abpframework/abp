@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
+import { ConfigStateService } from '@abp/ng.core';
 import { getPasswordValidators } from '@abp/ng.theme.shared';
 import { ePropType, FormProp } from '@abp/ng.components/extensible';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
