@@ -107,3 +107,36 @@ Add the new application URL to the `appsettings.json` file in the `Identity` ser
   }
 }
 ```
+
+### Configuring the AuthServer
+
+We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
+
+```json
+"App": {
+  "SelfUrl": "http://localhost:***",
+  "CorsOrigins": "...... ,http://localhost:44344",
+  "EnablePII": false,
+  "RedirectAllowedUrls": "...... ,http://localhost:44344"
+}
+```
+
+### Add the New Application to the Solution Runner
+
+We should add the new application to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new application to the solution runner profile. Afterwards, you can start the new application by selecting it in the solution runner.
+
+![web-public-solution-runner](images/web-public-solution-runner.png)
+
+## Docker Configuration for Prometheus
+
+If you want to monitor the new application with Prometheus when you debug the solution, you should add the new application to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing microservices and modify them according to the new application. Below is an example of the `prometheus.yml` file for the `WebPublic` application.
+
+```yml
+  - job_name: 'webpublic'
+    scheme: http
+    metrics_path: 'metrics'
+    static_configs:
+    - targets: ['host.docker.internal:44344']
+```
+
+## Creating Helm Chart for the New Microservice
