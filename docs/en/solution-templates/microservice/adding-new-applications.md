@@ -27,3 +27,83 @@ Select the UI theme and click the `Create` button.
 The new application is created and added to the solution. You can see the new microservice in the `apps` folder.
 
 ![public-web-app](images/public-web-app.png)
+
+### Configuring the appsettings.json
+
+The new application is created with the necessary configurations and dependencies. We should configure the `appsettings.json` file to set the Authority section for the authentication and Gateway section for the API gateway. The `Authority` section is the URL of the Identity Server, and the `Gateway` section is the URL of the API gateway. You can copy the configurations from the existing web application and modify them according to the new application. Below is an example of the `appsettings.json` file for the `Public` web application.
+
+```json
+{
+  "App": {
+    "SelfUrl": "http://localhost:44344",
+    "EnablePII": false
+  },
+  "AuthServer": {
+    "Authority": "http://localhost:44387",
+    "RequireHttpsMetadata": "false",
+    "ClientId": "WebPublic",
+    "ClientSecret": "1q2w3e*",
+    "IsOnK8s": "false",
+    "MetaAddress": "http://localhost:44387"
+  },
+  "RemoteServices": {
+    "Default": {
+      "BaseUrl": "http://localhost:44333"
+    }
+  },
+  ...
+}
+```
+
+### Configuring the OpenId Options
+
+You can use existing [openiddict applications](../../modules/openiddict.md#openiddictapplication] or create a new one for the new web application. In our example we use *WebPublic* as the `ClientId` and *1q2w3e\** as the `ClientSecret`. According to the configurations in the `appsettings.json` file, we should configure the `OpenIddictDataSeeder` in the `Identity` service. You can copy the configurations from the existing web application and modify them according to the new application. Below is an example of the `OpenIddictDataSeeder` configuration for the `Public` web application.
+
+```csharp
+private async Task CreateClientsAsync()
+{
+    ...
+
+    //Web Public Client
+    var webPublicClientRootUrl = _configuration["OpenIddict:Applications:WebPublic:RootUrl"]!.EnsureEndsWith('/');
+    await CreateOrUpdateApplicationAsync(
+        name: "WebPublic",
+        type: OpenIddictConstants.ClientTypes.Confidential,
+        consentType: OpenIddictConstants.ConsentTypes.Implicit,
+        displayName: "Web Public Client",
+        secret: "1q2w3e*",
+        grantTypes: new List<string> //Hybrid flow
+        {
+            OpenIddictConstants.GrantTypes.AuthorizationCode,
+            OpenIddictConstants.GrantTypes.Implicit
+        },
+        scopes: commonScopes.Union(new[]
+        {
+            "AuthServer", 
+            "IdentityService",
+            "SaasService",
+            "AuditLoggingService",
+            "AdministrationService"
+        }).ToList(),
+        redirectUris: new List<string> { $"{webPublicClientRootUrl}signin-oidc" },
+        postLogoutRedirectUris: new List<string>() { $"{webPublicClientRootUrl}signout-callback-oidc" },
+        clientUri: webPublicClientRootUrl,
+        logoUri: "/images/clients/aspnetcore.svg"
+    );
+}
+```
+
+Add the new application URL to the `appsettings.json` file in the `Identity` service.
+
+```json
+{
+  "OpenIddict": {
+    "Applications": {
+      ...
+      "WebPublic": {
+        "RootUrl": "http://localhost:44344"
+      }
+    }
+  }
+}
+```
