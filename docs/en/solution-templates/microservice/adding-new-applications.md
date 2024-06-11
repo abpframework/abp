@@ -174,3 +174,115 @@ Lastly, we should define the new application in the *_helpers.tpl* file in the `
 {{- print "https://" (.Values.global.hosts.webpublic | replace "[RELEASE_NAME]" .Release.Name) -}}
 {{- end -}}
 ```
+
+Afterwards, we need to create a new Helm chart for the new application. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `webpublic` Helm chart for the `WebPublic` application.
+
+```yaml
+# values.yaml
+image:
+  repository: "bookstore/webpublic"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+authServer:
+  clientSecret: "1q2w3e*"
+
+# Chart.yaml
+apiVersion: v2
+name: webpublic
+appVersion: "1.0"
+description: Bookstore Web Public Application
+version: 1.0.0
+type: application
+
+# webpublic.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+        ports:
+        - name: "http"
+          containerPort: 80
+        env:
+        - name: "DOTNET_ENVIRONMENT"
+          value: "{{ .Values.global.dotnetEnvironment }}"
+        - name: "App__SelfUrl"
+          value: "{{ include "bookstore.hosts.webpublic" . }}"
+        - name: App__EnablePII
+          value: "{{ .Values.global.enablePII }}"
+        - name: "AuthServer__Authority"
+          value: "{{ include "bookstore.hosts.authserver" . }}"
+        - name: "AuthServer__ClientSecret"
+          value: "{{ .Values.authServer.clientSecret }}"
+        - name: "AuthServer__IsOnK8s"
+          value: "true"
+        - name: "AuthServer__MetaAddress"
+          value: "http://{{ .Release.Name }}-authserver"
+        - name: "RemoteServices__Default__BaseUrl"
+          value: "http://{{ .Release.Name }}-webgateway"
+          ...
+
+# webpublic-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  ports:
+    - name: "80"
+      port: 80
+  selector:
+    app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+
+# webpublic-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  ingressClassName: "nginx"
+  tls:
+  - hosts:
+      - "{{ (include "bookstore.hosts.webpublic" .) | trimPrefix "https://" }}"
+    secretName: "{{ .Values.global.tlsSecret }}"
+  rules:
+  - host: "{{ (include "bookstore.hosts.webpublic" .) | trimPrefix "https://" }}"
+    http:
+      paths:
+      - path: /
+        pathType: "Prefix"
+        backend:
+          service:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+            port:
+              number: 80
+
+```
+
+After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
+
+![kubernetes-refresh-sub-charts](images/kubernetes-refresh-sub-charts.png)
+
+Then, update *Metadata* information right-click the *application* [sub-chart](../../studio/kubernetes.md#subchart), select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
+
+![application-chart-properties](application-chart-properties.png)
