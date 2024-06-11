@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Values;
 
 namespace Volo.Abp.TestApp.Domain;
 
-public class AppEntityWithNavigations : AggregateRoot<Guid>
+public class AppEntityWithNavigations : FullAuditedAggregateRoot<Guid>
 {
     protected AppEntityWithNavigations()
     {
