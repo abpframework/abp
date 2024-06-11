@@ -12,7 +12,7 @@ import {
   PropsFactory,
 } from './props';
 import { FormPropTooltip } from './form-props';
-import { SetOptional, Writable } from 'type-fest';
+import { O } from 'ts-toolbelt';
 
 export class EntityPropList<R = any> extends PropList<R, EntityProp<R>> {}
 
@@ -71,8 +71,7 @@ export class EntityProp<R = any> extends Prop<R> {
   }
 }
 
-export type EntityPropOptions<R = any> = SetOptional<
-  Writable<EntityProp<R>>,
+type OptionalKeys =
   | 'permission'
   | 'visible'
   | 'columnVisible'
@@ -83,8 +82,11 @@ export type EntityPropOptions<R = any> = SetOptional<
   | 'valueResolver'
   | 'action'
   | 'component'
-  | 'enumList'
->;
+  | 'enumList';
+
+type PartialEntityPropOptions<R = any> = O.Partial<O.Pick<EntityProp<R>, OptionalKeys>>;
+type FilteredEntityPropOptions<R = any> = O.Omit<EntityProp<R>, OptionalKeys>;
+export type EntityPropOptions<R = any> = PartialEntityPropOptions<R> & FilteredEntityPropOptions<R>;
 
 export type EntityPropDefaults<R = any> = Record<string, EntityProp<R>[]>;
 export type EntityPropContributorCallback<R = any> = PropContributorCallback<EntityPropList<R>>;

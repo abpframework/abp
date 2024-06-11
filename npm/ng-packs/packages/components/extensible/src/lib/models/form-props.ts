@@ -14,7 +14,7 @@ import {
   Props,
   PropsFactory,
 } from './props';
-import { SetOptional, Writable } from 'type-fest';
+import { O } from 'ts-toolbelt';
 
 export class FormPropList<R = any> extends PropList<R, FormProp<R>> {}
 
@@ -131,8 +131,7 @@ export class FormPropData<R = any> extends PropData<R> {
   }
 }
 
-export type FormPropOptions<R = any> = SetOptional<
-  Writable<FormProp<R>>,
+type OptionalKeys =
   | 'permission'
   | 'visible'
   | 'displayName'
@@ -147,8 +146,10 @@ export type FormPropOptions<R = any> = SetOptional<
   | 'id'
   | 'displayTextResolver'
   | 'formText'
-  | 'tooltip'
->;
+  | 'tooltip';
+type PartialFormPropOptions<R = any> = O.Partial<O.Pick<FormProp<R>, OptionalKeys>>;
+type FilteredFormPropOptions<R = any> = O.Omit<FormProp<R>, OptionalKeys>;
+export type FormPropOptions<R = any> = PartialFormPropOptions<R> & FilteredFormPropOptions<R>;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;
 export type CreateFormPropContributorCallback<R = any> = PropContributorCallback<FormPropList<R>>;

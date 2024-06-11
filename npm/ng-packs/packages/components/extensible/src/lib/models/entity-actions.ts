@@ -8,7 +8,7 @@ import {
   ActionsFactory,
 } from './actions';
 import { FormPropTooltip } from './form-props';
-import { Writable, SetOptional } from 'type-fest';
+import { O } from 'ts-toolbelt';
 
 export class EntityActionList<R = any> extends ActionList<R, EntityAction<R>> {}
 
@@ -47,10 +47,11 @@ export class EntityAction<R = any> extends Action<R> {
   }
 }
 
-export type EntityActionOptions<R = any> = SetOptional<
-  Writable<EntityAction<R>>,
-  'permission' | 'visible' | 'icon'
->;
+type OptionalKeys = 'permission' | 'visible' | 'icon';
+type PartialEntityActionOptions<R = any> = O.Partial<O.Pick<EntityAction<R>, OptionalKeys>>;
+type FilteredEntityActionOptions<R = any> = O.Omit<EntityAction<R>, OptionalKeys>;
+export type EntityActionOptions<R = any> = PartialEntityActionOptions<R> &
+  FilteredEntityActionOptions<R>;
 
 export type EntityActionDefaults<R = any> = Record<string, EntityAction<R>[]>;
 export type EntityActionContributorCallback<R = any> = ActionContributorCallback<

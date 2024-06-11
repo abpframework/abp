@@ -2,18 +2,18 @@ import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
 import { ePropType } from '../enums/props.enum';
 import { FormPropTooltip } from './form-props';
-import { ReadonlyDeep } from 'type-fest';
+import { O } from 'ts-toolbelt';
 
 export abstract class PropList<R = any, A = Prop<R>> extends LinkedList<A> {}
 
-export abstract class PropData<R = any, T = any> {
+export abstract class PropData<R = any> {
   abstract getInjected: <T>(
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
     options?: InjectOptions | InjectFlags,
   ) => T;
   index?: number;
-  abstract record: T;
+  abstract record: R;
 
   get data(): ReadonlyPropData<R> {
     return {
@@ -24,7 +24,10 @@ export abstract class PropData<R = any, T = any> {
   }
 }
 
-export type ReadonlyPropData<R = any, T = any> = ReadonlyDeep<Omit<PropData<R, T>, 'data'>>;
+export type ReadonlyPropData<R> = O.Merge<
+  O.Readonly<O.Omit<PropData<R>, 'data' | 'record'>>,
+  { record: R }
+>;
 
 export abstract class Prop<R = any> {
   constructor(
