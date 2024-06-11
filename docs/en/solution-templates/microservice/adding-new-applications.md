@@ -140,3 +140,37 @@ If you want to monitor the new application with Prometheus when you debug the so
 ```
 
 ## Creating Helm Chart for the New Microservice
+
+If you want to deploy the new application to Kubernetes, you should create a Helm chart for the new application.
+
+First, we need to add the new application to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `build-all-images.ps1` script for the `WebPublic` application.
+
+```powershell
+./build-image.ps1 -ProjectPath "../../apps/web-public/Acme.Bookstore.WebPublic/Acme.Bookstore.WebPublic.csproj" -ImageName bookstore/webpublic
+```
+
+Since we want to expose our application to outside the cluster, we should add the host url to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `WebPublic` application.
+
+```yaml
+global:
+  ...
+  hosts:
+    ...
+    webpublic: "[RELEASE_NAME]-webpublic"
+```
+
+Also for development purposes, we should create tls certificates for the new application. You can edit the `create-tls-certificate.ps1` script in the `etc/helm` folder to create tls certificates for the new application. Below is an example of the `create-tls-certificate.ps1` script for the `WebPublic` application.
+
+```powershell
+mkcert --cert-file bookstore-local.pem --key-file bookstore-local-key.pem "bookstore-local" ... "bookstore-local-webpublic"
+kubectl create namespace bookstore-local
+kubectl create secret tls -n bookstore-local bookstore-local-tls --cert=./bookstore-local.pem --key=./bookstore-local-key.pem
+```
+
+Lastly, we should define the new application in the *_helpers.tpl* file in the `etc/helm/projectname/templates` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the *_helpers.tpl* file for the `WebPublic` application.
+
+```yaml
+{{- define "bookstore.hosts.webpublic" -}}
+{{- print "https://" (.Values.global.hosts.webpublic | replace "[RELEASE_NAME]" .Release.Name) -}}
+{{- end -}}
+```
