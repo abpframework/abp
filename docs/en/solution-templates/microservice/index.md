@@ -41,6 +41,6 @@ ABP Studio provides pre-architected and production-ready templates to jump start
 * Guides
   * [Adding new microservices](adding-new-microservices.md)
   * [Adding new applications](adding-new-applications.md)
-  * Adding new API gateways
+  * [Adding new API gateways](adding-new-api-gateways.md)
   * Mono-repo vs multiple repository approaches
   * Authoring unit and integration tests
