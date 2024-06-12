@@ -42,7 +42,7 @@ public abstract class BackgroundWorkerBase : IBackgroundWorker
     {
         Logger.LogDebug("Stopped background worker: " + ToString());
         StoppingTokenSource.Cancel();
-        StoppingTokenSource.Dispose();        
+        StoppingTokenSource.Dispose();
         return Task.CompletedTask;
     }
 
