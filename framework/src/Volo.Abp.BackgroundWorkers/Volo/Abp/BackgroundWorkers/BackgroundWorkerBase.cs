@@ -22,16 +22,11 @@ public abstract class BackgroundWorkerBase : IBackgroundWorker
 
     protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    protected CancellationTokenSource StoppingTokenSource { get; private set; }
+    protected CancellationTokenSource StoppingTokenSource { get; set; }
 	
-    protected CancellationToken StoppingToken { get; private set; }
+    protected CancellationToken StoppingToken { get; set; }
 
     public BackgroundWorkerBase()
-    {
-        ResetStoppingCancellationTokenSource();
-    }
-
-    private void ResetStoppingCancellationTokenSource()
     {
         StoppingTokenSource = new CancellationTokenSource();
         StoppingToken = StoppingTokenSource.Token;
@@ -47,10 +42,7 @@ public abstract class BackgroundWorkerBase : IBackgroundWorker
     {
         Logger.LogDebug("Stopped background worker: " + ToString());
         StoppingTokenSource.Cancel();
-        StoppingTokenSource.Dispose();
-
-        ResetStoppingCancellationTokenSource();
-        
+        StoppingTokenSource.Dispose();        
         return Task.CompletedTask;
     }
 
