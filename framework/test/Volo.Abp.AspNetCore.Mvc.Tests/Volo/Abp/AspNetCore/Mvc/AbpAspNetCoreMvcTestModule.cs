@@ -73,9 +73,10 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
 
         context.Services.AddAuthentication(options =>
         {
+            options.DefaultAuthenticateScheme = FakeAuthenticationSchemeDefaults.Scheme;
             options.DefaultChallengeScheme = "Bearer";
             options.DefaultForbidScheme = "Cookie";
-        }).AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
+        }).AddFakeAuthentication().AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
 
         context.Services.AddAuthorization(options =>
         {
@@ -137,6 +138,8 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         {
             options.Contributors.Add(new TestApplicationConfigurationContributor());
         });
+
+        context.Services.TransformAbpClaims();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -148,8 +151,6 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         app.UseAbpRequestLocalization();
         app.UseAbpSecurityHeaders();
         app.UseRouting();
-        app.UseMiddleware<FakeAuthenticationMiddleware>();
-        app.UseAbpClaimsMap();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseAuditing();
