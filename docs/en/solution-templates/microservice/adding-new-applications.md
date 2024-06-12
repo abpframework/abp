@@ -24,13 +24,13 @@ Select the UI theme and click the `Create` button.
 
 ![create-new-module-ui-theme](images/create-new-module-ui-theme.png)
 
-The new application is created and added to the solution. You can see the new microservice in the `apps` folder.
+The new application is created and added to the solution. You can see the new application in the `apps` folder.
 
 ![public-web-app](images/public-web-app.png)
 
 ### Configuring the appsettings.json
 
-The new application is created with the necessary configurations and dependencies. We should configure the `appsettings.json` file to set the Authority section for the authentication and Gateway section for the API gateway. The `Authority` section is the URL of the Identity Server, and the `Gateway` section is the URL of the API gateway. You can copy the configurations from the existing web application and modify them according to the new application. Below is an example of the `appsettings.json` file for the `Public` web application.
+The new application is created with the necessary configurations and dependencies. We should configure the `appsettings.json` file to set the `Authority` section for authentication and the `Gateway` section for the API gateway. You can copy the configurations from the existing web application and modify them according to the new application. Below is an example of the `appsettings.json` file for the `Public` web application.
 
 ```json
 {
@@ -57,7 +57,7 @@ The new application is created with the necessary configurations and dependencie
 
 ### Configuring the OpenId Options
 
-You can use existing [openiddict applications](../../modules/openiddict.md#openiddictapplication] or create a new one for the new web application. In our example we use *WebPublic* as the `ClientId` and *1q2w3e\** as the `ClientSecret`. According to the configurations in the `appsettings.json` file, we should configure the `OpenIddictDataSeeder` in the `Identity` service. You can copy the configurations from the existing web application and modify them according to the new application. Below is an example of the `OpenIddictDataSeeder` configuration for the `Public` web application.
+You can use existing [OpenIddict applications](../../modules/openiddict.md#openiddictapplication) or create a new one for the new web application. In our example, we use *WebPublic* as the `ClientId` and *1q2w3e\** as the `ClientSecret`. According to the configurations in the `appsettings.json` file, we should configure the `OpenIddictDataSeeder` class in the `Identity` service. You can copy the configurations from the existing web application and modify them according to the new application. Below is an example of the `OpenIddictDataSeeder` configuration for the `Public` web application.
 
 ```csharp
 private async Task CreateClientsAsync()
@@ -108,19 +108,6 @@ Add the new application URL to the `appsettings.json` file in the `Identity` ser
 }
 ```
 
-### Configuring the AuthServer
-
-We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
-
-```json
-"App": {
-  "SelfUrl": "http://localhost:***",
-  "CorsOrigins": "...... ,http://localhost:44344",
-  "EnablePII": false,
-  "RedirectAllowedUrls": "...... ,http://localhost:44344"
-}
-```
-
 ### Add the New Application to the Solution Runner
 
 We should add the new application to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new application to the solution runner profile. Afterwards, you can start the new application by selecting it in the solution runner.
@@ -129,7 +116,7 @@ We should add the new application to the solution runner [profile](../../studio/
 
 ## Docker Configuration for Prometheus
 
-If you want to monitor the new application with Prometheus when you debug the solution, you should add the new application to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing microservices and modify them according to the new application. Below is an example of the `prometheus.yml` file for the `WebPublic` application.
+If you want to monitor the new application with Prometheus when you debug the solution, you should add the new application to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `prometheus.yml` file for the `WebPublic` application.
 
 ```yml
   - job_name: 'webpublic'
@@ -139,17 +126,17 @@ If you want to monitor the new application with Prometheus when you debug the so
     - targets: ['host.docker.internal:44344']
 ```
 
-## Creating Helm Chart for the New Microservice
+## Creating Helm Chart for the New Application
 
 If you want to deploy the new application to Kubernetes, you should create a Helm chart for the new application.
 
-First, we need to add the new application to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `build-all-images.ps1` script for the `WebPublic` application.
+First, add the new application to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `build-all-images.ps1` script for the `WebPublic` application.
 
 ```powershell
 ./build-image.ps1 -ProjectPath "../../apps/web-public/Acme.Bookstore.WebPublic/Acme.Bookstore.WebPublic.csproj" -ImageName bookstore/webpublic
 ```
 
-Since we want to expose our application to outside the cluster, we should add the host url to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `WebPublic` application.
+Since we want to expose our application outside the cluster, we should add the host URL to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `WebPublic` application.
 
 ```yaml
 global:
@@ -159,7 +146,7 @@ global:
     webpublic: "[RELEASE_NAME]-webpublic"
 ```
 
-Also for development purposes, we should create tls certificates for the new application. You can edit the `create-tls-certificate.ps1` script in the `etc/helm` folder to create tls certificates for the new application. Below is an example of the `create-tls-certificate.ps1` script for the `WebPublic` application.
+For development purposes, we should also create TLS certificates for the new application. You can edit the `create-tls-certificate.ps1` script in the `etc/helm` folder to generate TLS certificates for the new application. Below is an example of the `create-tls-certificate.ps1` script for the `WebPublic` application.
 
 ```powershell
 mkcert --cert-file bookstore-local.pem --key-file bookstore-local-key.pem "bookstore-local" ... "bookstore-local-webpublic"
@@ -276,7 +263,6 @@ spec:
             name: "{{ .Release.Name }}-{{ .Chart.Name }}"
             port:
               number: 80
-
 ```
 
 After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
@@ -285,4 +271,21 @@ After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
 
 Then, update *Metadata* information right-click the *application* [sub-chart](../../studio/kubernetes.md#subchart), select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
 
-![application-chart-properties](application-chart-properties.png)
+![application-chart-properties](images/application-chart-properties.png)
+
+Add the service name Regex pattern *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services* tab.
+
+![application-chart-properties-kubernetes-services](images/application-chart-properties-kubernetes-services.png)
+
+Last but not least, we need to configure the helm chart environments for identity microservice.
+
+```yaml
+# identity.yaml 
+# Add this line to the "env:" section
+- name: "OpenIddict__Applications__WebPublic__RootUrl"
+  value: "{{ include "bookstore.hosts.webpublic" . }}"
+```
+
+## Customizing the Application Template
+
+You can customize the application template if needed. Add new configurations, dependencies, or modules to the template by opening the `_templates` folder in the root directory and then the `web` folder. Modify the `web` template as required. The naming convention dictates that *microservicename* represents the name of the application when created. Use *microservicename* in the template files for dynamic naming. In the `web` folder, there are 3 subfolders: *Blazor*, *BlazorServer*, and *MVC*. You can customize the template according to the UI framework you selected when creating the new application. 
