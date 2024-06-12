@@ -79,3 +79,68 @@ The new gateway application is use the [YARP](https://microsoft.github.io/revers
 }
 ```
 
+### Configuring the OpenId Options
+
+We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `PublicWeb` gateway.
+
+Add the created gateway URL to the *redirectUris* parameter in the `CreateSwaggerClientAsync` method in the `OpenIddictDataSeeder` class.
+
+```csharp
+private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
+{
+    var webGatewaySwaggerRootUrl = _configuration["OpenIddict:Applications:WebGateway:RootUrl"]!.TrimEnd('/'); 
+    //PublicWebGateway uri
+    var publicWebGatewaySwaggerRootUrl = _configuration["OpenIddict:Applications:PublicWebGateway:RootUrl"]!.TrimEnd('/');
+    ...
+
+    await CreateOrUpdateApplicationAsync(
+        name: clientId,
+        type:  OpenIddictConstants.ClientTypes.Public,
+        consentType: OpenIddictConstants.ConsentTypes.Implicit,
+        displayName: "Swagger Test Client",
+        secret: null,
+        grantTypes: new List<string>
+        {
+            OpenIddictConstants.GrantTypes.AuthorizationCode,
+        },
+        scopes: commonScopes.Union(scopes).ToList(),
+        redirectUris: new List<string> {
+            $"{webGatewaySwaggerRootUrl}/swagger/oauth2-redirect.html",
+            $"{publicWebGatewaySwaggerRootUrl}/swagger/oauth2-redirect.html", // PublicWebGateway redirect uri
+            ...
+        },
+        clientUri: webGatewaySwaggerRootUrl,
+        logoUri: "/images/clients/swagger.svg"
+    );
+}
+```
+
+Add the new gateway URL to the `appsettings.json` file in the `Identity` service.
+
+```json
+{
+  "OpenIddict": {
+    "Applications": {
+      ...
+      "PublicWebGateway": {
+        "RootUrl": "http://localhost:44355"
+      }
+    }
+  }
+}
+```
+
+### Configuring the AuthServer
+
+We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
+
+```json
+"App": {
+  "SelfUrl": "http://localhost:***",
+  "CorsOrigins": "...... ,http://localhost:44355",
+  "EnablePII": false,
+  "RedirectAllowedUrls": "...... ,http://localhost:44355"
+}
+```
+
+### Add the New Gateway to the Solution Runner
