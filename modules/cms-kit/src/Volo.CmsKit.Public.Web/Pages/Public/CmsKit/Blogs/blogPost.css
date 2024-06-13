@@ -22,6 +22,11 @@ span.area-title {
     min-width: 276px;
 }
 
+.card-img-ratio {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
 #scroll-index {
     position: sticky;
     top: 20px;
