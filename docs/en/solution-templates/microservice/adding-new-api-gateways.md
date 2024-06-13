@@ -81,7 +81,7 @@ The new gateway application is use the [YARP](https://microsoft.github.io/revers
 
 ### Configuring the OpenId Options
 
-We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `PublicWeb` gateway.
+We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `PublicGateway` application.
 
 Add the created gateway URL to the *redirectUris* parameter in the `CreateSwaggerClientAsync` method in the `OpenIddictDataSeeder` class.
 
@@ -153,44 +153,44 @@ We should add the new gateway to the solution runner [profile](../../studio/runn
 
 If you want to deploy the new gateway to Kubernetes, you should create a Helm chart for the new application.
 
-First, add the new gateway to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `build-all-images.ps1` script for the `PublicWebGateway` application.
+First, add the new gateway to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `build-all-images.ps1` script for the `PublicGateway` application.
 
 ```powershell
-./build-image.ps1 -ProjectPath "../../gateways/public-web/Acme.Bookstore.PublicWebGateway/Acme.Bookstore.PublicWebGateway.csproj" -ImageName bookstore/publicwebgateway
+./build-image.ps1 -ProjectPath "../../gateways/public/Acme.Bookstore.PublicGateway/Acme.Bookstore.PublicGateway.csproj" -ImageName bookstore/publicgateway
 ```
 
-Since we want to expose our gateway outside the cluster, we should add the host URL to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `PublicWebGateway` application.
+Since we want to expose our gateway outside the cluster, we should add the host URL to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `PublicGateway` application.
 
 ```yaml
 global:
   ...
   hosts:
     ...
-    publicwebgateway: "[RELEASE_NAME]-publicwebgateway"
+    publicgateway: "[RELEASE_NAME]-publicgateway"
 ```
 
-For development purposes, we should also create TLS certificates for the new gateway. You can edit the `create-tls-certificate.ps1` script in the `etc/helm` folder to generate TLS certificates for the new gateway. Below is an example of the `create-tls-certificate.ps1` script for the `PublicWebGateway` application.
+For development purposes, we should also create TLS certificates for the new gateway. You can edit the `create-tls-certificate.ps1` script in the `etc/helm` folder to generate TLS certificates for the new gateway. Below is an example of the `create-tls-certificate.ps1` script for the `PublicGateway` application.
 
 ```powershell
-mkcert --cert-file bookstore-local.pem --key-file bookstore-local-key.pem "bookstore-local" ... "bookstore-local-publicwebgateway"
+mkcert --cert-file bookstore-local.pem --key-file bookstore-local-key.pem "bookstore-local" ... "bookstore-local-publicgateway"
 kubectl create namespace bookstore-local
 kubectl create secret tls -n bookstore-local bookstore-local-tls --cert=./bookstore-local.pem --key=./bookstore-local-key.pem
 ```
 
-Lastly, we should define the new application in the *_helpers.tpl* file in the `etc/helm/projectname/templates` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the *_helpers.tpl* file for the `PublicWebGateway` application.
+Lastly, we should define the new application in the *_helpers.tpl* file in the `etc/helm/projectname/templates` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the *_helpers.tpl* file for the `PublicGateway` application.
 
 ```yaml
-{{- define "bookstore.hosts.publicwebgateway" -}}
-{{- print "https://" (.Values.global.hosts.publicwebgateway | replace "[RELEASE_NAME]" .Release.Name) -}}
+{{- define "bookstore.hosts.publicgateway" -}}
+{{- print "https://" (.Values.global.hosts.publicgateway | replace "[RELEASE_NAME]" .Release.Name) -}}
 {{- end -}}
 ```
 
-Afterwards, we need to create a new Helm chart for the new gateway. You can copy the configurations from the existing applications and modify them according to the new gateway. Below is an example of the `publicwebgateway` Helm chart for the `PublicWebGateway` application.
+Afterwards, we need to create a new Helm chart for the new gateway. You can copy the configurations from the existing applications and modify them according to the new gateway. Below is an example of the `publicgateway` Helm chart for the `PublicGateway` application.
 
 ```yaml
 # values.yaml
 image:
-  repository: "bookstore/publicwebgateway"
+  repository: "bookstore/publicgateway"
   tag: "latest"
   pullPolicy: "IfNotPresent"
 swagger:
@@ -198,13 +198,13 @@ swagger:
 
 # Chart.yaml
 apiVersion: v2
-name: publicwebgateway
+name: publicgateway
 appVersion: "1.0"
-description: Bookstore Public Web API Gateway
+description: Bookstore Public API Gateway
 version: 1.0.0
 type: application
 
-# publicwebapigateway.yaml
+# publicapigateway.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -243,7 +243,7 @@ spec:
         - name: "ReverseProxy__Clusters__ProductService__Destinations__ProductService__Address"
           value: "http://{{ .Release.Name }}-productservice"
 
-# publicwebapigateway-service.yaml
+# publicapigateway-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -257,7 +257,7 @@ spec:
   selector:
     app: "{{ .Release.Name }}-{{ .Chart.Name }}"
 
-# publicwebapigateway-ingress.yaml
+# publicapigateway-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -272,10 +272,10 @@ spec:
   ingressClassName: "nginx"
   tls:
   - hosts:
-      - "{{ (include "bookstore.hosts.publicwebgateway" .) | trimPrefix "https://" }}"
+      - "{{ (include "bookstore.hosts.publicgateway" .) | trimPrefix "https://" }}"
     secretName: "{{ .Values.global.tlsSecret }}"
   rules:
-  - host: "{{ (include "bookstore.hosts.publicwebgateway" .) | trimPrefix "https://" }}"
+  - host: "{{ (include "bookstore.hosts.publicgateway" .) | trimPrefix "https://" }}"
     http:
       paths:
       - path: /
@@ -304,12 +304,11 @@ Last but not least, we need to configure the helm chart environments for identit
 ```yaml
 # identity.yaml 
 # Add this line to the "env:" section
-# OpenIddict:Applications:PublicWebGateway:RootUrl
-- name: "OpenIddict__Applications__PublicWebGateway__RootUrl"
-  value: "{{ include "bookstore.hosts.publicwebgateway" . }}"
+- name: "OpenIddict__Applications__PublicGateway__RootUrl"
+  value: "{{ include "bookstore.hosts.publicgateway" . }}"
 
 # authserver.yaml
 # Concat the following lines for "App__CorsOrigins" section
 - name: "App__CorsOrigins"
-  value: "...,http://{{ .Release.Name }}-administration,{{ include "bookstore.hosts.publicwebgateway" . }}"
+  value: "...,http://{{ .Release.Name }}-administration,{{ include "bookstore.hosts.publicgateway" . }}"
 ```
