@@ -176,3 +176,113 @@ mkcert --cert-file bookstore-local.pem --key-file bookstore-local-key.pem "books
 kubectl create namespace bookstore-local
 kubectl create secret tls -n bookstore-local bookstore-local-tls --cert=./bookstore-local.pem --key=./bookstore-local-key.pem
 ```
+
+Lastly, we should define the new application in the *_helpers.tpl* file in the `etc/helm/projectname/templates` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the *_helpers.tpl* file for the `PublicWebGateway` application.
+
+```yaml
+{{- define "bookstore.hosts.publicwebgateway" -}}
+{{- print "https://" (.Values.global.hosts.publicwebgateway | replace "[RELEASE_NAME]" .Release.Name) -}}
+{{- end -}}
+```
+
+Afterwards, we need to create a new Helm chart for the new gateway. You can copy the configurations from the existing applications and modify them according to the new gateway. Below is an example of the `publicwebgateway` Helm chart for the `PublicWebGateway` application.
+
+```yaml
+# values.yaml
+image:
+  repository: "bookstore/publicwebgateway"
+  tag: "latest"
+  pullPolicy: "IfNotPresent"
+swagger:
+  isEnabled: "true"
+
+# Chart.yaml
+apiVersion: v2
+name: publicwebgateway
+appVersion: "1.0"
+description: Bookstore Public Web API Gateway
+version: 1.0.0
+type: application
+
+# publicwebapigateway.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+        ports:
+        - name: "http"
+          containerPort: 80
+        env:
+        - name: "DOTNET_ENVIRONMENT"
+          value: "{{ .Values.global.dotnetEnvironment }}"
+        - name: "ElasticSearch__IsLoggingEnabled"
+          value: "{{ .Values.global.elasticSearch.isLoggingEnabled }}"
+        - name: "ElasticSearch__Url"
+          value: "http://{{ .Release.Name }}-elasticsearch:{{ .Values.global.elasticSearch.port }}"
+        - name: "Swagger__IsEnabled"
+          value: "{{ .Values.swagger.isEnabled }}"
+        - name: "AbpStudioClient__StudioUrl"
+          value: "{{ .Values.global.abpStudioClient.studioUrl }}"
+        - name: "AbpStudioClient__IsLinkEnabled"
+          value: "{{ .Values.global.abpStudioClient.isLinkEnabled }}"
+        - name: "ReverseProxy__Clusters__Administration__Destinations__Administration__Address"
+          value: "http://{{ .Release.Name }}-administration"
+        - name: "ReverseProxy__Clusters__ProductService__Destinations__ProductService__Address"
+          value: "http://{{ .Release.Name }}-productservice"
+
+# publicwebapigateway-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  ports:
+    - name: "80"
+      port: 80
+  selector:
+    app: "{{ .Release.Name }}-{{ .Chart.Name }}"
+
+# publicwebapigateway-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  ingressClassName: "nginx"
+  tls:
+  - hosts:
+      - "{{ (include "bookstore.hosts.publicwebgateway" .) | trimPrefix "https://" }}"
+    secretName: "{{ .Values.global.tlsSecret }}"
+  rules:
+  - host: "{{ (include "bookstore.hosts.publicwebgateway" .) | trimPrefix "https://" }}"
+    http:
+      paths:
+      - path: /
+        pathType: "Prefix"
+        backend:
+          service:
+            name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+            port:
+              number: 80
+```
