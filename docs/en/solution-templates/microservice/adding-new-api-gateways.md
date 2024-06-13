@@ -144,3 +144,35 @@ We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
 ```
 
 ### Add the New Gateway to the Solution Runner
+
+We should add the new gateway to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new gateway to the solution runner profile. Afterwards, you can start the new gatewaye by selecting it in the solution runner.
+
+![public-gateway-solution-runner](images/public-gateway-solution-runner.png)
+
+## Creating Helm Chart for the New Gateway
+
+If you want to deploy the new gateway to Kubernetes, you should create a Helm chart for the new application.
+
+First, add the new gateway to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `build-all-images.ps1` script for the `PublicWebGateway` application.
+
+```powershell
+./build-image.ps1 -ProjectPath "../../gateways/public-web/Acme.Bookstore.PublicWebGateway/Acme.Bookstore.PublicWebGateway.csproj" -ImageName bookstore/publicwebgateway
+```
+
+Since we want to expose our gateway outside the cluster, we should add the host URL to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `PublicWebGateway` application.
+
+```yaml
+global:
+  ...
+  hosts:
+    ...
+    publicwebgateway: "[RELEASE_NAME]-publicwebgateway"
+```
+
+For development purposes, we should also create TLS certificates for the new gateway. You can edit the `create-tls-certificate.ps1` script in the `etc/helm` folder to generate TLS certificates for the new gateway. Below is an example of the `create-tls-certificate.ps1` script for the `PublicWebGateway` application.
+
+```powershell
+mkcert --cert-file bookstore-local.pem --key-file bookstore-local-key.pem "bookstore-local" ... "bookstore-local-publicwebgateway"
+kubectl create namespace bookstore-local
+kubectl create secret tls -n bookstore-local bookstore-local-tls --cert=./bookstore-local.pem --key=./bookstore-local-key.pem
+```
