@@ -28,6 +28,7 @@ namespace Volo.Docs.Documents
                     Version = x.Version,
                     LanguageCode = x.LanguageCode,
                     Format = x.Format,
+                    Name = x.Name
                 })
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -53,6 +54,12 @@ namespace Volo.Docs.Documents
             CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task UpdateProjectLastCachedTimeAsync(Guid projectId, DateTime cachedTime,
+            CancellationToken cancellationToken = default)
+        {
+            await (await GetDbSetAsync()).Where(d => d.ProjectId == projectId).ExecuteUpdateAsync(x => x.SetProperty(d => d.LastCachedTime, cachedTime), GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Document>> GetListAsync(Guid? projectId, string version, string name, CancellationToken cancellationToken = default)

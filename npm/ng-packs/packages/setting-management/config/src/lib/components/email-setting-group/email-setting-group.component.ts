@@ -68,7 +68,7 @@ export class EmailSettingGroupComponent implements OnInit {
       .update(this.form.value)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe(() => {
-        this.toasterService.success('AbpSettingManagement::SuccessfullySaved');
+        this.toasterService.success('AbpSettingManagement::SavedSuccessfully');
         this.getData();
       });
   }

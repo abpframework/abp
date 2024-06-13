@@ -126,7 +126,7 @@ var abp = abp || {};
 
     // FULL SCREEN /////////////////
 
-    abp.utils.toggleFullscreen = function() {
+    abp.utils.toggleFullscreen = function () {
         var elem = document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
             !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -152,7 +152,7 @@ var abp = abp || {};
         }
     }
 
-    abp.utils.requestFullscreen = function() {
+    abp.utils.requestFullscreen = function () {
         var elem = document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
             !document.webkitFullscreenElement && !document.msFullscreenElement) {
@@ -168,7 +168,7 @@ var abp = abp || {};
         }
     }
 
-    abp.utils.exitFullscreen = function() {
+    abp.utils.exitFullscreen = function () {
         if (!(!document.fullscreenElement && !document.mozFullScreenElement &&
             !document.webkitFullscreenElement && !document.msFullscreenElement)) {
             if (document.exitFullscreen) {
@@ -179,6 +179,69 @@ var abp = abp || {};
                 document.mozCancelFullScreen();
             } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
+            }
+        }
+    }
+
+    /* UI *******************************************************/
+
+    abp.ui = abp.ui || {};
+
+    /* UI BLOCK */
+    //Defines UI Block API and implements basically
+
+    var $abpBlockArea = document.createElement('div');
+    $abpBlockArea.classList.add('abp-block-area');
+
+    /* opts: { //Can be an object with options or a string for query a selector
+     *  elm: a query selector (optional - default: document.body)
+     *  busy: boolean (optional - default: false)
+     * }
+     */
+    abp.ui.block = function (elm, busy) {
+        var $elm = document.querySelector(elm) || document.body;
+
+        if (busy) {
+            $abpBlockArea.classList.add('abp-block-area-busy');
+        } else {
+            $abpBlockArea.classList.remove('abp-block-area-busy');
+        }
+
+        if (document.querySelector(elm)) {
+            $abpBlockArea.style.position = 'absolute';
+        } else {
+            $abpBlockArea.style.position = 'fixed';
+        }
+
+        $elm.appendChild($abpBlockArea);
+    };
+
+    abp.ui.unblock = function () {
+        var element = document.querySelector('.abp-block-area');
+        if (element) {
+            element.classList.add('abp-block-area-disappearing');
+            setTimeout(function () {
+                if (element) {
+                    element.classList.remove('abp-block-area-disappearing');
+                    if (element.parentElement) {
+                        element.parentElement.removeChild(element);
+                    }
+                }
+            }, 250);
+        }
+    };
+
+    abp.utils.removeOidcUser = function () {
+        for (var i = 0; i < sessionStorage.length; i++) {
+            var key = sessionStorage.key(i);
+            if (key.startsWith('oidc.user:')) {
+                sessionStorage.removeItem(key);
+            }
+        }
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key.startsWith('oidc.user:')) {
+                localStorage.removeItem(key);
             }
         }
     }

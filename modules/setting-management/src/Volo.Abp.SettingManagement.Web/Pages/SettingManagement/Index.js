@@ -27,7 +27,7 @@
     }).first().click();
 
     $(document).on('AbpSettingSaved', function () {
-        abp.notify.success(l('SuccessfullySaved'));
+        abp.notify.success(l('SavedSuccessfully'));
 
         abp.ajax({
            url: abp.appPath + 'SettingManagement?handler=RefreshConfiguration'

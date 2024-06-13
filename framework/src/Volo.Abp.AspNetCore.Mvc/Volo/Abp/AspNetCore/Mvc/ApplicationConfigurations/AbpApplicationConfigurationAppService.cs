@@ -158,7 +158,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
             EmailVerified = _currentUser.EmailVerified,
             PhoneNumber = _currentUser.PhoneNumber,
             PhoneNumberVerified = _currentUser.PhoneNumberVerified,
-            Roles = _currentUser.Roles
+            Roles = _currentUser.Roles,
+            SessionId = _currentUser.FindSessionId()
         };
     }
 
@@ -258,28 +259,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
     private static CurrentCultureDto GetCurrentCultureInfo()
     {
-        return new CurrentCultureDto
-        {
-            Name = CultureInfo.CurrentUICulture.Name,
-            DisplayName = CultureInfo.CurrentUICulture.DisplayName,
-            EnglishName = CultureInfo.CurrentUICulture.EnglishName,
-            NativeName = CultureInfo.CurrentUICulture.NativeName,
-            IsRightToLeft = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
-            CultureName = CultureInfo.CurrentUICulture.TextInfo.CultureName,
-            TwoLetterIsoLanguageName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
-            ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
-            DateTimeFormat = new DateTimeFormatDto
-            {
-                CalendarAlgorithmType =
-                    CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
-                DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
-                ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
-                FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
-                DateSeparator = CultureInfo.CurrentUICulture.DateTimeFormat.DateSeparator,
-                ShortTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern,
-                LongTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.LongTimePattern,
-            }
-        };
+        return CurrentCultureDto.Create();
     }
 
     private async Task<ApplicationSettingConfigurationDto> GetSettingConfigAsync()

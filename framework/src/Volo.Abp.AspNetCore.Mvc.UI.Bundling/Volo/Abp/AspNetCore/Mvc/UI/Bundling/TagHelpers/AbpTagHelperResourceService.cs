@@ -98,7 +98,7 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
 
     protected virtual void AddErrorScript(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, string bundleName)
     {
-        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file.FileName}' for the bundle '{bundleName}'!\", 'background: yellow; font-size:20px;');</script>{Environment.NewLine}");
+        output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file.FileName}' for the bundle '{bundleName}'!\", 'background: yellow; color: black; font-size:20px;');</script>{Environment.NewLine}");
     }
 
     protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)

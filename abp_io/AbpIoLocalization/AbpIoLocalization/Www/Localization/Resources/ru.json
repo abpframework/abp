@@ -438,7 +438,7 @@
     "Index_Page_Testimonial_2": "ABP Framework — это не только платформа, но и руководство по разработке/управлению проектами, поскольку оно обеспечивает обучение DDD, GenericRepository, DI, Microservice и Modularity. ",
     "VideosLoginAndRegisterMessage": "Чтобы иметь возможность смотреть видео, вам необходимо войти в систему.",
     "Filter": "Фильтр",
-    "VideoCourses": "Видео курсы",
+    "VideoCourses": "Основные видео",
     "TestimonialText": "Ваш отзыв",
     "Position": "Позиция",
     "ExperienceYear": "Годы опыта",
@@ -446,7 +446,7 @@
     "CompanySize": "Размер компании",
     "Image": "Изображение вашего профиля",
     "TestimonialTitle": "Давайте послушаем ваше свидетельство",
-    "TestimonialInfo": "То, что говорят наши клиенты, имеет значение! ",
+    "TestimonialInfo": "То, что говорят наши клиенты, имеет значение! Расскажите нам о своем опыте использования наших продуктов и услуг. Рекомендуется писать отзыв на английском языке, чтобы охватить более широкую аудиторию.",
     "Country": "Страна",
     "TestimonialTextPlaceholder": "Напишите краткую историю о том, как ABP помогла вам создать и реализовать ваш проект. ",
     "PositionPlaceholder": "Ваша должность в вашей компании.",
@@ -465,6 +465,11 @@
     "Title": "Заголовок",
     "TitlePlaceholder": "Разработчик программного обеспечения, технический директор и т. д.",
     "Characters": "Символы",
-    "ABPTestimonialDescription": "ABP Framework: давайте послушаем ваш отзыв"
+    "ABPTestimonialDescription": "ABP Framework: давайте послушаем ваш отзыв",
+    "LeaveUsReview": "Оставьте нам отзыв",
+    "DocumentationButtonTitle": "Документация",
+    "ABPVideoCoursesDescription": "Изучите основы ABP Framework с помощью видеокурсов, созданных командой ABP.",
+    "ABPVideoCoursesPageDescription": "Изучите основы ABP Framework с помощью видеокурсов, созданных командой ABP. В этой серии видео вы изучите основные темы ABP Framework. Числа в каждом видео написаны в соответствии с потоком обучения.",
+    "ABPVideoCoursesTitle": "Основные видеоролики АБП"
   }
 }

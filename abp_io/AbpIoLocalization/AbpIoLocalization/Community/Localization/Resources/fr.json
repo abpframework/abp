@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>Ceci est la page de tirage au sort dédiée à vous montrer notre gratitude pour votre participation active à la communauté. Nous organisons <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">des discussions communautaires ABP</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">, des conférences ABP .NET</a> , assistons ou sponsorisons des événements liés à .NET au cours desquels nous offrons des cadeaux.<br><br> Vous pouvez suivre cette page pour voir les tirages au sort à venir, y assister ou voir les tirages au sort précédents que nous tirons, y compris les gagnants.<br><br> Merci d&#39;être un membre actif ! Rendez-vous lors des prochains tirages au sort.",
     "RafflesInfoTitle": "<span class=\"gradient-community\">Tirages</span> au sort communautaires ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> prise en charge.",
-    "Preview": "Aperçu"
+    "Preview": "Aperçu",
+    "VisitPage": "Page de visite",
+    "VisitVideoCourseDescription": "Si vous souhaitez apprendre les bases du framework ABP, consultez les cours vidéo ABP Essentials."
   }
 }

@@ -230,6 +230,19 @@
     "CommunityProfile": "Profilo della comunità",
     "BlogProfile": "Profilo del blog",
     "Tickets": "Biglietti",
-    "DisplayName:CommunityIndexPagePoll": "Sondaggio della pagina indice della comunità"
+    "MeetTheABPCommunity": "Incontra la ABP<span class=\"gradient-community\">comunità</span>",
+    "DisplayName:CommunityIndexPagePoll": "Sondaggio della pagina indice della comunità",
+    "OrganizationOverview": "Panoramica dell'organizzazione",
+    "EmailPreferences": "preferenze email",
+    "VideoCourses": "Video essenziali",
+    "Resources": "Risorse",
+    "DoYouAgreePrivacyPolicy": "Cliccando <b>sottoscrivi</b> pulsante accetti il <a href=\"https://account.abp.io/Account/TermsConditions\">Termini</a> E <a href=\"https://account.abp.io/Account/Privacy\">politica sulla riservatezza</a>.",
+    "PromotionalOffers": "Offerte promozionali",
+    "PromotionalOffersDefinition": "Sconti, campagne stagionali, ecc.",
+    "EventsDefinition": "Community Talks, webinar, conferenze ABP .NET, ecc.",
+    "ReleaseNotesDefinition": "ABP.IO Rilasci della piattaforma, nuovi prodotti, ecc.",
+    "Newsletter": "Notiziario",
+    "NewsletterDefinition": "Post del blog, notizie della community, ecc.",
+    "AbpConferenceDescription": "La ABP Conference è un evento virtuale che consente agli sviluppatori .NET di apprendere e connettersi con la comunità."
   }
 }

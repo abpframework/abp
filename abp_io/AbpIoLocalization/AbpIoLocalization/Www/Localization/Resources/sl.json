@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "Ogrodje ABP ni le ogrodje, je tudi vodilo za razvoj/upravljanje projektov, saj zagotavlja usposabljanja DDD, GenericRepository, DI, Microservice, Modularity. Tudi če ne boste uporabljali samega ogrodja, se lahko razvijate z docs.abp.io, ki je dobro in strokovno pripravljen. (OpenIddict, Redis, Quartz itd.) \n Ker je veliko stvari vnaprej zgrajenih, znatno skrajša čas razvoja projekta. (Kot so prijavna stran, obravnavanje izjem, filtriranje-sejanje podatkov, revizijsko beleženje, lokalizacija, samodejni krmilnik api itd.) \n Kot primer iz naše aplikacije sem za nadzor zalog uporabil lokalno vodilo dogodkov. Tako lahko upravljam premike naročil s pisanjem programa za obdelavo zalog. \n Čudovito je ne izgubljati časa za CreationTime, CreatorId. Polnijo se samodejno.",
     "VideosLoginAndRegisterMessage": "Za ogled videoposnetkov se morate prijaviti. Če ga še niste, lahko ustvarite račun za uro.",
     "Filter": "Filter",
-    "VideoCourses": "Video tečaji",
+    "VideoCourses": "Bistveni videoposnetki",
     "TestimonialText": "Vaše pričevanje",
     "Position": "Položaj",
     "ExperienceYear": "leta izkušenj",
@@ -448,7 +448,7 @@
     "CompanySize": "Velikost podjetja",
     "Image": "Vaša profilna slika",
     "TestimonialTitle": "Slišimo vaše pričevanje",
-    "TestimonialInfo": "Pomembno je, kaj pravijo naše stranke! ",
+    "TestimonialInfo": "Pomembno je, kaj pravijo naše stranke! Povejte nam o svojih izkušnjah z našim izdelkom in storitvijo. Priporočljivo je, da izjavo napišete v angleščini, da dosežete širše občinstvo.",
     "Country": "Država",
     "TestimonialTextPlaceholder": "Napišite kratko zgodbo o tem, kako vam je ABP pomagal zgraditi in izvesti vaš projekt. ",
     "PositionPlaceholder": "Vaš položaj v vašem podjetju.",
@@ -467,6 +467,11 @@
     "Title": "Naslov",
     "TitlePlaceholder": "Razvijalec programske opreme, tehnični direktor itd.",
     "Characters": "znaki",
-    "ABPTestimonialDescription": "Ogrodje ABP: poslušajmo vaše pričevanje"
+    "ABPTestimonialDescription": "Ogrodje ABP: poslušajmo vaše pričevanje",
+    "LeaveUsReview": "Pustite nam oceno",
+    "DocumentationButtonTitle": "Dokumentacija",
+    "ABPVideoCoursesDescription": "Naučite se osnov ogrodja ABP prek video tečajev, ki jih je ustvarila ekipa ABP.",
+    "ABPVideoCoursesPageDescription": "Naučite se osnov ogrodja ABP prek video tečajev, ki jih je ustvarila ekipa ABP. V tej seriji videoposnetkov se boste naučili bistvenih tem ogrodja ABP. Številke na vsakem videoposnetku so zapisane glede na potek učenja.",
+    "ABPVideoCoursesTitle": "ABP Essential Videos"
   }
 }

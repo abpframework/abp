@@ -106,6 +106,29 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/appsettings.json"
         );
 
+        //MyCompanyName.MyProjectName.Blazor.WebApp
+
+        ChangeProjectReference(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.WebApp/MyCompanyName.MyProjectName.Blazor.WebApp.csproj",
+            _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
+            "MongoDB"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.WebApp/MyProjectNameBlazorModule.cs",
+            "MyCompanyName.MyProjectName.EntityFrameworkCore",
+            "MyCompanyName.MyProjectName.MongoDB",
+            _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
+            "MyProjectNameMongoDbModule"
+        );
+
+        ChangeConnectionStringToMongoDb(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.WebApp/appsettings.json"
+        );
+
         //MyCompanyName.MyProjectName.HttpApi.HostWithIds
 
         ChangeProjectReference(
