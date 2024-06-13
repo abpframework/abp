@@ -5,6 +5,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
@@ -25,7 +26,8 @@ namespace Volo.CmsKit;
     typeof(CmsKitDomainSharedModule),
     typeof(AbpUsersDomainModule),
     typeof(AbpDddDomainModule),
-    typeof(AbpBlobStoringModule)
+    typeof(AbpBlobStoringModule),
+    typeof(AbpSettingManagementDomainModule)
 )]
 public class CmsKitDomainModule : AbpModule
 {
