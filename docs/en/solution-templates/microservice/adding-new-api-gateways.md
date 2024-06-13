@@ -12,7 +12,7 @@ In ABP Studio [Solution Explorer](../../studio/solution-explorer.md#adding-a-new
 
 ![new-gateway-application](images/new-gateway-application.png)
 
-It opens the `Create New Module` dialog. Enter the name of the new application, specify the output directory if needed, and click the `Create` button. There is a naming convention: the *Module name* should include the solution name as a prefix, and the use of the dot (.) character in the *Module name* is not allowed.
+It opens the `Create New Module` dialog. Enter the name of the new gateway application, specify the output directory if needed, and click the `Create` button. There is a naming convention: the *Module name* should include the solution name as a prefix, and the use of the dot (.) character in the *Module name* is not allowed.
 
 ![create-new-gateway-app](images/create-new-gateway-app.png)
 
@@ -89,8 +89,8 @@ Add the created gateway URL to the *redirectUris* parameter in the `CreateSwagge
 private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
 {
     var webGatewaySwaggerRootUrl = _configuration["OpenIddict:Applications:WebGateway:RootUrl"]!.TrimEnd('/'); 
-    //PublicWebGateway uri
-    var publicWebGatewaySwaggerRootUrl = _configuration["OpenIddict:Applications:PublicWebGateway:RootUrl"]!.TrimEnd('/');
+    //PublicGateway Url
+    var publicGatewaySwaggerRootUrl = _configuration["OpenIddict:Applications:PublicGateway:RootUrl"]!.TrimEnd('/');
     ...
 
     await CreateOrUpdateApplicationAsync(
@@ -106,7 +106,7 @@ private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
         scopes: commonScopes.Union(scopes).ToList(),
         redirectUris: new List<string> {
             $"{webGatewaySwaggerRootUrl}/swagger/oauth2-redirect.html",
-            $"{publicWebGatewaySwaggerRootUrl}/swagger/oauth2-redirect.html", // PublicWebGateway redirect uri
+            $"{publicGatewaySwaggerRootUrl}/swagger/oauth2-redirect.html", // PublicGateway redirect uri
             ...
         },
         clientUri: webGatewaySwaggerRootUrl,
@@ -122,8 +122,8 @@ Add the new gateway URL to the `appsettings.json` file in the `Identity` service
   "OpenIddict": {
     "Applications": {
       ...
-      "PublicWebGateway": {
-        "RootUrl": "http://localhost:44355"
+      "PublicGateway": {
+        "RootUrl": "http://localhost:44382"
       }
     }
   }
@@ -137,15 +137,15 @@ We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
 ```json
 "App": {
   "SelfUrl": "http://localhost:***",
-  "CorsOrigins": "...... ,http://localhost:44355",
+  "CorsOrigins": "...... ,http://localhost:44382",
   "EnablePII": false,
-  "RedirectAllowedUrls": "...... ,http://localhost:44355"
+  "RedirectAllowedUrls": "...... ,http://localhost:44382"
 }
 ```
 
 ### Add the New Gateway to the Solution Runner
 
-We should add the new gateway to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new gateway to the solution runner profile. Afterwards, you can start the new gatewaye by selecting it in the solution runner.
+We should add the new gateway to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new gateway to the solution runner profile. Afterwards, you can start the new gateway by selecting it in the solution runner.
 
 ![public-gateway-solution-runner](images/public-gateway-solution-runner.png)
 
@@ -285,4 +285,31 @@ spec:
             name: "{{ .Release.Name }}-{{ .Chart.Name }}"
             port:
               number: 80
+```
+
+After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
+
+![kubernetes-refresh-sub-charts](images/kubernetes-refresh-sub-charts.png)
+
+Then, update *Metadata* information right-click the *gateway* [sub-chart](../../studio/kubernetes.md#subchart), select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
+
+![gateway-chart-properties](images/gateway-chart-properties.png)
+
+Add the service name Regex pattern *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services* tab.
+
+![gateway-chart-properties-kubernetes-services](images/gateway-chart-properties-kubernetes-services.png)
+
+Last but not least, we need to configure the helm chart environments for identity microservice and auth-server application.
+
+```yaml
+# identity.yaml 
+# Add this line to the "env:" section
+# OpenIddict:Applications:PublicWebGateway:RootUrl
+- name: "OpenIddict__Applications__PublicWebGateway__RootUrl"
+  value: "{{ include "bookstore.hosts.publicwebgateway" . }}"
+
+# authserver.yaml
+# Concat the following lines for "App__CorsOrigins" section
+- name: "App__CorsOrigins"
+  value: "...,http://{{ .Release.Name }}-administration,{{ include "bookstore.hosts.publicwebgateway" . }}"
 ```
