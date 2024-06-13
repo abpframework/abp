@@ -1,5 +1,6 @@
-.card-img-top { 
+.card-img-top {
     aspect-ratio: 16 / 9;
+    object-fit: cover;
 }
 
 .popover {
