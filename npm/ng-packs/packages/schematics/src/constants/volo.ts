@@ -4,6 +4,9 @@ export const VOLO_REMOTE_STREAM_CONTENT = [
   'Volo.Abp.Content.RemoteStreamContent',
 ];
 
+export const SAAS_NAMESPACE = 'Volo.Saas';
+export const TENANT_KEY = 'tenant';
+
 export const VOLO_PACKAGE_PROXY_IMPORTS = new Map<string, string>([
   ['Volo.Abp.Identity.IdentityUserDto', '@volo/abp.ng.identity/proxy'],
   ['Volo.Abp.Identity.IdentityRoleDto', '@volo/abp.ng.identity/proxy'],
@@ -18,8 +21,8 @@ export const VOLO_PACKAGE_PROXY_IMPORTS = new Map<string, string>([
   ['Volo.Chat.ChatConversationDto', '@volo/abp.ng.chat/proxy'],
   ['Volo.Abp.Gdpr.GdprRequestDto', '@volo/abp.ng.gdpr/proxy'],
   ['Volo.Saas.Tenants.TenantDto', '@volo/abp.ng.saas/proxy'],
-  ['Volo.Saas.TenantConnectionStringsDto', '@volo/abp.ng.saas/proxy'],
-  ['Volo.Saas.EditionDto', '@volo/abp.ng.saas/proxy'],
+  ['Volo.Saas.Tenants.TenantConnectionStringDto', '@volo/abp.ng.saas/proxy'],
+  ['Volo.Saas.Tenants.EditionDto', '@volo/abp.ng.saas/proxy'],
   [
     'Volo.Abp.TextTemplateManagement.TextTemplates.TextTemplateContentDto',
     '@volo/abp.ng.saas/proxy',

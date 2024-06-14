@@ -16,7 +16,7 @@ import {
   extendsSelf,
   removeTypeModifiers,
 } from './type';
-import { VOLO_PACKAGE_PROXY_IMPORTS, VOLO_REGEX } from '../constants';
+import { SAAS_NAMESPACE, TENANT_KEY, VOLO_PACKAGE_PROXY_IMPORTS, VOLO_REGEX } from '../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
@@ -41,7 +41,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
     sortInterfaces(interfaces);
 
     interfaces.forEach(_interface => {
-      if (VOLO_REGEX.test(_interface.ref)) return;
+      if (VOLO_REGEX.test(_interface.ref) || VOLO_PACKAGE_PROXY_IMPORTS.has(_interface.ref)) return;
 
       if (types[_interface.ref]!.isEnum) {
         if (!enums.includes(_interface.ref)) enums.push(_interface.ref);
@@ -203,15 +203,12 @@ export function parseBaseTypeWithGenericTypes(type: string): string[] {
   return nodeToText(parsedTypeNode);
 }
 
-const tenantKey = 'tenant';
-const saasNamespace = 'Volo.Saas';
-
 export function resolveAbpPackages(models: Model[]) {
   for (const model of models) {
     renamePropForTenant(model.interfaces);
 
     model.imports.forEach((imp, i) => {
-      fixImportName(imp);
+      fixImportNameForTenant(imp);
 
       for (const ref of imp.refs) {
         const path = VOLO_PACKAGE_PROXY_IMPORTS.get(ref);
@@ -226,8 +223,8 @@ export function resolveAbpPackages(models: Model[]) {
 function renamePropForTenant(interfaces: Interface[]) {
   for (const inters of interfaces) {
     for (const prop of inters.properties) {
-      const isTenant = prop.name.toLocaleLowerCase().includes(tenantKey);
-      const isSaasDto = prop.refs.filter(f => f.startsWith(saasNamespace)).length > 0;
+      const isTenant = prop.name.toLocaleLowerCase().includes(TENANT_KEY);
+      const isSaasDto = prop.refs.filter(f => f.startsWith(SAAS_NAMESPACE)).length > 0;
 
       if (isTenant && isSaasDto) {
         prop.type = 'Saas' + prop.type;
@@ -236,9 +233,9 @@ function renamePropForTenant(interfaces: Interface[]) {
   }
 }
 
-function fixImportName(imp: Import) {
+function fixImportNameForTenant(imp: Import) {
   imp.specifiers.forEach((spe, index) => {
-    const isTenant = spe.toLocaleLowerCase().includes(tenantKey);
+    const isTenant = spe.toLocaleLowerCase().includes(TENANT_KEY);
 
     if (isTenant) {
       imp.specifiers[index] = 'Saas' + spe;
