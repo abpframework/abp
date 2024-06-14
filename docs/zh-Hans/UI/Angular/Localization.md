@@ -205,16 +205,23 @@ export class AppComponent {}
 // app.module.ts
 
 @NgModule({
-  imports: [
-    // other imports
-     CoreModule.forRoot({
-      // other options
-      cultureNameLocaleFileMap: { 
-        "DotnetCultureName": "AngularLocaleFileName",
-        "pt-BR": "pt"  // example
-      }
-    })
-    //...
+  providers: [
+    // ...
+    provideAbpCore(
+      withOptions({
+        ...,
+        registerLocaleFn: registerLocale(
+          {
+            cultureNameLocaleFileMap: {
+              "DotnetCultureName": "AngularLocaleFileName",
+              "pt-BR": "pt"  // example
+            },
+          },
+        )
+      }),
+    ),
+  ]
+})
 ```
 
 查看 [Angular中所有的语言环境文件](https://github.com/angular/angular/tree/master/packages/common/locales).

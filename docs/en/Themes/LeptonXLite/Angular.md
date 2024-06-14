@@ -31,20 +31,21 @@ yarn add bootstrap-icons
 Note: You should remove the old theme styles from "angular.json" if you are switching from "ThemeBasic" or "Lepton."
 Look at the [Theme Configurations](../../UI/Angular/Theme-Configurations) list of styles. Depending on your theme, you can alter your styles in angular.json.
 
-- Finally, remove `ThemeBasicModule` from `app.module.ts`, and import the related modules in `app.module.ts`
+- Finally, remove `ThemeBasicModule`, `provideThemeBasicConfig` from `app.module.ts`, and import the related modules in `app.module.ts`
 
 ```js
 import { ThemeLeptonXModule } from "@abp/ng.theme.lepton-x";
-import { SideMenuLayoutModule } from "@abp/ng.theme.lepton-x/layouts";
 
 @NgModule({
   imports: [
     // ...
-
     // do not forget to remove ThemeBasicModule or other old theme module
-    //  ThemeBasicModule.forRoot(),
-    ThemeLeptonXModule.forRoot(),
-    SideMenuLayoutModule.forRoot(),
+    //  ThemeBasicModule
+    ThemeLeptonXModule.forRoot()
+  ],
+  providers: [
+    // do not forget to remove provideThemeBasicConfig or other old theme providers
+    // provideThemeBasicConfig
   ],
   // ...
 })

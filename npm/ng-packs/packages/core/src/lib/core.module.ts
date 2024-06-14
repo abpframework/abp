@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, TitleStrategy } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
@@ -15,36 +15,17 @@ import { InitDirective } from './directives/init.directive';
 import { PermissionDirective } from './directives/permission.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
-import { RoutesHandler } from './handlers/routes.handler';
 import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { ToInjectorPipe } from './pipes/to-injector.pipe';
-import { CookieLanguageProvider } from './providers/cookie-language.provider';
-import { LocaleProvider } from './providers/locale.provider';
-import { LocalizationService } from './services/localization.service';
-import { OTHERS_GROUP } from './tokens';
-import { localizationContributor, LOCALIZATIONS } from './tokens/localization.token';
-import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
-import { TENANT_KEY } from './tokens/tenant-key.token';
-import { noop } from './utils/common-utils';
 import './utils/date-extensions';
-import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
 import { ShortTimePipe } from './pipes/short-time.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import { QUEUE_MANAGER } from './tokens/queue.token';
-import { DefaultQueueManager } from './utils/queue';
-import { IncludeLocalizationResourcesProvider } from './providers/include-localization-resources.provider';
-import { SORT_COMPARE_FUNC, compareFuncFactory } from './tokens/compare-func.token';
-import { AuthErrorFilterService } from './abstracts';
-import { DYNAMIC_LAYOUTS_TOKEN } from "./tokens/dynamic-layout.token";
-import { DEFAULT_DYNAMIC_LAYOUTS } from "./constants";
-import { AbpTitleStrategy } from './services/title-strategy.service';
-import { LocalStorageListenerService } from './services/local-storage-listener.service';
-
+import { provideAbpCoreChild, provideAbpCore, withOptions } from './providers';
 
 const standaloneDirectives = [
   AutofocusDirective,
@@ -132,96 +113,23 @@ export class RootCoreModule {}
   imports: [BaseCoreModule],
 })
 export class CoreModule {
+  /**
+   * @deprecated forRoot method is deprecated, use `provideAbpCore` *function* for config settings.
+   */
   static forRoot(options = {} as ABP.Root): ModuleWithProviders<RootCoreModule> {
     return {
       ngModule: RootCoreModule,
-      providers: [
-        LocaleProvider,
-        CookieLanguageProvider,
-        {
-          provide: 'CORE_OPTIONS',
-          useValue: options,
-        },
-        {
-          provide: CORE_OPTIONS,
-          useFactory: coreOptionsFactory,
-          deps: ['CORE_OPTIONS'],
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [Injector],
-          useFactory: getInitialData,
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [Injector],
-          useFactory: localeInitializer,
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [LocalizationService],
-          useFactory: noop,
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [LocalStorageListenerService],
-          useFactory: noop,
-        },
-        {
-          provide: APP_INITIALIZER,
-          multi: true,
-          deps: [RoutesHandler],
-          useFactory: noop,
-        },
-
-        { provide: TENANT_KEY, useValue: options.tenantKey || '__tenant' },
-        {
-          provide: LOCALIZATIONS,
-          multi: true,
-          useValue: localizationContributor(options.localizations),
-          deps: [LocalizationService],
-        },
-        {
-          provide: SORT_COMPARE_FUNC,
-          useFactory: compareFuncFactory,
-        },
-        {
-          provide: QUEUE_MANAGER,
-          useClass: DefaultQueueManager,
-        },
-        {
-          provide: OTHERS_GROUP,
-          useValue: options.othersGroup || 'AbpUi::OthersGroup',
-        },
-        AuthErrorFilterService,
-        IncludeLocalizationResourcesProvider,
-        {
-          provide: DYNAMIC_LAYOUTS_TOKEN,
-          useValue: options.dynamicLayouts || DEFAULT_DYNAMIC_LAYOUTS
-        },
-        {
-          provide: TitleStrategy,
-          useExisting: AbpTitleStrategy
-        }
-      ],
+      providers: [provideAbpCore(withOptions(options))],
     };
   }
 
+  /**
+   * @deprecated forChild method is deprecated, use `provideAbpCoreChild` *function* for config settings.
+   */
   static forChild(options = {} as ABP.Child): ModuleWithProviders<RootCoreModule> {
     return {
       ngModule: RootCoreModule,
-      providers: [
-        {
-          provide: LOCALIZATIONS,
-          multi: true,
-          useValue: localizationContributor(options.localizations),
-          deps: [LocalizationService],
-        },
-      ],
+      providers: [provideAbpCoreChild(options)],
     };
   }
 }

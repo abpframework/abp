@@ -6,28 +6,20 @@ Reactive forms in ABP Angular UI are validated by [ngx-validate](https://www.npm
 
 ## How to Add New Error Messages
 
-You can add a new error message by passing validation options to the `ThemeSharedModule` in your root module.
+You can add a new error message by passing validation options to the `withValidationBluePrint` method of `provideAbpThemeShared` function in your root module.
 
-```js
-import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
-import { DEFAULT_VALIDATION_BLUEPRINTS } from "@abp/ng.theme.shared";
+```ts
+import { provideAbpThemeShared, withValidationBluePrint } from '@abp/ng.theme.shared';
 
 @NgModule({
-  imports: [
-    ThemeSharedModule.forRoot({
-      validation: {
-        blueprints: {
-          uniqueUsername: "::AlreadyExists[{%{{{ username }}}%}]",
-        },
-      },
-
-      // rest of theme shared config
-    }),
-
-    // other imports
+  providers: [
+    provideAbpThemeShared(
+      withValidationBluePrint({
+        uniqueUsername: "::AlreadyExists[{%{{{ username }}}%}]"
+      })
+    ),
+    ...
   ],
-
-  // rest of the module metadata
 })
 export class AppModule {}
 ```
@@ -77,26 +69,16 @@ You can overwrite an existing error message by passing validation options to the
 
 To use this instead of the built-in required input message, all you need to do is the following.
 
-```js
-import { VALIDATION_BLUEPRINTS } from "@ngx-validate/core";
-import { DEFAULT_VALIDATION_BLUEPRINTS } from "@abp/ng.theme.shared";
+```ts
+import { provideAbpThemeShared, withValidationBluePrint } from '@abp/ng.theme.shared';
 
 @NgModule({
-  imports: [
-    ThemeSharedModule.forRoot({
-      validation: {
-        blueprints: {
-          required: "::RequiredInput",
-        },
-      },
-
-      // rest of theme shared config
-    }),
-
-    // other imports
+  providers: [
+    provideAbpThemeShared(withValidationBluePrint({
+      required: "::RequiredInput",
+    })),
+    ...
   ],
-
-  // rest of the module metadata
 })
 export class AppModule {}
 ```
