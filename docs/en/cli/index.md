@@ -53,6 +53,7 @@ Here, is the list of all available commands before explaining their details:
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
+* **`upgrade`**: It converts the application to use pro modules.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`login-info`**: Shows the current user's login information.
@@ -108,7 +109,7 @@ Usage:
 abp new <solution-name> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp new Acme.BookStore
@@ -221,7 +222,7 @@ Generates a new module.
 abp new-module <module-name> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp new-module Acme.BookStore -t module:ddd
@@ -250,7 +251,7 @@ Generates a new package.
 abp new-package [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp new-package --name Acme.BookStore.Domain --template lib.domain
@@ -342,7 +343,7 @@ Basic usage:
 abp add-package <package-name> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp add-package Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
@@ -370,7 +371,7 @@ Adds one or more package reference to target project, also adds ABP module depen
 abp add-package-ref <package-names> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp add-package-ref Acme.BookStore.Domain
@@ -383,13 +384,13 @@ abp add-package-ref "Acme.BookStore.Domain Acme.BookStore.Domain.Shared" -t Acme
 
 ### install-module
 
-Installs a module, that is published as nuget packages, to a local module. Project relations are created according the types of the projects. For example: a `lib.domain-shared` project is added to `lib.domain-shared` project
+Installs a module, that is published as nuget packages, to a local module. Project relations are created according the types of the projects. For Examples: a `lib.domain-shared` project is added to `lib.domain-shared` project
 
 ````bash
 abp install-module <module-name> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp install-module Volo.Blogging
@@ -404,13 +405,13 @@ abp install-module Volo.Blogging -t "modules/crm/Acme.Crm.abpmdl"
 
 ### install-local-module
 
-Installs one module to another. Project relations are created according the types of the projects. For example: a `lib.domain-shared` project is added to `lib.domain-shared` project
+Installs one module to another. Project relations are created according the types of the projects. For Examples: a `lib.domain-shared` project is added to `lib.domain-shared` project
 
 ````bash
 abp install-local-module <module-path> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp install-local-module Acme.OrderManagement
@@ -432,7 +433,7 @@ Usage:
 abp list-modules [options]
 ````
 
-Example:
+Examples:
 
 ```bash
 abp list-modules
@@ -462,7 +463,7 @@ Usage:
 abp get-source <module-name> [options]
 ````
 
-Example:
+Examples:
 
 ```bash
 abp get-source Volo.Blogging
@@ -485,7 +486,7 @@ Downloads the source code of a module and replaces package references with proje
 abp add-source-code <module-name> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp add-source-code Volo.Chat --add-to-solution-file
@@ -504,7 +505,7 @@ Creates necessary files for a solution to be readable by ABP Studio. If the solu
 abp init-solution [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp init-solution --name Acme.BookStore
@@ -522,7 +523,7 @@ Connects to Kubernetes cluster. Press `ctrl+c` to disconnect.
 abp kube-connect [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp kube-connect
@@ -548,7 +549,7 @@ Intercepts a service running in Kubernetes environment. Press `ctrl+c` to stop i
 abp kube-intercept <service-name> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp kube-intercept mycrm-product-service -ns mycrm-local
@@ -597,7 +598,7 @@ You can create your own module source and add it to the list. It accepts a name 
 
 When you add a module source, you can install modules from that source using the `install-module` command. It attempts to find the package from NuGet, such as `Volo.Abp.Account.Installer`. You can configure a private NuGet feed and publish your modules to that feed. Each module has an installer package that is utilized to install the module into a solution. When you publish your module to a private feed, you should also publish the installer package to the same feed.
 
-Example:
+Examples:
 
 ````bash
 abp add-module-source -n "Custom Source" -p "D:\packages\abp\modules.json"
@@ -618,7 +619,7 @@ Deletes a remote module source from the list of sources that you can use to inst
 abp delete-module-source [options]
 ````	
 
-Example:
+Examples:
 
 ````bash
 abp delete-module-source -n "Custom Source"
@@ -766,11 +767,32 @@ abp switch-to-local [options]
 
 * `--paths` or `-p`: Specifies the local paths that the projects are inside. You can use `|` character to separate the paths.
 
-Example:
+Examples:
 
 ````bash
 abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
 ````
+
+### upgrade
+
+Upgrades the ABP modules to pro modules, such as upgrading [Identity](../modules/identity.md) to [Identity Pro](../modules/identity-pro.md). You can use this for [Single Layer Web Application](../solution-templates/single-layer-web-application/index.md) and [Layered Web Application](../solution-templates/layered-web-application/index.md) templates.
+
+Usage:
+
+````bash
+abp upgrade [-t <template-name>] [options]
+````
+
+Examples:
+
+````bash
+abp upgrade -t app
+abp upgrade -t app-nolayers -p D:\MyProjects\MyProject
+````
+
+#### Options
+
+* `--path` or `-p`: Specifies the module path. The module should be in that directory. If not specified, the default is the current directory.
 
 ### translate
 
@@ -790,7 +812,7 @@ First step is to create the unified translation file:
 abp translate -c <culture> [options]
 ````
 
-Example:
+Examples:
 
 ````bash
 abp translate -c de
