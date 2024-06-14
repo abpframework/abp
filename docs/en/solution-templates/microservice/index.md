@@ -38,7 +38,7 @@ ABP Studio provides pre-architected and production-ready templates to jump start
   * [HTTP API Calls](http-api-calls.md)
   * [gRPC Calls](grpc-calls.md)
 * [Helm Charts and Kubernetes](helm-charts-and-kubernetes.md)
-* Guides
+* [Guides](guides.md)
   * [Adding new microservices](adding-new-microservices.md)
   * [Adding new applications](adding-new-applications.md)
   * [Adding new API gateways](adding-new-api-gateways.md)
