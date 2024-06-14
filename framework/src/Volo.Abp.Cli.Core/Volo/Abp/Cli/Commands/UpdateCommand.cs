@@ -84,7 +84,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
             return;
         }
 
-        var project = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.csproj").FirstOrDefault();
+        var project = Directory.GetFiles(directory, "*.csproj").FirstOrDefault();
 
         if (project != null)
         {
