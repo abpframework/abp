@@ -1,7 +1,7 @@
 # Installing ABP Studio
 
 > **Warning: Beta Version Information**\
-> Currently, ABP Studio is in its beta phase, and access is exclusively available to invited organizations. To request access to the beta version, kindly visit [this web page](https://commercial.abp.io/studio). If you have already received an invitation, please follow the installation guide below.
+> Currently, ABP Studio is in its beta phase and available for everyone. To access the beta version, kindly visit [this web page](https://commercial.abp.io/studio).
 
 ## Pre-requirements
 
