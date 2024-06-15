@@ -84,6 +84,15 @@ public class CmsKitFeatureDefinitionProvider : FeatureDefinitionProvider
             L("Feature:TagEnableDescription"),
             new ToggleStringValueType());
         }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<MarkedItemsFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.MarkedItemEnable,
+            "true",
+            L("Feature:MarkedItemEnable"),
+            L("Feature:MarkedItemEnableDescription"),
+            new ToggleStringValueType());
+        }
     }
 
     private static LocalizableString L(string name)

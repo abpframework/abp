@@ -5,11 +5,13 @@ using Volo.Abp.Users.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.MongoDB.Blogs;
 using Volo.CmsKit.MongoDB.Comments;
 using Volo.CmsKit.MongoDB.GlobalResources;
+using Volo.CmsKit.MongoDB.MarkedItems;
 using Volo.CmsKit.MongoDB.MediaDescriptors;
 using Volo.CmsKit.MongoDB.Menus;
 using Volo.CmsKit.MongoDB.Pages;
@@ -48,6 +50,7 @@ public class CmsKitMongoDbModule : AbpModule
             options.AddRepository<MediaDescriptor, MongoMediaDescriptorRepository>();
             options.AddRepository<MenuItem, MongoMenuItemRepository>();
             options.AddRepository<GlobalResource, MongoGlobalResourceRepository>();
+            options.AddRepository<UserMarkedItem, MongoUserMarkedItemRepository>();
         });
     }
 }

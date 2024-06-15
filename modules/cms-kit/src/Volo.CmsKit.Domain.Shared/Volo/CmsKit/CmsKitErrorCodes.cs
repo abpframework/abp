@@ -44,4 +44,9 @@ public static class CmsKitErrorCodes
         public const string InvalidName = "CmsKit:Media:0001";
         public const string EntityTypeDoesntExist = "CmsKit:Media:0002";
     }
+
+    public static class MarkedItems
+    {
+        public const string EntityCannotBeMarked = "CmsKit:MarkedItem:0001";
+    }
 }
