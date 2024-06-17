@@ -587,11 +587,16 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
 
     private static void ChangeThemeToBasicForMvcProjects(ProjectBuildContext context, string defaultThemeName)
     {
-        var projectNames = new[]
+        var projectNames = new List<string>
         {
-            ".Web", ".HttpApi.Host", ".AuthServer", ".Web.Public", ".Web.Public.Host",
+            ".Web", ".AuthServer", ".Web.Public", ".Web.Public.Host",
             "" //for app-nolayers-mvc
         };
+        
+        if(!context.Symbols.Contains("tiered"))
+        {
+            projectNames.Add(".HttpApi.Host");
+        }
 
         foreach (var projectName in projectNames)
         {
