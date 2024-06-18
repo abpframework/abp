@@ -1,13 +1,21 @@
 # ABP Framework
 
 ![build and test](https://img.shields.io/github/actions/workflow/status/abpframework/abp/build-and-test.yml?branch=dev&style=flat-square)
+
 [![codecov](https://codecov.io/gh/abpframework/abp/branch/dev/graph/badge.svg?token=jUKLCxa6HF)](https://codecov.io/gh/abpframework/abp)
+
 [![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
+
 [![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
+
 [![MyGet (nightly builds)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.svg?style=flat-square)](https://docs.abp.io/en/abp/latest/Nightly-Builds)
+
 [![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
+
 [![Code of Conduct](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/abpframework/abp/blob/dev/CODE_OF_CONDUCT.md)
+
 [![CLA Signed](https://cla-assistant.io/readme/badge/abpframework/abp)](https://cla-assistant.io/abpframework/abp)
+
 [![ABP Discord server](https://img.shields.io/discord/951497912645476422?label=Discord)](https://discord.gg/abp)
 
 ABP Framework is a complete **infrastructure** based on **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**. Check out https://abp.io
@@ -34,27 +42,25 @@ Create a new solution:
 
 > See the [CLI documentation](https://docs.abp.io/en/abp/latest/CLI) for all available options.
 
+
+
 ### UI Framework Options
 
 <img width="500" src="docs/en/images/ui-options.png">
+
+
 
 ### Database Provider Options
 
 <img width="500" src="docs/en/images/db-options.png">
 
-## The Book: Mastering ABP Framework
 
-Written by the creator of ABP Framework, this book will help you to gain a complete understanding of the ABP Framework and modern web application development techniques.
-
-* [Buy on Amazon](https://www.amazon.com/gp/product/B097Z2DM8Q)
-* [Buy on Packt Publishing](https://www.packtpub.com/product/mastering-abp-framework/9781801079242)
-* [More details about the book](https://abp.io/books/mastering-abp-framework)
-
-![book-mastering-abp-framework](docs/en/images/book-mastering-abp-framework.png)
 
 ## What ABP Provides?
 
 ABP provides a **full stack developer experience**.
+
+
 
 ### Architecture
 
@@ -64,13 +70,19 @@ ABP offers a complete, **modular** and **layered** software architecture based o
 
 ABP Framework is suitable for **[microservice solutions](https://docs.abp.io/en/abp/latest/Microservice-Architecture)** as well as monolithic applications.
 
+
+
 ### Infrastructure
 
 There are a lot of features provided by the ABP Framework to achieve real world scenarios easier, like [Event Bus](https://docs.abp.io/en/abp/latest/Event-Bus), [Background Job System](https://docs.abp.io/en/abp/latest/Background-Jobs), [Audit Logging](https://docs.abp.io/en/abp/latest/Audit-Logging), [BLOB Storing](https://docs.abp.io/en/abp/latest/Blob-Storing), [Data Seeding](https://docs.abp.io/en/abp/latest/Data-Seeding), [Data Filtering](https://docs.abp.io/en/abp/latest/Data-Filtering), etc.
 
+
+
 ### Cross Cutting Concerns
 
 ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](https://docs.abp.io/en/abp/latest/Exception-Handling), [Validation](https://docs.abp.io/en/abp/latest/Validation), [Authorization](https://docs.abp.io/en/abp/latest/Authorization), [Localization](https://docs.abp.io/en/abp/latest/Localization), [Caching](https://docs.abp.io/en/abp/latest/Caching), [Dependency Injection](https://docs.abp.io/en/abp/latest/Dependency-Injection), [Setting Management](https://docs.abp.io/en/abp/latest/Settings), etc.
+
+
 
 ### Application Modules
 
@@ -83,11 +95,23 @@ ABP is a modular framework and the Application Modules provide **pre-built appli
 
 See the [Application Modules](https://docs.abp.io/en/abp/latest/Modules/Index) document for all pre-built modules.
 
+
+
 ### Startup Templates
 
 The [Startup templates](https://docs.abp.io/en/abp/latest/Startup-Templates/Index) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
 
-## ABP Community
+
+
+## Mastering ABP Framework Book
+
+This e-book will help you to gain a complete understanding of the ABP Framework and modern web application development techniques. It is written by the creator and team lead of the ABP Framework. You can buy from [Amazon](https://www.amazon.com/gp/product/B097Z2DM8Q) or [Packt Publishing](https://www.packtpub.com/product/mastering-abp-framework/9781801079242). Find further info about the book at [abp.io/books/mastering-abp-framework](https://abp.io/books/mastering-abp-framework).
+
+![book-mastering-abp-framework](docs/en/images/book-mastering-abp-framework.png)
+
+
+
+## The Community
 
 ### ABP Community Web Site
 
@@ -105,26 +129,29 @@ See the [sample projects](https://docs.abp.io/en/abp/latest/Samples/Index) built
 
 ABP is a community-driven open source project. See [the contribution guide](https://docs.abp.io/en/abp/latest/Contribution/Index) if you want to be a part of this project.
 
+
+
 ## Official Links
 
-* <a href="https://abp.io/" target="_blank">Main Web Site</a>
-  * <a href="https://abp.io/get-started" target="_blank">Get Started</a>
-  * <a href="https://abp.io/features" target="_blank">Features</a>
-* <a href="https://docs.abp.io/" target="_blank">Documentation</a>
-* <a href="https://docs.abp.io/en/abp/latest/Samples/Index" target="_blank">Samples</a>
-* <a href="https://blog.abp.io/" target="_blank">Blog</a>
-* <a href="https://community.abp.io/" target="_blank">Community</a>
-* <a href="https://stackoverflow.com/questions/tagged/abp" target="_blank">Stack overflow</a>
-* <a href="https://twitter.com/abpframework" target="_blank">Twitter</a>
+* [Home Website](https://abp.io)
+  * [Get Started](https://abp.io/get-started)
+  * [Features](https://abp.io/features)
+* [Documents](https://docs.abp.io/)
+* [Samples](https://docs.abp.io/en/abp/latest/Samples/Index)
+* [Blog](https://blog.abp.io/)
+* [Community](https://community.abp.io/)
+* [Stackoverflow](https://stackoverflow.com/questions/tagged/abp)
+* [Twitter](https://twitter.com/abpframework)
+
+
 
 ## Support the ABP Framework
 
-Love ABP Framework? **Please give a star** to this repository :star:
+GitHub repository stars are a very important indicator of popularity and how big the community is. If you like ABP Framework, support us by clicking the star :star: on the repository.
+
+
 
 ## Discord Channel
 
-You can use this link to join the ABP Community Discord Server: https://discord.gg/abp
+We have a Discord server where you can chat with other ABP users. Share your ideas, technical issues, showcase your creations , share the tips that worked for you, catch up with the latest news and announcements about ABP Framework. Join 👉 https://discord.gg/abp.
 
-## ABP Commercial
-
-See also [ABP Commercial](https://commercial.abp.io/) if you are looking for pre-built application modules, professional themes, code generation tooling and premium support for the ABP Framework.
