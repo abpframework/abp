@@ -192,10 +192,27 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         try
         {
-            if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
+            foreach (var entityEntry in AbpEfCoreNavigationHelper.GetChangedEntityEntries())
             {
-                foreach (var entityEntry in AbpEfCoreNavigationHelper.GetChangedEntityEntries())
+                if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
                 {
+                    if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
+                    {
+                        EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
+                    }
+                    else
+                    {
+                        EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
+                    }
+                }
+                else if (entityEntry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
+                {
+                    if (entityEntry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey()))
+                    {
+                        // Skip `PublishEntityDeletedEvent/PublishEntityUpdatedEvent` if only foreign keys have changed.
+                        break;
+                    }
+
                     if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
                     {
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);

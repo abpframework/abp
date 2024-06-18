@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Identity;
 
-public class GetIdentityUsersInput : PagedAndSortedResultRequestDto
+public class GetIdentityUsersInput : ExtensiblePagedAndSortedResultRequestDto
 {
     public string Filter { get; set; }
 }
