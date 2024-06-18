@@ -16,7 +16,7 @@
 
 [![CLA Signed](https://cla-assistant.io/readme/badge/abpframework/abp)](https://cla-assistant.io/abpframework/abp)
 
-[![ABP Discord server](https://img.shields.io/discord/951497912645476422?label=Discord)](https://discord.gg/abp)
+[![Discord Shield](https://discord.com/api/guilds/951497912645476422/widget.png?style=shield)](https://discord.gg/abp)
 
 ABP Framework is a complete **infrastructure** based on **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**. Check out https://abp.io
 
