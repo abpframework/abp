@@ -62,7 +62,7 @@ public class PackageVersionCheckerService : ITransientDependency
 
     public async Task<LatestVersionInfo> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
     {
-        if (!includeNightly && !includeReleaseCandidates && !packageId.Contains("LeptonX"))
+        if (!includeNightly && !includeReleaseCandidates && !packageId.Contains("LeptonX") && !packageId.StartsWith("Volo.Abp.Studio."))
         {
             return await GetLatestStableVersionFromGithubAsync();
         }
