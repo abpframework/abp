@@ -798,7 +798,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, "IsDeleted");
 
-            if (LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null)
+            if (UseDbFunction())
             {
                 expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
                 modelBuilder.ConfigureSoftDeleteDbFunction(AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
@@ -809,7 +809,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
 
-            if (LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null)
+            if (UseDbFunction())
             {
                 multiTenantFilter = e => AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilter(((IMultiTenant)e).TenantId, CurrentTenantId, true);
                 modelBuilder.ConfigureMultiTenantDbFunction(AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
@@ -821,8 +821,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         return expression;
     }
 
+    protected virtual bool UseDbFunction()
+    {
+        return LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null;
+    }
+
     public virtual string GetCompiledQueryCacheKey()
     {
-        return $"{CurrentTenantId?.ToString() ?? "Null"}{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
+        return $"{CurrentTenantId?.ToString() ?? "Null"}:{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
     }
 }

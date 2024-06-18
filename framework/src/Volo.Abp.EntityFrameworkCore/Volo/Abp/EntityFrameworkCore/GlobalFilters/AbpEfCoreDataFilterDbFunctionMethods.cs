@@ -5,7 +5,7 @@ namespace Volo.Abp.EntityFrameworkCore.GlobalFilters;
 
 public static class AbpEfCoreDataFilterDbFunctionMethods
 {
-    private const string NotSupportedExceptionMessage = "Your EF Core database provider does not support 'User-defined function mapping'." +
+    public const string NotSupportedExceptionMessage = "Your EF Core database provider does not support 'User-defined function mapping'." +
                                                         "Please set 'UseDbFunction' of 'AbpEfCoreGlobalFilterOptions' to false to disable it." +
                                                         "See https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping for more information." ;
 
