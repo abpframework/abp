@@ -103,9 +103,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 BindingFlags.Instance | BindingFlags.NonPublic
             )!;
 
+    protected readonly DbContextOptions DbContextOptions;
+
     protected AbpDbContext(DbContextOptions<TDbContext> options)
         : base(options)
     {
+        DbContextOptions = options;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -791,15 +794,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         Expression<Func<TEntity, bool>>? expression = null;
 
-        var abpEfCoreCurrentDbContext = this.GetService<AbpEfCoreCurrentDbContext>();
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {
             expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, "IsDeleted");
 
-            if (LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction)
+            if (LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null)
             {
                 expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
-                modelBuilder.ConfigureSoftDeleteDbFunction(AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilterMethodInfo, abpEfCoreCurrentDbContext);
+                modelBuilder.ConfigureSoftDeleteDbFunction(AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
             }
         }
 
@@ -807,10 +809,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
 
-            if (LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction)
+            if (LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null)
             {
                 multiTenantFilter = e => AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilter(((IMultiTenant)e).TenantId, CurrentTenantId, true);
-                modelBuilder.ConfigureMultiTenantDbFunction(AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilterMethodInfo, abpEfCoreCurrentDbContext);
+                modelBuilder.ConfigureMultiTenantDbFunction(AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
             }
 
             expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
