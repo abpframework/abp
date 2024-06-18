@@ -2,7 +2,7 @@
   "culture": "nl",
   "texts": {
     "Settings": "Instellingen",
-    "SuccessfullySaved": "Succesvol opgeslagen",
+    "SavedSuccessfully": "Succesvol opgeslagen",
     "Permission:SettingManagement": "Instellingenbeheer",
     "Permission:Emailing": "E-mail",
     "Permission:EmailingTest": "E-mailtest",

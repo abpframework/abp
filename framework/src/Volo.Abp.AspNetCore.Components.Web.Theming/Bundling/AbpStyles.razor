@@ -1,0 +1,56 @@
+@using Volo.Abp
+@implements IDisposable
+@inject IComponentBundleManager BundleManager
+@inject PersistentComponentState PersistentComponentState
+
+@if (StyleFiles != null)
+{
+    foreach (var file in StyleFiles)
+    {
+        <link rel="stylesheet" href="@file" />
+    }
+}
+
+@code {
+    [Parameter]
+    public List<string>? WebAssemblyStyleFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    private List<string>? StyleFiles { get; set; }
+
+    private PersistingComponentStateSubscription persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (BundleName == null)
+        {
+            throw new AbpException("The BundleName parameter of the AbpStyles component can not be null!");
+        }
+
+        persistingSubscription = PersistentComponentState.RegisterOnPersisting(PersistStyleFiles);
+
+        if (PersistentComponentState.TryTakeFromJson<List<string>>(nameof(StyleFiles), out var restoredStyleFiles))
+        {
+            StyleFiles = restoredStyleFiles;
+        }
+        else
+        {
+            StyleFiles = (await BundleManager.GetStyleBundleFilesAsync(BundleName!)).ToList();
+        }
+
+        if (OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
+        {
+            StyleFiles?.AddRange(WebAssemblyStyleFiles);
+        }
+    }
+
+    private Task PersistStyleFiles()
+    {
+        PersistentComponentState.PersistAsJson(nameof(StyleFiles), StyleFiles);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => persistingSubscription.Dispose();
+}

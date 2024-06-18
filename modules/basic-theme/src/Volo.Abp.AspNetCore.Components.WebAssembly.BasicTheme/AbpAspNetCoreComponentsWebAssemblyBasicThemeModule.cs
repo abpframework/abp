@@ -1,4 +1,6 @@
-﻿using Volo.Abp.AspNetCore.Components.Web.BasicTheme;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Components.Web;
+using Volo.Abp.AspNetCore.Components.Web.BasicTheme;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Toolbars;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
@@ -25,5 +27,14 @@ public class AbpAspNetCoreComponentsWebAssemblyBasicThemeModule : AbpModule
         {
             options.Contributors.Add(new BasicThemeToolbarContributor());
         });
+
+        if (context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
+        {
+            Configure<AuthenticationOptions>(options =>
+            {
+                options.LoginUrl = "Account/Login";
+                options.LogoutUrl = "Account/Logout";
+            });
+        }
     }
 }

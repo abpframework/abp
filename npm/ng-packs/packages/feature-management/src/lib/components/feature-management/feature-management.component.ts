@@ -11,7 +11,7 @@ import {
   LocaleDirection,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 
@@ -31,6 +31,12 @@ export class FeatureManagementComponent
     FeatureManagement.FeatureManagementComponentInputs,
     FeatureManagement.FeatureManagementComponentOutputs
 {
+  protected readonly track = inject(TrackByService);
+  protected readonly toasterService = inject(ToasterService);
+  protected readonly service = inject(FeaturesService);
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly confirmationService = inject(ConfirmationService);
+
   @Input()
   providerKey: string;
 
@@ -71,14 +77,6 @@ export class FeatureManagementComponent
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   modalBusy = false;
-
-  constructor(
-    public readonly track: TrackByService,
-    private toasterService: ToasterService,
-    protected service: FeaturesService,
-    protected configState: ConfigStateService,
-    protected confirmationService: ConfirmationService,
-  ) {}
 
   openModal() {
     if (!this.providerName) {
@@ -127,6 +125,7 @@ export class FeatureManagementComponent
       .subscribe(() => {
         this.visible = false;
 
+        this.toasterService.success('AbpFeatureManagement::Saved');
         if (!this.providerKey) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();

@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework is niet alleen een raamwerk, het is ook een leidraad voor projectontwikkeling/management, omdat het DDD, GenericRepository, DI, Microservice, Modularity trainingen biedt. Zelfs als je het framework zelf niet gaat gebruiken, kun je jezelf ontwikkelen met docs.abp.io dat goed en professioneel is voorbereid. (OpenIddict, Redis, Quartz etc.) \n Omdat veel dingen vooraf zijn gebouwd, verkort dit de projectontwikkelingstijd aanzienlijk. (Zoals inlogpagina, afhandeling van uitzonderingen, gegevensfiltering-zaaien, auditlogboekregistratie, lokalisatie, automatische API-controller enz.) \n Als voorbeeld uit onze app heb ik Local Event Bus gebruikt voor voorraadbeheer. Ik kan dus orderbewegingen beheren door voorraadbeheer te schrijven. \n Het is geweldig om geen tijd te verliezen voor CreationTime, CreatorId. Ze worden automatisch gevuld.",
     "VideosLoginAndRegisterMessage": "Je moet inloggen om video&#39;s te bekijken. Als u dat nog niet heeft gedaan, kunt u een account voor Watch aanmaken.",
     "Filter": "Filter",
-    "VideoCourses": "Videocursussen",
+    "VideoCourses": "Essentiële video's",
     "TestimonialText": "Jouw getuigenis",
     "Position": "Positie",
     "ExperienceYear": "Jarenlange ervaring",
@@ -448,7 +448,7 @@
     "CompanySize": "Bedrijfsomvang",
     "Image": "Jouw profiel foto",
     "TestimonialTitle": "Laten we uw getuigenis horen",
-    "TestimonialInfo": "Wat onze klanten zeggen, doet ertoe! ",
+    "TestimonialInfo": "Wat onze klanten zeggen, doet er toe! Vertel ons over uw ervaring met ons product en onze service. Het wordt aanbevolen om de testimonial in het Engels te schrijven om een ​​breder publiek te bereiken.",
     "Country": "Land",
     "TestimonialTextPlaceholder": "Schrijf een kort verhaal over hoe ABP u heeft geholpen bij het opzetten en opleveren van uw project. ",
     "PositionPlaceholder": "Jouw functie binnen jouw bedrijf.",
@@ -467,6 +467,11 @@
     "Title": "Titel",
     "TitlePlaceholder": "Softwareontwikkelaar, CTO enz.",
     "Characters": "tekens",
-    "ABPTestimonialDescription": "ABP Framework: Laten we uw getuigenis horen"
+    "ABPTestimonialDescription": "ABP Framework: Laten we uw getuigenis horen",
+    "LeaveUsReview": "Laat ons een beoordeling achter",
+    "DocumentationButtonTitle": "Documentatie",
+    "ABPVideoCoursesDescription": "Leer de basisprincipes van het ABP Framework via videocursussen gemaakt door het ABP-team.",
+    "ABPVideoCoursesPageDescription": "Leer de basisprincipes van het ABP Framework via videocursussen gemaakt door het ABP-team. In deze videoserie leer je de essentiële onderwerpen van het ABP Framework. De nummers op elke video zijn geschreven volgens de leerstroom.",
+    "ABPVideoCoursesTitle": "ABP Essentiële video's"
   }
 }

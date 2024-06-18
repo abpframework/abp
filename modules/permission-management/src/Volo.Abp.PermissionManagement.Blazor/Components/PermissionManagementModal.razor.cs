@@ -159,6 +159,7 @@ public partial class PermissionManagementModal
             await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
             await InvokeAsync(_modal.Hide);
+            await Notify.Success(L["SavedSuccessfully"]);
         }
         catch (Exception ex)
         {

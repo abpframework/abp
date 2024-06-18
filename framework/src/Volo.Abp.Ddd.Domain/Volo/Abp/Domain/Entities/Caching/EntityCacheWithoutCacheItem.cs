@@ -20,6 +20,4 @@ public class EntityCacheWithoutCacheItem<TEntity, TKey> :
     {
         return entity;
     }
-
-
 }

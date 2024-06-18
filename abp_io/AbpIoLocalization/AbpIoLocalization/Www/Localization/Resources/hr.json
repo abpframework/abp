@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework nije samo okvir, već je i smjernica za razvoj/upravljanje projektom, jer pruža DDD, GenericRepository, DI, Microservice, Modularity treninge. Čak i ako nećete koristiti sam framework, možete se razvijati s docs.abp.io koji je dobro i profesionalno pripremljen. (OpenIddict, Redis, Quartz itd.) \n Budući da su mnoge stvari unaprijed izgrađene, značajno skraćuje vrijeme razvoja projekta. (Kao što je stranica za prijavu, rukovanje iznimkama, filtriranje-sijanje podataka, bilježenje revizije, lokalizacija, automatski API kontroler itd.) \n Kao primjer iz naše aplikacije, koristio sam lokalnu sabirnicu događaja za kontrolu zaliha. Dakle, mogu upravljati kretanjem narudžbi pisanjem rukovatelja zalihama. \n Divno je ne gubiti vrijeme za CreationTime, CreatorId. Pune se automatski.",
     "VideosLoginAndRegisterMessage": "Morate se prijaviti za gledanje videa. Možete stvoriti račun za sat ako niste.",
     "Filter": "filtar",
-    "VideoCourses": "Video tečajevi",
+    "VideoCourses": "Osnovni videozapisi",
     "TestimonialText": "Vaša preporuka",
     "Position": "Pozicija",
     "ExperienceYear": "Godine iskustva",
@@ -448,7 +448,7 @@
     "CompanySize": "Veličina tvrtke",
     "Image": "Vaša profilna slika",
     "TestimonialTitle": "Poslušajmo vašu preporuku",
-    "TestimonialInfo": "Ono što naši klijenti kažu važno je! Podijelite s nama svoje iskustvo s našim proizvodom i uslugom.",
+    "TestimonialInfo": "Ono što naši klijenti kažu je važno! Recite nam nešto o svom iskustvu s našim proizvodom i uslugom. Preporučamo napisati izjavu na engleskom kako biste dosegli širu publiku.",
     "Country": "Država",
     "TestimonialTextPlaceholder": "Napišite kratku priču o tome kako vam je ABP pomogao izgraditi i isporučiti vaš projekt.",
     "PositionPlaceholder": "Vaša pozicija u tvrtki.",
@@ -467,6 +467,11 @@
     "Title": "Naslov",
     "TitlePlaceholder": "Razvojni inženjer, CTO, itd.",
     "Characters": "znakovi",
-    "ABPTestimonialDescription": "ABP Framework: Hajde da čujemo tvoje iskustvo"
+    "ABPTestimonialDescription": "ABP Framework: Hajde da čujemo tvoje iskustvo",
+    "LeaveUsReview": "Ostavite nam recenziju",
+    "DocumentationButtonTitle": "Dokumentacija",
+    "ABPVideoCoursesDescription": "Naučite osnove ABP okvira putem video tečajeva koje je izradio ABP tim.",
+    "ABPVideoCoursesPageDescription": "Naučite osnove ABP okvira putem video tečajeva koje je izradio ABP tim. U ovoj video seriji naučit ćete bitne teme ABP okvira. Brojevi na svakom videu napisani su prema tijeku učenja.",
+    "ABPVideoCoursesTitle": "ABP osnovni videozapisi"
   }
 }

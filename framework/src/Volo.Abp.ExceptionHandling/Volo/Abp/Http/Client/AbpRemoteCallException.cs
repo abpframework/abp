@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.Http.Client;
 
-[Serializable]
 public class AbpRemoteCallException : AbpException, IHasErrorCode, IHasErrorDetails, IHasHttpStatusCode
 {
     public int HttpStatusCode { get; set; }
@@ -22,12 +20,6 @@ public class AbpRemoteCallException : AbpException, IHasErrorCode, IHasErrorDeta
 
     public AbpRemoteCallException(string message, Exception? innerException = null)
         : base(message, innerException)
-    {
-
-    }
-
-    public AbpRemoteCallException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
     {
 
     }
