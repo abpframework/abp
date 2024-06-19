@@ -170,7 +170,7 @@ public abstract class EmailSenderBase : IEmailSender
         var htmlBody = mail.Body;
 
         // Find all base64 tags in the html message.
-        var base64Tags = Regex.Matches(htmlBody, @"src\s*=\s*(""|')\s*data\s*:\s*(?<mediaType>[\w/\-\.]+);(?<encoding>\w+),(?<data>.*)(""|')", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+        var base64Tags = Regex.Matches(htmlBody, @"src\s*=\s*(""|')\s*data\s*:\s*(?<mediaType>[\w/\-\.]+);(?<encoding>\w+),(?<data>.*?)(""|')", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
         foreach (Match base64Tag in base64Tags)
         {
