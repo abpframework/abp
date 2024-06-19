@@ -97,7 +97,7 @@ var abp = abp || {};
                      .replace(tenantPlaceHolders[2] + ".", "");
              }
              
-            url = url.replace(tenantPlaceHolders[0], abp.currentTenant.id).url.replace(tenantPlaceHolders[1], abp.currentTenant.name);
+            url = url.replace(tenantPlaceHolders[0], abp.currentTenant.id).replace(tenantPlaceHolders[1], abp.currentTenant.name);
             
             if(abp.currentTenant.name != null){
                 url = url.replace(tenantPlaceHolders[2], abp.currentTenant.name);
