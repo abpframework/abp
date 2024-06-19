@@ -90,13 +90,19 @@ var abp = abp || {};
                 await getAbpApplicationConfiguration();
             }
             
-            url.replace(tenantPlaceHolders[0], abp.currentTenant.id);
-            url.replace(tenantPlaceHolders[1], abp.currentTenant.name);
+             if(abp.currentTenant.id == null && abp.currentTenant.name == null){
+                 return url
+                     .replace(tenantPlaceHolders[0] + ".", "")
+                     .replace(tenantPlaceHolders[1] + ".", "")
+                     .replace(tenantPlaceHolders[2] + ".", "");
+             }
+             
+            url = url.replace(tenantPlaceHolders[0], abp.currentTenant.id).url.replace(tenantPlaceHolders[1], abp.currentTenant.name);
             
             if(abp.currentTenant.name != null){
-                url.replace(tenantPlaceHolders[2], abp.currentTenant.name);
+                url = url.replace(tenantPlaceHolders[2], abp.currentTenant.name);
             }else if (abp.currentTenant.id != null){
-                url.replace(tenantPlaceHolders[2], abp.currentTenant.id);
+                url = url.replace(tenantPlaceHolders[2], abp.currentTenant.id);
             }
             
             return url;
