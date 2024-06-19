@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.Content;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Swashbuckle;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -89,16 +90,15 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         Action<SwaggerGenOptions>? setupAction = null)
     {
         var discoveryUrl = discoveryEndpoint != null ?
-            new Uri($"{discoveryEndpoint.TrimEnd('/')}/.well-known/openid-configuration") :
-            new Uri($"{authority.TrimEnd('/')}/.well-known/openid-configuration");
-        
+            $"{discoveryEndpoint.TrimEnd('/')}/.well-known/openid-configuration":
+            $"{authority.TrimEnd('/')}/.well-known/openid-configuration";
         flows ??= new [] { AbpSwaggerOidcFlows.AuthorizationCode };
 
         services.Configure<SwaggerUIOptions>(swaggerUiOptions =>
         {
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedFlows"] = flows;
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedScopes"] = scopes;
-            swaggerUiOptions.ConfigObject.AdditionalItems["oidcDiscoveryEndpoint"] = discoveryEndpoint;
+            swaggerUiOptions.ConfigObject.AdditionalItems["oidcDiscoveryEndpoint"] = discoveryUrl;
         });
         
         return services
@@ -109,7 +109,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                     options.AddSecurityDefinition("oidc", new OpenApiSecurityScheme
                     {
                         Type = SecuritySchemeType.OpenIdConnect,
-                        OpenIdConnectUrl = discoveryUrl
+                        OpenIdConnectUrl = new Uri(RemoveTenantPlaceholders(discoveryUrl))
                     });
 
                     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -128,5 +128,13 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                     });
                     setupAction?.Invoke(options);
                 });
+    }
+    
+    private static string RemoveTenantPlaceholders(string url)
+    {
+        return url
+            .Replace(MultiTenantUrlProvider.TenantPlaceHolder + ".", string.Empty)
+            .Replace(MultiTenantUrlProvider.TenantIdPlaceHolder + ".", string.Empty)
+            .Replace(MultiTenantUrlProvider.TenantNamePlaceHolder + ".", string.Empty);
     }
 }
