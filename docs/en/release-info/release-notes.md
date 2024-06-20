@@ -1,6 +1,6 @@
 # Release Notes
 
-This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check [the related milestone](https://github.com/abpframework/abp/milestones?state=closed) and [the change logs page](https://commercial.abp.io/releases) (only for commercial license holders).
+This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check [the related milestone](https://github.com/abpframework/abp/milestones?state=closed) and [the change logs page](https://abp.io/pro-releases) (only for paid license holders).
 
 > If you want to read detailed release posts for each version, please see the [official ABP blog](https://blog.abp.io).
 
