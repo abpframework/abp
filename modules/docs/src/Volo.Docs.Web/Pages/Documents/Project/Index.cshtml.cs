@@ -490,6 +490,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 {
                     Document = await GetSpecificDocumentOrDefaultAsync(language);
                     DocumentLanguageCode = language;
+                    DocumentNameWithExtension = Document.Name;
                     await ConvertDocumentContentToHtmlAsync();
                     return true;
                 }
