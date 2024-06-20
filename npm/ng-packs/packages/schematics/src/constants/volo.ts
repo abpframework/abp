@@ -23,7 +23,7 @@ export const VOLO_PACKAGE_PROXY_IMPORTS = new Map<string, string>([
   ['Volo.Saas.Tenants.TenantDto', '@volo/abp.ng.saas/proxy'],
   //TenantConnectionStringDto it must end with Strings.
   ['Volo.Saas.Tenants.TenantConnectionStringDto', '@volo/abp.ng.saas/proxy'],
-  ['Volo.Saas.Tenants.EditionDto', '@volo/abp.ng.saas/proxy'],
+  ['Volo.Saas.Editions.EditionDto', '@volo/abp.ng.saas/proxy'],
   [
     'Volo.Abp.TextTemplateManagement.TextTemplates.TextTemplateContentDto',
     '@volo/abp.ng.saas/proxy',
