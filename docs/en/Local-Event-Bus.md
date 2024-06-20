@@ -235,6 +235,13 @@ Pre-build events are published when you save changes to the database;
 * For EF Core, they are published on `DbContext.SaveChanges`.
 * For MongoDB, they are published when you call repository's `InsertAsync`, `UpdateAsync` or `DeleteAsync` methods (since MongoDB has not a change tracking system).
 
+#### AbpEntityChangeOptions
+
+There is a `PublishEntityUpdatedEventWhenNavigationChanges` option in the `AbpEntityChangeOptions` class with a default value of `true`.
+If you set it to `false`, the `EntityUpdatedEventData<T>` will not be published when a navigation property changes.
+
+> This option is only used for the EF Core.
+
 ## See Also
 
 * [Distributed Event Bus](Distributed-Event-Bus.md)
