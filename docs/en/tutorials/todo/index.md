@@ -6,8 +6,8 @@
 
 This tutorial has multiple versions. Please select the one best fits for you:
 
-* **[Single-Layer Solution](single-Layer)**: Creates a single-project solution. Recommended for building an application with a **simpler and easy to understand** architecture.
-* **[Layered Solution](layered)**: A fully layered (multiple projects) solution based on [Domain Driven Design](../../framework/architecture/domain-driven-design) practices. Recommended for long-term projects that need a **maintainable and extensible** codebase.
+* **[Single-Layer Solution](single-layer/index.md)**: Creates a single-project solution. Recommended for building an application with a **simpler and easy to understand** architecture.
+* **[Layered Solution](layered/index.md)**: A fully layered (multiple projects) solution based on [Domain Driven Design](../../framework/architecture/domain-driven-design) practices. Recommended for long-term projects that need a **maintainable and extensible** codebase.
 
 ## See Also
 

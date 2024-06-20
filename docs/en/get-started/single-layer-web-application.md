@@ -12,6 +12,8 @@ Welcome to ABP Studio. In this quick start guide, you will learn how to create a
 
 ## Creating a New Solution
 
+> 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is in the beta version now. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.
+
 Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:
 
 ![abp-studio-welcome-screen](images/abp-studio-welcome-screen.png)

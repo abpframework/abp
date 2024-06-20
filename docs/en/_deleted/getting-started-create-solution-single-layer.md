@@ -38,7 +38,7 @@ abp new Acme.BookStore -t app-nolayers{{if UI == "NG"}} -u angular{{else if UI =
 
 *You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.* 
 
-> [ABP CLI document](../cli) covers all of the available commands and options.
+> [ABP CLI document](../cli/index.md) covers all of the available commands and options.
 
 ## The Solution Structure
 

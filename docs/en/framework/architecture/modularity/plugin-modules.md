@@ -49,7 +49,7 @@ You can add the ABP packages that you need to use in the module. At least, you s
 abp add-package Volo.Abp.Core
 ````
 
- If you haven't done it yet, you first need to install the [ABP CLI](../../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
+ If you haven't done it yet, you first need to install the [ABP CLI](../../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Core).
 
 Every [module](../modularity/basics.md) must declare a class derived from the `AbpModule`. Here, a simple module class that resolves a service and initializes it on the application startup:
 

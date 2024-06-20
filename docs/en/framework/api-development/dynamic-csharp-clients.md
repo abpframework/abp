@@ -46,7 +46,7 @@ If you're not using a startup template, then execute the following command in th
 abp add-package Volo.Abp.Http.Client
 ````
 
-> If you haven't done it yet, you first need to install the [ABP CLI](../../cli). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Http.Client).
+> If you haven't done it yet, you first need to install the [ABP CLI](../../cli/index.md). For other installation options, see [the package description page](https://abp.io/package-detail/Volo.Abp.Http.Client).
 
 Now, it's ready to create the client proxies. Example:
 

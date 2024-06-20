@@ -42,7 +42,7 @@ The following tools should be installed on your development machine:
 
 ### Install the ABP CLI
 
-[ABP CLI](../cli) is a command line interface that is used to automate some common tasks for ABP based solutions. First, you need to install the ABP CLI using the following command:
+[ABP CLI](../cli/index.md) is a command line interface that is used to automate some common tasks for ABP based solutions. First, you need to install the ABP CLI using the following command:
 
 ````shell
 dotnet tool install -g Volo.Abp.Cli

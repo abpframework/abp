@@ -57,7 +57,7 @@ In addition to that, the framework and the [pre-build modules](../modules) have 
 This is the recommended approach, since it automatically finds all missing texts for a specific culture and lets you to translate in one place.
 
 * Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
-* Install the [ABP CLI](../cli) if you haven't installed before.
+* Install the [ABP CLI](../cli/index.md) if you haven't installed before.
 * Run `abp translate -c <culture-name>` command for your language in the root folder of the abp repository. For example, use `abp translate -c fr` for French. Check [this document](https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes) to find the culture code for your language.
 * This command creates a file in the same folder, named `abp-translation.json`. Open this file in your favorite editor and fill the missing text values.
 * Once you done the translation, use `abp translate -a` command to apply changes to the related files.
