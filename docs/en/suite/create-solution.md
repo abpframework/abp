@@ -1,5 +1,19 @@
 # Creating a new ABP solution
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Adding existing ABP solution",
+    "Path": "suite/add-solution"
+  },
+  "Next": {
+    "Name": "Generating a CRUD page",
+    "Path": "suite/generating-crud-page"
+  }
+}
+````
+
 ## Create a new solution
 
 Creates a new ABP solution. It's an alternative way of creating an ABP project rather than [ABP CLI](../cli#new) or [abp.io](https://abp.io/get-started) website.  To create a new ABP Solution, click the **Create a new solution** button. It will open a new dialog for the options.
@@ -55,7 +69,3 @@ Also, you can add a *public web site* project to your solution, separate tenant 
 - **Tiered:** Creates a tiered solution where `Web` and `HTTP API ` layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. You can leave it unchecked, if you are not sure.
 
 - **Preview:** Creates the solution in the latest preview version.
-
-## What's next?
-
-[Generating a CRUD page](generating-crud-page.md)

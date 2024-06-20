@@ -1,5 +1,19 @@
 # Creating Many-To-Many Relationship
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Generating a CRUD page",
+    "Path": "suite/generating-crud-page"
+  },
+  "Next": {
+    "Name": "Generating from an Existing Database",
+    "Path": "suite/generating-entities-from-an-existing-database-table"
+  }
+}
+````
+
 ABP Suite allows you to create many-to-many relationships. You can select a foreign entity to define a **navigation collection** in the CRUD Page Generation interface.
 
 ## Navigation Collections
@@ -55,7 +69,3 @@ Click the **Navigations** tab. Then click the **Add navigation collection** butt
 The below image is the final page created by ABP Suite. The **new book** dialog has a **Categories** tab which lists all categories of the book and allows add/remove categories.
 
 ![navigation-collection-books-page](../images/navigation-collection-books-page.8.1.png)
-
-## What's next?
-
-[Generating from an Existing Database](generating-entities-from-an-existing-database-table.md)

@@ -1,5 +1,15 @@
 # Master-Detail Relationship
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Generating CRUD Pages From an Existing Database Table",
+    "Path": "suite/generating-entities-from-an-existing-database-table"
+  }
+}
+````
+
 The Master-Detail (or Master-Child) relationship refers to a hierarchical connection between two entities, where one entity (the master or parent entity) influences or controls the behavior or properties of another element (the child entity) relationship. The relationship between **Order - Order Lines** and **Invoice - Invoice Items** can be considered as examples of a master-detail relationship.
 
 In this relationship, the master entity contains unique records that act as the main source of the information. On the other hand, the child entity contains related records that are associated with a single record in the master entity. In other words, the child entity contains detailed information about the master entity.
@@ -37,7 +47,3 @@ Run the application, and navigate to the page of your master entity. If you have
 ![](../images/suite-master-child-datagrid.png)
 
 > **Note**: Detail rows are shown in tabs as can be seen in the figure above, and that means that you can have **multiple child entities** that are associated with the same master entity. You just need to apply the steps above to establish the master-child relationship.
-
-## What's next?
-
-[Accessing source code of modules](source-code.md)

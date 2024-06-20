@@ -14,7 +14,6 @@ The process may take awhile since it  downloads the source code from GitHub. Aft
 
 ![suite-source-code-added](../images/suite-source-code-added.png)
 
-
 ## Downloading Source Code of a Module
 
 If you want to have the source code in your local or see the source code for inspiration, you can easily download it to your computer.
@@ -28,7 +27,3 @@ If you want to have the source code in your local or see the source code for ins
 ![suite-source-code-download-popup](../images/suite-source-code-download-popup.png)
 
 3) Click **OK** to start the download.
-
-## What's next?
-
-[Updating packages](updating-packages.md)

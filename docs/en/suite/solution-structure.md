@@ -447,7 +447,7 @@ It is essential to have a published application since Dockerfile uses the publis
 
 You can run the docker images you have built using the `docker run` command individually or use the provided `run-docker.ps1` script under the `etc/docker` folder that uses the `docker-compose.yml` file for orchestration. It is **recommended** to use the `run-docker.ps1` script that also generates required HTTPS certificates to run the solution on HTTPS.
 
-## What's next?
+## See Also
 
-- See the [Getting Started](../get-started) document to create a new solution and run it for this template.
+- See the [Getting Started](../get-started/index.md) document to create a new solution and run it for this template.
 - See the [ASP.NET Core MVC Tutorial](../tutorials/book-store/part-01.md) to learn how to develop applications using this template.

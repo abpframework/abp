@@ -1,5 +1,15 @@
 # Creating a new ABP module solution
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Module Startup Template Solution Structure",
+    "Path": "suite/solution-structure"
+  }
+}
+````
+
 ## Creating a new ABP module via ABP Suite
 
 Creating a new ABP module via ABP Suite is an alternative way of creating an ABP module project rather than using [ABP CLI](../cli#new) or [abp.io](https://abp.io/get-started) website. To create a new ABP module solution, click the **Create a new solution** button. Then choose **module template** from the opening dialog.
@@ -30,8 +40,3 @@ You can create a standalone ABP module however you can also create a new  ABP mo
 Open ABP Suite, click **Modules** menu item. Click the **Create a new module** on the right-top of the screen. You enter your module name and check **Add to the solution** checkbox. This will create a new ABP module without `host` folder in your active ABP solution. When you start your ABP solution, you can see this new module in your main menu. If you don't see it in your main menu, you may need to grant permission for this new module.
 
 ![New Solution Directory](../images/new-module-from-modules-page.png)
-
-
-## What's Next?
-
-* [Module Startup Template Solution Structure](solution-structure.md)

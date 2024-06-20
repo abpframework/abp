@@ -1,5 +1,19 @@
 # Generating a CRUD page
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating a new ABP solution",
+    "Path": "suite/create-solution"
+  },
+  "Next": {
+    "Name": "Creating Many-To-Many Relationship",
+    "Path": "suite/creating-many-to-many-relationship"
+  }
+}
+````
+
 When you add an existing project or create a new one, the project will be listed in the "Open Recent" section. To select the project, click on the project name. 
 
 Be aware that, ABP Suite generates a unique URL for every project. After you select your project, you can safely bookmark it to your browser to access it faster.
@@ -292,15 +306,9 @@ abp suite generate --entity D:\Projects\BookStore\.suite\entities\Book.json --so
 
 In this example, `Book.json` was previously created via ABP Suite.
 
-
 ##### Parameters
 
 * `--entity` or `-e`: Path of the entity's JSON file.
 * `--solution` or `-s`: Path of the target solution file (***.sln**).
 
 > Entity JSON file is the metadata for an entity. It has all the information to generate a CRUD page for an entity. When you generate an entity on ABP Suite, you can find the entity JSON file of that entity in `.suite\entities` folder of the solution. You can use that file directly to re-generate the entity via **Abp CLI**. When you copy an entity from a solution to another which has different namespace, then you may need to update your entity JSON. The reason for that, the navigation properties are saved with their namespaces, therefore you need to update the namespaces of navigation properties.
-
-## What's next?
-
-* [Creating Many-To-Many Relationship](creating-many-to-many-relationship.md)
-* [Generating CRUD Pages From an Existing Database Table](generating-entities-from-an-existing-database-table.md)

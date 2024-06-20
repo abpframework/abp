@@ -13,7 +13,3 @@ ABP Suite automatically finds your project directories, but when you customize y
 ```bash
 $HOME/.dotnet/tools/.store/volo.abp.suite/<version>/volo.abp.suite/<version>/tools/netcoreapp3.1/any/appsettings.json
 ```
-
-## What's next?
-
-[Editing templates](editing-templates.md)
