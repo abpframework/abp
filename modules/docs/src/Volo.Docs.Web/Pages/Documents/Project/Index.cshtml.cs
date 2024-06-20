@@ -482,33 +482,20 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task<bool> TrySetDocumentAsync()
         {
-            var documentPath = DocumentName ?? "";
-
-            if (Request.GetDisplayUrl().EndsWith("/index", StringComparison.OrdinalIgnoreCase))
-            {
-                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
-            }
-
-            var documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" }.Distinct().ToArray();
             var languages = new[] { LanguageCode, DefaultLanguageCode }.Where(x => !x.IsNullOrWhiteSpace()).Distinct().ToArray();
-            var sb = new StringBuilder();
-            foreach (var documentName in documentNames)
+            DocumentNameWithExtension = new StringBuilder().Append(DocumentName).Append('.').Append(Project.Format).ToString();
+            foreach (var language in languages)
             {
-                DocumentName = documentName;
-                DocumentNameWithExtension = sb.Clear().Append(DocumentName).Append('.').Append(Project.Format).ToString();
-                foreach (var language in languages)
+                try
                 {
-                    try
-                    {
-                        Document = await GetSpecificDocumentOrDefaultAsync(language);
-                        DocumentLanguageCode = language;
-                        await ConvertDocumentContentToHtmlAsync();
-                        return true;
-                    }
-                    catch (DocumentNotFoundException e)
-                    {
-                        Logger.LogWarning(e.Message);
-                    }
+                    Document = await GetSpecificDocumentOrDefaultAsync(language);
+                    DocumentLanguageCode = language;
+                    await ConvertDocumentContentToHtmlAsync();
+                    return true;
+                }
+                catch (DocumentNotFoundException e)
+                {
+                    Logger.LogWarning(e.Message);
                 }
             }
 

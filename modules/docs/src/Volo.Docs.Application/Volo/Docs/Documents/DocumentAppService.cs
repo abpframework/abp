@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -305,7 +306,7 @@ namespace Volo.Docs.Documents
             return normalizedPathStringBuilder.ToString();
         }
 
-        private string RemoveFileExtensionFromPath(string path, string format)
+        private static string RemoveFileExtensionFromPath(string path, string format)
         {
             if (path == null)
             {
@@ -376,8 +377,8 @@ namespace Volo.Docs.Documents
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version);
             }
-
-            var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
+            
+            var document = await _documentRepository.FindAsync(project.Id, GetPossibleNames(documentName, project.Format), languageCode, version);
             if (document == null)
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version);
@@ -416,10 +417,8 @@ namespace Volo.Docs.Documents
             string languageCode, string version, Document oldDocument = null)
         {
             Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
-
-            var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version,
-                oldDocument?.LastSignificantUpdateTime);
+            
+            var sourceDocument = await GetSourceDocument(project, documentName, languageCode, version, oldDocument);
 
             await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version, autoSave: true);
             await _documentRepository.InsertAsync(sourceDocument, true);
@@ -442,6 +441,55 @@ namespace Volo.Docs.Documents
             });
 
             return CreateDocumentWithDetailsDto(project, sourceDocument);
+        }
+
+        private static List<string> GetPossibleNames(string originalDocumentName, string format)
+        {
+            var extension = Path.GetExtension(originalDocumentName);
+            if (extension != null && !extension.Equals("." + format, StringComparison.OrdinalIgnoreCase))
+            {
+                return new List<string> {originalDocumentName};
+            }
+            
+            var possibleNames = new List<string> {originalDocumentName};
+            if (!originalDocumentName.EndsWith("/index." + format, StringComparison.OrdinalIgnoreCase))
+            {
+                var documentNameWithoutExtension = RemoveFileExtensionFromPath(originalDocumentName, format);
+                possibleNames.Add(documentNameWithoutExtension + "/index." + format);
+                possibleNames.Add(documentNameWithoutExtension + "/Index." + format);
+            }
+
+            return possibleNames;
+        }
+        
+        private async Task<Document> GetSourceDocument(Project project, string documentName,
+            string languageCode, string version, Document oldDocument)
+        {
+            var source = _documentStoreFactory.Create(project.DocumentStoreType);
+            
+            Document sourceDocument = null;
+            
+            Exception firstException = null;
+            foreach (var name in GetPossibleNames(documentName, project.Format))
+            {
+                try
+                {
+                    sourceDocument = await source.GetDocumentAsync(project, name, languageCode, version,
+                        oldDocument?.LastSignificantUpdateTime);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    firstException ??= ex;
+                }
+            }
+            
+            if(sourceDocument == null)
+            {
+                throw firstException!;
+            }
+
+            return sourceDocument;
         }
 
         private TimeSpan GetCacheTimeout()
