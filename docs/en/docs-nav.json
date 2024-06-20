@@ -1612,10 +1612,6 @@
             {
               "text": "Database Tables",
               "path": "modules/database-tables.md"
-            },
-            {
-              "text": "Database Tables (Pro modules)",
-              "path": "modules/database-tables-pro.md"
             }
           ]
         }
