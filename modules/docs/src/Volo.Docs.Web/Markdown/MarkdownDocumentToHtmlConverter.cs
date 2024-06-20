@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Routing;
@@ -96,8 +97,12 @@ namespace Volo.Docs.Markdown
                 }
                 
                 var documentName = RemoveFileExtension(linkPart);
+                
+                var isFolder = !Path.HasExtension(linkPart);
+                
+                var isMdFile = linkPart.EndsWith(".md");
 
-                if (UrlHelper.IsExternalLink(link) || !linkPart.EndsWith(".md"))
+                if (UrlHelper.IsExternalLink(link) || !(isMdFile || isFolder))
                 {
                     return NormalizeLink(displayText, MdLinkFormat, link, projectShortName,
                         version,
