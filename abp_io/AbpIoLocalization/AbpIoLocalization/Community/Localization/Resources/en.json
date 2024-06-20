@@ -56,7 +56,7 @@
     "MilestoneErrorMessage": "Could not get the current milestone details from Github.",
     "QuestionItemErrorMessage": "Could not get the latest question details from Stackoverflow.",
     "Oops": "Oops!",
-    "CreatePostSuccessMessage": "The Post has been successfully submitted. It will be published after a review from the site admin.",
+    "CreatePostSuccessMessage": "Your post has been successfully submitted. It will be published after review by the site administrator.",
     "Browse": "Browse",
     "CoverImage": "Cover Image",
     "ShareYourExperiencesWithTheABPFramework": "Share your experiences with the ABP Framework!",
