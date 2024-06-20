@@ -14,7 +14,7 @@
 }
 ````
 
-ABP Studio has a shortcut for running ABP Suite to allow using it without starting it externally and using it on a browser. Thanks to that, you can use both ABP Studio and ABP Suite as a united platform. 
+[ABP Studio](../studio/index.md) has a shortcut for running ABP Suite to allow using it without starting it externally and using it on a browser. Thanks to that, you can use both ABP Studio and ABP Suite as a united platform. 
 
 > You can check the [ABP Studio: Working with ABP Suite](../studio/working-with-suite.md) documentation for more info.
 

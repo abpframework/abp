@@ -48,9 +48,11 @@ abp suite update --p
 
 ## Older versions
 
-To install a specific version of ABP Suite, add `--version` or `-v` parameter to the command arguments. You can install older versions of the ABP Suite. The version of ABP Suite and your solution's ABP package versions must be the same. Otherwise you will get errors due to templates not suitable for your project. 
+To install a specific version of ABP Suite, add `--version` or `-v` parameter to the command arguments:
 
 ```bash
 abp suite install --version 3.3.1
 abp suite update --v 4.0.0-rc.5
 ```
+
+You can install older or newer versions. The version of ABP Suite and your solution's ABP package versions must be the same. Otherwise you will get errors due to templates not suitable for your project. 

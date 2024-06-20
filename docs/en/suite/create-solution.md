@@ -16,7 +16,7 @@
 
 ## Create a new solution
 
-Creates a new ABP solution. It's an alternative way of creating an ABP project rather than [ABP CLI](../cli#new) or [abp.io](https://abp.io/get-started) website.  To create a new ABP Solution, click the **Create a new solution** button. It will open a new dialog for the options.
+Creates a new ABP solution. It's an alternative way of creating an ABP project rather than [ABP CLI](../cli/index.md#new). To create a new ABP Solution, click the **Create a new solution** button. It will open a new dialog for the options.
 
 ![Create a new ABP Solution](../images/suite-create-a-new-solution.png)
 
