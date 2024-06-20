@@ -122,7 +122,7 @@ You can click the `OK` button to add the folder to the profile.
 ### Miscellaneous
 
 - You can drag and drop folder and application into folder for organization purposes. Click and hold an item, then drag it into the desired folder.
-- We can start all applications by clicking the *Play* icon on the left side, similiar way we can stop all applications by clicking the *Stop*  icon on the left side.
+- We can start all applications by clicking the *Play* icon on the left side, similar way we can stop all applications by clicking the *Stop*  icon on the left side.
 - To remove an application from the tree, open the context menu by right-clicking the application and selecting *Remove*.
 - To remove a folder from the tree, open the context menu by right-clicking the folder and selecting *Delete*.
 - When starting applications, they continue to restart until the application starts gracefully. To stop the restarting process when attempting to restart the application, click the icon on the left. Additionally, you can review the *Logs* to understand why the application isn't starting gracefully.
@@ -135,13 +135,13 @@ We already now why we need folder in the [previous](./running-applications.md#fo
 
 ### Start
 
-You can see the context menu by right-clicking *Folder* -> *Start*, it's [similiar](#run) like *Acme.BookStore(Default)* -> *Run* options, there are 3 options available. The only difference with root of the tree and folder is gonna be execute in selected folder.
+You can see the context menu by right-clicking *Folder* -> *Start*, it's [similar](#run) like *Acme.BookStore(Default)* -> *Run* options, there are 3 options available. The only difference with root of the tree and folder is gonna be execute in selected folder.
 
 ![folder-context-menu-start](images/solution-runner/folder-context-menu-start.png)
 
 ### Build
 
-*Folder* -> *Build* context menu, it's the [similiar](#build) options like *Acme.BookStore(Default)* -> *Builds* options there are 4 options available. The only difference between them it's gonna be execute in selected folder.
+*Folder* -> *Build* context menu, it's the [similar](#build) options like *Acme.BookStore(Default)* -> *Builds* options there are 4 options available. The only difference between them it's gonna be execute in selected folder.
 
 ![folder-context-menu-build](images/solution-runner/folder-context-menu-build.png)
 
@@ -181,7 +181,7 @@ We have several options in C# applications. Those options are `Start`(If the app
 
 ### Build
 
-It's the [similiar](#build) options like root of the tree options. The only difference between them it's gonna be execute the selected application.
+It's the [similar](#build) options like root of the tree options. The only difference between them it's gonna be execute the selected application.
 
 ![csharp-application-context-menu-build](images/solution-runner/csharp-application-context-menu-build.png)
 
