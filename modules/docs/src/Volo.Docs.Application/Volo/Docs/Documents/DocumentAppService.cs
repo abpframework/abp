@@ -383,12 +383,22 @@ namespace Volo.Docs.Documents
                 return await GetDocumentAsync(documentName, project, languageCode, version);
             }
 
-            if (document.LastCachedTime + _cacheTimeout < DateTime.Now)
+            if (document.LastCachedTime + _cacheTimeout >= DateTime.Now)
+            {
+                return CreateDocumentWithDetailsDto(project, document);
+            }
+
+            try
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
-
-            return CreateDocumentWithDetailsDto(project, document);
+            catch
+            {
+                Logger.LogWarning(
+                    "Could not retrieve the document ({documentName}, {languageCode}, {version}) from the source. Using the cached version.",
+                    documentName, languageCode, version);
+                return CreateDocumentWithDetailsDto(project, document);
+            }
         }
 
         protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
