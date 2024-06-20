@@ -310,7 +310,7 @@
               "items": [
                 {
                   "text": "FluentValidation Integration",
-                  "path": "framework/fundamentals/fluentvalidation.md"
+                  "path": "framework/fundamentals/fluent-validation.md"
                 }
               ]
             }
