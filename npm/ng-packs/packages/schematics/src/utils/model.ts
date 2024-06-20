@@ -201,3 +201,27 @@ export function parseBaseTypeWithGenericTypes(type: string): string[] {
 
   return nodeToText(parsedTypeNode);
 }
+
+export function resolveSelfGenericProps(params: Partial<ModelGeneratorParams>) {
+  const { types, solution } = params;
+  if (!types || !solution) {
+    return;
+  }
+
+  Object.keys(types)
+    .filter(f => f.startsWith(solution))
+    .forEach(key => {
+      const type = types[key];
+      if (type.genericArguments?.length) {
+        type.properties?.map(prop => {
+          if (prop.type.includes('<>')) {
+            prop.type = prop.type.replace('<>', `<${type.genericArguments!.join(', ')}>`);
+            prop.typeSimple = prop.typeSimple.replace(
+              '<>',
+              `<${type.genericArguments!.join(', ')}>`,
+            );
+          }
+        });
+      }
+    });
+}
