@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling\MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling.csproj" />
         <ProjectReference Include="..\MyCompanyName.MyProjectName.Blazor\MyCompanyName.MyProjectName.Blazor.csproj"/>
         <ProjectReference Include="..\MyCompanyName.MyProjectName.HttpApi.Client\MyCompanyName.MyProjectName.HttpApi.Client.csproj"/>
     </ItemGroup>
