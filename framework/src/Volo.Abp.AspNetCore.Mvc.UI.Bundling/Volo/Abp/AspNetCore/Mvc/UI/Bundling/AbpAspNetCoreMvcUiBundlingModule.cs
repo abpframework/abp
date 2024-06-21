@@ -93,6 +93,7 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
                  var fileInfo = webHostEnvironment.WebRootFileProvider?.GetFileInfo(file.FileName);
                  if (fileInfo == null || !fileInfo.Exists)
                  {
+                     logger.LogError($"Could not find the file: {file.FileName}");
                      continue;
                  }
 
