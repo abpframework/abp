@@ -1566,7 +1566,7 @@
           "items": [
             {
               "text": "OpenIddict Migration Guide",
-              "path": "migration-guides/openiddict-step-by-step.md"
+              "path": "release-info/migration-guides/openiddict-step-by-step.md"
             }
           ]          
         },
