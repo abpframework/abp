@@ -29,6 +29,7 @@ import {
   sanitizeTypeNames,
   sanitizeControllerTypeNames,
   serializeParameters,
+  resolveAbpPackages,
   resolveSelfGenericProps,
 } from '../../utils';
 import * as cases from '../../utils/text';
@@ -159,6 +160,8 @@ function createModelGenerator(params: ModelGeneratorParams) {
       }),
     ),
   );
+
+  resolveAbpPackages(models);
 
   return chain(
     models.map(model =>
