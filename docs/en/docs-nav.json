@@ -1389,37 +1389,37 @@
               "items": [
                 {
                   "text": "Database Migrations",
-                  "path": "framework/data/entity-framework-core/entity-framework-core-migrations.md"
+                  "path": "framework/data/entity-framework-core/migrations.md"
                 },
                 {
                   "text": "Switch DBMS",
-                  "path": "framework/data/entity-framework-core/entity-framework-core-other-dbms.md",
+                  "path": "framework/data/entity-framework-core/other-dbms.md",
                   "items": [
                     {
                       "text": "To MySQL",
-                      "path": "framework/data/entity-framework-core/entity-framework-core-mysql.md"
+                      "path": "framework/data/entity-framework-core/mysql.md"
                     },
                     {
                       "text": "To PostgreSQL",
-                      "path": "framework/data/entity-framework-core/entity-framework-core-postgresql.md"
+                      "path": "framework/data/entity-framework-core/postgresql.md"
                     },
                     {
                       "text": "To Oracle",
-                      "path": "framework/data/entity-framework-core/entity-framework-core-oracle.md",
+                      "path": "framework/data/entity-framework-core/oracle.md",
                       "items": [
                         {
                           "text": "Oracle (Official)",
-                          "path": "framework/data/entity-framework-core/entity-framework-core-oracle-official.md"
+                          "path": "framework/data/entity-framework-core/oracle-official.md"
                         },
                         {
                           "text": "Oracle (Devart)",
-                          "path": "framework/data/entity-framework-core/entity-framework-core-oracle-devart.md"
+                          "path": "framework/data/entity-framework-core/oracle-devart.md"
                         }
                       ]
                     },
                     {
                       "text": "To SQLite",
-                      "path": "framework/data/entity-framework-core/entity-framework-core-sqlite.md"
+                      "path": "framework/data/entity-framework-core/sqlite.md"
                     }
                   ]
                 }
