@@ -19,7 +19,7 @@ Also, this guide is mostly usable for general **application development**.
   * [Repositories](./repositories.md)
   * [Domain Services](./domain-services.md)
 * Application Layer
-  * [Application Services](../domain-driven-design/application-services.md)
+  * [Application Services](.//application-services.md)
   * [Data Transfer Objects](./data-transfer-objects.md)
 * Data Access
   * [Entity Framework Core Integration](./entity-framework-core-integration.md)
