@@ -49,7 +49,7 @@ Open a command-line terminal in the root folder of your web project (`.csproj`) 
 abp generate-proxy -t js -u https://localhost:53929/
 ````
 
-> If you haven't installed yet, you should install the [ABP CLI](../CLI.md). Change the example URL to your application's root URL.
+> If you haven't installed yet, you should install the [ABP CLI](../../CLI.md). Change the example URL to your application's root URL.
 
 This command should generate the following files under the `ClientProxies` folder:
 
@@ -66,7 +66,7 @@ acme.bookStore.authors.author.get = function(id, ajaxParams) {
 };
 ````
 
-> `generate-proxy` command generates proxies for only the APIs you've defined in your application (assumes `app` as the module name). If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../CLI.md) documentation for other options.
+> `generate-proxy` command generates proxies for only the APIs you've defined in your application (assumes `app` as the module name). If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../../CLI.md) documentation for other options.
 
 ### Using the Proxy Functions
 
