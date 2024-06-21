@@ -845,7 +845,7 @@
                   "items": [
                     {
                       "text": "Overall",
-                      "path": "framework/ui/mvc-razor-pages/javadcript-api"
+                      "path": "framework/ui/mvc-razor-pages/javascript-api"
                     },
                     {
                       "text": "Localization",
