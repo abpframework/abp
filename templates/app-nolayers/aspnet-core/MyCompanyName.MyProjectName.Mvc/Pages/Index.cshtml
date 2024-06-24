@@ -16,19 +16,26 @@
         <div class="card h-lg-100 w-100 overflow-hidden">
             <div class="card-body">
                 <div class="starting-content">
-                    <h3>Getting Started</h3>
-                    <p class="lead text-muted mb-2">Learn how to create and run
+                    <h3>@L["Welcome_Title"]</h3>
+                    <p class="lead text-muted mb-2">@L["Welcome_Text"]</p>
+                    @if (!CurrentUser.IsAuthenticated)
+                    {
+                        <a href="/Account/Login" class="btn btn-primary mb-4"><i class="fa-solid fa-right-to-bracket me-1"></i><span>@L["Login"]</span></a>
+                    }
+
+                    <h4>Getting Started</h4>
+                    <p class="text-muted mb-2">Learn how to create and run
                         a
                         new web application using the application startup
                         template.</p>
-                    <a href="https://docs.abp.io/en/commercial/latest/getting-started" class="btn btn-brand mb-4" target="_blank">Getting
+                    <a href="https://docs.abp.io/en/commercial/latest/getting-started" class="btn btn-brand mb-2" target="_blank">Getting
                         Started</a>
 
                     <h4>Web Application Development Tutorial</h4>
                     <p class="text-muted mb-2">Learn how to build an ABP based
                         web
                         application named Acme.BookStore.</p>
-                    <a href="https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF" class="btn btn-primary soft mb-4" target="_blank">Explore Tutorial</a>
+                    <a href="https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF" class="btn btn-primary soft mb-2" target="_blank">Explore Tutorial</a>
 
                     <h4>Customize Lepton Theme</h4>
                     <p class="text-muted mb-2">Learn how to customize LeptonX
