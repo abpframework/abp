@@ -1308,7 +1308,7 @@
     "Tools_Page_Description": "Explore the tool kits provided by ABP that enhance development productivity and streamline your development.",
     "DeveloperPrice": "Developer Price",
     "AdditionalDeveloperPaymentInfoSection_AdditionalDevelopers": "{0} <small>developers</small>",
-    "LicenseRemainingDays": "for <span class=\"text-white\"> {0} </span> days",
+    "LicenseRemainingDays": "for <span> {0} </span> days",
     "ExtendPaymentInfoSection_Description": "By extending/renewing your license, you will continue to get <a href=\"{0}\">premium support</a>. You will also be able to get major or minor updates for modules and themes. You will be able to continue creating new projects. And you will still be able to use <a href=\"{1}\">ABP Suite</a> which speeds up your development.",
     "LicenseRenewalPrice": "License renewal price",
     "LicensePrice": "License Price",
