@@ -82,23 +82,41 @@ namespace Volo.Docs.Markdown
             string documentLocalDirectory,
             string languageCode)
         {
-            return Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
-            {
-                var link = match.Groups[3].Value;
-                var displayText = match.Groups[1].Value;
+            return NormalizeLinksByRegexPattern(MarkdownLinkRegExp, 3, 1, content, projectShortName, version, documentLocalDirectory, languageCode);
+        }
 
-                var hashPart = "";
+        private string NormalizeAnchorLinks(string projectShortName, string version, string documentLocalDirectory,
+            string languageCode, string normalized)
+        {
+            return NormalizeLinksByRegexPattern(AnchorLinkRegExp, 1, 2, normalized, projectShortName, version, documentLocalDirectory, languageCode);
+        }
+        
+        private string NormalizeLinksByRegexPattern(string regexPattern,
+            int linkGroupIndex,
+            int displayTextGroupIndex,
+            string content,
+            string projectShortName,
+            string version,
+            string documentLocalDirectory,
+            string languageCode)
+        {
+            return Regex.Replace(content, regexPattern, delegate (Match match)
+            {
+                var link = match.Groups[linkGroupIndex].Value;
+                var displayText = match.Groups[displayTextGroupIndex].Value;
+
+                var hashPart = string.Empty;
                 var linkPart = link;
-                if (link.Contains("#"))
+                if (link.Contains('#'))
                 {
-                    var linkSplitted = link.Split("#");
+                    var linkSplitted = link.Split('#');
                     linkPart = linkSplitted[0];
                     hashPart = linkSplitted[1];
                 }
                 
                 var documentName = RemoveFileExtension(linkPart);
                 
-                var isFolder = !Path.HasExtension(linkPart);
+                var isFolder = !linkPart.IsNullOrWhiteSpace() && !Path.HasExtension(linkPart);
                 
                 var isMdFile = linkPart.EndsWith(".md");
 
@@ -122,48 +140,16 @@ namespace Volo.Docs.Markdown
                 {
                     documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
                 }
-
-                if (!string.IsNullOrEmpty(hashPart))
-                {
-                    documentName += $"#{hashPart}";
-                }
                 
                 return NormalizeLink(
                     displayText,
                     MdLinkFormat,
-                    _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName),
+                    _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName) + (hashPart.IsNullOrWhiteSpace() ? string.Empty : "#" + hashPart),
                     projectShortName,
                     version,
                     documentName,
                     languageCode
                 );
-            });
-        }
-
-        private string NormalizeAnchorLinks(string projectShortName, string version, string documentLocalDirectory,
-            string languageCode, string normalized)
-        {
-            return Regex.Replace(normalized, AnchorLinkRegExp, delegate (Match match)
-            {
-                var link = match.Groups[1].Value;
-                var displayText = match.Groups[2].Value;
-                var documentName = RemoveFileExtension(link);
-
-                if (UrlHelper.IsExternalLink(link))
-                {
-                    var documentLocalDirectoryNormalized = documentLocalDirectory.TrimStart('/').TrimEnd('/');
-                    if (!string.IsNullOrWhiteSpace(documentLocalDirectoryNormalized))
-                    {
-                        documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
-                    }
-                    
-                    link = _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName);
-                }
-                
-                return NormalizeLink(displayText, MdLinkFormat, link,projectShortName,
-                    version,
-                    documentName,
-                    languageCode);
             });
         }
         
