@@ -1464,7 +1464,7 @@
     "DevelopYourSolution_Description6": "You can imagine how much that code block can be long and complicated if you would do it all manually.",
     "SuiteCrudGenerationInFewSeconds": "In addition to hand coding your solution, you can create fully working advanced CRUD pages in a few minutes using the ABP Suite tooling. It generates the code into your solution, so you can fine-tune it based on your custom requirements.",
     "DeployAnywhere_Description1": "At the end of the day, you have a pure .NET solution. You can deploy your solution to your own server, to a cloud platform, to Kubernetes or anywhere you want. You can deploy to as many servers as you want. ABP is a deployment environment agnostic tool.",
-    "ExpertiseAbpFramework": "Expertise the ABP Framework",
+    "ExpertiseAbpFramework": "Expertise the ABP",
     "ExpertiseAbpFramework_Description1": "Want to go beyond basics and get expertise with the ABP Platform?",
     "FreeDownload": "Free Download",
     "HavingTrouble": "Having Trouble?",
