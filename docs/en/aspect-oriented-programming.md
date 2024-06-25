@@ -1,3 +1,3 @@
 ## Dynamic Proxying / Interceptors
 
-TODO
+This document is planned to be written later.

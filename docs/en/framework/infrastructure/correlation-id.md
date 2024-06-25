@@ -1,3 +1,3 @@
 # Correlation ID
 
-TODO
+This document is planned to be written later.
