@@ -36,7 +36,7 @@ The top menu is the main menu bar in ABP Studio. It offers access to various fun
 ### Help Menu
 
 - **License Information:** Shows your organization's license information.
-- **Documentation:** Opens the official [documentation](../index.md) website in your browser.
+- **Documentation:** Opens the official [documentation](../) website in your browser.
 - **Community:** Opens the official [ABP Community](https://abp.io/community) website in your browser.
 - **Support:** Opens the official [Support](https://abp.io/support/questions) website in your browser.
 - **My Support Questions:** Opens the page on the official Support website in your browser showing the tickets you have opened.
