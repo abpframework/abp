@@ -1,3 +1,3 @@
 # Extension Methods & Helpers
 
-TODO
+This document is planned to be written later.

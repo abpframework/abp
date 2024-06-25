@@ -1,3 +1,3 @@
 ## Ambient Context Pattern
 
-TODO
+This document is planned to be written later.
