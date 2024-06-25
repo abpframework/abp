@@ -451,12 +451,32 @@ namespace Volo.Docs.Documents
                 return new List<string> {originalDocumentName};
             }
             
+            var lowerCaseIndex = "index." + format;
+            var titleCaseIndex = "Index." + format;
+            var indexLength = lowerCaseIndex.Length;
+            
             var possibleNames = new List<string> {originalDocumentName};
-            if (!originalDocumentName.EndsWith("/index." + format, StringComparison.OrdinalIgnoreCase))
+            if (originalDocumentName.EndsWith("/" + lowerCaseIndex, StringComparison.OrdinalIgnoreCase) || originalDocumentName.Equals(lowerCaseIndex, StringComparison.OrdinalIgnoreCase))
             {
-                var documentNameWithoutExtension = RemoveFileExtensionFromPath(originalDocumentName, format);
-                possibleNames.Add(documentNameWithoutExtension + "/index." + format);
-                possibleNames.Add(documentNameWithoutExtension + "/Index." + format);
+                var indexPart = originalDocumentName.Right(indexLength);
+                
+                var documentNameWithoutIndex = originalDocumentName.Left(originalDocumentName.Length - lowerCaseIndex.Length);
+                
+                if(indexPart != lowerCaseIndex)
+                {
+                    possibleNames.Add(documentNameWithoutIndex + lowerCaseIndex);
+                }
+                
+                if(indexPart != titleCaseIndex)
+                {
+                    possibleNames.Add(documentNameWithoutIndex + titleCaseIndex);
+                }
+            }
+            else
+            {
+                var documentNameWithoutExtension = RemoveFileExtensionFromPath(originalDocumentName, format).EnsureEndsWith('/');
+                possibleNames.Add(documentNameWithoutExtension + lowerCaseIndex);
+                possibleNames.Add(documentNameWithoutExtension + titleCaseIndex);
             }
 
             return possibleNames;
