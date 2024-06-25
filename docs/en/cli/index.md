@@ -233,7 +233,7 @@ abp new-module Acme.BookStore -t module:ddd
 * `--template` or `-t`: Specifies the template name. Default template name is `module:ddd`, which generates a DDD module. Module templates are provided by the main template, see their own startup template documentation for available modules. `empty:empty` and `module:ddd` template is available for all solution structure.
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--target-solution` or `-ts`: If set, the new module will be added to the given solution. Otherwise the new module will added to the closest solution in the file system. If no solution found, it will throw an error.
-* `--solution-folder` or `-sf`: Specifies the target folder in the [Solution Explorer](./solution-explorer.md#folder)  virtual folder system.
+* `--solution-folder` or `-sf`: Specifies the target folder in the [Solution Explorer](../studio/solution-explorer.md#folder)  virtual folder system.
 * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `ef, mongodb` if the module template supports it. Available providers:
   * `ef`: Entity Framework Core.
   * `mongodb`: MongoDB.
