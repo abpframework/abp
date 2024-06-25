@@ -1,7 +1,7 @@
 # Installing ABP Studio
 
 > **Warning: Beta Version Information**\
-> Currently, ABP Studio is in its beta phase and available for everyone. To access the beta version, kindly visit [this web page](https://commercial.abp.io/studio).
+> Currently, ABP Studio is in its beta phase and available for everyone. To access the beta version, kindly visit [this web page](https://abp.io/studio).
 
 ## Pre-requirements
 
@@ -44,7 +44,7 @@ ABP Studio needs Docker for Kubernetes operations. Install Docker by following t
 ## Installation
 Now you have met the pre-requirements, follow the steps below to install ABP Studio:
 
-1. **Download ABP Studio:** Visit [your organization page](https://commercial.abp.io/my-organizations) on the official [commercial.abp.io](https://commercial.abp.io/) website to download the latest version.
+1. **Download ABP Studio:** Visit [your organization page](https://abp.io/my-organizations) on the official [abp.io](https://abp.io/) website to download the latest version.
 
 ![abp-studio-beta-access](./images/abp-studio-beta-access.png)
 
@@ -56,7 +56,7 @@ After you install ABP Studio, you can log in to access all the features. To log 
 
 1. **Launch ABP Studio:** Open ABP Studio on your desktop.
 
-2. **Login Credentials:** Enter your [commercial.abp.io](https://commercial.abp.io/) login credentials when prompted.
+2. **Login Credentials:** Enter your [abp.io](https://abp.io/) login credentials when prompted.
 
 ## Changing the UI Theme
 ABP Studio allows you to customize the user interface theme according to your preferences. You can change the UI theme as in the image below:
