@@ -1,5 +1,4 @@
-import { VOLO_REGEX } from '../constants';
-import { Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
+import { Import, Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
 import {
   extractGenerics,
   generateRefWithPlaceholders,
@@ -17,6 +16,8 @@ import {
   extendsSelf,
   removeTypeModifiers,
 } from './type';
+import { SAAS_NAMESPACE, TENANT_KEY, VOLO_PACKAGE_PROXY_IMPORTS, VOLO_REGEX } from '../constants';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 
@@ -40,7 +41,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
     sortInterfaces(interfaces);
 
     interfaces.forEach(_interface => {
-      if (VOLO_REGEX.test(_interface.ref)) return;
+      if (VOLO_REGEX.test(_interface.ref) || VOLO_PACKAGE_PROXY_IMPORTS.has(_interface.ref)) return;
 
       if (types[_interface.ref]!.isEnum) {
         if (!enums.includes(_interface.ref)) enums.push(_interface.ref);
@@ -200,4 +201,68 @@ export function parseBaseTypeWithGenericTypes(type: string): string[] {
   };
 
   return nodeToText(parsedTypeNode);
+}
+
+export function resolveAbpPackages(models: Model[]) {
+  for (const model of models) {
+    renamePropForTenant(model.interfaces);
+
+    model.imports.forEach((imp, i) => {
+      fixImportNameForTenant(imp);
+
+      for (const ref of imp.refs) {
+        const path = VOLO_PACKAGE_PROXY_IMPORTS.get(ref);
+        if (path) {
+          model.imports[i] = new Import({ ...imp, path });
+        }
+      }
+    });
+  }
+}
+
+function renamePropForTenant(interfaces: Interface[]) {
+  for (const inters of interfaces) {
+    for (const prop of inters.properties) {
+      const isTenant = prop.name.toLocaleLowerCase().includes(TENANT_KEY);
+      const isSaasDto = prop.refs.filter(f => f.startsWith(SAAS_NAMESPACE)).length > 0;
+
+      if (isTenant && isSaasDto) {
+        prop.type = 'Saas' + prop.type;
+      }
+    }
+  }
+}
+
+function fixImportNameForTenant(imp: Import) {
+  imp.specifiers.forEach((spe, index) => {
+    const isTenant = spe.toLocaleLowerCase().includes(TENANT_KEY);
+
+    if (isTenant) {
+      imp.specifiers[index] = 'Saas' + spe;
+    }
+  });
+}
+
+export function resolveSelfGenericProps(params: Partial<ModelGeneratorParams>) {
+  const { types, solution } = params;
+  if (!types || !solution) {
+    return;
+  }
+
+  Object.keys(types)
+    .filter(f => f.startsWith(solution))
+    .forEach(key => {
+      const type = types[key];
+      if (type.genericArguments?.length) {
+        type.properties?.map(prop => {
+          if (prop.type.includes('<>')) {
+            prop.type = prop.type.replace('<>', `<${type.genericArguments!.join(', ')}>`);
+            prop.typeSimple = prop.typeSimple.replace(
+              '<>',
+              `<${type.genericArguments!.join(', ')}>`,
+            );
+          }
+        });
+      }
+    });
 }
