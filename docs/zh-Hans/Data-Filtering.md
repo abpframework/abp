@@ -166,17 +166,14 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>();
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
-        Expression<Func<TEntity, bool>> isActiveFilter =
-            e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
-        expression = expression == null 
-            ? isActiveFilter 
-            : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
+        Expression<Func<TEntity, bool>> isActiveFilter = e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
+        expression = expression == null ? isActiveFilter : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
     }
 
     return expression;
@@ -185,6 +182,78 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 
 * 添加 `IsActiveFilterEnabled` 属性用于检查是否启用了 `IIsActive` . 内部使用了之前介绍到的 `IDataFilter` 服务.
 * 重写 `ShouldFilterEntity` 和 `CreateFilterExpression` 方法检查给定实体是否实现 `IIsActive` 接口,在必要时组合表达式.
+
+#### 使用用户定义的函数映射
+
+使用[用户定义的函数映射](https://learn.microsoft.com/zh-cnn/ef/core/querying/user-defined-function-mapping) 可以获取性能提升.
+
+要使用此功能，请更改DbContext如下所示:
+
+````csharp
+protected bool IsActiveFilterEnabled => DataFilter?.IsEnabled<IIsActive>() ?? false;
+
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+{
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        return true;
+    }
+
+    return base.ShouldFilterEntity<TEntity>(entityType);
+}
+
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+{
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
+
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        Expression<Func<TEntity, bool>> isActiveFilter = e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
+
+        if (UseDbFunction())
+        {
+            isActiveFilter = e => IsActiveFilter(((IIsActive)e).IsActive, true);
+
+            var abpEfCoreCurrentDbContext = this.GetService<AbpEfCoreCurrentDbContext>();
+            modelBuilder.HasDbFunction(typeof(MyProjectNameDbContext).GetMethod(nameof(IsActiveFilter))!)
+                .HasTranslation(args =>
+                {
+                    // (bool isActive, bool boolParam)
+                    var isActive = args[0];
+                    var boolParam = args[1];
+
+                    if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<IIsActive>() == true)
+                    {
+                        // isActive == true
+                        return new SqlBinaryExpression(
+                            ExpressionType.Equal,
+                            isActive,
+                            new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping),
+                            boolParam.Type,
+                            boolParam.TypeMapping);
+                    }
+
+                    // empty where sql
+                    return new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping);
+                });
+        }
+
+        expression = expression == null ? isActiveFilter : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
+    }
+
+    return expression;
+}
+
+public static bool IsActiveFilter(bool isActive, bool boolParam)
+{
+    throw new NotSupportedException(AbpEfCoreDataFilterDbFunctionMethods.NotSupportedExceptionMessage);
+}
+
+public override string GetCompiledQueryCacheKey()
+{
+    return $"{base.GetCompiledQueryCacheKey()}:{IsActiveFilterEnabled}";
+}
+````
 
 ### MongoDB
 
