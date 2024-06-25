@@ -52,7 +52,7 @@ abp new Acme.BookStore{{if UI == "NG"}} -u angular{{else if UI == "Blazor"}} -u 
 
 {{ end }}
 
-> [ABP CLI document](../cli) covers all of the available commands and options.
+> [ABP CLI document](../cli/index.md) covers all of the available commands and options.
 
 ### Mobile Development
 

@@ -1,8 +1,8 @@
 # Switch to EF Core Oracle Provider
 
-> [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with Oracle. See [that document](other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to Oracle after creating the solution.
+> [ABP CLI](../../../cli/index.md) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with Oracle. See [that document](other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to Oracle after creating the solution.
 
-This document explains how to switch to the **Oracle** database provider for **[the application startup template](../../../solution-templates/layered-web-application)** which comes with SQL Server provider pre-configured.
+This document explains how to switch to the **Oracle** database provider for **[the application startup template](../../../solution-templates/layered-web-application/index.md)** which comes with SQL Server provider pre-configured.
 
 ABP provides integrations for two different Oracle packages. See one of the following documents based on your provider decision:
 

@@ -1,7 +1,5 @@
 ## Domain Services Best Practices & Conventions
 
-
-
 ### Domain Service
 
 - **Do** define domain services in the **domain layer**.

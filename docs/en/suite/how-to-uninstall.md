@@ -1,28 +1,21 @@
 # How to uninstall ABP Suite?
 
-You can simply uninstall ABP Suite with the terminal command.
+You can simply uninstall ABP Suite with the terminal command:
 
 ```bash
 abp suite remove
 ```
-
-
 
 ## How to do a clean uninstallation of ABP Suite?
 
 To cleanly uninstall ABP Suite, follow these steps:
 
 1. Terminate your ABP Suite application.
-
-   
-
 2. Uninstall ABP Suite via terminal command:
 
    ```bash
    dotnet tool uninstall -g volo.abp.suite
    ```
-
-   
 
 3. If exists, delete the application installation folder:
 
@@ -38,9 +31,7 @@ To cleanly uninstall ABP Suite, follow these steps:
    ~/.dotnet/tools/.store/volo.abp.suite
    ```
    
-   
-   
-3. If exists, delete the ABP Suite executable file:
+4. If exists, delete the ABP Suite executable file:
 
 	*Windows:*
    
@@ -54,9 +45,7 @@ To cleanly uninstall ABP Suite, follow these steps:
    ~/.dotnet/tools/abp-suite
    ```
    
-   
-   
-4. If exists, delete license file:
+5. If exists, delete license file:
 
    *Windows:*
 
@@ -70,9 +59,7 @@ To cleanly uninstall ABP Suite, follow these steps:
    $TMPDIR/AbpLicense.bin
    ```
    
-   
-   
-5. Delete the access-token file:
+6. Delete the access-token file:
 
    *Windows:*
 
@@ -86,31 +73,25 @@ To cleanly uninstall ABP Suite, follow these steps:
     ~/.abp/cli/access-token.bin
    ```
 
-
-
 You have successfully uninstalled ABP Suite!
-
-
----
 
 ## Reinstall ABP Suite
 
 If you want to reinstall ABP Suite:
 
-- Make sure you have already installed ABP CLI
+- Make sure you have already installed the ABP CLI (by running the `abp` command on a terminal).
 
-- Login your account via ABP CLI
+- Login your account via ABP CLI:
 
   ```bash
   abp login <username>
   ```
 
-- Install ABP Suite
+- Then, install the ABP Suite with the following command:
 
   ```bash
   abp suite install
   ```
   
-  If you want to install the preview version add the parameter `--preview`.
-  
+  > If you want to install the preview version add the parameter `--preview`.
   

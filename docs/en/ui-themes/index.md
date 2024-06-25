@@ -5,14 +5,14 @@ ABP provides a complete UI theming system. While you can build your own themes, 
 
 [LeptonX Theme](https://x.leptontheme.com/) is the official and default theme when you create a new ABP solution. A screenshot from the LeptonX theme:
 
-![LeptonX Lite application layout](../images/leptonxlite-theme-application-layout.jpeg)
+![LeptonX Lite application layout](../images/leptonx-theme-users-page.png)
 
 LeptonX theme has two versions:
 
-* [LeptonX Theme](lepton-x) is included in paid licenses.
-* [LeptonX Lite Theme](lepton-x-lite) is provided as free.
+* [LeptonX Theme](lepton-x/index.md) is included in commercial licenses.
+* [LeptonX Lite Theme](lepton-x-lite/index.md) is provided as free.
 
-> If you are looking for the legacy Lepton Theme documentation, please [click here](lepton).
+> If you are looking for the legacy Lepton Theme documentation, please [click here](lepton/index.md).
 
 ## The Basic Theme
 

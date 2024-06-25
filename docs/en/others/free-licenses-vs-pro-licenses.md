@@ -1,4 +1,4 @@
-# Free (Open Source) License vs Paid (Pro) Licenses
+# Free (Open Source) License vs Commercial (Pro) Licenses
 
 [ABP](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates), [CLI](../cli), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/asp-net-core.md) and ready to use [application modules](../modules). 
 
@@ -164,7 +164,7 @@ A screenshot of the LeptonX Lite (free version):
 
 [LeptonX Theme](https://commercial.abp.io/themes) is a commercial theme developed by the ABP Core Team. It is **100% Bootstrap** compatible, lightweight and powerful with multiple color styles and layout options.
 
-A screenshot of the LeptonX Theme (paid version):
+A screenshot of the LeptonX Theme (commercial version):
 
 ![lepton-theme-users-page](../images/leptonx-theme-users-page.png)
 

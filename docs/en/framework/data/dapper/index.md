@@ -8,7 +8,7 @@ While you can use Dapper as is in your ABP applications, there is also an integr
 
 ## Installation
 
-You can use the [ABP CLI](../../../cli) to install the [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper) package to your project. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
+You can use the [ABP CLI](../../../cli/index.md) to install the [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper) package to your project. Execute the following command in the folder of the `.csproj` file that you want to install the package on:
 
 ````bash
 abp add-package Volo.Abp.Dapper

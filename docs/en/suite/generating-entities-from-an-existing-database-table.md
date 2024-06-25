@@ -1,5 +1,19 @@
 # Generating CRUD Pages From an Existing Database Table
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating Many-To-Many Relationship",
+    "Path": "suite/creating-many-to-many-relationship"
+  },
+  "Next": {
+    "Name": "Creating master-detail (master-child) relationship",
+    "Path": "suite/creating-master-detail-relationship"
+  }
+}
+````
+
 If you have an existing database table, you can generate the entities using ABP Suite and create a CRUD page based on those entities, let's get started.
 
 # Create/open your project
@@ -30,11 +44,3 @@ The following GIF is a summary of the previous steps: ![SUTIE_GIF](../images/SUT
 # Run the Project!
 
 After that, run the project and watch the magic! An easy CRUD app using the entities from an existing database table!![SUITE_GIF_2](../images/SUITE_GIF_2.gif)
-
-
-## What's next?
-
-* [Customizing the Generated Code](customizing-the-generated-code.md)
-
-* [Creating master-detail (master-child) relationship](creating-master-detail-relationship.md)
-

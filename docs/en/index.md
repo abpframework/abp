@@ -59,11 +59,11 @@ ABP Platform provides tooling to help you in your daily development.
 
 #### ABP CLI
 
-[ABP CLI](cli) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
+[ABP CLI](cli.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
 
 ### Startup Templates
 
-The [Startup templates](./solution-templates) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
+The [Startup templates](./solution-templates/index.md) are pre-built Visual Studio solution templates. You can create your own solution based on these templates to **immediately start your development**.
 
 ### Application Modules
 

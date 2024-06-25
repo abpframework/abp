@@ -144,7 +144,7 @@ Open a command-line terminal in the root folder of your client project (`.csproj
 abp generate-proxy -t csharp -u http://localhost:53929/
 ````
 
-> If you haven't installed yet, you should install the [ABP CLI](../../cli).
+> If you haven't installed yet, you should install the [ABP CLI](../../cli/index.md).
 
 This command should generate the following files under the `ClientProxies` folder:
 
@@ -168,7 +168,7 @@ This command should generate the following files under the `ClientProxies` folde
 * `BookClientProxy.Generated.cs` is the actual generated proxy class in this example. `BookClientProxy` is a `partial` class where you can write your custom code (ABP won't override it). 
 * `app-generate-proxy.json` contains information about the remote HTTP endpoint, so ABP can properly perform HTTP requests. This file must be configured as an embedded resource in your project, so that it can be found by the virtual file system.
 
-> `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../../cli) documentation for other options.
+> `generate-proxy` command generates proxies for only the APIs you've defined in your application. If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../../cli/index.md) documentation for other options.
 
 ## Usage
 

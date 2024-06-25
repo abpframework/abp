@@ -17,7 +17,7 @@ As mentioned before, the [application startup template](../../../../solution-tem
 This approach has the following benefits:
 
 * Your solution will be **clean** and only contains your **own application code**.
-* You can **easily upgrade** a module when a new version is available. `abp update` [CLI](../../../../cli) command makes it even easier. In this way, you can continue to get **new features and bug fixes**.
+* You can **easily upgrade** a module when a new version is available. `abp update` [CLI](../../../../cli/index.md) command makes it even easier. In this way, you can continue to get **new features and bug fixes**.
 
 However, there is a drawback:
 
@@ -31,7 +31,7 @@ If you don't think to make huge changes on the pre-built modules, re-using them 
 
 If you want to make **huge changes** or add **major features** on a pre-built module, but the available extension points are not enough, you can consider to directly work the source code of the depended module.
 
-In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](../../../../cli)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
+In this case, you typically **add the source code** of the module to your solution and replace **every** package reference in the solution with its corresponding local project references.  **[ABP CLI](../../../../cli/index.md)**'s `add-module` command automates this process for you with the `--with-source-code` parameter. This command can also replace a module by its source code if the module already installed as NuGet packages.
 
 
 #### Separating the Module Solution

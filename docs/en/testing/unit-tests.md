@@ -1,5 +1,19 @@
 # Unit Tests
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Overall",
+    "Path": "testing/overall"
+  },
+  "Next": {
+    "Name": "Integration tests",
+    "Path": "testing/integration-tests"
+  }
+}
+````
+
 For Unit Tests, you don't need to much infrastructure. You typically instantiate your class and provide some pre-configured mocked objects to prepare your object to test.
 
 ## Classes Without Dependencies
@@ -50,7 +64,7 @@ namespace MyProject.Issues
 
 ````
 
-Notice that the `IsClosed` and `CloseDate` properties have private setters to force some business rules by using the `Open()` and `Close()` methods;
+Notice that the `IsClosed` and `CloseDate` properties have private setters to force some business rules by using the `Open()` and `Close()` methods:
 
 * Whenever you close an issue, the `CloseDate` should be set to the [current time](../framework/infrastructure/virtual-file-system.md).
 * An issue can not be re-opened if it is locked. And if it is re-opened, the `CloseDate` should be set to `null`.
@@ -94,7 +108,7 @@ This test follows the AAA (Arrange-Act-Assert) pattern;
 
 `[Fact]` attribute is defined by the [xUnit](https://xunit.net/) library and marks a method as a test method. `Should...` extension methods are provided by the [Shouldly](https://github.com/shouldly/shouldly) library. You can directly use the `Assert` class of the xUnit, but Shouldly makes it much comfortable and straightforward.
 
-When you execute the tests, you will see that is passes successfully:
+When you execute the tests, you will see that it passes successfully:
 
 ![issue-first-test](../images/issue-first-test.png)
 
@@ -139,11 +153,11 @@ public void Should_Not_Allow_To_ReOpen_A_Locked_Issue()
 
 `Assert.Throws` checks if the executed code throws a matching exception.
 
-> See the xUnit & Shoudly documentations to learn more about these libraries.
+> See the [xUnit](https://xunit.net/#documentation) & [Shoudly](https://docs.shouldly.org/) documentation to learn more about these libraries.
 
 ## Classes With Dependencies
 
-If your service has dependencies and you want to unit test this service, you need to mock the dependencies.
+If your service has dependencies and if you want to unit test this service, you need to mock the dependencies.
 
 ### Example: Testing a Domain Service
 

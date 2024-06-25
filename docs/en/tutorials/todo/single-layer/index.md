@@ -59,7 +59,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Creating a New Solution
 
-In this tutorial, we will use the [ABP CLI](../../../cli) to create the sample application with the ABP. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
+In this tutorial, we will use the [ABP CLI](../../../cli/index.md) to create the sample application with the ABP. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
@@ -105,7 +105,7 @@ This command will create the database and seed the initial data for you. Then yo
 
 #### Installing the Client-Side Packages
 
-[ABP CLI](../../../cli) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
+[ABP CLI](../../../cli/index.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
 
 However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
 
@@ -121,7 +121,7 @@ abp install-libs
 
 #### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../cli).
+`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../cli/index.md).
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 

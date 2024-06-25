@@ -1612,12 +1612,21 @@
             {
               "text": "Database Tables",
               "path": "modules/database-tables.md"
-            },
-            {
-              "text": "Database Tables (Pro modules)",
-              "path": "modules/database-tables-pro.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "UI Themes",
+      "items": [
+        {
+          "text": "The Basic Theme",
+          "path": "framework/ui/mvc-razor-pages/basic-theme.md"
+        },
+        {
+          "text": "LeptonX Theme",
+          "path": "ui-themes/lepton-x/index.md"
         }
       ]
     },

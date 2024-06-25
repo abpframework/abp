@@ -17,7 +17,3 @@ It scans all the `*.csproj` files in the solution and checks the version of the 
 - For **nightly packages**, it updates the package from https://www.myget.org.
 - For **open-source ABP packages**, it updates the package from https://nuget.org.
 - For **commercial ABP packages**, it updates the package from https://nuget.abp.io.
-
-## What's next?
-
-[ABP Suite configuration](configuration.md)

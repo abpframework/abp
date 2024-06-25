@@ -1,6 +1,6 @@
 # Switch to Another DBMS for Entity Framework Core
 
-[ABP CLI](../../../cli) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
+[ABP CLI](../../../cli/index.md) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:
 
 - `SqlServer` (default)
 - `MySQL`

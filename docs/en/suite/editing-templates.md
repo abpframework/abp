@@ -110,5 +110,3 @@ Conditions are if statements to render the related code-block. If the condition 
 | %%&lt;if:HasFilterableProperties&gt;%%    %%&lt;/if:HasFilterableProperties&gt;%%          | if it has any filterable properties.                                   |
 | %%&lt;if:HasAnyFilterableProperties&gt;%%    %%&lt;/if:HasAnyFilterableProperties&gt;%%    | if it has any filterable properties including navigation properties.                                   |
 | %%&lt;if:BulkDeleteEnabled&gt;%%    %%&lt;/if:BulkDeleteEnabled&gt;%%          | if the bulk delete is enabled.                                   |
-
-
