@@ -30,7 +30,6 @@ export interface FormPropGroup {
 export interface FormPropTooltip {
   text: string;
   placement?: 'top' | 'end' | 'bottom' | 'start';
-  triggers?: string;
 }
 
 export class GroupedFormPropList<R = any> {
