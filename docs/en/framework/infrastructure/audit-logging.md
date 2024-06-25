@@ -237,7 +237,7 @@ An **audit log object** is created for each **web request** by default. An audit
   * `ClientId`: Id of the current client, if the client has been authenticated. A client is generally a 3rd-party application using the system over an HTTP API.
   * `ClientName`: Name of the current client, if available.
   * `ClientIpAddress`: IP address of the client/user device.
-  * `CorrelationId`: Current [Correlation Id](./correlation-id.md). Correlation Id is used to relate the audit logs written by different applications (or microservices) in a single logical operation.
+  * `CorrelationId`: Current Correlation Id. Correlation Id is used to relate the audit logs written by different applications (or microservices) in a single logical operation.
   * `BrowserInfo`: Browser name/version info of the current user, if available.
   * `HttpMethod`: HTTP method of the current request (GET, POST, PUT, DELETE... etc.).
   * `HttpStatusCode`: HTTP response status code for this request.
@@ -309,7 +309,7 @@ Configure<AbpAuditingOptions>(options =>
 
 This section explains the `IAuditLogScope` & `IAuditingManager` services for advanced use cases.
 
-An **audit log scope** is an [ambient scope](../../ambient-context-pattern.md) that **builds** and **saves** an audit log object (explained before). By default, an audit log scope is created for a web request by the Audit Log Middleware (see `UseAuditing()` section above).
+An **audit log scope** is an ambient scope that **builds** and **saves** an audit log object (explained before). By default, an audit log scope is created for a web request by the Audit Log Middleware (see `UseAuditing()` section above).
 
 ### Access to the Current Audit Log Scope
 

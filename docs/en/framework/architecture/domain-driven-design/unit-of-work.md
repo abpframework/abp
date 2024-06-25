@@ -86,7 +86,7 @@ Then `MyService` (and any class derived from it) methods will be UOW.
 
 However, there are **some rules should be followed** in order to make it working;
 
-* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](../../../dynamic-proxying-interceptors.md) system can not work).
+* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, dynamic proxy / interception system can not work).
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted. So, sync methods can not start a UOW.
 
 > Notice that if `FooAsync` is called inside a UOW scope, then it already participates to the UOW without needing to the `IUnitOfWorkEnabled` or any other configuration.
@@ -149,7 +149,7 @@ namespace AbpDemo
 
 Again, the **same rules** are valid here:
 
-* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](../../../dynamic-proxying-interceptors.md) system can not work).
+* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, dynamic proxy / interception system can not work).
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted. So, sync methods can not start a UOW.
 
 #### UnitOfWorkAttribute Properties

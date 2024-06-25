@@ -538,7 +538,7 @@ public class AppModule : AbpModule
 
 This example simply checks if the service class has `MyLogAttribute` attribute and adds `MyLogInterceptor` to the interceptor list if so.
 
-> Notice that `OnRegistered` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method. See [the documentation](../../dynamic-proxying-interceptors.md) of dynamic proxying / interceptors.
+> Notice that `OnRegistered` callback might be called multiple times for the same service class if it exposes more than one service/interface. So, it's safe to use `Interceptors.TryAdd` method instead of `Interceptors.Add` method.
 
 ### IServiceCollection.OnActivated Event
 

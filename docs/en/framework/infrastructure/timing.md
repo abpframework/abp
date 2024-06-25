@@ -83,7 +83,7 @@ var normalizedDateTime = Clock.Normalize(dateTime)
 
 * `DateTime` type binding in the ASP.NET Core MVC model binding.
 * Saving data to and reading data from database via [Entity Framework Core](../data/entity-framework-core).
-* Working with `DateTime` objects on [JSON deserialization](../../json-serialization.md).
+* Working with `DateTime` objects on JSON deserialization.
 
 #### DisableDateTimeNormalization Attribute
 

@@ -110,7 +110,7 @@ namespace Acme.BookStore
 }
 ````
 
-> ABP uses the [dynamic proxying / interception](../../dynamic-proxying-interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
+> ABP uses the dynamic proxying / interception system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
 
 #### Enabling/Disabling Validation
 
