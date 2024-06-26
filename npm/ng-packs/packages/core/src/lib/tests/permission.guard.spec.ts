@@ -14,12 +14,11 @@ import { HttpErrorReporterService } from '../services/http-error-reporter.servic
 import { PermissionService } from '../services/permission.service';
 import { RoutesService } from '../services/routes.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
-import { IncludeLocalizationResourcesProvider } from '../providers';
+import { IncludeLocalizationResourcesProvider, provideAbpCore, withOptions } from '../providers';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { OTHERS_GROUP } from '../tokens';
 import { SORT_COMPARE_FUNC, compareFuncFactory } from '../tokens/compare-func.token';
-import { CoreModule } from '../core.module';
 import { AuthService } from '../abstracts';
 
 describe('PermissionGuard', () => {
@@ -155,12 +154,13 @@ describe('authGuard', () => {
     permissionService = createSpyObject(PermissionService);
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, CoreModule.forRoot()],
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: AuthService, useValue: mockOAuthService },
         { provide: PermissionService, useValue: permissionService },
         { provide: HttpErrorReporterService, useValue: httpErrorReporter },
         provideRouter(routes),
+        provideAbpCore(withOptions()),
       ],
     });
   });

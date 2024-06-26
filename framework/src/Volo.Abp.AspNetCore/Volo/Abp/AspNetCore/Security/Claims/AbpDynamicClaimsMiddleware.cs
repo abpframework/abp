@@ -24,18 +24,14 @@ public class AbpDynamicClaimsMiddleware : AbpMiddlewareBase, ITransientDependenc
 
                 if (context.User.Identity?.IsAuthenticated == false)
                 {
+                    var authenticationSchemeProvider = context.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
                     if (!authenticationType.IsNullOrWhiteSpace())
                     {
-                        var authenticationSchemeProvider = context.RequestServices.GetRequiredService<IAuthenticationSchemeProvider>();
-                        var scheme = await authenticationSchemeProvider.GetSchemeAsync(authenticationType);
-                        if (scheme != null)
+                        var authenticationScheme = await authenticationSchemeProvider.GetSchemeAsync(authenticationType);
+                        if (authenticationScheme != null && typeof(IAuthenticationSignOutHandler).IsAssignableFrom(authenticationScheme.HandlerType))
                         {
-                            await context.SignOutAsync(scheme.Name);
+                            await context.SignOutAsync(authenticationScheme.Name);
                         }
-                    }
-                    else
-                    {
-                        await context.SignOutAsync();
                     }
                 }
             }

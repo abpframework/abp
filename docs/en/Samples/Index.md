@@ -12,7 +12,15 @@ Reference microservice solution built with the ABP Framework and .NET.
 
 This is a reference application built with the ABP Framework. It implements the Domain Driven Design with multiple application layers.
 
+* [Live](https://openeventhub.com/)
 * [Source code](https://github.com/abpframework/eventhub)
+
+## CMS Kit Demo
+
+This reference application built with the ABP Framework and demonstrates the [CMS Kit Module's](../Modules/Cms-Kit/Index.md) capabilities.
+
+* [Live](https://cms-kit-demo.abpdemo.com/)
+* [Source code](https://github.com/abpframework/cms-kit-demo)
 
 ## Book Store
 

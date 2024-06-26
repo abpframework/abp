@@ -70,10 +70,7 @@
             </div>
             <hr class="my-2" />
             @for (permission of selectedGroupPermissions; track $index; let i = $index) {
-              <div
-                [ngStyle]="permission.style"
-                class="form-check mb-2"
-              >
+              <div [ngStyle]="permission.style" class="form-check mb-2">
                 <input
                   #permissionCheckbox
                   type="checkbox"
@@ -88,8 +85,7 @@
                   >{{ permission.displayName }}
                   @if (!hideBadges) {
                     @for (provider of permission.grantedProviders; track $index) {
-                      <span
-                        class="badge bg-light text-dark"
+                      <span class="badge bg-primary text-dark"
                         >{{ provider.providerName }}: {{ provider.providerKey }}</span
                       >
                     }

@@ -42,13 +42,13 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
             .Where(user => user.Roles.Any(role => roleIds.Contains(role.RoleId)))
             .SelectMany(user => user.Roles)
             .GroupBy(userRole => userRole.RoleId)
-            .Select(x => new  
+            .Select(x => new
             {
                 RoleId = x.Key,
                 Count = x.Count()
             })
             .ToListAsync(GetCancellationToken(cancellationToken));
-        
+
         return roles.Select(role => new IdentityRoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
     }
 
@@ -97,6 +97,20 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
                      x.NormalizedName.Contains(filter))
             .As<IMongoQueryable<IdentityRole>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task RemoveClaimFromAllRolesAsync(string claimType, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        var roles = await (await GetMongoQueryableAsync(cancellationToken))
+            .Where(r => r.Claims.Any(c => c.ClaimType == claimType))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+
+        foreach (var role in roles)
+        {
+            role.Claims.RemoveAll(c => c.ClaimType == claimType);
+        }
+
+        await UpdateManyAsync(roles, cancellationToken: cancellationToken);
     }
 
     protected virtual async Task<List<IdentityRole>> GetListInternalAsync(

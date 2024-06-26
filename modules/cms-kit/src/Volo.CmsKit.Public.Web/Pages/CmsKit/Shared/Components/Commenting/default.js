@@ -111,7 +111,7 @@
 
                 $form.submit(function (e) {
                     e.preventDefault();
-                    
+
                     abp.ui.setBusy($form.find("button[type='submit']"));
 
                     let formAsObject = $form.serializeFormToObject();
@@ -178,6 +178,10 @@
                         }),
                         success: function () {
                             widgetManager.refresh($widget);
+                            if (abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")) {
+                                abp.message.success(l("CommentSubmittedForApproval"), l("SavedSuccessfully"));
+                            }
+                            $form.trigger('reset');
                             abp.ui.clearBusy();
                         },
                         error: function (data) {

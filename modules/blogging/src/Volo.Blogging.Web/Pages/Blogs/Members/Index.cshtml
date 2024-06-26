@@ -107,9 +107,10 @@
             @if (CurrentUser.Id == Model.User.Id)
             {
                 <abp-tabs>
-                    @if (Model.Posts is not null && Model.Posts.Any())
-                    {
-                        <abp-tab name="all-posts" title="@L["Posts"]">
+                    
+                    <abp-tab name="all-posts" title="@L["Posts"]">
+                        @if (Model.Posts is not null && Model.Posts.Any())
+                        {
                             <div class="mt-4 pt-3">
                                 @foreach (var post in Model.Posts)
                                 {
@@ -117,7 +118,7 @@
                                         <div class="post-type-cont" style="text-align: center;">
 
                                             <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
-                                                <img gravatar-email="@Model.User.Email" default-image="Identicon" id="gravatar" class="post-member-img rounded-circle d-block" />
+                                                <img gravatar-email="@Model.User.Email" default-image="Identicon" id="gravatar" class="post-member-img rounded-circle d-block"/>
                                             </a>
                                         </div>
 
@@ -149,39 +150,39 @@
                                     </div>
                                 }
                             </div>
-                        </abp-tab>
-                    }
-                    else
-                    {
-                        <div class="col-md-8">
-                            <div class="mt-5 pt-6">
-                                <p>@L["MemberNotPublishedPostYet"]</p>
+                        }
+                        else
+                        {
+                            <div class="col-md-8">
+                                <div class="mt-5 pt-6">
+                                    <p>@L["MemberNotPublishedPostYet"]</p>
+                                </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </abp-tab>
                     <abp-tab name="edit-profile" title="Edit Profile">
                         <div class="mt-4 mb-3 pt-3">
                             <form method="post">
                                 <abp-row>
                                     <abp-column size="_12" v-align="Center">
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Name" required-symbol="false" label="@($"{L["Name"].Value} ({L["Optional"].Value})")" value="@Model.User.Name"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Name" required-symbol="false" label="@($"{L["Name"].Value}")" value="@Model.User.Name"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Surname" required-symbol="false" label="@($"{L["Surname"].Value} ({L["Optional"].Value})")" value="@Model.User.Surname"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Surname" required-symbol="false" label="@($"{L["Surname"].Value}")" value="@Model.User.Surname"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.WebSite" required-symbol="false" label="@($"{L["WebSite"].Value} ({L["Optional"].Value})")" value="@Model.User.WebSite" info="@L["UpdateUserWebSiteInfo"].Value"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.WebSite" required-symbol="false" label="@($"{L["WebSite"].Value}")" value="@Model.User.WebSite" info="@L["UpdateUserWebSiteInfo"].Value"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Twitter" required-symbol="false" label="Twitter @($"{L["UserName"].Value} ({L["Optional"].Value})")" value="@Model.User.Twitter" info="@L["UpdateUserTwitterInfo"].Value"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Twitter" required-symbol="false" label="Twitter @($"{L["UserName"].Value}")" value="@Model.User.Twitter" info="@L["UpdateUserTwitterInfo"].Value"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Github" required-symbol="false" label="Github @($"{L["UserName"].Value} ({L["Optional"].Value})")" value="@Model.User.Github" info="@L["UpdateUserGithubInfo"].Value"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Github" required-symbol="false" label="GitHub @($"{L["UserName"].Value}")" value="@Model.User.Github" info="@L["UpdateUserGithubInfo"].Value"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Linkedin" required-symbol="false" label="Linkedin @($"{L["FullURL"].Value} ({L["Optional"].Value})")" value="@Model.User.Linkedin" info="@L["UpdateUserLinkedinInfo"].Value"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Linkedin" required-symbol="false" label="Linkedin @($"{L["FullURL"].Value}")" value="@Model.User.Linkedin" info="@L["UpdateUserLinkedinInfo"].Value"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Company" required-symbol="false" label="@($"{L["Company"].Value} ({L["Optional"].Value})")" value="@Model.User.Company" info="@L["UpdateUserCompanyInfo"].Value"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Company" required-symbol="false" label="@($"{L["Company"].Value}")" value="@Model.User.Company" info="@L["UpdateUserCompanyInfo"].Value"></abp-input>
 
-                                        <abp-input class="form-control" asp-for="CustomUserUpdate.JobTitle" required-symbol="false" label="@($"{L["JobTitle"].Value} ({L["Optional"].Value})")" value="@Model.User.JobTitle" info="@L["UpdateUserJobTitleInfo"].Value"></abp-input>
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.JobTitle" required-symbol="false" label="@($"{L["JobTitle"].Value}")" value="@Model.User.JobTitle" info="@L["UpdateUserJobTitleInfo"].Value"></abp-input>
 
                                         <div class="mb-3">
-                                            <label class="form-label">@L["Biography"] (@L["Optional"])</label>
+                                            <label class="form-label">@L["Biography"]</label>
                                             <textarea id="CustomUserUpdate_Biography" name="CustomUserUpdate.Biography" class="form-control " rows="7" data-val-length="The field Biography must be a string with a maximum length of 1000." data-val-length-max="1000" maxlength="1000">@Model.User.Biography</textarea>
                                         </div>
                                     </abp-column>
