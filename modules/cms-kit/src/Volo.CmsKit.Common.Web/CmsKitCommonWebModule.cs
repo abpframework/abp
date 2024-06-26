@@ -7,13 +7,15 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Web.Icons;
 using Markdig;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.SettingManagement.Web;
 
 namespace Volo.CmsKit.Web;
 
 [DependsOn(
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(CmsKitCommonApplicationContractsModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpAutoMapperModule),
+    typeof(AbpSettingManagementWebModule)
     )]
 public class CmsKitCommonWebModule : AbpModule
 {
