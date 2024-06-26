@@ -21,18 +21,13 @@ namespace Volo.Docs.Markdown
         private readonly IMarkdownConverter _markdownConverter;
         private readonly DocsUiOptions _uiOptions;
         private readonly IDocsLinkGenerator _docsLinkGenerator;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly Func<DocsUrlNormalizerContext, string> _urlNormalizer;
 
         public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter,
-            IOptions<DocsUiOptions> urlOptions, IDocsLinkGenerator docsLinkGenerator, 
-            IServiceProvider serviceProvider)
+            IOptions<DocsUiOptions> urlOptions, IDocsLinkGenerator docsLinkGenerator)
         {
             _markdownConverter = markdownConverter;
             _docsLinkGenerator = docsLinkGenerator;
-            _serviceProvider = serviceProvider;
             _uiOptions = urlOptions.Value;
-            _urlNormalizer = _uiOptions.UrlNormalizer ?? (context => context.Url);
         }
 
         private const string MdLinkFormat = "[{0}]({1})";
@@ -122,10 +117,7 @@ namespace Volo.Docs.Markdown
 
                 if (UrlHelper.IsExternalLink(link) || !(isMdFile || isFolder))
                 {
-                    return NormalizeLink(displayText, MdLinkFormat, link, projectShortName,
-                        version,
-                        documentName,
-                        languageCode);
+                    return match.Value;
                 }
                 
 
@@ -141,28 +133,9 @@ namespace Volo.Docs.Markdown
                     documentLocalDirectoryNormalized = "/" + documentLocalDirectoryNormalized;
                 }
                 
-                return NormalizeLink(
-                    displayText,
-                    MdLinkFormat,
-                    _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName) + (hashPart.IsNullOrWhiteSpace() ? string.Empty : "#" + hashPart),
-                    projectShortName,
-                    version,
-                    documentName,
-                    languageCode
-                );
+                return string.Format(MdLinkFormat, displayText,
+                    _docsLinkGenerator.GenerateLink(projectShortName, languageCode, $"{version}{documentLocalDirectoryNormalized}", documentName) + (hashPart.IsNullOrWhiteSpace() ? string.Empty : "#" + hashPart));
             });
-        }
-        
-        private string NormalizeLink(string displayText, string linkFormat, string link, string projectName, string version, string documentName, string languageCode)
-        {
-            return string.Format(linkFormat, displayText, _urlNormalizer(new DocsUrlNormalizerContext {
-                Url = link,
-                ProjectName = projectName,
-                Version = version,
-                DocumentName = documentName,
-                LanguageCode = languageCode,
-                ServiceProvider = _serviceProvider
-            }));
         }
 
         private static string RemoveFileExtension(string documentName)
