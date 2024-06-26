@@ -1808,6 +1808,8 @@
     "Docs_Page_Title": "ABP Documentation",
     "Docs_Page_Description": "Access comprehensive guides and API references in the ABP Documentation, aiding in development and troubleshooting.",
     "Videos_Page_Title": "{0} - Video Post | ABP.IO",
-    "AskQuestionsOnSupport": "You can ask questions on ABP Support."
+    "AskQuestionsOnSupport": "You can ask questions on ABP Support.",
+    "MicroserviceApplicationExplanation1": "Creates a distributed solution.",
+    "MicroserviceApplicationExplanation2": "Recommended for large teams to create complex and scalable systems."
   }
 }
