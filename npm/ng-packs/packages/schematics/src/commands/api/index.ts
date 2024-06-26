@@ -29,6 +29,8 @@ import {
   sanitizeTypeNames,
   sanitizeControllerTypeNames,
   serializeParameters,
+  resolveAbpPackages,
+  resolveSelfGenericProps,
 } from '../../utils';
 import * as cases from '../../utils/text';
 
@@ -48,6 +50,8 @@ export default function (schema: GenerateProxySchema) {
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);
       data.types = sanitizeTypeNames(data.types);
+
+      resolveSelfGenericProps({ solution, types: data.types });
 
       const types = data.types;
       const modules = data.modules;
@@ -156,6 +160,8 @@ function createModelGenerator(params: ModelGeneratorParams) {
       }),
     ),
   );
+
+  resolveAbpPackages(models);
 
   return chain(
     models.map(model =>

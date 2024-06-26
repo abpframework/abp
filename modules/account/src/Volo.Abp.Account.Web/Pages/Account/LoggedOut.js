@@ -1,6 +1,12 @@
-document.addEventListener('DOMContentLoaded', function (event) {
+document.addEventListener("DOMContentLoaded", function (event) {
     setTimeout(function () {
-        window.clientName = document.getElementById("redirectButton").getAttribute("cname");
-        window.location = document.getElementById('redirectButton').getAttribute('href');
-    }, 3000);
+        var redirectButton = document.getElementById("redirectButton");
+        
+        if(!redirectButton){
+            return;
+        }
+            
+        redirectButton.getAttribute("cname");
+        redirectButton.getAttribute("href");
+    }, 3000)
 });

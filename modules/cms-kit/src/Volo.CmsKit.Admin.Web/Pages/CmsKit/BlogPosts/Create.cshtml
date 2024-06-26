@@ -60,8 +60,8 @@
     <abp-card-header title="@L["New"].Value"></abp-card-header>
     <abp-card-body>
         <div class="mb-3">
-            <label class="form-label">@L["CoverImage"]</label>
-            <input type="file" id="BlogPostCoverImage" class="form-control" />
+            <label class="form-label">@L["CoverImage"] <span class="badge text-bg-light">16:9</span></label>
+            <input type="file" id="BlogPostCoverImage" class="form-control" accept="image/*" />
         </div>
 
         <form asp-page="/CmsKit/BlogPosts/Create" id="form-blog-post-create">

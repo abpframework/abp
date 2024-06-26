@@ -38,8 +38,8 @@
     <PackageVersion Include="EphemeralMongo6.runtime.osx-x64" Version="1.1.3" />
     <PackageVersion Include="EphemeralMongo6.runtime.win-x64" Version="1.1.3" />
     <PackageVersion Include="FluentValidation" Version="11.8.0" />
-    <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.6" />
-    <PackageVersion Include="Hangfire.SqlServer" Version="1.8.6" />
+    <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14" />
+    <PackageVersion Include="Hangfire.SqlServer" Version="1.8.14" />
     <PackageVersion Include="HtmlSanitizer" Version="8.0.746" />
     <PackageVersion Include="IdentityModel" Version="6.2.0" />
     <PackageVersion Include="IdentityServer4" Version="4.1.2" />
