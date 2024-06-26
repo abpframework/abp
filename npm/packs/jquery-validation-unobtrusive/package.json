@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@abp/jquery-validation": "~8.2.0-rc.5",
-    "jquery-validation-unobtrusive": "^3.2.12"
+    "jquery-validation-unobtrusive": "^4.0.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",
