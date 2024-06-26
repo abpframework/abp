@@ -49,6 +49,10 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
             steps.Add(new ChangeThemeStyleStep());
             return;
         }
+        else
+        {
+            steps.Add(new RemoveFileStep("LeptonXFooter.razor", false));
+        }
 
         steps.Add(new ChangeThemeStep());
         ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version ?? context.TemplateFile.Version);

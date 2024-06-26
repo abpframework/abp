@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> podporováno.",
     "Preview": "Náhled",
     "VisitPage": "Navštivte stránku",
-    "VisitVideoCourseDescription": "Pokud se chcete naučit základy rámce ABP, podívejte se na videokurzy ABP Essentials."
+    "VisitVideoCourseDescription": "Pokud se chcete naučit základy rámce ABP, podívejte se na videokurzy ABP Essentials.",
+    "ConfirmEmailForPost": "Abyste mohli přidávat příspěvky, musíte potvrdit svůj e-mail. Přejděte na stránku account.abp.io/Account/Manage a ověřte svůj e-mail na kartě Osobní údaje.",
+    "DailyPostCreateLimitation": "Dosáhli jste denního limitu pro vytváření příspěvků. Nový příspěvek můžete vytvořit v {0}."
   }
 }
