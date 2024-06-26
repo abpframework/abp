@@ -524,7 +524,7 @@ public abstract class AbpCrudPageBase<
         await GetEntitiesAsync();
 
         await InvokeAsync(EditModal!.Hide);
-        await Notify.Success(GetUpdateMessage();
+        await Notify.Success(GetUpdateMessage());
     }
 
     protected virtual string GetUpdateMessage()
