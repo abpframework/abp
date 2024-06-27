@@ -796,8 +796,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {
-            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, "IsDeleted");
-
+            var softDeleteColumnName = modelBuilder.Entity<TEntity>().Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.GetColumnName() ?? "IsDeleted";
+            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeleteColumnName);
             if (UseDbFunction())
             {
                 expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
@@ -807,14 +807,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
-            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
-
+            var multiTenantColumnName = modelBuilder.Entity<TEntity>().Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.GetColumnName() ?? "TenantId";
+            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantColumnName) == CurrentTenantId;
             if (UseDbFunction())
             {
                 multiTenantFilter = e => AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilter(((IMultiTenant)e).TenantId, CurrentTenantId, true);
                 modelBuilder.ConfigureMultiTenantDbFunction(AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
             }
-
             expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
         }
 
