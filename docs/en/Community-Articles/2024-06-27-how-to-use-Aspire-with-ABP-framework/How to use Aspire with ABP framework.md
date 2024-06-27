@@ -1,14 +1,14 @@
 # How to use .NET Aspire with ABP framework
 
-Dotnet Aspire is an opinionated, cloud-ready stack designed for building observable, production-ready, and distributed applications. On the other hand, the ABP framework offers an opinionated architecture to build enterprise software solutions with best practices on top of the .NET and the ASP.NET Core platforms. This guide explores how to combine Dotnet Aspire with ABP, enabling developers to create observable, and feature-rich applications in a cloud-native environment.
+[.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) is an opinionated, cloud-ready stack designed for building observable, production-ready, and distributed applications. On the other hand, the [ABP framework](https://docs.abp.io/en/abp/latest) offers an opinionated architecture to build enterprise software solutions with best practices on top of the .NET and the ASP.NET Core platforms. This guide explores how to combine .NET Aspire with ABP, enabling developers to create observable, and feature-rich applications in a cloud-native environment.
 
 ## When to Use Aspire?
 
-Using Dotnet Aspire with the ABP framework can be beneficial in various scenarios where you need to combine the strengths of both technologies. Here are some situations when using Dotnet Aspire with ABP can be advantageous:
+Using .NET Aspire with the ABP framework can be beneficial in various scenarios where you need to combine the strengths of both technologies. Here are some situations when using .NET Aspire with ABP can be advantageous:
 
-- **Enterprise Web Applications:** ABP is well-suited for building enterprise web applications with its opinionated architecture and best practices. When combined with Dotnet Aspire, you can leverage ABP's features for rapid development of user interfaces, backend services, and business logic while benefiting from Dotnet Aspire's cloud-native capabilities and observability features.
-- **Observability and Monitoring:** Dotnet Aspire's emphasis on observability, including logging, monitoring, and tracing, can enhance ABP applications by providing deeper insights into system behavior, performance metrics, and diagnostics, which is crucial for maintaining and optimizing enterprise-grade applications.
-- **Cloud-Native Integration:** If your application needs to integrate with cloud-native services, infrastructure, or deployment patterns (such as containerization, serverless computing, or cloud provider services), Dotnet Aspire's cloud-native capabilities can complement ABP's framework, enabling seamless integration and management in cloud environments.
+- **Enterprise Web Applications:** ABP is well-suited for building enterprise web applications with its opinionated architecture and best practices. When combined with .NET Aspire, you can leverage ABP's features for rapid development of user interfaces, backend services, and business logic while benefiting from .NET Aspire's cloud-native capabilities and observability features.
+- **Observability and Monitoring:** .NET Aspire's emphasis on observability, including logging, monitoring, and tracing, can enhance ABP applications by providing deeper insights into system behavior, performance metrics, and diagnostics, which is crucial for maintaining and optimizing enterprise-grade applications.
+- **Cloud-Native Integration:** If your application needs to integrate with cloud-native services, infrastructure, or deployment patterns (such as containerization, serverless computing, or cloud provider services), .NET Aspire's cloud-native capabilities can complement ABP's framework, enabling seamless integration and management in cloud environments.
 
 ## Creating a new ABP Solution
 
@@ -48,7 +48,9 @@ These commands adds two new projects to the solution:
 - **AspirationalAbp.AppHost**: An orchestrator project designed to connect and configure the different projects and services of your app.
 - **AspirationalAbp.ServiceDefaults**: A .NET Aspire shared project to manage configurations that are reused across the projects in your solution related to [resilience](https://learn.microsoft.com/en-us/dotnet/core/resilience/http-resilience), [service discovery](https://learn.microsoft.com/en-us/dotnet/aspire/service-discovery/overview), and [telemetry](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/telemetry).
 
-We have added .NET Aspire to our ABP based solution, but we have not registered our projects in the .NET Aspire orchestration. Now, let's enroll our projects, which implement the db migrator, web user interface, API, and auth, in .NET Aspire orchestration:
+We have added .NET Aspire to our ABP based solution, but we have not registered our projects in the .NET Aspire orchestration. Now, let's enroll our projects, which implement the db migrator, web user interface, API, and auth, in .NET Aspire orchestration.
+
+## Registering projects to .NET Aspire orchestration
 
 First of all, we need to add the reference of related projects to the `AspirationalAbp.AppHost` project. For this, add the following `ItemGroups` to `AspirationalAbp.AppHost/AspirationalAbp.AppHost.csproj` file:
 
@@ -161,6 +163,7 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 ```
 
 Now let's continue with `AspirationalAbp.EntityFrameworkCore`.
+
 ### AspirationalAbp.EntityFrameworkCore
 
 Now let's add the `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL` package to the `AspirationalAbp.EntityFrameworkCore` project. For this, you can run the following command in the `AspirationalAbp.EntityFrameworkCore` project:
@@ -170,6 +173,7 @@ dotnet add package Aspire.Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.1
 ```
 
 Now let's continue with `AspirationalAbp.AuthServer`.
+
 ### AspirationalAbp.AuthServer
 
 First, let's add the `Serilog.Sinks.OpenTelemetry`, `Aspire.StackExchange.Redis` and `AspirationalAbp.ServiceDefaults` packages to the `AspirationalAbp.AuthServer` project. For this, let's run the following .NET CLI command inside the `AspirationalAbp.AuthServer` project:
@@ -206,6 +210,7 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 ```
 
 So far we have made `AspirationalAbp.DbMigrator`, `AspirationalAbp.EntityFrameworkCore`, `AspirationalAbp.AuthServer`, and `AspirationalAbp.HttpApi.Host` compatible with .NET Aspire. Now let's continue with `AspirationalAbp.HttpApi.Host`.
+
 ### AspirationalAbp.HttpApi.Host
 
 First, let's add the `Serilog.Sinks.OpenTelemetry`, `Aspire.StackExchange.Redis` and `AspirationalAbp.ServiceDefaults` packages to the `AspirationalAbp.HttpApi.Host` project. For this, let's run the following .NET CLI command inside the `AspirationalAbp.HttpApi.Host` project:
@@ -246,6 +251,7 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 ```
 
 Finally, let's make `AspirationalAbp.Web` compatible with .NET Aspire.
+
 ### AspirationalAbp.Web
 
 First, let's add the `Serilog.Sinks.OpenTelemetry`, `Aspire.StackExchange.Redis` and `AspirationalAbp.ServiceDefaults` packages to the `AspirationalAbp.Web` project. For this, let's run the following .NET CLI command inside the `AspirationalAbp.Web` project:
@@ -280,6 +286,7 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 After making all our changes, we can run the `AspirationalAbp.AppHost` project.
 
 ![[./aspire-dashboard.png]]
+
 ## Conclusion
 
-Combining Dotnet Aspire with the ABP framework creates a powerful setup for building robust, cloud-native applications. By integrating Aspire's observability and cloud capabilities with ABP's approach of focusing on your business without repeating yourself, you can develop feature-rich, scalable applications with enhanced monitoring and seamless cloud integration. This guide provides a clear path to set up and configure these technologies, ensuring your applications are well-structured, maintainable, and ready for modern cloud environments.
+Combining .NET Aspire with the ABP framework creates a powerful setup for building robust, cloud-native applications. By integrating Aspire's observability and cloud capabilities with ABP's approach of focusing on your business without repeating yourself, you can develop feature-rich, scalable applications with enhanced monitoring and seamless cloud integration. This guide provides a clear path to set up and configure these technologies, ensuring your applications are well-structured, maintainable, and ready for modern cloud environments.
