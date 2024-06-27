@@ -1,18 +1,17 @@
 # How to use .NET Aspire with ABP framework
 
-[.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) is an opinionated, cloud-ready stack designed for building observable, production-ready, and distributed applications. On the other hand, the [ABP framework](https://docs.abp.io/en/abp/latest) offers an opinionated architecture to build enterprise software solutions with best practices on top of the .NET and the ASP.NET Core platforms. This guide explores how to combine .NET Aspire with ABP, enabling developers to create observable, and feature-rich applications in a cloud-native environment.
+[.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) is an opinionated, cloud-ready stack designed for building observable, production-ready, and distributed applications. On the other hand, the [ABP framework](https://docs.abp.io/en/abp/latest) offers a complete, modular and layered software architecture based on Domain Driven Design principles and patterns. This guide explores how to combine .NET Aspire with ABP, enabling developers to create observable, and feature-rich applications.
 
 ## When to Use Aspire?
 
 Using .NET Aspire with the ABP framework can be beneficial in various scenarios where you need to combine the strengths of both technologies. Here are some situations when using .NET Aspire with ABP can be advantageous:
 
 - **Enterprise Web Applications:** ABP is well-suited for building enterprise web applications with its opinionated architecture and best practices. When combined with .NET Aspire, you can leverage ABP's features for rapid development of user interfaces, backend services, and business logic while benefiting from .NET Aspire's cloud-native capabilities and observability features.
-- **Observability and Monitoring:** .NET Aspire's emphasis on observability, including logging, monitoring, and tracing, can enhance ABP applications by providing deeper insights into system behavior, performance metrics, and diagnostics, which is crucial for maintaining and optimizing enterprise-grade applications.
-- **Cloud-Native Integration:** If your application needs to integrate with cloud-native services, infrastructure, or deployment patterns (such as containerization, serverless computing, or cloud provider services), .NET Aspire's cloud-native capabilities can complement ABP's framework, enabling seamless integration and management in cloud environments.
+- **Observability and Monitoring:** .NET Aspire's emphasis on observability, including logging, monitoring, and tracing, can enhance ABP applications by providing deeper insights into system behavior, performance metrics, and diagnostics, which is key for maintaining and optimizing enterprise-grade applications.
 
 ## Creating a new ABP Solution
 
-To demonstrate the usage of Aspire with ABP framework, I've created an ABP solution. If you want to create the same solution from scratch, follow the steps below:
+To demonstrate the usage of .NET Aspire with ABP framework, I've created an ABP solution. If you want to create the same solution from scratch, follow the steps below:
 
 Install the ABP CLI if you haven't installed it before:
 
@@ -29,6 +28,7 @@ abp new AspirationalAbp -u mvc --database-provider ef -dbms PostgreSQL --csf --t
 > The startup template selection matters for this article. I chose these options so that the demo solution can cover complex scenarios. 
 
 **Disclaimer-I:** This article is based on version `8.0.1` of .NET Aspire and version `8.2.0` of ABP Framework.
+
 **Disclaimer-II:** ABP and .NET Aspire may not be fully compatible in some respects. This article aims to explain how these two technologies can be used together in the simplest way possible, even if they are not fully compatible.
 ## Add .NET Aspire
 
@@ -133,7 +133,7 @@ Now let's make the projects we added to the app host compatible with Aspire.
 
 ## Configuring Projects for Aspire
 
-To make the `AspirationalAbp.DbMigrator`, `AspirationalAbp.AuthServer`, `AspirationalAbp.HttpApi.Host`, and `AspirationalAbp.Web` projects compatible with .NET Aspire, we need to add and configure several packages. First, add the `Aspire.StackExchange.Redis` package to all these projects and the `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL` package to the `AspirationalAbp.EntityFrameworkCore` project. Additionally, add a reference to `AspirationalAbp.ServiceDefaults` in every project except `AspirationalAbp.DbMigrator`. To enable structured logging in .NET Aspire dashboard, include the `Serilog.Sinks.OpenTelemetry` package in the host projects to convert **Serilog** events into **OpenTelemetry** `LogRecord`s. Let's begin with configuring `AspirationalAbp.DbMigrator`.
+To make the `AspirationalAbp.DbMigrator`, `AspirationalAbp.AuthServer`, `AspirationalAbp.HttpApi.Host`, and `AspirationalAbp.Web` projects compatible with .NET Aspire, we need to add and configure several packages. For that we need to add the `Aspire.StackExchange.Redis` package to all these projects and the `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL` package to the `AspirationalAbp.EntityFrameworkCore` project. Additionally, we will add a `AspirationalAbp.ServiceDefaults` reference to host projects except `AspirationalAbp.DbMigrator`. Also, we need to convert [Serilog](https://serilog.net/) events into [OpenTelemetry](https://opentelemetry.io/) `LogRecord`s, for that we will add a  `Serilog.Sinks.OpenTelemetry` reference to host projects. Let's begin with configuring `AspirationalAbp.DbMigrator`.
 
 ### AspirationalAbp.DbMigrator
 
@@ -181,6 +181,7 @@ First, let's add the `Serilog.Sinks.OpenTelemetry`, `Aspire.StackExchange.Redis`
 ```bash
 dotnet add package Aspire.StackExchange.Redis --version 8.0.1
 dotnet add reference ../AspirationalAbp.ServiceDefaults/AspirationalAbp.ServiceDefaults.csproj
+dotnet add package Serilog.Sinks.OpenTelemetry --version 4.0.0-dev-00313
 ```
 
 Then add the following code block after defining the builder variable in `Program.cs`:
@@ -189,10 +190,10 @@ Then add the following code block after defining the builder variable in `Progra
 builder.AddServiceDefaults();  
 builder.AddRedisClient("redis");  
 builder.AddNpgsqlDbContext<AspirationalAbpDbContext>("Default",  
-options =>  
-{  
-    options.DisableRetry = true;  
-});
+    options =>  
+    {  
+        options.DisableRetry = true;  
+    });
 ```
 
 Then add the following code to the `PreConfigureServices` method in `AspirationalAbpAuthServerModule` class:
@@ -209,7 +210,7 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 /// .CreateLogger();
 ```
 
-So far we have made `AspirationalAbp.DbMigrator`, `AspirationalAbp.EntityFrameworkCore`, `AspirationalAbp.AuthServer`, and `AspirationalAbp.HttpApi.Host` compatible with .NET Aspire. Now let's continue with `AspirationalAbp.HttpApi.Host`.
+So far we have made `AspirationalAbp.DbMigrator`, `AspirationalAbp.EntityFrameworkCore`, and `AspirationalAbp.AuthServer` compatible with .NET Aspire. Now let's continue with `AspirationalAbp.HttpApi.Host`.
 
 ### AspirationalAbp.HttpApi.Host
 
@@ -218,6 +219,7 @@ First, let's add the `Serilog.Sinks.OpenTelemetry`, `Aspire.StackExchange.Redis`
 ```bash
 dotnet add package Aspire.StackExchange.Redis --version 8.0.1
 dotnet add reference ../AspirationalAbp.ServiceDefaults/AspirationalAbp.ServiceDefaults.csproj
+dotnet add package Serilog.Sinks.OpenTelemetry --version 4.0.0-dev-00313
 ```
 
 Then add the following code block after defining the builder variable in `Program.cs`:
@@ -226,10 +228,10 @@ Then add the following code block after defining the builder variable in `Progra
 builder.AddServiceDefaults();  
 builder.AddRedisClient("redis");  
 builder.AddNpgsqlDbContext<AspirationalAbpDbContext>("Default",  
-options =>  
-{  
-    options.DisableRetry = true;  
-});
+    options =>  
+    {  
+        options.DisableRetry = true;  
+    });
 ```
 
 Then let's override the `PreConfigureServices` method in `AspirationalAbpHttpApiHostModule` as below:
@@ -259,6 +261,7 @@ First, let's add the `Serilog.Sinks.OpenTelemetry`, `Aspire.StackExchange.Redis`
 ```bash
 dotnet add package Aspire.StackExchange.Redis --version 8.0.1
 dotnet add reference ../AspirationalAbp.ServiceDefaults/AspirationalAbp.ServiceDefaults.csproj
+dotnet add package Serilog.Sinks.OpenTelemetry --version 4.0.0-dev-00313
 ```
 
 Then add the following code block after defining the builder variable in `Program.cs`:
@@ -285,7 +288,7 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 
 After making all our changes, we can run the `AspirationalAbp.AppHost` project.
 
-![[./aspire-dashboard.png]]
+![aspire-dashboard](aspire-dashboard.png)
 
 ## Conclusion
 
