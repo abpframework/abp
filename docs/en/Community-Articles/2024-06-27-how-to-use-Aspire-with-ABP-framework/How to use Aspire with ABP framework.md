@@ -2,7 +2,7 @@
 
 [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview) is an opinionated, cloud-ready stack designed for building observable, production-ready, and distributed applications. On the other hand, the [ABP framework](https://docs.abp.io/en/abp/latest) offers a complete, modular and layered software architecture based on Domain Driven Design principles and patterns. This guide explores how to combine .NET Aspire with ABP, enabling developers to create observable, and feature-rich applications.
 
-## When to Use Aspire?
+## When to Use .NET Aspire?
 
 Using .NET Aspire with the ABP framework can be beneficial in various scenarios where you need to combine the strengths of both technologies. Here are some situations when using .NET Aspire with ABP can be advantageous:
 
@@ -129,7 +129,7 @@ With the code above, the following operations were performed below:
 7. Adds the `Web` project, referencing Redis.
 8. Builds and runs the application.
 
-Now let's make the projects we added to the app host compatible with Aspire.
+Now let's make the projects we added to the app host compatible with .NET Aspire.
 
 ## Configuring Projects for Aspire
 
@@ -289,6 +289,12 @@ To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelem
 After making all our changes, we can run the `AspirationalAbp.AppHost` project.
 
 ![aspire-dashboard](aspire-dashboard.png)
+
+![aspire-structured-logs](aspire-structured-logs.png)
+
+![aspire-traces](aspire-traces.png)
+
+![aspire-metrics](aspire-metrics.png)
 
 ## Conclusion
 
