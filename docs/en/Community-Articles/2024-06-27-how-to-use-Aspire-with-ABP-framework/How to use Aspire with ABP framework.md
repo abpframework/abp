@@ -11,7 +11,7 @@ Using .NET Aspire with the ABP framework can be beneficial in various scenarios 
 
 ## Creating a new ABP Solution
 
-To demonstrate the usage of .NET Aspire with ABP framework, I've created an ABP solution. If you want to create the same solution from scratch, follow the steps below:
+To demonstrate the usage of .NET Aspire with the ABP framework, I've created an ABP solution. If you want to create the same solution from scratch, follow the steps below:
 
 Install the ABP CLI if you haven't installed it before:
 
@@ -32,7 +32,7 @@ abp new AspirationalAbp -u mvc --database-provider ef -dbms PostgreSQL --csf --t
 **Disclaimer-II:** ABP and .NET Aspire may not be fully compatible in some respects. This article aims to explain how these two technologies can be used together in the simplest way possible, even if they are not fully compatible.
 ## Add .NET Aspire
 
-After creating the solution, run the following commands in `src` folder of solution to add .NET Aspire:
+After creating the solution, run the following commands in the `src` folder of your solution to add .NET Aspire:
 
 ```bash
 // Adding AppHost
@@ -44,7 +44,7 @@ dotnet new aspire-servicedefaults -n AspirationalAbp.ServiceDefaults
 dotnet sln ../AspirationalAbp.sln add ./AspirationalAbp.ServiceDefaults/AspirationalAbp.ServiceDefaults.csproj
 ```
 
-These commands adds two new projects to the solution:
+These commands add two new projects to the solution:
 - **AspirationalAbp.AppHost**: An orchestrator project designed to connect and configure the different projects and services of your app.
 - **AspirationalAbp.ServiceDefaults**: A .NET Aspire shared project to manage configurations that are reused across the projects in your solution related to [resilience](https://learn.microsoft.com/en-us/dotnet/core/resilience/http-resilience), [service discovery](https://learn.microsoft.com/en-us/dotnet/aspire/service-discovery/overview), and [telemetry](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/telemetry).
 
@@ -52,7 +52,7 @@ We have added .NET Aspire to our ABP based solution, but we have not registered 
 
 ## Registering projects to .NET Aspire orchestration
 
-First of all, we need to add the reference of related projects to the `AspirationalAbp.AppHost` project. For this, add the following `ItemGroups` to `AspirationalAbp.AppHost/AspirationalAbp.AppHost.csproj` file:
+First of all, we need to add the reference of related projects to the `AspirationalAbp.AppHost` project. For this, add the following `ItemGroups` to the `AspirationalAbp.AppHost/AspirationalAbp.AppHost.csproj` file:
 
 ```csharp
 <ItemGroup>  
@@ -92,7 +92,8 @@ if (builder.Environment.IsDevelopment())
         .AddProject<Projects.AspirationalAbp_DbMigrator>("dbMigrator")  
         .WithReference(postgres, "Default")  
         .WithReference(redis, "Redis")   
-        .WithReplicas(1); }  
+        .WithReplicas(1);
+}  
   
 // AuthServer  
 var authServerLaunchProfile = "AspirationalAbp.AuthServer";  
@@ -133,7 +134,7 @@ Now let's make the projects we added to the app host compatible with .NET Aspire
 
 ## Configuring Projects for Aspire
 
-To make the `AspirationalAbp.DbMigrator`, `AspirationalAbp.AuthServer`, `AspirationalAbp.HttpApi.Host`, and `AspirationalAbp.Web` projects compatible with .NET Aspire, we need to add and configure several packages. For that we need to add the `Aspire.StackExchange.Redis` package to all these projects and the `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL` package to the `AspirationalAbp.EntityFrameworkCore` project. Additionally, we will add a `AspirationalAbp.ServiceDefaults` reference to host projects except `AspirationalAbp.DbMigrator`. Also, we need to convert [Serilog](https://serilog.net/) events into [OpenTelemetry](https://opentelemetry.io/) `LogRecord`s, for that we will add a  `Serilog.Sinks.OpenTelemetry` reference to host projects. Let's begin with configuring `AspirationalAbp.DbMigrator`.
+To make the `AspirationalAbp.DbMigrator`, `AspirationalAbp.AuthServer`, `AspirationalAbp.HttpApi.Host`, and `AspirationalAbp.Web` projects compatible with .NET Aspire, we need to add and configure several packages. For that, we need to add the `Aspire.StackExchange.Redis` package to all these projects and the `Aspire.Npgsql.EntityFrameworkCore.PostgreSQL` package to the `AspirationalAbp.EntityFrameworkCore` project. Additionally, we will add the  `AspirationalAbp.ServiceDefaults` reference to host projects except `AspirationalAbp.DbMigrator`. Also, we need to convert [Serilog](https://serilog.net/) events into [OpenTelemetry](https://opentelemetry.io/) `LogRecord`s, for that we will add a  `Serilog.Sinks.OpenTelemetry` reference to host projects. Let's begin with configuring `AspirationalAbp.DbMigrator`.
 
 ### AspirationalAbp.DbMigrator
 
@@ -154,7 +155,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelemetry` package and now let's enable the sink. For this, let's write the following code block just before calling the `CreateLogger` method in logger configuration in `Program.cs`:
+To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelemetry` package and now let's enable the sink. For this, let's write the following code block just before calling the `CreateLogger` method in the logger configuration in `Program.cs`:
 
 ```csharp
 /// .WriteTo.Async(c => c.Console())  
@@ -196,7 +197,7 @@ builder.AddNpgsqlDbContext<AspirationalAbpDbContext>("Default",
     });
 ```
 
-Then add the following code to the `PreConfigureServices` method in `AspirationalAbpAuthServerModule` class:
+Then add the following code to the `PreConfigureServices` method in the `AspirationalAbpAuthServerModule` class:
 
 ```csharp
 configuration["Redis:Configuration"] = configuration["ConnectionStrings:Redis"];
@@ -244,7 +245,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelemetry` package and now let's enable the sink. For this, let's write the following code block just before calling the `CreateLogger` method in logger configuration in `Program.cs`:
+To use the **OpenTelemetry** sink we have installed the `Serilog.Sinks.OpenTelemetry` package and now let's enable the sink. For this, let's write the following code block just before calling the `CreateLogger` method in the logger configuration in `Program.cs`:
 
 ```csharp
 /// .WriteTo.Async(c => c.Console())  
@@ -271,7 +272,7 @@ builder.AddServiceDefaults();
 builder.AddRedisClient("redis");
 ```
 
-Then add the following code to the `PreConfigureServices` method in `AspirationalAbpWebModule` class:
+Then add the following code to the `PreConfigureServices` method in the `AspirationalAbpWebModule` class:
 
 ```bash
 var configuration = context.Services.GetConfiguration();  
