@@ -156,14 +156,17 @@ kubectl create secret tls -n bookstore-local bookstore-local-tls --cert=./bookst
 
 Lastly, we should define the new application in the *_helpers.tpl* file in the `etc/helm/projectname/templates` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the *_helpers.tpl* file for the `WebPublic` application.
 
+{%{
 ```yaml
 {{- define "bookstore.hosts.webpublic" -}}
 {{- print "https://" (.Values.global.hosts.webpublic | replace "[RELEASE_NAME]" .Release.Name) -}}
 {{- end -}}
 ```
+}%}
 
 Afterwards, we need to create a new Helm chart for the new application. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `webpublic` Helm chart for the `WebPublic` application.
 
+{%{
 ```yaml
 # values.yaml
 image:
@@ -264,6 +267,7 @@ spec:
             port:
               number: 80
 ```
+}%}
 
 After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
 
@@ -279,12 +283,14 @@ Add the service name Regex pattern *Kubernetes Services* in the *Chart Propertie
 
 Last but not least, we need to configure the helm chart environments for identity microservice.
 
+{%{
 ```yaml
 # identity.yaml 
 # Add this line to the "env:" section
 - name: "OpenIddict__Applications__WebPublic__RootUrl"
   value: "{{ include "bookstore.hosts.webpublic" . }}"
 ```
+}%}
 
 ## Customizing the Application Template
 
