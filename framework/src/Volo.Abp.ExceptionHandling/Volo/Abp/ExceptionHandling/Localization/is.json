@@ -24,6 +24,6 @@
     "404MessageDetail": "Því miður, það er ekkert á þessu heimilisfangi.",
     "Unauthorized": "Óheimilt",
     "invalid_token": "Ógildur auðkenni",
-    "The token is no longer valid because the user's session expired.": "Auðkennið er ekki lengur gildið því að notandinn er ekki lengur innskráður."
+    "SessionExpired": "Auðkennið er ekki lengur gildið því að notandinn er ekki lengur innskráður."
   }
 }

@@ -24,6 +24,6 @@
     "404MessageDetail": "Üzgünüz, bu adreste bir şey yok.",
     "Unauthorized": "Yetkisiz",
     "invalid_token": "Geçersiz token",
-    "The token is no longer valid because the user's session expired.": "Kullanıcının oturumu sona erdiği için token artık geçerli değil."
+    "SessionExpired": "Kullanıcının oturumu sona erdiği için token artık geçerli değil."
   }
 }

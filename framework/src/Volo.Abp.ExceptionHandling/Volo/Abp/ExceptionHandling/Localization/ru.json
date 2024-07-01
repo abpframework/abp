@@ -24,6 +24,6 @@
     "404MessageDetail": "Извините, по этому адресу ничего нет.",
     "Unauthorized": "Неавторизованный",
     "invalid_token": "Неверный токен",
-    "The token is no longer valid because the user's session expired.": "Токен больше не действителен, потому что сеанс пользователя"
+    "SessionExpired": "Токен больше не действителен, потому что сеанс пользователя"
   }
 }

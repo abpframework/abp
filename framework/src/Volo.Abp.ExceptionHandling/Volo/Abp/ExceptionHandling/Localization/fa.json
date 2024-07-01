@@ -24,6 +24,6 @@
     "404MessageDetail": "با عرض پورش، در این آدرس هیچ محتوایی وجود ندارد.",
     "Unauthorized": "غیر مجاز",
     "invalid_token": "توکن نامعتبر است",
-    "The token is no longer valid because the user's session expired.": "توکن دیگر نامعتبر نیست زیرا جلسه کاربر منقضی شده است."
+    "SessionExpired": "توکن دیگر نامعتبر نیست زیرا جلسه کاربر منقضی شده است."
   }
 }

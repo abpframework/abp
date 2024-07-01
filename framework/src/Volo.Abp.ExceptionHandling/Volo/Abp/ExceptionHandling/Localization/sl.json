@@ -24,6 +24,6 @@
     "404MessageDetail": "Oprostite, na tem naslovu ni ničesar.",
     "Unauthorized": "Niste prijavljeni!",
     "invalid_token": "Neveljaven žeton",
-    "The token is no longer valid because the user's session expired.": "Žeton ni več veljaven, ker je uporabnikova seja potekla."
+    "SessionExpired": "Žeton ni več veljaven, ker je uporabnikova seja potekla."
   }
 }

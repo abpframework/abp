@@ -24,6 +24,6 @@
     "404MessageDetail": "Przepraszamy, pod tym adresem nic nie ma.",
     "Unauthorized": "Nieautoryzowany",
     "invalid_token": "Nieprawidłowy token",
-    "The token is no longer valid because the user's session expired.": "Token jest nieprawidłowy, ponieważ sesja użytkownika wygasła."
+    "SessionExpired": "Token jest nieprawidłowy, ponieważ sesja użytkownika wygasła."
   }
 }

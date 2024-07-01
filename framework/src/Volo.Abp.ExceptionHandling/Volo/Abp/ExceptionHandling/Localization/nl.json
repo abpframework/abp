@@ -24,6 +24,6 @@
     "404MessageDetail": "Sorry, op dit adres is niks gevonden.",
     "Unauthorized": "Niet geautoriseerd",
     "invalid_token": "Ongeldig token",
-    "The token is no longer valid because the user's session expired.": "Het token is niet langer geldig omdat de sessie van de gebruiker is verlopen."
+    "SessionExpired": "Het token is niet langer geldig omdat de sessie van de gebruiker is verlopen."
   }
 }

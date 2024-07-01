@@ -4,5 +4,5 @@ public static class AbpExceptionHandlingConsts
 {
     public const string Unauthorized = "Unauthorized";
     public const string InvalidToken = "invalid_token";
-    public const string SessionExpired = "The token is no longer valid because the user's session expired.";
+    public const string SessionExpired = "SessionExpired";
 }

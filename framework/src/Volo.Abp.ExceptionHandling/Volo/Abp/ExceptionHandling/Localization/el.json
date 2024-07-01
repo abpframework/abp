@@ -24,6 +24,6 @@
     "404MessageDetail": "Λυπούμαστε, δεν υπάρχει τίποτα σε αυτή τη διεύθυνση.",
     "Unauthorized": "Μη εξουσιοδοτημένος",
     "invalid_token": "Το token δ",
-    "The token is no longer valid because the user's session expired.": "Το token δεν είναι πλέον έγκυρο επειδή η συνεδρία του χρήστη έληξε."
+    "SessionExpired": "Το token δεν είναι πλέον έγκυρο επειδή η συνεδρία του χρήστη έληξε."
   }
 }

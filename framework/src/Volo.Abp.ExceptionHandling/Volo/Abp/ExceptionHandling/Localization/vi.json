@@ -24,6 +24,6 @@
     "404MessageDetail": "Xin lỗi, không có gì ở địa chỉ này.",
     "Unauthorized": "Không được phép",
     "invalid_token": "Token không hợp lệ",
-    "The token is no longer valid because the user's session expired.": "Token không còn hợp lệ vì phiên làm việc của người dùng đã hết hạn."
+    "SessionExpired": "Token không còn hợp lệ vì phiên làm việc của người dùng đã hết hạn."
   }
 }

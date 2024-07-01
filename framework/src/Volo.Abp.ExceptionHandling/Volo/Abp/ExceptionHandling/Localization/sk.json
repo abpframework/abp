@@ -24,6 +24,6 @@
     "404MessageDetail": "Je nám ľúto, ale na tejto adrese sa nič nenachádza.",
     "Unauthorized": "Neoprávnený",
     "invalid_token": "Neplatný token",
-    "The token is no longer valid because the user's session expired.": "Token je neplatný, pretože platnosť relácie používateľa vypršala."
+    "SessionExpired": "Token je neplatný, pretože platnosť relácie používateľa vypršala."
   }
 }

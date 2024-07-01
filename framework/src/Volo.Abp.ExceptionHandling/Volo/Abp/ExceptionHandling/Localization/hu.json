@@ -24,6 +24,6 @@
     "404MessageDetail": "Sajnos ezen a címen nincs semmi.",
     "Unauthorized": "Nem jogosult",
     "invalid_token": "A token érv",
-    "The token is no longer valid because the user's session expired.": "A token érvényessége lejárt, mert a felhasználó munkamenete lejárt."
+    "SessionExpired": "A token érvényessége lejárt, mert a felhasználó munkamenete lejárt."
   }
 }

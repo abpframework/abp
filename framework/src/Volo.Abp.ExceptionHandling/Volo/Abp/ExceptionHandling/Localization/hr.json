@@ -24,6 +24,6 @@
     "404MessageDetail": "Nažalost, na ovoj adresi nema ničega.",
     "Unauthorized": "Niste ovlašteni za izvođenje ove operacije.",
     "invalid_token": "Neispravan token",
-    "The token is no longer valid because the user's session expired.": "Token više nije valjan jer je korisnička sesija istekla."
+    "SessionExpired": "Token više nije valjan jer je korisnička sesija istekla."
   }
 }

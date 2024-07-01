@@ -24,6 +24,6 @@
     "404MessageDetail": "對不起，地址是空的",
     "Unauthorized": "未授權",
     "invalid_token": "無效的令牌",
-    "The token is no longer valid because the user's session expired.": "由於使用者的會話已過期，令牌不再有效。"
+    "SessionExpired": "由於使用者的會話已過期，令牌不再有效。"
   }
 }

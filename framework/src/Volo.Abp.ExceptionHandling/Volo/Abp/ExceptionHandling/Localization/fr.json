@@ -24,6 +24,6 @@
     "404MessageDetail": "Désolé, il n'y a rien à cette adresse.",
     "Unauthorized": "Non autorisé",
     "invalid_token": "Le jeton n'est pas valide.",
-    "The token is no longer valid because the user's session expired.": "Le jeton n'est plus valide car la session de l'utilisateur a expiré."
+    "SessionExpired": "Le jeton n'est plus valide car la session de l'utilisateur a expiré."
   }
 }
