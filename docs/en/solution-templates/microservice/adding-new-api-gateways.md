@@ -179,14 +179,17 @@ kubectl create secret tls -n bookstore-local bookstore-local-tls --cert=./bookst
 
 Lastly, we should define the new application in the *_helpers.tpl* file in the `etc/helm/projectname/templates` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the *_helpers.tpl* file for the `PublicGateway` application.
 
+{%{
 ```yaml
 {{- define "bookstore.hosts.publicgateway" -}}
 {{- print "https://" (.Values.global.hosts.publicgateway | replace "[RELEASE_NAME]" .Release.Name) -}}
 {{- end -}}
 ```
+}%}
 
 Afterwards, we need to create a new Helm chart for the new gateway. You can copy the configurations from the existing applications and modify them according to the new gateway. Below is an example of the `publicgateway` Helm chart for the `PublicGateway` application.
 
+{%{
 ```yaml
 # values.yaml
 image:
@@ -286,6 +289,7 @@ spec:
             port:
               number: 80
 ```
+}%}
 
 After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
 
@@ -301,6 +305,7 @@ Add the service name Regex pattern *Kubernetes Services* in the *Chart Propertie
 
 Last but not least, we need to configure the helm chart environments for identity microservice and auth-server application.
 
+{%{
 ```yaml
 # identity.yaml 
 # Add this line to the "env:" section
@@ -312,3 +317,4 @@ Last but not least, we need to configure the helm chart environments for identit
 - name: "App__CorsOrigins"
   value: "...,http://{{ .Release.Name }}-administration,{{ include "bookstore.hosts.publicgateway" . }}"
 ```
+}%}
