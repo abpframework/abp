@@ -1,10 +1,10 @@
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { DateTimeAdapter,DateAdapter,TimeAdapter } from '@abp/ng.theme.shared';
+import { DateTimeAdapter, DateAdapter, TimeAdapter } from '@abp/ng.theme.shared';
 
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import { ePropType } from '../enums/props.enum';
-import { FormPropList } from "../models/form-props";
-import { PropData } from "../models/props";
+import { FormPropList } from '../models/form-props';
+import { PropData } from '../models/props';
 import { ExtensionsService } from '../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../tokens/extensions.token';
 
@@ -16,7 +16,7 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   const extraForm = new UntypedFormGroup({});
   form.addControl(EXTRA_PROPERTIES_KEY, extraForm);
 
-  const record = data.record || {};
+  const record: any = data.record || {};
   const type = JSON.stringify(record) === '{}' ? 'create' : 'edit';
   const props: FormPropList<R> = extensions[`${type}FormProps`].get(identifier).props;
   const extraProperties = record[EXTRA_PROPERTIES_KEY] || {};
@@ -24,7 +24,11 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   props.forEach(({ value: prop }) => {
     const name = prop.name;
     const isExtraProperty = prop.isExtra || name in extraProperties;
-    let value = isExtraProperty ? extraProperties[name] : name in record ? record[name] : undefined;
+    let value = isExtraProperty
+      ? extraProperties[name as string]
+      : name in record
+        ? record[name]
+        : undefined;
 
     if (typeof value === 'undefined') value = prop.defaultValue;
 

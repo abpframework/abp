@@ -55,7 +55,7 @@ export class ExtensibleFormComponent<R = any> {
 
   extraPropertiesKey = EXTRA_PROPERTIES_KEY;
   groupedPropList!: GroupedFormPropList;
-  groupedPropListOfArray: FormProp<any>[][];
+  groupedPropListOfArray!: FormProp<any>[][];
   record!: R;
 
   get form(): UntypedFormGroup {
@@ -76,7 +76,7 @@ export class ExtensibleFormComponent<R = any> {
   }
 
   //TODO: Reactor this method
-  isAnyGroupMemberVisible(index: number, data) {
+  isAnyGroupMemberVisible(index: number, data: any) {
     const { items } = this.groupedPropList;
     const formPropList = items[index].formPropList.toArray();
     return formPropList.some(prop => prop.visible(data));

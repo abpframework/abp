@@ -39,7 +39,7 @@ export function createTypeaheadOptions(
 }
 
 export function getTypeaheadType(lookup: ExtensionPropertyUiLookupDto, name: string) {
-  if (!!lookup.url) {
+  if (!lookup.url) {
     return ePropType.Typeahead;
   } else {
     return name.endsWith(TYPEAHEAD_TEXT_SUFFIX) ? ePropType.Hidden : undefined;
