@@ -346,6 +346,7 @@ global:
 
 Afterwards, we need to create a new Helm chart for the new microservice. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `productservice` Helm chart for the `ProductService` microservice.
 
+{%{
 ```yaml
 # values.yaml
 image:
@@ -408,6 +409,7 @@ spec:
   selector:
     app: "{{ .Release.Name }}-{{ .Chart.Name }}"
 ```
+}%}
 
 After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
 
@@ -423,6 +425,7 @@ Add the *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services*
 
 Last but not least, we need to configure the helm chart environments for identity, auth-server, and gateway applications.
 
+{%{
 ```yaml
 # identity.yaml 
 # Add this line to the "env:" section
@@ -439,6 +442,7 @@ Last but not least, we need to configure the helm chart environments for identit
 - name: "ReverseProxy__Clusters__ProductService__Destinations__ProductService__Address"
   value: "http://{{ .Release.Name }}-productservice"
 ```
+}%}
 
 ## Customizing the Microservice Template
 
