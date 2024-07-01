@@ -18,7 +18,7 @@ Each leaf item (e.g. `Acme.CloudCrm.IdentityService`, `Acme.CloudCrm.Web`, `Acme
 
 ## Exploring the Folder Structure
 
-You can write-click the root item in the solution explorer (`Acme.CloudCrm` for this example) and select the *Open with* -> *Explorer* command to open the folder containing the solution in your file system:
+You can right-click the root item in the solution explorer (`Acme.CloudCrm` for this example) and select the *Open with* -> *Explorer* command to open the folder containing the solution in your file system:
 
 ![open-solution-with-explorer](images/open-solution-with-explorer.png)
 
