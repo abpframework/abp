@@ -67,7 +67,7 @@ You can add some icons for your application to be seen in specific screen sizes 
 
 You need to create `service-worker.js` and `service-worker.published.js` files under the **wwwroot** folder of your project. These files will be used by your project to determine which PWA features you want to use.
 
-You can get the simple configurations for the [service-worker.js](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.js) and [service-worker.published.js](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/service-worker.published.js) files from our [template](https://github.com/abpframework/abp/tree/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot).
+You can get the simple configurations for the [service-worker.js](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Client/wwwroot/service-worker.js) and [service-worker.published.js](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Client/wwwroot/service-worker.published.js) files from our [template](https://github.com/abpframework/abp/tree/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Client/wwwroot).
 
 After the related service worker files are added, then we need to define them in our `.csproj` file to notify our application. So open your `*.csproj` file and add the following content:
 
