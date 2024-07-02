@@ -1548,7 +1548,7 @@
           "items": [
             {
               "text": "IdentityServer Migration Guide",
-              "path": "migration-guides/identity-server4-step-by-step.md"
+              "path": "migration-guides/identityserver4-step-by-step.md"
             }
           ]
         },
