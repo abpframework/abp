@@ -965,7 +965,7 @@
                     },
                     {
                       "text": "LeptonX Lite",
-                      "path": "themes/lepton-x-lite/blazor.md"
+                      "path": "ui-themes/lepton-x-lite/blazor.md"
                     },
                     {
                       "text": "Branding",
@@ -1281,7 +1281,7 @@
                         },
                         {
                           "text": "LeptonX Lite",
-                          "path": "themes/lepton-x-lite/angular.md"
+                          "path": "ui-themes/lepton-x-lite/angular.md"
                         }
                       ]
                     },
