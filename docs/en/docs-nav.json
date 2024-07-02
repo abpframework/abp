@@ -636,7 +636,7 @@
               "items": [
                 {
                   "text": "Overall",
-                  "path": "framework/architecture/domain-driven-design/domain-driven-design.md"
+                  "path": "framework/architecture/domain-driven-design"
                 },
                 {
                   "text": "Domain Layer",
