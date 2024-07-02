@@ -59,7 +59,7 @@ First, you need to create a JSON file named **manifest.json** under the **wwwroo
 
 You can add some icons for your application to be seen in specific screen sizes and define in which screen sizes icons should be displayed in the **manifest.json** file. You can see the **icons** section in the **manifest.json** file as an example above.
 
-> You can use, default icons from our [template](https://github.com/abpframework/abp/tree/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot).
+> You can use, default icons from our [template](https://github.com/abpframework/abp/tree/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Client/wwwroot).
 
 ### 3-) Configure Service Workers
 
