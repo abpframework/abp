@@ -33,7 +33,7 @@ abp new MyCompanyName.MyProjectName -csf -u angular
 
 > To see further options in the CLI, please visit the [CLI manual](../../../cli).
 
-This command will prepare a solution with an Angular and a .NET Core project in it. Please visit [Getting Started section](../../../_deleted/getting-started.md?UI=NG&DB=EF&Tiered=No#abp-cli-commands-options) for further instructions on how to set up the backend of your solution.
+This command will prepare a solution with an Angular and a .NET Core project in it. Please visit [Getting Started section](../../../get-started/index.md?UI=NG&DB=EF&Tiered=No#abp-cli-commands-options) for further instructions on how to set up the backend of your solution.
 
 To continue reading without checking other methods, visit [Angular project structure section](#angular-project-structure).
 
@@ -91,7 +91,7 @@ Next, we will take a look at the commands used to prepare, build, and serve our 
 
 Now that you know about the files and folders, we can get the application up and running.
 
-1. Make sure the [database migration is complete](../../../_deleted/getting-started.md?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../../_deleted/getting-started?UI=NG&DB=EF&Tiered=No#run-the-application).
+1. Make sure the [database migration is complete](../../../get-started/index.md.md?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../../get-started/index.md?UI=NG&DB=EF&Tiered=No#run-the-application).
 2. Run `yarn` or `npm install` if you have not already.
 3. Run `yarn start` or `npm start`. The first compilation may take a while. This will start a [live development server](#angular-live-development-server) and launch your default browser in the end.
 4. Visit the browser page that opens after the compilation <sup id="a-certificate-error">[1](#f-certificate-error)</sup>.

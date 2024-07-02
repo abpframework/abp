@@ -6,7 +6,7 @@ This template provides a layered application structure based on the [Domain Driv
 
 This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
 
-* [The getting started document](../../_deleted/getting-started-single-layered.md) explains how to create a new application in a few minutes.
+* [The getting started document](../../get-started/single-layer-web-application.md) explains how to create a new application in a few minutes.
 * [The application development tutorial](../../tutorials/book-store/part-01.md) explains step by step application development.
 
 ## How to Start With?
@@ -206,7 +206,7 @@ You can still create unit tests for your classes which will be harder to write (
 
 Set `.Web` as the startup project and run the application. The default username is `admin` and the password is `1q2w3E*`.
 
-See [Getting Started With the ASP.NET Core MVC Template](../../_deleted/getting-started-asp-net-core-mvc-template.md) for more information.
+See [Getting Started With the ASP.NET Core MVC Template](../../get-started/layered-web-application.md) for more information.
 
 ### Tiered Structure
 
@@ -457,7 +457,7 @@ If you want to configure social/external logins for your application, please fol
 
 ## What's Next?
 
-- [The getting started document](../../_deleted/Getting-Started-Overall.md) explains how to create a new application in a few minutes.
+- [The getting started document](../../get-started) explains how to create a new application in a few minutes.
 - [The application development tutorial](../../tutorials/book-store/part-01.md) explains step by step application development.
 
 ## See Also

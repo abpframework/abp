@@ -1,6 +1,6 @@
 # Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](../_deleted//getting-started-asp-net-core-mvc-template.md)**.
+This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](../get-started/layered-web-application.md)**.
 
 ## Create a New Project
 
