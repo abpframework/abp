@@ -12,7 +12,7 @@ First of all, you can follow the official documentation to understand how the [D
 
 ### A Quick Example
 
-You can follow the [web application development tutorial](../../../tutorials/book-store/part-01.md?UI=MVC) for a complete example application that uses the DataTables.Net as the Data Table. This section shows a minimalist example.
+You can follow the [web application development tutorial](../../../tutorials/book-store/part-01.md) for a complete example application that uses the DataTables.Net as the Data Table. This section shows a minimalist example.
 
 You do nothing to add DataTables.Net library to the page since it is already added to the global [bundle](bundling-minification.md) by default.
 
