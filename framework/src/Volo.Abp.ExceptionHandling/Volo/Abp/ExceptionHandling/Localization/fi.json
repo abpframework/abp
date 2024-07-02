@@ -24,6 +24,6 @@
     "404MessageDetail": "Valitettavasti tässä osoitteessa ei ole mitään.",
     "Unauthorized": "Sinulla ei ole oikeutta suorittaa tätä toimintoa!",
     "invalid_token": "Virheellinen token",
-    "SessionExpired": "Token ei ole enää voimassa, koska käyttäjän istunto on vanhentunut."
+    "SessionExpired": "Istuntosi on vanhentunut. Kirjaudu sisään jatkaaksesi sovelluksessa."
   }
 }

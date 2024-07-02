@@ -24,6 +24,6 @@
     "404MessageDetail": "Entschuldigung, unter dieser Adresse ist nichts.",
     "Unauthorized": "Nicht autorisiert",
     "invalid_token": "Ungültiges Token",
-    "SessionExpired": "Das Token ist nicht mehr gültig, weil die Sitzung des Benutzers abgelaufen ist."
+    "SessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an, um in der Anwendung fortzufahren."
   }
 }

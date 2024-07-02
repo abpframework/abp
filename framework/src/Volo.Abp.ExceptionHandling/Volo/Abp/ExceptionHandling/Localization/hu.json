@@ -24,6 +24,6 @@
     "404MessageDetail": "Sajnos ezen a címen nincs semmi.",
     "Unauthorized": "Nem jogosult",
     "invalid_token": "A token érv",
-    "SessionExpired": "A token érvényessége lejárt, mert a felhasználó munkamenete lejárt."
+    "SessionExpired": "A munkamenete lejárt. Kérjük, jelentkezzen be újra az alkalmazásban való folytatáshoz."
   }
 }

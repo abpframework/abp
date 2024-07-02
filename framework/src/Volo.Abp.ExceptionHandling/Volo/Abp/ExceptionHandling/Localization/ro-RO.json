@@ -24,6 +24,6 @@
     "404MessageDetail": "Ne cerem scuze, nu este nimic la această adresă.",
     "Unauthorized": "Nu sunteţi autorizat să efectuaţi această operaţie.",
     "invalid_token": "Tokenul nu este valid sau a expirat.",
-    "SessionExpired": "Tokenul nu mai este valid deoarece sesiunea utilizatorului a expirat."
+    "SessionExpired": "Sesiunea dumneavoastră a expirat. Vă rugăm să vă autentificaţi din nou pentru a continua în aplicaţie."
   }
 }
