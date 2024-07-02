@@ -360,7 +360,7 @@
               "items": [
                 {
                   "text": "BLOB Storing System",
-                  "path": "framework/infrastructure/blob-storing/inded.md"
+                  "path": "framework/infrastructure/blob-storing"
                 },
                 {
                   "text": "Storage Providers",
