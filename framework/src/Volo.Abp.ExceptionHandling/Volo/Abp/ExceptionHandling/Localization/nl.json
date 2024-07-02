@@ -21,6 +21,9 @@
     "404Message": "Pagina niet gevonden",
     "500Message": "Interne Server Fout",
     "403MessageDetail": "U bent niet bevoegd om deze handeling uit te voeren!",
-    "404MessageDetail": "Sorry, op dit adres is niks gevonden."
+    "404MessageDetail": "Sorry, op dit adres is niks gevonden.",
+    "Unauthorized": "Niet geautoriseerd",
+    "invalid_token": "Ongeldig token",
+    "SessionExpired": "Uw sessie is verlopen. Log opnieuw in om door te gaan in de applicatie."
   }
 }
