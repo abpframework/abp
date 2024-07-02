@@ -254,7 +254,7 @@ Components used in the side menu layout.
 
 * The **user menu component (C# file)** is defined in the `Themes/LeptonX/Components/SideMenu/Toolbar/UserMenu/UserMenuViewComponent.cs` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.
 
-> LeptonX implements the ABP Menu [ABP Naviation/Menus]([#user-menu](../../framework/ui/mvc-razor-pages/navigation-menu.md#standard-menus)). So you can check it out to learn how to add/remove menu items to the user menu.
+> LeptonX implements the ABP Menu [ABP Naviation/Menus](../../framework/ui/mvc-razor-pages/navigation-menu.md#standard-menus). So you can check it out to learn how to add/remove menu items to the user menu.
 
 ---
 
