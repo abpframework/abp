@@ -24,6 +24,6 @@
     "404MessageDetail": "Spiacenti, non c'è niente a questo indirizzo.",
     "Unauthorized": "Non autorizzato",
     "invalid_token": "Token non valido",
-    "SessionExpired": "Il token non è più valido perché la sessione dell'utente è scaduta."
+    "SessionExpired": "La tua sessione è scaduta. Effettua nuovamente il login per continuare nell'applicazione."
   }
 }

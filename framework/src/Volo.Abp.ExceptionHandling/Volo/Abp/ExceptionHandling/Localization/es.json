@@ -24,6 +24,6 @@
     "404MessageDetail": "Disculpa, no hay nada en esta dirección.",
     "Unauthorized": "No autorizado",
     "invalid_token": "El token no es válido.",
-    "SessionExpired": "El token ya no es válido porque la sesión del usuario ha expirado."
+    "SessionExpired": "Tu sesión ha expirado. Por favor inicia sesión de nuevo para continuar en la aplicación."
   }
 }
