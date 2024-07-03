@@ -1357,6 +1357,15 @@
               ]
             },
             {
+              "text": "MAUI",
+              "items": [
+                {
+                  "text": "Overall",
+                  "path": "framework/ui/maui"
+                }
+              ]
+            },
+            {
               "text": "Common",
               "items": [
                 {
