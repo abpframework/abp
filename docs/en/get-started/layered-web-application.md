@@ -190,7 +190,7 @@ You can start the following application(s):
 - `Acme.BookStore.Web`
 {{ end }}
  
-Before starting the mobile application, ensure that you configure it for [react-native](../framework/ui/react-native) or [MAUI](./maui.md).
+Before starting the mobile application, ensure that you configure it for [react-native](../framework/ui/react-native) or [MAUI](../framework/ui/maui).
 
 ![mobile-sample](images/abp-studio-mobile-sample.gif)
 
