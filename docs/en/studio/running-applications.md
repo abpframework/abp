@@ -198,9 +198,9 @@ When the C# application is connected to ABP Studio, it starts sending telemetry 
 
 ### Properties
 
-We can open the *Application Properties* window to change *Launch url* and *Kubernetes service* information. To access the *Application Properties* window, navigate to a C# application, right-click to view the context menu, and select the Properties option.
+We can open the *Application Properties* window to change *Launch url*, *Kubernetes service* and *run* information. To access the *Application Properties* window, navigate to a C# application, right-click to view the context menu, and select the Properties option.
 
-![csharp-application-context-menu-properties](images/solution-runner/csharp-application-context-menu-properties.png)
+![solutioın-runner-properties](images/solution-runner/solutioın-runner-properties.png)
 
 You can click the `OK` button to save the changes.
 
