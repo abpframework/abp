@@ -6,7 +6,7 @@ ABP Studio (Studio) has a shortcut for running [ABP Suite](../suite) (Suite) to 
 
 ### Opening from main window
 
-The `Open` button int `ABP Suite` menu runs the Suite and opens it as a tab in the main page of Studio. It may take a few seconds to open Suite if it is not already running. The main page of Suite will be shown if there is not a module loaded in Studio. Otherwise, it will automatically open `Crud Page Generation` screen with the loaded module in Studio.
+The `Open` button in `ABP Suite` menu runs the Suite and opens it as a tab in the main page of Studio. It may take a few seconds to open Suite if it is not already running. The main page of Suite will be shown if there is not a module loaded in Studio. Otherwise, it will automatically open `Crud Page Generation` screen with the loaded module in Studio.
 
 ![suite-button-main-page](./images/suite/suite-button-main-page.png)
 
