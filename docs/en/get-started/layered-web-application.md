@@ -1,4 +1,4 @@
-# Quick Start: Creating a Layered Web Application with ABP Studio
+# Get Started with ABP: Creating a Layered Web Application
 
 ````json
 //[doc-params]
@@ -9,7 +9,7 @@
 }
 ````
 
-Welcome to ABP Studio. In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using ABP Studio.
+In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using [ABP Studio](../studio/index.md).
 
 ## Creating a New Solution
 
@@ -189,7 +189,7 @@ You can start the following application(s):
 {{ else }}
 - `Acme.BookStore.Web`
 {{ end }}
- 
+
 Before starting the mobile application, ensure that you configure it for [react-native](../framework/ui/react-native) or [MAUI](./maui.md).
 
 ![mobile-sample](images/abp-studio-mobile-sample.gif)

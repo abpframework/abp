@@ -1,6 +1,6 @@
-# Quick Start: Creating a Microservice Solution with ABP Studio
+# Get Started with ABP: Creating a Microservice Solution
 
-Welcome to ABP Studio. In this quick start guide, you will learn how to create and run a microservice solution using ABP Studio.
+In this quick start guide, you will learn how to create and run a microservice solution using [ABP Studio](../studio/index.md).
 
 ## Creating a New Solution
 
