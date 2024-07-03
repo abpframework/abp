@@ -60,7 +60,7 @@
           "text": "Book Store application",
           "items": [
             {
-              "text": "01: Creating the server side",
+              "text": "1: Creating the server side",
               "path": "tutorials/book-store/part-01.md"
             },
             {
