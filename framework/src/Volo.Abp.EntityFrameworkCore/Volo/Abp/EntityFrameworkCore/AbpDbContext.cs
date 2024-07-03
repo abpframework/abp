@@ -11,11 +11,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -24,6 +25,7 @@ using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.ChangeTrackers;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
+using Volo.Abp.EntityFrameworkCore.GlobalFilters;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.EventBus.Distributed;
@@ -37,7 +39,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
-public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
+public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, IAbpEfCoreDbFunctionContext, ITransientDependency
     where TDbContext : DbContext
 {
     public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
@@ -78,6 +80,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public IOptions<AbpDbContextOptions> Options => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpDbContextOptions>>();
 
+    public IOptions<AbpEfCoreGlobalFilterOptions> GlobalFilterOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpEfCoreGlobalFilterOptions>>();
+
     private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
         = typeof(AbpDbContext<TDbContext>)
             .GetMethod(
@@ -99,9 +103,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 BindingFlags.Instance | BindingFlags.NonPublic
             )!;
 
+    protected readonly DbContextOptions DbContextOptions;
+
     protected AbpDbContext(DbContextOptions<TDbContext> options)
         : base(options)
     {
+        DbContextOptions = options;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -713,7 +720,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         if (mutableEntityType.BaseType == null && ShouldFilterEntity<TEntity>(mutableEntityType))
         {
-            var filterExpression = CreateFilterExpression<TEntity>();
+            var filterExpression = CreateFilterExpression<TEntity>(modelBuilder);
             if (filterExpression != null)
             {
                 modelBuilder.Entity<TEntity>().HasAbpQueryFilter(filterExpression);
@@ -782,22 +789,44 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         return false;
     }
 
-    protected virtual Expression<Func<TEntity, bool>>? CreateFilterExpression<TEntity>()
+    protected virtual Expression<Func<TEntity, bool>>? CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
         where TEntity : class
     {
         Expression<Func<TEntity, bool>>? expression = null;
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {
-            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, "IsDeleted");
+            var softDeleteColumnName = modelBuilder.Entity<TEntity>().Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.GetColumnName() ?? "IsDeleted";
+            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeleteColumnName);
+            if (UseDbFunction())
+            {
+                expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
+                modelBuilder.ConfigureSoftDeleteDbFunction(AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
+            }
         }
 
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
-            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
+            var multiTenantColumnName = modelBuilder.Entity<TEntity>().Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.GetColumnName() ?? "TenantId";
+            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantColumnName) == CurrentTenantId;
+            if (UseDbFunction())
+            {
+                multiTenantFilter = e => AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilter(((IMultiTenant)e).TenantId, CurrentTenantId, true);
+                modelBuilder.ConfigureMultiTenantDbFunction(AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
+            }
             expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
         }
 
         return expression;
+    }
+
+    protected virtual bool UseDbFunction()
+    {
+        return LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null;
+    }
+
+    public virtual string GetCompiledQueryCacheKey()
+    {
+        return $"{CurrentTenantId?.ToString() ?? "Null"}:{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
     }
 }

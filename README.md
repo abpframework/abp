@@ -3,13 +3,16 @@
 ![build and test](https://img.shields.io/github/actions/workflow/status/abpframework/abp/build-and-test.yml?branch=dev&style=flat-square) 🔹 [![codecov](https://codecov.io/gh/abpframework/abp/branch/dev/graph/badge.svg?token=jUKLCxa6HF)](https://codecov.io/gh/abpframework/abp) 🔹 [![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![MyGet (nightly builds)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.svg?style=flat-square)](https://docs.abp.io/en/abp/latest/Nightly-Builds) 🔹 
 [![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![Code of Conduct](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/abpframework/abp/blob/dev/CODE_OF_CONDUCT.md) 🔹 [![CLA Signed](https://cla-assistant.io/readme/badge/abpframework/abp)](https://cla-assistant.io/abpframework/abp) 🔹 [![Discord Shield](https://discord.com/api/guilds/951497912645476422/widget.png?style=shield)](https://discord.gg/abp)
 
-ABP Framework is a complete **infrastructure** based on **ASP.NET Core** to create **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**. Check out https://abp.io
+ABP Framework is a complete **infrastructure** based on **ASP.NET Core** that creates **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.
+
+[![ABP Platform](https://github.com/abpframework/abp/assets/9526587/47531496-4088-406d-9c69-63cb0ffec2ba)](https://abp.io)
+
 
 ## Getting Started
 
-- [Quick Start](https://docs.abp.io/en/abp/latest/Tutorials/Todo/Index) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to quickly understand how ABP works.
-- [Getting Started guide](https://docs.abp.io/en/abp/latest/Getting-Started) can be used to create and run ABP based solutions with different options and details.
-- [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1) is a complete tutorial to develop a full-stack web application with all aspects of a real-life solution.
+- [Quick Start](https://docs.abp.io/en/abp/latest/Tutorials/Todo/Index) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to understand how ABP works quickly.
+- [Getting Started guide](https://docs.abp.io/en/abp/latest/Getting-Started) can be used to create and run ABP-based solutions with different options and details.
+- [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1) is a complete tutorial on developing a full-stack web application with all aspects of a real-life solution.
 
 ### Quick Start
 
@@ -130,7 +133,7 @@ ABP is a community-driven open-source project. See [the contribution guide](http
 
 
 
-## Support the ABP Framework
+## Support ABP
 
 GitHub repository stars are an important indicator of popularity and the size of the community. If you like ABP Framework, support us by clicking the star :star: on the repository.
 

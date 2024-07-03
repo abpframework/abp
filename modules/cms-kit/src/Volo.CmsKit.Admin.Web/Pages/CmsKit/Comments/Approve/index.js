@@ -57,8 +57,8 @@
                 orderable: false,
                 visible: abp.auth.isGranted('CmsKit.Comments.Update'),
                 render: function (data, type, row) {
-                    let approveButton = $(`<button class="btn btn-xs btn-success change-status" data-id="${row.id}" data-status="true" data-toggle="tooltip" data-placement="top" title="${l('Approve')}"><i class="fa fa-check"></i></button>`);
-                    let rejectButton = $(`<button class="btn btn-xs btn-danger change-status" data-id="${row.id}" data-status="false" data-toggle="tooltip" data-placement="top" title="${l('Disapproved')}"><i class="fa fa-times"></i></button>`);
+                    let approveButton = $(`<button class="btn btn-xs btn-success change-status text-light" data-id="${row.id}" data-status="true" data-toggle="tooltip" data-placement="top" title="${l('Approve')}"><i class="fa fa-check"></i></button>`);
+                    let rejectButton = $(`<button class="btn btn-xs btn-danger change-status text-light" data-id="${row.id}" data-status="false" data-toggle="tooltip" data-placement="top" title="${l('Disapproved')}"><i class="fa fa-times"></i></button>`);
                     let buttons = [];
                     buttons.push(approveButton);
                     buttons.push(rejectButton);
@@ -95,6 +95,16 @@
                 render: function (data) {
                     if (data !== null) {
                         return GetFilterableDatatableContent('#EntityType', $.fn.dataTable.render.text().display(data));
+                    }
+                    return "";
+                }
+            },
+            {
+                title: l("URL"),
+                data: "url",
+                render: function (data, type, row) {
+                    if (data !== null) {
+                        return '<a href="' + data + '#comment-' + row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
                     }
                     return "";
                 }

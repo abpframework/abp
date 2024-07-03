@@ -21,6 +21,9 @@
     "404Message": "Stránka nebola nájdená",
     "500Message": "Interná chyba servera",
     "403MessageDetail": "Nie ste oprávnený vykonávať túto operáciu!",
-    "404MessageDetail": "Je nám ľúto, ale na tejto adrese sa nič nenachádza."
+    "404MessageDetail": "Je nám ľúto, ale na tejto adrese sa nič nenachádza.",
+    "Unauthorized": "Neoprávnený",
+    "invalid_token": "Neplatný token",
+    "SessionExpired": "Vaša relácia vypršala. Prihláste sa znova, aby ste mohli pokračovať v aplikácii."
   }
 }

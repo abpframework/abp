@@ -21,6 +21,9 @@
     "404Message": "Sayfa bulunamadı",
     "500Message": "Sunucu tarafında hata",
     "403MessageDetail": "Bu işlemi gerçekleştirmek için gereken yetkiye sahip değilsiniz!",
-    "404MessageDetail": "Üzgünüz, bu adreste bir şey yok."
+    "404MessageDetail": "Üzgünüz, bu adreste bir şey yok.",
+    "Unauthorized": "Yetkisiz",
+    "invalid_token": "Geçersiz token",
+    "SessionExpired": "Oturumunuz sona erdi. Uygulamaya devam etmek için lütfen tekrar giriş yapın."
   }
 }

@@ -66,7 +66,7 @@ acme.bookStore.authors.author.get = function(id, ajaxParams) {
 };
 ````
 
-> `generate-proxy` command generates proxies for only the APIs you've defined in your application (assumes `app` as the module name). If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../CLI.md) documentation for other options.
+> `generate-proxy` command generates proxies for only the APIs you've defined in your application (assumes `app` as the module name). If you are developing a modular application, you can specify the `-m` (or `--module`) parameter to specify the module you want to generate proxies. See the *generate-proxy* section in the [ABP CLI](../../CLI.md) documentation for other options.
 
 ### Using the Proxy Functions
 
