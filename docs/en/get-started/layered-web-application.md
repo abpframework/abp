@@ -1,4 +1,4 @@
-# Quick Start: Creating a Layered Web Application with ABP Studio
+# Get Started with ABP: Creating a Layered Web Application
 
 ````json
 //[doc-params]
@@ -9,7 +9,7 @@
 }
 ````
 
-Welcome to ABP Studio. In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using ABP Studio.
+In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using [ABP Studio](../studio/index.md).
 
 ## Creating a New Solution
 
@@ -93,7 +93,7 @@ You can explore the solution, but you need to wait for background tasks to be co
 
 After creating your solution, you can open it in your favorite IDE (e.g. Visual Studio, Visual Studio Code or Rider) and start your development. However, ABP Studio provides a *Solution Runner* system. You can use it to easily run and browse your applications in your solution without needing an external tool.
 
-Open the Solution Runner section on the left side of ABP Studio as shown in the following figure:
+Open the [Solution Runner](../studio/running-applications.md) section on the left side of ABP Studio as shown in the following figure:
 
 > The solution runner structure can be different in your case based on the options you've selected.
 

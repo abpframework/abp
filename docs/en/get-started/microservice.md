@@ -1,6 +1,6 @@
-# Quick Start: Creating a Microservice Solution with ABP Studio
+# Get Started with ABP: Creating a Microservice Solution
 
-Welcome to ABP Studio. In this quick start guide, you will learn how to create and run a microservice solution using ABP Studio.
+In this quick start guide, you will learn how to create and run a microservice solution using [ABP Studio](../studio/index.md).
 
 ## Creating a New Solution
 
@@ -111,7 +111,7 @@ You will typically add new microservices to the solution and perform your busine
 
 Running a microservice solution is not like running a monolith application where you typically have a single executable. All the applications, services, gateways, and infrastructure components (e.g. Redis, RabbitMQ) should be up and running. Fortunately, ABP Studio provides the *Solution Runner* and *Kubernetes Integration* features to make it easy and enjoyable.
 
-Open the *Solution Runner* section on the left side of ABP Studio as shown in the following figure:
+Open the [Solution Runner](../studio/running-applications.md) section on the left side of ABP Studio as shown in the following figure:
 
 ![abp-studio-microservice-solution-runner](images/abp-studio-microservice-solution-runner.png)
 
@@ -190,7 +190,7 @@ Solution Runner is a great way to locally run all the applications and services 
 * If your solution grows and you have tens or hundreds of services, running all the system in your local environment will consume your system resources (CPU, RAM, ...) a lot.
 * In the end, your solution will work in a production environment, and Kubernetes is currently the de-facto tool to deploy such distributed solutions. Running your solution in a local or remote Kubernetes environment will be much closer to a production environment.
 
-ABP Studio's Kubernetes Integration feature is a great way to deploy your microservice solution to Kubernetes and locally develop your services by integrating your local environment to a Kubernetes cluster.
+ABP Studio's [Kubernetes Integration](../studio/kubernetes.md) feature is a great way to deploy your microservice solution to Kubernetes and locally develop your services by integrating your local environment to a Kubernetes cluster.
 
 Open the *Kubernetes* section on the left side of ABP Studio as shown in the following figure:
 

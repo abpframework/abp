@@ -1,4 +1,4 @@
-# Quick Start: Creating a Single Layer Web Application with ABP Studio
+# Get Started with ABP: Creating a Single Layer Web Application
 
 ````json
 //[doc-params]
@@ -8,11 +8,13 @@
 }
 ````
 
-Welcome to ABP Studio. In this quick start guide, you will learn how to create and run a single layer web application using ABP Studio.
+In this quick start guide, you will learn how to create and run a single layer web application using [ABP Studio](../studio/index.md).
 
 ## Creating a New Solution
 
 > 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is in the beta version now. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.
+
+> ABP startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
 Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:
 
@@ -68,7 +70,7 @@ You can explore the solution, but you need to wait for background tasks to be co
 
 After creating your solution, you can open it in your favorite IDE (e.g. Visual Studio, Visual Studio Code or Rider) and start your development. However, ABP Studio provides a *Solution Runner* system. You can use it to easily run and browse your applications in your solution without needing an external tool.
 
-Open the Solution Runner section on the left side of ABP Studio as shown in the following figure:
+Open the [Solution Runner](../studio/running-applications.md) section on the left side of ABP Studio as shown in the following figure:
 
 > The solution runner structure can be different in your case based on the options you've selected.
 
