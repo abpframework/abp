@@ -58,7 +58,7 @@ This part is also recorded as a video tutorial and **<a href="https://www.youtub
 
 ## Creating the Solution
 
-Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../../get-started).
+Before starting the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../../get-started/layered-web-application.md).
 
 ## After Creating the Solution
 
