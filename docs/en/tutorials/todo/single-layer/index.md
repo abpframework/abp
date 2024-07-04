@@ -872,4 +872,4 @@ You can find the source code of the completed application [here](https://github.
 
 ## See Also
 
-* Check the [Web Application Development Tutorial](../../book-store/part-01.md) to see a real-life web application development in a layered architecture using the [Application Startup Template](../../../solution-templates/layered-web-application).
+* Check the [Web Application Development Tutorial](../../book-store/part-01.md) to see a real-life web application development in a layered architecture using the [Layered Application Startup Template](../../../solution-templates/layered-web-application).
