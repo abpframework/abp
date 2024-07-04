@@ -90,7 +90,7 @@ var abp = abp || {};
                     return "";
                 }
 
-                var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
+                var $button = $('<button type="button" class="btn btn-primary btn-sm abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
                     $button.html(abp.utils.isFunction(firstItem.text) ? firstItem.text(record, tableInstance) : firstItem.text);
