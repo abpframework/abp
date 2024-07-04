@@ -12,11 +12,11 @@
 {
   "Next": {
     "Name": "Authors: Application Layer",
-    "Path": "Tutorials/Part-8"
+    "Path": "tutorials/book-store/part-08"
   },
   "Previous": {
     "Name": "Authors: Domain Layer",
-    "Path": "Tutorials/Part-6"
+    "Path": "tutorials/book-store/part-06"
   }
 }
 ````

@@ -11,11 +11,11 @@
 {
   "Next": {
     "Name": "Creating, Updating and Deleting Books",
-    "Path": "Tutorials/Part-3"
+    "Path": "tutorials/book-store/part-03"
   },
   "Previous": {
     "Name": "Creating the Server Side",
-    "Path": "Tutorials/Part-1"
+    "Path": "tutorials/book-store/part-01"
   }
 }
 ````

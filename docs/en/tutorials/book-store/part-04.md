@@ -12,11 +12,11 @@
 {
   "Next": {
     "Name": "Authorization",
-    "Path": "Tutorials/Part-5"
+    "Path": "tutorials/book-store/part-05"
   },
   "Previous": {
     "Name": "Creating, Updating and Deleting Books",
-    "Path": "Tutorials/Part-3"
+    "Path": "tutorials/book-store/part-03"
   }
 }
 ````

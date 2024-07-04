@@ -12,7 +12,7 @@
 {
   "Previous": {
     "Name": "Authors: User Interface",
-    "Path": "Tutorials/Part-9"
+    "Path": "tutorials/book-store/part-09"
   }
 }
 ````
