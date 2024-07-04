@@ -20,12 +20,21 @@ namespace Volo.Abp.Emailing;
 /// </summary>
 public abstract class EmailSenderBase : IEmailSender
 {
+    public ILogger<EmailSenderBase> Logger { get; set; }
+
+    protected ICurrentTenant CurrentTenant { get; }
+
+    protected IEmailSenderConfiguration Configuration { get; }
+
+    protected IBackgroundJobManager BackgroundJobManager { get; }
+
     /// <summary>
     /// Constructor.
     /// </summary>
-    protected EmailSenderBase(ICurrentTenant currentTenant,
-                              IEmailSenderConfiguration configuration,
-                              IBackgroundJobManager backgroundJobManager)
+    protected EmailSenderBase(
+        ICurrentTenant currentTenant,
+        IEmailSenderConfiguration configuration,
+        IBackgroundJobManager backgroundJobManager)
     {
         Logger = NullLogger<EmailSenderBase>.Instance;
 
@@ -34,11 +43,57 @@ public abstract class EmailSenderBase : IEmailSender
         BackgroundJobManager = backgroundJobManager;
     }
 
-    public ILogger<EmailSenderBase> Logger { get; set; }
+public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
+    {
+        await SendAsync(BuildMailMessage(null, to, subject, body, isBodyHtml, additionalEmailSendingArgs));
+    }
 
-    protected IBackgroundJobManager BackgroundJobManager { get; }
-    protected IEmailSenderConfiguration Configuration { get; }
-    protected ICurrentTenant CurrentTenant { get; }
+    public virtual async Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
+    {
+        await SendAsync(BuildMailMessage(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs));
+    }
+
+    protected virtual MailMessage BuildMailMessage(string? from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
+    {
+        var message = from == null
+            ? new MailMessage { To = { to }, Subject = subject, Body = body, IsBodyHtml = isBodyHtml }
+            : new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
+
+        if (additionalEmailSendingArgs != null)
+        {
+            if (additionalEmailSendingArgs.Attachments != null)
+            {
+                foreach (var attachment in additionalEmailSendingArgs.Attachments.Where(x => x.File != null))
+                {
+                    var fileStream = new MemoryStream(attachment.File!);
+                    fileStream.Seek(0, SeekOrigin.Begin);
+                    message.Attachments.Add(new Attachment(fileStream, attachment.Name));
+                }
+            }
+
+            if (additionalEmailSendingArgs.CC != null)
+            {
+                foreach (var cc in additionalEmailSendingArgs.CC)
+                {
+                    message.CC.Add(cc);
+                }
+            }
+        }
+
+        return message;
+    }
+
+    public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
+    {
+        await NormalizeMailForBase64DataAsync(mail);
+
+        if (normalize)
+        {
+            await NormalizeMailAsync(mail);
+        }
+
+        await SendEmailAsync(mail);
+    }
 
     public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
@@ -50,7 +105,7 @@ public abstract class EmailSenderBase : IEmailSender
             return;
         }
 
-        _ = await BackgroundJobManager.EnqueueAsync(
+        await BackgroundJobManager.EnqueueAsync(
             new BackgroundEmailSendingJobArgs
             {
                 TenantId = CurrentTenant.Id,
@@ -73,7 +128,7 @@ public abstract class EmailSenderBase : IEmailSender
             return;
         }
 
-        _ = await BackgroundJobManager.EnqueueAsync(
+        await BackgroundJobManager.EnqueueAsync(
             new BackgroundEmailSendingJobArgs
             {
                 TenantId = CurrentTenant.Id,
@@ -87,90 +142,43 @@ public abstract class EmailSenderBase : IEmailSender
         );
     }
 
-    public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
-    {
-        await SendAsync(BuildMailMessage(null, to, subject, body, isBodyHtml, additionalEmailSendingArgs));
-    }
-
-    public virtual async Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
-    {
-        await SendAsync(BuildMailMessage(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs));
-    }
-
-    public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
-    {
-        NormalizeMailForBase64Data(mail);
-        if (normalize)
-        {
-            await NormalizeMailAsync(mail);
-        }
-
-        await SendEmailAsync(mail);
-    }
-
-    protected virtual MailMessage BuildMailMessage(string? from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
-    {
-        var message = from == null
-            ? new MailMessage { To = { to }, Subject = subject, Body = body, IsBodyHtml = isBodyHtml }
-            : new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
-
-        if (additionalEmailSendingArgs != null)
-        {
-            if (additionalEmailSendingArgs.Attachments != null)
-            {
-                foreach (var attachment in additionalEmailSendingArgs.Attachments.Where(x => x.File != null))
-                {
-                    var fileStream = new MemoryStream(attachment.File!);
-                    _ = fileStream.Seek(0, SeekOrigin.Begin);
-                    message.Attachments.Add(new Attachment(fileStream, attachment.Name));
-                }
-            }
-
-            if (additionalEmailSendingArgs.CC != null)
-            {
-                foreach (var cc in additionalEmailSendingArgs.CC)
-                {
-                    message.CC.Add(cc);
-                }
-            }
-        }
-
-        return message;
-    }
-
-    /// <summary>
-    /// Normalizes given email. Fills <see cref="MailMessage.From"/> if it's not filled before. Sets
-    /// encodings to UTF8 if they are not set before.
-    /// </summary>
-    /// <param name="mail">Mail to be normalized</param>
-    protected virtual async Task NormalizeMailAsync(MailMessage mail)
-    {
-        if (mail.From == null || mail.From.Address.IsNullOrEmpty())
-        {
-            mail.From = new MailAddress(await Configuration.GetDefaultFromAddressAsync(),
-                                        await Configuration.GetDefaultFromDisplayNameAsync(),
-                                        Encoding.UTF8);
-        }
-
-        mail.HeadersEncoding ??= Encoding.UTF8;
-
-        mail.SubjectEncoding ??= Encoding.UTF8;
-
-        mail.BodyEncoding ??= Encoding.UTF8;
-    }
-
     /// <summary>
     /// Should implement this method to send email in derived classes.
     /// </summary>
     /// <param name="mail">Mail to be sent</param>
     protected abstract Task SendEmailAsync(MailMessage mail);
 
-    private static void NormalizeMailForBase64Data(MailMessage mail)
+    /// <summary>
+    /// Normalizes given email.
+    /// Fills <see cref="MailMessage.From"/> if it's not filled before.
+    /// Sets encodings to UTF8 if they are not set before.
+    /// </summary>
+    /// <param name="mail">Mail to be normalized</param>
+    protected virtual async Task NormalizeMailAsync(MailMessage mail)
+    {
+        if (mail.From == null || mail.From.Address.IsNullOrEmpty())
+        {
+            mail.From = new MailAddress(
+                await Configuration.GetDefaultFromAddressAsync(),
+                await Configuration.GetDefaultFromDisplayNameAsync(),
+                Encoding.UTF8
+                );
+        }
+
+        mail.HeadersEncoding ??= Encoding.UTF8;
+        mail.SubjectEncoding ??= Encoding.UTF8;
+        mail.BodyEncoding ??= Encoding.UTF8;
+    }
+
+    protected virtual Task NormalizeMailForBase64DataAsync(MailMessage mail)
     {
         var htmlBody = mail.Body;
 
         // Find all base64 tags in the html message.
-        var base64Tags = Regex.Matches(htmlBody, @"src\s*=\s*(""|')\s*data\s*:\s*(?<mediaType>[\w/\-\.]+);(?<encoding>\w+),(?<data>.*?)(""|')", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+        var base64Tags = Regex.Matches(
+            htmlBody,
+            @"src\s*=\s*(""|')\s*data\s*:\s*(?<mediaType>[\w/\-\.]+);(?<encoding>\w+),(?<data>.*?)(""|')",
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
         foreach (Match base64Tag in base64Tags)
         {
@@ -200,10 +208,11 @@ public abstract class EmailSenderBase : IEmailSender
                                                         Encoding.UTF8,
                                                         MediaTypeNames.Text.Plain);
 
-            LinkedResource img = new(dataStream, mediaType)
+            var img = new LinkedResource(dataStream, mediaType)
             {
                 ContentId = name
             };
+
             img.ContentType.MediaType = mediaType;
             img.TransferEncoding = TransferEncoding.Base64;
             img.ContentType.Name = img.ContentId;
@@ -212,7 +221,10 @@ public abstract class EmailSenderBase : IEmailSender
             mail.AlternateViews.Add(plainView);
             mail.AlternateViews.Add(htmlView);
         }
+
         mail.Body = htmlBody;
+
+        return Task.CompletedTask;
     }
 
     private static void ValidateEmailAddress(string emailAddress)
