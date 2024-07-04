@@ -1786,6 +1786,14 @@
           "path": "others/aspnet-zero-vs-abp.md"
         },
         {
+          "text": "Migrating from Open Source Templates",
+          "path": "guides/migrating-from-open-source.md"
+        },
+        {
+          "text": "Migrating from IdentityServer to OpenIddict",
+          "path": "release-info/migration-guides/openiddict-step-by-step.md"
+        },
+        {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "others/aspnet-boilerplate-migration-guide.md"
         }
