@@ -25,7 +25,7 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts:
 
-- **[Part 1: Creating the server side](part-01.md)**
+- [Part 1: Creating the server side](part-01.md)
 - [Part 2: The book list page](part-02.md)
 - [Part 3: Creating, updating and deleting books](part-03.md)
 - [Part 4: Integration tests](part-04.md)
