@@ -262,7 +262,10 @@
                                     <input class="form-control"
                                            id="fullsearch"
                                            type="search"
-                                           data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
+                                           data-fullsearch-url="@Url.Page("/Documents/Search", new Dictionary<string, object> {
+                                                                    { nameof(Model.LanguageCode), Model.LanguageCode },
+                                                                    { nameof(Model.Version), Model.Version },
+                                                                    { nameof(Model.ProjectName), Model.ProjectName }})"
                                            placeholder="@L["FullSearch"].Value"
                                            aria-label="Filter">
                                 </div>
@@ -381,7 +384,7 @@
                     <div data-spy="scroll" data-bs-target="#docs-sticky-index" data-offset="0">
                         <article class="docs-body">
 
-                            @if (Model.DocumentLanguageCode != Model.LanguageCode)
+                            @if (Model.LanguageCode != null && Model.DocumentLanguageCode != Model.LanguageCode)
                             {
                                 <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
                                     @L["DocumentNotFoundInSelectedLanguage"]
@@ -480,7 +483,7 @@ else
         {
             model = new ErrorPageModel
             {
-                RedirectUrl = Model.DocumentsUrlPrefix,
+                RedirectUrl = Url.Page("/Projects/Index"),
                 ErrorCode = "404",
                 ErrorMessage = L.GetString("ProjectNotFound")
             }
@@ -493,8 +496,7 @@ else
         {
             model = new ErrorPageModel
             {
-                RedirectUrl = Model.DocumentsUrlPrefix + Model.LanguageCode + "/" + Model.ProjectName + "/"
-                              + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
+                RedirectUrl = Model.BuildDocumentUrl(Model.ProjectName, Model.LanguageCode, Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version, null),
                 ErrorCode = "404",
                 ErrorMessage = L.GetString("DocumentNotFound"),
                 AutoRedirect = !Model.DocumentName.IsNullOrWhiteSpace()

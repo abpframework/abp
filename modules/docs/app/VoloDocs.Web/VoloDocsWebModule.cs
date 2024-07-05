@@ -75,10 +75,13 @@ namespace VoloDocs.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            Configure<DocsUiOptions>(options =>
-            {
-                options.RoutePrefix = null;
-            });
+            // Configure<DocsUiOptions>(options =>
+            // {
+            //     options.RoutePrefix = null;
+            //     options.SingleProjectMode.Enable = true;
+            //     options.SingleProjectMode.ProjectName = "abp";
+            //     options.MultiLanguageMode = false;
+            // });
 
             Configure<DocsElasticSearchOptions>(options =>
             {
