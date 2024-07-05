@@ -2,7 +2,7 @@
 
 Localization API allows you to get the values of the settings on the client side. You can read the current value of a setting in the client side only if it is allowed by the setting definition (on the server side).
 
-> This document only explains the JavaScript API. See the [settings document](../../../fundamentals/settings.md) to understand the ABP setting system.
+> This document only explains the JavaScript API. See the [settings document](../../../infrastructure/settings.md) to understand the ABP setting system.
 
 ## Basic Usage
 

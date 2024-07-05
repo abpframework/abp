@@ -1,6 +1,6 @@
 # Blazor UI: Settings
 
-Blazor applications can reuse the same `ISettingProvider` service that is explained in the [settings document](../../fundamentals/settings.md).
+Blazor applications can reuse the same `ISettingProvider` service that is explained in the [settings document](../../infrastructure/settings.md).
 
 ## ISettingProvider
 
@@ -60,4 +60,4 @@ public class MyService : ITransientDependency
 
 ## See Also
 
-* [Settings](../../fundamentals/settings.md)
+* [Settings](../../infrastructure/settings.md)

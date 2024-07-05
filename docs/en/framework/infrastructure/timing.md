@@ -104,7 +104,7 @@ This section covers the ABP infrastructure related to managing time zones.
 
 ABP defines **a setting**, named `Abp.Timing.TimeZone`, that can be used to set and get the time zone for a user, [tenant](../architecture/multi-tenancy) or globally for the application. The default value is `UTC`.
 
-See the [setting documentation](../fundamentals/settings.md) to learn more about the setting system.
+See the [setting documentation](../infrastructure/settings.md) to learn more about the setting system.
 
 ### ITimezoneProvider
 
