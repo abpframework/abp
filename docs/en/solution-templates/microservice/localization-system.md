@@ -50,3 +50,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 ```
 
 > Existing microservices in the solution don't contain the localization text. These localization resources are defined in their own modules. You can add new localization resources to the existing microservices by following the steps above.
+
+## Next
+
+* [Background jobs in the Microservice solution](background-jobs.md)

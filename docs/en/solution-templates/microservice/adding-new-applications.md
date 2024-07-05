@@ -295,3 +295,7 @@ Last but not least, we need to configure the helm chart environments for identit
 ## Customizing the Application Template
 
 You can customize the application template if needed. Add new configurations, dependencies, or modules to the template by opening the `_templates` folder in the root directory and then the `web` folder. Modify the `web` template as required. The naming convention dictates that *microservicename* represents the name of the application when created. Use *microservicename* in the template files for dynamic naming. In the `web` folder, there are 3 subfolders: *Blazor*, *BlazorServer*, and *MVC*. You can customize the template according to the UI framework you selected when creating the new application. 
+
+## Next
+
+* [Adding new API gateways to Microservice solution](adding-new-api-gateways.md)

@@ -24,3 +24,6 @@ You can easily understand the Serilog configuration when you check your `Program
 * We are adding an `Application` property to every log record, so you can filter logs by the application name. It is done in the `Program.cs` file with the `.Enrich.WithProperty("Application", applicationName)` line. The `applicationName` value is taken from [the `IApplicationInfoAccessor` service](../../framework/fundamentals/application-startup.md#the-applicationname-option) of ABP. By default, it is the name of the entrance assembly (that contains the `Program.cs` file) of the application.
 * We are using ABP Serilog Enrichers in the module class of the application. It is done by the `app.UseAbpSerilogEnrichers();` line in the `OnApplicationInitialization` method of your module class. That ASP.NET Core middleware adds current [tenant](../../framework/architecture/multi-tenancy/index.md), [user](../../framework/infrastructure/current-user.md), client and correlation id information to the log records.
 
+## Next
+
+* [Monitoring in the Microservice solution](monitoring.md)

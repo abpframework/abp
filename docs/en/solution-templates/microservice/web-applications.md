@@ -61,3 +61,7 @@ If you've selected the Blazor Server UI while creating your solution, `Acme.Clou
 ### MAUI Blazor (Hybrid) Web Application
 
 If you've selected the MAUI Blazor (Hybrid) UI while creating your solution, `Acme.CloudCrm.MauiBlazor` project is included in the `apps` folder of the solution. That folder contains the main desktop application of the solution that is implemented using MAUI Blazor (Hybrid) that uses existing Blazor UI Implementation.
+
+## Next
+
+* [Mobile applications in the Microservice solution](mobile-applications.md)

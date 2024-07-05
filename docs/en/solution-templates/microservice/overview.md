@@ -4,7 +4,8 @@ In this document, you will learn what the Microservice solution template offers 
 
 ## The Big Picture
 
-***TODO: Prepare a diagram of the fundamental components of the system.***
+![ms-overall-architecture](images/overall-architecture.png)
+*Figure: Overall Diagram of the Solution (not all associations are shown, for the sake of simplicity)*
 
 ## Pre-Installed Libraries & Services
 

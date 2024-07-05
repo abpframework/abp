@@ -331,7 +331,7 @@ If you want to deploy the new microservice to Kubernetes, you should create a He
 First, we need to add the new microservice to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `build-all-images.ps1` script for the `ProductService` microservice.
 
 ```powershell
-./build-image.ps1 -ProjectPath "../../services/product-service/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
+./build-image.ps1 -ProjectPath "../../services/product/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
 ```
 
 Then, we need to add the connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `ProductService` microservice.
@@ -461,3 +461,7 @@ Next, start creating *Pages* and *Components* for the new microservice in the UI
 ```bash
 abp generate-proxy -t ng -url http://localhost:44333/ -m productService
 ```
+
+## Next
+
+* [Adding new applications to Microservice solution](adding-new-applications.md)

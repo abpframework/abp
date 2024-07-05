@@ -70,3 +70,7 @@ In the multiple repos approach, each microservice has its own repository. You ca
 ## Conclusion
 
 The choice between mono-repo and multiple repos depends on various factors including team size, project complexity, and organizational needs. Both mono-repo and multiple repository approaches have their pros and cons. The decision should be based on the specific context of the project, taking into account factors such as team structure, scalability needs, and management preferences. By carefully considering these aspects, organizations can choose the repository strategy that best aligns with their goals and operational requirements.
+
+## Next
+
+* [Authoring unit and integration tests in the Microservice solution](authoring-unit-and-integration-tests.md)

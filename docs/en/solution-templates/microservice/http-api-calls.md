@@ -34,3 +34,7 @@ After exposing the Integration Services, you can call the HTTP APIs of other mic
 For a real-world example, inspect the *Administration* microservice, which communicates via HTTP with the *Identity* microservice.
 
 > When you enable the Integration Services, ensure that only the microservices within the cluster can access the endpoints. The existing gateway applications do not expose the Integration Service endpoints to the outside world.
+
+## Next
+
+* [gRPC calls in the Microservice solution](grpc-calls.md)

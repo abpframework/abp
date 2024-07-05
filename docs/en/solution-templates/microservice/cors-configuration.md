@@ -9,3 +9,7 @@ In the microservice solution template, the CORS configuration is set up in the `
     "CorsOrigins": "http://localhost:44388,http://localhost:44324,http://localhost:44377"
   }
 ```
+
+## Next
+
+* [Communication in the Microservice solution](communication.md)

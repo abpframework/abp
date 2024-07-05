@@ -54,3 +54,7 @@ You can run the `uninstall.ps1` script to uninstall the solution from a Kubernet
 Additionally, in ABP Studio [Kubernetes](../../studio/kubernetes.md) feature, you can do the same operations more easily. You can use the Install Chart(s) and Uninstall Chart(s) commands to install and uninstall the solution to a Kubernetes cluster. Also, use the Build Docker Image(s) command to build the Docker images of the solution.
 
 ![kubernetes](images/kubernetes.png)
+
+## Next
+
+* [Miscellaneous guides in the Microservice solution](guides.md)

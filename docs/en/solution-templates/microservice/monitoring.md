@@ -60,3 +60,7 @@ public class DemoController : AbpController
 ## Kubernetes Monitoring
 
 If you check the *Kubernetes Configuration* option during project creation, the monitoring system is automatically configured for Kubernetes. The `prometheus` and `grafana` configurations are added to the `helm` chart.
+
+## Next
+
+* [Swagger integration in the Microservice solution](swagger-integration.md)

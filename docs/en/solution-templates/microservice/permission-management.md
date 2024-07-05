@@ -52,3 +52,7 @@ public class IdentityServicePermissionDefinitionProvider : PermissionDefinitionP
 ```
 
 > Since identity related permissions comes from [Identity](../../modules/identity-pro.md) module, there is no need to define new permissions. However, you can add new permissions to the *Identity* microservice if you need.
+
+## Next
+
+* [Feature management in the Microservice solution](feature-management.md)

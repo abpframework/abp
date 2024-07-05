@@ -56,3 +56,7 @@ Additionally, you can use the [DataFilter](../../framework/infrastructure/data-f
         }
     }
 ```
+
+## Next
+
+* [BLOB storing in the Microservice solution](blob-storing.md)

@@ -55,3 +55,7 @@ public class BookService : ITransientDependency
 ```
 
 Lastly, you can use the [Entity Cache](../../framework/infrastructure/entity-cache.md) feature, which offers a pre-built caching mechanism. If the requested item is not in the cache, it retrieves the data from the database, and when related data is manipulated, it automatically removes the item from the cache to ensure data consistency.
+
+## Next
+
+* [Multi-Tenancy in the Microservice solution](multi-tenancy.md)

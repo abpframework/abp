@@ -55,3 +55,7 @@ public class FormsFeatureDefinitionProvider : FeatureDefinitionProvider
     }
 }
 ```
+
+## Next
+
+* [Localization system in the Microservice solution](localization-system.md)

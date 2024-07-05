@@ -19,3 +19,7 @@ In the microservice solution template, [RabbitMQ](https://www.rabbitmq.com/) is 
 ```
 
 Additionally, there is docker-compose configuration for RabbitMQ in the `docker-compose.yml` file and helm chart configuration in the `etc/helm` folder.
+
+## Next
+
+* [Background workers in the Microservice solution](background-workers.md)

@@ -81,6 +81,22 @@ If you've selected the [GDPR](../../modules/gdpr.md) module while [creating your
 
 This microservice basically serves the [GDPR](../../modules/gdpr.md) module's HTTP API, creates and manages its database.
 
-Next
+### File Management Microservice (optional)
+
+If you've selected the [File Management](../../modules/file-management.md) module while [creating your solution](../../get-started/microservice.md), the file management microservice is added to the solution as shown in the following figure:
+
+![file-management-microservice-in-solution-explorer](images/file-management-microservice-in-solution-explorer.png)
+
+This microservice basically serves the [File Management](../../modules/file-management.md) module's HTTP API, creates and manages its database.
+
+### Chat Microservice (optional)
+
+If you've selected the [Chat](../../modules/chat.md) module while [creating your solution](../../get-started/microservice.md), the Chat microservice is added to the solution as shown in the following figure:
+
+![chat-microservice-in-solution-explorer](images/chat-microservice-in-solution-explorer.png)
+
+This microservice basically serves the [Chat](../../modules/chat.md) module's HTTP API, creates and manages its database.
+
+## Next
 
 * [API Gateways in the Microservice solution](api-gateways.md)

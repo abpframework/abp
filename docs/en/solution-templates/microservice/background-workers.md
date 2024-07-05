@@ -47,3 +47,7 @@ public class AdministrationServiceModule : AbpModule
 ```
 
 > An important point in distributed systems is that the same background workers could be running in multiple instances of the same service. So, you should be careful about the side effects of the workers. For example, if you are processing a message from a queue, you should ensure that the message is processed only once. You can use [distributed locking](../../framework/infrastructure/distributed-locking.md) to prevent multiple instances from processing the same message. You can find more information about distributed locking in microservice environments in the [distributed locking](distributed-locking.md) document.
+
+## Next
+
+* [Distributed locking in the Microservice solution](distributed-locking.md)

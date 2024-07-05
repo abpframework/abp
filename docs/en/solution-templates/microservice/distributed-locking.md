@@ -45,3 +45,7 @@ public class MyService : ITransientDependency
     }
 }
 ```
+
+## Next
+
+* [Distributed cache in the Microservice solution](distributed-cache.md)

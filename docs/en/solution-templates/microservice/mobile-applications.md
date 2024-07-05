@@ -153,3 +153,7 @@ React Native applications can't be run with the solution runner. You need to run
 Before running the React Native application, rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices.
 
 Then you can run the React Native application by following this documentation: [Getting Started with the React Native](../../framework/ui/react-native/index.md).
+
+## Next
+
+* [Built-in features in the Microservice solution](built-in-features.md)

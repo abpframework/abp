@@ -86,3 +86,7 @@ private void ConfigureDistributedEventBus()
 ```
 
 > One downside of using the outbox/inbox pattern is that since messages are stored in the database, each microservice needs its own database schema. This can be problematic if you use EntityFrameworkCore and want to share the same database connection between microservices. Having two different database schemas (DbContexts) with the same table name will cause conflicts.
+
+## Next
+
+* [Helm charts and Kubernetes in the Microservice solution](helm-charts-and-kubernetes.md)

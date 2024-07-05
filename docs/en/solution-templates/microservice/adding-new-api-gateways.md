@@ -318,3 +318,7 @@ Last but not least, we need to configure the helm chart environments for identit
   value: "...,http://{{ .Release.Name }}-administration,{{ include "bookstore.hosts.publicgateway" . }}"
 ```
 }%}
+
+## Next
+
+* [Mono-repo vs multiple repository approaches](mono-repo-vs-multiple-repository-approaches.md)

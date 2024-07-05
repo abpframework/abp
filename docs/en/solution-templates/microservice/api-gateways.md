@@ -121,3 +121,7 @@ Now, you are authenticated with the user you've used while logging in to the app
 When you execute that API, the server should return a JSON value as shown in the following screenshot:
 
 ![identity-roles-get-api-swagger-ui-result](images/identity-roles-get-api-swagger-ui-result.png)
+
+## Next
+
+* [Web applications in the Microservice solution](web-applications.md)
