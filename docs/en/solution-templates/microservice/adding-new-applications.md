@@ -1,5 +1,15 @@
 # Microservice Solution: Adding New Applications
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Adding new API gateways to Microservice solution",
+    "Path": "solution-templates/microservice/adding-new-api-gateways"
+  }
+}
+````
+
 You can add new applications to the microservice solution template. This document explains how to add new web applications to the solution. In the solution template, there is a folder named `apps` in the root directory, which contains all the applications in the solution. You can create separate applications for different purposes, such as web applications, public websites for landing pages, or admin panels.
 
 Additionally, there is a folder named `_templates` in the root directory. This folder contains templates you can use to create new microservices, API gateways, and applications. These templates can be customized according to your needs.
@@ -295,7 +305,3 @@ Last but not least, we need to configure the helm chart environments for identit
 ## Customizing the Application Template
 
 You can customize the application template if needed. Add new configurations, dependencies, or modules to the template by opening the `_templates` folder in the root directory and then the `web` folder. Modify the `web` template as required. The naming convention dictates that *microservicename* represents the name of the application when created. Use *microservicename* in the template files for dynamic naming. In the `web` folder, there are 3 subfolders: *Blazor*, *BlazorServer*, and *MVC*. You can customize the template according to the UI framework you selected when creating the new application. 
-
-## Next
-
-* [Adding new API gateways to Microservice solution](adding-new-api-gateways.md)

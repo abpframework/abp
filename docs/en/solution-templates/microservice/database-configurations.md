@@ -1,5 +1,15 @@
 # Microservice Solution: Database Configurations
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Logging in the Microservice solution",
+    "Path": "solution-templates/microservice/logging"
+  }
+}
+````
+
 This document explains the database configuration and migration structure that is designed and implemented in the ABP Studio Microservice solution template.
 
 ## Database Configurations
@@ -428,7 +438,3 @@ When you initially run the application on your development environment, or when 
 For example, the Identity microservice will fail on startup if the Administration service wasn't started before and created the database. All **these are expected and nothing to worry about**. That is the nature of distributed system.
 
 The solution has designed to tolerate these startup failures and everything will be working in a few seconds or minutes. ABP Studio solution runner and Kubernetes have systems to restart a failed service, so the service will restart and try it again until its startup dependencies are satisfied.
-
-## Next
-
-* [Logging in the Microservice solution](logging.md)

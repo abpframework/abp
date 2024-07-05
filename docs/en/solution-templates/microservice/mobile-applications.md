@@ -1,5 +1,15 @@
 # Microservice Solution: Mobile Applications
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Built-in features in the Microservice solution",
+    "Path": "solution-templates/microservice/built-in-features"
+  }
+}
+````
+
 The ABP Studio microservice solution template comes with an optional mobile application that is completely integrated to the solution. There are two options for the mobile application:
 
 * MAUI
@@ -153,7 +163,3 @@ React Native applications can't be run with the solution runner. You need to run
 Before running the React Native application, rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices.
 
 Then you can run the React Native application by following this documentation: [Getting Started with the React Native](../../framework/ui/react-native/index.md).
-
-## Next
-
-* [Built-in features in the Microservice solution](built-in-features.md)

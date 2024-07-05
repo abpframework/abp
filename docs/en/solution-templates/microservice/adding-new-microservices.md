@@ -1,5 +1,15 @@
 # Microservice Solution: Adding New Microservices
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Adding new applications to Microservice solution",
+    "Path": "solution-templates/microservice/adding-new-applications"
+  }
+}
+````
+
 This document explains how to add new microservices to the microservice solution template. In the solution template, there is a folder named `services` in the root directory, which contains all the microservices in the solution. Each microservice is a separate ASP.NET Core application that can be developed, tested, and deployed independently.
 
 Additionally, there is a folder named `_templates` in the root directory. This folder contains templates you can use to create new microservices, API gateways, and applications. These templates can be customized according to your needs.
@@ -461,7 +471,3 @@ Next, start creating *Pages* and *Components* for the new microservice in the UI
 ```bash
 abp generate-proxy -t ng -url http://localhost:44333/ -m productService
 ```
-
-## Next
-
-* [Adding new applications to Microservice solution](adding-new-applications.md)

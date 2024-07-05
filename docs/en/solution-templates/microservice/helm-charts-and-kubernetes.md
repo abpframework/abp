@@ -1,5 +1,15 @@
 # Microservice Solution: Helm Charts and Kubernetes
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Miscellaneous guides in the Microservice solution",
+    "Path": "solution-templates/microservice/guides"
+  }
+}
+````
+
 This document explains how to deploy the microservice solution to a Kubernetes cluster using [Helm](https://helm.sh/) charts. The microservice solution template includes Helm charts for each microservice, API gateway, application, and infrastructure (Redis, RabbitMQ, etc). You can use these charts to deploy the solution to a Kubernetes cluster. You can see the Helm charts in the `etc/helm` folder of the solution.
 
 ## Folder Structure
@@ -54,7 +64,3 @@ You can run the `uninstall.ps1` script to uninstall the solution from a Kubernet
 Additionally, in ABP Studio [Kubernetes](../../studio/kubernetes.md) feature, you can do the same operations more easily. You can use the Install Chart(s) and Uninstall Chart(s) commands to install and uninstall the solution to a Kubernetes cluster. Also, use the Build Docker Image(s) command to build the Docker images of the solution.
 
 ![kubernetes](images/kubernetes.png)
-
-## Next
-
-* [Miscellaneous guides in the Microservice solution](guides.md)

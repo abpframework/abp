@@ -1,5 +1,15 @@
 # Microservice Solution: Feature Management
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Localization system in the Microservice solution",
+    "Path": "solution-templates/microservice/localization-system"
+  }
+}
+````
+
 The *Administration* microservice is responsible for managing features. It is used by all the services and applications in the solution. This document explains how feature management works in the microservice solution. It's similar to the [permission management](permission-management.md). When we send a request to `/api/abp/application-configuration`, the gateway application forwards the request to the *Administration* microservice. The *Administration* microservice returns the application configuration, which includes the [features](../../framework/infrastructure/features.md) for the current user tenant. You can see the details of the application configuration here: [Application Configuration](../../framework/api-development/standard-apis/configuration.md).
 
 Since [Feature Management](../../modules/feature-management.md) is a fundamental feature module, each microservice depends on the *Volo.Abp.FeatureManagement.EntityFrameworkCore* or *Volo.Abp.FeatureManagement.MongoDB* package. These modules provide the necessary infrastructure (such as `IFeatureStore`) to check features. Additionally, the *Administration* microservice depends on the *Volo.Abp.FeatureManagement.Application*, *Volo.Abp.FeatureManagement.HttpApi* packages to manage features.
@@ -55,7 +65,3 @@ public class FormsFeatureDefinitionProvider : FeatureDefinitionProvider
     }
 }
 ```
-
-## Next
-
-* [Localization system in the Microservice solution](localization-system.md)

@@ -1,5 +1,15 @@
 # Microservice Solution: The Microservices
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "API Gateways in the Microservice solution",
+    "Path": "solution-templates/microservice/api-gateways"
+  }
+}
+````
+
 The ABP Studio Microservice solution consists of a few microservices at the beginning. It is expected that you [add more microservices](guides/add-new-microservice.md) as your solution grows. This document briefly explains the structure of pre-built microservices in the solution.
 
 The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:
@@ -96,7 +106,3 @@ If you've selected the [Chat](../../modules/chat.md) module while [creating your
 ![chat-microservice-in-solution-explorer](images/chat-microservice-in-solution-explorer.png)
 
 This microservice basically serves the [Chat](../../modules/chat.md) module's HTTP API, creates and manages its database.
-
-## Next
-
-* [API Gateways in the Microservice solution](api-gateways.md)

@@ -1,5 +1,15 @@
 # Microservice Solution: Authentication
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Database configurations in the Microservice solution",
+    "Path": "solution-templates/microservice/database-configurations"
+  }
+}
+````
+
 The [microservice solution template](index.md) is fully configured for authentication. All the services and applications are configured to use the [OpenIddict](https://documentation.openiddict.com) library for authentication. They are configured in a common way for authentication. This document explains that common authentication structure.
 
 ## OpenIddict
@@ -27,7 +37,3 @@ The solution has an authentication server (auth-server) application to provide t
 ## Authentication Flows
 
 The applications use several flows to authenticate users based on the application type. The MVC UI web application uses the [hybrid flow](https://openid.net/specs/openid-connect-core-1_0.html#HybridFlowAuth) (OpenID Connect Authentication) to authenticate users, while the SPA and Swagger applications use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) to authenticate users. After the user logs into the system and receives the token from the authentication server, the applications (microservices) use [JWT Bearer Authentication](https://jwt.io/introduction/) to authorize users.
-
-## Next
-
-* [Database configurations in the Microservice solution](database-configurations.md)

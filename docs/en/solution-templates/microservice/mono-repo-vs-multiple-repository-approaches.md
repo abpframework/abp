@@ -1,5 +1,15 @@
 # Microservice Solution: Mono-repo vs Multiple Repository Approaches
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authoring unit and integration tests in the Microservice solution",
+    "Path": "solution-templates/microservice/authoring-unit-and-integration-tests"
+  }
+}
+````
+
 Microservices architecture breaks down an application into a series of small, loosely coupled services. Each microservice is designed to fulfill a specific business function and can be developed, deployed, and scaled independently. One of the critical decisions in implementing microservices is choosing the repository structure: mono-repo or multiple repos.
 
 ## Mono-repo Approach
@@ -70,7 +80,3 @@ In the multiple repos approach, each microservice has its own repository. You ca
 ## Conclusion
 
 The choice between mono-repo and multiple repos depends on various factors including team size, project complexity, and organizational needs. Both mono-repo and multiple repository approaches have their pros and cons. The decision should be based on the specific context of the project, taking into account factors such as team structure, scalability needs, and management preferences. By carefully considering these aspects, organizations can choose the repository strategy that best aligns with their goals and operational requirements.
-
-## Next
-
-* [Authoring unit and integration tests in the Microservice solution](authoring-unit-and-integration-tests.md)

@@ -1,5 +1,15 @@
 # Microservice Solution: The Structure
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Main Components",
+    "Path": "solution-templates/microservice/main-components"
+  }
+}
+````
+
 This document explains the solution and folder structure of ABP Studio's [microservice solution template](index.md).
 
 > This document assumes that you've created a new microservice solution by following the *[Quick Start: Creating a Microservice Solution with ABP Studio](../../get-started/microservice.md)* guide.
@@ -39,7 +49,3 @@ The folder structure basically matches to the solution in ABP Studio's *Solution
 * `services` folder contains the microservices. The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:
   * `administration` microservice is used to manage permissions, languages and other fundamental settings of the system.
   * `identity` microservice is used to manage users, roles and their permissions. It basically serves to the [Identity](../../modules/identity.md) module's UI (and [OpenIddict](../../modules/openiddict.md) module's UI, if selected).
-
-## Next
-
-* [Main Components](main-components.md)

@@ -1,5 +1,15 @@
 # Microservice Solution: Distributed Events
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Helm charts and Kubernetes in the Microservice solution",
+    "Path": "solution-templates/microservice/helm-charts-and-kubernetes"
+  }
+}
+````
+
 The microservice solution template uses the [Distributed Event Bus](../../framework/infrastructure/event-bus/distributed/index.md) mechanism to enable asynchronous communication between microservices. The Event Bus employs a publish-subscribe pattern, allowing microservices to communicate without being aware of each other, which helps in decoupling them and making them more independent.
 
 In the microservice solution template, [RabbitMQ](https://www.rabbitmq.com/) is used as the message broker to manage these events. The functionality is implemented in the `Volo.Abp.EventBus.RabbitMQ` package, which provides the necessary implementations to publish and subscribe to events using RabbitMQ. This setup is integrated into the microservice solution template and is used in microservice/application projects. You can change the RabbitMQ configuration in the `appsettings.json` file of the related project. The default configuration is as follows:
@@ -86,7 +96,3 @@ private void ConfigureDistributedEventBus()
 ```
 
 > One downside of using the outbox/inbox pattern is that since messages are stored in the database, each microservice needs its own database schema. This can be problematic if you use EntityFrameworkCore and want to share the same database connection between microservices. Having two different database schemas (DbContexts) with the same table name will cause conflicts.
-
-## Next
-
-* [Helm charts and Kubernetes in the Microservice solution](helm-charts-and-kubernetes.md)
