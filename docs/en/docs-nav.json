@@ -101,7 +101,7 @@
               "path": "tutorials/book-store/part-10.md"
             }
           ]
-        },        
+        },
         {
           "text": "Community Articles",
           "path": "https://abp.io/community"
@@ -302,10 +302,6 @@
               "path": "framework/fundamentals/options.md"
             },
             {
-              "text": "Settings",
-              "path": "framework/fundamentals/settings.md"
-            },
-            {
               "text": "Validation",
               "path": "framework/fundamentals/validation.md",
               "items": [
@@ -503,6 +499,10 @@
               "path": "framework/infrastructure/object-to-object-mapping.md"
             },
             {
+              "text": "Settings",
+              "path": "framework/infrastructure/settings.md"
+            },
+            {
               "text": "Simple State Checker",
               "path": "framework/infrastructure/simple-state-checker.md"
             },
@@ -608,7 +608,7 @@
                 {
                   "text": "Plug-In Modules",
                   "path": "framework/architecture/modularity/plugin-modules.md"
-                },                
+                },
                 {
                   "text": "Customizing/Extending Modules",
                   "items": [
@@ -1125,11 +1125,11 @@
                     {
                       "text": "HTTP Requests",
                       "items": [
-                        { 
+                        {
                           "text": "How to Make HTTP Requests",
                           "path": "framework/ui/angular/http-requests.md"
                         },
-                        { 
+                        {
                           "text": "Customize Error Handling",
                           "path": "framework/ui/angular/http-error-handling.md"
                         }
@@ -1578,7 +1578,7 @@
               "text": "OpenIddict Migration Guide",
               "path": "release-info/migration-guides/openiddict-step-by-step.md"
             }
-          ]          
+          ]
         },
         {
           "text": "OpenIddict (Pro)",

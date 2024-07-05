@@ -43,7 +43,7 @@ There are a lot of features provided by the ABP to achieve real world scenarios 
 
 #### Cross Cutting Concerns
 
-ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](./framework/fundamentals/exception-handling.md), [Validation](./framework/fundamentals/validation.md), [Authorization](./framework/fundamentals/authorization.md), [Localization](./framework/fundamentals/localization.md), [Caching](./framework/fundamentals/caching.md), [Dependency Injection](./framework/fundamentals/dependency-injection.md), [Setting Management](./framework/fundamentals/settings.md), etc. 
+ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](./framework/fundamentals/exception-handling.md), [Validation](./framework/fundamentals/validation.md), [Authorization](./framework/fundamentals/authorization.md), [Localization](./framework/fundamentals/localization.md), [Caching](./framework/fundamentals/caching.md), [Dependency Injection](./framework/fundamentals/dependency-injection.md), [Setting Management](./framework/infrastructure/settings.md), etc. 
 
 ### Tooling
 

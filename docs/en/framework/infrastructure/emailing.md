@@ -3,7 +3,7 @@
 ABP provides various services, settings and integrations for sending emails;
 
 * Provides `IEmailSender` service that is used to send emails.
-* Defines [settings](../fundamentals/settings.md) to configure email sending.
+* Defines [settings](../infrastructure/settings.md) to configure email sending.
 * Integrates to the [background job system](./background-jobs) to send emails via background jobs.
 * Provides [MailKit integration](./mail-kit.md) package.
 
@@ -86,7 +86,7 @@ See the [background jobs document](./background-jobs) for more about the backgro
 
 ## Email Settings
 
-Email sending uses the [setting system](../fundamentals/settings.md) to define settings and get the values of these settings on the runtime. `Volo.Abp.Emailing.EmailSettingNames` defines constants for the setting names, just listed below:
+Email sending uses the [setting system](../infrastructure/settings.md) to define settings and get the values of these settings on the runtime. `Volo.Abp.Emailing.EmailSettingNames` defines constants for the setting names, just listed below:
 
 * **Abp.Mailing.DefaultFromAddress**: Used as the sender's email address when you don't specify a sender when sending emails (just like in the example above).
 * **Abp.Mailing.DefaultFromDisplayName**: Used as the sender's display name when you don't specify a sender when sending emails (just like in the example above).
@@ -120,7 +120,7 @@ If you don't use the Setting Management module, you can simply define the settin
 }
 ````
 
-You can set/change these settings programmatically using the `ISettingManager` and store values in a database. See the [setting system document](../fundamentals/settings.md) to understand the setting system better.
+You can set/change these settings programmatically using the `ISettingManager` and store values in a database. See the [setting system document](../infrastructure/settings.md) to understand the setting system better.
 
 ### Encrypt the SMTP Password
 

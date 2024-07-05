@@ -29,7 +29,7 @@ The following features are built and pre-configured for you in the solution.
   * **OpenId Connect Authentication**, if you have selected the MVC UI.
   * **Authorization code flow** is implemented, if you have selected a SPA UI (Angular or Blazor WASM).
   * Other flows (resource owner password, client credentials...) are easy to use when you need them.
-* **[Permission](../../framework/fundamentals/authorization.md)** (authorization), **[setting](../../framework/fundamentals/settings.md)**, **[feature](../../framework/infrastructure/features.md)** and the **[localization](../../framework/fundamentals/localization.md)** management systems are pre-configured and ready to use.
+* **[Permission](../../framework/fundamentals/authorization.md)** (authorization), **[setting](../../framework/infrastructure/settings.md)**, **[feature](../../framework/infrastructure/features.md)** and the **[localization](../../framework/fundamentals/localization.md)** management systems are pre-configured and ready to use.
 * **[Background job system](../../framework/infrastructure/background-jobs/index.md)** with [RabbitMQ integrated](../../framework/infrastructure/background-jobs/rabbitmq.md).
 * **[BLOB storge](../../framework/infrastructure/blob-storing/index.md)** system is installed with the [database provider](../../framework/infrastructure/blob-storing/database.md) and a separate database.
 * **On-the-fly database migration** system (services automatically migrated their database schema when you deploy a new version)

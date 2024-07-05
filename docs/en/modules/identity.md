@@ -132,7 +132,7 @@ Configure<IdentityOptions>(options =>
 });
 ````
 
-ABP takes these options one step further and allows you to change them on runtime by using the [setting system](../framework/fundamentals/settings.md). You can [inject](../framework/fundamentals/dependency-injection.md) `ISettingManager` and use one of the `Set...` methods to change the option values for a user, a tenant or globally for all users.
+ABP takes these options one step further and allows you to change them on runtime by using the [setting system](../framework/infrastructure/settings.md). You can [inject](../framework/fundamentals/dependency-injection.md) `ISettingManager` and use one of the `Set...` methods to change the option values for a user, a tenant or globally for all users.
 
 **Example: Change minimum required length of passwords for the current tenant**
 

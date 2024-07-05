@@ -1,6 +1,6 @@
 # Setting Management Module
 
-Setting Management Module implements the `ISettingStore` (see [the setting system](../framework/fundamentals/settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.
+Setting Management Module implements the `ISettingStore` (see [the setting system](../framework/infrastructure/settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.
 
 > Setting Management module is already installed and configured for [the startup templates](../solution-templates). So, most of the times you don't need to manually add this module to your application.
 
@@ -75,7 +75,7 @@ Setting values are cached using the [distributed cache](../framework/fundamental
 
 ## Setting Management Providers
 
-Setting Management module is extensible, just like the [setting system](../framework/fundamentals/settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered it the following order:
+Setting Management module is extensible, just like the [setting system](../framework/infrastructure/settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered it the following order:
 
 * `DefaultValueSettingManagementProvider`: Gets the value from the default value of the setting definition. It can not set the default value since default values are hard-coded on the setting definition.
 * `ConfigurationSettingManagementProvider`: Gets the value from the [IConfiguration service](../framework/fundamentals/configuration.md). It can not set the configuration value because it is not possible to change the configuration values on runtime.
@@ -114,7 +114,7 @@ The order of the providers are important. Providers are executed in the reverse 
 
 ## See Also
 
-* [Settings](../framework/fundamentals/settings.md)
+* [Settings](../framework/infrastructure/settings.md)
 
 ## Setting Management UI
 
