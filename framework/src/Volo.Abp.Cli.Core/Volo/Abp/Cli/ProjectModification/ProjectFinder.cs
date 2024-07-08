@@ -49,10 +49,10 @@ public static class ProjectFinder
                        FindProjectEndsWith(projectFiles, assemblyNames, ".HttpApi.Host") ??
                        FindProjectEndsWith(projectFiles, assemblyNames, ".Web");
             case NuGetPackageTarget.Blazor:
-                return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor")
+                return FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor.Client")
                     ?? FindProjectEndsWith(projectFiles, assemblyNames, ".MauiBlazor");;
             case NuGetPackageTarget.BlazorWebAssembly:
-                var BlazorWebAssemblyTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor");
+                var BlazorWebAssemblyTargetProject = FindProjectEndsWith(projectFiles, assemblyNames, ".Blazor.Client");
                 return BlazorWebAssemblyTargetProject != null &&
                        !BlazorProjectTypeChecker.IsBlazorServerProject(BlazorWebAssemblyTargetProject)
                     ? BlazorWebAssemblyTargetProject
