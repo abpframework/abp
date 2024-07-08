@@ -1819,6 +1819,7 @@
     "EncryptionDecryptionServicesExplanation": "ABP provides string encryption feature that allows to <b>Encrypt</b> and <b>Decrypt</b> strings.",
     "BackgroundWorkers": "Background Workers",
     "BackgroundWorkersExplanation": "Define operations to run in a separate, dedicated thread. Use the built-in background workers or integrate your own. <a href=\"{0}\">Hangfire</a> and <a href=\"{1}\">Quartz</a> integrations are already available.",
+    "ConcurrencyCheck": "Concurrency Check",
     "ConcurrencyCheckExplanation": "ABP provides an optimistic concurrency check mechanism to ensure data consistency in your application and prevents users access or change the same data in a database at the same time."
   }
 }
