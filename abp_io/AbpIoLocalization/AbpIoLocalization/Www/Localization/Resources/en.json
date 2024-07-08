@@ -115,7 +115,7 @@
     "DependencyInjection": "Dependency Injection",
     "DependencyInjectionByConventions": "Dependency Injection by Conventions",
     "ModularityExplanation": "ABP provides a complete infrastructure to build your own application modules that may have entities, services, database integration, APIs, UI components and so on..",
-    "MultiTenancyExplanation": "ABP framework doesn't only support developing multi-tenant applications, but also makes your code mostly unaware of the multi-tenancy.",
+    "MultiTenancyExplanation": "ABP doesn't only support developing multi-tenant applications, but also makes your code mostly unaware of the multi-tenancy.",
     "MultiTenancyExplanation2": "Can automatically determine the current tenant, isolate data of different tenants from each other.",
     "MultiTenancyExplanation3": "Supports single database, database per tenant and hybrid approaches.",
     "MultiTenancyExplanation4": "You focus on your business code and let the framework handle multi-tenancy on behalf of you.",
@@ -1810,6 +1810,15 @@
     "Videos_Page_Title": "{0} - Video Post | ABP.IO",
     "AskQuestionsOnSupport": "You can ask questions on ABP Support.",
     "MicroserviceApplicationExplanation1": "Creates a distributed solution.",
-    "MicroserviceApplicationExplanation2": "Recommended for large teams to create complex and scalable systems."
+    "MicroserviceApplicationExplanation2": "Recommended for large teams to create complex and scalable systems.",
+    "CancellationSupport": "Cancellation Support",
+    "CancellationSupportExplanation": "ABP allows for the graceful termination of asynchronous operations in applications, ensuring proper resource cleanup and responsive user experience.",
+    "DistributedLocking": "Distributed Locking",
+    "DistributedLockingExplanation": "ABP's distributed locking system ensures that resources are accessed in a mutually exclusive manner across different nodes in a distributed environment, preventing concurrent conflicts and ensuring data consistency.",
+    "EncryptionDecryptionServices": "Encryption & Decryption Services",
+    "EncryptionDecryptionServicesExplanation": "ABP provides string encryption feature that allows to <b>Encrypt</b> and <b>Decrypt</b> strings.",
+    "BackgroundWorkers": "Background Workers",
+    "BackgroundWorkersExplanation": "Define operations to run in a separate, dedicated thread. Use the built-in background workers or integrate your own. <a href=\"{0}\">Hangfire</a> and <a href=\"{1}\">Quartz</a> integrations are already available.",
+    "ConcurrencyCheckExplanation": "ABP provides an optimistic concurrency check mechanism to ensure data consistency in your application and prevents users access or change the same data in a database at the same time."
   }
 }
