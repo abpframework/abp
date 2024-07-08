@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AspNetCore.Components.DependencyInjection;
-using Volo.Abp.AspNetCore.Components.Server;
+using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
 

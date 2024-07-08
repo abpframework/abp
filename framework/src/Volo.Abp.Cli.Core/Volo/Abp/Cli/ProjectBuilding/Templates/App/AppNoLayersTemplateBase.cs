@@ -249,6 +249,11 @@ public abstract class AppNoLayersTemplateBase : TemplateInfo
             steps.Add(new ChangeThemeStyleStep());
         }
 
+        if (context.BuildArgs.Theme != Theme.LeptonX)
+        {
+            steps.Add(new RemoveFileStep("LeptonXFooter.razor", false));
+        }
+
         RemoveThemeLogoFolders(context, steps);
 
         if (IsDefaultThemeForTemplate(context.BuildArgs))

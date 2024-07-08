@@ -1166,6 +1166,10 @@
                   "path": "UI/Angular/Ellipsis-Directive.md"
                 },
                 {
+                  "text": "Projection Strategy",
+                  "path": "UI/Angular/Projection-Strategy.md"
+                },
+                {
                   "text": "Context Strategy",
                   "path": "UI/Angular/Context-Strategy.md"
                 },

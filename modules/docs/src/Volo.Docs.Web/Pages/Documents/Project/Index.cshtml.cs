@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 using Volo.Docs.Documents;
@@ -20,6 +21,7 @@ using Volo.Docs.Models;
 using Volo.Docs.Projects;
 using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.Localization;
+using Volo.Docs.Utils;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -63,8 +65,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
-        public string DocumentsUrlPrefix { get; set; }
-
         public bool ShowProjectsCombobox { get; set; }
         
         public bool ShowProjectsComboboxLabel { get; set; }
@@ -91,6 +91,8 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentSectionRenderer _documentSectionRenderer;
         private readonly DocsUiOptions _uiOptions;
+        
+        protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
 
         public IndexModel(
             IDocumentAppService documentAppService,
@@ -119,44 +121,26 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            var documentPath = DocumentName ?? "";
-
-            string[] documentNames;
-
-            if (displayUrl.EndsWith("/index", StringComparison.OrdinalIgnoreCase))
-            {
-                documentPath = documentPath.Substring(0, documentPath.LastIndexOf('/') + 1);
-            }
-
-            documentNames = new[] { DocumentName, documentPath.EnsureEndsWith('/') + "Index", documentPath.EnsureEndsWith('/') + "index" };
-
-            foreach (var documentName in documentNames)
-            {
-                DocumentName = documentName;
-                try
-                {
-                    return await SetPageAsync();
-                }
-                catch (DocumentNotFoundException exception)
-                {
-                    Logger.LogWarning(exception.Message);
-                }
-            }
-            DocumentFound = false;
-            Response.StatusCode = 404;
-            return Page();
+            
+            return await SetPageAsync();
         }
 
         private async Task<IActionResult> SetPageAsync()
         {
-            DocumentsUrlPrefix = _uiOptions.RoutePrefix;
-            ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
+            ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox && !_uiOptions.SingleProjectMode.Enable;
             ShowProjectsComboboxLabel = ShowProjectsCombobox && _uiOptions.ShowProjectsComboboxLabel;
             FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
 
             try
             {
                 await SetProjectAsync();
+                if (Project == null)
+                {
+                    ProjectFound = false;
+                    Response.StatusCode = 404;
+                    return Page();
+                }
+                
             }
             catch (EntityNotFoundException e)
             {
@@ -171,25 +155,36 @@ namespace Volo.Docs.Pages.Documents.Project
                 await SetProjectsAsync();
             }
 
-            await SetVersionAsync();
+            if (!await TrySetVersionAsync())
+            {
+                return RedirectToDefaultVersion();
+            }
             await SetLanguageList();
 
             if (IsDefaultDocument())
             {
                 return RedirectToDefaultDocument();
             }
+            
+            var usingSingleLanguageMode = !_uiOptions.MultiLanguageMode && LanguageCode.IsNullOrWhiteSpace();
 
-            if (!CheckLanguage())
+            if (!usingSingleLanguageMode && !CheckLanguage())
             {
                 return RedirectToDefaultLanguage();
             }
 
-            if (IsDocumentCultureDifferentThanCurrent())
+            if (!usingSingleLanguageMode && IsDocumentCultureDifferentThanCurrent())
             {
                 return ReloadPageWithCulture();
             }
 
-            await SetDocumentAsync();
+            if (!await TrySetDocumentAsync())
+            {
+                DocumentFound = false;
+                Response.StatusCode = 404;
+                return Page();
+            }
+
             await SetNavigationAsync();
             SetLanguageSelectListItems();
 
@@ -217,12 +212,29 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetProjectAsync()
         {
-            Project = await _projectAppService.GetAsync(ProjectName);
+            if (!_uiOptions.SingleProjectMode.Enable)
+            {
+                Project = await _projectAppService.GetAsync(ProjectName);
+                return;
+            }
+            
+            var singleProjectName = ProjectName ?? _uiOptions.SingleProjectMode.ProjectName;
+            if (!singleProjectName.IsNullOrWhiteSpace())
+            {
+                Project = await _projectAppService.GetAsync(singleProjectName);
+                return;
+            }
+            
+            var listResult = await _projectAppService.GetListAsync();
+            if (listResult.Items.Count == 1)
+            {
+                Project = listResult.Items[0];
+            }
         }
 
         private async Task SetLanguageList()
         {
-            LanguageConfig = await _projectAppService.GetLanguageListAsync(ProjectName, Version);
+            LanguageConfig = await _projectAppService.GetLanguageListAsync(Project.ShortName, Version);
             SetDefaultLanguageCode();
         }
 
@@ -233,61 +245,62 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private bool CheckLanguage()
         {
-            return LanguageConfig.Languages.Any(l => l.Code == LanguageCode);
+            return LanguageConfig.Languages.Any(l => l.Code.Equals(LanguageCode, StringComparison.OrdinalIgnoreCase));
         }
 
         private IActionResult ReloadPageWithCulture()
         {
-            var sb = new StringBuilder();
-
-            var returnUrl = sb.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(ProjectName)
-                .Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName).ToString();
-
-            sb.Clear();
-
-            return Redirect(sb.Append("/Abp/Languages/Switch?culture=").Append(LanguageCode).Append("&uiCulture=")
-                .Append(LanguageCode).Append("&returnUrl=").Append(returnUrl).ToString());
+            return Redirect(
+                new StringBuilder()
+                    .Append("/Abp/Languages/Switch?culture=")
+                    .Append(LanguageCode).Append("&uiCulture=")
+                    .Append(LanguageCode).Append("&returnUrl=").Append(DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode,
+                        LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, DocumentName)).ToString());
         }
 
         public string GetFullUrlOfTheLatestDocument()
         {
-            return Request.Scheme + "://" + Request.Host.Value + Request.PathBase +
-                   DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" +
-                   DocsAppConsts.Latest + "/" + DocumentName;
+            return Request.Scheme + Uri.SchemeDelimiter + Request.Host.Value + Request.PathBase + DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, DocsAppConsts.Latest, DocumentName);
         }
         
         public string CreateDocumentLink(string documentName)
         {
-            return new StringBuilder()
-                .Append(DocumentsUrlPrefix)
-                .Append(LanguageCode)
-                .Append('/')
-                .Append(ProjectName)
-                .Append('/')
-                .Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version)
-                .Append('/')
-                .Append(documentName)
-                .ToString();
+            return DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, documentName);
+        }
+        
+        public string BuildDocumentUrl(string projectName, string languageCode, string version, string documentName)
+        {
+            return DocsLinkGenerator.GenerateLink(projectName, languageCode, version, documentName);
         }
 
         private IActionResult RedirectToDefaultLanguage()
         {
-            return RedirectToPage(new {
-                projectName = ProjectName,
-                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
-                languageCode = DefaultLanguageCode,
-                documentName = DocumentName
-            });
+            return Redirect(DocsLinkGenerator.GenerateLink(
+                ProjectName, 
+                DefaultLanguageCode, 
+                LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version,
+                DocumentName
+            ));
+        }
+        
+        private IActionResult RedirectToDefaultVersion()
+        {
+            return Redirect(DocsLinkGenerator.GenerateLink(
+                ProjectName,
+                LanguageCode,
+                DocsAppConsts.Latest,
+                DocumentName
+            ));
         }
 
         private IActionResult RedirectToDefaultDocument()
         {
-            return RedirectToPage(new {
-                projectName = ProjectName,
-                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
-                documentName = "",
-                languageCode = DefaultLanguageCode
-            });
+            return Redirect(DocsLinkGenerator.GenerateLink (
+                ProjectName,
+                DefaultLanguageCode,
+                LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, 
+                ""
+            ));
         }
 
         private async Task SetProjectsAsync()
@@ -308,18 +321,10 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return null;
             }
-
-            return new StringBuilder()
-                .Append(DocumentsUrlPrefix)
-                .Append(LanguageCode)
-                .Append('/')
-                .Append(project.ShortName)
-                .Append('/')
-                .Append(DocsAppConsts.Latest)
-                .ToString();
+            return DocsLinkGenerator.GenerateLink(project.ShortName, LanguageCode, Version, null);
         }
 
-        private async Task SetVersionAsync()
+        private async Task<bool> TrySetVersionAsync()
         {
             //TODO: Needs refactoring
             if (string.IsNullOrWhiteSpace(Version))
@@ -356,8 +361,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                     else
                     {
-                        LatestVersionInfo.IsSelected = true;
-                        Version = LatestVersionInfo.Version;
+                        return false;
                     }
                 }
             }
@@ -382,6 +386,8 @@ namespace Volo.Docs.Pages.Documents.Project
             }).ToList();
             
             IsLatestVersion = Version == LatestVersionInfo.Version;
+            
+            return true;
         }
 
         private VersionInfoViewModel GetLatestVersionInfo(List<VersionInfoViewModel> versions)
@@ -441,7 +447,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     new GetNavigationDocumentInput
                     {
                         ProjectId = Project.Id,
-                        LanguageCode = LanguageCode,
+                        LanguageCode = DocumentLanguageCode,
                         Version = Version
                     }
                 );
@@ -458,16 +464,8 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 version = DocsAppConsts.Latest;
             }
-
-            var linkStringBuilder = new StringBuilder();
-            linkStringBuilder.Append(DocumentsUrlPrefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(version);
-
-            if (documentName != null)
-            {
-                linkStringBuilder.Append("/").Append(DocumentName);
-            }
-
-            return linkStringBuilder.ToString();
+            
+            return DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, version, documentName);
         }
 
         public string GetSpecificVersionOrLatest()
@@ -482,50 +480,47 @@ namespace Volo.Docs.Pages.Documents.Project
                 RemoveVersionPrefix(Document.Version);
         }
 
-        private async Task SetDocumentAsync()
+        private async Task<bool> TrySetDocumentAsync()
         {
-            var sb = new StringBuilder();
-            DocumentNameWithExtension = sb.Append(DocumentName).Append(".").Append(Project.Format).ToString();
-
-            try
+            var languages = new[] { LanguageCode, DefaultLanguageCode }.Where(x => !x.IsNullOrWhiteSpace()).Distinct().ToArray();
+            DocumentNameWithExtension = new StringBuilder().Append(DocumentName).Append('.').Append(Project.Format).ToString();
+            foreach (var language in languages)
             {
-                Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
-                DocumentLanguageCode = LanguageCode;
-            }
-            catch (DocumentNotFoundException)
-            {
-                if (LanguageCode != DefaultLanguageCode)
+                try
                 {
-                    Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
-
-                    DocumentLanguageCode = DefaultLanguageCode;
+                    Document = await GetSpecificDocumentOrDefaultAsync(language);
+                    DocumentLanguageCode = language;
+                    DocumentNameWithExtension = Document.Name;
+                    await ConvertDocumentContentToHtmlAsync();
+                    return true;
                 }
-                else
+                catch (DocumentNotFoundException e)
                 {
-                    throw;
+                    Logger.LogWarning(e.Message);
                 }
             }
 
-            await ConvertDocumentContentToHtmlAsync();
+            return false;
         }
 
         private void SetLanguageSelectListItems()
         {
             LanguageSelectListItems = new List<SelectListItem>();
 
-            var sb = new StringBuilder();
+            if (!_uiOptions.MultiLanguageMode)
+            {
+                return;
+            }
 
             foreach (var language in LanguageConfig.Languages)
             {
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        sb.Append(DocumentsUrlPrefix).Append(language.Code).Append("/").Append(Project.ShortName).Append("/").Append(LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version).Append("/").Append(DocumentName).ToString(),
-                        language.Code == LanguageCode
-                        )
-                    );
-
-                sb.Clear();
+                        DocsLinkGenerator.GenerateLink(ProjectName, language.Code, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, DocumentName),
+                        language.Code.Equals(LanguageCode, StringComparison.OrdinalIgnoreCase)
+                    )
+                );
             }
         }
 
@@ -545,7 +540,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
-            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
+            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode, ProjectName);
 
             content = HtmlNormalizer.ReplaceImageSources(
                 content,
@@ -578,14 +573,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 foreach (var parameter in partialTemplates.Parameters)
                 {
-                    if (!UserPreferences.ContainsKey(parameter.Key))
-                    {
-                        UserPreferences.Add(parameter.Key, parameter.Value);
-                    }
-                    else
-                    {
-                        UserPreferences[parameter.Key] = parameter.Value;
-                    }
+                    UserPreferences[parameter.Key] = parameter.Value;
                 }
             }
 

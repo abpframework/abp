@@ -94,6 +94,16 @@ namespace Volo.Docs.Documents
                                                                                                     x.LanguageCode == languageCode &&
                                                                                                     x.Version == version, GetCancellationToken(cancellationToken));
         }
+        
+        public virtual async Task<Document> FindAsync(Guid projectId, List<string> possibleNames, string languageCode, string version,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await (await GetMongoQueryableAsync(cancellationToken)).FirstOrDefaultAsync(x => x.ProjectId == projectId &&
+                possibleNames.Contains(x.Name) &&
+                x.LanguageCode == languageCode &&
+                x.Version == version, GetCancellationToken(cancellationToken));
+        }
 
         public virtual async Task DeleteAsync(Guid projectId, string name, string languageCode, string version, bool autoSave = false, CancellationToken cancellationToken = default)
         {

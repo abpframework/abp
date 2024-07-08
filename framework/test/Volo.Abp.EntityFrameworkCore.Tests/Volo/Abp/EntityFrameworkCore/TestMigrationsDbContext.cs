@@ -51,6 +51,8 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         {
             b.Property(x => x.LastActiveTime).ValueGeneratedOnAddOrUpdate().HasDefaultValue(DateTime.Now);
             b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
+            b.Property(x => x.TenantId).HasColumnName("Tenant_Id");
+            b.Property(x => x.IsDeleted).HasColumnName("Is_Deleted");
         });
 
         modelBuilder.Entity<City>(b =>

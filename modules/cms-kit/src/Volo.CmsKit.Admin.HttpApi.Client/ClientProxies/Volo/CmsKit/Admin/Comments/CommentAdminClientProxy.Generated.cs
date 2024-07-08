@@ -40,4 +40,26 @@ public partial class CommentAdminClientProxy : ClientProxyBase<ICommentAdminAppS
             { typeof(Guid), id }
         });
     }
+
+    public virtual async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
+    {
+        await RequestAsync(nameof(UpdateApprovalStatusAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id },
+            { typeof(CommentApprovalDto), input }
+        });
+    }
+
+    public virtual async Task UpdateSettingsAsync(CommentSettingsDto input)
+    {
+        await RequestAsync(nameof(UpdateSettingsAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(CommentSettingsDto), input }
+        });
+    }
+
+    public virtual async Task<int> GetWaitingCountAsync()
+    {
+        return await RequestAsync<int>(nameof(GetWaitingCountAsync));
+    }
 }

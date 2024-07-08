@@ -118,6 +118,8 @@ For more samples, go to [ABP CLI Create Solution Samples](CLI-New-Command-Sample
       * `angular`: Angular UI. There are some additional options for this template:
         * `--separate-auth-server`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
+      * `blazor-webapp`: Blazor Web App UI. There are some additional options for this template:
+        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `blazor`: Blazor UI. There are some additional options for this template:
         * `--separate-auth-server`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.

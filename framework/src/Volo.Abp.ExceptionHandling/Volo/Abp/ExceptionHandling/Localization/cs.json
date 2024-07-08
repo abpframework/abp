@@ -21,6 +21,9 @@
     "404Message": "Stránka nenalezena",
     "500Message": "Interní chyba serveru",
     "403MessageDetail": "K provedení této operace nemáte oprávnění!",
-    "404MessageDetail": "Je nám líto, na této adrese nic není."
+    "404MessageDetail": "Je nám líto, na této adrese nic není.",
+    "Unauthorized": "Neoprávněno",
+    "invalid_token": "Neplatný token",
+    "SessionExpired": "Vaše relace vypršela. Přihlaste se znovu, abyste mohli pokračovat v aplikaci."
   }
 }
