@@ -1,4 +1,5 @@
 @page
+@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.Extensions.Options
@@ -62,7 +63,7 @@
             <script type="text/javascript">
                 function googleTranslateElementInit() {
                     new google.translate.TranslateElement({
-                      pageLanguage: 'en',
+                      pageLanguage: '@DocsWebOptions.Value.GetCultureLanguageCode(CultureInfo.CurrentUICulture)',
                       autoDisplay: false,
                       disableAutoTranslation: true,
                       includedLanguages: '@string.Join(",", DocsWebOptions.Value.IncludedLanguages)',

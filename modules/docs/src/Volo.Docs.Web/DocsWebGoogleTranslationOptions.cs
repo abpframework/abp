@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Volo.Docs;
 
@@ -10,6 +12,8 @@ public class DocsWebGoogleTranslationOptions
     /// https://cloud.google.com/translate/docs/languages
     /// </summary>
     public List<string> IncludedLanguages { get; set; }
+
+    public Func<CultureInfo, string> GetCultureLanguageCode { get; set; }
 
     public DocsWebGoogleTranslationOptions()
     {
@@ -34,5 +38,14 @@ public class DocsWebGoogleTranslationOptions
             "de",
             "es"
         ];
+        GetCultureLanguageCode = culture =>
+        {
+            return culture.Name switch
+            {
+                "zh-Hans" => "zh-CN",
+                "zh-Hant" => "zh-TW",
+                _ => culture.TwoLetterISOLanguageName
+            };
+        };
     }
 }
