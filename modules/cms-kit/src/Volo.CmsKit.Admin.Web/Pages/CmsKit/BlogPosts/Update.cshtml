@@ -68,8 +68,8 @@
                     <br/>
                 }
             </div>
-            <label class="form-label">@L["CoverImage"]</label>
-            <input type="file" id="BlogPostCoverImage" class="form-control"/>
+            <label class="form-label">@L["CoverImage"]<span class="badge text-bg-light">16:9</span></label>
+            <input type="file" id="BlogPostCoverImage" class="form-control" accept="image/*" />
         </div>
 
         <form asp-page="/CmsKit/BlogPosts/Update" id="form-blog-post-update">

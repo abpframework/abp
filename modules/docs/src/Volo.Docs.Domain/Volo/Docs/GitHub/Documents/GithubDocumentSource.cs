@@ -410,18 +410,6 @@ namespace Volo.Docs.GitHub.Documents
 
                 return await _githubRepositoryManager.GetFileRawStringContentAsync(rawDocumentUrl, token, userAgent);
             }
-            catch (HttpRequestException ex)
-            {
-                Logger.LogWarning($"Could not retrieve the document ({rawDocumentUrl}) from Github. Trying to get it from database...");
-                
-                var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
-                if (document == null)
-                {
-                    throw new DocumentNotFoundException(rawDocumentUrl);
-                }
-                
-                return document.Content;
-            }
             catch (Exception ex)
             {
                 //TODO: Only handle when document is really not available

@@ -1,9 +1,9 @@
-```json
+````json
 //[doc-params]
 {
   "Tiered": ["No", "Yes"]
 }
-```
+````
 
 # Getting Started with the React Native
 

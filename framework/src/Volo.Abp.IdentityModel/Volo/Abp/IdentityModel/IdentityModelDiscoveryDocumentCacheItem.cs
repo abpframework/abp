@@ -24,6 +24,6 @@ public class IdentityModelDiscoveryDocumentCacheItem
 
     public static string CalculateCacheKey(IdentityClientConfiguration configuration)
     {
-        return configuration.Authority.ToLower().ToMd5();
+        return configuration.Authority.ToLower().ToSha256();
     }
 }

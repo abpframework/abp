@@ -246,6 +246,7 @@
     "Cancel": "Vazgeç",
     "Continue": "Devam",
     "ConfirmEmailForPost": "Gönderi paylaşabilmek için e-posta adresinizi onaylamanız gerekir. account.abp.io/Account/Manage adresine gidin ve Kişisel Bilgiler sekmesinden e-posta adresinizi doğrulayın.",
-    "DailyPostCreateLimitation": "Günlük gönderi paylaşma sınırına ulaştınız. {0}'da yeni bir gönderi paylaşabilirsiniz."
+    "DailyPostCreateLimitation": "Günlük gönderi paylaşma sınırına ulaştınız. {0}'da yeni bir gönderi paylaşabilirsiniz.",
+    "YourAccountDisabled": "Kullanıcı hesabınız devre dışı bırakıldı!"
   }
 }

@@ -74,7 +74,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             {
                 Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
             }).ToListAsync(cancellationToken: cancellationToken);
-        
+
         var orgUnitRoles = await (from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
             join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
             join role in dbContext.Roles on roleOu.RoleId equals role.Id
@@ -89,7 +89,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             {
                 Id = gp.Key, RoleNames = gp.Select(x => x.Name).ToArray()
             }).ToListAsync(cancellationToken: cancellationToken);
-        
+
         return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames {Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray()}).ToList();
     }
 
@@ -143,6 +143,20 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             .IncludeDetails(includeDetails)
             .Where(u => u.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task RemoveClaimFromAllUsersAsync(string claimType, bool autoSave, CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var userClaims = await dbContext.Set<IdentityUserClaim>().Where(uc => uc.ClaimType == claimType).ToListAsync(cancellationToken: cancellationToken);
+        if (userClaims.Any())
+        {
+            (await GetDbContextAsync()).Set<IdentityUserClaim>().RemoveRange(userClaims);
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+            }
+        }
     }
 
     public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
@@ -216,7 +230,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
             minModifitionTime,
             cancellationToken
         );
-            
+
         return await query.IncludeDetails(includeDetails)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityUser.UserName) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -437,14 +451,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     {
         var upperFilter = filter?.ToUpperInvariant();
         var query = await GetQueryableAsync();
-        
+
         if (roleId.HasValue)
         {
             var dbContext = await GetDbContextAsync();
             var organizationUnitIds = await dbContext.Set<OrganizationUnitRole>().Where(q => q.RoleId == roleId.Value).Select(q => q.OrganizationUnitId).ToArrayAsync(cancellationToken: cancellationToken);
             query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
         }
-        
+
         return query
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),

@@ -217,17 +217,14 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>();
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
-        Expression<Func<TEntity, bool>> isActiveFilter =
-            e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
-        expression = expression == null 
-            ? isActiveFilter 
-            : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
+        Expression<Func<TEntity, bool>> isActiveFilter = e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
+        expression = expression == null ? isActiveFilter : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
     }
 
     return expression;
@@ -248,6 +245,78 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
     });
+}
+````
+
+#### Using User-defined function mapping for global filters
+
+Using [User-defined function mapping](https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping) for global filters will gain performance improvements. 
+
+To use this feature, you need to change your DbContext like below:
+
+````csharp
+protected bool IsActiveFilterEnabled => DataFilter?.IsEnabled<IIsActive>() ?? false;
+
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+{
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        return true;
+    }
+
+    return base.ShouldFilterEntity<TEntity>(entityType);
+}
+
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+{
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
+
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        Expression<Func<TEntity, bool>> isActiveFilter = e => !IsActiveFilterEnabled || EF.Property<bool>(e, "IsActive");
+
+        if (UseDbFunction())
+        {
+            isActiveFilter = e => IsActiveFilter(((IIsActive)e).IsActive, true);
+
+            var abpEfCoreCurrentDbContext = this.GetService<AbpEfCoreCurrentDbContext>();
+            modelBuilder.HasDbFunction(typeof(MyProjectNameDbContext).GetMethod(nameof(IsActiveFilter))!)
+                .HasTranslation(args =>
+                {
+                    // (bool isActive, bool boolParam)
+                    var isActive = args[0];
+                    var boolParam = args[1];
+
+                    if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<IIsActive>() == true)
+                    {
+                        // isActive == true
+                        return new SqlBinaryExpression(
+                            ExpressionType.Equal,
+                            isActive,
+                            new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping),
+                            boolParam.Type,
+                            boolParam.TypeMapping);
+                    }
+
+                    // empty where sql
+                    return new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping);
+                });
+        }
+
+        expression = expression == null ? isActiveFilter : QueryFilterExpressionHelper.CombineExpressions(expression, isActiveFilter);
+    }
+
+    return expression;
+}
+
+public static bool IsActiveFilter(bool isActive, bool boolParam)
+{
+    throw new NotSupportedException(AbpEfCoreDataFilterDbFunctionMethods.NotSupportedExceptionMessage);
+}
+
+public override string GetCompiledQueryCacheKey()
+{
+    return $"{base.GetCompiledQueryCacheKey()}:{IsActiveFilterEnabled}";
 }
 ````
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.SettingManagement;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
@@ -20,9 +21,14 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 {
     protected ICommentRepository CommentRepository { get; }
 
-    public CommentAdminAppService(ICommentRepository commentRepository)
+    protected ISettingManager SettingManager { get; }
+
+    public CommentAdminAppService(
+        ICommentRepository commentRepository,
+        ISettingManager settingManager)
     {
         CommentRepository = commentRepository;
+        SettingManager = settingManager;
     }
 
     public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
@@ -33,7 +39,9 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
             input.RepliedCommentId,
             input.Author,
             input.CreationStartDate,
-            input.CreationEndDate);
+            input.CreationEndDate,
+            input.CommentApproveState
+        );
 
         var comments = await CommentRepository.GetListAsync(
             input.Text,
@@ -44,7 +52,8 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
             input.CreationEndDate,
             input.Sorting,
             input.MaxResultCount,
-            input.SkipCount
+            input.SkipCount,
+            input.CommentApproveState
         );
 
         var dtos = comments.Select(queryResultItem =>
@@ -73,5 +82,33 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
     {
         var comment = await CommentRepository.GetAsync(id);
         await CommentRepository.DeleteWithRepliesAsync(comment);
+    }
+
+    [Authorize(CmsKitAdminPermissions.Comments.Update)]
+    public async Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
+    {
+        var comment = await CommentRepository.GetAsync(id);
+
+        if (input.IsApproved)
+        {
+            comment.Approve();
+        }
+        else
+        {
+            comment.Reject();
+        }
+
+        await CommentRepository.UpdateAsync(comment);
+    }
+
+    [Authorize(CmsKitAdminPermissions.Comments.SettingManagement)]
+    public async Task UpdateSettingsAsync(CommentSettingsDto input)
+    {
+        await SettingManager.SetGlobalAsync(CmsKitSettings.Comments.RequireApprovement, input.CommentRequireApprovement.ToString());
+    }
+
+    public async Task<int> GetWaitingCountAsync()
+    {
+        return (int)await CommentRepository.GetCountAsync(commentApproveState: CommentApproveState.Waiting);
     }
 }

@@ -49,6 +49,10 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
             steps.Add(new ChangeThemeStyleStep());
             return;
         }
+        else
+        {
+            steps.Add(new RemoveFileStep("LeptonXFooter.razor", false));
+        }
 
         steps.Add(new ChangeThemeStep());
         ReplaceLeptonXThemePackagesFromPackageJsonFiles(steps, uiFramework: context.BuildArgs.UiFramework, theme: context.BuildArgs.Theme, version: context.BuildArgs.Version ?? context.TemplateFile.Version);
@@ -172,6 +176,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor", null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client", null,
+                    "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Client"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.ProductService.Blazor",
                     "/services/product/MyCompanyName.MyProjectName.ProductService.sln",
                     "/services/product/src/MyCompanyName.MyProjectName.ProductService.Blazor"));
@@ -217,6 +223,13 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor",
                     null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client",
+                    "/apps/blazor/MyCompanyName.MyProjectName.Blazor.sln",
+                    "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Client"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client",
+                    null,
+                    "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Client"));
                 steps.Add(new RemoveProjectFromTyeStep("blazor"));
 
                 steps.Add(new TemplateProjectRenameStep("MyCompanyName.MyProjectName.Blazor.Server",
@@ -230,6 +243,8 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
             case UiFramework.NotSpecified:
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor", null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Client", null,
+                    "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Client"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Blazor.Server", null,
                     "/apps/blazor/src/MyCompanyName.MyProjectName.Blazor.Server"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.ProductService.Blazor",

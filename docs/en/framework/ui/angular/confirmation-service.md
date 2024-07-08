@@ -71,10 +71,10 @@ const options: Partial<Confirmation.Options> = {
   yesText: "Confirm",
   messageLocalizationParams: ["Demo"],
   titleLocalizationParams: [],
-  // You can customize icon 
+  // You can customize icon
   // icon: 'fa fa-exclamation-triangle', // or
   // iconTemplate : '<img src="custom-image-path.jpg" alt=""/>'
-} 
+};
 
 this.confirmation.warn(
   "AbpIdentity::RoleDeletionConfirmationMessage",
@@ -129,22 +129,25 @@ this.confirmation.clear();
 
 ### How to Change Icons of The Confirmation Popup
 
-You can change icons with the token of "confirmationIcons" in ThemeSharedModule in the app.module.ts. The changes will affect  all confirmation popup in the project.
+You can change icons with the `withConfirmationIcon()` method of `provideAbpThemeShared` function in the app.module.ts. The changes will affect all confirmation popup in the project.
 
-```js
-...
-ThemeSharedModule.forRoot({
-  confirmationIcons: {
-    info: 'fa fa-info-circle',
-    success: 'fa fa-check-circle',
-    warning: 'fa fa-exclamation-triangle',
-    error: 'fa fa-times-circle',
-    default: 'fa fa-question-circle',
-  },
-}),
-...
+```ts
+import { provideAbpThemeShared, withConfirmationIcon } from '@abp/ng.theme.shared';
+
+@NgModule({
+  providers: [
+    // ...
+    provideAbpThemeShared(withConfirmationIcon({
+      info: 'fa fa-info-circle',
+      success: 'fa fa-check-circle',
+      warning: 'fa fa-exclamation-triangle',
+      error: 'fa fa-times-circle',
+      default: 'fa fa-question-circle',
+    })),
+  ],
+})
+export class AppModule {}
 ```
-
 
 ## API
 

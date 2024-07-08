@@ -2,6 +2,8 @@
 
 This module provides CMS (Content Management System) capabilities for your application. It provides **core building blocks** and fully working **sub-systems** to create your own website with CMS features enabled, or use the building blocks in your web sites with any purpose.
 
+> You can see the live demo at [cms-kit-demo.abpdemo.com](https://cms-kit-demo.abpdemo.com/).
+
 > **This module currently available only for the MVC / Razor Pages UI**. While there is no official Blazor package, it can also work in a Blazor Server UI since a Blazor Server UI is actually a hybrid application that runs in an ASP.NET Core MVC / Razor Pages application.
 
 The following features are currently available:

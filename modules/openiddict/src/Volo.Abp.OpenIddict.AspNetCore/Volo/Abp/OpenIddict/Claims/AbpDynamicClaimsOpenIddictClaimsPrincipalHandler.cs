@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
@@ -9,6 +10,11 @@ public class AbpDynamicClaimsOpenIddictClaimsPrincipalHandler: IAbpOpenIddictCla
 {
     public virtual async Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
     {
+        if (context.OpenIddictRequest.IsClientCredentialsGrantType())
+        {
+            return;
+        }
+
         var abpClaimsPrincipalFactory = context
             .ScopeServiceProvider
             .GetRequiredService<IAbpClaimsPrincipalFactory>();

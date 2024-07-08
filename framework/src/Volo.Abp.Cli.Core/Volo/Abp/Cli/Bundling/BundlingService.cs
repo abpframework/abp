@@ -13,6 +13,7 @@ using Volo.Abp.Cli.Build;
 using Volo.Abp.Cli.Bundling.Scripts;
 using Volo.Abp.Cli.Bundling.Styles;
 using Volo.Abp.Cli.Configuration;
+using Volo.Abp.Cli.Version;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Minify.Scripts;
 using Volo.Abp.Minify.Styles;
@@ -29,6 +30,7 @@ public class BundlingService : IBundlingService, ITransientDependency
     public IScriptBundler ScriptBundler { get; set; }
     public IStyleBundler StyleBundler { get; set; }
     public IConfigReader ConfigReader { get; set; }
+    public CliVersionService CliVersionService { get; set; }
 
     public async Task BundleAsync(string directory, bool forceBuild, string projectType = BundlingConsts.WebAssembly)
     {
@@ -47,7 +49,7 @@ public class BundlingService : IBundlingService, ITransientDependency
 
         var projectFilePath = projectFiles[0];
 
-        CheckProjectIsSupportedType(projectFilePath, projectType);
+        await CheckProjectIsSupportedTypeAsync(projectFilePath, projectType);
 
         var config = projectType == BundlingConsts.WebAssembly? ConfigReader.Read(PathHelper.GetWwwRootPath(directory)): ConfigReader.Read(directory);
         var bundleConfig = config.Bundle;
@@ -318,7 +320,7 @@ public class BundlingService : IBundlingService, ITransientDependency
         };
     }
 
-    private void CheckProjectIsSupportedType(string projectFilePath, string projectType)
+    private async Task CheckProjectIsSupportedTypeAsync(string projectFilePath, string projectType)
     {
         var document = new XmlDocument();
         document.Load(projectFilePath);
@@ -341,6 +343,18 @@ public class BundlingService : IBundlingService, ITransientDependency
                         $"Unsupported project type. Project type must be {BundlingConsts.SupportedMauiBlazorProjectType}.");
                 }
                 break;
+        }
+
+        var targetFramework = document.SelectSingleNode("//TargetFramework")?.InnerText ??
+                              document.SelectNodes("//TargetFrameworks")[0].InnerText;
+        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
+
+        if (targetFramework.IsNullOrWhiteSpace() ||
+            targetFramework.IndexOf($"net{currentCliVersion.Major}.0", StringComparison.OrdinalIgnoreCase) < 0)
+        {
+            throw new BundlingException($"Your project({projectFilePath}) target framework is {targetFramework}. " + Environment.NewLine +
+                                        $"But ABP CLI version is {currentCliVersion}. " + Environment.NewLine +
+                                        $"Please use the ABP CLI that is compatible with your project target framework.");
         }
     }
 }
