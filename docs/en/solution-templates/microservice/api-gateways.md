@@ -1,5 +1,15 @@
 # Microservice Solution: API Gateways
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Web applications in the Microservice solution",
+    "Path": "solution-templates/microservice/web-applications"
+  }
+}
+````
+
 An API Gateway is used to expose your system to the clients. It also provides a single entry point to your system.
 
 ## About the BFF Pattern

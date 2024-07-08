@@ -1,5 +1,15 @@
 # Microservice Solution: Background Workers
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Distributed locking in the Microservice solution",
+    "Path": "solution-templates/microservice/distributed-locking"
+  }
+}
+````
+
 Background workers are long-running processes that perform tasks in the background. They are used in microservice systems to handle tasks that run continuously or periodically, such as data processing, notifications, and more. The ABP Framework includes a system for creating and running these workers in your application. You can learn more in the [Background Workers](../../framework/infrastructure/background-workers/index.md) document.
 
 Basically, you can create scheduled workers for a specific time interval based on your requirements, such as checking the status of inactive users and changing their status to passive if they have not logged in to the application in the last 30 days.

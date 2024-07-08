@@ -1,5 +1,15 @@
 # Microservice Solution: Adding New Microservices
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Adding new applications to Microservice solution",
+    "Path": "solution-templates/microservice/adding-new-applications"
+  }
+}
+````
+
 This document explains how to add new microservices to the microservice solution template. In the solution template, there is a folder named `services` in the root directory, which contains all the microservices in the solution. Each microservice is a separate ASP.NET Core application that can be developed, tested, and deployed independently.
 
 Additionally, there is a folder named `_templates` in the root directory. This folder contains templates you can use to create new microservices, API gateways, and applications. These templates can be customized according to your needs.
@@ -331,7 +341,7 @@ If you want to deploy the new microservice to Kubernetes, you should create a He
 First, we need to add the new microservice to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `build-all-images.ps1` script for the `ProductService` microservice.
 
 ```powershell
-./build-image.ps1 -ProjectPath "../../services/product-service/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
+./build-image.ps1 -ProjectPath "../../services/product/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
 ```
 
 Then, we need to add the connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `ProductService` microservice.

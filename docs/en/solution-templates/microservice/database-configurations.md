@@ -1,5 +1,15 @@
 # Microservice Solution: Database Configurations
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Logging in the Microservice solution",
+    "Path": "solution-templates/microservice/logging"
+  }
+}
+````
+
 This document explains the database configuration and migration structure that is designed and implemented in the ABP Studio Microservice solution template.
 
 ## Database Configurations

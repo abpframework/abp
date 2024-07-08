@@ -1,5 +1,15 @@
 # Microservice Solution: BLOB Storing
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "CORS configuration in the Microservice solution",
+    "Path": "solution-templates/microservice/cors-configuration"
+  }
+}
+````
+
 This document explains how to store BLOBs (Binary Large Objects) in a microservice solution. It is common to store files, images, videos, and other large objects in a distributed system. You can learn more about BLOB storage in the [BLOB Storing System](../../framework/infrastructure/blob-storing/index.md) documentation.
 
 In the microservice solution template, the [Database Provider](../../framework/infrastructure/blob-storing/database.md) is used to store BLOBs in the database. The `Volo.Abp.BlobStoring.Database.EntityFrameworkCore` or `Volo.Abp.BlobStoring.Database.MongoDB` package provides the necessary implementations to store and retrieve BLOBs in the database. This setup is integrated into the microservice solution template and is used in all related projects. You can change the database configuration in the `appsettings.json` file of the related project. The default configuration is for SQL Server as follows:

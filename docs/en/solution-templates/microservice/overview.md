@@ -1,10 +1,21 @@
 # Microservice Solution: Overview
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Solution Structure",
+    "Path": "solution-templates/microservice/solution-structure"
+  }
+}
+````
+
 In this document, you will learn what the Microservice solution template offers to you.
 
 ## The Big Picture
 
-***TODO: Prepare a diagram of the fundamental components of the system.***
+![ms-overall-architecture](images/overall-architecture.png)
+*Figure: Overall Diagram of the Solution (not all associations are shown, for the sake of simplicity)*
 
 ## Pre-Installed Libraries & Services
 
@@ -98,10 +109,6 @@ If you prefer, the solution includes a mobile application with its dedicated API
 ### Multi-Tenancy & SaaS Module
 
 The **[SaaS module](../../modules/saas.md)** is included as an option. When you select it, the **[multi-tenancy](../../framework/architecture/multi-tenancy/index.md)** system is automatically configured. Otherwise, the system will not include any multi-tenancy overhead.
-
-## Next
-
-* [Solution Structure](solution-structure.md)
 
 ## See Also
 

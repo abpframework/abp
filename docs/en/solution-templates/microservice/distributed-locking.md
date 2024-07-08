@@ -1,5 +1,15 @@
 # Microservice Solution: Distributed Locking
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Distributed cache in the Microservice solution",
+    "Path": "solution-templates/microservice/distributed-cache"
+  }
+}
+````
+
 Distributed locking is a common pattern in distributed systems to ensure that only one instance of a service can execute a specific operation at a time. This document explains how the distributed locking mechanism works in the microservice solution template. You can learn more in the [Distributed Locking](../../framework/infrastructure/distributed-locking.md) document.
 
 ## Distributed Locking in Microservice Solutions

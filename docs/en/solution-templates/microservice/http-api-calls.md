@@ -1,5 +1,15 @@
 # Microservice Solution: HTTP API Calls
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "gRPC calls in the Microservice solution",
+    "Path": "solution-templates/microservice/grpc-calls"
+  }
+}
+````
+
 The microservice solution template uses the [Integration Services](../../framework/api-development/integration-services.md) to enable synchronous communication between microservices. This allows microservices to communicate with each other over HTTP requests. You can also use the [Static](../../framework/api-development/static-csharp-clients.md) or [Dynamic](../../framework/api-development/dynamic-csharp-clients.md) C# clients to call the HTTP APIs of other microservices. However, the Integration Services is the recommended way to communicate between microservices because it allows you to hide your endpoints from the outside world and manage your services more easily.
 
 ## Integration Service Configurations

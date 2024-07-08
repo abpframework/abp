@@ -1,5 +1,15 @@
 # Microservice Solution: The Microservices
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "API Gateways in the Microservice solution",
+    "Path": "solution-templates/microservice/api-gateways"
+  }
+}
+````
+
 The ABP Studio Microservice solution consists of a few microservices at the beginning. It is expected that you [add more microservices](guides/add-new-microservice.md) as your solution grows. This document briefly explains the structure of pre-built microservices in the solution.
 
 The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:
@@ -81,6 +91,18 @@ If you've selected the [GDPR](../../modules/gdpr.md) module while [creating your
 
 This microservice basically serves the [GDPR](../../modules/gdpr.md) module's HTTP API, creates and manages its database.
 
-Next
+### File Management Microservice (optional)
 
-* [API Gateways in the Microservice solution](api-gateways.md)
+If you've selected the [File Management](../../modules/file-management.md) module while [creating your solution](../../get-started/microservice.md), the file management microservice is added to the solution as shown in the following figure:
+
+![file-management-microservice-in-solution-explorer](images/file-management-microservice-in-solution-explorer.png)
+
+This microservice basically serves the [File Management](../../modules/file-management.md) module's HTTP API, creates and manages its database.
+
+### Chat Microservice (optional)
+
+If you've selected the [Chat](../../modules/chat.md) module while [creating your solution](../../get-started/microservice.md), the Chat microservice is added to the solution as shown in the following figure:
+
+![chat-microservice-in-solution-explorer](images/chat-microservice-in-solution-explorer.png)
+
+This microservice basically serves the [Chat](../../modules/chat.md) module's HTTP API, creates and manages its database.

@@ -1,5 +1,15 @@
 # Microservice Solution: Authentication
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Database configurations in the Microservice solution",
+    "Path": "solution-templates/microservice/database-configurations"
+  }
+}
+````
+
 The [microservice solution template](index.md) is fully configured for authentication. All the services and applications are configured to use the [OpenIddict](https://documentation.openiddict.com) library for authentication. They are configured in a common way for authentication. This document explains that common authentication structure.
 
 ## OpenIddict

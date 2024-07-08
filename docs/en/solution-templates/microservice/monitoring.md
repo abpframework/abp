@@ -1,5 +1,15 @@
 # Microservice Solution: Monitoring
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Swagger integration in the Microservice solution",
+    "Path": "solution-templates/microservice/swagger-integration"
+  }
+}
+````
+
 In a distributed system it is important to monitor the health of the system and the services. Monitoring helps to detect issues before they become problems and helps to understand the system's behavior. All the services, applications and gateways are configured to use the [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/) libraries for monitoring. They are configured in a common way for monitoring. This document explains that common monitoring structure.
 
 ## Configuration

@@ -1,5 +1,15 @@
 # Microservice Solution: Distributed Cache
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Multi-Tenancy in the Microservice solution",
+    "Path": "solution-templates/microservice/multi-tenancy"
+  }
+}
+````
+
 Distributed caching is a common pattern in distributed systems to improve performance by storing frequently accessed data in a cache. This document explains how the distributed caching mechanism works in the microservice solution template. You can learn more in the [Distributed Cache](../../framework/fundamentals/caching.md) document.
 
 ## Distributed Cache in Microservice Solutions
