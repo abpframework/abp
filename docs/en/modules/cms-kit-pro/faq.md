@@ -22,7 +22,7 @@ CMS Kit module admin side adds the following items to the main menu, under the *
 
 ### Pages
 
-You can list, create, update and delete FAQ's on the admin side of your solution.
+You can list, create, update and delete sections and their questions FAQ's on the admin side of your solution.
 
 ![faq-page](../../images/cmskit-module-faq-page.png)
 ![faq-edit-page](../../images/cmskit-module-faq-edit-page.png)
@@ -37,27 +37,31 @@ The FAQ system provides a FAQ [widget](https://docs.abp.io/en/abp/latest/UI/AspN
     typeof(FaqViewComponent),
     new
     {
-        groupName = "group1",
-        name = ""
+        groupName = "Community",
+        name = "Development"
     })
 ```
 
+`FaqViewComponent` parameters:
+- `groupName` (optional): It allows to specify which FAQ group to show. If not specified, all groups will be shown.
+- `sectionName` (optional): It is used to determine which section within the specified group will be shown. If not specified, all sections in the related group will be shown.
+
+The FAQ system can also be used in combination with the [dynamic widget](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Dynamic-Widget) feature.
+
 ## Options
 
-Before using the FAQ system, you need to define groups. You can use `FaqOptions`. `FaqOptions` can be configured at the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics).
-  
+The FAQ system provides a mechanism to group sections by group name. For example, if you want to use the FAQ system for  community and support page, you need to define two group names named Community and Support and add sections under these groups. So, before using the FAQ system, you need to define groups. For that, you can use `FaqOptions`. `FaqOptions` can be configured at the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics).
+
 ```csharp
-  Configure<FaqOptions>(options =>
-    {
-        options.AddGroups("group1");
-        options.AddGroups("group2");
-        options.AddGroups("group3");
-    });
+Configure<FaqOptions>(options =>
+{
+    options.SetGroups(new[] { "General", "Community", "Support" });
+});
 ```
 
 `FaqOptions` properties:
 
-- `GroupName`: List of defined groups in the FAQ system. The `options.AddGroups` method is a shortcut to add a new group to this list.
+- `Groups`: Dictionary of defined groups in the FAQ system. The `options.SetGroups` method is a shortcut to add a new groups to this dictionary.
 
 ## Internals
 
@@ -71,8 +75,8 @@ This module follows the [Entity Best Practices & Conventions](https://docs.abp.i
 
 A FAQ represents a generated FAQ with its questions: 
 
-- `FaqSection` (aggregate root): Represents a FAQ by including the options in the system.
-- `FaqQuestion` (entity): Represents the defined FAQ questions related to the FAQ in the system.
+- `FaqSection` (aggregate root): Represents the defined FAQ sections related to the FAQ in the system.
+- `FaqQuestion` (aggregate root): Represents the defined FAQ questions with section identifier related to the FAQ in the system.
 
 #### Repositories
 
@@ -93,8 +97,9 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 #### Application services
 
-- `FaqAdminAppService` (implements `IFaqAdminAppService`): Implements the use cases of FAQ management for admin side.
-- `FaqPublicAppService` (implements `IFaqPublicAppService`): Implements the use cases of FAQ's for public websites.
+- `FaqSectionAdminAppService` (implements `IFaqSectionAdminAppService`): Implements the use cases of FAQ section management for admin side.
+- `FaqQuestionAdminAppService` (implements `IFaqQuestionAdminAppService`): Implements the use cases of FAQ question management for admin side.
+- `FaqSectionPublicAppService` (implements `IFaqSectionPublicAppService`): Implements the use cases of FAQ's for public websites.
 
 ### Database providers
 
@@ -115,13 +120,14 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 ##### Tables
 
 - CmsFaqSections
-  - CmsFaqQuestions
+- CmsFaqQuestions
 
 #### MongoDB
 
 ##### Collections
 
-- **CmsFaqSections**
+- CmsFaqSections
+- CmsFaqQuestions
 
 ## Entity Extensions
 
