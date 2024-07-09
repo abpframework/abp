@@ -1,4 +1,6 @@
-# FAQ System
+# CMS Kit Pro: FAQ System
+
+> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
 
 The CMS kit provides a **FAQ** system to allow users to create, edit and delete FAQ's. Here is a screenshot of the FAQ widget:
 
