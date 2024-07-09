@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 This document explains the database configuration and migration structure that is designed and implemented in the ABP Studio Microservice solution template.
 
 ## Database Configurations

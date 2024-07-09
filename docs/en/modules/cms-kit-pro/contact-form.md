@@ -1,4 +1,6 @@
-# Contact Management
+# CMS Kit Pro: Contact Management
+
+> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
 
 CMS Kit provides a widget to create a contact form on your website.
 

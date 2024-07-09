@@ -1,5 +1,7 @@
 # Microservice Solution: Authoring Unit and Integration Tests
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 Unit and integration tests are essential for ensuring the quality and reliability of your microservice system. In this document, you will learn how to write and run tests for your microservices. Each microservice has its own test projects to validate its functionality and interactions with other services. There are four main types of tests: `Entities`, `Repositories`, `Application Services`, and `Controllers`.
 
 ## Prepare the Test Environment

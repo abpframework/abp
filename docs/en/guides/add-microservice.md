@@ -4,6 +4,8 @@
 
 ## Creating new service
 
+> You must have an ABP Business or a higher license to be able to create a new sub-microservice.
+
 You can create a new service (sub microservice) into your microservice solution by using the ABP CLI. Use the following command to create a new service:
 
 ```powershell

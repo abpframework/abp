@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 The ABP Studio microservice solution template contains a few web applications. These applications are fully integrated to the solution, uses the [microservices](microservices.md) through the [API gateways](api-gateways.md). 
 
 The following figure shows the application in the *[Solution Explorer](../../studio/solution-explorer.md)* pane of ABP Studio:

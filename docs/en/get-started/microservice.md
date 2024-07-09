@@ -1,5 +1,7 @@
 # Get Started with ABP: Creating a Microservice Solution
 
+> You must have an ABP Business or a higher license to use this startup template.
+
 In this quick start guide, you will learn how to create and run a microservice solution using [ABP Studio](../studio/index.md).
 
 ## Creating a New Solution

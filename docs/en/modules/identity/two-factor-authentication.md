@@ -1,5 +1,7 @@
 # Two Factor Authentication
 
+> You must have an ABP Team or a higher license to use this module & its features.
+
 Two-factor authentication (**2FA**) is a specific type of multi-factor authentication (MFA) that requires the authenticating party to produce two separate identifying factors to verify your identity. The first factor is something you know "**username & password**" and the second factor is something you have "**mobile device or email**" to verify authentication requests. 2FA protects against phishing, social  engineering and password brute-force attacks and secures your logins  from attackers exploiting weak or stolen credentials.
 
 **ABP** handles **two-factor authentication** at three different layers:

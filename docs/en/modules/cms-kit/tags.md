@@ -1,4 +1,4 @@
-# Tag Management
+# CMS Kit: Tag Management
 
 CMS Kit provides a **tag** system to tag any kind of resources, like a blog post.
 

@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 In this document, you will learn what the Microservice solution template offers to you.
 
 ## The Big Picture

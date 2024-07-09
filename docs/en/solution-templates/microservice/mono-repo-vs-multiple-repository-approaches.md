@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 Microservices architecture breaks down an application into a series of small, loosely coupled services. Each microservice is designed to fulfill a specific business function and can be developed, deployed, and scaled independently. One of the critical decisions in implementing microservices is choosing the repository structure: mono-repo or multiple repos.
 
 ## Mono-repo Approach

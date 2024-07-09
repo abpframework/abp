@@ -1,5 +1,7 @@
 # Microservice Solution: Communication
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 Microservice solution template provides multiple ways to communicate between services, applications and API gateways. This documents explains the communication methods in the solution template.
 
 ## Synchronous Communication
