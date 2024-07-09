@@ -11,7 +11,7 @@ In the next sections, you will find the affected URLs, attack parameters (reques
 There are high _(red flag)_, medium _(orange flag)_, low _(yellow flag)_, and informational _(blue flag)_ alerts. 
 
 ![penetration-test-8.2.0](../images/pen-test-alert-list-8.2.png)
-w
+
 > The informational alerts are not mentioned in this document. These alerts are not raising any risks on your application and they are optional.
 
 ### Path Traversal [Risk: High] - False Positive
@@ -300,7 +300,7 @@ Manually confirm that the timestamp data is not sensitive, and that the data can
 
 **Explanation**: 
 
-This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](../framework/ui/angular/password-complexity-indicator-component.md). This library is one of the most used password strength estimator and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
+This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](https://docs.abp.io/en/commercial/latest/ui/angular/password-complexity-indicator-component). This library is one of the most used password strength estimator and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
 
 ### X-Content-Type-Options Header Missing [Risk: Low] - Positive (Fixed)
 
@@ -324,7 +324,7 @@ If possible, ensure that the end user uses a standards-compliant and modern web 
 
 The `X-Content-Type-Options` header allows you to avoid MIME type sniffing by saying that the MIME types are deliberately configured. This headeer is not strictly required, but it is highly recommended for security reasons. While modern browsers have improved security features, you can still set this header for ensuring the security of web applications.
 
-You can add the [ABP's Security Header Middleware](../framework/ui/mvc-razor-pages/security-headers.md#security-headers-middleware) into the request pipeline to set the `X-Content-Type-Options` as *no-sniff*. Also, this middleware adds other pre-defined security headers to your application, including `X-XSS-Protection`, `X-Frame-Options` and `Content-Security-Policy` (if it's enabled). Read [Security Headers](../framework/ui/mvc-razor-pages/security-headers.md) documentation for more info.
+You can add the [ABP's Security Header Middleware](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers#security-headers-middleware) into the request pipeline to set the `X-Content-Type-Options` as *no-sniff*. Also, this middleware adds other pre-defined security headers to your application, including `X-XSS-Protection`, `X-Frame-Options` and `Content-Security-Policy` (if it's enabled). Read the documentation for more info: [https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers).
 
 ## Other Alerts
 
@@ -368,11 +368,11 @@ attacks. The second, on the other hand, discloses some endpoints that are unavai
 
 * **Application Configuration Script**: 
 
-  These 2 endpoints are used by ABP application templates. The first one `/Abp/ApplicationConfigurationScript` provides configuration and user based definitions with JSON format. This data is important for SPA based applications to get the current language, localization texts, policies, settings, user info, current tenant or time zone information. This is not a data leak. User specific data can only be accessed after user logon. Other data are application-wide used not dangerous for unauthenticated users. For more information check out the [Application Configuration](../framework/api-development/standard-apis/configuration.md) document.
+  These 2 endpoints are used by ABP application templates. The first one `/Abp/ApplicationConfigurationScript` provides configuration and user based definitions with JSON format. This data is important for SPA based applications to get the current language, localization texts, policies, settings, user info, current tenant or time zone information. This is not a data leak. User specific data can only be accessed after user logon. Other data are application-wide used not dangerous for unauthenticated users. For more information about Application Configuration, check out [docs.abp.io/en/abp/latest/API/Application-Configuration](https://docs.abp.io/en/abp/latest/API/Application-Configuration)
 
 * **Service Proxy Script**:
 
-  This endpoint provides auto-generated JavaScript AJAX call methods for the backend operations. This may disclosure information about the host API methods. On the other hand, it makes easy to consume the HTTP APIs from JavaScript side. ABP Application Services are automatically converted to JavaScript proxies. But it does not mean that these JavaScript methods can be executed anonymously. The attacker still needs to log in to perform operations. For more information check out the [Service Proxy Script](../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) document. If you want to disable this functionality, check out [github.com/abpframework/abp/issues/12297](https://github.com/abpframework/abp/issues/12297)
+  This endpoint provides auto-generated JavaScript AJAX call methods for the backend operations. This may disclosure information about the host API methods. On the other hand, it makes easy to consume the HTTP APIs from JavaScript side. ABP Application Services are automatically converted to JavaScript proxies. But it does not mean that these JavaScript methods can be executed anonymously. The attacker still needs to log in to perform operations. For more information about Service Proxy Script, check out [docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies). If you want to disable this functionality, check out [github.com/abpframework/abp/issues/12297](https://github.com/abpframework/abp/issues/12297)
 
 ### User E-mail Address Enumeration [Risk: Low] - Positive
 
