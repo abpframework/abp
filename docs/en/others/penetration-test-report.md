@@ -1,25 +1,24 @@
 # ABP Penetration Test Report
 
-The ABP MVC `v8.0.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
+The ABP MVC `v8.1.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
 
 Many of these alerts are **false-positive**, meaning the vulnerability scanner detected these issues, but they are not exploitable. It's clearly explained for each false-positive alert why this alert is a false-positive. 
 
-In the next sections, you will find the affected URLs, alert descriptions, false-positive explanations, and fixes for the issues.  Some positive alerts are already fixed or needed additional actions that can be taken by you. The issue links for the fixes are mentioned in each positive alert.
+In the next sections, you will find the affected URLs, attack parameters (request-body), alert descriptions, false-positive explanations, and fixes for the issues. Some positive alerts are already fixed or needed additional actions that can be taken by you. The issue links for the fixes are mentioned in each positive alert.
 
 ## Alerts
 
 There are high _(red flag)_, medium _(orange flag)_, low _(yellow flag)_, and informational _(blue flag)_ alerts. 
 
-![penetration-test-8.0.0](../images/pen-test-alert-list-8.0.png)
+![penetration-test-8.1.0](../images/pen-test-alert-list-8.1.png)
 
 > The informational alerts are not mentioned in this document. These alerts are not raising any risks on your application and they are optional.
 
 ### Path Traversal [Risk: High] - False Positive
 
-- *[GET] - https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=audit-logs&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=&sorting=executionTime+desc&skipCount=0&maxResultCount=10*
-- *[POST] - https://localhost:44349/Account/Login*
-- *[POST] - https://localhost:44349/Identity/SecurityLogs*
-- *[POST] - https://localhost:44349/LanguageManagement/Texts*
+- *[GET] - https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=audit-logs&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=true&sorting=executionTime+desc&skipCount=0&maxResultCount=10* (attack: **httpMethod=audit-logs**)
+- *[POST] - https://localhost:44349/Account/Login* (attack: **\Login**)
+- *[POST] - https://localhost:44349/Identity/SecurityLogs* (attack: **\SecurityLogs**)
 
 **Description**:
 
@@ -31,10 +30,11 @@ This is a **false-positive** alert since ABP does all related checks for this ki
 
 ### SQL Injection [Risk: High] - False Positive
 
-* *[GET] - https://localhost:44349/Identity/OrganizationUnits/AddRoleModal?organizationUnitId=ff550f9d-8a3d-c961-ef26-3a0fc6b68d16%27+AND+%271%27%3D%271%27+--+*
-* *[POST] — https://localhost:44349/Account/Login*
+* *[POST] — https://localhost:44349/Account/Login* (attack: **1q2w3E* AND 1=1 --**)
+* *[POST] — https://localhost:44349/AuditLogs* (attack: **GET' AND '1'='1' --**)
+* *[POST] — https://localhost:44349/Identity/SecurityLogs* (attack: **admin' AND '1'='1**)
+* *[POST] — https://localhost:44349/LanguageManagement/Texts* (attack: **true" AND "1"="1" --**)
 * *[POST] — https://localhost:44349/Account/Manage?CurrentPassword=ZAP%27+AND+%271%27%3D%271%27+--+&NewPassword=ZAP&NewPasswordConfirm=ZAP*
-* *[POST] - https://localhost:44349/SettingManagement?handler=RenderView%27+AND+%271%27%*
 
 **Description**:
 
@@ -46,7 +46,7 @@ ABP uses Entity Framework Core and LINQ. It's safe against SQL Injection because
 
 ### SQL Injection - Authentication Bypass [Risk: High] - False Positive
 
-- *[POST] - https://localhost:44349/Account/Login?returnUrl=%2FAccount%2FManage*
+- *[POST] - https://localhost:44349/Account/Login?returnUrl=%2FAccount%2FManage* (attacks: **1q2w3E* AND 1=1 --** and **admin OR 1=1**)
 
 **Description**:
 
@@ -62,6 +62,7 @@ This alert indicates that we must not trust client side input (even if there is 
 * *[GET] - https://localhost:44349/Account/LinkUsers/LinkUsersModal?returnUrl=/SettingManagement*
 * *[GET] — https://localhost:44349/Account/Manage* (same URL with different query parameters)
 * *[GET] - https://localhost:44349/HostDashboard*
+* *[GET] - https://localhost:44349/SettingManagement?handler=RenderView&id=Volo.Abp.Account*
 
 **Description**: 
 
@@ -76,6 +77,7 @@ This is a **false-positive** alert because ABP provides the Anti-CSRF token via 
 
 ### Application Error Disclosure [Risk: Medium] - False Positive
 
+- *[GET] — https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=GET&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=&sorting=executionTime%20desc&skipCount=0&maxResultCount=10*
 - *[GET] — https://localhost:44349/AuditLogs*
 
 **Description**: 
@@ -84,11 +86,12 @@ This page contains an error/warning message that may disclose sensitive informat
 
 **Explanation**:
 
-There is only one URL that is reported as exposing error messages. This is a **false-positive** alert. The Audit Logging Module, shows request & response details and exception information, these are not sensitive information and only can be seen by the users whose related permissions are granted.
+There are only two URLs that are reported as exposing error messages. This is a **false-positive** alert. The Audit Logging Module, shows request & response details and exception information, these are not sensitive information and only can be seen by the users whose related permissions are granted.
 
 ### Content Security Policy (CSP) Header Not Set [Risk: Medium] — Positive (Fixed)
 
 - *[GET] — https://localhost:44349*
+- *[GET] — https://localhost:44349/Abp/MultiTenancy/TenantSwitchModal*
 - *[GET] — https://localhost:44349/Account/AuthorityDelegation/AuthorityDelegationModal*
 - *[GET] — https://localhost:44349/Account/AuthorityDelegation/DelegateNewUserModal*
 - *[GET] — https://localhost:44349/Account/ForgotPassword _(other several account URLS)_* 
@@ -113,18 +116,6 @@ Configure<AbpSecurityHeadersOptions>(options =>
 
 > See [the documentation](../framework/ui/mvc-razor-pages/security-headers.md) for more info.
 
-### Cross-Domain Misconfiguration [Risk: Medium] - False Positive
-
-- *[GET] - https://localhost:44349/*
-
-**Description**:
-
-Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
-
-**Explanation**: 
-
-This is a **false-positive** alert. ABP Startup Templates come with pre-configured CORS options.
-
 ### Format String Error [Risk: Medium] - False Positive
 
 - *[GET] - https://localhost:44349/api/language-management/language-texts?filter=&resourceName=&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&targetCultureName=cs&getOnlyEmptyValues=false&sorting=name+asc&skipCount=0&maxResultCount=10*
@@ -132,6 +123,7 @@ This is a **false-positive** alert. ABP Startup Templates come with pre-configur
 - *[GET] - https://localhost:44349/Abp/Languages/Switch?culture=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&returnUrl=%2F&uiCulture=ar*
 - *[GET] - https://localhost:44349/Abp/ApplicationLocalizationScript?cultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
 - *[POST] — https://localhost:44349/Account/Login (same URL with different parameters)*
+- *[POST] — https://localhost:44349/AuditLogs*
 
 **Description:**
 
@@ -233,7 +225,7 @@ Injection using XSL transformations may be possible and may allow an attacker to
 
 **Explanation**: 
 
-This is a **false-positive** alert. v8.0.0 uses .NET 8 and the XSLT transformation is not possible on .NET5 or higher.
+This is a **false-positive** alert. v8.1.0 uses .NET 8 and the XSLT transformation is not possible on .NET5 or higher.
 
 ### Application Error Disclosure [Risk: Low] — False Positive
 
@@ -245,11 +237,13 @@ The reported page contains an error/warning message that may disclose sensitive 
 
 **Explanation:** 
 
-This vulnerability was reported as a **positive** alert because the application ran in `Development` mode. ABP throws exceptions for developers in the `Development` environment. We set the environment to `Production` and re-run the test, then the server sent a *500-Internal Error* without the error disclosed. Therefore this alert is **false-positive**. Further information can be found in the following issue:  https://github.com/abpframework/abp/issues/14177.
+This vulnerability was reported as a **positive** alert because the application ran in `Development` mode. ABP throws exceptions for developers in the `Development` environment. We set the environment to `Production` and re-run the test, then the server sent a *500-Internal Error* without the error disclosed. Therefore this alert is **false-positive**. Further information can be found in the following issue: https://github.com/abpframework/abp/issues/14177.
 
 ### Cookie No `HttpOnly` Flag [Risk: Low] — Positive (No need for a fix)
 
 * *[GET] — https://localhost:44349 (and there are several URLs)*
+* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2FAccount%2FForgotPassword%3FreturnUrl%3D%2522%252F%253E%253Cxsl%253Avalue-of%2520select%253D%2522system-property(%2527xsl%253Avendor%2527)%2522%252F%253E%253C!--&uiCulture=ar (and there are several URLs)*
+* *[GET] — https://localhost:44349/Abp/ApplicationConfigurationScript*
 
 **Description:** 
 
@@ -273,7 +267,7 @@ The following alert is related to the next alert. Therefore, to understand this 
 
 All the pages that are setting the `XSRF-TOKEN` and `.AspNetCore.Culture` cookies in the HTTP response are reported as "No `HttpOnly` Flag" vulnerability. This is a **positive-alert**. 
 
-> **Note for IDS4 users**: The `idsrv.session` cookie is being used in IDS4 and after ABP 6.x, ABP switched to OpenIddict (https://github.com/abpframework/abp/issues/7221). Therefore, this cookie is not being used in the current startup templates and you can ignore this note if you have created your application after v6.0+. However, if you are still using Identity Server 4, there is an issue related to the `idsrv.session` cookie, it cannot be set as `HttpOnly`; you can see the related thread at its own repository https://github.com/IdentityServer/IdentityServer4/issues/3873. 
+> **Note for IDS4 users**: The `idsrv.session` cookie is being used in IDS4 and after ABP 6.x, ABP switched to OpenIddict (https://github.com/abpframework/abp/issues/7221). Therefore, this cookie is not being used in the current startup templates and you can ignore this note if you have created your application after v6.0+. However, if you are still using Identity Server 4, there is an issue related to the `idsrv.session` cookie, it cannot be set as `HttpOnly`; you can see the related thread at its own repository: https://github.com/IdentityServer/IdentityServer4/issues/3873
 
 The `.AspNetCore.Culture` and `XSRF-TOKEN` cookies are being retrieved via JavaScript in ABP Angular, MVC and Blazor WASM projects. Therefore they cannot be set as `HttpOnly`. You can check out the following modules that retrieve these cookies via JavaScript:
 
@@ -286,9 +280,11 @@ The `.AspNetCore.Culture` and `XSRF-TOKEN` cookies are being retrieved via JavaS
 * https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Components.Web/Volo/Abp/AspNetCore/Components/Web/AbpBlazorClientHttpMessageHandler.cs#L94
 
 **Setting `XSRF-TOKEN` cookie as `HttpOnly`:**
+
 If you want to set it, you can do it in the [AbpAntiForgeryOptions](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc/Volo/Abp/AspNetCore/Mvc/AntiForgery/AbpAntiForgeryOptions.cs#L56) class.
 
 **Setting `.AspNetCore.Culture` cookie as `HttpOnly`:**
+
 If you want to set it, you can do it in the [AbpRequestCultureCookieHelper](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore/Microsoft/AspNetCore/RequestLocalization/AbpRequestCultureCookieHelper.cs#L16) class. Set the option as `HttpOnly = true`.
 
 The related issue for this alert can be found at https://github.com/abpframework/abp/issues/14214.
@@ -296,6 +292,8 @@ The related issue for this alert can be found at https://github.com/abpframework
 ### Cookie with SameSite Attribute None [Risk: Low] — Positive (No need for a fix)
 
 * *[GET] — https://localhost:44349 (and there are several URLs)*
+* *[GET] — https://localhost:44349/Abp/ApplicationConfigurationScript*
+* *[GET] — https://localhost:44349/Account/ForgotPassword (and there are several URLs)*
 * *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D%252FAccount%252F%7E%252FAccount%252FLogin&uiCulture=a (and there are several URLs)*
 
 **Description:** 
@@ -334,7 +332,7 @@ Disable debugging messages before pushing them to production.
 
 **Explanation:** 
 
-The response of the endpoints above return localization texts which are not real error messages. As there is no real error in the backend, this vulnerability is a **false-positive** alert.
+The response of the endpoints above return localization texts which are not real error messages. As there is no real error in the backend side, this vulnerability is a **false-positive** alert.
 
 ![Information Disclosure - Debug Error Messages](../images/pen-test-information-disclosure.png)
 
@@ -363,3 +361,19 @@ Enabling HSTS on production.
 This vulnerability was reported as a positive alert because the application ran in `Development` mode. We enable HSTS on `Production` mode as can be seen in the image below, therefore this is a **false-positive** alert.
 
 ![HSTS](../images/pen-test-hsts.png)
+
+### Timestamp Disclosure - Unix [Risk: Low] - False Positive
+
+- *[GET] - https://localhost:44349/libs/zxcvbn/zxcvbn.js?=*
+
+**Description**: 
+
+A timestamp was disclosed by the application/web server - Unix
+
+**Solution**:
+
+Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.
+
+**Explanation**: 
+
+This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](https://docs.abp.io/en/commercial/latest/ui/angular/password-complexity-indicator-component). This library is one of the most password strength estimator and it's being used widely and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
