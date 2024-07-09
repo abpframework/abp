@@ -75,7 +75,13 @@
                     if (args.$el.hasClass('goog-te-combo')) {
                         args.$el.removeClass('goog-te-combo').addClass('form-select');
                         $('#google_translate_select').append(args.$el);
-                    }
+                        var a = $('#google_translate_element').find('a');
+                        var img = $('#google_translate_element').find('img');
+                        if (a.length > 0 && img.length > 0) {
+                            var alt = img.attr('alt');
+                            a.removeClass().css('color', '#666').html(alt);
+                        }
+                    }    
                 });
             </script>
             <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
