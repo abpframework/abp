@@ -1,5 +1,15 @@
 # Extracting a Module as a Microservice
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Communications Between Microservices",
+    "Path": "guides/interservice-communication"
+  }
+}
+````
+
 To run the initial microservice template properly, **AdministrationService** hosts required management modules such as permission-management, setting-management, audit-logging etc. However, you may need to extract one or more management system into an isolated microservice as hosted alone.
 This guide explains how to extract `Audit-Logging Management` as a sample management module from the Administration service into a different microservice called **LoggingService**.
 
@@ -323,8 +333,3 @@ Add/update/delete new product:
 Then you can check Audit Logs under Administration -> Audit Logs
 
 ![event-based-audit-logs](../images/event-based-audit-logs.png)
-
-
-## Next
-
-- [Communications Between Microservices](interservice-communication.md)

@@ -12,7 +12,7 @@ In this pattern, a service sends message without waiting for a response, and one
 
 Further information check out https://docs.microsoft.com/en-us/azure/architecture/microservices/design/interservice-communication
 
-## Next
+## See Also
 
 - [Synchronous Communication](synchronous-interservice-communication.md)
 - [Asynchronous Communication](asynchronous-interservice-communication.md)
