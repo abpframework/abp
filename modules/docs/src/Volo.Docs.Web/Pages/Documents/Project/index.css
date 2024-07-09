@@ -40,7 +40,7 @@ body {
   white-space: break-spaces !important;
 }
 
-.goog-te-combo {
+/* .goog-te-combo {
   width: 100%;
   height: auto;
   padding: 0.75rem 2.25rem 0.75rem 0.75rem !important;
@@ -49,7 +49,7 @@ body {
   border: 0;
   min-height: 30px;
   color: rgba(255, 255, 255, 0.7);
-}
+} */
 
 .goog-te-combo:focus-visible {
   border: 0px;

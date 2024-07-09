@@ -63,14 +63,20 @@
             <script type="text/javascript">
                 function googleTranslateElementInit() {
                     new google.translate.TranslateElement({
-                      pageLanguage: '@DocsWebOptions.Value.GetCultureLanguageCode(CultureInfo.CurrentUICulture)',
-                      autoDisplay: false,
-                      disableAutoTranslation: true,
-                      includedLanguages: '@string.Join(",", DocsWebOptions.Value.IncludedLanguages)',
-                      layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
-                    },
-                    'google_translate_element');
-                  }
+                        pageLanguage: '@DocsWebOptions.Value.GetCultureLanguageCode(CultureInfo.CurrentUICulture)',
+                        autoDisplay: false,
+                        disableAutoTranslation: true,
+                        includedLanguages: '@string.Join(",", DocsWebOptions.Value.IncludedLanguages)',
+                        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+                    }, 'google_translate_element');
+                }
+
+                abp.dom.onNodeAdded(function (args) {
+                    if (args.$el.hasClass('goog-te-combo')) {
+                        args.$el.removeClass('goog-te-combo').addClass('form-select');
+                        $('#google_translate_select').append(args.$el);
+                    }
+                });
             </script>
             <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         }
@@ -120,13 +126,6 @@
 
         <div class="docs-tree-list">
             <div class="row gx-2 mb-2 ">
-                @if (DocsWebOptions.Value.UseGoogleTranslation)
-                {
-                    <div>
-                        <span class="google_translate_text">Google Translate</span>
-                        <div id="google_translate_element" class="mb-3"></div>
-                    </div>
-                }
                 @if (Model.ShowProjectsCombobox && Model.ProjectSelectItems.Count > 1)
                 {
                     <div class="col-12 mb-2">
@@ -224,6 +223,17 @@
                     </div>
                 </div>
             </div>
+
+            @if (DocsWebOptions.Value.UseGoogleTranslation)
+            {
+                <div class="docs-version mt-2 skiptranslate">
+                    <span>@L["GoogleTranslate"]</span>
+                    <div class="version-select">
+                        <div class="input-group" id="google_translate_select"></div>
+                    </div>
+                </div>
+                <div id="google_translate_element" class="mt-1"></div>
+            }
 
             <div id="search-all-document" style="display: none;" class="search-all-document-container">
                 <button class="btn" type="button">
