@@ -10,6 +10,7 @@ This module implements the Audit Logging system of an application;
 * View details of an entity change. 
 * View all changes of an entity. 
 * This module also defines reusable "Average Execution Duration Per Day" and "Error Rate" widgets.
+* Periodic clean up of audit logs.
 
 See [the module description page](https://commercial.abp.io/modules/Volo.AuditLogging.Ui) for an overview of the module features.
 
@@ -79,6 +80,20 @@ You can view details of all changes of an entity by clicking the "Full Change Hi
 
 ![audit-logging-module-full-entity-change-details-modal](../images/audit-logging-module-full-entity-change-details-modal.png)
 
+#### Audit Log Settings
+
+The *Audit Log* settings tab is used to configure audit log settings. You can enable or disable the clean up service system wide. This way, you can shut down the clean up service for all tenants and host. If the system wide clean up service is enabled, you can configure the global *Expired Item Deletion Period* for all tenants and host.
+
+![audit-logging-module-global-settings](../images/audit-logging-module-global-settings.png)
+
+When configuring the global settings for the audit log module from the host side in this manner, ensure that each tenant and host uses the global values. If you want to set tenant/host-specific values, you can do so under *Settings* -> *Audit Log* -> *General*. This way, you can disable the clean up service for specific tenants or host. It overrides the global settings.
+
+![audit-logging-module-general-settings](../images/audit-logging-module-general-settings.png)
+
+To view the audit log settings, you need to enable the feature. For the host side, navigate to *Settings* -> *Feature Management* -> *Manage Host Features* -> *Audit Logging* -> *Enable audit log setting management*. For the tenant side, you can use either [Tenant Features](./saas.md#tenant-features) or [Edition Features](./saas.md#edition-features).
+
+> If you don't enable the *Cleanup Service System Wide* from the host side under *Settings* -> *Audit logs* -> *Global*, it won't remove the expired audit logs, even if there are tenant specific settings.
+
 ## Data seed
 
 This module doesn't seed any data.
@@ -97,6 +112,19 @@ Configure<AbpAuditingOptions>(options =>
 ````
 
 To see `AbpAuditingOptions` properties, please see its [documentation](../framework/infrastructure/audit-logging.md#abpauditingoptions).
+
+### ExpiredAuditLogDeleterOptions
+
+`ExpiredAuditLogDeleterOptions` can be configured in the UI layer, within the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+
+```csharp
+Configure<ExpiredAuditLogDeleterOptions>(options =>
+{
+    options.Period = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
+});
+```
+
+The *Period* doesn't mean the *Expired Item Deletion Period*. It's the period of the worker to run clean up service system wide. The default value is 1 day.
 
 ## Internals
 
