@@ -208,6 +208,17 @@
                 }
             </div>
 
+            @if (DocsWebOptions.Value.UseGoogleTranslation)
+            {
+                <div class="docs-version mt-2 skiptranslate">
+                    <span>@L["GoogleTranslate"]</span>
+                    <div class="version-select">
+                        <div class="input-group" id="google_translate_select"></div>
+                    </div>
+                </div>
+                <div id="google_translate_element" class="mt-1 mb-2"></div>
+            }
+
             <div class="docs-version">
                 <div class="version-select">
                     <div class="input-group align-items-center">
@@ -223,17 +234,6 @@
                     </div>
                 </div>
             </div>
-
-            @if (DocsWebOptions.Value.UseGoogleTranslation)
-            {
-                <div class="docs-version mt-2 skiptranslate">
-                    <span>@L["GoogleTranslate"]</span>
-                    <div class="version-select">
-                        <div class="input-group" id="google_translate_select"></div>
-                    </div>
-                </div>
-                <div id="google_translate_element" class="mt-1"></div>
-            }
 
             <div id="search-all-document" style="display: none;" class="search-all-document-container">
                 <button class="btn" type="button">
