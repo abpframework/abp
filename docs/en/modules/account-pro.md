@@ -342,3 +342,5 @@ This module doesn't define any additional distributed event. See the [standard d
 
 * [Authority Delegation](./account/authority-delegation.md)
 * [Impersonation](./account/impersonation.md)
+* [Linked Accounts](./account/linkedaccounts.md)
+* [Session Management](./account/session-management.md)
