@@ -75,6 +75,44 @@ This page is used to send Name, Surname and Email Address of user to PayU.
 
 ### Admin Pages
 
+### Angular UI
+
+#### Installation
+
+In order to configure the application to use the `PaymentModule`, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root module. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
+
+```js
+// app.module.ts
+import { PaymentAdminConfigModule } from '@volo/abp.ng.payment/admin/config';
+
+@NgModule({
+  imports: [
+    // other imports
+    PaymentAdminConfigModule.forRoot(),
+    // other imports
+  ],
+  // ...
+})
+export class AppModule {}
+```
+
+The `PaymentAdminModule` should be imported and lazy-loaded in your routing module as below:
+
+```js
+// app-routing.module.ts
+const routes: Routes = [
+  // other route definitions
+  {
+  path: 'payment',
+  loadChildren: () =>
+    import('@volo/abp.ng.payment/admin').then(m => m.PaymentAdminModule.forLazy()),
+  },
+];
+
+@NgModule(/* AppRoutingModule metadata */)
+export class AppRoutingModule {}
+```
+
 #### Payment plans page
 Payment plans for subscriptions can be managed on this page. You can connect external subscriptions for each gateway to a plan.
 
