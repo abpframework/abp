@@ -437,3 +437,4 @@ This module doesn't define any additional distributed event. See the [standard d
 * [OAuth Login](./identity/oauth-login.md)
 * [Periodic Password Change (Password Aging)](./identity/periodic-password-change.md)
 * [Two Factor Authentication](./identity/two-factor-authentication.md)
+* [Session Management](./identity/session-management.md)

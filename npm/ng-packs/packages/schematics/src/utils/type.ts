@@ -14,7 +14,7 @@ export function createTypeSimplifier() {
     );
 
     type = /any</.test(type) ? 'any' : type;
-     const { identifier, generics, array} = extractSimpleGenerics(type);
+    const { identifier, generics, array } = extractSimpleGenerics(type);
     return generics.length ? `${identifier}<${generics.join(', ')}>${array}` : identifier;
   });
 
@@ -64,12 +64,21 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
   return (imports: Import[], types: TypeWithEnum[]) => {
     types.forEach(({ type, isEnum }) => {
       const newImport = mapTypeToImport(type, isEnum);
-      if (!newImport) return;
+      if (!newImport) {
+        return;
+      }
+
+      if(newImport.specifiers.some(f => f.toLocaleLowerCase() === type.toLocaleLowerCase())){
+        return;
+      }
 
       const existingImport = imports.find(
         ({ keyword, path }) => keyword === newImport.keyword && path === newImport.path,
       );
-      if (!existingImport) return imports.push(newImport);
+
+      if (!existingImport){
+        return imports.push(newImport);
+      }
 
       existingImport.refs = [...new Set([...existingImport.refs, ...newImport.refs])];
       existingImport.specifiers = [
@@ -91,11 +100,15 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
     const modelNamespace = parseNamespace(solution, type);
     const refs = [removeTypeModifiers(type)];
     const specifiers = [adaptType(simplifyType(refs[0]).split('<')[0])];
-    const path = VOLO_REGEX.test(type)
-      ? '@abp/ng.core'
-      : isEnum
-      ? relativePathToEnum(namespace, modelNamespace, specifiers[0])
-      : relativePathToModel(namespace, modelNamespace);
+    let path = relativePathToModel(namespace, modelNamespace);
+    
+    if (VOLO_REGEX.test(type)) {
+      path = '@abp/ng.core';
+    }
+
+    if (isEnum) {
+      path = relativePathToEnum(namespace, modelNamespace, specifiers[0]);
+    }
 
     return new Import({ keyword: eImportKeyword.Type, path, refs, specifiers });
   };

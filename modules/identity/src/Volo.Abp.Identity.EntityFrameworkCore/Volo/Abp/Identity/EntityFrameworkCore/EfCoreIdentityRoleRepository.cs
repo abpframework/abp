@@ -29,26 +29,26 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
     }
 
     public virtual async Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
-        string sorting = null, 
+        string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string filter = null,
-        bool includeDetails = false, 
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         var roles = await GetListInternalAsync(sorting, maxResultCount, skipCount, filter, includeDetails, cancellationToken: cancellationToken);
-        
+
         var roleIds = roles.Select(x => x.Id).ToList();
         var userCount = await (await GetDbContextAsync()).Set<IdentityUserRole>()
             .Where(userRole => roleIds.Contains(userRole.RoleId))
             .GroupBy(userRole => userRole.RoleId)
-            .Select(x => new  
+            .Select(x => new
             {
                 RoleId = x.Key,
                 Count = x.Count()
             })
             .ToListAsync(GetCancellationToken(cancellationToken));
-        
+
         return roles.Select(role => new IdentityRoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
     }
 
@@ -90,6 +90,20 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
             .LongCountAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task RemoveClaimFromAllRolesAsync(string claimType, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var roleClaims = await dbContext.Set<IdentityRoleClaim>().Where(uc => uc.ClaimType == claimType).ToListAsync(cancellationToken: cancellationToken);
+        if (roleClaims.Any())
+        {
+            (await GetDbContextAsync()).Set<IdentityRoleClaim>().RemoveRange(roleClaims);
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+            }
+        }
     }
 
     protected virtual async Task<List<IdentityRole>> GetListInternalAsync(

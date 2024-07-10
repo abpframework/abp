@@ -80,7 +80,7 @@
                             <span class="font-weight-bold author-name-span" data-author-id="@blog.Author.Id">@@@blog.Author?.UserName</span>
                             <small style="opacity:.65;">@blog.CreationTime</small>
                         </p>
-                        <p style="min-height: 60px;">@blog.ShortDescription</p>
+                        <p class="cms-blogpost-desc-preview">@blog.ShortDescription</p>
                         <div class="d-grid gap-2">
                             <a href="/@CmsBlogsWebConsts.BlogsRoutePrefix/@Model.BlogSlug/@blog.Slug" class="btn btn-light">
                                 @L["Read"]

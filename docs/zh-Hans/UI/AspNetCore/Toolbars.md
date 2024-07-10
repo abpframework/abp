@@ -1,3 +1,0 @@
-# Toolbars
-
-TODO

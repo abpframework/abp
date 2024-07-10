@@ -1,5 +1,4 @@
-import { VOLO_REGEX } from '../constants';
-import { Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
+import { Import, Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
 import {
   extractGenerics,
   generateRefWithPlaceholders,
@@ -17,6 +16,8 @@ import {
   extendsSelf,
   removeTypeModifiers,
 } from './type';
+import { SAAS_NAMESPACE, TENANT_KEY, VOLO_PACKAGE_PROXY_IMPORTS, VOLO_REGEX } from '../constants';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 
@@ -40,7 +41,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
     sortInterfaces(interfaces);
 
     interfaces.forEach(_interface => {
-      if (VOLO_REGEX.test(_interface.ref)) return;
+      if (VOLO_REGEX.test(_interface.ref) || VOLO_PACKAGE_PROXY_IMPORTS.has(_interface.ref)) return;
 
       if (types[_interface.ref]!.isEnum) {
         if (!enums.includes(_interface.ref)) enums.push(_interface.ref);
@@ -71,23 +72,36 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
       model.interfaces.forEach(_interface => {
         const { baseType } = types[_interface.ref];
 
-        if (baseType && parseNamespace(solution, baseType) !== model.namespace){
+        if (baseType && parseNamespace(solution, baseType) !== model.namespace) {
           const baseTypeWithGenericParams = parseBaseTypeWithGenericTypes(baseType);
           baseTypeWithGenericParams.forEach(t => {
             toBeImported.push({
               type: t,
               isEnum: false,
             });
-          })
+          });
+        }
 
-}
         [..._interface.properties, ..._interface.generics].forEach(prop => {
           prop.refs.forEach(ref => {
             const propType = types[ref];
-            if (!propType) return;
-            if (propType.isEnum) toBeImported.push({ type: ref, isEnum: true });
-            else if (parseNamespace(solution, ref) !== model.namespace)
-              toBeImported.push({ type: ref, isEnum: false });
+            if (!propType) {
+              return;
+            }
+
+            if (propType.isEnum) {
+              toBeImported.push({ type: ref, isEnum: true });
+            }
+
+            if (parseNamespace(solution, ref) !== model.namespace) {
+              const isEnumImportAvailable = toBeImported.some(importValue => {
+                return importValue.isEnum && importValue.type === ref;
+              });
+
+              if (!isEnumImportAvailable) {
+                toBeImported.push({ type: ref, isEnum: false });
+              }
+            }
           });
         });
       });
@@ -176,20 +190,85 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return (prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired));
+  return prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired);
 }
 
-export function  parseBaseTypeWithGenericTypes(type: string): string[] {
+export function parseBaseTypeWithGenericTypes(type: string): string[] {
   const parsedTypeNode = parseGenerics(type);
-  const nodeToText = (node: TypeNode,acc:string[] = []): string[] => {
 
+  const nodeToText = (node: TypeNode, acc: string[] = []): string[] => {
     acc.push(node.data);
-    if(node.children && node.children.length > 0){
+    if (node.children && node.children.length > 0) {
       node.children.forEach(child => {
-        nodeToText(child,acc);
-      })
+        nodeToText(child, acc);
+      });
     }
     return acc;
-  }
+  };
+
   return nodeToText(parsedTypeNode);
+}
+
+export function resolveAbpPackages(models: Model[]) {
+  for (const model of models) {
+    renamePropForTenant(model.interfaces);
+
+    model.imports.forEach((imp, i) => {
+      fixImportNameForTenant(imp);
+
+      for (const ref of imp.refs) {
+        const path = VOLO_PACKAGE_PROXY_IMPORTS.get(ref);
+        if (path) {
+          model.imports[i] = new Import({ ...imp, path });
+        }
+      }
+    });
+  }
+}
+
+function renamePropForTenant(interfaces: Interface[]) {
+  for (const inters of interfaces) {
+    for (const prop of inters.properties) {
+      const isTenant = prop.name.toLocaleLowerCase().includes(TENANT_KEY);
+      const isSaasDto = prop.refs.filter(f => f.startsWith(SAAS_NAMESPACE)).length > 0;
+
+      if (isTenant && isSaasDto) {
+        prop.type = 'Saas' + prop.type;
+      }
+    }
+  }
+}
+
+function fixImportNameForTenant(imp: Import) {
+  imp.specifiers.forEach((spe, index) => {
+    const isTenant = spe.toLocaleLowerCase().includes(TENANT_KEY);
+
+    if (isTenant) {
+      imp.specifiers[index] = 'Saas' + spe;
+    }
+  });
+}
+
+export function resolveSelfGenericProps(params: Partial<ModelGeneratorParams>) {
+  const { types, solution } = params;
+  if (!types || !solution) {
+    return;
+  }
+
+  Object.keys(types)
+    .filter(f => f.startsWith(solution))
+    .forEach(key => {
+      const type = types[key];
+      if (type.genericArguments?.length) {
+        type.properties?.map(prop => {
+          if (prop.type.includes('<>')) {
+            prop.type = prop.type.replace('<>', `<${type.genericArguments!.join(', ')}>`);
+            prop.typeSimple = prop.typeSimple.replace(
+              '<>',
+              `<${type.genericArguments!.join(', ')}>`,
+            );
+          }
+        });
+      }
+    });
 }

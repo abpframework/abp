@@ -1,12 +1,12 @@
 {
-  "version": "8.1.1",
+  "version": "8.2.0",
   "name": "@abp/codemirror",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~8.1.1",
-    "codemirror": "^5.65.1"
+    "@abp/core": "~8.2.0",
+    "codemirror": "^6.0.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

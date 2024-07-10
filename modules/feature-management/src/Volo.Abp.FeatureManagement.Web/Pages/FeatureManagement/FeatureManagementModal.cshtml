@@ -51,11 +51,13 @@
                                             {
                                                 <abp-input asp-for="@feature.Value"
                                                            type="checkbox"
+                                                           class="d-inline"
                                                            abp-id-name="@Model.FeatureGroups[i].Features[j].BoolValue"
                                                            label="@feature.DisplayName"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
                                                            group-style="margin-inline-start: @(feature.Depth * 20)px"/>
+
                                                 @if (feature.Description != null)
                                                 {
                                                     <div class="form-text" style="margin-inline-start: @(feature.Depth * 20)px">@feature.Description</div>

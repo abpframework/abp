@@ -39,6 +39,8 @@ After adding the package reference, open the module class of the project (eg: `{
 )]
 ```
 
+> If you are using Blazor Web App, you need to add the `Volo.FileManagement.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and ad the `Volo.Chat.FileManagement.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
+
 If your project is using `EntityFrameworkCore`, you need to add following configuration to `OnModelCreating` method at your `DbContext`.
 
 If your project is using `MongoDB`, you need to add following configuration to `CreateModel` method at your `DbContext`.

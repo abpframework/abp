@@ -41,15 +41,21 @@ After adding the package reference, open the module class of the project (eg: `{
   typeof(ChatApplicationModule)
 )]
 ```
+
+> If you are using Blazor Web App, you need to add the `Volo.Chat.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and ad the `Volo.Chat.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
+
 The `Volo.Chat.SignalR` package must be added according to your project structure:
 
 * **Mvc**
-  * **Non-Tiered**: {ProjectName}.Web project.
-  * **Tiered**: {ProjectName}.Web project.
-* **Blazor Server** : {ProjectName}.Blazor.Server.
-* **Angular**
-  * **Unified Backend**: {ProjectName}.HttpApi.Host project.
-  * **Separated Auth Server**:  {ProjectName}.HttpApi.Host project. 
+  * **Tiered**: {ProjectName}.HttpApi.Host project.
+* **Blazor Server**
+  * **Unified Backend**: {ProjectName}.Blazor.
+  * **Separated Auth Server**: {ProjectName}.HttpApi.Host project.
+* **Blazor WebAssembly**: {ProjectName}.HttpApi.Host project. 
+* **Blazor Web App**
+  * **Unified Backend**: {ProjectName}.Blazor.
+  * **Separated Auth Server**: {ProjectName}.HttpApi.Host project.
+* **Angular**: {ProjectName}.HttpApi.Host project.
 
 If database provider of your project is **EntityFrameworkCore**, use `modelBuilder.ConfigureChat()` to configure database tables in your project's DbContext.
 

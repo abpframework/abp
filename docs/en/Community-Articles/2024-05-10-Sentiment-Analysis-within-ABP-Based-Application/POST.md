@@ -325,9 +325,13 @@ public class SentimentAnalyzeResult
 }
 ```
 
-Then, finally we can run the application to see the final results:
+Then, finally, we can run the application to see the final results:
 
 ![](demo.gif)
+
+## Advanced: Reusing And Optimizing Machine Learning Models
+
+Once the model is trained and evaluated, we can save the trained model and use it directly for further use. In this way, you don’t have to retrain the model every time when you want to make predictions. It’s essential to save the trained model for future use and a must for the production-ready code. I created a separate article dedicated to that topic, and if you are interested, you can read it from [here](https://engincanv.github.io/machine-learning/sentiment-analysis/best-practises/2024/05/16/reusing-and-optimizing-machine-learning-models-in-dotnet.html).
 
 ## Conclusion
 

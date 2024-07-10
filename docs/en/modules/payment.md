@@ -40,6 +40,8 @@ After adding the package reference, open the module class of the project (eg: `{
 )]
 ```
 
+> If you are using Blazor Web App, you need to add the `Volo.Payment.Admin.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and ad the `Volo.Payment.Admin.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
+
 ### Supported Gateway Packages
 
 In order to use a Payment Gateway, you need to add related NuGet packages to your related project as explained in Manual Installation section above and add ```DependsOn``` to your related module. For example, if you don't want to use PayU, you don't have to use its NuGet packages. 
@@ -74,6 +76,44 @@ This page is used to send Name, Surname and Email Address of user to PayU.
 ![payment-payu-prepayment-page](../images/payment-payu-prepayment-page.png)
 
 ### Admin Pages
+
+### Angular UI
+
+#### Installation
+
+In order to configure the application to use the `PaymentModule`, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root module. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
+
+```js
+// app.module.ts
+import { PaymentAdminConfigModule } from '@volo/abp.ng.payment/admin/config';
+
+@NgModule({
+  imports: [
+    // other imports
+    PaymentAdminConfigModule.forRoot(),
+    // other imports
+  ],
+  // ...
+})
+export class AppModule {}
+```
+
+The `PaymentAdminModule` should be imported and lazy-loaded in your routing module as below:
+
+```js
+// app-routing.module.ts
+const routes: Routes = [
+  // other route definitions
+  {
+  path: 'payment',
+  loadChildren: () =>
+    import('@volo/abp.ng.payment/admin').then(m => m.PaymentAdminModule.forLazy()),
+  },
+];
+
+@NgModule(/* AppRoutingModule metadata */)
+export class AppRoutingModule {}
+```
 
 #### Payment plans page
 Payment plans for subscriptions can be managed on this page. You can connect external subscriptions for each gateway to a plan.

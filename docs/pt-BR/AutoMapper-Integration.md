@@ -1,3 +1,0 @@
-## AutoMapper Integration
-
-Façam

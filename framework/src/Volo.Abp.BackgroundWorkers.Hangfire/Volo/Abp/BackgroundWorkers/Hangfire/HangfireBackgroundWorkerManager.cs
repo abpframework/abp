@@ -94,6 +94,10 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
         {
             cron = $"0 */{time.TotalHours} * * *";
         }
+        else if(time.TotalDays <= 31)
+        {
+            cron = $"0 0 0 1/{time.TotalDays} * *";
+        }
         else
         {
             throw new AbpException(

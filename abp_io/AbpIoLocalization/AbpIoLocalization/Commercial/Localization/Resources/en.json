@@ -916,7 +916,7 @@
     "AbpStudio_Description": "ABP Studio is still under development. You can fill out the form below to be one of the first users.",
     "AbpStudio_Description1": "ABP Studio is a <span class=\"text-highlight-white\">cross-platform desktop application</span> for ABP developers.",
     "AbpStudio_Description2": "It is <span class=\"text-highlight-white\">well integrated</span> to the ABP Framework and aims to provide a comfortable development environment for you by <span class=\"text-highlight-white\">automating things, providing insights</span> about your solution, making <span class=\"text-highlight-white\">develop, run</span> and <span class=\"text-highlight-white\">deploy</span> your solutions much easier.",
-    "AbpStudio_ComingSoon": "Coming Soon <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Planned beta release date: Q4 of 2023.</span>",
+    "AbpStudio_ComingSoon": "If you want to test ABP Studio before anyone else, become a BETA tester",
     "AbpStudio_PlannedPreviewDate": "Planned preview release date: Q4 of 2023.",
     "BetaRequest": "Beta Request",
     "CreateNewSolutions": "Create New Solutions",

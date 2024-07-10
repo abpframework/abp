@@ -6,25 +6,26 @@ This module extends the [open-source CMS Kit module](../cms-kit) and adds additi
 
 > **This module is currently available for MVC / Razor Pages and Blazor UIs**.
 
-The following features are provided by the open source CMS Kit module:
+The following features are provided by the open-source CMS Kit module:
 
 - [**Page**](../cms-kit/pages.md) management system to manage dynamic pages with dynamic URLs.
-- [**Blogging**](../cms-kit/blogging.md) system to create publish blog posts with multiple blog support.
+- [**Blogging**](../cms-kit/blogging.md) system to create and publish blog posts with multiple blog support.
 - [**Tagging**](../cms-kit/tags.md) system to tag any kind of resource, like a blog post.
-- [**Comment**](../cms-kit/comments.md) system to add comments feature to any kind of resource, like blog post or a product review page.
+- [**Comment**](../cms-kit/comments.md) system to add comments feature to any kind of resource, like a blog post or a product review page.
 - [**Reaction**](../cms-kit/reactions.md) system to add reactions (smileys) feature to any kind of resource, like a blog post or a comment.
-- [**Rating**](../cms-kit/ratings.md) system to add rating feature to any kind of resource.
+- [**Rating**](../cms-kit/ratings.md) system to add a rating feature to any kind of resource.
 - [**Menu**](../cms-kit/menus.md) system to manage public menus dynamically.
 - [**Global resources**](../cms-kit/global-resources.md) system to add global styles and scripts dynamically.
 - [**Dynamic widget**](../cms-kit/dynamic-widget.md) system to create dynamic widgets for page and blog posts.
 
-And the following features are provided by the CMS Kit pro version:
+The following features are provided by the CMS Kit Pro version:
 
-* [**Newsletter**](./newsletter.md) system to allow users to subscribe to newsletters.
-* [**Contact form**](./contact-form.md) system to allow users to write messages to you.
-* [**URL forwarding**](./url-forwarding.md) system to create URLs that redirect to other pages or external websites.
-* [**Poll**](./poll.md) system to create quick polls for users
-* [**Page Feedback**](./page-feedback.md) system to allow users to send feedback about pages.
+* [**Newsletter**](newsletter.md) It allows users to subscribe to newsletters.
+* [**Contact form**](contact-form.md) It allows users to write messages to you.
+* [**URL forwarding**](URL-forwarding.md) It allows the creation of URLs that point to other pages or external websites.
+* [**Poll**](poll.md) It allows to create simple polls for your visitors.
+* [**Page Feedback**](page-feedback.md) It allows users to send feedback for your pages.
+* [**Faq**](faq.md) system to create dynamic FAQ.
 
 Click on a feature to understand and learn how to use it. See [the module description page](https://commercial.abp.io/modules/Volo.CmsKit.Pro) for an overview of the module features.
 
@@ -61,8 +62,7 @@ GlobalFeatureManager.Instance.Modules.CmsKitPro(cmsKitPro =>
 
 Alternatively, you can enable features individually, like `cmsKit.Comments.Enable();`.
 
-> If you are using Entity Framework Core, do not forget to add a new migration and update your database.
-
+> If you are using Entity Framework Core, remember to add a new migration and update your database.
 
 ## Entity Extensions
 
@@ -115,12 +115,12 @@ public static void ConfigureExtraProperties()
  
 * `ConfigureCmsKitPro` method is used to configure the entities of the CMS Kit Pro module.
 
-* `cmsKit.ConfigurePoll(...)` is used to configure the **Poll** entity of the CMS Kit Pro module. You can add or update your extra properties of the **Poll** entity. 
+* `cmsKit.ConfigurePoll(...)` is used to configure the **Poll** entity of the CMS Kit Pro module. You can add or update the extra properties of the **Poll** entity. 
 
-* `cmsKit.ConfigureNewsletterRecord(...)` is used to configure the **NewsletterRecord** entity of the CMS Kit Pro module. You can add or update your extra properties of the **NewsletterRecord** entity. 
+* `cmsKit.ConfigureNewsletterRecord(...)` is used to configure the **NewsletterRecord** entity of the CMS Kit Pro module. You can add or update the extra properties of the **NewsletterRecord** entity. 
 
 * You can also set some validation rules for the property that you defined. In the above sample, `RequiredAttribute` and `StringLengthAttribute` were added for the property named **"NewsletterRecord"**. 
 
 * When you define the new property, it will automatically add to **Entity**, **HTTP API** and **UI** for you. 
   * Once you define a property, it appears in the create and update forms of the related entity. 
-  * New properties also appear in the datatable of the related page.
+  * New properties also appear in the data table on the related page.
