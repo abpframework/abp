@@ -1,3 +1,0 @@
-## Data Transfer Objects
-
-Façam
