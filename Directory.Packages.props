@@ -49,7 +49,7 @@
     <PackageVersion Include="LibGit2Sharp" Version="0.28.0" />
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
     <PackageVersion Include="MailKit" Version="4.3.0" />
-    <PackageVersion Include="Markdig.Signed" Version="0.33.0" />
+    <PackageVersion Include="Markdig.Signed" Version="0.37.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="8.0.4" />
