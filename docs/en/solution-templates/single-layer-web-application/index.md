@@ -15,7 +15,7 @@ You can use the [ABP CLI](../../cli) to create a new project using this startup 
 Firstly, install the ABP CLI if you haven't installed it before:
 
 ```bash
-dotnet tool install -g Volo.Abp.Cli
+dotnet tool install -g Volo.Abp.Studio.Cli
 ```
 
 Then, use the `abp new` command in an empty folder to create a new solution:

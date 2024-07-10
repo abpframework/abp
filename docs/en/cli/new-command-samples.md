@@ -162,7 +162,7 @@ Module are reusable sub applications used by your main project. Using ABP Module
 
 ## Choose database management system
 
-The default database management system (DBMS) is `Entity Framework Core` / ` SQL Server`. You can choose a DBMS by passing `--database-management-system` parameter. [Accepted values](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Cli.Core/Volo/Abp/Cli/ProjectBuilding/Building/DatabaseManagementSystem.cs) are `SqlServer`, `MySQL`, `SQLite`, `Oracle`, `Oracle-Devart`, `PostgreSQL`. The default value is `SqlServer`.
+The default database management system (DBMS) is `Entity Framework Core` / ` SQL Server`. You can choose a DBMS by passing `--database-management-system` parameter. Accepted values are `SqlServer`, `MySQL`, `SQLite`, `Oracle`, `Oracle-Devart`, `PostgreSQL`. The default value is `SqlServer`.
 
 * Angular UI, **PostgreSQL** database, creates the project in a new folder:
 

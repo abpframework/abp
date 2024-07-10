@@ -66,7 +66,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 We will use the [ABP CLI](../../../cli/index.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
 ````bash
-dotnet tool install -g Volo.Abp.Cli
+dotnet tool install -g Volo.Abp.Studio.Cli
 ````
 
 ## Create Your ABP Solution
