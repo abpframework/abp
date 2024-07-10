@@ -12,7 +12,7 @@ This document provides an overview for the ABP Blazor UI integration and highlig
 
 You can follow the documents below to start with the ABP and the Blazor UI now:
 
-* [Get started](../../../get-started/index.md.md) with the Blazor UI for the ABP.
+* [Get started](../../../get-started/index.md) with the Blazor UI for the ABP.
 * [Web Application Development Tutorial](../../../tutorials/book-store/part-01.md) with the Blazor UI.
 
 ## Modularity
