@@ -4,7 +4,11 @@ This document introduces the breaking changes done in the ABP 4.0 and explains h
 
 > See [the blog post](https://blog.abp.io/abp/ABP.IO-Platform-v4.0-RC-Has-Been-Released-based-on-.NET-5.0) to learn what's new with the ABP 4.0. This document only focuses on the breaking changes.
 
-## Overall
+## Open-Source (Framework)
+
+If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+
+### Overall
 
 Here, the overall list of the changes;
 
@@ -20,17 +24,17 @@ Here, the overall list of the changes;
 * Removed the SessionState in the @abp/ng.core package ([#5606](https://github.com/abpframework/abp/issues/5606)).
 * Made some API revisions & startup template changes for the Blazor UI.
 
-## Upgraded to .NET 5.0
+### Upgraded to .NET 5.0
 
 ABP has been moved to .NET 5.0. So, if you want to upgrade to the ABP 4.0, you also need to upgrade to .NET 5.0.
 
 See the [Migrate from ASP.NET Core 3.1 to 5.0](https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50) document to learn how to upgrade your solution to .NET 5.0.
 
-## Moved to System.Text.Json
+### Moved to System.Text.Json
 
 ABP 4.0 uses the System.Text.Json by default as the JSON serialization library. It, actually, using a hybrid approach: Continues to use the Newtonsoft.Json when it needs to use features not supported by the System.Text.Json.
 
-### Unsupported Types
+#### Unsupported Types
 
 If you want to use the Newtonsoft.Json to serialize/deserialize for some specific types, you can configure the `AbpSystemTextJsonSerializerOptions` in your module's `ConfigureServices` method.
 
@@ -43,7 +47,7 @@ Configure<AbpSystemTextJsonSerializerOptions>(options =>
 });
 ````
 
-### Always Use the Newtonsoft.Json
+#### Always Use the Newtonsoft.Json
 
 If you want to continue to use the Newtonsoft.Json library for all the types, you can set `UseHybridSerializer` to false in the `PreConfigureServices` method of your module class:
 
@@ -54,56 +58,56 @@ PreConfigure<AbpJsonOptions>(options =>
 });
 ````
 
-## Upgraded to Identity Server 4.1.1
+### Upgraded to Identity Server 4.1.1
 
 ABP upgrades the [IdentityServer4](https://www.nuget.org/packages/IdentityServer4) library from 3.x to 4.1.1 with the ABP version 4.0. IdentityServer 4.x has a lot of changes. Some of them are **breaking changes in the data structure**.
 
-### Entity Changes
+#### Entity Changes
 
 Entity changes don't directly affect your application; however, it is good to know.
 
-#### ApiScope
+##### ApiScope
 
 As the **most critical breaking change**; Identity Server 4.x defines the `ApiScope` as an independent aggregate root. Previously, it was the child entity of the `ApiResource`. This change requires manual operation. See the _Database Changes_ section.
 
 Also, added `Enabled(string)` and `Description(bool,true)` properties.
 
-#### ApiResource
+##### ApiResource
 
 - Added `AllowedAccessTokenSigningAlgorithms (string)` and `ShowInDiscoveryDocument(bool, default: true)` properties
 
-#### Client
+##### Client
 
 - Added `RequireRequestObject <bool>` and `AllowedIdentityTokenSigningAlgorithms <string>` properties.
 - Changed the default value of `RequireConsent` from `true` to `false`.
 - Changed the default value of `RequirePkce` from `false` to `true`.
 
-#### DeviceFlowCodes
+##### DeviceFlowCodes
 
 - Added `SessionId <string>` and `Description <string>` properties.
 
-#### PersistedGrant
+##### PersistedGrant
 
 - Added `SessionId <string>`, `Description <string>` and `ConsumedTime <DateTime?>` properties
 
-### Database Changes
+#### Database Changes
 
 > Attention: **Please backup your database** before the migration!
 
 **If you are upgrading from 3.x, then there are some steps should be done in your database.**
 
-#### Database Schema Migration
+##### Database Schema Migration
 
 If you are using **Entity Framework Core**, you need to add a new database migration, using the `Add-Migration` command, and apply changes to the database. Please **review the migration** script and read the sections below to understand if it affects your existing data. Otherwise, you may **lose some of your configuration**, which may not be easy to remember and re-configure.
 
-#### Seed Code
+##### Seed Code
 
 If you haven't customized the `IdentityServerDataSeedContributor` and haven't customized the initial data inside the `IdentityServer*` tables;
 
 1. Update `IdentityServerDataSeedContributor` class by comparing to [the latest code](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Domain/IdentityServer/IdentityServerDataSeedContributor.cs). You probably only need to add the `CreateApiScopesAsync` method and the code related to it.
 2. Then you can simply clear all the **data** in these tables then execute the `DbMigrator` application to fill it with the new configuration.
 
-#### Migrating the Configuration Data
+##### Migrating the Configuration Data
 
 If you've customized your IdentityServer configuration in the database or in the seed data, you should understand the changes and upgrade your code/data accordingly. Especially, the following changes will affect your application:
 
@@ -113,7 +117,7 @@ If you've customized your IdentityServer configuration in the database or in the
 
 You may need to perform additional steps based on how much you made custom configurations.
 
-### Other IdentityServer Changes
+#### Other IdentityServer Changes
 
 IdentityServer has removed the [public origin option](https://github.com/IdentityServer/IdentityServer4/pull/4335). It was resolving HTTP/HTTPS conversion issues, but they decided to leave this to the developer. This is especially needed if you use a reverse proxy where your external protocol is HTTPS but internal protocol is HTTP.
 
@@ -129,12 +133,12 @@ app.Use((httpContext, next) =>
 
 > This sample is obtained from the [ASP.NET Core documentation](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer#scenarios-and-use-cases). You can use it if you always use HTTPS in all environments.
 
-### Related Resources
+#### Related Resources
 
 - https://leastprivilege.com/2020/06/19/announcing-identityserver4-v4-0/
 - https://github.com/IdentityServer/IdentityServer4/issues/4592
 
-## Auto API Controller Route Changes
+### Auto API Controller Route Changes
 
 The route calculation for the [Auto API Controllers](../../framework/api-development/auto-controllers.md) is changing with the ABP version 4.0 ([#5325](https://github.com/abpframework/abp/issues/5325)). Before v4.0 the route paths were **camelCase**. After version 4.0, it's changed to **kebab-case** route paths where it is possible.
 
@@ -146,7 +150,7 @@ The route calculation for the [Auto API Controllers](../../framework/api-develop
 
 ![route-4](images/route-4.png)
 
-### How to Fix?
+#### How to Fix?
 
 You may not take any action for the MVC & Blazor UI projects.
 
@@ -154,7 +158,7 @@ For the Angular UI, this change may effect your client UI. If you have used the 
 
 If there are other type of clients (e.g. 3rd-party companies) using your APIs, they also need to update the URLs.
 
-### Use the v3.x style URLs
+#### Use the v3.x style URLs
 
 If it is hard to change it in your application, you can still to use the version 3.x route strategy, by following one of the approaches;
 
@@ -181,7 +185,7 @@ Configure<AbpConventionalControllerOptions>(options =>
 
 Setting it globally affects all the modules in a modular application.
 
-## Removed Retry for the Dynamic HTTP Client Proxies
+### Removed Retry for the Dynamic HTTP Client Proxies
 
 [Dynamic C# HTTP Client Proxies](../../framework/api-development/dynamic-csharp-clients.md) were trying up to 3 times if a request fails using the [Polly](https://github.com/App-vNext/Polly) library. Starting from the version 4.0, this logic has been removed. If you need it, you should configure it in your own application, by configuring the `AbpHttpClientBuilderOptions` in the `PreConfigureServices` method of your module.
 
@@ -207,7 +211,7 @@ This example uses the Microsoft.Extensions.Http.Polly NuGet package.
 
 If you create a new solution, you can find the same configuration in the `.HttpApi.Client.ConsoleTestApp` project's module class, as an example.
 
-## Creation Audit Properties Made Read-Only
+### Creation Audit Properties Made Read-Only
 
 Removed setters from the `IHasCreationTime.CreationTime`, ` IMustHaveCreator.CreatorId` and `IMayHaveCreator.CreatorId` properties to accidently set the creation properties while updating an existing entity.
 
@@ -215,15 +219,15 @@ Since the ABP automatically sets these properties, you normally don't need to di
 
 These properties implemented with `protected set` in the `Entity` and `AggregateRoot` base classes. That means you can still set in a derived class, if you need it. Alternatively, you can use reflection to set them (Or use `ObjectHelper.TrySetProperty` which internally uses reflection) out of the class if you have to do.
 
-## Changed type of the IHasExtraProperties.ExtraProperties
+### Changed type of the IHasExtraProperties.ExtraProperties
 
 `IHasExtraProperties.ExtraProperties` was a regular `Dictionary<string, object>`. With the version 4.0, it is replaced with `ExtraPropertyDictionary` class which inherits the `Dictionary<string, object>`. 
 
 Most of the applications don't be affected by this change. If you've directly implemented this interface, replace the standard dictionary to the `ExtraPropertyDictionary`.
 
-## Other Changes
+### Other Changes
 
-### IdentityOptions Usage
+#### IdentityOptions Usage
 
 Previously, when you inject `IOptions<IdentityOptions>`, you get a dynamically overridden options value. For example, when you get `IdentityOptions.Password.RequiredLength`, the value is being changed based on the setting (`IdentitySettingNames.Password.RequiredLength`) of the current tenant. That means `IdentityOptions` changes per tenant. However, this caused an [issue](https://github.com/abpframework/abp/issues/6318) and we [had to change](https://github.com/abpframework/abp/pull/6333) the usage.
 
@@ -253,11 +257,11 @@ public class MyService : ITransientDependency
 Pre-built modules already handles this. However, if you have used `IdentityOptions` directly in your code, you also need to follow this new pattern.
 Please make sure that the injected `IOptions<IdentityOptions>` service and the service consuming it are in the same scope of dependency injection container.
 
-### LDAP module full async
+#### LDAP module full async
 
 In order to solve the problem of async over sync, `ILdapManager` uses async method instead of sync. And use [`ldap4net`](https://github.com/flamencist/ldap4net) to replace [`Novell.Directory.Ldap.NETStandard`](https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard) package.
 
-### Dynamic external login provider system
+#### Dynamic external login provider system
 
 You need to change the `WithDynamicOptions` method and pass the `Handler` class of the external login provider.
 Use the `goto definition` function in Visual Studio or Rider to check `Handler` in the extension method like `AddGoogle`.
@@ -267,14 +271,18 @@ Use the `goto definition` function in Visual Studio or Rider to check `Handler` 
 + WithDynamicOptions<GoogleOptions, GoogleHandler>()
 ````
 
-## ASP.NET Core MVC / Razor Pages UI
+### ASP.NET Core MVC / Razor Pages UI
 
 See the [ASP.NET Core MVC / Razor Pages UI Migration Guide](Abp-4-0-MVC-Razor-Pages.md).
 
-## Angular UI
+### Angular UI
 
 See the [Angular UI Migration Guide](Abp-4-0-Angular.md).
 
-## Blazor UI
+### Blazor UI
 
 See the [Blazor UI Migration Guide](Abp-4-0-Blazor.md).
+
+## PRO
+
+There is not a single breaking-change that effect the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to do in your application.

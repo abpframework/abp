@@ -2,16 +2,20 @@
 
 This document is a guide for upgrading ABP v8.0 solutions to ABP v8.1. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
-## Added `NormalizedName` property to `Tenant`
+## Open-Source (Framework)
+
+If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+
+### Added `NormalizedName` property to `Tenant`
 
 The `Tenant` entity has a new property called `NormalizedName`. It is used to find/cache a tenant by its name in a case-insensitive way.
 This property is automatically set when a tenant is created or updated. It gets the normalized name of the tenant name by `UpperInvariantTenantNormalizer(ITenantNormalizer)` service. You can implement this service to change the normalization logic.
 
-### `ITenantStore` 
+#### `ITenantStore` 
 
 The `ITenantStore` will use the `NormalizedName` parameter to get tenants, Please use the `ITenantNormalizer` to normalize the tenant name before calling the `ITenantStore` methods.
 
-### Update `NormalizedName` in `appsettings.json`
+#### Update `NormalizedName` in `appsettings.json`
 
 If your tenants defined in the `appsettings.json` file, you should add the `NormalizedName` property to your tenants.
 
@@ -33,7 +37,7 @@ If your tenants defined in the `appsettings.json` file, you should add the `Norm
   ]
 ````
 
-### Update `NormalizedName` in the database
+#### Update `NormalizedName` in the database
 
 Please add a sql script to your migration to set the `NormalizedName` property of the existing tenants. You can use the following script:
 
@@ -83,7 +87,7 @@ public partial class Add_NormalizedName : Migration
 
 See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/managing?tabs=dotnet-core-cli#adding-raw-sql to learn how to add raw SQL to migrations.
 
-## Use `Asp.Versioning.Mvc` to replace `Microsoft.AspNetCore.Mvc.Versioning`
+### Use `Asp.Versioning.Mvc` to replace `Microsoft.AspNetCore.Mvc.Versioning`
 
 The Microsoft.AspNetCore.Mvc.Versioning packages are now deprecated and superseded by Asp.Versioning.Mvc.
 See the announcement here: https://github.com/dotnet/aspnet-api-versioning/discussions/807
@@ -92,14 +96,14 @@ The namespace of the `[ControllerName]` attribute has changed to `using Asp.Vers
 
 Related PR: https://github.com/abpframework/abp/pull/18380
 
-## New asynchronous methods for `IAppUrlProvider`
+### New asynchronous methods for `IAppUrlProvider`
 
 The `IsRedirectAllowedUrl` method of `IAppUrlProvider` has been changed to `IsRedirectAllowedUrlAsync` and it is now an async method. 
 You should update your usage of `IAppUrlProvider` to use the new method.
 
 Related PR: https://github.com/abpframework/abp/pull/18492
 
-## New attribute: `ExposeKeyedServiceAttribute`
+### New attribute: `ExposeKeyedServiceAttribute`
 
 The new `ExposeKeyedServiceAttribute` is used to control which keyed services are provided by the related class. Example:
 
@@ -144,3 +148,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 This is a small **Breaking Change** because `IOnServiceExposingContext` has changed. You should update your usage of `IOnServiceExposingContext` if you have related code.
 
 Related PR: https://github.com/abpframework/abp/pull/18819
+
+## PRO
+
+There is not a single breaking-change that effect the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to do in your application.
