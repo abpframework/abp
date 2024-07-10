@@ -65,6 +65,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
+        public string DocumentsUrlPrefix { get; set; }
+
         public bool ShowProjectsCombobox { get; set; }
         
         public bool ShowProjectsComboboxLabel { get; set; }
@@ -127,6 +129,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task<IActionResult> SetPageAsync()
         {
+            DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox && !_uiOptions.SingleProjectMode.Enable;
             ShowProjectsComboboxLabel = ShowProjectsCombobox && _uiOptions.ShowProjectsComboboxLabel;
             FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
