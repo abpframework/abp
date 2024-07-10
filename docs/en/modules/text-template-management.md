@@ -4,7 +4,7 @@
 
 This module is used to store and edit template contents for [the text templating system](https://docs.abp.io/en/abp/latest/Text-Templating) of the ABP. So, you may need to understand it to better understand the purpose of this module.
 
-There are different use cases of the text templating system. For example, [the Account Module](Account.md) is using it to define templates for sending emails when it needs to send emails to users (like sending "password reset link" email). This module provides UI to easily edit these email templates.
+There are different use cases of the text templating system. For example, [the Account Module](account.md) is using it to define templates for sending emails when it needs to send emails to users (like sending "password reset link" email). This module provides UI to easily edit these email templates.
 
 See [the module description page](https://commercial.abp.io/modules/Volo.TextTemplateManagement) for an overview of the module features.
 
