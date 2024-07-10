@@ -210,7 +210,7 @@ This table stores the user votes for the polls that are managed by the CMS Kit M
 
 This table stores URL mappings in the system and is used by the [URL Forwarding](./cms-kit-pro/url-forwarding.md) feature of the CMS Kit Module. The [URL forwarding system](./cms-kit-pro/url-forwarding.md) allows the creation of URLs that redirect to other pages or external websites. 
 
-## [Docs Module](Docs.md)
+## [Docs Module](docs.md)
 
 ### DocsProjects
 
