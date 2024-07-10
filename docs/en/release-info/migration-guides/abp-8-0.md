@@ -324,7 +324,7 @@ The client-proxy.js file was also updated as follows:
 
 ### CMS Kit Pro: Changed Route Convention for Poll Feature
 
-We have made some improvements on the [CMS Kit Pro's Poll Feature](../../Modules/cms-kit-pro/poll.md) such as preventing adding more than one poll with the same date range to a widget, or not rendering a widget without any active poll. During the development, we revised the Poll Feature and noticed that the route convention was not following the _REST API Route URI Convention_ and this led us to update the routes.
+We have made some improvements on the [CMS Kit Pro's Poll Feature](../../modules/cms-kit-pro/poll.md) such as preventing adding more than one poll with the same date range to a widget, or not rendering a widget without any active poll. During the development, we revised the Poll Feature and noticed that the route convention was not following the _REST API Route URI Convention_ and this led us to update the routes.
 
 You can see the following changes and if you are making a request to the following routes, you can change them as stated below:
 

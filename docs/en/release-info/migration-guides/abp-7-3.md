@@ -4,7 +4,7 @@ This document is a guide for upgrading ABP v7.2 solutions to ABP v7.3. There are
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### OpenIddict - Refactoring of `ClaimsPrincipal`
 
@@ -36,4 +36,4 @@ We would like  to inform you that ABP version 7.3 uses Angular version 16. Pleas
 
 ## PRO
 
-There is not a single breaking-change that effect the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to do in your application.
+There is not a single breaking-change that affects the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to make in your application.

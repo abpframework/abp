@@ -4,7 +4,7 @@ This document is a guide for upgrading ABP v7.1 solutions to ABP v7.2. There are
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### `LastPasswordChangeTime` and `ShouldChangePasswordOnNextLogin` Properties Added to the `IdentityUser` Class
 
@@ -22,7 +22,7 @@ However, if you have used this method in your projects, you need to rename it as
 
 If you are a paid-license owner and using the ABP's paid version, then please follow the following sections to get informed about the breaking changes and apply the necessary ones:
 
-## Payment Plan Management Permissions Moved to the Host Side
+### Payment Plan Management Permissions Moved to the Host Side
 
 In this version, the payment plan management permissions (payment plan, gateway, and payment request permissions) have been moved to the host side. These permissions could have been visible on both sides prior to this version (tenants and hosts). However, a tenant can't configure its own payment gateway configurations by default, therefore it was not beneficial and logical. 
 

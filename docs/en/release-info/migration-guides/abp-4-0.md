@@ -6,7 +6,7 @@ This document introduces the breaking changes done in the ABP 4.0 and explains h
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### Overall
 
@@ -285,4 +285,4 @@ See the [Blazor UI Migration Guide](Abp-4-0-Blazor.md).
 
 ## PRO
 
-There is not a single breaking-change that effect the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to do in your application.
+There is not a single breaking-change that affects the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to make in your application.

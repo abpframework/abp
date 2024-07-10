@@ -4,7 +4,7 @@ This document is a guide for upgrading ABP v7.3 solutions to ABP v7.4. There are
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### Bumped the `Microsoft.Extensions.FileProviders.Embedded` Package Version To v7.0.10
 

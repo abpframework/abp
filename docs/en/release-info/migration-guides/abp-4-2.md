@@ -4,7 +4,7 @@ This version has no breaking changes but there is an important change on the rep
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### IRepository.GetQueryableAsync
 
@@ -106,4 +106,4 @@ If you are upgrading to 4.2, you also need also upgrade the following packages i
 
 ## PRO
 
-There is not a single breaking-change that effect the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to do in your application.
+There is not a single breaking-change that affects the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to make in your application.

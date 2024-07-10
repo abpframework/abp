@@ -4,7 +4,7 @@ This version comes with some changes in the startup template, mostly related to 
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### `UseVirtualFiles` Has Been Marked as `Obsolete`
 

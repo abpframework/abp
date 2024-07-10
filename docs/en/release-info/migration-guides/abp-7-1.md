@@ -6,7 +6,7 @@ This document is a guide for upgrading ABP v7.0 solutions to ABP v7.1. There are
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### Navigation Menu - `CustomData` type changed to `Dictionary<string, object>`
 
@@ -26,4 +26,4 @@ var menu = new ApplicationMenu("Home", L["Home"], "/").WithCustomData("CustomDat
 
 ## PRO
 
-There is not a single breaking-change that effect the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to do in your application.
+There is not a single breaking-change that affects the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to make in your application.

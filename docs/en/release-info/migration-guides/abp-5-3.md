@@ -4,7 +4,7 @@ This document is a guide for upgrading ABP v5.2 solutions to ABP v5.3. There is 
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### AutoMapper Upgraded to v11.0.1
 

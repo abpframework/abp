@@ -4,7 +4,7 @@ This document is a guide for upgrading ABP v5.3 solutions to ABP v6.0. There is 
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### The IsActive property is Added
 

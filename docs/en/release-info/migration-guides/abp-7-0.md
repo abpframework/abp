@@ -6,7 +6,7 @@ This document is a guide for upgrading ABP v6.x solutions to ABP v7.0. There are
 
 ## Open-Source (Framework)
 
-If you are using the one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
 
 ### `FormTenantResolveContributor` Removed from the `AbpTenantResolveOptions`
 
