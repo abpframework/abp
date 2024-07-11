@@ -1,5 +1,7 @@
 # LeptonX Theme Module
 
+> You must have an ABP Team or a higher license to use this theme.
+
 The LeptonX Theme is a professional theme for the ABP. 
 
 * Check out the website of LeptonX on https://leptontheme.com/.

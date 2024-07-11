@@ -670,6 +670,6 @@ See the following examples:
 
 
 
-## Next
+## See Also
 
 Docs Module is also available as a standalone application. Check out [VoloDocs](../apps/volo-docs.md).

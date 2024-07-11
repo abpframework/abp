@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 The ABP Studio Microservice solution consists of a few microservices at the beginning. It is expected that you [add more microservices](guides/add-new-microservice.md) as your solution grows. This document briefly explains the structure of pre-built microservices in the solution.
 
 The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:

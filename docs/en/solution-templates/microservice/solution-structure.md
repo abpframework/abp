@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 This document explains the solution and folder structure of ABP Studio's [microservice solution template](index.md).
 
 > This document assumes that you've created a new microservice solution by following the *[Quick Start: Creating a Microservice Solution with ABP Studio](../../get-started/microservice.md)* guide.

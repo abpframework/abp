@@ -2,9 +2,13 @@
 
 ## Introduction
 
+> You must have an ABP Team or a higher license to use this module & its features.
+
 The Identity PRO module has built-in `LdapExternalLoginProvider` and `OpenLdapManager` services. It implements LDAP authentication and gets user info for [external login](https://github.com/abpframework/abp/issues/4977).
 
 The cross-platform [LdapForNet](https://www.nuget.org/packages/LdapForNet/) library is used for Windows LDAP authentication. See [LdapForNet GitHub repository](https://github.com/flamencist/ldap4net) for more information.
+
+> You must have an ABP Team or a higher license to use this module & its features.
 
 ## How to enable LDAP external login?
 

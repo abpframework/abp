@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 An API Gateway is used to expose your system to the clients. It also provides a single entry point to your system.
 
 ## About the BFF Pattern

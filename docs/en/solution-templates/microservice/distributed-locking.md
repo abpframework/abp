@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 Distributed locking is a common pattern in distributed systems to ensure that only one instance of a service can execute a specific operation at a time. This document explains how the distributed locking mechanism works in the microservice solution template. You can learn more in the [Distributed Locking](../../framework/infrastructure/distributed-locking.md) document.
 
 ## Distributed Locking in Microservice Solutions
