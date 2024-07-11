@@ -2,7 +2,7 @@
 <CascadingValue Value="this" IsFixed="true">
     @if ( Type == ActionType.Dropdown )
     {
-        <Dropdown Disabled=@Disabled>
+        <Dropdown Disabled="@DisabledOrNoActions()">
             @if ( HasPrimaryAction )
             {
                 <Button Block="true"
