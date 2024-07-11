@@ -62,7 +62,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 In this tutorial, we will use the [ABP CLI](../../../cli/index.md) to create the sample application with the ABP. You can run the following command in a command-line terminal to install the **ABP CLI**, if you haven't installed it yet:
 
 ````bash
-dotnet tool install -g Volo.Abp.Cli
+dotnet tool install -g Volo.Abp.Studio.Cli
 ````
 
 Then create an empty folder, open a command-line terminal and execute the following command in the terminal:

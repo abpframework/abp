@@ -7,7 +7,7 @@ This template is used to create a minimalist console application project.
 First, install the [ABP CLI](../cli) if you haven't installed before:
 
 ````bash
-dotnet tool install -g Volo.Abp.Cli
+dotnet tool install -g Volo.Abp.Studio.Cli
 ````
 
 Then use the `abp new` command in an empty folder to create a new solution:
