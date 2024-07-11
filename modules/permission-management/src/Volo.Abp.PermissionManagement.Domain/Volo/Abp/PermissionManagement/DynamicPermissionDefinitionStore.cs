@@ -23,7 +23,8 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
     protected IAbpDistributedLock DistributedLock { get; }
     public PermissionManagementOptions PermissionManagementOptions { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
-    
+    protected DistributedCacheEntryOptions DistributedCacheEntryOptions { get; }
+
     public DynamicPermissionDefinitionStore(
         IPermissionGroupDefinitionRecordRepository permissionGroupRepository,
         IPermissionDefinitionRecordRepository permissionRepository,
@@ -32,7 +33,8 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         IDistributedCache distributedCache,
         IOptions<AbpDistributedCacheOptions> cacheOptions,
         IOptions<PermissionManagementOptions> permissionManagementOptions,
-        IAbpDistributedLock distributedLock)
+        IAbpDistributedLock distributedLock,
+        IOptions<DistributedCacheEntryOptions> distributedCacheEntryOptions)
     {
         PermissionGroupRepository = permissionGroupRepository;
         PermissionRepository = permissionRepository;
@@ -40,6 +42,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
         StoreCache = storeCache;
         DistributedCache = distributedCache;
         DistributedLock = distributedLock;
+        DistributedCacheEntryOptions = distributedCacheEntryOptions.Value;
         PermissionManagementOptions = permissionManagementOptions.Value;
         CacheOptions = cacheOptions.Value;
     }
@@ -149,10 +152,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
             await DistributedCache.SetStringAsync(
                 cacheKey,
                 stampInDistributedCache,
-                new DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                }
+                DistributedCacheEntryOptions
             );
         }
 
