@@ -51,7 +51,11 @@
         >
           @for (option of options$ | async; track option.value) {
             <option [ngValue]="option.value">
-              {{ option.key }}
+              @if (prop.isExtra) {
+                {{ '::' + option.key | abpLocalization }}
+              } @else {
+                {{ option.key }}
+              }
             </option>
           }
         </select>
@@ -68,7 +72,11 @@
         >
           @for (option of options$ | async; track option.value) {
             <option [ngValue]="option.value">
-              {{ option.key }}
+              @if (prop.isExtra) {
+                {{ '::' + option.key | abpLocalization }}
+              } @else {
+                {{ option.key }}
+              }
             </option>
           }
         </select>
@@ -142,7 +150,7 @@
               aria-hidden="true"
               [ngClass]="{
                 'fa-eye-slash': !showPassword,
-                'fa-eye': showPassword
+                'fa-eye': showPassword,
               }"
             ></i>
           </button>
