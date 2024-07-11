@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 The ABP Studio [microservice solution template](index.md) is fully configured for [logging](../../framework/fundamentals/logging.md). All the services, applications and gateways are configured to use the [Serilog](https://serilog.net/) library for structured logging. They are configured in a common way for logging. This document explains that common logging structure.
 
 ## The Serilog Sinks

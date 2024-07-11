@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 This document explains how to deploy the microservice solution to a Kubernetes cluster using [Helm](https://helm.sh/) charts. The microservice solution template includes Helm charts for each microservice, API gateway, application, and infrastructure (Redis, RabbitMQ, etc). You can use these charts to deploy the solution to a Kubernetes cluster. You can see the Helm charts in the `etc/helm` folder of the solution.
 
 ## Folder Structure

@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 The *Administration* microservice is responsible for managing permissions. It is used by all the services and applications in the solution. This document explains how permission management works in the microservice solution.
 
 When we send a request to `/api/abp/application-configuration`, the gateway application forwards the request to the *Administration* microservice. The *Administration* microservice returns the application configuration, which includes the granted policies (permissions) for the current user. You can see the details of the application configuration here: [Application Configuration](../../framework/api-development/standard-apis/configuration.md). 

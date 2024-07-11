@@ -1,4 +1,4 @@
-# Reaction System
+# CMS Kit: Reaction System
 
 CMS Kit provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments.
 

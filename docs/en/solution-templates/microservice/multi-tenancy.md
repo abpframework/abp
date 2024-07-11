@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 Multi-tenancy is a software architecture where a single instance(codebase) of software runs on a server and serves multiple tenants. Tenants are isolated from each other and can have their own data, configurations, and users. This document explains how the multi-tenancy mechanism works in the microservice solution template. You can learn more about multi-tenancy in the [Multi-Tenancy](../../framework/architecture/multi-tenancy/index.md), [Tenant Management](../../modules/tenant-management.md) and [SaaS](../../modules/saas.md) documents.
 
 ## Multi-Tenancy in Microservice Solutions

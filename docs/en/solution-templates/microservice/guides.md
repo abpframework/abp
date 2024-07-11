@@ -1,5 +1,7 @@
 # Microservice Solution: Guides
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 The following documents provide guiding to achieve various tasks on the microservice solution:
 
 - [Adding new microservices](adding-new-microservices.md)

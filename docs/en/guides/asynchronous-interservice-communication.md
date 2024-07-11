@@ -68,7 +68,7 @@ Create a handler class that inherits `IDistributedEventHandler<ProductPriceChang
 
 ## Auto Events
 
-You can also subscribe to [pre-defined events](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#pre-defined-events). ABP publishes events for **create**, **update** and **delete** operations for an entity once you configure it. Consider you want to update your order whenever a user information is changed.
+You can also subscribe to [pre-defined events](../framework/infrastructure/event-bus/distributed/index.md#pre-defined-events). ABP publishes events for **create**, **update** and **delete** operations for an entity once you configure it. Consider you want to update your order whenever a user information is changed.
 
 `IdentityService` using [Identity Module](https://docs.abp.io/en/abp/latest/Modules/Identity#distributed-events) auto publishes `UserEto`. To reference `UserEto`, 
 
@@ -102,11 +102,11 @@ public class OrderUserUpdateHandler : IDistributedEventHandler<EntityUpdatedEto<
 }
 ```
 
-> Note: You can also use pre-defined ETO classes like `IdentityUserCreatedEto`. Check the [Pre-Defined Events documentations](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#pre-defined-events) for more.
+> Note: You can also use pre-defined ETO classes like `IdentityUserCreatedEto`. Check the [Pre-Defined Events documentations](../framework/infrastructure/event-bus/distributed/index.md#pre-defined-events) for more.
 
 
 
-## Next
+## See Also
 
-- [Distributed Event Bus](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus)
+- [Distributed Event Bus](../framework/infrastructure/event-bus/distributed/index.md)
 - [Synchronous Communication](synchronous-interservice-communication.md)

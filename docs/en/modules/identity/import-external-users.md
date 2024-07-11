@@ -2,8 +2,9 @@
 
 ## Introduction
 
-The Identity PRO module has built-in `LdapExternalLoginProvider` and `OAuthExternalLoginProvider` services. They not only support external login but also import users.
+> You must have an ABP Team or a higher license to use this module & its features.
 
+The Identity PRO module has built-in `LdapExternalLoginProvider` and `OAuthExternalLoginProvider` services. They not only support external login but also import users.
 
 ## How to import users from an external login provider?
 

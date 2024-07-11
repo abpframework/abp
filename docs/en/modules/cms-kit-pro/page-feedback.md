@@ -1,9 +1,11 @@
-# Page Feedback System
+# CMS Kit Pro: Page Feedback System
+
+> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
 
 The CMS Kit provides a **Page Feedback** system to collect feedback from users about pages.
 
-| ![cmskit-module-page-feedback-widget](../../images/cmskit-module-page-feedback-widget.png) |![cmskit-module-page-feedback-widget](../../images/cmskit-module-page-feedback-widget-2.png) |
-| --- | --- |
+| ![cmskit-module-page-feedback-widget](../../images/cmskit-module-page-feedback-widget.png) | ![cmskit-module-page-feedback-widget](../../images/cmskit-module-page-feedback-widget-2.png) |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
 
 ## Enabling the Page Feedback System
 

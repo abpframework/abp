@@ -1,5 +1,12 @@
 @page
+@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
@@ -8,13 +15,14 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
+@using Volo.Docs.Areas.Documents.TagHelpers
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @using Volo.Docs.Pages.Documents.Shared.ErrorComponent
-@using Volo.Docs.Pages.Shared.Components.Head
 @inject IThemeManager ThemeManager
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
+@inject IOptions<DocsWebGoogleTranslationOptions> DocsWebOptions
 
 @model IndexModel
 @{
@@ -36,7 +44,7 @@
 }
 
 @section scripts {
-    
+
     @if (Model.LoadSuccess)
     {
         <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -50,6 +58,34 @@
             <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
             <abp-script src="/Pages/Documents/Project/index.js"/>
         </abp-script-bundle>
+        if (DocsWebOptions.Value.UseGoogleTranslation)
+        {
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: '@DocsWebOptions.Value.GetCultureLanguageCode(CultureInfo.CurrentUICulture)',
+                        autoDisplay: false,
+                        disableAutoTranslation: true,
+                        includedLanguages: '@string.Join(",", DocsWebOptions.Value.IncludedLanguages)',
+                        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+                    }, 'google_translate_element');
+                }
+
+                abp.dom.onNodeAdded(function (args) {
+                    if (args.$el.hasClass('goog-te-combo')) {
+                        args.$el.removeClass('goog-te-combo').addClass('form-select');
+                        $('#google_translate_select').append(args.$el);
+                        var a = $('#google_translate_element').find('a');
+                        var img = $('#google_translate_element').find('img');
+                        if (a.length > 0 && img.length > 0) {
+                            var alt = img.attr('alt');
+                            a.removeClass().css('color', '#666').html(alt);
+                        }
+                    }    
+                });
+            </script>
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        }
     }
     else
     {
@@ -177,6 +213,17 @@
                     </div>
                 }
             </div>
+
+            @if (DocsWebOptions.Value.UseGoogleTranslation)
+            {
+                <div class="docs-version mt-2 skiptranslate">
+                    <span>@L["GoogleTranslate"]</span>
+                    <div class="version-select">
+                        <div class="input-group" id="google_translate_select"></div>
+                    </div>
+                </div>
+                <div id="google_translate_element" class="mt-1 mb-2"></div>
+            }
 
             <div class="docs-version">
                 <div class="version-select">
@@ -341,7 +388,7 @@
                                         var rowCount = count / maxCellCount + (count % maxCellCount > 0 ? 1 : 0);
                                         var cellSize = 12 / (count > maxCellCount ? maxCellCount : count);
                                         var latestCellSize = 12 / count - (rowCount - 1) * maxCellCount;
-                                        
+
                                         string BuildParameterDivClass(int index)
                                         {
                                             var row = index / maxCellCount;
@@ -349,7 +396,7 @@
                                             var currentCellSize = isLastRow ? latestCellSize : cellSize;
                                             return $"col-12 col-lg-{currentCellSize} mb-lg-{(isLastRow ? "0" : "2")} {(index == count - 1 ? "" : "mb-2")}";
                                         }
-                                        
+
                                         for (var i = 0; i < count; ++i)
                                         {
                                             var parameter = Model.DocumentPreferences.Parameters[i];
@@ -391,11 +438,11 @@
                                 </abp-alert>
                             }
                             @Html.Raw(Model.Document.Content)
-                            
+
                             @if (Model.DocumentNavigationsDto.HasValues)
                             {
                                 <hr class="my-4"/>
-                                
+
                                 <div class="row navigation">
                                     <div class="col-6">
                                         @if (Model.DocumentNavigationsDto.HasPrevious)

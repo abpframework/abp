@@ -1,5 +1,15 @@
 # Synchronous Communication between Microservices
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Asynchronous Communication",
+    "Path": "guides/asynchronous-interservice-communication"
+  }
+}
+````
+
 > This documentation introduces guidance for inter-service communication between two microservices using synchronous HTTP communication.
 
 The below sample demonstrates how to make a request to **ProductService** from **OrderService**. See [Add New Microservice Guide](add-microservice.md) to understand how to add a new microservice project (_OrderService_) to your solution.
@@ -164,7 +174,3 @@ Below you can see a screenshot of the final **IdentityServerDataSeeder.cs**, cre
 When the databases are seeded, **BookStore_Identity.IdentityServerClients** database should have a new client and **BookStore_Administration.AbpPermissionGrants** should be seeded with ProviderName **C**:
 
 ![IdentityServerDataSeeder changes](../images/added-orderservice-client-db-query.png)
-
-## Next
-
-*   [Asynchronous Communication](asynchronous-interservice-communication.md)

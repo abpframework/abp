@@ -2,7 +2,11 @@
 
 This version has no breaking changes but there is an important change on the repositories that should be applied for your application for an important performance and scalability gain.
 
-## IRepository.GetQueryableAsync
+## Open-Source (Framework)
+
+If you are using one of the open-source startup templates, then you can check the following sections to apply the related breaking changes:
+
+### IRepository.GetQueryableAsync
 
 `IRepository` interface inherits `IQueryable`, so you can directly use the standard LINQ extension methods, like `Where`, `OrderBy`, `First`, `Sum`... etc.
 
@@ -57,7 +61,7 @@ ABP may start a database transaction when you get an `IQueryable` (If current [U
 
 > **The new way has a significant performance and scalability gain. The old usage (directly using LINQ over the repositories) will be removed in the next major version (5.0).** You have a lot of time for the change, but we recommend to immediately take the action since the old usage has a big **scalability problem**.
 
-### Actions to Take
+#### Actions to Take
 
 * Use the repository's queryable feature as explained before.
 * If you've overridden `CreateFilteredQuery` in a class derived from `CrudAppService`, you should override the `CreateFilteredQueryAsync` instead and remove the `CreateFilteredQuery` in your class.
@@ -66,7 +70,7 @@ ABP may start a database transaction when you get an `IQueryable` (If current [U
 
 You can re-build your solution and check the `Obsolete` warnings to find some of the usages need to change.
 
-#### About IRepository Async Extension Methods
+##### About IRepository Async Extension Methods
 
 Using IRepository Async Extension Methods has no such a problem. The examples below are pretty fine:
 
@@ -83,7 +87,7 @@ var book1984 = await _bookRepository
 
 See the [repository documentation](https://docs.abp.io/en/abp/4.2/Repositories#iqueryable-async-operations) to understand the relation between `IQueryable` and asynchronous operations.
 
-## .NET Package Upgrades
+### .NET Package Upgrades
 
 ABP uses the latest 5.0.* .NET packages. If your application is using 5.0.0 packages, you may get an error on build. We recommend to depend on the .NET packages like `5.0.*` in the `.csproj` files to use the latest patch versions.
 
@@ -93,9 +97,13 @@ Example:
 <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.*" />
 ````
 
-## Blazorise Library Upgrade
+### Blazorise Library Upgrade
 
 If you are upgrading to 4.2, you also need also upgrade the following packages in your Blazor application;
 
 * `Blazorise.Bootstrap` to `0.9.3-preview6`
 * `Blazorise.Icons.FontAwesome` to `0.9.3-preview6`
+
+## PRO
+
+There is not a single breaking-change that affects the pro modules, nevertheless, please check the **Open-Source (Framework)** section above to ensure, there is not a change that you need to make in your application.

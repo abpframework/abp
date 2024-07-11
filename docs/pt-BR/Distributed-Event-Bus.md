@@ -1,3 +1,0 @@
-# Distributed Event Bus
-
-Façam

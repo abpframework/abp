@@ -1,5 +1,7 @@
 # Lepton Theme Module
 
+> You must have an ABP Team or a higher license to use this theme.
+
 The Lepton Theme is a professional theme for the ABP.
 
 * Built on the [Bootstrap 5](https://getbootstrap.com) library.

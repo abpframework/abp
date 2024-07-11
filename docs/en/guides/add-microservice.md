@@ -1,8 +1,20 @@
 # Add new Microservices to the Solution
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Guides: Communication Between Microservices",
+    "Path": "guides/interservice-communication"
+  }
+}
+````
+
 > This documentation introduces guidance for creating a new microservice for your microservice startup template. Eventually, these steps will be automated in the future however learning these steps may provide insight to learn the relations between microservices.
 
 ## Creating new service
+
+> You must have an ABP Business or a higher license to be able to create a new sub-microservice.
 
 You can create a new service (sub microservice) into your microservice solution by using the ABP CLI. Use the following command to create a new service:
 
@@ -520,7 +532,3 @@ Open your browser and navigate to your startup URL:
 ## Deployment
 
 If you are using K8s and Helm charts, don't forget to add new helm chart for the new OrderService and update the deployment and values .yaml files of related application and gateway charts.
-
-## Next
-
-- [Guides: Communication Between Microservices](interservice-communication.md)

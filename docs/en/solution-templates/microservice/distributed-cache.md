@@ -10,6 +10,8 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 Distributed caching is a common pattern in distributed systems to improve performance by storing frequently accessed data in a cache. This document explains how the distributed caching mechanism works in the microservice solution template. You can learn more in the [Distributed Cache](../../framework/fundamentals/caching.md) document.
 
 ## Distributed Cache in Microservice Solutions

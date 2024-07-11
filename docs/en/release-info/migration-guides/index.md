@@ -2,8 +2,6 @@
 
 The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../upgrading.md).
 
-> **If you have a commercial ABP license, see also [the migration guides for the pro features](pro).**
-
 - [8.0 to 8.1](abp-8-1.md)
 - [7.x to 8.0](abp-8-0.md)
 - [7.3 to 7.4](abp-7-4.md)

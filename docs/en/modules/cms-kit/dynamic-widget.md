@@ -1,4 +1,4 @@
-# Dynamic Widget
+# CMS Kit: Dynamic Widget
 
 CMS Kit provides a dynamic [widget](../../framework/ui/mvc-razor-pages/widgets.md) used to render the components previously developed by the software in the content of the pages and blog posts. Its means, that in static content you can use dynamic content. We will mention how you can do it. You have two choices to define the widget in the system: Writing and UI.
 
