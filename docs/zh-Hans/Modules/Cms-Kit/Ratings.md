@@ -1,3 +1,0 @@
-# Rating System
-
-TODO...

@@ -163,6 +163,11 @@ namespace VoloDocs.Web
             {
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
             });
+
+            Configure<DocsWebGoogleTranslationOptions>(options =>
+            {
+                options.UseGoogleTranslation = true;
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

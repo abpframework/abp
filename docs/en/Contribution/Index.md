@@ -29,23 +29,6 @@ You may want to fix a known bug or work on a planned enhancement. See [the issue
 
 If you have a feature idea for the framework or modules, [create an issue](https://github.com/abpframework/abp/issues/new) on Github or attend to an existing discussion. Then you can implement it if it's embraced by the community.
 
-## Document Translation
-
-You may want to translate the complete [documentation](https://docs.abp.io) (including this one) to your mother language. If so, follow these steps:
-
-* Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
-* To add a new language, create a new folder inside the [docs](https://github.com/abpframework/abp/tree/master/docs) folder. Folder names can be "en", "es", "fr", "tr" and so on based on the language (see [all culture codes](https://msdn.microsoft.com/en-us/library/hh441729.aspx)).
-* Get the ["en" folder](https://github.com/abpframework/abp/tree/master/docs/en) as a reference for the file names and folder structure. Keep the same naming if you are translating the same documentation.
-* Send a pull request (PR) once you translate any document. Please translate documents & send PRs one by one. Don't wait to finish translations for all documents.
-
-There are some fundamental documents need to be translated before publishing a language on the [ABP documentation web site](https://docs.abp.io):
-
-* Index (Home)
-* Getting Started
-* Web Application Development Tutorial
-
-A new language is published after these minimum translations have been completed.
-
 ## Resource Localization
 
 ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
