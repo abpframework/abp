@@ -45,4 +45,10 @@ body {
   outline: none;
 }
 
+.gsc-control-cse {
+    background-color: #fbfbfb !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
 /*# sourceMappingURL=Index.css.map */
