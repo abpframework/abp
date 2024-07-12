@@ -166,7 +166,7 @@ namespace VoloDocs.Web
 
             Configure<DocsWebGoogleOptions>(options =>
             {
-                options.EnableGoogleTranslation = true;
+                options.EnableGoogleTranslate = true;
                 options.EnableGoogleProgrammableSearchEngine = true;
                 options.GoogleSearchEngineId = "77c7266532da1427f";
             });

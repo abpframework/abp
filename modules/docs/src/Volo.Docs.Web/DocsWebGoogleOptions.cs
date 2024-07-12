@@ -6,7 +6,7 @@ namespace Volo.Docs;
 
 public class DocsWebGoogleOptions
 {
-    public bool EnableGoogleTranslation { get; set; }
+    public bool EnableGoogleTranslate { get; set; }
 
     /// <summary>
     /// https://cloud.google.com/translate/docs/languages
@@ -21,7 +21,7 @@ public class DocsWebGoogleOptions
 
     public DocsWebGoogleOptions()
     {
-        EnableGoogleTranslation = false;
+        EnableGoogleTranslate = false;
         IncludedLanguages =
         [
             "en",
