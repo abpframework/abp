@@ -59,7 +59,7 @@
             </tr>
             <tr>
                 <td>Command Line Interface</td>
-                <td><a href="https://docs.abp.io/en/abp/latest/CLI" target="_blank">ABP CLI</a></td>
+                <td><a href="https://abp.io/docs/latest/cli" target="_blank">ABP CLI</a></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
@@ -160,7 +160,7 @@
             </tr>
             <tr>
                 <td>User Delegation</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -233,7 +233,7 @@
             </tr>
             <tr>
                 <td>Tenant subscription, payment &amp; billing system</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -318,7 +318,7 @@
             </tr>
             <tr>
                 <td>Session timeout & User lock Screen</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -336,6 +336,11 @@
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
+            <tr>
+                <td>GDPR (downloading personal data & deleting accounts)</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>                
             <tr>
                 <td>UI Theme</td>
                 <td><a href="http://x.leptontheme.com/" target="_blank">Lepton-X</a>, <a href="http://leptontheme.com/" target="_blank">Lepton</a></td>
@@ -363,11 +368,16 @@
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
+                <td>.NET MAUI</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
                 <td colspan="3"><strong>Rapid Application Development</strong></td>
             </tr>
             <tr>
                 <td>Code generation extension</td>
-                <td><a href="https://docs.abp.io/en/commercial/latest/abp-suite/index" target="_blank">ABP Suite</a></td>
+                <td><a href="https://abp.io/docs/latest/suite" target="_blank">ABP Suite</a></td>
                 <td><a href="https://docs.aspnetzero.com/en/common/latest/Rapid-Application-Development" target="_blank">Power Tools</a></td>
             </tr>
             <tr>
@@ -385,7 +395,7 @@
             </tr>
             <tr>
                 <td>&nbsp;</td>
-                <td><a href="https://commercial.abp.io/pricing" target="_blank" rel="noopener">Pricing</a></td>
+                <td><a href="https://abp.io/pricing" target="_blank" rel="noopener">Pricing</a></td>
                 <td><a href="https://aspnetzero.com/Pricing">Pricing</a></td>
             </tr>
         </tbody>
