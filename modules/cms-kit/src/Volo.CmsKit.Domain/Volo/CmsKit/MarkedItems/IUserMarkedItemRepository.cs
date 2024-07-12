@@ -23,9 +23,10 @@ public interface IUserMarkedItemRepository : IBasicRepository<UserMarkedItem, Gu
         CancellationToken cancellationToken = default
     );
 
-    Task<IQueryable<UserMarkedItem>> GetQueryForUserAsync(
-        [NotNull] string entityType,
+    Task<List<string>> GetEntityIdsFilteredByUserAsync(
         [NotNull] Guid userId,
+        [NotNull] string entityType,
+        [CanBeNull] Guid? tenantId = null,
         CancellationToken cancellationToken = default
     );
 }

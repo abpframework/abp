@@ -48,5 +48,7 @@ public static class CmsKitErrorCodes
     public static class MarkedItems
     {
         public const string EntityCannotBeMarked = "CmsKit:MarkedItem:0001";
+        public const string MarkedItemDefinitionNotFound = "CmsKit:MarkedItem:0002";
+        public const string DuplicateMarkedItem = "CmsKit:MarkedItem:0003";
     }
 }

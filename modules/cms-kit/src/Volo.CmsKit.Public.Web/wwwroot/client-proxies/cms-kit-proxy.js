@@ -123,7 +123,7 @@
 
     abp.utils.createNamespace(window, 'volo.cmsKit.public.markedItems.markedItemPublic');
 
-    volo.cmsKit.public.markedItems.markedItemPublic.getForToggle = function(entityType, entityId, ajaxParams) {
+    volo.cmsKit.public.markedItems.markedItemPublic.getForUser = function(entityType, entityId, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-public/marked-items/' + entityType + '/' + entityId + '',
         type: 'GET'

@@ -26,6 +26,8 @@
     "CmsKit:Rating:0001": "لا يمكن تصنيف الكيان {EntityType}.",
     "CmsKit:Reaction:0001": "لا يمكن أن يحتوي الكيان {EntityType} على ردود أفعال.",
     "CmsKit:MarkedItem:0001": "لا يمكن أن تمييز الكيان {EntityType}.",
+    "CmsKit:MarkedItem:0002": "لم يتم العثور على تعريف لنوع الكيان '{EntityType}'.",
+    "CmsKit:MarkedItem:0003": "يوجد بالفعل تعريف لنوع الكيان '{EntityType}'. يجب أن يكون لكل نوع كيان تعريف واحد فقط.",
     "CmsKit:Tag:0002": "الكيان غير قابل للوسم!",
     "CommentAuthorizationExceptionMessage": "هذه التعليقات غير مسموح بها للعرض العام.",
     "CommentDeletionConfirmationMessage": "سيتم حذف هذا التعليق وجميع الردود!",

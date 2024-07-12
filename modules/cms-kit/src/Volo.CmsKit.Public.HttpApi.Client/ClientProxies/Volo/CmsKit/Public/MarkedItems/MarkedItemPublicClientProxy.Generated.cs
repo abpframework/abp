@@ -17,9 +17,9 @@ namespace Volo.CmsKit.Public.MarkedItems;
 [ExposeServices(typeof(IMarkedItemPublicAppService), typeof(MarkedItemPublicClientProxy))]
 public partial class MarkedItemPublicClientProxy : ClientProxyBase<IMarkedItemPublicAppService>, IMarkedItemPublicAppService
 {
-    public virtual async Task<MarkedItemWithToggleDto> GetForToggleAsync(string entityType, string entityId)
+    public virtual async Task<MarkedItemWithToggleDto> GetForUserAsync(string entityType, string entityId)
     {
-        return await RequestAsync<MarkedItemWithToggleDto>(nameof(GetForToggleAsync), new ClientProxyRequestTypeValue
+        return await RequestAsync<MarkedItemWithToggleDto>(nameof(GetForUserAsync), new ClientProxyRequestTypeValue
         {
             { typeof(string), entityType },
             { typeof(string), entityId }

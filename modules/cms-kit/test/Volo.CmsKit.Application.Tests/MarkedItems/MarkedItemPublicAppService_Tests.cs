@@ -32,11 +32,11 @@ public class MarkedItemPublicAppService_Tests : CmsKitApplicationTestBase
         _currentUser.Id.Returns(_cmsKitTestData.User1Id);
         _currentUser.IsAuthenticated.Returns(true);
 
-        var firstMarkedItem = await _markedItemPublicAppService.GetForToggleAsync(
+        var firstMarkedItem = await _markedItemPublicAppService.GetForUserAsync(
             _cmsKitTestData.EntityType1,
             _cmsKitTestData.EntityId1
         );
-        var secondMarkedItem = await _markedItemPublicAppService.GetForToggleAsync(
+        var secondMarkedItem = await _markedItemPublicAppService.GetForUserAsync(
             _cmsKitTestData.EntityType2,
             _cmsKitTestData.EntityId1
         );

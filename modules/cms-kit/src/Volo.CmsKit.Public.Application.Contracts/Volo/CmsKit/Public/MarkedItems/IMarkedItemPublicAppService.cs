@@ -5,6 +5,6 @@ namespace Volo.CmsKit.Public.MarkedItems;
 
 public interface IMarkedItemPublicAppService : IApplicationService
 {
-    Task<MarkedItemWithToggleDto> GetForToggleAsync(string entityType, string entityId);
+    Task<MarkedItemWithToggleDto> GetForUserAsync(string entityType, string entityId);
     Task<bool> ToggleAsync(string entityType, string entityId);
 }

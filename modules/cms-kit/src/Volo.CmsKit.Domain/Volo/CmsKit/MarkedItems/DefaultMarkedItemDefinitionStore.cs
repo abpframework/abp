@@ -29,8 +29,20 @@ public class DefaultMarkedItemDefinitionStore : IMarkedItemDefinitionStore
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        var definition = Options.EntityTypes.SingleOrDefault(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase));
+        var definitions = Options.EntityTypes
+                .Where(x => x.EntityType.Equals(entityType, StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
 
-        return Task.FromResult(definition);
+        if (definitions.Count == 0)
+        {
+            throw new MarkedItemDefinitionNotFoundException(entityType);
+        }
+
+        if (definitions.Count > 1)
+        {
+            throw new DuplicateMarkedItemDefinitionException(entityType);
+        }
+
+        return Task.FromResult(definitions.Single());
     }
 }

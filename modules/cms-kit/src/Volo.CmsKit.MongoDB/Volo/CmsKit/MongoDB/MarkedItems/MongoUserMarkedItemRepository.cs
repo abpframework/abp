@@ -46,22 +46,18 @@ public class MongoUserMarkedItemRepository : MongoDbRepository<ICmsKitMongoDbCon
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    /// <summary>
-    /// Retrieves an IQueryable representing the user's marked items based on the specified entity type and user ID.
-    /// </summary>
-    /// <param name="entityType">The type of entity to filter by.</param>
-    /// <param name="userId">The ID of the user whose marked items are being retrieved.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>An IQueryable representing the user's marked items filtered by the specified entity type and user ID.</returns>
-    public virtual async Task<IQueryable<UserMarkedItem>> GetQueryForUserAsync([NotNull] string entityType, [NotNull] Guid userId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<string>> GetEntityIdsFilteredByUserAsync([NotNull] Guid userId, [NotNull] string entityType, [CanBeNull] Guid? tenantId = null, CancellationToken cancellationToken = default)
     {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-        Check.NotNull(userId, nameof(userId));
+        var dbContext = await GetDbContextAsync();
+        var userMarkedItemQueryable = await GetMongoQueryableAsync(GetCancellationToken(cancellationToken));
 
-        var queryable = await GetMongoQueryableAsync(cancellationToken);
-        var query = queryable
-            .Where(x => x.EntityType == entityType && x.CreatorId == userId);
+        var resultQueryable = userMarkedItemQueryable
+                                .Where(x => x.CreatorId == userId
+                                    && x.EntityType == entityType
+                                    && x.TenantId == tenantId
+                                )
+                                .Select(s => s.EntityId);
 
-        return query;
+        return await AsyncExecuter.ToListAsync(resultQueryable, GetCancellationToken(cancellationToken));
     }
 }

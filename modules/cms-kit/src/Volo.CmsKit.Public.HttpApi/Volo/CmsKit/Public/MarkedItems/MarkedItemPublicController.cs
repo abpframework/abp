@@ -24,9 +24,9 @@ public class MarkedItemPublicController : CmsKitPublicControllerBase, IMarkedIte
 
     [HttpGet]
     [Route("{entityType}/{entityId}")]
-    public virtual Task<MarkedItemWithToggleDto> GetForToggleAsync(string entityType, string entityId)
+    public virtual Task<MarkedItemWithToggleDto> GetForUserAsync(string entityType, string entityId)
     {
-        return MarkedItemPublicAppService.GetForToggleAsync(entityType, entityId);
+        return MarkedItemPublicAppService.GetForUserAsync(entityType, entityId);
     }
 
     [HttpPut]

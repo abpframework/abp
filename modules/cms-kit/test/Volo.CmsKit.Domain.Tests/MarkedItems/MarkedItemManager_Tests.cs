@@ -18,13 +18,13 @@ public class MarkedItemManager_Tests : CmsKitDomainTestBase
     [Fact]
     public async Task ToggleAsync()
     {
-        var firstToggleResult = await _markedItemManager.ToggleAsync(
+        var firstToggleResult = await _markedItemManager.ToggleUserMarkedItemAsync(
             _cmsKitTestData.User1Id,
             _cmsKitTestData.EntityType2,
             _cmsKitTestData.EntityId1
         );
 
-        var secondToggleResult = await _markedItemManager.ToggleAsync(
+        var secondToggleResult = await _markedItemManager.ToggleUserMarkedItemAsync(
              _cmsKitTestData.User1Id,
             _cmsKitTestData.EntityType2,
             _cmsKitTestData.EntityId1
@@ -32,14 +32,5 @@ public class MarkedItemManager_Tests : CmsKitDomainTestBase
 
         firstToggleResult.ShouldBeTrue();
         secondToggleResult.ShouldBeFalse();
-    }
-
-    [Fact]
-    public async Task GetAsync()
-    {
-        var markedItem = await _markedItemManager.GetAsync(_cmsKitTestData.EntityType1);
-
-        markedItem.EntityType.ShouldBe(_cmsKitTestData.EntityType1);
-        markedItem.IconName.ShouldBe(StandardMarkedItems.Favorite);
     }
 }

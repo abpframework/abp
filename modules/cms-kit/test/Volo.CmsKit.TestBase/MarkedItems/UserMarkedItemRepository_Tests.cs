@@ -43,22 +43,15 @@ public abstract class UserMarkedItemRepository_Tests<TStartupModule> : CmsKitTes
         markedItems.Count.ShouldBe(2);
     }
 
+
     [Fact]
-    public async Task GetQueryForUserAsync()
+    public async Task GetEntityIdsFilteredByUserAsync()
     {
-        await WithUnitOfWorkAsync(async () =>
-        {
-            var query = await _userMarkedItemRepository.GetQueryForUserAsync(
-               _cmsKitTestData.EntityType1,
-               _cmsKitTestData.User1Id
-           );
+        var entityIds = await _userMarkedItemRepository.GetEntityIdsFilteredByUserAsync(_cmsKitTestData.User1Id, _cmsKitTestData.EntityType1);
 
+        entityIds.ShouldNotBeNull();
+        entityIds.ShouldNotBeEmpty();
 
-            var markedItems = query.ToList();
-
-            markedItems.Count.ShouldBe(2);
-            markedItems.All(x => x.CreatorId == _cmsKitTestData.User1Id).ShouldBeTrue();
-            markedItems.All(x => x.EntityType == _cmsKitTestData.EntityType1).ShouldBeTrue();
-        });
+        entityIds.Count.ShouldBe(2);
     }
 }

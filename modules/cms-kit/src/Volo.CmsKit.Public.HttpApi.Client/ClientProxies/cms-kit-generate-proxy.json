@@ -921,7 +921,7 @@
               "name": "IMarkedItemPublicAppService",
               "methods": [
                 {
-                  "name": "GetForToggleAsync",
+                  "name": "GetForUserAsync",
                   "parametersOnMethod": [
                     {
                       "name": "entityType",
@@ -974,9 +974,9 @@
             }
           ],
           "actions": {
-            "GetForToggleAsyncByEntityTypeAndEntityId": {
-              "uniqueName": "GetForToggleAsyncByEntityTypeAndEntityId",
-              "name": "GetForToggleAsync",
+            "GetForUserAsyncByEntityTypeAndEntityId": {
+              "uniqueName": "GetForUserAsyncByEntityTypeAndEntityId",
+              "name": "GetForUserAsync",
               "httpMethod": "GET",
               "url": "api/cms-kit-public/marked-items/{entityType}/{entityId}",
               "supportedVersions": [],

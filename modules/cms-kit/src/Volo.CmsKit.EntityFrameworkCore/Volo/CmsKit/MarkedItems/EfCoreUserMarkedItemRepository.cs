@@ -45,23 +45,18 @@ public class EfCoreUserMarkedItemRepository : EfCoreRepository<ICmsKitDbContext,
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    /// <summary>
-    /// Retrieves an IQueryable representing the user's marked items based on the specified entity type and user ID.
-    /// </summary>
-    /// <param name="entityType">The type of entity to filter by.</param>
-    /// <param name="userId">The ID of the user whose marked items are being retrieved.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>An IQueryable representing the user's marked items filtered by the specified entity type and user ID.</returns>
-    public async Task<IQueryable<UserMarkedItem>> GetQueryForUserAsync([NotNull] string entityType, [NotNull] Guid userId, CancellationToken cancellationToken = default)
+    public async Task<List<string>> GetEntityIdsFilteredByUserAsync([NotNull] Guid userId, [NotNull] string entityType, [CanBeNull] Guid? tenantId = null, CancellationToken cancellationToken = default)
     {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
         Check.NotNull(userId, nameof(userId));
+        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        var dbSet = await GetDbSetAsync();
+        var dbContext = await GetDbContextAsync();
+        var result = from umi in dbContext.Set<UserMarkedItem>()
+                     where umi.CreatorId == userId
+                           && umi.EntityType == entityType
+                           && umi.TenantId == tenantId
+                     select umi.EntityId;
 
-        var query = dbSet
-            .Where(x => x.EntityType == entityType && x.CreatorId == userId);
-
-        return query;
+        return await result.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

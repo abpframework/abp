@@ -36,7 +36,7 @@ public class MarkedItemToggleViewComponent : AbpViewComponent
         string entityId,
         bool? needsConfirmation = false)
     {
-        var result = await MarkedItemPublicAppService.GetForToggleAsync(entityType, entityId);
+        var result = await MarkedItemPublicAppService.GetForUserAsync(entityType, entityId);
         var returnUrl = HttpContext.Request.Path.ToString();
 
         var viewModel = new MarkedItemToggleViewModel

@@ -33,6 +33,8 @@
     "CmsKit:Modals:YouAreNotAuthenticated": "This operation is not authorized for you.",
     "CommentDeletionConfirmationMessage": "This comment and all replies will be deleted!",
     "CmsKit:MarkedItem:0001": "The entity {EntityType} can't be marked.",
+    "CmsKit:MarkedItem:0002": "No definition found for entity type '{EntityType}'.",
+    "CmsKit:MarkedItem:0003": "A definition for entity type '{EntityType}' already exists. Each entity type should have only one definition.",
     "CmsKit:MarkedItem:LoginMessage": "Please login to mark this item.",
     "Comments": "Comments",
     "Content": "Content",

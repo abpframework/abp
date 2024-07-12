@@ -58,31 +58,6 @@ The marking system provides a toggle widget to allow users to add/remove the mar
 * `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. 
 * `needsConfirmation` An optional parameter to let the user confirm when removing the mark.
 
-# Filter on marked items
-
-Filtering on marked items enhances the user experience by making it easier to search marked items.
-
-![markedItemsFilter](../../images/cmskit-module-markedItemsFilter.gif)
-
-There is an ability to utilize the marking system to let users filter on their marked items. The code below shows how you can filter on your query filter:
-
-```csharp
-    protected async override Task<IQueryable<YourEntity>> CreateFilteredQueryAsync(YourEntityPagedAndSortedResultDto input)
-    {
-        IQueryable<YourEntity> query = await base.CreateFilteredQueryAsync(input);
-
-        if (input.FilterOnFavorites && CurrentUser.IsAuthenticated)
-        {
-            var markedQuery = await UserMarkedItemRepository.GetQueryForUserAsync("entityType", CurrentUser.GetId());
-            query = query.Where(e => markedQuery.Any(m => m.EntityId == e.Id));
-        }
-
-        // ... 
-
-        return query;
-    } 
-```
-
 # Internals
 
 ## Domain Layer

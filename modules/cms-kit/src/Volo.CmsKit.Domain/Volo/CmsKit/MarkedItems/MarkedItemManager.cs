@@ -18,7 +18,7 @@ public class MarkedItemManager : CmsKitDomainServiceBase
         MarkedItemDefinitionStore = markedItemDefinitionStore;
     }
 
-    public virtual async Task<bool> ToggleAsync(
+    public virtual async Task<bool> ToggleUserMarkedItemAsync(
         Guid creatorId,
         [NotNull] string entityType, 
         [NotNull] string entityId)
@@ -48,13 +48,5 @@ public class MarkedItemManager : CmsKitDomainServiceBase
                 )
             );
         return true;
-    }
-
-    public virtual async Task<MarkedItemEntityTypeDefinition> GetAsync(
-        [NotNull] string entityType)
-    {
-        Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-
-        return await MarkedItemDefinitionStore.GetAsync(entityType);
     }
 }

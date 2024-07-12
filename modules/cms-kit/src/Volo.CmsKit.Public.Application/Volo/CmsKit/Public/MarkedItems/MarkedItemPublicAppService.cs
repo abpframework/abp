@@ -30,9 +30,9 @@ public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedIte
     }
 
     [AllowAnonymous]
-    public virtual async Task<MarkedItemWithToggleDto> GetForToggleAsync(string entityType, string entityId)
+    public virtual async Task<MarkedItemWithToggleDto> GetForUserAsync(string entityType, string entityId)
     {
-        var markedItem = await MarkedItemManager.GetAsync(entityType);
+        var markedItem = await MarkedItemDefinitionStore.GetAsync(entityType);
 
         var userMarkedItem = CurrentUser.IsAuthenticated
             ? (await UserMarkedItemRepository
@@ -53,7 +53,7 @@ public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedIte
     [Authorize]
     public virtual async Task<bool> ToggleAsync(string entityType, string entityId)
     {
-        return await MarkedItemManager.ToggleAsync(
+        return await MarkedItemManager.ToggleUserMarkedItemAsync(
             CurrentUser.GetId(),
             entityType,
             entityId

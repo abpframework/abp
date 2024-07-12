@@ -457,12 +457,12 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
     private async Task SeedMarkedItemsAsync()
     {
-        await _markedItemManager.ToggleAsync(
+        await _markedItemManager.ToggleUserMarkedItemAsync(
             _cmsKitTestData.User1Id,
             _cmsKitTestData.EntityType1,
             _cmsKitTestData.EntityId1
         );
-        await _markedItemManager.ToggleAsync(
+        await _markedItemManager.ToggleUserMarkedItemAsync(
             _cmsKitTestData.User1Id,
             _cmsKitTestData.EntityType1,
             _cmsKitTestData.EntityId2
