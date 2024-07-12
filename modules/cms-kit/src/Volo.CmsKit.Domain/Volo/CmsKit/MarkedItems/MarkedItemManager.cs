@@ -6,8 +6,10 @@ using Volo.Abp;
 namespace Volo.CmsKit.MarkedItems;
 public class MarkedItemManager : CmsKitDomainServiceBase
 {
-    IMarkedItemDefinitionStore MarkedItemDefinitionStore { get; set; }
-    IUserMarkedItemRepository UserMarkedItemRepository { get; set; }
+    protected IMarkedItemDefinitionStore MarkedItemDefinitionStore { get; set; }
+
+    protected IUserMarkedItemRepository UserMarkedItemRepository { get; set; }
+
     public MarkedItemManager(
         IUserMarkedItemRepository userMarkedItemRepository,
         IMarkedItemDefinitionStore markedItemDefinitionStore)
