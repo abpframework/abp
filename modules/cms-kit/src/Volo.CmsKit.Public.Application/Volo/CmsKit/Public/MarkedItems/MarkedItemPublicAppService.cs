@@ -11,11 +11,11 @@ namespace Volo.CmsKit.Public.MarkedItems;
 [RequiresGlobalFeature(typeof(MarkedItemsFeature))]
 public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedItemPublicAppService
 {
-    public IMarkedItemDefinitionStore MarkedItemDefinitionStore { get; }
+    protected IMarkedItemDefinitionStore MarkedItemDefinitionStore { get; }
 
-    public IUserMarkedItemRepository UserMarkedItemRepository { get; }
+    protected IUserMarkedItemRepository UserMarkedItemRepository { get; }
 
-    public MarkedItemManager MarkedItemManager { get; }
+    protected MarkedItemManager MarkedItemManager { get; }
 
     public MarkedItemPublicAppService(
         IMarkedItemDefinitionStore markedItemDefinitionStore,
