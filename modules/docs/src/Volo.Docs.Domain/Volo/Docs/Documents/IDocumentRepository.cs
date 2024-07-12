@@ -26,6 +26,13 @@ namespace Volo.Docs.Documents
             string version,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
+        
+        Task<Document> FindAsync(Guid projectId,
+            List<string> possibleNames,
+            string languageCode,
+            string version,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default);
 
         Task DeleteAsync(Guid projectId,
             string name,

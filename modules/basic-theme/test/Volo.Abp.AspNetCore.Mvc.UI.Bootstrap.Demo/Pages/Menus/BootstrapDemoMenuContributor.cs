@@ -56,8 +56,8 @@ public class BootstrapDemoMenuContributor : IMenuContributor
 
         context.Menu.AddItem(
             new ApplicationMenuItem(
-                name: "Framework",
-                displayName: "Framework",
+                name: "Platform",
+                displayName: "Platform",
                 url: "https://abp.io"
                 )
             );
@@ -65,21 +65,14 @@ public class BootstrapDemoMenuContributor : IMenuContributor
             new ApplicationMenuItem(
                 name: "Community",
                 displayName: "Community",
-                url: "https://community.abp.io"
-            )
-        );
-        context.Menu.AddItem(
-            new ApplicationMenuItem(
-                name: "Commercial",
-                displayName: "Commercial",
-                url: "https://commercial.abp.io"
+                url: "https://abp.io/community"
             )
         );
         context.Menu.AddItem(
             new ApplicationMenuItem(
                 name: "Documents",
                 displayName: "Documents",
-                url: "https://Docs.abp.io"
+                url: "https://abp.io/docs/latest"
             )
         );
         context.Menu.AddItem(

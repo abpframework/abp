@@ -29,7 +29,7 @@
 
 <div class="container mb-5">
 
-    <form method="get" action="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" class="mt-4">
+    <form method="get" action="@Url.Page("/Documents/Search", new Dictionary<string, object> { { nameof(Model.LanguageCode), Model.LanguageCode }, { nameof(Model.Version), Model.Version }, { nameof(Model.ProjectName), Model.ProjectName } })" class="mt-4">
 		<h4 class="text-center my-3">@L["FullSearch"]</h4>
         <div class="card rounded">
             <div class="p-3 bg-white">
@@ -68,7 +68,12 @@
                                     }
                                 }
                                 <h5 class="mb-3">
-                                    <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
+                                    <a href="@Url.Page("/Documents/Project/Index", new Dictionary<string, object> {
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), Model.LanguageCode },
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), Model.Version },
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), Model.ProjectName },
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.DocumentName), RemoveFileExtensionFromPath(docs.Name) }
+                                             })">
                                         @RemoveFileExtensionFromPath(docs.Name)
                                     </a>
                                 </h5>
