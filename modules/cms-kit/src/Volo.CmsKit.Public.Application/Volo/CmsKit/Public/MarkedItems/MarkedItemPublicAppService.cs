@@ -5,6 +5,8 @@ using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MarkedItems;
+using Volo.CmsKit.Features;
+using Volo.Abp.Features;
 
 namespace Volo.CmsKit.Public.MarkedItems;
 [RequiresFeature(CmsKitFeatures.PageEnable)]
