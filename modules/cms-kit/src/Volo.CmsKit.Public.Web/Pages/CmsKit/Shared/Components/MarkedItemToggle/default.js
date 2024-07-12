@@ -7,7 +7,6 @@
         let $markedItemArea = $widget.find('.cms-markedItem-area');
         let loginModal = new abp.ModalManager(abp.appPath + 'CmsKit/Shared/Modals/Login/LoginModal');
 
-
         function getFilters() {
             return {
                 entityType: $markedItemArea.attr('data-entity-type'),
