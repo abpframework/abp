@@ -1,5 +1,15 @@
 # ABP Studio: Working with Kubernetes
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Working with ABP Suite",
+    "Path": "studio/working-with-suite"
+  }
+}
+````
+
 You can use the *Kubernetes* panel to manage your application(s) in a Kubernetes cluster. This panel is specifically designed for microservice projects, so you don't have to run all your microservice projects in the local environment. Instead, deploy them in a Kubernetes cluster and debug one or more projects locally. However, you can still use this panel for monolithic projects as well. Access it by clicking the *Kubernetes* button in the *ABP Studio* sidebar.
 
 ![kubernetes-panel](./images/kubernetes/kubernetes.png)

@@ -1,5 +1,15 @@
 # ABP Studio: Overview
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Solution Explorer",
+    "Path": "studio/solution-explorer"
+  }
+}
+````
+
 ## Introduction
 
 ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.

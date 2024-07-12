@@ -1,5 +1,15 @@
 # ABP Studio: Running Applications
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Monitoring Applications",
+    "Path": "studio/monitoring-applications"
+  }
+}
+````
+
 Use the *Solution Runner* to easily run your application(s) and set up infrastructure. You can create different profiles to organize projects based on your needs and teams. Simply navigate to the *Solution Runner* panel in the left menu.
 
 ![solution-runner](images/solution-runner/solution-runner.png)
