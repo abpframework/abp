@@ -10,8 +10,6 @@ ABP Studio provides pre-architected and production-ready templates to jump start
 
 ## Contents
 
-> *Documentation is still on going...*
-
 * [Overview](overview.md)
 * [Solution structure](solution-structure.md)
 * [Main Components](main-components.md)
