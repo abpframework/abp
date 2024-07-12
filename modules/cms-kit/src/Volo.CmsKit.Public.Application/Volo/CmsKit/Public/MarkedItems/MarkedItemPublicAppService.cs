@@ -7,7 +7,7 @@ using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MarkedItems;
 
 namespace Volo.CmsKit.Public.MarkedItems;
-
+[RequiresFeature(CmsKitFeatures.PageEnable)]
 [RequiresGlobalFeature(typeof(MarkedItemsFeature))]
 public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedItemPublicAppService
 {
