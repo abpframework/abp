@@ -7,47 +7,27 @@
 
 Before you begin the installation process for ABP Studio, ensure that your system meets the following pre-requirements:
 
-### PowerShell (installed by default) *
-Ensure PowerShell is installed on your system. 
-ABP Studio automatically installs PowerShell, but if you want to install it manually, run the following command in your terminal:
-
-   ```bash
-   dotnet tool install --global PowerShell
-   ```
-
-### ABP CLI (installed by default) *
-Ensure ABP CLI (Command Line Interface) is installed on your system. 
-ABP Studio automatically installs ABP CLI, but if you want to install it manually, follow the instructions in the official [ABP CLI documentation](../cli). 
-
-### ABPC CLI (installed by default) *
-The ABPC CLI (Command-Line Interface) is a tool that works with ABP Studio. It doesn't need the user interface; you can run it by typing commands or including it in scripts. When you install ABP Studio, the ABPC CLI is automatically installed. This CLI tool helps automate tasks when working with CI/CD pipelines.
-
-### Node *
-Make sure Node.js is installed on your system. If you have not installed Node.js, you can download the `v16` or `v18` version from the official [Node.js website](https://nodejs.org/).
+### Node
+Make sure [Node.js](https://nodejs.org/en) is installed on your system. If you have not installed Node.js, you can download the `v16` or `v18` version from the official [Node.js website](https://nodejs.org/en/download/prebuilt-installer).
 
 ### WireGuard (Optional) 
-ABP Studio needs WireGuard for Kubernetes operations. You can find the installation instructions for your specific operating system below:
+ABP Studio needs [WireGuard](https://www.wireguard.com/) for Kubernetes operations. You can find the installation instructions for your specific operating system below:
 
 **For Windows:** 
-Installation instructions for your Windows operating system are on the official [WireGuard website](https://www.wireguard.com/).
+Installation instructions for your Windows operating system are on the official [WireGuard website](https://www.wireguard.com/install/#windows-7-81-10-11-2008r2-2012r2-2016-2019-2022).
 
 **For macOS:**
-To install WireGuard on macOS, run the following command in your terminal:
-
-```bash
-brew install wireguard-tools
-```
+Installation instructions for your macOS operating system are on the official [WireGuard website](https://www.wireguard.com/install/#macos-homebrew-and-macports-basic-cli-homebrew-userspace-go-homebrew-tools-macports-userspace-go-macports-tools).
 
 ### Docker (Optional) 
-ABP Studio needs Docker for Kubernetes operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
+ABP Studio needs [Docker](https://www.docker.com/) for [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
 
 ## Installation
 Now you have met the pre-requirements, follow the steps below to install ABP Studio:
 
-1. **Download ABP Studio:** Visit [your organization page](https://abp.io/my-organizations) on the official [abp.io](https://abp.io/) website to download the latest version.
+1. **Download ABP Studio:** Visit [abp.io](https://abp.io/studio) to download the latest version of ABP Studio.
 
-![abp-studio-beta-access](./images/abp-studio-beta-access.png)
-
+[![abp-studio-download-page](./images/abp-studio-download-page.png)](https://abp.io/studio)
 
 2. **Run the Installer:** Execute the installer and follow the on-screen instructions to install ABP Studio on your computer.
 
