@@ -1105,7 +1105,7 @@ That's all. Just run the application and try to create or edit an author.
 
 ### The Book List
 
-It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
+It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor.Client` project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
 
 ````xml
 <DataGridColumn TItem="BookDto"
