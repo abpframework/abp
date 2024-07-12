@@ -1,5 +1,15 @@
 # ABP Studio: Monitoring Applications
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Working with Kubernetes",
+    "Path": "studio/kubernetes.md"
+  }
+}
+````
+
 ABP Studio offers a comprehensive centralized monitoring solution, enabling you to oversee all applications from a single interface. To see the monitoring tabs you can select the [Solution Runner](./running-applications.md) or *Kubernetes* from the left menu, monitoring tabs are automatically opened in the center. You can start the applications for monitoring. Various monitoring options are available, including [Overall](#overall), [Browse](#browse), [HTTP Requests](#http-requests), [Events](#events), [Exceptions](#exceptions), [Logs](#logs). 
 
 ![monitoring](./images/monitoring-applications/monitoring.png)

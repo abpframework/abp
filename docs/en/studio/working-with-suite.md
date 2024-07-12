@@ -1,5 +1,15 @@
 # ABP Studio: Working with ABP Suite
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "ABP Suite",
+    "Path": "suite/index"
+  }
+}
+````
+
 ABP Studio (Studio) has a shortcut for running [ABP Suite](../suite) (Suite) to allow using it without starting it externally and using it on a browser. Thus you can use both Studio and Suite as a united platform.
 
 ## Running Suite From Studio

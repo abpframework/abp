@@ -17,18 +17,12 @@ More than one preview releases (like 8.1.0-rc.2 and 8.1.0-rc.3) might be publish
 Before creating or updating an existing solution make sure to update the CLI to the latest preview version, for example:
 
 ````bash
-dotnet tool update --global Volo.Abp.Cli --version 8.2.0-rc.1
+dotnet tool update --global Volo.Abp.Studio.Cli
 ````
 
 ### New Solutions
 
-To create a project for testing the preview version, you can select the "**preview**" option on the [get started](https://abp.io/get-started) page or use the "**--preview**" parameter with the [ABP CLI](../cli) new command:
-
-````bash
-abp new Acme.BookStore --preview
-````
-
-This command will create a new project using the latest preview NuGet packages, NPM packages and the solution template. Whenever the stable version is released, you can switch to the stable version for your solution using the `abp switch-to-stable` command in the root folder of your solution.
+Creating new solutions with the preview version is not supported. All new solutions must be created with the stable version.
 
 ### Existing Solutions
 

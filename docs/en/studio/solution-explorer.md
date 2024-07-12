@@ -1,5 +1,15 @@
 # ABP Studio: Solution Explorer
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running Applications",
+    "Path": "studio/running-applications"
+  }
+}
+````
+
 ABP Studio incorporates various [concepts](./concepts.md) and we're using them in the solution explorer. To ensure clarity, please review the [concepts](./concepts.md) documentation first. You can see the *Solution Explorer* on the left side of the ABP Studio. It displays an overview of your solution, you can manage your projects using the solution explorer. Simply navigate to the *Solution Explorer* panel in the left menu.
 
 ![solution-explorer](images/solution-explorer/solution-explorer.png)
