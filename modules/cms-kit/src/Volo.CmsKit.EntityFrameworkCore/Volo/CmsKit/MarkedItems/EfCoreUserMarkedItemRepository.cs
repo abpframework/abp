@@ -24,11 +24,11 @@ public class EfCoreUserMarkedItemRepository : EfCoreRepository<ICmsKitDbContext,
         Check.NotNull(entityId, nameof(entityId));
 
         var entity = await(await GetDbSetAsync())
-        .Where(x =>
+        .FirstOrDefaultAsync(x =>
             x.CreatorId == userId &&
             x.EntityType == entityType &&
-            x.EntityId == entityId)
-        .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            x.EntityId == entityId,
+            GetCancellationToken(cancellationToken));
 
         return entity;
     }
