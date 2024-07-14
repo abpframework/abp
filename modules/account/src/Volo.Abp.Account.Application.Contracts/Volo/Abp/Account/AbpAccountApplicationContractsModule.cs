@@ -39,8 +39,7 @@ public class AbpAccountApplicationContractsModule : AbpModule
         });
     }
     
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
+    public override void PostConfigureServices(ServiceConfigurationContext context)=>
         OneTimeRunner.Run(() =>
         {
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToApi(
@@ -50,5 +49,5 @@ public class AbpAccountApplicationContractsModule : AbpModule
                 updateApiTypes: new[] { typeof(UpdateProfileDto) }
             );
         });
-    }
+    
 }

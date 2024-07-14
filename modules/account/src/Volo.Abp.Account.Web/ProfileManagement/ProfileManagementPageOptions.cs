@@ -6,8 +6,5 @@ public class ProfileManagementPageOptions
 {
     public List<IProfileManagementPageContributor> Contributors { get; }
 
-    public ProfileManagementPageOptions()
-    {
-        Contributors = new List<IProfileManagementPageContributor>();
-    }
+    public ProfileManagementPageOptions() => Contributors = new List<IProfileManagementPageContributor>();
 }

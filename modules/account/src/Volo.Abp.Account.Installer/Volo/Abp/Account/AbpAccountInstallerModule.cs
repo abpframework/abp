@@ -8,11 +8,10 @@ namespace Volo.Abp.Account;
     )]
 public class AbpAccountInstallerModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
+    public override void ConfigureServices(ServiceConfigurationContext context)=>
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpAccountInstallerModule>();
         });
-    }
+    
 }

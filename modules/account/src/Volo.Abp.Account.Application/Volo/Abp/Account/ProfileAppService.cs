@@ -14,18 +14,12 @@ using Volo.Abp.Users;
 namespace Volo.Abp.Account;
 
 [Authorize]
-public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
+public class ProfileAppService(
+    IdentityUserManager userManager,
+    IOptions<IdentityOptions> identityOptions) : IdentityAppServiceBase, IProfileAppService
 {
-    protected IdentityUserManager UserManager { get; }
-    protected IOptions<IdentityOptions> IdentityOptions { get; }
-
-    public ProfileAppService(
-        IdentityUserManager userManager,
-        IOptions<IdentityOptions> identityOptions)
-    {
-        UserManager = userManager;
-        IdentityOptions = identityOptions;
-    }
+    protected IdentityUserManager UserManager { get; } = userManager;
+    protected IOptions<IdentityOptions> IdentityOptions { get; } = identityOptions;
 
     public virtual async Task<ProfileDto> GetAsync()
     {

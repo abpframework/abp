@@ -22,26 +22,18 @@ using Volo.Abp.Settings;
 namespace Volo.Abp.Account.Web.Pages.Account;
 
 [ExposeServices(typeof(LoginModel))]
-public class IdentityServerSupportedLoginModel : LoginModel
+public class IdentityServerSupportedLoginModel(
+    IAuthenticationSchemeProvider schemeProvider,
+    IOptions<AbpAccountOptions> accountOptions,
+    IOptions<IdentityOptions> identityOptions,
+    IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+    IIdentityServerInteractionService interaction,
+    IClientStore clientStore,
+    IEventService identityServerEvents) : LoginModel(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
 {
-    protected IIdentityServerInteractionService Interaction { get; }
-    protected IClientStore ClientStore { get; }
-    protected IEventService IdentityServerEvents { get; }
-
-    public IdentityServerSupportedLoginModel(
-        IAuthenticationSchemeProvider schemeProvider,
-        IOptions<AbpAccountOptions> accountOptions,
-        IOptions<IdentityOptions> identityOptions,
-        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-        IIdentityServerInteractionService interaction,
-        IClientStore clientStore,
-        IEventService identityServerEvents)
-        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
-    {
-        Interaction = interaction;
-        ClientStore = clientStore;
-        IdentityServerEvents = identityServerEvents;
-    }
+    protected IIdentityServerInteractionService Interaction { get; } = interaction;
+    protected IClientStore ClientStore { get; } = clientStore;
+    protected IEventService IdentityServerEvents { get; } = identityServerEvents;
 
     public override async Task<IActionResult> OnGetAsync()
     {

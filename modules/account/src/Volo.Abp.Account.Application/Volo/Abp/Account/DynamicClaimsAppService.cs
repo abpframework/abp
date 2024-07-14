@@ -7,21 +7,14 @@ using Volo.Abp.Users;
 namespace Volo.Abp.Account;
 
 [Authorize]
-public class DynamicClaimsAppService : IdentityAppServiceBase, IDynamicClaimsAppService
+public class DynamicClaimsAppService(
+    IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+    IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory,
+    ICurrentPrincipalAccessor principalAccessor) : IdentityAppServiceBase, IDynamicClaimsAppService
 {
-    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
-    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
-    protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
-
-    public DynamicClaimsAppService(
-        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-        IAbpClaimsPrincipalFactory abpClaimsPrincipalFactory,
-        ICurrentPrincipalAccessor principalAccessor)
-    {
-        IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
-        AbpClaimsPrincipalFactory = abpClaimsPrincipalFactory;
-        PrincipalAccessor = principalAccessor;
-    }
+    protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; } = identityDynamicClaimsPrincipalContributorCache;
+    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; } = abpClaimsPrincipalFactory;
+    protected ICurrentPrincipalAccessor PrincipalAccessor { get; } = principalAccessor;
 
     public virtual async Task RefreshAsync()
     {

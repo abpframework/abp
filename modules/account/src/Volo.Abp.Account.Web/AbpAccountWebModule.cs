@@ -102,8 +102,7 @@ public class AbpAccountWebModule : AbpModule
 
     }
     
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
+    public override void PostConfigureServices(ServiceConfigurationContext context)=>
         OneTimeRunner.Run(() =>
         {
             ModuleExtensionConfigurationHelper
@@ -113,5 +112,5 @@ public class AbpAccountWebModule : AbpModule
                     editFormTypes: new[] { typeof(AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel) }
                 );
         });
-    }
+    
 }
