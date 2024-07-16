@@ -203,6 +203,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             {
                 if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
                 {
+                    if (entityEntry.State == EntityState.Unchanged)
+                    {
+                        ApplyAbpConceptsForModifiedEntity(entityEntry, true);
+                    }
+
                     if (entityEntry.Entity is ISoftDelete && entityEntry.Entity.As<ISoftDelete>().IsDeleted)
                     {
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entityEntry.Entity);
@@ -281,7 +286,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
     }
 
-    private void PublishEntityEvents(EntityEventReport changeReport)
+    protected virtual void PublishEntityEvents(EntityEventReport changeReport)
     {
         foreach (var localEvent in changeReport.DomainEvents)
         {
@@ -395,7 +400,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
 
             case EntityState.Modified:
-                ApplyAbpConceptsForModifiedEntity(entry);
                 if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
                     if (entry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey()))
@@ -404,6 +408,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         break;
                     }
 
+                    ApplyAbpConceptsForModifiedEntity(entry);
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
@@ -413,8 +418,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
                     }
                 }
-                else if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges && AbpEfCoreNavigationHelper.IsEntityEntryModified(entry))
+                else if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges && AbpEfCoreNavigationHelper.IsNavigationEntryModified(entry))
                 {
+                    ApplyAbpConceptsForModifiedEntity(entry, true);
                     if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
                     {
                         EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
@@ -435,11 +441,20 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void HandlePropertiesBeforeSave()
     {
-        foreach (var entry in ChangeTracker.Entries().ToList())
+        var entries = ChangeTracker.Entries().ToList();
+        foreach (var entry in entries)
         {
             HandleExtraPropertiesOnSave(entry);
 
             if (entry.State.IsIn(EntityState.Modified, EntityState.Deleted))
+            {
+                UpdateConcurrencyStamp(entry);
+            }
+        }
+
+        if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
+        {
+            foreach (var entry in AbpEfCoreNavigationHelper.GetChangedEntityEntries().Where(x => x.State == EntityState.Unchanged))
             {
                 UpdateConcurrencyStamp(entry);
             }
@@ -572,9 +587,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         SetCreationAuditProperties(entry);
     }
 
-    protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry)
+    protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, bool forceApply = false)
     {
-        if (entry.State == EntityState.Modified && entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
+        if (forceApply ||
+            entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
         {
             IncrementEntityVersionProperty(entry);
             SetModificationAuditProperties(entry);
