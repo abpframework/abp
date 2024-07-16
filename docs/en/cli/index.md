@@ -171,7 +171,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `leptonx`: LeptonX Theme.
       * `basic`: Basic Theme.
 
-  * **`microservice-pro`**: Microservice solution template. Additional options:
+  * **`microservice`**: Microservice solution template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       * `angular`: Angular UI. There are some additional options for this template:
@@ -235,7 +235,7 @@ abp new-module Acme.BookStore -t module:ddd
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--target-solution` or `-ts`: If set, the new module will be added to the given solution. Otherwise the new module will added to the closest solution in the file system. If no solution found, it will throw an error.
 * `--solution-folder` or `-sf`: Specifies the target folder in the [Solution Explorer](../studio/solution-explorer.md#folder)  virtual folder system.
-* `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `ef, mongodb` if the module template supports it. Available providers:
+* `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `ef,mongodb` if the module template supports it. Available providers:
   * `ef`: Entity Framework Core.
   * `mongodb`: MongoDB.
 * `--ui-framework` or `-u`: Specifies the UI framework. This option is only available if the module template supports it. You can add multiple values separated by commas, such as `mvc,angular` if the module template supports it. Available frameworks:
