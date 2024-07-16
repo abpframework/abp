@@ -62,8 +62,7 @@ Here, is the list of all available commands before explaining their details:
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 * **`clear-download-cache`**: Clears the templates download cache.
-* **`trust-version`**: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
- 
+
 ### help
 
 Shows basic usages of the ABP CLI.
@@ -125,23 +124,22 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a application solution. Available templates:
   * **`empty`**: Empty solution template.
-
   * **`app`**: Application template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular UI. There are some additional options for this template:
-        * `--separate-auth-server`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
-        * `--separate-auth-server`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
         * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `maui-blazor`: Blazor Maui UI. There are some additional options for this template:
         * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
-        * `--separate-auth-server`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
       * `none`: Without any mobile application.
       * `react-native`: React Native.
@@ -152,10 +150,10 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
     * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
     * `--separate-tenant-schema`: Creates a different DbContext for tenant schema. If not specified, the tenant schema is shared with the host schema. This option is only included in PRO templates.
-    * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
+    * `--theme` or `-th`: Specifes the theme. Default theme is `leptonx`. Available themes:
         * `leptonx`: LeptonX Theme.
+        * `leptonx-lite`: LeptonX-Lite Theme.
         * `basic`: Basic Theme.
-
   * **`app-nolayers`**: Single-layer application template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
@@ -169,8 +167,8 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
       * `leptonx`: LeptonX Theme.
+      * `leptonx-lite`: LeptonX-Lite Theme.
       * `basic`: Basic Theme.
-
   * **`microservice`**: Microservice solution template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
@@ -188,9 +186,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
       * `leptonx`: LeptonX Theme.
+      * `leptonx-lite`: LeptonX-Lite Theme.
       * `basic`: Basic Theme.
     * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
-
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--local-framework-ref` or `-lfr`: Uses local projects references to the ABP framework instead of using the NuGet packages. It tries to find the paths from `ide-state.json`. The file is located at `%UserProfile%\.abp\studio\ui\ide-state.json` (for Windows) and `~/.abp/studio/ui/ide-state.json` (for MAC).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
@@ -214,6 +212,8 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * `-no-text-template-management`: Skips the Text Template Management module.
   * `-no-chat`: Skips the Chat module.
 * `--legacy`: Generates a legacy solution.
+  * `trust-version`: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
+
 
 ### new-module
 
@@ -618,7 +618,7 @@ Deletes a remote module source from the list of sources that you can use to inst
 
 ````bash
 abp delete-module-source [options]
-````	
+````
 
 Examples:
 
