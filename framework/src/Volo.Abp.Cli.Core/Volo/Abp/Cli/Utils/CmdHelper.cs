@@ -12,12 +12,12 @@ public class CmdHelper : ICmdHelper, ITransientDependency
     private const int SuccessfulExitCode = 0;
 
     protected AbpCliOptions CliOptions { get; }
-    
+
     public CmdHelper(IOptionsSnapshot<AbpCliOptions> cliOptions)
     {
         CliOptions = cliOptions.Value;
     }
-    
+
     public void Open(string pathOrUrl)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -43,7 +43,7 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         {
             HideNewCommandWindow(procStartInfo);
         }
-        
+
         Process.Start(procStartInfo)?.WaitForExit();
     }
 
@@ -74,6 +74,7 @@ public class CmdHelper : ICmdHelper, ITransientDependency
             process?.WaitForExit();
 
             exitCode = process.ExitCode;
+            Environment.ExitCode = exitCode;
         }
     }
 
@@ -144,6 +145,7 @@ public class CmdHelper : ICmdHelper, ITransientDependency
             process.WaitForExit();
 
             exitCode = process.ExitCode;
+            Environment.ExitCode = exitCode;
         }
 
         return output.Trim();
@@ -160,7 +162,7 @@ public class CmdHelper : ICmdHelper, ITransientDependency
         {
             procStartInfo.WorkingDirectory = workingDirectory;
         }
-        
+
         if (CliOptions.AlwaysHideExternalCommandOutput)
         {
             HideNewCommandWindow(procStartInfo);

@@ -107,7 +107,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
     {
         return Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories)
             .Union(Directory.GetFiles(directory, "angular.json", SearchOption.AllDirectories))
-            .Where(file => ExcludeDirectory.All(x => file.IndexOf(x, StringComparison.OrdinalIgnoreCase) == -1))
+            .Where(file => ExcludeDirectory.All(x => file.IndexOf(x + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) == -1))
             .Where(file =>
             {
                 if (file.EndsWith(".csproj"))

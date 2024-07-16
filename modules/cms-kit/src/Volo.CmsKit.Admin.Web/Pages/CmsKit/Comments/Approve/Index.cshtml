@@ -1,0 +1,75 @@
+﻿@page
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
+@using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt
+
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<CmsKitResource> L
+
+@model IndexModel
+
+@{
+    PageLayout.Content.Title = L["CommentsAwaitingApproval"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
+    PageLayout.Content.MenuItemName = CmsKitAdminMenus.Comments.CommentsMenu;
+}
+
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/Pages/CmsKit/Comments/index.css" />
+    </abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/client-proxies/cms-kit-common-proxy.js" />
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js" />
+        <abp-script src="/Pages/CmsKit/Comments/Approve/index.js" />
+        <abp-script type="typeof(MarkdownItScriptContributor)" />
+    </abp-script-bundle>
+}
+
+<abp-card class="mb-4">
+    <abp-card-body>
+        <div id="CmsKitCommentsWrapper">
+            <form id="CmsKitCommentsFilterForm" method="post">
+                <abp-row class="align-items-end">
+                    <abp-column size-lg="_4" size-md="_12">
+                        <abp-row>
+                            <abp-column size-lg="_6" size-md="_6">
+                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" />
+                            </abp-column>
+                            <abp-column size-lg="_6" size-md="_6">
+                                <abp-input asp-for="@Model.CreationEndDate" class="singledatepicker" label="@L["EndDate"].Value" type="text" />
+                            </abp-column>
+                        </abp-row>
+                    </abp-column>
+
+                    <abp-column size-lg="_3" size-md="_6">
+                        <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text" />
+                    </abp-column>
+
+                    <abp-column size-lg="_3" size-md="_6">
+                        <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text" />
+                    </abp-column>
+
+                    <abp-column size-lg="_2" size-md="_6">
+                        <abp-button class="w-100 mb-3" button-type="Primary" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </abp-button>
+                    </abp-column>
+                </abp-row>
+            </form>
+        </div>
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-body>
+        <abp-table id="CommentsTable" class="nowrap"></abp-table>
+    </abp-card-body>
+</abp-card>

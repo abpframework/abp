@@ -1,6 +1,7 @@
 {
   "culture": "vi",
   "texts": {
+    "AppName": "MyProjectName",
     "Welcome_Title": "Chào mừng bạn",
     "Welcome_Text": "Đây là một mẫu khởi động ứng dụng lớp đơn, tối giản cho ABP Framework.",
     "Menu:Home": "Trang chủ"

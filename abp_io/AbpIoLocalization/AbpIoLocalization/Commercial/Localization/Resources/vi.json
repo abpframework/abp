@@ -408,6 +408,7 @@
     "SendUsEmail": "Gửi email cho chúng tôi",
     "ErrorExceptionMessage": "Đã xảy ra lỗi trong khi xử lý yêu cầu của bạn",
     "WatchTakeCodeGeneration": "Xem video \"Khám phá tiềm năng tạo mã: ABP Suite\"!",
-    "ExtendNow": "Gia hạn/Gia hạn"
+    "ExtendNow": "Gia hạn/Gia hạn",
+    "AbpStudio_ComingSoon": "Nếu bạn muốn thử nghiệm ABP Studio trước bất kỳ ai khác, hãy trở thành người thử nghiệm BETA"
   }
 }

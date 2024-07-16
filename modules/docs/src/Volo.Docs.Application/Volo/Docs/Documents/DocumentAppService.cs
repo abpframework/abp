@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -305,7 +306,7 @@ namespace Volo.Docs.Documents
             return normalizedPathStringBuilder.ToString();
         }
 
-        private string RemoveFileExtensionFromPath(string path, string format)
+        private static string RemoveFileExtensionFromPath(string path, string format)
         {
             if (path == null)
             {
@@ -376,19 +377,29 @@ namespace Volo.Docs.Documents
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version);
             }
-
-            var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
+            
+            var document = await _documentRepository.FindAsync(project.Id, GetPossibleNames(documentName, project.Format), languageCode, version);
             if (document == null)
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version);
             }
 
-            if (document.LastCachedTime + _cacheTimeout < DateTime.Now)
+            if (document.LastCachedTime + _cacheTimeout >= DateTime.Now)
+            {
+                return CreateDocumentWithDetailsDto(project, document);
+            }
+
+            try
             {
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
-
-            return CreateDocumentWithDetailsDto(project, document);
+            catch
+            {
+                Logger.LogWarning(
+                    "Could not retrieve the document ({documentName}, {languageCode}, {version}) from the source. Using the cached version.",
+                    documentName, languageCode, version);
+                return CreateDocumentWithDetailsDto(project, document);
+            }
         }
 
         protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
@@ -406,10 +417,8 @@ namespace Volo.Docs.Documents
             string languageCode, string version, Document oldDocument = null)
         {
             Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
-
-            var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version,
-                oldDocument?.LastSignificantUpdateTime);
+            
+            var sourceDocument = await GetSourceDocument(project, documentName, languageCode, version, oldDocument);
 
             await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version, autoSave: true);
             await _documentRepository.InsertAsync(sourceDocument, true);
@@ -432,6 +441,75 @@ namespace Volo.Docs.Documents
             });
 
             return CreateDocumentWithDetailsDto(project, sourceDocument);
+        }
+
+        private static List<string> GetPossibleNames(string originalDocumentName, string format)
+        {
+            var extension = Path.GetExtension(originalDocumentName);
+            if (extension != null && !extension.Equals("." + format, StringComparison.OrdinalIgnoreCase))
+            {
+                return new List<string> {originalDocumentName};
+            }
+            
+            var lowerCaseIndex = "index." + format;
+            var titleCaseIndex = "Index." + format;
+            var indexLength = lowerCaseIndex.Length;
+            
+            var possibleNames = new List<string> {originalDocumentName};
+            if (originalDocumentName.EndsWith("/" + lowerCaseIndex, StringComparison.OrdinalIgnoreCase) || originalDocumentName.Equals(lowerCaseIndex, StringComparison.OrdinalIgnoreCase))
+            {
+                var indexPart = originalDocumentName.Right(indexLength);
+                
+                var documentNameWithoutIndex = originalDocumentName.Left(originalDocumentName.Length - lowerCaseIndex.Length);
+                
+                if(indexPart != lowerCaseIndex)
+                {
+                    possibleNames.Add(documentNameWithoutIndex + lowerCaseIndex);
+                }
+                
+                if(indexPart != titleCaseIndex)
+                {
+                    possibleNames.Add(documentNameWithoutIndex + titleCaseIndex);
+                }
+            }
+            else
+            {
+                var documentNameWithoutExtension = RemoveFileExtensionFromPath(originalDocumentName, format).EnsureEndsWith('/');
+                possibleNames.Add(documentNameWithoutExtension + lowerCaseIndex);
+                possibleNames.Add(documentNameWithoutExtension + titleCaseIndex);
+            }
+
+            return possibleNames;
+        }
+        
+        private async Task<Document> GetSourceDocument(Project project, string documentName,
+            string languageCode, string version, Document oldDocument)
+        {
+            var source = _documentStoreFactory.Create(project.DocumentStoreType);
+            
+            Document sourceDocument = null;
+            
+            Exception firstException = null;
+            foreach (var name in GetPossibleNames(documentName, project.Format))
+            {
+                try
+                {
+                    sourceDocument = await source.GetDocumentAsync(project, name, languageCode, version,
+                        oldDocument?.LastSignificantUpdateTime);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    firstException ??= ex;
+                }
+            }
+            
+            if(sourceDocument == null)
+            {
+                throw firstException!;
+            }
+
+            return sourceDocument;
         }
 
         private TimeSpan GetCacheTimeout()
