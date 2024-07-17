@@ -414,7 +414,7 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 ### Authorize the Razor Component
 
-Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor` project and add an `Authorize` attribute just after the `@page` directive and the following namespace imports (`@using` lines), as shown below:
+Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor.Client` project and add an `Authorize` attribute just after the `@page` directive and the following namespace imports (`@using` lines), as shown below:
 
 ````html
 @page "/books"
@@ -500,7 +500,7 @@ You can run and test the permissions. Remove a book related permission from the 
 
 Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
 
-Open the `BookStoreMenuContributor` class in the `Acme.BookStore.Blazor` project, find the code block below:
+Open the `BookStoreMenuContributor` class in the `Acme.BookStore.Blazor.Client` project, find the code block below:
 
 ````csharp
 context.Menu.AddItem(
