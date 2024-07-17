@@ -291,6 +291,13 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
                 moduleFile.Name,
                 "Volo.Abp.LeptonX.Shared;"
             );
+
+            AddNamespaces(
+                context,
+                moduleFile.Name,
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton;",
+                "using Volo.Abp.AspNetCore.Mvc.UI.Theme.Lepton.Bundling;"
+            );
         }
     }
 
