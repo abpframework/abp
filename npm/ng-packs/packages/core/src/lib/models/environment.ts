@@ -23,7 +23,7 @@ export interface HasAdditional {
 }
 export interface ApiConfig extends O.Partial<HasAdditional> {
   url: string;
-  rootNamespace: string;
+  rootNamespace?: string;
 }
 
 export interface Apis {
