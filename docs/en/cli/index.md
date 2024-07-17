@@ -43,8 +43,8 @@ Here, is the list of all available commands before explaining their details:
 * **`get-source`**: Downloads the source code of a module.
 * **`add-source-code`**: Downloads the source code and replaces package references with project references.
 * **`init-solution`**: Creates ABP Studio configuration files for a given solution.
-* **`kube-connect`**: Connects to kubernetes environment.
-* **`kube-intercept`**: Intercepts a service running in Kubernetes environment.
+* **`kube-connect`**: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+* **`kube-intercept`**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
 * **`list-module-sources`**: Lists the remote module sources.
 * **`add-module-source`**: Adds a remote module source.
 * **`delete-module-source`**: Deletes a remote module source.
@@ -127,19 +127,19 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * **`app`**: Application template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
-        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
+        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
       * `angular`: Angular UI. There are some additional options for this template:
-        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
-        * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
-        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
+        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project. (*Available for* ***Team*** *or higher licenses*)
       * `maui-blazor`: Blazor Maui UI. There are some additional options for this template:
-        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
+        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project. (*Available for* ***Team*** *or higher licenses*)
       * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
-        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side.
+        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
       * `none`: Without any mobile application.
       * `react-native`: React Native.
@@ -151,7 +151,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
     * `--separate-tenant-schema`: Creates a different DbContext for tenant schema. If not specified, the tenant schema is shared with the host schema. This option is only included in PRO templates.
     * `--theme` or `-th`: Specifes the theme. Default theme is `leptonx`. Available themes:
-        * `leptonx`: LeptonX Theme.
+        * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
         * `leptonx-lite`: LeptonX-Lite Theme.
         * `basic`: Basic Theme.
   * **`app-nolayers`**: Single-layer application template. Additional options:
@@ -166,10 +166,10 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `mongodb`: MongoDB.
     * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
-      * `leptonx`: LeptonX Theme.
+      * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
       * `leptonx-lite`: LeptonX-Lite Theme.
       * `basic`: Basic Theme.
-  * **`microservice`**: Microservice solution template. Additional options:
+  * **`microservice`**: Microservice solution template (*Available for* ***Business*** *or higher licenses*).  Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       * `angular`: Angular UI. There are some additional options for this template:
@@ -185,7 +185,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
-      * `leptonx`: LeptonX Theme.
+      * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
       * `leptonx-lite`: LeptonX-Lite Theme.
       * `basic`: Basic Theme.
     * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
@@ -202,7 +202,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 * `--dont-run-install-libs`: Skip installing client side packages.
 * `--dont-run-bundling`: Skip bundling for Blazor packages.
 * `--no-kubernetes-configuration` or `-nkc`: Skips the Kubernetes configuration files.
-* *Module Options*: You can skip some modules if you don't want to add them to your solution. Available commands:
+* *Module Options*: You can skip some modules if you don't want to add them to your solution (*Available for* ***Team*** *or higher licenses*). Available commands:
   * `-no-saas`: Skips the Saas module.
   * `-no-gdpr`: Skips the GDPR module.
   * `-no-openiddict-admin-ui`: Skips the OpenIddict Admin UI module.
@@ -440,10 +440,6 @@ Examples:
 abp list-modules
 ```
 
-#### Options
-
-* `--include-pro-modules`: Includes commercial (pro) modules in the output.
-
 ### list-templates
 
 Lists all available templates to create a solution.
@@ -518,7 +514,7 @@ abp init-solution --name Acme.BookStore
 
 ### kube-connect
 
-Connects to Kubernetes cluster. Press `ctrl+c` to disconnect.
+Connects to Kubernetes cluster (*Available for* ***Business*** *or higher licenses*). Press `ctrl+c` to disconnect.
 
 ````bash
 abp kube-connect [options]
@@ -544,7 +540,7 @@ abp kube-connect -c docker-desktop -ns mycrm-local
 
 ### kube-intercept
 
-Intercepts a service running in Kubernetes environment. Press `ctrl+c` to stop interception.
+Intercepts a service running in Kubernetes environment (*Available for* ***Business*** *or higher licenses*). Press `ctrl+c` to stop interception.
 
 ````bash
 abp kube-intercept <service-name> [options]
