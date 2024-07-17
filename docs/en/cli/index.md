@@ -127,19 +127,19 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * **`app`**: Application template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
-        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
+        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Personal*** *or higher licenses*)
       * `angular`: Angular UI. There are some additional options for this template:
-        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
+        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Personal*** *or higher licenses*)
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
-        * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
+        * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Personal*** *or higher licenses*)
         * `--pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
-        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project. (*Available for* ***Team*** *or higher licenses*)
+        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project. (*Available for* ***Personal*** *or higher licenses*)
       * `maui-blazor`: Blazor Maui UI (*Available for* ***Personal*** *or higher licenses*). There are some additional options for this template:
         * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
-        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
+        * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Personal*** *or higher licenses*)
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
       * `none`: Without any mobile application.
       * `react-native`: React Native.
