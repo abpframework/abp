@@ -91,16 +91,8 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
 
             if (propType.isEnum) {
               toBeImported.push({ type: ref, isEnum: true });
-            }
-
-            if (parseNamespace(solution, ref) !== model.namespace) {
-              const isEnumImportAvailable = toBeImported.some(importValue => {
-                return importValue.isEnum && importValue.type === ref;
-              });
-
-              if (!isEnumImportAvailable) {
-                toBeImported.push({ type: ref, isEnum: false });
-              }
+            } else if (parseNamespace(solution, ref) !== model.namespace) {
+              toBeImported.push({ type: ref, isEnum: false });
             }
           });
         });
