@@ -16,7 +16,7 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   const extraForm = new UntypedFormGroup({});
   form.addControl(EXTRA_PROPERTIES_KEY, extraForm);
 
-  const record: any = data.record || {};
+  const record = data.record || {};
   const type = JSON.stringify(record) === '{}' ? 'create' : 'edit';
   const props: FormPropList<R> = extensions[`${type}FormProps`].get(identifier).props;
   const extraProperties = record[EXTRA_PROPERTIES_KEY] || {};
@@ -24,11 +24,7 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   props.forEach(({ value: prop }) => {
     const name = prop.name;
     const isExtraProperty = prop.isExtra || name in extraProperties;
-    let value = isExtraProperty
-      ? extraProperties[name as string]
-      : name in record
-        ? record[name]
-        : undefined;
+    let value = isExtraProperty ? extraProperties[name] : name in record ? record[name] : undefined;
 
     if (typeof value === 'undefined') value = prop.defaultValue;
 

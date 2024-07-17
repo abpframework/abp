@@ -131,8 +131,7 @@ export class FormPropData<R = any> extends PropData<R> {
   }
 }
 
-export type FormPropOptions<R = any> = O.Optional<
-  O.Writable<FormProp<R>>,
+type OptionalKeys =
   | 'permission'
   | 'visible'
   | 'displayName'
@@ -147,8 +146,10 @@ export type FormPropOptions<R = any> = O.Optional<
   | 'id'
   | 'displayTextResolver'
   | 'formText'
-  | 'tooltip'
->;
+  | 'tooltip';
+type PartialFormPropOptions<R = any> = O.Partial<O.Pick<FormProp<R>, OptionalKeys>>;
+type FilteredFormPropOptions<R = any> = O.Omit<FormProp<R>, OptionalKeys>;
+export type FormPropOptions<R = any> = PartialFormPropOptions<R> & FilteredFormPropOptions<R>;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;
 export type CreateFormPropContributorCallback<R = any> = PropContributorCallback<FormPropList<R>>;

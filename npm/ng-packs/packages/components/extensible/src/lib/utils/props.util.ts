@@ -26,7 +26,7 @@ import {
 export function createExtraPropertyValueResolver<T>(
   name: string,
 ): PropCallback<T, Observable<any>> {
-  return (data?) => of((data?.record as { [key: string]: any })[EXTRA_PROPERTIES_KEY][name]);
+  return (data?) => of((data.record as { [key: string]: any })[EXTRA_PROPERTIES_KEY][name]);
 }
 
 export function mergeWithDefaultProps<F extends PropsFactory<any>>(

@@ -61,15 +61,19 @@ export class ToolbarComponent<R = any> extends Action<R> {
   }
 }
 
-export type ToolbarActionOptions<R = any> = O.Optional<
-  O.Writable<ToolbarAction<R>>,
-  'permission' | 'visible' | 'icon' | 'btnClass'
->;
+type OptionalActionKeys = 'permission' | 'visible' | 'icon' | 'btnClass';
+type PartialToolbarActionOptions<R = any> = O.Partial<O.Pick<ToolbarAction<R>, OptionalActionKeys>>;
+type FilteredToolbarActionOptions<R = any> = O.Omit<ToolbarAction<R>, OptionalActionKeys>;
+export type ToolbarActionOptions<R = any> = PartialToolbarActionOptions<R> &
+  FilteredToolbarActionOptions<R>;
 
-export type ToolbarComponentOptions<R = any> = O.Optional<
-  O.Writable<ToolbarComponent<R>>,
-  'permission' | 'visible' | 'action'
+type OptionalComponentKeys = 'permission' | 'visible' | 'action';
+type PartialToolbarComponentOptions<R = any> = O.Partial<
+  O.Pick<ToolbarComponent<R>, OptionalComponentKeys>
 >;
+type FilteredToolbarComponentOptions<R = any> = O.Omit<ToolbarComponent<R>, OptionalComponentKeys>;
+export type ToolbarComponentOptions<R = any> = PartialToolbarComponentOptions<R> &
+  FilteredToolbarComponentOptions<R>;
 
 export type ToolbarActionDefault<R = any> = ToolbarAction<R> | ToolbarComponent<R>;
 

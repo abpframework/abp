@@ -22,8 +22,10 @@ export abstract class ActionData<R = any> {
   }
 }
 
-export type ReadonlyActionData<R = any> = O.Readonly<Omit<ActionData<R>, 'data'>>;
-
+export type ReadonlyActionData<R = any> = O.Merge<
+  O.Readonly<Omit<ActionData<R>, 'data' | 'record'>>,
+  { record: R }
+>;
 export abstract class Action<R = any> {
   constructor(
     public readonly permission: string,

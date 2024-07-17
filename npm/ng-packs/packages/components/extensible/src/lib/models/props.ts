@@ -24,8 +24,10 @@ export abstract class PropData<R = any> {
   }
 }
 
-export type ReadonlyPropData<R = any> = O.Readonly<Omit<PropData<R>, 'data'>>;
-
+export type ReadonlyPropData<R> = O.Merge<
+  O.Readonly<O.Omit<PropData<R>, 'data' | 'record'>>,
+  { record: R }
+>;
 export abstract class Prop<R = any> {
   constructor(
     public readonly type: ePropType,
