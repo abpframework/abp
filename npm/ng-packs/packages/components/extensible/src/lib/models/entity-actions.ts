@@ -1,5 +1,4 @@
 import { Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
@@ -9,6 +8,7 @@ import {
   ActionsFactory,
 } from './actions';
 import { FormPropTooltip } from './form-props';
+import { FilteredWithOptions, PartialWithOptions } from '../utils/model.utils';
 
 export class EntityActionList<R = any> extends ActionList<R, EntityAction<R>> {}
 
@@ -48,10 +48,8 @@ export class EntityAction<R = any> extends Action<R> {
 }
 
 type OptionalKeys = 'permission' | 'visible' | 'icon';
-type PartialEntityActionOptions<R = any> = O.Partial<O.Pick<EntityAction<R>, OptionalKeys>>;
-type FilteredEntityActionOptions<R = any> = O.Omit<EntityAction<R>, OptionalKeys>;
-export type EntityActionOptions<R = any> = PartialEntityActionOptions<R> &
-  FilteredEntityActionOptions<R>;
+export type EntityActionOptions<R = any> = PartialWithOptions<EntityAction<R>, OptionalKeys> &
+  FilteredWithOptions<EntityAction<R>, OptionalKeys>;
 
 export type EntityActionDefaults<R = any> = Record<string, EntityAction<R>[]>;
 export type EntityActionContributorCallback<R = any> = ActionContributorCallback<

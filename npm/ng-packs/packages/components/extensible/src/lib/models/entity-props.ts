@@ -1,7 +1,6 @@
 import { ABP, escapeHtmlChars } from '@abp/ng.core';
 import { InjectFlags, InjectOptions, InjectionToken, Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { O } from 'ts-toolbelt';
 import { ActionCallback } from './actions';
 import {
   Prop,
@@ -13,6 +12,7 @@ import {
   PropsFactory,
 } from './props';
 import { FormPropTooltip } from './form-props';
+import { FilteredWithOptions, PartialWithOptions } from '../utils/model.utils';
 
 export class EntityPropList<R = any> extends PropList<R, EntityProp<R>> {}
 
@@ -83,10 +83,8 @@ type OptionalKeys =
   | 'action'
   | 'component'
   | 'enumList';
-
-type PartialEntityPropOptions<R = any> = O.Partial<O.Pick<EntityProp<R>, OptionalKeys>>;
-type FilteredEntityPropOptions<R = any> = O.Omit<EntityProp<R>, OptionalKeys>;
-export type EntityPropOptions<R = any> = PartialEntityPropOptions<R> & FilteredEntityPropOptions<R>;
+export type EntityPropOptions<R = any> = PartialWithOptions<EntityProp<R>, OptionalKeys> &
+  FilteredWithOptions<EntityProp<R>, OptionalKeys>;
 
 export type EntityPropDefaults<R = any> = Record<string, EntityProp<R>[]>;
 export type EntityPropContributorCallback<R = any> = PropContributorCallback<EntityPropList<R>>;

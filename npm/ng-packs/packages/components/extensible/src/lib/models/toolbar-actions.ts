@@ -1,5 +1,4 @@
 import { Injector, Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
@@ -10,6 +9,7 @@ import {
   ActionsFactory,
   ReadonlyActionData,
 } from './actions';
+import { FilteredWithOptions, PartialWithOptions } from '../utils/model.utils';
 
 export class ToolbarActionList<R = any> extends ActionList<R, ToolbarActionDefault<R>> {}
 
@@ -62,18 +62,18 @@ export class ToolbarComponent<R = any> extends Action<R> {
 }
 
 type OptionalActionKeys = 'permission' | 'visible' | 'icon' | 'btnClass';
-type PartialToolbarActionOptions<R = any> = O.Partial<O.Pick<ToolbarAction<R>, OptionalActionKeys>>;
-type FilteredToolbarActionOptions<R = any> = O.Omit<ToolbarAction<R>, OptionalActionKeys>;
-export type ToolbarActionOptions<R = any> = PartialToolbarActionOptions<R> &
-  FilteredToolbarActionOptions<R>;
+export type ToolbarActionOptions<R = any> = PartialWithOptions<
+  ToolbarAction<R>,
+  OptionalActionKeys
+> &
+  FilteredWithOptions<ToolbarAction<R>, OptionalActionKeys>;
 
 type OptionalComponentKeys = 'permission' | 'visible' | 'action';
-type PartialToolbarComponentOptions<R = any> = O.Partial<
-  O.Pick<ToolbarComponent<R>, OptionalComponentKeys>
->;
-type FilteredToolbarComponentOptions<R = any> = O.Omit<ToolbarComponent<R>, OptionalComponentKeys>;
-export type ToolbarComponentOptions<R = any> = PartialToolbarComponentOptions<R> &
-  FilteredToolbarComponentOptions<R>;
+export type ToolbarComponentOptions<R = any> = PartialWithOptions<
+  ToolbarComponent<R>,
+  OptionalComponentKeys
+> &
+  FilteredWithOptions<ToolbarComponent<R>, OptionalComponentKeys>;
 
 export type ToolbarActionDefault<R = any> = ToolbarAction<R> | ToolbarComponent<R>;
 

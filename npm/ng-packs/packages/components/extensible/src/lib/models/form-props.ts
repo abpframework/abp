@@ -2,7 +2,6 @@ import { ABP } from '@abp/ng.core';
 import { Injector, Type } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { O } from 'ts-toolbelt';
 import {
   Prop,
   PropCallback,
@@ -15,6 +14,7 @@ import {
   Props,
   PropsFactory,
 } from './props';
+import { FilteredWithOptions, PartialWithOptions } from '../utils/model.utils';
 
 export class FormPropList<R = any> extends PropList<R, FormProp<R>> {}
 
@@ -147,9 +147,8 @@ type OptionalKeys =
   | 'displayTextResolver'
   | 'formText'
   | 'tooltip';
-type PartialFormPropOptions<R = any> = O.Partial<O.Pick<FormProp<R>, OptionalKeys>>;
-type FilteredFormPropOptions<R = any> = O.Omit<FormProp<R>, OptionalKeys>;
-export type FormPropOptions<R = any> = PartialFormPropOptions<R> & FilteredFormPropOptions<R>;
+export type FormPropOptions<R = any> = PartialWithOptions<FormProp<R>, OptionalKeys> &
+  FilteredWithOptions<FormProp<R>, OptionalKeys>;
 
 export type CreateFormPropDefaults<R = any> = Record<string, FormProp<R>[]>;
 export type CreateFormPropContributorCallback<R = any> = PropContributorCallback<FormPropList<R>>;
