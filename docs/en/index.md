@@ -14,13 +14,13 @@ The [Getting Started](get-started) guide can be used to create and run ABP based
 
 ABP can work with any UI framework, while the following frameworks are supported out of the box:
 
-<img width="500" height="56" src="images/ui-options.png" alt="ui options">
+<img width="540" src="images/ui-options.png" alt="ui options">
 
 ### Database Provider Options
 
 ABP can work with any database provider, while the following providers are supported out of the box:
 
-<img width="500" height="56" src="images/db-options.png" alt="ABP Database Providers" />
+<img width="540" src="images/db-options.png" alt="ABP Database Providers" />
 
 ## Exploring the Documentation
 
