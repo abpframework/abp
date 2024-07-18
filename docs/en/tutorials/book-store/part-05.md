@@ -355,6 +355,19 @@ export class BookRoutingModule {}
 * Imported `authGuard` and `permissionGuard` from the `@abp/ng.core`.
 * Added `canActivate: [authGuard, permissionGuard]` to the route definition.
 
+Open the `/src/app/route.provider.ts` and add `requiredPolicy: 'BookStore.Books'` to the `/book-store` route. The `/book-store` route block should be following:
+
+````js
+{
+  path: '/book-store',
+  name: '::Menu:BookStore',
+  iconClass: 'fas fa-book',
+  order: 2,
+  layout: eLayoutType.application,
+  requiredPolicy: 'BookStore.Books',
+},
+````
+
 Open the `/src/app/route.provider.ts` and add `requiredPolicy: 'BookStore.Books'` to the `/books` route. The `/books` route block should be following:
 
 ````js

@@ -577,6 +577,18 @@ Open the `src/app/route.provider.ts` file and add the following menu definition:
 }
 ````
 
+Open the `/src/app/route.provider.ts` and add `'BookStore.Books || BookStore.Authors'` to the `/book-store` route. The `/book-store` route block should be following:
+
+````js
+{
+  path: '/book-store',
+  name: '::Menu:BookStore',
+  iconClass: 'fas fa-book',
+  order: 2,
+  layout: eLayoutType.application,
+  requiredPolicy: 'BookStore.Books || BookStore.Authors',
+},
+
 The final `configureRoutes` function declaration should be following:
 
 ```js
@@ -596,6 +608,7 @@ function configureRoutes(routes: RoutesService) {
         iconClass: 'fas fa-book',
         order: 2,
         layout: eLayoutType.application,
+        requiredPolicy: 'BookStore.Books || BookStore.Authors',
       },
       {
         path: '/books',
