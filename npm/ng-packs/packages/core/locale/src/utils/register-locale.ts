@@ -19,7 +19,7 @@ export interface RegisterLocaleData {
 function loadLocale(locale: string) {
   // hard coded list works with esbuild. Source https://github.com/angular/angular-cli/issues/26904#issuecomment-1903596563
 
-  var list = {
+  const list = {
       'ar': () => import('@angular/common/locales/ar'),
       'cs': () => import('@angular/common/locales/cs'),
       'en': () => import('@angular/common/locales/en'),
@@ -53,7 +53,7 @@ export function registerLocaleForEsBuild(
   return (locale: string): Promise<any> => {
       localeMap = { ...differentLocales, ...cultureNameLocaleFileMap };
       const l = localeMap[locale] || locale;
-      var localeSupportList = "ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant".split("|");
+      const localeSupportList = "ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant".split("|");
 
       if (localeSupportList.indexOf(locale) == -1) {
           return;
