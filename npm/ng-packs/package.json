@@ -127,7 +127,7 @@
     "ts-toolbelt": "^9.0.0",
     "tslib": "^2.0.0",
     "tslint": "~6.1.0",
-    "typescript": "~5.3.0",
+    "typescript": "~5.4.0",
     "zone.js": "~0.14.0"
   },
   "lint-staged": {
