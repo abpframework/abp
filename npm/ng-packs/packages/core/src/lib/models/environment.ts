@@ -1,6 +1,5 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { ABP } from './common';
-import { O } from 'ts-toolbelt';
 
 export interface Environment {
   apis: Apis;
@@ -21,17 +20,17 @@ export interface ApplicationInfo {
 export interface HasAdditional {
   [key: string]: string;
 }
-export interface ApiConfig extends O.Partial<HasAdditional> {
+export interface ApiConfig extends Partial<HasAdditional> {
   url: string;
   rootNamespace?: string;
 }
 
 export interface Apis {
-  [key: string]: O.Partial<ApiConfig>;
+  [key: string]: Partial<ApiConfig>;
   default: ApiConfig;
 }
 
-export type customMergeFn = (localEnv: O.Partial<Environment>, remoteEnv: any) => Environment;
+export type customMergeFn = (localEnv: Partial<Environment>, remoteEnv: any) => Environment;
 
 export interface RemoteEnv {
   url: string;
