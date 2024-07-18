@@ -21,11 +21,6 @@ export abstract class ActionData<R = any> {
   }
 }
 
-// export type ReadonlyActionData<R = any> = O.Merge<
-//   Readonly<Omit<ActionData<R>, 'data' | 'record'>>,
-//   { record: R }
-// >;
-
 export type ReadonlyActionData<R = any> = Readonly<Omit<ActionData<R>, 'data'>>;
 
 export abstract class Action<R = any> {
