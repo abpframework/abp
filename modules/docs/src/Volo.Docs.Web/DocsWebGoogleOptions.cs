@@ -4,9 +4,9 @@ using System.Globalization;
 
 namespace Volo.Docs;
 
-public class DocsWebGoogleTranslationOptions
+public class DocsWebGoogleOptions
 {
-    public bool UseGoogleTranslation { get; set; }
+    public bool EnableGoogleTranslate { get; set; }
 
     /// <summary>
     /// https://cloud.google.com/translate/docs/languages
@@ -15,9 +15,13 @@ public class DocsWebGoogleTranslationOptions
 
     public Func<CultureInfo, string> GetCultureLanguageCode { get; set; }
 
-    public DocsWebGoogleTranslationOptions()
+    public bool EnableGoogleProgrammableSearchEngine { get; set; }
+
+    public string GoogleSearchEngineId { get; set; }
+
+    public DocsWebGoogleOptions()
     {
-        UseGoogleTranslation = false;
+        EnableGoogleTranslate = false;
         IncludedLanguages =
         [
             "en",
@@ -47,5 +51,7 @@ public class DocsWebGoogleTranslationOptions
                 _ => culture.TwoLetterISOLanguageName
             };
         };
+
+        EnableGoogleProgrammableSearchEngine = false;
     }
 }

@@ -85,7 +85,7 @@ namespace VoloDocs.Web
 
             Configure<DocsElasticSearchOptions>(options =>
             {
-                options.Enable = true;
+                options.Enable = false;
             });
 
             Configure<AbpDbConnectionOptions>(options =>
@@ -164,9 +164,11 @@ namespace VoloDocs.Web
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
             });
 
-            Configure<DocsWebGoogleTranslationOptions>(options =>
+            Configure<DocsWebGoogleOptions>(options =>
             {
-                options.UseGoogleTranslation = true;
+                options.EnableGoogleTranslate = true;
+                options.EnableGoogleProgrammableSearchEngine = true;
+                options.GoogleSearchEngineId = "77c7266532da1427f";
             });
         }
 
