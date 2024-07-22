@@ -29,14 +29,14 @@ Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`cli`**: Update or remove ABP CLI.
-* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates).
+* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
 * **`new-module`**: Generates a new module based on the given template.
 * **`new-package`**: Generates a new package based on the given template.
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-package-ref`**: Adds package to given project.
-* **`install-module`**: Adds a [multi-package application module](../modules) to a given module.
+* **`install-module`**: Adds a [multi-package application module](../modules/index.md) to a given module.
 * **`install-local-module`**: Installs a local module to given module.
 * **`list-modules`**: Lists names of open-source application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
