@@ -587,6 +587,7 @@
     "AutoRenewalEnabled": "Auto Renewal Enabled",
     "LastAutoRenewalPaymentTime": "Last Auto Renewal Payment Time",
     "OrganizationDoesNotHaveACreditCard": "Organization does not have a credit card!",
+    "OrganizationDoesNotHaveACreditCardInGateway": "Organization does not have a credit card in the gateway!",
     "Permission:EditWinners": "Edit Winners",
     "Permission:ChangeDrawingStatus": "Change Drawing Status",
     "Menu:Licenses": "Licenses",
