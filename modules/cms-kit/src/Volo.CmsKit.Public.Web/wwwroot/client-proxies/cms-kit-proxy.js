@@ -117,6 +117,28 @@
 
   })();
 
+  // controller volo.cmsKit.public.markedItems.markedItemPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.markedItems.markedItemPublic');
+
+    volo.cmsKit.public.markedItems.markedItemPublic.getForUser = function(entityType, entityId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/marked-items/' + entityType + '/' + entityId + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.markedItems.markedItemPublic.toggle = function(entityType, entityId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/marked-items/' + entityType + '/' + entityId + '',
+        type: 'PUT'
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.cmsKit.public.menus.menuItemPublic
 
   (function(){
