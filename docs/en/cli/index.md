@@ -2,6 +2,8 @@
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
 
+> 🛈 With **v8.2+**, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and [ABP Studio](../studio/index.md). The new ABP CLI commands are explained in this documentation. However, if you want to learn more about the differences between the old and new CLIs, want to learn the reason for the change, or need guidance to use the old ABP CLI, please refer to the [Old vs New CLI](differences-between-old-and-new-cli.md) documentation.
+
 ## Installation
 
 ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Install it using a command line window:
@@ -29,14 +31,14 @@ Here, is the list of all available commands before explaining their details:
 
 * **`help`**: Shows help on the usage of the ABP CLI.
 * **`cli`**: Update or remove ABP CLI.
-* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates).
+* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
 * **`new-module`**: Generates a new module based on the given template.
 * **`new-package`**: Generates a new package based on the given template.
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-package-ref`**: Adds package to given project.
-* **`install-module`**: Adds a [multi-package application module](../modules) to a given module.
+* **`install-module`**: Adds a [multi-package application module](../modules/index.md) to a given module.
 * **`install-local-module`**: Installs a local module to given module.
 * **`list-modules`**: Lists names of open-source application modules.
 * **`list-templates`**: Lists the names of available templates to create a solution.
