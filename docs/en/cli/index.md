@@ -537,7 +537,7 @@ abp kube-connect -c docker-desktop -ns mycrm-local
 * `--namespace` or `-ns`: The namespace that services running on.
 * `--context` or `-c`: The context that services running in.
 * `--wireguard-password` or `-wp`: Wireguard password for the profile. This is not needed if you already set it on the ABP Studio user interface.
-* `--solution-id` or `-si`: Id of the solution. If not set, the closest solution in file system will be used.
+* `--solution-path` or `-sp`: Path of the solution. If not set, the closest solution in file system will be used.
 
 ### kube-intercept
 
