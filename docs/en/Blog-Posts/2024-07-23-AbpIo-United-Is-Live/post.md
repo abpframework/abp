@@ -1,5 +1,5 @@
 
-#The new ABP Platform is live!
+# The new ABP Platform is live!
 
 We're thrilled to announce that the **new ABP.IO Platform is now live!** Our team has been hard at unifying and enhancing the entire platform to deliver a seamless, user-friendly experience. Here's what's new:
 
