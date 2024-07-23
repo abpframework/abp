@@ -22,6 +22,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         "node_modules",
         ".git",
         ".idea",
+        "_templates",
         Path.Combine("bin", "debug"),
         Path.Combine("obj", "debug")
     };
