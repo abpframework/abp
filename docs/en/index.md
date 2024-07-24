@@ -24,7 +24,7 @@ ABP can work with any database provider, while the following providers are suppo
 
 ## Exploring the Documentation
 
-ABP has a **comprehensive documentation** that not only explains the ABP, but also includes **guides** and **samples** to help you on creating a **maintainable solution** by introducing and discussing common **software development principle and best practices**.
+ABP has a **comprehensive documentation** that not only explains ABP, but also includes **guides** and **samples** to help you on creating a **maintainable solution** by introducing and discussing common **software development principle and best practices**.
 
 ### The Framework
 
@@ -33,13 +33,13 @@ ABP has a **comprehensive documentation** that not only explains the ABP, but al
 ABP offers a complete, modular and layered software architecture based on [Domain Driven Design](./framework/architecture/domain-driven-design) principles and patterns. It also provides the necessary infrastructure to implement this architecture.
 
 * See the [Modularity](./framework/architecture/modularity/basics.md) document to understand the module system.
-* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with the ABP.
+* [Implementing Domain Driven Design book](https://abp.io/books/implementing-domain-driven-design?ref=doc) is an ultimate guide for who want to understand and implement the DDD with ABP.
 * [Microservice Architecture](./framework/architecture/microservices) document explains how ABP helps to create a microservice solution.
 * [Multi-Tenancy](./framework/architecture/multi-tenancy) document introduces multi-tenancy and explores the ABP multi-tenancy infrastructure.
 
 #### Infrastructure
 
-There are a lot of features provided by the ABP to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus), [Background Job System](./framework/infrastructure/background-jobs), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
+There are a lot of features provided by ABP to achieve real world scenarios easier, like [Event Bus](./framework/infrastructure/event-bus), [Background Job System](./framework/infrastructure/background-jobs), [Audit Logging](./framework/infrastructure/audit-logging.md), [BLOB Storing](./framework/infrastructure/blob-storing), [Data Seeding](./framework/infrastructure/data-seeding.md), [Data Filtering](./framework/infrastructure/data-filtering.md).
 
 #### Cross Cutting Concerns
 
@@ -75,11 +75,11 @@ ABP provides a UI theming system where you can use [pre-built themes](ui-themes)
 
 ## Books
 
-### Mastering ABP
+### Mastering ABP Framework
 
 <img width="302" height="372" src="images/abp-book.png" alt="Mastering ABP - Halil İbrahim Kalkan" />
 
-*Mastering ABP* is an ultimate guide to get started and expertise with the ABP. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP.
+*Mastering ABP Framework* is an ultimate guide to get started and expertise with the ABP Framework. It is authored by Halil İbrahim Kalkan, the creator and the lead developer of the ABP Framework.
 
 **[Click here to see the details and order the book](https://abp.io/books/mastering-abp-framework)**.
 
@@ -97,7 +97,7 @@ See the [sample projects](samples) built with ABP.
 
 ## ABP Community
 
-The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about the ABP.
+The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about ABP.
 
 ## Blog
 
