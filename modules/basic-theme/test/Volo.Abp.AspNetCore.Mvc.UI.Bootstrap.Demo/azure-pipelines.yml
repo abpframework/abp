@@ -44,7 +44,7 @@ stages:
       inputs:
         command: build
         repository: demo/bootstrap-taghelpers
-        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile
+        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile.azure
         buildContext: $(workDir)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
