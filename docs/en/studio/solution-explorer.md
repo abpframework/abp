@@ -28,6 +28,7 @@ It is the main solution that you can open with ABP Studio, an ABP solution can c
   - `Existing Module`: You can add existing module to your solution.
 - `Rename`: Renames the solution.
 - `Manage Secrets`: You can edit your solution secrets.
+- `Manage Metadata`: You can edit your solution metadata.
 - `Reload`: Reloads the solution.
 - `ABP Suite`: It opens the *Choose Module* window and you can select a module or continue without selecting a module. If you select a module, it will open the module in the ABP Suite. If you continue without selecting a module, it will open the ABP Suite without a module.
 - `ABP CLI`
