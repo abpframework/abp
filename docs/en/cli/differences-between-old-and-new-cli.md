@@ -1,6 +1,6 @@
-# Old vs New CLI
+# Old ABP CLI vs New ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features. With **v8.2+**, the old/legacy ABP CLI has been replaced with a new [CLI](index.md) system to align with the new templating system and [ABP Studio](../studio/index.md). Also, there are some superior features/commands have been introduced with the new CLI, such as `kube-connect` and `kube-intercept` commands.
+ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features. With **v8.2+**, the old/legacy ABP CLI has been replaced with a new [CLI](index.md) system to align with the new templating system and [ABP Studio](../studio/index.md). Also, some superior features/commands have been introduced with the new CLI, such as `kube-connect` and `kube-intercept` commands.
 
 In this guide, you will learn the motivation behind this change, some questions that you may have, how to use the old/legacy CLI, its features, and more...
 
@@ -14,7 +14,7 @@ This change allows you to create your application with the new templating system
 
 ## Using The New ABP CLI
 
-> If you installed [ABP Studio](../studio/index.md) recently, then you may skip this section, because ABP Studio automatically uninstalls the old CLI and replace it with the new CLI. Therefore, you don't need to manually switch to the new ABP CLI.
+> If you installed [ABP Studio](../studio/index.md) recently, then you may skip this section because ABP Studio automatically uninstalls the old CLI and replaces it with the new CLI. Therefore, you don't need to manually switch to the new ABP CLI.
 
 > 🛈 The new ABP CLI is in the beta version for now. If you have any issues, you can always use the old ABP CLI by following the instructions in the _Using the old ABP CLI_ section below.
 
@@ -28,7 +28,7 @@ dotnet tool uninstall -g Volo.Abp.Cli
 dotnet tool install -g Volo.Abp.Studio.Cli
 ```
 
-> **Note:** If you try to install the new CLI before uninstalling the old one, you will get an error such as **`Failed to create shell shim for tool 'volo.abp.studio.cli': Command 'abp' conflicts with an existing command from another tool.`**. This is caused because both old and new CLIs use the same `abp` command as the executing command, therefore it's required to use only one of them.
+> **Note:** If you try to install the new CLI before uninstalling the old one, you will get an error such as **`Failed to create shell shim for tool 'volo.abp.studio.cli': Command 'abp' conflicts with an existing command from another tool.`**. This is because both old and new CLI binary names use the same `abp` command as the executing command.
 
 If you start using ABP from v8.2+, then you can directly install the new CLI with the following command:
 
@@ -36,7 +36,7 @@ If you start using ABP from v8.2+, then you can directly install the new CLI wit
 dotnet tool install -g Volo.Abp.Studio.Cli
 ```
 
-After installing the new CLI, you will be able to use the CLI commands described [in the documentation](index.md) (with the `abp` command) or if you prefer GUI, you can always use the [ABP Studio](../studio/index.md).
+After installing the new CLI, you will be able to use the CLI commands described [in the documentation](index.md) (with the `abp` command), or if you prefer GUI, you can always use the [ABP Studio](../studio/index.md).
 
 ## Using The Old ABP CLI
 
@@ -62,7 +62,7 @@ abp new Acme.BookStore --version 8.0 --old # or you can use `abp-old new Acme.Bo
 
 Alternatively, you can uninstall the new CLI and install the old CLI to use the old ABP CLI. However, with the `--old` parameter, you don't need to do that and instead you can easily use the old CLI by just passing the `--old` parameter to the end of your command.
 
-> Using the `--old` parameter is recommended to use the old ABP CLI. However, if you have any problem, you can always remove the new CLI, install the old CLI, and use it!
+> It is recommended that you use the `--old` parameter to use the old ABP CLI. However, if you have any problems, you can always remove the new CLI and install the old CLI as before.
 
 ## Common Questions
 
@@ -70,7 +70,7 @@ In this section, you can see the common questions with the new CLI changes and t
 
 1. **Can I create a new project with an older ABP version with the new ABP CLI?**
 
-Yes, you can. You just need to type the command and put the `--old` command at the end of your command and execute it. For example, if you want to create an application in v8.0, you can use the following command and pass the template version:
+Yes, you can. You just need to type the command, put the `--old` command at the end of your command, and execute it. For example, if you want to create an application in v8.0, you can use the following command and pass the template version:
 
 ```bash
 abp new Acme.BookStore --version 8.0.0 --old
