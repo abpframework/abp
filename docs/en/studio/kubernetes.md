@@ -74,6 +74,7 @@ If you have multiple main charts, you can execute collective commands for all of
   - `Build Docker Image(s)`: If build docker images available for subcharts it builds all of them.
   - `Install Chart(s)`: Installs all charts to selected profile.
   - `Uninstall Chart(s)`: Uninstalls all charts from selected profile.
+  - `Create Self-Signed TLS secret`: It creates self-signed certificates for the applications and adds them to the Kubernetes cluster. It is useful when you [specify the user](#specify-the-user) for the application.
 - `Add Chart`: It opens the *Select Helm Chart* window. Pick the chart from the specified location and select the main helm chart to add a new main chart to the root.
 
 ### Main Chart
@@ -179,6 +180,16 @@ You can disable interception by right clicking the service and selecting *Disabl
 After you made some changes on your project, you can redeploy the chart to the Kubernetes cluster. To do that, right click the service  and select *Redeploy* from the context-menu. It builds the docker image for selected project and installs it again.
 
 ![redeploy](./images/kubernetes/redeploy.png)
+
+## Specify the User
+
+When you connect to a Kubernetes cluster, it uses the selected profile for Kubernetes *Context* and *Namespace* information. Afterwards, when you [intercept a service](#intercept-a-service), it creates some Kubernetes resources and redirects the requests to the local environment. However, if two or more developers are working on the same project, they can't intercept the same service at the same time. To solve this problem, you can specify the user. To do that, it uses the *Metadata* key-value pairs, which you can define in *Tools* -> *Global Metadata* or other levels such as *Solution Metadata* and *Kubernetes Profile Metadata*. When you define metadata named `k8ssuffix` with the desired value, it's appended to the namespace. For example, if you define the `k8ssuffix` metadata with the value `arthur`, the namespace becomes `bookstore-local-arthur`. After that, you can use the same Kubernetes profile with different users.
+
+![global-metadata](./images/kubernetes/global-metadata.png)
+
+> After defining the user, you should execute the *Create Self-Signed TLS secret* command on the [chart root](#chart-root) to create self-signed certificates for the applications and add them to the Kubernetes cluster. It's necessary to intercept the service.
+
+> When you define the metadata in the *Global Metadata*, it's available for all solutions and will not be shared with your team members. However, if you define the metadata in the *Solution Metadata* or *Kubernetes Profile Metadata*, it's available only for the current solution or Kubernetes profile and will be shared with your team members.
 
 ## Advanced Topics
 
