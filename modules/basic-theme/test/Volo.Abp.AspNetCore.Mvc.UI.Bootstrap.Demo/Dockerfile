@@ -1,21 +1,6 @@
-FROM node:16 AS nodebase
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
-COPY --from=nodebase /usr/local/bin /usr/local/bin
-COPY --from=nodebase /usr/local/lib /usr/local/lib
-
-WORKDIR /app
-COPY . .
-
-RUN dotnet tool update --global Volo.Abp.Cli
-ENV PATH="${PATH}:/root/.dotnet/tools/"
-RUN abp install-libs
-RUN dotnet publish -c Release -o bin/Release/publish
-
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 ENV ASPNETCORE_URLS=http://+:80
-COPY --from=build /app/bin/Release/publish .
+COPY bin/Release/publish .
 ENTRYPOINT ["dotnet", "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.dll"]

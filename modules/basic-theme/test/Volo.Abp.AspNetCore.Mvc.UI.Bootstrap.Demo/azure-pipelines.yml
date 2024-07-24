@@ -45,7 +45,7 @@ stages:
         command: build
         repository: demo/bootstrap-taghelpers
         dockerfile: $(bootstrapTaghelpersDir)/Dockerfile
-        buildContext: $(bootstrapTaghelpersDir)
+        buildContext: $(workDir)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
