@@ -27,6 +27,7 @@
     "DisplayName:TwoFactorEnabled": "احراز هویت دو مرحله ای",
     "DisplayName:IsActive": "فعال",
     "DisplayName:LockoutEnabled": "قفل کردن حساب",
+    "Description:LockoutEnabled": "قفل کردن حساب پس از تلاش های ناموفق برای ورود",
     "NewRole": "نقش/وظیفه جدید",
     "RoleName": "نام نقش/وظیفه",
     "CreationTime": "زمان ایجاد",

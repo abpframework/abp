@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "التحقق من عاملين",
     "DisplayName:IsActive": "نشيط",
     "DisplayName:LockoutEnabled": "تأمين الحساب",
+    "Description:LockoutEnabled": "قفل الحساب بعد محاولات تسجيل الدخول الفاشلة",
     "NewRole": "دور جديد",
     "RoleName": "اسم الدور",
     "CreationTime": "وقت الإنشاء",
