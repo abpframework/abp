@@ -67,7 +67,7 @@ public class ListModulesCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("Options:");
         sb.AppendLine("  --include-pro-modules                                           Includes commercial (pro) modules in the output.");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }

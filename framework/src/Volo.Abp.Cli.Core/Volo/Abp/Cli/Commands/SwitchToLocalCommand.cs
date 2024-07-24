@@ -103,7 +103,7 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp switch-to-local --paths D:\\Github\\abp");
         sb.AppendLine("  abp switch-to-local --paths D:\\Github\\abp --solution D:\\test\\MyProject");
         sb.AppendLine("  abp switch-to-local --paths \"D:\\Github\\abp|D:\\Github\\volo\"");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }

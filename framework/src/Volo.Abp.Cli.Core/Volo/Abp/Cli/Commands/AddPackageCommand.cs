@@ -105,7 +105,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the NuGet package to the given project.");
         sb.AppendLine("  abp add-package @abp/ng.theme.basic                                        Adds the NPM package to the given corresponding project.");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
