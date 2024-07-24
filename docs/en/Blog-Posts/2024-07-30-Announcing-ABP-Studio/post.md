@@ -30,3 +30,7 @@ For example, you can now select all the non-fundamental modules as optional:
 ### The Microservice Startup Template
 
 The most important change is made on the [microservice startup template](https://abp.io/docs/latest/solution-templates/microservice) (which is available only for Business or higher license holders). We've designed the solution structure, integrations, Kubernetes/Helm configuration, database migrations and all others from scratch and well documented all the decisions we applied. Developing microservice solutions with ABP Framework is now easier and more understandable than ever.
+
+## The Solution Explorer
+
+One of the main purposes to build ABP Studio is to simplify to create multi-modular and distributed systems. Either you create a modular monolith application or a microservice solution, [ABP Studio's solution explorer](https://abp.io/docs/latest/studio/solution-explorer) provides a convenient way to design your high-level solution. You can think it as an architectural tool to create modules and packages and arrange their dependencies.
