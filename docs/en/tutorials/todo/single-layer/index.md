@@ -91,7 +91,11 @@ This will create a new solution with a single project, named *TodoApp*. Once the
 
 {{end}}
 
-### Create the Database
+### Before Running the Application
+
+You can skip to the *Run the Application* section if you have created the solution using the ABP CLI. It automatically performs the following steps. However, sometimes these steps might need to be manually done. For example, you need to perform them if you have cloned the application code from a source control system.
+
+#### Creating the Database
 
 You can run the following command in the {{if UI=="Blazor"}} directory of your `TodoApp.Host` project {{else}}root directory of your project (in the same folder of the `.csproj` file){{end}} to create the database and seed the initial data:
 
@@ -99,17 +103,11 @@ You can run the following command in the {{if UI=="Blazor"}} directory of your `
 dotnet run --migrate-database
 ```
 
-This command will create the database and seed the initial data for you. Then you can run the application.
-
-### Before Running the Application
+This command will create the database and seed the initial data for you. You could also execute the `migrate-database.ps1` script that is included in the root folder of the solution.
 
 #### Installing the Client-Side Packages
 
-[ABP CLI](../../../cli/index.md) runs the `abp install-libs` command behind the scenes to install the required NPM packages for your solution while creating the application. 
-
-However, sometimes this command might need to be manually run. For example, you need to run this command, if you have cloned the application, or the resources from *node_modules* folder didn't copy to *wwwroot/libs* folder, or if you have added a new client-side package dependency to your solution.
-
-For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
+Run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
 
 ```bash
 abp install-libs
@@ -121,9 +119,7 @@ abp install-libs
 
 #### Bundling and Minification
 
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../../cli/index.md).
-
-However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
+Run the following command in the directory of your blazor application:
 
 ```bash
 abp bundle
@@ -183,7 +179,7 @@ This application will have a single [entity](../../../framework/architecture/dom
 ````csharp
 using Volo.Abp.Domain.Entities;
 
-namespace TodoApp{{if UI=="Blazor"}}.{{end}}Entities;
+namespace TodoApp.Entities;
 
 public class TodoItem : BasicAggregateRoot<Guid>
 {
@@ -328,16 +324,10 @@ Create a `TodoAppService` class under the `Services` folder of {{if UI=="Blazor"
 
 ```csharp
 using TodoApp.Services;
-{{if UI=="Blazor"}}
 using TodoApp.Services.Dtos;
 using TodoApp.Entities;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-{{else}}
-using TodoAppEntities;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
-{{end}}
 
 namespace TodoApp.Services;
 
