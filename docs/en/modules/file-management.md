@@ -6,7 +6,7 @@ This module is used to upload, download and organize files in a hierarchical fol
 
 This module is based on the [BLOB Storing](../framework/infrastructure/blob-storing) system, so it can use different storage providers to store the file contents.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.FileManagement) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.FileManagement) for an overview of the module features.
 
 ## How to Install
 

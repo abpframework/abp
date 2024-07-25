@@ -2,7 +2,7 @@
 
 LeptonX Lite has implementation for the ABP Angular Client. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
 
-> If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP](https://commercial.abp.io/).
+> If you are looking for a professional, enterprise ready theme, you can check the [LeptonX Theme](https://x.leptontheme.com/), which is a part of [ABP](https://abp.io/).
 
 > See the [Theming document](../../framework/ui/mvc-razor-pages/theming.md) to learn about themes.
 

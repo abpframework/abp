@@ -27,7 +27,7 @@ When you upgrade to a new version, it is good to check if there is a database sc
 
 ## The Blog Posts & Guides
 
-Whenever you upgrade your solution, it is strongly suggested to check the [ABP Blog](https://blog.abp.io/) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes.
+Whenever you upgrade your solution, it is strongly suggested to check the [ABP Blog](https://abp.io/blog/) to learn the new features and changes coming with the new version. We regularly publish posts and write these kind of changes.
 
 ### Migration Guides
 

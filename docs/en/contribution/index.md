@@ -4,7 +4,7 @@ ABP is an [open source](https://github.com/abpframework) and community driven pr
 
 ## ABP Community Website
 
-If you want to write **articles** or **how to guides** related to the ABP and ASP.NET Core, please submit your article to the [community.abp.io](https://community.abp.io/) website.
+If you want to write **articles** or **how to guides** related to the ABP and ASP.NET Core, please submit your article to the [abp.io/community](https://abp.io/community/) website.
 
 ## Code Contribution
 

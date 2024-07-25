@@ -68,7 +68,7 @@ public class MySmsSender : ISmsSender, ITransientDependency
 }
 ````
 
-> [ABP](https://commercial.abp.io/) provides a [Twilio SMS Module](../modules/twilio-sms.md) as a pre-built integration with the popular [Twilio](https://www.twilio.com/) platform.
+> [ABP](https://abp.io/) provides a [Twilio SMS Module](../modules/twilio-sms.md) as a pre-built integration with the popular [Twilio](https://www.twilio.com/) platform.
 
 ## BLOB Provider
 

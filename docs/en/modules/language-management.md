@@ -9,7 +9,7 @@ This module implements the Language management system of an application;
 * Enable/disable **languages**.
 * Select **default language** in the UI.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.LanguageManagement) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.LanguageManagement) for an overview of the module features.
 
 ## How to Install
 

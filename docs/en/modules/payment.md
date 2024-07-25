@@ -6,7 +6,7 @@ Payment module implements payment gateway integration of an application. It prov
 
 * Supports [Stripe](https://stripe.com/), [PayPal](https://www.paypal.com/), [2Checkout](https://www.2checkout.com/), [PayU](https://corporate.payu.com/), [Iyzico](https://www.iyzico.com/en) and [Alipay](https://global.alipay.com/) payment gateways.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Payment) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Payment) for an overview of the module features.
 
 ## How to install
 

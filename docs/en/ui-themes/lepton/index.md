@@ -14,7 +14,7 @@ A screenshot from the light style of the theme:
 
 ![lepton-theme-light](../../images/lepton-theme-light.png)
 
-> [See all the theme styles and create a demo to see it in action](https://commercial.abp.io/themes).
+> [See all the theme styles and create a demo to see it in action](https://abp.io/themes).
 
 ## How to Install
 

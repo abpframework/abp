@@ -1,6 +1,6 @@
 # Accessing Source Code Of Modules
 
-**If your [license plan](https://commercial.abp.io/pricing) allows you to access the source code of [modules](https://commercial.abp.io/modules)**, you can use ABP Suite to download the source code and add downloaded source code of modules to your solution structure.
+**If your [license plan](https://abp.io/pricing) allows you to access the source code of [modules](https://abp.io/modules)**, you can use ABP Suite to download the source code and add downloaded source code of modules to your solution structure.
 
 ## Adding a Module With Source Code
 

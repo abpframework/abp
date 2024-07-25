@@ -2,7 +2,7 @@
 
 [ABP](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates), [CLI](../cli), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/asp-net-core.md) and ready to use [application modules](../modules). 
 
-[ABP Pro licenses](https://commercial.abp.io) adds important benefits on top of the open-source ABP project with a set of professional [application modules](https://commercial.abp.io/modules), [UI themes](https://commercial.abp.io/themes), CRUD page generator: [ABP Suite](https://commercial.abp.io/tools/suite), [premium support](https://commercial.abp.io/support) and [additional services](https://commercial.abp.io/additional-services). 
+[ABP Pro licenses](https://abp.io) adds important benefits on top of the open-source ABP project with a set of professional [application modules](https://abp.io/modules), [UI themes](https://abp.io/themes), CRUD page generator: [ABP Suite](https://abp.io/tools/suite), [premium support](https://abp.io/support) and [additional services](https://abp.io/additional-services). 
 
 > This document only focuses the major differences between the open source ABP license and the ABP Pro licenses. It only covers some of the features.
 
@@ -18,12 +18,12 @@ The following table explains the major differences between the open-source ABP a
 | [Free (basic) UI theme](https://docs.abp.io/en/abp/latest/Themes/Basic) | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i>     |
 | [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) (Command Line Interface) | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i>     |
 | [Community support](https://stackoverflow.com/questions/tagged/abp) | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i>     |
-| [PRO startup templates](https://commercial.abp.io/startup-templates) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
-| [PRO application modules](https://commercial.abp.io/modules) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
-| [PRO UI themes](https://commercial.abp.io/themes)            | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
-| [ABP Suite](https://commercial.abp.io/tools/suite)           | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
-| [Premium support](https://commercial.abp.io/support)         | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
-|                                                              | [Download](https://abp.io/get-started)     | [Pricing](https://commercial.abp.io/pricing) |
+| [PRO startup templates](https://abp.io/startup-templates) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [PRO application modules](https://abp.io/modules) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [PRO UI themes](https://abp.io/themes)            | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [ABP Suite](https://abp.io/tools/suite)           | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [Premium support](https://abp.io/support)         | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+|                                                              | [Download](https://abp.io/get-started)     | [Pricing](https://abp.io/pricing) |
 
 ## The Framework
 
@@ -51,24 +51,24 @@ ABP has many **additional modules** compared to the open-source ABP project. Als
 
 | Module                                                       | Open Source ABP Project                            | ABP                                             |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------------- |
-| Identity                                                     | [Basic](https://docs.abp.io/en/abp/latest/Modules/Identity)  | [PRO](https://commercial.abp.io/modules/Volo.Identity.Pro) |
-| Account                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Account)   | [PRO](https://commercial.abp.io/modules/Volo.Account.Pro)  |
-| Multi-Tenancy                                                | [Basic](https://docs.abp.io/en/abp/latest/Modules/Tenant-Management) *(only tenant management)* | [PRO](https://commercial.abp.io/modules/Volo.Saas) (SaaS)  |
-| CMS Kit                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit)   | [PRO](https://commercial.abp.io/modules/Volo.CmsKit.Pro)   |
+| Identity                                                     | [Basic](https://docs.abp.io/en/abp/latest/Modules/Identity)  | [PRO](https://abp.io/modules/Volo.Identity.Pro) |
+| Account                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Account)   | [PRO](https://abp.io/modules/Volo.Account.Pro)  |
+| Multi-Tenancy                                                | [Basic](https://docs.abp.io/en/abp/latest/Modules/Tenant-Management) *(only tenant management)* | [PRO](https://abp.io/modules/Volo.Saas) (SaaS)  |
+| CMS Kit                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit)   | [PRO](https://abp.io/modules/Volo.CmsKit.Pro)   |
 | [Blogging](https://docs.abp.io/en/abp/latest/Modules/Blogging) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [Docs](https://docs.abp.io/en/abp/latest/Modules/Docs)       | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [Identity Server Integration](https://docs.abp.io/en/abp/latest/Modules/IdentityServer) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
-| [Identity Server Management UI](https://commercial.abp.io/modules/Volo.Identityserver.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Identity Server Management UI](https://abp.io/modules/Volo.Identityserver.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [OpenIddict Integration](https://docs.abp.io/en/abp/latest/Modules/OpenIddict) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
-| [OpenIddictManagement UI](https://commercial.abp.io/modules/Volo.OpenIddict.Pro) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Audit Log Reporting UI](https://commercial.abp.io/modules/Volo.AuditLogging.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Dynamic Language Management](https://commercial.abp.io/modules/Volo.LanguageManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Payment](https://commercial.abp.io/modules/Volo.Payment)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Text Template Management](https://commercial.abp.io/modules/Volo.TextTemplateManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Chat](https://commercial.abp.io/modules/Volo.Chat)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [File Management](https://commercial.abp.io/modules/Volo.FileManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Forms](https://commercial.abp.io/modules/Volo.Forms)        | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Twilio SMS](https://commercial.abp.io/modules/Volo.Abp.Sms.Twilio) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [OpenIddictManagement UI](https://abp.io/modules/Volo.OpenIddict.Pro) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Audit Log Reporting UI](https://abp.io/modules/Volo.AuditLogging.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Dynamic Language Management](https://abp.io/modules/Volo.LanguageManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Payment](https://abp.io/modules/Volo.Payment)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Text Template Management](https://abp.io/modules/Volo.TextTemplateManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Chat](https://abp.io/modules/Volo.Chat)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [File Management](https://abp.io/modules/Volo.FileManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Forms](https://abp.io/modules/Volo.Forms)        | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Twilio SMS](https://abp.io/modules/Volo.Abp.Sms.Twilio) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [GDPR](https://docs.abp.io/en/commercial/latest/modules/gdpr) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 
 Some modules have "Basic" (open-source) and "PRO" (commercial) versions. The next sections show the differences between the basic and the PRO versions.
@@ -162,7 +162,7 @@ A screenshot of the LeptonX Lite (free version):
 
 ![abp-basic-theme](../images/leptonx-lite-users-page.png)
 
-[LeptonX Theme](https://commercial.abp.io/themes) is a commercial theme developed by the ABP Core Team. It is **100% Bootstrap** compatible, lightweight and powerful with multiple color styles and layout options.
+[LeptonX Theme](https://abp.io/themes) is a commercial theme developed by the ABP Core Team. It is **100% Bootstrap** compatible, lightweight and powerful with multiple color styles and layout options.
 
 A screenshot of the LeptonX Theme (commercial version):
 
@@ -178,7 +178,7 @@ However, there are some samples valid only for the ABP. See the [samples for the
 
 ABP provides two premium support options;
 
-* All [license types](https://commercial.abp.io/pricing) has the premium forum support. Your questions are answered by the ABP development and experienced support team with a high priority.
+* All [license types](https://abp.io/pricing) has the premium forum support. Your questions are answered by the ABP development and experienced support team with a high priority.
 * Enterprise license holders can send direct email and create private hidden tickets.
 
 Using the open-source project, you can still get community support via [Stack Overflow](https://stackoverflow.com/questions/tagged/abp) and [GitHub Issues](https://github.com/abpframework/abp/). 

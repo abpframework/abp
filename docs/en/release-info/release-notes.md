@@ -2,13 +2,13 @@
 
 This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check <a href="https://github.com/abpframework/abp/milestones?state=closed" target="_blank">the related milestone</a> and [the change logs page](https://abp.io/pro-releases) (only for paid license holders).
 
-> If you want to read detailed release posts for each version, please see the [official ABP blog](https://blog.abp.io).
+> If you want to read detailed release posts for each version, please see the [official ABP blog](https://abp.io/blog).
 
 ## 8.2 (2024-05-25)
 
 > This version is currently in preview. The final release date is planned for July, 2024.
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-2-release-candidate)** for the v8.2 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-2-release-candidate)** for the v8.2 release.
 
 * Blazor Full-Stack Web App UI.
 * Introducing the `IBlockUiService` for Blazor UI (disables/blocks the page or a part of the page).
@@ -19,7 +19,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing
 
 ## 8.1 (2024-04-04)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-1-stable-release)** for the v8.1 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-1-stable-release)** for the v8.1 release.
 
 * Introducing the `ExposeKeyedServiceAttribute` & `DisableAbpFeaturesAttribute`.
 * Custom menu component support for MVC UI.
@@ -32,7 +32,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing
 
 ## 8.0 (2023-12-19)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/abp-8-0-stable-release-with-dotnet-8-0)** for the v8.0 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/abp-8-0-stable-release-with-dotnet-8-0)** for the v8.0 release.
 
 * Upgraded to **.NET 8.0** & **Angular 17**.
 * Dynamic Claims (allows to get the latest user claims for the current user).
@@ -46,7 +46,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/abp-8-0-st
 
 ## 7.4 (2023-08-16)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-7-4-stable-release)** for the v7.4 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-7-4-stable-release)** for the v7.4 release.
 
 * Dynamic Setting Store (collects and gets all setting definitions from a single point).
 * Introducing the `AdditionalAssemblyAttribute`.
@@ -59,7 +59,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing
 
 ## 7.3 (2023-06-12)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-3-Final-Has-Been-Released)** for the v7.3 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-7-3-Final-Has-Been-Released)** for the v7.3 release.
 
 * Introducing the `Volo.Abp.Imaging` packages, which allows you to compress and resize images.
 * ABP CLI: `switch-to-local` command.
@@ -72,7 +72,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 7.2 (2023-05-03)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-2-Final-Has-Been-Released)** for the v7.2 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-7-2-Final-Has-Been-Released)** for the v7.2 release.
 
 * Grouping of the navigation menu items.
 * New Components for Angular UI.
@@ -85,7 +85,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 7.1 (2023-03-22)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Platform-7-1-Final-Has-Been-Released)** for the v7.1 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-7-1-Final-Has-Been-Released)** for the v7.1 release.
 
 * New Blazor WASM option for Application Single Layer Startup template.
 * Introducing the `IHasEntityVersion` & `EntitySynchronizer` services.
@@ -97,7 +97,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Pla
 
 ## 7.0 (2023-01-05)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7.0-Final-Has-Been-Released)** for the v7.0 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-7.0-Final-Has-Been-Released)** for the v7.0 release.
 
 * Upgraded to **.NET 7.0**.
 * Upgraded to **OpenIddict 4.0**.
@@ -112,7 +112,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 6.0 (2022-10-05)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-6.0-Final-Has-Been-Released)** for the v6.0 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-6.0-Final-Has-Been-Released)** for the v6.0 release.
 
 * New **OpenIddict** integration module (replacing the IdentityServer integration module).
 * The **[LeptonX theme](https://x.leptontheme.com/)** is the default theme now, allowing to use the [old Lepton](https://leptontheme.com/) theme too.
@@ -126,7 +126,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 5.3 (2022-06-14)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-5.3-Final-Has-Been-Released)** for the v5.3 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-5.3-Final-Has-Been-Released)** for the v5.3 release.
 
 * New module: **GDPR** (currently, allows to download/delete user's personal data).
 * **Polling** feature for the [CMS Kit module](../modules/cms-kit/index.md).
@@ -137,7 +137,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 5.2 (2022-04-05)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Platform-5-2-Final-Has-Been-Released)** for the v5.2 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-5-2-Final-Has-Been-Released)** for the v5.2 release.
 
 * Code generation with **many to many relation** support for the [ABP Suite](../suite/index.md).
 * The new **single-layer**, simpler startup solution template.
@@ -148,7 +148,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Pla
 
 ## 5.1 (2022-01-12)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-v5-1-Has-Been-Released)** for the v5.1 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-v5-1-Has-Been-Released)** for the v5.1 release.
 
 * Upgraded to **Angular 13**.
 * Changed the application startup solution to use the new ASP.NET Core **minimal hosting model**.
@@ -157,7 +157,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 5.0 (2021-12-14)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Platform-5.0-RC-1-Has-Been-Released)** for the v5.0.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-5.0-RC-1-Has-Been-Released)** for the v5.0.
 
 * Upgraded to **.NET 6.0**.
 * Upgraded to **Bootstrap 5.1**.
@@ -174,7 +174,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Pla
 
 ## 4.4 (2021-08-02)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-4.4-Final-Has-Been-Released!)** for the v4.4.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-4.4-Final-Has-Been-Released!)** for the v4.4.
 
 * Removed the `EntityFrameworkCore.DbMigrations` project for simplicity.
 * Dynamic menu management for the [CMS Kit module](../modules/cms-kit/index.md).
@@ -189,7 +189,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 4.3 (2021-04-23)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-v4-3-Has-Been-Released)** for the v4.3.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-v4-3-Has-Been-Released)** for the v4.3.
 
 * New module: **CMS Kit (pro)**
 * New module: **Forms**
@@ -204,7 +204,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 4.2 (2021-01-28)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-4-2-Final-Has-Been-Released)** for the v4.2.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-4-2-Final-Has-Been-Released)** for the v4.2.
 
 * Introducing the `IRepository.GetQueryableAsync()` method.
 * Bulk operations for EF Core (`InsertManyAsync`, `UpdateManyAsync` and `DeleteManyAsync`).
@@ -219,7 +219,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 4.1 (2021-01-06)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Platform-v4-1-Final-Has-Been-Released)** for the v4.1.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-v4-1-Final-Has-Been-Released)** for the v4.1.
 
 * Introducing the **module entity extensions** system.
 * Bundling & Minification System for Blazor UI.
@@ -230,7 +230,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-IO-Pla
 
 ## 4.0 (2020-12-03)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-4.0-with-.NET-5.0-in-the-4th-Year)** for the v4.0.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-4.0-with-.NET-5.0-in-the-4th-Year)** for the v4.0.
 
 * Upgraded to **.NET 5.0**.
 * The **Blazor UI** option is now stable and officially supported.
@@ -243,7 +243,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Pla
 
 ## 3.3 (2020-10-27)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.3-Final-Have-Been-Released)** for the v3.3.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-ABP-Commercial-3.3-Final-Have-Been-Released)** for the v3.3.
 
 * Completed fundamental features, modules and the theme integration for the **Blazor UI**.
 * Automatic **AntiForgery Token Validation** for HTTP APIs.
@@ -257,17 +257,17 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 ## 3.2 (2020-10-01)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI)** for the v3.2.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI)** for the v3.2.
 
 * Released the preview (experimental) **Blazor UI** option.
-* **Angular** UI for the [file management](https://commercial.abp.io/modules/Volo.FileManagement) module.
+* **Angular** UI for the [file management](https://abp.io/modules/Volo.FileManagement) module.
 * Managing the **application features** for the **host** side.
 * User **profile picture** for the account module.
 * Options to enable, disable or force **two factor authentication** for tenants and users.
 
 ## 3.1 (2020-09-03)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-v3.1-Final-Has-Been-Released)** for the v3.1 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-v3.1-Final-Has-Been-Released)** for the v3.1 release.
 
 * Completely re-written the ABP Suite **Angular UI code generation**, using the Angular Schematics system.
 * Implemented **Authorization Code Authentication Flow** for the Angular UI.
@@ -280,7 +280,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 ## 3.0 (2020-07-01)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-v3.0-Has-Been-Released)** for the v3.0 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-v3.0-Has-Been-Released)** for the v3.0 release.
 
 * Introducing the **Azure BLOB Storage Provider**.
 * Created the Oracle Integration Package for EF Core.
@@ -290,29 +290,29 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 
 ## 2.9 (2020-06-04)
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-v2.9.0-Has-Been-Released)** for the v2.9 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-v2.9.0-Has-Been-Released)** for the v2.9 release.
 
 * Performance improvements (pre-compiling razor pages).
-* New **Organization Unit** Management UI for the [Identity Module](https://commercial.abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
-* Created **Angular UI** for the [Chat Module](https://commercial.abp.io/modules/Volo.Chat).
+* New **Organization Unit** Management UI for the [Identity Module](https://abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
+* Created **Angular UI** for the [Chat Module](https://abp.io/modules/Volo.Chat).
 * Implemented **Angular UI** for the [Easy CRM](https://docs.abp.io/en/commercial/latest/samples/easy-crm) application.
-* [ABP Suite](https://commercial.abp.io/tools/suite) code generation support for **module development**.
-* New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://commercial.abp.io/themes) components**.
+* [ABP Suite](https://abp.io/tools/suite) code generation support for **module development**.
+* New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://abp.io/themes) components**.
 
 ## 2.8 (2020-05-21)
 
-See the detailed **blog post / announcement** for the v2.8 release: [https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map](https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map)
+See the detailed **blog post / announcement** for the v2.8 release: [https://abp.io/blog/ABP-v2.8.0-Releases-%26-Road-Map](https://abp.io/blog/ABP-v2.8.0-Releases-%26-Road-Map)
 
 * RTL support for the MVC UI & Arabic localization.
-* Completely renewed the **[Lepton Theme](https://commercial.abp.io/themes) styles** and add a new one.
-* New module: Created a **real time [Chat Module](https://commercial.abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
+* Completely renewed the **[Lepton Theme](https://abp.io/themes) styles** and add a new one.
+* New module: Created a **real time [Chat Module](https://abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
 * Implemented **[module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
 * **Gravatar** integration for the Angular UI.
 * Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
 
 ## 2.7 (2020-05-07)
 
-See the detailed **blog post / announcement** for the v2.7 release:  https://blog.abp.io/abp/ABP-Framework-v2_7_0-Has-Been-Released 
+See the detailed **blog post / announcement** for the v2.7 release:  https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released 
 
 * New module: **Text template management** (with angular and mvc UI - document is [coming](../modules/text-template-management.md)).
 * **Dynamically add properties** to current entities of the depended modules (see [module entity extensions](../framework/architecture/modularity/extending/module-entity-extensions.md))
@@ -323,7 +323,7 @@ See the detailed **blog post / announcement** for the v2.7 release:  https://blo
 * **Optimize database migrations** & seed code for multi-tenant multi-database systems.
 * ABP Suite: Make **menu item active** on navigation menu when selected.
 * ABP Suite: Improve **enum usage** while creating new entities.
-* Bug fixes in the [Lepton Theme](https://commercial.abp.io/themes), [ABP Suite](https://commercial.abp.io/tools/suite) and  other modules.
+* Bug fixes in the [Lepton Theme](https://abp.io/themes), [ABP Suite](https://abp.io/tools/suite) and  other modules.
 
 ## See Also
 

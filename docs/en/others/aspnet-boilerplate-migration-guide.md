@@ -8,7 +8,7 @@ ABP is **the successor** of the open source [ASP.NET Boilerplate](https://aspnet
 
 ABP has the same goal of the ASP.NET Boilerplate framework: **Don't Repeat Yourself**! It provides infrastructure, tools and startup templates to make a developer's life easier while developing enterprise software solutions.
 
-See [the introduction blog post](https://blog.abp.io/abp/Abp-vNext-Announcement) if you wonder why we needed to re-write the ASP.NET Boilerplate framework.
+See [the introduction blog post](https://abp.io/blog/Abp-vNext-Announcement) if you wonder why we needed to re-write the ASP.NET Boilerplate framework.
 
 ### Should I Migrate?
 
@@ -23,7 +23,7 @@ However, if you want to take the advantage of the new ABP [features](https://abp
 
 [ASP.NET Zero](https://aspnetzero.com/) is a commercial product developed by the core ASP.NET Boilerplate team, on top of the ASP.NET Boilerplate framework. It provides pre-built application [features](https://aspnetzero.com/Features), code generation tooling and a nice looking modern UI. It is trusted and used by thousands of companies from all around the World.
 
-We have created the [ABP](https://commercial.abp.io/) as an alternative to the ASP.NET Zero. ABP is more modular and upgradeable compared to the ASP.NET Zero. It currently has less features compared to ASP.NET Zero, but the gap will be closed by the time (it also has some features don't exist in the ASP.NET Zero).
+We have created the [ABP](https://abp.io/) as an alternative to the ASP.NET Zero. ABP is more modular and upgradeable compared to the ASP.NET Zero. It currently has less features compared to ASP.NET Zero, but the gap will be closed by the time (it also has some features don't exist in the ASP.NET Zero).
 
 We think ASP.NET Zero is still a good choice while starting a new application. It is production ready and mature solution delivered as a full source code. It is being actively developed and we are constantly adding new features.
 
@@ -69,7 +69,7 @@ We suggest to continue to use these modules as package references, in this way y
 
 More extend/customization options will be developed and documented by the time. However, if you need to fully change the module implementation, it is best to add the [source code](https://github.com/abpframework/abp/tree/dev/modules) of the related module into your own solution and remove the package dependencies.
 
-The source code of the modules and the themes are [MIT](https://opensource.org/licenses/MIT) licensed, you can fully own and customize it without any limitation (for the ABP, you can download the source code of a [module](../modules)/[theme](https://commercial.abp.io/themes) if you have a [license](https://commercial.abp.io/pricing) type that includes the source code).
+The source code of the modules and the themes are [MIT](https://opensource.org/licenses/MIT) licensed, you can fully own and customize it without any limitation (for the ABP, you can download the source code of a [module](../modules)/[theme](https://abp.io/themes) if you have a [license](https://abp.io/pricing) type that includes the source code).
 
 ## The Domain Layer
 

@@ -8,7 +8,7 @@
 
 ### About the ABP SaaS Module
 
-The [SaaS Module](https://commercial.abp.io/modules/Volo.Saas) is an alternative implementation of this module with more features and possibilities. It is distributed as a part of the [ABP](https://commercial.abp.io/) subscription.
+The [SaaS Module](https://abp.io/modules/Volo.Saas) is an alternative implementation of this module with more features and possibilities. It is distributed as a part of the [ABP](https://abp.io/) subscription.
 
 ## How to Install
 

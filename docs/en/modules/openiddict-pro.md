@@ -8,7 +8,7 @@ This module provides integration and management functionality for the OpenIddict
 * Manage **Application** and **API scopes** in the system. 
 * Set **permissions** for clients.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.OpenIddict) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.OpenIddict) for an overview of the module features.
 
 ## How to Install
 

@@ -4,7 +4,7 @@
 
 [Twilio](https://www.twilio.com) is a cloud communication provider that makes it easy to send and receive SMS. ABP Twilio SMS module implements the SMS sending feature of `ISmsSender` interface with Twilio.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Abp.Sms.Twilio) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Abp.Sms.Twilio) for an overview of the module features.
 
 ## Installation
 
