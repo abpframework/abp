@@ -97,7 +97,7 @@ See the [sample projects](samples) built with ABP.
 
 ## ABP Community
 
-The [ABP Community](https://community.abp.io/) website is a central place to publish articles and share knowledge about ABP.
+The [ABP Community](https://abp.io/community/) website is a central place to publish articles and share knowledge about ABP.
 
 ## Blog
 

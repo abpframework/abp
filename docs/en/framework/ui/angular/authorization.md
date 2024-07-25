@@ -27,7 +27,7 @@ export const environment = {
 ```
 
 This configuration results in an [OAuth authorization code flow with PKCE](https://tools.ietf.org/html/rfc7636).
-According to this flow, the user is redirected to an external login page which is built with MVC. So, if you need **to customize the login page**, please follow [this community article](https://community.abp.io/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd).
+According to this flow, the user is redirected to an external login page which is built with MVC. So, if you need **to customize the login page**, please follow [this community article](https://abp.io/community/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd).
 
 ### Resource Owner Password Flow
 

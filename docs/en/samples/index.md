@@ -56,7 +56,7 @@ The following samples uses the pro modules.
 
 * **Event Organizer**: A sample application to create events (meetups) and allow others to register the events. Developed using EF Core and Blazor UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/EventOrganizer)
-  * [Article](https://community.abp.io/articles/creating-an-event-organizer-application-with-the-blazor-ui-wbe0sf2z)
+  * [Article](https://abp.io/community/articles/creating-an-event-organizer-application-with-the-blazor-ui-wbe0sf2z)
 * **Entity Framework Migrations**: A solution to demonstrate how to split your application into multiple databases each database contains different modules.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)
   * [EF Core database migrations document](../framework/data/entity-framework-core/migrations.md)
@@ -65,7 +65,7 @@ The following samples uses the pro modules.
   * [SignalR Integration document](../framework/real-time/signalr.md)
 * **Real Time Messaging In A Distributed Architecture** (using SingalR & RabbitMQ)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/SignalRTieredDemo)
-  * [Article](https://community.abp.io/articles/real-time-messaging-in-a-distributed-architecture-using-abp-framework-singalr-rabbitmq-daf47e17)
+  * [Article](https://abp.io/community/articles/real-time-messaging-in-a-distributed-architecture-using-abp-framework-singalr-rabbitmq-daf47e17)
 * **Dashboard Demo**: A simple application to show how to use the widget system for the ASP.NET Core MVC UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo)
   * [Widget documentation](../framework/ui/mvc-razor-pages/widgets.md)
@@ -80,32 +80,32 @@ The following samples uses the pro modules.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
 * **Passwordless Authentication**: Shows how to add a custom token provider to authenticate a user with a link, instead of entering a password.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication)
-  * [Article](https://community.abp.io/articles/implementing-passwordless-authentication-with-asp.net-core-identity-c25l8koj)
+  * [Article](https://abp.io/community/articles/implementing-passwordless-authentication-with-asp.net-core-identity-c25l8koj)
 * **Authentication Customization**: A solution to show how to customize the authentication for ASP.NET Core MVC / Razor Pages applications.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)
   * Related articles:
-    * [Azure Active Directory Authentication](https://community.abp.io/articles/how-to-use-the-azure-active-directory-authentication-for-mvc-razor-page-applications-4603b9cf)
-    * [Customize the Login Page](https://community.abp.io/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd)
-    * [Customize the SignIn Manager](https://community.abp.io/articles/how-to-customize-the-signin-manager-3e858753)
+    * [Azure Active Directory Authentication](https://abp.io/community/articles/how-to-use-the-azure-active-directory-authentication-for-mvc-razor-page-applications-4603b9cf)
+    * [Customize the Login Page](https://abp.io/community/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd)
+    * [Customize the SignIn Manager](https://abp.io/community/articles/how-to-customize-the-signin-manager-3e858753)
 * **GRPC Demo**: Shows how to add a gRPC service to an ABP based web application and consume it from a console application.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo)
 * **Telerik Blazor Integration**: Shows how to install and use Telerik Blazor components with ABP.
-  * [Article](https://community.abp.io/articles/how-to-integrate-the-telerik-blazor-components-to-the-abp-blazor-ui-q8g31abb)
+  * [Article](https://abp.io/community/articles/how-to-integrate-the-telerik-blazor-components-to-the-abp-blazor-ui-q8g31abb)
 * **Angular Material Integration**: Implemented the web application tutorial using the Angular Material library.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/AcmeBookStoreAngularMaterial)
-  * [Article](https://community.abp.io/articles/using-angular-material-components-with-the-abp-framework-af8ft6t9)
+  * [Article](https://abp.io/community/articles/using-angular-material-components-with-the-abp-framework-af8ft6t9)
 * **DevExtreme Angular Component Integration**: How to install and use DevExtreme components in the ABP Angular UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Angular)
-  * [Article](https://community.abp.io/articles/using-devextreme-angular-components-with-the-abp-framework-x5nyvj3i)
+  * [Article](https://abp.io/community/articles/using-devextreme-angular-components-with-the-abp-framework-x5nyvj3i)
 * **DevExtreme MVC / Razor Pages Component Integration**: How to install and use DevExtreme components in the ABP MVC / Razor Pages UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Mvc)
-  * [Article](https://community.abp.io/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv)
+  * [Article](https://abp.io/community/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv)
 * **Syncfusion Blazor Integration**: Shows how to install and integrate Syncfusion UI the ABP Blazor UI.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/SyncfusionSample)
-  * [Article](https://community.abp.io/articles/using-syncfusion-components-with-the-abp-framework-5ccvi8kc)
+  * [Article](https://abp.io/community/articles/using-syncfusion-components-with-the-abp-framework-5ccvi8kc)
 * **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with ABP installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
   * [Documentation](../get-started/empty-aspnet-core-application.md)
 * **Using Elsa Workflow with ABP**: Shows how to use the Elsa Core workflow library within an ABP-based application. 
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo)
-  * [Article](https://community.abp.io/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)
+  * [Article](https://abp.io/community/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)

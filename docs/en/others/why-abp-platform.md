@@ -230,4 +230,4 @@ By the way, the ABP provides modularity, and a CMS module or CMS system can be d
 
 ## See Also
 
-* **[ABP Community Talk 2023.2: Why Should You Use the ABP as a .NET Developer?](https://community.abp.io/events/why-should-you-use-the-abp-framework-as-a-.net-developer-xd489a48)**
+* **[ABP Community Talk 2023.2: Why Should You Use the ABP as a .NET Developer?](https://abp.io/community/events/why-should-you-use-the-abp-framework-as-a-.net-developer-xd489a48)**

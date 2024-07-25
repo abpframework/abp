@@ -295,4 +295,4 @@ Assuming that the possible values for a column data is `f` and `m`, the `gender`
 
 ## Other Data Grids
 
-You can use any library you like. For example, [see this article](https://community.abp.io/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv) to learn how to use DevExtreme Data Grid in your applications.
+You can use any library you like. For example, [see this article](https://abp.io/community/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv) to learn how to use DevExtreme Data Grid in your applications.

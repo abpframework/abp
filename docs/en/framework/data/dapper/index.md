@@ -4,7 +4,7 @@
 
 While you can use Dapper as is in your ABP applications, there is also an integration package that simplifies creating repository classes using Dapper.
 
-> ABP's Dapper integration package is based on Entity Framework Core (EF Core). That means it assumes you will use Dapper mixed with EF Core where EF Core is the primary database provider and you use Dapper when you need to fine-tune your quires and get the maximum performance. See [this article](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l) if you want to know why it is like that.
+> ABP's Dapper integration package is based on Entity Framework Core (EF Core). That means it assumes you will use Dapper mixed with EF Core where EF Core is the primary database provider and you use Dapper when you need to fine-tune your quires and get the maximum performance. See [this article](https://abp.io/community/articles/using-dapper-with-the-abp-framework-shp74p2l) if you want to know why it is like that.
 
 ## Installation
 
@@ -61,9 +61,9 @@ Let's examine this class:
 
 Then you can [inject](../../fundamentals/dependency-injection.md) `PersonDapperRepository` to any service to perform these database operations. If you want to implement a layered solution, we suggest to introduce an `IPersonDapperRepository` interface in your domain layer, implement it in your database later, then inject the interface to use the repository service.
 
-> If you want to learn more details and examples of using Dapper with the ABP, [check this community article](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l).
+> If you want to learn more details and examples of using Dapper with the ABP, [check this community article](https://abp.io/community/articles/using-dapper-with-the-abp-framework-shp74p2l).
 
 ## See Also
 
-* [Community Article: Using Dapper with the ABP](https://community.abp.io/posts/using-dapper-with-the-abp-framework-shp74p2l)
+* [Community Article: Using Dapper with the ABP](https://abp.io/community/articles/using-dapper-with-the-abp-framework-shp74p2l)
 * [Entity Framework Core integration document](../../data/entity-framework-core)

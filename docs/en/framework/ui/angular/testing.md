@@ -377,4 +377,4 @@ npm test -- --prod
 
 ## See Also
 
-- [ABP Community Video - Unit Testing with the Angular UI](https://community.abp.io/articles/unit-testing-with-the-angular-ui-p4l550q3)
+- [ABP Community Video - Unit Testing with the Angular UI](https://abp.io/community/articles/unit-testing-with-the-angular-ui-p4l550q3)
