@@ -1,12 +1,12 @@
 # TODO Application Tutorial with Layered Solution
 
-````json
+```json
 //[doc-params]
 {
     "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
     "DB": ["EF", "Mongo"]
 }
-````
+```
 
 This is a single-part quick-start tutorial to build a simple todo application with the ABP. Here's a screenshot from the final application:
 
@@ -65,17 +65,17 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 We will use the [ABP CLI](../../../cli/index.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
-````bash
+```
 dotnet tool install -g Volo.Abp.Studio.Cli
-````
+```
 
 ## Create Your ABP Solution
 
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
-````bash
+```
 abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
-````
+```
 
 {{if UI=="NG"}}
 
@@ -107,7 +107,7 @@ However, sometimes this command might need to be manually run. For example, you 
 
 For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
 
-```bash
+```
 abp install-libs
 ```
 
@@ -121,7 +121,7 @@ abp install-libs
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
-```bash
+```
 abp bundle
 ```
 
@@ -163,9 +163,9 @@ You can explore and test your HTTP API with this UI. If it works, we can run the
 
 You can run the application using the following command:
 
-````bash
+```
 npm start
-````
+```
 
 This command takes time, but eventually runs and opens the application in your default browser:
 
@@ -181,7 +181,7 @@ All ready. We can start coding!
 
 This application has a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
 
-````csharp
+```csharp
 using System;
 using Volo.Abp.Domain.Entities;
 
@@ -189,10 +189,10 @@ namespace TodoApp
 {
     public class TodoItem : BasicAggregateRoot<Guid>
     {
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }
-````
+```
 
 `BasicAggregateRoot` is the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
 
@@ -206,13 +206,13 @@ Next step is to setup the [Entity Framework Core](../../../framework/data/entity
 
 Open the `TodoAppDbContext` class in the `EntityFrameworkCore` folder of the *TodoApp.EntityFrameworkCore* project and add a new `DbSet` property to this class:
 
-````csharp
+```csharp
 public DbSet<TodoItem> TodoItems { get; set; }
-````
+```
 
 Then navigate to the `OnModelCreating` method in the `TodoAppDbContext` class and add the mapping code for the `TodoItem ` entity:
 
-````csharp
+```csharp
 protected override void OnModelCreating(ModelBuilder builder)
 {
     base.OnModelCreating(builder);
@@ -228,7 +228,7 @@ protected override void OnModelCreating(ModelBuilder builder)
         b.ToTable("TodoItems");
     });
 }
-````
+```
 
 We've mapped the `TodoItem` entity to the `TodoItems` table in the database.
 
@@ -238,9 +238,9 @@ The startup solution is configured to use Entity Framework Core [Code First Migr
 
 Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore* project and type the following command:
 
-````bash
+```
 dotnet ef migrations add Added_TodoItem
-````
+```
 
 This will add a new migration class to the project:
 
@@ -248,9 +248,9 @@ This will add a new migration class to the project:
 
 You can apply changes to the database using the following command, in the same command-line terminal:
 
-````bash
+```
 dotnet ef database update
-````
+```
 
 > If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
@@ -260,18 +260,18 @@ Next step is to setup the [MongoDB](../../../framework/data/mongodb/index.md) co
 
 1. Add a new property to the class:
 
-````csharp
+```csharp
 public IMongoCollection<TodoItem> TodoItems => Collection<TodoItem>();
-````
+```
 
 2. Add the following code inside the `CreateModel` method:
 
-````csharp
+```csharp
 modelBuilder.Entity<TodoItem>(b =>
 {
     b.CollectionName = "TodoItems";
 });
-````
+```
 
 {{end}}
 
@@ -289,7 +289,7 @@ An [Application Service](../../../framework/architecture/domain-driven-design/ap
 
 We can start by defining an interface for the application service. Create a new `ITodoAppService` interface in the *TodoApp.Application.Contracts* project, as shown below:
 
-````csharp
+```csharp
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -304,13 +304,13 @@ namespace TodoApp
         Task DeleteAsync(Guid id);
     }
 }
-````
+```
 
 ### Data Transfer Object
 
 `GetListAsync` and `CreateAsync` methods return `TodoItemDto`. `ApplicationService` typically gets and returns DTOs ([Data Transfer Objects](../../../framework/architecture/domain-driven-design/data-transfer-objects.md)) instead of entities. So, we should define the DTO class here. Create a new `TodoItemDto` class inside the *TodoApp.Application.Contracts* project:
 
-````csharp
+```csharp
 using System;
 
 namespace TodoApp
@@ -318,10 +318,10 @@ namespace TodoApp
     public class TodoItemDto
     {
         public Guid Id { get; set; }
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }
-````
+```
 
 This is a very simple DTO class that matches our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
 
@@ -329,7 +329,7 @@ This is a very simple DTO class that matches our `TodoItem` entity. We are ready
 
 Create a `TodoAppService` class inside the *TodoApp.Application* project, as shown below:
 
-````csharp
+```csharp
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -351,7 +351,7 @@ namespace TodoApp
         // TODO: Implement the methods here...
     }
 }
-````
+```
 
 This class inherits from the `ApplicationService` class of the ABP and implements the `ITodoAppService` that was defined before. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/entities.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
 
@@ -359,7 +359,7 @@ This class inherits from the `ApplicationService` class of the ABP and implement
 
 Let's start by implementing the `GetListAsync` method:
 
-````csharp
+```csharp
 public async Task<List<TodoItemDto>> GetListAsync()
 {
     var items = await _todoItemRepository.GetListAsync();
@@ -370,7 +370,7 @@ public async Task<List<TodoItemDto>> GetListAsync()
             Text = item.Text
         }).ToList();
 }
-````
+```
 
 We are simply getting the complete `TodoItem` list from the database, mapping them to `TodoItemDto` objects and returning as the result.
 
@@ -378,7 +378,7 @@ We are simply getting the complete `TodoItem` list from the database, mapping th
 
 Next method is `CreateAsync` and we can implement it as shown below:
 
-````csharp
+```csharp
 public async Task<TodoItemDto> CreateAsync(string text)
 {
     var todoItem = await _todoItemRepository.InsertAsync(
@@ -391,7 +391,7 @@ public async Task<TodoItemDto> CreateAsync(string text)
         Text = todoItem.Text
     };
 }
-````
+```
 
 The repository's `InsertAsync` method inserts the given `TodoItem` to the database and returns the same `TodoItem` object. It also sets the `Id`, so we can use it on the returning object. We are simply returning a `TodoItemDto` by creating from the new `TodoItem` entity.
 
@@ -399,12 +399,12 @@ The repository's `InsertAsync` method inserts the given `TodoItem` to the databa
 
 Finally, we can implement the `DeleteAsync` as the following code block:
 
-````csharp
+```csharp
 public async Task DeleteAsync(Guid id)
 {
     await _todoItemRepository.DeleteAsync(id);
 }
-````
+```
 
 The application service is ready to be used from the UI layer.
 
@@ -422,7 +422,7 @@ It is time to show the todo items on the UI! Before starting to write the code, 
 
 Open the `Index.cshtml.cs` file in the `Pages` folder of the *TodoApp.Web* project and replace the content with the following code block:
 
-````csharp
+```csharp
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -445,7 +445,7 @@ namespace TodoApp.Web.Pages
         }
     }
 }
-````
+```
 
 This class uses the `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
 
@@ -453,7 +453,7 @@ This class uses the `ITodoAppService` to get the list of todo items and assign t
 
 Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
-````xml
+```xml
 @page
 @model TodoApp.Web.Pages.IndexModel
 @section styles {
@@ -493,7 +493,7 @@ Open the `Index.cshtml` file in the `Pages` folder of the *TodoApp.Web* project 
         </abp-card-body>
     </abp-card>
 </div>
-````
+```
 
 We are using ABP's [card tag helper](../../../framework/ui/mvc-razor-pages/tag-helpers/cards.md) to create a simple card view. You could directly use the standard bootstrap HTML structure, however the ABP [tag helpers](../../../framework/ui/mvc-razor-pages/tag-helpers) make it much easier and type safe.
 
@@ -501,9 +501,9 @@ This page imports a CSS and a JavaScript file, so we should also create them.
 
 ### Index.js
 
-Open the `Index.js` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
+Create a file named `Index.js` in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
-````js
+```js
 $(function () {
     
     // DELETING ITEMS /////////////////////////////////////////
@@ -530,7 +530,7 @@ $(function () {
         });
     });
 });
-````
+```
 
 In the first part, we are subscribing to the click events of the trash icons near the todo items, deleting the related item on the server and showing a notification on the UI. Also, we are removing the deleted item from the DOM, so we don't need to refresh the page.
 
@@ -540,9 +540,9 @@ The interesting part here is how we communicate with the server. See the *Dynami
 
 ### Index.css
 
-As the final touch, open the `Index.css` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
+As the final touch, Create a file named `Index.css` in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
-````css
+```css
 #TodoList{
     list-style: none;
     margin: 0;
@@ -552,8 +552,6 @@ As the final touch, open the `Index.css` file in the `Pages` folder of the *Todo
 #TodoList li {
     padding: 5px;
     margin: 5px 0px;
-    border: 1px solid #cccccc;
-    background-color: #f5f5f5;
 }
 
 #TodoList li i
@@ -567,7 +565,7 @@ As the final touch, open the `Index.css` file in the `Pages` folder of the *Todo
     color: #ff0000;
     cursor: pointer;
 }
-````
+```
 
 This is a simple styling for the todo page. We believe that you can do much better :)
 
@@ -589,7 +587,7 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 Open the `Index.razor.cs` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
 
-````csharp
+```csharp
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -602,7 +600,7 @@ namespace TodoApp.Blazor.Pages
         private ITodoAppService TodoAppService { get; set; }
 
         private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
-        private string NewTodoText { get; set; }
+        private string NewTodoText { get; set; } = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
@@ -624,7 +622,7 @@ namespace TodoApp.Blazor.Pages
         }
     }
 }
-````
+```
 
 This class uses `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
@@ -638,7 +636,7 @@ See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how w
 
 Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
 
-````xml
+```xml
 @page "/"
 @inherits TodoAppComponentBase
 <div class="container">
@@ -674,13 +672,13 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
         </CardBody>
     </Card>
 </div>
-````
+```
 
 ### Index.razor.css
 
 As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Blazor* project and replace it with the following content:
 
-````css
+```css
 #TodoList{
     list-style: none;
     margin: 0;
@@ -705,7 +703,7 @@ As the final touch, open the `Index.razor.css` file in the `Pages` folder of the
     color: #ff0000;
     cursor: pointer;
 }
-````
+```
 
 This is a simple styling for the todo page. We believe that you can do much better :)
 
@@ -741,19 +739,19 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
-````bash
+```
 abp generate-proxy -t ng
-````
+```
 
 If everything goes well, it should generate an output as shown below:
 
-````bash
+```
 CREATE src/app/proxy/generate-proxy.json (170978 bytes)
 CREATE src/app/proxy/README.md (1000 bytes)
 CREATE src/app/proxy/todo.service.ts (794 bytes)
 CREATE src/app/proxy/models.ts (66 bytes)
 CREATE src/app/proxy/index.ts (58 bytes)
-````
+```
 
 We can then use `todoService` to use the server-side HTTP APIs, as we'll do in the next section.
 
@@ -761,7 +759,7 @@ We can then use `todoService` to use the server-side HTTP APIs, as we'll do in t
 
 Open the `/angular/src/app/home/home.component.ts` file and replace its content with the following code block:
 
-````js
+```js
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { TodoItemDto, TodoService } from '@proxy';
@@ -802,7 +800,7 @@ export class HomeComponent implements OnInit {
   }  
 }
 
-````
+```
 
 We've used `todoService` to get the list of todo items and assigned the returning value to the `todoItems` array. We've also added `create` and `delete` methods. These methods will be used on the view side.
 
@@ -810,7 +808,7 @@ We've used `todoService` to get the list of todo items and assigned the returnin
 
 Open the `/angular/src/app/home/home.component.html` file and replace its content with the following code block:
 
-````html
+```html
 <div class="container">
   <div class="card">
     <div class="card-header">
@@ -837,13 +835,13 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
     </div>
   </div>
 </div>
-````
+```
 
 ### home.component.scss
 
 As the final touch, open the `/angular/src/app/home/home.component.scss` file and replace its content with the following code block:
 
-````css
+```css
 #TodoList{
     list-style: none;
     margin: 0;
@@ -868,7 +866,7 @@ As the final touch, open the `/angular/src/app/home/home.component.scss` file an
     color: #ff0000;
     cursor: pointer;
 }
-````
+```
 
 This is a simple styling for the todo page. We believe that you can do much better :)
 
