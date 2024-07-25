@@ -189,7 +189,7 @@ namespace TodoApp
 {
     public class TodoItem : BasicAggregateRoot<Guid>
     {
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }
 ````
@@ -318,7 +318,7 @@ namespace TodoApp
     public class TodoItemDto
     {
         public Guid Id { get; set; }
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }
 ````
@@ -501,7 +501,7 @@ This page imports a CSS and a JavaScript file, so we should also create them.
 
 ### Index.js
 
-Open the `Index.js` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
+Create a file named `Index.js` in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
 ````js
 $(function () {
@@ -540,7 +540,7 @@ The interesting part here is how we communicate with the server. See the *Dynami
 
 ### Index.css
 
-As the final touch, open the `Index.css` file in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
+As the final touch, Create a file named `Index.css` in the `Pages` folder of the *TodoApp.Web* project and replace it with the following content:
 
 ````css
 #TodoList{
@@ -552,8 +552,6 @@ As the final touch, open the `Index.css` file in the `Pages` folder of the *Todo
 #TodoList li {
     padding: 5px;
     margin: 5px 0px;
-    border: 1px solid #cccccc;
-    background-color: #f5f5f5;
 }
 
 #TodoList li i
@@ -589,7 +587,7 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 Open the `Index.razor.cs` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
 
-````csharp
+```csharp
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -602,7 +600,7 @@ namespace TodoApp.Blazor.Pages
         private ITodoAppService TodoAppService { get; set; }
 
         private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
-        private string NewTodoText { get; set; }
+        private string NewTodoText { get; set; } = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
@@ -624,7 +622,7 @@ namespace TodoApp.Blazor.Pages
         }
     }
 }
-````
+```
 
 This class uses `ITodoAppService` to perform operations for the todo items. It manipulates the `TodoItems` list after create and delete operations. This way, we don't need to refresh the whole todo list from the server.
 
