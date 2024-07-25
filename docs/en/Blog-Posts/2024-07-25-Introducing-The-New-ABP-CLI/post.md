@@ -1,18 +1,18 @@
 # Introducing the New ABP CLI
 
-📢 We're excited to introduce the [new ABP CLI](https://abp.io/docs/latest/cli/index) with [the new unified ABP Platform](https://abp.io/blog/new-abp-platform-is-live). 
-
 ![](cover-image.png)
 
-As you know, we recently unified the ABP platform in a single domain ([abp.io](https://abp.io/)) and also made some radical changes in our templating system to simplify your development. Also, we released more stable ABP Studio versions, which can dramatically improve and speed up your development time. Besides all of these changes, we have also introduced a new ABP CLI to bring you more streamlined and efficient experience.
+📢 We're excited to introduce the [new ABP CLI](https://abp.io/docs/latest/cli/index) after the announce of [the new unified ABP Platform](https://abp.io/blog/new-abp-platform-is-live). 
+
+As you know, we recently unified the ABP platform in a single domain ([abp.io](https://abp.io/)) and made some radical changes in our templating system to simplify your development. Also, we released more stable ABP Studio versions, which can dramatically improve and speed up your development time. Besides all of these changes, we have also introduced a new ABP CLI to bring you more streamlined and efficient experience.
 
 Here is a brief overview of what's new, what's changed, and why this change is happening...
 
 ## The New ABP CLI
 
-ABP CLI is a command line tool to perform some common operations for ABP based solutions or ABP Studio features. With v8.2+, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and ABP Studio. 
+ABP CLI is a command line tool to perform some common operations for ABP based solutions or [ABP Studio](https://abp.io/docs/latest/studio) features. With v8.2+, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and ABP Studio. 
 
-The new ABP CLI extends the old ABP CLI, adds more features, those are used by ABP Studio behind the scene, and also fully compatible with the new templating system. It also allows you to use the old ABP CLI, if you need, by passing a single parameter.
+The new ABP CLI extends the old ABP CLI, adds more features those are used by ABP Studio behind the scene, and also fully compatible with the new templating system. Also, it allows you to use the old ABP CLI if you need, by passing a single parameter.
 
 To be able to use the new ABP CLI, you should first delete the existing/old CLI with the following command, if you installed it before:
 
@@ -30,7 +30,7 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 
 ## Reason for the Change
 
-ABP introduces a new templating system, which is fully compatible with the ABP Studio for v8.2+. Since, ABP Studio offers more and better features (such as tracking, monitoring, and deploying your applications from a single point), and the new templating system has a different versioning structure, we wanted to introduce a new ABP CLI by extending the current features and adding even more features that are compatible with the new templating system and ABP Studio.
+ABP introduces a new templating system, which is fully compatible with the ABP Studio from v8.2+. Since, ABP Studio offers more and better features (such as tracking, monitoring, and deploying your applications from a single point), and the new templating system has a different versioning structure, we wanted to introduce a new ABP CLI by extending the current features and adding even more features that are compatible with the new templating system and ABP Studio.
 
 This change allows you to create your application with the new templating system either by running the cross-platform ABP Studio application or ABP CLI, and allows you to create automated pipelines with the power of the new ABP CLI.
 
@@ -56,6 +56,17 @@ abp install-old-cli --version 8.0.0
 
 abp new Acme.BookStore --version 8.0 --old # alternatively, you can use the `abp-old` command without need to pass the "--old" parameter
 ```
+
+## New Commands
+
+New ABP CLI extends the existing features of old ABP CLI and introduces new commands. Here are some of the new commands:
+
+* `kube-connect`: Connects to kubernetes environment. (Available for Business or higher licenses)
+* `kube-intercept`: Intercepts a service running in Kubernetes environment. (Available for Business or higher licenses)
+* `list-module-sources`: Lists the remote module sources.
+* and more...
+
+You can check the CLI documentation for all available commands and their usages.
 
 ## Conclusion
 
