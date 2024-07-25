@@ -39,7 +39,7 @@
                         <abp-input asp-for="UserInfo.IsActive" />
                         <abp-input asp-for="UserInfo.LockoutEnabled" />
 
-                        @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.UserInfoViewModel>())
+                        @foreach (var propertyInfo in await ObjectExtensionManager.Instance.GetPropertiesAndCheckPolicyAsync<CreateModalModel.UserInfoViewModel>(HttpContext.RequestServices))
                         {
                             if (!propertyInfo.Name.EndsWith("_Text"))
                             {
