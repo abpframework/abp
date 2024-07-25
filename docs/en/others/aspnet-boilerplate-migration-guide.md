@@ -8,7 +8,7 @@ ABP is **the successor** of the open source [ASP.NET Boilerplate](https://aspnet
 
 ABP has the same goal of the ASP.NET Boilerplate framework: **Don't Repeat Yourself**! It provides infrastructure, tools and startup templates to make a developer's life easier while developing enterprise software solutions.
 
-See [the introduction blog post](https://blog.abp.io/abp/Abp-vNext-Announcement) if you wonder why we needed to re-write the ASP.NET Boilerplate framework.
+See [the introduction blog post](https://abp.io/blog/Abp-vNext-Announcement) if you wonder why we needed to re-write the ASP.NET Boilerplate framework.
 
 ### Should I Migrate?
 

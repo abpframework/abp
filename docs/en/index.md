@@ -101,7 +101,7 @@ The [ABP Community](https://abp.io/community/) website is a central place to pub
 
 ## Blog
 
-Follow the [ABP Blog](https://blog.abp.io/) to learn the latest happenings in the ABP Platform.
+Follow the [ABP Blog](https://abp.io/blog/) to learn the latest happenings in the ABP Platform.
 
 ## The Source Code
 
