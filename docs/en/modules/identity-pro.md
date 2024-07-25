@@ -19,7 +19,7 @@ This module implements the User and Role system of an application;
 * View security logs (login, logout, change password...) in the system.
 * Export & Import **users** to/from Excel and CSV files (also supports **importing external users**).
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Identity.Pro) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Identity.Pro) for an overview of the module features.
 
 ## How to install
 

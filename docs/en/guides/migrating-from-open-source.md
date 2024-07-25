@@ -9,7 +9,7 @@
 
 This guide provides you a step-by-step guidance to migrating your existing application (that uses the ABP) to ABP. Since ABP uses the main structure of the ABP and is built on top of that, this process is pretty straightforward, you can apply the steps mentioned in each step and easily migrate your project to ABP.
 
-> After following this documentation, you should be able to migrate your project to ABP. However, if you have any problems or cannot migrate your project, we are providing paid consultancy, which you can find details at [https://commercial.abp.io/additional-services](https://commercial.abp.io/additional-services). On this page, you can find related pieces of information about our trainings, custom project development, and porting existing projects services, and you can fill-out the contact form, so we can reach out to you.
+> After following this documentation, you should be able to migrate your project to ABP. However, if you have any problems or cannot migrate your project, we are providing paid consultancy, which you can find details at [https://abp.io/additional-services](https://abp.io/additional-services). On this page, you can find related pieces of information about our trainings, custom project development, and porting existing projects services, and you can fill-out the contact form, so we can reach out to you.
 
 ## ABP Migration Steps
 
@@ -19,7 +19,7 @@ There are 4 main steps to migrating from ABP to ABP, and each one of them is exp
 
 ### 1. License Transition
 
-The first step is to obtain the necessary license for ABP to be able to get the benefit of the pro modules and unlock the additional features. To do that, you should first get your `ApiKey` from the [organization's detail page](https://commercial.abp.io/my-organizations).
+The first step is to obtain the necessary license for ABP to be able to get the benefit of the pro modules and unlock the additional features. To do that, you should first get your `ApiKey` from the [organization's detail page](https://abp.io/my-organizations).
 
 You can update the **NuGet.Config** file in the root directory of your solution and add the *packageSource* as follows (don't forget to replace `<api-key>` placeholder): 
 
@@ -480,4 +480,4 @@ Then, to apply the database into your database and seed the initial data, you ca
 
 ## Consultancy
 
-If you find the migration process challenging or prefer professional assistance, we offer a [paid consultancy service](https://commercial.abp.io/additional-services). Our experienced consultants can help ensure a smooth transition to ABP, addressing any specific needs or challenges your project may encounter. For detailed guidance and support, feel free to [reach out](https://commercial.abp.io/contact).
+If you find the migration process challenging or prefer professional assistance, we offer a [paid consultancy service](https://abp.io/additional-services). Our experienced consultants can help ensure a smooth transition to ABP, addressing any specific needs or challenges your project may encounter. For detailed guidance and support, feel free to [reach out](https://abp.io/contact).

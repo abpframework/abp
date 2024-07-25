@@ -6,7 +6,7 @@ This module allows users to download and delete their personal data collected by
 
 > The GDPR module requests the information from the other modules that reference the `Volo.Abp.Gdpr.Abstractions` package and merges the response data into a single JSON file and the personal data can be downloaded later by the user. Also, the user can delete her/his personal data and account permanently.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Gdpr) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Gdpr) for an overview of the module features.
 
 ## How to install
 
@@ -48,7 +48,7 @@ The "Personal Data" page is used to manage personal data requests. You can view 
 
 ![gdpr](../images/gdpr-personal-data-page.png)
 
-To see the other features of the GDPR module, visit [the module description page](https://commercial.abp.io/modules/Volo.Gdpr).
+To see the other features of the GDPR module, visit [the module description page](https://abp.io/modules/Volo.Gdpr).
 
 ## Options
 

@@ -61,7 +61,7 @@ If you have used ABP's [BLOB Storing](../framework/infrastructure/blob-storing) 
 
 The [Database BLOB provider](../framework/infrastructure/blob-storing/database.md) is the easiest way since it uses your application's main database (or another database if you configure) to store BLOBs. However, you should remember that BLOBs are large objects and may quickly increase your database's size.
 
-> [ABP](https://commercial.abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
+> [ABP](https://abp.io/) startup solution templates come with the database BLOB provider as pre-installed, and stores BLOBs in the application's database.
 
 Check the [BLOB Storing](../framework/infrastructure/blob-storing) document to see all the available BLOB storage providers.
 

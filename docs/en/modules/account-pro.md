@@ -8,7 +8,7 @@ This module implements the Login, Register, Forgot Password, Email Confirmation,
 * OpenIddict Grant and Consent pages.
 * Setting page to manage **self registration** and two-factor authentication.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Account.Pro) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Account.Pro) for an overview of the module features.
 
 ## How to Install
 

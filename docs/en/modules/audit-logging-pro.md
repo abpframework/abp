@@ -12,7 +12,7 @@ This module implements the Audit Logging system of an application;
 * This module also defines reusable "Average Execution Duration Per Day" and "Error Rate" widgets.
 * Periodic clean up of audit logs.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.AuditLogging.Ui) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.AuditLogging.Ui) for an overview of the module features.
 
 ## How to install
 

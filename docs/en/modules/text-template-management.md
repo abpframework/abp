@@ -6,7 +6,7 @@ This module is used to store and edit template contents for [the text templating
 
 There are different use cases of the text templating system. For example, [the Account Module](account.md) is using it to define templates for sending emails when it needs to send emails to users (like sending "password reset link" email). This module provides UI to easily edit these email templates.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.TextTemplateManagement) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.TextTemplateManagement) for an overview of the module features.
 
 ## How to Install
 

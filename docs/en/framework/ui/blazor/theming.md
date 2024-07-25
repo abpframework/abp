@@ -26,7 +26,7 @@ In order to accomplish these goals, ABP;
 Currently, three themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
-* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://commercial.abp.io/) license.
+* The [Lepton Theme](https://abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://abp.io/) license.
 * The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/blazor) and a [lite](../../../ui-themes/lepton-x-lite/blazor.md) version. 
 
 ## Overall
@@ -60,7 +60,7 @@ All themes must define a layout for the application. The following image shows t
 
 ![basic-theme-application-layout-blazor](../../../images/basic-theme-application-layout-blazor.png)
 
-And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
+And the same page is shown below with the [Lepton Theme](https://abp.io/themes) application layout:
 
 ![lepton-theme-application-layout](../../../images/lepton-theme-blazor-layout.png)
 

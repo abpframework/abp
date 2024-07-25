@@ -379,7 +379,7 @@ Feature value providers are **executed one by one**. If one of them return a non
 There are three pre-defined value providers, executed by the given order:
 
 * `TenantFeatureValueProvider` tries to get if the feature value is explicitly set for the **current tenant**.
-* `EditionFeatureValueProvider` tries to get the feature value for the current edition. Edition Id is obtained from the current principal identity (`ICurrentPrincipalAccessor`) with the claim name `editionid` (a constant defined as`AbpClaimTypes.EditionId`). Editions are not implemented for the [tenant management](../../modules/tenant-management.md) module. You can implement it yourself or consider to use the [SaaS module](https://commercial.abp.io/modules/Volo.Saas) of the ABP Commercial.
+* `EditionFeatureValueProvider` tries to get the feature value for the current edition. Edition Id is obtained from the current principal identity (`ICurrentPrincipalAccessor`) with the claim name `editionid` (a constant defined as`AbpClaimTypes.EditionId`). Editions are not implemented for the [tenant management](../../modules/tenant-management.md) module. You can implement it yourself or consider to use the [SaaS module](https://abp.io/modules/Volo.Saas) of the ABP Commercial.
 * `DefaultValueFeatureValueProvider` gets the default value of the feature.
 
 You can write your own provider by inheriting the `FeatureValueProvider`.

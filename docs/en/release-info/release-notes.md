@@ -260,7 +260,7 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI)** for the v3.2.
 
 * Released the preview (experimental) **Blazor UI** option.
-* **Angular** UI for the [file management](https://commercial.abp.io/modules/Volo.FileManagement) module.
+* **Angular** UI for the [file management](https://abp.io/modules/Volo.FileManagement) module.
 * Managing the **application features** for the **host** side.
 * User **profile picture** for the account module.
 * Options to enable, disable or force **two factor authentication** for tenants and users.
@@ -293,19 +293,19 @@ See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framew
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP-Framework-v2.9.0-Has-Been-Released)** for the v2.9 release.
 
 * Performance improvements (pre-compiling razor pages).
-* New **Organization Unit** Management UI for the [Identity Module](https://commercial.abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
-* Created **Angular UI** for the [Chat Module](https://commercial.abp.io/modules/Volo.Chat).
+* New **Organization Unit** Management UI for the [Identity Module](https://abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
+* Created **Angular UI** for the [Chat Module](https://abp.io/modules/Volo.Chat).
 * Implemented **Angular UI** for the [Easy CRM](https://docs.abp.io/en/commercial/latest/samples/easy-crm) application.
-* [ABP Suite](https://commercial.abp.io/tools/suite) code generation support for **module development**.
-* New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://commercial.abp.io/themes) components**.
+* [ABP Suite](https://abp.io/tools/suite) code generation support for **module development**.
+* New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://abp.io/themes) components**.
 
 ## 2.8 (2020-05-21)
 
 See the detailed **blog post / announcement** for the v2.8 release: [https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map](https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map)
 
 * RTL support for the MVC UI & Arabic localization.
-* Completely renewed the **[Lepton Theme](https://commercial.abp.io/themes) styles** and add a new one.
-* New module: Created a **real time [Chat Module](https://commercial.abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
+* Completely renewed the **[Lepton Theme](https://abp.io/themes) styles** and add a new one.
+* New module: Created a **real time [Chat Module](https://abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
 * Implemented **[module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
 * **Gravatar** integration for the Angular UI.
 * Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
@@ -323,7 +323,7 @@ See the detailed **blog post / announcement** for the v2.7 release:  https://blo
 * **Optimize database migrations** & seed code for multi-tenant multi-database systems.
 * ABP Suite: Make **menu item active** on navigation menu when selected.
 * ABP Suite: Improve **enum usage** while creating new entities.
-* Bug fixes in the [Lepton Theme](https://commercial.abp.io/themes), [ABP Suite](https://commercial.abp.io/tools/suite) and  other modules.
+* Bug fixes in the [Lepton Theme](https://abp.io/themes), [ABP Suite](https://abp.io/tools/suite) and  other modules.
 
 ## See Also
 

@@ -4,7 +4,7 @@
 
 This module implements real time messaging between users for an application.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Chat) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Chat) for an overview of the module features.
 
 To download the source-code of the Chat module, you can use ABP Suite or you can use the ABP CLI with the following command:
 

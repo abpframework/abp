@@ -18,7 +18,7 @@ You can use the *Kubernetes* panel to manage your application(s) in a Kubernetes
 
 ## Prerequisites
 
-The *Kubernetes* panel is available only in the [business and enterprise](https://commercial.abp.io/pricing) licenses. You need to install and configure the following tools to use the *Kubernetes* panel.
+The *Kubernetes* panel is available only in the [business and enterprise](https://abp.io/pricing) licenses. You need to install and configure the following tools to use the *Kubernetes* panel.
 
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * [Helm](https://helm.sh/docs/intro/install/)

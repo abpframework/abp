@@ -4,7 +4,7 @@
 
 This module allows you to create questionnaires  to gather information. The forms module can store responses as they come in and you can export the data to a CSV file. You can share your form with others with your form unique link. You can request authentication or allow anonymous reply. It is similar to the Google Form application. Usage area is quite wide, you can create surveys, manage event registrations, collect email addresses for a newsletter, create a quiz, and even receive an order request.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Forms) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Forms) for an overview of the module features.
 
 ## How to install
 
@@ -43,7 +43,7 @@ Forms page is used to manage the forms. You can view the form contents, send it 
 
 ![form-list-page](../images/forms-list.png)
 
-To see the other features of the Forms module, visit [the module description page](https://commercial.abp.io/modules/Volo.Forms).
+To see the other features of the Forms module, visit [the module description page](https://abp.io/modules/Volo.Forms).
 
 ## Data seed
 

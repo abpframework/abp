@@ -20,8 +20,8 @@ Currently, four themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [LeptonX Lite Theme](../../../ui-themes/lepton-x-lite/asp-net-core.md) is modern and stylish Bootstrap UI theme. It is ideal if you want to have a production ready UI theme. It is also **open source and free**.
-* The [Lepton Theme](https://commercial.abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://commercial.abp.io/) license.
-* The [LeptonX Theme](https://docs.abp.io/en/commercial/latest/themes/lepton-x/index) is also a **commercial** theme developed by the core ABP theme and is a part of the [ABP](https://commercial.abp.io/) license. This is the default theme after ABP v6.0.0.
+* The [Lepton Theme](https://abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://abp.io/) license.
+* The [LeptonX Theme](https://docs.abp.io/en/commercial/latest/themes/lepton-x/index) is also a **commercial** theme developed by the core ABP theme and is a part of the [ABP](https://abp.io/) license. This is the default theme after ABP v6.0.0.
 
 There are also some community-driven themes for the ABP (you can search on the web).
 
@@ -72,7 +72,7 @@ This is the default layout which is used by the main application pages. The foll
 
 ![basic-theme-application-layout](../../../images/basic-theme-application-layout.png)
 
-And the same page is shown below with the [Lepton Theme](https://commercial.abp.io/themes) application layout:
+And the same page is shown below with the [Lepton Theme](https://abp.io/themes) application layout:
 
 ![lepton-theme-application-layout](../../../images/lepton-theme-application-layout.png)
 
@@ -110,7 +110,7 @@ Here, the account layout of the Lepton Theme:
 
 ![lepton-theme-account-layout](../../../images/lepton-theme-account-layout.png)
 
-The [Lepton Theme](https://commercial.abp.io/themes) shows the application logo and footer in this layout.
+The [Lepton Theme](https://abp.io/themes) shows the application logo and footer in this layout.
 
 > You can override theme layouts completely or partially in an application to [customize](customization-user-interface.md) it.
 

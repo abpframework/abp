@@ -6,7 +6,7 @@ This document aims to answer the big question:
 
 The document introduces the challenges of building a modern software solution and explains how ABP addresses these challenges.
 
-See also https://commercial.abp.io/why-abp-io
+See also https://abp.io/why-abp-io
 
 ## Creating a New Solution
 
@@ -37,7 +37,7 @@ When it comes to the UI, there are a lot of challenges, including preparing a fo
 
 Even if you buy a pre-built theme, **integrating** it into your solution may take **days of development**. Upgrading such a theme is another problem. Most of the time, the theme's HTML/CSS structure is mixed with your UI code, and it is not easy to **upgrade** or **change** the theme later.
 
-ABP provides a [theming](../framework/ui/mvc-razor-pages/theming.md) system that makes your UI code independent from the theme. Themes are isolated, and they are **NuGet/NPM packages**. Installing or upgrading a theme is just a minute. While you can build your theme (or integrate an existing theme), ABP offers **professional and modern** [themes](https://commercial.abp.io/themes).
+ABP provides a [theming](../framework/ui/mvc-razor-pages/theming.md) system that makes your UI code independent from the theme. Themes are isolated, and they are **NuGet/NPM packages**. Installing or upgrading a theme is just a minute. While you can build your theme (or integrate an existing theme), ABP offers **professional and modern** [themes](https://abp.io/themes).
 
 > There are also UI **component providers** (like Telerik and DevExpress). But they only provide individual components. You are responsible for creating your own **layout system**. You **can use** such libraries in your ABP-based solutions just like in any other project.
 
@@ -101,7 +101,7 @@ There is much more. ABP provides infrastructure to implement such requirements e
 
 ### Generating Initial Code & Tooling
 
-[ABP Suite](https://commercial.abp.io/tools/suite) can generate a full-stack CRUD page for your entities in seconds. The generated code is layered and clean. All the standard validation and authorization requirements are implemented. Plus, unit test classes are generated. Once you get a fully running page, you can modify it according to your business requirements.
+[ABP Suite](https://abp.io/tools/suite) can generate a full-stack CRUD page for your entities in seconds. The generated code is layered and clean. All the standard validation and authorization requirements are implemented. Plus, unit test classes are generated. Once you get a fully running page, you can modify it according to your business requirements.
 
 ### Integrating to 3rd-Party Libraries and Systems
 
@@ -149,7 +149,7 @@ ABP even goes one step further and provides a complete [startup template](../sol
 
 All of us have similar but slightly different business requirements. However, we all should re-invent the wheel since no one's code can directly work in our solution. They are all embedded parts of a larger solution.
 
-ABP [modules](https://commercial.abp.io/modules) provides a lot of **re-usable application modules** like payment, chat, file management, audit log reporting... etc. All of these modules are easily installed into your solution and directly work. We are constantly adding more modules.
+ABP [modules](https://abp.io/modules) provides a lot of **re-usable application modules** like payment, chat, file management, audit log reporting... etc. All of these modules are easily installed into your solution and directly work. We are constantly adding more modules.
 
 All modules are designed as customizable for your business requirements. If you need complete control, you can download the full source code of any module and completely customize based on your specific business requirements.
 

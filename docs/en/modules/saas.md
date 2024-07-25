@@ -9,7 +9,7 @@ This module is used to manage your tenants and editions in multi-tenant applicat
 * Set **connection string** of tenants.
 * Set **features** of editions and tenants.
 
-See [the module description page](https://commercial.abp.io/modules/Volo.Saas) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.Saas) for an overview of the module features.
 
 ## How to install
 

@@ -11,7 +11,7 @@ This module provides integration and management functionality for Identity Serve
 * Create custom **identity resources**.
 * Manage **API resources**
 
-See [the module description page](https://commercial.abp.io/modules/Volo.identityserver.Ui) for an overview of the module features.
+See [the module description page](https://abp.io/modules/Volo.identityserver.Ui) for an overview of the module features.
 
 ## How to Install
 

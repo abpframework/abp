@@ -27,7 +27,7 @@ The following features are provided by the CMS Kit Pro version:
 * [**Page Feedback**](page-feedback.md) It allows users to send feedback for your pages.
 * [**Faq**](faq.md) system to create dynamic FAQ.
 
-Click on a feature to understand and learn how to use it. See [the module description page](https://commercial.abp.io/modules/Volo.CmsKit.Pro) for an overview of the module features.
+Click on a feature to understand and learn how to use it. See [the module description page](https://abp.io/modules/Volo.CmsKit.Pro) for an overview of the module features.
 
 ## How to Install
 
