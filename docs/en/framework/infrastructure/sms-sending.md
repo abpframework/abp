@@ -110,4 +110,4 @@ namespace AbpDemo
 
 ## More
 
-[ABP](https://abp.io/) provides Twilio integration package to send SMS over [Twilio service](https://docs.abp.io/en/commercial/latest/modules/twilio-sms).
+[ABP](https://abp.io/) provides Twilio integration package to send SMS over [Twilio service](https://abp.io/docs/latest/modules/twilio-sms).
