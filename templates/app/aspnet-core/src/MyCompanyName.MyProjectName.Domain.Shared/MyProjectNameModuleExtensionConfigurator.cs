@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName;
@@ -37,6 +38,44 @@ public static class MyProjectNameModuleExtensionConfigurator
 
     private static void ConfigureExtraProperties()
     {
+
+        ObjectExtensionManager.Instance.Modules()
+            .ConfigureIdentity(identity =>
+            {
+                identity.ConfigureUser(user =>
+                {
+                    user.AddOrUpdateProperty<string>( //property type: string
+                        "SocialSecurityNumber", //property name
+                        property =>
+                        {
+                            //validation rules
+                            property.Attributes.Add(new RequiredAttribute());
+                            property.Attributes.Add(new StringLengthAttribute(128) {MinimumLength = 3});
+
+                            // property.Policy.GlobalFeatures = new ExtensionPropertyGlobalFeaturePolicyConfiguration()
+                            // {
+                            //      Features = new[] {"abc", "def"},
+                            //      RequiresAll = true
+                            // };
+
+                            // property.Policy.Features = new ExtensionPropertyFeaturePolicyConfiguration()
+                            // {
+                            //     Features = new[] {"abc", "def"},
+                            //     RequiresAll = false
+                            // };
+
+                            property.Policy.Permissions = new ExtensionPropertyPermissionPolicyConfiguration()
+                            {
+                                PermissionNames = new[] {"AbpTenantManagement.Tenants.Update", "AbpTenantManagement.Tenants.Delete"},
+                                RequiresAll = false
+                            };
+
+                            //...other configurations for this property
+                        }
+                    );
+                });
+            });
+
         /* You can configure extra properties for the
          * entities defined in the modules used by your application.
          *
@@ -57,7 +96,7 @@ public static class MyProjectNameModuleExtensionConfigurator
                               //validation rules
                               property.Attributes.Add(new RequiredAttribute());
                               property.Attributes.Add(new StringLengthAttribute(64) {MinimumLength = 4});
-                              
+
                               property.Configuration[IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit] = true;
 
                               //...other configurations for this property

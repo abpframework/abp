@@ -39,6 +39,15 @@ public static class MyProjectNameEfCoreEntityExtensionMappings
                  * See the documentation for more:
                  * https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities
                  */
+
+                ObjectExtensionManager.Instance
+                        .MapEfCoreProperty<IdentityUser, string>(
+                            "SocialSecurityNumber",
+                            (entityBuilder, propertyBuilder) =>
+                            {
+                                propertyBuilder.HasMaxLength(128);
+                            }
+                        );
         });
     }
 }
