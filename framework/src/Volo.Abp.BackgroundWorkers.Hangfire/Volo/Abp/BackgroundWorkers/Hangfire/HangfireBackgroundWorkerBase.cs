@@ -11,16 +11,9 @@ public abstract class HangfireBackgroundWorkerBase : BackgroundWorkerBase, IHang
 
     public string CronExpression { get; set; } = default!;
 
-    public TimeZoneInfo? TimeZone { get; set; }
+    public TimeZoneInfo? TimeZone { get; set; } = TimeZoneInfo.Utc;
 
-    public string Queue { get; set; }
+    public string Queue { get; set; } = EnqueuedState.DefaultQueue;
 
     public abstract Task DoWorkAsync(CancellationToken cancellationToken = default);
-
-    protected HangfireBackgroundWorkerBase()
-    {
-        TimeZone = TimeZoneInfo.Utc;
-        Queue = EnqueuedState.DefaultQueue;
-        TimeZone = TimeZoneInfo.Utc;
-    }
 }
