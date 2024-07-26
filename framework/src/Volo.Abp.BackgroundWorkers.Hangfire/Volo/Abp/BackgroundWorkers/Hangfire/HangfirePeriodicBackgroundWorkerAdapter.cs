@@ -16,8 +16,6 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
     {
         _doWorkAsyncMethod = typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
         _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        
-        TimeZone = TimeZoneInfo.Utc;
         RecurringJobId = typeof(TWorker).Name;
     }
 

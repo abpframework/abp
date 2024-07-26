@@ -19,7 +19,7 @@ public abstract class HangfireBackgroundWorkerBase : BackgroundWorkerBase, IHang
 
     protected HangfireBackgroundWorkerBase()
     {
-        TimeZone = null;
+        TimeZone = TimeZoneInfo.Utc;
         Queue = EnqueuedState.DefaultQueue;
         TimeZone = TimeZoneInfo.Utc;
     }
