@@ -25,7 +25,7 @@ ABP offers an opinionated architecture to build enterprise software solutions wi
 
 🔗Twitter: https://twitter.com/abpframework
 
-🔗Discord: https://community.abp.io/discord
+🔗Discord: https://abp.io/community/discord
 
 🔗Stackoverflow: https://stackoverflow.com/questions/tagged/abp
 
