@@ -94,7 +94,7 @@ The new CLI extends the old CLI and provides most of the commands that are alrea
 
 4. **What happens if I have multiple old CLI versions installed with the `install-old-cli` commands? Which version would be used?**
 
-You can see all available `abp-old` command versions under the **%UserProfile%\.abp\studio\cli\old** folder and when you execute the `abp-old` command, you can learn which old CLI version will be used when you execute an ABP command with the old CLI (by either running the `abp-old` command or passing the `--old` parameter as the last argument for your command):
+You can see all available `abp-old` command versions under the **%UserProfile%\\.abp\studio\cli\old** folder and when you execute the `abp-old` command, you can learn which old CLI version will be used when you execute an ABP command with the old CLI (by either running the `abp-old` command or passing the `--old` parameter as the last argument for your command):
 
 ```bash
 C:\Users\user-name>abp-old
@@ -108,14 +108,14 @@ Command List:
     //...
 ```
 
-You can update the old CLI version with the `install-old-cli` command or safely delete the **%UserProfile%\.abp\studio\cli\old** folder and install any old CLI version you want to use.
+You can update the old CLI version with the `install-old-cli` command or safely delete the **%UserProfile%\\.abp\studio\cli\old** folder and install any old CLI version you want to use.
 
 5. **What are the new commands that came with the new ABP CLI?**
 
 New ABP CLI extends the existing features of old ABP CLI and also introduces new commands. Here are some of them:
 
-* `kube-connect`: Connects to kubernetes environment. (Available for **Business** or higher licenses)
-* `kube-intercept`: Intercepts a service running in Kubernetes environment. (Available for **Business** or higher licenses)
+* `kube-connect`: Connects to Kubernetes environment. (Available for **Business** or higher licenses)
+* `kube-intercept`: Intercepts a service running in the Kubernetes environment. (Available for **Business** or higher licenses)
 * `list-module-sources`: Lists the remote module sources.
 * ...
 
