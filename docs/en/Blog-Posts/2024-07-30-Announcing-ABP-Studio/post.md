@@ -70,3 +70,38 @@ You can see all the Helm charts in a solution in the Kubernetes panel of ABP Stu
 Here, you can easily build, install and uninstall the Helm charts to your Kubernetes cluster. In the Kubernetes tab, you can connect to the Kubernetes cluster and intercept a service to develop it locally. See [the documentation](https://abp.io/docs/latest/studio/kubernetes) for more information.
 
 The good news is that all the monitoring data (HTTP Requests, Events, Exceptions, Logs,...) is still visible in real time with the Kubernetes integration too.
+
+## Use the ABP Suite as Integrated to ABP Studio
+
+[ABP Suite](https://abp.io/suite) is a tool that is basically used to generate code for ABP Solutions. It has started by creating simple CRUD pages, and now it does much more. It can establish relations with existing entities, create complex user interfaces like parent/child tables and so on...
+
+ABP Suite can be used directly inside ABP Studio by clicking the *ABP Suite* -> *Open* command:
+
+![abp-suite-open-in-abp-studio](abp-suite-open-in-abp-studio.png)
+
+This will open ABP Suite  in a new tab for the current solution and focus on the CRUD page generation:
+
+![abp-suite-in-abp-studio](abp-suite-in-abp-studio.png)
+
+The new ABP Studio solution templates and ABP Suite code generation are compatible with each other. Here a screenshot from the generated CRUD UI for a very simple Book entity:
+
+![suite-generated-entity](suite-generated-entity.png)
+
+## The Community Edition vs Commercial Licenses
+
+ABP Studio has a Community Edition which is completely free and available to everyone. As you can guess, there are come differences between the community edition and commercial editions. ABP Platform has 4 fundamental license types;
+
+* Open source (free)
+* Team
+* Business
+* Enterprise
+
+Here, the comparison table for ABP Studio features for these license types:
+
+![abp-studio-license-comparison-table](abp-studio-license-comparison-table.png)
+
+Microservice startup template and Kubernetes integration features are available only for commercial licenses since these are considered more enterprise requirements. Also, the solution size is limited with the ABP Community edition. If you are building a large or distributed solution, consider to [purchase a commercial license](https://abp.io/pricing).
+
+## Conclusion
+
+. 
