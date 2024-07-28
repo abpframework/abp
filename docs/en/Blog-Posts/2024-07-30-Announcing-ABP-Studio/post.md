@@ -1,5 +1,9 @@
 # Announcing ABP Studio (beta) General Availability
 
+ABP Framework makes your daily coding activities much easier, more convenient, and even more enjoyable. However, building a software product is not just about coding. We know that you need to build, run, test, debug and deploy your software, and trace errors on a failure. You also should to design architecture of your overall solution and perform many common operations on your solutions in addition to the coding activity.
+
+We'd already provided tools like [ABP CLI](https://abp.io/cli) and [ABP Suite](https://abp.io/suite) for these kind of purposes before. [ABP Studio](https://abp.io/studio) takes this one long step further and offers a tool that you can use continuously throughout your coding activities, help you for non-coding activities to make you focus on your software development.
+
 I am very excited to announce that the ABP Studio (beta) is generally available to everyone. It is now downloadable on the [get started page](https://abp.io/get-started) of the [new ABP Platform website](https://abp.io/blog/new-abp-platform-is-live).
 
 ## What is ABP Studio?
@@ -104,4 +108,4 @@ Microservice startup template and Kubernetes integration features are available 
 
 ## Conclusion
 
-. 
+I've introduced the ABP Studio General Availability with this post. It is still in the beta stage. You can expect frequent releases during the beta phase. We will add new features and fix issues quickly. Please [download](https://abp.io/studio) and use it now. If you find any problem, do not hesitate to open an [issue on GitHub](https://github.com/abpframework/abp/issues/new/choose).
