@@ -400,6 +400,36 @@ public static class AbpStringExtensions
         }
     }
 
+    public static string ToSha256(this string str)
+    {
+        using (var sha = SHA256.Create())
+        {
+            var data = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
+
+            var sb = new StringBuilder();
+            foreach (var d in data)
+            {
+                sb.Append(d.ToString("x2"));
+            }
+            return sb.ToString();
+        }
+    }
+
+    public static string ToSha512(this string str)
+    {
+        using (var sha = SHA512.Create())
+        {
+            var data = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
+
+            var sb = new StringBuilder();
+            foreach (var d in data)
+            {
+                sb.Append(d.ToString("x2"));
+            }
+            return sb.ToString();
+        }
+    }
+
     /// <summary>
     /// Converts camelCase string to PascalCase string.
     /// </summary>

@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Values;
 
 namespace Volo.Abp.TestApp.Domain;
 
-public class AppEntityWithNavigations : AggregateRoot<Guid>
+public class AppEntityWithNavigations : FullAuditedAggregateRoot<Guid>
 {
     protected AppEntityWithNavigations()
     {
@@ -23,6 +24,7 @@ public class AppEntityWithNavigations : AggregateRoot<Guid>
 
     public string FullName { get; set; }
 
+
     public AppEntityWithValueObjectAddress AppEntityWithValueObjectAddress { get; set; }
 
     public virtual AppEntityWithNavigationChildOneToOne OneToOne { get; set; }
@@ -30,6 +32,8 @@ public class AppEntityWithNavigations : AggregateRoot<Guid>
     public virtual List<AppEntityWithNavigationChildOneToMany> OneToMany { get; set; }
 
     public virtual List<AppEntityWithNavigationChildManyToMany> ManyToMany { get; set; }
+
+    public virtual Guid? AppEntityWithNavigationForeignId { get; set; }
 }
 
 public class AppEntityWithValueObjectAddress : ValueObject
@@ -87,4 +91,20 @@ public class AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany
     public Guid AppEntityWithNavigationsId { get; set; }
 
     public Guid AppEntityWithNavigationChildManyToManyId { get; set; }
+}
+
+public class AppEntityWithNavigationsForeign : AggregateRoot<Guid>
+{
+    protected AppEntityWithNavigationsForeign()
+    {
+
+    }
+
+    public AppEntityWithNavigationsForeign(Guid id, string name)
+        : base(id)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; }
 }

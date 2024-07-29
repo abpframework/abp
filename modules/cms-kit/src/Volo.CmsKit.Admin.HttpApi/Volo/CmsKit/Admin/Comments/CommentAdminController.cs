@@ -47,4 +47,25 @@ public class CommentAdminController : CmsKitAdminController, ICommentAdminAppSer
     {
         return CommentAdminAppService.DeleteAsync(id);
     }
+
+    [HttpPut]
+    [Route("{id}/approval-status")]
+    public Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input)
+    {
+        return CommentAdminAppService.UpdateApprovalStatusAsync(id, input);
+    }
+
+    [HttpPost]
+    [Route("settings")]
+    public Task UpdateSettingsAsync(CommentSettingsDto input)
+    {
+       return CommentAdminAppService.UpdateSettingsAsync(input);
+    }
+
+    [HttpGet]
+    [Route("waiting-count")]
+    public Task<int> GetWaitingCountAsync()
+    {
+        return CommentAdminAppService.GetWaitingCountAsync();
+    }
 }
