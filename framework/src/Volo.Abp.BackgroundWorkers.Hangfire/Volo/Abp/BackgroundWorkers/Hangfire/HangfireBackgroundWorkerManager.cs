@@ -61,15 +61,28 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                 var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
                 var workerAdapter = (Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker)!;
 
-                RecurringJob.AddOrUpdate(
-                    workerAdapter.RecurringJobId,
-                    workerAdapter.Queue,
-                    () => workerAdapter.DoWorkAsync(cancellationToken),
-                    GetCron(period.Value),
-                    new RecurringJobOptions
-                    {
-                        TimeZone = workerAdapter.TimeZone
-                    });
+                if (workerAdapter.RecurringJobId.IsNullOrWhiteSpace())
+                {
+                    RecurringJob.AddOrUpdate(   
+                        workerAdapter.Queue,
+                        () => workerAdapter.DoWorkAsync(cancellationToken),
+                        GetCron(period.Value),
+                        workerAdapter.TimeZone);
+                }
+                else
+                {
+                    
+                    RecurringJob.AddOrUpdate(
+                        workerAdapter.RecurringJobId,
+                        workerAdapter.Queue,
+                        () => workerAdapter.DoWorkAsync(cancellationToken),
+                        GetCron(period.Value),
+                        new RecurringJobOptions
+                        {
+                            TimeZone = workerAdapter.TimeZone
+                        });
+                }
+                
 
                 break;
             }
