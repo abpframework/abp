@@ -1,12 +1,12 @@
 # TODO Application Tutorial with Layered Solution
 
-```json
+````json
 //[doc-params]
 {
     "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
     "DB": ["EF", "Mongo"]
 }
-```
+````
 
 This is a single-part quick-start tutorial to build a simple todo application with the ABP. Here's a screenshot from the final application:
 
