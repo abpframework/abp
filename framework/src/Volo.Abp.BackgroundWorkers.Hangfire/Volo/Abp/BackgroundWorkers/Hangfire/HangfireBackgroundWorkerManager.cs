@@ -64,10 +64,10 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                 if (workerAdapter.RecurringJobId.IsNullOrWhiteSpace())
                 {
                     RecurringJob.AddOrUpdate(   
-                        workerAdapter.Queue,
                         () => workerAdapter.DoWorkAsync(cancellationToken),
                         GetCron(period.Value),
-                        workerAdapter.TimeZone);
+                        workerAdapter.TimeZone ,
+                        workerAdapter.Queue);
                 }
                 else
                 {
