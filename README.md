@@ -5,8 +5,7 @@
 
 ABP Framework is a complete **infrastructure** based on **ASP.NET Core** that creates **modern web applications** and **APIs** by following the software development **best practices** and the **latest technologies**.
 
-[![ABP Platform](https://github.com/abpframework/abp/assets/9526587/47531496-4088-406d-9c69-63cb0ffec2ba)](https://abp.io)
-
+[![ABP Platform](https://github.com/user-attachments/assets/200653c0-0e69-4b47-b76a-3a83460aaab6)](https://abp.io) 
 
 ## Getting Started
 
