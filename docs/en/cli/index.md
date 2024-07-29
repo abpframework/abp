@@ -156,6 +156,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
         * `leptonx-lite`: LeptonX-Lite Theme.
         * `basic`: Basic Theme.
+    * `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
   * **`app-nolayers`**: Single-layer application template. Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
@@ -171,6 +172,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
       * `leptonx-lite`: LeptonX-Lite Theme.
       * `basic`: Basic Theme.
+    * `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
   * **`microservice`**: Microservice solution template (*Available for* ***Business*** *or higher licenses*).  Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
