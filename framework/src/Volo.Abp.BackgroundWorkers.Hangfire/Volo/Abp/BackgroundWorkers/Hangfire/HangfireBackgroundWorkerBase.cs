@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Hangfire.States;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
@@ -10,15 +11,9 @@ public abstract class HangfireBackgroundWorkerBase : BackgroundWorkerBase, IHang
 
     public string CronExpression { get; set; } = default!;
 
-    public TimeZoneInfo? TimeZone { get; set; }
+    public TimeZoneInfo? TimeZone { get; set; } = TimeZoneInfo.Utc;
 
-    public string Queue { get; set; }
+    public string Queue { get; set; } = EnqueuedState.DefaultQueue;
 
     public abstract Task DoWorkAsync(CancellationToken cancellationToken = default);
-
-    protected HangfireBackgroundWorkerBase()
-    {
-        TimeZone = null;
-        Queue = "default";
-    }
 }

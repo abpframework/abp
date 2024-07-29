@@ -14,9 +14,12 @@
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="IdentityModel" Version="6.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="7.5.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.5.1" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.5.1" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Caching.StackExchangeRedis\Volo.Abp.Caching.StackExchangeRedis.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />

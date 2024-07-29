@@ -1,0 +1,13 @@
+﻿@using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Routing
+@using Microsoft.Extensions.Options
+@inject IOptions<AbpRouterOptions> RouterOptions
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="RouterOptions.Value.AdditionalAssemblies">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+</Router>

@@ -131,7 +131,7 @@ public static class AbpDictionaryExtensions
     }
 
     /// <summary>
-    /// Converts a <string,object> dictionary to dynamic object so added and removed at run
+    /// Converts a &lt;string,object&gt; dictionary to dynamic object so added and removed at run
     /// </summary>
     /// <param name="dictionary">The collection object</param>
     /// <returns>If value is correct, return ExpandoObject that represents an object</returns>

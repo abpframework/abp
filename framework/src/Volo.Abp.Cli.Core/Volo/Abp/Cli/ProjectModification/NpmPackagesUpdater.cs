@@ -250,6 +250,17 @@ public class NpmPackagesUpdater : ITransientDependency
             return false;
         }
 
+        var prefix = string.Empty;
+        if (package.Value.ToString().StartsWith("~"))
+        {
+            prefix = "~";
+        }
+        else if (package.Value.ToString().StartsWith("^"))
+        {
+            prefix = "^";
+        }
+
+        version = prefix + version.RemovePreFix("~", "^");
         package.Value.Replace(version);
 
         Logger.LogInformation(

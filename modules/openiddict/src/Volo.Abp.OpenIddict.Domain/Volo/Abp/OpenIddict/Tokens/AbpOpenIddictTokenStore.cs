@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.Guids;
@@ -29,8 +30,9 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
         IOpenIddictApplicationRepository applicationRepository,
         IOpenIddictAuthorizationRepository authorizationRepository,
         AbpOpenIddictIdentifierConverter identifierConverter,
-        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler)
-        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler)
+        IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler,
+        IOptions<AbpOpenIddictStoreOptions> storeOptions)
+        : base(repository, unitOfWorkManager, guidGenerator, identifierConverter, concurrencyExceptionHandler, storeOptions)
     {
         ApplicationRepository = applicationRepository;
         AuthorizationRepository = authorizationRepository;
@@ -309,7 +311,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
 
     public virtual async ValueTask<long> PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
-        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: IsolationLevel.RepeatableRead))
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: StoreOptions.Value.PruneIsolationLevel))
         {
             var date = threshold.UtcDateTime;
             var count = await Repository.PruneAsync(date, cancellationToken: cancellationToken);

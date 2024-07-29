@@ -440,7 +440,7 @@
     "Index_Page_Testimonial_2": "ABP Framework není jen rámec, je to také návod pro vývoj/řízení projektů, protože poskytuje školení DDD, GenericRepository, DI, Microservice, Modularity. I když se nechystáte používat samotný framework, můžete se vyvíjet s docs.abp.io, který je dobře a profesionálně připraven. (OpenIddict, Redis, Quartz atd.) \n Protože je mnoho věcí předpřipravených, výrazně to zkracuje dobu vývoje projektu. (Jako přihlašovací stránka, zpracování výjimek, filtrování dat-seedování, protokolování auditu, lokalizace, automatický api řadič atd.) \n Jako příklad z naší aplikace jsem pro řízení zásob použil místní sběrnici událostí. Takže jsem schopen řídit pohyby objednávek psaním skladového manipulátoru. \n Je skvělé neztrácet čas pro CreationTime, CreatorId. Vyplňují se automaticky.",
     "VideosLoginAndRegisterMessage": "Chcete-li sledovat videa, musíte se přihlásit. Můžete si vytvořit účet pro hodinky, pokud ještě nemáte.",
     "Filter": "Filtr",
-    "VideoCourses": "Video kurzy",
+    "VideoCourses": "Základní videa",
     "TestimonialText": "Vaše hodnocení",
     "Position": "Pozice",
     "ExperienceYear": "Roky zkušeností",
@@ -448,7 +448,7 @@
     "CompanySize": "Velikost společnosti",
     "Image": "Vaše profilová fotografie",
     "TestimonialTitle": "Pojďme slyšet vaše hodnocení",
-    "TestimonialInfo": "To, co naši zákazníci říkají, má význam! Dejte nám vědět o své zkušenosti s naším produktem a servisem.",
+    "TestimonialInfo": "Na tom, co říkají naši zákazníci, záleží! Řekněte nám o svých zkušenostech s naším produktem a službou. Doporučuje se napsat posudek v angličtině, abyste oslovili širší publikum.",
     "Country": "Země",
     "TestimonialTextPlaceholder": "Napište stručný příběh o tom, jak vám ABP pomohlo stavět a dodávat váš projekt.",
     "PositionPlaceholder": "Vaše pozice ve vaší společnosti.",
@@ -467,6 +467,11 @@
     "Title": "Titul",
     "TitlePlaceholder": "Vývojář softwaru, CTO atd.",
     "Characters": "znaky",
-    "ABPTestimonialDescription": "ABP Framework: Pojďme slyšet vaši referenci"
+    "ABPTestimonialDescription": "ABP Framework: Pojďme slyšet vaši referenci",
+    "LeaveUsReview": "Zanechte nám recenzi",
+    "DocumentationButtonTitle": "Dokumentace",
+    "ABPVideoCoursesDescription": "Naučte se základy rámce ABP prostřednictvím videokurzů vytvořených týmem ABP.",
+    "ABPVideoCoursesPageDescription": "Naučte se základy rámce ABP prostřednictvím videokurzů vytvořených týmem ABP. V této sérii videí se naučíte základní témata rámce ABP. Čísla na každém videu jsou napsána podle postupu učení.",
+    "ABPVideoCoursesTitle": "Základní videa ABP"
   }
 }

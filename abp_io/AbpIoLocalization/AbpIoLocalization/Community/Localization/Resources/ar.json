@@ -257,6 +257,8 @@
     "RafflesInfo": "<br>هذه هي صفحة السحب المخصصة لإظهار تقديرنا لك لكونك عضوًا نشطًا في المجتمع. نحن نقوم بإجراء <a target=\"_blank\" class=\"fw-6 \" href=\"https://community.abp.io/events\">محادثات مجتمعية لبرنامج ABP</a> <a target=\"_blank\" class=\"fw-6\" href=\"https://abp.io/conference/2023\">، ومؤتمر ABP .NET</a> ، ونحضر أو نرعى الأحداث المتعلقة بـ .NET والتي نقدم فيها بعض الهدايا.<br><br> يمكنك متابعة هذه الصفحة لرؤية السحوبات القادمة أو حضورها أو الاطلاع على السحوبات السابقة التي قمنا بسحبها بما في ذلك الفائزين.<br><br> شكرا لكونك عضوا نشطا! نراكم في السحوبات القادمة.",
     "RafflesInfoTitle": "<span class=\"gradient-community\">سحوبات</span> مجتمع ABP",
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> أيد.",
-    "Preview": "معاينة"
+    "Preview": "معاينة",
+    "VisitVideoCourseDescription": "إذا كنت ترغب في تعلم أساسيات إطار عمل برنامج ABP، فاطلع على دورات الفيديو الخاصة ببرنامج ABP Essentials.",
+    "VisitPage": "زر الصفحة"
   }
 }

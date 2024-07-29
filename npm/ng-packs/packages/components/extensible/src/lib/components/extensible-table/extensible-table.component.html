@@ -50,7 +50,11 @@
           <ng-container *abpVisible="row['_' + prop.name]?.visible">
             @if (!row['_' + prop.name].component) {
               <div
-                [innerHTML]="row['_' + prop.name]?.value | async"
+                [innerHTML]="
+                  !prop.isExtra
+                    ? (row['_' + prop.name]?.value | async)
+                    : ('::' + (row['_' + prop.name]?.value | async) | abpLocalization)
+                "
                 (click)="
                   prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
                 "
