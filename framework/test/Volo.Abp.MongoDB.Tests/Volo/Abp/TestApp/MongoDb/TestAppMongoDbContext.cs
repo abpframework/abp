@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
@@ -36,6 +37,11 @@ public class TestAppMongoDbContext : AbpMongoDbContext, ITestAppMongoDbContext, 
         modelBuilder.Entity<City>(b =>
         {
             b.CollectionName = "MyCities";
+        });
+        
+        modelBuilder.Entity<Person>(b =>
+        {
+            b.CreateCollectionOptions.Collation = new Collation(locale:"en_US", strength: CollationStrength.Secondary);
         });
     }
 }

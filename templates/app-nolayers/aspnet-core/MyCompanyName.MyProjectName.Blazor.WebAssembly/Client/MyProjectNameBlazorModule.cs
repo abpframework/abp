@@ -67,7 +67,6 @@ public class MyProjectNameBlazorModule : AbpModule
         ConfigureHttpClient(context, environment);
         ConfigureBlazorise(context);
         ConfigureRouter(context);
-        ConfigureUI(builder);
         ConfigureMenu(context);
         ConfigureAutoMapper(context);
         ConfigureHttpClientProxies(context);

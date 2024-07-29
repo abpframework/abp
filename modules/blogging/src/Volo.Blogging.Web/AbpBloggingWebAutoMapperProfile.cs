@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Volo.Abp.AutoMapper;
-using Volo.Blogging.Pages.Blog.Posts;
+using Volo.Blogging.Pages.Blogs.Posts;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging

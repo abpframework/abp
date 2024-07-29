@@ -70,6 +70,11 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDe
     {
         //TODO: Trigger an AbpExceptionHandled event or something like that.
 
+        if (context.ExceptionHandled)
+        {
+            return;
+        }
+
         var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
         var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
         var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception!, options =>
@@ -106,6 +111,6 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDe
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
         }
 
-        context.Exception = null; //Handled!
+        context.ExceptionHandled = true; //Handled!
     }
 }

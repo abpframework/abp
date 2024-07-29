@@ -121,7 +121,10 @@ export class FormProp<R = any> extends Prop<R> {
 export class FormPropData<R = any> extends PropData<R> {
   getInjected: PropData<R>['getInjected'];
 
-  constructor(injector: Injector, public readonly record: R) {
+  constructor(
+    injector: Injector,
+    public readonly record: R,
+  ) {
     super();
 
     this.getInjected = injector.get.bind(injector);

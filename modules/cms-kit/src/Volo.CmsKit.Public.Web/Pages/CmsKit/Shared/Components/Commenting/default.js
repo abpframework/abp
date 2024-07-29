@@ -178,6 +178,7 @@
                         }),
                         success: function () {
                             widgetManager.refresh($widget);
+                            $form.trigger('reset');
                             abp.ui.clearBusy();
                         },
                         error: function (data) {

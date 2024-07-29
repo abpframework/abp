@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Microsoft.Extensions.Options;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
@@ -11,7 +11,7 @@ using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Blog.Posts
+namespace Volo.Blogging.Pages.Blogs.Posts
 {
     public class DetailModel : BloggingPageModel
     {
@@ -19,6 +19,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly ICommentAppService _commentAppService;
+        private readonly BloggingUrlOptions _blogOptions;
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -47,16 +48,28 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty(SupportsGet = true)]
         public string TagName { get; set; }
 
-        public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService, ICommentAppService commentAppService)
+        public DetailModel(IPostAppService postAppService, IBlogAppService blogAppService, ICommentAppService commentAppService, IOptions<BloggingUrlOptions> blogOptions)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
             _commentAppService = commentAppService;
+            _blogOptions = blogOptions.Value;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
             if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
+            }
+            
+            if (_blogOptions.SingleBlogMode.Enabled)
+            {
+                BlogShortName = _blogOptions.SingleBlogMode.BlogName;
+            }
+            
+            Blog = await GetBlogAsync(_blogAppService, _blogOptions, BlogShortName);
+            if(Blog == null)
             {
                 return NotFound();
             }
@@ -76,6 +89,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
             });
 
             FocusCommentId = comment.Id;
+            
+            Blog = await GetBlogAsync(_blogAppService, _blogOptions, BlogShortName);
+            if(Blog == null)
+            {
+                return NotFound();
+            }
 
             await GetData();
 
@@ -84,7 +103,6 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         private async Task GetData()
         {
-            Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Post = await _postAppService.GetForReadingAsync(new GetPostInput { BlogId = Blog.Id, Url = PostUrl });
             
             PostsList = Post.Writer != null

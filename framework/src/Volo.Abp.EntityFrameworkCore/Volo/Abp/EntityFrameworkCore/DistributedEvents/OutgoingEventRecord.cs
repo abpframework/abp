@@ -37,6 +37,10 @@ public class OutgoingEventRecord :
 
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
+        foreach (var property in eventInfo.ExtraProperties)
+        {
+            this.SetProperty(property.Key, property.Value);
+        }
     }
 
     public OutgoingEventInfo ToOutgoingEventInfo()

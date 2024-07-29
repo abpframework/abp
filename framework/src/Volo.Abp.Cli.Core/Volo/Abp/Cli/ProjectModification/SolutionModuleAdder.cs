@@ -188,7 +188,7 @@ public class SolutionModuleAdder : ITransientDependency
         }
 
         await PublishEventAsync(6, "Configuring angular projects...");
-        
+
         var moduleName = module.Name.Split('.').Last();
 
         ConfigureAngularPackagesForAppModuleFile(angularPath, angularPackages, moduleName);
@@ -301,7 +301,8 @@ public class SolutionModuleAdder : ITransientDependency
 
     private async Task RunBundleForBlazorAsync(string[] projectFiles, ModuleWithMastersInfo module)
     {
-        var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
+        var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.Client.csproj")) ??
+                            projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
 
         if (blazorProject == null || !module.NugetPackages.Any(np => np.Target == NuGetPackageTarget.Blazor))
         {
@@ -625,7 +626,7 @@ public class SolutionModuleAdder : ITransientDependency
     private async Task AddNugetAndNpmReferences(ModuleWithMastersInfo module, string[] projectFiles,
         bool useDotnetCliToInstall)
     {
-        var webPackagesWillBeAddedToBlazorServerProject = SouldWebPackagesBeAddedToBlazorServerProject(module, projectFiles);
+        var webPackagesWillBeAddedToBlazorServerProject = ShouldWebPackagesBeAddedToBlazorServerProject(module, projectFiles);
 
         await PublishEventAsync(3, "Adding nuget package references");
         foreach (var nugetPackage in module.NugetPackages)
@@ -687,7 +688,7 @@ public class SolutionModuleAdder : ITransientDependency
         }
     }
 
-    private static bool SouldWebPackagesBeAddedToBlazorServerProject(ModuleWithMastersInfo module, string[] projectFiles)
+    private static bool ShouldWebPackagesBeAddedToBlazorServerProject(ModuleWithMastersInfo module, string[] projectFiles)
     {
         var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
 
