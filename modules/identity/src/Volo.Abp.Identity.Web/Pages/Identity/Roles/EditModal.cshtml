@@ -34,7 +34,7 @@
 
             <abp-input asp-for="Role.IsPublic" />
 
-            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.RoleInfoModel>())
+            @foreach (var propertyInfo in await ObjectExtensionManager.Instance.GetPropertiesAndCheckPolicyAsync<CreateModalModel.RoleInfoModel>(HttpContext.RequestServices))
             {
                 if (!propertyInfo.Name.EndsWith("_Text"))
                 {
