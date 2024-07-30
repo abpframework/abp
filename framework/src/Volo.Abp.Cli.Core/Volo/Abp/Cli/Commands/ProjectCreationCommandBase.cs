@@ -347,16 +347,15 @@ public abstract class ProjectCreationCommandBase
         uiFramework = uiFramework == UiFramework.NotSpecified || uiFramework == UiFramework.None ? UiFramework.Mvc : uiFramework;
         databaseProvider = databaseProvider == DatabaseProvider.NotSpecified ? DatabaseProvider.EntityFrameworkCore : databaseProvider;
 
-        var urlPrefix = commercial ? "commercial" : "www";
         var tieredYesNo = tiered ? "yes" : "no";
-        var url = $"https://{urlPrefix}.abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}";
+        var url = $"https://abp.io/project-created-success?ui={uiFramework:g}&db={databaseProvider:g}&tiered={tieredYesNo}&commercial={(commercial ? "yes" : "no")}";
 
         CmdHelper.Open(url);
     }
 
     protected void OpenMicroserviceDocumentPage()
     {
-        var url = "https://docs.abp.io/en/commercial/latest/startup-templates/microservice/index";
+        var url = "https://abp.io/docs/latest/solution-templates/microservice";
 
         CmdHelper.Open(url);
     }

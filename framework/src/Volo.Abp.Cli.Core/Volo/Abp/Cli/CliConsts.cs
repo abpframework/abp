@@ -6,7 +6,7 @@ public static class CliConsts
 
     public const string BranchPrefix = "branch@";
 
-    public const string DocsLink = "https://docs.abp.io";
+    public const string DocsLink = "https://abp.io/docs";
 
     public const string HttpClientName = "AbpHttpClient";
 
