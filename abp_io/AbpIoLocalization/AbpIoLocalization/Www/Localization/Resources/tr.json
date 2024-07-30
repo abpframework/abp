@@ -298,7 +298,7 @@
     "SeparateIdentityServer": "Ayrı Kimlik Sunucusu",
     "Preview": "Önizleme",
     "CreateANewSolution": "Yeni bir çözüm oluşturun",
-    "ABPFrameworkFeatures": "ABP Framework <span class=\"gradient-framework\">Özellikleri</span>",
+    "FrameworkFeatures": "ABP Framework <span class=\"gradient-framework\">Özellikleri</span>",
     "ThirdPartyTools": "Üçüncü taraf araçlar",
     "Back": "Geri",
     "SeeMore": "Daha fazla göster",

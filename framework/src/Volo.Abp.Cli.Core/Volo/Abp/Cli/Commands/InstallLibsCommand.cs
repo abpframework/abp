@@ -58,7 +58,7 @@ public class InstallLibsCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }

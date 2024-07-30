@@ -39,14 +39,7 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
 
             var timer = workerType.GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
 
-            if (worker is AsyncPeriodicBackgroundWorkerBase)
-            {
-                period = ((AbpAsyncTimer?)timer)?.Period;
-            }
-            else
-            {
-                period = ((AbpTimer?)timer)?.Period;
-            }
+            period = worker is AsyncPeriodicBackgroundWorkerBase ? ((AbpAsyncTimer?)timer)?.Period : ((AbpTimer?)timer)?.Period;
         }
         else
         {
@@ -60,10 +53,10 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
 
         JobDetail = JobBuilder
             .Create<QuartzPeriodicBackgroundWorkerAdapter<TWorker>>()
-            .WithIdentity(workerType.FullName!)
+            .WithIdentity(BackgroundWorkerNameAttribute.GetName<TWorker>())
             .Build();
         Trigger = TriggerBuilder.Create()
-            .WithIdentity(workerType.FullName!)
+            .WithIdentity(BackgroundWorkerNameAttribute.GetName<TWorker>())
             .WithSimpleSchedule(builder => builder.WithInterval(TimeSpan.FromMilliseconds(period.Value)).RepeatForever())
             .Build();
     }

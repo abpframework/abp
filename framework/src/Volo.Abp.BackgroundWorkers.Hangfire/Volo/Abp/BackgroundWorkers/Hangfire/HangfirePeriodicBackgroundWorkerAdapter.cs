@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,9 +14,9 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
 
     public HangfirePeriodicBackgroundWorkerAdapter()
     {
-        _doWorkAsyncMethod =
-            typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        _doWorkAsyncMethod = typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
         _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        RecurringJobId = BackgroundWorkerNameAttribute.GetNameOrNull<TWorker>();
     }
 
     public async override Task DoWorkAsync(CancellationToken cancellationToken = default)
@@ -33,4 +34,6 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
                 break;
         }
     }
+    
+    
 }
