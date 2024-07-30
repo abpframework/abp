@@ -189,7 +189,7 @@ var abp = abp || {};
                 var propertyConfig = objectConfig.properties[propertyName];
 
                 var policy = propertyConfig.policy;
-                if (!checkPolicy(policy.globalFeatures.features, policy.globalFeatures.requiresAll, abp.features.isEnabled) ||
+                if (!checkPolicy(policy.globalFeatures.features, policy.globalFeatures.requiresAll, abp.globalFeatures.isEnabled) ||
                     !checkPolicy(policy.features.features, policy.features.requiresAll, abp.features.isEnabled) ||
                     !checkPolicy(policy.permissions.permissionNames, policy.permissions.requiresAll, abp.auth.isGranted)) {
                     continue;
