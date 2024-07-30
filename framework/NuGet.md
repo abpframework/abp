@@ -11,21 +11,21 @@ ABP offers an opinionated architecture to build enterprise software solutions wi
 
 🔗GitHub Repository: https://github.com/abpframework/abp
 
-🔗Samples: https://docs.abp.io/en/abp/latest/Samples/Index
+🔗Samples: https://abp.io/docs/latest/Samples/Index
 
 🔗Official Theme: https://www.LeptonTheme.com
 
-🔗Documentation: https://docs.abp.io
+🔗Documentation: https://abp.io/docs
 
-🔗Community: https://community.abp.io
+🔗Community: https://abp.io/community
 
-🔗Blog: https://blog.abp.io
+🔗Blog: https://abp.io/blog
 
 🔗Books: https://abp.io/books
 
 🔗Twitter: https://twitter.com/abpframework
 
-🔗Discord: https://community.abp.io/discord
+🔗Discord: https://abp.io/community/discord
 
 🔗Stackoverflow: https://stackoverflow.com/questions/tagged/abp
 
@@ -124,8 +124,6 @@ Support for open-source ABP Framework client-side packages is available at [GitH
 
 If you are building an enterprise-level application with pro support, extra tools like a code generator, fancy themes and a microservice template, time to invest in the commercial version! 
 
-To understand how it works, see [How it Works]( https://commercial.abp.io/how-it-works) page.
+To understand how it works, see [How it Works](https://abp.io/how-it-works) page.
 
-If you wonder why you should choose ABP Commercial, check out [Why ABP.IO Platform](https://docs.abp.io/en/commercial/latest/why-abp-io-platform) page.
-
-Official website:  [https://commercial.abp.io](https://commercial.abp.io/)
+If you wonder why you should choose ABP Commercial, check out [Why ABP.IO Platform](https://abp.io/docs/latest/others/why-abp-platform) page.

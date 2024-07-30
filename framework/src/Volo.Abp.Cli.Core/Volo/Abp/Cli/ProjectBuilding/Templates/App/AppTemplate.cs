@@ -14,6 +14,6 @@ public class AppTemplate : AppTemplateBase
     public AppTemplate()
         : base(TemplateName)
     {
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Application";
+        DocumentUrl = CliConsts.DocsLink + "latest/solution-templates/layered-web-application";
     }
 }
