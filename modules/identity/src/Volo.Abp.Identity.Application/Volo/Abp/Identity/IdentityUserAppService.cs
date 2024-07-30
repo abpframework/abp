@@ -172,21 +172,21 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
         }
 
-
         if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
         {
             (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
         }
 
+        (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+
         if (user.Id != CurrentUser.Id)
         {
-            (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+            user.SetIsActive(input.IsActive);
         }
 
         user.Name = input.Name;
         user.Surname = input.Surname;
         (await UserManager.UpdateAsync(user)).CheckErrors();
-        user.SetIsActive(input.IsActive);
         if (input.RoleNames != null && await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
         {
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();

@@ -160,7 +160,7 @@
     "ABPCLIExplanation": "ABP CLI (sučelje naredbenog retka) alat je naredbenog retka za izvođenje nekih uobičajenih operacija za rješenja temeljena na ABP-u.",
     "ABPSuiteEasilyCURD": "ABP Suite je alat koji vam omogućuje jednostavno stvaranje CRUD stranica",
     "WeAreHereToHelp": "Ovdje smo da <span class=\"zero-text\">pomognemo</span>",
-    "BrowseOrAskQuestion": "Možete pregledavati naše teme pomoći ili pretraživati u često postavljanim pitanjima ili nam možete postaviti pitanje koristeći <a href=\"{0}\" class=\"text-success\">obrazac za kontakt</a> .",
+    "BrowseOrAskQuestion": "Možete pregledavati naše teme pomoći ili pretraživati u često postavljanim pitanjima ili nam možete postaviti pitanje koristeći <a href=\"{0}\">obrazac za kontakt</a> .",
     "SearchQuestionPlaceholder": "Pretražite u često postavljanim pitanjima",
     "WhatIsTheABPCommercial": "Što je ABP Commercial?",
     "WhatAreDifferencesThanAbpFramework": "Koje su razlike između open source ABP Framework i ABP Commercial?",
