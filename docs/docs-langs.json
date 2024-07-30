@@ -4,16 +4,6 @@
       "DisplayName" : "English",
       "Code" : "en",
       "IsDefault": true
-    },
-	{
-      "DisplayName" : "Português",
-      "Code" : "pt-BR",
-      "IsDefault": false
-    },
-    {
-      "DisplayName" : "简体中文",
-      "Code" : "zh-Hans",
-      "IsDefault": false
     }
   ]
 }

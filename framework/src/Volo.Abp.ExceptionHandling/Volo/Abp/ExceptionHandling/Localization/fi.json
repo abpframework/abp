@@ -21,6 +21,9 @@
     "404Message": "Sivua ei löydetty",
     "500Message": "Sisäinen palvelinvirhe",
     "403MessageDetail": "Sinulla ei ole oikeutta suorittaa tätä toimintoa!",
-    "404MessageDetail": "Valitettavasti tässä osoitteessa ei ole mitään."
+    "404MessageDetail": "Valitettavasti tässä osoitteessa ei ole mitään.",
+    "Unauthorized": "Sinulla ei ole oikeutta suorittaa tätä toimintoa!",
+    "invalid_token": "Virheellinen token",
+    "SessionExpired": "Istuntosi on vanhentunut. Kirjaudu sisään jatkaaksesi sovelluksessa."
   }
 }

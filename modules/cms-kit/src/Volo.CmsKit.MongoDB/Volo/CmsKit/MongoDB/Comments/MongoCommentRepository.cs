@@ -45,6 +45,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     )
     {
@@ -56,6 +57,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             authorUsername,
             creationStartDate,
             creationEndDate,
+            commentApproveState,
             token);
 
         var comments = await query.OrderBy(sorting.IsNullOrEmpty() ? "creationTime desc" : sorting)
@@ -66,20 +68,18 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         var commentIds = comments.Select(x => x.Id).ToList();
 
         var authorsQuery = from comment in (await GetMongoQueryableAsync(token))
-                           join user in (await GetDbContextAsync(token)).CmsUsers on comment.CreatorId equals user.Id
-                           where commentIds.Contains(comment.Id)
-                           orderby comment.CreationTime
-                           select user;
+            join user in (await GetDbContextAsync(token)).CmsUsers on comment.CreatorId equals user.Id
+            where commentIds.Contains(comment.Id)
+            orderby comment.CreationTime
+            select user;
 
         var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(token);
 
         return comments
             .Select(
                 comment =>
-                    new CommentWithAuthorQueryResultItem
-                    {
-                        Comment = comment,
-                        Author = authors.FirstOrDefault(a => a.Id == comment.CreatorId)
+                    new CommentWithAuthorQueryResultItem {
+                        Comment = comment, Author = authors.FirstOrDefault(a => a.Id == comment.CreatorId)
                     }).ToList();
     }
 
@@ -90,6 +90,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     )
     {
@@ -100,6 +101,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             authorUsername,
             creationStartDate,
             creationEndDate,
+            commentApproveState,
             cancellationToken);
 
         return await query.As<IMongoQueryable<Comment>>()
@@ -109,6 +111,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
     public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
         string entityType,
         string entityId,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -122,8 +125,16 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
 
         var authors = await ApplyDataFilters<IMongoQueryable<CmsUser>, CmsUser>(authorsQuery).ToListAsync(GetCancellationToken(cancellationToken));
 
-        var comments = await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(c => c.EntityId == entityId && c.EntityType == entityType)
+        var commentsQuery = (await GetMongoQueryableAsync(cancellationToken))
+        .Where(c => c.EntityId == entityId && c.EntityType == entityType);
+
+        commentsQuery = commentApproveState switch {
+            CommentApproveState.Approved => commentsQuery.Where(c => c.IsApproved == true),
+            CommentApproveState.Approved | CommentApproveState.Waiting => commentsQuery.Where(c => c.IsApproved == true || c.IsApproved == null),
+            _ => commentsQuery
+        };
+
+        var comments = await commentsQuery
             .OrderBy(c => c.CreationTime)
             .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -172,6 +183,7 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     )
     {
@@ -190,6 +202,9 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             .WhereIf(!entityType.IsNullOrWhiteSpace(), c => c.EntityType == entityType)
             .WhereIf(repliedCommentId.HasValue, c => c.RepliedCommentId == repliedCommentId)
             .WhereIf(creationStartDate.HasValue, c => c.CreationTime >= creationStartDate)
-            .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate);
+            .WhereIf(creationEndDate.HasValue, c => c.CreationTime <= creationEndDate)
+            .WhereIf(CommentApproveState.Approved == commentApproveState, c => c.IsApproved == true)
+            .WhereIf(CommentApproveState.Disapproved == commentApproveState, c => c.IsApproved == false)
+            .WhereIf(CommentApproveState.Waiting == commentApproveState, c => c.IsApproved == null);
     }
 }

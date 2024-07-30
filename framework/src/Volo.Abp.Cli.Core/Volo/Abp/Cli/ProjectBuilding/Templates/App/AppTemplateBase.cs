@@ -235,6 +235,10 @@ public abstract class AppTemplateBase : TemplateInfo
         {
             steps.Add(new ChangeThemeStyleStep());
         }
+        else
+        {
+            steps.Add(new RemoveFileStep("LeptonXFooter.razor", false));
+        }
 
         RemoveThemeLogoFolders(context, steps);
 
