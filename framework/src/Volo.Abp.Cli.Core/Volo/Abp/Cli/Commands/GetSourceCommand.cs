@@ -100,7 +100,7 @@ public class GetSourceCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp get-source Volo.Blogging");
         sb.AppendLine("  abp get-source Volo.Blogging -o d:\\my-project");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
