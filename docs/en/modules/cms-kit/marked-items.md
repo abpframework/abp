@@ -1,4 +1,4 @@
-# Marked Item System
+# CMS Kit: Marked Item System
 
 CMS kit provides a marking system to mark any kind of resource, like a blog post or a product, as a favorite, starred, flagged, or bookmarked.
 
