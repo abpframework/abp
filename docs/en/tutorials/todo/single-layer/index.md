@@ -183,7 +183,7 @@ namespace TodoApp.Entities;
 
 public class TodoItem : BasicAggregateRoot<Guid>
 {
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 }
 ````
 
@@ -288,7 +288,7 @@ namespace TodoApp.Services.Dtos;
 public class TodoItemDto
 {
     public Guid Id { get; set; }
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 }
 ```
 
@@ -420,7 +420,7 @@ namespace TodoApp.Pages;
 
 public class IndexModel : AbpPageModel
 {
-    public List<TodoItemDto> TodoItems { get; set; }
+    public List<TodoItemDto> TodoItems { get; set; } = new();
 
     private readonly TodoAppService _todoAppService;
 
@@ -543,8 +543,6 @@ As for the final touch, open the `Index.cshtml.css` file in the `Pages` folder a
 #TodoList li {
     padding: 5px;
     margin: 5px 0px;
-    border: 1px solid #cccccc;
-    background-color: #f5f5f5;
 }
 
 #TodoList li i
