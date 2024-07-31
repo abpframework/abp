@@ -578,7 +578,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
 
     public string GetShortDescription()
     {
-        return "Install, update, remove or start ABP Suite. See https://commercial.abp.io/tools/suite.";
+        return "Install, update, remove or start ABP Suite. See https://abp.io/suite.";
     }
 
     public static class Options

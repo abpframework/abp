@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Tweefactor authenticatie",
     "DisplayName:IsActive": "Actief",
     "DisplayName:LockoutEnabled": "Account vergrendelen",
+    "Description:LockoutEnabled": "Account vergrendelen na mislukte inlogpogingen",
     "NewRole": "Nieuwe rol",
     "RoleName": "Rol naam",
     "CreationTime": "Creatie tijd",

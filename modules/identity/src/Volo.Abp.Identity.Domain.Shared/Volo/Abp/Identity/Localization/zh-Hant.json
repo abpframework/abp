@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "二次認證",
     "DisplayName:IsActive": "啟用",
     "DisplayName:LockoutEnabled": "帳號鎖定",
+    "Description:LockoutEnabled": "登錄嘗試失敗后鎖定帳戶",
     "NewRole": "新角色",
     "RoleName": "角色名稱",
     "CreationTime": "建立時間",

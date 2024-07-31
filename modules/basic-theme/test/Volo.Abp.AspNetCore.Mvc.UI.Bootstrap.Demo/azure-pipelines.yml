@@ -21,7 +21,7 @@ variables:
   DOCKER_BUILDKIT: 1
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: aks-deployer-agent
 
 
 stages:
@@ -31,21 +31,21 @@ stages:
   - job: Build
     displayName: Package Helm Charts and Values
     pool:
-      vmImage: 'ubuntu-latest'
+      name: aks-deployer-agent
     steps:
     - checkout: self
     - checkout: devops
 
-    - script: |
-        cd $(bootstrapTaghelpersDir) && dotnet publish -c Release -o bin/Release/publish
+    # - script: |
+    #     cd $(bootstrapTaghelpersDir) && dotnet publish -c Release -o bin/Release/publish
 
     - task: Docker@2
       displayName: Build Image
       inputs:
         command: build
         repository: demo/bootstrap-taghelpers
-        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile
-        buildContext: $(bootstrapTaghelpersDir)
+        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile.azure
+        buildContext: $(workDir)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
