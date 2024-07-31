@@ -27,13 +27,16 @@ namespace Volo.Docs.Pages.Documents
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = _uiOptions.RoutePrefix;
+            if (_uiOptions.SingleProjectMode.Enable)
+            {
+                return RedirectToPage("/Documents/Project/Index");
+            }
 
             var listResult = await _projectAppService.GetListAsync();
 
             if (listResult.Items.Count == 1)
             {
-                return Redirect(DocumentsUrlPrefix + listResult.Items[0].ShortName);
+                return RedirectToPage("/Documents/Project/Index", new { shortName = listResult.Items[0].ShortName });
             }
 
             Projects = listResult.Items;

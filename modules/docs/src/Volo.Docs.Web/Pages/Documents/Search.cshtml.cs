@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Documents.Version;
@@ -35,14 +36,16 @@ namespace Volo.Docs.Pages.Documents
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentAppService _documentAppService;
         private readonly HtmlEncoder _encoder;
+        private readonly DocsUiOptions _uiOptions;
 
         public SearchModel(IProjectAppService projectAppService,
             IDocumentAppService documentAppService,
-            HtmlEncoder encoder)
+            HtmlEncoder encoder, IOptions<DocsUiOptions> uiOptions)
         {
             _projectAppService = projectAppService;
             _documentAppService = documentAppService;
             _encoder = encoder;
+            _uiOptions = uiOptions.Value;
         }
 
         public List<DocumentSearchOutput> SearchOutputs { get; set; } = new List<DocumentSearchOutput>();
@@ -61,7 +64,7 @@ namespace Volo.Docs.Pages.Documents
 
             KeyWord = keyword;
 
-            Project = await _projectAppService.GetAsync(ProjectName);
+            await SetProjectAsync();
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
 
@@ -116,6 +119,28 @@ namespace Volo.Docs.Pages.Documents
             }
 
             return Page();
+        }
+        
+        private async Task SetProjectAsync()
+        {
+            if (!_uiOptions.SingleProjectMode.Enable)
+            {
+                Project = await _projectAppService.GetAsync(ProjectName);
+                return;
+            }
+            
+            var singleProjectName = ProjectName ?? _uiOptions.SingleProjectMode.ProjectName;
+            if (!singleProjectName.IsNullOrWhiteSpace())
+            {
+                Project = await _projectAppService.GetAsync(singleProjectName);
+                return;
+            }
+            
+            var listResult = await _projectAppService.GetListAsync();
+            if (listResult.Items.Count == 1)
+            {
+                Project = listResult.Items[0];
+            }
         }
     }
 }

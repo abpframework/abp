@@ -43,5 +43,19 @@ namespace Volo.Docs
             var documentsAfterClear = await DocumentRepository.GetListByProjectId(DocsTestData.ProjectId);
             documentsAfterClear.ForEach(d => d.LastCachedTime.ShouldBe(DateTime.MinValue));
         }
+        
+        [Fact] 
+        public async Task GetUniqueDocumentsByProjectIdPagedAsync()
+        {
+            var documents = await DocumentRepository.GetUniqueDocumentsByProjectIdPagedAsync(DocsTestData.ProjectId, 0, 10);
+            documents.Count.ShouldBe(1);
+        }
+        
+        [Fact]
+        public async Task GetUniqueDocumentCountByProjectIdAsync()
+        {
+            var count = await DocumentRepository.GetUniqueDocumentCountByProjectIdAsync(DocsTestData.ProjectId);
+            count.ShouldBe(1);
+        }
     }
 }
