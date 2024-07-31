@@ -2,6 +2,7 @@
 
 The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../Upgrading.md).
 
+- [8.2 to 8.3](Abp-8_3.md)
 - [8.x to 8.2](Abp-8_2.md)
 - [8.0 to 8.1](Abp-8_1.md)
 - [7.x to 8.0](Abp-8_0.md)

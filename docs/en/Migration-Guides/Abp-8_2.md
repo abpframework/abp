@@ -27,7 +27,7 @@ In this version, default padding (padding-top: 1.5rem and padding-bottom: 1.5rem
 
 ## Moved members page directory for Blogging Module
 
-With this version on, ABP Framework allows you to use single blog mode, without needing to define a blog and a prefix. With this change, the following namespace changes were done:
+With this version on, ABP allows you to use single blog mode, without needing to define a blog and a prefix. With this change, the following namespace changes were done:
 * `Volo.Blogging.Pages.Blog` -> `Volo.Blogging.Pages.Blogs`
 * `Volo.Blogging.Pages.Members` -> `Volo.Blogging.Pages.Blogs.Members` (members folder)
 
