@@ -1,3 +1,0 @@
-## Guid Generation
-
-Façam
