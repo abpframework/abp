@@ -11,6 +11,7 @@ using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
 using Octokit;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Docs.GitHub.Documents.Version;
 using Volo.Extensions;
 using Project = Volo.Docs.Projects.Project;
@@ -29,8 +30,8 @@ namespace Volo.Docs.GitHub.Documents
         private readonly DocsGithubLanguageOptions _docsGithubLanguageOptions;
 
         public GithubDocumentSource(
-            IGithubRepositoryManager githubRepositoryManager, 
-            IGithubPatchAnalyzer githubPatchAnalyzer, 
+            IGithubRepositoryManager githubRepositoryManager,
+            IGithubPatchAnalyzer githubPatchAnalyzer,
             IDocumentRepository documentRepository,
             IOptions<DocsGithubLanguageOptions> docsGithubLanguageOptions)
         {
@@ -275,7 +276,7 @@ namespace Volo.Docs.GitHub.Documents
 
             if (githubVersionProviderSource == GithubVersionProviderSource.Branches && project.ExtraProperties.ContainsKey("VersionBranchPrefix"))
             {
-                var prefix = (string) project.ExtraProperties["VersionBranchPrefix"];
+                var prefix = project.GetProperty<string>("VersionBranchPrefix");
 
                 if (!string.IsNullOrEmpty(prefix))
                 {
@@ -307,8 +308,8 @@ namespace Volo.Docs.GitHub.Documents
 
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
         {
-            return project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                ? (GithubVersionProviderSource) (long) project.ExtraProperties["GithubVersionProviderSource"]
+            return project.HasProperty("GithubVersionProviderSource")
+                ? project.GetProperty<GithubVersionProviderSource>("GithubVersionProviderSource")
                 : GithubVersionProviderSource.Releases;
         }
 
@@ -344,9 +345,9 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch
             {
-                Logger.LogWarning("Could not retrieved language list from Github. Using the default language from DocsGithubLanguageOptions."); 
-                
-                return new LanguageConfig 
+                Logger.LogWarning("Could not retrieved language list from Github. Using the default language from DocsGithubLanguageOptions.");
+
+                return new LanguageConfig
                 {
                     Languages = new List<LanguageConfigElement> { _docsGithubLanguageOptions.DefaultLanguage }
                 };

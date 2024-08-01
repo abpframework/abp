@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -68,7 +69,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public string DocumentsUrlPrefix { get; set; }
 
         public bool ShowProjectsCombobox { get; set; }
-        
+
         public bool ShowProjectsComboboxLabel { get; set; }
 
         public bool IsVersionPreview { get; set; }
@@ -83,8 +84,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool FullSearchEnabled { get; set; }
 
-        public bool IsLatestVersion { get; private set; } 
-        
+        public bool IsLatestVersion { get; private set; }
+
         public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
@@ -93,7 +94,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentSectionRenderer _documentSectionRenderer;
         private readonly DocsUiOptions _uiOptions;
-        
+
         protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
 
         public IndexModel(
@@ -123,7 +124,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return Redirect(decodedUrl);
             }
-            
+
             return await SetPageAsync();
         }
 
@@ -143,7 +144,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     Response.StatusCode = 404;
                     return Page();
                 }
-                
+
             }
             catch (EntityNotFoundException e)
             {
@@ -168,7 +169,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return RedirectToDefaultDocument();
             }
-            
+
             var usingSingleLanguageMode = !_uiOptions.MultiLanguageMode && LanguageCode.IsNullOrWhiteSpace();
 
             if (!usingSingleLanguageMode && !CheckLanguage())
@@ -220,14 +221,14 @@ namespace Volo.Docs.Pages.Documents.Project
                 Project = await _projectAppService.GetAsync(ProjectName);
                 return;
             }
-            
+
             var singleProjectName = ProjectName ?? _uiOptions.SingleProjectMode.ProjectName;
             if (!singleProjectName.IsNullOrWhiteSpace())
             {
                 Project = await _projectAppService.GetAsync(singleProjectName);
                 return;
             }
-            
+
             var listResult = await _projectAppService.GetListAsync();
             if (listResult.Items.Count == 1)
             {
@@ -265,12 +266,12 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             return Request.Scheme + Uri.SchemeDelimiter + Request.Host.Value + Request.PathBase + DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, DocsAppConsts.Latest, DocumentName);
         }
-        
+
         public string CreateDocumentLink(string documentName)
         {
             return DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, documentName);
         }
-        
+
         public string BuildDocumentUrl(string projectName, string languageCode, string version, string documentName)
         {
             return DocsLinkGenerator.GenerateLink(projectName, languageCode, version, documentName);
@@ -279,13 +280,13 @@ namespace Volo.Docs.Pages.Documents.Project
         private IActionResult RedirectToDefaultLanguage()
         {
             return Redirect(DocsLinkGenerator.GenerateLink(
-                ProjectName, 
-                DefaultLanguageCode, 
+                ProjectName,
+                DefaultLanguageCode,
                 LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version,
                 DocumentName
             ));
         }
-        
+
         private IActionResult RedirectToDefaultVersion()
         {
             return Redirect(DocsLinkGenerator.GenerateLink(
@@ -301,7 +302,7 @@ namespace Volo.Docs.Pages.Documents.Project
             return Redirect(DocsLinkGenerator.GenerateLink (
                 ProjectName,
                 DefaultLanguageCode,
-                LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version, 
+                LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version,
                 ""
             ));
         }
@@ -374,7 +375,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     $"{DocsAppConsts.Latest}",
                     DocsAppConsts.Latest,
                     true);
-                
+
                 if(string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
                 {
                     Version = RemoveVersionPrefix(Project.LatestVersionBranchName);
@@ -387,16 +388,16 @@ namespace Volo.Docs.Pages.Documents.Project
                 Value = CreateVersionLink(LatestVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
-            
+
             IsLatestVersion = Version == LatestVersionInfo.Version;
-            
+
             return true;
         }
 
         private VersionInfoViewModel GetLatestVersionInfo(List<VersionInfoViewModel> versions)
         {
-            if (Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                && (GithubVersionProviderSource)(long)Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
+            if (Project.HasProperty("GithubVersionProviderSource")
+                && Project.GetProperty<GithubVersionProviderSource>("GithubVersionProviderSource") == GithubVersionProviderSource.Branches)
             {
                 var LatestVersionBranchNameWithoutPrefix = RemoveVersionPrefix(Project.LatestVersionBranchName);
 
@@ -418,12 +419,12 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private string RemoveVersionPrefix(string version)
         {
-            if (!Project.ExtraProperties.ContainsKey("VersionBranchPrefix"))
+            if (!Project.HasProperty("VersionBranchPrefix"))
             {
                 return version;
             }
 
-            var prefix = Project.ExtraProperties["VersionBranchPrefix"]?.ToString();
+            var prefix = Project.GetProperty<string>("VersionBranchPrefix");
 
             if (string.IsNullOrWhiteSpace(version) || string.IsNullOrWhiteSpace(prefix) || !version.StartsWith(prefix) || version.Length <= prefix.Length)
             {
@@ -435,8 +436,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
         {
-            if (!Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                || (GithubVersionProviderSource)(long)Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
+            if (!Project.HasProperty("GithubVersionProviderSource")
+                || Project.GetProperty<GithubVersionProviderSource>("GithubVersionProviderSource") == GithubVersionProviderSource.Releases)
             {
                 versions.First(v => !SemanticVersionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
             }
@@ -467,7 +468,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 version = DocsAppConsts.Latest;
             }
-            
+
             return DocsLinkGenerator.GenerateLink(ProjectName, LanguageCode, version, documentName);
         }
 
@@ -536,7 +537,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 SetUserPreferences();
 
                 var partialTemplates = await GetDocumentPartialTemplatesAsync();
-                
+
                 DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
                 Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
