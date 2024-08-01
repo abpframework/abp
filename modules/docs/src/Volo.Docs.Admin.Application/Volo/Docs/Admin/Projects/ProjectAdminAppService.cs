@@ -81,7 +81,7 @@ namespace Volo.Docs.Admin.Projects
 
             foreach (var extraProperty in input.ExtraProperties)
             {
-                project.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+                project.SetProperty(extraProperty.Key, extraProperty.Value);
             }
 
             project = await _projectRepository.InsertAsync(project);
@@ -106,7 +106,7 @@ namespace Volo.Docs.Admin.Projects
 
             foreach (var extraProperty in input.ExtraProperties)
             {
-                project.ExtraProperties[extraProperty.Key] = extraProperty.Value;
+                project.SetProperty(extraProperty.Key, extraProperty.Value);
             }
 
             project = await _projectRepository.UpdateAsync(project);
@@ -134,18 +134,18 @@ namespace Volo.Docs.Admin.Projects
             {
                 throw new Exception("Cannot find the project with the Id " + projectId);
             }
-            
+
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
-            
+
             var docsCount = await _documentRepository.GetUniqueDocumentCountByProjectIdAsync(projectId);
-            
+
             if (docsCount == 0)
             {
                 return;
             }
-            
+
             const int maxResultCount = 1000;
-            
+
             var skipCount = 0;
             while(skipCount < docsCount)
             {
@@ -164,13 +164,13 @@ namespace Volo.Docs.Admin.Projects
         {
             _elasticSearchService.ValidateElasticSearchEnabled();
             var projects = await _projectRepository.GetListAsync();
-         
+
             foreach (var project in projects)
             {
                 await ReindexProjectAsync(project.Id);
             }
         }
-        
+
         public virtual async Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
         {
             var projects = await _projectRepository.GetListWithoutDetailsAsync();
