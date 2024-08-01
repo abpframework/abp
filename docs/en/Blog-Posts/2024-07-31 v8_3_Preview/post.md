@@ -2,7 +2,7 @@
 
 ![](cover-image.png)
 
-Today, we are happy to release [ABP](abp.io) version **8.3 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
+Today, we are happy to release [ABP](https://abp.io) version **8.3 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
 Try this version and provide feedback for a more stable version of ABP v8.3! Thanks to you in advance.
 
@@ -19,20 +19,14 @@ There are a few breaking changes in this version that may affect your applicatio
 In this section, I will introduce some major features released in this version.
 Here is a brief list of titles explained in the next sections:
 
-* **Framework (Open-Source)**
-    * CMS Kit: Marked Items/Favorites
-    * CMS Kit: Approvement System for Comments
-    * Docs: Added Google Translation Support & Introducing the Single Project Mode
-    * Using DBFunction for Global Query Filters
-* **PRO**
-    * CMS Kit (PRO): FAQ
-* **Package Updates (NuGet & NPM)**
+* CMS Kit: Marked Items/Favorites
+* CMS Kit: Approvement System for Comments
+* Docs: Added Google Translation Support & Introducing the Single Project Mode
+* Using DBFunction for Global Query Filters
+* CMS Kit (PRO): FAQ
+* Package Updates (NuGet & NPM)
 
-### Framework (Open-Source)
-
-In this version, we mostly worked on [CMS Kit](https://abp.io/docs/latest/modules/cms-kit) and [Docs](https://abp.io/docs/latest/modules/docs) modules and made enhancements overall in the ABP Platform.
-
-#### CMS Kit: Marked Items/Favorites
+### CMS Kit: Marked Items/Favorites
 
 CMS Kit provides a marking system to mark any kind of resource, like a blog post or a product, as a favorite, starred, flagged, or bookmarked.
 
@@ -56,7 +50,7 @@ You can select any of the standard marked item icons (as used in the example abo
 
 > Read the [CMS Kit: Marked Item System](https://abp.io/docs/8.3/modules/cms-kit/marked-items) documentation to learn more.
 
-#### CMS Kit: Approvement System for Comments
+### CMS Kit: Approvement System for Comments
 
 CMS Kit Module has been provided a [Commenting System](https://abp.io/docs/8.3/modules/cms-kit/comments) for a while. This system allows you to add the comment feature to any kind of resource, like blog posts, or products. However, this system wasn't providing an approvement system, that allows system administrations to review the comments before publishing them in their application.
 
@@ -68,9 +62,9 @@ When you enable it, whenever a user submits a comment, it can be directly seen o
 
 > Read the [CMS Kit: Comments](https://abp.io/docs/8.3/modules/cms-kit/comments) documentation to learn more.
 
-#### Docs: Added Google Translation Support & Introducing the Single Project Mode
+### Docs: Added Google Translation Support & Introducing the Single Project Mode
 
-In this version, we made some improvements in the [Docs Module](https://abp.io/docs/8.3/modules/docs), added Google Translation support for better findings in the documentation, and introduced a single project mode.
+In this version, we made some improvements in the [Docs Module](https://abp.io/docs/8.3/modules/docs), added Google Translation support for better findings in the documentation, and introduced a single project mode to align our needs in the documentation system with [the unification of the ABP Platform](https://abp.io/blog/new-abp-platform-is-live).
 
 The single project mode allows you to use a single name as a project name in your application. If you are not considering supporting multiple projects with their multiple docs and instead if you have a single project and want to have documentation for it, it's especially useful for you. You just need to configure the `DocsUiOptions`, set the single project mode as **enabled** and also define a constant project name:
 
@@ -90,19 +84,15 @@ In addition to this feature, we also introduced Google Translation support for t
 
 Thanks to this system, you can either translate your documentation into your own language by Google Translation System or search specific keywords to easily find the related topic in the documentation.
 
-#### Using DBFunction for Global Query Filters
+### Using DBFunction for Global Query Filters
 
 In this version, ABP has started using [User-defined function mapping](https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping) for global filters to gain performance improvements and let EF Core generate more precise SQL commands under the hook.
 
 > See the documentation for more info: [Using User-defined function mapping for global filters](https://abp.io/docs/8.3/framework/infrastructure/data-filtering#using-user-defined-function-mapping-for-global-filters)
 
-### PRO
+### CMS Kit: FAQ
 
-We've also worked for pro modules to align the features and changes made in the framework. In addition to that, we introduced the [FAQ System](https://abp.io/docs/latest/modules/cms-kit-pro/faq) for [CMS Kit (PRO)](https://abp.io/docs/latest/modules/cms-kit-pro) Module:
-
-#### CMS Kit (PRO): FAQ
-
-CMS Kit (PRO) provides a [FAQ System](https://abp.io/docs/8.3/modules/cms-kit-pro/faq) to allow users to create, edit, and delete FAQs. Here is an example screenshot from the FAQ page on the admin side:
+CMS Kit provides a [FAQ System](https://abp.io/docs/8.3/modules/cms-kit-pro/faq) to allow users to create, edit, and delete FAQs. Here is an example screenshot from the FAQ page on the admin side:
 
 ![](cms-kit-faq.png)
 
@@ -118,11 +108,11 @@ In this version, we also updated some of the core NuGet and NPM package versions
 
 You can see the following list of the package version changes:
 
-* [Updated Markdig.Signed to v0.37.0](https://github.com/abpframework/abp/pull/20195) - [NuGet](https://www.nuget.org/packages/Markdig.Signed)
-* [Updated Hangfire to v1.8.12](https://github.com/abpframework/abp/pull/20009) - [NuGet](https://www.nuget.org/packages/Hangfire.AspNetCore)
-* [Updated SixLabors.ImageSharp to v3.1.4](https://github.com/abpframework/abp/pull/19643) - [NuGet](https://www.nuget.org/packages/SixLabors.ImageSharp)
-* [Updated Blazorise to v1.5.2](https://github.com/abpframework/abp/pull/19841) - [NuGet](https://www.nuget.org/packages/Blazorise)
-* [Updated datatables.net to v2.0.2](https://github.com/abpframework/abp/pull/19340) - [NPM](https://www.npmjs.com/package/datatables.net)
+* [Updated Markdig.Signed from v0.33.0 to v0.37.0](https://github.com/abpframework/abp/pull/20195) - [NuGet](https://www.nuget.org/packages/Markdig.Signed)
+* [Updated Hangfire from v1.8.6 to v1.8.12](https://github.com/abpframework/abp/pull/20009) - [NuGet](https://www.nuget.org/packages/Hangfire.AspNetCore)
+* [Updated SixLabors.ImageSharp from v3.0.2 to v3.1.4](https://github.com/abpframework/abp/pull/19643) - [NuGet](https://www.nuget.org/packages/SixLabors.ImageSharp)
+* [Updated Blazorise from v1.5.0 to v1.5.2](https://github.com/abpframework/abp/pull/19841) - [NuGet](https://www.nuget.org/packages/Blazorise)
+* [Updated datatables.net from v1.11.4 to v2.0.2](https://github.com/abpframework/abp/pull/19340) - [NPM](https://www.npmjs.com/package/datatables.net)
 
 ## Community News
 
@@ -172,6 +162,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [Create a Generic HTTP Service to Consume a Web API](https://abp.io/community/articles/create-a-generic-http-service-to-consume-a-web-api-yidme2kq) by [Bart Van Hoey](https://github.com/bartvanhoey)
 * [Use User-Defined Function Mapping for Global Filter](https://abp.io/community/articles/use-userdefined-function-mapping-for-global-filter-pht26l07) by [Liming Ma](https://github.com/maliming)
 * [How to use .NET Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk) by [Berkan Şaşmaz](https://twitter.com/berkansasmazz)
+* [Exciting New Feature in ABP.IO CMS Kit: Marked Item System](https://abp.io/community/articles/exciting-new-feature-in-abp.io-cms-kit-marked-item-system.-2hvpq0me) by [Suhaib Mousa](https://abp.io/community/members/suhaibmousa032@gmail.com)
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/submit) to the ABP Community.
 
