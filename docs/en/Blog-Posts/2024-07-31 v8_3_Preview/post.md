@@ -30,7 +30,7 @@ Here is a brief list of titles explained in the next sections:
 
 ### Framework (Open-Source)
 
-In this version, we mostly worked on [CMS Kit](https://abp.io/docs/latest/modules/cms-kit) and [Docs](https://abp.io/docs/latest/modules/docs) modules, and made enhancements overally in the ABP Platform.
+In this version, we mostly worked on [CMS Kit](https://abp.io/docs/latest/modules/cms-kit) and [Docs](https://abp.io/docs/latest/modules/docs) modules and made enhancements overall in the ABP Platform.
 
 #### CMS Kit: Marked Items/Favorites
 
@@ -38,7 +38,7 @@ CMS Kit provides a marking system to mark any kind of resource, like a blog post
 
 ![](cmskit-module-markedItems.png)
 
-This system is especially useful, if you need to highlight some resources and differantiate them from other items. To use the marking system, you need to define an entity type with the icon name, by configuring the `CmsKitMarkedItemOptions`:
+This system is especially useful if you need to highlight some resources and differentiate them from other items. To use the marking system, you need to define an entity type with the icon name, by configuring the `CmsKitMarkedItemOptions`:
 
 ```csharp
 Configure<CmsKitMarkedItemOptions>(options =>
@@ -52,27 +52,27 @@ Configure<CmsKitMarkedItemOptions>(options =>
 });
 ```
 
-You can select any of the standard marked item icons (as used in the example above) or easily customize icons shown in the toggling components.
+You can select any of the standard marked item icons (as used in the example above) or easily customize the icons shown in the toggling components.
 
 > Read the [CMS Kit: Marked Item System](https://abp.io/docs/8.3/modules/cms-kit/marked-items) documentation to learn more.
 
 #### CMS Kit: Approvement System for Comments
 
-CMS Kit Module has been provided a [Commenting System](https://abp.io/docs/8.3/modules/cms-kit/comments) for a while. This system allows you to add the comment feature to any kind of resource, like blog posts, or products. However, this system wasn't providing an approvement system, that allows system administrations to review the comments before publish them in their application.
+CMS Kit Module has been provided a [Commenting System](https://abp.io/docs/8.3/modules/cms-kit/comments) for a while. This system allows you to add the comment feature to any kind of resource, like blog posts, or products. However, this system wasn't providing an approvement system, that allows system administrations to review the comments before publishing them in their application.
 
 In this version, we have introduced the [Approvement System](https://abp.io/docs/8.3/modules/cms-kit/comments#settings), which allows you to _require approval for comments to be published_. It's disabled by default, but you can make it enabled by simply checking the related setting on the settings page:
 
 ![](cmskit-module-comments-settings.png)
 
-When you enabled it, whenever a user submits a comment, it can be directly seen on the back-office application (in the _cms/comments_ page), and you can determine if the comment should be approved or rejected. If you approve the comment, then it will be started to shown on the comment section for the related resource.
+When you enable it, whenever a user submits a comment, it can be directly seen on the back-office application (in the _cms/comments_ page), and you can determine if the comment should be approved or rejected. If you approve the comment, then it will be shown in the comment section for the related resource.
 
 > Read the [CMS Kit: Comments](https://abp.io/docs/8.3/modules/cms-kit/comments) documentation to learn more.
 
 #### Docs: Added Google Translation Support & Introducing the Single Project Mode
 
-In this version, we made some improvements in the [Docs Module](https://abp.io/docs/8.3/modules/docs), added Google Translation support for better findings in the documentation and introduced single project mode.
+In this version, we made some improvements in the [Docs Module](https://abp.io/docs/8.3/modules/docs), added Google Translation support for better findings in the documentation, and introduced a single project mode.
 
-The single project mode allows you to use a single name as a project name in your application. If you are not considering to support multiple projects with their multiple docs and instead if you have a single project and want to have documentation for it, it's especially useful for you. You just need to configure the `DocsUiOptions` and set the single project mode as enabled and also define a constant project name:
+The single project mode allows you to use a single name as a project name in your application. If you are not considering supporting multiple projects with their multiple docs and instead if you have a single project and want to have documentation for it, it's especially useful for you. You just need to configure the `DocsUiOptions`, set the single project mode as **enabled** and also define a constant project name:
 
 ```csharp
 Configure<DocsUiOptions>(options => 
@@ -82,17 +82,17 @@ Configure<DocsUiOptions>(options =>
 });
 ```
 
-In addition to this feature, we also introduced the Google Translation support for the documentation system and even integrated it in our [abp.io/docs](https://abp.io/docs/) website:
+In addition to this feature, we also introduced Google Translation support for the documentation system and even integrated it into our [abp.io/docs](https://abp.io/docs/) website:
 
 ![](docs-google-search.png)
 
 ![](google-search-results.png)
 
-Thanks to this system, you can either translate your documentation into your own language by Google Translation System or search specific keywords to easily find the related topic in your documentation.
+Thanks to this system, you can either translate your documentation into your own language by Google Translation System or search specific keywords to easily find the related topic in the documentation.
 
 #### Using DBFunction for Global Query Filters
 
-In this version, ABP have started using [User-defined function mapping](https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping) for global filters to gain performance improvements and let EF Core to generate more precise SQL commands under the hook.
+In this version, ABP has started using [User-defined function mapping](https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping) for global filters to gain performance improvements and let EF Core generate more precise SQL commands under the hook.
 
 > See the documentation for more info: [Using User-defined function mapping for global filters](https://abp.io/docs/8.3/framework/infrastructure/data-filtering#using-user-defined-function-mapping-for-global-filters)
 
@@ -102,11 +102,11 @@ We've also worked for pro modules to align the features and changes made in the 
 
 #### CMS Kit (PRO): FAQ
 
-CMS Kit (PRO) provides a [FAQ System](https://abp.io/docs/8.3/modules/cms-kit-pro/faq) to allow users to create, edit and delete FAQs. Here is an example screenshot from the FAQ page on the admin side:
+CMS Kit (PRO) provides a [FAQ System](https://abp.io/docs/8.3/modules/cms-kit-pro/faq) to allow users to create, edit, and delete FAQs. Here is an example screenshot from the FAQ page on the admin side:
 
 ![](cms-kit-faq.png)
 
-You can list, create, update and delete sections and their questions on the admin side of your solution. Then, by using the `FaqViewComponent` in your public-web application, you can display FAQs, section by section:
+You can list, create, update, and delete sections and their questions on the admin side of your solution. Then, by using the `FaqViewComponent` in your public-web application, you can display FAQs, section by section:
 
 ![](faq-section-public-web.png)
 
@@ -114,7 +114,9 @@ You can list, create, update and delete sections and their questions on the admi
 
 ### Package Updates
 
-In this version, we also updated some of the core NuGet and NPM package versions. All of the removed, or deprecetad methods have already been updated at the framework level. However, if you used any methods from these packages, you should aware of the change and update it in your code accordingly. You can see the following list to be aware of the package version changes:
+In this version, we also updated some of the core NuGet and NPM package versions. All of the removed or deprecated methods have already been updated at the framework level. However, if you used any methods from these packages, you should be aware of the change and update it in your code accordingly. 
+
+You can see the following list of the package version changes:
 
 * [Updated Markdig.Signed to v0.37.0](https://github.com/abpframework/abp/pull/20195) - [NuGet](https://www.nuget.org/packages/Markdig.Signed)
 * [Updated Hangfire to v1.8.12](https://github.com/abpframework/abp/pull/20009) - [NuGet](https://www.nuget.org/packages/Hangfire.AspNetCore)
@@ -128,7 +130,7 @@ In this version, we also updated some of the core NuGet and NPM package versions
 
 ![](new-platform-cover-image.png)
 
-We're thrilled to announce that the **new ABP.IO Platform** is now live! Our team has been hard at unifying and enhancing the entire platform to deliver a seamless, user-friendly experience. We consolidated all our services under a single domain: [abp.io](https://abp.io/); added a new mega menu that makes find what you need much easier and faster, and also improved UX of our application and combined both ABP (open-source) and ABP Commercial (paid) documents into a single comprehensive resource.
+We're thrilled to announce that the **new ABP.IO Platform** is now live! Our team has been hard at unifying and enhancing the entire platform to deliver a seamless, user-friendly experience. We consolidated all our services under a single domain: [abp.io](https://abp.io/); added a new mega menu that makes finding what you need much easier and faster, and also improved the UX of our application and combined both ABP (open-source) and ABP Commercial (paid) documents into a single comprehensive resource.
 
 > Read the blog post to learn more about this unification 👉 [The new ABP Platform is live!](https://abp.io/blog/new-abp-platform-is-live)
 
@@ -148,7 +150,7 @@ Besides all of these changes, we have also introduced a [new ABP CLI](https://ab
 
 ![](new-abp-cli-cover-image.png)
 
-The new ABP CLI extends the old ABP CLI, adds more features that are used by ABP Studio behind the scenes, and is also fully compatible with the new templating system. We created a blog post, which you can read at [https://abp.io/blog/introducing-the-new-abp-cli](https://abp.io/blog/introducing-the-new-abp-cli) to highlight the reason behind this change and insights of the new ABP CLI, you can check it out if you want to learn more.
+The new ABP CLI extends the old ABP CLI, adds more features that are used by ABP Studio behind the scenes, and is also fully compatible with the new templating system. We created a blog post, which you can read at [https://abp.io/blog/introducing-the-new-abp-cli](https://abp.io/blog/introducing-the-new-abp-cli) to highlight the reason behind this change and insights into the new ABP CLI, you can check it out if you want to learn more.
 
 ### New ABP Community Articles
 
@@ -163,7 +165,7 @@ There are exciting articles contributed by the ABP community as always. I will h
     * [ABP React Template V2](https://abp.io/community/videos/abp-react-template-v2-ilc4cyqr)
     * [Migrating Tye to Aspire - .NET Microservice with ABP](https://abp.io/community/videos/migrating-tye-to-aspire-.net-microservice-with-abp-ga1t4ckr)
 
-* [HeadChannel Team](https://headchannel.co.uk/) have created **two** new community articles:
+* [HeadChannel Team](https://headchannel.co.uk/) has created **two** new community articles:
     * [Managing Baseline Creation in Applications Based on ABP Framework](https://abp.io/community/articles/managing-baseline-creation-in-applications-based-on-abp-framework-yiacte5c)
     * [How to Test The System Using PostgreSQL and TestContainers](https://abp.io/community/articles/how-to-test-the-system-using-postgresql-and-testcontainers-8yh8t0j8)
 
