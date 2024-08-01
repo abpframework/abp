@@ -1,0 +1,1 @@
+**ConfigState has been deprecated.** Use the [ConfigStateService](./config-state-service) instead.
