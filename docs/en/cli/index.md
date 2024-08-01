@@ -23,6 +23,7 @@ dotnet tool update -g Volo.Abp.Studio.Cli
 While each command may have a set of options, there are some global options that can be used with any command;
 
 * `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+- `--skip-extension-version-check` or `-sevc`: Skips to check the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
 * `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features/templates are added to the `Volo.Abp.Studio.Cli`. But if you want to use the old version, you can use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
 
 ## Commands
@@ -64,6 +65,7 @@ Here, is the list of all available commands before explaining their details:
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 * **`clear-download-cache`**: Clears the templates download cache.
+* **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
 
 ### help
 
@@ -918,6 +920,16 @@ abp install-libs [options]
 #### Options
 
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a project file.
+
+### check-extensions
+
+This command checks the installed ABP CLI extensions and updates them if necessary.
+
+Usage:
+
+````bash
+abp check-extensions
+````
 
 ## See Also
 
