@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 
 namespace Volo.Docs.Projects
 {
     [Serializable]
-    public class ProjectDto : EntityDto<Guid>
+    public class ProjectDto : EntityDto<Guid>, IHasExtraProperties
     {
         public string Name { get; set; }
 
@@ -25,6 +25,6 @@ namespace Volo.Docs.Projects
 
         public string DocumentStoreType { get; set; }
 
-        public Dictionary<string, object> ExtraProperties { get; set; }
+        public ExtraPropertyDictionary ExtraProperties { get; set; } = new();
     }
 }

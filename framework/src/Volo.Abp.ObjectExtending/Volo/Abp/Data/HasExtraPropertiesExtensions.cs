@@ -47,7 +47,7 @@ public static class HasExtraPropertiesExtensions
 
             if (conversionType.IsEnum)
             {
-                return (TProperty)value;
+                return (TProperty)Enum.Parse(conversionType, value.ToString()!);
             }
 
             return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
