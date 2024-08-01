@@ -8,7 +8,7 @@ Try this version and provide feedback for a more stable version of ABP v8.3! Tha
 
 ## Get Started with the 8.3 RC
 
-//TODO:...
+You can check the [Get Started page](https://abp.io/get-started) to see how to get started with ABP. You can either download [ABP Studio](https://abp.io/get-started#abp-studio-tab) (**recommended**, if you prefer a user-friendly GUI application - desktop application) or use the [ABP CLI](https://abp.io/docs/latest/cli).
 
 ## Migration Guide
 
@@ -34,19 +34,67 @@ In this version, we mostly worked on [CMS Kit](https://abp.io/docs/latest/module
 
 #### CMS Kit: Marked Items/Favorites
 
-//TODO:...
+CMS Kit provides a marking system to mark any kind of resource, like a blog post or a product, as a favorite, starred, flagged, or bookmarked.
+
+![](cmskit-module-markedItems.png)
+
+This system is especially useful, if you need to highlight some resources and differantiate them from other items. To use the marking system, you need to define an entity type with the icon name, by configuring the `CmsKitMarkedItemOptions`:
+
+```csharp
+Configure<CmsKitMarkedItemOptions>(options =>
+{
+    options.EntityTypes.Add(
+        new MarkedItemEntityTypeDefinition(
+            entityType: "product",
+            icon: StandardMarkedItems.Favorite
+            )
+        );
+});
+```
+
+You can select any of the standard marked item icons (as used in the example above) or easily customize icons shown in the toggling components.
+
+> Read the [CMS Kit: Marked Item System](https://abp.io/docs/8.3/modules/cms-kit/marked-items) documentation to learn more.
 
 #### CMS Kit: Approvement System for Comments
 
-//TODO:...
+CMS Kit Module has been provided a [Commenting System](https://abp.io/docs/8.3/modules/cms-kit/comments) for a while. This system allows you to add the comment feature to any kind of resource, like blog posts, or products. However, this system wasn't providing an approvement system, that allows system administrations to review the comments before publish them in their application.
+
+In this version, we have introduced the [Approvement System](https://abp.io/docs/8.3/modules/cms-kit/comments#settings), which allows you to _require approval for comments to be published_. It's disabled by default, but you can make it enabled by simply checking the related setting on the settings page:
+
+![](cmskit-module-comments-settings.png)
+
+When you enabled it, whenever a user submits a comment, it can be directly seen on the back-office application (in the _cms/comments_ page), and you can determine if the comment should be approved or rejected. If you approve the comment, then it will be started to shown on the comment section for the related resource.
+
+> Read the [CMS Kit: Comments](https://abp.io/docs/8.3/modules/cms-kit/comments) documentation to learn more.
 
 #### Docs: Added Google Translation Support & Introducing the Single Project Mode
 
-//TODO:...
+In this version, we made some improvements in the [Docs Module](https://abp.io/docs/8.3/modules/docs), added Google Translation support for better findings in the documentation and introduced single project mode.
+
+The single project mode allows you to use a single name as a project name in your application. If you are not considering to support multiple projects with their multiple docs and instead if you have a single project and want to have documentation for it, it's especially useful for you. You just need to configure the `DocsUiOptions` and set the single project mode as enabled and also define a constant project name:
+
+```csharp
+Configure<DocsUiOptions>(options => 
+{
+    options.SingleProjectMode.Enable = true;
+    options.SingleProjectMode.ProjectName = "abp";
+});
+```
+
+In addition to this feature, we also introduced the Google Translation support for the documentation system and even integrated it in our [abp.io/docs](https://abp.io/docs/) website:
+
+![](docs-google-search.png)
+
+![](google-search-results.png)
+
+Thanks to this system, you can either translate your documentation into your own language by Google Translation System or search specific keywords to easily find the related topic in your documentation.
 
 #### Using DBFunction for Global Query Filters
 
-//TODO:...
+In this version, ABP have started using [User-defined function mapping](https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping) for global filters to gain performance improvements and let EF Core to generate more precise SQL commands under the hook.
+
+> See the documentation for more info: [Using User-defined function mapping for global filters](https://abp.io/docs/8.3/framework/infrastructure/data-filtering#using-user-defined-function-mapping-for-global-filters)
 
 ### PRO
 
@@ -54,7 +102,15 @@ We've also worked for pro modules to align the features and changes made in the 
 
 #### CMS Kit (PRO): FAQ
 
-//TODO:...
+CMS Kit (PRO) provides a [FAQ System](https://abp.io/docs/8.3/modules/cms-kit-pro/faq) to allow users to create, edit and delete FAQs. Here is an example screenshot from the FAQ page on the admin side:
+
+![](cms-kit-faq.png)
+
+You can list, create, update and delete sections and their questions on the admin side of your solution. Then, by using the `FaqViewComponent` in your public-web application, you can display FAQs, section by section:
+
+![](faq-section-public-web.png)
+
+> Read the [CMS Kit: FAQ System](https://abp.io/docs/8.3/modules/cms-kit-pro/faq) documentation to learn more.
 
 ### Package Updates
 
