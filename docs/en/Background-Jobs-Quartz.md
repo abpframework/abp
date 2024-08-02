@@ -72,7 +72,13 @@ public class YourModule : AbpModule
 }
 ````
 
-Starting from ABP 3.1 version, we have added `Configurator` to `AbpQuartzOptions` to configure Quartz. For example:
+Starting from ABP 3.1 version, we have added `Configurator` to `AbpQuartzOptions` to configure Quartz, but you first need to add the [Quartz.Serialization.Json](https://www.nuget.org/packages/Quartz.Serialization.Json) NuGet package to your project:
+
+   ````
+   Install-Package Volo.Abp.BackgroundJobs.Quartz
+   ````
+
+Now you can use `AbpQuartzOptions` as shown in the example below: 
 
 ````csharp
 [DependsOn(
@@ -92,8 +98,10 @@ public class YourModule : AbpModule
                 configure.UsePersistentStore(storeOptions =>
                 {
                     storeOptions.UseProperties = true;
-                    storeOptions.UseJsonSerializer();
+                    storeOptions.UseNewtonsoftJsonSerializer();
                     storeOptions.UseSqlServer(configuration.GetConnectionString("Quartz"));
+                    // Or if you want to use PostgreSQL
+                    // storeOptions.UsePostgres(configuration.GetConnectionString("Quartz"));
                     storeOptions.UseClustering(c =>
                     {
                         c.CheckinMisfireThreshold = TimeSpan.FromSeconds(20);
