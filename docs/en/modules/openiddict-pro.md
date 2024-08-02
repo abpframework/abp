@@ -417,7 +417,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 ### Disable Transport Security Requirement
 
-By default, OpenIddict requires the use of HTTPS for all endpoints. This can be disabled if needed.
+By default, OpenIddict requires the use of HTTPS for all endpoints. You can disable it if it's needed. You just need to configure the `OpenIddictServerAspNetCoreOptions` and set `DisableTransportSecurityRequirement` as **true**:
 
 ```cs
 Configure<OpenIddictServerAspNetCoreOptions>(options =>
