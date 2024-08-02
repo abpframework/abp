@@ -26,10 +26,10 @@ export const VOLO_PACKAGE_PROXY_IMPORTS = new Map<string, string>([
   ['Volo.Saas.Editions.EditionDto', '@volo/abp.ng.saas/proxy'],
   [
     'Volo.Abp.TextTemplateManagement.TextTemplates.TextTemplateContentDto',
-    '@volo/abp.ng.saas/proxy',
+    '@volo/abp.ng.text-template-management/proxy',
   ],
   [
     'Volo.Abp.TextTemplateManagement.TextTemplates.TemplateDefinitionDto',
-    '@volo/abp.ng.saas/proxy',
+    '@volo/abp.ng.text-template-management/proxy',
   ],
 ]);
