@@ -282,7 +282,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         finally
         {
             ChangeTracker.AutoDetectChangesEnabled = true;
-            AbpEfCoreNavigationHelper.Clear();
+            AbpEfCoreNavigationHelper.RemoveChangedEntityEntries();
         }
     }
 

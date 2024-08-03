@@ -199,7 +199,12 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return null;
     }
 
-    public void Clear()
+    public virtual void RemoveChangedEntityEntries()
+    {
+        EntityEntries.RemoveAll(x => x.Value.IsModified);
+    }
+
+    public virtual void Clear()
     {
         EntityEntries.Clear();
     }
