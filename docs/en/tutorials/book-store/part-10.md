@@ -17,36 +17,6 @@
 }
 ````
 
-## About This Tutorial
-
-In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
-
-* **{{DB_Value}}** as the ORM provider.
-* **{{UI_Value}}** as the UI Framework.
-
-This tutorial is organized as the following parts;
-
-- [Part 1: Creating the server side](part-01.md)
-- [Part 2: The book list page](part-02.md)
-- [Part 3: Creating, updating and deleting books](part-03.md)
-- [Part 4: Integration tests](part-04.md)
-- [Part 5: Authorization](part-05.md)
-- [Part 6: Authors: Domain layer](part-06.md)
-- [Part 7: Authors: Database Integration](part-07.md)
-- [Part 8: Authors: Application Layer](part-08.md)
-- [Part 9: Authors: User Interface](part-09.md)
-- **Part 10: Book to Author Relation (this part)**
-
-### Download the Source Code
-
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
-
-* [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
-* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
-* [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
-
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
-
 ## Introduction
 
 We have created `Book` and `Author` functionalities for the book store application. However, currently there is no relation between these entities.
