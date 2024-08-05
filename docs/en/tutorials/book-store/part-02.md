@@ -20,44 +20,6 @@
 }
 ````
 
-## About This Tutorial
-
-In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
-
-* **{{DB_Value}}** as the ORM provider.
-* **{{UI_Value}}** as the UI Framework.
-
-This tutorial is organized as the following parts:
-
-- [Part 1: Creating the server side](part-01.md)
-- **Part 2: The book list page (this part)**
-- [Part 3: Creating, updating and deleting books](part-03.md)
-- [Part 4: Integration tests](part-04.md)
-- [Part 5: Authorization](part-05.md)
-- [Part 6: Authors: Domain layer](part-06.md)
-- [Part 7: Authors: Database Integration](part-07.md)
-- [Part 8: Authors: Application Layer](part-08.md)
-- [Part 9: Authors: User Interface](part-09.md)
-- [Part 10: Book to Author Relation](part-10.md)
-
-### Download the Source Code
-
-This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared a few combinations of the source code to be downloaded:
-
-* [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
-* [Blazor UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
-* [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
-
-> If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
-
-{{if UI == "MVC" && DB == "EF"}}
-
-### Video Tutorial
-
-This part is also recorded as a video tutorial and **<a href="https://www.youtube.com/watch?v=UDNlLiPiBiw&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=2" target="_blank">published on YouTube</a>**.
-
-{{end}}
-
 {{if UI == "MVC"}}
 
 ## Dynamic JavaScript Proxies
@@ -556,9 +518,13 @@ Now you can see the final result on your browser:
 
 ## Create a Books Page
 
-It's time to create something visible and usable! Right click on the `Pages` folder under the `Acme.BookStore.Blazor.Client` project and add a new **razor component**, named `Books.razor`:
+It's time to create something visible and usable! Right click on the `Pages` folder under the {{ if UI == "Blazor"}}`Acme.BookStore.Blazor.Client`{{ else }}`Acme.BookStore.Blazor`{{ end }} project and add a new **razor component**, named `Books.razor`:
 
+{{ if UI == "Blazor"}}
+![blazor-add-books-component](images/blazor-add-books-component-client.png)
+{{ else }}
 ![blazor-add-books-component](images/blazor-add-books-component.png)
+{{ end }}
 
 Replace the contents of this component as shown below:
 
@@ -574,7 +540,7 @@ Replace the contents of this component as shown below:
 
 ### Add the Books Page to the Main Menu
 
-Open the `BookStoreMenuContributor` class in the `Blazor.Client` project add the following code to the end of the `ConfigureMainMenuAsync` method:
+Open the `BookStoreMenuContributor` class in the {{ if UI == "Blazor"}}`Acme.BookStore.Blazor.Client`{{ else }}`Acme.BookStore.Blazor`{{ end }} project add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
 context.Menu.AddItem(
