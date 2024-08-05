@@ -518,9 +518,13 @@ Now you can see the final result on your browser:
 
 ## Create a Books Page
 
-It's time to create something visible and usable! Right click on the `Pages` folder under the `Acme.BookStore.Blazor.Client` project and add a new **razor component**, named `Books.razor`:
+It's time to create something visible and usable! Right click on the `Pages` folder under the {{ if UI == "Blazor"}}`Acme.BookStore.Blazor.Client`{{ else }}`Acme.BookStore.Blazor`{{ end }} project and add a new **razor component**, named `Books.razor`:
 
+{{ if UI == "Blazor"}}
+![blazor-add-books-component](images/blazor-add-books-component-client.png)
+{{ else }}
 ![blazor-add-books-component](images/blazor-add-books-component.png)
+{{ end }}
 
 Replace the contents of this component as shown below:
 
@@ -536,7 +540,7 @@ Replace the contents of this component as shown below:
 
 ### Add the Books Page to the Main Menu
 
-Open the `BookStoreMenuContributor` class in the `Blazor.Client` project add the following code to the end of the `ConfigureMainMenuAsync` method:
+Open the `BookStoreMenuContributor` class in the {{ if UI == "Blazor"}}`Acme.BookStore.Blazor.Client`{{ else }}`Acme.BookStore.Blazor`{{ end }} project add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
 context.Menu.AddItem(
