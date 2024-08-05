@@ -1206,7 +1206,7 @@ Open the `BookStoreMenuContributor.cs` in the `Acme.BookStore.Blazor.Client` pro
 ````csharp
 if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
 {
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
+    context.Menu.AddItem(new ApplicationMenuItem(
         "BooksStore.Authors",
         l["Menu:Authors"],
         url: "/authors"
