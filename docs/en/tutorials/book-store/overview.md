@@ -46,8 +46,6 @@ This tutorial has multiple versions based on your **UI** and **Database** prefer
 
 > If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../kb/windows-path-too-long-fix.md).
 
-> After downloading the source code, you might need to run some commands before running the application. See the _After Creating the Solution_ section below for more information.
-
 {{if UI == "MVC" && DB == "EF"}}
 
 ### Video Tutorial
