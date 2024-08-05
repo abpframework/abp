@@ -674,19 +674,19 @@ To reference the previous and next documents from a document, you should specify
 
 ```
 
-  ````json
-  //[doc-nav]
-  {
-    "Previous": {
-      "Name": "Overall",
-      "Path": "testing/overall"
-    },
-    "Next": {
-      "Name": "Integration tests",
-      "Path": "testing/integration-tests"
-    }
-  }
-  ````
+	  ````json
+	  //[doc-nav]
+	  {
+	    "Previous": {
+	      "Name": "Overall",
+	      "Path": "testing/overall"
+	    },
+	    "Next": {
+	      "Name": "Integration tests",
+	      "Path": "testing/integration-tests"
+	    }
+	  }
+	  ````
 
 ```
 
