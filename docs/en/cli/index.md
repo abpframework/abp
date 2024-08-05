@@ -779,6 +779,7 @@ abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
 ### upgrade
 
 Upgrades the ABP modules to pro modules, such as upgrading [Identity](../modules/identity.md) to [Identity Pro](../modules/identity-pro.md). You can use this for [Single Layer Web Application](../solution-templates/single-layer-web-application/index.md) and [Layered Web Application](../solution-templates/layered-web-application/index.md) templates.
+This command is specially designed for users who already started their development before having a license. Therefore this command requires license.
 
 Usage:
 
