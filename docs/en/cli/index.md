@@ -130,7 +130,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a application solution. Available templates:
   * **`empty`**: Empty solution template.
   * **`app`**: Application template. Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+    * `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
       * `angular`: Angular UI. There are some additional options for this template:
@@ -161,7 +161,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `basic`: Basic Theme.
     * `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
   * **`app-nolayers`**: Single-layer application template. Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+    * `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       * `angular`: Angular UI. There are some additional options for this template:
       * `blazor`: Blazor UI. There are some additional options for this template:
@@ -177,7 +177,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `basic`: Basic Theme.
     * `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
   * **`microservice`**: Microservice solution template (*Available for* ***Business*** *or higher licenses*).  Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+    * `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       * `angular`: Angular UI. There are some additional options for this template:
       * `blazor`: Blazor UI. There are some additional options for this template:
