@@ -10,7 +10,7 @@
     "@abp/utils": "~8.3.0-rc.1",
     "just-clone": "^6.0.0",
     "just-compare": "^2.0.0",
-    "ts-toolbelt": "6.15.4",
+    "ts-toolbelt": "^9.0.0",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
