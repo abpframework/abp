@@ -27,7 +27,7 @@ export class AppModule {}
 ```
 
 - `ErrorScreenErrorCodes` the error codes that you can pass to `skipHandledErrorCodes` and `forWhichErrors`.
-- `skipHandledErrorCodes` the error codes those you don't want to handle it.
+- `skipHandledErrorCodes` the error codes those you don't want to handle.
 - `errorScreen` the screen that you want to show when a route error occurs.
   - `component` component that you want to show.
   - `forWhichErrors` same as `ErrorScreenErrorCodes`
