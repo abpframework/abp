@@ -135,6 +135,10 @@ await builder.AddApplicationAsync<MyMigratorModule>();
 
 See https://github.com/abpframework/abp/pull/13985 for more info.
 
+## Add Microsoft.Extensions.FileProviders.Embedded su support localization
+
+Virtual File System now relayes on the Microsoft.Extensions.FileProviders.Embedded 7.0.x package, so you must add this package to *.Domain.Shared project.
+
 ## Devart.Data.Oracle.EFCore
 
 The `Devart.Data.Oracle.EFCore` package do not yet support EF Core 7.0, If you use `AbpEntityFrameworkCoreOracleDevartModule(Volo.Abp.EntityFrameworkCore.Oracle.Devart)` may not work as expected, We will release new packages as soon as they are updated.
