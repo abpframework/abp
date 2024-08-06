@@ -69,6 +69,7 @@ Here, is the list of all available commands before explaining their details:
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 * **`clear-download-cache`**: Clears the templates download cache.
 * **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
+* **`install-old-cli`**: Installs old ABP CLI.
 
 ### help
 
@@ -933,6 +934,20 @@ Usage:
 ````bash
 abp check-extensions
 ````
+
+### install-old-cli
+
+This command installs the old ABP CLI with a specific version if it's specified. Otherwise, it installs the old ABP CLI with the latest stable version. Then, [you can directly use the old ABP CLI by simply passing the `--old` parameter at the end of the command or using the `abp-old` as the executing command](./differences-between-old-and-new-cli.md#using-the-old-abp-cli).
+
+Usage:
+
+```bash
+abp install-old-cli [options]
+```
+
+#### Options
+
+* ```--version``` or ```-v```: Specifies the version for ABP CLI to be installed.
 
 ## See Also
 
