@@ -58,8 +58,11 @@
         },
         {
           "text": "Book Store application",
-          "path": "tutorials/book-store/index.md",
           "items": [
+            {
+              "text": "Overview",
+              "path": "tutorials/book-store/overview.md"
+            },
             {
               "text": "1: Creating the server side",
               "path": "tutorials/book-store/part-01.md"
