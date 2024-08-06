@@ -20,7 +20,7 @@ export interface ApplicationInfo {
 export interface HasAdditional {
   [key: string]: string;
 }
-export interface ApiConfig extends Partial<HasAdditional>{
+export interface ApiConfig extends Partial<HasAdditional> {
   url: string;
   rootNamespace?: string;
 }
