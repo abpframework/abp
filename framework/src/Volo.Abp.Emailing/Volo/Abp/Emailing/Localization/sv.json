@@ -1,0 +1,25 @@
+{
+  "culture": "sv",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Standard från adress",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Standard från visningsnamn",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Värd",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "Användarens namn",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Lösenord",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domän",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Aktivera SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Använda standardautentiseringsuppgifter",
+    "Description:Abp.Mailing.DefaultFromAddress": "Standardadressen från",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "Standard från visningsnamn",
+    "Description:Abp.Mailing.Smtp.Host": "Namnet på eller IP-adressen till den värd som används för SMTP-transaktioner.",
+    "Description:Abp.Mailing.Smtp.Port": "Den port som används för SMTP-transaktioner.",
+    "Description:Abp.Mailing.Smtp.UserName": "Användarnamn som är kopplat till autentiseringsuppgifterna.",
+    "Description:Abp.Mailing.Smtp.Password": "Lösenordet för det användarnamn som är kopplat till autentiseringsuppgifterna.",
+    "Description:Abp.Mailing.Smtp.Domain": "Domän- eller datornamnet som verifierar autentiseringsuppgifterna.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Om SmtpClient använder SSL (Secure Sockets Layer) för att kryptera anslutningen.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Om DefaultCredentials skickas med förfrågningar.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Standardmall för e-postlayout",
+    "TextTemplate:StandardEmailTemplates.Message": "Enkel meddelandemall för e-post"
+  }
+}
