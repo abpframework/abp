@@ -1,0 +1,12 @@
+{
+  "culture": "sv",
+  "texts": {
+    "ThisFieldIsRequired": "Detta fält är obligatoriskt",
+    "MaxLenghtErrorMessage": "Detta fält kan innehålla högst '{0}' tecken",
+    "Enum:BookType.Undefined": "Odefinierad från ValidationResource",
+    "Enum:BookType.0": "Odefinierad med värdet 0 från ValidationResource",
+    "BookType.Adventure": "Äventyr från ValidationResource",
+    "BookType.1": "Äventyr med värde 1 från ValidationResource",
+    "Biography": "Biografi från ValidationResource"
+  }
+}
