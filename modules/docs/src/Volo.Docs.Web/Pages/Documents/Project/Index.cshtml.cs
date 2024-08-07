@@ -55,6 +55,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public List<SelectListItem> LanguageSelectListItems { get; set; }
 
         public string DocumentNameWithExtension { get; private set; }
+        
+        public string DocumentPageTitle { get; private set; }
 
         public DocumentWithDetailsDto Document { get; private set; }
 
@@ -191,6 +193,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             await SetNavigationAsync();
             SetLanguageSelectListItems();
+            SetDocumentPageTitle();
 
             return Page();
         }
@@ -455,11 +458,17 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
+                
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
                 return;
             }
+        }
+        
+        private void SetDocumentPageTitle()
+        {
+            DocumentPageTitle = Navigation.FindNavigation(DocumentNameWithExtension)?.Text ?? DocumentName?.Replace("-", " ");
         }
 
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
