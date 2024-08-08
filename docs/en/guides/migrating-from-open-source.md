@@ -53,5 +53,5 @@ The command will also do the following changes in your solution:
 
 ## Things to pay attention before using
 
-- The command covers the most common scenarios, but there is still a possiblity that it can mess up something in your solution. Therefore, we strongly recommend a source code control system (like GitHub) to track what is changed in your solution and revert if needed.
+- The command covers the most common scenarios, but there is still a possibility that it can mess up something in your solution. Therefore, we strongly recommend a version control system (like [Git](https://git-scm.com)) to track what is changed in your solution and revert if needed.
 - The command will not remove your custom codes that may be related with the removed modules listed above. So there may be build errors if you referenced one of those modules. You can clear them manually.
