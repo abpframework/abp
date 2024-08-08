@@ -148,7 +148,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
       * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
         * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
-    * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
+    * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       * `none`: Without any mobile application.
       * `react-native`: React Native.
       * `maui`: MAUI. This mobile option is only available for ABP. (*Available for* ***Team*** *or higher licenses*)
@@ -187,7 +187,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
       * `maui-blazor`: Blazor Maui UI. There are some additional options for this template:
       * `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
-    * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `react-native`. Available frameworks:
+    * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       * `none`: Without any mobile application.
       * `react-native`: React Native.
       * `maui`: MAUI.
