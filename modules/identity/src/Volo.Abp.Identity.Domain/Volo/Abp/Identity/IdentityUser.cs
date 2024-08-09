@@ -9,6 +9,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
 using Volo.Abp.Users;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity;
 
@@ -99,6 +100,7 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// <remarks>
     /// A value in the past means the user is not locked out.
     /// </remarks>
+    [DisableDateTimeNormalization]
     public virtual DateTimeOffset? LockoutEnd { get; protected internal set; }
 
     /// <summary>
