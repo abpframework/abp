@@ -1,5 +1,4 @@
 import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
-import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ExtensibleModule } from '@abp/ng.components/extensible';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
@@ -17,6 +16,7 @@ import {
   TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS,
 } from './tokens/extensions.token';
 import { PageModule } from '@abp/ng.components/page';
+import { FeatureManagementComponent } from '@abp/ng.feature-management';
 
 @NgModule({
   declarations: [TenantsComponent],
@@ -27,9 +27,9 @@ import { PageModule } from '@abp/ng.components/page';
     CoreModule,
     ThemeSharedModule,
     NgbDropdownModule,
-    FeatureManagementModule,
     ExtensibleModule,
     PageModule,
+    FeatureManagementComponent,
   ],
 })
 export class TenantManagementModule {

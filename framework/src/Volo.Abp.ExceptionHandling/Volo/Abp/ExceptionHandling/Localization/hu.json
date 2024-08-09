@@ -21,6 +21,9 @@
     "404Message": "Az oldal nem található",
     "500Message": "Belső Szerverhiba",
     "403MessageDetail": "Ön nem jogosult ennek a műveletnek a végrehajtására!",
-    "404MessageDetail": "Sajnos ezen a címen nincs semmi."
+    "404MessageDetail": "Sajnos ezen a címen nincs semmi.",
+    "Unauthorized": "Nem jogosult",
+    "invalid_token": "A token érv",
+    "SessionExpired": "A munkamenete lejárt. Kérjük, jelentkezzen be újra az alkalmazásban való folytatáshoz."
   }
 }

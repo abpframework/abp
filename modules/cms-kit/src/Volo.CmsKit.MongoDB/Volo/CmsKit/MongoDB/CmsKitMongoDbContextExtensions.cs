@@ -3,6 +3,7 @@ using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -83,6 +84,11 @@ public static class CmsKitMongoDbContextExtensions
         builder.Entity<GlobalResource>(x =>
         {
             x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "GlobalResources";
+        });
+
+        builder.Entity<UserMarkedItem>(x =>
+        {
+            x.CollectionName = AbpCmsKitDbProperties.DbTablePrefix + "UserMarkedItems";
         });
     }
 }
