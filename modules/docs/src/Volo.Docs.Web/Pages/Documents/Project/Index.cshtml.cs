@@ -16,6 +16,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.EventBus.Local;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -96,6 +97,8 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly DocsUiOptions _uiOptions;
 
         protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
+        
+        protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
         public IndexModel(
             IDocumentAppService documentAppService,
@@ -540,7 +543,19 @@ namespace Volo.Docs.Pages.Documents.Project
 
                 DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
-                Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                try
+                {
+                    Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                }
+                catch (Exception e)
+                {
+                    var message = $"Error occurred during the rendering of this document. The document is not valid: {e.Message}";
+                    Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
+                    await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
+                    {
+                        ErrorMessage = message, Name = Document.Name
+                    });
+                }
             }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
