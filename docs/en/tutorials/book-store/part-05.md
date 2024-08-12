@@ -29,7 +29,7 @@ ABP provides an [authorization system](../../framework/fundamentals/authorizatio
 
 A permission must have a unique name (a `string`). The best way is to define it as a `const`, so we can reuse the permission name.
 
-Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and add new permission names:
 
 ````csharp
 namespace Acme.BookStore.Permissions;
@@ -37,7 +37,11 @@ namespace Acme.BookStore.Permissions;
 public static class BookStorePermissions
 {
     public const string GroupName = "BookStore";
+    
+    // other permissions...
+    // other permissions...
 
+ 	// *** ADDED a NEW NESTED CLASS ***
     public static class Books
     {
         public const string Default = GroupName + ".Books";
