@@ -344,3 +344,16 @@ export class AppComponent {
 
 * Patched the languages dropdown element with new `requiredPolicy` and new `order`.
 * Removed the current user dropdown element.
+
+## Grouped Menu (Pro)
+
+**This feature is only applied for [LeptonX](https://abp.io/docs/latest/themes/lepton-x/angular) theme**
+
+### Web
+
+![groupped-menu](./images/grouped-menu.png)
+
+
+### Mobile
+
+![groupped-menu-mobile](./images/grouped-menu-mobile.png)
