@@ -46,6 +46,10 @@
       "text": "Tutorials",
       "items": [
         {
+          "text": "Overview",
+          "path": "tutorials/overview.md"
+        },
+        {
           "text": "TODO application",
           "items": [
             {
@@ -121,6 +125,10 @@
       "text": "Tools",
       "items": [
         {
+          "text": "Overview",
+          "path": "tools.md"
+        },
+        {
           "text": "ABP CLI",
           "items": [
             {
@@ -137,16 +145,20 @@
           "text": "ABP Studio",
           "items": [
             {
+              "text": "Overview",
+              "path": "studio/index.md"
+            },
+            {
               "text": "Installation",
               "path": "studio/installation.md"
             },
             {
-              "text": "Overview",
-              "path": "studio/overview.md"
-            },
-            {
               "text": "Fundamentals",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "studio/overview.md"
+                },
                 {
                   "text": "Solution Explorer",
                   "path": "studio/solution-explorer.md"
@@ -254,6 +266,10 @@
           "text": "Fundamentals",
           "items": [
             {
+              "text": "Overview",
+              "path": "framework/fundamentals/overview.md"
+            },
+            {
               "text": "Application Startup",
               "path": "framework/fundamentals/application-startup.md"
             },
@@ -343,13 +359,20 @@
           "text": "Infrastructure",
           "items": [
             {
+              "text": "Overview",
+              "path": "framework/infrastructure/overview.md"
+            },
+            {
               "text": "Audit Logging",
               "path": "framework/infrastructure/audit-logging.md"
             },
             {
               "text": "Background Jobs",
-              "path": "framework/infrastructure/background-jobs",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/infrastructure/background-jobs"
+                },
                 {
                   "text": "Hangfire Integration",
                   "path": "framework/infrastructure/background-jobs/hangfire.md"
@@ -366,8 +389,11 @@
             },
             {
               "text": "Background Workers",
-              "path": "framework/infrastructure/background-workers",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/infrastructure/background-workers"
+                },
                 {
                   "text": "Quartz Integration",
                   "path": "framework/infrastructure/background-workers/quartz.md"
@@ -382,7 +408,7 @@
               "text": "BLOB Storing",
               "items": [
                 {
-                  "text": "BLOB Storing System",
+                  "text": "Overview",
                   "path": "framework/infrastructure/blob-storing"
                 },
                 {
@@ -452,7 +478,7 @@
               "text": "Email Sending",
               "items": [
                 {
-                  "text": "Email Sending System",
+                  "text": "Overview",
                   "path": "framework/infrastructure/emailing.md"
                 },
                 {
@@ -478,8 +504,11 @@
                 },
                 {
                   "text": "Distributed Event Bus",
-                  "path": "framework/infrastructure/event-bus/distributed",
                   "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/infrastructure/event-bus/distributed"
+                    },
                     {
                       "text": "Azure Service Bus Integration",
                       "path": "framework/infrastructure/event-bus/distributed/azure.md"
@@ -542,8 +571,11 @@
             },
             {
               "text": "Text Templating",
-              "path": "framework/infrastructure/text-templating",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/infrastructure/text-templating"
+                },
                 {
                   "text": "Razor Integration",
                   "path": "framework/infrastructure/text-templating/razor.md"
@@ -586,6 +618,10 @@
                   "text": "Domain Layer",
                   "items": [
                     {
+                      "text": "Overview",
+                      "path": "framework/architecture/best-practices/domain-layer-overview.md"
+                    },
+                    {
                       "text": "Entities",
                       "path": "framework/architecture/best-practices/entities.md"
                     },
@@ -603,6 +639,10 @@
                   "text": "Application Layer",
                   "items": [
                     {
+                      "text": "Overview",
+                      "path": "framework/architecture/best-practices/application-layer-overview.md"
+                    },
+                    {
                       "text": "Application Services",
                       "path": "framework/architecture/best-practices/application-services.md"
                     },
@@ -615,6 +655,10 @@
                 {
                   "text": "Data Access",
                   "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/architecture/best-practices/data-access-overview.md"
+                    },
                     {
                       "text": "Entity Framework Core Integration",
                       "path": "framework/architecture/best-practices/entity-framework-core-integration.md"
@@ -631,7 +675,7 @@
               "text": "Modularity",
               "items": [
                 {
-                  "text": "Basics",
+                  "text": "Overview",
                   "path": "framework/architecture/modularity/basics.md"
                 },
                 {
@@ -672,6 +716,10 @@
                   "text": "Domain Layer",
                   "items": [
                     {
+                      "text": "Overview",
+                      "path": "framework/architecture/domain-driven-design/domain-layer.md"
+                    },
+                    {
                       "text": "Entities & Aggregate Roots",
                       "path": "framework/architecture/domain-driven-design/entities.md"
                     },
@@ -696,6 +744,10 @@
                 {
                   "text": "Application Layer",
                   "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/architecture/domain-driven-design/application-layer.md"
+                    },
                     {
                       "text": "Application Services",
                       "path": "framework/architecture/domain-driven-design/application-services.md"
@@ -730,8 +782,16 @@
           "text": "API Development",
           "items": [
             {
+              "text": "Overview",
+              "path": "framework/api-development/overview.md"
+            },
+            {
               "text": "ABP Endpoints",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/api-development/standard-apis/overview.md"
+                },
                 {
                   "text": "Application Configuration",
                   "path": "framework/api-development/standard-apis/configuration.md"
@@ -771,6 +831,10 @@
         {
           "text": "User Interface",
           "items": [
+            {
+              "text": "Overview",
+              "path": "framework/ui/overview.md"
+            },
             {
               "text": "MVC / Razor Pages",
               "items": [
@@ -1114,6 +1178,10 @@
               "text": "Angular",
               "items": [
                 {
+                  "text": "Overview",
+                  "path": "framework/ui/angular/overview.md"
+                },
+                {
                   "text": "Quick Start",
                   "path": "framework/ui/angular/quick-start.md"
                 },
@@ -1430,8 +1498,11 @@
             },
             {
               "text": "Entity Framework Core",
-              "path": "framework/data/entity-framework-core",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/data/entity-framework-core"
+                },
                 {
                   "text": "Database Migrations",
                   "path": "framework/data/entity-framework-core/migrations.md"
@@ -1672,6 +1743,10 @@
       "text": "UI Themes",
       "items": [
         {
+          "text": "Overview",
+          "path": "ui-themes/index.md"
+        },
+        {
           "text": "The Basic Theme",
           "path": "framework/ui/mvc-razor-pages/basic-theme.md"
         },
@@ -1760,6 +1835,10 @@
       "text": "Books",
       "items": [
         {
+          "text": "Overview",
+          "path": "https://abp.io/books"
+        },
+        {
           "text": "Mastering ABP Framework",
           "path": "https://abp.io/books/mastering-abp-framework"
         },
@@ -1772,6 +1851,10 @@
     {
       "text": "Release Information",
       "items": [
+        {
+          "text": "Overview",
+          "path": "release-info/overview.md"
+        },
         {
           "text": "Release Notes",
           "path": "release-info/release-notes.md"
