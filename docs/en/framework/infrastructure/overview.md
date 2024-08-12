@@ -1,5 +1,7 @@
 ## ABP Infrastructure: Overview
 
+ABP provides a complete infrastructure for creating software solutions with modern architectures based on .NET platform:
+
 * [Audit Logging](./audit-logging.md)
 * [Background Jobs](./background-jobs/index.md)
 * [Background Workers](./background-workers/index.md)
