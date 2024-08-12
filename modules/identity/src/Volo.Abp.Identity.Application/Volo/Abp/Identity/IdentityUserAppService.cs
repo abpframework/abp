@@ -184,8 +184,8 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             user.SetIsActive(input.IsActive);
         }
 
-        user.Name = input.Name.Trim();
-        user.Surname = input.Surname.Trim();
+        user.Name = input.Name?.Trim();
+        user.Surname = input.Surname?.Trim();
         (await UserManager.UpdateAsync(user)).CheckErrors();
         if (input.RoleNames != null && await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
         {

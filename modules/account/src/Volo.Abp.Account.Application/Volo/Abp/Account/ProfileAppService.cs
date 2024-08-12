@@ -68,8 +68,8 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
             (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
         }
 
-        user.Name = input.Name.Trim();
-        user.Surname = input.Surname.Trim();
+        user.Name = input.Name?.Trim();
+        user.Surname = input.Surname?.Trim();
 
         input.MapExtraPropertiesTo(user);
 
