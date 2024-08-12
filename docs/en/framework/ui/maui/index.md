@@ -64,19 +64,19 @@ The MAUI template consists of four pages:
 
 ### Homepage
 
-![Maui Home Page](./images/maui-home-page.png)
+![Maui Home Page](../../../images/maui-home-page.png)
 
 ### Users Page
 
-![Maui Users Page](./images/maui-users-page.png)
+![Maui Users Page](../../../images/maui-users-page.png)
 
 ### Tenants Page
 
-![Maui Tenants Page](./images/maui-tenants-page.png)
+![Maui Tenants Page](../../../images/maui-tenants-page.png)
 
 ### Settings Page
 
-![Maui Settings Page](./images/maui-settings-page.png)
+![Maui Settings Page](../../../images/maui-settings-page.png)
 
 ## Run the Mobile Application
 
