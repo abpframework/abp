@@ -2,8 +2,11 @@
   "items": [
     {
       "text": "Get started",
-      "path": "get-started",
       "items": [
+        {
+          "text": "Overview",
+          "path": "get-started/index.md"
+        },
         {
           "text": "Single-layer solution",
           "path": "get-started/single-layer-web-application.md"
@@ -44,8 +47,11 @@
       "items": [
         {
           "text": "TODO application",
-          "path": "tutorials/todo",
           "items": [
+            {
+              "text": "Overview",
+              "path": "tutorials/todo/index.md"
+            },
             {
               "text": "Single-layer solution",
               "path": "tutorials/todo/single-layer"
@@ -116,8 +122,11 @@
       "items": [
         {
           "text": "ABP CLI",
-          "path": "cli",
           "items": [
+            {
+              "text": "Overview",
+              "path": "cli/index.md"
+            },
             {
               "text": "Examples for the new command",
               "path": "cli/new-command-samples.md"
@@ -126,7 +135,6 @@
         },
         {
           "text": "ABP Studio",
-          "path": "studio",
           "items": [
             {
               "text": "Installation",
@@ -171,7 +179,7 @@
           "text": "ABP Suite",
           "items": [
             {
-              "text": "Overall",
+              "text": "Overview",
               "path": "suite"
             },
             {
@@ -192,8 +200,11 @@
             },
             {
               "text": "Generating CRUD Page",
-              "path": "suite/generating-crud-page.md",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "suite/generating-crud-page.md"
+                },
                 {
                   "text": "Creating Many-To-Many Relationship",
                   "path": "suite/creating-many-to-many-relationship.md"
@@ -248,8 +259,11 @@
             },
             {
               "text": "Authorization",
-              "path": "framework/fundamentals/authorization.md",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/fundamentals/authorization.md"
+                },
                 {
                   "text": "Dynamic Claims",
                   "path": "framework/fundamentals/dynamic-claims.md"
@@ -258,8 +272,11 @@
             },
             {
               "text": "Caching",
-              "path": "framework/fundamentals/caching.md",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/fundamentals/caching.md"
+                },
                 {
                   "text": "Redis Cache",
                   "path": "framework/fundamentals/redis-cache.md"
@@ -276,8 +293,11 @@
             },
             {
               "text": "Dependency Injection",
-              "path": "framework/fundamentals/dependency-injection.md",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/fundamentals/dependency-injection.md"
+                },
                 {
                   "text": "AutoFac Integration",
                   "path": "framework/fundamentals/autofac-integration.md"
@@ -306,8 +326,11 @@
             },
             {
               "text": "Validation",
-              "path": "framework/fundamentals/validation.md",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/fundamentals/validation.md"
+                },
                 {
                   "text": "FluentValidation Integration",
                   "path": "framework/fundamentals/fluent-validation.md"
@@ -446,7 +469,7 @@
               "text": "Event Bus",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/infrastructure/event-bus"
                 },
                 {
@@ -543,13 +566,16 @@
         },
         {
           "text": "Architecture",
-          "path": "framework/architecture",
           "items": [
+            {
+              "text": "Overview",
+              "path": "framework/architecture"
+            },
             {
               "text": "Best Practices",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/architecture/best-practices"
                 },
                 {
@@ -616,7 +642,7 @@
                   "text": "Customizing/Extending Modules",
                   "items": [
                     {
-                      "text": "Overall",
+                      "text": "Overview",
                       "path": "framework/architecture/modularity/extending/customizing-application-modules-guide.md"
                     },
                     {
@@ -639,7 +665,7 @@
               "text": "Domain Driven Design",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/architecture/domain-driven-design"
                 },
                 {
@@ -749,7 +775,7 @@
               "text": "MVC / Razor Pages",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/ui/mvc-razor-pages/overall.md"
                 },
                 {
@@ -794,8 +820,11 @@
                 },
                 {
                   "text": "Tag Helpers",
-                  "path": "framework/ui/mvc-razor-pages/tag-helpers",
                   "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/ui/mvc-razor-pages/tag-helpers"
+                    },
                     {
                       "text": "Form Elements",
                       "path": "framework/ui/mvc-razor-pages/tag-helpers/form-elements.md"
@@ -832,8 +861,11 @@
                 },
                 {
                   "text": "Theming",
-                  "path": "framework/ui/mvc-razor-pages/theming.md",
                   "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/ui/mvc-razor-pages/theming.md"
+                    },
                     {
                       "text": "The Basic Theme",
                       "path": "framework/ui/mvc-razor-pages/basic-theme.md"
@@ -848,7 +880,7 @@
                   "text": "JavaScript API",
                   "items": [
                     {
-                      "text": "Overall",
+                      "text": "Overview",
                       "path": "framework/ui/mvc-razor-pages/javascript-api"
                     },
                     {
@@ -909,7 +941,7 @@
                   "text": "Customize/Extend the UI",
                   "items": [
                     {
-                      "text": "Overall",
+                      "text": "Overview",
                       "path": "framework/ui/mvc-razor-pages/customization-user-interface.md"
                     },
                     {
@@ -941,7 +973,7 @@
               "text": "Blazor",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/ui/blazor/overall.md"
                 },
                 {
@@ -960,7 +992,7 @@
                   "text": "Theming",
                   "items": [
                     {
-                      "text": "Overall",
+                      "text": "Overview",
                       "path": "framework/ui/blazor/theming.md"
                     },
                     {
@@ -1272,7 +1304,7 @@
                       "text": "Theming",
                       "items": [
                         {
-                          "text": "Overall",
+                          "text": "Overview",
                           "path": "framework/ui/angular/theming.md"
                         },
                         {
@@ -1305,7 +1337,7 @@
                       "text": "Extensions",
                       "items": [
                         {
-                          "text": "Overall",
+                          "text": "Overview",
                           "path": "framework/ui/angular/extensions-overall.md"
                         },
                         {
@@ -1355,7 +1387,7 @@
               "text": "React Native",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/ui/react-native"
                 }
               ]
@@ -1364,7 +1396,7 @@
               "text": "MAUI",
               "items": [
                 {
-                  "text": "Overall",
+                  "text": "Overview",
                   "path": "framework/ui/maui"
                 }
               ]
@@ -1393,7 +1425,7 @@
           "text": "Data Access",
           "items": [
             {
-              "text": "Overall",
+              "text": "Overview",
               "path": "framework/data"
             },
             {
@@ -1467,7 +1499,7 @@
       "text": "Solution Templates",
       "items": [
         {
-          "text": "Overall",
+          "text": "Overview",
           "path": "solution-templates"
         },
         {
@@ -1492,7 +1524,7 @@
       "text": "Application Modules",
       "items": [
         {
-          "text": "Overall",
+          "text": "Overview",
           "path": "modules"
         },
         {
@@ -1557,8 +1589,11 @@
         },
         {
           "text": "IdentityServer",
-          "path": "modules/identity-server.md",
           "items": [
+            {
+              "text": "Overview",
+              "path": "modules/identity-server.md"
+            },
             {
               "text": "IdentityServer Migration Guide",
               "path": "release-info/migration-guides/identityserver4-step-by-step.md"
@@ -1575,8 +1610,11 @@
         },
         {
           "text": "OpenIddict",
-          "path": "modules/openiddict.md",
           "items": [
+            {
+              "text": "Overview",
+              "path": "modules/openiddict.md"
+            },
             {
               "text": "OpenIddict Migration Guide",
               "path": "release-info/migration-guides/openiddict-step-by-step.md"
@@ -1647,7 +1685,7 @@
       "text": "Testing",
       "items": [
         {
-          "text": "Overall",
+          "text": "Overview",
           "path": "testing/overall.md"
         },
         {
@@ -1666,8 +1704,11 @@
     },
     {
       "text": "Deployment",
-      "path": "deployment",
       "items": [
+        {
+          "text": "Overview",
+          "path": "deployment"
+        },
         {
           "text": "Configuring SSL certificate(HTTPS)",
           "path": "deployment/ssl.md"
