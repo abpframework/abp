@@ -1294,6 +1294,10 @@
                       "path": "framework/ui/angular/modifying-the-menu.md"
                     },
                     {
+                      "text": "Manage Profile Page Tabs",
+                      "path": "framework/ui/angular/manage-profile-page-tabs.md"
+                    },
+                    {
                       "text": "Sorting Navigation Elements",
                       "path": "framework/ui/angular/sorting-navigation-elements.md"
                     },
