@@ -3,6 +3,8 @@
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
 
 > 🛈 With **v8.2+**, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and [ABP Studio](../studio/index.md). The new ABP CLI commands are explained in this documentation. However, if you want to learn more about the differences between the old and new CLIs, want to learn the reason for the change, or need guidance to use the old ABP CLI, please refer to the [Old vs New CLI](differences-between-old-and-new-cli.md) documentation.
+>
+> You may need to remove the Old CLI before installing the New CLI, by running the following command: `dotnet tool uninstall -g Volo.Abp.Cli`
 
 ## Installation
 
@@ -22,8 +24,10 @@ dotnet tool update -g Volo.Abp.Studio.Cli
 
 While each command may have a set of options, there are some global options that can be used with any command;
 
-* `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+* `--skip-cli-version-check` or `-scvc`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+- `--skip-extension-version-check` or `-sevc`: Skips to check the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
 * `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features/templates are added to the `Volo.Abp.Studio.Cli`. But if you want to use the old version, you can use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
+* `--help` or `-h`: Shows help for the specified command.
 
 ## Commands
 
@@ -64,6 +68,8 @@ Here, is the list of all available commands before explaining their details:
 * **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
 * **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
 * **`clear-download-cache`**: Clears the templates download cache.
+* **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
+* **`install-old-cli`**: Installs old ABP CLI.
 
 ### help
 
@@ -127,7 +133,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a application solution. Available templates:
   * **`empty`**: Empty solution template.
   * **`app`**: Application template. Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+    * `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
       * `angular`: Angular UI. There are some additional options for this template:
@@ -158,7 +164,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `basic`: Basic Theme.
     * `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
   * **`app-nolayers`**: Single-layer application template. Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+    * `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       * `angular`: Angular UI. There are some additional options for this template:
       * `blazor`: Blazor UI. There are some additional options for this template:
@@ -174,7 +180,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `basic`: Basic Theme.
     * `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
   * **`microservice`**: Microservice solution template (*Available for* ***Business*** *or higher licenses*).  Additional options:
-    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+    * `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       * `angular`: Angular UI. There are some additional options for this template:
       * `blazor`: Blazor UI. There are some additional options for this template:
@@ -776,6 +782,7 @@ abp switch-to-local --paths "D:\Github\abp|D:\Github\my-repo"
 ### upgrade
 
 Upgrades the ABP modules to pro modules, such as upgrading [Identity](../modules/identity.md) to [Identity Pro](../modules/identity-pro.md). You can use this for [Single Layer Web Application](../solution-templates/single-layer-web-application/index.md) and [Layered Web Application](../solution-templates/layered-web-application/index.md) templates.
+This command is specially designed for users who already started their development before having a license. Therefore this command requires license.
 
 Usage:
 
@@ -918,6 +925,30 @@ abp install-libs [options]
 #### Options
 
 * ```--working-directory``` or ```-wd```: Specifies the working directory. This option is useful when executing directory doesn't contain a project file.
+
+### check-extensions
+
+This command checks the installed ABP CLI extensions and updates them if necessary.
+
+Usage:
+
+````bash
+abp check-extensions
+````
+
+### install-old-cli
+
+This command installs the old ABP CLI with a specific version if it's specified. Otherwise, it installs the old ABP CLI with the latest stable version. Then, [you can directly use the old ABP CLI by simply passing the `--old` parameter at the end of the command or using the `abp-old` as the executing command](./differences-between-old-and-new-cli.md#using-the-old-abp-cli).
+
+Usage:
+
+```bash
+abp install-old-cli [options]
+```
+
+#### Options
+
+* ```--version``` or ```-v```: Specifies the version for ABP CLI to be installed.
 
 ## See Also
 

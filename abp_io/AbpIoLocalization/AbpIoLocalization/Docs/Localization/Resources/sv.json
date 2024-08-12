@@ -1,0 +1,9 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Buy": "Köp",
+    "SeeBookDetails": "Se bokdetaljer",
+    "MasteringAbpFrameworkEBookDescription": "Den här boken hjälper dig att få en fullständig förståelse för ramverket och moderna tekniker för utveckling av webbapplikationer.",
+    "Feedback": "Återkoppling"
+  }
+}

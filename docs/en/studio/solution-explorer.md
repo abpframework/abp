@@ -117,6 +117,7 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
   - `JetBrains Rider`: Opens the module in JetBrains Rider. This option is only available if you have JetBrains Rider installed.
   - `Terminal`: Opens the terminal in the module directory.
   - `Explorer`: Opens the file explorer in the module directory.
+- `Upgrade to Pro`: This will be visible only when you purchased a license but still using the modules came with open-source (free) license. For more details, check out [Migrating from Open Source Templates](../guides/migrating-from-open-source.md) document. This is not shown in the screenshot above.
 
 ### Adding a New Empty Module
 

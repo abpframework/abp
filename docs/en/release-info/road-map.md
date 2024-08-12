@@ -4,18 +4,18 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v8.2
+### v9.0
 
-The next version will be 8.2 and planned to release the stable 8.2 version in June 2024. We will be mostly working on the following topics:
+The next version will be 9.0 and planned to release the stable 9.0 version in November 2024. We will be mostly working on the following topics:
 
-* ABP Studio Community Edition
-* Blazor Full-Stack UI ([#18289](https://github.com/abpframework/abp/issues/18289))
-* Angular Universal ([#15782](https://github.com/abpframework/abp/issues/15782))
-* Upgrading React Native template to the latest major release 0.72.7 ([#18191](https://github.com/abpframework/abp/issues/18191))
-* Deployment Documents Improvements ([#15034](https://github.com/abpframework/abp/issues/15034))
+* Upgrading to .NET 9
+* Introducing `Extension Property Policy` feature
+* Handling localization resources in a microservice scenario
+* ABP Suite: Show default template for customized templates for better sync.
+* Microservice development tutorials
 * Improvements on the existing features and provide more guides.
 
-See the [8.2 milestone](https://github.com/abpframework/abp/milestone/95) for all the issues we've planned to work on.
+See the [9.0 milestone](https://github.com/abpframework/abp/milestone/104) for all the issues we've planned to work on.
 
 ## Backlog Items
 
@@ -45,13 +45,13 @@ Here is a list of major items in the backlog we are considering working on in th
 * Dynamic dashboard system.
 * User guiding module.
 * gRPC integration and implementation for all the pre-built modules.
-* Chat Module: Deleting messages & conversations
 
 ### Tooling
 
-* Suite: File, DateOnly and TimeOnly types
-* Suite: Export child/detail entity records
-* CMS Kit features, including FAQ, spam protection, social media feeds, multi-language support, and so on.
+* ABP Suite: Extra Properties on CRUD Page generation
+* ABP Suite: Allow to create PAGE instead of MODAL for CRUD page generation
+* ABP Suite: Export child/detail entity records
+* CMS Kit features, including spam protection, social media feeds, multi-language support, and so on.
 
 You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map. The backlog items are subject to change. We are adding new items and changing priorities based on the community feedbacks and goals of the project.
 
