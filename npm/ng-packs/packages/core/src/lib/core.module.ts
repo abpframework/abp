@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXsrfConfiguration,
+} from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -46,7 +50,6 @@ const standaloneDirectives = [
 @NgModule({
   exports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
@@ -65,7 +68,6 @@ const standaloneDirectives = [
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
@@ -84,7 +86,7 @@ const standaloneDirectives = [
     ShortTimePipe,
     ShortDatePipe,
   ],
-  providers: [LocalizationPipe],
+  providers: [LocalizationPipe, provideHttpClient(withInterceptorsFromDi())],
 })
 export class BaseCoreModule {}
 
@@ -94,13 +96,14 @@ export class BaseCoreModule {}
  */
 @NgModule({
   exports: [BaseCoreModule, LocalizationModule],
-  imports: [
-    BaseCoreModule,
-    LocalizationModule,
-    HttpClientXsrfModule.withOptions({
-      cookieName: 'XSRF-TOKEN',
-      headerName: 'RequestVerificationToken',
-    }),
+  imports: [BaseCoreModule, LocalizationModule],
+  providers: [
+    provideHttpClient(
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'RequestVerificationToken',
+      }),
+    ),
   ],
 })
 export class RootCoreModule {}
