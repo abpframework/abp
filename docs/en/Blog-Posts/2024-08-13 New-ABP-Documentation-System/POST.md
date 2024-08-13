@@ -39,15 +39,33 @@ Also, for the application modules, we added **(PRO)** postfixes in the navigatio
 
 ## New Navigation Tree 📚
 
-//TODO:...
+With the documentation unification, we re-structured the navigation tree of the documents:
+
+![](navigation-menu.png)
+
+The new navigation tree allows you to find any document you want in a more desired way, in the related sub-menu. For example, if you want to learn more about the modularity, you can find under the **Framework > Architecture > Modularity** menu items, or if you want to learn more about the ABP Studio, you can find the all related docs under the root **Tools** menu.
 
 ## Google Translate & Search Capabilities 🔎
 
-//TODO:...
+In ABP v8.3, we made some improvements in the [Docs Module](https://abp.io/docs/8.3/modules/docs), added Google Search support for better findings in the documentation, and introduced Google Translation for the documentation system. After implementing these features, we integrated them in our documentation system and removed the languages select-box from the menu:
+
+![](google-translate-and-search.png)
+
+From now on, we will provide documents in English only. The reason behind that is, with the new Google Translate support, you can directly translate any documentation to the desired language (of course, must be one of the supported languages). Thanks to the Google Translate feature, you can read the official documentation in your own language, and we as the core team, don't need to synchronize the documentation between different languages, it was really hard to keep them up to date, and now they all will be available all the time in the all supported languages.
+
+Also, thanks to the Google Search, now you can search specific keywords to easily find the related topic in the documentation. For example, if you search the **Validation** keyword, Google will list the all related documents according to their importance and relevancy:
+
+![](google-search-result.png)
 
 ## Providing Feedbacks 📝
 
-//TODO:...
+Beside the all changes, we also added a **feedback section** at the end of the each documentation. You can share your thoughts, suggestions or criticism for a specific documentation. We would like to hear more about you about the documentation quality of ours and get suggestions from each one of you to improve our documents and platform, so it will be much appreciated if you share your feedbacks for any documentation you want, please don't hesitate!
+
+You can either directly scroll down to the bottom directly for a certain document, or click the **Feedback** action button to navigate to the feedbacks section, and provide feedback:
+
+![](docs-feedbacks.png)
+
+![](docs-feedback-section.png)
 
 ## Conclusion 🎯
 
