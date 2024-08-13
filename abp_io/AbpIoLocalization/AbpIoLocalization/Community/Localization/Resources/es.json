@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> soportado.",
     "Preview": "Avance",
     "VisitPage": "Visita la página",
-    "VisitVideoCourseDescription": "Si desea aprender los conceptos básicos del marco ABP, consulte los cursos en vídeo de ABP Essentials."
+    "VisitVideoCourseDescription": "Si desea aprender los conceptos básicos del marco ABP, consulte los cursos en vídeo de ABP Essentials.",
+    "ConfirmEmailForPost": "Para poder publicar, debe confirmar su correo electrónico. Vaya a account.abp.io/Account/Manage y verifique su correo electrónico en la pestaña Información personal.",
+    "DailyPostCreateLimitation": "Has alcanzado el límite diario de creación de publicaciones. Puedes crear una nueva publicación en {0}."
   }
 }

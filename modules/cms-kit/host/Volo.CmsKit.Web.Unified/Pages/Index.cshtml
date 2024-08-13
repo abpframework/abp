@@ -8,6 +8,7 @@
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Pages
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.MarkedItemToggle
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
@@ -117,4 +118,33 @@
             })
         }
     </abp-column>
+</abp-row>
+
+
+<hr />
+<abp-row>
+    @for (int i = 1; i <= 4; i++)
+    {
+        var name = $"Item {i}";
+        <abp-column>
+            <abp-card background="Light" text-color="Dark" border="Success" class="mb-3" style="max-width: 18rem;">
+                <abp-card-header class="d-flex justify-content-between">
+                    <div>
+                        Item
+                    </div>
+                    <div>
+                        @await Component.InvokeAsync(typeof(MarkedItemToggleViewComponent), new
+                            {
+                                entityId = name,
+                                entityType = "product",
+                                needsConfirmation = true // (optional)
+                            })
+                    </div>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-card-title>@name</abp-card-title>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    }
 </abp-row>
