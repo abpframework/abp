@@ -1,0 +1,56 @@
+# New ABP Documentation System: Everything You Need In One Place 📣
+
+//TODO: add cover image here...
+
+We have combined the ABP (open-source) and ABP Commercial (paid) documents into a single, comprehensive resource. This unification brings you a better experience in the documentation system, helps you find what you're looking for more easily, allows you to read the documents those are related to each other one after the another and also provides google search and translation support for the documents. Let's see what's new with the unified documentation system in details:
+
+## All Documentation In One Place 📃
+
+We decided to combine the ABP (open-source) and ABP Commercial (paid) documents into a single place, along with [the new ABP Platform Unification](https://abp.io/blog/new-abp-platform-is-live). The new documentation address is [abp.io/docs](https://abp.io/docs) and it's look like in the figure below:
+
+![](abp-docs.png)
+
+This unified documentation brings you a better search capabilities with Google Search support, allows you to not needing to switch between documentation websites to read both framework and commercial features, look what you are looking for more easily from the unified menu structure, following new features and their documentation in a more stable and easier way.
+
+## Accessing Old Documents 🗃️
+
+From v8.2, with the new documentation system, since we merged all documents into a single place, you don't need to select if you want to show a framework or commercial document. However, if you want to access an old document, for example if you are using an older version of ABP or doesn't want to create the solutions from ABP Studio and instead prefering ABP CLI (in the getting started and startup template docs, ABP Studio is shown for project creation and other features, for instance), you can change the version from the version select-box (prior to v8.2), and select which document type (framework or commercial) you want to read and then find/choose the document that you want:
+
+![](old-docs.png)
+
+You can access any old-version document as you would before, by specifying the version. But we suggest you to update your solution to v8.2+ and start using ABP Studio! By doing that, you can get more benefit of new features, edge cutting features of ABP Studio and easily manage your application from development to the production!
+
+## Documentation Updates 🚀
+
+With the [announcement of ABP Studio (beta) General Availability](https://abp.io/blog/announcing-abp-studio-general-availability), we made some improvements in our documents. Starting from v8.2, since ABP Studio is the suggested way to create and manage your applications, we updated the [Get started](https://abp.io/docs/latest/get-started) documentation and some other documents along with it, and explained project creation via ABP Studio. If you prefer [creating a new solution with the ABP CLI](https://abp.io/docs/latest/cli), you can use the new ABP CLI as you do the old one before. 
+
+Beside that, we revised all of our documents, updated most of them according to the [new ABP Platform unification](https://abp.io/blog/new-abp-platform-is-live). For example, we merged our migration guide documents into single documents for each version and categorized the related topics you need to do when updating your solutions under the **open-source** and **pro** sections, so either you are an open-source template user or a license owner, you can easily jump to the related section and read them easily and accordingly:
+
+![](in-this-document.png)
+
+Since we combined ABP (framework) and ABP Commercial documents, we added information notes in each documentation that indicates if the related feature is in your license plan or not. An example screenshot from ABP Suite documentation can be seen as follow:
+
+![](suite-license-note.png)
+
+Also, for the application modules, we added **(PRO)** postfixes in the navigation menu for you to easily understand if the module is for license owners or open-source users. Thanks to that you can easily distinguish the related application modules and read the related module documentation to understand it:
+
+![](pro-modules.png)
+
+
+## New Navigation Tree 📚
+
+//TODO:...
+
+## Google Translate & Search Capabilities 🔎
+
+//TODO:...
+
+## Providing Feedbacks 📝
+
+//TODO:...
+
+## Conclusion 🎯
+
+To see the new ABP documentation system, please visit the https://abp.io/docs/latest/ website. Check it out the new navigation tree, read documents you want, provide feedbacks to help us improve our documents and more...
+
+We look forward to your feedback and continued support as we grow together! Thanks in advance 🙏
