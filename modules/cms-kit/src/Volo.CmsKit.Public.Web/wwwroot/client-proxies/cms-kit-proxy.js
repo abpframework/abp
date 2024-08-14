@@ -5,138 +5,53 @@
 
 (function(){
 
-  // controller volo.cmsKit.public.tags.tagPublic
+  // controller volo.cmsKit.public.blogs.blogPostPublic
 
   (function(){
 
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.tags.tagPublic');
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.blogs.blogPostPublic');
 
-    volo.cmsKit.public.tags.tagPublic.getAllRelatedTags = function(entityType, entityId, ajaxParams) {
+    volo.cmsKit.public.blogs.blogPostPublic.get = function(blogSlug, blogPostSlug, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/tags/' + entityType + '/' + entityId + '',
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '/' + blogPostSlug + '',
         type: 'GET'
       }, ajaxParams));
     };
 
-  })();
-
-  // controller volo.cmsKit.public.reactions.reactionPublic
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.reactions.reactionPublic');
-
-    volo.cmsKit.public.reactions.reactionPublic.getForSelection = function(entityType, entityId, ajaxParams) {
+    volo.cmsKit.public.blogs.blogPostPublic.getList = function(blogSlug, input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/reactions/' + entityType + '/' + entityId + '',
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '' + abp.utils.buildQueryString([{ name: 'authorId', value: input.authorId }, { name: 'tagId', value: input.tagId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };
 
-    volo.cmsKit.public.reactions.reactionPublic.create = function(entityType, entityId, reaction, ajaxParams) {
+    volo.cmsKit.public.blogs.blogPostPublic.getAuthorsHasBlogPosts = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/reactions/' + entityType + '/' + entityId + '/' + reaction + '',
-        type: 'PUT',
-        dataType: null
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/authors' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        type: 'GET'
       }, ajaxParams));
     };
 
-    volo.cmsKit.public.reactions.reactionPublic['delete'] = function(entityType, entityId, reaction, ajaxParams) {
+    volo.cmsKit.public.blogs.blogPostPublic.getAuthorHasBlogPost = function(id, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/reactions/' + entityType + '/' + entityId + '/' + reaction + '',
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/authors/' + id + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.blogs.blogPostPublic['delete'] = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + id + '',
         type: 'DELETE',
         dataType: null
       }, ajaxParams));
     };
 
-  })();
-
-  // controller volo.cmsKit.public.ratings.ratingPublic
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.ratings.ratingPublic');
-
-    volo.cmsKit.public.ratings.ratingPublic.create = function(entityType, entityId, input, ajaxParams) {
+    volo.cmsKit.public.blogs.blogPostPublic.getTagName = function(tagId, id, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/ratings/' + entityType + '/' + entityId + '',
-        type: 'PUT',
-        data: JSON.stringify(input)
-      }, ajaxParams));
-    };
-
-    volo.cmsKit.public.ratings.ratingPublic['delete'] = function(entityType, entityId, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/ratings/' + entityType + '/' + entityId + '',
-        type: 'DELETE',
-        dataType: null
-      }, ajaxParams));
-    };
-
-    volo.cmsKit.public.ratings.ratingPublic.getGroupedStarCounts = function(entityType, entityId, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/ratings/' + entityType + '/' + entityId + '',
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/tags/' + id + '' + abp.utils.buildQueryString([{ name: 'tagId', value: tagId }]) + '',
         type: 'GET'
-      }, ajaxParams));
-    };
-
-  })();
-
-  // controller volo.cmsKit.public.pages.pagesPublic
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.pages.pagesPublic');
-
-    volo.cmsKit.public.pages.pagesPublic.findBySlug = function(slug, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/pages/' + slug + '',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.cmsKit.public.pages.pagesPublic.findDefaultHomePage = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/pages',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-  })();
-
-  // controller volo.cmsKit.public.menus.menuItemPublic
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.menus.menuItemPublic');
-
-    volo.cmsKit.public.menus.menuItemPublic.getList = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/menu-items',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-  })();
-
-  // controller volo.cmsKit.public.globalResources.globalResourcePublic
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.globalResources.globalResourcePublic');
-
-    volo.cmsKit.public.globalResources.globalResourcePublic.getGlobalScript = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/global-resources/script',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.cmsKit.public.globalResources.globalResourcePublic.getGlobalStyle = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/global-resources/style',
-        type: 'GET'
-      }, ajaxParams));
+      }, { dataType: 'text' }, ajaxParams));
     };
 
   })();
@@ -180,45 +95,173 @@
 
   })();
 
-  // controller volo.cmsKit.public.blogs.blogPostPublic
+  // controller volo.cmsKit.public.globalResources.globalResourcePublic
 
   (function(){
 
-    abp.utils.createNamespace(window, 'volo.cmsKit.public.blogs.blogPostPublic');
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.globalResources.globalResourcePublic');
 
-    volo.cmsKit.public.blogs.blogPostPublic.get = function(blogSlug, blogPostSlug, ajaxParams) {
+    volo.cmsKit.public.globalResources.globalResourcePublic.getGlobalScript = function(ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '/' + blogPostSlug + '',
+        url: abp.appPath + 'api/cms-kit-public/global-resources/script',
         type: 'GET'
       }, ajaxParams));
     };
 
-    volo.cmsKit.public.blogs.blogPostPublic.getList = function(blogSlug, input, ajaxParams) {
+    volo.cmsKit.public.globalResources.globalResourcePublic.getGlobalStyle = function(ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '' + abp.utils.buildQueryString([{ name: 'authorId', value: input.authorId }, { name: 'tagId', value: input.tagId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-public/global-resources/style',
         type: 'GET'
       }, ajaxParams));
     };
 
-    volo.cmsKit.public.blogs.blogPostPublic.getAuthorsHasBlogPosts = function(input, ajaxParams) {
+  })();
+
+  // controller volo.cmsKit.public.markedItems.markedItemPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.markedItems.markedItemPublic');
+
+    volo.cmsKit.public.markedItems.markedItemPublic.getForUser = function(entityType, entityId, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/authors' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-public/marked-items/' + entityType + '/' + entityId + '',
         type: 'GET'
       }, ajaxParams));
     };
 
-    volo.cmsKit.public.blogs.blogPostPublic.getAuthorHasBlogPost = function(id, ajaxParams) {
+    volo.cmsKit.public.markedItems.markedItemPublic.toggle = function(entityType, entityId, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/authors/' + id + '',
+        url: abp.appPath + 'api/cms-kit-public/marked-items/' + entityType + '/' + entityId + '',
+        type: 'PUT'
+      }, ajaxParams));
+    };
+
+  })();
+
+  // controller volo.cmsKit.public.menus.menuItemPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.menus.menuItemPublic');
+
+    volo.cmsKit.public.menus.menuItemPublic.getList = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/menu-items',
         type: 'GET'
       }, ajaxParams));
     };
 
-    volo.cmsKit.public.blogs.blogPostPublic['delete'] = function(id, ajaxParams) {
+  })();
+
+  // controller volo.cmsKit.public.pages.pagesPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.pages.pagesPublic');
+
+    volo.cmsKit.public.pages.pagesPublic.findBySlug = function(slug, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + id + '',
+        url: abp.appPath + 'api/cms-kit-public/pages/by-slug' + abp.utils.buildQueryString([{ name: 'slug', value: slug }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.pages.pagesPublic.findDefaultHomePage = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/pages/home',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.pages.pagesPublic.doesSlugExist = function(slug, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/pages/exist' + abp.utils.buildQueryString([{ name: 'slug', value: slug }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
+  // controller volo.cmsKit.public.ratings.ratingPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.ratings.ratingPublic');
+
+    volo.cmsKit.public.ratings.ratingPublic.create = function(entityType, entityId, input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/ratings/' + entityType + '/' + entityId + '',
+        type: 'PUT',
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.ratings.ratingPublic['delete'] = function(entityType, entityId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/ratings/' + entityType + '/' + entityId + '',
         type: 'DELETE',
         dataType: null
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.ratings.ratingPublic.getGroupedStarCounts = function(entityType, entityId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/ratings/' + entityType + '/' + entityId + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
+  // controller volo.cmsKit.public.reactions.reactionPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.reactions.reactionPublic');
+
+    volo.cmsKit.public.reactions.reactionPublic.getForSelection = function(entityType, entityId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/reactions/' + entityType + '/' + entityId + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.reactions.reactionPublic.create = function(entityType, entityId, reaction, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/reactions/' + entityType + '/' + entityId + '/' + reaction + '',
+        type: 'PUT',
+        dataType: null
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.reactions.reactionPublic['delete'] = function(entityType, entityId, reaction, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/reactions/' + entityType + '/' + entityId + '/' + reaction + '',
+        type: 'DELETE',
+        dataType: null
+      }, ajaxParams));
+    };
+
+  })();
+
+  // controller volo.cmsKit.public.tags.tagPublic
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.public.tags.tagPublic');
+
+    volo.cmsKit.public.tags.tagPublic.getAllRelatedTags = function(entityType, entityId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/tags/' + entityType + '/' + entityId + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.public.tags.tagPublic.getPopularTags = function(entityType, maxCount, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-public/tags/popular/' + entityType + '/' + maxCount + '',
+        type: 'GET'
       }, ajaxParams));
     };
 

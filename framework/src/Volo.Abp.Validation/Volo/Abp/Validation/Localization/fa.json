@@ -13,7 +13,7 @@
     "The field {0} must match the regular expression '{1}'.": "فیلد {0} با قالب درخواستی مطابقت ندارد.",
     "The {0} field is required.": "فیلد {0} الزامی است.",
     "The field {0} must be a string with a maximum length of {1}.": "فیلد {0} باید یک رشته با حداکثر طول {1} باشد.",
-    "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "فیلد {0} باید رشته ای با حداقل طول {2} و حداکثر باشد طول {1}. ",
+    "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "فیلد {0} باید رشته ای با حداقل طول {2} و حداکثر طول {1} باشد. ",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "فیلد {0} یک نشانی اینترنتی http ، https ، یا ftp کاملاً واجد شرایط نیست.",
     "The field {0} is invalid.": "فیلد {0} نامعتبر است.",
     "The value '{0}' is invalid.": "مقدار '{0}' نامعتبر است.",

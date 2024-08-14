@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -12,4 +12,10 @@ public interface ICommentAdminAppService : IApplicationService
     Task<CommentWithAuthorDto> GetAsync(Guid id);
 
     Task DeleteAsync(Guid id);
+
+    Task UpdateApprovalStatusAsync(Guid id, CommentApprovalDto input);
+
+    Task UpdateSettingsAsync(CommentSettingsDto input);
+
+    Task<int> GetWaitingCountAsync();
 }
