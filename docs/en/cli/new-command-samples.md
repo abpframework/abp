@@ -36,6 +36,12 @@ The following commands are for creating Angular UI projects:
   abp new Acme.BookStore -t app -u angular -m none --separate-auth-server --database-provider mongodb -csf
   ```
 
+* **No DB migration!**, the DB migration will not be generated
+
+  ```bash
+  abp new Acme.BookStore -u angular --skip-migrations --skip-migrator
+  ```
+
 ## MVC
 
 The following commands are for creating MVC UI projects:
@@ -72,7 +78,12 @@ The following commands are for creating MVC UI projects:
   
   _Note that Public Website is only included in PRO templates._
   
+* **No initial configuration!**, the DB migration will not be generated, client-side scripts will not be installed and bundling will not run
 
+  ```bash
+  abp new Acme.BookStore -u mvc --skip-migrations --skip-migrator --dont-run-install-libs --dont-run-bundling
+  ```
+  
 ## Blazor WebAssembly
 
 The following commands are for creating Blazor WASM projects:
@@ -93,6 +104,12 @@ The following commands are for creating Blazor WASM projects:
 
   ```bash
   abp new Acme.BookStore -u blazor --database-provider mongodb --mobile none -csf
+  ```
+  
+* **Client-side libraries are not loaded automatically!**, the libs folder will not be installed from ([NPM](https://www.npmjs.com/))
+
+  ```bash
+  abp new Acme.BookStore -u blazor --dont-run-install-libs
   ```
 
 ## Blazor Server
@@ -115,6 +132,12 @@ The following commands are for creating Blazor projects:
 
   ```bash
   abp new Acme.BookStore -u blazor --database-provider mongodb --mobile none -csf
+  ```
+
+* **Skip bundling for the packages**, 
+
+  ```bash
+  abp new Acme.BookStore -u blazor --dont-run-bundling
   ```
   
 ## No UI 
