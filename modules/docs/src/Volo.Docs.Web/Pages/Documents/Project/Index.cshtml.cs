@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -549,12 +550,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
                 catch (Exception e)
                 {
-                    var message = $"Error occurred during the rendering of this document. The document is not valid: {e.Message}";
-                    Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
-                    await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
-                    {
-                        ErrorMessage = message, Name = Document.Name
-                    });
+                    await OnSectionRenderingErrorAsync(e);
                 }
             }
 
@@ -577,6 +573,19 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+        
+        protected async Task OnSectionRenderingErrorAsync(Exception e)
+        {
+            var message = $"Error occurred during the rendering of this document. The document is not valid: {e.Message}";
+            Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
+            await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
+            {
+                ErrorMessage = message, Name = Document.Name
+            });
+
+            // Slow down with crawling
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         }
 
         private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
