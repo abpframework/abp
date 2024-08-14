@@ -575,7 +575,7 @@ namespace Volo.Docs.Pages.Documents.Project
             Document.Content = content;
         }
         
-        protected async Task OnSectionRenderingErrorAsync(Exception e)
+        protected virtual async Task OnSectionRenderingErrorAsync(Exception e)
         {
             var message = $"Error occurred during the rendering of this document. The document is not valid: {e.Message}";
             Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
