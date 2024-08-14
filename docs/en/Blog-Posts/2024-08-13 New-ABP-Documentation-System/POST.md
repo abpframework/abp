@@ -1,8 +1,8 @@
 # New ABP Documentation System: Everything You Need In One Place 📣
 
-//TODO: add cover image here...
-
 We have combined the ABP (open-source) and ABP Commercial (paid) documents into a single, comprehensive resource. This unification brings you a better experience in the documentation system, helps you find what you're looking for more easily, allows you to read the documents that are related to each other one after the other, and also provides Google Search and Google Translation support for the documents. 
+
+![](blog-cover.png)
 
 Let's see what's new with the unified documentation system in detail:
 
