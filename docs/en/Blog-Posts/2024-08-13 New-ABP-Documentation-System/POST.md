@@ -16,7 +16,7 @@ The new documentation address is [abp.io/docs](https://abp.io/docs) and seen lik
 
 This unified documentation brings you a better search capability with Google Search support, allows you to not need to switch between documentation websites to read both framework and commercial features, look what you are looking for more easily from the unified menu structure, following new features and their documentation in a more stable and easier way.
 
-## Accessing Old Documents 🗃️
+## Accessing Documents with Older Versions🗃️
 
 From v8.2, with the new documentation system, since we merged all documents into a single place, you don't need to select if you want to show a framework or commercial document. However, if you want to access an old document, for example, if you are using an older version of ABP or don't want to create the solutions from ABP Studio and instead prefer ABP CLI (in the getting started and startup template docs, ABP Studio is shown for project creation and other features, for instance), you can change the version from the version select-box (prior to v8.2), and select which document type (framework or commercial) you want to read and then find/choose the document that you want:
 
