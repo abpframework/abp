@@ -34,6 +34,7 @@
     <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.3.10.8" />
     <PackageVersion Include="DeviceDetector.NET" Version="6.1.4" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.5" />
+    <PackageVersion Include="DistributedLock.Redis" Version="1.0.2" />
     <PackageVersion Include="EphemeralMongo.Core" Version="1.1.3" />
     <PackageVersion Include="EphemeralMongo6.runtime.linux-x64" Version="1.1.3" />
     <PackageVersion Include="EphemeralMongo6.runtime.osx-x64" Version="1.1.3" />
