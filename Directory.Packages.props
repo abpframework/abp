@@ -120,6 +120,8 @@
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageVersion Include="SkiaSharp" Version="2.88.6" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.macOS" Version="2.88.6" />
     <PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
