@@ -17,6 +17,7 @@
     <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.2" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageVersion Include="Backport.System.Threading.Lock" Version="1.1.1" />
     <PackageVersion Include="Blazorise" Version="1.5.2" />
     <PackageVersion Include="Blazorise.Components" Version="1.5.2" />
     <PackageVersion Include="Blazorise.DataGrid" Version="1.5.2" />
@@ -47,6 +48,7 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageVersion Include="LdapForNet" Version="2.7.15" />
     <PackageVersion Include="LibGit2Sharp" Version="0.28.0" />
+    <PackageVersion Include="ListShuffle" Version="2.0.0" />
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
     <PackageVersion Include="MailKit" Version="4.7.1.1" />
     <PackageVersion Include="Markdig.Signed" Version="0.37.0" />
@@ -165,6 +167,7 @@
     <PackageVersion Include="System.Text.Encodings.Web" Version="8.0.0" />
     <PackageVersion Include="System.Text.Json" Version="8.0.4" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
+    <PackageVersion Include="ThreadSafeRandomizer" Version="1.1.4" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />
     <PackageVersion Include="xunit" Version="2.6.1" />
