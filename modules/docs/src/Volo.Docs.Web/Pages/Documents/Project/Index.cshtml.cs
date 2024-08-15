@@ -475,7 +475,7 @@ namespace Volo.Docs.Pages.Documents.Project
             var match = Regex.Match(Document.Content, @"#(?<PageTitle>.+)");
             if (match.Success && match.Groups.TryGetValue("PageTitle", out var group))
             {
-                DocumentPageTitle = Regex.Replace(group.Value, "<.*?>", string.Empty);
+                DocumentPageTitle = Regex.Replace(group.Value, "<.*?>", string.Empty).Trim();
             }
         }
 
