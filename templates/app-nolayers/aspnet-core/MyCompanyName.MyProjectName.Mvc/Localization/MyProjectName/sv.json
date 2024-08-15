@@ -1,0 +1,8 @@
+{
+  "culture": "sv",
+  "texts": {
+    "AppName": "MittProjektNamn",
+    "Welcome_Text": "Detta är en minimalistisk startmall för applikationer i ett lager för ABP-ramverket.",
+    "Menu:Home": "Hem"
+  }
+}

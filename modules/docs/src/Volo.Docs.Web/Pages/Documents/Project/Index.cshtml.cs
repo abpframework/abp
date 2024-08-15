@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.EventBus.Local;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -55,6 +57,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public List<SelectListItem> LanguageSelectListItems { get; set; }
 
         public string DocumentNameWithExtension { get; private set; }
+        
+        public string DocumentPageTitle { get; private set; }
 
         public DocumentWithDetailsDto Document { get; private set; }
 
@@ -96,6 +100,8 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly DocsUiOptions _uiOptions;
 
         protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
+        
+        protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
         public IndexModel(
             IDocumentAppService documentAppService,
@@ -191,6 +197,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             await SetNavigationAsync();
             SetLanguageSelectListItems();
+            SetDocumentPageTitle();
 
             return Page();
         }
@@ -455,11 +462,17 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
+                
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
                 return;
             }
+        }
+        
+        private void SetDocumentPageTitle()
+        {
+            DocumentPageTitle = Navigation.FindNavigation(DocumentNameWithExtension)?.Text ?? DocumentName?.Replace("-", " ");
         }
 
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
@@ -540,7 +553,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
                 DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
-                Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                try
+                {
+                    Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                }
+                catch (Exception e)
+                {
+                    await OnSectionRenderingErrorAsync(e);
+                }
             }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
@@ -562,6 +582,19 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+        
+        protected virtual async Task OnSectionRenderingErrorAsync(Exception e)
+        {
+            var message = $"Error occurred during the rendering of this document. The document is not valid: {e.Message}";
+            Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
+            await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
+            {
+                ErrorMessage = message, Name = Document.Name
+            });
+
+            // Slow down with crawling
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         }
 
         private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
