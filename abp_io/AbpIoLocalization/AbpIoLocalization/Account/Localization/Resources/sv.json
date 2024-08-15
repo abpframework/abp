@@ -1,0 +1,18 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Account": "ABP-konto - Logga in och registrera dig | ABP.IO",
+    "Welcome": "Välkommen",
+    "UseOneOfTheFollowingLinksToContinue": "Använd någon av följande länkar för att fortsätta",
+    "FrameworkHomePage": "Ramverkets startsida",
+    "FrameworkDocumentation": "Dokumentation av ramverk",
+    "OfficialBlog": "Officiell blogg",
+    "CommercialHomePage": "Kommersiell hemsida",
+    "CommercialSupportWebSite": "Webbplats för kommersiellt stöd",
+    "CommunityWebSite": "ABP:s gemensamma webbplats",
+    "ManageAccount": "Mitt konto | ABP.IO",
+    "ManageYourProfile": "Hantera din profil",
+    "ReturnToApplication": "Återgå till ansökan",
+    "IdentityUserNotAvailable:Deleted": "Den här e-postadressen är inte tillgänglig. Anledning till detta: Redan raderad."
+  }
+}

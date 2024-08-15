@@ -28,7 +28,7 @@
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
-    PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
+    PageLayout.Content.Title = Model.DocumentPageTitle;
     ViewBag.Description = Model.GetDescription();
     ViewBag.CanonicalUrl = Model.IsLatestVersion ? null : Model.GetFullUrlOfTheLatestDocument(); //issue #12355
 }
