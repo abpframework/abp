@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.ObjectExtending.Modularity;
 
 public static class ModuleExtensionConfigurationHelper
 {
-    private static object SyncLock = new object();
+    private static Lock SyncLock = new Lock();
 
     public static void ApplyEntityConfigurationToEntity(
         string moduleName,

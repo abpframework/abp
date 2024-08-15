@@ -10,6 +10,7 @@ using RabbitMQ.Client.Exceptions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
+using System.Threading;
 
 namespace Volo.Abp.RabbitMQ;
 
@@ -35,7 +36,7 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
     protected ConcurrentQueue<QueueBindCommand> QueueBindCommands { get; }
 
-    protected object ChannelSendSyncLock { get; } = new object();
+    protected Lock ChannelSendSyncLock { get; } = new Lock();
 
     public RabbitMqMessageConsumer(
         IConnectionPool connectionPool,
@@ -89,7 +90,8 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                     return;
                 }
 
-                lock (ChannelSendSyncLock)
+                ChannelSendSyncLock.Enter();
+                try
                 {
                     if (QueueBindCommands.TryPeek(out var command))
                     {
@@ -115,6 +117,10 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
                         QueueBindCommands.TryDequeue(out command);
                     }
+                }
+                finally
+                {
+                    ChannelSendSyncLock.Exit();
                 }
             }
         }

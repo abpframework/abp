@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
+using System.Threading;
 
 namespace Volo.Abp.MongoDB;
 
@@ -17,7 +18,7 @@ public class MongoModelBuilder : IMongoModelBuilder
 {
     private readonly Dictionary<Type, object> _entityModelBuilders;
 
-    private static readonly object SyncObj = new object();
+    private static readonly Lock SyncObj = new Lock();
 
     public MongoModelBuilder()
     {

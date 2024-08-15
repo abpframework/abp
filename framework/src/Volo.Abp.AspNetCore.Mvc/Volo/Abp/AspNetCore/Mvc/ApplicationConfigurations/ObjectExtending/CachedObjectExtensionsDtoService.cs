@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
@@ -13,7 +14,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
 {
     protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
     protected volatile ObjectExtensionsDto? CachedValue;
-    protected readonly object SyncLock = new object();
+    protected readonly Lock SyncLock = new Lock();
 
     public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)
     {

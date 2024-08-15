@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
@@ -19,7 +19,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private IVirtualFileProvider _virtualFileProvider = default!;
     private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
-    private readonly object _syncObj = new object();
+    private readonly Lock _syncObj = new Lock();
     private LocalizationResourceBase _resource = default!;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
