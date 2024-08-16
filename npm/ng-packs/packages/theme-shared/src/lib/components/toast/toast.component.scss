@@ -55,6 +55,8 @@ $toastClass: abp-toast;
     align-self: center;
     flex-direction: column;
     word-break: break-word;
+    padding-bottom: 2px;
+
     .#{$toastClass}-close-button {
       position: absolute;
       top: 0;
@@ -65,7 +67,7 @@ $toastClass: abp-toast;
       margin: 0;
       padding: 0px 5px 0 0;
       width: 25px;
-      height: 25px;
+      height: 100%;
       border: none;
       border-radius: 50%;
       background: transparent;
