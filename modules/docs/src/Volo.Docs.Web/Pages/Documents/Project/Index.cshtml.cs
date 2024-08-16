@@ -590,7 +590,10 @@ namespace Volo.Docs.Pages.Documents.Project
             Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
             await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
             {
-                ErrorMessage = message, Name = Document.Name
+                ErrorMessage = e.Message, 
+                Name = Document.Name,
+                Url = Request.GetDisplayUrl(),
+                UserPreferences = UserPreferences
             });
 
             // Slow down with crawling
