@@ -592,7 +592,8 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 ErrorMessage = e.Message, 
                 Name = Document.Name,
-                Url = Request.GetDisplayUrl()
+                Url = Request.GetDisplayUrl(),
+                UserPreferences = UserPreferences
             });
 
             // Slow down with crawling
