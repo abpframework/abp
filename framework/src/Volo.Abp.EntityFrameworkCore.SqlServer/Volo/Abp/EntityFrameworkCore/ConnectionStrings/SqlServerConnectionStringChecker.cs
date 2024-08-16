@@ -32,7 +32,7 @@ public class SqlServerConnectionStringChecker : IConnectionStringChecker, ITrans
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

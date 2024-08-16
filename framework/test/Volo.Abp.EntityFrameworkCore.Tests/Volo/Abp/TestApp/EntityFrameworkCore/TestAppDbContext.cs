@@ -14,8 +14,6 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore;
 [ReplaceDbContext(typeof(IFourthDbContext))]
 public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext, IFourthDbContext
 {
-    private DbSet<FourthDbContextDummyEntity> _dummyEntities;
-    private DbSet<FourthDbContextDummyEntity> _dummyEntities1;
     public DbSet<Person> People { get; set; }
 
     public DbSet<City> Cities { get; set; }

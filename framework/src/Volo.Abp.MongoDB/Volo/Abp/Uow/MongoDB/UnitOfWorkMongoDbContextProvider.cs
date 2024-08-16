@@ -242,7 +242,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             {
                 session.StartTransaction();
             }
-            catch (NotSupportedException e)
+            catch (NotSupportedException)
             {
                 Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 

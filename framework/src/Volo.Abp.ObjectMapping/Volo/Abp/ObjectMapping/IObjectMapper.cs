@@ -11,7 +11,7 @@ public interface IObjectMapper
     IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
 
     /// <summary>
-    /// Converts an object to another. Creates a new object of <see cref="TDestination"/>.
+    /// Converts an object to another. Creates a new object of <typeparamref name="TDestination" />.
     /// </summary>
     /// <typeparam name="TDestination">Type of the destination object</typeparam>
     /// <typeparam name="TSource">Type of the source object</typeparam>
@@ -25,7 +25,7 @@ public interface IObjectMapper
     /// <typeparam name="TDestination">Destination type</typeparam>
     /// <param name="source">Source object</param>
     /// <param name="destination">Destination object</param>
-    /// <returns>Returns the same <see cref="destination"/> object after mapping operation</returns>
+    /// <returns>Returns the same <paramref name="destination" /> object after mapping operation</returns>
     TDestination Map<TSource, TDestination>(TSource source, TDestination destination);
 }
 
@@ -46,7 +46,7 @@ public interface IObjectMapper<TContext> : IObjectMapper
 public interface IObjectMapper<in TSource, TDestination>
 {
     /// <summary>
-    /// Converts an object to another. Creates a new object of <see cref="TDestination"/>.
+    /// Converts an object to another. Creates a new object of <typeparamref name="TDestination"/>.
     /// </summary>
     /// <param name="source">Source object</param>
     TDestination Map(TSource source);
@@ -56,6 +56,6 @@ public interface IObjectMapper<in TSource, TDestination>
     /// </summary>
     /// <param name="source">Source object</param>
     /// <param name="destination">Destination object</param>
-    /// <returns>Returns the same <see cref="destination"/> object after mapping operation</returns>
+    /// <returns>Returns the same <paramref name="destination"/> object after mapping operation</returns>
     TDestination Map(TSource source, TDestination destination);
 }

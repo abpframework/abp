@@ -28,7 +28,7 @@ public class OracleConnectionStringChecker : IConnectionStringChecker, ITransien
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

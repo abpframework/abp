@@ -20,12 +20,10 @@ public class DotnetEfToolManager : ISingletonDependency
 
     public async Task BeSureInstalledAsync()
     {
-        if (IsDotNetEfToolInstalled())
+        if (!IsDotNetEfToolInstalled())
         {
-            return;
-        }
-
-        InstallDotnetEfTool();
+            InstallDotnetEfTool();
+        }        
     }
     
     private bool IsDotNetEfToolInstalled()

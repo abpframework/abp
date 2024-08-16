@@ -151,7 +151,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
                 var redis = await ConnectionMultiplexer.ConnectAsync("127.0.0.1", options => options.ConnectTimeout = 3000);
                 isConnected = redis.IsConnected;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }

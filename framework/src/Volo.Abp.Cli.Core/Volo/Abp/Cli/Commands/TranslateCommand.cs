@@ -412,7 +412,7 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         {
             jObject = JObject.Parse(json);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return null;
         }

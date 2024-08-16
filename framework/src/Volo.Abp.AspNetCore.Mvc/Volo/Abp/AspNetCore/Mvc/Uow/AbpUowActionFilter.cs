@@ -103,7 +103,7 @@ public class AbpUowActionFilter : IAsyncActionFilter, IAbpFilter, ITransientDepe
             {
                 await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
                 throw;

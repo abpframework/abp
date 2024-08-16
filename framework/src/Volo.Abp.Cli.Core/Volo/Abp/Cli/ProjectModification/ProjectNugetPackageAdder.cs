@@ -291,7 +291,7 @@ public class ProjectNugetPackageAdder : ITransientDependency
             {
                 await RunBundleForBlazorAsync(projectFile);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.LogWarning("Couldn't run bundle for blazor.");
             }

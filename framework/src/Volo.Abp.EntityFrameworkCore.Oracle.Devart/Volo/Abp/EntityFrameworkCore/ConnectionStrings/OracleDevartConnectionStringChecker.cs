@@ -28,7 +28,7 @@ public class OracleDevartConnectionStringChecker : IConnectionStringChecker, ITr
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

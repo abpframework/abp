@@ -109,7 +109,7 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
             {
                 await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
                 throw;
