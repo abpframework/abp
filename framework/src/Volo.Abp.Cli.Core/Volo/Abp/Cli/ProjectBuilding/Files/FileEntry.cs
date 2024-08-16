@@ -97,7 +97,9 @@ public class FileEntry
 
         if (Bytes[0] == 0x2b && Bytes[1] == 0x2f && Bytes[2] == 0x76)
         {
+#pragma warning disable SYSLIB0001 // The UTF-7 encoding is insecure
             return Encoding.UTF7;
+#pragma warning restore SYSLIB0001 // The UTF-7 encoding is insecure
         }
 
         if (Bytes[0] == 0xef && Bytes[1] == 0xbb && Bytes[2] == 0xbf)

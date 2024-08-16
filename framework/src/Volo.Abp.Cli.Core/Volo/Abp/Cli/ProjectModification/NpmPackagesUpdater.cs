@@ -54,7 +54,7 @@ public class NpmPackagesUpdater : ITransientDependency
     {
         var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
-        if (!fileList.Any())
+        if (fileList.Count == 0)
         {
             return;
         }
@@ -95,8 +95,8 @@ public class NpmPackagesUpdater : ITransientDependency
 
             if (!IsAngularProject(fileDirectory))
             {
-                Thread.Sleep(1000);
-                RunInstallLibsAsync(fileDirectory);
+                await Task.Delay(1000);
+                await RunInstallLibsAsync(fileDirectory);
             }
         }
     }

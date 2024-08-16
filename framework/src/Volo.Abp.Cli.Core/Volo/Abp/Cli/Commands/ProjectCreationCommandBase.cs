@@ -309,10 +309,7 @@ public abstract class ProjectCreationCommandBase
         bool isTiered,
         CommandLineArgs commandLineArgs)
     {
-
-#if DEBUG
-        return;
-#endif
+#if !DEBUG
         if (AppTemplateBase.IsAppTemplate(template))
         {
             var isCommercial = template == AppProTemplate.TemplateName;
@@ -322,6 +319,7 @@ public abstract class ProjectCreationCommandBase
         {
             OpenMicroserviceDocumentPage();
         }
+#endif
     }
 
     protected UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)

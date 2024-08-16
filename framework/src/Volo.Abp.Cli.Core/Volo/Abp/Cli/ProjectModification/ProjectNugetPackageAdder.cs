@@ -259,11 +259,11 @@ public class ProjectNugetPackageAdder : ITransientDependency
 
             if (useDotnetCliToInstall)
             {
-                AddUsingDotnetCli(package, version);
+                await AddUsingDotnetCli(package, version);
             }
             else
             {
-                AddToCsprojManuallyAsync(projectFile, package, version);
+                await AddToCsprojManuallyAsync(projectFile, package, version);
             }
 
             var moduleFiles = ModuleClassFinder.Find(projectFile, "AbpModule");

@@ -490,7 +490,7 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
                 var jsonString = File.ReadAllText(jsonFile);
                 _ = JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.LogError($"Invalid json file: {jsonFile}");
                 hasInvalidJsonFile = true;
