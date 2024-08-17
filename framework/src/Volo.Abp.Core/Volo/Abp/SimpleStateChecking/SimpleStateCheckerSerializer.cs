@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
-using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.SimpleStateChecking;

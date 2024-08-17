@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
-using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.Maui;
 

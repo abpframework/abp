@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-
 namespace Volo.Abp.Uow;
 
 public interface IUnitOfWorkAccessor

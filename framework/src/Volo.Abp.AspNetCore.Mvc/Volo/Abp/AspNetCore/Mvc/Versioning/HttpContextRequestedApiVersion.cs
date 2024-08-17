@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.ApiVersioning;
 
 namespace Volo.Abp.AspNetCore.Mvc.Versioning;
