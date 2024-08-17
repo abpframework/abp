@@ -1,7 +1,14 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- These versions are transitive overrides to fix vulnerabilities. -->
+    <!-- They can possibly be removed if packages that depend on them are updated. -->
+    <PackageVersion Include="Azure.Identity" Version="1.12.0" />
+    <PackageVersion Include="System.Formats.Asn1" Version="8.0.1" />
+  </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.24" />
     <PackageVersion Include="aliyun-net-sdk-sts" Version="3.1.2" />
@@ -110,7 +117,7 @@
     <PackageVersion Include="NEST" Version="7.17.5" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="NuGet.Versioning" Version="6.7.0" />
     <PackageVersion Include="NUglify" Version="1.21.0" />
@@ -141,7 +148,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.4" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageVersion Include="SkiaSharp" Version="2.88.6" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
     <PackageVersion Include="SkiaSharp.NativeAssets.macOS" Version="2.88.6" />
@@ -155,9 +162,9 @@
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />
-    <PackageVersion Include="xunit" Version="2.6.1" />
-    <PackageVersion Include="xunit.extensibility.execution" Version="2.6.1" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageVersion Include="xunit" Version="2.9.0" />
+    <PackageVersion Include="xunit.extensibility.execution" Version="2.9.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
     <PackageVersion Include="Fody" Version="6.8.0" />
