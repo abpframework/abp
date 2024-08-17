@@ -7,7 +7,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Volo.Abp.Identity.HttpApi.Client</AssemblyName>
     <PackageId>Volo.Abp.Identity.HttpApi.Client</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

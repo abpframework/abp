@@ -8,7 +8,6 @@
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.Sms.Aliyun</AssemblyName>
         <PackageId>Volo.Abp.Sms.Aliyun</PackageId>
-        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
         <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

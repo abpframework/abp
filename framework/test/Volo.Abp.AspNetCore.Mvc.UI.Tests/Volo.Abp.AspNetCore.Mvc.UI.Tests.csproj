@@ -4,7 +4,6 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Tests</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
