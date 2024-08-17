@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.TestBase;
 

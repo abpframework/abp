@@ -6,10 +6,8 @@ using Azure.Messaging.ServiceBus;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.AzureServiceBus;
 

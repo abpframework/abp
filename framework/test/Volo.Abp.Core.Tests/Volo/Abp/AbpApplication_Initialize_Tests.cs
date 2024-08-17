@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NSubstitute;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Modularity.PlugIns;
 using Xunit;
-using IConfiguration = Castle.Core.Configuration.IConfiguration;
 
 namespace Volo.Abp;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Volo.Abp.Auditing;
+﻿namespace Volo.Abp.Auditing;
 
 internal static class InternalUtils
 {

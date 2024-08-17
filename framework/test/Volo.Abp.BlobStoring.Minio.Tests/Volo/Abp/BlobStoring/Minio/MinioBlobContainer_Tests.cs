@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace Volo.Abp.BlobStoring.Minio;
+﻿namespace Volo.Abp.BlobStoring.Minio;
 
 /*
 //Please set the correct connection string in secrets.json and continue the test.

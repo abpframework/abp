@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Filters;
-using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 

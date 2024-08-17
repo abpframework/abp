@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MongoDB.TestApp.FifthContext;
 using Volo.Abp.MongoDB.TestApp.FourthContext;
 using Volo.Abp.MongoDB.TestApp.ThirdDbContext;

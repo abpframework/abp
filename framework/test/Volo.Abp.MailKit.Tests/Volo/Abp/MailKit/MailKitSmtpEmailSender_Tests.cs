@@ -5,7 +5,6 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing.Smtp;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Testing;
-using Xunit;
 
 namespace Volo.Abp.MailKit;
 

@@ -1,9 +1,7 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
-using Volo.Abp.Cli.ProjectModification;
 using Xunit;
 
 namespace Volo.Abp.Cli;

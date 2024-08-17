@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.AutoMapper.SampleClasses;
 using Volo.Abp.ObjectMapping;

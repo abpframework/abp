@@ -1,14 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Auditing;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
-using Volo.Abp.Localization;
 using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;

@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Entities.Events;
 using Xunit;
 
 namespace Volo.Abp.EventBus.Local;

@@ -3,7 +3,6 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.GlobalFilters;
 using Volo.Abp.MultiTenancy;
 

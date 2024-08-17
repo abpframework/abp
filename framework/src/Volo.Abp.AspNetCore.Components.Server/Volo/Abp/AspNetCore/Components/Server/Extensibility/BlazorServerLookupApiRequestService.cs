@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;

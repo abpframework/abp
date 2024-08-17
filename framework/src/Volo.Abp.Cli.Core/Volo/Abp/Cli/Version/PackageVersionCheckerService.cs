@@ -14,7 +14,6 @@ using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
-using System.Text.Json.Serialization;
 
 namespace Volo.Abp.Cli.Version;
 

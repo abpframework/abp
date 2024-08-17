@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.Http.Client.Proxying;
 
 namespace Volo.Abp.Http.Client;

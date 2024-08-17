@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.DependencyInjection;
 

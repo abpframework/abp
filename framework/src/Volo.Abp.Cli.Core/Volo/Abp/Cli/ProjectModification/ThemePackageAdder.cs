@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NuGet.Versioning;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 

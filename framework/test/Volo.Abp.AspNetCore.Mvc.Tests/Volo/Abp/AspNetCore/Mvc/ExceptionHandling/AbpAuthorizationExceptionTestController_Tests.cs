@@ -3,7 +3,6 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using Shouldly;
 using Volo.Abp.AspNetCore.ExceptionHandling;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Testing;

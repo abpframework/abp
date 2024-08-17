@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Hangfire;
 using Volo.Abp.Modularity;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 

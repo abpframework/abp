@@ -5,11 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.Http;
-using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Timing;
 using Xunit;
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace Volo.Abp.DependencyInjection;
 
 public interface IInjectPropertiesService

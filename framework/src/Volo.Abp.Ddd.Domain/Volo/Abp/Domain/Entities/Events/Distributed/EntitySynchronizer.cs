@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;

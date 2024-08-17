@@ -1,3 +1,1 @@
-﻿using Xunit;
-
-namespace Volo.Abp.BlobStoring.Azure;
+﻿namespace Volo.Abp.BlobStoring.Azure;

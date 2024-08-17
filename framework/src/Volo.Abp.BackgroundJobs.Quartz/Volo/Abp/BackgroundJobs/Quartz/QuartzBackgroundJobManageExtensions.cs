@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Quartz;
 
 namespace Volo.Abp.BackgroundJobs.Quartz;
 

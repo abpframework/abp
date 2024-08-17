@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Volo.Abp.TextTemplating.VirtualFiles;
+﻿namespace Volo.Abp.TextTemplating.VirtualFiles;
 
 public interface ILocalizedTemplateContentReader
 {

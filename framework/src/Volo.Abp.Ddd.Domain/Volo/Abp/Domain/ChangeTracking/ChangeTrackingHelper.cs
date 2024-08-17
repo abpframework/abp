@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Domain.ChangeTracking;
 

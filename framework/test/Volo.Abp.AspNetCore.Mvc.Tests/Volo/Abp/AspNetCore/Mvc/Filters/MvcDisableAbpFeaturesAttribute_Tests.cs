@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.Auditing;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;

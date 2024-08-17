@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.BlobStoring.TestObjects;
-using Volo.Abp.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Testing;

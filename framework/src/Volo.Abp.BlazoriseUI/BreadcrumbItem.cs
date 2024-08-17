@@ -1,6 +1,4 @@
-﻿using Blazorise;
-
-namespace Volo.Abp.BlazoriseUI;
+﻿namespace Volo.Abp.BlazoriseUI;
 
 public class BreadcrumbItem
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
+﻿namespace Volo.Abp.AspNetCore.Components.Web.Theming.Layout;
 
 public static class StandardLayouts
 {

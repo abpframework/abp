@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Minify.Styles;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;

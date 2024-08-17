@@ -8,7 +8,6 @@ using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.AspNetCore.Auditing;
 

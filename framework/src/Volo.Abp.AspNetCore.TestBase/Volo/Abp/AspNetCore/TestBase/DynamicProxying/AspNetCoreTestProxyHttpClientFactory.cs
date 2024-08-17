@@ -1,7 +1,5 @@
 ﻿using System.Net.Http;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Client.DynamicProxying;
 using Volo.Abp.Http.Client.Proxying;
 
 namespace Volo.Abp.AspNetCore.TestBase.DynamicProxying;

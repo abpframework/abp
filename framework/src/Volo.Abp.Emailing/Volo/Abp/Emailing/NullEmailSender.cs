@@ -1,7 +1,6 @@
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.MultiTenancy;
 

@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Volo.Abp.AzureServiceBus;
 
 public interface IAzureServiceBusMessageConsumerFactory
