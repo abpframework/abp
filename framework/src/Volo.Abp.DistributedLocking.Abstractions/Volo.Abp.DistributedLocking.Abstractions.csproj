@@ -18,7 +18,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
         <PackageReference Include="AsyncKeyedLock" />
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
     </ItemGroup>
 
 </Project>

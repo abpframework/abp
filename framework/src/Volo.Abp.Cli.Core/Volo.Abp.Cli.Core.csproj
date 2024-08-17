@@ -15,14 +15,13 @@
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" />
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="NuGet.Versioning" />
-    <PackageReference Include="System.Text.Encoding.CodePages" />
-    <PackageReference Include="System.Security.Permissions" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Polly" />
     <PackageReference Include="Polly.Extensions.Http" />
     <PackageReference Include="LibGit2Sharp" />
     <PackageReference Include="StackExchange.Redis" />
     <PackageReference Include="DeepL.net" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +30,5 @@
     <ProjectReference Include="..\Volo.Abp.IdentityModel\Volo.Abp.IdentityModel.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
-    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 </Project>
