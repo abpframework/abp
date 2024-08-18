@@ -1,4 +1,4 @@
-## Entity Best Practices & Conventions
+# Entity Best Practices & Conventions
 
 ### Entities
 

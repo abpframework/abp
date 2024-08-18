@@ -1,4 +1,4 @@
-## MongoDB Integration
+# MongoDB Integration
 
 * Do define a separated `MongoDbContext` interface and class for each module.
 
