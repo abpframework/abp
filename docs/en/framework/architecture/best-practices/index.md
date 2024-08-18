@@ -1,4 +1,4 @@
-## Module Development Best Practices & Conventions
+# Module Development Best Practices & Conventions
 
 ### Introduction
 

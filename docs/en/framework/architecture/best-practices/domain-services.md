@@ -1,4 +1,4 @@
-## Domain Services Best Practices & Conventions
+# Domain Services Best Practices & Conventions
 
 ### Domain Service
 
