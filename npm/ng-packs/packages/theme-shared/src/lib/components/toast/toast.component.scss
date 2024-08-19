@@ -15,7 +15,7 @@ $toastClass: abp-toast;
 .#{$toastClass} {
   display: grid;
   grid-template-columns: 35px 1fr;
-  gap: 10px;
+  gap: 5px;
   margin: 5px 0;
   padding: 7px;
   width: 350px;
