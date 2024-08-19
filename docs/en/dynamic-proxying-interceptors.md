@@ -1,4 +1,4 @@
-## Dynamic Proxying / Interceptors
+# Dynamic Proxying / Interceptors
 
 This document is planned to be written later.
 

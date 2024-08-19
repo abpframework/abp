@@ -1,4 +1,4 @@
-## ABP Application Startup
+# ABP Application Startup
 
 You typically use the [ABP CLI](../../cli)'s `abp new` command to [get started](../../get-started/layered-web-application.md) with one of the pre-built [startup solution templates](../../solution-templates). When you do that, you generally don't need to know the details of how the ABP is integrated with your application or how it is configured and initialized. The startup template also comes with the fundamental ABP packages and [application modules](../../modules) are pre-installed and configured for you.
 
