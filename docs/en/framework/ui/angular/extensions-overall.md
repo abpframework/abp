@@ -1,4 +1,4 @@
-## Angular UI Extensions
+# Angular UI Extensions
 
 Angular UI extensions system allows you to add a new action to the actions menu, a new column to the data table, a new action to the toolbar of a page, and add a new field to the create and/or edit forms.
 
