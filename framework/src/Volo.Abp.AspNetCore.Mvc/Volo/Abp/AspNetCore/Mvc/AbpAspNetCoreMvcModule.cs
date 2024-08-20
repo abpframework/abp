@@ -232,7 +232,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         AddApplicationParts(context);
-        context.ServiceProvider.GetRequiredService<IAbpMvcLibsService>().CheckLibs(context);
+        CheckLibs(context);
     }
 
     private static void AddApplicationParts(ApplicationInitializationContext context)
@@ -278,5 +278,10 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
         }
+    }
+
+    private static void CheckLibs(ApplicationInitializationContext context)
+    {
+        context.ServiceProvider.GetRequiredService<IAbpMvcLibsService>().CheckLibs(context);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -40,7 +41,7 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
                         "       <h1>⚠️ The Libs folder under the <code style='background-color: #e7e7e7;'>wwwroot/libs</code> directory is empty!</h1>" +
                         "       <p>The Libs folder contains mandatory NPM Packages for running the project.</p>" +
                         "       <p>Make sure you run the <code style='background-color: #e7e7e7;'>abp install-libs</code> CLI tool command.</p>" +
-                        "       <p>For more information, check out the <a href='https://abp.io/docs/latest/CLI#install-libs'>ABP CLI documentation</a></p>" +                        
+                        "       <p>For more information, check out the <a href='https://abp.io/docs/latest/CLI#install-libs'>ABP CLI documentation</a></p>" +
                         "   </body>" +
                         "</html>",
                         Encoding.UTF8
@@ -65,14 +66,23 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
 
     protected virtual Task<bool> CheckLibsAsync(HttpContext httpContext)
     {
-        var fileProvider = new PhysicalFileProvider(httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath);
-        var libsFolder = fileProvider.GetDirectoryContents("/libs");
-        if (!libsFolder.Exists || !libsFolder.Any())
+        var logger = httpContext.RequestServices.GetRequiredService<ILogger<AbpMvcLibsService>>();
+        try
         {
-            var logger = httpContext.RequestServices.GetRequiredService<ILogger<AbpMvcLibsService>>();
-            logger.LogError("The 'wwwroot/libs' folder does not exist or empty!");
-            return Task.FromResult(false);
+            var fileProvider = new PhysicalFileProvider(httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath);
+            var libsFolder = fileProvider.GetDirectoryContents("/libs");
+            if (!libsFolder.Exists || !libsFolder.Any())
+            {
+                logger.LogError("The 'wwwroot/libs' folder does not exist or empty!");
+                return Task.FromResult(false);
+            }
         }
+        catch (Exception e)
+        {
+            // In case of any exception, log it and return true to prevent crashing the application.
+            logger.LogError(e, "An error occurred while checking the libs folder!");
+        }
+
         return Task.FromResult(true);
     }
 }
