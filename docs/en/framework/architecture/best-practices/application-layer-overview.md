@@ -1,6 +1,6 @@
 ## Best Practices: Application Layer
 
-ABP suggests some best-practices that you can use while implementing the Application Layer by following Domain Driven Design principles:
+The following documents suggest some best-practices that you can use while implementing the application layer of your solution by following the Domain Driven Design principles:
 
 * [Application Services](./application-services.md)
 * [Data Transfer Objects](./data-transfer-objects.md)
