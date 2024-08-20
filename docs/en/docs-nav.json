@@ -47,7 +47,7 @@
       "items": [
         {
           "text": "Overview",
-          "path": "tutorials/overview.md"
+          "path": "tutorials/index.md"
         },
         {
           "text": "TODO application",
@@ -71,7 +71,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "tutorials/book-store/overview.md"
+              "path": "tutorials/book-store/index.md"
             },
             {
               "text": "1: Creating the server side",
@@ -267,7 +267,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/fundamentals/overview.md"
+              "path": "framework/fundamentals/index.md"
             },
             {
               "text": "Application Startup",
@@ -360,7 +360,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/infrastructure/overview.md"
+              "path": "framework/infrastructure/index.md"
             },
             {
               "text": "Audit Logging",
@@ -783,14 +783,14 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/api-development/overview.md"
+              "path": "framework/api-development/index.md"
             },
             {
               "text": "ABP Endpoints",
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/api-development/standard-apis/overview.md"
+                  "path": "framework/api-development/standard-apis/index.md"
                 },
                 {
                   "text": "Application Configuration",
@@ -833,14 +833,14 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/ui/overview.md"
+              "path": "framework/ui/index.md"
             },
             {
               "text": "MVC / Razor Pages",
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/ui/mvc-razor-pages/overall.md"
+                  "path": "framework/ui/mvc-razor-pages/index.md"
                 },
                 {
                   "text": "Navigation / Menus",
@@ -1849,7 +1849,7 @@
       "items": [
         {
           "text": "Overview",
-          "path": "release-info/overview.md"
+          "path": "release-info/index.md"
         },
         {
           "text": "Release Notes",
