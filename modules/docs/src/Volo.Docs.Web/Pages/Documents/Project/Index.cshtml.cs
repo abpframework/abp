@@ -572,7 +572,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.LocalDirectory
             );
 
-            content = HtmlNormalizer.WrapImagesWithinAnchors(content);
+            if (!_uiOptions.EnableEnlargeImage)
+            {
+                content = HtmlNormalizer.WrapImagesWithinAnchors(content);
+            }
 
             //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(

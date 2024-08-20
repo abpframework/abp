@@ -36,6 +36,8 @@ namespace Volo.Docs
         public bool MultiLanguageMode { get; set; } = true;
         
         public SingleProjectModeOptions SingleProjectMode { get; } = new ();
+        
+        public bool EnableEnlargeImage { get; set; } = true;
 
         private string GetFormattedRoutePrefix()
         {
