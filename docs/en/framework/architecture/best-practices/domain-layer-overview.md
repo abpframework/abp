@@ -1,6 +1,6 @@
 ## Best Practices: Domain Layer
 
-ABP suggests some best-practices that you can use while implementing the Domain Layer by following Domain Driven Design principles:
+The following documents suggest some best-practices that you can use while implementing the domain layer of your solution by following the Domain Driven Design principles:
 
 * [Entities](./entities.md)
 * [Repositories](./repositories.md)
