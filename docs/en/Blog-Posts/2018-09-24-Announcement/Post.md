@@ -1,4 +1,4 @@
-# Introduction
+### Introduction
 For a while, we were working to design a new major version of the ASP.NET Boilerplate framework. Now, it’s time to share it with the community. We are too excited and we believe that you are too.
 
 #### Naming
