@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -26,7 +27,7 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
             var app = context.GetApplicationBuilder();
             app.Use(async (httpContext, next) =>
             {
-                if (!await HandleCheckLibsAsyncOnceAsync(httpContext))
+                if (!await CheckLibsAsyncOnceAsync(httpContext))
                 {
                     httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     httpContext.Response.ContentType = "text/html";
@@ -51,17 +52,17 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
         }
     }
 
-    protected virtual Task<bool> HandleCheckLibsAsyncOnceAsync(HttpContext httpContext)
+    protected virtual Task<bool> CheckLibsAsyncOnceAsync(HttpContext httpContext)
     {
         if (_checkLibsTask == null)
         {
-            _checkLibsTask = HandleCheckLibsAsync(httpContext);
+            _checkLibsTask = CheckLibsAsync(httpContext);
         }
 
         return _checkLibsTask;
     }
 
-    protected virtual Task<bool> HandleCheckLibsAsync(HttpContext httpContext)
+    protected virtual Task<bool> CheckLibsAsync(HttpContext httpContext)
     {
         var fileProvider = new PhysicalFileProvider(httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath);
         var libsFolder = fileProvider.GetDirectoryContents("/libs");
