@@ -32,6 +32,7 @@ using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Infrastructure;
 using Volo.Abp.AspNetCore.Mvc.Json;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
@@ -231,6 +232,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         AddApplicationParts(context);
+        context.ServiceProvider.GetRequiredService<IAbpMvcLibsService>().CheckLibs(context);
     }
 
     private static void AddApplicationParts(ApplicationInitializationContext context)
