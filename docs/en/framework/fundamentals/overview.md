@@ -1,6 +1,6 @@
 ## ABP Fundamentals: Overview
 
-ABP provides fundamental documents that explain to you the core building-blocks of ABP & .NET applications. Here, is the full list of the fundamental documents:
+The following documents explains the fundamental building blocks to create ABP solutions:
 
 * [Application Startup](./application-startup.md)
 * [Authorization](./authorization.md)

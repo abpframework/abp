@@ -1,6 +1,6 @@
-## API Development: Overview
+## API Development
 
-ABP provides a set of features and integrations to third-party libraries to easily develop APIs. Here, is the list of documents that you can refer to while developing APIs:
+The following documents explain the concepts, infrastructure and integrations to build HTTP APIs with ABP:
 
 * [ABP Endpoints](./standard-apis/overview.md)
 * [API Versioning](./versioning.md)
