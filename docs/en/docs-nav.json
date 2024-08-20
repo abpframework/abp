@@ -5,7 +5,7 @@
       "items": [
         {
           "text": "Overview",
-          "path": "get-started/index.md"
+          "path": "get-started"
         },
         {
           "text": "Single-layer solution",
@@ -47,14 +47,14 @@
       "items": [
         {
           "text": "Overview",
-          "path": "tutorials/overview.md"
+          "path": "tutorials"
         },
         {
           "text": "TODO application",
           "items": [
             {
               "text": "Overview",
-              "path": "tutorials/todo/index.md"
+              "path": "tutorials/todo"
             },
             {
               "text": "Single-layer solution",
@@ -71,7 +71,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "tutorials/book-store/overview.md"
+              "path": "tutorials/book-store"
             },
             {
               "text": "1: Creating the server side",
@@ -133,7 +133,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "cli/index.md"
+              "path": "cli"
             },
             {
               "text": "Examples for the new command",
@@ -146,7 +146,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "studio/index.md"
+              "path": "studio"
             },
             {
               "text": "Installation",
@@ -267,7 +267,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/fundamentals/overview.md"
+              "path": "framework/fundamentals"
             },
             {
               "text": "Application Startup",
@@ -360,7 +360,7 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/infrastructure/overview.md"
+              "path": "framework/infrastructure"
             },
             {
               "text": "Audit Logging",
@@ -783,14 +783,14 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/api-development/overview.md"
+              "path": "framework/api-development"
             },
             {
               "text": "ABP Endpoints",
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/api-development/standard-apis/overview.md"
+                  "path": "framework/api-development/standard-apis"
                 },
                 {
                   "text": "Application Configuration",
@@ -833,14 +833,14 @@
           "items": [
             {
               "text": "Overview",
-              "path": "framework/ui/overview.md"
+              "path": "framework/ui"
             },
             {
               "text": "MVC / Razor Pages",
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/ui/mvc-razor-pages/overall.md"
+                  "path": "framework/ui/mvc-razor-pages"
                 },
                 {
                   "text": "Navigation / Menus",
@@ -1740,7 +1740,7 @@
       "items": [
         {
           "text": "Overview",
-          "path": "ui-themes/index.md"
+          "path": "ui-themes"
         },
         {
           "text": "The Basic Theme",
@@ -1748,7 +1748,7 @@
         },
         {
           "text": "LeptonX Theme",
-          "path": "ui-themes/lepton-x/index.md"
+          "path": "ui-themes/lepton-x"
         }
       ]
     },
@@ -1849,7 +1849,7 @@
       "items": [
         {
           "text": "Overview",
-          "path": "release-info/overview.md"
+          "path": "release-info"
         },
         {
           "text": "Release Notes",
