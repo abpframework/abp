@@ -35,10 +35,10 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
                     await httpContext.Response.WriteAsync(
                         "<html>" +
                         "   <head>" +
-                        "       <title>Error — The Libs folder is missing!</title>" +
+                        "       <title>Error - The Libs folder is missing!</title>" +
                         "   </head>" +
                         "   <body>" +
-                        "       <h1>⚠️ The Libs folder under the <code style='background-color: #e7e7e7;'>wwwroot/libs</code> directory is empty!</h1>" +
+                        "       <h1> &#9888;&#65039; The Libs folder under the <code style='background-color: #e7e7e7;'>wwwroot/libs</code> directory is empty!</h1>" +
                         "       <p>The Libs folder contains mandatory NPM Packages for running the project.</p>" +
                         "       <p>Make sure you run the <code style='background-color: #e7e7e7;'>abp install-libs</code> CLI tool command.</p>" +
                         "       <p>For more information, check out the <a href='https://abp.io/docs/latest/CLI#install-libs'>ABP CLI documentation</a></p>" +
