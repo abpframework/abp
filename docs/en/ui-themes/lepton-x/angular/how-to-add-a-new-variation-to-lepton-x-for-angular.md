@@ -1,4 +1,4 @@
-## How to Add a New Appearance to LeptonX for Angular
+# How to Add a New Appearance to LeptonX for Angular
 LeptonX has four appearances: light, dim, dark, and system. You can add a new appearance to LeptonX for Angular. In this document, we will show you how to add a new appearance to LeptonX for Angular.
 
 ### Step 1: Creating the New Theme Definition
