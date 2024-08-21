@@ -1,4 +1,4 @@
-## Concurrency Check
+# Concurrency Check
 
 ### Introduction
 
