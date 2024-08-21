@@ -38,7 +38,6 @@ And install the following modules to your solution:
 - Volo.Abp.LanguageManagement
 - Volo.Abp.TextTemplateManagement
 - Volo.FileManagement
-- Volo.Chat
 - Volo.Abp.Gdpr
 - Volo.Abp.LeptonXTheme
 

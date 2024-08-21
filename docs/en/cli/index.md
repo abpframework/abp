@@ -105,6 +105,8 @@ abp cli update
 abp cli update --preview
 abp cli update --version 1.0.0
 abp cli remove
+abp cli check-version
+abp cli clear-cache
 ````
 
 ### new

@@ -1,4 +1,4 @@
-## Configuring the Default Theme for LeptonX
+# Configuring the Default Theme for LeptonX
 The LeptonX theme offers multiple appearances to suit your application's visual style. You can easily configure the default theme for your application using the ThemeLeptonXModule provided by LeptonX.
 
 ### Configuration Code
