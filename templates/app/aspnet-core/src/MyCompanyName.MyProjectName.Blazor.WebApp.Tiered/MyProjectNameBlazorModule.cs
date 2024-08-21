@@ -140,6 +140,9 @@ public class MyProjectNameBlazorModule : AbpModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
+            // Blazor Web App
+            options.Parameters.InteractiveAuto = true;
+
             // MVC UI
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,

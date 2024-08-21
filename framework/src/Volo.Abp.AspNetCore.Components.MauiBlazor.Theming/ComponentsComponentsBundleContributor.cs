@@ -1,7 +1,9 @@
-﻿using Volo.Abp.Bundling;
+using System;
+using Volo.Abp.Bundling;
 
 namespace Volo.Abp.AspNetCore.Components.MauiBlazor.Theming;
 
+[Obsolete("This class is obsolete and will be removed in the future versions. Use GlobalAssets instead.")]
 public class ComponentsComponentsBundleContributor : IBundleContributor
 {
     public void AddScripts(BundleContext context)

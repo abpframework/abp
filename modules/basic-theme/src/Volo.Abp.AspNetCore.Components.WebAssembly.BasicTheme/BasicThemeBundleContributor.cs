@@ -1,7 +1,9 @@
-﻿using Volo.Abp.Bundling;
+using System;
+using Volo.Abp.Bundling;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 
+[Obsolete("This class is obsolete and will be removed in the future versions. Use GlobalAssets instead.")]
 public class BasicThemeBundleContributor : IBundleContributor
 {
     public void AddScripts(BundleContext context)

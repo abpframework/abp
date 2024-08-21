@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling\Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling.csproj" />
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.MauiBlazor\Volo.Abp.AspNetCore.Components.MauiBlazor.csproj" />
     </ItemGroup>

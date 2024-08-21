@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.Host", "host\MyCompanyName.MyProjectName.Blazor.Host\MyCompanyName.MyProjectName.Blazor.Host.csproj", "{C33FD057-839D-4F92-BA81-DD40B03FB75D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling", "src\MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling\MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling.csproj", "{43E17629-2AA1-4B82-B70B-DB4B500BE19A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,10 @@ Global
 		{C33FD057-839D-4F92-BA81-DD40B03FB75D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C33FD057-839D-4F92-BA81-DD40B03FB75D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C33FD057-839D-4F92-BA81-DD40B03FB75D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43E17629-2AA1-4B82-B70B-DB4B500BE19A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43E17629-2AA1-4B82-B70B-DB4B500BE19A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43E17629-2AA1-4B82-B70B-DB4B500BE19A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43E17629-2AA1-4B82-B70B-DB4B500BE19A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -209,6 +215,7 @@ Global
 		{FEA752A1-5B4E-49E9-B1F3-DDC25E41BB52} = {E400416D-2895-4512-9D17-90681EEC7E0A}
 		{BE39FD00-745B-4049-8161-FC129817CBE4} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 		{C33FD057-839D-4F92-BA81-DD40B03FB75D} = {E400416D-2895-4512-9D17-90681EEC7E0A}
+		{43E17629-2AA1-4B82-B70B-DB4B500BE19A} = {649A3FFA-182F-4E56-9717-E6A9A2BEC545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}
