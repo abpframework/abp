@@ -49,6 +49,10 @@ However, notice this package is used by the `@abp/aspnetcore.mvc.ui.theme.shared
 
 See the PR for more info: https://github.com/abpframework/abp/pull/19340
 
+### Angular UI
+
+We wish to formally inform you that ABP version 8.3 has been upgraded to incorporate Angular version 18. Consequently, we recommend migrating your application to [Angular v18](https://angular.dev/update-guide) to ensure compatibility.
+
 ## PRO
 
 > Please check the **Open-Source (Framework)** section before reading this section. The listed topics might affect your application and you might need to take care of them.
