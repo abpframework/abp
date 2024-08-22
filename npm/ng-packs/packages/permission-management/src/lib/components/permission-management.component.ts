@@ -195,13 +195,13 @@ export class PermissionManagementComponent
     }, 0);
   }
 
-  setParentClicked(clickedPermissions: PermissionGrantInfoDto) {
+  setParentClicked(clickedPermission: PermissionGrantInfoDto) {
     let childPermissionGrantedCount = 0;
     let parentPermission: PermissionGrantInfoDto;
 
-    if (clickedPermissions.parentName) {
+    if (clickedPermission.parentName) {
       this.permissions.forEach(per => {
-        if (per.name === clickedPermissions.parentName) {
+        if (per.name === clickedPermission.parentName) {
           parentPermission = per;
         }
       });
@@ -220,9 +220,11 @@ export class PermissionManagementComponent
       }
       return;
     }
+
     this.permissions = this.permissions.map(per => {
-      if (per.parentName === clickedPermissions.name) {
-        per.isGranted = false;
+      const root = findRootParent(this.permissions, per);
+      if (root && root.name === clickedPermission.name) {
+        per.isGranted = root.isGranted;
       }
       return per;
     });
@@ -385,6 +387,28 @@ export class PermissionManagementComponent
 
     return false;
   }
+}
+
+function findRootParent(
+  permissions: PermissionGrantInfoDto[],
+  permission: PermissionGrantInfoDto,
+): PermissionGrantInfoDto | null {
+  if (!permissions.length) {
+    return null;
+  }
+
+  const permissionMap = new Map(permissions.map(p => [p.name, p]));
+  let currentPermission = permissionMap.get(permission.name) ?? null;
+
+  while (currentPermission && currentPermission.parentName) {
+    const parentPermission = permissionMap.get(currentPermission.parentName);
+    if (!parentPermission) {
+      break;
+    }
+    currentPermission = parentPermission;
+  }
+
+  return currentPermission;
 }
 
 function findMargin(
