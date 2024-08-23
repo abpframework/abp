@@ -105,6 +105,8 @@ abp cli update
 abp cli update --preview
 abp cli update --version 1.0.0
 abp cli remove
+abp cli check-version
+abp cli clear-cache
 ````
 
 ### new
@@ -794,12 +796,19 @@ Examples:
 
 ````bash
 abp upgrade -t app
+abp upgrade -t app --language-management --gdpr --audit-logging-ui --text-template-management --openiddict-pro
+abp upgrade -t app-nolayers --audit-logging-ui
 abp upgrade -t app-nolayers -p D:\MyProjects\MyProject
 ````
 
 #### Options
 
 * `--path` or `-p`: Specifies the module path. The module should be in that directory. If not specified, the default is the current directory.
+* `--gdpr`: Installs GDPR module too.
+* `--language-management`: Installs Language Management module too.
+* `--audit-logging-ui`: Installs Audit Logging Pro (UI) module too.
+* `--text-template-management`: Installs Text Template Management module too.
+* `--openiddict-pro`: Installs OpenIddict Pro (UI) module too.
 
 ### translate
 
