@@ -184,6 +184,10 @@
             {
               "text": "Concepts",
               "path": "studio/concepts.md"
+            },
+            {
+              "text": "Version Compatibility",
+              "path": "studio/version-compatibility.md"
             }
           ]
         },
