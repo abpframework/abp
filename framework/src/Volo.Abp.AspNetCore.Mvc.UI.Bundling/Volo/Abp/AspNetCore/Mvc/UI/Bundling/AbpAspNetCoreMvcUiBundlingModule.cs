@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.Data;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
@@ -14,9 +15,12 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpMvcLibsOptions>(options =>
+        if (!context.Services.IsDataMigrationEnvironment())
         {
-            options.CheckLibs = true;
-        });
+            Configure<AbpMvcLibsOptions>(options =>
+            {
+                options.CheckLibs = true;
+            });
+        }
     }
 }
