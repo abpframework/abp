@@ -41,6 +41,11 @@ public class DynamicSettingDefinitionStoreInMemoryCache : IDynamicSettingDefinit
                 record.IsInherited,
                 record.IsEncrypted);
 
+            if (!record.Providers.IsNullOrWhiteSpace())
+            {
+                settingDefinition.Providers.AddRange(record.Providers.Split(','));
+            }
+
             foreach (var property in record.ExtraProperties)
             {
                 settingDefinition.WithProperty(property.Key, property.Value);
