@@ -69,7 +69,7 @@ Theme packages no longer import styles as CSS modules as of ABP version 6.0. The
 },
 ```
 
-## Lepton X [commercial](https://docs.abp.io/en/commercial)
+## Lepton X [commercial](https://abp.io/en/commercial)
 If you want to use top-menu, You need to switch the following 2 **`side-menu`** imports to **`top-menu`**.
 ```json
 {
@@ -175,7 +175,7 @@ If you want to use top-menu, You need to switch the following 2 **`side-menu`** 
 
 ```
 
-## Theme Lepton [commercial](https://docs.abp.io/en/commercial)
+## Theme Lepton [commercial](https://abp.io/en/commercial)
 ```json
 {
     "input": "node_modules/@volo/abp.ng.theme.lepton/dist/global/styles/lepton1.min.css",

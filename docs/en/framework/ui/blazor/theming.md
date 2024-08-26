@@ -27,7 +27,7 @@ Currently, three themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://abp.io/) license.
-* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/blazor) and a [lite](../../../ui-themes/lepton-x-lite/blazor.md) version. 
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has a [commercial](../../../ui-themes/lepton-x/blazor.md) and a [lite](../../../ui-themes/lepton-x-lite/blazor.md) version. 
 
 ## Overall
 
