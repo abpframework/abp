@@ -4,6 +4,7 @@ You can format date by Date pipe of angular.
 
 Example
 
+{%{
 ```html
 <span> {{today | date 'dd/mm/yy'}}</span>
 ```
@@ -27,3 +28,4 @@ ShortDate, ShortTime and ShortDateTime format data like angular's data pipe but 
 ```html
 <span> {{today | shortDateTimePipe }}</span>
 ```
+}%}
