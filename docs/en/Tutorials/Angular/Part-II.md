@@ -427,6 +427,7 @@ save() {
 
 Open the `book-list.component.html` and add modify the `p-table` as shown below:
 
+{%{
 ```html
 <p-table [value]="books$ | async" [loading]="loading" [paginator]="true" [rows]="10">
   <ng-template pTemplate="header">
@@ -463,6 +464,7 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
   </ng-template>
 </p-table>
 ```
+}%}
 
 - Added a `th` for the "Actions" column.
 - Added `button` with `ngbDropdownToggle` to open actions when clicked the button.
@@ -475,11 +477,13 @@ The final UI looks like:
 
 Update the modal header to change the title based on the current operation:
 
+{%{
 ```html
 <ng-template #abpHeader>
   <h3>{{ selectedBook.id ? 'Edit' : 'New Book' }}</h3>
 </ng-template>
 ```
+}%}
 
 ![actions-buttons](images/bookstore-edit-modal.png)
 
