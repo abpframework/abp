@@ -286,7 +286,7 @@ See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-
 * Created the Oracle Integration Package for EF Core.
 * New **File Management Module** that is used to store and manage files in your application.
 * Migrated the Angular UI to the **Angular 10**.
-* Published an **[API documentation](https://abp.io/docs/3.0)** web site to explore the classes of the ABP.
+* Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP.
 
 ## 2.9 (2020-06-04)
 
