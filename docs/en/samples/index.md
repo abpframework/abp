@@ -27,13 +27,13 @@ A simple CRUD application to show basic principles of developing an application 
 The following samples uses only the open source (free) modules.
 
 * **Book Store: Razor Pages UI & Entity Framework Core**
-  * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=MVC&DB=EF)
+  * [Tutorial](../tutorials/book-store/part-01.md?UI=MVC&DB=EF)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * **Book Store: Blazor UI & Entity Framework Core**
-  * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=Blazor&DB=EF)
+  * [Tutorial](../tutorials/book-store/part-01.md?UI=Blazor&DB=EF)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
 * **Book Store: Angular UI & MongoDB**
-  * [Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=NG&DB=Mongo)
+  * [Tutorial](../tutorials/book-store/part-01.md?UI=NG&DB=Mongo)
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 * **Book Store: Modular application (Razor Pages UI & EF Core)**
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Modular)
@@ -43,13 +43,13 @@ The following samples uses only the open source (free) modules.
 The following samples uses the pro modules.
 
 - **Book Store: Razor Pages (MVC) UI & Entity Framework Core**
-  - [Tutorial](https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF)
+  - [Tutorial](../tutorials/book-store/part-01.md?UI=MVC&DB=EF)
   - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-mvc-ef)
 - **Book Store: Blazor UI & Entity Framework Core**
-  - [Tutorial](https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=Blazor&DB=EF)
+  - [Tutorial](../tutorials/book-store/part-01.md?UI=Blazor&DB=EF)
   - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-blazor-efcore)
 - **Book Store: Angular UI & MongoDB**
-  - [Tutorial](https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=NG&DB=Mongo)
+  - [Tutorial](../tutorials/book-store/part-01.md?UI=NG&DB=Mongo)
   - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-angular-mongodb)
 
 ## Other Samples
