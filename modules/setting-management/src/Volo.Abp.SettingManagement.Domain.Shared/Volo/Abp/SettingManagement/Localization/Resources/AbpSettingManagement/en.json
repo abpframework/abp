@@ -15,7 +15,7 @@
     "TestEmailSubject": "Test email {0}",
     "TestEmailBody": "Test email body message here",
     "SuccessfullySent": "Successfully sent",
-    "Send": "Send",
+    "MailSendingFailed": "Mail sending failed, Please check your email configuration and try again.",
     "Menu:Emailing": "Emailing",
     "Menu:TimeZone": "Time Zone",
     "DisplayName:Timezone": "Time zone",

@@ -15,6 +15,7 @@
     "TestEmailSubject": "Testowy e-mail {0}",
     "TestEmailBody": "Tutaj przetestuj treść wiadomości e-mail",
     "SuccessfullySent": "Pomyślnie wysłane",
+    "MailSendingFailed": "Wysyłanie e-maila nie powiodło się. Sprawdź konfigurację e-maila i spróbuj ponownie.",
     "Send": "Wysłać",
     "Menu:Emailing": "Wysyłanie e-maili",
     "Menu:TimeZone": "Strefa Czasowa",
