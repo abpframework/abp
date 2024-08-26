@@ -5,6 +5,7 @@ You can format date by Date pipe of angular.
 Example
 
 {%{
+
 ```html
 <span> {{today | date 'dd/mm/yy'}}</span>
 ```
