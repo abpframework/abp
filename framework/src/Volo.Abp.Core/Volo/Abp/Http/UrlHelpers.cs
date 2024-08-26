@@ -2,7 +2,7 @@ using System;
 
 namespace Volo.Abp.Http;
 
-public static class UriHelpers
+public static class UrlHelpers
 {
     private const string WildcardSubdomain = "*.";
 

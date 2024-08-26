@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.Http;
 
-public class UriHelpers_Tests
+public class UrlHelpers_Tests
 {
     [Theory]
     [InlineData(null)]
@@ -14,7 +14,7 @@ public class UriHelpers_Tests
     [InlineData("http://.domain/hello")]
     public void IsSubdomainOf_ReturnsFalseIfDomainIsMalformedUri(string domain)
     {
-        var actual = UriHelpers.IsSubdomainOf("http://*.domain", domain);
+        var actual = UrlHelpers.IsSubdomainOf("http://*.domain", domain);
         actual.ShouldBeFalse();
     }
 
@@ -25,7 +25,7 @@ public class UriHelpers_Tests
     [InlineData("http://sub.domain:4567", "http://*.domain:4567")]
     public void IsSubdomainOf_ReturnsTrue_WhenASubdomain(string subdomain, string domain)
     {
-        var actual = UriHelpers.IsSubdomainOf(subdomain, domain);
+        var actual = UrlHelpers.IsSubdomainOf(subdomain, domain);
         actual.ShouldBeTrue();
     }
 
@@ -36,7 +36,7 @@ public class UriHelpers_Tests
     [InlineData("https://sub.domain", "http://*.domain")]
     public void IsSubdomainOf_ReturnsFalse_WhenNotASubdomain(string subdomain, string domain)
     {
-        var actual = UriHelpers.IsSubdomainOf(subdomain, domain);
+        var actual = UrlHelpers.IsSubdomainOf(subdomain, domain);
         actual.ShouldBeFalse();
     }
 }

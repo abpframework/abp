@@ -45,7 +45,7 @@ public class AppUrlProvider : IAppUrlProvider, ITransientDependency
             redirectAllowedUrls.Add((await NormalizeUrlAsync(redirectAllowedUrl))!);
         }
         var allow = redirectAllowedUrls.Any(x => url.StartsWith(x, StringComparison.CurrentCultureIgnoreCase) ||
-                                                 UriHelpers.IsSubdomainOf(url, x));
+                                                 UrlHelpers.IsSubdomainOf(url, x));
         if (!allow)
         {
             Logger.LogError($"Invalid RedirectUrl: {url}, Use {nameof(AppUrlProvider)} to configure it!");
