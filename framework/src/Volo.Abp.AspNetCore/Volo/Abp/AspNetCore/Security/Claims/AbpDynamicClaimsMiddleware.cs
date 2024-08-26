@@ -22,11 +22,11 @@ public class AbpDynamicClaimsMiddleware : AbpMiddlewareBase, ITransientDependenc
                 var authenticateResultFeature = context.Features.Get<IAuthenticateResultFeature>();
                 var authenticationType = authenticateResultFeature?.AuthenticateResult?.Ticket?.AuthenticationScheme ?? context.User.Identity.AuthenticationType;
 
-                var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
-                var user = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
-
                 if (authenticateResultFeature != null && !authenticationType.IsNullOrWhiteSpace())
                 {
+                    var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
+                    var user = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
+
                     authenticateResultFeature.AuthenticateResult = AuthenticateResult.Success(new AuthenticationTicket(user, authenticationType));
                     var httpAuthenticationFeature = context.Features.Get<IHttpAuthenticationFeature>();
                     if (httpAuthenticationFeature != null)
