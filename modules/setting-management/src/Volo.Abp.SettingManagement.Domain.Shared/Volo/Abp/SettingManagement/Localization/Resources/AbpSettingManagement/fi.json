@@ -15,6 +15,7 @@
     "TestEmailSubject": "Testisähköposti {0}",
     "TestEmailBody": "Testaa sähköpostiviestiä täällä",
     "SuccessfullySent": "Lähetetty onnistuneesti",
+    "MailSendingFailed": "Sähköpostin lähetys epäonnistui. Tarkista sähköpostiasetuksesi ja yritä uudelleen.",
     "Send": "Lähetä",
     "Menu:Emailing": "Sähköpostiviestit",
     "Menu:TimeZone": "Aikavyöhyke",
