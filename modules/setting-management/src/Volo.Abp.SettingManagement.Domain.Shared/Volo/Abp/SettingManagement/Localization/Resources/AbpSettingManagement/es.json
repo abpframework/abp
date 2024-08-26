@@ -15,6 +15,7 @@
     "TestEmailSubject": "Correo electrónico de prueba {0}",
     "TestEmailBody": "Pruebe el cuerpo del mensaje de correo electrónico aquí",
     "SuccessfullySent": "Enviado exitosamente",
+    "MailSendingFailed": "Error al enviar el correo, por favor revise su configuración de correo y vuelva a intentarlo.",
     "Send": "Enviar",
     "Menu:Emailing": "Configuración",
     "Menu:TimeZone": "Zona Horaria",

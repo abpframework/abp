@@ -15,6 +15,7 @@
     "TestEmailSubject": "Testovací e-mail {0}",
     "TestEmailBody": "Test těla e-mailové zprávy zde",
     "SuccessfullySent": "Úspěšně odesláno",
+    "MailSendingFailed": "Odesílání e-mailu se nezdařilo. Zkontrolujte konfiguraci e-mailu a zkuste to znovu.",
     "Send": "Poslat",
     "Menu:Emailing": "Zasílání e-mailem",
     "Menu:TimeZone": "Časové Pásmo",
