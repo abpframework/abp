@@ -15,6 +15,7 @@
     "TestEmailSubject": "परीक्षण ईमेल {0}",
     "TestEmailBody": "यहां ईमेल बॉडी संदेश का परीक्षण करें",
     "SuccessfullySent": "सफलतापूर्वक भेजा",
+    "MailSendingFailed": "मेल भेजने में विफल, कृपया अपनी ईमेल विन्यास की जाँच करें और पुनः प्रयास करें।",
     "Send": "भेजना",
     "Menu:Emailing": "ईमेल से भेजना",
     "Menu:TimeZone": "समय क्षेत्र",
