@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -25,7 +23,14 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpMvcLibsOptions>>().Value;
         if (options.CheckLibs)
         {
-            var app = context.GetApplicationBuilder();
+            var app = context.GetApplicationBuilderOrNull();
+            if (app == null)
+            {
+                var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpMvcLibsService>>();
+                logger.LogWarning($"The {nameof(IApplicationBuilder)} is not available. The 'CheckLibs' feature is disabled!");
+                return;
+            }
+
             app.Use(async (httpContext, next) =>
             {
                 if (!await CheckLibsAsyncOnceAsync(httpContext))
