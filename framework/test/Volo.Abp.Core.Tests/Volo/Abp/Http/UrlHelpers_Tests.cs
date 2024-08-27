@@ -19,6 +19,7 @@ public class UrlHelpers_Tests
     }
 
     [Theory]
+    [InlineData("http://sub.domain", "http://domain")]
     [InlineData("http://sub.domain", "http://*.domain")]
     [InlineData("http://sub.sub.domain", "http://*.domain")]
     [InlineData("http://sub.sub.domain", "http://*.sub.domain")]
