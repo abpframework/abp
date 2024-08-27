@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Two factor verifikacija",
     "DisplayName:IsActive": "Aktivan",
     "DisplayName:LockoutEnabled": "Zaključavanje računa",
+    "Description:LockoutEnabled": "Zaključaj račun nakon neuspješnih pokušaja prijave",
     "NewRole": "Nova uloga",
     "RoleName": "Naziv uloge",
     "CreationTime": "Vrijeme stvaranja",
