@@ -196,25 +196,19 @@ export class PermissionManagementComponent
   }
 
   setParentClicked(clickedPermission: PermissionGrantInfoDto) {
-    let childPermissionGrantedCount = 0;
-    let parentPermission: PermissionGrantInfoDto;
+    const parentPermissions: PermissionGrantInfoDto[] = findAllParentPermissions(
+      this.permissions,
+      clickedPermission,
+    );
 
     if (clickedPermission.parentName) {
-      this.permissions.forEach(per => {
-        if (per.name === clickedPermission.parentName) {
-          parentPermission = per;
-        }
-      });
-      this.permissions.forEach(per => {
-        if (parentPermission.name === per.parentName) {
-          per.isGranted && childPermissionGrantedCount++;
-        }
-      });
-      if (childPermissionGrantedCount === 1 && !parentPermission.isGranted) {
+      if (parentPermissions.length) {
         this.permissions = this.permissions.map(per => {
-          if (per.name === parentPermission.name) {
-            per.isGranted = true;
-          }
+          parentPermissions.forEach(parent => {
+            if (per.name === parent.name) {
+              per.isGranted = true;
+            }
+          });
           return per;
         });
       }
@@ -223,8 +217,10 @@ export class PermissionManagementComponent
 
     this.permissions = this.permissions.map(per => {
       const root = findRootParent(this.permissions, per);
-      if (root && root.name === clickedPermission.name) {
-        per.isGranted = root.isGranted;
+      if (root) {
+        if (root.name === clickedPermission.name && !root.isGranted) {
+          per.isGranted = false;
+        }
       }
       return per;
     });
@@ -389,26 +385,44 @@ export class PermissionManagementComponent
   }
 }
 
-function findRootParent(
+function traverseParentPermissions(
   permissions: PermissionGrantInfoDto[],
   permission: PermissionGrantInfoDto,
-): PermissionGrantInfoDto | null {
-  if (!permissions.length) {
-    return null;
-  }
-
+  collectAll = false,
+): PermissionGrantInfoDto[] {
   const permissionMap = new Map(permissions.map(p => [p.name, p]));
   let currentPermission = permissionMap.get(permission.name) ?? null;
+  const parentPermissions: PermissionGrantInfoDto[] = [];
 
   while (currentPermission && currentPermission.parentName) {
     const parentPermission = permissionMap.get(currentPermission.parentName);
     if (!parentPermission) {
       break;
     }
+    parentPermissions.push(parentPermission);
     currentPermission = parentPermission;
+
+    if (!collectAll) {
+      break;
+    }
   }
 
-  return currentPermission;
+  return parentPermissions;
+}
+
+function findRootParent(
+  permissions: PermissionGrantInfoDto[],
+  permission: PermissionGrantInfoDto,
+): PermissionGrantInfoDto | null {
+  const parentPermissions = traverseParentPermissions(permissions, permission);
+  return parentPermissions.length ? parentPermissions[parentPermissions.length - 1] : null;
+}
+
+function findAllParentPermissions(
+  permissions: PermissionGrantInfoDto[],
+  permission: PermissionGrantInfoDto,
+): PermissionGrantInfoDto[] {
+  return traverseParentPermissions(permissions, permission, true);
 }
 
 function findMargin(
