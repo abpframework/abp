@@ -31,6 +31,7 @@ public partial class FeatureManagementModal
 
     protected string ProviderName;
     protected string ProviderKey;
+    protected string ProviderKeyDisplayName;
 
     protected string SelectedTabName;
 
@@ -40,7 +41,7 @@ public partial class FeatureManagementModal
 
     protected Dictionary<string, string> SelectionStringValues;
 
-    public virtual async Task OpenAsync([NotNull] string providerName, string providerKey = null)
+    public virtual async Task OpenAsync([NotNull] string providerName, string providerKey = null, string providerKeyDisplayName = null)
     {
         try
         {
@@ -49,6 +50,11 @@ public partial class FeatureManagementModal
 
             ToggleValues = new Dictionary<string, bool>();
             SelectionStringValues = new Dictionary<string, string>();
+
+            if (!providerKeyDisplayName.IsNullOrWhiteSpace())
+            {
+                ProviderKeyDisplayName = $" - {providerKeyDisplayName}";
+            }
 
             var result = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
