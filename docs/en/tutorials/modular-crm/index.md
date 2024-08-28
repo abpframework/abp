@@ -32,7 +32,7 @@ Initially, you see a `ModularCrm` solution and a `ModularCrm` module under that 
 
 ![solution-explorer-modular-crm-expanded](images/solution-explorer-modular-crm-expanded.png)
 
-## Creating the Product Module
+## Creating the Products Module
 
 In this part, you will create a new module for product management and add it to the main application.
 
@@ -48,7 +48,14 @@ Create `main` and `modules` folder using the *New Folder* command, then move the
 
 ![abp-studio-solution-explorer-with-folders](images/abp-studio-solution-explorer-with-folders.png)
 
-Now, we can create a new module in our solution. Right-click the `modules` folder on the *Solution Explorer* panel, and select the *Add* -> *New Module* -> *DDD Module* command:
+Now, we can create a new module in our solution. There are two module templates provided by ABP Studio:
+
+* **Empty Module**: You can use that module template to build your module structure from scratch.
+* **DDD Module**: A Domain-Driven Design based layered module structure.
+
+We will use the *DDD Module* template for the Product module. We will use the *Empty Module* template later in this tutorial.
+
+Right-click the `modules` folder on the *Solution Explorer* panel, and select the *Add* -> *New Module* -> *DDD Module* command:
 
 ![abp-studio-add-new-dd-module](images/abp-studio-add-new-dd-module.png)
 
@@ -73,6 +80,24 @@ The next step is to select the database provider (or providers) you want to supp
 ![abp-studio-create-new-module-dialog-step-db](images/abp-studio-create-new-module-dialog-step-db.png)
 
 Since our main application is using Entity Framework Core and we will use the `ModularCrm.Products` module only for that main application, we can select the *Entity Framework Core* option and click the *Create* button.
+
+After adding the new module, the *Solution Explorer* panel should look like the following figure:
+
+![abp-studio-solution-explorer-two-modules](images/abp-studio-solution-explorer-two-modules.png)
+
+The new `ModularCrm.Products` module has been created and added to the solution. The `ModularCrm.Products` module has a separate and independent .NET solution. Right-click the `ModularCrm.Products` module and select the *Open with* -> *Explorer* command:
+
+![abp-studio-open-in-explorer](images/abp-studio-open-in-explorer.png)
+
+This command opens the solution folder in your file system:
+
+![product-module-folder](images/product-module-folder.png)
+
+You can open `ModularCrm.Product.sln` in your favorite IDE (e.g. Visual Studio):
+
+![product-module-visual-studio](images/product-module-visual-studio.png)
+
+As seen in the preceding figure, the `ModularCrm.Product` solution consists of several layers, each has own responsibility.
 
 
 
