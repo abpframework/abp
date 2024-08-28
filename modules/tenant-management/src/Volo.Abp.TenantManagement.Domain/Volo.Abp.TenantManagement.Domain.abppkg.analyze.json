@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Domain",
-  "hash": "3cee9d89359b00bd39be9e09f6036218",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
@@ -217,11 +217,18 @@
           "namespace": "Volo.Abp",
           "declaringAssemblyName": "Volo.Abp.Core",
           "fullName": "Volo.Abp.ISoftDelete"
+        },
+        {
+          "name": "IHasEntityVersion",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasEntityVersion"
         }
       ],
       "methods": [
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "FindDefaultConnectionString",
           "summary": null,
           "isAsync": false,
@@ -232,6 +239,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "FindConnectionString",
           "summary": null,
           "isAsync": false,
@@ -248,6 +256,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "SetDefaultConnectionString",
           "summary": null,
           "isAsync": false,
@@ -264,6 +273,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "SetConnectionString",
           "summary": null,
           "isAsync": false,
@@ -285,6 +295,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "RemoveDefaultConnectionString",
           "summary": null,
           "isAsync": false,
@@ -295,6 +306,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "RemoveConnectionString",
           "summary": null,
           "isAsync": false,
@@ -328,6 +340,16 @@
           "summary": null
         },
         {
+          "type": "System.String",
+          "name": "NormalizedName",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "EntityVersion",
+          "summary": null
+        },
+        {
           "type": "System.Collections.Generic.List`1[Volo.Abp.TenantManagement.TenantConnectionString]",
           "name": "ConnectionStrings",
           "summary": null
@@ -348,6 +370,7 @@
       "methods": [
         {
           "returnType": "Tenant",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -364,6 +387,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "ChangeNameAsync",
           "summary": null,
           "isAsync": true,
@@ -453,6 +477,7 @@
       "methods": [
         {
           "returnType": "Tenant",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -462,7 +487,7 @@
           "parameters": [
             {
               "type": "String",
-              "name": "name",
+              "name": "normalizedName",
               "isOptional": false
             },
             {
@@ -479,6 +504,7 @@
         },
         {
           "returnType": "Tenant",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "FindByName",
           "summary": null,
           "isAsync": false,
@@ -488,7 +514,7 @@
           "parameters": [
             {
               "type": "String",
-              "name": "name",
+              "name": "normalizedName",
               "isOptional": false
             },
             {
@@ -500,6 +526,7 @@
         },
         {
           "returnType": "Tenant",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "FindById",
           "summary": null,
           "isAsync": false,
@@ -521,6 +548,7 @@
         },
         {
           "returnType": "List<Tenant>",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -562,6 +590,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,

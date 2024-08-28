@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.Web",
-  "hash": "535a8e561ef369beac7b706d17493489",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement.Web",
@@ -72,6 +72,18 @@
       ],
       "contentType": "abpModule",
       "name": "AbpSettingManagementWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement.Web.Pages.SettingManagement",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.EmailSettingGroup",
+      "contentType": "webPage",
+      "name": "SendTestEmailModal",
       "summary": null
     }
   ]

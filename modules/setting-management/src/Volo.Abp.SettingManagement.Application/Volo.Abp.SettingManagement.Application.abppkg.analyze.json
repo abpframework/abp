@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.Application",
-  "hash": "e101768281ffae14eab8cdfd970a3b0f",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
@@ -24,6 +24,16 @@
           "declaringAssemblyName": "Volo.Abp.Emailing",
           "namespace": "Volo.Abp.Emailing",
           "name": "AbpEmailingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Timing",
+          "namespace": "Volo.Abp.Timing",
+          "name": "AbpTimingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Users.Abstractions",
+          "namespace": "Volo.Abp.Users",
+          "name": "AbpUsersAbstractionModule"
         }
       ],
       "implementingInterfaces": [
@@ -141,6 +151,7 @@
       "methods": [
         {
           "returnType": "EmailSettingsDto",
+          "namespace": "Volo.Abp.SettingManagement",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -151,6 +162,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.SettingManagement",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -167,6 +179,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.SettingManagement",
           "name": "SendTestEmailAsync",
           "summary": null,
           "isAsync": true,
@@ -184,6 +197,115 @@
       ],
       "contentType": "applicationService",
       "name": "EmailSettingsAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.SettingManagement",
+      "baseClass": {
+        "name": "SettingManagementAppServiceBase",
+        "namespace": "Volo.Abp.SettingManagement",
+        "declaringAssemblyName": "Volo.Abp.SettingManagement.Application",
+        "fullName": "Volo.Abp.SettingManagement.SettingManagementAppServiceBase"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "ITimeZoneSettingsAppService",
+          "namespace": "Volo.Abp.SettingManagement",
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Application.Contracts",
+          "fullName": "Volo.Abp.SettingManagement.ITimeZoneSettingsAppService"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "String",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "GetAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        },
+        {
+          "returnType": "List<NameValue>",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "GetTimezonesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "UpdateAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "timezone",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "TimeZoneSettingsAppService",
       "summary": null
     }
   ]

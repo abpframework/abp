@@ -1,6 +1,6 @@
 {
   "name": "Volo.BloggingTestApp.EntityFrameworkCore",
-  "hash": "1ae906cf0026320e50077986287d66ac",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.BloggingTestApp.EntityFrameworkCore",
@@ -89,6 +89,7 @@
       "connectionStringName": null,
       "databaseTables": [],
       "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -143,6 +144,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",
