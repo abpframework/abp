@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Admin.Application",
-  "hash": "f36b44743b8df7a8d4cc013570d044a2",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging.Admin",
@@ -146,6 +146,7 @@
       "methods": [
         {
           "returnType": "ListResultDto<BlogDto>",
+          "namespace": "Volo.Blogging.Admin.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -156,6 +157,7 @@
         },
         {
           "returnType": "BlogDto",
+          "namespace": "Volo.Blogging.Admin.Blogs",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -172,6 +174,7 @@
         },
         {
           "returnType": "BlogDto",
+          "namespace": "Volo.Blogging.Admin.Blogs",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -188,6 +191,7 @@
         },
         {
           "returnType": "BlogDto",
+          "namespace": "Volo.Blogging.Admin.Blogs",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -209,6 +213,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Admin.Blogs",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -225,6 +230,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Admin.Blogs",
           "name": "ClearCacheAsync",
           "summary": null,
           "isAsync": true,

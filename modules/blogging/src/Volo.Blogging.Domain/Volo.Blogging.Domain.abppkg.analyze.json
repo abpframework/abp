@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Domain",
-  "hash": "6ef78d68d0b8c8fe7a3f43214e572d5d",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging",
@@ -152,7 +152,7 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         },
         {
@@ -165,6 +165,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Blogging.Users",
           "name": "Update",
           "summary": null,
           "isAsync": false,
@@ -228,6 +229,41 @@
         {
           "type": "System.Boolean",
           "name": "PhoneNumberConfirmed",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "WebSite",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Twitter",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Github",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Linkedin",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Company",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "JobTitle",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Biography",
           "summary": null
         }
       ],
@@ -349,6 +385,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -365,6 +402,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "IncreaseUsageCount",
           "summary": null,
           "isAsync": false,
@@ -381,6 +419,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "DecreaseUsageCount",
           "summary": null,
           "isAsync": false,
@@ -397,6 +436,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "SetDescription",
           "summary": null,
           "isAsync": false,
@@ -556,6 +596,7 @@
       "methods": [
         {
           "returnType": "Post",
+          "namespace": "Volo.Blogging.Posts",
           "name": "IncreaseReadCount",
           "summary": null,
           "isAsync": false,
@@ -566,6 +607,7 @@
         },
         {
           "returnType": "Post",
+          "namespace": "Volo.Blogging.Posts",
           "name": "SetTitle",
           "summary": null,
           "isAsync": false,
@@ -582,6 +624,7 @@
         },
         {
           "returnType": "Post",
+          "namespace": "Volo.Blogging.Posts",
           "name": "SetUrl",
           "summary": null,
           "isAsync": false,
@@ -598,6 +641,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Posts",
           "name": "AddTag",
           "summary": null,
           "isAsync": false,
@@ -614,6 +658,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Posts",
           "name": "RemoveTag",
           "summary": null,
           "isAsync": false,
@@ -800,6 +845,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Comments",
           "name": "SetText",
           "summary": null,
           "isAsync": false,
@@ -954,6 +1000,7 @@
       "methods": [
         {
           "returnType": "Blog",
+          "namespace": "Volo.Blogging.Blogs",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -970,6 +1017,7 @@
         },
         {
           "returnType": "Blog",
+          "namespace": "Volo.Blogging.Blogs",
           "name": "SetShortName",
           "summary": null,
           "isAsync": false,
@@ -1061,6 +1109,7 @@
       "methods": [
         {
           "returnType": "List<BlogUser>",
+          "namespace": "Volo.Blogging.Users",
           "name": "GetUsersAsync",
           "summary": null,
           "isAsync": true,
@@ -1135,6 +1184,7 @@
       "methods": [
         {
           "returnType": "List<Tag>",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1156,6 +1206,7 @@
         },
         {
           "returnType": "Tag",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "GetByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -1182,6 +1233,7 @@
         },
         {
           "returnType": "Tag",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -1208,6 +1260,7 @@
         },
         {
           "returnType": "List<Tag>",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1229,6 +1282,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Tagging",
           "name": "DecreaseUsageCountOfTagsAsync",
           "summary": null,
           "isAsync": true,
@@ -1298,6 +1352,7 @@
       "methods": [
         {
           "returnType": "List<Post>",
+          "namespace": "Volo.Blogging.Posts",
           "name": "GetPostsByBlogId",
           "summary": null,
           "isAsync": true,
@@ -1319,6 +1374,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Blogging.Posts",
           "name": "IsPostUrlInUseAsync",
           "summary": null,
           "isAsync": true,
@@ -1350,6 +1406,7 @@
         },
         {
           "returnType": "Post",
+          "namespace": "Volo.Blogging.Posts",
           "name": "GetPostByUrl",
           "summary": null,
           "isAsync": true,
@@ -1376,6 +1433,7 @@
         },
         {
           "returnType": "List<Post>",
+          "namespace": "Volo.Blogging.Posts",
           "name": "GetOrderedList",
           "summary": null,
           "isAsync": true,
@@ -1392,6 +1450,55 @@
               "type": "Boolean",
               "name": "descending",
               "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<Post>",
+          "namespace": "Volo.Blogging.Posts",
+          "name": "GetListByUserIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<Post>",
+          "namespace": "Volo.Blogging.Posts",
+          "name": "GetLatestBlogPostsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "blogId",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "count",
+              "isOptional": false
             },
             {
               "type": "CancellationToken",
@@ -1450,6 +1557,7 @@
       "methods": [
         {
           "returnType": "List<Comment>",
+          "namespace": "Volo.Blogging.Comments",
           "name": "GetListOfPostAsync",
           "summary": null,
           "isAsync": true,
@@ -1471,6 +1579,7 @@
         },
         {
           "returnType": "Int32",
+          "namespace": "Volo.Blogging.Comments",
           "name": "GetCommentCountOfPostAsync",
           "summary": null,
           "isAsync": true,
@@ -1492,6 +1601,7 @@
         },
         {
           "returnType": "List<Comment>",
+          "namespace": "Volo.Blogging.Comments",
           "name": "GetRepliesOfComment",
           "summary": null,
           "isAsync": true,
@@ -1513,6 +1623,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Blogging.Comments",
           "name": "DeleteOfPost",
           "summary": null,
           "isAsync": true,
@@ -1582,6 +1693,7 @@
       "methods": [
         {
           "returnType": "Blog",
+          "namespace": "Volo.Blogging.Blogs",
           "name": "FindByShortNameAsync",
           "summary": null,
           "isAsync": true,

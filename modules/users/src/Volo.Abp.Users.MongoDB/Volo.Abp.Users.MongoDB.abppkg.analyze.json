@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Users.MongoDB",
-  "hash": "9c292e59ebd9d93e0caa335c86132208",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Users.MongoDB",

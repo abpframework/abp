@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.HttpApi",
-  "hash": "c1ea0544950c8b5fb8fa33c66533554b",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
@@ -62,6 +62,76 @@
       ],
       "contentType": "abpModule",
       "name": "AbpSettingManagementHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/setting-management/emailing",
+          "method": "GET",
+          "groupName": "EmailSettings",
+          "responseType": "Volo.Abp.SettingManagement.EmailSettingsDto",
+          "responseTypeAsJson": "{\r\n  \"smtpHost\": \"string\",\r\n  \"smtpPort\": 0,\r\n  \"smtpUserName\": \"string\",\r\n  \"smtpPassword\": \"string\",\r\n  \"smtpDomain\": \"string\",\r\n  \"smtpEnableSsl\": false,\r\n  \"smtpUseDefaultCredentials\": false,\r\n  \"defaultFromAddress\": \"string\",\r\n  \"defaultFromDisplayName\": \"string\"\r\n}",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/setting-management/emailing",
+          "method": "POST",
+          "groupName": "EmailSettings",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "UpdateEmailSettingsDto"
+            }
+          ]
+        },
+        {
+          "path": "api/setting-management/emailing/send-test-email",
+          "method": "POST",
+          "groupName": "EmailSettings",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "SendTestEmailInput"
+            }
+          ]
+        },
+        {
+          "path": "api/setting-management/timezone",
+          "method": "GET",
+          "groupName": "TimeZoneSettings",
+          "responseType": "System.String",
+          "responseTypeAsJson": "\"string\"",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/setting-management/timezone/timezones",
+          "method": "GET",
+          "groupName": "TimeZoneSettings",
+          "responseType": "System.Collections.Generic.List`1[Volo.Abp.NameValue]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"name\": \"string\",\r\n    \"value\": \"string\"\r\n  }\r\n]",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/setting-management/timezone",
+          "method": "POST",
+          "groupName": "TimeZoneSettings",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "timezone",
+              "type": "String"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

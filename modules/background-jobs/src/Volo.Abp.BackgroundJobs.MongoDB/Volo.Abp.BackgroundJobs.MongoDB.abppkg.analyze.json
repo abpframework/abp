@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.MongoDB",
-  "hash": "43dcde5f0f68f0b06ce3158a154b58e1",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.MongoDB",
@@ -71,7 +71,7 @@
         {
           "entityFullName": "Volo.Abp.BackgroundJobs.BackgroundJobRecord",
           "contentType": "databaseCollection",
-          "name": "AbpBackgroundJobs",
+          "name": "BackgroundJobs",
           "summary": null
         }
       ],

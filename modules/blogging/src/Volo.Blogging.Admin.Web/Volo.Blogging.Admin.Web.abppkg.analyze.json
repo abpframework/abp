@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Admin.Web",
-  "hash": "f00cd39c07130843c7103cc1f6caf9a2",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging.Admin",
@@ -72,6 +72,24 @@
       ],
       "contentType": "abpModule",
       "name": "BloggingAdminWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs",
+      "contentType": "webPage",
+      "name": "CreateModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs",
+      "contentType": "webPage",
+      "name": "EditModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]

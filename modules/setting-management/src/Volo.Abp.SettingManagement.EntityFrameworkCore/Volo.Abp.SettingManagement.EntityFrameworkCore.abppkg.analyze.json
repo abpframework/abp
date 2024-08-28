@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.EntityFrameworkCore",
-  "hash": "05cb2df7469683b6e1c25cce3b82f5fc",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
@@ -67,15 +67,27 @@
     {
       "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
       "connectionStringName": "AbpSettingManagement",
-      "databaseTables": [
+      "databaseTables": [],
+      "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
         {
-          "entityFullName": "Volo.Abp.SettingManagement.Setting",
-          "contentType": "databaseTable",
-          "name": "AbpSettings",
-          "summary": null
+          "returnType": "Void",
+          "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
+          "name": "ConfigureSettingManagement",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
         }
       ],
-      "replacedDbContexts": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -130,6 +142,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",
