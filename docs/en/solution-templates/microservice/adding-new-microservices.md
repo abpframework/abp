@@ -108,7 +108,7 @@ You can copy the configurations from the existing microservices and modify them 
 
 ### Configuring the OpenId Options
 
-We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `ProductService` microservice.
+We should configure the OpenId options by modifying the `OpenIddictDataSeeder` in the `Identity` service. Below is an example of the `OpenIddictDataSeeder` options for the `Product` microservice.
 
 Create API scopes and add the required API scope for Swagger clients in the `CreateApiScopesAsync` and `CreateSwaggerClientsAsync` methods in the `OpenIddictDataSeeder` class.
 
@@ -166,7 +166,7 @@ private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
 }
 ```
 
-Add the allowed scope for the web (front-end) application(s) in the `CreateClientsAsync` method. You might have different clients for different UI applications such as web, Angular, React, etc. Ensure you add the new service to the allowed scopes of these clients.
+Add the allowed scope for the web (front-end) application(s) in the `CreateClientsAsync` method. You might have different clients for different UI applications such as web, Angular, React, etc. Ensure you add the new microservice to the allowed scopes of these clients.
 
 ```diff
 private async Task CreateClientsAsync()
@@ -228,7 +228,7 @@ Add the new service URL to the `appsettings.json` file in the `Identity` microse
 
 ### Configuring the AuthServer
 
-We should configure the *AuthServer* `appsettings.json` file for the **CorsOrigins** and **RedirectAllowedUrls** sections.
+We should configure the *AuthServer* application `appsettings.json` file for the **CorsOrigins** and **RedirectAllowedUrls** sections.
 
 ```diff
 ...
@@ -245,33 +245,33 @@ We should configure the *AuthServer* `appsettings.json` file for the **CorsOrigi
 
 ### Configuring the API Gateway
 
-We should configure the API Gateway to access the new microservice. First, add the **ProductService** sections to the `appsettings.json` file in the `WebGateway` project. In this example we're gonna edit the *Acme.Bookstore.WebGateway* project `appsettings.json` file.
+We should configure the API Gateway to access the new microservice. First, add the **Product** sections to the `appsettings.json` file in the `WebGateway` project. In this example we're gonna edit the *Acme.Bookstore.WebGateway* project `appsettings.json` file.
 
 ```diff
 "ReverseProxy": {
     "Routes": {
       ...
-+      "ProductService": {
-+        "ClusterId": "ProductService",
++      "Product": {
++        "ClusterId": "Product",
 +        "Match": {
-+          "Path": "/api/productservice/{**catch-all}"
++          "Path": "/api/product/{**catch-all}"
 +        }
 +      },
-+      "ProductServiceSwagger": {
-+        "ClusterId": "ProductService",
++      "ProductSwagger": {
++        "ClusterId": "Product",
 +        "Match": {
-+          "Path": "/swagger-json/ProductService/swagger/v1/swagger.json"
++          "Path": "/swagger-json/Product/swagger/v1/swagger.json"
 +        },
 +        "Transforms": [
-+          { "PathRemovePrefix": "/swagger-json/ProductService" }
++          { "PathRemovePrefix": "/swagger-json/Product" }
 +        ]
 +      }
     },
     "Clusters": {
       ...
-+      "ProductService": {
++      "Product": {
 +        "Destinations": {
-+          "ProductService": {
++          "Product": {
 +            "Address": "http://localhost:44350/"
 +          }
 +        }
@@ -305,7 +305,7 @@ private static void ConfigureSwaggerUI(
 
 ### Configuring the UI Services
 
-We should configure the UI application(s) to allow the new microservice to access through the web gateway. To do this, we should add the new service scope to the `ConfigureAuthentication` method in the `ProjectName...Module` class in the `Web` or `Blazor` application. In this example we're gonna edit the *BookstoreWebModule* file.
+We should configure the UI application(s) to allow the new microservice to access through the web gateway. To do this, we should add the new microservice scope to the `ConfigureAuthentication` method in the `ProjectName...Module` class in the `Web` or `Blazor` application. In this example we're gonna edit the `BookstoreWebModule` file.
 
 ```diff
 private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
@@ -355,7 +355,7 @@ We should add the new microservice to the solution runner [profile](../../studio
 
 ## Docker Configuration for Prometheus
 
-If you want to monitor the new microservice with Prometheus when you debug the solution, you should add the new microservice to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `prometheus.yml` file for the `ProductService` microservice.
+If you want to monitor the new microservice with Prometheus when you debug the solution, you should add the new microservice to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `prometheus.yml` file for the `Product` microservice.
 
 ```diff
   - job_name: 'authserver'
@@ -375,32 +375,32 @@ If you want to monitor the new microservice with Prometheus when you debug the s
 
 If you want to deploy the new microservice to Kubernetes, you should create a Helm chart for the new microservice.
 
-First, we need to add the new microservice to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `build-all-images.ps1` script for the `ProductService` microservice.
+First, we need to add the new microservice to the `build-all-images.ps1` script in the `etc/helm` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `build-all-images.ps1` script for the `Product` microservice.
 
 ```diff
 ...
   ./build-image.ps1 -ProjectPath "../../apps/auth-server/Acme.Bookstore.AuthServer/Acme.Bookstore.AuthServer.csproj" -ImageName bookstore/authserver
-+ ./build-image.ps1 -ProjectPath "../../services/product/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/productservice
++ ./build-image.ps1 -ProjectPath "../../services/product/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj" -ImageName bookstore/product
 ```
 
-Then, we need to add the connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `ProductService` microservice.
+Then, we need to add the connection string to the `values.projectname-local.yaml` file in the `etc/helm/projectname` folder. Below is an example of the `values.bookstore-local.yaml` file for the `Product` microservice.
 
 ```diff
 global:
   ...
   connectionStrings:
     ...
-+   productService: "Server=[RELEASE_NAME]-sqlserver,1433; Database=Bookstore_ProductService; User Id=sa; Password=myPassw@rd; TrustServerCertificate=True"
++   product: "Server=[RELEASE_NAME]-sqlserver,1433; Database=Bookstore_ProductService; User Id=sa; Password=myPassw@rd; TrustServerCertificate=True"
 ```
 
-Afterwards, we need to create a new Helm chart for the new microservice. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `productservice` Helm chart for the `ProductService` microservice.
+Afterwards, we need to create a new Helm chart for the new microservice. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `product` Helm chart for the `Product` microservice.
 
 Product microservice `values.yaml` file. 
 
 {%{
 ```yaml
 image:
-  repository: "bookstore/productservice"
+  repository: "bookstore/product"
   tag: "latest"
   pullPolicy: IfNotPresent
 swagger:
@@ -413,7 +413,7 @@ Product microservice `Chart.yaml` file.
 {%{
 ```yaml
 apiVersion: v2
-name: productservice
+name: product
 version: 1.0.0
 appVersion: "1.0"
 description: Bookstore Product Service
@@ -452,7 +452,7 @@ spec:
         - name: "ConnectionStrings__AbpBlobStoring"
           value: "{{ .Values.global.connectionStrings.blobStoring | replace "[RELEASE_NAME]" .Release.Name }}"
         - name: "ConnectionStrings__ProductService"
-          value: "{{ .Values.global.connectionStrings.productService | replace "[RELEASE_NAME]" .Release.Name }}"
+          value: "{{ .Values.global.connectionStrings.product | replace "[RELEASE_NAME]" .Release.Name }}"
           ...
 ```
 }%}
@@ -549,7 +549,7 @@ spec:
         ...
         - name: "App__CorsOrigins"
 -         value: "...,http://{{ .Release.Name }}-administration"
-+         value: "...,http://{{ .Release.Name }}-administration,http://{{ .Release.Name }}-productservice"
++         value: "...,http://{{ .Release.Name }}-administration,http://{{ .Release.Name }}-product"
 ```
 }%}
 
@@ -579,8 +579,8 @@ spec:
           containerPort: 80
         env:
         ...
-+       - name: "ReverseProxy__Clusters__ProductService__Destinations__ProductService__Address"
-+         value: "http://{{ .Release.Name }}-productservice"
++       - name: "ReverseProxy__Clusters__Product__Destinations__Product__Address"
++         value: "http://{{ .Release.Name }}-product"
 ```
 }%}
 
@@ -593,11 +593,11 @@ You can customize the microservice template if needed. Add new configurations, d
 After adding the new microservice to the solution, you can develop the UI for the new microservice. For .NET applications, you can add the microservice *Contracts* package to the UI application(s) to access the services provided by the new microservice. Afterwards, you can use the [generate-proxy](../../cli/index.md#generate-proxy) command to generate the proxy classes for the new microservice.
 
 ```bash
-abp generate-proxy -t csharp -url http://localhost:44333/ -m productService --without-contracts
+abp generate-proxy -t csharp -url http://localhost:44333/ -m product --without-contracts
 ```
 
 Next, start creating *Pages* and *Components* for the new microservice in the UI application(s). Similarly, if you have an Angular application, you can use the [generate-proxy](../../cli/index.md#generate-proxy) command to generate the proxy classes for the new microservice and start developing the UI.
 
 ```bash
-abp generate-proxy -t ng -url http://localhost:44333/ -m productService
+abp generate-proxy -t ng -url http://localhost:44333/ -m product
 ```
