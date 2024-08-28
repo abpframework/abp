@@ -480,13 +480,19 @@ After creating the Helm chart, you can *Refresh Sub Charts* in the ABP Studio.
 
 ![kubernetes-refresh-sub-charts](images/kubernetes-refresh-sub-charts.png)
 
-Then, update *Metadata* information right-click the *microservicename* [sub-chart](../../studio/kubernetes.md#subchart), select *Properties* it open *Chart Properties* window. You can edit in the *Metadata* tab. 
+Then, update *Metadata* information right-click the *microservicename* [sub-chart](../../studio/kubernetes.md#subchart), select *Properties* it open *Chart Properties* window. You should add the following keys in the *Metadata* tab.
 
 ![microservice-chart-properties](images/microservice-chart-properties-metadata.png)
+
+- `projectPath`: The path to the microservice host application project. In the bookstore example, this value is `../../services/product/Acme.Bookstore.ProductService/Acme.Bookstore.ProductService.csproj`.
+- `imageName`: When we build the Docker image, it uses this value as the Docker image name. We're going to use it in the Helm chart values.
+- `projectType`: You can add a Helm chart for Angular and .NET projects, which is why we should explicitly specify the project type.
 
 Add the *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services* tab.
 
 ![microservice-chart-properties-kubernetes-services](images/microservice-chart-properties-kubernetes-services.png)
+
+> This value should be the same as the [solution runner application](./../../studio/running-applications.md#c-application) *Kubernetes service* value. It's necessary for browsing because when we connect to the Kubernetes cluster, we should browse the Kubernetes services instead of using the Launch URL.
 
 Last but not least, we need to configure the helm chart environments for identity, auth-server, and gateway applications.
 
