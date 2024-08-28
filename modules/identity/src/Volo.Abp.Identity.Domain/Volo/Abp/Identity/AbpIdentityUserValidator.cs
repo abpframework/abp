@@ -41,6 +41,24 @@ namespace Volo.Abp.Identity
                     });
                 }
             }
+            
+            var email = await manager.GetEmailAsync(user);
+            if (email == null)
+            {
+                errors.Add(describer.InvalidEmail(null));
+            }
+            else
+            {
+                var owner = await manager.FindByNameAsync(email);
+                if (owner != null && !string.Equals(await manager.GetUserIdAsync(owner), await manager.GetUserIdAsync(user)))
+                {
+                    errors.Add(new IdentityError
+                    {
+                        Code = "InvalidEmail",
+                        Description = Localizer["Volo.Abp.Identity:InvalidEmail", email]
+                    });
+                }
+            }
 
             return errors.Count > 0 ? IdentityResult.Failed(errors.ToArray()) : IdentityResult.Success;
         }
