@@ -236,4 +236,93 @@ After the operation completes, you can check your database to see the new `Produ
 
 ## Creating the Application Service
 
-TODO
+Now, we will create an [application service](../../framework/architecture/domain-driven-design/application-services.md) to perform some use cases related to products.
+
+### Defining the Application Service Contracts
+
+Return to your IDE (e.g. Visual Studio), open the `ModularCrm.Products` module's .NET solution and create an `IProductAppService` interface under the `ModularCrm.Products.Application.Contracts` project:
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+
+namespace ModularCrm.Products;
+
+public interface IProductAppService : IApplicationService
+{
+    Task CreateAsync(ProductCreationDto input);
+}
+````
+
+We are defining application service interfaces and [data transfer objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) in the `Application.Contracts` project. In that way, we can share that contracts with clients without sharing the actual implementation class.
+
+`IProductAppService.CreateAsync` method gets an object of type `ProductCreationDto`. So, we also need to create a `ProductCreationDto` class under the `ModularCrm.Products.Application.Contracts` project:
+
+````csharp
+namespace ModularCrm.Products;
+
+public class ProductCreationDto
+{
+    public string Name { get; set; }
+    public int StockCount { get; set; }
+}
+````
+
+These two files should be located under the `ModularCrm.Products.Application.Contracts` project as shown below:
+
+![visual-studio-application-contracts](images/visual-studio-application-contracts.png)
+
+### Implementing the Application Service
+
+Now, we can implement the `IProductAppService` interface. Create a `ProductAppService` class under the `ModularCrm.Products.Application` project:
+
+````csharp
+using System.Threading.Tasks;
+
+namespace ModularCrm.Products;
+
+public class ProductAppService : ProductsAppService, IProductAppService
+{
+    public async Task CreateAsync(ProductCreationDto input)
+    {
+        // TODO
+    }
+}
+````
+
+Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for localization and object mapping. You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
+
+Let's return to the `ProductAppService` and implement the `CreateAsync` method:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace ModularCrm.Products;
+
+public class ProductAppService : ProductsAppService, IProductAppService
+{
+    private readonly IRepository<Product, Guid> _productRepository;
+
+    public ProductAppService(IRepository<Product, Guid> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task CreateAsync(ProductCreationDto input)
+    {
+        var product = new Product
+        {
+            Name = input.Name,
+            StockCount = input.StockCount
+        };
+
+        await _productRepository.InsertAsync(product);
+    }
+}
+````
+
+
+
+...
