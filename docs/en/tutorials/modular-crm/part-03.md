@@ -47,9 +47,9 @@ public class Product : AggregateRoot<Guid>
 
 ## Mapping Entity to Database
 
-The next step is to configure Entity Framework Core `DbContext` class for the new entity.
+The next step is to configure Entity Framework Core `DbContext` class and the database for the new entity.
 
-### Add a DbSet Property
+### Add a `DbSet` Property
 
 Open the `ProductsDbContext` in the `ModularCrm.Products.EntityFrameworkCore` project and add a new `DbSet` property for the `Product` entity. The final `Product.cs` file content should be the following:
 
@@ -101,7 +101,7 @@ public interface IProductsDbContext : IEfCoreDbContext
 }
 ````
 
-Having such an `IProductsDbContext` interface allows us to decouple our repositories (and other classes) from the concrete `ProductsDbContext` class, which provides flexibility to the final application to merge multiple `DbContext`s into a single `DbContext` to manage database migrations easier and have a database level transaction support for multi-module operations. We will see it in the *Adding a Database Migration* section.
+Having such an `IProductsDbContext` interface allows us to decouple our repositories (and other classes) from the concrete `ProductsDbContext` class, which provides flexibility to the final application to merge multiple `DbContext`s into a single `DbContext` to manage database migrations easier and have a database level transaction support for multi-module database operations.
 
 ### Configure the Table Mapping
 
@@ -149,6 +149,8 @@ public static class ProductsDbProperties
     public const string ConnectionStringName = "Products";
 }
 ````
+
+You can set a `DbSchema` to collect a module's tables under a separate schema (if it is supported by your DBMS), or use a `DbTablePrefix` as a prefix for all tables names of a module. For this tutorial, we won't set any of them.
 
 In that point, build the `ModularCrm.Products` .NET solution in your IDE (or in ABP Studio UI). We will switch to the main application's .NET solution.
 
