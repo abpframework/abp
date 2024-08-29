@@ -39,7 +39,7 @@ public abstract class AbpOpenIddictWildcardDomainBase<THandler, TOriginalHandler
         Logger.LogDebug("Checking wildcard domain for url: {url}", url);
         foreach (var domain in WildcardDomainOptions.WildcardDomainsFormat.Select(domainFormat => domainFormat.Replace("{0}", "*")))
         {
-            Logger.LogDebug("Checking wildcard domain format: {newDomainFormat}", domain);
+            Logger.LogDebug("Checking wildcard domain format: {domain}", domain);
             if (UrlHelpers.IsSubdomainOf(url, domain))
             {
                 Logger.LogDebug("The url: {url} is a wildcard domain of: {domain}", url, domain);
