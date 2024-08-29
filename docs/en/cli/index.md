@@ -924,6 +924,7 @@ abp bundle [options]
 * ```--project-type``` or ```-t```: Specifies the project type. Default type is `webassembly`. Available types:
   * `webassembly`
   * `maui-blazor`
+* `--version` or `-v`: Specifies the ABP Framework version that the project is using. This is helpful for those who use central package management.
 
 `bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md)
 
