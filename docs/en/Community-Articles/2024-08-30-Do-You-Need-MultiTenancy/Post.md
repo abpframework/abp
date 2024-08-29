@@ -1,5 +1,7 @@
 # Do You Need Multi-tenancy?
 
+This article discusses whether you need a multi-tenancy architecture for your next project. Answer my critical questions to decide if multi-tenancy suits your application or not!
+
 ## What’s Multi-tenancy?
 
 It’s an architectural approach to building SaaS solutions. In this model, the hardware and software resources are shared between tenants, and application data is virtually or physically isolated between tenants. Here, **the main goal is minimizing costs and maximizing customer count**.
@@ -29,7 +31,7 @@ Or ;
 
 
 
-**These are not multi-tenant applications!** It just needs a simple filtering by your different branches / faculties / departments / groups or whatever hierarchy is...
+**These are not multi-tenant applications!** It just needs a simple filtering by your different branches/faculties/departments/holding sub-companies/ groups or whatever hierarchy is…
 
 ---
 
