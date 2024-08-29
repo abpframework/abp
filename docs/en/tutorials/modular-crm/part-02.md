@@ -1,4 +1,4 @@
-# Building the Products Module
+# Creating the Initial Products Module
 
 In this part, you will build a new module for product management and install it to the main CRM application.
 
@@ -16,7 +16,7 @@ Create `main` and `modules` folder using the *New Folder* command, then move the
 
 ![abp-studio-solution-explorer-with-folders](images/abp-studio-solution-explorer-with-folders.png)
 
-## Creating the Products Module
+## Creating The Module
 
 There are two module templates provided by ABP Studio:
 
@@ -81,6 +81,8 @@ As seen in the preceding figure, the `ModularCrm.Product` solution consists of s
 
 A module does not contain an executable application inside. The `Modular.Products.Web` project is just a class library project, not an executable web application. A module should be installed to an executable application in order to run it.
 
+> **Ensure that the web application is not running in [Solution Runner](../../studio/running-applications.md) or in your IDE. Installing a module to a running application will produce errors.**
+
 The product module has no relation to the main application yet. Right-click to the `ModularCrm` module (inside the `main` folder) and select the *Import Module* command:
 
 ![abp-studio-import-module](images/abp-studio-import-module.png)
@@ -91,8 +93,32 @@ The *Import Module* command opens a dialog as shown below:
 
 Select the `ModularCrm.Products` module and check the *Install this module* option. If you don't check that option, it only imports the module but doesn't setup project dependencies. Importing a module without installation can be used to manually setup your project dependencies. Here, we want to make it automatically, so checking the *Install this module* option.
 
-When you click the OK button, ABP Studio opens the *Install Module* dialog:
+When you click the *OK* button, ABP Studio opens the *Install Module* dialog:
 
 ![abp-studio-module-installation-dialog](images/abp-studio-module-installation-dialog.png)
 
-This dialog simplifies installing a multi-layer module to a multi-layer application.
+This dialog simplifies installing a multi-layer module to a multi-layer application. It automatically determines which package of the `ModularCrm.Products` module should be installed to which package of the main application. For example, the `ModularCrm.Products.Domain` package is installed to the `ModularCrm.Domain` package. In that way, you can use domain objects ([entities](../../framework/architecture/domain-driven-design/entities.md), [repositories](../../framework/architecture/domain-driven-design/repositories.md), ...) of the products module from the domain layer of your main application.
+
+The default package match is good for this tutorial, so you can click the *OK* button to proceed.
+
+### Building the Main Application
+
+After the installation, build the entire solution by right-clicking to the `ModularCrm` module (under the `main` folder) and select the *Dotnet CLI* -> *Graph Build* command:
+
+![abp-studio-graph-build](images/abp-studio-graph-build.png)
+
+Graph Build is a dotnet CLI command that recursively build all the referenced dotnet projects even if they are not a part of the root solution.
+
+> While developing multi-module solutions with ABP Studio, you may need to perform *Graph Build* on the root/main module if you made changes in the depending modules.
+
+### Run the Main Application
+
+Open the *Solution Runner* panel, click the *Play* button (near to the solution root), right-click the `ModularCrm.Web` application and select the *Browse* command. It will open the web application in the built-in browser. Then you can navigate to the *Products* page on the main menu of the application to see the Products page that is coming from the `ModularCrm.Products` module:
+
+![abp-studio-solution-runner-initial-product-page](images/abp-studio-solution-runner-initial-product-page.png)
+
+## Summary
+
+In this part, we've created a new module to manage products in our modular application. Then we installed the new module to the main application and run the solution to test if it has successfully installed.
+
+In the next part, you will learn how to create entities, services and a basic user interface for the products module.

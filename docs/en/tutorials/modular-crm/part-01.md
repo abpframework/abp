@@ -22,4 +22,6 @@ Initially, you see a `ModularCrm` solution and a `ModularCrm` module under that 
 
 ![solution-explorer-modular-crm-expanded](images/solution-explorer-modular-crm-expanded.png)
 
-We've created the initial layered monolith solution. In the next part, we will learn how to create an application module, build functionality inside it and install it to the main application.
+## Summary
+
+We've created the initial layered monolith solution. In the next part, we will learn how to create a new application module and install it to the main application.

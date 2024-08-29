@@ -7,7 +7,8 @@ ABP provides a great infrastructure and tooling to build modular software soluti
 This tutorial is organized as the following parts:
 
 * [Part 01: Creating the initial solution](part-01.md)
-* [Part 02: Building the products module](part-02.md)
+* [Part 02: Creating the initial products module](part-02.md)
+* [Part 03: Building the products module](part-03.md)
 * ...
 
 ## Download the Source Code
