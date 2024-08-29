@@ -1,4 +1,4 @@
-## Modular Monolith Application Development Tutorial
+# Modular Monolith Application Development Tutorial
 
 ABP provides a great infrastructure and tooling to build modular software solutions. In this tutorial, you will learn how to create application modules, compose and communicate them to build a monolith modular web application.
 

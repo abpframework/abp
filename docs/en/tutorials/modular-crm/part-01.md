@@ -1,6 +1,6 @@
-## Creating the Initial Solution
+# Creating the Initial Solution
 
-Follow the [Get Stared](../../get-started/layered-web-application.md) guide to create a new layered web application with [ABP Studio](../../studio/index.md) the following configuration:
+Follow the [Get Stared](../../get-started/layered-web-application.md) guide to create a new layered web application with the following configuration:
 
 * **Solution name**: `ModularCrm`
 * **UI Framework**: ASP.NET Core MVC / Razor Pages
@@ -8,7 +8,7 @@ Follow the [Get Stared](../../get-started/layered-web-application.md) guide to c
 
 You can select the other options based on your preference.
 
-> **Please complete the [Get Stared](../../get-started/layered-web-application.md) guide and run the web application.**
+> **Please complete the [Get Stared](../../get-started/layered-web-application.md) guide and run the web application before going further.**
 
 The initial solution structure should be like the following in ABP Studio's *Solution Explorer*:
 
@@ -21,3 +21,5 @@ Initially, you see a `ModularCrm` solution and a `ModularCrm` module under that 
 `ModularCrm` module is your main application, which is a layered .NET solution that consists of several packages (.NET projects). You can expand the `ModularCrm` module to see its packages:
 
 ![solution-explorer-modular-crm-expanded](images/solution-explorer-modular-crm-expanded.png)
+
+We've created the initial layered monolith solution. In the next part, we will learn how to create an application module, build functionality inside it and install it to the main application.
