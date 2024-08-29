@@ -52,32 +52,32 @@ Let's answer these questions;
 
 
 
-##### 1. Can a user be shared among other tenants?
+##### **1. Can a user be shared among other tenants?**
 
 If you need to *share a user among other tenants, or in other words, users can be members of different tenants,* then **your application is definitely not multi-tenant**! Multi-tenancy means a tenant’s data is always isolated, even if it’s logically separated. You cannot share a user btw your tenants; The reason is simple: In the future, if you move a tenant to on-premise, then your application will break!
 
 
 
-##### 2. Does any tenant need to see other tenants' data?
+##### **2. Does any tenant need to see other tenants' data?**
 
 If your answer is **YES**, **then** **your application is not multi-tenant**. In multi-tenant apps, the tenant's data cannot be shared in any circumstances among the other tenants. Business decision-makers sometimes want to share some entities with other tenants. If there's this requirement, you shouldn't start a multi-tenant architecture. You can simply group these tenants manually. Again, reply to this question; In the future, if I move a tenant physically to another environment, does my app still work properly? In this case, it does not! Let's say your application is Amazon3.com, and there's a product entity, "iPhone 16 Pro Max," that you want to share with your sellers. This requirement breaks the multi-tenancy rule; you shouldn't make your Amazon3.com multi-tenant!
 
 
 
-##### 3. Does your application still work if you physically move one of the tenants physically?
+##### **3. Does your application still work if you physically move one of the tenants physically?**
 
 If your answer is **YES**, you should **stop making it multi-tenant**. This means your tenants are tightly coupled with the application's infrastructure or database, and this requirement prevents you from making it multi-tenant because it disrupts the entire system when you take out a tenant.
 
 
 
 
-##### 4. Do your customers need higher security and better GDPR enforcement?
+##### **4. Do your customers need higher security and better GDPR enforcement?**
 
 If your answer is **YES**, you **should not make it multi-tenancy.**  When a **hacker** gets into your server, he can **steal all your client data**. Also if you have a security hole, **a tenant can gain access** to other tenant’s data. Especially your tenants' data is being shared in the same database... On the other hand, some customers, for example, government agencies or banks, may be required to locate the database in their own geo-location and make it unreachable from the main application. In this case, you should go with a single-tenant architecture. Another difficulty is that some tenants may have **different data retention policies**, so you must implement different strategies for each tenant. In this case, you should also consider making it a single-tenant.
 
 
 
-##### 5. Do you need cumulative queries over your tenants?
+##### **5. Do you need cumulative queries over your tenants?**
 
 This question is not a clear decision parameter for multi-tenancy. But it can be a supportive parameter for your decision. Actually, this is a common feature in multi-tenant systems where aggregated reporting or analytics across tenants is required. In a virtually isolated multi-tenant environment, you can easily do this by just disabling the multi-tenancy filter. However, when some of your tenants have separate databases or application instances, it becomes harder to get aggregate reports.
 
