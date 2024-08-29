@@ -79,6 +79,30 @@ public class ProductsDbContext : AbpDbContext<ProductsDbContext>, IProductsDbCon
 }
 ````
 
+The `ProductsDbContext` class implements the `IProductsDbContext` interface. Add the following property to the `IProductsDbContext` interface:
+
+````csharp
+DbSet<Product> Products { get; set; }
+````
+
+The final `IProductsDbContext` interface should be the following:
+
+````csharp
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace ModularCrm.Products.EntityFrameworkCore;
+
+[ConnectionStringName(ProductsDbProperties.ConnectionStringName)]
+public interface IProductsDbContext : IEfCoreDbContext
+{
+    DbSet<Product> Products { get; set; }
+}
+````
+
+Having such an `IProductsDbContext` interface allows us to decouple our repositories (and other classes) from the concrete `ProductsDbContext` class, which provides flexibility to the final application to merge multiple `DbContext`s into a single `DbContext` to manage database migrations easier and have a database level transaction support for multi-module operations. We will see it in the *Adding a Database Migration* section.
+
 ### Configure the Table Mapping
 
 The DDD module template has designed flexible so that your module can have a separate physical database, or store its tables inside another database, like the main database of your application. To make that possible, it configures the database mapping in an extension method (`ConfigureProducts`) that is called inside the `OnModelCreating` method above. Find that extension method (in the `ProductsDbContextModelCreatingExtensions` class) and change its content as the following code block:
@@ -126,7 +150,87 @@ public static class ProductsDbProperties
 }
 ````
 
-> When you use Entity Framework Core, it is typical to add a new database migration and update the database after changing your database configuration. However, by design, we are leaving the database migrations to the main application, so it can be flexible to select the DBMS (Database Management System) to use and share physical databases among different modules.
+In that point, build the `ModularCrm.Products` .NET solution in your IDE (or in ABP Studio UI). We will switch to the main application's .NET solution.
+
+### Configuring the Main Application Database
+
+We changed the Entity Framework Core configuration. The next step should be adding a new code-first database migration and update the database, so the new Products table is created on the database.
+
+We are not managing the database migrations in the module. Instead, the main application decides which DBMS (Database Management System) to use and how to share physical database(s) among modules. To keep this tutorial simple, we will store all the data of all modules in a single physical database.
+
+Open the `ModularCrm` module (which is the main application) in your IDE:
+
+![abp-studio-open-with-visual-studio-main-app](images/abp-studio-open-with-visual-studio-main-app.png)
+
+Find the `ModularCrmDbContext` class under the `ModularCrm.EntityFrameworkCore` project:
+
+![visual-studio-main-dbcontext](images/visual-studio-main-dbcontext.png)
+
+We will merge module's database configuration into `ModularCrmDbContext`.
+
+#### Replace the `IProductsDbContext` Service
+
+Follow the 3 steps below;
+
+**(1)** Add the following attribute on top of the `ModularCrmDbContext` class:
+
+````csharp
+[ReplaceDbContext(typeof(IProductsDbContext))]
+````
+
+`ReplaceDbContext` attribute makes it possible to use the `ModularCrmDbContext` class in the services in the Products module.
+
+**(2)** Implement the `IProductsDbContext` by the `ModularCrmDbContext` class:
+
+````csharp
+public class ModularCrmDbContext :
+    AbpDbContext<ModularCrmDbContext>,
+    ITenantManagementDbContext,
+    IIdentityDbContext,
+    IProductsDbContext //NEW: IMPLEMENT THE INTERFACE
+{
+    public DbSet<Product> Products { get; set; } //NEW: ADD DBSET PROPERTY
+	...
+}
+````
+
+**(3)** Finally, call the `ConfigureProducts()` extension method inside the `OnModelCreating` method after other `Configure...` module calls:
+
+````csharp
+protected override void OnModelCreating(ModelBuilder builder)
+{
+    ...
+    builder.ConfigureProducts(); //NEW: CALL THE EXTENSION METHOD
+}
+````
+
+In this way, `ModularCrmDbContext` can be used by the products module over the `IProductsDbContext` interface. This part is only needed for one time for a module. Next time, you can just add a new database migration as explained in the next section.
+
+#### Add a Database Migration
+
+Now, we can add a new database migration. You can use Entity Framework Core's `Add-Migration` (or `dotnet ef migrations add`) terminal command, but we will use ABP Studio's shortcut UI in this tutorial.
+
+Ensure that the solution has built. You can right-click the `ModularCrm` (under the `main` folder) on ABP Studio *Solution Runner* and select the *Dotnet CLI* -> *Graph Build* command.
+
+Right-click the `ModularCrm.EntityFrameworkCore` package and select the *EF Core CLI* -> *Add Migration* command:
+
+![abp-studio-add-entity-framework-core-migration](images/abp-studio-add-entity-framework-core-migration.png)
+
+The *Add Migration* command opens a new dialog to get a migration name:
+
+![abp-studio-add-entity-framework-core-migration-dialog](images/abp-studio-add-entity-framework-core-migration-dialog.png)
+
+Once you click the *OK* button, a new database migration class is added into the `Migrations` folder of the `ModularCrm.EntityFrameworkCore` project:
+
+![visual-studio-new-migration-class](images/visual-studio-new-migration-class.png)
+
+Now, you can return to ABP Studio, right-click the `ModularCrm.EntityFrameworkCore` project and select the *EF Core CLI* -> *Update Database* command:
+
+![abp-studio-entity-framework-core-update-database](images/abp-studio-entity-framework-core-update-database.png)
+
+After the operation completes, you can check your database to see the new `Products` table has been created:
+
+![sql-server-products-database-table](images/sql-server-products-database-table.png)
 
 ## Creating the Application Service
 
