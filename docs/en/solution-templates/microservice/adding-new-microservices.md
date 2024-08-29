@@ -142,7 +142,7 @@ private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
     ...
     ...
     var administrationServiceRootUrl = _configuration["OpenIddict:Resources:AdministrationService:RootUrl"]!.TrimEnd('/');
-+   var productServiceServiceRootUrl = _configuration["OpenIddict:Resources:ProductService:RootUrl"]!.TrimEnd('/');
++   var productServiceRootUrl = _configuration["OpenIddict:Resources:ProductService:RootUrl"]!.TrimEnd('/');
 
     await CreateOrUpdateApplicationAsync(
         name: clientId,
@@ -160,7 +160,7 @@ private async Task CreateSwaggerClientAsync(string clientId, string[] scopes)
             $"{authServerRootUrl}/swagger/oauth2-redirect.html",
             $"{identityServiceRootUrl}/swagger/oauth2-redirect.html",
             $"{administrationServiceRootUrl}/swagger/oauth2-redirect.html",
-+           $"{productServiceServiceRootUrl}/swagger/oauth2-redirect.html"
++           $"{productServiceRootUrl}/swagger/oauth2-redirect.html"
         }
     );
 }
@@ -492,7 +492,7 @@ Add the *Kubernetes Services* in the *Chart Properties* -> *Kubernetes Services*
 
 ![microservice-chart-properties-kubernetes-services](images/microservice-chart-properties-kubernetes-services.png)
 
-> This value should be the same as the [solution runner application](./../../studio/running-applications.md#c-application) *Kubernetes service* value. It's necessary for browsing because when we connect to the Kubernetes cluster, we should browse the Kubernetes services instead of using the Launch URL.
+> This value should be the same as the [solution runner application](./../../studio/running-applications.md#properties) *Kubernetes service* value. It's necessary for browsing because when we connect to the Kubernetes cluster, we should browse the Kubernetes services instead of using the Launch URL.
 
 Last but not least, we need to configure the helm chart environments for identity, auth-server, and gateway applications.
 
@@ -523,7 +523,7 @@ spec:
         env:
         ...
 +       - name: "OpenIddict__Resources__ProductService__RootUrl"
-+         value: "http://{{ .Release.Name }}-productservice"
++         value: "http://{{ .Release.Name }}-product"
 ```
 }%}
 
