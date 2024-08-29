@@ -1,5 +1,19 @@
 # Creating the Initial Products Module
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Creating the initial solution",
+    "Path": "tutorials/modular-crm/part-01"
+  },
+  "Next": {
+    "Name": "Building the products module",
+    "Path": "tutorials/modular-crm/part-03"
+  }
+}
+````
+
 In this part, you will build a new module for product management and install it to the main CRM application.
 
 ## Creating Solution Folders

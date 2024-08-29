@@ -1,5 +1,15 @@
 # Creating the Initial Solution
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Creating the initial products module",
+    "Path": "tutorials/modular-crm/part-02"
+  }
+}
+````
+
 Follow the [Get Stared](../../get-started/layered-web-application.md) guide to create a new layered web application with the following configuration:
 
 * **Solution name**: `ModularCrm`
