@@ -43,7 +43,7 @@ We believe that new mega menu will allow you to navigate through the web pages m
 
 ### The New Get Started Page
 
-We are constantly working to improve ABP's onboarding experience. With the new platform changes, we now offer ABP Studio as the starting point for the ABP Platform. You can still use the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) to created new ABP solutions, but the new ABP Studio makes it much easier and understandable. It also provides features to easily run and monitor your applications, even in the Community edition.
+We are constantly working to improve ABP's onboarding experience. With the new platform changes, we now offer ABP Studio as the starting point for the ABP Platform. You can still use the [ABP CLI](https://abp.io/docs/latest/CLI) to created new ABP solutions, but the new ABP Studio makes it much easier and understandable. It also provides features to easily run and monitor your applications, even in the Community edition.
 
 ![new-get-started](new-get-started.png)
 
@@ -51,7 +51,7 @@ You can easily download and install ABP Studio, login with your abp.io account a
 
 ### The New Pricing Page
 
-Since the [ABP Commercial website](https://commercial.abp.io/) has merged with the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect which features are open source and free, and what is included in the commercial licenses.
+Since the [ABP Platform website](https://abp.io/) has merged with the main website, you will see the *Pricing* page located on the main menu of the abp.io website. We have completely revised the design and content of this page to better reflect which features are open source and free, and what is included in the commercial licenses.
 
 ![new-pricing](new-pricing.png)
 
@@ -59,7 +59,7 @@ As mentioned above, all the free & open source features are still free & open so
 
 ## Merging the ABP Platform Documentation
 
-Currently, ABP Framework (open source) and ABP Commercial [documents](https://docs.abp.io/) are completely separated. You can switch between them on the left side:
+Currently, ABP Framework (open source) and ABP Commercial [documents](https://abp.io/docs/latest/) are completely separated. You can switch between them on the left side:
 
 ![docs-project-selection](docs-project-selection.png)
 
@@ -76,21 +76,21 @@ The left navigation panel tree is also completely revisited and simplified:
 
 ## The ABP Studio Community Edition
 
-[ABP Studio](https://docs.abp.io/en/commercial/latest/studio/index) is a cross-platform desktop application designed for ABP and .NET developers. It aims to provide a comfortable development environment by automating tasks, providing insights about your solution, and simplifying the processes of creation, development, execution, browsing, monitoring, tracing, and deploying your solutions.
+[ABP Studio](https://abp.io/docs/latest/studio/index) is a cross-platform desktop application designed for ABP and .NET developers. It aims to provide a comfortable development environment by automating tasks, providing insights about your solution, and simplifying the processes of creation, development, execution, browsing, monitoring, tracing, and deploying your solutions.
 
 Here, a screenshot from the *Solution Runner* screen of ABP Studio:
 
 ![abp-studio-solution-runner](abp-studio-solution-runner.png)
 
-ABP Studio has been started as a commercial product, as a part of [ABP Commercial](https://commercial.abp.io/). We are very excited to announce that the *Community Edition* will be available soon for free. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
+ABP Studio has been started as a commercial product, as a part of [ABP Platform](https://abp.io/). We are very excited to announce that the *Community Edition* will be available soon for free. It will have some missing features and limitations compared to the full edition, but will be enough to create, explore and run ABP solutions easily.
 
-We will be offering ABP Studio as a starting point to the ABP platform. The [Getting Started](https://docs.abp.io/en/abp/latest/Getting-Started-Overall) and other documents will use ABP Studio to create new solutions and perform ABP-related operations.
+We will be offering ABP Studio as a starting point to the ABP platform. The [Getting Started](https://abp.io/docs/latest/get-started) and other documents will use ABP Studio to create new solutions and perform ABP-related operations.
 
 ## Other News
 
 We are also working on some other topics related to these changes. Some of them are;
 
-* Completely renewing the [startup templates](https://docs.abp.io/en/abp/latest/Startup-Templates/Index) (with ABP Studio), so they will be more flexible and will provide more options.
+* Completely renewing the [startup templates](https://abp.io/docs/latest/solution-templates) (with ABP Studio), so they will be more flexible and will provide more options.
 * Providing a tool to automatically convert ABP solutions created with open source startup templates into ABP commercial.
 
 ## Questions
@@ -99,7 +99,7 @@ I tried to explain all the important changes in this post. However, you may have
 
 ### What should open source users expect?
 
-Since the [ABP Commercial](https://commercial.abp.io/) website content is merged with the main [abp.io](https://abp.io/) website, you will see paid features being introduced on the main website. The pricing page will also be available on the same website. This may lead you to wonder whether the ABP Platform is a fully paid product. The simple answer to this question is "No". Actually, nothing has changed on the open source side. Everything will be the same. Additionally, open source users will now have ABP Studio Community Edition for free. So open source has more for its users than before.
+Since the [ABP Commercial](https://abp.io/) website content is merged with the main [abp.io](https://abp.io/) website, you will see paid features being introduced on the main website. The pricing page will also be available on the same website. This may lead you to wonder whether the ABP Platform is a fully paid product. The simple answer to this question is "No". Actually, nothing has changed on the open source side. Everything will be the same. Additionally, open source users will now have ABP Studio Community Edition for free. So open source has more for its users than before.
 
 ### What should ABP Commercial customers expect?
 
