@@ -1,4 +1,4 @@
-# Do You Need Multi-tenancy?
+# Do You Really Need Multi-tenancy?
 
 This article discusses whether you need a multi-tenancy architecture for your next project. Answer my critical questions to decide if multi-tenancy suits your application or not!
 
@@ -19,7 +19,7 @@ It’s an architectural approach to building SaaS solutions. In this model, the 
 
 
 
-## Multi-tenant Application Development is Hard!
+## Multi-tenant Application Development is Hard - Reconsider!
 
 **Developing a multi-tenant application is harder** compared to non-multi-tenant applications. You add `TenandId` to all your shared entities. And each time you make a query, you need to filter by `TenantId`. There is an increased risk of security breaches if one tenant's data is compromised.  Multi-tenancy can limit the extent of customization available to each tenant since they all operate on the same core infrastructure. Also, in a microservice environment, things get two times more complicated. So you should carefully consider if you need multi-tenancy or not. Sometimes, I got questions like;
 
