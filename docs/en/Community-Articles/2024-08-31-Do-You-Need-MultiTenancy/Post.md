@@ -43,8 +43,8 @@ Ask yourself the following questions if you cannot decide whether your app needs
 
 1. Can a user be shared among other tenants?
 2. Any tenant needs to see other tenant's data?
-3. Do you need cumulative queries over your tenants?
-4. Does your application still work if you physically move one of the tenants physically?
+3. Does your application still work if you physically move one of the tenants physically?
+4. Do your customers need higher security and better GDPR enforcement?
 5. Do you need cumulative queries over your tenants?
 
 
