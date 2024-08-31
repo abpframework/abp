@@ -23,7 +23,7 @@ It’s an architectural approach to building SaaS solutions. In this model, the 
 
 **Developing a multi-tenant application is harder** compared to non-multi-tenant applications. You add `TenandId` to all your shared entities. And each time you make a query, you need to filter by `TenantId`. There is an increased risk of security breaches if one tenant's data is compromised.  Multi-tenancy can limit the extent of customization available to each tenant since they all operate on the same core infrastructure. Also, in a microservice environment, things get two times more complicated. So you should carefully consider if you need multi-tenancy or not. Sometimes, I got questions like;
 
->  Our customer has branches in different cities so should I make this application as multi-tenant?
+>  Our customer has branches in different cities, so should I make this application a multi-tenant?
 
 Or ;
 
@@ -54,13 +54,17 @@ Let's answer these questions;
 
 ##### **1. Can a user be shared among other tenants?**
 
-If you need to *share a user among other tenants, or in other words, users can be members of different tenants,* then **your application is definitely not multi-tenant**! Multi-tenancy means a tenant’s data is always isolated, even if it’s logically separated. You cannot share a user btw your tenants; The reason is simple: In the future, if you move a tenant to on-premise, then your application will break!
+If you need to *share a user among other tenants, or in other words, users can be members of different tenants,* then **your application is definitely not multi-tenant**! Multi-tenancy means a tenant’s data is always isolated, even if it’s logically separated. **You cannot share a user among your tenants.** The reason is simple: In the future, if you move a tenant to on-premise, then your application will break!
 
 
 
 ##### **2. Does any tenant need to see other tenants' data?**
 
-If your answer is **YES**, **then** **your application is not multi-tenant**. In multi-tenant apps, the tenant's data cannot be shared in any circumstances among the other tenants. Business decision-makers sometimes want to share some entities with other tenants. If there's this requirement, you shouldn't start a multi-tenant architecture. You can simply group these tenants manually. Again, reply to this question; In the future, if I move a tenant physically to another environment, does my app still work properly? In this case, it does not! Let's say your application is Amazon3.com, and there's a product entity, "iPhone 16 Pro Max," that you want to share with your sellers. This requirement breaks the multi-tenancy rule; you shouldn't make your Amazon3.com multi-tenant!
+If your answer is **YES**, **then** **your application is not multi-tenant**. In multi-tenant apps, the tenant's data cannot be shared in any circumstances among the other tenants. Business decision-makers sometimes want to share some entities with other tenants. If there's this requirement, you shouldn't start a multi-tenant architecture. You can simply group these tenants manually. Again, reply to this question; **In the future, if I move a tenant physically to another environment, will my app still work properly?** In this case, it will not! 
+
+Let's say your app is *Amazon.com* and you have a product entity "iPhone 16 Pro Max" that you want to share with the sellers. This requirement violates the multi-tenant rule. While your *Amazon.com* is still SaaS, it shouldn't be multi-tenant. 
+
+On the other hand, if you serve several online shopping websites dedicated to different brands. Let's say Nike and Adidas want to have their own e-commerce websites. And your ***Amazon.com* provides these companies with their own subdomains: *nike.amazon.com* and *adidas.amazon.com***. In this architecture, these companies will have their own user, roles, settings. Also these companies will have their own branding like custom login screen, custom logo, different theme layouts, menu items,  language options, payment gateways etc... Hence, **this is %100 multi-tenant.**
 
 
 
@@ -73,7 +77,7 @@ If your answer is **YES**, you should **stop making it multi-tenant**. This mean
 
 ##### **4. Do your customers need higher security and better GDPR enforcement?**
 
-If your answer is **YES**, you **should not make it multi-tenancy.**  When a **hacker** gets into your server, he can **steal all your client data**. Also if you have a security hole, **a tenant can gain access** to other tenant’s data. Especially your tenants' data is being shared in the same database... On the other hand, some customers, for example, government agencies or banks, may be required to locate the database in their own geo-location and make it unreachable from the main application. In this case, you should go with a single-tenant architecture. Another difficulty is that some tenants may have **different data retention policies**, so you must implement different strategies for each tenant. In this case, you should also consider making it a single-tenant.
+If your answer is **YES**, you **should not make it multi-tenancy.**  When a **hacker** gets into your server, he can **steal all your client data**. Also, if you have a security hole, **a tenant can gain access** to other tenants' data. Especially your tenants' data is being shared in the same database... On the other hand, some customers, for example, government agencies or banks, may be required to locate the database in their own geo-location and make it unreachable from the main application. In this case, you should go with a single-tenant architecture. Another difficulty is that some tenants may have **different data retention policies**, so you must implement different strategies for each tenant. In this case, you should also consider making it a single-tenant.
 
 
 
@@ -105,11 +109,11 @@ Do you need cumulative queries over your tenants? If your answer is YES, then yo
 
 ![Logo](https://abp.io/assets/platform/img/logos/logo-abp-dark.svg)
 
-We’ve been working for a long time on multi-tenancy, microservices, modular development topics, and developing tools and frameworks for repetitive development tasks. Check out the amazing open-source [ABP Framework](https://github.com/abpframework/abp), which provides all the alternative solutions to implement a multi-tenant architecture. All the multi-tenancy issues are magically done at the framework level, and you can simply focus on your business code. Keep it simple, nice and neat with ABP.
+We’ve been working for a long time on multi-tenancy, microservices, modular development topics, and developing tools and frameworks for repetitive development tasks. Check out the amazing open-source [ABP Framework](https://github.com/abpframework/abp), which provides all the alternative solutions to implement a multi-tenant architecture. The multi-tenancy logic is seamlessly done at the core level, and you can simply focus on your business code. Keep it simple, nice and neat with ABP.
 
 
 ```bash
-ABP.io The Modern Way of Developing Web Apps for .NET Developers!
+ABP.IO: The Modern Way of Developing Web Apps for .NET Developers!
 ```
 
  
