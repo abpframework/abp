@@ -33,7 +33,8 @@ Or ;
 
 
 
-**No! These are not multi-tenant applications.** It just needs a simple filtering by your different branches/faculties/departments/holding sub-companies/ groups or whatever hierarchy is…
+**No! These are not multi-tenant applications.** It just needs a simple filtering by your different branches/faculties/departments/holding sub-companies/ groups or whatever hierarchy is… 
+You are confusing "grouping" with "resource sharing".
 
 ---
 
