@@ -35,4 +35,9 @@
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Volo\Abp\AspNetCore\Mvc\Libs\AbpMvcLibsErrorPage.cshtml" />
+    <None Include="Volo\Abp\AspNetCore\Mvc\Libs\AbpMvcLibsErrorPage.cshtml" />
+  </ItemGroup>
+
 </Project>

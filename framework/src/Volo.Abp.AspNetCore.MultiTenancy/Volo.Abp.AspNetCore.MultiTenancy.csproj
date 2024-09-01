@@ -23,4 +23,9 @@
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Volo\Abp\AspNetCore\MultiTenancy\Views\MultiTenancyMiddlewareErrorPage.cshtml" />
+    <None Include="Volo\Abp\AspNetCore\MultiTenancy\Views\MultiTenancyMiddlewareErrorPage.cshtml" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,28 @@
+@using System.Globalization
+@using Volo.Abp.AspNetCore.MultiTenancy.Views
+@using Volo.Abp.AspNetCore.RazorViews
+@inherits AbpCompilationRazorPageBase
+@{
+    Response.ContentType = "text/html; charset=utf-8";
+    Response.StatusCode = 404;
+}
+
+@functions{
+    public MultiTenancyMiddlewareErrorPage(MultiTenancyMiddlewareErrorPageModel model)
+    {
+        Model = model;
+    }
+
+    public MultiTenancyMiddlewareErrorPageModel Model { get; set; }
+}
+
+<html lang="@HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)">
+    <head>
+        <meta charset="utf-8" />
+        <title>@HtmlEncoder.Encode(Model.Message)</title>
+    </head>
+    <body>
+        <h3>@HtmlEncoder.Encode(Model.Message)</h3>
+        <p>@HtmlEncoder.Encode(Model.Details)<p/>
+    </body>
+</html>
