@@ -59,6 +59,7 @@
     "NugetPackages": "Nuget Packages",
     "NpmPackageCount": "NPM Package Count",
     "NugetPackageCount": "Nuget Package Count",
+    "NuGetPackageCount": "NuGet Package Count",
     "Module": "Modules",
     "ModuleInfo": "Module info",
     "CreateANpmPackage": "Create a NPM package",
