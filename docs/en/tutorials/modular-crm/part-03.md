@@ -277,24 +277,6 @@ These two files should be located under the `ModularCrm.Products.Application.Con
 Now, we can implement the `IProductAppService` interface. Create a `ProductAppService` class under the `ModularCrm.Products.Application` project:
 
 ````csharp
-using System.Threading.Tasks;
-
-namespace ModularCrm.Products;
-
-public class ProductAppService : ProductsAppService, IProductAppService
-{
-    public async Task CreateAsync(ProductCreationDto input)
-    {
-        // TODO
-    }
-}
-````
-
-Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for localization and object mapping (you can see in the `ModularCrm.Products.Application` project). You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
-
-Let's return to the `ProductAppService` and implement the `CreateAsync` method:
-
-````csharp
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -323,6 +305,14 @@ public class ProductAppService : ProductsAppService, IProductAppService
 }
 ````
 
-
+Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for [localization](../../framework/fundamentals/localization.md) and [object mapping](../../framework/infrastructure/object-to-object-mapping.md) (you can see in the `ModularCrm.Products.Application` project). You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
 
 ...
+
+
+
+
+
+
+
+## Creating the User Interface
