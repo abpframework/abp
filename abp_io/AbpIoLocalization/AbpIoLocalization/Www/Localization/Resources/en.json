@@ -568,7 +568,7 @@
     "FeatureRequest": "Feature Request",
     "CreatePostTitleInfo": "Title of the post to be shown on the post list.",
     "CreatePostSummaryInfo": "A short summary of the post to be shown on the post list. Maximum length: <b>{0}</b>",
-    "CreatePostCoverInfo": "For creating an effective post, add a cover photo. Upload 16:9 aspect ratio pictures for the best view.<br/> Maximum file size: <b>1MB.</b>",
+    "CreatePostCoverInfo": "For creating an effective post, add a cover photo. Upload <strong> 16:9 </strong> aspect ratio pictures for the best view.<br/> Maximum file size: <strong>1MB.</strong> <br/> Example image : <a href='https://abp.io/assets/example-post-image.png'> https://abp.io/assets/example-post-image.png</a>",
     "ThisExtensionIsNotAllowed": "This extension is not allowed.",
     "TheFileIsTooLarge": "The file is too large.",
     "GoToThePost": "Go to the Post",
