@@ -46,7 +46,7 @@ Ask yourself the following questions if you cannot decide whether your app needs
 
 1. Can a user be shared among other tenants?
 2. Any tenant needs to see other tenant's data?
-3. Does your application still work if you physically move one of the tenants physically?
+3. Does your application break when you physically move one of the tenants??
 4. Do your customers need higher security and better GDPR enforcement?
 5. Do you need cumulative queries over your tenants?
 
@@ -72,9 +72,9 @@ On the other hand, if you serve several online shopping websites dedicated to di
 
 
 
-##### **3. Does your application still work if you physically move one of the tenants physically?**
+##### **3. Does your application break when you physically move one of the tenants?**
 
-If your answer is **YES**, you should **stop making it multi-tenant**. This means your tenants are tightly coupled with the application's infrastructure or database, and this requirement prevents you from making it multi-tenant because it disrupts the entire system when you take out a tenant.
+If your answer is **YES**, you should **stop making it multi-tenant**. It is **not a multi-tenant app**! This means your tenants are tightly coupled with the application's infrastructure or database, and this requirement prevents you from making it multi-tenant because it disrupts the entire system when you take out a tenant. 
 
 
 
@@ -99,11 +99,11 @@ Do you need cumulative queries over your tenants? If your answer is YES, then yo
 
 ## Conclusion
 
-- It's important to decide on the first day whether your application needs to be multi-tenant! To decide this, consider these topics; 
+- It's important to decide on the first day whether your application needs to be multi-tenant. To decide this, consider these topics; 
 
   - **Do my tenants really have a relationship with each other?** No, they have nothing to do in common; **OK, go with multi-tenancy**. 
-  - **My tenants don't have a relationship** with each other, and the only thing they have in common is sharing my application. **If yes, go with multi-tenancy**. 
-  - If **a tenant leaves the system, will the other tenants be affected** when I remove its data from the system? **If others are not affected, go with multi-tenancy**.
+  - **My tenants don't have a relationship** with each other, and the only thing they have in common is sharing my application. **OK, go with multi-tenancy**. 
+  - **When a tenant leaves the system (by removing their data), the other tenants also stop working** This means that the tenants are coupled. **Do not do multi-tenancy!**
 
 
 
