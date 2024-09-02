@@ -347,12 +347,6 @@ const oAuthConfig = {
 };
 ```
 
-### Add the New Microservice to the Solution Runner
-
-We should add the new microservice to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new microservice to the solution runner profile. Afterwards, you can start the new microservice by selecting it in the solution runner.
-
-![product-service-solution-runner](images/product-service-solution-runner.png)
-
 ## Docker Configuration for Prometheus
 
 If you want to monitor the new microservice with Prometheus when you debug the solution, you should add the new microservice to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `prometheus.yml` file for the `Product` microservice.
