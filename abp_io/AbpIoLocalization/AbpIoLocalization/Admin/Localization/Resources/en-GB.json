@@ -41,6 +41,7 @@
     "EfCoreConfigureMethodName": "Configure method name",
     "IsProFilter": "Is pro",
     "ShowOnModuleFilter": "Show on module list",
+    "ShowOnModuleListFilter": "Show on module list",
     "ApplicationType": "Application type",
     "Target": "Target",
     "TargetFilter": "Target",
