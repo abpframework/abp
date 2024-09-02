@@ -290,7 +290,7 @@ public class ProductAppService : ProductsAppService, IProductAppService
 }
 ````
 
-Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for localization and object mapping. You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
+Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for localization and object mapping (you can see in the `ModularCrm.Products.Application` project). You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
 
 Let's return to the `ProductAppService` and implement the `CreateAsync` method:
 
