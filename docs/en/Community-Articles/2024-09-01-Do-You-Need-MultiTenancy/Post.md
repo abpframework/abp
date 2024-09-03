@@ -28,7 +28,7 @@ It’s an architectural approach to building SaaS solutions. In this model, the 
 ![Questions](questions.png)
 
 **No! These are not multi-tenant applications.** It just needs a simple filtering by your different branches/faculties/departments/holding sub-companies/ groups or whatever hierarchy is… 
-You are confusing "grouping" with "resource sharing".
+**You are confusing "grouping" with "resource sharing".**
 
 ---
 
