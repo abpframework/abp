@@ -8,18 +8,44 @@ This document provides a road map, release schedule, and planned features for th
 
 The next version will be 9.0 and planned to release the stable 9.0 version in November 2024. We will be mostly working on the following topics:
 
-* Upgrading to .NET 9
-* Introducing `Extension Property Policy` feature
-* Handling localization resources in a microservice scenario
-* ABP Suite: Show default template for customized templates for better sync.
-* Microservice development tutorials
-* Improvements on the existing features and provide more guides.
+* Framework
+  * Upgrading to .NET 9.0
+  * Google Cloud Storage BLOB Provider
+  * Better handling localization resources in a microservice scenario
+  * SSR support for the Angular UI
+  * Upgrading 3rd-party dependencies
 
-See the [9.0 milestone](https://github.com/abpframework/abp/milestone/104) for all the issues we've planned to work on.
+* ABP Suite
+  * Multiple navigation properties to the same target entity
+  * Define navigation properties without target string property dependency
+  * Improvements one-to-many scenarios
+  * Access to default code generation templates for customized templates
+
+* ABP Studio
+  * Blazor WebApp UI option for the new startup templates
+  * Execution order (dependency management) for Solution Runner
+  * Automate more details on new service creation for a microservice solution
+  * Support multiple concurrent Kubernetes deployment/integration scenarios
+  * Show the README file when you create a new solution or open an existing solution
+  * Improve ABP Suite code-generation possibilities for microservice solutions
+  * Improve the module installation experience
+  * Auto-install 3rd-party dependencies
+  * Better handle long log files
+  * Allow to directly create new solutions with ABP's RC (Release Candidate) versions
+  * Support Intel processors for Mac computers, support ARM chipset for Windows and support Linux OS
+  * Improve client proxy generation experience
+
+* Application modules
+  * Account module: Support mixed social/local login scenarios
+  * UI/UX improvements on existing [application modules](../modules/index.md)
+
+* New tutorials
+  * Modular monolith development
+  * Microservice development
 
 ## Backlog Items
 
-The *Next Versions* section above shows the main focus of the planned versions. However, in each release, we add new features to the core framework and the [application modules](../modules).
+The *Next Versions* section above shows the main focus of the planned versions. However, in each release, we add new features to the core framework and the [application modules](../modules/index.md).
 
 Here is a list of major items in the backlog we are considering working on in the next versions.
 
