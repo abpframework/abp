@@ -77,7 +77,9 @@ ABP Platform provides many (free and commercial) [pre-built application modules]
 
 ### ABP Studio
 
-[ABP Studio](../studio/index.md) is a cross-platform desktop application for ABP and .NET developers to simplify and automate daily tasks of developers. It has a community (free) edition as well as commercial editions. It is released and versioned independently from the ABP platform and frequently released. Here, are some of the important planned features for next ABP Studio versions:
+[ABP Studio](../studio/index.md) is a cross-platform desktop application for ABP and .NET developers to simplify and automate daily tasks of developers. It has a community (free) edition as well as commercial editions. It is released and versioned independently from the ABP platform and frequently released.
+
+Here, are some of the important planned features for next ABP Studio versions:
 
 * Theme builder for the LeptonX theme
 * Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects.
@@ -102,9 +104,19 @@ ABP Platform provides many (free and commercial) [pre-built application modules]
 
 ### ABP Suite
 
-* Extra properties on CRUD page generation
+[ABP Suite](../suite/index.md) is a GUI application that is mainly used to generate CRUD style pages in your application. You define your entity and it can generate all the code from the database layer to the UI layer. The generated code is clean and a perfect starting point to implement your custom requirements on top of it.
+
+Here, are some of the important planned features for next ABP Suite versions:
+
+* Handle image properties for entities
+* Allow to define extra properties for DTOs those are not a part of the entity
 * Allow to create pages instead of modals for CRUD page generation
-* Export child/detail entity records
+* View-only (detail view) modal/page for an entity
+* Export child/detail entity records as a part of export operation for a main (master) entity
+* Allow to accept attachments (files) for an entity
+* Allow to add custom entity actions for an entity
+* Allow to inherit from an existing entity class
+* Custom form layouts on CRUD page generation
 
 ## Feature Requests
 
