@@ -188,6 +188,10 @@
             {
               "text": "Version Compatibility",
               "path": "studio/version-compatibility.md"
+            },
+            {
+              "text": "Release Notes",
+              "path": "studio/release-notes.md"
             }
           ]
         },
