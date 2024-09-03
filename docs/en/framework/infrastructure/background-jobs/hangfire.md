@@ -155,11 +155,11 @@ app.UseAbpHangfireDashboard("/hangfire", options =>
 **Important**: `UseAbpHangfireDashboard` should be called after the authentication and authorization middlewares in your `Startup` class (probably at the last line). Otherwise,
 authorization will always fail!
 
-#### Dashboard Authorization In API Website.
+#### Dashboard Authorization In API Projects
 
-If you use the hangfire dashboard in a api project that uses non-cookie authentication (like JWT Bearers), The `/hangfire` page can't authenticate the user.
+If you use the hangfire dashboard in an API project that uses non-cookie authentication (like JWT Bearers), The `/hangfire` page can't authenticate the user.
 
-In this case, you can add a cookies authorization scheme to authenticate the user. The best way to do this is to use the `Cookie` and `OpenIdConnect` authentication schemes. This requires creating a new OAuth2 client and add the `ClientId`, `ClientSecret` properties to the `AuthServer` section in the `appsettings.json` file.
+In this case, you can add a cookies authorization scheme to authenticate the user. The best way to do this is to use the `Cookie` and `OpenIdConnect` authentication schemes. This requires creating a new OAuth2 client and adding the `ClientId`, and `ClientSecret` properties to the `AuthServer` section in the `appsettings.json` file.
 
 The final code should look like below:
 
