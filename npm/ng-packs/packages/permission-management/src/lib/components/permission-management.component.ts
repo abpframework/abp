@@ -171,23 +171,14 @@ export class PermissionManagementComponent
   }
 
   onClickCheckbox(clickedPermission: PermissionGrantInfoDto) {
-    if (
-      clickedPermission.isGranted &&
-      this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
-    )
+    const { isGranted, grantedProviders } = clickedPermission;
+    if (isGranted && this.isGrantedByOtherProviderName(grantedProviders)) {
       return;
+    }
+
     this.setSelectedGroup(this.selectedGroup);
     setTimeout(() => {
-      this.permissions = this.permissions.map(per => {
-        if (clickedPermission.name === per.name) {
-          return { ...per, isGranted: !per.isGranted };
-        } else if (clickedPermission.name === per.parentName && clickedPermission.isGranted) {
-          return { ...per, isGranted: false };
-        } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
-          return { ...per, isGranted: true };
-        }
-        return per;
-      });
+      this.updatePermissionStatus(clickedPermission);
       this.updateSelectedGroupPermissions(clickedPermission);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
@@ -195,31 +186,58 @@ export class PermissionManagementComponent
     }, 0);
   }
 
-  setParentClicked(clickedPermission: PermissionGrantInfoDto) {
-    const parentPermissions: PermissionGrantInfoDto[] = findAllParentPermissions(
-      this.permissions,
-      clickedPermission,
-    );
+  updatePermissionStatus(clickedPermission: PermissionGrantInfoDto) {
+    this.permissions = this.permissions.map(permission => {
+      const isExactMatch = clickedPermission.name == permission.name;
+      const isParentOfPermission = clickedPermission.parentName === permission.name;
+      const isChildOfPermission = clickedPermission.name === permission.parentName;
 
+      if (isExactMatch) {
+        return { ...permission, isGranted: !permission.isGranted };
+      }
+
+      if (isChildOfPermission && permission.isGranted) {
+        return { ...permission, isGranted: false };
+      }
+
+      if (isParentOfPermission && !permission.isGranted) {
+        return { ...permission, isGranted: true };
+      }
+
+      return permission;
+    });
+  }
+
+  setParentClicked(clickedPermission: PermissionGrantInfoDto) {
     if (clickedPermission.parentName) {
-      if (parentPermissions.length) {
+      const parentPermissions = findParentPermissions(this.permissions, clickedPermission);
+      if (parentPermissions.length > 0) {
+        const parentNames = new Set(parentPermissions.map(parent => parent.name));
+
         this.permissions = this.permissions.map(per => {
-          parentPermissions.forEach(parent => {
-            if (per.name === parent.name) {
-              per.isGranted = true;
-            }
-          });
-          return per;
+          let updatedIsGranted = per.isGranted;
+
+          if (per.parentName === clickedPermission.name && !clickedPermission.isGranted) {
+            updatedIsGranted = false;
+          }
+
+          if (parentNames.has(per.name)) {
+            updatedIsGranted = true;
+          }
+
+          return { ...per, isGranted: updatedIsGranted };
         });
       }
       return;
     }
 
     this.permissions = this.permissions.map(per => {
-      const root = findRootParent(this.permissions, per);
-      if (root) {
-        if (root.name === clickedPermission.name && !root.isGranted) {
-          per.isGranted = false;
+      const parents = findParentPermissions(this.permissions, per);
+      if (parents.length > 0) {
+        const rootParent = parents[parents.length - 1];
+
+        if (rootParent.name === clickedPermission.name && !rootParent.isGranted) {
+          return { ...per, isGranted: false };
         }
       }
       return per;
@@ -385,10 +403,9 @@ export class PermissionManagementComponent
   }
 }
 
-function traverseParentPermissions(
+function findParentPermissions(
   permissions: PermissionGrantInfoDto[],
   permission: PermissionGrantInfoDto,
-  collectAll = false,
 ): PermissionGrantInfoDto[] {
   const permissionMap = new Map(permissions.map(p => [p.name, p]));
   let currentPermission = permissionMap.get(permission.name) ?? null;
@@ -401,28 +418,9 @@ function traverseParentPermissions(
     }
     parentPermissions.push(parentPermission);
     currentPermission = parentPermission;
-
-    if (!collectAll) {
-      break;
-    }
   }
 
   return parentPermissions;
-}
-
-function findRootParent(
-  permissions: PermissionGrantInfoDto[],
-  permission: PermissionGrantInfoDto,
-): PermissionGrantInfoDto | null {
-  const parentPermissions = traverseParentPermissions(permissions, permission);
-  return parentPermissions.length ? parentPermissions[parentPermissions.length - 1] : null;
-}
-
-function findAllParentPermissions(
-  permissions: PermissionGrantInfoDto[],
-  permission: PermissionGrantInfoDto,
-): PermissionGrantInfoDto[] {
-  return traverseParentPermissions(permissions, permission, true);
 }
 
 function findMargin(
