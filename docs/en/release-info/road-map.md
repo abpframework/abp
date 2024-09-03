@@ -37,7 +37,7 @@ The next version will be 9.0 and planned to release the stable 9.0 version in No
 
 * Application modules
   * Account module: Support mixed social/local login scenarios
-  * UI/UX improvements on existing [application modules](../modules/index.md)
+  * UI/UX improvements on existing application modules
 
 * New tutorials
   * Modular monolith development
@@ -45,41 +45,66 @@ The next version will be 9.0 and planned to release the stable 9.0 version in No
 
 ## Backlog Items
 
-The *Next Versions* section above shows the main focus of the planned versions. However, in each release, we add new features to the core framework and the [application modules](../modules/index.md).
-
-Here is a list of major items in the backlog we are considering working on in the next versions.
+The *Next Versions* section above shows the main focus of the planned versions. However, in each release, we add new features to the ABP platform.
 
 ### Framework
 
-* [#86](https://github.com/abpframework/abp/issues/86) / GrapQL Integration
+The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here, are some of the important features you can expect from next versions:
+
 * [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system
-* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules))
+* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules/index.md))
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
+* [#58](https://github.com/abpframework/abp/issues/58) / Content localization system (multilingual entities)
 * [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
 * [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy
 * [#2296](https://github.com/abpframework/abp/issues/2296) / Feature toggling infrastructure
-* [#16342](https://github.com/abpframework/abp/issues/16342) / CMS Kit: Meta information for SEO
-* [#16260](https://github.com/abpframework/abp/issues/16260) / GCP Blob Storage Provider
 * [#15932](https://github.com/abpframework/abp/issues/15932) / Introduce ABP Diagnostics Module
-* [#16756](https://github.com/abpframework/abp/issues/16756) / Blob Storing - Provider configuration UI
 * [#16744](https://github.com/abpframework/abp/issues/16744) / State Management API
+* [#17815](https://github.com/abpframework/abp/issues/17815) / Operation Rate Limiting
 
-### Modules / Themes
+### Application Modules / UI Themes
 
-* New styles, components and features for the LeptonX theme.
-* Payment module: Invoice system.
-* Dynamic dashboard system.
-* User guiding module.
-* gRPC integration and implementation for all the pre-built modules.
+ABP Platform provides many (free and commercial) [pre-built application modules](../modules/index.md) and modern [UI themes](../ui-themes/index.md). In every release, many enhancements and bugfixes are already done on the existing modules. In addition, here some of the planned features for next versions:
 
-### Tooling
+* LeptonX theme: New layouts, styles and components
+* CMS Kit module: Meta information for SEO, media gallery, RSS feed, content versioning, social media streams
+* Identity module: Idle session warning
+* Payment module: Invoice system
+* New module: User notification
+* New module: Dynamic dashboard
+* New module: User guiding
+* New module: Keycloak integration
 
-* ABP Suite: Extra Properties on CRUD Page generation
-* ABP Suite: Allow to create PAGE instead of MODAL for CRUD page generation
-* ABP Suite: Export child/detail entity records
-* CMS Kit features, including spam protection, social media feeds, multi-language support, and so on.
+### ABP Studio
 
-You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones) for a detailed road map. The backlog items are subject to change. We are adding new items and changing priorities based on the community feedbacks and goals of the project.
+[ABP Studio](../studio/index.md) is a cross-platform desktop application for ABP and .NET developers to simplify and automate daily tasks of developers. It has a community (free) edition as well as commercial editions. It is released and versioned independently from the ABP platform and frequently released. Here, are some of the important planned features for next ABP Studio versions:
+
+* Theme builder for the LeptonX theme
+* Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects.
+* Add status bar to the built-in browser to easily see errors
+* Swagger authentication support for the built-in browser
+* Show related requests/events (traces) together in the solution runner panel
+* Integrate common tool dashboards into ABP Studio (such a Garana, Redis, RabbitMQ, Kibana, etc)
+* Built-in command terminal
+* Automate all steps of new service creation for microservice solutions
+* Container application type support for Solution Runner (to individually control docker dependencies)
+* More options while creating new solutions
+* Downloading samples in ABP studio
+* Built-in ABP documentation experience
+* Auto-execute terminal commands in markdown files
+* Compare changed on the startup templates when a new ABP version is published
+* Remove unused projects while downloading source code of an existing module
+* Testing/hosting applications for module templates
+* Easily explore all module and package dependencies of a large solution
+* Built-in deployment options
+* Rapid application development features
+* ABP support integration
+
+### ABP Suite
+
+* Extra properties on CRUD page generation
+* Allow to create pages instead of modals for CRUD page generation
+* Export child/detail entity records
 
 ## Feature Requests
 
