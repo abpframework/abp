@@ -11,7 +11,7 @@ ABP offers an opinionated architecture to build enterprise software solutions wi
 
 🔗GitHub Repository: https://github.com/abpframework/abp
 
-🔗Samples: https://abp.io/docs/latest/Samples/Index
+🔗Samples: https://abp.io/docs/latest/samples/
 
 🔗Official Theme: https://www.LeptonTheme.com
 
@@ -126,6 +126,6 @@ If you are building an enterprise-level application with pro support, extra tool
 
 To understand how it works, see [How it Works]( https://abp.io/how-it-works) page.
 
-If you wonder why you should choose ABP Commercial, check out [Why ABP.IO Platform](https://abp.io/docs/commercial/7.2/why-abp-io-platform) page.
+If you wonder why you should choose ABP, check out [Why ABP.IO Platform](https://abp.io/docs/latest/others/why-abp-platform) page.
 
 Official website:  [https://abp.io](https://abp.io/)
