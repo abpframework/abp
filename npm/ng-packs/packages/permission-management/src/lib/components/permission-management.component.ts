@@ -180,9 +180,9 @@ export class PermissionManagementComponent
     setTimeout(() => {
       this.updatePermissionStatus(clickedPermission);
       this.updateSelectedGroupPermissions(clickedPermission);
+      this.setParentClicked(clickedPermission);
       this.setTabCheckboxState();
       this.setGrantCheckboxState();
-      this.setParentClicked(clickedPermission);
     }, 0);
   }
 
@@ -254,13 +254,13 @@ export class PermissionManagementComponent
   }
 
   setTabCheckboxState() {
-    const selectableGroupPermissions = this.selectedGroupPermissions.filter(per =>
+    const selectablePermissions = this.permissions.filter(per =>
       per.grantedProviders.every(p => p.providerName === this.providerName),
     );
-    const selectedPermissions = selectableGroupPermissions.filter(per => per.isGranted);
+    const selectedPermissions = selectablePermissions.filter(per => per.isGranted);
     const element = document.querySelector('#select-all-in-this-tabs') as any;
 
-    if (selectedPermissions.length === selectableGroupPermissions.length) {
+    if (selectedPermissions.length === selectablePermissions.length) {
       element.indeterminate = false;
       this.selectThisTab = true;
     } else if (selectedPermissions.length === 0) {
