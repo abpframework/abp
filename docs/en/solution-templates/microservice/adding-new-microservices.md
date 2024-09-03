@@ -41,20 +41,16 @@ The new microservice is created and added to the solution. You can see the new m
 ### Configuring the appsettings.json
 
 The new microservice is created with the necessary configurations and dependencies. We should configure several sections by modifying the `appsettings.json` file:
- * Set the `Administration` & `AbpBlobStoring` connection strings.
  * Set the `CorsOrigins` to allow the web gateway to access the microservice.
  * Set the `AuthServer` configurations to enable the microservice to authenticate and authorize users.
- * Set the correct `StringEncryption` key.
 
 You can copy the configurations from the existing microservices and modify them according to the new microservice. Below is an example of the `appsettings.json` file for the `ProductService` microservice.
 
 ```diff
 {
   "ConnectionStrings": {
--   "Administration": "Administration_Database",
--   "AbpBlobStoring": "BlobStoring_Database",
-+   "Administration": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_Administration; TrustServerCertificate=true",
-+   "AbpBlobStoring": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_BlobStoring; TrustServerCertificate=true",
+    "Administration": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_Administration; TrustServerCertificate=true",
+    "AbpBlobStoring": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_BlobStoring; TrustServerCertificate=true",
     "ProductService": "Server=localhost,1434; User Id=sa; Password=myPassw@rd; Database=Bookstore_ProductService; TrustServerCertificate=true"
   },
   "App": {
@@ -100,8 +96,7 @@ You can copy the configurations from the existing microservices and modify them 
     "Url": "http://localhost:9200"
   },
   "StringEncryption": {
--    "DefaultPassPhrase": "string_encrryption_key"
-+    "DefaultPassPhrase": "PDAWjbshpwlOwNB6"
+     "DefaultPassPhrase": "PDAWjbshpwlOwNB6"
   }
 }
 ```
