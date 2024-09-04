@@ -359,7 +359,11 @@ public class ProductsApplicationAutoMapperProfile : Profile
 
 ### Creating Example Products
 
-In this section, we will create a few example products using the Swagger UI. In that way
+In this section, we will create a few example products using the Swagger UI. In that way, we will have some sample products to show on the UI.
+
+Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel, select the *Dotnet CLI* -> *Graph Build* command. In this way, we can be sure that the product module and the main application has built and ready to run.
+
+After the build process completes, open the Solution Runner panel and click the *Play* button near to the solution root. Once the `ModularCrm.Web` application runs, we can right-click it and select the *Browse* command to open the user interface.
 
 ...
 
