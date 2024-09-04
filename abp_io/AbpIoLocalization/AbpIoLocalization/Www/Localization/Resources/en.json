@@ -1440,6 +1440,7 @@
     "MAUI": "MAUI",
     "HowItWorks_Page_Title": "How it Works?",
     "HowItWorks_Page_Description": "Understand how ABP Framework works with detailed documentation, including guides and best practices.",
+    "HowItWorks_Description_Title": "What’s possible with ASP.NET Core, easier with ABP!",
     "HowItWorks_Description1": "ABP extends the .NET platform. So, anything you can do with a plain .NET solution is already possible with ABP. That makes it easy to get started with a low learning curve.",
     "HowItWorks_Description2": "Once you start learning and using ABP features, developing your software will be much more enjoyable than ever.",
     "HowItWorks_Description3": "This page basically explains how you use the ABP Platform as a .NET developer.",

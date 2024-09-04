@@ -40,8 +40,9 @@ The top menu is the main menu bar in ABP Studio. It offers access to various fun
 ### Tools Menu
 
 - **Options**
-    - **Theme:** Allows to change UI theme.
-- **Extensions:** Opens the extension management window.
+  - **Theme:** Allows to change UI theme.
+- **Global secrets**: Allows to add global secrets.
+- **Global metadata**: Allows to add global metadata.
 
 ### Help Menu
 
@@ -50,6 +51,7 @@ The top menu is the main menu bar in ABP Studio. It offers access to various fun
 - **Community:** Opens the official [ABP Community](https://abp.io/community) website in your browser.
 - **Support:** Opens the official [Support](https://abp.io/support/questions) website in your browser.
 - **My Support Questions:** Opens the page on the official Support website in your browser showing the tickets you have opened.
+- **Check for updates:** Checks for new version of ABP Studio.
 - **About:** Opens the about window of ABP Studio where you can get more information about it.
 
 ## Welcome Screen
