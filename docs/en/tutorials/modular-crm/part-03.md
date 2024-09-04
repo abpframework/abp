@@ -364,7 +364,7 @@ We've just added the `CreateMap<Product, ProductDto>();` line to define the mapp
 For this application, we don't need to create HTTP API endpoints for the products module actually. But, it is good to understand how to do it when you need. You have two options;
 
 * You can create a regular ASP.NET Core Controller class into the `ModularCrm.Products.HttpApi` project, inject `IProductAppService` and use it to create wrapper methods. We will do it later while we will create the Ordering module.
-* Alternatively, you can just use the ABP's Auto API Controllers feature to automatically expose your application services as API controllers by conventions. We will do it here.
+* Alternatively, you can just use the ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature to automatically expose your application services as API controllers by conventions. We will do it here.
 
 Open the `ModularCrmWebModule` class in the main application's solution (the `ModularCrm` solution), find the `PreConfigureServices` method and add the following lines inside that method:
 
@@ -491,10 +491,13 @@ Now, you can browse the *Products* page to see the list of the products:
 
 ![abp-studio-browser-list-of-products](images/abp-studio-browser-list-of-products.png)
 
-As you see, it is pretty straightforward to develop a UI page in a modular ABP application. We kept the UI simple to focus on the modularity. If you want to learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
+As you see, it is pretty straightforward to develop a UI page in a modular ABP application. We kept the UI very simple to focus on the modularity. If you want to learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
 
-TODO
+## Final Notes
 
-## Notes
+Some of the projects in the product module's .NET solution (`ModularCrm.Products`) are not necessary for most of the cases. They are available to support different scenarios. You can delete them from your module (and remove the dependencies on the main application) if you want:
 
-* We can delete httpapi, httpapi.client packages from products module
+* `ModularCrm.Products.HttpApi`: That project is to define regular HTTP API controllers. If you will always use ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature (like we did in this tutorial), you can delete that project.
+* `ModularCrm.Products.HttpApi.Client`: That project is generally shared with 3rd-party applications, so they can easily consume your HTTP API endpoints. In a modular monolith application, you typically don't need it.
+* `ModularCrm.Products.HttpApi.Installer`: That project is used to discover and install a multi-projects module (like the product module) when you deploy it to a package management system (like NuGet). If you will use the module with local project references (like we did here), you can delete that project.
+* You can also delete the test projects (there are 4 of them in the solution) if you don't prefer to write unit/integration tests in the module's solution (Legal warning: it is recommended to write tests &#128522;)
