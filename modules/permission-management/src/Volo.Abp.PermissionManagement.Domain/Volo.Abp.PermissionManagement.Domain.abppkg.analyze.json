@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Domain",
-  "hash": "5fdb46829763b28e9bc9a5be7d3965aa",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement",
@@ -156,6 +156,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "HasSameData",
           "summary": null,
           "isAsync": false,
@@ -172,6 +173,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "Patch",
           "summary": null,
           "isAsync": false,
@@ -192,11 +194,6 @@
       "namespace": "Volo.Abp.PermissionManagement",
       "primaryKeyType": "Guid",
       "properties": [
-        {
-          "type": "System.Guid",
-          "name": "Id",
-          "summary": null
-        },
         {
           "type": "System.String",
           "name": "GroupName",
@@ -295,6 +292,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "HasSameData",
           "summary": null,
           "isAsync": false,
@@ -311,6 +309,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "Patch",
           "summary": null,
           "isAsync": false,
@@ -331,11 +330,6 @@
       "namespace": "Volo.Abp.PermissionManagement",
       "primaryKeyType": "Guid",
       "properties": [
-        {
-          "type": "System.Guid",
-          "name": "Id",
-          "summary": null
-        },
         {
           "type": "System.String",
           "name": "Name",
@@ -401,6 +395,7 @@
       "methods": [
         {
           "returnType": "PermissionDefinitionRecord",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -470,6 +465,7 @@
       "methods": [
         {
           "returnType": "PermissionGrant",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -501,6 +497,7 @@
         },
         {
           "returnType": "List<PermissionGrant>",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -527,6 +524,7 @@
         },
         {
           "returnType": "List<PermissionGrant>",
+          "namespace": "Volo.Abp.PermissionManagement",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,

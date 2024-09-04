@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.Application.Contracts",
-  "hash": "212ba33f01b4091ceedd07b742d142bb",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
@@ -81,6 +81,13 @@
       "isEnabled": true,
       "contentType": "permission",
       "name": "SettingManagement.Emailing.Test",
+      "summary": null
+    },
+    {
+      "displayName": "Time zone",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "SettingManagement.TimeZone",
       "summary": null
     }
   ]

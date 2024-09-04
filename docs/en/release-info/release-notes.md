@@ -4,11 +4,20 @@ This document contains **brief release notes** for each release. Release notes o
 
 > If you want to read detailed release posts for each version, please see the [official ABP blog](https://abp.io/blog).
 
-## 8.2 (2024-05-25)
+## 8.3.0-rc.1 (2024-07-31)
 
-> This version is currently in preview. The final release date is planned for July, 2024.
+> This version is currently in preview. The final release date is planned for August, 2024.
 
-See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-2-release-candidate)** for the v8.2 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-3-release-candidate)** for the v8.3 release.
+
+* CMS Kit: Marked Items & Approvement System for Commenting Feature
+* Enhancements on the Docs Module (Google Translation support & new single project mode)
+* Using DbFunction for generating more precise SQL commands for Global Query Filters
+* CMS Kit (Pro): FAQ System
+
+## 8.2 (2024-06-26)
+
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-2-stable-release)** for the v8.2 release.
 
 * Blazor Full-Stack Web App UI.
 * Introducing the `IBlockUiService` for Blazor UI (disables/blocks the page or a part of the page).

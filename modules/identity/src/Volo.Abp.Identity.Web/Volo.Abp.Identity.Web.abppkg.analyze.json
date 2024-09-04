@@ -75,12 +75,6 @@
       "summary": null
     },
     {
-      "apis": [],
-      "contentType": "httpApi",
-      "name": "Defined Http Apis",
-      "summary": null
-    },
-    {
       "namespace": "Volo.Abp.Identity.Web.Pages.Identity.Users",
       "contentType": "webPage",
       "name": "CreateModalModel",

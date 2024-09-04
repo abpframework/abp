@@ -1,0 +1,22 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@using Volo.CmsKit.Localization
+@inject IStringLocalizer<CmsKitResource> L
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Modals.Login.LoginModalModel
+@{
+    Layout = null;
+    var message = String.IsNullOrEmpty(Model.ViewModel.Message) ? L["CmsKit:Modals:LoginModalDefaultMessage"] : Model.ViewModel.Message;
+}
+<abp-modal centered="true">
+    <abp-modal-header title="@L["CmsKit:Modals:YouAreNotAuthenticated"]">
+    </abp-modal-header>
+    <abp-modal-body>
+        <div class="text-center">
+            <h4>
+                @message
+            </h4>
+            <br />
+            <a href="@Model.ViewModel.LoginUrl" class="btn btn-secondary">@L["CmsKit:Modals:Login"]</a>
+        </div>
+    </abp-modal-body>
+</abp-modal>

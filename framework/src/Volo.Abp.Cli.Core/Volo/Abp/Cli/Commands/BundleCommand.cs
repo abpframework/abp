@@ -13,7 +13,7 @@ namespace Volo.Abp.Cli.Commands;
 public class BundleCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "bundle";
-    
+
     public ILogger<BundleCommand> Logger { get; set; }
 
     public IBundlingService BundlingService { get; set; }
@@ -30,7 +30,7 @@ public class BundleCommand : IConsoleCommand, ITransientDependency
 
         var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
                          commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
-        
+
         var projectType = GetProjectType(commandLineArgs);
 
         if (!Directory.Exists(workingDirectory))
@@ -42,15 +42,7 @@ public class BundleCommand : IConsoleCommand, ITransientDependency
             );
         }
 
-        try
-        {
-            await BundlingService.BundleAsync(workingDirectory, forceBuild, projectType);
-        }
-        catch (BundlingException ex)
-        {
-            Logger.LogError(ex.Message);
-            throw;
-        }
+        await BundlingService.BundleAsync(workingDirectory, forceBuild, projectType);
     }
 
     public string GetShortDescription()
@@ -77,7 +69,7 @@ public class BundleCommand : IConsoleCommand, ITransientDependency
 
         return sb.ToString();
     }
-    
+
     private string GetProjectType(CommandLineArgs commandLineArgs)
     {
         var projectType = commandLineArgs.Options.GetOrNull(Options.ProjectType.Short, Options.ProjectType.Long);

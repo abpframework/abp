@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> được hỗ trợ.",
     "Preview": "Xem trước",
     "VisitPage": "Ghé thăm trang",
-    "VisitVideoCourseDescription": "Nếu bạn muốn tìm hiểu những kiến ​​thức cơ bản về Khung ABP, hãy xem các khóa học Video Cơ bản về ABP."
+    "VisitVideoCourseDescription": "Nếu bạn muốn tìm hiểu những kiến ​​thức cơ bản về Khung ABP, hãy xem các khóa học Video Cơ bản về ABP.",
+    "ConfirmEmailForPost": "Để có thể đăng bài, bạn cần xác nhận email của mình. Hãy truy cập account.abp.io/Account/Quản lý và xác minh email của bạn trong tab Thông tin cá nhân.",
+    "DailyPostCreateLimitation": "Bạn đã đạt đến giới hạn tạo bài đăng hàng ngày. Bạn có thể tạo bài đăng mới trong {0}."
   }
 }

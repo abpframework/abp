@@ -32,7 +32,7 @@ public class AbpCardBodyTagHelperService : AbpTagHelperService<AbpCardBodyTagHel
         if (!TagHelper.Subtitle.IsNullOrWhiteSpace())
         {
             var cardSubtitle = new TagBuilder(AbpCardSubtitleTagHelper.DefaultHeading.ToHtmlTag());
-            cardSubtitle.AddCssClass("card-subtitle text-muted mb-2");
+            cardSubtitle.AddCssClass("card-subtitle mb-2");
             cardSubtitle.InnerHtml.AppendHtml(TagHelper.Subtitle!);
             output.PreContent.AppendHtml(cardSubtitle);
         }
