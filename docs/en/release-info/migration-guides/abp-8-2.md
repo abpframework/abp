@@ -51,6 +51,11 @@ If the flag icon has been specified while defining the localization languages, t
 In this version, ABP Framework provides a new UI option called **Blazor Full-Stack WebApp**. We have already created an introduction/migration guide for you to check it: [Migrating to Blazor Web App](abp-8-2-blazor-web-app.md)
 
 > Please read the documentation carefully if you are considering migrating your existing **Blazor** project to **Blazor WebApp**.
+
+## Angular UI
+
+In this version, the Angular UI has been updated to use the Angular version 17.3.0 and Nx version to 19.0.0. See the PR for more information: [#19915](https://github.com/abpframework/abp/pull/19915/)
+
 ## Session Management Infrastructure
 
 The **Session Management** feature allows you to prevent concurrent login and manage user sessions.
