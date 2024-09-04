@@ -425,6 +425,74 @@ We've some entities in the database, and we can show them on the user interface 
 
 In this section, we will create a very simple user interface to demonstrate how to build UI in the products module and make it working in the main application.
 
+As a first step, stop the application on ABP Studio's Solution Runner if it is currently running.
+
+Open the `ModularCrm.Products` .NET solution in your IDE, find the `Pages/Products/Index.cshtml` file under the `ModularCrm.Products.Web` project:
+
+![visual-studio-products-cshtml](images/visual-studio-products-cshtml.png)
+
+Replace the `IndexModel.cshtml.cs` file with the following content:
+
+````csharp
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace ModularCrm.Products.Web.Pages.Products;
+
+public class IndexModel : ProductsPageModel
+{
+    public List<ProductDto> Products { get; set; }
+
+    private readonly IProductAppService _productAppService;
+
+    public IndexModel(IProductAppService productAppService)
+    {
+        _productAppService = productAppService;
+    }
+
+    public async Task OnGetAsync()
+    {
+        Products = await _productAppService.GetListAsync();
+    }
+}
+````
+
+Here, we are simply using the `IProductAppService` to get a list of all products and assigning the result to the `Products` property. We can use it in the `Index.cshtml` file to show a simple list of products on the UI:
+
+````xml
+@page
+@using Microsoft.Extensions.Localization
+@using ModularCrm.Products.Localization
+@using ModularCrm.Products.Web.Pages.Products
+@model ModularCrm.Products.Web.Pages.Products.IndexModel
+@inject IStringLocalizer<ProductsResource> L
+
+<h1>Products</h1>
+
+<abp-card>
+    <abp-card-body>
+        <abp-list-group>
+            @foreach (var product in Model.Products)
+            {
+                <abp-list-group-item>
+                    @product.Name <span class="text-muted">(stock: @product.StockCount)</span>
+                </abp-list-group-item>
+            }
+        </abp-list-group>
+    </abp-card-body>
+</abp-card>
+````
+
+You can build the product module's .NET solution (`ModularCrm.Products`), then right-click the `ModularCrm.Web` application on ABP Studio's solution runner and select the *Build & Restart* command:
+
+![abp-studio-build-and-restart-application](images/abp-studio-build-and-restart-application.png)
+
+Now, you can browse the *Products* page to see the list of the products:
+
+![abp-studio-browser-list-of-products](images/abp-studio-browser-list-of-products.png)
+
+As you see, it is pretty straightforward to develop a UI page in a modular ABP application. We kept the UI simple to focus on the modularity. If you want to learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
+
 TODO
 
 ## Notes
