@@ -1,6 +1,6 @@
 {
   "name": "VoloDocs.EntityFrameworkCore",
-  "hash": "16b4276f8bb7836474b6a2da1a71df37",
+  "hash": "",
   "contents": [
     {
       "namespace": "VoloDocs.EntityFrameworkCore",
@@ -84,6 +84,7 @@
       "connectionStringName": null,
       "databaseTables": [],
       "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",

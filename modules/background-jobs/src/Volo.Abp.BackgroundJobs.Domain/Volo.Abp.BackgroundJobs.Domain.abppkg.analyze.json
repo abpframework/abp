@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.Domain",
-  "hash": "9135b4c99ca5f16a980041e8621fb415",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs",
@@ -222,6 +222,7 @@
       "methods": [
         {
           "returnType": "List<BackgroundJobRecord>",
+          "namespace": "Volo.Abp.BackgroundJobs",
           "name": "GetWaitingListAsync",
           "summary": null,
           "isAsync": true,

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Web",
-  "hash": "d4c82263439a4a663a6b98ee502d02f4",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging",
@@ -72,6 +72,42 @@
       ],
       "contentType": "abpModule",
       "name": "BloggingWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Pages.Blogs",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Pages.Blogs.Posts",
+      "contentType": "webPage",
+      "name": "DetailModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Pages.Blogs.Posts",
+      "contentType": "webPage",
+      "name": "EditModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Pages.Blogs.Posts",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Pages.Blogs.Posts",
+      "contentType": "webPage",
+      "name": "NewModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Blogging.Pages.Blogs.Members",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]

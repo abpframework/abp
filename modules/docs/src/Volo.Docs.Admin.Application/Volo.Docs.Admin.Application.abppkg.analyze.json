@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.Application",
-  "hash": "9f9f4df9fb9f426b7c115abc968b99d1",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -146,6 +146,7 @@
       "methods": [
         {
           "returnType": "PagedResultDto<ProjectDto>",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -162,6 +163,7 @@
         },
         {
           "returnType": "ProjectDto",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -178,6 +180,7 @@
         },
         {
           "returnType": "ProjectDto",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -194,6 +197,7 @@
         },
         {
           "returnType": "ProjectDto",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -215,6 +219,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -231,6 +236,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "ReindexAsync",
           "summary": null,
           "isAsync": true,
@@ -247,6 +253,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "ReindexAllAsync",
           "summary": null,
           "isAsync": true,
@@ -257,6 +264,7 @@
         },
         {
           "returnType": "List<ProjectWithoutDetailsDto>",
+          "namespace": "Volo.Docs.Admin.Projects",
           "name": "GetListWithoutDetailsAsync",
           "summary": null,
           "isAsync": true,
@@ -337,6 +345,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "ClearCacheAsync",
           "summary": null,
           "isAsync": true,
@@ -353,6 +362,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "PullAllAsync",
           "summary": null,
           "isAsync": true,
@@ -369,6 +379,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "PullAsync",
           "summary": null,
           "isAsync": true,
@@ -385,6 +396,7 @@
         },
         {
           "returnType": "PagedResultDto<DocumentDto>",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "GetAllAsync",
           "summary": null,
           "isAsync": true,
@@ -401,6 +413,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "RemoveFromCacheAsync",
           "summary": null,
           "isAsync": true,
@@ -417,6 +430,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "ReindexAsync",
           "summary": null,
           "isAsync": true,
@@ -433,6 +447,7 @@
         },
         {
           "returnType": "List<DocumentInfoDto>",
+          "namespace": "Volo.Docs.Admin.Documents",
           "name": "GetFilterItemsAsync",
           "summary": null,
           "isAsync": true,
