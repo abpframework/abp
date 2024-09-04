@@ -238,11 +238,12 @@ After the operation completes, you can check your database to see the new `Produ
 
 Now, we will create an [application service](../../framework/architecture/domain-driven-design/application-services.md) to perform some use cases related to products.
 
-### Defining the Application Service Contracts
+### Defining the Application Service Contract
 
 Return to your IDE (e.g. Visual Studio), open the `ModularCrm.Products` module's .NET solution and create an `IProductAppService` interface under the `ModularCrm.Products.Application.Contracts` project:
 
 ````csharp
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
@@ -250,25 +251,49 @@ namespace ModularCrm.Products;
 
 public interface IProductAppService : IApplicationService
 {
+    Task<List<ProductDto>> GetListAsync();
     Task CreateAsync(ProductCreationDto input);
 }
 ````
 
 We are defining application service interfaces and [data transfer objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) in the `Application.Contracts` project. In that way, we can share that contracts with clients without sharing the actual implementation class.
 
-`IProductAppService.CreateAsync` method gets an object of type `ProductCreationDto`. So, we also need to create a `ProductCreationDto` class under the `ModularCrm.Products.Application.Contracts` project:
+### Defining Data Transfer Objects
+
+`GetListAsync` and `.CreateAsync` methods are using `ProductDto` and `ProductCreationDto` that are not defined yet. So, we need to define them.
+
+Create a `ProductCreationDto` class under the `ModularCrm.Products.Application.Contracts` project:
 
 ````csharp
+using System.ComponentModel.DataAnnotations;
+
 namespace ModularCrm.Products;
 
 public class ProductCreationDto
 {
+    [Required]
+    [StringLength(100)]
     public string Name { get; set; }
+
+    [Range(0, int.MaxValue)]
     public int StockCount { get; set; }
 }
 ````
 
-These two files should be located under the `ModularCrm.Products.Application.Contracts` project as shown below:
+And create a `ProductDto` class under the `ModularCrm.Products.Application.Contracts` project:
+
+````csharp
+namespace ModularCrm.Products
+{
+    public class ProductDto
+    {
+        public string Name { get; set; }
+        public int StockCount { get; set; }
+    }
+}
+````
+
+The new files under the `ModularCrm.Products.Application.Contracts` project are shown below:
 
 ![visual-studio-application-contracts](images/visual-studio-application-contracts.png)
 
@@ -278,6 +303,7 @@ Now, we can implement the `IProductAppService` interface. Create a `ProductAppSe
 
 ````csharp
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
@@ -290,6 +316,12 @@ public class ProductAppService : ProductsAppService, IProductAppService
     public ProductAppService(IRepository<Product, Guid> productRepository)
     {
         _productRepository = productRepository;
+    }
+
+    public async Task<List<ProductDto>> GetListAsync()
+    {
+        var products = await _productRepository.GetListAsync();
+        return ObjectMapper.Map<List<Product>, List<ProductDto>>(products);
     }
 
     public async Task CreateAsync(ProductCreationDto input)
@@ -307,12 +339,28 @@ public class ProductAppService : ProductsAppService, IProductAppService
 
 Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for [localization](../../framework/fundamentals/localization.md) and [object mapping](../../framework/infrastructure/object-to-object-mapping.md) (you can see in the `ModularCrm.Products.Application` project). You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
 
+#### Object Mapping
+
+`ProductAppService.GetListAsync` method uses the `ObjectMapper` service to convert `Product` entities to `ProductDto` objects. The mapping should be configured. Open the `ProductsApplicationAutoMapperProfile` class in the `ModularCrm.Products.Application` project and change it as the following code block:
+
+````csharp
+using AutoMapper;
+
+namespace ModularCrm.Products;
+
+public class ProductsApplicationAutoMapperProfile : Profile
+{
+    public ProductsApplicationAutoMapperProfile()
+    {
+        CreateMap<Product, ProductDto>();
+    }
+}
+````
+
+### Creating Example Products
+
+In this section, we will create a few example products using the Swagger UI. In that way
+
 ...
-
-
-
-
-
-
 
 ## Creating the User Interface
