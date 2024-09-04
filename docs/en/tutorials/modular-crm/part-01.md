@@ -4,7 +4,7 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Creating the initial products module",
+    "Name": "Creating the initial Products module",
     "Path": "tutorials/modular-crm/part-02"
   }
 }

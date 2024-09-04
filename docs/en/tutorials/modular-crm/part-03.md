@@ -4,11 +4,11 @@
 //[doc-nav]
 {
   "Previous": {
-    "Name": "Creating the initial products module",
+    "Name": "Creating the initial Products module",
     "Path": "tutorials/modular-crm/part-02"
   },
   "Next": {
-    "Name": "TODO",
+    "Name": "Creating the initial Ordering module",
     "Path": "tutorials/modular-crm/part-04"
   }
 }

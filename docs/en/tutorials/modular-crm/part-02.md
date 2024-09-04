@@ -8,7 +8,7 @@
     "Path": "tutorials/modular-crm/part-01"
   },
   "Next": {
-    "Name": "Building the products module",
+    "Name": "Building the Products module",
     "Path": "tutorials/modular-crm/part-03"
   }
 }
