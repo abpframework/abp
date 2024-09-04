@@ -357,14 +357,76 @@ public class ProductsApplicationAutoMapperProfile : Profile
 }
 ````
 
+We've just added the `CreateMap<Product, ProductDto>();` line to define the mapping.
+
+### Exposing Application Services as HTTP API Controllers
+
+For this application, we don't need to create HTTP API endpoints for the products module actually. But, it is good to understand how to do it when you need. You have two options;
+
+* You can create a regular ASP.NET Core Controller class into the `ModularCrm.Products.HttpApi` project, inject `IProductAppService` and use it to create wrapper methods. We will do it later while we will create the Ordering module.
+* Alternatively, you can just use the ABP's Auto API Controllers feature to automatically expose your application services as API controllers by conventions. We will do it here.
+
+Open the `ModularCrmWebModule` class in the main application's solution (the `ModularCrm` solution), find the `PreConfigureServices` method and add the following lines inside that method:
+
+````csharp
+PreConfigure<IMvcBuilder>(mvcBuilder =>
+{
+    mvcBuilder.AddApplicationPartIfNotExists(typeof(ProductsApplicationModule).Assembly);
+});
+````
+
+This will tell to ASP.NET Core to explore the given assembly to discover controllers.
+
+Then open the `ConfigureAutoApiControllers` method of the same class and add a second `ConventionalControllers.Create` call as shown in the following code block:
+
+````csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ConventionalControllers.Create(typeof(ModularCrmApplicationModule).Assembly);
+    
+    //ADD THE FOLLOWINGN LINE:
+    options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly);
+});
+````
+
+This will tell to ABP framework to create API controllers for the application services in the given assembly.
+
+> We made these configurations in the main application's solution since there is no project in the product module's solution that has reference to ASP.NET Core MVC packages and uses the application layer of the product module. If you add a reference of `ModularCrm.Products.Application` to `ModularCrm.Products.HttpApi`, then you can move these configurations to the `ModularCrm.Products.HttpApi` project.
+
+Now, the application services defined in the `ModularCrm.Products.Application` project will be exposed as API controllers automatically by ABP. In the next section, we will use these API controller to create some example products.
+
 ### Creating Example Products
 
-In this section, we will create a few example products using the Swagger UI. In that way, we will have some sample products to show on the UI.
+In this section, we will create a few example products using the [Swagger UI](../../framework/api-development/swagger.md). In that way, we will have some sample products to show on the UI.
 
 Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel, select the *Dotnet CLI* -> *Graph Build* command. In this way, we can be sure that the product module and the main application has built and ready to run.
 
 After the build process completes, open the Solution Runner panel and click the *Play* button near to the solution root. Once the `ModularCrm.Web` application runs, we can right-click it and select the *Browse* command to open the user interface.
 
-...
+Once you see the user interface of the web application, type `/swagger` to the end of the URL to open the Swagger UI. If you scroll down, you should see the `Products` API:
+
+![abp-studio-swagger-ui-in-browser](images/abp-studio-swagger-ui-in-browser.png)
+
+Expand the `/api/app/product` API and click the *Try it out* button as shown in the following figure:
+
+![abp-studio-swagger-ui-create-product-try](images/abp-studio-swagger-ui-create-product-try.png)
+
+Then create a few products by filling the *Request body* and clicking the *Execute* button:
+
+![abp-studio-swagger-ui-create-product-execute](images/abp-studio-swagger-ui-create-product-execute.png)
+
+If you check the database, you should see the entities created in the `Products` table:
+
+![sql-server-products-database-table-filled](images/sql-server-products-database-table-filled.png)
+
+We've some entities in the database, and we can show them on the user interface now.
 
 ## Creating the User Interface
+
+In this section, we will create a very simple user interface to demonstrate how to build UI in the products module and make it working in the main application.
+
+TODO
+
+## Notes
+
+* We can delete httpapi, httpapi.client packages from products module
