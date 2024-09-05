@@ -80,7 +80,7 @@ public partial class RoleManagement
         return base.SetEntityActionsAsync();
     }
 
-    protected override ValueTask SetTableColumnsAsync()
+    protected override async ValueTask SetTableColumnsAsync()
     {
         RoleManagementTableColumns
             .AddRange(new TableColumn[]
@@ -99,10 +99,10 @@ public partial class RoleManagement
                     },
             });
 
-        RoleManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+        RoleManagementTableColumns.AddRange(await GetExtensionTableColumnsAsync(IdentityModuleExtensionConsts.ModuleName,
             IdentityModuleExtensionConsts.EntityNames.Role));
 
-        return base.SetTableColumnsAsync();
+        await base.SetTableColumnsAsync();
     }
 
     protected override async Task SetPermissionsAsync()

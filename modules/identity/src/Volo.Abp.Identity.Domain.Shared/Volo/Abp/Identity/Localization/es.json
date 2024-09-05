@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Autenticación en dos pasos",
     "DisplayName:IsActive": "Activo",
     "DisplayName:LockoutEnabled": "Bloqueo de cuenta",
+    "Description:LockoutEnabled": "Bloquear cuenta después de intentos de inicio de sesión fallidos",
     "NewRole": "Nuevo rol",
     "RoleName": "Nombre de rol",
     "CreationTime": "Fecha de creación",

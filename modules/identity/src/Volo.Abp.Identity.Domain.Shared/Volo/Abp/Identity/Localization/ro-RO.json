@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Autentificare în doi paşi",
     "DisplayName:IsActive": "Activ",
     "DisplayName:LockoutEnabled": "Blocare cont",
+    "Description:LockoutEnabled": "Blochează contul după încercări eşuate de autentificare",
     "NewRole": "Rol nou",
     "RoleName": "Nume rol",
     "CreationTime": "Data creării",

@@ -1,0 +1,8 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Volo.Feature:010001": "Funktionen är inte aktiverad: {Funktionsnamn}",
+    "Volo.Feature:010002": "Obligatoriska funktioner är inte aktiverade. Alla dessa funktioner måste vara aktiverade: {Funktionsnamn}",
+    "Volo.Feature:010003": "Nödvändiga funktioner är inte aktiverade. Åtminstone en av dessa funktioner måste vara aktiverad: {Funktionsnamn}"
+  }
+}

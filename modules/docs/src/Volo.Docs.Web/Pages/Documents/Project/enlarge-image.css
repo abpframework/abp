@@ -1,0 +1,87 @@
+/* The Modal (background) */
+.docs-image-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(41,45,50); /* Fallback color */
+    background-color: rgb(41 45 50 / 50%);
+    cursor: zoom-out;
+}
+
+.docs-image-modal.show {
+    z-index: 9999;
+    align-items: center;
+    display: flex;
+    padding-top: 0;
+}
+
+/* Modal Content (image) */
+.docs-image-modal .docs-image-modal-content {
+    margin: auto;
+    display: block;
+    background: #fff;
+
+    position: relative;
+    flex-direction: column;
+    background-clip: padding-box;
+    outline: 0;
+}
+
+/* Add Animation */
+.docs-image-modal .docs-image-modal-content{
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.3s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)}
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+}
+/* The Close Button */
+.docs-image-modal .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    transition: 0.3s;
+    font-size: 48px;
+    font-weight: 100;
+}
+
+.docs-image-modal .close:hover,
+.docs-image-modal .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 768px){
+    .docs-image-modal .docs-image-modal-content {
+        max-width: 95vw;
+    }
+}
+
+@media only screen and (min-width: 768px){
+    .docs-image-modal .docs-image-modal-content {
+        max-width: 80vw;
+        max-height: 80vh;
+    }
+}
+
+.docs-enlarge-image {
+    cursor: zoom-in;
+}
