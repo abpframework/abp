@@ -43,8 +43,24 @@ In this section, we will create packages under the Ordering module. The Products
 * `ModularCrm.Ordering`: Contains all the module code without any layering. It will contains entities, database access code, services, controllers, UI pages and whatever we need to implement the *Ordering* module.
 * `ModularCrm.Ordering.Contracts`: Contains the services and objects we want to share with other modules. `ModularCrm.Ordering` uses (and implements) this package.
 
-> If your modules are relatively small, easy to maintain, they will only be used by your main application and you don't care about layering, you can create such a simple module structure.
+> If your modules are relatively small, easy to maintain, they will only be used by your main application and you don't care about layering, you can create such simple module structures.
+
+We will create and configure everything from scratch. It will take time, but you will have a good understanding of all the details. Let's begin...
 
 ### Creating the `ModularCrm.Ordering.Contracts` Package
 
-s
+We will start by creating the `ModularCrm.Ordering.Contracts` package. Right-click the `ModularCrm.Ordering` module on the *Solution Explorer* and select the *Add* -> *Package* -> *New Package* command as shown in the following figure:
+
+![abp-studio-add-new-package](images/abp-studio-add-new-package.png)
+
+That command opens a new dialog to create a new package:
+
+![abp-studio-add-new-package-class-library](images/abp-studio-add-new-package-class-library.png)
+
+With that dialog, you can build your module or application layer by layer. There are templates for any type of package. However, here we will go with the most simple one: *ABP Class Library*. ABP Class Library is an empty C# class library with the [core ABP package](https://www.nuget.org/packages/Volo.Abp.Core) dependency and a [module class](../../framework/architecture/modularity/basics.md).
+
+Type `ModularCrm.Ordering.Contracts` as the *Package name* and click the *Create* button. It will add the package under the `ModularCrm.Ordering` module:
+
+![abp-studio-new-package-under-the-module](images/abp-studio-new-package-under-the-module.png)
+
+d
