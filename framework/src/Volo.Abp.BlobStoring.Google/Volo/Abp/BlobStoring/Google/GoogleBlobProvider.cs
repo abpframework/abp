@@ -31,17 +31,13 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
         {
             throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{GetContainerName(args)}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
         }
-
+        
         if (configuration.CreateContainerIfNotExists)
         {
             await CreateContainerIfNotExists(args);
         }
         
-        await storageClient.UploadObjectAsync(containerName, blobName, contentType: "application/octet-stream", args.BlobStream,
-            new UploadObjectOptions
-            {
-                IfGenerationMatch = !args.OverrideExisting ? 0 : 1
-            });
+        await storageClient.UploadObjectAsync(containerName, blobName, contentType: "application/octet-stream", args.BlobStream);
     }
 
     public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
@@ -49,8 +45,16 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
         var storageClient = await GetStorageClientClientAsync(args);
         var blobName = GoogleBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);
-            
-        await storageClient.DeleteObjectAsync(containerName, blobName);
+
+        try
+        {
+            await storageClient.DeleteObjectAsync(containerName, blobName);
+        }
+        catch (GoogleApiException e) when (e.HttpStatusCode == HttpStatusCode.NotFound)
+        {
+            return true;
+        }
+        
 
         return true;
     }
@@ -66,13 +70,12 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
         var storageClient = await GetStorageClientClientAsync(args);
         var blobName = GoogleBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);
-                
-        var @object = await storageClient.GetObjectAsync(containerName, blobName);
-        if (@object == null)
+         
+        if(!await BlobExistsAsync(args, blobName))
         {
             return null;
         }
-
+        
         var stream = new MemoryStream();
         
         await storageClient.DownloadObjectAsync(containerName, blobName, stream);
@@ -92,23 +95,48 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
     
     protected virtual async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
     {
-        var @object = await (await GetStorageClientClientAsync(args)).GetObjectAsync(args.ContainerName, blobName);
-        
-        return @object != null;
+        var storageClient = await GetStorageClientClientAsync(args);
+        if(!await ContainerExistsAsync(args, storageClient))
+        {
+            return false;
+        }
+
+        try
+        {
+            await storageClient.GetObjectAsync(GetContainerName(args), blobName);
+        }
+        catch (GoogleApiException e) when (e.HttpStatusCode == HttpStatusCode.NotFound)
+        {
+            return false;
+        }
+
+        return true;
     }
     
     protected virtual async Task CreateContainerIfNotExists(BlobProviderArgs args)
     {
         var storageClient = await GetStorageClientClientAsync(args);
         var configuration = args.Configuration.GetGoogleConfiguration();
+        if(await ContainerExistsAsync(args, storageClient))
+        {
+            return;
+        }
+       
+        await storageClient.CreateBucketAsync(configuration.ProjectId, GetContainerName(args));
+    }
+
+    protected virtual async Task<bool> ContainerExistsAsync(BlobProviderArgs args, StorageClient client)
+    {
         try
         {
-            await storageClient.GetBucketAsync(args.ContainerName);
+            await client.GetBucketAsync(GetContainerName(args));
         }
         catch (GoogleApiException e) when (e.HttpStatusCode == HttpStatusCode.NotFound)
         {
-            await storageClient.CreateBucketAsync(configuration.ProjectId, GetContainerName(args));
+            return false;
         }
+
+        return true;
     }
     
     protected virtual async Task<StorageClient> GetStorageClientClientAsync(BlobProviderArgs args)
