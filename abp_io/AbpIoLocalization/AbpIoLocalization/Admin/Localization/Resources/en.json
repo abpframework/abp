@@ -644,7 +644,6 @@
     "Permission:HeroSections": "Hero Sections",
     "RedirectLink": "Redirect link",
     "HeroSectionsDeletionConfirmationMessage": "Are you sure you want to delete the hero section?",
-    "AbpStudioName": "Abp Studio name",
-    "TestimonialUserImageDownload" : "Download Original Size Image"
+    "AbpStudioName": "Abp Studio name"
   }
 }
