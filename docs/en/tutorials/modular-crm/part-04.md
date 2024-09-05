@@ -91,3 +91,18 @@ The initial module creation has been completed. Now, we have a new module with 2
 
 In this section, we will install the `ModularCrm.Ordering` module to the main application, so it can be a part of the system.
 
+Right-click the `ModularCrm` module (under the `main` folder) and select the *Import Module* command:
+
+![abp-studio-import-module-for-ordering](images/abp-studio-import-module-for-ordering.png)
+
+That command opens the *Import Module* dialog:
+
+![abp-studio-import-module-for-ordering-dialog](images/abp-studio-import-module-for-ordering-dialog.png)
+
+Select the `ModularCrm.Ordering` module and check the *Install this module* option as shown in the preceding figure. When you click the OK button, a new dialog is shown to select the packages to install:
+
+![abp-studio-install-module-dialog](images/abp-studio-install-module-dialog.png)
+
+Select the `ModuleCrm.Ordering` package on the left side, `ModularCrm.Web` package on the middle area as shown in the preceding figure and click the *OK* button.
+
+> Since the Ordering module is not layered, we didn't install its packages to...
