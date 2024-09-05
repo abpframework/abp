@@ -45,7 +45,7 @@ In this section, we will create packages under the Ordering module. The Products
 
 > If your modules are relatively small, easy to maintain, they will only be used by your main application and you don't care about layering, you can create such simple module structures.
 
-We will create and configure everything from scratch. It will take time, but you will have a good understanding of all the details. Let's begin...
+We will create and configure everything from scratch. You have already learned the easy way in the previous parts where we've created the Products module. It is time to have a deep understanding of the details and learn how ABP Studio allows you to setup custom structures. Let's begin...
 
 ### Creating the `ModularCrm.Ordering.Contracts` Package
 
@@ -91,6 +91,8 @@ The initial module creation has been completed. Now, we have a new module with 2
 
 In this section, we will install the `ModularCrm.Ordering` module to the main application, so it can be a part of the system.
 
+> Before the installation, ensure that the web application is not running.
+
 Right-click the `ModularCrm` module (under the `main` folder) and select the *Import Module* command:
 
 ![abp-studio-import-module-for-ordering](images/abp-studio-import-module-for-ordering.png)
@@ -105,4 +107,6 @@ Select the `ModularCrm.Ordering` module and check the *Install this module* opti
 
 Select the `ModuleCrm.Ordering` package on the left side, `ModularCrm.Web` package on the middle area as shown in the preceding figure and click the *OK* button.
 
-> Since the Ordering module is not layered, we didn't install its packages to...
+> Since the Ordering module is not layered, we didn't install its packages to the layers of our main application. We are installing it only to the `ModularCrm.Web` since that is the final executable application of our solution and that is enough. If you build your modules as non-layered and you don't have much code in the main application's .NET solution, you can also consider to create a non-layered main application that composes these modules.
+
+In this part of the tutorial, we've created an empty module and added packages. In that way, you can create modules or applications with custom structure. In the next part, we will add functionality to the Ordering module.

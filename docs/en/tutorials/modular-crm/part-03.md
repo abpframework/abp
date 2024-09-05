@@ -20,7 +20,7 @@ In this part, you will learn how to create entities, services and a basic user i
 
 If it is still running, please stop the web application before continuing with the tutorial.
 
-## Creating a Product Entity
+## Creating a `Product` Entity
 
 Open the `ModularCrm.Products` module in your favorite IDE. You can right-click the `ModularCrm.Products` module and select the *Open With* -> *Visual Studio* command to open the `ModularCrm.Products` module's .NET solution with Visual Studio. If you can not find your IDE in the *Open with* list, open with the *Explorer*, then open the `.sln` file with your IDE:
 
