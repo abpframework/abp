@@ -614,7 +614,19 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
+        ExtraPropertyDictionary? originalExtraProperties = null;
+        if (entry.Entity is IHasExtraProperties)
+        {
+            originalExtraProperties = entry.OriginalValues.GetValue<ExtraPropertyDictionary>(nameof(IHasExtraProperties.ExtraProperties));
+        }
+
         entry.Reload();
+
+        if (entry.Entity is IHasExtraProperties)
+        {
+            ObjectHelper.TrySetProperty(entry.Entity.As<IHasExtraProperties>(), x => x.ExtraProperties, () => originalExtraProperties);
+        }
+
         ObjectHelper.TrySetProperty(entry.Entity.As<ISoftDelete>(), x => x.IsDeleted, () => true);
         SetDeletionAuditProperties(entry);
     }
