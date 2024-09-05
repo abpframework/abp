@@ -24,12 +24,69 @@ The following figure shows the `ModularCrm.Ordering` module in the *Solution Exp
 
 ### Adding `Volo.Abp.Ddd.Domain` Package Reference
 
-As you see in the preceding figure, the solution structure is very minimal. It also has a minimal ABP dependency. ABP Framework has [hundreds of NuGet packages](https://abp.io/packages), but the `ModularCrm.Ordering` project only has the [`Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared`](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared) package reference:
+As you see in the preceding figure, the solution structure is very minimal. It also has a minimal ABP dependency. ABP Framework has [hundreds of NuGet packages](https://abp.io/packages), but the `ModularCrm.Ordering` project only has the [`Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared`](https://abp.io/package-detail/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared) package reference:
 
 ![visual-studio-ordering-ui-package-dependency](images/visual-studio-ordering-ui-package-dependency.png)
 
-TODO
+We will create an [entity class](../../framework/architecture/domain-driven-design/entities.md) and ABP defines base entity classes and other related infrastructure in the [`Volo.Abp.Ddd.Domain`](https://abp.io/package-detail/Volo.Abp.Ddd.Domain) package. So, we need to add a reference to that NuGet package.
+
+You can add that package and arrange the [module](../../framework/architecture/modularity/basics.md) class dependency manually. However, here we will use ABP Studio as a more practical way.
+
+Return to ABP Studio, right-click the `ModularCrm.Ordering` package in the *Solution Explorer* and select the *Add Package Reference* command:
 
 ![abp-studio-add-package-reference-2](images/abp-studio-add-package-reference-2.png)
 
-f
+That command opens a dialog to add a new package reference:
+
+![abp-studio-add-nuget-package-reference](images/abp-studio-add-nuget-package-reference.png)
+
+Select the *NuGet* tab, type `Volo.Abp.Ddd.Domain` as the *Package name* and write the version of the package you want to install. Please be sure that you are installing exactly the same version with the other ABP packages you are already using. In future versions, ABP Studio will provide an easier way to select the package and its version.
+
+Click the *OK* button and then you can check the *Packages* under the `ModularCrm.Ordering` module *Dependencies* to see the `Volo.Abp.Ddd.Domain` package is installed:
+
+![abp-studio-added-ddd-domain-package](images/abp-studio-added-ddd-domain-package.png)
+
+### Adding an `Order` Class
+
+Now, you can return your IDE and add an `Order` class to the `ModularCrm.Ordering` project (open an `Entities` folder and place the `Order.cs` into that folder):
+
+````csharp
+using System;
+using Volo.Abp.Domain.Entities;
+using ModularCrm.Ordering.Contracts.Enums;
+
+namespace ModularCrm.Ordering.Entities
+{
+    public class Order : AggregateRoot<Guid>
+    {
+        public Guid ProductId { get; set; }
+        public string CustomerName { get; set; }
+        public OrderState State { get; set; }
+    }
+}
+````
+
+We are allowing to place only a single product within an order. In a real-world application, the `Order` entity would be much more complex. However, the complexity of the `Order` entity doesn't effect modularity, so we keep it simple to focus on modularity in this tutorial.
+
+### Adding an `OrderState` Enumeration
+
+We used an `OrderState` enumeration that is not defined yet. Open an `Enums` folder in the `ModularCrm.Ordering.Contracts` project and create an `OrderState.cs` file inside it:
+
+````csharp
+namespace ModularCrm.Ordering.Contracts.Enums;
+
+public enum OrderState : byte
+{
+    Placed = 0,
+    Delivered = 1,
+    Canceled = 2
+}
+````
+
+Final structure of the Ordering module should be similar to the following figure in your IDE:
+
+![visual-studio-order-entity](images/visual-studio-order-entity.png)
+
+## Configuring the Database Mapping
+
+TODO
