@@ -47,6 +47,15 @@ public class GoogleBlobProviderConfiguration
     }
     
     /// <summary>
+    /// Use the application default credentials. https://cloud.google.com/docs/authentication/provide-credentials-adc
+    /// Default value: false.
+    /// </summary>
+    public bool UseApplicationDefaultCredentials {
+        get => _containerConfiguration.GetConfigurationOrDefault(GoogleBlobProviderConfigurationNames.UseApplicationDefaultCredentials, false);
+        set => _containerConfiguration.SetConfiguration(GoogleBlobProviderConfigurationNames.UseApplicationDefaultCredentials, value);
+    }
+    
+    /// <summary>
     /// The name can only contain lowercase letters, numeric characters, dashes (-), underscores (_), and dots (.). Spaces are not allowed. Names containing dots require verification.
     /// Must start and end with a number or letter.
     /// Must contain 3-63 characters. Names containing dots can contain up to 222 characters, but each dot-separated component can be no longer than 63 characters.

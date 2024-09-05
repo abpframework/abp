@@ -141,6 +141,11 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
     protected virtual async Task<StorageClient> GetStorageClientClientAsync(BlobProviderArgs args)
     {
         var configuration = args.Configuration.GetGoogleConfiguration();
+        if (configuration.UseApplicationDefaultCredentials)
+        {
+            return await StorageClient.CreateAsync();
+        }
+        
         var googleCredential = GoogleCredential.FromServiceAccountCredential(
             new ServiceAccountCredential(
                 new ServiceAccountCredential.Initializer(configuration.ClientEmail)

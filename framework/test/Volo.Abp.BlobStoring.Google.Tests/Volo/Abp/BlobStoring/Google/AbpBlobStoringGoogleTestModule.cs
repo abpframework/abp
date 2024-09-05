@@ -53,7 +53,7 @@ public class AbpBlobStoringGoogleTestModule : AbpModule
                 containerConfiguration.UseGoogle(google =>
                 {
                     google.ClientEmail = _clientEmail;
-                    google.ProjectId = _projectId = "wide-origin-296910";
+                    google.ProjectId = _projectId;
                     google.PrivateKey = _privateKey;
                     google.ContainerName = _randomContainerName;
                     google.CreateContainerIfNotExists = true;
