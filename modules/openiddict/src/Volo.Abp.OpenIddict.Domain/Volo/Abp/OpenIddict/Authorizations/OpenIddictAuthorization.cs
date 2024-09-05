@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
@@ -22,6 +23,7 @@ public class OpenIddictAuthorization : FullAuditedAggregateRoot<Guid>
     /// <summary>
     /// Gets or sets the UTC creation date of the current authorization.
     /// </summary>
+    [DisableDateTimeNormalization]
     public virtual DateTime? CreationDate { get; set; }
 
     /// <summary>

@@ -1131,6 +1131,56 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "name": "UpdateApprovalStatusAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CommentApprovalDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "name": "UpdateSettingsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "CommentSettingsDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "name": "GetWaitingCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",

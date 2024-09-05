@@ -1,21 +1,15 @@
-import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { NAVIGATE_TO_MANAGE_PROFILE } from '@abp/ng.core';
-import { ACCOUNT_ROUTE_PROVIDERS } from './providers/route.provider';
-import { navigateToManageProfileFactory } from './utils/factories';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { provideAccountConfig } from './providers';
 
+/**
+ * @deprecated AccountConfigModule is deprecated use `provideAccountConfig` *function* instead.
+ */
 @NgModule()
 export class AccountConfigModule {
   static forRoot(): ModuleWithProviders<AccountConfigModule> {
     return {
       ngModule: AccountConfigModule,
-      providers: [
-        ACCOUNT_ROUTE_PROVIDERS,
-        {
-          provide: NAVIGATE_TO_MANAGE_PROFILE,
-          useFactory: navigateToManageProfileFactory,
-          deps: [Injector],
-        },
-      ],
+      providers: [provideAccountConfig()],
     };
   }
 }

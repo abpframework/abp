@@ -72,7 +72,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection).AddAbpDbContextOptionsExtension();
             });
         });
     }
@@ -101,7 +101,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
         var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
         connection.Open();
 
-        using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
+        using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).AddAbpDbContextOptionsExtension().Options))
         {
             context.GetService<IRelationalDatabaseCreator>().CreateTables();
             context.Database.ExecuteSqlRaw(
