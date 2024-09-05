@@ -10,7 +10,7 @@ namespace Volo.Abp.BlobStoring.Google;
 
 
 /// <summary>
-/// This module will not try to connect to azure.
+/// This module will not try to connect to Google Cloud Storage.
 /// </summary>
 [DependsOn(
     typeof(AbpBlobStoringGoogleModule),

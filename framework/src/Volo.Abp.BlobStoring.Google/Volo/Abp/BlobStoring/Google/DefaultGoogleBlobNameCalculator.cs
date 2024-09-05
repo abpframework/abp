@@ -3,7 +3,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BlobStoring.Google;
 
-public class DefaultGoogleBlobNameCalculator: IGoogleBlobNameCalculator, ITransientDependency
+public class DefaultGoogleBlobNameCalculator : IGoogleBlobNameCalculator, ITransientDependency
 {
     protected ICurrentTenant CurrentTenant { get; }
 

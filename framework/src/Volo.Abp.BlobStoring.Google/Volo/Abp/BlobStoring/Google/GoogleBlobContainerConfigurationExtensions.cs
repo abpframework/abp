@@ -12,12 +12,12 @@ public static class GoogleBlobContainerConfigurationExtensions
 
     public static BlobContainerConfiguration UseGoogle(
         this BlobContainerConfiguration containerConfiguration,
-        Action<GoogleBlobProviderConfiguration> azureConfigureAction)
+        Action<GoogleBlobProviderConfiguration> googleConfigureAction)
     {
         containerConfiguration.ProviderType = typeof(GoogleBlobProvider);
         containerConfiguration.NamingNormalizers.TryAdd<GoogleBlobNamingNormalizer>();
 
-        azureConfigureAction(new GoogleBlobProviderConfiguration(containerConfiguration));
+        googleConfigureAction(new GoogleBlobProviderConfiguration(containerConfiguration));
 
         return containerConfiguration;
     }

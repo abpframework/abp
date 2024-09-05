@@ -10,8 +10,8 @@ public class GoogleBlobNameCalculator_Tests : AbpBlobStoringGoogleTestCommonBase
     private readonly IGoogleBlobNameCalculator _calculator;
     private readonly ICurrentTenant _currentTenant;
 
-    private const string AzureContainerName = "/";
-    private const string AzureSeparator = "/";
+    private const string GoogleContainerName = "/";
+    private const string GoogleSeparator = "/";
 
     public GoogleBlobNameCalculator_Tests()
     {
@@ -24,7 +24,7 @@ public class GoogleBlobNameCalculator_Tests : AbpBlobStoringGoogleTestCommonBase
     {
         _calculator.Calculate(
             GetArgs("my-container", "my-blob")
-        ).ShouldBe($"host{AzureSeparator}my-blob");
+        ).ShouldBe($"host{GoogleSeparator}my-blob");
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class GoogleBlobNameCalculator_Tests : AbpBlobStoringGoogleTestCommonBase
         {
             _calculator.Calculate(
                 GetArgs("my-container", "my-blob")
-            ).ShouldBe($"tenants{AzureSeparator}{tenantId:D}{AzureSeparator}my-blob");
+            ).ShouldBe($"tenants{GoogleSeparator}{tenantId:D}{GoogleSeparator}my-blob");
         }
     }
 

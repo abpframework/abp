@@ -27,7 +27,7 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
         var blobName = GoogleBlobNameCalculator.Calculate(args);
         var containerName = GetContainerName(args);
         
-        if(await BlobExistsAsync(args, blobName) && !args.OverrideExisting)
+        if (await BlobExistsAsync(args, blobName) && !args.OverrideExisting)
         {
             throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{GetContainerName(args)}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
         }
@@ -54,7 +54,6 @@ public class GoogleBlobProvider : BlobProviderBase, ITransientDependency
         {
             return true;
         }
-        
 
         return true;
     }

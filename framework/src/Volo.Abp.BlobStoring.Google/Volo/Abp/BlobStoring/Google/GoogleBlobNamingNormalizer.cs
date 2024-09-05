@@ -5,7 +5,7 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.BlobStoring.Google;
 
-public class GoogleBlobNamingNormalizer: IBlobNamingNormalizer, ITransientDependency
+public class GoogleBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDependency
 {
     /// <summary>
     /// https://cloud.google.com/storage/docs/buckets#naming
@@ -83,7 +83,7 @@ public class GoogleBlobNamingNormalizer: IBlobNamingNormalizer, ITransientDepend
         if (!char.IsLetterOrDigit(containerName[0]))
         {
             containerName = containerName.Substring(1);
-            return RemoveInvalidStartEndCharacters( containerName);
+            return RemoveInvalidStartEndCharacters(containerName);
         }
 
         if (!char.IsLetterOrDigit(containerName[containerName.Length - 1]))
