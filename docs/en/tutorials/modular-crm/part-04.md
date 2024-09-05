@@ -63,4 +63,31 @@ Type `ModularCrm.Ordering.Contracts` as the *Package name* and click the *Create
 
 ![abp-studio-new-package-under-the-module](images/abp-studio-new-package-under-the-module.png)
 
-d
+### Creating the `ModularCrm.Ordering` Package
+
+Right-click the `ModularCrm.Ordering` module on the *Solution Explorer* again and select the *Add* -> *Package* -> *New Package* command to create a second package:
+
+![abp-studio-add-new-package-mvc-ui](images/abp-studio-add-new-package-mvc-ui.png)
+
+This time, we are selecting the *MVC UI* template and set the *Package name* as `ModularCrm.Ordering`. Click the *Create* button to add the new package.
+
+### Add Package Reference
+
+After the package has been added, right-click the `ModularCrm.Ordering` package and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference](images/abp-studio-add-package-reference.png)
+
+That command opens a dialog to select the package:
+
+![abp-studio-add-package-reference-dialog](images/abp-studio-add-package-reference-dialog.png)
+
+In that dialog, you can add package reference from various sources. Here, we will add reference for the package in the current module. So, select the `ModularCrm.Ordering.Contracts` package in *This module* tab and click the *OK* button. You can see the package reference under the *Projects* dependencies on the *Solution Explorer* panel:
+
+![abp-studio-project-reference-example](images/abp-studio-project-reference-example.png)
+
+The initial module creation has been completed. Now, we have a new module with 2 packages. However, it has no relation to other modules and applications in the solution yet.
+
+## Installing into the Main Application
+
+In this section, we will install the `ModularCrm.Ordering` module to the main application, so it can be a part of the system.
+
