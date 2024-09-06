@@ -164,8 +164,68 @@ namespace ModularCrm.Ordering.Data
 
 #### Configuring the Main Application
 
-Open the 
+Open the main application's solution in your IDE, find the `ModularCrmDbContext` class under the `ModularCrm.EntityFrameworkCore` project and follow the 3 steps below:
 
-d
+**(1)** Add the following attribute on top of the `ModularCrmDbContext` class:
 
-d
+````csharp
+[ReplaceDbContext(typeof(IOrderingDbContext))]
+````
+
+`ReplaceDbContext` attribute makes it possible to use the `ModularCrmDbContext` class in the services in the Ordering module.
+
+**(2)** Implement the `IOrderingDbContext` by the `ModularCrmDbContext` class:
+
+````csharp
+public class ModularCrmDbContext :
+    AbpDbContext<ModularCrmDbContext>,
+    ITenantManagementDbContext,
+    IIdentityDbContext,
+    IProductsDbContext,
+    IOrderingDbContext //NEW: IMPLEMENT THE INTERFACE
+{
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Order> Orders { get; set; } //NEW: ADD DBSET PROPERTY
+	...
+}
+````
+
+**(3)** Finally, call the `ConfigureOrdering()` extension method inside the `OnModelCreating` method after other `Configure...` module calls:
+
+````csharp
+protected override void OnModelCreating(ModelBuilder builder)
+{
+    ...
+    builder.ConfigureOrdering(); //NEW: CALL THE EXTENSION METHOD
+}
+````
+
+In this way, `ModularCrmDbContext` can be used by the Ordering module over the `IProductsDbContext` interface. This part is only needed for one time for a module. Next time, you can just add a new database migration as explained in the next section.
+
+#### Add a Database Migration
+
+Now, we can add a new database migration. You can use Entity Framework Core's `Add-Migration` (or `dotnet ef migrations add`) terminal command, but we will use ABP Studio's shortcut UI in this tutorial.
+
+Ensure that the solution has built. You can right-click the `ModularCrm` (under the `main` folder) on ABP Studio *Solution Runner* and select the *Dotnet CLI* -> *Graph Build* command.
+
+Right-click the `ModularCrm.EntityFrameworkCore` package and select the *EF Core CLI* -> *Add Migration* command:
+
+![abp-studio-add-entity-framework-core-migration](images/abp-studio-add-entity-framework-core-migration.png)
+
+The *Add Migration* command opens a new dialog to get a migration name:
+
+![abp-studio-entity-framework-core-add-migration-order](images/abp-studio-entity-framework-core-add-migration-order.png)
+
+Once you click the *OK* button, a new database migration class is added into the `Migrations` folder of the `ModularCrm.EntityFrameworkCore` project:
+
+![visual-studio-new-migration-class-2](images/visual-studio-new-migration-class-2.png)
+
+Now, you can return to ABP Studio, right-click the `ModularCrm.EntityFrameworkCore` project and select the *EF Core CLI* -> *Update Database* command:
+
+![abp-studio-entity-framework-core-update-database](images/abp-studio-entity-framework-core-update-database.png)
+
+After the operation completes, you can check your database to see the new `Orders` table has been created:
+
+![sql-server-products-database-table](images/sql-server-orders-database-table.png)
+
+TODO

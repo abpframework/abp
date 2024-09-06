@@ -105,8 +105,8 @@ Select the `ModularCrm.Ordering` module and check the *Install this module* opti
 
 ![abp-studio-install-module-dialog](images/abp-studio-install-module-dialog.png)
 
-Select the `ModuleCrm.Ordering` package on the left side, `ModularCrm.Web` package on the middle area as shown in the preceding figure and click the *OK* button.
+Select the `ModuleCrm.Ordering` package on the left area, `ModularCrm.Domain` package on the middle area as shown in the preceding figure and click the *OK* button.
 
-> Since the Ordering module is not layered, we didn't install its packages to the layers of our main application. We are installing it only to the `ModularCrm.Web` since that is the final executable application of our solution and that is enough. If you build your modules as non-layered and you don't have much code in the main application's .NET solution, you can also consider to create a non-layered main application that composes these modules.
+> Since the Ordering module is not layered, we didn't install its packages to the layers of our main application. We are installing it only to `ModularCrm.Domain`. In this way, we can use the Ordering module from any layer of our application since `ModularCrm.Domain` is one of the core packages of our application. If you build your modules as non-layered and you don't have much code in the main application's .NET solution, you can also consider to create a non-layered main application that composes these modules.
 
 In this part of the tutorial, we've created an empty module and added packages. In that way, you can create modules or applications with custom structure. In the next part, we will add functionality to the Ordering module.
