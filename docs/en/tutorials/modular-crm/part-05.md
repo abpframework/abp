@@ -328,7 +328,12 @@ Run the main application on ABP Studio, manually type `/Orders` to end of your a
 
 ![abp-studio-solution-runner-orders-page](images/abp-studio-solution-runner-orders-page.png)
 
-Great! We can see the list of orders. However, we don't see the Orders item on the main menu. This is because we haven't configured the [navigation menu system](../../framework/ui/mvc-razor-pages/navigation-menu.md) yet.
+Great! We can see the list of orders. However, there are two problems:
+
+1. We don't see the Orders item on the main menu. This is because we haven't configured the [navigation menu system](../../framework/ui/mvc-razor-pages/navigation-menu.md) yet.
+2. We see Product's GUID ID instead of its name. This is because the Ordering module has no integration with the Products module and doesn't have access to Product module's database to perform a JOIN query.
+
+We will solve these two problems in next sections.
 
 ### Adding a Menu Item
 
