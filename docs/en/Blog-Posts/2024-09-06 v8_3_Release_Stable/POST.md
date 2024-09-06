@@ -24,7 +24,7 @@ You can upgrade your existing solutions with either ABP Studio or ABP CLI. In th
 
 If you are already using the ABP Studio, you can upgrade it to the latest version to align it with ABP v8.3. ABP Studio periodically checks for updates in the background, and when a new version of ABP Studio is available, you will be notified through a modal. Then, you can update it by confirming the opened modal. See [the documentation](https://abp.io/docs/latest/studio/installation#upgrading) for more info.
 
-After upgrading the ABP Studio, then you can open your solution in the application, and simply click the **Switch to stable** action button to instantly upgrade your solution like in the figure:
+After upgrading the ABP Studio, then you can open your solution in the application, and simply click the **Switch to stable** action button to instantly upgrade your solution:
 
 ![](switch-to-stable.png)
 
