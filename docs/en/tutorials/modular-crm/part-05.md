@@ -228,4 +228,108 @@ After the operation completes, you can check your database to see the new `Order
 
 ![sql-server-products-database-table](images/sql-server-orders-database-table.png)
 
+## Creating the User Interface
+
+Since this is a non-layered module, we can directly use entities and repositories on the user interface. If you think that is not a good practice, then use the layered module template as we've already done for the *Products* module. But for the Ordering module, we will keep it very simple for this tutorial to show it is also possible.
+
+### Creating a `_ViewImports.cshtml` File
+
+Open the `ModularCrm.Ordering` .NET solution in your favorite IDE, locate the `ModularCrm.Ordering` project and create a `Pages` folder under that project. Then add a `_ViewImports.cshtml` file under that `Pages` folder with the following content:
+
+````csharp
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
+````
+
+That file simply imports some tag helpers from ASP.NET Core and ABP. The `Pages` folder should be like the following figure:
+
+![visual-studio-pages-folder](images/visual-studio-pages-folder.png)
+
+### Creating the Orders Page
+
+Create an `Orders` folder under the `Pages` folder and add an `Index.cshtml` Razor Page inside that new folder. Then replace the `Index.cshtml.cs` content with the following code block:
+
+````csharp
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using ModularCrm.Ordering.Entities;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace ModularCrm.Ordering.Pages.Orders
+{
+    public class IndexModel : PageModel
+    {
+        public List<Order> Orders { get; set; }
+
+        private readonly IRepository<Order, Guid> _orderRepository;
+
+        public IndexModel(IRepository<Order, Guid> orderRepository)
+        {
+            _orderRepository = orderRepository;
+        }
+
+        public async Task OnGetAsync()
+        {
+            Orders = await _orderRepository.GetListAsync();
+        }
+    }
+}
+````
+
+Here, we are injecting a repository to query `Order` entities from database to show on the page. Open the `Index.cshtml` file and replace the content with the following code block:
+
+````html
+@page
+@model ModularCrm.Ordering.Pages.Orders.IndexModel
+
+<h1>Orders</h1>
+
+<abp-card>
+    <abp-card-body>
+        <abp-list-group>
+            @foreach (var order in Model.Orders)
+            {
+                <abp-list-group-item>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductId <br />
+                    <strong>State:</strong> @order.State
+                </abp-list-group-item>
+            }
+        </abp-list-group>
+    </abp-card-body>
+</abp-card>
+````
+
+This page simply shows a list of orders on the UI. We haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
+
+### Creating Some Sample Data
+
+You can open the database and manually create a few order records to show on the UI:
+
+![sql-server-orders-table-content](images/sql-server-orders-table-content.png)
+
+You can get `ProductId` values from the `Products` table and [generate](https://www.guidgenerator.com/) some random GUIDs for other GUID fields.
+
+### Building the Application
+
+Now, we will run the application to see the result. First of all, stop the application if it is already running. Then open the *Solution Runner* panel, right-click the `ModularCrm.Web` application, select the *Build* -> *Graph Build* command:
+
+![abp-studio-solution-runner-graph-build](images/abp-studio-solution-runner-graph-build.png)
+
+We've performed a graph build since we've made a change on a module and only building the main application is not enough. *Graph Build* command also builds the depended modules if it is necessary. Alternatively, you could build the Ordering module first (on ABP Studio or on your IDE), then Build right-click the `ModularCrm.Web` application and select the *Run* -> *Build & Start*. This approach can be faster if you have too many modules and you made change in one of the modules.
+
+### Running the Application
+
+Run the main application on ABP Studio, manually type `/Orders` to end of your application's URL to open the *Orders* page:
+
+![abp-studio-solution-runner-orders-page](images/abp-studio-solution-runner-orders-page.png)
+
+Great! We can see the list of orders. However, we don't see the Orders item on the main menu. This is because we haven't configured the [navigation menu system](../../framework/ui/mvc-razor-pages/navigation-menu.md) yet.
+
+### Adding a Menu Item
+
 TODO
