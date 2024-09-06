@@ -89,4 +89,19 @@ Final structure of the Ordering module should be similar to the following figure
 
 ## Configuring the Database Mapping
 
-TODO
+The `Order` entity has been created. Now, we need to configure the database mapping for that entity. We will first install the Entity Framework Core package, define the database table mapping, create a database migration and update the database.
+
+### Installing the Entity Framework Core Package
+
+> In this section, we will install the [`Volo.Abp.EntityFrameworkCore`](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore) package to the Ordering module. That package is DBMS-independent and leaves the DBMS selection to the final application. If you want, you can install DBMS-specific package instead. For example, you can install the [`Volo.Abp.EntityFrameworkCore.SqlServer`](https://abp.io/package-detail/Volo.Abp.EntityFrameworkCore.SqlServer) package if you are using SQL server and want to make SQL Server specific configuration for your module's database.
+> You can search for other packages on the [abp.io/packages](https://abp.io/packages) page.
+
+Stop the web application if it is still running. Return to ABP Studio, right-click the `ModularCrm.Ordering` package on the *Solution Explorer* panel and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-3](images/abp-studio-add-package-reference-3.png)
+
+Select the NuGet tab, type `Volo.Abp.EntityFrameworkCore` as the *Package name* and specify a *Version* that is compatible with the ABP version used by your solution:
+
+![abp-studio-add-package-reference-dialog-2](images/abp-studio-add-package-reference-dialog-2.png)
+
+Once you click the *OK* button, the package reference is added.
