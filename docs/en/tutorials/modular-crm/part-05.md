@@ -100,8 +100,72 @@ Stop the web application if it is still running. Return to ABP Studio, right-cli
 
 ![abp-studio-add-package-reference-3](images/abp-studio-add-package-reference-3.png)
 
-Select the NuGet tab, type `Volo.Abp.EntityFrameworkCore` as the *Package name* and specify a *Version* that is compatible with the ABP version used by your solution:
+Select the *NuGet* tab, type `Volo.Abp.EntityFrameworkCore` as the *Package name* and specify a *Version* that is compatible with the ABP version used by your solution:
 
 ![abp-studio-add-package-reference-dialog-2](images/abp-studio-add-package-reference-dialog-2.png)
 
-Once you click the *OK* button, the package reference is added.
+Once you click the *OK* button, the NuGet package reference is added.
+
+### Defining the Database Mappings
+
+Entity Framework Core requires to define a `DbContext` class as the main object for the database mapping. We want to use the main application's `DbContext` object. In that way, we can control the database migrations in a single point, ensure database transactions on multi-module operations and establish relations between database tables of different modules. However, the Ordering module can not use the main application's `DbContext` object, because it doesn't depend on the main application and we don't want to establish such a dependency.
+
+As a solution, we will define a `DbContext` interface in the Ordering module which is then implemented by the main module's `DbContext`.
+
+Open your IDE, create a `Data` folder under the `ModularCrm.Ordering` project, and create an `IOrderingDbContext` interface under that folder:
+
+````csharp
+using Microsoft.EntityFrameworkCore;
+using ModularCrm.Ordering.Entities;
+using Volo.Abp.EntityFrameworkCore;
+
+namespace ModularCrm.Ordering.Data
+{
+    public interface IOrderingDbContext : IEfCoreDbContext
+    {
+        DbSet<Order> Orders { get; set; }
+    }
+}
+````
+
+Now, we can inject and use the `IOrderingDbContext` in the Ordering module. Actually, we will not directly use that interface most of the time. Instead, we will use ABP's [repositories](../../framework/architecture/domain-driven-design/repositories.md).
+
+It is best to configure the database table mapping for the `Order` entity in the Ordering module. We will create an extension method that will be called by the main application later. Create a class named `OrderingDbContextModelCreatingExtensions` in the same `Data` folder:
+
+````csharp
+using Microsoft.EntityFrameworkCore;
+using ModularCrm.Ordering.Entities;
+using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
+
+namespace ModularCrm.Ordering.Data
+{
+    public static class OrderingDbContextModelCreatingExtensions
+    {
+        public static void ConfigureOrdering(this ModelBuilder builder)
+        {
+            Check.NotNull(builder, nameof(builder));
+
+            builder.Entity<Order>(b =>
+            {
+                //Configure table name
+                b.ToTable("Orders");
+
+                //Always call this method to setup base entity properties
+                b.ConfigureByConvention();
+
+                //Properties of the entity
+                b.Property(q => q.CustomerName).IsRequired().HasMaxLength(120);
+            });
+        }
+    }
+}
+````
+
+#### Configuring the Main Application
+
+Open the 
+
+d
+
+d
