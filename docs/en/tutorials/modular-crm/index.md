@@ -2,7 +2,7 @@
 
 ABP provides a great infrastructure and tooling to build modular software solutions. In this tutorial, you will learn how to create application modules, compose and communicate them to build a monolith modular web application.
 
-> **This tutorial is focused on modularity. The example application functionality and user interface are intentionally kept simple. If you want to learn real world, full featured application development with ABP, please follow the [Book Store tutorial](../book-store/index.md).**
+> **This tutorial is focused on modularity. The example application's functionality and user interface are intentionally kept simple. If you want to learn real world, full featured application development with ABP, please follow the [Book Store tutorial](../book-store/index.md).**
 
 ## Tutorial Outline
 
@@ -13,7 +13,7 @@ This tutorial is organized as the following parts:
 * [Part 03: Building the Products module](part-03.md)
 * [Part 04: Creating the initial Ordering module](part-04.md)
 * [Part 05: Building the Ordering module](part-05.md)
-* ...
+* [Part 06: Integrating modules](part-06.md)
 
 ## Download the Source Code
 
