@@ -197,7 +197,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
             await SetNavigationAsync();
             SetLanguageSelectListItems();
-            SetDocumentPageTitle();
 
             return Page();
         }
@@ -472,7 +471,12 @@ namespace Volo.Docs.Pages.Documents.Project
         
         private void SetDocumentPageTitle()
         {
-            DocumentPageTitle = Navigation.FindNavigation(DocumentNameWithExtension)?.Text ?? DocumentName?.Replace("-", " ");
+            DocumentPageTitle = DocumentName?.Replace("-", " ");
+            var match = Regex.Match(Document.Content, @"#(?<PageTitle>.+)");
+            if (match.Success && match.Groups.TryGetValue("PageTitle", out var group))
+            {
+                DocumentPageTitle = Regex.Replace(group.Value, "<.*?>", string.Empty).Trim();
+            }
         }
 
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
@@ -508,6 +512,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     Document = await GetSpecificDocumentOrDefaultAsync(language);
                     DocumentLanguageCode = language;
                     DocumentNameWithExtension = Document.Name;
+                    SetDocumentPageTitle();
                     await ConvertDocumentContentToHtmlAsync();
                     return true;
                 }
@@ -572,7 +577,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.LocalDirectory
             );
 
-            content = HtmlNormalizer.WrapImagesWithinAnchors(content);
+            if (!_uiOptions.EnableEnlargeImage)
+            {
+                content = HtmlNormalizer.WrapImagesWithinAnchors(content);
+            }
 
             //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(
@@ -590,7 +598,10 @@ namespace Volo.Docs.Pages.Documents.Project
             Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
             await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
             {
-                ErrorMessage = message, Name = Document.Name
+                ErrorMessage = e.Message, 
+                Name = Document.Name,
+                Url = Request.GetDisplayUrl(),
+                UserPreferences = UserPreferences
             });
 
             // Slow down with crawling

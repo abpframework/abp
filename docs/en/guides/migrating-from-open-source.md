@@ -9,12 +9,14 @@ ABP Studio provides a way for users, who already started the development before 
 * Alternatively, you can use the following ABP Studio CLI command to achieve the same functionality:
 
   ```bash
-  abp upgrade [-t <template-name>]
+  abp upgrade [-t <template-name>] [options]
   
   Examples:
   
   abp upgrade -t app
-  abp upgrade -t app-nolayers
+  abp upgrade -t app --language-management --gdpr --audit-logging-ui --text-template-management --openiddict-pro
+  abp upgrade -t app-nolayers --audit-logging-ui
+  abp upgrade -t app-nolayers -p D:\MyProjects\MyProject
   ```
 
 ## Changes in the solution
@@ -31,16 +33,14 @@ This command will remove the following modules from your solution:
 And install the following modules to your solution:
 
 - Volo.Abp.Account.Pro
-- Volo.Abp.AuditLogging.Pro
 - Volo.Abp.Identity.Pro
-- Volo.Abp.OpenIddict.Pro
-- Volo.Saas
-- Volo.Abp.LanguageManagement
-- Volo.Abp.TextTemplateManagement
-- Volo.FileManagement
-- Volo.Chat
-- Volo.Abp.Gdpr
 - Volo.Abp.LeptonXTheme
+- Volo.Saas
+- Volo.Abp.OpenIddict.Pro (*Optional*)
+- Volo.Abp.AuditLogging.Pro  (*Optional*)
+- Volo.Abp.LanguageManagement  (*Optional*)
+- Volo.Abp.TextTemplateManagement  (*Optional*)
+- Volo.Abp.Gdpr  (*Optional*)
 
 ### Other changes
 

@@ -152,6 +152,7 @@ $projects = (
     "framework/src/Volo.Abp.BlobStoring.Azure",
     "framework/src/Volo.Abp.BlobStoring.Minio",
     "framework/src/Volo.Abp.BlobStoring.Aws",
+    "framework/src/Volo.Abp.BlobStoring.Google",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Caching.StackExchangeRedis",
     "framework/src/Volo.Abp.Castle.Core",
@@ -265,8 +266,8 @@ $projects = (
     "modules/audit-logging/src/Volo.Abp.AuditLogging.Domain.Shared",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.EntityFrameworkCore",
     "modules/audit-logging/src/Volo.Abp.AuditLogging.MongoDB",
-    # "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
-    # "source-code/Volo.Abp.AuditLogging.SourceCode",
+    "modules/audit-logging/src/Volo.Abp.AuditLogging.Installer",
+    "source-code/Volo.Abp.AuditLogging.SourceCode",
 
     # modules/background-jobs
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",

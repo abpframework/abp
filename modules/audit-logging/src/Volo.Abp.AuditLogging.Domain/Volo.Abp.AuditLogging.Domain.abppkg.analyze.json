@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.Domain",
-  "hash": "fa171768247503b44e7e57d4518d2ef8",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging",
@@ -274,7 +274,7 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
@@ -486,6 +486,7 @@
       "methods": [
         {
           "returnType": "List<AuditLog>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -526,6 +527,11 @@
             {
               "type": "String",
               "name": "url",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
               "isOptional": true
             },
             {
@@ -587,6 +593,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -612,6 +619,11 @@
             {
               "type": "String",
               "name": "url",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
               "isOptional": true
             },
             {
@@ -668,6 +680,7 @@
         },
         {
           "returnType": "Dictionary<DateTime, Double>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetAverageExecutionDurationPerDayAsync",
           "summary": null,
           "isAsync": true,
@@ -694,6 +707,7 @@
         },
         {
           "returnType": "EntityChange",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChange",
           "summary": null,
           "isAsync": true,
@@ -715,6 +729,7 @@
         },
         {
           "returnType": "List<EntityChange>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangeListAsync",
           "summary": null,
           "isAsync": true,
@@ -781,6 +796,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangeCountAsync",
           "summary": null,
           "isAsync": true,
@@ -827,6 +843,7 @@
         },
         {
           "returnType": "EntityChangeWithUsername",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangeWithUsernameAsync",
           "summary": null,
           "isAsync": true,
@@ -848,6 +865,7 @@
         },
         {
           "returnType": "List<EntityChangeWithUsername>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangesWithUsernameAsync",
           "summary": null,
           "isAsync": true,

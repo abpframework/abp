@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.HttpApi",
-  "hash": "3e6f3a5c72fe4dd10117f387c5a28255",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging",
@@ -62,6 +62,300 @@
       ],
       "contentType": "abpModule",
       "name": "BloggingHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/blogging/files/{name}",
+          "method": "GET",
+          "groupName": "BlogFiles",
+          "responseType": "Volo.Blogging.Files.RawFileDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/files/www/{name}",
+          "method": "GET",
+          "groupName": "BlogFiles",
+          "responseType": "Volo.Abp.Content.IRemoteStreamContent",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/files/images/upload",
+          "method": "POST",
+          "groupName": "BlogFiles",
+          "responseType": "Volo.Blogging.Files.FileUploadOutputDto",
+          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"webUrl\": \"string\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "File",
+              "type": "IRemoteStreamContent"
+            },
+            {
+              "name": "Name",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/blogs",
+          "method": "GET",
+          "groupName": "Blogs",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Blogging.Blogs.Dtos.BlogDto]",
+          "responseTypeAsJson": "{\r\n  \"items\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"shortName\": \"string\",\r\n      \"description\": \"string\",\r\n      \"concurrencyStamp\": \"string\",\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/blogging/blogs/by-shortname/{shortName}",
+          "method": "GET",
+          "groupName": "Blogs",
+          "responseType": "Volo.Blogging.Blogs.Dtos.BlogDto",
+          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "shortName",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/blogs/{id}",
+          "method": "GET",
+          "groupName": "Blogs",
+          "responseType": "Volo.Blogging.Blogs.Dtos.BlogDto",
+          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/comments/hierarchical/{postId}",
+          "method": "GET",
+          "groupName": "Comments",
+          "responseType": "System.Collections.Generic.List`1[Volo.Blogging.Comments.Dtos.CommentWithRepliesDto]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"comment\": {\r\n      \"repliedCommentId\": null,\r\n      \"text\": \"string\",\r\n      \"writer\": {\r\n        \"tenantId\": null,\r\n        \"name\": \"string\",\r\n        \"surname\": \"string\",\r\n        \"userName\": \"string\",\r\n        \"email\": \"string\",\r\n        \"emailConfirmed\": false,\r\n        \"phoneNumber\": \"string\",\r\n        \"phoneNumberConfirmed\": false,\r\n        \"webSite\": \"string\",\r\n        \"twitter\": \"string\",\r\n        \"github\": \"string\",\r\n        \"linkedin\": \"string\",\r\n        \"company\": \"string\",\r\n        \"jobTitle\": \"string\",\r\n        \"biography\": \"string\",\r\n        \"extraProperties\": {\r\n          \"string\": \"object\"\r\n        },\r\n        \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n      },\r\n      \"concurrencyStamp\": \"string\",\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    },\r\n    \"replies\": [\r\n      {\r\n        \"repliedCommentId\": null,\r\n        \"text\": \"string\",\r\n        \"writer\": {\r\n          \"tenantId\": null,\r\n          \"name\": \"string\",\r\n          \"surname\": \"string\",\r\n          \"userName\": \"string\",\r\n          \"email\": \"string\",\r\n          \"emailConfirmed\": false,\r\n          \"phoneNumber\": \"string\",\r\n          \"phoneNumberConfirmed\": false,\r\n          \"webSite\": \"string\",\r\n          \"twitter\": \"string\",\r\n          \"github\": \"string\",\r\n          \"linkedin\": \"string\",\r\n          \"company\": \"string\",\r\n          \"jobTitle\": \"string\",\r\n          \"biography\": \"string\",\r\n          \"extraProperties\": {\r\n            \"string\": \"object\"\r\n          },\r\n          \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n        },\r\n        \"concurrencyStamp\": \"string\",\r\n        \"isDeleted\": false,\r\n        \"deleterId\": null,\r\n        \"deletionTime\": null,\r\n        \"lastModificationTime\": null,\r\n        \"lastModifierId\": null,\r\n        \"creationTime\": \"0001-01-01T00:00:00\",\r\n        \"creatorId\": null,\r\n        \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n      }\r\n    ]\r\n  }\r\n]",
+          "parameterDescriptions": [
+            {
+              "name": "postId",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/comments",
+          "method": "POST",
+          "groupName": "Comments",
+          "responseType": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto",
+          "responseTypeAsJson": "{\r\n  \"repliedCommentId\": null,\r\n  \"text\": \"string\",\r\n  \"writer\": {\r\n    \"tenantId\": null,\r\n    \"name\": \"string\",\r\n    \"surname\": \"string\",\r\n    \"userName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"emailConfirmed\": false,\r\n    \"phoneNumber\": \"string\",\r\n    \"phoneNumberConfirmed\": false,\r\n    \"webSite\": \"string\",\r\n    \"twitter\": \"string\",\r\n    \"github\": \"string\",\r\n    \"linkedin\": \"string\",\r\n    \"company\": \"string\",\r\n    \"jobTitle\": \"string\",\r\n    \"biography\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "CreateCommentDto"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/comments/{id}",
+          "method": "PUT",
+          "groupName": "Comments",
+          "responseType": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto",
+          "responseTypeAsJson": "{\r\n  \"repliedCommentId\": null,\r\n  \"text\": \"string\",\r\n  \"writer\": {\r\n    \"tenantId\": null,\r\n    \"name\": \"string\",\r\n    \"surname\": \"string\",\r\n    \"userName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"emailConfirmed\": false,\r\n    \"phoneNumber\": \"string\",\r\n    \"phoneNumberConfirmed\": false,\r\n    \"webSite\": \"string\",\r\n    \"twitter\": \"string\",\r\n    \"github\": \"string\",\r\n    \"linkedin\": \"string\",\r\n    \"company\": \"string\",\r\n    \"jobTitle\": \"string\",\r\n    \"biography\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "UpdateCommentDto"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/comments/{id}",
+          "method": "DELETE",
+          "groupName": "Comments",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/{blogId}/all",
+          "method": "GET",
+          "groupName": "Posts",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Blogging.Posts.PostWithDetailsDto]",
+          "responseTypeAsJson": "{\r\n  \"items\": [\r\n    {\r\n      \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n      \"title\": \"string\",\r\n      \"coverImage\": \"string\",\r\n      \"url\": \"string\",\r\n      \"content\": \"string\",\r\n      \"description\": \"string\",\r\n      \"readCount\": 0,\r\n      \"commentCount\": 0,\r\n      \"writer\": {\r\n        \"tenantId\": null,\r\n        \"name\": \"string\",\r\n        \"surname\": \"string\",\r\n        \"userName\": \"string\",\r\n        \"email\": \"string\",\r\n        \"emailConfirmed\": false,\r\n        \"phoneNumber\": \"string\",\r\n        \"phoneNumberConfirmed\": false,\r\n        \"webSite\": \"string\",\r\n        \"twitter\": \"string\",\r\n        \"github\": \"string\",\r\n        \"linkedin\": \"string\",\r\n        \"company\": \"string\",\r\n        \"jobTitle\": \"string\",\r\n        \"biography\": \"string\",\r\n        \"extraProperties\": {\r\n          \"string\": \"object\"\r\n        },\r\n        \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n      },\r\n      \"tags\": [\r\n        {\r\n          \"name\": \"string\",\r\n          \"description\": \"string\",\r\n          \"usageCount\": 0,\r\n          \"isDeleted\": false,\r\n          \"deleterId\": null,\r\n          \"deletionTime\": null,\r\n          \"lastModificationTime\": null,\r\n          \"lastModifierId\": null,\r\n          \"creationTime\": \"0001-01-01T00:00:00\",\r\n          \"creatorId\": null,\r\n          \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n        }\r\n      ],\r\n      \"concurrencyStamp\": \"string\",\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "blogId",
+              "type": "Guid"
+            },
+            {
+              "name": "tagName",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/{blogId}/all/by-time",
+          "method": "GET",
+          "groupName": "Posts",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Blogging.Posts.PostWithDetailsDto]",
+          "responseTypeAsJson": "{\r\n  \"items\": [\r\n    {\r\n      \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n      \"title\": \"string\",\r\n      \"coverImage\": \"string\",\r\n      \"url\": \"string\",\r\n      \"content\": \"string\",\r\n      \"description\": \"string\",\r\n      \"readCount\": 0,\r\n      \"commentCount\": 0,\r\n      \"writer\": {\r\n        \"tenantId\": null,\r\n        \"name\": \"string\",\r\n        \"surname\": \"string\",\r\n        \"userName\": \"string\",\r\n        \"email\": \"string\",\r\n        \"emailConfirmed\": false,\r\n        \"phoneNumber\": \"string\",\r\n        \"phoneNumberConfirmed\": false,\r\n        \"webSite\": \"string\",\r\n        \"twitter\": \"string\",\r\n        \"github\": \"string\",\r\n        \"linkedin\": \"string\",\r\n        \"company\": \"string\",\r\n        \"jobTitle\": \"string\",\r\n        \"biography\": \"string\",\r\n        \"extraProperties\": {\r\n          \"string\": \"object\"\r\n        },\r\n        \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n      },\r\n      \"tags\": [\r\n        {\r\n          \"name\": \"string\",\r\n          \"description\": \"string\",\r\n          \"usageCount\": 0,\r\n          \"isDeleted\": false,\r\n          \"deleterId\": null,\r\n          \"deletionTime\": null,\r\n          \"lastModificationTime\": null,\r\n          \"lastModifierId\": null,\r\n          \"creationTime\": \"0001-01-01T00:00:00\",\r\n          \"creatorId\": null,\r\n          \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n        }\r\n      ],\r\n      \"concurrencyStamp\": \"string\",\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "blogId",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/read",
+          "method": "GET",
+          "groupName": "Posts",
+          "responseType": "Volo.Blogging.Posts.PostWithDetailsDto",
+          "responseTypeAsJson": "{\r\n  \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"title\": \"string\",\r\n  \"coverImage\": \"string\",\r\n  \"url\": \"string\",\r\n  \"content\": \"string\",\r\n  \"description\": \"string\",\r\n  \"readCount\": 0,\r\n  \"commentCount\": 0,\r\n  \"writer\": {\r\n    \"tenantId\": null,\r\n    \"name\": \"string\",\r\n    \"surname\": \"string\",\r\n    \"userName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"emailConfirmed\": false,\r\n    \"phoneNumber\": \"string\",\r\n    \"phoneNumberConfirmed\": false,\r\n    \"webSite\": \"string\",\r\n    \"twitter\": \"string\",\r\n    \"github\": \"string\",\r\n    \"linkedin\": \"string\",\r\n    \"company\": \"string\",\r\n    \"jobTitle\": \"string\",\r\n    \"biography\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"tags\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"description\": \"string\",\r\n      \"usageCount\": 0,\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ],\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "Url",
+              "type": "String"
+            },
+            {
+              "name": "BlogId",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/{id}",
+          "method": "GET",
+          "groupName": "Posts",
+          "responseType": "Volo.Blogging.Posts.PostWithDetailsDto",
+          "responseTypeAsJson": "{\r\n  \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"title\": \"string\",\r\n  \"coverImage\": \"string\",\r\n  \"url\": \"string\",\r\n  \"content\": \"string\",\r\n  \"description\": \"string\",\r\n  \"readCount\": 0,\r\n  \"commentCount\": 0,\r\n  \"writer\": {\r\n    \"tenantId\": null,\r\n    \"name\": \"string\",\r\n    \"surname\": \"string\",\r\n    \"userName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"emailConfirmed\": false,\r\n    \"phoneNumber\": \"string\",\r\n    \"phoneNumberConfirmed\": false,\r\n    \"webSite\": \"string\",\r\n    \"twitter\": \"string\",\r\n    \"github\": \"string\",\r\n    \"linkedin\": \"string\",\r\n    \"company\": \"string\",\r\n    \"jobTitle\": \"string\",\r\n    \"biography\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"tags\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"description\": \"string\",\r\n      \"usageCount\": 0,\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ],\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts",
+          "method": "POST",
+          "groupName": "Posts",
+          "responseType": "Volo.Blogging.Posts.PostWithDetailsDto",
+          "responseTypeAsJson": "{\r\n  \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"title\": \"string\",\r\n  \"coverImage\": \"string\",\r\n  \"url\": \"string\",\r\n  \"content\": \"string\",\r\n  \"description\": \"string\",\r\n  \"readCount\": 0,\r\n  \"commentCount\": 0,\r\n  \"writer\": {\r\n    \"tenantId\": null,\r\n    \"name\": \"string\",\r\n    \"surname\": \"string\",\r\n    \"userName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"emailConfirmed\": false,\r\n    \"phoneNumber\": \"string\",\r\n    \"phoneNumberConfirmed\": false,\r\n    \"webSite\": \"string\",\r\n    \"twitter\": \"string\",\r\n    \"github\": \"string\",\r\n    \"linkedin\": \"string\",\r\n    \"company\": \"string\",\r\n    \"jobTitle\": \"string\",\r\n    \"biography\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"tags\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"description\": \"string\",\r\n      \"usageCount\": 0,\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ],\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "CreatePostDto"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/{id}",
+          "method": "PUT",
+          "groupName": "Posts",
+          "responseType": "Volo.Blogging.Posts.PostWithDetailsDto",
+          "responseTypeAsJson": "{\r\n  \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"title\": \"string\",\r\n  \"coverImage\": \"string\",\r\n  \"url\": \"string\",\r\n  \"content\": \"string\",\r\n  \"description\": \"string\",\r\n  \"readCount\": 0,\r\n  \"commentCount\": 0,\r\n  \"writer\": {\r\n    \"tenantId\": null,\r\n    \"name\": \"string\",\r\n    \"surname\": \"string\",\r\n    \"userName\": \"string\",\r\n    \"email\": \"string\",\r\n    \"emailConfirmed\": false,\r\n    \"phoneNumber\": \"string\",\r\n    \"phoneNumberConfirmed\": false,\r\n    \"webSite\": \"string\",\r\n    \"twitter\": \"string\",\r\n    \"github\": \"string\",\r\n    \"linkedin\": \"string\",\r\n    \"company\": \"string\",\r\n    \"jobTitle\": \"string\",\r\n    \"biography\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"tags\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"description\": \"string\",\r\n      \"usageCount\": 0,\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ],\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "UpdatePostDto"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/user/{userId}",
+          "method": "GET",
+          "groupName": "Posts",
+          "responseType": "System.Collections.Generic.List`1[Volo.Blogging.Posts.PostWithDetailsDto]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"title\": \"string\",\r\n    \"coverImage\": \"string\",\r\n    \"url\": \"string\",\r\n    \"content\": \"string\",\r\n    \"description\": \"string\",\r\n    \"readCount\": 0,\r\n    \"commentCount\": 0,\r\n    \"writer\": {\r\n      \"tenantId\": null,\r\n      \"name\": \"string\",\r\n      \"surname\": \"string\",\r\n      \"userName\": \"string\",\r\n      \"email\": \"string\",\r\n      \"emailConfirmed\": false,\r\n      \"phoneNumber\": \"string\",\r\n      \"phoneNumberConfirmed\": false,\r\n      \"webSite\": \"string\",\r\n      \"twitter\": \"string\",\r\n      \"github\": \"string\",\r\n      \"linkedin\": \"string\",\r\n      \"company\": \"string\",\r\n      \"jobTitle\": \"string\",\r\n      \"biography\": \"string\",\r\n      \"extraProperties\": {\r\n        \"string\": \"object\"\r\n      },\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    },\r\n    \"tags\": [\r\n      {\r\n        \"name\": \"string\",\r\n        \"description\": \"string\",\r\n        \"usageCount\": 0,\r\n        \"isDeleted\": false,\r\n        \"deleterId\": null,\r\n        \"deletionTime\": null,\r\n        \"lastModificationTime\": null,\r\n        \"lastModifierId\": null,\r\n        \"creationTime\": \"0001-01-01T00:00:00\",\r\n        \"creatorId\": null,\r\n        \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n      }\r\n    ],\r\n    \"concurrencyStamp\": \"string\",\r\n    \"isDeleted\": false,\r\n    \"deleterId\": null,\r\n    \"deletionTime\": null,\r\n    \"lastModificationTime\": null,\r\n    \"lastModifierId\": null,\r\n    \"creationTime\": \"0001-01-01T00:00:00\",\r\n    \"creatorId\": null,\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  }\r\n]",
+          "parameterDescriptions": [
+            {
+              "name": "userId",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/{blogId}/latest/{count}",
+          "method": "GET",
+          "groupName": "Posts",
+          "responseType": "System.Collections.Generic.List`1[Volo.Blogging.Posts.PostWithDetailsDto]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"blogId\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"title\": \"string\",\r\n    \"coverImage\": \"string\",\r\n    \"url\": \"string\",\r\n    \"content\": \"string\",\r\n    \"description\": \"string\",\r\n    \"readCount\": 0,\r\n    \"commentCount\": 0,\r\n    \"writer\": {\r\n      \"tenantId\": null,\r\n      \"name\": \"string\",\r\n      \"surname\": \"string\",\r\n      \"userName\": \"string\",\r\n      \"email\": \"string\",\r\n      \"emailConfirmed\": false,\r\n      \"phoneNumber\": \"string\",\r\n      \"phoneNumberConfirmed\": false,\r\n      \"webSite\": \"string\",\r\n      \"twitter\": \"string\",\r\n      \"github\": \"string\",\r\n      \"linkedin\": \"string\",\r\n      \"company\": \"string\",\r\n      \"jobTitle\": \"string\",\r\n      \"biography\": \"string\",\r\n      \"extraProperties\": {\r\n        \"string\": \"object\"\r\n      },\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    },\r\n    \"tags\": [\r\n      {\r\n        \"name\": \"string\",\r\n        \"description\": \"string\",\r\n        \"usageCount\": 0,\r\n        \"isDeleted\": false,\r\n        \"deleterId\": null,\r\n        \"deletionTime\": null,\r\n        \"lastModificationTime\": null,\r\n        \"lastModifierId\": null,\r\n        \"creationTime\": \"0001-01-01T00:00:00\",\r\n        \"creatorId\": null,\r\n        \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n      }\r\n    ],\r\n    \"concurrencyStamp\": \"string\",\r\n    \"isDeleted\": false,\r\n    \"deleterId\": null,\r\n    \"deletionTime\": null,\r\n    \"lastModificationTime\": null,\r\n    \"lastModifierId\": null,\r\n    \"creationTime\": \"0001-01-01T00:00:00\",\r\n    \"creatorId\": null,\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  }\r\n]",
+          "parameterDescriptions": [
+            {
+              "name": "blogId",
+              "type": "Guid"
+            },
+            {
+              "name": "count",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/posts/{id}",
+          "method": "DELETE",
+          "groupName": "Posts",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/tags/popular/{blogId}",
+          "method": "GET",
+          "groupName": "Tags",
+          "responseType": "System.Collections.Generic.List`1[Volo.Blogging.Tagging.Dtos.TagDto]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"name\": \"string\",\r\n    \"description\": \"string\",\r\n    \"usageCount\": 0,\r\n    \"isDeleted\": false,\r\n    \"deleterId\": null,\r\n    \"deletionTime\": null,\r\n    \"lastModificationTime\": null,\r\n    \"lastModifierId\": null,\r\n    \"creationTime\": \"0001-01-01T00:00:00\",\r\n    \"creatorId\": null,\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  }\r\n]",
+          "parameterDescriptions": [
+            {
+              "name": "blogId",
+              "type": "Guid"
+            },
+            {
+              "name": "ResultCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MinimumPostCount",
+              "type": "Nullable<Int32>"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

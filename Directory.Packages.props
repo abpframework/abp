@@ -8,7 +8,7 @@
     <PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.13.0" />
     <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-    <PackageVersion Include="AsyncKeyedLock" Version="7.0.0" />
+    <PackageVersion Include="AsyncKeyedLock" Version="7.0.1" />
     <PackageVersion Include="Autofac" Version="8.0.0" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
@@ -41,6 +41,7 @@
     <PackageVersion Include="EphemeralMongo6.runtime.win-x64" Version="1.1.3" />
     <PackageVersion Include="FluentValidation" Version="11.8.0" />
     <PackageVersion Include="Fody" Version="6.8.0" />
+    <PackageVersion Include="Google.Cloud.Storage.V1" Version="4.10.0" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14" />
     <PackageVersion Include="Hangfire.SqlServer" Version="1.8.14" />
     <PackageVersion Include="HtmlSanitizer" Version="8.0.746" />

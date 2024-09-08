@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.HttpApi",
-  "hash": "6661b70996cefd1caa9f3072d98aeab3",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -62,6 +62,269 @@
       ],
       "contentType": "abpModule",
       "name": "DocsAdminHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/docs/admin/documents/ClearCache",
+          "method": "POST",
+          "groupName": "DocumentsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "ClearCacheInput"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/documents/PullAll",
+          "method": "POST",
+          "groupName": "DocumentsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "PullAllDocumentInput"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/documents/Pull",
+          "method": "POST",
+          "groupName": "DocumentsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "PullDocumentInput"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/documents/GetAll",
+          "method": "GET",
+          "groupName": "DocumentsAdmin",
+          "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Docs.Admin.Documents.DocumentDto]",
+          "responseTypeAsJson": "{\r\n  \"totalCount\": 0,\r\n  \"items\": [\r\n    {\r\n      \"projectId\": \"00000000-0000-0000-0000-000000000000\",\r\n      \"projectName\": \"string\",\r\n      \"name\": \"string\",\r\n      \"version\": \"string\",\r\n      \"languageCode\": \"string\",\r\n      \"fileName\": \"string\",\r\n      \"format\": \"string\",\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"lastUpdatedTime\": \"0001-01-01T00:00:00\",\r\n      \"lastSignificantUpdateTime\": null,\r\n      \"lastCachedTime\": \"0001-01-01T00:00:00\",\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Nullable<Guid>"
+            },
+            {
+              "name": "Name",
+              "type": "String"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            },
+            {
+              "name": "FileName",
+              "type": "String"
+            },
+            {
+              "name": "Format",
+              "type": "String"
+            },
+            {
+              "name": "CreationTimeMin",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "CreationTimeMax",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "LastUpdatedTimeMin",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "LastUpdatedTimeMax",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "LastSignificantUpdateTimeMin",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "LastSignificantUpdateTimeMax",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "LastCachedTimeMin",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "LastCachedTimeMax",
+              "type": "Nullable<DateTime>"
+            },
+            {
+              "name": "Sorting",
+              "type": "String"
+            },
+            {
+              "name": "SkipCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MaxResultCount",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/documents/RemoveDocumentFromCache",
+          "method": "PUT",
+          "groupName": "DocumentsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "documentId",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/documents/ReindexDocument",
+          "method": "PUT",
+          "groupName": "DocumentsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "documentId",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/documents/GetFilterItems",
+          "method": "GET",
+          "groupName": "DocumentsAdmin",
+          "responseType": "System.Collections.Generic.List`1[Volo.Docs.Admin.Documents.DocumentInfoDto]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"version\": \"string\",\r\n    \"format\": \"string\",\r\n    \"languageCode\": \"string\",\r\n    \"projectId\": \"00000000-0000-0000-0000-000000000000\"\r\n  }\r\n]",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/docs/admin/projects",
+          "method": "GET",
+          "groupName": "ProjectsAdmin",
+          "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Docs.Admin.Projects.ProjectDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "Sorting",
+              "type": "String"
+            },
+            {
+              "name": "SkipCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MaxResultCount",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/projects/{id}",
+          "method": "GET",
+          "groupName": "ProjectsAdmin",
+          "responseType": "Volo.Docs.Admin.Projects.ProjectDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/projects",
+          "method": "POST",
+          "groupName": "ProjectsAdmin",
+          "responseType": "Volo.Docs.Admin.Projects.ProjectDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "CreateProjectDto"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/projects/{id}",
+          "method": "PUT",
+          "groupName": "ProjectsAdmin",
+          "responseType": "Volo.Docs.Admin.Projects.ProjectDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "UpdateProjectDto"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/projects",
+          "method": "DELETE",
+          "groupName": "ProjectsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/admin/projects/ReindexAll",
+          "method": "POST",
+          "groupName": "ProjectsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/docs/admin/projects/GetListProjectWithoutDetailsAsync",
+          "method": "GET",
+          "groupName": "ProjectsAdmin",
+          "responseType": "System.Collections.Generic.List`1[Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto]",
+          "responseTypeAsJson": "[\r\n  {\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"name\": \"string\"\r\n  }\r\n]",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/docs/admin/projects/Reindex",
+          "method": "POST",
+          "groupName": "ProjectsAdmin",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "ReindexInput"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

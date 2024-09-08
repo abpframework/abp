@@ -1,4 +1,4 @@
-## Repository Best Practices & Conventions
+# Repository Best Practices & Conventions
 
 ### Repository Interfaces
 

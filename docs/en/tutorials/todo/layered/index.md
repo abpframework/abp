@@ -3,7 +3,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp" ,"NG"],
     "DB": ["EF", "Mongo"]
 }
 ````
@@ -53,7 +53,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 8.0+](https://dotnet.microsoft.com/download/dotnet) development.
-* [Node v16.x](https://nodejs.org/)
+* [Node v18.19+](https://nodejs.org/)
 
 {{if DB=="Mongo"}}
 
@@ -147,6 +147,10 @@ Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the a
 ![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
 You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
+
+{{else if UI=="BlazorWebApp" }}
+
+It is good to run the application before starting the development. Ensure the `TodoApp.Blazor` project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
 
 {{else if UI=="NG"}}
 
@@ -252,7 +256,7 @@ You can apply changes to the database using the following command, in the same c
 dotnet ef database update
 ```
 
-> If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
+> If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer" || UI=="Blazor" || UI=="BlazorWebApp"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
 {{else if DB=="Mongo"}}
 
@@ -581,11 +585,11 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ![todo-api](../images/todo-api.png)
 
-{{else if UI=="Blazor" || UI=="BlazorServer"}}
+{{else if UI=="Blazor" || UI=="BlazorServer" || UI=="BlazorWebApp"}}
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else}}*TodoApp.Blazor*{{end}} project and replace the content with the following code block:
 
 ```csharp
 using Microsoft.AspNetCore.Components;
@@ -634,7 +638,7 @@ See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how w
 
 ### Index.razor
 
-Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* project and replace the content with the following code block:
+Open the `Index.razor` file in the `Pages` folder of the {{if UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else}} *TodoApp.Blazor* {{end}} project and replace the content with the following code block:
 
 ```xml
 @page "/"
@@ -676,7 +680,7 @@ Open the `Index.razor` file in the `Pages` folder of the *TodoApp.Blazor* projec
 
 ### Index.razor.css
 
-As the final touch, open the `Index.razor.css` file in the `Pages` folder of the *TodoApp.Blazor* project and replace it with the following content:
+As the final touch, open the `Index.razor.css` file in the `Pages` folder of the {{if UI=="BlazorWebApp"}}*TodoApp.Blazor.Client*{{else}}*TodoApp.Blazor*{{end}} project and replace it with the following content:
 
 ```css
 #TodoList{

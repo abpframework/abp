@@ -248,7 +248,7 @@ This table stores the values of the features for different providers. You can us
 
 ### FmDirectoryDescriptors
 
-This table is utilized by the [File Management system](file-management.md) to manage directories by using the [BlobStoring](https://docs.abp.io/en/abp/latest/Blob-Storing) module.
+This table is utilized by the [File Management system](file-management.md) to manage directories by using the [BlobStoring](../framework/infrastructure/blob-storing/index.md) module.
 
 #### Foreign Keys
 
