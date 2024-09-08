@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain.Shared",
-  "hash": "7cf1adab77763451880c93c2ce5de54d",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",

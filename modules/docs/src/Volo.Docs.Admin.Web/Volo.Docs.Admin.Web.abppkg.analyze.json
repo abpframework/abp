@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.Web",
-  "hash": "46beda5e0ea0eec3abd53bd83b1ab711",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -62,6 +62,36 @@
       ],
       "contentType": "abpModule",
       "name": "DocsAdminWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
+      "contentType": "webPage",
+      "name": "CreateModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
+      "contentType": "webPage",
+      "name": "EditModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
+      "contentType": "webPage",
+      "name": "PullModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Documents",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]

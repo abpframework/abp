@@ -125,6 +125,8 @@ In the *Solution Runner* section (on the left side) you can see all the runnable
 
 > All the leaf items in the *Solution Runner* is called as an *Application* as they are executable applications.
 
+> For a faster start process, first start the *Docker-Dependencies*, then you can start all applications.
+
 As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, `infrastructure`, and `services`. You can start/stop them all, a group (folder) of them, or one by one.
 
 Before running the applications, it is good to be sure that all applications are built. To do that, right-click the root item in the *Solution Runner* and select *Build* -> *Build All* action.
