@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
+    <PackageReference Include="Backport.System.Threading.Lock" />
+  </ItemGroup>
+
 </Project>
