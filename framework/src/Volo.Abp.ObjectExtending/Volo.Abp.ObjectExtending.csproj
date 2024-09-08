@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
@@ -20,10 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Validation.Abstractions\Volo.Abp.Validation.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
-    <PackageReference Include="Backport.System.Threading.Lock" />
   </ItemGroup>
 
 </Project>

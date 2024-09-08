@@ -7,7 +7,7 @@ namespace Volo.Abp.ObjectExtending.Modularity;
 
 public static class ModuleExtensionConfigurationHelper
 {
-    private static Lock SyncLock = new Lock();
+    private static object SyncLock = new();
 
     public static void ApplyEntityConfigurationToEntity(
         string moduleName,
