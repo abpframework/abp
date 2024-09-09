@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity;
 
-public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
+public class IdentitySession : AggregateRoot<Guid>, IMultiTenant
 {
     public virtual string SessionId { get; protected set; }
 
