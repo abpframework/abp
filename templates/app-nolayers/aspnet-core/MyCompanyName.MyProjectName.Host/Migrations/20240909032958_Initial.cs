@@ -268,7 +268,9 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     ClientId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
                     IpAddresses = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     SignedIn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
