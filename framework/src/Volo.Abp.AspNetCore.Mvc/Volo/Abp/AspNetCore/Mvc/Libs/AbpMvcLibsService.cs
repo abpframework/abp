@@ -74,7 +74,14 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
         var logger = httpContext.RequestServices.GetRequiredService<ILogger<AbpMvcLibsService>>();
         try
         {
-            var fileProvider = new PhysicalFileProvider(httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().WebRootPath);
+            var webHostEnvironment = httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
+            if (webHostEnvironment.WebRootPath.IsNullOrWhiteSpace())
+            {
+                logger.LogWarning("The 'WebRootPath' is not set! The 'CheckLibs' feature is disabled!");
+                return Task.FromResult(true);
+            }
+
+            var fileProvider = new PhysicalFileProvider(webHostEnvironment.WebRootPath);
             var libsFolder = fileProvider.GetDirectoryContents("/libs");
             if (!libsFolder.Exists || !libsFolder.Any())
             {
