@@ -31,6 +31,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected AbpDistributedCacheOptions CacheOptions { get; }
 
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
+    protected DistributedCacheEntryOptions DistributedCacheEntryOptions { get; }
 
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
@@ -43,7 +44,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IAbpDistributedLock distributedLock,
         IOptions<AbpPermissionOptions> permissionOptions,
         ICancellationTokenProvider cancellationTokenProvider,
-        IUnitOfWorkManager unitOfWorkManager)
+        IUnitOfWorkManager unitOfWorkManager,
+        IOptions<DistributedCacheEntryOptions> distributedCacheEntryOptions)
     {
         UnitOfWorkManager = unitOfWorkManager;
         StaticStore = staticStore;
@@ -56,6 +58,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         CancellationTokenProvider = cancellationTokenProvider;
         PermissionOptions = permissionOptions.Value;
         CacheOptions = cacheOptions.Value;
+        DistributedCacheEntryOptions = distributedCacheEntryOptions.Value;
     }
 
     public async Task SaveAsync()
@@ -116,9 +119,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                         await Cache.SetStringAsync(
                             GetCommonStampCacheKey(),
                             Guid.NewGuid().ToString(),
-                            new DistributedCacheEntryOptions {
-                                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-                            },
+                            DistributedCacheEntryOptions,
                             CancellationTokenProvider.Token
                         );
                     }
@@ -143,10 +144,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
         await Cache.SetStringAsync(
             cacheKey,
-            currentHash,
-            new DistributedCacheEntryOptions {
-                SlidingExpiration = TimeSpan.FromDays(30) //TODO: Make it configurable?
-            },
+            currentHash, 
+            DistributedCacheEntryOptions,
             CancellationTokenProvider.Token
         );
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -37,6 +38,11 @@ public class AbpPermissionManagementDomainModule : AbpModule
                 options.IsDynamicPermissionStoreEnabled = false;
             });
         }
+
+        Configure<DistributedCacheEntryOptions>(options =>
+        {
+            options.SlidingExpiration = TimeSpan.FromDays(30);
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
