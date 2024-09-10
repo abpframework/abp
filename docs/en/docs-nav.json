@@ -188,6 +188,10 @@
             {
               "text": "Version Compatibility",
               "path": "studio/version-compatibility.md"
+            },
+            {
+              "text": "Release Notes",
+              "path": "studio/release-notes.md"
             }
           ]
         },
@@ -441,6 +445,10 @@
                     {
                       "text": "AWS Provider",
                       "path": "framework/infrastructure/blob-storing/aws.md"
+                    },
+                    {
+                      "text": "Google Cloud Storage Provider",
+                      "path": "framework/infrastructure/blob-storing/google.md"
                     },
                     {
                       "text": "Create a Custom Provider",
@@ -1814,7 +1822,7 @@
       "text": "Samples",
       "items": [
         {
-          "text": "All Samples",
+          "text": "Overview",
           "path": "samples"
         },
         {
