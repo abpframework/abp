@@ -255,6 +255,8 @@
     "Name": "Name",
     "Surname": "Surname",
     "CompanyName": "Company name",
+    "CompanyAddress" : "Company Address",
+    "TaxNumber" : "Tax Number",
     "Free": "Free",
     "DDDEBook": "DDD E-Book",
     "PracticalGuideForImplementingDDD": "This book is a practical guide for implementing the Domain Driven Design with the ABP Framework.",
