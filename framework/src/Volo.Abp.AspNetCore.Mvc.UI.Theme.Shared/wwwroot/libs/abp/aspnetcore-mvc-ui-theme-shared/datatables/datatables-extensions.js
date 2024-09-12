@@ -355,6 +355,44 @@ var abp = abp || {};
                 }
             });
 
+        var _existingDefaultFnInitComplete = $.fn.dataTable.defaults.fnInitComplete;
+        $.extend(true,
+            $.fn.dataTable.defaults,
+            {
+                fnInitComplete: function (settings, json) {
+                    if (_existingDefaultFnInitComplete) {
+                        _existingDefaultFnInitComplete(settings, json);
+                    }
+
+                    var table = this;
+                    $(settings.nTableWrapper).find('.th-head-order-by-group select').on('change', function (e) {
+                        var isDesc = e.currentTarget.previousSibling.classList.value.indexOf('desc');
+                        var columnName = e.currentTarget.value;
+                        var order = [];
+
+                        if (columnName) {
+                            order.push([1, columnName + " " + (isDesc ? "desc" : "asc")]);
+                        }
+
+                        table.api().order(order).draw();
+                    });
+
+                    $(settings.nTableWrapper).find('.th-head-order-by-group button').on('click', function (e) {
+                        var columnName = e.currentTarget.nextSibling.value;
+
+                        if (columnName == "") return;
+
+                        var order = [];
+                        var isDesc = !e.currentTarget.classList.toggle('desc');
+                        e.currentTarget.innerText = localize(isDesc ? 'ASC' : 'DESC');
+
+                        order.push([1, columnName + " " + (isDesc ? "asc" : "desc")]);
+
+                        table.api().order(order).draw();
+                    });
+                }
+            });
+
         $.fn.dataTable.Api.register('ajax.reloadEx()', function (callback, resetPaging) {
             var table = this;
             if (callback || resetPaging) {
@@ -395,7 +433,7 @@ var abp = abp || {};
                     input.skipCount = requestData.start;
                 }
 
-                //Sorting
+                //Sorting                
                 if (requestData.order && requestData.order.length > 0) {
                     input.sorting = "";
 
@@ -451,6 +489,71 @@ var abp = abp || {};
             }
         };
 
+        function customizeColumnTitleForResponsive(columns, orderby) {
+            var doropdownColumn = '<option value=""></option>';
+
+            for (var i = 0; i < columns.length; i++) {
+
+                if (columns[i].data == null || columns[i].sortable == false || columns[i].visible == false) continue;
+
+                if (columns[i].data == orderby[0]) {
+                    doropdownColumn += '<option value="' + columns[i].data + '" selected>' + columns[i].title + '</option>';
+                } else {
+                    doropdownColumn += '<option value="' + columns[i].data + '">' + columns[i].title + '</option>';
+                }
+            }
+            return '<div class="th-head-order-by-group text-end"><div class="btn-group btn-group-sm btn-block border" role="group"><button type="button" class="btn order-btn ' + orderby[1] + '">' + localize(orderby[1].toUpperCase()) + '</button><select class="btn btn-outline-dark text-dark bg-white border-0" id="_columnNames" title="colunmName">' + doropdownColumn + '</select></div></div>'
+        }
+
+        var customizeRowActionColumnForResponsive = function (configuration) {
+            var clientWidth = document.documentElement.clientWidth;
+            if (clientWidth > 768 || configuration.columnDefs.length < 3) return; //todo: Consider using configuration settings
+
+            var columns = configuration.columnDefs;
+            var stitle = configuration.ordering != false ?
+                customizeColumnTitleForResponsive(columns, configuration.order[0]) :
+                "";
+            var rowActionColumns = configuration.columnDefs.filter(function (column) {
+                return column.rowAction !== undefined;
+            });
+
+            configuration.columns = [...rowActionColumns, {
+                title: stitle,
+                data: " ",
+                orderable: false,
+                render: (v, e, r) => {
+                    var html = new Array();
+                    for (var i = 0; i < columns.length; i++) {
+                        if (r[columns[i].data] == null || columns[i].visible == false) continue;
+
+                        var text = "";
+
+                        if (typeof (columns[i].render) == 'function') {
+                            text = columns[i].render(r[columns[i].data], e, r).replaceAll("<br/>", " ");
+                        }
+                        else if (columns[i].dataFormat) {
+                            text = defaultRenderers[columns[i].dataFormat](r[columns[i].data]);
+                        }
+                        else {
+                            text = r[columns[i].data];
+                        }
+
+                        html.push("<div class='row d-block'><strong class='col-4 text-end'>" + columns[i].title + "</strong><em class='ps-1 col-8' style='vertical-align: top;'>" + text + "</em></div>");
+                    }
+
+                    html.unshift("<div class='container'>")
+                    html.push("</div>")
+
+                    return html.join("");
+                }
+            }]
+            configuration.responsive = false;
+            configuration.bAutoWidth = false;
+            configuration.scrollX = true;
+            configuration.columnDefs = [];
+            configuration.order = [[0, "asc"]];
+        }
+
         datatables.normalizeConfiguration = function (configuration) {
 
             configuration.scrollX = datatables.defaultConfigurations.scrollX;
@@ -476,6 +579,8 @@ var abp = abp || {};
                     customizeRowActionColumn(column);
                 }
             }
+
+            customizeRowActionColumnForResponsive(configuration);
 
             configuration.language = datatables.defaultConfigurations.language();
 
@@ -527,6 +632,14 @@ var abp = abp || {};
             return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
         }
     };
+
+    datatables.defaultRenderers['popover'] = function (value) {
+        if (!value) {
+            return value;
+        } else {
+            return abp.utils.formatString('<span class="d-inline-block text-truncate" style="max-width: 150px;text-decoration: underline;" tabindex="0" data-bs-placement="top" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-content="{0}">{0}</span>', value);
+        }
+    }
 
     /************************************************************************
      * Default Configurations                                                *
