@@ -1,6 +1,5 @@
 import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
 import { ePropType } from '../enums/props.enum';
 import { FormPropTooltip } from './form-props';
 
@@ -24,7 +23,7 @@ export abstract class PropData<R = any> {
   }
 }
 
-export type ReadonlyPropData<R = any> = O.Readonly<Omit<PropData<R>, 'data'>>;
+export type ReadonlyPropData<R = any> = Readonly<Omit<PropData<R>, 'data'>>;
 
 export abstract class Prop<R = any> {
   constructor(

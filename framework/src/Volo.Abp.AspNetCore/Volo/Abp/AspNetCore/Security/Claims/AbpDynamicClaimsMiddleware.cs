@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
@@ -18,9 +19,21 @@ public class AbpDynamicClaimsMiddleware : AbpMiddlewareBase, ITransientDependenc
         {
             if (context.RequestServices.GetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>().Value.IsDynamicClaimsEnabled)
             {
-                var authenticationType = context.User.Identity.AuthenticationType;
-                var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
-                context.User = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
+                var authenticateResultFeature = context.Features.Get<IAuthenticateResultFeature>();
+                var authenticationType = authenticateResultFeature?.AuthenticateResult?.Ticket?.AuthenticationScheme ?? context.User.Identity.AuthenticationType;
+
+                if (authenticateResultFeature != null && !authenticationType.IsNullOrWhiteSpace())
+                {
+                    var abpClaimsPrincipalFactory = context.RequestServices.GetRequiredService<IAbpClaimsPrincipalFactory>();
+                    var user = await abpClaimsPrincipalFactory.CreateDynamicAsync(context.User);
+
+                    authenticateResultFeature.AuthenticateResult = AuthenticateResult.Success(new AuthenticationTicket(user, authenticationType));
+                    var httpAuthenticationFeature = context.Features.Get<IHttpAuthenticationFeature>();
+                    if (httpAuthenticationFeature != null)
+                    {
+                        httpAuthenticationFeature.User = authenticateResultFeature.AuthenticateResult.Principal;
+                    }
+                }
 
                 if (context.User.Identity?.IsAuthenticated == false)
                 {

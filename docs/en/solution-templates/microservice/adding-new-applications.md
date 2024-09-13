@@ -120,12 +120,6 @@ Add the new application URL to the `appsettings.json` file in the `Identity` ser
 }
 ```
 
-### Add the New Application to the Solution Runner
-
-We should add the new application to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new application to the solution runner profile. Afterwards, you can start the new application by selecting it in the solution runner.
-
-![web-public-solution-runner](images/web-public-solution-runner.png)
-
 ## Docker Configuration for Prometheus
 
 If you want to monitor the new application with Prometheus when you debug the solution, you should add the new application to the `prometheus.yml` file in the `etc/docker/prometheus` folder. You can copy the configurations from the existing applications and modify them according to the new application. Below is an example of the `prometheus.yml` file for the `WebPublic` application.

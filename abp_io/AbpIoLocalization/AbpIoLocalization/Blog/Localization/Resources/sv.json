@@ -1,0 +1,8 @@
+{
+  "culture": "sv",
+  "texts": {
+    "AbpTitle": "Läs alla blogginlägg",
+    "AbpDescription": "ABP är ett applikationsramverk med öppen källkod som fokuserar på AspNet Core-baserad utveckling av webbapplikationer. Upprepa inte dig själv, fokusera på din egen affärskod.",
+    "AbpDefinition": "ABP-blogg för .NET-utveckling, plattformsoberoende, ASP.NET-applikationsmallar, ABP-relaterade nyheter och mer..."
+  }
+}

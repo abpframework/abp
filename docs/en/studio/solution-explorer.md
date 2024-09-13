@@ -117,6 +117,7 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
   - `JetBrains Rider`: Opens the module in JetBrains Rider. This option is only available if you have JetBrains Rider installed.
   - `Terminal`: Opens the terminal in the module directory.
   - `Explorer`: Opens the file explorer in the module directory.
+- `Upgrade to Pro`: This will be visible only when you purchased a license but still using the modules came with open-source (free) license. For more details, check out [Migrating from Open Source Templates](../guides/migrating-from-open-source.md) document. This is not shown in the screenshot above.
 
 ### Adding a New Empty Module
 
@@ -156,7 +157,7 @@ ABP modules have their own file extension `.abpmdl`, and they are located in the
 
 ### Difference Between ABP Module Template and ABP Studio Module Approach
 
-In ABP, creating a module solution using the [CLI](https://docs.abp.io/en/commercial/latest/startup-templates/module/creating-a-new-solution) results in a solution with numerous projects, some of which may not be necessary for a specific use case. The ABP Studio module approach differs from the ABP module template, offering greater flexibility. With ABP Studio, we can create a module containing only the required projects; for example, an empty module with only the `Domain` and `Application` projects. In this approach, the term [Package](./concepts.md#package) is used for module projects.
+In ABP, creating a module solution using the [CLI](../cli/index.md) results in a solution with numerous projects, some of which may not be necessary for a specific use case. The ABP Studio module approach differs from the ABP module template, offering greater flexibility. With ABP Studio, we can create a module containing only the required projects; for example, an empty module with only the `Domain` and `Application` projects. In this approach, the term [Package](./concepts.md#package) is used for module projects.
 
 Furthermore, it's important to mention that we can create not just DDD-principled modules. The [Modularity](../framework/architecture/modularity/basics.md) document clarifies the difference between *Framework* and *Application* modules. Basically, every C# project refers to the `Volo.Abp.Core` package and defines the *Module* class as an ABP Class Library. We have the option to develop an infrastructure module using only the *ABP Class Library* packages and provide a module reference to other modules.
 

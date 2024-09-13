@@ -10,6 +10,34 @@
 
 In this quick start guide, you will learn how to create and run a single layer web application using [ABP Studio](../studio/index.md).
 
+## Setup your development environment
+
+First things first! Let's setup your development environment before creating the first project.
+
+### Pre-requirements
+
+The following tools should be installed on your development machine:
+
+* [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (v17.3+) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
+* [.NET 8.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
+{{ if UI != "Blazor" }}
+* [Node v18.19+](https://nodejs.org/)
+* [Yarn v1.22+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v10+ (already installed with Node)
+{{ end }}
+{{ if Tiered == "Yes" }}
+* [Redis](https://redis.io/) (as the [distributed cache](../framework/fundamentals/caching.md)).
+{{ else }}
+* [Redis](https://redis.io/) (as the [distributed cache](../framework/fundamentals/caching.md)) is required if you select the Public website option.
+{{ end }}
+
+<sup id="f-editor"><b>1</b></sup> _You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core._ <sup>[↩](#a-editor)</sup>
+
+{{ if UI != "Blazor" }}
+
+<sup id="f-yarn"><b>2</b></sup> _Yarn v2 works differently and is not supported._ <sup>[↩](#a-yarn)</sup>
+
+{{ end }}
+
 ## Creating a New Solution
 
 > 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is in the beta version now. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.

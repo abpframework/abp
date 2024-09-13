@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Common.Application",
-  "hash": "9c83bf387d563350ffb80d42d2884a92",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
@@ -141,6 +141,7 @@
       "methods": [
         {
           "returnType": "List<TagDto>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetAllRelatedTagsAsync",
           "summary": null,
           "isAsync": true,
@@ -156,6 +157,28 @@
             {
               "type": "String",
               "name": "entityId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<PopularTagDto>",
+          "namespace": "Volo.CmsKit.Tags",
+          "name": "GetPopularTagsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxCount",
               "isOptional": false
             }
           ]
@@ -232,6 +255,7 @@
       "methods": [
         {
           "returnType": "RemoteStreamContent",
+          "namespace": "Volo.CmsKit.MediaDescriptors",
           "name": "DownloadAsync",
           "summary": null,
           "isAsync": true,
@@ -318,6 +342,7 @@
       "methods": [
         {
           "returnType": "BlogFeatureDto",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetOrDefaultAsync",
           "summary": null,
           "isAsync": true,

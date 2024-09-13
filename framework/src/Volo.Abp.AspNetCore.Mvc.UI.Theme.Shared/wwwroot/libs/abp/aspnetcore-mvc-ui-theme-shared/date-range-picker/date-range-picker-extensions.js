@@ -613,7 +613,7 @@
                 });
 
                 $input.on('show.daterangepicker', function (ev, picker) {
-                    const today = moment();
+                    const today = moment().startOf('day');
                     if(isEmptyDate(startDate, options)){
                         picker.setStartDate(today);
                     }else{

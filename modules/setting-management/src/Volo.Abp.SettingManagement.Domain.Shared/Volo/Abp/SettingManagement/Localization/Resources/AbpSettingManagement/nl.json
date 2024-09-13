@@ -15,6 +15,7 @@
     "TestEmailSubject": "Test-e-mail {0}",
     "TestEmailBody": "Test hier het hoofdbericht van de e-mail",
     "SuccessfullySent": "Succesvol verzonden",
+    "MailSendingFailed": "E-mail verzenden mislukt. Controleer uw e-mailconfiguratie en probeer het opnieuw.",
     "Send": "Versturen",
     "Menu:Emailing": "E-mail",
     "Menu:TimeZone": "Tijdzone",

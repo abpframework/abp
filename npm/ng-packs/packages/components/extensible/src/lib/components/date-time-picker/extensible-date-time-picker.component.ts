@@ -2,11 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
   Input,
   Optional,
   SkipSelf,
   ViewChild,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ControlContainer, ReactiveFormsModule } from '@angular/forms';
 import {
   NgbDateAdapter,
@@ -16,15 +18,21 @@ import {
   NgbTimepicker,
   NgbTimepickerModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { DateTimeAdapter } from '@abp/ng.theme.shared';
 import { FormProp } from '../../models/form-props';
 import { selfFactory } from '../../utils/factory.util';
-import { DateTimeAdapter } from '@abp/ng.theme.shared';
-import { CommonModule } from '@angular/common';
 
 @Component({
   exportAs: 'abpExtensibleDateTimePicker',
   standalone: true,
-  imports: [CommonModule, NgbDatepickerModule, ReactiveFormsModule, NgbTimepickerModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NgbDatepickerModule,
+    NgbTimepickerModule,
+    NgxValidateCoreModule,
+  ],
   selector: 'abp-extensible-date-time-picker',
   template: `
     <input
@@ -63,13 +71,13 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class ExtensibleDateTimePickerComponent {
+  public readonly cdRef = inject(ChangeDetectorRef);
+
   @Input() prop!: FormProp;
   @Input() meridian = false;
 
   @ViewChild(NgbInputDatepicker) date!: NgbInputDatepicker;
   @ViewChild(NgbTimepicker) time!: NgbTimepicker;
-
-  constructor(public readonly cdRef: ChangeDetectorRef) {}
 
   setDate(dateStr: string) {
     this.date.writeValue(dateStr);

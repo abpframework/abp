@@ -27,7 +27,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
     protected readonly IRepository<AppEntityWithNavigations, Guid> AppEntityWithNavigationsRepository;
     protected readonly ILocalEventBus LocalEventBus;
     protected readonly IRepository<Person, Guid> PersonRepository;
-    protected bool _loadEntityWithDetails = false;
+    protected bool _loadEntityWithoutDetails = false;
 
     public AbpEfCoreDomainEvents_Tests()
     {
@@ -42,7 +42,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         {
             options.Entity<AppEntityWithNavigations>(opt =>
             {
-                if (_loadEntityWithDetails)
+                if (_loadEntityWithoutDetails)
                 {
                     opt.DefaultWithDetailsFunc = q => q;
                 }
@@ -55,7 +55,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
     [Fact]
     public async Task Should_Trigger_Domain_Events_For_Aggregate_Root_When_Navigation_Changes_Tests()
     {
-        _loadEntityWithDetails = false;
+        _loadEntityWithoutDetails = false;
 
         var entityId = Guid.NewGuid();
 
@@ -77,6 +77,8 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
             await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), Guid.NewGuid().ToString(), new Random().Next(1, 100)));
         });
 
+        var unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
         // Test with simple property
         await WithUnitOfWorkAsync(async () =>
         {
@@ -92,6 +94,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("Turkey");
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -102,6 +105,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.AppEntityWithValueObjectAddress.Country = "USA";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -117,6 +121,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.AppEntityWithValueObjectAddress = null;
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -128,6 +133,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToOne = new AppEntityWithNavigationChildOneToOne
             {
                 ChildName = "ChildName",
@@ -157,6 +163,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToOne.ChildName = "ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -171,6 +178,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToOne.OneToOne.ChildName = "OneToOne-ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -188,6 +196,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToOne = null;
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -199,6 +208,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
             {
                 new AppEntityWithNavigationChildOneToMany
@@ -235,6 +245,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToMany[0].ChildName = "ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -249,6 +260,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToMany[0].OneToMany[0].ChildName = "OneToMany-ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -266,6 +278,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.OneToMany.Clear();
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -277,6 +290,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.ManyToMany = new List<AppEntityWithNavigationChildManyToMany>()
             {
                 new AppEntityWithNavigationChildManyToMany
@@ -293,6 +307,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.ManyToMany[0].ChildName = "ChildName2";
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -303,6 +318,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            await unitOfWorkManager.Current.SaveChangesAsync();
             entity.ManyToMany.Clear();
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
@@ -313,7 +329,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
     [Fact]
     public async Task Should_Trigger_Domain_Events_For_Aggregate_Root_When_EnsureCollectionLoaded_Navigation_Changes_Tests()
     {
-        _loadEntityWithDetails = true;
+        _loadEntityWithoutDetails = true;
 
         var entityId = Guid.NewGuid();
 
