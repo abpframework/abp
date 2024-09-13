@@ -5,6 +5,7 @@ using Volo.Abp.AspNetCore.TestBase;
 var builder = WebApplication.CreateBuilder();
 await builder.RunAbpModuleAsync<MyProjectNameWebTestModule>();
 
-public partial class Program
+public partial class Program 
 {
+
 }

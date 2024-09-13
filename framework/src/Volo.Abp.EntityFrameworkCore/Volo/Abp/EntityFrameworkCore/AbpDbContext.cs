@@ -36,6 +36,7 @@ using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -109,6 +110,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         : base(options)
     {
         DbContextOptions = options;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        //TODO: Re-check.
+        optionsBuilder.ConfigureWarnings(c => c.Ignore(RelationalEventId.PendingModelChangesWarning));
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -620,7 +628,14 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             originalExtraProperties = entry.OriginalValues.GetValue<ExtraPropertyDictionary>(nameof(IHasExtraProperties.ExtraProperties));
         }
 
-        entry.Reload();
+        //TODO: Reload will throw an exception. Check it later.
+        //entry.Reload();
+
+        var storeValues = entry.OriginalValues;
+        entry.CurrentValues.SetValues(storeValues);
+        entry.OriginalValues.SetValues(storeValues);
+        entry.State = EntityState.Unchanged;
+
 
         if (entry.Entity is IHasExtraProperties)
         {

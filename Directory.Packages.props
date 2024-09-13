@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.24" />
@@ -51,69 +52,69 @@
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
     <PackageVersion Include="MailKit" Version="4.7.1.1" />
     <PackageVersion Include="Markdig.Signed" Version="0.37.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-rc.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0-rc.*" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.FileProviders.Composite" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.4" />
-    <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.FileSystemGlobbing" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Localization" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Composite" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.FileSystemGlobbing" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Localization" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0-rc.*" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="7.5.1" />
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="7.5.1" />
-    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.5.1" />
+    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.0.2" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.2" />
     <PackageVersion Include="Minio" Version="6.0.2" />
     <PackageVersion Include="MongoDB.Driver" Version="2.22.0" />
     <PackageVersion Include="NEST" Version="7.17.5" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0-preview.7" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="NuGet.Versioning" Version="6.7.0" />
     <PackageVersion Include="NUglify" Version="1.21.0" />
@@ -127,7 +128,7 @@
     <PackageVersion Include="Oracle.EntityFrameworkCore" Version="8.23.40" />
     <PackageVersion Include="Polly" Version="8.2.0" />
     <PackageVersion Include="Polly.Extensions.Http" Version="3.0.0" />
-    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.1" />
     <PackageVersion Include="Quartz" Version="3.7.0" />
     <PackageVersion Include="Quartz.Extensions.DependencyInjection" Version="3.7.0" />
     <PackageVersion Include="Quartz.Plugins.TimeZoneConverter" Version="3.7.0" />
@@ -154,17 +155,17 @@
     <PackageVersion Include="Spectre.Console" Version="0.47.0" />
     <PackageVersion Include="StackExchange.Redis" Version="2.7.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageVersion Include="System.Collections.Immutable" Version="9.0.0-rc.*" />
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
     <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.3.5" />
     <PackageVersion Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageVersion Include="System.Security.Permissions" Version="8.0.0" />
+    <PackageVersion Include="System.Security.Permissions" Version="9.0.0-rc.*" />
     <PackageVersion Include="System.Security.Principal.Windows" Version="5.0.0" />
-    <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-    <PackageVersion Include="System.Text.Encodings.Web" Version="8.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="8.0.4" />
+    <PackageVersion Include="System.Text.Encoding.CodePages" Version="9.0.0-rc.*" />
+    <PackageVersion Include="System.Text.Encodings.Web" Version="9.0.0-rc.*" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.*" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />
@@ -174,5 +175,6 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
     <PackageVersion Include="Fody" Version="6.8.0" />
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />
   </ItemGroup>
 </Project>
