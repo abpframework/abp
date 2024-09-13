@@ -1,7 +1,8 @@
 {
   "culture": "en",
   "texts": {
-    "GetStarted": "Get Started with ABP | Quick and Easy Setup Guide",
+    "GetStarted": "Get Started",
+    "GetStarted_Page_Title": "Get Started with ABP | Quick and Easy Setup Guide",
     "Create": "Create",
     "NewProject": "New Project",
     "DirectDownload": "Direct Download",
@@ -1813,7 +1814,7 @@
     "Mobile_Page_Description": "Develop powerful mobile applications with ABP's mobile development features, ensuring cross-platform compatibility.",
     "ReleasesPageTitle": "ABP Commercial Releases",
     "ReleasesPageDescription": "Stay updated with the latest features and updates in ABP Commercial Releases, ensuring your applications are cutting-edge.",
-    "GetStartedPageTitle": "Begin your journey with ABP by following our step-by-step guide. Learn how to set up your development environment, explore key features, start building apps",
+    "GetStartedPageDescription": "Begin your journey with ABP by following our step-by-step guide. Learn how to set up your development environment, explore key features, start building apps",
     "Community_Page_Title": "ABP Community",
     "Community_Page_Description": "Connect and collaborate with other developers in the ABP Community, sharing knowledge and resources.",
     "Services_Page_Title": "Additional Services",
