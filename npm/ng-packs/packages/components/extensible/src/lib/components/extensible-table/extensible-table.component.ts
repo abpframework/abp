@@ -74,7 +74,14 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExtensibleTableComponent<R = any> implements OnChanges, OnDestroy {
+export class ExtensibleTableComponent<R = any> implements OnChanges {
+  readonly #injector = inject(Injector);
+  readonly getInjected = this.#injector.get.bind(this.#injector);
+  protected readonly locale = inject(LOCALE_ID);
+  protected readonly config = inject(ConfigStateService);
+  protected readonly entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
+  protected readonly permissionService = inject(PermissionService);
+
   protected _actionsText!: string;
   @Input()
   set actionsText(value: string) {
@@ -106,13 +113,6 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, OnDestroy {
   readonly actionList: EntityActionList<R>;
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
-
-  locale = inject(LOCALE_ID);
-  private config = inject(ConfigStateService);
-  entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
-  #injector = inject(Injector);
-  getInjected = this.#injector.get.bind(this.#injector);
-  permissionService = this.#injector.get(PermissionService);
   subscriptionService = this.#injector.get(SubscriptionService);
   listService = this.#injector.get(ListService);
   routerWaitService = this.#injector.get(RouterWaitService);

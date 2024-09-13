@@ -7,7 +7,7 @@ import {
   DoCheck,
   SimpleChanges,
   inject,
-  DestroyRef
+  DestroyRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -24,13 +24,13 @@ import {
   exportAs: 'ngxDatatableList',
 })
 export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
-  @Input() list!: ListService;
-
   protected readonly table = inject(DatatableComponent);
   protected readonly cdRef = inject(ChangeDetectorRef);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly localizationService = inject(LocalizationService);
   protected readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
+
+  @Input() list!: ListService;
 
   constructor() {
     this.setInitialValues();
@@ -43,6 +43,25 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.subscribeToPage();
     this.subscribeToSort();
+    const indicator = document.createElement(`div`);
+    indicator.innerHTML = `
+    <div class="d-flex justify-content-center align-items-center m-1">
+      <div class="spinner-border" role="status" id="loading">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    `;
+
+    let ref: HTMLDivElement;
+    this.list.isLoading$.subscribe(isLoading => {
+      if (isLoading) {
+        ref = this.table.element.querySelector('.datatable-body').appendChild(indicator);
+      } else {
+        const { emptyMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
+        this.table.messages.emptyMessage = this.localizationService.instant(emptyMessage);
+        ref?.remove();
+      }
+    });
   }
 
   ngOnChanges({ list }: SimpleChanges) {
@@ -63,24 +82,26 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
       this.ngxDatatableMessages || defaultNgxDatatableMessages;
 
     this.table.messages = {
-      emptyMessage: this.localizationService.instant(emptyMessage),
+      emptyMessage: '',
       totalMessage: this.localizationService.instant(totalMessage),
       selectedMessage: this.localizationService.instant(selectedMessage),
     };
   }
 
   protected subscribeToSort() {
-    this.table.sort.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ sorts: [{ prop, dir }] }) => {
-      if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
-        this.list.sortKey = '';
-        this.list.sortOrder = '';
-        this.table.sorts = [];
-        this.cdRef.detectChanges();
-      } else {
-        this.list.sortKey = prop;
-        this.list.sortOrder = dir;
-      }
-    });
+    this.table.sort
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ sorts: [{ prop, dir }] }) => {
+        if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
+          this.list.sortKey = '';
+          this.list.sortOrder = '';
+          this.table.sorts = [];
+          this.cdRef.detectChanges();
+        } else {
+          this.list.sortKey = prop;
+          this.list.sortOrder = dir;
+        }
+      });
   }
 
   protected subscribeToPage() {
