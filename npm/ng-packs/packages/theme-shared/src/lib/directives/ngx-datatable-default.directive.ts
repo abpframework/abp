@@ -149,7 +149,7 @@ export class NgxDatatableDefaultDirective implements OnInit, AfterViewInit, OnDe
 }
 
 // fix: https://github.com/angular/angular/issues/20351
-interface MockDocument extends ParentNode {
+interface MockDocument {
   body: MockBody;
   documentElement: MockDocumentElement;
 }
