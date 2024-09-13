@@ -34,6 +34,11 @@ Select the database provider and click the `Create` button.
 
 ![create-new-module-db-provider](images/create-new-module-db-provider.png)
 
+When you create a new microservice, you can choose to enable integration with the current solution. If you check *Enable integration*, the new microservice is added to the solution, and the necessary configurations are made automatically, so no manual configuration is needed. If you uncheck the *Enable integration* option, you will need to manually configure the new microservice. You can follow the steps in this documentation, starting from the [Configuring the appsettings.json](#configuring-the-appsettingsjson) section.
+
+
+![create-new-microservice-nolayers-enable-integration](images/create-new-microservice-nolayers-enable-integration.png)
+
 The new microservice is created and added to the solution. You can see the new microservice in the `services` folder.
 
 ![product-microservice](images/product-microservice.png)
