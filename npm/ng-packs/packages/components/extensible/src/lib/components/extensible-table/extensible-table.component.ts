@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   inject,
@@ -7,6 +8,7 @@ import {
   Input,
   LOCALE_ID,
   OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -14,8 +16,7 @@ import {
 } from '@angular/core';
 import { AsyncPipe, formatDate, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatest, Observable, map } from 'rxjs';
 
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -30,6 +31,8 @@ import {
   LocalizationModule,
   PermissionDirective,
   PermissionService,
+  RouterWaitService,
+  SubscriptionService,
 } from '@abp/ng.core';
 import {
   AbpVisibleDirective,
@@ -71,7 +74,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExtensibleTableComponent<R = any> implements OnChanges {
+export class ExtensibleTableComponent<R = any> implements OnChanges, OnDestroy {
   protected _actionsText!: string;
   @Input()
   set actionsText(value: string) {
@@ -110,6 +113,11 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   #injector = inject(Injector);
   getInjected = this.#injector.get.bind(this.#injector);
   permissionService = this.#injector.get(PermissionService);
+  subscriptionService = this.#injector.get(SubscriptionService);
+  listService = this.#injector.get(ListService);
+  routerWaitService = this.#injector.get(RouterWaitService);
+  cdRef = this.#injector.get(ChangeDetectorRef);
+  isLoading = true;
 
   constructor() {
     const extensions = this.#injector.get(ExtensionsService);
@@ -123,6 +131,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
         this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
       ).length > 0;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
+
+    this.subscribeLoading();
   }
 
   private setColumnWidths(actionsColumn: number | undefined) {
@@ -226,5 +236,34 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     });
 
     return visibleActions.length > 0;
+  }
+
+  subscribeLoading() {
+    this.subscriptionService.addOne(
+      combineLatest([this.listService.isLoading$, this.routerWaitService.getLoading$()]),
+      ([listLoading, routerLoading]) => {
+        if (listLoading || routerLoading) {
+          this.startLoading();
+        } else {
+          this.stopLoading();
+        }
+      },
+    );
+  }
+
+  startLoading() {
+    if (this.isLoading) {
+      return;
+    }
+    this.isLoading = true;
+    this.cdRef.detectChanges();
+  }
+
+  stopLoading() {
+    this.isLoading = false;
+  }
+
+  ngOnDestroy() {
+    this.subscriptionService.closeAll();
   }
 }
