@@ -20,6 +20,9 @@
         <ProjectReference Include="..\Volo.Abp.Json.Abstractions\Volo.Abp.Json.Abstractions.csproj" />
         <ProjectReference Include="..\Volo.Abp.Timing\Volo.Abp.Timing.csproj" />
         <ProjectReference Include="..\Volo.Abp.Data\Volo.Abp.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
         <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
