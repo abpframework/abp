@@ -8,14 +8,19 @@ import {
   SimpleChanges,
   inject,
   DestroyRef,
+  ViewContainerRef,
+  Renderer2,
+  AfterViewInit,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { ListService, LocalizationService } from '@abp/ng.core';
+import { combineLatest } from 'rxjs';
+import { ListService, LocalizationService, RouterWaitService } from '@abp/ng.core';
 import {
   defaultNgxDatatableMessages,
   NGX_DATATABLE_MESSAGES,
 } from '../tokens/ngx-datatable-messages.token';
+import { SpinnerComponent } from '../components';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -23,12 +28,17 @@ import {
   standalone: true,
   exportAs: 'ngxDatatableList',
 })
-export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
+export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck, AfterViewInit {
   protected readonly table = inject(DatatableComponent);
   protected readonly cdRef = inject(ChangeDetectorRef);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly localizationService = inject(LocalizationService);
   protected readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
+  protected readonly routerWaitService = inject(RouterWaitService);
+  protected readonly viewContainerRef = inject(ViewContainerRef);
+  protected readonly renderer = inject(Renderer2);
+
+  protected _loading = true;
 
   @Input() list!: ListService;
 
@@ -40,28 +50,15 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     this.refreshPageIfDataExist();
   }
 
+  ngAfterViewInit() {
+    this.table.loadingIndicator = this._loading;
+    this.handleLoadingStart();
+  }
+
   ngOnInit() {
     this.subscribeToPage();
     this.subscribeToSort();
-    const indicator = document.createElement(`div`);
-    indicator.innerHTML = `
-    <div class="d-flex justify-content-center align-items-center m-1">
-      <div class="spinner-border" role="status" id="loading">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-    `;
-
-    let ref: HTMLDivElement;
-    this.list.isLoading$.subscribe(isLoading => {
-      if (isLoading) {
-        ref = this.table.element.querySelector('.datatable-body').appendChild(indicator);
-      } else {
-        const { emptyMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
-        this.table.messages.emptyMessage = this.localizationService.instant(emptyMessage);
-        ref?.remove();
-      }
-    });
+    this.subscribeToLoadingState();
   }
 
   ngOnChanges({ list }: SimpleChanges) {
@@ -74,6 +71,66 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     this.table.offset = page;
   }
 
+  protected subscribeToLoadingState() {
+    combineLatest([this.list.isLoading$, this.routerWaitService.getLoading$()]).subscribe(
+      ([listLoading, routerLoading]) => {
+        const isLoading = listLoading || routerLoading;
+        if (isLoading) {
+          this.handleLoadingStart();
+        } else {
+          this.handleLoadingStop();
+        }
+      },
+    );
+  }
+
+  protected handleLoadingStop() {
+    if (this._loading) {
+      this.setLoadingState(false);
+      this.removeSpinner();
+    }
+  }
+
+  protected handleLoadingStart() {
+    if (!this._loading) {
+      this.setLoadingState(true);
+      this.updateLoadingIndicator();
+    }
+  }
+
+  protected setLoadingState(loading: boolean) {
+    this._loading = loading;
+    this.table.loadingIndicator = loading;
+    this.cdRef.detectChanges();
+  }
+
+  protected updateLoadingIndicator() {
+    const body = this.table.element.querySelector('datatable-body');
+    const progress = this.table.element.querySelector('datatable-progress');
+
+    if (!body) {
+      return;
+    }
+
+    if (progress) {
+      this.replaceLoadingIndicator(body, progress);
+    }
+  }
+
+  protected replaceLoadingIndicator(parent: Element, placeholder: Element) {
+    this.viewContainerRef.clear();
+
+    const spinnerRef = this.viewContainerRef.createComponent(SpinnerComponent);
+    const spinnerElement = spinnerRef.location.nativeElement;
+
+    this.renderer.insertBefore(parent, spinnerElement, placeholder);
+    this.renderer.removeChild(parent, placeholder);
+  }
+
+  protected removeSpinner() {
+    this.viewContainerRef.clear();
+  }
+
   protected setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
@@ -82,7 +139,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
       this.ngxDatatableMessages || defaultNgxDatatableMessages;
 
     this.table.messages = {
-      emptyMessage: '',
+      emptyMessage: this.localizationService.instant(emptyMessage),
       totalMessage: this.localizationService.instant(totalMessage),
       selectedMessage: this.localizationService.instant(selectedMessage),
     };
