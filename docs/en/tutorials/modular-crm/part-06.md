@@ -118,3 +118,123 @@ The implementation is pretty simple. Just using a [repository](../../framework/a
 > Here, we directly used `List<T>` classes, but instead you could wrap inputs and outputs into [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). In that way, it can be possible to add new properties to these DTOs without changing the signature of your integration service method (so, without introducing breaking change for your client modules).
 
 ### Consuming the Products Integration Service
+
+The Product Integration Service is ready to be consumed by the other modules. In this section, we will use it in the Ordering module to convert product Ids to product names.
+
+#### Adding Reference to the Contracts Package
+
+Open the ABP Studio UI and stop the application if it is already running. Then open the *Solution Explorer* in ABP Studio, right-click the `ModularCrm.Ordering` package and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-4](images/abp-studio-add-package-reference-4.png)
+
+In the opening dialog, select the *This solution* tab, find and check the `ModularCrm.Products.Application.Contracts` package and click the OK button:
+
+![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3.png)
+
+ABP Studio adds the package reference and also arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
+
+> Instead of directly adding such a package reference, it can be best to import the module first (right-click the `ModularCrm.Ordering` module, select the Import Module command and import the `ModularCrm.Products` module), then install the package reference. In that way, it would be easy to see and keep track of inter-module dependencies.
+
+#### Using the Products Integration Service
+
+Now, we can inject and use `IProductIntegrationService` in the Ordering module codebase.
+
+Open the `IndexModel` class (the `IndexModel.cshtml.cs` file under the `Pages/Orders` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and change its content as like the following code block:
+
+````csharp
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using ModularCrm.Ordering.Entities;
+using ModularCrm.Products.Integration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace ModularCrm.Ordering.Pages.Orders
+{
+    public class IndexModel : PageModel
+    {
+        public List<Order> Orders { get; set; }
+        
+        // Define a dictionary for Id -> Name conversion
+        public Dictionary<Guid, string> ProductNames { get; set; }
+
+        private readonly IRepository<Order, Guid> _orderRepository;
+        private readonly IProductIntegrationService _productIntegrationService;
+
+        public IndexModel(
+            IRepository<Order, Guid> orderRepository,
+            IProductIntegrationService productIntegrationService)
+        {
+            _orderRepository = orderRepository;
+            _productIntegrationService = productIntegrationService;
+        }
+
+        public async Task OnGetAsync()
+        {
+            // Getting the orders from this module's database
+            Orders = await _orderRepository.GetListAsync();
+
+            // Prepare a list of products we need
+            var productIds = Orders.Select(o => o.ProductId).Distinct().ToList();
+
+            // Request the related products from the product integration service
+            var products = await _productIntegrationService
+                .GetProductsByIdsAsync(productIds);
+
+            // Create a dictionary to get a product name easily by its id
+            ProductNames = products.ToDictionary(p => p.Id, p => p.Name);
+        }
+    }
+}
+````
+
+Let's see what we've changed:
+
+* Defined a `ProductNames` dictionary. We will use it on the UI to convert product ids to product names. We are filling that dictionary by getting products from the product integration service.
+* Injecting `IProductIntegrationService` interface, so we can use it to request products.
+* In the `OnGetAsync` method;
+  * First getting the orders from the ordering module's database just like done before.
+  * Next, we are preparing a unique list of product ids, since the `GetProductsByIdsAsync` methods requests it.
+  * Then we are calling the `IProductIntegrationService.GetProductsByIdsAsync` method to get a `List<ProductDto>` object.
+  * In the last line, we are converting the product list to a dictionary where the key is `Guid Id` and the value is `string Name`. In that way, we can easily find a product's name with it's id.
+
+Open the `Index.cshtml` file, change the `@order.ProductId` part by `@Model.ProductNames[order.ProductId]` to write the product name instead of the product id. The final `Index.cshtml` content should be the following:
+
+````html
+@page
+@model ModularCrm.Ordering.Pages.Orders.IndexModel
+
+<h1>Orders</h1>
+
+<abp-card>
+    <abp-card-body>
+        <abp-list-group>
+            @foreach (var order in Model.Orders)
+            {
+                <abp-list-group-item>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @Model.ProductNames[order.ProductId] <br />
+                    <strong>State:</strong> @order.State
+                </abp-list-group-item>
+            }
+        </abp-list-group>
+    </abp-card-body>
+</abp-card>
+````
+
+That's all. Now, you can graph build the main application and run in ABP Studio to see the result:
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+As you notice, we can see the product names instead of product ids.
+
+In the way explained in this section, you can easily create integration services for your modules and consume these integration services in any other module.
+
+> **Design Tip**
+>
+> It is suggested to keep that type of communication minimum to not couple your modules to each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs to product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Products module. Especially, if you consider to convert your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
+
+## Asynchronous Communication via Events
+

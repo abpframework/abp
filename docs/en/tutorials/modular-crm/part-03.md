@@ -283,10 +283,13 @@ public class ProductCreationDto
 And create a `ProductDto` class under the `ModularCrm.Products.Application.Contracts` project:
 
 ````csharp
+using System;
+
 namespace ModularCrm.Products
 {
     public class ProductDto
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public int StockCount { get; set; }
     }
