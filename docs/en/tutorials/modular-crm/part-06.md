@@ -304,7 +304,7 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace ModularCrm.Ordering.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/orders")]
     [ApiController]
     public class OrdersController : AbpControllerBase
     {
@@ -320,7 +320,7 @@ namespace ModularCrm.Ordering.Controllers
         }
 
         [HttpPost]
-        public async Task CreateAsync(OrderCreationModel input)
+        public async Task<IActionResult> CreateAsync(OrderCreationModel input)
         {
             // Create a new Order entity
             var order = new Order
@@ -340,6 +340,8 @@ namespace ModularCrm.Ordering.Controllers
                     ProductId = order.ProductId,
                     CustomerName = order.CustomerName
                 });
+
+            return Created();
         }
 
         public class OrderCreationModel
@@ -378,5 +380,93 @@ Once you click the OK button, the Ordering module is imported to the Products mo
 
 Here, select the `ModularCrm.Ordering.Contracts` package on the left side (because we want to add that package reference) and `ModularCrm.Products.Domain` package on the middle area (because we want to add the package reference to that project). We installed it to the [domain layer](../../framework/architecture/domain-driven-design/domain-layer.md) of the Products module since we will create our event handler into that layer. Click the OK button to finish the installation operation.
 
+You can check the ABP Studio's *Solution Explorer* panel to see the module import and the project reference (dependency).
 
+![abp-studio-imports-and-dependencies](images/abp-studio-imports-and-dependencies.png)
 
+#### Handling the `OrderPlacedEto` Event
+
+Now, it is possible to use the `OrderPlacedEto` class inside the Product module's domain layer since it has the `ModularCrm.Ordering.Contracts` package reference.
+
+Open the Product module's .NET solution in your IDE, locate the `ModularCrm.Products.Domain` project, create a new `Orders` folder and an `OrderEventHandler` class inside that folder. The final folder structure should be like that:
+
+![visual-studio-order-event-handler](images/visual-studio-order-event-handler.png)
+
+Replace the `OrderEventHandler.cs` file's content with the following code block:
+
+````csharp
+using ModularCrm.Ordering.Contracts.Events;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Distributed;
+
+namespace ModularCrm.Products.Orders
+{
+    public class OrderEventHandler :
+        IDistributedEventHandler<OrderPlacedEto>, 
+        ITransientDependency
+    {
+        private readonly IRepository<Product, Guid> _productRepository;
+
+        public OrderEventHandler(IRepository<Product, Guid> productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
+        public async Task HandleEventAsync(OrderPlacedEto eventData)
+        {
+            // Find the related product
+            var product = await _productRepository.FindAsync(eventData.ProductId);
+            if (product == null)
+            {
+                return;
+            }
+
+            // Decrease the stock count
+            product.StockCount = product.StockCount - 1;
+
+            // Update the entity in the database
+            await _productRepository.UpdateAsync(product);
+        }
+    }
+}
+````
+
+`OrderEventHandler` implements the `IDistributedEventHandler<OrderPlacedEto>` interface. In that way, ABP recognizes that class and subscribes to the related event automatically. Implementing `ITransientDependency` simply registers the `OrderEventHandler` class to the [dependency injection](../../framework/fundamentals/dependency-injection.md) system as a transient object.
+
+We are injecting the product repository and updating the stock count in the event handler method (`HandleEventAsync`). That's all.
+
+#### Testing the Order Creation
+
+We will not create a UI for creating an order, to keep this tutorial more focused. You can easily create a form to create an order on your user interface. We will test it just using the Swagger UI in this section.
+
+Graph build the `ModularCrm.Web` application, run it on the ABP Studio's *Solution Runner* panel and browse the application UI as demonstrated earlier.
+
+Once the application is running and ready, manually type `/swagger` to the end of the URL and press the ENTER key. You should see the Swagger UI that is used to discover and test your HTTP APIs:
+
+![abp-studio-swagger-create-order](images/abp-studio-swagger-create-order.png)
+
+Find the *Orders* API, click the *Try it out* button, enter a sample value the the *Request body*:
+
+````json
+{
+  "productId": "0fbf7dd0-d7e9-0d18-9214-3a14d9fa1b74",
+  "customerName": "David"
+}
+````
+
+> **IMPORTANT:** Here, you should type a valid Product Id from the Products table of your database!
+
+Once you press the *Execute* button, a new order is created. At that point, you can check the `/Orders` page to see if the new order is shown on the UI, and check the `/Products` page to see if the related product's stock count has decreased.
+
+Here, sample screenshots from the Products and Orders pages:
+
+![products-orders-pages-crop](images/products-orders-pages-crop.png)
+
+We placed a new order for Product C. As a result, Product C's stock count has decreased from 55 to 54 and a new line is added to the Orders page.
+
+## Joining the Products and Orders data
+
+TODO
