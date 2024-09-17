@@ -42,6 +42,8 @@ Open the `ModularCrm.Products` .NET solution in your IDE, find the `ModularCrm.P
 
 ![visual-studio-product-integration-service](images/visual-studio-product-integration-service.png)
 
+(Creating an`Integration` folder is not required, but it can be a good practice)
+
 Open the `IProductIntegrationService.cs` file and replace it's content with the following code block:
 
 ````csharp
@@ -71,10 +73,48 @@ namespace ModularCrm.Products.Integration
 >
 > We've reused the `ProductDto` object that was actually created for `IProductAppService`. That can be reasonable from the maintenance point. But, if you think your integration service results can be different than the application service results in the future, it can be good to separate them from the first day, so you don't need to introduce breaking changes later.
 
-#### Creating the `ProductIntegrationService` Class
+#### Implementing the `ProductIntegrationService` Class
 
-Okay, we've defined the integration service interface. Now, we can implement it in the  `ModularCrm.Products.Application` project:
+We've defined the integration service interface. Now, we can implement it in the  `ModularCrm.Products.Application` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like that:
 
+![visual-studio-product-integration-service-implementation](D:\Github\abp\docs\en\tutorials\modular-crm\images\visual-studio-product-integration-service-implementation.png)
 
+Open the `ProductIntegrationService.cs` file and replace it's content with the following code block:
 
-s
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
+
+namespace ModularCrm.Products.Integration
+{
+    [IntegrationService]
+    public class ProductIntegrationService
+        : ProductsAppService, IProductIntegrationService
+    {
+        private readonly IRepository<Product, Guid> _productRepository;
+
+        public ProductIntegrationService(IRepository<Product, Guid> productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
+        public async Task<List<ProductDto>> GetProductsByIdsAsync(List<Guid> ids)
+        {
+            var products = await _productRepository.GetListAsync(
+                product => ids.Contains(product.Id)
+            );
+
+            return ObjectMapper.Map<List<Product>, List<ProductDto>>(products);
+        }
+    }
+}
+````
+
+The implementation is pretty simple. Just using a [repository](../../framework/architecture/domain-driven-design/repositories.md) to query `Product` [entities](../../framework/architecture/domain-driven-design/entities.md).
+
+> Here, we directly used `List<T>` classes, but instead you could wrap inputs and outputs into [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). In that way, it can be possible to add new properties to these DTOs without changing the signature of your integration service method (so, without introducing breaking change for your client modules).
+
+### Consuming the Products Integration Service
