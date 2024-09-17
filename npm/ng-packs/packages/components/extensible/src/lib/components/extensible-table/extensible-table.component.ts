@@ -112,11 +112,6 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   readonly actionList: EntityActionList<R>;
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
-  subscriptionService = this.#injector.get(SubscriptionService);
-  listService = this.#injector.get(ListService);
-  routerWaitService = this.#injector.get(RouterWaitService);
-  cdRef = this.#injector.get(ChangeDetectorRef);
-  isLoading = true;
 
   constructor() {
     const extensions = this.#injector.get(ExtensionsService);
