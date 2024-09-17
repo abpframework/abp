@@ -121,7 +121,7 @@ The implementation is pretty simple. Just using a [repository](../../framework/a
 
 The Product Integration Service is ready to be consumed by the other modules. In this section, we will use it in the Ordering module to convert product Ids to product names.
 
-#### Adding Reference to the Contracts Package
+#### Adding a Reference to the `ModularCrm.Products.Application.Contracts` Package
 
 Open the ABP Studio UI and stop the application if it is already running. Then open the *Solution Explorer* in ABP Studio, right-click the `ModularCrm.Ordering` package and select the *Add Package Reference* command:
 
@@ -358,7 +358,25 @@ The `OrdersController.CreateAsync` method simply creates a new `Order` entity, s
 
 ### Subscribing to an Event
 
-s
+In this section, we will subscribe to the `OrderPlacedEto` event in the Products module and decrease the related product's stock count once a new order is placed.
+
+#### Adding a Reference to the `ModularCrm.Ordering.Contracts` Package
+
+Since the `OrderPlacedEto` class is located inside the `ModularCrm.Ordering.Contracts` project, we need to add that package's reference to the Products module. This time, we will use the *Import Module* feature of ABP Studio (as an alternative to approach we used in the *Adding a Reference to the `ModularCrm.Products.Application.Contracts` Package* section).
+
+Open the ABP Studio UI and stop the application if it is already running. Then open the *Solution Explorer* in ABP Studio, right-click the `ModularCrm.Products` module and select the *Import Module* command:
+
+![abp-studio-import-module-ordering](images/abp-studio-import-module-ordering.png)
+
+In the opening dialog, find and select the `ModularCrm.Ordering` module, check the *Install this module* option and click the OK button:
+
+![abp-studio-import-module-dialog-for-ordering](D:\Github\abp\docs\en\tutorials\modular-crm\images\abp-studio-import-module-dialog-for-ordering.png)
+
+Once you click the OK button, the Ordering module is imported to the Products module and an installation dialog is open:
+
+![abp-studio-install-module-dialog-for-ordering](images/abp-studio-install-module-dialog-for-ordering.png)
+
+Here, select the `ModularCrm.Ordering.Contracts` package on the left side (because we want to add that package reference) and `ModularCrm.Products.Domain` package on the middle area (because we want to add the package reference to that project). We installed it to the [domain layer](../../framework/architecture/domain-driven-design/domain-layer.md) of the Products module since we will create our event handler into that layer. Click the OK button to finish the installation operation.
 
 
 
