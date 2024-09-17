@@ -5,9 +5,19 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling;
 
 public class AbpExceptionHandlingOptions
 {
-    public bool SendExceptionsDetailsToClients { get; set; } = false;
+    public bool SendExceptionsDetailsToClients { get; set; }
 
-    public bool SendStackTraceToClients { get; set; } = true;
+    public bool SendStackTraceToClients { get; set; }
 
-    public List<Type> SendExceptionDataToClientTypes { get; } = new List<Type>();
+    public List<Type> SendExceptionDataToClientTypes { get; set; }
+
+    public AbpExceptionHandlingOptions()
+    {
+        SendExceptionsDetailsToClients = false;
+        SendStackTraceToClients = true;
+        SendExceptionDataToClientTypes =
+        [
+            typeof(IBusinessException)
+        ];
+    }
 }

@@ -329,11 +329,7 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
         return new AbpExceptionHandlingOptions
         {
             SendExceptionsDetailsToClients = false,
-            SendStackTraceToClients = true,
-            SendExceptionDataToClientTypes =
-            {
-                typeof(IBusinessException)
-            }
+            SendStackTraceToClients = true
         };
     }
 }
