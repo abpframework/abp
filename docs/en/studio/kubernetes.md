@@ -25,6 +25,11 @@ The *Kubernetes* panel is available only in the [business and enterprise](https:
 * [Docker Desktop](https://www.docker.com/products/docker-desktop) (Enable Kubernetes option if not working with a real cluster)
 * [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy)
 * [mkcert](https://www.ibm.com/docs/en/fsmmn?topic=commands-mkcert)
+  * When you are installing the `mkcert` to allow ABP Studio to generate certificates for you, please ensure that `mkcert` is installed on the **Trusted Certificate Store** by running the following command (on **Windows**, this command must be executed with *Administrator* priviliges):
+
+    ```bash
+    mkcert -install
+    ```
 
 ## Profile
 
