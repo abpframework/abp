@@ -13,7 +13,7 @@ This tutorial is organized as the following parts:
 * [Part 03: Building the Products module](part-03.md)
 * [Part 04: Creating the initial Ordering module](part-04.md)
 * [Part 05: Building the Ordering module](part-05.md)
-* [Part 06: Integrating modules](part-06.md)
+* [Part 06: Integrating the modules](part-06.md)
 
 ## Download the Source Code
 
