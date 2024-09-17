@@ -341,4 +341,62 @@ We will solve the second problem in the [next part](part-06.md), but we can easi
 
 ### Adding a Menu Item
 
-TODO
+ABP provides a modular navigation [menu system](../../framework/ui/mvc-razor-pages/navigation-menu.md) where each module can contribute to the main menu dynamically.
+
+Open the `ModularCrm.Ordering` .NET solution in your IDE and add the following `OrderingMenuContributor` class into the `ModularCrm.Ordering` project:
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.UI.Navigation;
+
+namespace ModularCrm.Ordering
+{
+    public class OrderingMenuContributor : IMenuContributor
+    {
+        public Task ConfigureMenuAsync(MenuConfigurationContext context)
+        {
+            if (context.Menu.Name == StandardMenus.Main)
+            {
+                context.Menu.AddItem(
+                    new ApplicationMenuItem(
+                        "ModularCrm.Orders.Index", // Unique menu id
+                        "Orders", // Menu display text
+                        "~/Orders", // URL
+                        "fa-solid fa-basket-shopping" // Icon CSS class
+                    )
+                );
+            }
+
+            return Task.CompletedTask;
+        }
+    }
+}
+````
+
+`OrderingMenuContributor` implements the `IMenuContributor` interface which forces us to implement the `ConfigureMenuAsync` method. In that method, we can just manipulate the menu items (add new menu items, remove existing menu items or change properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
+
+After creating such a class, we should configure the `AbpNavigationOptions` to add that contributor. Open the `OrderingWebModule` class in the `ModularCrm.Ordering` project and add the following configuration code into the `ConfigureServices` method (if there is no `ConfigureServices` method, first create it as shown below):
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpNavigationOptions>(options =>
+    {
+        options.MenuContributors.Add(new OrderingMenuContributor());
+    });
+}
+````
+
+That's all. You can stop the main application (if it is already working), make a graph build on the main application, run it again on ABP Studio's *Solution Runner* panel and *Browse* it to see the result:
+
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item.png)
+
+The *Orders* menu item is added under the *Products* menu item.
+
+> You can check the [menu documentation](../../framework/ui/mvc-razor-pages/navigation-menu.md) to learn more about manipulating menu items.
+
+## Summary
+
+In this part of the *Modular CRM* tutorial, we've built the functionality inside the Ordering module that we'd created in the [previous part](part-04.md). Since we've created the Ordering module from scratch (with the *Empty Module* template), we had to implement many aspects manually, added ABP packages, created some configuration classes, etc. It is good to do all these manually for one time for learning the things, but it is better to use the other module templates (that pre-configures the fundamentals for us) for a more comfortable development experience.
+
+In the next part, we will work for establishing communication between the Orders module and the Products module.
