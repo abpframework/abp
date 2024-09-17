@@ -14,8 +14,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { combineLatest } from 'rxjs';
-import { ListService, LocalizationService, RouterWaitService } from '@abp/ng.core';
+import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   defaultNgxDatatableMessages,
   NGX_DATATABLE_MESSAGES,
@@ -34,7 +33,6 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck, Af
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly localizationService = inject(LocalizationService);
   protected readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
-  protected readonly routerWaitService = inject(RouterWaitService);
   protected readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly renderer = inject(Renderer2);
 
@@ -72,16 +70,13 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck, Af
   }
 
   protected subscribeToLoadingState() {
-    combineLatest([this.list.isLoading$, this.routerWaitService.getLoading$()]).subscribe(
-      ([listLoading, routerLoading]) => {
-        const isLoading = listLoading || routerLoading;
-        if (isLoading) {
-          this.handleLoadingStart();
-        } else {
-          this.handleLoadingStop();
-        }
-      },
-    );
+    this.list.isLoading$.subscribe(listLoading => {
+      if (listLoading) {
+        this.handleLoadingStart();
+      } else {
+        this.handleLoadingStop();
+      }
+    });
   }
 
   protected handleLoadingStop() {
