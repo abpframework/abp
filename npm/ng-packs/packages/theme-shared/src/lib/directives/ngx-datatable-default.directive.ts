@@ -10,11 +10,11 @@ import { debounceTime } from 'rxjs/operators';
   standalone: true,
   exportAs: 'ngxDatatableDefault',
 })
-export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
-  @Input() class = 'material bordered';
-
+export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {    
   private subscription = new Subscription();
   private resizeDiff = 0;
+
+  @Input() class = 'material bordered';
 
   @HostBinding('class')
   get classes(): string {
