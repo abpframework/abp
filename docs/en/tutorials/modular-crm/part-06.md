@@ -647,6 +647,10 @@ In this part of the modular application development tutorial, you have learned t
 
 Now, you know the fundamental principles and mechanics to build sophisticated modular monolith application with ABP.
 
+## Download the Source Code
+
+You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCRM).
+
 ## See Also
 
 See the following sections for additional resources.
