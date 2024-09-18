@@ -30,6 +30,8 @@ That is because the Orders module has no access to the product data, so it can n
 
 As a solution to that problem, the Orders module may ask product names to the Product module using an [integration service](../../framework/api-development/integration-services.md). Integration service concept in ABP is designed for request/response style inter-module (in modular applications) and inter-microservice (in distributed systems) communication.
 
+> When you implement integration services for inter-module communication, you can easily convert them to REST API calls if you convert your solution to a microservice system and convert your modules to services later.
+
 ### Creating a Products Integration Service
 
 The first step is to create an integration service in the Products module, so other modules can consume it.
@@ -469,4 +471,93 @@ We placed a new order for Product C. As a result, Product C's stock count has de
 
 ## Joining the Products and Orders data
 
-TODO
+One of the essential purposes of modularity is to create modules those hide (encapsulate) their internal data and implementation details from the other modules. They communicate each other through well-defined [integration services](../../framework/api-development/integration-services.md) and [events](framework/infrastructure/event-bus/distributed). In that way, you can independently develop and change module implementations (even modules' database structures) from each other as long as you don't break these inter-module integration points.
+
+### The Problem
+
+In a non-modular application, accessing the related data is easy. You could just write a LINQ expression that joins `Orders` and `Products` database tables to get the data with a single database query. It would be easier to implement and executed with a good performance.
+
+On the other hand, it becomes harder to perform operations or get reports those requires to access data of multiple modules in a modular system. Remember the *Implementing Integration Services* section; We couldn't access the product data inside the Ordering module (`IOrderingDbContext` only defines a `DbSet<Order>`), so we needed to create an integration services just to get names of products. This approach is harder to implement and less performant (yet it is acceptable if you don't show too many orders on the UI or if you properly implement a caching layer), but it gives freedom to the Products module about its internal database or application logic changes. For example, you can decide to move product data to another physical database, or even to another database management system (DBMS) without effecting the other modules.
+
+### A Solution Option
+
+If you want to perform a single database query that spans database tables of multiple modules in a modular system, you have still some options. One option can be creating a reporting module that has access to all of the entities (or database tables). However, when you do that, you accept the following limitations:
+
+* When you make changes in a module's database structure, you should also update your reporting code. That is reasonable, but you should be informed by all module developers in such a case.
+* You can not change DBMS of a module easily. For example, if you decide to use MongoDB for your Products module while the Ordering module still uses SQL Server, performing such a JOIN operation would not be possible. Even moving Products module to another SQL Server database in another physical server can break your reporting logic.
+
+If these are not problems for you, or you can handle when they become problems, you can create reporting modules or aggregator modules that works with multiple modules' data.
+
+In the next section, we will use the main application's codebase to implement such a JOIN operation to keep the tutorial short. However, you already learned how to create new modules, so you can create a new module and develop your JOIN logic inside that new module if you want.
+
+### The Implementation
+
+In this section, we will create an application service in the main application's .NET solution. That application service will perform a LINQ operation on the `Product` and `Order` entities.
+
+#### Defining the Reporting Service Interface
+
+We will define the `IOrderReportingAppService` interface in the `ModularCrm.Application.Contracts` project of the main application's .NET solution.
+
+##### Adding `ModularCrm.Ordering.Contracts` Package Reference
+
+As the first step, we should to add a reference of the `ModularCrm.Ordering.Contracts` package (of the `ModularCrm.Ordering` module) since we will reuse the `OrderState` enum which is defined in that package.
+
+Open the ABP Studio's *Solution Explorer* panel, right-click the `ModularCrm.Application.Contracts` package and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-5](images/abp-studio-add-package-reference-5.png)
+
+Select the *Imported modules* tab, find and check the `ModularCrm.Ordering.Contracts` package and click the OK button:
+
+![abp-studio-add-package-reference-dialog-4](images/abp-studio-add-package-reference-dialog-4.png)
+
+The package reference is added and now we can use the types in the `ModularCrm.Ordering.Contracts` package.
+
+##### Defining the `IOrderReportingAppService` Interface
+
+Open the main `ModularCrm` .NET solution in your IDE, find the `ModularCrm.Application.Contracts` project, create an `Orders` folder and add an `IOrderReportingAppService` interface inside it. Here the definition of that interface:
+
+````csharp
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+
+namespace ModularCrm.Orders
+{
+    public interface IOrderReportingAppService : IApplicationService
+    {
+        Task<List<OrderReportDto>> GetLatestOrders();
+    }
+}
+````
+
+We have a single method, `GetLatestOrders`, that will return a list of the latest orders. We should also define the `OrderReportDto` class that is returned by that method. Create the following class in the same `Orders` folder:
+
+````csharp
+using System;
+using ModularCrm.Ordering.Contracts.Enums;
+
+namespace ModularCrm.Orders
+{
+    public class OrderReportDto
+    {
+        // Order data
+        public Guid OrderId { get; set; }
+        public string CustomerName { get; set; }
+        public OrderState State { get; set; }
+
+        // Product data
+        public Guid ProductId { get; set; }
+        public Guid ProductName { get; set; }
+    }
+}
+````
+
+`OrderReportDto` contains data from both of `Order` and  `Product` entities. We could use the `OrderState` since we have a reference to the package which defines that enum.
+
+After adding these files, the final folder structure should be like that:
+
+![visual-studio-order-reporting-app-service](images/visual-studio-order-reporting-app-service.png)
+
+##### Implementing the `OrderReportingAppService` Class
+
+s
