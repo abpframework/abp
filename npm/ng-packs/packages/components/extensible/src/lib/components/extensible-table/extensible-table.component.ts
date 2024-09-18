@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -15,7 +16,7 @@ import {
 } from '@angular/core';
 import { AsyncPipe, formatDate, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -30,8 +31,6 @@ import {
   LocalizationModule,
   PermissionDirective,
   PermissionService,
-  RouterWaitService,
-  SubscriptionService,
 } from '@abp/ng.core';
 import {
   AbpVisibleDirective,
@@ -73,9 +72,10 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExtensibleTableComponent<R = any> implements OnChanges {
+export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewInit {
   readonly #injector = inject(Injector);
   readonly getInjected = this.#injector.get.bind(this.#injector);
+  protected readonly cdr = inject(ChangeDetectorRef);
   protected readonly locale = inject(LOCALE_ID);
   protected readonly config = inject(ConfigStateService);
   protected readonly entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
@@ -228,5 +228,12 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     });
 
     return visibleActions.length > 0;
+  }
+
+  ngAfterViewInit(): void {
+    this.list?.requestStatus$?.pipe(filter(status => status === 'loading')).subscribe(() => {
+      this.data = [];
+      this.cdr.markForCheck();
+    });
   }
 }

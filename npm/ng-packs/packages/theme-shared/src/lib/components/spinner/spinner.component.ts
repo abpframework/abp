@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'abp-spinner',
   standalone: true,
   template: `
-    <div class="d-flex justify-content-center align-items-center m-4">
+    <div class="d-flex justify-content-center align-items-center border-top" style="height: 62px">
       <div class="spinner-border" role="status" id="loading">
         <span class="visually-hidden">Loading...</span>
       </div>
