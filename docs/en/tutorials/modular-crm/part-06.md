@@ -653,7 +653,7 @@ See the following sections for additional resources.
 
 ### The Book Store Tutorial
 
-In this tutorial, we intentionally kept the application logic very simple and didn't build a usable user interface for the modules. This was to keep your focus on modularity. If you want to learn how to build real-world user interfaces with ABP, you can check the [Book Store tutorial](../book-store/index.md). All the principles and approaches explained there are already possible with a modular system too.
+In this tutorial, we intentionally kept the application logic very simple and didn't build a usable user interface for the modules. Also, didn't implement authorization and localization for the modules. This was to keep your focus on modularity. If you want to learn how to build real-world user interfaces with ABP, you can check the [Book Store tutorial](../book-store/index.md). All the principles and approaches explained there are already possible with a modular system too.
 
 ### ABP Reusable Application Modules
 
