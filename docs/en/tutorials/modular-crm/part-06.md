@@ -558,7 +558,7 @@ After adding these files, the final folder structure should be like that:
 
 ![visual-studio-order-reporting-app-service](images/visual-studio-order-reporting-app-service.png)
 
-##### Implementing the `OrderReportingAppService` Class
+#### Implementing the `OrderReportingAppService` Class
 
 Create an `Orders` folder inside of the `ModularCrm.Application` project and add a class named `OrderReportingAppService` inside it. The final folder structure should be like that:
 
@@ -617,6 +617,46 @@ namespace ModularCrm.Orders
 }
 ````
 
+Let's explain that class;
 
+* It inject [repository](../../framework/architecture/domain-driven-design/repositories.md) services for `Order` and `Product` entities. We can access all entities of all modules from the main application codebase.
+* In the `GetLatestOrders` method, we are getting `IQueryable` objects for the entities, so we can create LINQ expressions.
+* Then we are executing a LINQ expression with `join` keyword, so we can be able to execute a single query that uses multiple tables.
 
-s
+That's all. In that way, you can execute JOIN queries that uses multiple modules' data. However, if you write majority of your application code into the main application and perform operations on multiple modules, then your system won't be so modular. So, here we show it is technically possible. Please use at your own risk.
+
+#### Testing the Reporting Service
+
+We haven't created a UI to show list of the latest orders using `OrderReportingAppService`. However, we can use the Swagger UI again to test it.
+
+Open the ABP Studio UI, stop the application if it is running, build and run it again. Once the application starts, browse it, then add `/swagger` to the end of the URL to open the Swagger UI:
+
+![abp-studio-swagger-list-orders](images/abp-studio-swagger-list-orders.png)
+
+Here, find the `OrderReporting` API and execute it as shown above. You should get the order objects with product names.
+
+Alternatively, you can visit the `/api/app/order-reporting/latest-orders` URL to directly execute the HTTP API on the browser (you should write the full URL, like `https://localhost:44358/api/app/order-reporting/latest-orders` - port can be different for your case)
+
+## Summary
+
+In this part of the modular application development tutorial, you have learned three ways of integrating your application modules:
+
+1. You can use the integration services to make request/response style communication between your modules.
+2. You can publish events from a module and subscribe to these events from other modules.
+3. You can write your code into the main application, so you can access to all entities (and related data) of all modules. Instead of writing it into the main application code, you can also create some aggregation or reporting modules that can access more than one module entities.
+
+Now, you know the fundamental principles and mechanics to build sophisticated modular monolith application with ABP.
+
+## See Also
+
+See the following sections for additional resources.
+
+### The Book Store Tutorial
+
+In this tutorial, we intentionally kept the application logic very simple and didn't build a usable user interface for the modules. This was to keep your focus on modularity. If you want to learn how to build real-world user interfaces with ABP, you can check the [Book Store tutorial](../book-store/index.md). All the principles and approaches explained there are already possible with a modular system too.
+
+### ABP Reusable Application Modules
+
+ABP is designed as modular from the first day. The ABP team has created tens of production-ready and [reusable application modules](../../modules/index.md). You can investigate these modules (some of them are already [free and open source](https://github.com/abpframework/abp/tree/dev/modules)) to see real-world modules.
+
+When you [create a new ABP solution](../../get-started/index.md), some of these modules are already comes as installed into your application (as NuGet and NPM packages). So, your initial ABP application is already a modular application from day one.
