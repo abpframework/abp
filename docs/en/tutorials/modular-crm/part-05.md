@@ -56,12 +56,12 @@ Now, you can return your IDE and add an `Order` class to the `ModularCrm.Orderin
 
 ````csharp
 using System;
-using Volo.Abp.Domain.Entities;
 using ModularCrm.Ordering.Contracts.Enums;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace ModularCrm.Ordering.Entities
 {
-    public class Order : AggregateRoot<Guid>
+    public class Order : CreationAuditedAggregateRoot<Guid>
     {
         public Guid ProductId { get; set; }
         public string CustomerName { get; set; }
@@ -70,7 +70,7 @@ namespace ModularCrm.Ordering.Entities
 }
 ````
 
-We are allowing to place only a single product within an order. In a real-world application, the `Order` entity would be much more complex. However, the complexity of the `Order` entity doesn't effect modularity, so we keep it simple to focus on modularity in this tutorial.
+We are allowing to place only a single product within an order. In a real-world application, the `Order` entity would be much more complex. However, the complexity of the `Order` entity doesn't effect modularity, so we keep it simple to focus on modularity in this tutorial. We are inheriting from the [`CreationAuditedAggregateRoot` class](../../framework/architecture/domain-driven-design/entities.md) since I want to know when an order has been created and who has created it.
 
 ### Adding an `OrderState` Enumeration
 
