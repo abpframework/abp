@@ -41,6 +41,8 @@
     "Next": "Next",
     "Previous": "Previous",
     "ProjectDeletionWarningMessage": "Project will be deleted.",
+    "Docs_Page_Title": "ABP Documentation",
+    "Docs_Page_Description": "Access comprehensive guides and API references in the ABP Documentation, aiding in development and troubleshooting.",
     "GoogleTranslate": "Google Translate"
   }
 }

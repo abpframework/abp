@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "渐进式Web应用程序",
     "Preview": "预览",
     "CreateANewSolution": "创建新解决方案",
-    "ABPFrameworkFeatures": "ABP 框架 <span class=\"gradient-framework\">特点</span",
+    "FrameworkFeatures": "ABP 框架 <span class=\"gradient-framework\">特点</span",
     "Commercial": "商业版",
     "ThirdPartyTools": "第三方工具",
     "Back": "返回",

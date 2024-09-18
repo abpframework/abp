@@ -157,7 +157,7 @@
     "ABPCLIExplanation": "ABP CLI (Interfejs wiersza poleceń) to narzędzie wiersza poleceń do wykonywania niektórych typowych operacji dla rozwiązań opartych na ABP.",
     "ABPSuiteEasilyCURD": "ABP Suite to narzędzie, które pozwala łatwo tworzyć strony CRUD",
     "WeAreHereToHelp": "Jesteśmy tutaj, aby <span class=\"zero-text\">pomoc</span>",
-    "BrowseOrAskQuestion": "Możesz przeglądać nasze tematy pomocy lub przeszukiwać często zadawane pytania albo możesz zadać nam pytanie, korzystając z <a href=\"{0}\" class=\"text-success\">formularza kontaktowego</a>.",
+    "BrowseOrAskQuestion": "Możesz przeglądać nasze tematy pomocy lub przeszukiwać często zadawane pytania albo możesz zadać nam pytanie, korzystając z <a href=\"{0}\">formularza kontaktowego</a>.",
     "SearchQuestionPlaceholder": "Szukaj w często zadawanych pytaniach",
     "WhatIsTheABPCommercial": "Co to jest reklama ABP?",
     "WhatAreDifferencesThanAbpFramework": "Jakie są różnice między Open Source ABP Framework a ABP Commercial?",

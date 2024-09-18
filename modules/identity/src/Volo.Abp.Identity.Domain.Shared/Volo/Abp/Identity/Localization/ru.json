@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Двухфакторная проверка подлинности",
     "DisplayName:IsActive": "Активный",
     "DisplayName:LockoutEnabled": "Блокировка учетной записи",
+    "Description:LockoutEnabled": "Блокировать учетную запись после неудачных попыток входа",
     "NewRole": "Новая роль",
     "RoleName": "Имя роли",
     "CreationTime": "Время создания",
