@@ -87,12 +87,12 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
 
         while (serialized.Length > IdentitySessionConsts.MaxIpAddressesLength)
         {
-            var lastCommaIndex = serialized.LastIndexOf(',');
+            var lastCommaIndex = serialized.IndexOf(',');
             if (lastCommaIndex < 0)
             {
                 return serialized;
             }
-            serialized = serialized.Substring(0, lastCommaIndex);
+            serialized = serialized.Substring(lastCommaIndex + 1);
         }
 
         return serialized;
