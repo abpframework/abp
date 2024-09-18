@@ -660,3 +660,9 @@ In this tutorial, we intentionally kept the application logic very simple and di
 ABP is designed as modular from the first day. The ABP team has created tens of production-ready and [reusable application modules](../../modules/index.md). You can investigate these modules (some of them are already [free and open source](https://github.com/abpframework/abp/tree/dev/modules)) to see real-world modules.
 
 When you [create a new ABP solution](../../get-started/index.md), some of these modules are already comes as installed into your application (as NuGet and NPM packages). So, your initial ABP application is already a modular application from day one.
+
+### Guide: Module Development Best Practices & Conventions
+
+ABP team has created the [reusable application modules](../../modules/index.md) based on some strict principles and rules to make them reusable as much as possible in different scenarios, including modular monolith applications and microservice systems.
+
+These application modules are designed so that they are generic, doesn't depend on each other, reusable in any web application, provides multiple UI and database options, etc. In a monolith modular application, you mostly don't have such requirements. But, you can still follow the [best practices guides](../../framework/architecture/best-practices/index.md) that is prepared by the ABP team that is followed while implementing these application modules.
