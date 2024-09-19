@@ -51,7 +51,7 @@ The next step is to configure Entity Framework Core `DbContext` class and the da
 
 ### Add a `DbSet` Property
 
-Open the `ProductsDbContext` in the `ModularCrm.Products.EntityFrameworkCore` project and add a new `DbSet` property for the `Product` entity. The final `Product.cs` file content should be the following:
+Open the `ProductsDbContext` in the `ModularCrm.Products.EntityFrameworkCore` project and add a new `DbSet` property for the `Product` entity. The final `ProductsDbContext.cs` file content should be the following:
 
 ````csharp
 using Microsoft.EntityFrameworkCore;
@@ -137,7 +137,7 @@ public static class ProductsDbContextModelCreatingExtensions
 }
 ````
 
-As first, we are setting the database table name with the `ToTable` method. `ProductsDbProperties.DbTablePrefix` defines a constant that is added as a prefix to all database table names of this module. If you see the `ProductsDbProperties` class, `DbTablePrefix` value is `Products`. In that case, the table name for the `Product` entity will be `ProductsProducts`. We think that is unnecessary for such a simple module and we can remove that prefix. So, you can change the `ProductsDbProperties` class with the following content to set an empty string to the `DbTablePrefix` property:
+As first, we are setting the database table name with the `ToTable` method. `ProductsDbProperties.DbTablePrefix` defines a constant that is added as a prefix to all database table names of this module. If you see the `ProductsDbProperties` class (in the `ModularCrm.Products.Domain` project), `DbTablePrefix` value is `Products`. In that case, the table name for the `Product` entity will be `ProductsProducts`. We think that is unnecessary for such a simple module and we can remove that prefix. So, you can change the `ProductsDbProperties` class with the following content to set an empty string to the `DbTablePrefix` property:
 
 ````csharp
 namespace ModularCrm.Products;
@@ -260,7 +260,7 @@ We are defining application service interfaces and [data transfer objects](../..
 
 ### Defining Data Transfer Objects
 
-`GetListAsync` and `.CreateAsync` methods are using `ProductDto` and `ProductCreationDto` that are not defined yet. So, we need to define them.
+`GetListAsync` and `CreateAsync` methods are using `ProductDto` and `ProductCreationDto` classes that are not defined yet. So, we need to define them.
 
 Create a `ProductCreationDto` class under the `ModularCrm.Products.Application.Contracts` project:
 
