@@ -142,13 +142,20 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             cacheKey,
             _ =>
             {
-                return specificMapper
+                var method = specificMapper
                     .GetType()
-                    .GetMethods()
-                    .First(x =>
+                    .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .FirstOrDefault(x =>
                         x.Name == nameof(IObjectMapper<object, object>.Map) &&
                         x.GetParameters().Length == (destination == null ? 1 : 2)
                     );
+
+                if (method == null)
+                {
+                    throw new AbpException($"Could not find a method named '{nameof(IObjectMapper<object, object>.Map)}' with {(destination == null ? "1" : "2")} parameters in the type '{mapperType}'.");
+                }
+
+                return method;
             }
         );
 
