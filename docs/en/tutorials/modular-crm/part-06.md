@@ -79,7 +79,7 @@ namespace ModularCrm.Products.Integration
 
 We've defined the integration service interface. Now, we can implement it in the  `ModularCrm.Products.Application` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like that:
 
-![visual-studio-product-integration-service-implementation](D:\Github\abp\docs\en\tutorials\modular-crm\images\visual-studio-product-integration-service-implementation.png)
+![visual-studio-product-integration-service-implementation](images/visual-studio-product-integration-service-implementation.png)
 
 Open the `ProductIntegrationService.cs` file and replace it's content with the following code block:
 
