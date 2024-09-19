@@ -16,3 +16,4 @@ To confirm, visit the Swagger UI to verify that the necessary API endpoints and 
 
 ![abp-suite-product-services](images/abp-suite-product-services.png)
 
+> Currently, you can't generate UI code with ABP Suite for microservice solutions. This feature will be added in future releases.
