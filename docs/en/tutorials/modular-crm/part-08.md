@@ -10,7 +10,7 @@
 }
 ````
 
-In this part, you will learn how you can make database-level JOIN operation on data of multiple modules, when their located in the same physical database.
+In this part, you will learn how you can make database-level JOIN operation on data of multiple modules, when their data located in the same physical database.
 
 ## The Problem
 
