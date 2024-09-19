@@ -92,6 +92,7 @@ public class AbpExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDepen
                         {
                             options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
                             options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+                            options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
                         })
                     )
                 )

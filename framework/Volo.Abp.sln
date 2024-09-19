@@ -471,6 +471,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Google
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Google.Tests", "test\Volo.Abp.BlobStoring.Google.Tests\Volo.Abp.BlobStoring.Google.Tests.csproj", "{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.ExceptionHandling.Tests", "test\Volo.Abp.ExceptionHandling.Tests\Volo.Abp.ExceptionHandling.Tests.csproj", "{E50739A7-5E2F-4EB5-AEA9-554115CB9613}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1405,6 +1407,10 @@ Global
 		{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E50739A7-5E2F-4EB5-AEA9-554115CB9613}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1642,6 +1648,7 @@ Global
 		{E1051CD0-9262-4869-832D-B951723F4DDE} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{DEEB5200-BBF9-464D-9B7E-8FC035A27E94} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{40FB8907-9CF7-44D0-8B5F-538AC6DAF8B9} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{E50739A7-5E2F-4EB5-AEA9-554115CB9613} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

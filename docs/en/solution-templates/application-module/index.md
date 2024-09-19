@@ -15,17 +15,25 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 Then use the `abp new` command in an empty folder to create a new solution:
 
 ```bash
-abp new Acme.IssueManagement -t module
+abp new-module Acme.BookStore
 ```
 
 - `Acme.IssueManagement` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
 
-### Without User Interface
+### Specifying the User Interface
 
-The template comes with MVC, Blazor & Angular user interfaces by default. You can use `--no-ui` option to not include any of these UI layers.
+The template comes without a user interface by default. You can use the `mvc`, `blazor`, `blazor-server`, or `angular` options to include any of these UI layers. You can also combine them. For example, you can use `mvc,angular` to include both MVC and Angular UI. To create a module without a user interface, don't specify any value.
 
 ````bash
-abp new Acme.IssueManagement -t module --no-ui
+abp new-module Acme.IssueManagement -u mvc,angular
+````
+
+#### Specifying the Database Provider
+
+The template comes with the *EntityFrameworkCore* database provider by default. You can use the `ef` or `mongodb` options to include either of these providers. You can also combine them. For example, you can use `ef,mongodb` to include both EntityFrameworkCore and MongoDB.
+
+````bash
+abp new-module Acme.IssueManagement -d ef,mongodb
 ````
 
 ## Solution Structure
@@ -34,11 +42,10 @@ Based on the options you've specified, you will get a slightly different solutio
 
 ![issuemanagement-module-solution](../../images/issuemanagement-module-solution.png)
 
-Projects are organized as `src`, `test` and `host` folders:
+Projects are organized as `src` and`test` folders:
 
 * `src` folder contains the actual module which is layered based on [DDD](../../framework/architecture/domain-driven-design) principles.
 * `test` folder contains unit & integration tests.
-* `host` folder contains applications with different configurations to demonstrate how to host the module in an application. These are not a part of the module, but useful on development.
 
 The diagram below shows the layers & project dependencies of the module:
 
@@ -105,8 +112,6 @@ The solution has multiple test projects, one for each layer:
 - `.MongoDB.Tests` is used to test MongoDB configuration and custom repositories.
 - `.TestBase` is a base (shared) project for all tests.
 
-In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
-
 Test projects are prepared for integration testing;
 
 - It is fully integrated to ABP and all services in your application.
@@ -117,49 +122,9 @@ You can still create unit tests for your classes which will be harder to write (
 
 > Domain & Application tests are using EF Core. If you remove EF Core integration or you want to use MongoDB for testing these layers, you should manually change project references & module dependencies.
 
-### Host Projects
+### Host Project
 
-The solution has a few host applications to run your module. Host applications are used to run your module in a fully configured application. It is useful on development. Host applications includes some other modules in addition to the module being developed:
-
-Host applications support two types of scenarios.
-
-#### Single (Unified) Application Scenario
-
-If your module has a UI, then `.Web.Unified` application is used to host the UI and API on a single point. It has its own `appsettings.json` file (that includes the database connection string) and EF Core database migrations.
-
-For the `.Web.Unified` application, there is a single database, named `YourProjectName_Unified` (like *IssueManagement_Unified* for this sample).
-
-> If you've selected the `--no-ui` option, this project will not be in your solution.
-
-##### How to Run?
-
-Set `host/YourProjectName.Web.Unified` as the startup project, run `Update-Database` command for the EF Core from Package Manager Console and run your application. Default username is `admin` and password is `1q2w3E*`.
-
-#### Separated Deployment & Databases Scenario
-
-In this scenario, there are three applications;
-
-* `.AuthServer` application is an authentication server used by other applications. It has its own `appsettings.json` that contains database connection and other configurations.
-* `.HttpApi.Host` hosts the HTTP API of the module. It has its own `appsettings.json` that contains database connections and other configurations.
-* `.Web.Host` host the UI of the module. This project contains an `appsettings.json` file, but it does not have a connection string because it never connects to the database. Instead, it mainly contains endpoint of the remote API server and the authentication server.
-
-The diagram below shows the relation of the applications:
-
-![tiered-solution-applications](../../images/tiered-solution-applications.png)
-
-`.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.AuthServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
-
-##### Pre-requirements
-
-* [Redis](https://redis.io/): The applications use Redis as as distributed cache. So, you need to have Redis installed & running.
-
-##### How to Run?
-
-You should run the application with the given order:
-
-- First, run the `.AuthServer` since other applications depends on it.
-- Then run the `.HttpApi.Host` since it is used by the `.Web.Host` application.
-- Finally, you can run the `.Web.Host` project and login to the application using `admin` as the username and `1q2w3E*` as the password.
+The solution doesn't have a host application to run your module. However, you can create a [single-layer](../../get-started/single-layer-web-application.md) or [layered](../../get-started/layered-web-application.md) application and [import](../../studio/solution-explorer.md#imports) the created module into the host application.
 
 ## UI
 
@@ -172,7 +137,7 @@ The solution will have a folder called `angular` in it. This is where the Angula
 * _angular/projects/issue-management_ folder contains the Angular module project.
 * _angular/projects/dev-app_ folder contains a development application that runs your module.
 
-The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API and the `Angular` demo application consumes it. You will not need to run the `.Web.Host` project though.
+The server-side is similar to the solution described above. After you create a *Host* application, the API and the `Angular` demo application consume it.
 
 #### How to Run the Angular Development App
 
@@ -195,9 +160,10 @@ The module you will develop depends on two of these ABP packages: _@abp/ng.core_
 
 Once all dependencies are installed, follow the steps below to serve your development app:
 
-1. Make sure `.AuthServer` and `*.HttpApi.Host` projects are up and running.
-2. Open your terminal at the root folder, i.e. `angular`.
-3. Run `yarn start` or `npm start`.
+1. Make sure *Host* application project is up and running.
+2. Change the `environment.ts` file in the `angular/projects/dev-app/src/environments` folder to match your *Host* application URL.
+3. Open your terminal at the root folder, i.e. `angular`.
+4. Run `yarn start` or `npm start`.
 
 ![ABP Angular module dev-app project](../../images/angular-module-dev-app-project.png)
 

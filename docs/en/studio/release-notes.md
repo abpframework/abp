@@ -2,6 +2,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.8.1 (2024-09-12)
+
+* Fixed MySQL connection problem for nolayers template
+* Ignored failed solution runner profiles while loading
+* Added required ModalBuilder extensions for the imported/installed modules for EF Core
+
+## 0.8.0 (2024-09-11)
+
+* Added `Blazor WebApp UI` to **app-nolayers** and **microservice** templates
+* Fixed version problem for bundle command
+* Fixed optional module integrations
+* Added **LeptonX Theme** to module-list
+* Fixed bug related to Kubernetes user-specified connection
+
 ## 0.7.9 (2024-08-29)
 
 * Opened Readme.md file after module creation or opening a solution
