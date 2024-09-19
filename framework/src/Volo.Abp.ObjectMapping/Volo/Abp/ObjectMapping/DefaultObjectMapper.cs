@@ -142,20 +142,39 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             cacheKey,
             _ =>
             {
-                var method = specificMapper
+                var methods = specificMapper
                     .GetType()
                     .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .FirstOrDefault(x =>
-                        x.Name == nameof(IObjectMapper<object, object>.Map) &&
-                        x.GetParameters().Length == (destination == null ? 1 : 2)
-                    );
+                    .Where(x => x.Name == nameof(IObjectMapper<object, object>.Map))
+                    .Where(x =>
+                    {
+                        var parameters = x.GetParameters();
+                        if (destination == null && parameters.Length != 1 ||
+                            destination != null && parameters.Length != 2 ||
+                            parameters[0].ParameterType != sourceArgumentType)
+                        {
+                            return false;
+                        }
 
-                if (method == null)
+                        return destination == null || parameters[1].ParameterType == destinationArgumentType;
+                    })
+                    .ToList();
+
+                if (methods.IsNullOrEmpty())
                 {
-                    throw new AbpException($"Could not find a method named '{nameof(IObjectMapper<object, object>.Map)}' with {(destination == null ? "1" : "2")} parameters in the type '{mapperType}'.");
+                    throw new AbpException($"Could not find a method named '{nameof(IObjectMapper<object, object>.Map)}'" +
+                                           $" with parameters({(destination == null ? sourceArgumentType.ToString() : sourceArgumentType + "," + destinationArgumentType)})" +
+                                           $" in the type '{mapperType}'.");
                 }
 
-                return method;
+                if (methods.Count > 1)
+                {
+                    throw new AbpException($"Found more than one method named '{nameof(IObjectMapper<object, object>.Map)}'" +
+                                           $" with parameters({(destination == null ? sourceArgumentType.ToString() : sourceArgumentType + "," + destinationArgumentType)})" +
+                                           $" in the type '{mapperType}'.");
+                }
+
+                return methods.First();
             }
         );
 
