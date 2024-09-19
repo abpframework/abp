@@ -85,11 +85,11 @@ This command opens the solution folder in your file system:
 
 ![product-module-folder](images/product-module-folder.png)
 
-You can open `ModularCrm.Product.sln` in your favorite IDE (e.g. Visual Studio):
+You can open `ModularCrm.Products.sln` in your favorite IDE (e.g. Visual Studio):
 
 ![product-module-visual-studio](images/product-module-visual-studio.png)
 
-As seen in the preceding figure, the `ModularCrm.Product` solution consists of several layers, each has own responsibility.
+As seen in the preceding figure, the `ModularCrm.Products` solution consists of several layers, each has own responsibility.
 
 ### Installing the Product Module to the Main Application
 
