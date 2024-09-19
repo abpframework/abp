@@ -387,7 +387,7 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 {
     options.ConventionalControllers.Create(typeof(ModularCrmApplicationModule).Assembly);
     
-    //ADD THE FOLLOWINGN LINE:
+    //ADD THE FOLLOWING LINE:
     options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly);
 });
 ````
