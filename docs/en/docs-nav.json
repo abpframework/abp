@@ -143,8 +143,16 @@
               "path": "tutorials/modular-crm/part-05.md"
             },
             {
-              "text": "6: Integrating the modules",
+              "text": "6: Integrating the modules: Implementing Integration Services",
               "path": "tutorials/modular-crm/part-06.md"
+            },
+            {
+              "text": "7: Integrating the modules: Communication via Messages (Events)",
+              "path": "tutorials/modular-crm/part-07.md"
+            },
+            {
+              "text": "8: Integrating the modules: Joining the Products and Orders Data",
+              "path": "tutorials/modular-crm/part-08.md"
             }
           ]
         },
