@@ -8,7 +8,7 @@
     "Path": "tutorials/modular-crm/part-04"
   },
   "Next": {
-    "Name": "Integrating Modules",
+    "Name": "Integrating Modules: Implementing Integration Services",
     "Path": "tutorials/modular-crm/part-06"
   }
 }
