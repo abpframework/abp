@@ -195,11 +195,13 @@ The modal with form looks like this:
 
 **`options`** is an input typed [NgbModalOptions](https://ng-bootstrap.github.io/#/components/modal/api#NgbModalOptions). It is configuration for the `ng-bootstrap` modal.
 
-Example of options:
- -  `animation`: This is an NgbModalOption property of type *boolean*. It controls whether the modal opens and closes with an animation. By default, it is set to true, meaning that the modal will have a smooth transition when it opens and closes. Setting it to false will disable these animations.
 
- ```js
- import {Component, ...} from '@angular/core';
+**Examples:**
+
+- `animation`: This is an NgbModalOption property of type *boolean*. It controls whether the modal opens and closes with an animation. By default, it is set to true, meaning that the modal will have a smooth transition when it opens and closes. Setting it to false will disable these animations.
+
+```js
+import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -212,22 +214,21 @@ export class NgbdModalOptions {
     this.modalService.open(content, { animation: true });
   }
 }
+```
 
- ```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The result of this configuration would be like this:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If `animation: false` :
+![Modal example result](./images/animation-true.gif)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; On the contrary, if we set it as false:
 
 ![Modal example result](./images/animation-false.gif)
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Otherwise, `animation: true` :
-
-![Modal example result](./images/animation-true.gif)
-
 - `fullscreen`: This is an NgbModalOption property of type *boolean or string*. When set to `true`, the element will expand to cover the entire screen, hiding all other interface elements. When set to `false`, the element remains in its regular size and position within the page.
 
 ```js
-import {Component, ...} from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
