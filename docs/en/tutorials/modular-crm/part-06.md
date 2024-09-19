@@ -374,7 +374,7 @@ Open the ABP Studio UI and stop the application if it is already running. Then o
 
 In the opening dialog, find and select the `ModularCrm.Ordering` module, check the *Install this module* option and click the OK button:
 
-![abp-studio-import-module-dialog-for-ordering](D:\Github\abp\docs\en\tutorials\modular-crm\images\abp-studio-import-module-dialog-for-ordering.png)
+![abp-studio-import-module-dialog-for-ordering](images/abp-studio-import-module-dialog-for-ordering.png)
 
 Once you click the OK button, the Ordering module is imported to the Products module and an installation dialog is open:
 
