@@ -977,6 +977,8 @@
     "UISupportExplanation": "ABP Framework itself is UI framework agnostic and can work with any UI framework. However, startup templates, module UIs and themes were not implemented for all UI frameworks. Check out the <a href=\"{0}\">Getting Started document</a> for the up-to-date list of UI options.",
     "MicroserviceSupport": "Does it support the microservice architecture?",
     "WhereCanIDownloadSourceCode": "Where can I download the source-code?",
+    "HowCanIUpgradeMyProjectToCommercialTemplate": "How can I upgrade my open-source project to the commercial PRO templates?",
+    "HowCanIUpgradeMyProjectToCommercialExplanation": "You can check out our documentation at <a href=\"{0}\">Migrating from open source templates</a> to upgrade your open-source projects to the paid PRO templates.",
     "ComputerLimitation": "How many computers can a developer login when developing ABP?",
     "ComputerLimitationExplanation": "We specifically permit <strong>{0} computers</strong> per individual/licensed developer. Whenever there is a need for a developer to develop ABP based products on a third machine, an e-mail should be sent to license@abp.io explaining the situation, and we will then make the appropriate allocation in our system.",
     "RefundPolicy": "Do you have a refund policy?",
