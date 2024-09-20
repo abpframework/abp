@@ -578,7 +578,7 @@
     "CreatePostCoverInfo1": "<i class='bi bi-dot'></i> Accepted file types : <strong>JPEG, JPG, PNG</strong>",
     "CreatePostCoverInfo2": "<i class='bi bi-dot'></i> Max file size : <strong>1 MB</strong>",
     "CreatePostCoverInfo3": "<i class='bi bi-dot'></i> Image proportion : <strong>16:9</strong>",
-    "CreatePostCoverInfo4": "<i class='bi bi-dot'></i> <a href='/assets/example-post-image.png' target='_blank'> Download a sample cover image </a>",
+    "CreatePostCoverInfo4": "<i class='bi bi-dot'></i> <a href='/assets/example-post-image.png'> Download a sample cover image </a>",
     "ThisExtensionIsNotAllowed": "This extension is not allowed.",
     "TheFileIsTooLarge": "The file is too large.",
     "GoToThePost": "Go to the Post",
