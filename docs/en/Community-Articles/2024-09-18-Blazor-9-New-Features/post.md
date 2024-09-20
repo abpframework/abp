@@ -80,7 +80,7 @@ For more info:
 
 
 
-## Easily add add static server-side rendering pages
+## Easily add static server-side rendering pages
 
 With .NET 9, adding static server-side rendering (SSR) pages to globally interactive Blazor Web Apps has become simpler. The new `[ExcludeFromInteractiveRouting]` attribute allows developers to mark specific Razor component pages that require static SSR, such as those relying on HTTP cookies and the request/response cycle. Pages annotated with this attribute exit interactive routing and trigger a full-page reload, while non-annotated pages default to interactive rendering modes like `InteractiveServer`. This approach enables flexibility between static and interactive rendering depending on the page's requirements.
 
