@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.Domain",
-  "hash": "e92e0873e411d6a1c141aa10c5cfad37",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer",
@@ -526,6 +526,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "AddUserClaim",
           "summary": null,
           "isAsync": false,
@@ -542,6 +543,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "RemoveAllUserClaims",
           "summary": null,
           "isAsync": false,
@@ -552,6 +554,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "RemoveUserClaim",
           "summary": null,
           "isAsync": false,
@@ -568,6 +571,7 @@
         },
         {
           "returnType": "IdentityResourceClaim",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "FindUserClaim",
           "summary": null,
           "isAsync": false,
@@ -584,6 +588,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "AddProperty",
           "summary": null,
           "isAsync": false,
@@ -605,6 +610,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "RemoveAllProperties",
           "summary": null,
           "isAsync": false,
@@ -615,6 +621,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "RemoveProperty",
           "summary": null,
           "isAsync": false,
@@ -631,6 +638,7 @@
         },
         {
           "returnType": "IdentityResourceProperty",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "FindProperty",
           "summary": null,
           "isAsync": false,
@@ -1060,6 +1068,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddGrantType",
           "summary": null,
           "isAsync": false,
@@ -1076,6 +1085,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllAllowedGrantTypes",
           "summary": null,
           "isAsync": false,
@@ -1086,6 +1096,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveGrantType",
           "summary": null,
           "isAsync": false,
@@ -1102,6 +1113,7 @@
         },
         {
           "returnType": "ClientGrantType",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindGrantType",
           "summary": null,
           "isAsync": false,
@@ -1118,6 +1130,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddSecret",
           "summary": null,
           "isAsync": false,
@@ -1149,6 +1162,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveSecret",
           "summary": null,
           "isAsync": false,
@@ -1170,6 +1184,7 @@
         },
         {
           "returnType": "ClientSecret",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindSecret",
           "summary": null,
           "isAsync": false,
@@ -1191,6 +1206,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddScope",
           "summary": null,
           "isAsync": false,
@@ -1207,6 +1223,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllScopes",
           "summary": null,
           "isAsync": false,
@@ -1217,6 +1234,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveScope",
           "summary": null,
           "isAsync": false,
@@ -1233,6 +1251,7 @@
         },
         {
           "returnType": "ClientScope",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindScope",
           "summary": null,
           "isAsync": false,
@@ -1249,6 +1268,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddCorsOrigin",
           "summary": null,
           "isAsync": false,
@@ -1265,6 +1285,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddRedirectUri",
           "summary": null,
           "isAsync": false,
@@ -1281,6 +1302,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddPostLogoutRedirectUri",
           "summary": null,
           "isAsync": false,
@@ -1297,6 +1319,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllCorsOrigins",
           "summary": null,
           "isAsync": false,
@@ -1307,6 +1330,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveCorsOrigin",
           "summary": null,
           "isAsync": false,
@@ -1323,6 +1347,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllRedirectUris",
           "summary": null,
           "isAsync": false,
@@ -1333,6 +1358,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveRedirectUri",
           "summary": null,
           "isAsync": false,
@@ -1349,6 +1375,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllPostLogoutRedirectUris",
           "summary": null,
           "isAsync": false,
@@ -1359,6 +1386,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemovePostLogoutRedirectUri",
           "summary": null,
           "isAsync": false,
@@ -1375,6 +1403,7 @@
         },
         {
           "returnType": "ClientCorsOrigin",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindCorsOrigin",
           "summary": null,
           "isAsync": false,
@@ -1391,6 +1420,7 @@
         },
         {
           "returnType": "ClientRedirectUri",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindRedirectUri",
           "summary": null,
           "isAsync": false,
@@ -1407,6 +1437,7 @@
         },
         {
           "returnType": "ClientPostLogoutRedirectUri",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindPostLogoutRedirectUri",
           "summary": null,
           "isAsync": false,
@@ -1423,6 +1454,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddProperty",
           "summary": null,
           "isAsync": false,
@@ -1444,6 +1476,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllProperties",
           "summary": null,
           "isAsync": false,
@@ -1454,6 +1487,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveProperty",
           "summary": null,
           "isAsync": false,
@@ -1470,6 +1504,7 @@
         },
         {
           "returnType": "ClientProperty",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindProperty",
           "summary": null,
           "isAsync": false,
@@ -1486,6 +1521,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddClaim",
           "summary": null,
           "isAsync": false,
@@ -1507,6 +1543,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllClaims",
           "summary": null,
           "isAsync": false,
@@ -1517,6 +1554,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveClaim",
           "summary": null,
           "isAsync": false,
@@ -1533,6 +1571,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveClaim",
           "summary": null,
           "isAsync": false,
@@ -1554,6 +1593,7 @@
         },
         {
           "returnType": "List<ClientClaim>",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindClaims",
           "summary": null,
           "isAsync": false,
@@ -1570,6 +1610,7 @@
         },
         {
           "returnType": "ClientClaim",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindClaim",
           "summary": null,
           "isAsync": false,
@@ -1591,6 +1632,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "AddIdentityProviderRestriction",
           "summary": null,
           "isAsync": false,
@@ -1607,6 +1649,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveAllIdentityProviderRestrictions",
           "summary": null,
           "isAsync": false,
@@ -1617,6 +1660,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "RemoveIdentityProviderRestriction",
           "summary": null,
           "isAsync": false,
@@ -1633,6 +1677,7 @@
         },
         {
           "returnType": "ClientIdPRestriction",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindIdentityProviderRestriction",
           "summary": null,
           "isAsync": false,
@@ -2067,6 +2112,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "AddUserClaim",
           "summary": null,
           "isAsync": false,
@@ -2083,6 +2129,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "RemoveAllUserClaims",
           "summary": null,
           "isAsync": false,
@@ -2093,6 +2140,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "RemoveClaim",
           "summary": null,
           "isAsync": false,
@@ -2109,6 +2157,7 @@
         },
         {
           "returnType": "ApiScopeClaim",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "FindClaim",
           "summary": null,
           "isAsync": false,
@@ -2125,6 +2174,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "AddProperty",
           "summary": null,
           "isAsync": false,
@@ -2146,6 +2196,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "RemoveAllProperties",
           "summary": null,
           "isAsync": false,
@@ -2156,6 +2207,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "RemoveProperty",
           "summary": null,
           "isAsync": false,
@@ -2172,6 +2224,7 @@
         },
         {
           "returnType": "ApiScopeProperty",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "FindProperty",
           "summary": null,
           "isAsync": false,
@@ -2369,6 +2422,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "AddSecret",
           "summary": null,
           "isAsync": false,
@@ -2400,6 +2454,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveSecret",
           "summary": null,
           "isAsync": false,
@@ -2421,6 +2476,7 @@
         },
         {
           "returnType": "ApiResourceSecret",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "FindSecret",
           "summary": null,
           "isAsync": false,
@@ -2442,6 +2498,7 @@
         },
         {
           "returnType": "ApiResourceScope",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "AddScope",
           "summary": null,
           "isAsync": false,
@@ -2458,6 +2515,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "AddUserClaim",
           "summary": null,
           "isAsync": false,
@@ -2474,6 +2532,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveAllUserClaims",
           "summary": null,
           "isAsync": false,
@@ -2484,6 +2543,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveClaim",
           "summary": null,
           "isAsync": false,
@@ -2500,6 +2560,7 @@
         },
         {
           "returnType": "ApiResourceClaim",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "FindClaim",
           "summary": null,
           "isAsync": false,
@@ -2516,6 +2577,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveAllSecrets",
           "summary": null,
           "isAsync": false,
@@ -2526,6 +2588,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveAllScopes",
           "summary": null,
           "isAsync": false,
@@ -2536,6 +2599,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveScope",
           "summary": null,
           "isAsync": false,
@@ -2552,6 +2616,7 @@
         },
         {
           "returnType": "ApiResourceScope",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "FindScope",
           "summary": null,
           "isAsync": false,
@@ -2568,6 +2633,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "AddProperty",
           "summary": null,
           "isAsync": false,
@@ -2589,6 +2655,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveAllProperties",
           "summary": null,
           "isAsync": false,
@@ -2599,6 +2666,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "RemoveProperty",
           "summary": null,
           "isAsync": false,
@@ -2615,6 +2683,7 @@
         },
         {
           "returnType": "ApiResourceProperty",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "FindProperty",
           "summary": null,
           "isAsync": false,
@@ -2760,6 +2829,7 @@
       "methods": [
         {
           "returnType": "List<IdentityResource>",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "GetListByScopeNameAsync",
           "summary": null,
           "isAsync": true,
@@ -2786,6 +2856,7 @@
         },
         {
           "returnType": "List<IdentityResource>",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -2827,6 +2898,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -2848,6 +2920,7 @@
         },
         {
           "returnType": "IdentityResource",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -2874,6 +2947,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.IdentityServer.IdentityResources",
           "name": "CheckNameExistAsync",
           "summary": null,
           "isAsync": true,
@@ -2948,6 +3022,7 @@
       "methods": [
         {
           "returnType": "List<PersistedGrant>",
+          "namespace": "Volo.Abp.IdentityServer.Grants",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -2989,6 +3064,7 @@
         },
         {
           "returnType": "PersistedGrant",
+          "namespace": "Volo.Abp.IdentityServer.Grants",
           "name": "FindByKeyAsync",
           "summary": null,
           "isAsync": true,
@@ -3010,6 +3086,7 @@
         },
         {
           "returnType": "List<PersistedGrant>",
+          "namespace": "Volo.Abp.IdentityServer.Grants",
           "name": "GetListBySubjectIdAsync",
           "summary": null,
           "isAsync": true,
@@ -3031,6 +3108,7 @@
         },
         {
           "returnType": "List<PersistedGrant>",
+          "namespace": "Volo.Abp.IdentityServer.Grants",
           "name": "GetListByExpirationAsync",
           "summary": null,
           "isAsync": true,
@@ -3057,6 +3135,29 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Grants",
+          "name": "DeleteExpirationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "maxExpirationDate",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Grants",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -3141,6 +3242,7 @@
       "methods": [
         {
           "returnType": "DeviceFlowCodes",
+          "namespace": "Volo.Abp.IdentityServer.Devices",
           "name": "FindByUserCodeAsync",
           "summary": null,
           "isAsync": true,
@@ -3162,6 +3264,7 @@
         },
         {
           "returnType": "DeviceFlowCodes",
+          "namespace": "Volo.Abp.IdentityServer.Devices",
           "name": "FindByDeviceCodeAsync",
           "summary": null,
           "isAsync": true,
@@ -3183,6 +3286,7 @@
         },
         {
           "returnType": "List<DeviceFlowCodes>",
+          "namespace": "Volo.Abp.IdentityServer.Devices",
           "name": "GetListByExpirationAsync",
           "summary": null,
           "isAsync": true,
@@ -3198,6 +3302,28 @@
             {
               "type": "Int32",
               "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.Devices",
+          "name": "DeleteExpirationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "maxExpirationDate",
               "isOptional": false
             },
             {
@@ -3257,6 +3383,7 @@
       "methods": [
         {
           "returnType": "Client",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "FindByClientIdAsync",
           "summary": null,
           "isAsync": true,
@@ -3283,6 +3410,7 @@
         },
         {
           "returnType": "List<Client>",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3324,6 +3452,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3345,6 +3474,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "GetAllDistinctAllowedCorsOriginsAsync",
           "summary": null,
           "isAsync": true,
@@ -3361,6 +3491,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.IdentityServer.Clients",
           "name": "CheckClientIdExistAsync",
           "summary": null,
           "isAsync": true,
@@ -3435,6 +3566,7 @@
       "methods": [
         {
           "returnType": "ApiScope",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3461,6 +3593,7 @@
         },
         {
           "returnType": "List<ApiScope>",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "GetListByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3487,6 +3620,7 @@
         },
         {
           "returnType": "List<ApiScope>",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3528,6 +3662,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3549,6 +3684,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.IdentityServer.ApiScopes",
           "name": "CheckNameExistAsync",
           "summary": null,
           "isAsync": true,
@@ -3623,6 +3759,7 @@
       "methods": [
         {
           "returnType": "ApiResource",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3649,6 +3786,7 @@
         },
         {
           "returnType": "List<ApiResource>",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3675,6 +3813,7 @@
         },
         {
           "returnType": "List<ApiResource>",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "GetListByScopesAsync",
           "summary": null,
           "isAsync": true,
@@ -3701,6 +3840,7 @@
         },
         {
           "returnType": "List<ApiResource>",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3742,6 +3882,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3763,6 +3904,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.IdentityServer.ApiResources",
           "name": "CheckNameExistAsync",
           "summary": null,
           "isAsync": true,

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.Web",
-  "hash": "0499a3058051b1ccbf1cb53b7731f1c8",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.Web",
@@ -67,6 +67,12 @@
       ],
       "contentType": "abpModule",
       "name": "AbpPermissionManagementWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement",
+      "contentType": "webPage",
+      "name": "PermissionManagementModal",
       "summary": null
     }
   ]

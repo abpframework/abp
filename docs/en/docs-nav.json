@@ -50,7 +50,7 @@
           "path": "tutorials"
         },
         {
-          "text": "TODO application",
+          "text": "TODO Application",
           "items": [
             {
               "text": "Overview",
@@ -67,7 +67,7 @@
           ]
         },
         {
-          "text": "Book Store application",
+          "text": "Book Store Application",
           "items": [
             {
               "text": "Overview",
@@ -112,6 +112,47 @@
             {
               "text": "10: Book to author relation",
               "path": "tutorials/book-store/part-10.md"
+            }
+          ]
+        },
+        {
+          "text": "Modular Monolith Application",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "tutorials/modular-crm/index.md"
+            },
+            {
+              "text": "1: Creating the initial solution",
+              "path": "tutorials/modular-crm/part-01.md"
+            },
+            {
+              "text": "2: Creating the initial Products module",
+              "path": "tutorials/modular-crm/part-02.md"
+            },
+            {
+              "text": "3: Building the Products module",
+              "path": "tutorials/modular-crm/part-03.md"
+            },
+            {
+              "text": "4: Creating the initial Ordering module",
+              "path": "tutorials/modular-crm/part-04.md"
+            },
+            {
+              "text": "5: Building the Ordering module",
+              "path": "tutorials/modular-crm/part-05.md"
+            },
+            {
+              "text": "6: Integrating the modules: Implementing Integration Services",
+              "path": "tutorials/modular-crm/part-06.md"
+            },
+            {
+              "text": "7: Integrating the modules: Communication via Messages (Events)",
+              "path": "tutorials/modular-crm/part-07.md"
+            },
+            {
+              "text": "8: Integrating the modules: Joining the Products and Orders Data",
+              "path": "tutorials/modular-crm/part-08.md"
             }
           ]
         },
@@ -184,6 +225,14 @@
             {
               "text": "Concepts",
               "path": "studio/concepts.md"
+            },
+            {
+              "text": "Version Compatibility",
+              "path": "studio/version-compatibility.md"
+            },
+            {
+              "text": "Release Notes",
+              "path": "studio/release-notes.md"
             }
           ]
         },
@@ -437,6 +486,10 @@
                     {
                       "text": "AWS Provider",
                       "path": "framework/infrastructure/blob-storing/aws.md"
+                    },
+                    {
+                      "text": "Google Cloud Storage Provider",
+                      "path": "framework/infrastructure/blob-storing/google.md"
                     },
                     {
                       "text": "Create a Custom Provider",
@@ -840,7 +893,7 @@
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/ui/mvc-razor-pages"
+                  "path": "framework/ui/mvc-razor-pages/overall"
                 },
                 {
                   "text": "Navigation / Menus",
@@ -1810,7 +1863,7 @@
       "text": "Samples",
       "items": [
         {
-          "text": "All Samples",
+          "text": "Overview",
           "path": "samples"
         },
         {

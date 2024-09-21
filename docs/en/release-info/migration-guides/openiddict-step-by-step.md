@@ -9,8 +9,8 @@ On the other hand, Identity Server ends support for the open-source Identity Ser
 
 ## Commercial Template
 
-If you are using a commercial template, please check [Migrating from IdentityServer to OpenIddict for the Commercial Templates](https://docs.abp.io/en/commercial/6.0/migration-guides/openIddict-step-by-step) guide.
-If you are using the microservice template, please check [Migrating the Microservice Template from IdentityServer to OpenIddict](https://docs.abp.io/en/commercial/6.0/migration-guides/openIddict-microservice) guide.
+If you are using a commercial template, please check [Migrating from IdentityServer to OpenIddict for the Commercial Templates](https://abp.io/docs/commercial/6.0/migration-guides/openIddict-step-by-step) guide.
+If you are using the microservice template, please check [Migrating the Microservice Template from IdentityServer to OpenIddict](https://abp.io/docs/commercial/6.0/migration-guides/openIddict-microservice) guide.
 
 ## OpenIddict Migration Steps
 
@@ -258,7 +258,7 @@ for creating the host builder.
 ## Source code of samples and module
 
 * [Open source tiered & separate auth server application migrate Identity Server to OpenIddict](https://github.com/abpframework/abp-samples/tree/master/Ids2OpenId)
-* [OpenIddict module document](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict)
+* [OpenIddict module document](../../modules/openiddict.md)
 * [OpenIddict module source code](https://github.com/abpframework/abp/tree/rel-6.0/modules/openiddict)
 
 ## See Also

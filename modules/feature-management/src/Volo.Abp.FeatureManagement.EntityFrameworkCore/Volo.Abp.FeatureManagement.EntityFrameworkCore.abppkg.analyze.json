@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
-  "hash": "d23d13b3c72c26ef41eb0070ab00ac34",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
@@ -67,27 +67,27 @@
     {
       "namespace": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
       "connectionStringName": "AbpFeatureManagement",
-      "databaseTables": [
+      "databaseTables": [],
+      "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
         {
-          "entityFullName": "Volo.Abp.FeatureManagement.FeatureDefinitionRecord",
-          "contentType": "databaseTable",
-          "name": "AbpFeatures",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord",
-          "contentType": "databaseTable",
-          "name": "AbpFeatureGroups",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
-          "contentType": "databaseTable",
-          "name": "AbpFeatureValues",
-          "summary": null
+          "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
+          "name": "ConfigureFeatureManagement",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
         }
       ],
-      "replacedDbContexts": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -142,6 +142,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",

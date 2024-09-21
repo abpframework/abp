@@ -152,7 +152,7 @@ Commonly used components in all layouts.
 
 ![Breadcrumb](images/leptonx-breadcrumb.png)
 
-Breadcrumbs can be customized by using the `IPageLayout` service. See [PageLayout - Breadcrumb](https://docs.abp.io/en/abp/7.2/UI%2FAspNetCore%2FPage-Header#breadcrumb) for more information. 
+Breadcrumbs can be customized by using the `IPageLayout` service. See [PageLayout - Breadcrumb](../../framework/ui/mvc-razor-pages/page-header.md#breadcrumb) for more information. 
 
 If you need to replace the component, you can follow the steps below.
 
@@ -166,7 +166,7 @@ If you need to replace the component, you can follow the steps below.
 
 ![Content title](images/leptonx-content-title.png)
 
-Page Titles can be customized by using the `IPageLayout` service. See [PageLayout - Page Title](https://docs.abp.io/en/abp/7.2/UI%2FAspNetCore%2FPage-Header#page-title) for more information.
+Page Titles can be customized by using the `IPageLayout` service. See [PageLayout - Page Title](../../framework/ui/mvc-razor-pages/page-header.md#page-title) for more information.
 
 If you need to replace the component, you can follow the steps below.
 

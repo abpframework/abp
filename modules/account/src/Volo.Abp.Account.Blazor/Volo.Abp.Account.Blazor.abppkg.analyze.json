@@ -1,10 +1,25 @@
 {
   "name": "Volo.Abp.Account.Blazor",
-  "hash": "caa7279a6d55f90db90b3ec2313a4e12",
+  "hash": "",
   "contents": [
     {
-      "namespace": "Volo.Abp.Account.Blazor;",
+      "namespace": "Volo.Abp.Account.Blazor",
       "dependsOnModules": [
+        {
+          "declaringAssemblyName": "Volo.Abp.AspNetCore.Components.Web.Theming",
+          "namespace": "Volo.Abp.AspNetCore.Components.Web.Theming",
+          "name": "AbpAspNetCoreComponentsWebThemingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.AutoMapper",
+          "namespace": "Volo.Abp.AutoMapper",
+          "name": "AbpAutoMapperModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Account.Application.Contracts",
+          "namespace": "Volo.Abp.Account",
+          "name": "AbpAccountApplicationContractsModule"
+        }
       ],
       "implementingInterfaces": [
         {
@@ -52,6 +67,12 @@
       ],
       "contentType": "abpModule",
       "name": "AbpAccountBlazorModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Blazor.Pages.Account",
+      "contentType": "webPage",
+      "name": "AccountManage",
       "summary": null
     }
   ]

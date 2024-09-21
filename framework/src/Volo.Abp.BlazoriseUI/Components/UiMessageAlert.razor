@@ -16,7 +16,14 @@
                 </DisplayHeading>
             }
             <Paragraph TextAlignment="TextAlignment.Center" Margin="Margin.Is0.FromBottom" Style="white-space: break-spaces;">
-                @Message
+                @if (!IsMessageHtmlMarkup)
+                {
+                    @Message
+                }
+                else
+                {
+                    @((MarkupString)Message)
+                }
             </Paragraph>
         </ModalBody>
         <ModalFooter class="d-flex justify-content-center">

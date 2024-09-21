@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Account.Web",
-  "hash": "93b7e37fb41330719f0911b2c1b31cf0",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Account.Web",
@@ -77,6 +77,107 @@
       ],
       "contentType": "abpModule",
       "name": "AbpAccountWebModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/account/login",
+          "method": "POST",
+          "groupName": "Account",
+          "responseType": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "login",
+              "type": "UserLoginInfo"
+            }
+          ]
+        },
+        {
+          "path": "api/account/logout",
+          "method": "GET",
+          "groupName": "Account",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/account/check-password",
+          "method": "POST",
+          "groupName": "Account",
+          "responseType": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "login",
+              "type": "UserLoginInfo"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "AccessDeniedModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "ForgotPasswordModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "LoggedOutModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "LoginModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "LogoutModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "ManageModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "PasswordResetLinkSentModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "RegisterModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "ResetPasswordModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account.Web.Pages.Account",
+      "contentType": "webPage",
+      "name": "ResetPasswordConfirmationModel",
       "summary": null
     }
   ]
