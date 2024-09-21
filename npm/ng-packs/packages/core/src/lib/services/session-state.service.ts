@@ -47,9 +47,8 @@ export class SessionStateService {
         if (lang.includes(';')) {
           lang = lang.split(';')[0];
         }
-        if (appLanguage !== lang) {
-          this.setLanguage(lang);
-        }
+        
+        this.setLanguage(lang);
       });
   }
 
@@ -84,9 +83,15 @@ export class SessionStateService {
   }
 
   setLanguage(language: string) {
-    if (language === this.store.state.language) return;
+    const currentLanguage = this.store.state.language;
 
-    this.store.patch({ language });
-    document.documentElement.setAttribute('lang', language);
+    if (language !== currentLanguage) {
+      this.store.patch({ language });
+    }
+
+    const currentAttribute = document.documentElement.getAttribute('lang');
+    if (language !== currentAttribute) {
+      document.documentElement.setAttribute('lang', language);
+    }
   }
 }
