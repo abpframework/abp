@@ -28,7 +28,7 @@ This error may occur when using IIS. You need to trust your certificate by `Mana
 
 ## References
 
-* [ABP IIS Deployment](https://abp.io/docs/latest/deployment)
+* [ABP IIS Deployment](./index.md)
 * [HTTPS in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl)
 * [Let's Encrypt](https://letsencrypt.org/getting-started)
 * [Cloudflare's Free SSL / TLS](https://www.cloudflare.com/application-services/products/ssl/)
