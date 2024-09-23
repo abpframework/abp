@@ -131,6 +131,27 @@ public class AbpAutoMapperModule_Specific_ObjectMapper_Tests : AbpIntegratedTest
     }
 
     [Fact]
+    public void Specific_Object_Mapper_Should_Support_Multiple_IObjectMapper_Interfaces()
+    {
+        var myEntityDto2 = _objectMapper.Map<MyEntity, MyEntityDto2>(new MyEntity { Number = 42 });
+        myEntityDto2.Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        var myEntity = _objectMapper.Map<MyEntityDto2, MyEntity>(new MyEntityDto2 { Number = 42 });
+        myEntity.Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        // IEnumerable
+        _objectMapper.Map<IEnumerable<MyEntity>, IEnumerable<MyEntityDto2>>(new List<MyEntity>()
+        {
+            new MyEntity { Number = 42 }
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+
+        _objectMapper.Map<IEnumerable<MyEntityDto2>, IEnumerable<MyEntity>>(new List<MyEntityDto2>()
+        {
+            new MyEntityDto2 { Number = 42 }
+        }).First().Number.ShouldBe(43); //MyEntityToMyEntityDto2Mapper adds 1 to number of the source.
+    }
+
+    [Fact]
     public void Should_Use_Destination_Object_Constructor_If_Available()
     {
         var id = Guid.NewGuid();

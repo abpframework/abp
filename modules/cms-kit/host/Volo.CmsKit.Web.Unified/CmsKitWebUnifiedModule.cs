@@ -263,7 +263,7 @@ public class CmsKitWebUnifiedModule : AbpModule
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
+        app.MapStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
 

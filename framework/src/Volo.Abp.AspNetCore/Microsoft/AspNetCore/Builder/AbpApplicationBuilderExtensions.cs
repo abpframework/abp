@@ -1,9 +1,14 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.RequestLocalization;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.StaticAssets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -11,8 +16,10 @@ using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
+using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Microsoft.AspNetCore.Builder;
 
@@ -116,5 +123,29 @@ public static class AbpApplicationBuilderExtensions
     public static IApplicationBuilder UseDynamicClaims(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AbpDynamicClaimsMiddleware>();
+    }
+
+    public static StaticAssetsEndpointConventionBuilder MapStaticAssets(this IApplicationBuilder app, string? staticAssetsManifestPath = null)
+    {
+        if (app is not IEndpointRouteBuilder endpoints)
+        {
+            throw new AbpException("The app(IApplicationBuilder) is not an IEndpointRouteBuilder.");
+        }
+
+        var contentTypeProvider = endpoints.ServiceProvider.GetRequiredService<AbpFileExtensionContentTypeProvider>();
+        var webContentFileProvider = new WebContentFileProvider(
+            endpoints.ServiceProvider.GetRequiredService<IVirtualFileProvider>(),
+            null,
+            endpoints.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>()
+        );
+
+        app.UseStaticFiles(new StaticFileOptions()
+        {
+            ContentTypeProvider = contentTypeProvider,
+            FileProvider = webContentFileProvider
+        });
+
+        var result = endpoints.MapStaticAssets(staticAssetsManifestPath);
+        return result;
     }
 }

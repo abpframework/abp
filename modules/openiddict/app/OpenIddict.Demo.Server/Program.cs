@@ -47,7 +47,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.MapStaticAssets();
 app.UseRouting();
 app.UseCors();
 app.UseAuthentication();

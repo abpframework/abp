@@ -567,6 +567,10 @@ namespace Volo.Docs.Pages.Documents.Project
                     await OnSectionRenderingErrorAsync(e);
                 }
             }
+            else
+            {
+                DocumentNavigationsDto = new DocumentNavigationsDto();
+            }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode, ProjectName);

@@ -361,7 +361,7 @@ public class MyProjectNameBlazorModule : AbpModule
         }
 
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
 
