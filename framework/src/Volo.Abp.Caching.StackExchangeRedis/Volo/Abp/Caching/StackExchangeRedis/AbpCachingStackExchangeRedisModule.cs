@@ -27,7 +27,8 @@ public class AbpCachingStackExchangeRedisModule : AbpModule
                 }
             });
 
-            context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, AbpRedisCache>());
+            //liangshiwei will update the AbpRedisCache
+            //context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, AbpRedisCache>());
         }
     }
 }
