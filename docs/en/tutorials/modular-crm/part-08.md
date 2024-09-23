@@ -10,24 +10,24 @@
 }
 ````
 
-In this part, you will learn how you can make database-level JOIN operation on data of multiple modules, when their data located in the same physical database.
+In this part, you will learn how to perform a database-level JOIN operation on the data of multiple modules when their data is located in the same physical database.
 
 ## The Problem
 
-One of the essential purposes of modularity is to create modules those hide (encapsulate) their internal data and implementation details from the other modules. They communicate each other through well-defined [integration services](../../framework/api-development/integration-services.md) and [events](framework/infrastructure/event-bus/distributed). In that way, you can independently develop and change module implementations (even modules' database structures) from each other as long as you don't break these inter-module integration points.
+One essential purpose of modularity is to create modules that hide (encapsulate) their internal data and implementation details from the other modules. These modules communicate with each other through well-defined [integration services](../../framework/api-development/integration-services.md) and [events](framework/infrastructure/event-bus/distributed). In that way, you can independently develop and change module implementations (even modules' database structures) from each other as long as you don't break these inter-module integration points.
 
-In a non-modular application, accessing the related data is easy. You could just write a LINQ expression that joins `Orders` and `Products` database tables to get the data with a single database query. It would be easier to implement and executed with a good performance.
+In a non-modular application, accessing the related data is easy. You could write a LINQ expression that joins `Orders` and `Products` database tables to get the data with a single database query. It would be easier to implement and execute with a good performance.
 
-On the other hand, it becomes harder to perform operations or get reports those requires to access data of multiple modules in a modular system. Remember the *[Implementing Integration Services](part-06.md)* part; We couldn't access the product data inside the Ordering module (`IOrderingDbContext` only defines a `DbSet<Order>`), so we needed to create an integration services just to get names of products. This approach is harder to implement and less performant (yet it is acceptable if you don't show too many orders on the UI or if you properly implement a caching layer), but it gives freedom to the Products module about its internal database or application logic changes. For example, you can decide to move product data to another physical database, or even to another database management system (DBMS) without effecting the other modules.
+On the other hand, it becomes harder to perform operations or get reports requiring access to multiple modules' internal data in a modular system. Remember the *[Implementing Integration Services](part-06.md)* part; We couldn't access the product data inside the Ordering module (`IOrderingDbContext` only defines a `DbSet<Order>`), so we needed to create an integration service just to get names of products. This approach is harder to implement and less performant (yet it is acceptable if you don't show too many orders on the UI or properly implement a caching layer). Still, it gives freedom to the Products module about its internal database or application logic changes. For example, you can decide to move product data to another physical database or even to another database management system (DBMS) without affecting the other modules.
 
 ## A Solution Option
 
-If you want to perform a single database query that spans database tables of multiple modules in a modular system, you have still some options. One option can be creating a reporting module that has access to all of the entities (or database tables). However, when you do that, you accept the following limitations:
+If you want to perform a single database query that spans database tables of multiple modules in a modular system, you still have some options. One option can be creating a reporting module with access to all entities (or database tables). However, when you do that, you accept the following limitations:
 
-* When you make changes in a module's database structure, you should also update your reporting code. That is reasonable, but you should be informed by all module developers in such a case.
-* You can not change DBMS of a module easily. For example, if you decide to use MongoDB for your Products module while the Ordering module still uses SQL Server, performing such a JOIN operation would not be possible. Even moving Products module to another SQL Server database in another physical server can break your reporting logic.
+* When you change a module's database structure, you should also update your reporting code. That is reasonable, but all module developers should let you know in such a case.
+* You can not change the DBMS of a module easily. For example, performing such a JOIN operation would be impossible if you decide to use MongoDB for your Products module while the Ordering module still uses SQL Server. Moving the Products module to another SQL Server database in another physical server can also break your reporting logic.
 
-If these are not problems for you, or you can handle when they become problems, you can create reporting modules or aggregator modules that works with multiple modules' data.
+If these are not problems for you, or if you can handle them when they become problems, you can create reporting modules or aggregator modules that work with multiple modules' data.
 
 In the next section, we will use the main application's codebase to implement such a JOIN operation to keep the tutorial short. However, you already learned how to create new modules, so you can create a new module and develop your JOIN logic inside that new module if you want.
 
@@ -41,7 +41,7 @@ We will define the `IOrderReportingAppService` interface in the `ModularCrm.Appl
 
 #### Adding `ModularCrm.Ordering.Contracts` Package Reference
 
-As the first step, we should to add a reference of the `ModularCrm.Ordering.Contracts` package (of the `ModularCrm.Ordering` module) since we will reuse the `OrderState` enum which is defined in that package.
+As the first step, we should reference the `ModularCrm.Ordering.Contracts` package (of the `ModularCrm.Ordering` module) since we will reuse the `OrderState` enum defined in that package.
 
 Open the ABP Studio's *Solution Explorer* panel, right-click the `ModularCrm.Application.Contracts` package and select the *Add Package Reference* command:
 
@@ -51,11 +51,11 @@ Select the *Imported modules* tab, find and check the `ModularCrm.Ordering.Contr
 
 ![abp-studio-add-package-reference-dialog-4](images/abp-studio-add-package-reference-dialog-4.png)
 
-The package reference is added and now we can use the types in the `ModularCrm.Ordering.Contracts` package.
+The package reference has been added, and we can now use the types in the `ModularCrm.Ordering.Contracts` package.
 
 #### Defining the `IOrderReportingAppService` Interface
 
-Open the main `ModularCrm` .NET solution in your IDE, find the `ModularCrm.Application.Contracts` project, create an `Orders` folder and add an `IOrderReportingAppService` interface inside it. Here the definition of that interface:
+Open the main `ModularCrm` .NET solution in your IDE, find the `ModularCrm.Application.Contracts` project, create an `Orders` folder and add an `IOrderReportingAppService` interface. Here is the definition of that interface:
 
 ````csharp
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace ModularCrm.Orders
 }
 ````
 
-We have a single method, `GetLatestOrders`, that will return a list of the latest orders. We should also define the `OrderReportDto` class that is returned by that method. Create the following class in the same `Orders` folder:
+We have a single method, `GetLatestOrders`, that will return a list of the latest orders. We should also define the `OrderReportDto` class that that method returns. Create the following class in the same `Orders` folder:
 
 ````csharp
 using System;
@@ -93,15 +93,15 @@ namespace ModularCrm.Orders
 }
 ````
 
-`OrderReportDto` contains data from both of `Order` and  `Product` entities. We could use the `OrderState` since we have a reference to the package which defines that enum.
+`OrderReportDto` contains data from both the `Order` and  `Product` entities. We could use the `OrderState` since we have a reference to the package that defines that enum.
 
-After adding these files, the final folder structure should be like that:
+After adding these files, the final folder structure should be like this:
 
 ![visual-studio-order-reporting-app-service](images/visual-studio-order-reporting-app-service.png)
 
 ### Implementing the `OrderReportingAppService` Class
 
-Create an `Orders` folder inside of the `ModularCrm.Application` project and add a class named `OrderReportingAppService` inside it. The final folder structure should be like that:
+Create an `Orders` folder inside the `ModularCrm.Application` project and add a class named `OrderReportingAppService` inside it. The final folder structure should be like this:
 
 ![visual-studio-order-reporting-app-service-impl](images/visual-studio-order-reporting-app-service-impl.png)
 
@@ -160,11 +160,11 @@ namespace ModularCrm.Orders
 
 Let's explain that class;
 
-* It inject [repository](../../framework/architecture/domain-driven-design/repositories.md) services for `Order` and `Product` entities. We can access all entities of all modules from the main application codebase.
-* In the `GetLatestOrders` method, we are getting `IQueryable` objects for the entities, so we can create LINQ expressions.
-* Then we are executing a LINQ expression with `join` keyword, so we can be able to execute a single query that uses multiple tables.
+* It injects [repository](../../framework/architecture/domain-driven-design/repositories.md) services for `Order` and `Product` entities. We can access all entities of all modules from the main application codebase.
+* In the `GetLatestOrders` method, we get `IQueryable` objects for the entities so we can create LINQ expressions.
+* Then, we execute a LINQ expression with the `join` keyword, enabling us to execute a single query that uses multiple tables.
 
-That's all. In that way, you can execute JOIN queries that uses multiple modules' data. However, if you write majority of your application code into the main application and perform operations on multiple modules, then your system won't be so modular. So, here we show it is technically possible. Please use at your own risk.
+That's all. In that way, you can execute JOIN queries that use data from multiple modules. However, if you write most of your code into the main application and perform operations on multiple modules, your system can not be so modular. Here we show it is technically possible. Please use at your own risk.
 
 ### Testing the Reporting Service
 
@@ -186,7 +186,7 @@ In the last three parts of this tutorial, you have learned three ways of integra
 2. You can publish events from a module and subscribe to these events from other modules.
 3. You can write your code into the main application, so you can access to all entities (and related data) of all modules. Instead of writing it into the main application code, you can also create some aggregation or reporting modules that can access more than one module entities.
 
-Now, you know the fundamental principles and mechanics to build sophisticated modular monolith application with ABP.
+Now, you know the fundamental principles and mechanics of building sophisticated modular monolith applications with ABP.
 
 ## Download the Source Code
 

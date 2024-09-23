@@ -10,7 +10,7 @@
 }
 ````
 
-Follow the [Get Stared](../../get-started/layered-web-application.md) guide to create a new layered web application with the following configuration:
+Follow the *[Get Stared](../../get-started/layered-web-application.md)* guide to create a new layered web application with the following configuration:
 
 * **Solution name**: `ModularCrm`
 * **UI Framework**: ASP.NET Core MVC / Razor Pages
@@ -20,7 +20,7 @@ You can select the other options based on your preference.
 
 > **Please complete the [Get Stared](../../get-started/layered-web-application.md) guide and run the web application before going further.**
 
-The initial solution structure should be like the following in ABP Studio's *Solution Explorer*:
+The initial solution structure should be like the following in ABP Studio's *[Solution Explorer](../../studio/solution-explorer.md)*:
 
 ![solution-explorer-modular-crm-initial](images/solution-explorer-modular-crm-initial.png)
 
