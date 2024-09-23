@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import compare from 'just-compare';
 import { filter, take } from 'rxjs/operators';
 import { Session } from '../models/session';
@@ -12,6 +13,7 @@ import { AbpLocalStorageService } from './local-storage.service';
 })
 export class SessionStateService {
   private readonly store = new InternalStore({} as Session.State);
+  protected readonly document = inject(DOCUMENT);
 
   private updateLocalStorage = () => {
     this.localStorageService.setItem('abpSession', JSON.stringify(this.store.state));
@@ -89,9 +91,9 @@ export class SessionStateService {
       this.store.patch({ language });
     }
 
-    const currentAttribute = document.documentElement.getAttribute('lang');
+    const currentAttribute = this.document.documentElement.getAttribute('lang');
     if (language !== currentAttribute) {
-      document.documentElement.setAttribute('lang', language);
+      this.document.documentElement.setAttribute('lang', language);
     }
   }
 }
