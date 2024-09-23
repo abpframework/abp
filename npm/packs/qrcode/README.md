@@ -124,4 +124,4 @@ The following page explains how you use the ABP.IO Platform as a .NET developer 
 
 ## 📫 Bug & Support
 
-Support for open-source ABP Framework client-side packages is available at [GitHub Issues](https://github.com/abpframework/abp/issues), and the support is available at [abp.io/support](https://abp.io/support/questions).
+Support for open-source ABP Framework client-side packages is available at [GitHub Issues](https://github.com/abpframework/abp/issues), and the commercial support is available at [abp.io/support](https://abp.io/support/questions).
