@@ -32,7 +32,7 @@ For more information, check out the below links:
 
 Why should you use the ABP.IO Platform instead of creating a new solution from scratch?
 
-You can find the answer here 👉🏻 [Why ABP Platform?](https://abp.io/docs/commercial/7.2/why-abp-io-platform)
+You can find the answer here 👉🏻 [Why ABP Platform?](https://abp.io/docs/latest/others/why-abp-platform)
 
 
 ## 🚀 Key Features of the ABP Framework
