@@ -15,14 +15,14 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
 {
     private readonly IVirtualFileProvider _virtualFileProvider;
     private readonly IFileProvider _fileProvider;
-    private readonly IWebHostEnvironment _hostingEnvironment;
+    private readonly IWebHostEnvironment? _hostingEnvironment;
     private string _rootPath = "/wwwroot";
 
     protected AbpAspNetCoreContentOptions Options { get; }
 
     public WebContentFileProvider(
         IVirtualFileProvider virtualFileProvider,
-        IWebHostEnvironment hostingEnvironment,
+        IWebHostEnvironment? hostingEnvironment,
         IOptions<AbpAspNetCoreContentOptions> options)
     {
         _virtualFileProvider = virtualFileProvider;
@@ -85,8 +85,8 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
         return new CompositeChangeToken(
             new[]
             {
-                    _fileProvider.Watch(_rootPath + filter),
-                    _fileProvider.Watch(filter)
+                _fileProvider.Watch(_rootPath + filter),
+                _fileProvider.Watch(filter)
             }
         );
     }
@@ -94,14 +94,16 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
     protected virtual IFileProvider CreateFileProvider()
     {
         var fileProviders = new List<IFileProvider>
-            {
-                new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
-                _virtualFileProvider
-            };
+        {
+            _virtualFileProvider
+        };
 
-        return new CompositeFileProvider(
-            fileProviders
-        );
+        if (_hostingEnvironment != null)
+        {
+            fileProviders.Add(_hostingEnvironment.WebRootFileProvider);
+        }
+
+        return new CompositeFileProvider(fileProviders);
     }
 
     protected virtual bool ExtraAllowedFolder(string path)

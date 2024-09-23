@@ -210,7 +210,7 @@ public class MyProjectNameAuthServerModule : AbpModule
 
         app.UseHttpsRedirection();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapStaticAssets();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();

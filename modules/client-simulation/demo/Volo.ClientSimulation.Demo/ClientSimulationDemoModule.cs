@@ -40,7 +40,7 @@ public class ClientSimulationDemoModule : AbpModule
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseStaticFiles();
+        app.MapStaticAssets();
         app.UseRouting();
         app.UseConfiguredEndpoints();
     }

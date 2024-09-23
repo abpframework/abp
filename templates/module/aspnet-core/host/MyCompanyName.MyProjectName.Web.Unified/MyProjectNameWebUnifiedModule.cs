@@ -158,7 +158,7 @@ public class MyProjectNameWebUnifiedModule : AbpModule
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
+        app.MapStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
 

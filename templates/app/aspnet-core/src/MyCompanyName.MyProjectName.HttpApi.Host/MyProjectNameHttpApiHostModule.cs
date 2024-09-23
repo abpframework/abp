@@ -188,7 +188,7 @@ public class MyProjectNameHttpApiHostModule : AbpModule
 
         app.UseAbpRequestLocalization();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapStaticAssets();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
