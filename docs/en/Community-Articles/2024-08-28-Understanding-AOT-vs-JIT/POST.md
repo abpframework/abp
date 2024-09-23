@@ -1,6 +1,6 @@
 
 
-![book](images/book.jpg)
+![book](images/cover.png)
 
 Ahead-of-Time (AOT) compilation and Just-in-Time (JIT) compilation are two different methods for compiling Angular applications. Here's a breakdown of the differences between them:
 
