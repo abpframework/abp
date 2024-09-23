@@ -14,13 +14,13 @@
 }
 ````
 
-In the previous parts, we've created two modules: The Products module to store and manage products and the Orders module to accept orders. However, these modules were completely independent from each other. Only the main application brings them together to execute in the same application, but these modules don't communicate to each other.
+In the previous parts, we created two modules: the Products module to store and manage products and the Orders module to accept orders. However, these modules were completely independent from each other. Only the main application brought them together to execute in the same application, but these modules don't communicate with each other.
 
 In the next three parts, you will learn to implement three patterns for integrating these modules:
 
-1. The Order module will make request to the Products module to get product information when needed.
-2. The Product module will listen to events from the Orders module, so it can decrease stock count of a product when an order is placed.
-3. Finally, we will execute a database query that includes product and order data together.
+1. The Order module will make a request to the Products module to get product information when needed.
+2. The Product module will listen to events from the Orders module, so it can decrease a product's stock count when an order is placed.
+3. Finally, we will execute a database query that includes product and order data.
 
 Let's begin from the first one: The Integration Services.
 
@@ -77,15 +77,15 @@ namespace ModularCrm.Products.Integration
 >
 > You may think if we can use the existing application services (like `IProductAppService`) from other modules instead of creating specific integration services. Technically you can use, ABP has no restriction. However, from good design and best practice points, we don't suggest it. Because, application services are designed to be consumed specifically by the presentation layer. They will have different authorization and validation logic, they will need different DTO input and output properties, they will have different performance, optimization and caching requirements, and so on. And most importantly, all these will change by the time based on UI requirements and these changes may break your integrations later. It is best to implement specific integration APIs that is designed and optimized for that purpose.
 >
-> We've reused the `ProductDto` object that was actually created for `IProductAppService`. That can be reasonable from the maintenance point. But, if you think your integration service results can be different than the application service results in the future, it can be good to separate them from the first day, so you don't need to introduce breaking changes later.
+> We've reused the `ProductDto` object created for `IProductAppService`, which can be reasonable from a maintenance point of view. But if you think your integration service results will be different from the application service results in the future, it can be good to separate them from the first day so you don't need to introduce breaking changes later.
 
 ### Implementing the `ProductIntegrationService` Class
 
-We've defined the integration service interface. Now, we can implement it in the  `ModularCrm.Products.Application` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like that:
+We've defined the integration service interface. Now, we can implement it in the  `ModularCrm.Products.Application` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like this:
 
 ![visual-studio-product-integration-service-implementation](images/visual-studio-product-integration-service-implementation.png)
 
-Open the `ProductIntegrationService.cs` file and replace it's content with the following code block:
+Open the `ProductIntegrationService.cs` file and replace its content with the following code block:
 
 ````csharp
 using System;
@@ -121,11 +121,11 @@ namespace ModularCrm.Products.Integration
 
 The implementation is pretty simple. Just using a [repository](../../framework/architecture/domain-driven-design/repositories.md) to query `Product` [entities](../../framework/architecture/domain-driven-design/entities.md).
 
-> Here, we directly used `List<T>` classes, but instead you could wrap inputs and outputs into [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). In that way, it can be possible to add new properties to these DTOs without changing the signature of your integration service method (so, without introducing breaking change for your client modules).
+> Here, we directly used `List<T>` classes, but instead, you could wrap inputs and outputs into [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). In that way, it can be possible to add new properties to these DTOs without changing the signature of your integration service method (and without introducing breaking changes for your client modules).
 
 ## Consuming the Products Integration Service
 
-The Product Integration Service is ready to be consumed by the other modules. In this section, we will use it in the Ordering module to convert product Ids to product names.
+The Product Integration Service is ready for the other modules to use. In this section, we will use it in the Ordering module to convert product IDs to product names.
 
 ### Adding a Reference to the `ModularCrm.Products.Application.Contracts` Package
 
@@ -137,9 +137,9 @@ In the opening dialog, select the *This solution* tab, find and check the `Modul
 
 ![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3.png)
 
-ABP Studio adds the package reference and also arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
+ABP Studio adds the package reference and arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
 
-> Instead of directly adding such a package reference, it can be best to import the module first (right-click the `ModularCrm.Ordering` module, select the Import Module command and import the `ModularCrm.Products` module), then install the package reference. In that way, it would be easy to see and keep track of inter-module dependencies.
+> Instead of directly adding such a package reference, it can be best to import the module first (right-click the `ModularCrm.Ordering` module, select the _Import Module_ command and import the `ModularCrm.Products` module), then install the package reference. In that way, it would be easy to see and keep track of inter-module dependencies.
 
 ### Using the Products Integration Service
 
@@ -198,15 +198,15 @@ namespace ModularCrm.Ordering.Pages.Orders
 
 Let's see what we've changed:
 
-* Defined a `ProductNames` dictionary. We will use it on the UI to convert product ids to product names. We are filling that dictionary by getting products from the product integration service.
-* Injecting `IProductIntegrationService` interface, so we can use it to request products.
+* We have defined a `ProductNames` dictionary. We will use it on the UI to convert product IDs to product names. We are filling that dictionary with products from the product integration service.
+* Injecting the `IProductIntegrationService` interface so we can use it to request products.
 * In the `OnGetAsync` method;
   * First getting the orders from the ordering module's database just like done before.
-  * Next, we are preparing a unique list of product ids, since the `GetProductsByIdsAsync` methods requests it.
+  * Next, we are preparing a unique list of product IDs since the `GetProductsByIdsAsync` method requests it.
   * Then we are calling the `IProductIntegrationService.GetProductsByIdsAsync` method to get a `List<ProductDto>` object.
-  * In the last line, we are converting the product list to a dictionary where the key is `Guid Id` and the value is `string Name`. In that way, we can easily find a product's name with it's id.
+  * In the last line, we are converting the product list to a dictionary, where the key is `Guid Id` and the value is `string Name`. That way, we can easily find a product's name with its ID.
 
-Open the `Index.cshtml` file, change the `@order.ProductId` part by `@Model.ProductNames[order.ProductId]` to write the product name instead of the product id. The final `Index.cshtml` content should be the following:
+Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@Model.ProductNames[order.ProductId]` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
 
 ````html
 @page
@@ -230,15 +230,15 @@ Open the `Index.cshtml` file, change the `@order.ProductId` part by `@Model.Prod
 </abp-card>
 ````
 
-That's all. Now, you can graph build the main application and run in ABP Studio to see the result:
+That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
 
 ![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
 
-As you notice, we can see the product names instead of product ids.
+As you can see, we can see the product names instead of product IDs.
 
 In the way explained in this section, you can easily create integration services for your modules and consume these integration services in any other module.
 
 > **Design Tip**
 >
-> It is suggested to keep that type of communication minimum to not couple your modules to each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs to product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Products module. Especially, if you consider to convert your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
+> It is suggested that you keep that type of communication to a minimum and not couple your modules with each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Products module. Especially if you consider converting your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
 
