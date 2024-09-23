@@ -105,7 +105,7 @@ public class GetSourceCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Download the source code of the specified module.";
     }

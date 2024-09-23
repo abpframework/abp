@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,13 +67,13 @@ public class HelpCommand : IConsoleCommand, ITransientDependency
 
         foreach (var command in AbpCliOptions.Commands.ToArray())
         {
-            string shortDescription;
-
-            using (var scope = ServiceScopeFactory.CreateScope())
+            var method = command.Value.GetMethod("GetShortDescription", BindingFlags.Static | BindingFlags.Public);
+            if (method == null)
             {
-                shortDescription = ((IConsoleCommand)scope.ServiceProvider
-                        .GetRequiredService(command.Value)).GetShortDescription();
+                continue;
             }
+            
+            var shortDescription = (string) method.Invoke(null, null);
 
             sb.Append("    > ");
             sb.Append(command.Key);
@@ -91,7 +92,7 @@ public class HelpCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Show command line help. Write ` abp help <command> `";
     }

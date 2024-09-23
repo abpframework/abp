@@ -63,7 +63,7 @@ public class InstallLibsCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.";
     }
