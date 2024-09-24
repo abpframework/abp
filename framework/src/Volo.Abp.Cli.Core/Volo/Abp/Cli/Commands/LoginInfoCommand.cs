@@ -62,7 +62,7 @@ public class LoginInfoCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Show your login info.";
     }

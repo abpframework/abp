@@ -14,7 +14,7 @@
 }
 ````
 
-In this part, you will learn how to create entities, services and a basic user interface for the products module.
+In this part, you will learn how to create entities and services and a basic user interface for the products module.
 
 > **This module's functionality will be minimal to focus on modularity.** You can follow the [Book Store tutorial](../book-store/index.md) to learn building more real-world applications with ABP.
 
@@ -47,7 +47,7 @@ public class Product : AggregateRoot<Guid>
 
 ## Mapping Entity to Database
 
-The next step is to configure Entity Framework Core `DbContext` class and the database for the new entity.
+The next step is to configure the Entity Framework Core `DbContext` class and the database for the new entity.
 
 ### Add a `DbSet` Property
 
@@ -101,11 +101,11 @@ public interface IProductsDbContext : IEfCoreDbContext
 }
 ````
 
-Having such an `IProductsDbContext` interface allows us to decouple our repositories (and other classes) from the concrete `ProductsDbContext` class, which provides flexibility to the final application to merge multiple `DbContext`s into a single `DbContext` to manage database migrations easier and have a database level transaction support for multi-module database operations.
+Having such an `IProductsDbContext` interface allows us to decouple our repositories (and other classes) from the concrete `ProductsDbContext` class. This provides flexibility to the final application to merge multiple `DbContext`s into a single `DbContext` to manage database migrations easier and have a database level transaction support for multi-module database operations.
 
 ### Configure the Table Mapping
 
-The DDD module template has designed flexible so that your module can have a separate physical database, or store its tables inside another database, like the main database of your application. To make that possible, it configures the database mapping in an extension method (`ConfigureProducts`) that is called inside the `OnModelCreating` method above. Find that extension method (in the `ProductsDbContextModelCreatingExtensions` class) and change its content as the following code block:
+The DDD module template is designed to be flexible so that your module can have a separate physical database or store its tables inside another database, like the main database of your application. To make that possible, it configures the database mapping in an extension method (`ConfigureProducts`) called inside the `OnModelCreating` method above. Find that extension method (in the `ProductsDbContextModelCreatingExtensions` class) and change its content as the following code block:
 
 ````csharp
 using Microsoft.EntityFrameworkCore;
@@ -137,7 +137,7 @@ public static class ProductsDbContextModelCreatingExtensions
 }
 ````
 
-As first, we are setting the database table name with the `ToTable` method. `ProductsDbProperties.DbTablePrefix` defines a constant that is added as a prefix to all database table names of this module. If you see the `ProductsDbProperties` class (in the `ModularCrm.Products.Domain` project), `DbTablePrefix` value is `Products`. In that case, the table name for the `Product` entity will be `ProductsProducts`. We think that is unnecessary for such a simple module and we can remove that prefix. So, you can change the `ProductsDbProperties` class with the following content to set an empty string to the `DbTablePrefix` property:
+First, we are setting the database table name with the `ToTable` method. `ProductsDbProperties.DbTablePrefix` defines a constant that is added as a prefix to all database table names of this module. If you see the `ProductsDbProperties` class (in the `ModularCrm.Products.Domain` project), `DbTablePrefix` value is `Products`. In that case, the table name for the `Product` entity will be `ProductsProducts`. That is unnecessary for such a simple module; we can remove that prefix. So, you can change the `ProductsDbProperties` class with the following content to set an empty string to the `DbTablePrefix` property:
 
 ````csharp
 namespace ModularCrm.Products;
@@ -150,15 +150,15 @@ public static class ProductsDbProperties
 }
 ````
 
-You can set a `DbSchema` to collect a module's tables under a separate schema (if it is supported by your DBMS), or use a `DbTablePrefix` as a prefix for all tables names of a module. For this tutorial, we won't set any of them.
+You can set a `DbSchema` to collect a module's tables under a separate schema (if your DBMS supports it) or use a `DbTablePrefix` as a prefix for all module table names. We won't set any of them for this tutorial.
 
-In that point, build the `ModularCrm.Products` .NET solution in your IDE (or in ABP Studio UI). We will switch to the main application's .NET solution.
+At that point, build the `ModularCrm.Products` .NET solution in your IDE (or ABP Studio UI). We will switch to the main application's .NET solution.
 
 ### Configuring the Main Application Database
 
-We changed the Entity Framework Core configuration. The next step should be adding a new code-first database migration and update the database, so the new Products table is created on the database.
+We changed the Entity Framework Core configuration. The next step should be adding a new code-first database migration and updating the database so the new Products table is created on the database.
 
-We are not managing the database migrations in the module. Instead, the main application decides which DBMS (Database Management System) to use and how to share physical database(s) among modules. To keep this tutorial simple, we will store all the data of all modules in a single physical database.
+We are not managing the database migrations in the module. Instead, the main application decides which DBMS (Database Management System) to use and how to share physical database(s) among modules. We will store all the modules' data in a single physical database to simplify this tutorial.
 
 Open the `ModularCrm` module (which is the main application) in your IDE:
 
@@ -172,7 +172,7 @@ We will merge module's database configuration into `ModularCrmDbContext`.
 
 #### Replace the `IProductsDbContext` Service
 
-Follow the 3 steps below;
+Follow the three steps below;
 
 **(1)** Add the following attribute on top of the `ModularCrmDbContext` class:
 
@@ -206,7 +206,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-In this way, `ModularCrmDbContext` can be used by the products module over the `IProductsDbContext` interface. This part is only needed for one time for a module. Next time, you can just add a new database migration as explained in the next section.
+In this way, `ModularCrmDbContext` can be used by the products module over the `IProductsDbContext` interface. This part is only needed once for a module. Next time, you can add a new database migration, as explained in the next section.
 
 #### Add a Database Migration
 
@@ -222,7 +222,7 @@ The *Add Migration* command opens a new dialog to get a migration name:
 
 ![abp-studio-add-entity-framework-core-migration-dialog](images/abp-studio-add-entity-framework-core-migration-dialog.png)
 
-Once you click the *OK* button, a new database migration class is added into the `Migrations` folder of the `ModularCrm.EntityFrameworkCore` project:
+Once you click the *OK* button, a new database migration class is added to the `Migrations` folder of the `ModularCrm.EntityFrameworkCore` project:
 
 ![visual-studio-new-migration-class](images/visual-studio-new-migration-class.png)
 
@@ -256,11 +256,11 @@ public interface IProductAppService : IApplicationService
 }
 ````
 
-We are defining application service interfaces and [data transfer objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) in the `Application.Contracts` project. In that way, we can share that contracts with clients without sharing the actual implementation class.
+We are defining application service interfaces and [data transfer objects](../../framework/architecture/domain-driven-design/data-transfer-objects.md) in the `Application.Contracts` project. That way, we can share those contracts with clients without sharing the actual implementation class.
 
 ### Defining Data Transfer Objects
 
-`GetListAsync` and `CreateAsync` methods are using `ProductDto` and `ProductCreationDto` classes that are not defined yet. So, we need to define them.
+The `GetListAsync` and `CreateAsync` methods use the `ProductDto` and `ProductCreationDto` classes, which have not been defined yet. So, we need to define them.
 
 Create a `ProductCreationDto` class under the `ModularCrm.Products.Application.Contracts` project:
 
@@ -340,11 +340,11 @@ public class ProductAppService : ProductsAppService, IProductAppService
 }
 ````
 
-Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not confuse about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configuration for [localization](../../framework/fundamentals/localization.md) and [object mapping](../../framework/infrastructure/object-to-object-mapping.md) (you can see in the `ModularCrm.Products.Application` project). You can inherit all of your application services from that base class. In this way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may confuse later.
+Notice that `ProductAppService` class implements the `IProductAppService` and also inherits from the `ProductsAppService` class. Do not be confused about the naming (`ProductAppService` and `ProductsAppService`). The `ProductsAppService` is a base class. It makes a few configurations for [localization](../../framework/fundamentals/localization.md) and [object mapping](../../framework/infrastructure/object-to-object-mapping.md) (you can see in the `ModularCrm.Products.Application` project). You can inherit all of your application services from that base class. This way, you can define some common properties and methods to share among all your application services. You can rename the base class if you feel that you may be confused later.
 
 #### Object Mapping
 
-`ProductAppService.GetListAsync` method uses the `ObjectMapper` service to convert `Product` entities to `ProductDto` objects. The mapping should be configured. Open the `ProductsApplicationAutoMapperProfile` class in the `ModularCrm.Products.Application` project and change it as the following code block:
+`ProductAppService.GetListAsync` method uses the `ObjectMapper` service to convert `Product` entities to `ProductDto` objects. The mapping should be configured. Open the `ProductsApplicationAutoMapperProfile` class in the `ModularCrm.Products.Application` project and change it to the following code block:
 
 ````csharp
 using AutoMapper;
@@ -360,14 +360,14 @@ public class ProductsApplicationAutoMapperProfile : Profile
 }
 ````
 
-We've just added the `CreateMap<Product, ProductDto>();` line to define the mapping.
+We've added the `CreateMap<Product, ProductDto>();` line to define the mapping.
 
 ### Exposing Application Services as HTTP API Controllers
 
-For this application, we don't need to create HTTP API endpoints for the products module actually. But, it is good to understand how to do it when you need. You have two options;
+For this application, we don't need to create HTTP API endpoints for the products module. But it is good to understand how to do it when you need it. You have two options;
 
-* You can create a regular ASP.NET Core Controller class into the `ModularCrm.Products.HttpApi` project, inject `IProductAppService` and use it to create wrapper methods. We will do it later while we will create the Ordering module.
-* Alternatively, you can just use the ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature to automatically expose your application services as API controllers by conventions. We will do it here.
+* You can create a regular ASP.NET Core Controller class in the `ModularCrm.Products.HttpApi` project, inject `IProductAppService` and use it to create wrapper methods. We will do this later while we create the Ordering module.
+* Alternatively, you can use the ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature to expose your application services as API controllers by conventions. We will do it here.
 
 Open the `ModularCrmWebModule` class in the main application's solution (the `ModularCrm` solution), find the `PreConfigureServices` method and add the following lines inside that method:
 
@@ -378,7 +378,7 @@ PreConfigure<IMvcBuilder>(mvcBuilder =>
 });
 ````
 
-This will tell to ASP.NET Core to explore the given assembly to discover controllers.
+This will tell the ASP.NET Core to explore the given assembly to discover controllers.
 
 Then open the `ConfigureAutoApiControllers` method of the same class and add a second `ConventionalControllers.Create` call as shown in the following code block:
 
@@ -392,21 +392,21 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 });
 ````
 
-This will tell to ABP framework to create API controllers for the application services in the given assembly.
+This will tell the ABP framework to create API controllers for the application services in the assembly.
 
-> We made these configurations in the main application's solution since there is no project in the product module's solution that has reference to ASP.NET Core MVC packages and uses the application layer of the product module. If you add a reference of `ModularCrm.Products.Application` to `ModularCrm.Products.HttpApi`, then you can move these configurations to the `ModularCrm.Products.HttpApi` project.
+> We made these configurations in the main application's solution since there is no project in the product module's solution that references ASP.NET Core MVC packages and uses the product module's application layer. If you add a reference of `ModularCrm.Products.Application` to `ModularCrm.Products.HttpApi`, then you can move these configurations to the `ModularCrm.Products.HttpApi` project.
 
-Now, the application services defined in the `ModularCrm.Products.Application` project will be exposed as API controllers automatically by ABP. In the next section, we will use these API controller to create some example products.
+Now, ABP will automatically expose the application services defined in the `ModularCrm.Products.Application` project as API controllers. The next section will use these API controllers to create some example products.
 
 ### Creating Example Products
 
-In this section, we will create a few example products using the [Swagger UI](../../framework/api-development/swagger.md). In that way, we will have some sample products to show on the UI.
+This section will create a few example products using the [Swagger UI](../../framework/api-development/swagger.md). Thus, we will have some sample products to show on the UI.
 
-Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel, select the *Dotnet CLI* -> *Graph Build* command. In this way, we can be sure that the product module and the main application has built and ready to run.
+Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel and select the *Dotnet CLI* -> *Graph Build* command. This will ensure that the product module and the main application are built and ready to run.
 
-After the build process completes, open the Solution Runner panel and click the *Play* button near to the solution root. Once the `ModularCrm.Web` application runs, we can right-click it and select the *Browse* command to open the user interface.
+After the build process completes, open the Solution Runner panel and click the *Play* button near the solution root. Once the `ModularCrm.Web` application runs, we can right-click it and select the *Browse* command to open the user interface.
 
-Once you see the user interface of the web application, type `/swagger` to the end of the URL to open the Swagger UI. If you scroll down, you should see the `Products` API:
+Once you see the user interface of the web application, type `/swagger` at the end of the URL to open the Swagger UI. If you scroll down, you should see the `Products` API:
 
 ![abp-studio-swagger-ui-in-browser](images/abp-studio-swagger-ui-in-browser.png)
 
@@ -414,7 +414,7 @@ Expand the `/api/app/product` API and click the *Try it out* button as shown in 
 
 ![abp-studio-swagger-ui-create-product-try](images/abp-studio-swagger-ui-create-product-try.png)
 
-Then create a few products by filling the *Request body* and clicking the *Execute* button:
+Then, create a few products by filling in the *Request body* and clicking the *Execute* button:
 
 ![abp-studio-swagger-ui-create-product-execute](images/abp-studio-swagger-ui-create-product-execute.png)
 
@@ -422,15 +422,15 @@ If you check the database, you should see the entities created in the `Products`
 
 ![sql-server-products-database-table-filled](images/sql-server-products-database-table-filled.png)
 
-We've some entities in the database, and we can show them on the user interface now.
+We've some entities in the database; we can show them on the user interface now.
 
 ## Creating the User Interface
 
-In this section, we will create a very simple user interface to demonstrate how to build UI in the products module and make it working in the main application.
+In this section, we will create a very simple user interface to demonstrate how to build UI in the products module and make it work in the main application.
 
-As a first step, stop the application on ABP Studio's Solution Runner if it is currently running.
+As a first step, you can stop the application on ABP Studio's Solution Runner if it is currently running.
 
-Open the `ModularCrm.Products` .NET solution in your IDE, find the `Pages/Products/Index.cshtml` file under the `ModularCrm.Products.Web` project:
+Open the `ModularCrm.Products` .NET solution in your IDE, and find the `Pages/Products/Index.cshtml` file under the `ModularCrm.Products.Web` project:
 
 ![visual-studio-products-cshtml](images/visual-studio-products-cshtml.png)
 
@@ -460,7 +460,7 @@ public class IndexModel : ProductsPageModel
 }
 ````
 
-Here, we are simply using the `IProductAppService` to get a list of all products and assigning the result to the `Products` property. We can use it in the `Index.cshtml` file to show a simple list of products on the UI:
+Here, we simply use the `IProductAppService` to get a list of all products and assign the result to the `Products` property. We can use it in the `Index.cshtml` file to show a simple list of products on the UI:
 
 ````xml
 @page
@@ -494,13 +494,13 @@ Now, you can browse the *Products* page to see the list of the products:
 
 ![abp-studio-browser-list-of-products](images/abp-studio-browser-list-of-products.png)
 
-As you see, it is pretty straightforward to develop a UI page in a modular ABP application. We kept the UI very simple to focus on the modularity. If you want to learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
+As you can see, developing a UI page in a modular ABP application is pretty straightforward. We kept the UI very simple to focus on modularity. To learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
 
 ## Final Notes
 
 Some of the projects in the product module's .NET solution (`ModularCrm.Products`) are not necessary for most of the cases. They are available to support different scenarios. You can delete them from your module (and remove the dependencies on the main application) if you want:
 
-* `ModularCrm.Products.HttpApi`: That project is to define regular HTTP API controllers. If you will always use ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature (like we did in this tutorial), you can delete that project.
+* `ModularCrm.Products.HttpApi`: This project aims to define regular HTTP API controllers. If you will always use ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature (like we did in this tutorial), you can delete that project.
 * `ModularCrm.Products.HttpApi.Client`: That project is generally shared with 3rd-party applications, so they can easily consume your HTTP API endpoints. In a modular monolith application, you typically don't need it.
-* `ModularCrm.Products.HttpApi.Installer`: That project is used to discover and install a multi-projects module (like the product module) when you deploy it to a package management system (like NuGet). If you will use the module with local project references (like we did here), you can delete that project.
+* `ModularCrm.Products.HttpApi.Installer`: That project is used to discover and install a multi-projects module (like the product module) when you deploy it to a package management system (like NuGet). If you use the module with local project references (like we did here), you can delete that project.
 * You can also delete the test projects (there are 4 of them in the solution) if you don't prefer to write unit/integration tests in the module's solution (Legal warning: it is recommended to write tests &#128522;)
