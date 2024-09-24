@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "दो कारक सत्यापन",
     "DisplayName:IsActive": "सक्रिय",
     "DisplayName:LockoutEnabled": "खाता लॉकआउट",
+    "Description:LockoutEnabled": "विफल लॉगिन प्रयासों के बाद खाता लॉक करें",
     "NewRole": "नयी भूमिका",
     "RoleName": "भूमिका का नाम",
     "CreationTime": "रचना समय",

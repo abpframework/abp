@@ -1,0 +1,15 @@
+{
+  "culture": "sv",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "OpenID Connect-begäran kan inte hämtas.",
+    "TheUserDetailsCannotBbeRetrieved": "Användaruppgifterna kan inte hämtas.",
+    "TheApplicationDetailsCannotBeFound": "Ansökningsuppgifterna kan inte hittas.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "Detaljer om den anropande klientapplikationen kan inte hittas.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "Den angivna grant-typen {0} är inte implementerad.",
+    "Authorization": "Auktorisering",
+    "DoYouWantToGrantAccessToYourData": "Vill du ge {0} tillgång till dina data?",
+    "ScopesRequested": "Begärda omfattningar",
+    "Accept": "Acceptera",
+    "Deny": "Förneka"
+  }
+}

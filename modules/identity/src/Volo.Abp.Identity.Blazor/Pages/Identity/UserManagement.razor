@@ -129,12 +129,11 @@
                                     <Field>
                                         <Check TValue="bool" @bind-Checked="@NewEntity.IsActive">@L["DisplayName:IsActive"]</Check>
                                     </Field>
-                                    @if (!IsEditCurrentUser)
-                                    {
-                                        <Field>
-                                            <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-                                        </Field>
-                                    }
+                                    <Field>
+                                        <Tooltip Text="@L["Description:LockoutEnabled"].Value" style="width: fit-content;" Placement="TooltipPlacement.Right" >
+                                            <Check TValue="bool" @bind-Checked="@NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"] <Icon Name="IconName.InfoCircle"/> </Check>
+                                        </Tooltip>
+                                    </Field>
                                     <ExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                                 </TabPanel>
                                 <TabPanel Name="Roles">
@@ -253,12 +252,17 @@
                                             </TextEdit>
                                         </Field>
                                     </Validation>
+                                    @if (!IsEditCurrentUser)
+                                    {
+                                        <Field>
+                                            <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">@L["DisplayName:IsActive"]</Check>
+                                        </Field>
+                                    }
                                     <Field>
-                                        <Check TValue="bool" @bind-Checked="EditingEntity.IsActive">@L["DisplayName:IsActive"]</Check>
-                                    </Field>
-                                    <Field>
-                                        <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-                                    </Field>
+                                            <Tooltip Text="@L["Description:LockoutEnabled"].Value" style="width: fit-content;" Placement="TooltipPlacement.Right" >
+                                                <Check TValue="bool" @bind-Checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"] <Icon Name="IconName.InfoCircle"/> </Check>
+                                            </Tooltip>
+                                        </Field>
                                     <ExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH" ModalType="ExtensionPropertyModalType.EditModal" />
                                 </TabPanel>
                                 @if (EditUserRoles != null && EditUserRoles.Any())

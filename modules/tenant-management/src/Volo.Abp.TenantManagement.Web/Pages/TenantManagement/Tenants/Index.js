@@ -38,6 +38,7 @@
                             _featuresModal.open({
                                 providerName: 'T',
                                 providerKey: data.record.id,
+                                providerKeyDisplayName: data.record.name,
                             });
                         },
                     },

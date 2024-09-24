@@ -27,6 +27,7 @@
     "DisplayName:TwoFactorEnabled": "Επαλήθευση δύο παραγόντων",
     "DisplayName:IsActive": "Ενεργός",
     "DisplayName:LockoutEnabled": "Κλείδωμα λογαριασμού",
+    "Description:LockoutEnabled": "Κλείδωμα λογαριασμού μετά από αποτυχημένες προσπάθειες σύνδεσης",
     "NewRole": "Νέος ρόλος",
     "RoleName": "Όνομα ρόλου",
     "CreationTime": "Χρόνος δημιουργίας",

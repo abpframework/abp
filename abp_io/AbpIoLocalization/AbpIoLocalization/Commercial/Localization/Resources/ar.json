@@ -157,7 +157,7 @@
     "ABPCLIExplanation": "ABP CLI (واجهة سطر الأوامر) هي أداة سطر أوامر لتنفيذ بعض العمليات الشائعة للحلول المستندة إلى ABP.",
     "ABPSuiteEasilyCURD": "ABP Suite هي أداة تسمح لك بإنشاء صفحات CRUD بسهولة",
     "WeAreHereToHelp": "نحن هنا من أجل <span class=\"zero-text\"> المساعدة </ span>",
-    "BrowseOrAskQuestion": "يمكنك تصفح مواضيع المساعدة الخاصة بنا أو البحث في الأسئلة الشائعة ، أو يمكنك طرح سؤال علينا باستخدام <a href=\"{0}\" class=\"text-success\"> نموذج الاتصال </a>.",
+    "BrowseOrAskQuestion": "يمكنك تصفح مواضيع المساعدة الخاصة بنا أو البحث في الأسئلة الشائعة ، أو يمكنك طرح سؤال علينا باستخدام <a href=\"{0}\"> نموذج الاتصال </a>.",
     "SearchQuestionPlaceholder": "البحث في الأسئلة المتداولة",
     "WhatIsTheABPCommercial": "ما هو برنامج ABP التجاري؟",
     "WhatAreDifferencesThanAbpFramework": "ما هي الاختلافات بين إطار عمل ABP مفتوح المصدر وإطار عمل ABP التجاري؟",

@@ -29,7 +29,7 @@ namespace Volo.Docs.Pages.Documents
         {
             if (_uiOptions.SingleProjectMode.Enable)
             {
-                return RedirectToPage("/Documents/Project/Index");
+                return RedirectToPage("/Documents/Project/Index", new {version = DocsAppConsts.Latest });
             }
 
             var listResult = await _projectAppService.GetListAsync();
