@@ -79,7 +79,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
 
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
     {
-        //context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
+        context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
         using (var scope = context.ServiceProvider.CreateScope())
         {
             var categoryRepository = scope.ServiceProvider.GetRequiredService<IBasicRepository<Category, Guid>>();

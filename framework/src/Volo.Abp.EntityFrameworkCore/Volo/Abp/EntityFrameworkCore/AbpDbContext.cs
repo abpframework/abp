@@ -114,7 +114,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //TODO: Re-check.
         optionsBuilder.ConfigureWarnings(c => c.Ignore(RelationalEventId.PendingModelChangesWarning));
         base.OnConfiguring(optionsBuilder);
     }
@@ -628,14 +627,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             originalExtraProperties = entry.OriginalValues.GetValue<ExtraPropertyDictionary>(nameof(IHasExtraProperties.ExtraProperties));
         }
 
-        //TODO: Reload will throw an exception. Check it later.
+        //TODO: Reload will throw an exception. Check it when new EF Core versions released.
         //entry.Reload();
 
         var storeValues = entry.OriginalValues;
         entry.CurrentValues.SetValues(storeValues);
         entry.OriginalValues.SetValues(storeValues);
         entry.State = EntityState.Unchanged;
-
 
         if (entry.Entity is IHasExtraProperties)
         {
