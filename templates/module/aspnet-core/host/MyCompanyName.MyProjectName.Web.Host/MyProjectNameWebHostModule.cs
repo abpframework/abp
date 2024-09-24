@@ -240,7 +240,7 @@ public class MyProjectNameWebHostModule : AbpModule
         }
 
         app.UseHttpsRedirection();
-        app.MapStaticAssets();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
 

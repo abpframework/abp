@@ -120,7 +120,7 @@ public class DemoAppModule : AbpModule
         }
 
         app.UseHttpsRedirection();
-        app.MapStaticAssets();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();

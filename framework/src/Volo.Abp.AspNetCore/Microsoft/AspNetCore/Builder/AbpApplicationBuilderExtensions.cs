@@ -125,27 +125,43 @@ public static class AbpApplicationBuilderExtensions
         return app.UseMiddleware<AbpDynamicClaimsMiddleware>();
     }
 
-    public static StaticAssetsEndpointConventionBuilder MapStaticAssets(this IApplicationBuilder app, string? staticAssetsManifestPath = null)
+    /// <summary>
+    /// MapAbpStaticAssets is used to serve the files from the abp virtual file system embedded resources(js/css) and call the MapStaticAssets.
+    /// </summary>
+    public static StaticAssetsEndpointConventionBuilder MapAbpStaticAssets(this WebApplication app, string? staticAssetsManifestPath = null)
+    {
+        return app.As<IApplicationBuilder>().MapAbpStaticAssets(staticAssetsManifestPath);
+    }
+
+    /// <summary>
+    /// MapAbpStaticAssets is used to serve the files from the abp virtual file system embedded resources(js/css) and call the MapStaticAssets.
+    /// </summary>
+    public static StaticAssetsEndpointConventionBuilder MapAbpStaticAssets(this IApplicationBuilder app, string? staticAssetsManifestPath = null)
     {
         if (app is not IEndpointRouteBuilder endpoints)
         {
             throw new AbpException("The app(IApplicationBuilder) is not an IEndpointRouteBuilder.");
         }
 
-        var contentTypeProvider = endpoints.ServiceProvider.GetRequiredService<AbpFileExtensionContentTypeProvider>();
-        var webContentFileProvider = new WebContentFileProvider(
-            endpoints.ServiceProvider.GetRequiredService<IVirtualFileProvider>(),
-            null,
-            endpoints.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>()
-        );
+        app.UseVirtualStaticFiles();
 
-        app.UseStaticFiles(new StaticFileOptions()
+        return endpoints.MapStaticAssets(staticAssetsManifestPath);
+    }
+
+    /// <summary>
+    /// This static file provider is used to serve the files from the abp virtual file system embedded resources(js/css).
+    /// It will not serve the files from the application's wwwroot folder.
+    /// </summary>
+    public static IApplicationBuilder UseVirtualStaticFiles(this IApplicationBuilder app)
+    {
+        return app.UseStaticFiles(new StaticFileOptions()
         {
-            ContentTypeProvider = contentTypeProvider,
-            FileProvider = webContentFileProvider
+            ContentTypeProvider = app.ApplicationServices.GetRequiredService<AbpFileExtensionContentTypeProvider>(),
+            FileProvider = new WebContentFileProvider(
+                app.ApplicationServices.GetRequiredService<IVirtualFileProvider>(),
+                null,
+                app.ApplicationServices.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>()
+            )
         });
-
-        var result = endpoints.MapStaticAssets(staticAssetsManifestPath);
-        return result;
     }
 }

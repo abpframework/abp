@@ -27,7 +27,7 @@ public class PromptCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Starts with prompt mode.";
     }

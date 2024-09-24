@@ -226,7 +226,7 @@ public class MyProjectNameWebModule : AbpModule
         }
 
         app.UseCorrelationId();
-        app.MapStaticAssets();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
