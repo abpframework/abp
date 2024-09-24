@@ -93,16 +93,13 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
 
     protected virtual IFileProvider CreateFileProvider()
     {
-        var fileProviders = new List<IFileProvider>
-        {
-            _virtualFileProvider
-        };
-
+        var fileProviders = new List<IFileProvider>();
         if (_hostingEnvironment != null)
         {
-            fileProviders.Add(_hostingEnvironment.WebRootFileProvider);
+            fileProviders.Add(new PhysicalFileProvider(_hostingEnvironment.ContentRootPath));
         }
 
+        fileProviders.Add(_virtualFileProvider);
         return new CompositeFileProvider(fileProviders);
     }
 

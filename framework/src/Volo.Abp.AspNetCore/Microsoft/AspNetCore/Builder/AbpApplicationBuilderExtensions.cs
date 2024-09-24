@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticAssets;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
@@ -144,6 +145,7 @@ public static class AbpApplicationBuilderExtensions
         }
 
         app.UseVirtualStaticFiles();
+        app.UseVirtualStaticFiles("Pages");
 
         return endpoints.MapStaticAssets(staticAssetsManifestPath);
     }
@@ -154,7 +156,7 @@ public static class AbpApplicationBuilderExtensions
     /// </summary>
     public static IApplicationBuilder UseVirtualStaticFiles(this IApplicationBuilder app)
     {
-        return app.UseStaticFiles(new StaticFileOptions()
+        app.UseStaticFiles(new StaticFileOptions()
         {
             ContentTypeProvider = app.ApplicationServices.GetRequiredService<AbpFileExtensionContentTypeProvider>(),
             FileProvider = new WebContentFileProvider(
@@ -163,5 +165,22 @@ public static class AbpApplicationBuilderExtensions
                 app.ApplicationServices.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>()
             )
         });
+
+        return app;
+    }
+
+    /// <summary>
+    /// This static file provider is used to serve the files from the <param name="folder">folder</param>.
+    /// </summary>
+    public static IApplicationBuilder UseVirtualStaticFiles(this IApplicationBuilder app, string folder)
+    {
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            ContentTypeProvider = app.ApplicationServices.GetRequiredService<AbpFileExtensionContentTypeProvider>(),
+            FileProvider = new PhysicalFileProvider(Path.Combine(app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().ContentRootPath, folder)),
+            RequestPath = $"/{folder}"
+        });
+
+        return app;
     }
 }
