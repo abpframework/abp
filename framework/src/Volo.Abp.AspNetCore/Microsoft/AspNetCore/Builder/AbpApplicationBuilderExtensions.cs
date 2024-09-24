@@ -161,7 +161,7 @@ public static class AbpApplicationBuilderExtensions
             ContentTypeProvider = app.ApplicationServices.GetRequiredService<AbpFileExtensionContentTypeProvider>(),
             FileProvider = new WebContentFileProvider(
                 app.ApplicationServices.GetRequiredService<IVirtualFileProvider>(),
-                null,
+                new EmptyHostingEnvironment(),
                 app.ApplicationServices.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>()
             )
         });

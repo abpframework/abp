@@ -15,14 +15,14 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
 {
     private readonly IVirtualFileProvider _virtualFileProvider;
     private readonly IFileProvider _fileProvider;
-    private readonly IWebHostEnvironment? _hostingEnvironment;
+    private readonly IWebHostEnvironment _hostingEnvironment;
     private string _rootPath = "/wwwroot";
 
     protected AbpAspNetCoreContentOptions Options { get; }
 
     public WebContentFileProvider(
         IVirtualFileProvider virtualFileProvider,
-        IWebHostEnvironment? hostingEnvironment,
+        IWebHostEnvironment hostingEnvironment,
         IOptions<AbpAspNetCoreContentOptions> options)
     {
         _virtualFileProvider = virtualFileProvider;
@@ -94,7 +94,7 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
     protected virtual IFileProvider CreateFileProvider()
     {
         var fileProviders = new List<IFileProvider>();
-        if (_hostingEnvironment != null)
+        if (!_hostingEnvironment.ContentRootPath.IsNullOrEmpty())
         {
             fileProviders.Add(new PhysicalFileProvider(_hostingEnvironment.ContentRootPath));
         }
