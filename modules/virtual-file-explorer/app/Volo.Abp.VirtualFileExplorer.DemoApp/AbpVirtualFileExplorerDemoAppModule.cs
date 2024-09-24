@@ -38,7 +38,7 @@ public class AbpVirtualFileExplorerDemoAppModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
 
-        app.MapStaticAssets();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAbpRequestLocalization();
         app.UseConfiguredEndpoints();
