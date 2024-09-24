@@ -93,7 +93,7 @@ myPromise.then(value => console.log(value)).catch(error => console.error(error))
 
 ### Observable Example
 
-```typescript
+```javascript
 import { Observable } from 'rxjs';
 
 const myObservable = new Observable(observer => {
