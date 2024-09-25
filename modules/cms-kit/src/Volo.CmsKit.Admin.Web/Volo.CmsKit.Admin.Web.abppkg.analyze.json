@@ -143,6 +143,12 @@
       "summary": null
     },
     {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Approve",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
       "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
       "contentType": "webPage",
       "name": "CreateModalModel",

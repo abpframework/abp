@@ -1,6 +1,5 @@
 import { LinkedList } from '@abp/utils';
 import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
 
 export abstract class ActionList<R = any, A = Action<R>> extends LinkedList<A> {}
 
@@ -22,7 +21,7 @@ export abstract class ActionData<R = any> {
   }
 }
 
-export type ReadonlyActionData<R = any> = O.Readonly<Omit<ActionData<R>, 'data'>>;
+export type ReadonlyActionData<R = any> = Readonly<Omit<ActionData<R>, 'data'>>;
 
 export abstract class Action<R = any> {
   constructor(

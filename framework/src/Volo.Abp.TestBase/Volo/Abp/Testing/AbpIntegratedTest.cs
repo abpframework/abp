@@ -60,6 +60,10 @@ public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithService
     {
         Application.Shutdown();
         TestServiceScope.Dispose();
+        if (RootServiceProvider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
         Application.Dispose();
     }
 }

@@ -75,14 +75,17 @@ namespace VoloDocs.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            Configure<DocsUiOptions>(options =>
-            {
-                options.RoutePrefix = null;
-            });
+            // Configure<DocsUiOptions>(options =>
+            // {
+            //     options.RoutePrefix = null;
+            //     options.SingleProjectMode.Enable = true;
+            //     options.SingleProjectMode.ProjectName = "abp";
+            //     options.MultiLanguageMode = false;
+            // });
 
             Configure<DocsElasticSearchOptions>(options =>
             {
-                options.Enable = true;
+                options.Enable = false;
             });
 
             Configure<AbpDbConnectionOptions>(options =>
@@ -159,6 +162,13 @@ namespace VoloDocs.Web
             Configure<RazorPagesOptions>(options =>
             {
                 options.Conventions.AddPageRoute("/Error", "error/{statusCode}");
+            });
+
+            Configure<DocsWebGoogleOptions>(options =>
+            {
+                options.EnableGoogleTranslate = true;
+                options.EnableGoogleProgrammableSearchEngine = true;
+                options.GoogleSearchEngineId = "77c7266532da1427f";
             });
         }
 

@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
     <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Abstractions\Volo.Abp.AspNetCore.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +25,10 @@ namespace VoloDocs.Web.Pages
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
+            if (_urlUiOptions.SingleProjectMode.Enable)
+            {
+                return Redirect(GetUrlForProject());
+            }
             var projects = await _projectAppService.GetListAsync();
 
             if (projects.Items.Count == 1)
@@ -47,13 +50,23 @@ namespace VoloDocs.Web.Pages
         }
 
         //Eg: "/en/abp/latest"
-        public string GetUrlForProject(ProjectDto project, string language = "en", string version = null)
+        public string GetUrlForProject(ProjectDto project = null, string language = "en", string version = null)
         {
-            return "." +
-                   _urlUiOptions.RoutePrefix.EnsureStartsWith('/').EnsureEndsWith('/') +
-                   language.EnsureEndsWith('/') +
-                   project.ShortName.EnsureEndsWith('/') +
-                   (version ?? DocsAppConsts.Latest);
+            var routeValues = new Dictionary<string, object> {
+                { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), version ?? DocsAppConsts.Latest }
+            };
+
+            if (!_urlUiOptions.SingleProjectMode.Enable)
+            {
+                routeValues.Add(nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), project?.ShortName);
+            }
+            
+            if(_urlUiOptions.MultiLanguageMode)
+            {
+                routeValues.Add(nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), language);
+            }
+            
+            return Url.Page("/Documents/Project/Index", routeValues);
         }
     }
 }

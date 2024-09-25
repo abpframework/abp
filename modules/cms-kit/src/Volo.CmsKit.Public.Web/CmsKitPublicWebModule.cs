@@ -13,10 +13,12 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.Public.Web.Menus;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.GlobalResources.Script;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.GlobalResources.Style;
 using Volo.CmsKit.Web;
+using Volo.CmsKit.Web.Icons;
 
 namespace Volo.CmsKit.Public.Web;
 
@@ -46,6 +48,14 @@ public class CmsKitPublicWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<CmsKitUiOptions>(options =>
+        {
+            options.MarkedItemIcons[StandardMarkedItems.Favorite] = new LocalizableIconDictionary("fa fa-heart text-danger");
+            options.MarkedItemIcons[StandardMarkedItems.Flagged] = new LocalizableIconDictionary("fa fa-flag text-info");
+            options.MarkedItemIcons[StandardMarkedItems.Bookmark] = new LocalizableIconDictionary("fa fa-bookmark text-primary");
+            options.MarkedItemIcons[StandardMarkedItems.Starred] = new LocalizableIconDictionary("fa fa-star text-warning");
+
+        });
         Configure<AbpNavigationOptions>(options =>
         {
             options.MenuContributors.Add(new CmsKitPublicMenuContributor());

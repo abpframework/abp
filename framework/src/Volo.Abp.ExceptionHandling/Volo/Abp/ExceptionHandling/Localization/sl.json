@@ -21,6 +21,9 @@
     "404Message": "Strani ni mogoče najti",
     "500Message": "Napaka na strani strežnika",
     "403MessageDetail": "Niste pooblaščeni za izvajanje te operacije!",
-    "404MessageDetail": "Oprostite, na tem naslovu ni ničesar."
+    "404MessageDetail": "Oprostite, na tem naslovu ni ničesar.",
+    "Unauthorized": "Niste prijavljeni!",
+    "invalid_token": "Neveljaven žeton",
+    "SessionExpired": "Vaša seja je potekla. Za nadaljevanje v aplikaciji se ponovno prijavite."
   }
 }

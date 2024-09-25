@@ -12,6 +12,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -49,6 +50,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
     private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
     private readonly IOptions<CmsKitRatingOptions> _ratingOptions;
     private readonly IMenuItemRepository _menuItemRepository;
+    private readonly MarkedItemManager _markedItemManager;
+    private readonly IOptions<CmsKitMarkedItemOptions> _markedItemOptions;
 
     public CmsKitDataSeedContributor(
         IGuidGenerator guidGenerator,
@@ -75,7 +78,9 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
         IOptions<CmsKitMediaOptions> cmsMediaOptions,
         IOptions<CmsKitCommentOptions> commentsOptions,
         IOptions<CmsKitRatingOptions> ratingOptions,
-        IMenuItemRepository menuItemRepository)
+        IMenuItemRepository menuItemRepository,
+        MarkedItemManager markedItemManager,
+        IOptions<CmsKitMarkedItemOptions> markedItemOptions)
     {
         _guidGenerator = guidGenerator;
         _cmsUserRepository = cmsUserRepository;
@@ -102,6 +107,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
         _commentsOptions = commentsOptions;
         _ratingOptions = ratingOptions;
         _menuItemRepository = menuItemRepository;
+        _markedItemManager = markedItemManager;
+        _markedItemOptions = markedItemOptions;
     }
 
     public async Task SeedAsync(DataSeedContext context)
@@ -129,6 +136,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             await SeedMediaAsync();
 
             await SeedMenusAsync();
+
+            await SeedMarkedItemsAsync();
         }
     }
 
@@ -170,6 +179,9 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
         _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType1));
         _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType2));
+
+        _markedItemOptions.Value.EntityTypes.Add(new MarkedItemEntityTypeDefinition(_cmsKitTestData.EntityType1, StandardMarkedItems.Favorite));
+        _markedItemOptions.Value.EntityTypes.Add(new MarkedItemEntityTypeDefinition(_cmsKitTestData.EntityType2, StandardMarkedItems.Starred));
 
         return Task.CompletedTask;
     }
@@ -441,5 +453,19 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                     _cmsKitTestData.MenuItem_3_Url),
                 menuItem4
             });
+    }
+
+    private async Task SeedMarkedItemsAsync()
+    {
+        await _markedItemManager.ToggleUserMarkedItemAsync(
+            _cmsKitTestData.User1Id,
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId1
+        );
+        await _markedItemManager.ToggleUserMarkedItemAsync(
+            _cmsKitTestData.User1Id,
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId2
+        );
     }
 }

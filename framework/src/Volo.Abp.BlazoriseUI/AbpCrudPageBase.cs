@@ -480,7 +480,12 @@ public abstract class AbpCrudPageBase<
         await GetEntitiesAsync();
 
         await InvokeAsync(CreateModal!.Hide);
-        await Notify.Success(L["SavedSuccessfully"]);
+        await Notify.Success(GetCreateMessage());
+    }
+
+    protected virtual string GetCreateMessage()
+    {
+        return UiLocalizer["CreatedSuccessfully"];
     }
 
     protected virtual async Task UpdateEntityAsync()
@@ -519,7 +524,12 @@ public abstract class AbpCrudPageBase<
         await GetEntitiesAsync();
 
         await InvokeAsync(EditModal!.Hide);
-        await Notify.Success(L["SavedSuccessfully"]);
+        await Notify.Success(GetUpdateMessage());
+    }
+
+    protected virtual string GetUpdateMessage()
+    {
+        return UiLocalizer["SavedSuccessfully"];
     }
 
     protected virtual async Task DeleteEntityAsync(TListViewModel entity)
@@ -546,7 +556,12 @@ public abstract class AbpCrudPageBase<
     {
         await GetEntitiesAsync();
         await InvokeAsync(StateHasChanged);
-        await Notify.Success(L["DeletedSuccessfully"]);
+        await Notify.Success(GetDeleteMessage());
+    }
+
+    protected virtual string GetDeleteMessage()
+    {
+        return UiLocalizer["DeletedSuccessfully"];
     }
 
     protected virtual string GetDeleteConfirmationMessage(TListViewModel entity)

@@ -8,7 +8,7 @@
     transform: rotate(360deg);
   }
 }
-:root  {
+:root {
   --lpx-logo: url('/assets/images/logo/logo-light.png');
   --lpx-logo-icon: url('/assets/images/logo/logo-light-thumbnail.png');
 }
@@ -27,5 +27,32 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+}
 
+.abp-logo {
+  background-repeat: no-repeat;
+}
+
+.abp-support {
+  width: 178px;
+  height: 30px;
+  background-image: url('/assets/images/getting-started/abp-support.svg');
+}
+
+.abp-community {
+  width: 215px;
+  height: 30px;
+  background-image: url('/assets/images/getting-started/abp-community.svg');
+}
+
+.abp-blog {
+  width: 142px;
+  height: 30px;
+  background-image: url('/assets/images/getting-started/abp-blog.svg');
+}
+
+.logo-x {
+  width: 20px;
+  height: 20px;
+  background-image: url('/assets/images/getting-started/x.svg');
 }

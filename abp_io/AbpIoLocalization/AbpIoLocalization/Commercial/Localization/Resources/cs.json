@@ -431,6 +431,7 @@
     "ErrorExceptionMessage": "Při zpracování vašeho požadavku nastala chyba",
     "WatchTakeCodeGeneration": "Podívejte se na video „Prozkoumejte potenciál generování kódu: ABP Suite“!",
     "ExtendNow": "Prodloužit / Obnovit",
-    "RegisterDemo": "Registrovat"
+    "RegisterDemo": "Registrovat",
+    "AbpStudio_ComingSoon": "Pokud chcete ABP Studio otestovat dříve než kdokoli jiný, staňte se BETA testerem"
   }
 }

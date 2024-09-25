@@ -7,7 +7,7 @@ export interface Environment {
   hmr?: boolean;
   test?: boolean;
   localization?: { defaultResourceName?: string };
-  oAuthConfig?: AuthConfig;
+  oAuthConfig?: AuthConfig & { impersonation?: Impersonation };
   production: boolean;
   remoteEnv?: RemoteEnv;
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -20,7 +20,7 @@ export interface ApplicationInfo {
 export interface HasAdditional {
   [key: string]: string;
 }
-export interface ApiConfig extends Partial<HasAdditional>{
+export interface ApiConfig extends Partial<HasAdditional> {
   url: string;
   rootNamespace?: string;
 }
@@ -37,4 +37,9 @@ export interface RemoteEnv {
   mergeStrategy: 'deepmerge' | 'overwrite' | customMergeFn;
   method?: string;
   headers?: ABP.Dictionary<string>;
+}
+
+export interface Impersonation {
+  tenantImpersonation?: boolean;
+  userImpersonation?: boolean;
 }

@@ -81,6 +81,12 @@
       "contentType": "webPage",
       "name": "IndexModel",
       "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Modals.Login",
+      "contentType": "webPage",
+      "name": "LoginModalModel",
+      "summary": null
     }
   ]
 }

@@ -915,7 +915,6 @@
     "AbpStudio_Description": "ABP Studio je još uvijek u razvoju. Možete ispuniti obrazac ispod i biti jedan od prvih korisnika.",
     "AbpStudio_Description1": "ABP Studio je <span class=\"text-highlight-white\">stolna aplikacija za više platformi</span> za ABP programere.",
     "AbpStudio_Description2": "<span class=\"text-highlight-white\">Dobro je integriran</span> u ABP Framework i ima za cilj pružiti vam ugodno razvojno okruženje <span class=\"text-highlight-white\">automatiziranjem stvari, pružanjem uvida</span> u vaše rješenje, čineći <span class=\"text-highlight-white\">razvoj, pokretanje</span> i <span class=\"text-highlight-white\">implementaciju</span> vaših rješenja puno lakšim.",
-    "AbpStudio_ComingSoon": "Uskoro. <span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">Planirani datum izdavanja beta verzije: 4. tromjesečje 2023.</span>",
     "AbpStudio_PlannedPreviewDate": "Planirani datum izdavanja pregleda: 4. kvartal 2023.",
     "BetaRequest": "Zahtjev za beta verziju",
     "CreateNewSolutions": "Stvorite nova rješenja",
@@ -1107,6 +1106,7 @@
     "SendUsEmail": "Pošaljite nam e-mail",
     "ErrorExceptionMessage": "Pojavila se greška prilikom obrade Vašeg zahtjeva",
     "WatchTakeCodeGeneration": "Pogledajte video \"Istražite potencijal generiranja koda: ABP Suite\"!",
-    "ExtendNow": "Produži / obnovi"
+    "ExtendNow": "Produži / obnovi",
+    "AbpStudio_ComingSoon": "Ako želite testirati ABP Studio prije svih ostalih, postanite BETA tester"
   }
 }

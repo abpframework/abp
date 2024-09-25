@@ -119,8 +119,6 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         return sb.ToString();
     }
 
-    public abstract string GetShortDescription();
-
     public static class Options
     {
         public static class Module

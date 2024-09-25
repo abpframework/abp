@@ -411,6 +411,7 @@
     "SendUsEmail": "Senden Sie uns eine E-Mail",
     "ErrorExceptionMessage": "Während Ihrer Anfrage ist ein Fehler aufgetreten",
     "WatchTakeCodeGeneration": "Sehen Sie sich das Video „Entdecken Sie das Potenzial der Codegenerierung: ABP Suite“ an!",
-    "ExtendNow": "Verlängern / Erneuern"
+    "ExtendNow": "Verlängern / Erneuern",
+    "AbpStudio_ComingSoon": "Wenn Sie ABP Studio vor allen anderen testen möchten, werden Sie BETA-Tester"
   }
 }
