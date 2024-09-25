@@ -372,7 +372,7 @@ dotnet ef migrations add AbpOpenIddictMigration
 
 * [Open source tiered & separate auth server application migrate Identity Server to OpenIddct](https://github.com/abpframework/abp-samples/tree/master/Ids2OpenId)
 * [Commercial tiered & separate auth server application migrate Identity Server to OpenIddct](https://abp.io/Account/Login?returnUrl=/api/download/samples/Ids2OpenId)
-* [OpenIddict module document](https://docs.abp.io/en/abp/6.0/Modules/OpenIddict)
+* [OpenIddict module document](https://abp.io/docs/6.0/Modules/OpenIddict)
 * [OpenIddict module source code](https://github.com/abpframework/abp/tree/rel-6.0/modules/openiddict)
 
 ## See Also
