@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Dvoufázové ověřování",
     "DisplayName:IsActive": "Aktivní",
     "DisplayName:LockoutEnabled": "Zamčení účtu",
+    "Description:LockoutEnabled": "Zamknout účet po neúspěšných pokusech o přihlášení",
     "NewRole": "Nová role",
     "RoleName": "Název role",
     "CreationTime": "Vytvořeno",

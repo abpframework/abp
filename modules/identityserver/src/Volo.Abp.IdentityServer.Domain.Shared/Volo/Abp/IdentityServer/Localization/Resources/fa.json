@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "شما اجازه ورود به سیستم را ندارید! حساب شما غیرفعال است یا نیاز به تایید ایمیل/شماره تلفن شما دارد.",
     "InvalidUsername": "نام کاربری یا رمز عبور نامعتبر!",
     "InvalidAuthenticatorCode": "کد احراز هویت نامعتبر!",
+    "InvalidRecoveryCode": "کد بازیابی نامعتبر!",
     "TheTargetUserIsNotLinkedToYou": "کاربر هدف به شما پیوند داده نشده است!"
   }
 }

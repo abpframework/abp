@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Kahden tekijän todentaminen",
     "DisplayName:IsActive": "Aktiivinen",
     "DisplayName:LockoutEnabled": "Tilin lukitus",
+    "Description:LockoutEnabled": "Tilin lukitus epäonnistuneiden kirjautumisyritysten jälkeen",
     "NewRole": "Uusi rooli",
     "RoleName": "Roolinimi",
     "CreationTime": "Luomisaika",

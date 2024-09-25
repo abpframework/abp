@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "Ứng dụng web tiến bộ",
     "Preview": "Xem trước",
     "CreateANewSolution": "Tạo một giải pháp mới",
-    "ABPFrameworkFeatures": "<span class=\"gradient-framework\">Tính năng</span> của khung ABP",
+    "FrameworkFeatures": "<span class=\"gradient-framework\">Tính năng</span> của khung ABP",
     "Commercial": "Thuộc về thương mại",
     "ThirdPartyTools": "Công cụ của bên thứ ba",
     "Back": "Mặt sau",

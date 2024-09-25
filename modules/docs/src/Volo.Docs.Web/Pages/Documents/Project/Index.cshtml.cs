@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.EventBus.Local;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -55,6 +57,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public List<SelectListItem> LanguageSelectListItems { get; set; }
 
         public string DocumentNameWithExtension { get; private set; }
+        
+        public string DocumentPageTitle { get; private set; }
 
         public DocumentWithDetailsDto Document { get; private set; }
 
@@ -96,6 +100,8 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly DocsUiOptions _uiOptions;
 
         protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
+        
+        protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
 
         public IndexModel(
             IDocumentAppService documentAppService,
@@ -455,10 +461,21 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
+                
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
                 return;
+            }
+        }
+        
+        private void SetDocumentPageTitle()
+        {
+            DocumentPageTitle = DocumentName?.Replace("-", " ");
+            var match = Regex.Match(Document.Content, @"#(?<PageTitle>.+)");
+            if (match.Success && match.Groups.TryGetValue("PageTitle", out var group))
+            {
+                DocumentPageTitle = Regex.Replace(group.Value, "<.*?>", string.Empty).Trim();
             }
         }
 
@@ -495,6 +512,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     Document = await GetSpecificDocumentOrDefaultAsync(language);
                     DocumentLanguageCode = language;
                     DocumentNameWithExtension = Document.Name;
+                    SetDocumentPageTitle();
                     await ConvertDocumentContentToHtmlAsync();
                     return true;
                 }
@@ -540,7 +558,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
                 DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
 
-                Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                try
+                {
+                    Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                }
+                catch (Exception e)
+                {
+                    await OnSectionRenderingErrorAsync(e);
+                }
             }
             else
             {
@@ -556,7 +581,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.LocalDirectory
             );
 
-            content = HtmlNormalizer.WrapImagesWithinAnchors(content);
+            if (!_uiOptions.EnableEnlargeImage)
+            {
+                content = HtmlNormalizer.WrapImagesWithinAnchors(content);
+            }
 
             //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(
@@ -566,6 +594,22 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+        
+        protected virtual async Task OnSectionRenderingErrorAsync(Exception e)
+        {
+            var message = $"Error occurred during the rendering of this document. The document is not valid: {e.Message}";
+            Document.Content = $"````txt{Environment.NewLine}{message}{Environment.NewLine}````";
+            await LocalEventBus.PublishAsync(new DocumentRenderErrorEvent
+            {
+                ErrorMessage = e.Message, 
+                Name = Document.Name,
+                Url = Request.GetDisplayUrl(),
+                UserPreferences = UserPreferences
+            });
+
+            // Slow down with crawling
+            HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         }
 
         private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
