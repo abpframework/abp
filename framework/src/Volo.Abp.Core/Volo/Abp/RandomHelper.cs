@@ -81,8 +81,6 @@ public static class RandomHelper
     /// <param name="items">items</param>
     public static List<T> GenerateRandomizedList<T>([NotNull] IEnumerable<T> items)
     {
-        Check.NotNull(items, nameof(items));
-
         var list = new List<T>(items);
         list.Shuffle();
 
