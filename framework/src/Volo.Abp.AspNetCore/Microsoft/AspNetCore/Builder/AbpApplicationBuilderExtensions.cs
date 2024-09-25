@@ -145,7 +145,12 @@ public static class AbpApplicationBuilderExtensions
         }
 
         app.UseVirtualStaticFiles();
-        app.UseVirtualStaticFiles("Pages");
+
+        var options = app.ApplicationServices.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>().Value;
+        foreach (var folder in options.AllowedExtraWebContentFolders)
+        {
+            app.UseVirtualStaticFiles(folder);
+        }
 
         return endpoints.MapStaticAssets(staticAssetsManifestPath);
     }
@@ -174,10 +179,18 @@ public static class AbpApplicationBuilderExtensions
     /// </summary>
     public static IApplicationBuilder UseVirtualStaticFiles(this IApplicationBuilder app, string folder)
     {
+        folder = folder.TrimStart('/').TrimEnd('/');
+
+        var root = Path.Combine(app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().ContentRootPath, folder);
+        if (!Directory.Exists(root))
+        {
+            return app;
+        }
+
         app.UseStaticFiles(new StaticFileOptions
         {
             ContentTypeProvider = app.ApplicationServices.GetRequiredService<AbpFileExtensionContentTypeProvider>(),
-            FileProvider = new PhysicalFileProvider(Path.Combine(app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().ContentRootPath, folder)),
+            FileProvider = new PhysicalFileProvider(root),
             RequestPath = $"/{folder}"
         });
 
