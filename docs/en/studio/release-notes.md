@@ -4,7 +4,7 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 0.8.3 (2024-09-24)
 
-* Allowed to set Execution Order (or dependency) for Solution Runner
+* Allowed to set Execution Order (or dependency) from Solution Runner
 * Added Icons for the Solution Runner's Context Menu
 * Fixed MongoDB database issues for the Microservice Template
 * Allowed parallel running for background tasks
