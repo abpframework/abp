@@ -85,7 +85,7 @@ public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientD
         return string.Empty;
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return string.Empty;
     }

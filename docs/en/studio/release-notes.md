@@ -2,6 +2,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.8.3 (2024-09-24)
+
+* Allowed to set Execution Order (or dependency) from Solution Runner
+* Added Icons for the Solution Runner's Context Menu
+* Fixed MongoDB database issues for the Microservice Template
+* Allowed parallel running for background tasks
+
+## 0.8.2 (2024-09-19)
+
+* Fixed WireGuard connection random port bug
+* Automated steps after microservice solution creation
+* Fixed unusable options/features for Trial License
+* Fixed blazor-server single-layer template
+
 ## 0.8.1 (2024-09-12)
 
 * Fixed MySQL connection problem for nolayers template

@@ -583,7 +583,7 @@
     "CreatePostCoverInfo1": "<i class='bi bi-dot'></i> Accepted file types : <strong>JPEG, JPG, PNG</strong>",
     "CreatePostCoverInfo2": "<i class='bi bi-dot'></i> Max file size : <strong>1 MB</strong>",
     "CreatePostCoverInfo3": "<i class='bi bi-dot'></i> Image proportion : <strong>16:9</strong>",
-    "CreatePostCoverInfo4": "<i class='bi bi-dot'></i> <a href='https://abp.io/assets/example-post-image.png'> Download a sample cover image </a>",
+    "CreatePostCoverInfo4": "<i class='bi bi-dot'></i> <a href='/assets/example-post-image.png' download> Download a sample cover image </a>",
     "ThisExtensionIsNotAllowed": "This extension is not allowed.",
     "TheFileIsTooLarge": "The file is too large.",
     "GoToThePost": "Go to the Post",
@@ -987,6 +987,8 @@
     "UISupportExplanation": "ABP Framework itself is UI framework agnostic and can work with any UI framework. However, startup templates, module UIs and themes were not implemented for all UI frameworks. Check out the <a href=\"{0}\">Getting Started document</a> for the up-to-date list of UI options.",
     "MicroserviceSupport": "Does it support the microservice architecture?",
     "WhereCanIDownloadSourceCode": "Where can I download the source-code?",
+    "HowCanIUpgradeMyProjectToCommercialTemplate": "How can I upgrade my open-source project to the commercial PRO templates?",
+    "HowCanIUpgradeMyProjectToCommercialExplanation": "You can check out our documentation at <a href=\"{0}\">Migrating from open source templates</a> to upgrade your open-source projects to the paid PRO templates.",
     "ComputerLimitation": "How many computers can a developer login when developing ABP?",
     "ComputerLimitationExplanation": "We specifically permit <strong>{0} computers</strong> per individual/licensed developer. Whenever there is a need for a developer to develop ABP based products on a third machine, an e-mail should be sent to license@abp.io explaining the situation, and we will then make the appropriate allocation in our system.",
     "RefundPolicy": "Do you have a refund policy?",
@@ -1838,8 +1840,8 @@
     "Raffle_Page_Title": "Raffle - {0}",
     "Raffle_Page_Description": "Participate in ABP raffles and stand a chance to win exciting prizes, engaging with the ABP Community.",
     "Docs_Page_Title": "ABP Documentation",
-    "Docs_Page_Description": "Dive into ABP's latest documentation. Find guides, API references, and best practices to help you effectively build and manage modern web apps with ABP",
-    "Videos_Page_Title": "{0} - Video Post | ABP.IO",
+    "Docs_Page_Description": "Access comprehensive guides and API references in the ABP Documentation, aiding in development and troubleshooting.",
+    "Videos_Page_Title": "{0} - Video Post",
     "AskQuestionsOnSupport": "You can ask questions on ABP Support.",
     "MicroserviceApplicationExplanation1": "Creates a distributed solution.",
     "MicroserviceApplicationExplanation2": "Recommended for large teams to create complex and scalable systems.",
@@ -1857,6 +1859,7 @@
     "NewsletterDeleteSubscriptionDescription": "<div style=\"line-height: 24px; text-align: justify;\"><span style=\"color:#000000;\">This is a confirmation that you have unsubscribed from the following email categories:<ul><li><strong>Promotional Offers:</strong>Discounts, seasonal campaigns, etc.</li><li><strong>Events:</strong>Community Talks, Webinars, ABP DOTNET Conference, etc.</li><li><strong>Release Notes:</strong>ABP Platform releases, new products, etc.</li><li><strong>Newsletter:</strong>Blog posts, community news, etc.</li></ul><br>Please note that you will still receive important transactional emails related to your account.</span></div>",
     "NewsletterEmailFooterTemplateDeleteSubscription": "<a style=\"color: #007bff;\" href=\"{0}\" data-root=\"{1}\">If you change your mind, you're always welcome to resubscribe!</a>",
     "GenerateQuote" : "Generate Quote" ,
-    "GeneratePriceQuote" : "Generate a Price Quote"
+    "GeneratePriceQuote": "Generate a Price Quote",
+    "Qa:QuestionPageTitle": "Support"
   }
 }
