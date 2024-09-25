@@ -84,8 +84,8 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Theory]
-    [InlineData("[ABP Community](https://community.abp.io/)")]
-    [InlineData("<a href='https://docs.abp.io/en/abp/latest'>docs.abp.io</a>")]
+    [InlineData("[ABP Community](https://abp.io/community/)")]
+    [InlineData("<a href='https://abp.io/docs/latest'>abp.io/docs</a>")]
     public async Task CreateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed(string text)
     {
         _currentUser.Id.Returns(_cmsKitTestData.User2Id);
@@ -150,7 +150,7 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
                 _cmsKitTestData.CommentWithChildId,
                 new UpdateCommentInput 
                 {
-                    Text = "[ABP Community - Update](https://community.abp.io/)", //not allowed URL
+                    Text = "[ABP Community - Update](https://abp.io/community/)", //not allowed URL
                 }
             ));
     }

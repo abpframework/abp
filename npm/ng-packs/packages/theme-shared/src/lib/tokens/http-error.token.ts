@@ -4,7 +4,7 @@ import { CustomHttpErrorHandlerService, HttpErrorConfig, HttpErrorHandler } from
 export const HTTP_ERROR_CONFIG = new InjectionToken<HttpErrorConfig>('HTTP_ERROR_CONFIG');
 
 /**
-  @deprecated use **`CUSTOM_ERROR_HANDLERS`** injection token instead of this, see more info https://docs.abp.io/en/abp/latest/UI/Angular/HTTP-Requests
+  @deprecated use **`CUSTOM_ERROR_HANDLERS`** injection token instead of this, see more info https://abp.io/docs/latest/framework/ui/angular/http-requests
 */
 export const HTTP_ERROR_HANDLER = new InjectionToken<HttpErrorHandler>('HTTP_ERROR_HANDLER');
 
