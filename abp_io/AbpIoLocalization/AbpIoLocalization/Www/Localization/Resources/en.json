@@ -164,7 +164,7 @@
     "MobileTitleDescription" : "You can include a mobile application that is integrated to your backend.",
     "ReactNative": "React Native",
     "AdditonalOptions" : "Additonal Options",
-    "CreateYourSolution" : "Create Your Solution",
+    "CreateYourSolution" : "Create a Your Solution",
     "CreateYourSolutionDescription" : "Execute the following <a href='https://abp.io/docs/latest/cli'>ABP CLI</a> command in your command-line terminal:",
     "Strong": "Strong",
     "Complete": "Complete",
