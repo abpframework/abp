@@ -60,7 +60,7 @@ abp new Acme.BookStore -d mongodb
 
 This template supports the following mobile application frameworks:
 
-- `react-native`: React Native
+- `react-native`: React Native (*Available for* ***Team*** *or higher licenses*)
 
 Use the `-m` (or `--mobile`) option to specify the mobile application framework:
 
