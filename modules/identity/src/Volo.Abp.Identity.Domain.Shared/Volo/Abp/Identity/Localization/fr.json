@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Vérification de deux facteurs",
     "DisplayName:IsActive": "actif",
     "DisplayName:LockoutEnabled": "Verrouillage du compte",
+    "Description:LockoutEnabled": "Verrouiller le compte après des tentatives de connexion échouées",
     "NewRole": "Nouveau rôle",
     "RoleName": "Nom du rôle",
     "CreationTime": "Temps de création",

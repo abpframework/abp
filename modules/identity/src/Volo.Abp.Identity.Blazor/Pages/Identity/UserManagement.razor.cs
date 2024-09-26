@@ -197,7 +197,7 @@ public partial class UserManagement
         return base.SetEntityActionsAsync();
     }
 
-    protected override ValueTask SetTableColumnsAsync()
+    protected override async ValueTask SetTableColumnsAsync()
     {
         UserManagementTableColumns
             .AddRange(new TableColumn[]
@@ -227,9 +227,9 @@ public partial class UserManagement
                     }
             });
 
-        UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+        UserManagementTableColumns.AddRange(await GetExtensionTableColumnsAsync(IdentityModuleExtensionConsts.ModuleName,
             IdentityModuleExtensionConsts.EntityNames.User));
-        return base.SetTableColumnsAsync();
+        await base.SetTableColumnsAsync();
     }
 
     protected override ValueTask SetToolbarItemsAsync()

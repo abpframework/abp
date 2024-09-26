@@ -38,12 +38,12 @@
                         </div>
                         <abp-input asp-for="UserInfo.Email" />
                         <abp-input asp-for="UserInfo.PhoneNumber" />
-                        <abp-input asp-for="UserInfo.IsActive" />
                         @if (!Model.IsEditCurrentUser)
                         {
-                            <abp-input asp-for="UserInfo.LockoutEnabled" />
+                            <abp-input asp-for="UserInfo.IsActive" />
                         }
-                        @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<EditModalModel.UserInfoViewModel>())
+                        <abp-input asp-for="UserInfo.LockoutEnabled" label-tooltip="@L.GetString("Description:LockoutEnabled")"  />
+                        @foreach (var propertyInfo in await ObjectExtensionManager.Instance.GetPropertiesAndCheckPolicyAsync<EditModalModel.UserInfoViewModel>(HttpContext.RequestServices))
                         {
                             if (!propertyInfo.Name.EndsWith("_Text"))
                             {

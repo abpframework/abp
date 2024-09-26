@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "Applicazione Web progressiva",
     "Preview": "Anteprima",
     "CreateANewSolution": "Creare una nuova soluzione",
-    "ABPFrameworkFeatures": "<span class=\"gradient-framework\">Caratteristiche</span> della struttura ABP",
+    "FrameworkFeatures": "<span class=\"gradient-framework\">Caratteristiche</span> della struttura ABP",
     "Commercial": "Commerciale",
     "ThirdPartyTools": "Strumenti di terze parti",
     "Back": "Indietro",

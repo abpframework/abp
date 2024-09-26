@@ -1,0 +1,20 @@
+name: 💎 Article request
+description: Article suggestion you want to be published on community.abp.io
+labels: [community-article-request]
+body:
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Is there an existing article or article request for this?
+      description: Please search to see if there is an article or article request related to your article request ([abp.io/community](https://abp.io/community/articles), [abp/issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+label%3Acommunity-article-request))
+      options:
+      - label: I have searched the existing resources
+        required: true
+  - type: textarea
+    attributes:
+      label: Describe the article you'd like
+      description: |
+        Please describe the article you'd like to be published on community.abp.io.
+        If you have any reference article, please share it here.
+    validations:
+      required: true

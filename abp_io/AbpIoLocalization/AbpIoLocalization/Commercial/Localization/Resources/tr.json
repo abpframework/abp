@@ -153,7 +153,7 @@
     "ABPCLIExplanation": "ABP CLI (Komut Satırı Arayüzü), ABP tabanlı projeler için bazı ortak işlemleri gerçekleştirmek için bir komut satırı aracıdır.",
     "ABPSuiteEasilyCURD": "ABP Suite, kolayca CRUD sayfaları oluşturmanıza olanak sağlayan bir araçtır",
     "WeAreHereToHelp": "<span class=\"zero-text\">Yardım</span> için buradayız",
-    "BrowseOrAskQuestion": "Yardım konularımıza göz atabilir veya sık sorulan sorularda arama yapabilir ya da <a href=\"{0}\" class=\"text-success\">iletişim formunu</a> kullanarak bize soru sorabilirsiniz.",
+    "BrowseOrAskQuestion": "Yardım konularımıza göz atabilir veya sık sorulan sorularda arama yapabilir ya da <a href=\"{0}\">iletişim formunu</a> kullanarak bize soru sorabilirsiniz.",
     "SearchQuestionPlaceholder": "Sık sorulan sorularda ara",
     "WhatIsTheABPCommercial": "ABP Commercial nedir?",
     "WhatAreDifferencesThanAbpFramework": "Açık kaynaklı ABP Frameworkü ile ABP Commercial arasındaki farklar nelerdir?",

@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Kétlépcsős azonosítás",
     "DisplayName:IsActive": "Aktív",
     "DisplayName:LockoutEnabled": "Fiók zárolása",
+    "Description:LockoutEnabled": "Fiók zárolása sikertelen bejelentkezési kísérletek után",
     "NewRole": "Új szerepkör",
     "RoleName": "Szerepkör neve",
     "CreationTime": "Létrehozás időpontja",

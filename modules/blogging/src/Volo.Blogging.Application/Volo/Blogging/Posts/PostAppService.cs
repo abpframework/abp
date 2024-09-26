@@ -308,7 +308,7 @@ namespace Volo.Blogging.Posts
 
             foreach (var newTag in newTags)
             {
-                var tag = tags.FirstOrDefault(t => t.Name == newTag);
+                var tag = tags.FirstOrDefault(t => t.Name.Equals(newTag, StringComparison.OrdinalIgnoreCase));
 
                 if (tag == null)
                 {

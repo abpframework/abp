@@ -159,7 +159,7 @@
     "ABPCLIExplanation": "ABP CLI(命令行頁面)是一個執行基於ABP解決方案的一些常見操作的命令行工具.",
     "ABPSuiteEasilyCURD": "ABP Suite是一個使你輕松創建CURD頁面的工具",
     "WeAreHereToHelp": "我們在這裏為你提供<span class=\"zero-text\">幫助</span>",
-    "BrowseOrAskQuestion": "你可以瀏覽我們的幫助主題或搜索常見的問題, 或者你可以使用<a href=\"{0}\" class=\"text-success\">聯系表單</a>向我們提問.",
+    "BrowseOrAskQuestion": "你可以瀏覽我們的幫助主題或搜索常見的問題, 或者你可以使用<a href=\"{0}\">聯系表單</a>向我們提問.",
     "SearchQuestionPlaceholder": "搜索常見的問題",
     "WhatIsTheABPCommercial": "什麽是ABP商業版?",
     "WhatAreDifferencesThanAbpFramework": "ABP框架與ABP商業版有什麽不同?",
