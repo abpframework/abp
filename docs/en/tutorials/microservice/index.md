@@ -21,6 +21,7 @@ In this tutorial, you will learn how to create services and communicate them. Yo
 This tutorial is organized as the following parts:
 
 * [Part 01: Creating the initial solution](part-01.md)
+* [Part 02: Creating the initial Catalog service](part-02.md)
 
 ## Download the Source Code
 
