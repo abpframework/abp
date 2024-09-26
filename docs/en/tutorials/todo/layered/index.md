@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/428f3d82-cce8-4fdd-a400-6d092d1a9e62)# TODO Application Tutorial with Layered Solution
+# TODO Application Tutorial with Layered Solution
 
 ````json
 //[doc-params]
