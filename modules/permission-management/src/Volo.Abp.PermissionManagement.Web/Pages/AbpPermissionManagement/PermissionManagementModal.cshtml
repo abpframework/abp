@@ -23,7 +23,7 @@
                 <div class="col">
                     <div class="input-group mb-2">
                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Filter" aria-label="Username"
+                        <input type="text" class="form-control" id="permission-search" placeholder="Filter" aria-label="Username"
                             aria-describedby="basic-addon1" />
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                     @for (var i = 0; i < Model.Groups.Count; i++)
                     {
                         var group = Model.Groups[i];
-                        <abp-tab title="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
+                        <abp-tab title="@group.DisplayName" data-filter-tab-text="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
                             <div class="w-100" style="height: 500px;overflow-y: auto">
                                 <div class="ps-1">
                                     <abp-input asp-for="@group.IsAllPermissionsGranted"
@@ -60,6 +60,7 @@
                                             abp-id-name="@Model.Groups[i].Permissions[j].IsGranted"
                                             label="@permission.GetShownName(Model.ProviderName)"
                                             disabled="@permission.IsDisabled(Model.ProviderName)"
+                                            group-data-filter-text="@permission.GetShownName(Model.ProviderName)"
                                             group-data-permission-name="@permission.Name"
                                             group-data-parent-name="@(permission.ParentName ?? "")"
                                             group-style="margin-inline-start: @(permission.Depth * 20)px" />
