@@ -289,17 +289,17 @@ var abp = abp || {};
             $permissionSearchInput = $('#permission-search');
 
             $permissionSearchInput.keyup(throttle(function() {
-                var value = $permissionSearchInput.val().toLowerCase();
-                filterTabs(value);
+                var searchTerm = $permissionSearchInput.val().toLowerCase();
+                filterTabs(searchTerm);
             }, 300));
 
-            function filterTabs(value) {
+            function filterTabs(searchTerm) {
                 var $tabs = $('#PermissionsTabs .nav-link');
                 $tabs.each(function(i) {
                     var $tabItem = $(this);
                     var $tab = $tabItem.parent();
 
-                    if (!value) {
+                    if (!searchTerm) {
                         $tab.show();
                         return;
                     }
@@ -310,13 +310,13 @@ var abp = abp || {};
                     let includedInTabContent = false;
                     tabContentFilters.each(function(i) {
                         var permissionName = $(this).attr('data-filter-text').toLowerCase();
-                        includedInTabContent = permissionName.includes(value);
+                        includedInTabContent = permissionName.includes(searchTerm);
                         if (includedInTabContent === true) {
                             return false;
                         }
                     });
 
-                    if(includedInTabContent || tabName.includes(value)) {
+                    if(includedInTabContent || tabName.includes(searchTerm)) {
                         $tab.show();
                     } else {
                         $tab.hide();
