@@ -5,7 +5,7 @@
 {
   "Next": {
     "Name": "Creating the initial Products service",
-    "Path": "tutorials/modular-crm/part-02"
+    "Path": "tutorials/microservice/part-02"
   }
 }
 ````

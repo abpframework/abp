@@ -5,7 +5,7 @@
 {
   "Next": {
     "Name": "Creating the initial solution",
-    "Path": "tutorials/modular-crm/part-01"
+    "Path": "tutorials/microservice/part-01"
   }
 }
 ````
@@ -22,6 +22,7 @@ This tutorial is organized as the following parts:
 
 * [Part 01: Creating the initial solution](part-01.md)
 * [Part 02: Creating the initial Catalog service](part-02.md)
+* [Part 03: Building the Catalog service](part-03.md)
 
 ## Download the Source Code
 

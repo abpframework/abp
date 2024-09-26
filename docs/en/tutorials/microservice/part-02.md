@@ -5,7 +5,11 @@
 {
   "Previous": {
     "Name": "Creating the initial solution",
-    "Path": "tutorials/modular-crm/part-01"
+    "Path": "tutorials/microservice/part-01"
+  },
+  "Next": {
+    "Name": "Building the Catalog service",
+    "Path": "tutorials/microservice/part-03"
   }
 }
 ````
