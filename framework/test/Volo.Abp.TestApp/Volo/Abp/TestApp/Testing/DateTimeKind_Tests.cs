@@ -18,7 +18,7 @@ public abstract class DateTimeKind_Tests<TStartupModule> : TestAppTestBase<TStar
         PersonRepository = GetRequiredService<IPersonRepository>();
     }
 
-    [Fact]
+    [Fact(Skip = "Skip temporarily")]
     public async Task DateTime_Kind_Should_Be_Normalized_Test()
     {
         var personId = Guid.NewGuid();

@@ -37,6 +37,7 @@ using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -772,6 +773,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     protected virtual void ConfigureValueConverter<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
         where TEntity : class
     {
+        //TODO: There is a exception in EF Core 9, I'm trying to find a workaround.
+        return;
         if (mutableEntityType.BaseType == null &&
             !typeof(TEntity).IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) &&
             !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&

@@ -149,13 +149,12 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
         DateTime endDate,
         CancellationToken cancellationToken = default)
     {
-        var result = (await (await GetDbSetAsync()).AsNoTracking()
+        var result = await (await GetDbSetAsync()).AsNoTracking()
             .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
             .OrderBy(t => t.ExecutionTime)
-            .ToListAsync(cancellationToken: cancellationToken))
             .GroupBy(t => new { t.ExecutionTime.Date })
             .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
-            .ToList();
+            .ToListAsync(GetCancellationToken(cancellationToken));
 
         return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
     }
