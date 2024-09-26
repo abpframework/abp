@@ -42,7 +42,7 @@
                     @for (var i = 0; i < Model.Groups.Count; i++)
                     {
                         var group = Model.Groups[i];
-                        <abp-tab title="@group.DisplayName" data-filter-tab-text="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
+                        <abp-tab title="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
                             <div class="w-100" style="height: 500px;overflow-y: auto">
                                 <div class="ps-1">
                                     <abp-input asp-for="@group.IsAllPermissionsGranted"
