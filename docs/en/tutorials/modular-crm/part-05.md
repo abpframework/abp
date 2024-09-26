@@ -232,6 +232,28 @@ After the operation completes, you can check your database to see the new `Order
 
 ![sql-server-products-database-table](images/sql-server-orders-database-table.png)
 
+## Creating the Application Service
+
+We will create an application service to manage the `Order` entities. 
+
+### Defining the Application Service Contract
+
+We're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project but first, we need to add `Volo.Abp.Application.Contracts` package reference.
+
+Right-click the `ModularCrm.Ordering.Contracts` project in the *Solution Explorer* panel and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-5](images/abp-studio-add-package-reference-6.png)
+
+This command opens a dialog to add a new package reference:
+
+![abp-studio-add-package-reference-dialog-5](images/abp-studio-add-package-reference-dialog-5.png)
+
+Select the *NuGet* tab, type `Volo.Abp.Ddd.Contracts`as the *Package name* and write the version of the package you want to install.  Please be sure that you are installing the same version as the other ABP packages you are already using.
+
+Click the *Ok* button. Now you can check the *Packages* under the `ModularCrm.Ordering.Contracts` project *Dependencies* to see the `Volo.Abp.Ddd.Contracts` package is installed:
+
+![abp-studio-added-ddd-contracts-package](images/abp-studio-added-ddd-contracts-package.png)
+
 ## Creating the User Interface
 
 Since this is a non-layered module, we can use entities and repositories directly on the user interface. If you think that is not a good practice, then use the layered module template as we've already done for the *Products* module. But for the Ordering module, we will keep it very simple for this tutorial to show it is also possible.
