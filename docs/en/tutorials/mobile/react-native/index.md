@@ -1,5 +1,7 @@
 # Mobile Application Development Tutorial - React Native
 
+React Native mobile option is *available for* ***Team*** *or higher licenses*. Therefore, if you don't have a commercial license, it's suggested to follow the article by downloading the source code of the sample application as described in the next chapter.
+
 ## About This Tutorial
 
 - This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../framework/ui/react-native) as the mobile option.. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial.
