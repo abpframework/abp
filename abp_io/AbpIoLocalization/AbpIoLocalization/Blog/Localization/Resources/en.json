@@ -1,8 +1,9 @@
 {
   "culture": "en",
   "texts": {
-    "AbpTitle": "Read All Blog Posts",
+    "AbpTitle": "New Blog Post | ABP.IO",
     "AbpDescription": "ABP is an open source application framework focused on AspNet Core based web application development. Don't repeat yourself, focus on your own business code.",
-    "AbpDefinition": "ABP blog for .NET development, cross-platform, ASP.NET application templates, ABP-related news and more..."
+    "AbpDefinition": "Create a new blog post and share your knowledge and experience with ABP.",
+    "Blogs": "Blog Posts"
   }
 }
