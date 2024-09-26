@@ -14,7 +14,7 @@
 }
 ````
 
-In this part, you will build a new product management module and install it in the main CRM application.
+In this part, you will create a new product management module and install it in the main CRM application.
 
 ## Creating Solution Folders
 
