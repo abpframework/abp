@@ -95,7 +95,7 @@ public class DisableDateTimeKindTests : TestAppTestBase<AbpMongoDbTestModule>
         base.AfterAddApplication(services);
     }
 
-    [Fact(Skip = "Skip temporarily")]
+    [Fact]
     public async Task DateTime_Kind_Should_Be_Normalized_By_MongoDb_Test()
     {
         var personId = Guid.NewGuid();

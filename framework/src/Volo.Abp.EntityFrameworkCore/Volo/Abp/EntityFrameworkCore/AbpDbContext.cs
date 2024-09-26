@@ -37,7 +37,6 @@ using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -773,8 +772,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     protected virtual void ConfigureValueConverter<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
         where TEntity : class
     {
-        //TODO: There is a exception in EF Core 9, I'm trying to find a workaround.
-        return;
         if (mutableEntityType.BaseType == null &&
             !typeof(TEntity).IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) &&
             !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
@@ -784,6 +781,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             {
                 return;
             }
+
+            AbpDateTimeValueConverter.Clock = Clock;
+            AbpNullableDateTimeValueConverter.Clock = Clock;
 
             foreach (var property in mutableEntityType.GetProperties().
                          Where(property => property.PropertyInfo != null &&
@@ -795,8 +795,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                     .Entity<TEntity>()
                     .Property(property.Name)
                     .HasConversion(property.ClrType == typeof(DateTime)
-                        ? new AbpDateTimeValueConverter(Clock)
-                        : new AbpNullableDateTimeValueConverter(Clock));
+                        ? new AbpDateTimeValueConverter()
+                        : new AbpNullableDateTimeValueConverter());
             }
         }
     }
