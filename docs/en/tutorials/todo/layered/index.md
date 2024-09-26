@@ -65,7 +65,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 We will use the [ABP CLI](../../../cli/index.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
-````
+````bash
 dotnet tool install -g Volo.Abp.Studio.Cli
 ````
 
@@ -73,7 +73,7 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
-````
+````bash
 abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
@@ -107,7 +107,7 @@ However, sometimes this command might need to be manually run. For example, you 
 
 For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
 
-````
+````bash
 abp install-libs
 ````
 
@@ -121,7 +121,7 @@ abp install-libs
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
-````
+````bash
 abp bundle
 ````
 
@@ -167,7 +167,7 @@ You can explore and test your HTTP API with this UI. If it works, we can run the
 
 You can run the application using the following command:
 
-````
+````bash
 npm start
 ````
 
@@ -242,7 +242,7 @@ The startup solution is configured to use Entity Framework Core [Code First Migr
 
 Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore* project and type the following command:
 
-````
+````bash
 dotnet ef migrations add Added_TodoItem
 ````
 
@@ -252,7 +252,7 @@ This will add a new migration class to the project:
 
 You can apply changes to the database using the following command, in the same command-line terminal:
 
-````
+````bash
 dotnet ef database update
 ````
 
@@ -743,13 +743,13 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
-````
+````bash
 abp generate-proxy -t ng
 ````
 
 If everything goes well, it should generate an output as shown below:
 
-```
+```bash
 CREATE src/app/proxy/generate-proxy.json (170978 bytes)
 CREATE src/app/proxy/README.md (1000 bytes)
 CREATE src/app/proxy/todo.service.ts (794 bytes)
