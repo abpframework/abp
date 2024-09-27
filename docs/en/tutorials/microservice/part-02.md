@@ -8,7 +8,7 @@
     "Path": "tutorials/microservice/part-01"
   },
   "Next": {
-    "Name": "Building the Catalog service",
+    "Name": "Building the Catalog microservice",
     "Path": "tutorials/microservice/part-03"
   }
 }

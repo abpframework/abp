@@ -4,7 +4,7 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Creating the initial Products service",
+    "Name": "Creating the initial Products microservice",
     "Path": "tutorials/microservice/part-02"
   }
 }
