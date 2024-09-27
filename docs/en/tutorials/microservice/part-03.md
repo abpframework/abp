@@ -65,3 +65,5 @@ You can leave the other configurations as default.
 
 That's all. You can click the *Save and generate* button to start the code generation process.
 
+TODO: I give a break in that point since we are waiting ABP Suite team to complete generating UI for microservices.
+
