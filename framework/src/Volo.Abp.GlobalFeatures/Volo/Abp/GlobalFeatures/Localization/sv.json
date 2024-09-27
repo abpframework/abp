@@ -1,0 +1,6 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Volo.GlobalFeature:010001": "Tjänsten '{ServiceName}' måste aktivera funktionen '{GlobalFeatureName}'."
+  }
+}

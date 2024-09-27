@@ -187,6 +187,14 @@ var abp = abp || {};
             for (var i = 0; i < propertyNames.length; i++) {
                 var propertyName = propertyNames[i];
                 var propertyConfig = objectConfig.properties[propertyName];
+
+                var policy = propertyConfig.policy;
+                if (!checkPolicy(policy.globalFeatures.features, policy.globalFeatures.requiresAll, abp.globalFeatures.isEnabled) ||
+                    !checkPolicy(policy.features.features, policy.features.requiresAll, abp.features.isEnabled) ||
+                    !checkPolicy(policy.permissions.permissionNames, policy.permissions.requiresAll, abp.auth.isGranted)) {
+                    continue;
+                }
+
                 if (propertyConfig.ui.onTable.isVisible) {
                     if (propertyName.endsWith("_Text")) {
                         var lookupPropertyName = propertyName.replace("_Text", "");
@@ -214,6 +222,29 @@ var abp = abp || {};
             }
 
             return tableProperties;
+        }
+
+        function checkPolicy(names, requiresAll, checkFunc) {
+            if (names.length === 0) {
+                return true;
+            }
+
+            var hasAny = false;
+            for (var i = 0; i < names.length; i++) {
+                if (!checkFunc(names[i])) {
+                    if (requiresAll) {
+                        return false;
+                    }
+                }
+                else {
+                    hasAny = true;
+                    if (!requiresAll) {
+                        break;
+                    }
+                }
+            }
+
+            return hasAny;
         }
 
         function getValueFromRow(property, row) {

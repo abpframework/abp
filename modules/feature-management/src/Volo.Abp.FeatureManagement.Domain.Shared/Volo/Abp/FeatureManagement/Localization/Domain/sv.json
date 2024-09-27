@@ -1,0 +1,17 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Features": "Funktioner",
+    "NoFeatureFoundMessage": "Det finns inte någon tillgänglig funktion.",
+    "ManageHostFeatures": "Hantera värdfunktioner",
+    "ManageHostFeaturesText": "Du kan hantera funktionerna på hostsidan genom att klicka på följande knapp.",
+    "Permission:FeatureManagement": "Hantering av funktioner",
+    "Permission:FeatureManagement.ManageHostFeatures": "Hantera värdfunktioner",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} Funktionsvärdet är inte giltigt!",
+    "Menu:FeatureManagement": "Hantering av funktioner",
+    "ResetToDefault": "Återställ till standard",
+    "ResetedToDefault": "Återställd till standard",
+    "AreYouSure": "Är du säker?",
+    "AreYouSureToResetToDefault": "Är du säker på att återställa till standard?"
+  }
+}

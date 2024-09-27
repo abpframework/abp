@@ -6,7 +6,7 @@
 @{
     Entity.SetDefaultsForExtraProperties();
 
-    foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<TEntityType>())
+    foreach (var propertyInfo in Properties)
     {
         if (!propertyInfo.Name.EndsWith("_Text"))
         {
