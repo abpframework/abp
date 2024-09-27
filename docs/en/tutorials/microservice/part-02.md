@@ -82,7 +82,7 @@ You can run the solution using ABP Studio's *Solution Runner*. It will also run 
 
 Click the *Play* button near to the solution root:
 
-![abp-studio-solution-runner-play-all](D:\Github\abp\docs\en\tutorials\microservice\images\abp-studio-solution-runner-play-all.png)
+![abp-studio-solution-runner-play-all](images/abp-studio-solution-runner-play-all.png)
 
 ### Browsing the Catalog Service
 
