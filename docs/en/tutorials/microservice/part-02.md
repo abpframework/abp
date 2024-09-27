@@ -94,9 +94,13 @@ It will open the built-in browser and you will see the Swagger UI for the Catalo
 
 ![abp-studio-browser-catalog-service-swagger-ui](images/abp-studio-browser-catalog-service-swagger-ui.png)
 
+You can test the APIs on the Swagger UI to see if the new microservice is properly working.
+
 ### Opening the Catalog Database
 
-The new Catalog microservice has its own database. Assuming you've selected SQL Server as your DBMS, you can open the SQL Server Management Studio to see its database:
+The new Catalog microservice has its own database. That database is created automatically by the microservice application, when you run the microservice. Also, [Entity Framework's database migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/) are automatically applied by the microservice when it runs. So, you don't care about the database schema changes every time you deploy the microservice.
+
+Assuming you've selected SQL Server as your DBMS, you can open the SQL Server Management Studio to see its database:
 
 ![sql-server-management-studio-login-screen](images/sql-server-management-studio-login-screen.png)
 
@@ -106,7 +110,7 @@ Once you click the *Connect* button, you can see all the databases and explore t
 
 ![sql-server-management-studio-databases](images/sql-server-management-studio-databases.png)
 
-The Catalog service's database has only three initial table. The first one is for Entity Framework Core's migration system, and the others are for ABP's [distributed event bus](../../solution-templates/microservice/distributed-events.md) to properly apply transactional events using the outbox and inbox patterns.
+The Catalog service's database has only three initial table. The first one is for Entity Framework Core's migration system, and the others are for ABP's [distributed event bus](../../solution-templates/microservice/distributed-events.md) to properly apply transactional events using the outbox and inbox patterns. You don't need to care about these tables since they are created and managed by Entity Framework Core and ABP.
 
 ## Summary
 
