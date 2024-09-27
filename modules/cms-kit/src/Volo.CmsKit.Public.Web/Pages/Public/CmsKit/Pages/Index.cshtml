@@ -1,9 +1,16 @@
 ﻿@page "/cmskit/page"
 
 @addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.CmsKit.Contents
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Layouts
 @using Volo.CmsKit.Web.Pages.CmsKit.Components.Contents
 @model Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages.IndexModel
+@inject ITheme ThemeManager
+
+@{
+    Layout = ThemeManager.GetLayoutByKey(Model.ViewModel.LayoutName);
+}
 
 @section styles{
     

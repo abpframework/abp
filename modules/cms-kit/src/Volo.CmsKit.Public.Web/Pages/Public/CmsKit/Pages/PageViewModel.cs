@@ -13,6 +13,8 @@ public class PageViewModel
 
     public string Title { get; set; }
 
+    public string LayoutName { get; set; }
+
     public List<ContentFragment> ContentFragments { get; set; }
 
     public string Script { get; set; }
