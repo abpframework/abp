@@ -254,6 +254,12 @@ Click the *Ok* button. Now you can check the *Packages* under the `ModularCrm.Or
 
 ![abp-studio-added-ddd-contracts-package](images/abp-studio-added-ddd-contracts-package.png)
 
+Return to your IDE, open the `ModularCrm.Ordering` module's .NET solution and create an `IOrderAppService` interface under the `Services` folder for `ModularCrm.Ordering.Contracts` project:
+
+````csharp
+//Checkpoint
+````
+
 ## Creating the User Interface
 
 Since this is a non-layered module, we can use entities and repositories directly on the user interface. If you think that is not a good practice, then use the layered module template as we've already done for the *Products* module. But for the Ordering module, we will keep it very simple for this tutorial to show it is also possible.
