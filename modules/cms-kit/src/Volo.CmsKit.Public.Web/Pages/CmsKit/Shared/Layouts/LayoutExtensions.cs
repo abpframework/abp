@@ -15,8 +15,8 @@ public static class LayoutExtensions
 
     public static string GetLayoutByKey(this ITheme theme, string layoutKey)
     {
-        return LayoutFunctions.TryGetValue(layoutKey, out var layoutFunc)
-            ? layoutFunc(theme)
-            : theme.GetApplicationLayout(); // Application layout is the default
+        return !string.IsNullOrWhiteSpace(layoutKey) && LayoutFunctions.TryGetValue(layoutKey, out var layoutFunc)
+           ? layoutFunc(theme)
+           : theme.GetApplicationLayout(); // Application layout is the default
     }
 }

@@ -18,7 +18,6 @@ public class UpdatePageInputDto : ExtensibleObject, IHasConcurrencyStamp
     [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
     public string Slug { get; set; }
 
-    [Required]
     [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxLayoutNameLength))]
     public string LayoutName { get; set; }
 

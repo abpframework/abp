@@ -78,7 +78,7 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVers
 
     public virtual void SetLayoutName(string layoutName) 
     {
-        LayoutName = Check.NotNullOrEmpty(layoutName, nameof(layoutName), PageConsts.MaxLayoutNameLength); 
+        LayoutName = Check.Length(layoutName, nameof(layoutName), PageConsts.MaxLayoutNameLength); 
     }
 
     internal void SetIsHomePage(bool isHomePage)
