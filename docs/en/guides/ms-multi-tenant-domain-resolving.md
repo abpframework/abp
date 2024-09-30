@@ -313,6 +313,7 @@ spec:
 
 Navigate to applications, gateways and microservices' **x-deployment.yaml** file and override the newly introduced `TenantDomain` key:
 
+{%{
 ```yaml
 ... Removed for brevity
 - name: "TenantDomain" # Add this key
@@ -321,11 +322,13 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
   value: "{{ .Values.config.authServer.authority }}"
 ...
 ```
+}%}
 
 > **Update all the application, gateway and microservice deployment.yaml files.** 
 
 **For AuthServer, also add the WildCardDomains that is used to handle subdomain *redirect* and *post_logout redirect* URIs to the authserver-deployment.yaml file:**
 
+{%{
 ```yaml
 ... Removed for brevity
 - name: "TenantDomain"
@@ -350,6 +353,7 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
   value: "{{ .Values.wildCardDomains.productService }}"
 ...
 ```
+}%}
 
 Afterwards, update the **values.yaml** file for all the sub-charts (administration, authserver etc):
 
@@ -385,7 +389,7 @@ wildCardDomains:
 After updating the **deployment.yaml** and **values.yaml** files of all the application, gateway and microservices' navigate to the **mystore chart values.yaml** file located under the k8s/Mystore/values.yaml that overrides all the sub-charts:
 
 **AuthServer:**
-
+{%{
 ```yaml
 # auth-server sub-chart override
 authserver:
@@ -404,11 +408,13 @@ authserver:
     saasService: "https://{0}.saas.mystore.dev"
     productService: "https://{0}.product.mystore.dev"  
 ```
+}%}
 
 You may also get CORS error when authenticating SwaggerUI of your gateways or microservices. Add Override the AuthServer CORS values with the subdomain to solve this problem:
 
 **identityService:**
 
+{%{
 ```yaml
 # identity-service sub-chart override
 identity:
@@ -418,9 +424,10 @@ identity:
     ... Removed for brevity
     tenantDomain: "https://{0}.identity.mystore.dev"
 ```
+}%}
 
 **administrationService:**
-
+{%{
 ```yaml
 # administration-service sub-chart override
 administration:
@@ -430,9 +437,11 @@ administration:
     ... Removed for brevity
     tenantDomain: "https://{0}.administration.mystore.dev" 
 ```
+}%}
 
 **saasService:**
 
+{%{
 ```yaml
 # saas-service sub-chart override
 saas:
@@ -442,9 +451,9 @@ saas:
     ... Removed for brevity
     tenantDomain: "https://{0}.saas.mystore.dev"
 ```
-
+}%}
 **productService:**
-
+{%{
 ```yaml
 # product-service sub-chart override
 product:
@@ -454,9 +463,10 @@ product:
     ... Removed for brevity
     tenantDomain: "https://{0}.product.mystore.dev"
 ```
+}%}
 
 **gateway-web:**
-
+{%{
 ```yaml
 # saas-service sub-chart override
 gateway-web:
@@ -466,9 +476,10 @@ gateway-web:
     ... Removed for brevity
     tenantDomain: "https://{0}.gateway-web.mystore.dev"
 ```
+}%}
 
 **gateway-web-public:**
-
+{%{
 ```yaml
 # gateway-web-public sub-chart override
 gateway-web-public:
@@ -478,9 +489,10 @@ gateway-web-public:
     ... Removed for brevity
     tenantDomain: "https://{0}.gateway-public.mystore.dev"
 ```
+}%}
 
 **publicweb:**
-
+{%{
 ```yaml
 # Public Web application sub-chart override
 publicweb:
@@ -491,9 +503,10 @@ publicweb:
       ... Removed for brevity
     tenantDomain: "https://{0}.mystore.dev"
 ```
+}%}
 
 **angular:**
-
+{%{
 ```yaml
 # Angular back-office application sub-chart override
 angular:
@@ -507,6 +520,7 @@ angular:
       strictDiscoveryDocumentValidation: false
       skipIssuerCheck: true
 ```
+}%}
 
 > If you are using Web or BlazorServer application for back-office, it is similar configuration with the public-web application
 
