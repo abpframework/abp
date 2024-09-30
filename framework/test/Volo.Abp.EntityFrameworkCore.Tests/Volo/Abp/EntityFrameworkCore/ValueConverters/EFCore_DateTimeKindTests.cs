@@ -37,6 +37,7 @@ public abstract class EFCore_DateTimeKindTests : DateTimeKind_Tests<AbpEntityFra
     }
 }
 
+[Collection(nameof(EFCore_DateTimeKindTests))]
 public class DateTimeKindTests : EFCore_DateTimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
@@ -46,6 +47,7 @@ public class DateTimeKindTests : EFCore_DateTimeKindTests
     }
 }
 
+[Collection(nameof(EFCore_DateTimeKindTests))]
 public class DateTimeKindTests_Local : EFCore_DateTimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
@@ -55,6 +57,7 @@ public class DateTimeKindTests_Local : EFCore_DateTimeKindTests
     }
 }
 
+[Collection(nameof(EFCore_DateTimeKindTests))]
 public class DateTimeKindTests_Utc : EFCore_DateTimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)

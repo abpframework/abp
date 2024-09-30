@@ -782,6 +782,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
+            AbpDateTimeValueConverter.Clock = Clock;
+            AbpNullableDateTimeValueConverter.Clock = Clock;
+
             foreach (var property in mutableEntityType.GetProperties().
                          Where(property => property.PropertyInfo != null &&
                                            (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
@@ -792,8 +795,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                     .Entity<TEntity>()
                     .Property(property.Name)
                     .HasConversion(property.ClrType == typeof(DateTime)
-                        ? new AbpDateTimeValueConverter(Clock)
-                        : new AbpNullableDateTimeValueConverter(Clock));
+                        ? new AbpDateTimeValueConverter()
+                        : new AbpNullableDateTimeValueConverter());
             }
         }
     }

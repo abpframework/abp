@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="9.0.0-preview.7.24405.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.0-preview.7.24405.3" />
   </ItemGroup>
 
 </Project>
