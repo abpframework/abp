@@ -238,7 +238,7 @@ We will create an application service to manage the `Order` entities.
 
 ### Defining the Application Service Contract
 
-We're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project but first, we need to add `Volo.Abp.Application.Contracts` package reference.
+We're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project but first, we need to add `Volo.Abp.Ddd.Application.Contracts` package reference.
 
 Right-click the `ModularCrm.Ordering.Contracts` project in the *Solution Explorer* panel and select the *Add Package Reference* command:
 
@@ -250,15 +250,67 @@ This command opens a dialog to add a new package reference:
 
 Select the *NuGet* tab, type `Volo.Abp.Ddd.Contracts`as the *Package name* and write the version of the package you want to install.  Please be sure that you are installing the same version as the other ABP packages you are already using.
 
-Click the *Ok* button. Now you can check the *Packages* under the `ModularCrm.Ordering.Contracts` project *Dependencies* to see the `Volo.Abp.Ddd.Contracts` package is installed:
+Click the *Ok* button. Now you can check the *Packages* under the `ModularCrm.Ordering.Contracts` project *Dependencies* to see the `Volo.Abp.Ddd.Application.Contracts` package is installed:
 
 ![abp-studio-added-ddd-contracts-package](images/abp-studio-added-ddd-contracts-package.png)
 
 Return to your IDE, open the `ModularCrm.Ordering` module's .NET solution and create an `IOrderAppService` interface under the `Services` folder for `ModularCrm.Ordering.Contracts` project:
 
 ````csharp
-//Checkpoint
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+
+namespace ModularCrm.Ordering.Contracts.Services;
+
+public interface IOrderAppService : IApplicationService
+{
+    Task<List<OrderDto>> GetListAsync();
+    Task CreateAsync(OrderCreationDto input);
+}
 ````
+
+### Defining Data Transfer Objects
+
+The `GetListAsync` and `CreateAsync` methods will use data transfer objects (DTOs) to communicate with the client. We will create two DTO classes for that purpose.
+
+Create a `OrderCreationDto` class under the `ModularCrm.Ordering.Contracts` project:
+
+````csharp
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace ModularCrm.Ordering.Contracts.Services;
+
+public class OrderCreationDto
+{
+    [Required]
+    [StringLength(150)]
+    public string CustomerName { get; set; }
+
+    [Required]
+    public Guid ProductId { get; set; }
+}
+````
+
+Create a `OrderDto` class under the `ModularCrm.Ordering.Contracts` project:
+
+````csharp
+using System;
+
+namespace ModularCrm.Ordering.Contracts.Services;
+
+public class OrderDto
+{
+    public Guid Id { get; set; }
+    public string CustomerName { get; set; }
+    public Guid ProductId { get; set; }
+}
+````
+
+The new files under the `ModularCrm.Ordering.Contracts` project should be like the following figure:
+
+![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts.png)
 
 ## Creating the User Interface
 
