@@ -270,6 +270,7 @@ Your request from the browser to the subdomain will be accepted by the ingress-c
 
 Update your charts ingress.yaml files. Ex for **administration-ingress.yaml**:
 
+{%{
 ```yaml
 spec:
   tls:
@@ -303,6 +304,7 @@ spec:
             port:
               number: 80
 ```
+}%}
 
 **Update all the application, gateway and microservice ingress.yaml files.** Eventually, when deploy the application, you will be seeing:
 ![updated-ingress](../images/updated-ingress.png)
