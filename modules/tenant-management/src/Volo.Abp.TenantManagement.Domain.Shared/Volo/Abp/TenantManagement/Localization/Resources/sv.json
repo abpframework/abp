@@ -1,0 +1,23 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Hyresgästens namn finns redan: {Namn}",
+    "Menu:TenantManagement": "Förvaltning av hyresgäster",
+    "Tenants": "Hyresgäster",
+    "NewTenant": "Ny hyresgäst",
+    "TenantName": "Hyresgästens namn",
+    "DisplayName:TenantName": "Hyresgästens namn",
+    "TenantDeletionConfirmationMessage": "Hyresgäst '{0}' kommer att raderas. Kan du bekräfta det?",
+    "ConnectionStrings": "Anslutningssträngar",
+    "DisplayName:DefaultConnectionString": "Standard anslutningssträng",
+    "DisplayName:UseSharedDatabase": "Använd den delade databasen",
+    "Permission:TenantManagement": "Förvaltning av hyresgäster",
+    "Permission:Create": "Skapa",
+    "Permission:Edit": "Redigera",
+    "Permission:Delete": "Radera",
+    "Permission:ManageConnectionStrings": "Hantera anslutningssträngar",
+    "Permission:ManageFeatures": "Hantera funktioner",
+    "DisplayName:AdminEmailAddress": "Admin E-postadress",
+    "DisplayName:AdminPassword": "Lösenord för administratör"
+  }
+}
