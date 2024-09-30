@@ -309,7 +309,7 @@ public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
             else
             {
                 tasks.Add(cache.HashSetAsync(prefixedKey, fields));
-                tasks.Add( cache.KeyExpireAsync(prefixedKey, TimeSpan.FromSeconds(ttl.GetValueOrDefault())));
+                tasks.Add(cache.KeyExpireAsync(prefixedKey, TimeSpan.FromSeconds(ttl.GetValueOrDefault())));
             }
         }
 
