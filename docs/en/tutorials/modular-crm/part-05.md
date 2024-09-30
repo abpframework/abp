@@ -242,7 +242,7 @@ We're gonna create the `IOrderAppService` interface under the `ModularCrm.Orderi
 
 Right-click the `ModularCrm.Ordering.Contracts` project in the *Solution Explorer* panel and select the *Add Package Reference* command:
 
-![abp-studio-add-package-reference-5](images/abp-studio-add-package-reference-6.png)
+![abp-studio-add-package-reference-6](images/abp-studio-add-package-reference-6.png)
 
 This command opens a dialog to add a new package reference:
 
@@ -311,6 +311,101 @@ public class OrderDto
 The new files under the `ModularCrm.Ordering.Contracts` project should be like the following figure:
 
 ![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts.png)
+
+### Implementing the Application Service
+
+Before creating the `OrderAppService` class, we need to add the `Volo.Abp.Ddd.Application` and `Volo.Abp.AutoMapper` packages to the Ordering module. 
+
+Right-click the `ModularCrm.Ordering` package in the *Solution Explorer* panel and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-7](images/abp-studio-add-package-reference-7.png)
+
+This command opens a dialog to add a new package reference:
+
+![abp-studio-add-package-reference-dialog-6](images/abp-studio-add-package-reference-dialog-6.png)
+
+Select the *NuGet* tab, enter `Volo.Abp.Ddd.Application` as the *Package name*, and specify the version of the package you wish to install. Afterward, you can add the `Volo.Abp.AutoMapper` package in the same dialog. Ensure that you install the same version as the other ABP packages you are already using.
+
+Click the *OK* button. Now we should configure the *AutoMapper* object to map the `Order` entity to the `OrderDto` object. We will create a class named `OrderingApplicationAutoMapperProfile` under the `ModularCrm.Ordering` project:
+
+````csharp
+using AutoMapper;
+using ModularCrm.Ordering.Contracts.Services;
+using ModularCrm.Ordering.Entities;
+
+namespace ModularCrm.Ordering;
+
+public class OrderingApplicationAutoMapperProfile : Profile
+{
+    public OrderingApplicationAutoMapperProfile()
+    {
+        CreateMap<Order, OrderDto>();
+    }
+}
+````
+
+And configure the `OrderingWebModule` class to use the `OrderingApplicationAutoMapperProfile`:
+
+````csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<IMvcBuilder>(mvcBuilder =>
+    {
+        mvcBuilder.AddApplicationPartIfNotExists(typeof(OrderingWebModule).Assembly);
+    });
+
+    //Add these lines
+    context.Services.AddAutoMapperObjectMapper<OrderingWebModule>();
+    Configure<AbpAutoMapperOptions>(options =>
+    {
+        options.AddMaps<OrderingWebModule>(validate: true);
+    });
+}
+````
+
+Now, we can implement the `IOrderAppService` interface. Create an `OrderAppService` class under the `Services` folder of the `ModularCrm.Ordering` project:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ModularCrm.Ordering.Contracts.Enums;
+using ModularCrm.Ordering.Contracts.Services;
+using ModularCrm.Ordering.Entities;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace ModularCrm.Ordering.Services;
+
+public class OrderAppService : ApplicationService, IOrderAppService
+{
+    private readonly IRepository<Order> _orderRepository;
+
+    public OrderAppService(IRepository<Order, Guid> orderRepository)
+    {
+        _orderRepository = orderRepository;
+        ObjectMapperContext = typeof(OrderingWebModule);
+    }
+
+    public async Task<List<OrderDto>> GetListAsync()
+    {
+        var orders = await _orderRepository.GetListAsync();
+        return ObjectMapper.Map<List<Order>, List<OrderDto>>(orders);
+    }
+
+    public async Task CreateAsync(OrderCreationDto input)
+    {
+        var order = new Order
+        {
+            CustomerName = input.CustomerName,
+            ProductId = input.ProductId,
+            State = OrderState.Placed
+        };
+
+        await _orderRepository.InsertAsync(order);
+    }
+}
+````
 
 ## Creating the User Interface
 
