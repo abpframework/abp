@@ -248,7 +248,7 @@ This command opens a dialog to add a new package reference:
 
 ![abp-studio-add-package-reference-dialog-5](images/abp-studio-add-package-reference-dialog-5.png)
 
-Select the *NuGet* tab, type `Volo.Abp.Ddd.Contracts`as the *Package name* and write the version of the package you want to install.  Please be sure that you are installing the same version as the other ABP packages you are already using.
+Select the *NuGet* tab, type `Volo.Abp.Ddd.Application.Contracts` as the *Package name* and write the version of the package you want to install. Please be sure that you are installing the same version as the other ABP packages you are already using.
 
 Click the *Ok* button. Now you can check the *Packages* under the `ModularCrm.Ordering.Contracts` project *Dependencies* to see the `Volo.Abp.Ddd.Application.Contracts` package is installed:
 
