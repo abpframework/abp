@@ -15,7 +15,7 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 Then use the `abp new` command in an empty folder to create a new solution:
 
 ```bash
-abp new-module Acme.BookStore
+abp new Acme.BookStore -t module
 ```
 
 - `Acme.IssueManagement` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
@@ -25,7 +25,7 @@ abp new-module Acme.BookStore
 The template comes without a user interface by default. You can use the `mvc`, `blazor`, `blazor-server`, or `angular` options to include any of these UI layers. You can also combine them. For example, you can use `mvc,angular` to include both MVC and Angular UI. To create a module without a user interface, don't specify any value.
 
 ````bash
-abp new-module Acme.IssueManagement -u mvc,angular
+abp new Acme.IssueManagement -t module -u mvc,angular
 ````
 
 #### Specifying the Database Provider
@@ -33,7 +33,7 @@ abp new-module Acme.IssueManagement -u mvc,angular
 The template comes with the *EntityFrameworkCore* database provider by default. You can use the `ef` or `mongodb` options to include either of these providers. You can also combine them. For example, you can use `ef,mongodb` to include both EntityFrameworkCore and MongoDB.
 
 ````bash
-abp new-module Acme.IssueManagement -d ef,mongodb
+abp new Acme.IssueManagement -t module -d ef,mongodb
 ````
 
 ## Solution Structure
