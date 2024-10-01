@@ -1,6 +1,8 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <MicrosoftPackageVersion Condition="$(TargetFramework.Contains('net9'))">9.0.0-rc.1.24452.1</MicrosoftPackageVersion>
+    <MicrosoftPackageVersion Condition="$(TargetFramework.Contains('net8'))">8.0.8</MicrosoftPackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="2.0.24" />
@@ -51,23 +53,23 @@
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
     <PackageVersion Include="MailKit" Version="4.7.1.1" />
     <PackageVersion Include="Markdig.Signed" Version="0.37.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-rc.1.24452.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authorization" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(MicrosoftPackageVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Razor.Language" Version="6.0.25" />
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.0-rc.1.24452.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="$(MicrosoftPackageVersion)" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
@@ -81,7 +83,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-rc.1.24451.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-rc.1.24451.1" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-rc.1.24431.7" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0-rc.1.24452.1" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="$(MicrosoftPackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0-rc.1.24431.7" />
@@ -89,14 +91,14 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Composite" Version="9.0.0-rc.1.24431.7" />
-    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.0-rc.1.24452.1" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftPackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Physical" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.FileSystemGlobbing" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.0-rc.1.24431.7" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="9.0.0-rc.1.24452.1" />
-    <PackageVersion Include="Microsoft.Extensions.Localization" Version="9.0.0-rc.1.24452.1" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="$(MicrosoftPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Localization" Version="$(MicrosoftPackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.0-rc.1.24431.7" />
