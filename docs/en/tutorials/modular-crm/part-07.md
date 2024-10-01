@@ -56,11 +56,7 @@ namespace ModularCrm.Ordering.Contracts.Events
 
 ### Using the `IDistributedEventBus` Service
 
-The `IDistributedEventBus` service publishes events to the event bus. Until this point, the Ordering module has no functionality to create new orders.
-
-Open the `ModularCrm.Ordering` module's .NET solution, and edit the `OrderAppService` class in the `ModularCrm.Ordering` project.
-
-Here is the full `OrderAppService` class:
+The `IDistributedEventBus` service publishes events to the event bus. Until this point, the Ordering module has no functionality to create new orders. For that purpose, open the `ModularCrm.Ordering` module's .NET solution, and update the `OrderAppService` as following:
 
 ````csharp
 using System;
