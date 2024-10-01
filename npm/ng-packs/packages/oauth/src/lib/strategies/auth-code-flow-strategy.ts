@@ -1,6 +1,6 @@
 import { noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
-import { from, of } from 'rxjs';
+import { filter, from, of, tap } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { isTokenExpired } from '../utils';
 
@@ -12,6 +12,18 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
     return super
       .init()
+      .then(() => {
+        this.oAuthService.events
+          .pipe(
+            filter(event => event.type === 'token_received'),
+            tap(e => {
+              const urlParams = window.location.search;
+              const uiCulture = new URLSearchParams(urlParams).get('ui-culture');
+              this.sessionState.setLanguage(uiCulture);
+            }),
+          )
+          .subscribe();
+      })
       .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh());
   }
