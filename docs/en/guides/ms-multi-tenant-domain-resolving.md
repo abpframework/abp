@@ -270,6 +270,7 @@ Your request from the browser to the subdomain will be accepted by the ingress-c
 
 Update your charts ingress.yaml files. Ex for **administration-ingress.yaml**:
 
+
 {%{
 ```yaml
 spec:
