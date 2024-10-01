@@ -12,18 +12,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
     return super
       .init()
-      .then(() => {
-        this.oAuthService.events
-          .pipe(
-            filter(event => event.type === 'token_received'),
-            tap(e => {
-              const urlParams = window.location.search;
-              const uiCulture = new URLSearchParams(urlParams).get('ui-culture');
-              this.sessionState.setLanguage(uiCulture);
-            }),
-          )
-          .subscribe();
-      })
+      .then(() => this.setLanguageWithUICulture())
       .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh());
   }
@@ -79,5 +68,18 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     const lang = this.sessionState.getLanguage();
     const culture = { culture: lang, 'ui-culture': lang };
     return { ...(lang && culture), ...queryParams };
+  }
+
+  private setLanguageWithUICulture() {
+    this.oAuthService.events
+      .pipe(
+        filter(event => event.type === 'token_received'),
+        tap(e => {
+          const urlParams = window.location.search;
+          const uiCulture = new URLSearchParams(urlParams).get('ui-culture');
+          this.sessionState.setLanguage(uiCulture);
+        }),
+      )
+      .subscribe();
   }
 }
