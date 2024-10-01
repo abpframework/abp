@@ -8,16 +8,15 @@
     "Tiered": ["Yes", "No"]
 }
 ````
+In this quick start guide, you will learn how to create and run a layered, potentially modular web application using [ABP Studio](../studio/index.md).
 
-In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using [ABP Studio](../studio/index.md).
+## Set Up Your Development Environment
 
-## Setup your development environment
+First things first! Let's set up your development environment before creating your first project.
 
-First things first! Let's setup your development environment before creating the first project.
+### Prerequisites
 
-### Pre-requirements
-
-The following tools should be installed on your development machine:
+Ensure the following tools are installed on your development machine:
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (v17.3+) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
 * [.NET 8.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
@@ -41,7 +40,7 @@ The following tools should be installed on your development machine:
 
 ## Creating a New Solution
 
-> 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is in the beta version now. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.
+> 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is currently in beta. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.
 
 > ABP startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
