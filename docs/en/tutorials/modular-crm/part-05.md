@@ -297,6 +297,7 @@ Create a `OrderDto` class under the `ModularCrm.Ordering.Contracts` project:
 
 ````csharp
 using System;
+using ModularCrm.Ordering.Contracts.Enums;
 
 namespace ModularCrm.Ordering.Contracts.Services;
 
@@ -305,6 +306,7 @@ public class OrderDto
     public Guid Id { get; set; }
     public string CustomerName { get; set; }
     public Guid ProductId { get; set; }
+    public OrderState State { get; set; }
 }
 ````
 
@@ -407,9 +409,43 @@ public class OrderAppService : ApplicationService, IOrderAppService
 }
 ````
 
-## Creating the User Interface
+Open the `ModularCrmWebModule` class in the main application's solution (the `ModularCrm` solution), find the `ConfigureAutoApiControllers` method and add the following lines inside that method:
 
-Since this is a non-layered module, we can use entities and repositories directly on the user interface. If you think that is not a good practice, then use the layered module template as we've already done for the *Products* module. But for the Ordering module, we will keep it very simple for this tutorial to show it is also possible.
+````csharp
+private void ConfigureAutoApiControllers()
+{
+    Configure<AbpAspNetCoreMvcOptions>(options =>
+    {
+        options.ConventionalControllers.Create(typeof(ModularCrmApplicationModule).Assembly);
+        options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly);
+
+        //ADD THE FOLLOWING LINE:
+        options.ConventionalControllers.Create(typeof(OrderingWebModule).Assembly);
+    });
+}
+````
+
+### Creating Example Orders
+
+This section will create a few example orders using the [Swagger UI](../../framework/api-development/swagger.md). Thus, we will have some sample orders to show on the UI.
+
+Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel and select the *Dotnet CLI* -> *Graph Build* command. This will ensure that the order module and the main application are built and ready to run.
+
+After the build process completes, open the Solution Runner panel and click the *Play* button near the solution root. Once the `ModularCrm.Web` application runs, we can right-click it and select the *Browse* command to open the user interface.
+
+Once you see the user interface of the web application, type `/swagger` at the end of the URL to open the Swagger UI. If you scroll down, you should see the `Orders` API:
+
+![abp-studio-ordering-swagger-ui-in-browser](images/abp-studio-ordering-swagger-ui-in-browser.png)
+
+Expand the `/api/app/order` API and click the *Try it out* button. Then, create a few orders by filling in the request body and clicking the *Execute* button:
+
+![abp-studio-swagger-ui-create-order-execute](images/abp-studio-swagger-ui-create-order-execute.png)
+
+If you check the database, you should see the entities created in the *Orders* table:
+
+![sql-server-orders-database-table-filled](images/sql-server-orders-database-table-filled.png)
+
+## Creating the User Interface
 
 ### Creating a `_ViewImports.cshtml` File
 
@@ -432,28 +468,26 @@ Create an `Orders` folder under the `Pages` folder and add an `Index.cshtml` Raz
 
 ````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModularCrm.Ordering.Entities;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
+using ModularCrm.Ordering.Contracts.Services;
 
 namespace ModularCrm.Ordering.Pages.Orders
 {
     public class IndexModel : PageModel
     {
-        public List<Order> Orders { get; set; }
+        public List<OrderDto> Orders { get; set; }
 
-        private readonly IRepository<Order, Guid> _orderRepository;
+        private readonly IOrderAppService _orderAppService;
 
-        public IndexModel(IRepository<Order, Guid> orderRepository)
+        public IndexModel(IOrderAppService orderAppService)
         {
-            _orderRepository = orderRepository;
+            _orderAppService = orderAppService;
         }
 
         public async Task OnGetAsync()
         {
-            Orders = await _orderRepository.GetListAsync();
+            Orders = await _orderAppService.GetListAsync();
         }
     }
 }
@@ -484,14 +518,6 @@ Here, we are injecting a repository to query `Order` entities from the database 
 ````
 
 This page shows a list of orders on the UI. We haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
-
-### Creating Some Sample Data
-
-You can open the database and manually create a few order records to show on the UI:
-
-![sql-server-orders-table-content](images/sql-server-orders-table-content.png)
-
-You can get `ProductId` values from the `Products` table and [generate](https://www.guidgenerator.com/) some random GUIDs for other GUID fields.
 
 ### Building the Application
 
@@ -550,11 +576,13 @@ namespace ModularCrm.Ordering
 
 `OrderingMenuContributor` implements the `IMenuContributor` interface, which forces us to implement the `ConfigureMenuAsync` method. In that method, we can manipulate the menu items (add new menu items, remove existing menu items or change the properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
 
-After creating such a class, we should configure the `AbpNavigationOptions` to add that contributor. Open the `OrderingWebModule` class in the `ModularCrm.Ordering` project and add the following configuration code into the `ConfigureServices` method (if there is no `ConfigureServices` method, first create it as shown below):
+After creating such a class, we should configure the `AbpNavigationOptions` to add that contributor. Open the `OrderingWebModule` class in the `ModularCrm.Ordering` project and add the following configuration code into the `ConfigureServices` method:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
+    //... other configurations
+
     Configure<AbpNavigationOptions>(options =>
     {
         options.MenuContributors.Add(new OrderingMenuContributor());
