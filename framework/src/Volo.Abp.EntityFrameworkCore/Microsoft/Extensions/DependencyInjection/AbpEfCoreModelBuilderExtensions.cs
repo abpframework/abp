@@ -26,13 +26,13 @@ public static class AbpEfCoreModelBuilderExtensions
                     return new SqlBinaryExpression(
                         ExpressionType.Equal,
                         isDeleted,
-                        new SqlConstantExpression(Expression.Constant(false), boolParam.TypeMapping),
+                        new SqlConstantExpression(false, typeof(bool), boolParam.TypeMapping),
                         boolParam.Type,
                         boolParam.TypeMapping);
                 }
 
                 // empty where sql
-                return new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping);
+                return new SqlConstantExpression(true, typeof(bool), boolParam.TypeMapping);
             });
 
         return modelBuilder;
@@ -60,7 +60,7 @@ public static class AbpEfCoreModelBuilderExtensions
                 }
 
                 // empty where sql
-                return new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping);
+                return new SqlConstantExpression(true, typeof(bool), boolParam.TypeMapping);
             });
 
         return modelBuilder;
