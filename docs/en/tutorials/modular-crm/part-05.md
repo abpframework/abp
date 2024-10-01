@@ -349,13 +349,8 @@ public class OrderingApplicationAutoMapperProfile : Profile
 And configure the `OrderingWebModule` class to use the `OrderingApplicationAutoMapperProfile`:
 
 ````csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    PreConfigure<IMvcBuilder>(mvcBuilder =>
-    {
-        mvcBuilder.AddApplicationPartIfNotExists(typeof(OrderingWebModule).Assembly);
-    });
-
     //Add these lines
     context.Services.AddAutoMapperObjectMapper<OrderingWebModule>();
     Configure<AbpAutoMapperOptions>(options =>
