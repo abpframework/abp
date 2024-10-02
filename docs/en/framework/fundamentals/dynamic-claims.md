@@ -1,8 +1,8 @@
 # Dynamic Claims
 
-When a client authenticates and obtains an access token or an authentication cookie, the claims in that token or cookie are not changed unless it re-authenticates. For most of the claims, that may not be a problem since claims are not frequently changing values. However, some claims may be changed and these changes should be reflected to the current session immediately. For example, we can revoke a role from a user and that should be immediately effective, otherwise user will continue to use that role's permissions until re-login to the application.
+When a client authenticates and obtains an access token or an authentication cookie, the claims in that token or cookie are not changed unless it re-authenticates. That is not a problem for most claims since the claim values do not frequently change. However, for some claims, it may be required to immediately see the impact after the claim values change in the current session. For example, if a role is revoked from a user, you want to see its effect in the next request. Otherwise, the user will continue to use that role's permissions until re-login to the application.
 
-ABP's dynamic claims feature is used to automatically and dynamically override the configured claim values in the client's authentication token/cookie by the latest values of these claims.
+ABP's dynamic claims feature dynamically overrides the configured claim values in the client's authentication token/cookie with the latest values of these claims.
 
 ## How to Use
 
@@ -10,7 +10,7 @@ This feature is disabled by default. You should enable it for your application a
 
 > **Beginning from the v8.0, all the [startup templates](../../solution-templates) are pre-configured and the dynamic claims feature is enabled by default. So, if you have created a solution with v8.0 and above, you don't need to make any configuration. Follow the instructions only if you've upgraded from a version lower than 8.0.**
 
-### Enabling the Dynamic Claims
+### Enabling / Disabling the Dynamic Claims
 
 You can enable it by the following code:
 
@@ -19,7 +19,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 {
     context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
     {
-        options.IsDynamicClaimsEnabled = true;
+        options.IsDynamicClaimsEnabled = true; //set it "true" to enable "Dynamic Claims" or "false" to disable it.
     });
 }
 ````
