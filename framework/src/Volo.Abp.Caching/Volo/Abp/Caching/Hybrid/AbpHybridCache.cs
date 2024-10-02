@@ -173,7 +173,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
         CancellationToken token = default)
     {
         token = CancellationTokenProvider.FallbackToProvider(token);
-        hideErrors = hideErrors ?? DistributedCacheOption.HideErrors;
+        hideErrors ??= DistributedCacheOption.HideErrors;
 
         TCacheItem? value = null;
 
@@ -274,7 +274,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
         async Task SetRealCache()
         {
             token = CancellationTokenProvider.FallbackToProvider(token);
-            hideErrors = hideErrors ?? DistributedCacheOption.HideErrors;
+            hideErrors ??= DistributedCacheOption.HideErrors;
 
             try
             {
@@ -353,7 +353,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
 
         async Task RemoveRealCache()
         {
-            hideErrors = hideErrors ?? DistributedCacheOption.HideErrors;
+            hideErrors ??= DistributedCacheOption.HideErrors;
 
             try
             {
