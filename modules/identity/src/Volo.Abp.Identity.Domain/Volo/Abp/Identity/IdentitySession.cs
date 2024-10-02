@@ -80,7 +80,22 @@ public class IdentitySession : AggregateRoot<Guid>, IMultiTenant
     private static string JoinAsString(IEnumerable<string> list)
     {
         var serialized = string.Join(",", list);
-        return serialized.IsNullOrWhiteSpace() ? null : serialized;
+        if (serialized.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        while (serialized.Length > IdentitySessionConsts.MaxIpAddressesLength)
+        {
+            var lastCommaIndex = serialized.IndexOf(',');
+            if (lastCommaIndex < 0)
+            {
+                return serialized;
+            }
+            serialized = serialized.Substring(lastCommaIndex + 1);
+        }
+
+        return serialized;
     }
 
     private string[] GetArrayFromString(string str)

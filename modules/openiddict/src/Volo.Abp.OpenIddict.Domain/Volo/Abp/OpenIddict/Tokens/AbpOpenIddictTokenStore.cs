@@ -63,7 +63,7 @@ public class AbpOpenIddictTokenStore : AbpOpenIddictStoreBase<IOpenIddictTokenRe
 
         try
         {
-            await Repository.DeleteAsync(token.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
+            await Repository.DeleteAsync(token.Id, autoSave: true, cancellationToken: cancellationToken);
         }
         catch (AbpDbConcurrencyException e)
         {

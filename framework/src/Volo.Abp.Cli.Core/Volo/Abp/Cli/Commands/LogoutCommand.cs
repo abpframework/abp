@@ -31,7 +31,7 @@ public class LogoutCommand : IConsoleCommand, ITransientDependency
         return string.Empty;
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Sign out from " + CliUrls.AccountAbpIo + ".";
     }

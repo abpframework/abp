@@ -2,7 +2,7 @@
 
 ## About this solution
 
-This is a layered startup solution based on [Domain Driven Design (DDD)](https://docs.abp.io/en/abp/latest/Domain-Driven-Design) practises. All the fundamental ABP modules are already installed. 
+This is a layered startup solution based on [Domain Driven Design (DDD)](https://abp.io/docs/latest/framework/architecture/domain-driven-design) practises. All the fundamental ABP modules are already installed. 
 
 ### Pre-requirements
 
@@ -52,7 +52,7 @@ It is recommended to use **two** RSA certificates, distinct from the certificate
 
 For more information, please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios
 
-> Also, see the [Configuring OpenIddict](https://docs.abp.io/en/abp/latest/Deployment/Configuring-OpenIddict#production-environment) documentation for more information.
+> Also, see the [Configuring OpenIddict](https://abp.io/docs/latest/deployment/configuring-openiddict#production-environment) documentation for more information.
 
 #### Install Client-Side Libraries
 
@@ -108,43 +108,43 @@ This is a layered monolith application that consists of the following applicatio
 
 ### Deploying the application
 
-Deploying an ABP application is not different than deploying any .NET or ASP.NET Core application. However, there are some topics that you should care about when you are deploying your applications. You can check ABP's [Deployment documentation](https://docs.abp.io/en/abp/latest/Deployment/Index) before deploying your application.
+Deploying an ABP application is not different than deploying any .NET or ASP.NET Core application. However, there are some topics that you should care about when you are deploying your applications. You can check ABP's [Deployment documentation](https://abp.io/docs/latest/deployment) before deploying your application.
 
 ### Additional resources
 
 You can see the following resources to learn more about your solution and the ABP Framework:
 
-* [Web Application Development Tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1)
-* [Application Startup Template Structure](https://docs.abp.io/en/abp/latest/Startup-Templates/Application)
+* [Web Application Development Tutorial](https://abp.io/docs/latest/tutorials/book-store/part-01?UI=Blazor&DB=EF)
+* [Application Startup Template Structure](https://abp.io/docs/latest/solution-templates/layered-web-application)
 <TEMPLATE-REMOVE IF-NOT='ui:mvc'>
 <TEMPLATE-REMOVE IF-NOT='BASIC'>
-* [ASP.NET Core MVC / Razor Pages: The Basic Theme](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Basic-Theme)
+* [ASP.NET Core MVC / Razor Pages: The Basic Theme](https://abp.io/docs/latest/framework/ui/mvc-razor-pages/basic-theme)
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
-* [LeptonX Lite MVC UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/AspNetCore)
+* [LeptonX Lite MVC UI](https://abp.io/docs/latest/ui-themes/lepton-x-lite/asp-net-core)
 </TEMPLATE-REMOVE>
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='ui:blazor-server'>
 <TEMPLATE-REMOVE IF-NOT='BASIC'>
-* [Blazor UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme?UI=BlazorServer)
+* [Blazor UI: Basic Theme](https://abp.io/docs/latest/framework/ui/blazor/basic-theme?UI=BlazorServer)
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
-* [LeptonX Lite Blazor UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Blazor?UI=BlazorServer)
+* [LeptonX Lite Blazor UI](https://abp.io/docs/latest/ui-themes/lepton-x-lite/blazor?UI=BlazorServer)
 </TEMPLATE-REMOVE>
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='ui:blazor'>
 <TEMPLATE-REMOVE IF-NOT='BASIC'>
-* [Blazor UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Blazor/Basic-Theme?UI=Blazor)
+* [Blazor UI: Basic Theme](https://abp.io/docs/latest/framework/ui/blazor/basic-theme?UI=Blazor)
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
-* [LeptonX Lite Blazor UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Blazor?UI=Blazor)
+* [LeptonX Lite Blazor UI](https://abp.io/docs/latest/ui-themes/lepton-x-lite/blazor?UI=Blazor)
 </TEMPLATE-REMOVE>
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='ui:angular'>
 <TEMPLATE-REMOVE IF-NOT='BASIC'>
-* [Angular UI: Basic Theme](https://docs.abp.io/en/abp/latest/UI/Angular/Basic-Theme)
+* [Angular UI: Basic Theme](https://abp.io/docs/latest/framework/ui/angular/basic-theme)
 </TEMPLATE-REMOVE>
 <TEMPLATE-REMOVE IF-NOT='LEPTONXLITE'>
-* [LeptonX Lite Angular UI](https://docs.abp.io/en/abp/latest/Themes/LeptonXLite/Angular)
+* [LeptonX Lite Angular UI](https://abp.io/docs/latest/ui-themes/lepton-x-lite/angular)
 </TEMPLATE-REMOVE>
 </TEMPLATE-REMOVE>

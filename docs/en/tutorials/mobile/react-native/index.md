@@ -1,10 +1,12 @@
 # Mobile Application Development Tutorial - React Native
 
+React Native mobile option is *available for* ***Team*** *or higher licenses*. Therefore, if you don't have a commercial license, it's suggested to follow the article by downloading the source code of the sample application as described in the next chapter.
+
 ## About This Tutorial
 
 - This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../framework/ui/react-native) as the mobile option.. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial.
 - In this tutorial, we will only focus on the UI side of the `Acme.BookStore` application and will implement the CRUD operations.
-- Before starting, please make sure that the [React Native Development Environment](https://docs.abp.io/en/commercial/latest/getting-started-react-native) is ready on your machine.
+- Before starting, please make sure that the [React Native Development Environment](../../../framework/ui/react-native/index.md) is ready on your machine.
 
 ## Download the Source Code
 

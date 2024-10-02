@@ -5,25 +5,23 @@ For more information, check out the below links:
 
 🔗Official Website: https://abp.io
 
-🔗Commercial Website: https://commercial.abp.io
-
-🔗Commercial Demo: https://commercial.abp.io/demo
+🔗Commercial Demo: https://abp.io/demo
 
 🔗GitHub Repository: https://github.com/abpframework/abp
 
 🔗Official Theme: https://www.LeptonTheme.com
 
-🔗Documentation: https://docs.abp.io
+🔗Documentation: https://abp.io/docs/latest/
 
-🔗Community: https://community.abp.io
+🔗Community: https://abp.io/community/
 
-🔗Blog: https://blog.abp.io
+🔗Blog: https://abp.io/blog/
 
 🔗Books: https://abp.io/books
 
 🔗Twitter: https://twitter.com/abpframework
 
-🔗Discord: https://community.abp.io/discord
+🔗Discord: https://abp.io/community/discord
 
 🔗Stackoverflow: https://stackoverflow.com/questions/tagged/abp
 
@@ -34,7 +32,7 @@ For more information, check out the below links:
 
 Why should you use the ABP.IO Platform instead of creating a new solution from scratch?
 
-You can find the answer here 👉🏻 [Why ABP Platform?](https://docs.abp.io/en/commercial/latest/why-abp-io-platform)
+You can find the answer here 👉🏻 [Why ABP Platform?](https://abp.io/docs/latest/others/why-abp-platform)
 
 
 ## 🚀 Key Features of the ABP Framework
@@ -100,7 +98,7 @@ You can find the answer here 👉🏻 [Why ABP Platform?](https://docs.abp.io/en
 
 ## 🧐 How It Works?
 
-The following page explains how you use the ABP.IO Platform as a .NET developer 👉 [How it works?](https://commercial.abp.io/how-it-works)
+The following page explains how you use the ABP.IO Platform as a .NET developer 👉 [How it works?](https://abp.io/how-it-works)
 
 
 ### 📘 Supported Database Providers
@@ -127,4 +125,4 @@ The following page explains how you use the ABP.IO Platform as a .NET developer 
 
 ## 📫 Bug & Support
 
-Support for open-source ABP Framework client-side packages is available at [GitHub Issues](https://github.com/abpframework/abp/issues), and the commercial support is available at [support.abp.io](https://support.abp.io).
+Support for open-source ABP Framework client-side packages is available at [GitHub Issues](https://github.com/abpframework/abp/issues), and the commercial support is available at [abp.io/support](https://abp.io/support/questions).
