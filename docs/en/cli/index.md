@@ -152,7 +152,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       * `none`: Without any mobile application.
-      * `react-native`: React Native.
+      * `react-native`: React Native. This mobile option is only available for active **license owners**.
       * `maui`: MAUI. This mobile option is only available for ABP. (*Available for* ***Team*** *or higher licenses*)
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.

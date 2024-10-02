@@ -10,5 +10,5 @@ public class IdentitySessionConsts
 
     public static int MaxClientIdLength { get; set; } = 64;
 
-    public static int MaxIpAddressesLength { get; set; } = 256;
+    public static int MaxIpAddressesLength { get; set; } = 2048;
 }

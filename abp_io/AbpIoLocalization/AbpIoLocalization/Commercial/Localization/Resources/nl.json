@@ -382,7 +382,7 @@
     "TrialLicenseExpireMessage": "U gebruikt de proeflicentie en uw proeflicentie verloopt op {0}.",
     "TryForFree": "Probeer gratis",
     "TrialLicenseExpiredInfo": "Uw proeflicentieperiode is verlopen!",
-    "CommercialNewsletterConfirmationMessage": "Ik ga akkoord met de <a href=\"https://commercial.abp.io/TermsConditions\">Algemene voorwaarden</a> en het <a href=\"https://commercial.abp.io/Privacy\">Privacybeleid </a>.",
+    "CommercialNewsletterConfirmationMessage": "Ik ga akkoord met de <a href=\"https://abp.io/terms-conditions\">Algemene voorwaarden</a> en het <a href=\"https://abp.io/privacy\">Privacybeleid </a>.",
     "BlackFridayDiscount": "Black Friday korting",
     "MultipleOrganizationInfo": "Bekijk al uw organisaties",
     "PaymentFailedInfo": "Excuses, betaling mislukt! ",

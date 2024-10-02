@@ -2,6 +2,34 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.8.3 (2024-09-24)
+
+* Allowed to set Execution Order (or dependency) from Solution Runner
+* Added Icons for the Solution Runner's Context Menu
+* Fixed MongoDB database issues for the Microservice Template
+* Allowed parallel running for background tasks
+
+## 0.8.2 (2024-09-19)
+
+* Fixed WireGuard connection random port bug
+* Automated steps after microservice solution creation
+* Fixed unusable options/features for Trial License
+* Fixed blazor-server single-layer template
+
+## 0.8.1 (2024-09-12)
+
+* Fixed MySQL connection problem for nolayers template
+* Ignored failed solution runner profiles while loading
+* Added required ModalBuilder extensions for the imported/installed modules for EF Core
+
+## 0.8.0 (2024-09-11)
+
+* Added `Blazor WebApp UI` to **app-nolayers** and **microservice** templates
+* Fixed version problem for bundle command
+* Fixed optional module integrations
+* Added **LeptonX Theme** to module-list
+* Fixed bug related to Kubernetes user-specified connection
+
 ## 0.7.9 (2024-08-29)
 
 * Opened Readme.md file after module creation or opening a solution

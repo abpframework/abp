@@ -45,7 +45,7 @@ public class BundleCommand : IConsoleCommand, ITransientDependency
         await BundlingService.BundleAsync(workingDirectory, forceBuild, projectType);
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Bundles all third party styles and scripts required by modules and updates index.html file.";
     }
