@@ -31,7 +31,7 @@ public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
         }
 
         app.UseRouting();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseConfiguredEndpoints();
     }
     
