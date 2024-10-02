@@ -67,6 +67,7 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
         {
             options.SendExceptionsDetailsToClients = Options.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = Options.SendStackTraceToClients;
+            options.SendExceptionDataToClientTypes = Options.SendExceptionDataToClientTypes;
         });
     }
 }

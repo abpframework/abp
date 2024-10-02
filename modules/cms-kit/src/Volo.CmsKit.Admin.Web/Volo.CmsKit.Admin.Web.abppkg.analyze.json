@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Admin.Web",
-  "hash": "fa6d7b5a529c2c76386141dc3cb12bba",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin.Web",
@@ -62,6 +62,132 @@
       ],
       "contentType": "abpModule",
       "name": "CmsKitAdminWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags",
+      "contentType": "webPage",
+      "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags",
+      "contentType": "webPage",
+      "name": "EditModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Tags",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages",
+      "contentType": "webPage",
+      "name": "CreateModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages",
+      "contentType": "webPage",
+      "name": "UpdateModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems",
+      "contentType": "webPage",
+      "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems",
+      "contentType": "webPage",
+      "name": "UpdateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.GlobalResources",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Contents",
+      "contentType": "webPage",
+      "name": "AddWidgetModal",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments",
+      "contentType": "webPage",
+      "name": "DetailsModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments.Approve",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "FeaturesModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "UpdateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts",
+      "contentType": "webPage",
+      "name": "CreateModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.BlogPosts",
+      "contentType": "webPage",
+      "name": "UpdateModel",
       "summary": null
     }
   ]

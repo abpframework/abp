@@ -81,6 +81,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDe
        {
            options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
            options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+           options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
        });
 
         var logLevel = context.Exception!.GetLogLevel();

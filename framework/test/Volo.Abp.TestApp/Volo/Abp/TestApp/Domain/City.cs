@@ -5,11 +5,13 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.TestApp.Domain;
 
-public class City : AggregateRoot<Guid>
+public class City : AggregateRoot<Guid>, ISoftDelete
 {
     public string Name { get; set; }
 
     public ICollection<District> Districts { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     private City()
     {

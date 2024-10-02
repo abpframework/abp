@@ -5,7 +5,7 @@
 <Modal @ref="Modal" Closing="@ClosingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>@L["Features"]</ModalTitle>
+            <ModalTitle>@L["Features"]@ProviderKeyDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         @if (Groups == null || !Groups.Any())

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Account.Application",
-  "hash": "ebd6f98a2003938944d5a3790daf20af",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Account",
@@ -141,6 +141,7 @@
       "methods": [
         {
           "returnType": "IdentityUserDto",
+          "namespace": "Volo.Abp.Account",
           "name": "RegisterAsync",
           "summary": null,
           "isAsync": true,
@@ -157,6 +158,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Account",
           "name": "SendPasswordResetCodeAsync",
           "summary": null,
           "isAsync": true,
@@ -173,6 +175,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Account",
           "name": "VerifyPasswordResetTokenAsync",
           "summary": null,
           "isAsync": true,
@@ -189,6 +192,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Account",
           "name": "ResetPasswordAsync",
           "summary": null,
           "isAsync": true,
@@ -266,6 +270,87 @@
           "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
         },
         {
+          "name": "IDynamicClaimsAppService",
+          "namespace": "Volo.Abp.Account",
+          "declaringAssemblyName": "Volo.Abp.Account.Application.Contracts",
+          "fullName": "Volo.Abp.Account.IDynamicClaimsAppService"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Account",
+          "name": "RefreshAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "DynamicClaimsAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Account",
+      "baseClass": {
+        "name": "IdentityAppServiceBase",
+        "namespace": "Volo.Abp.Identity",
+        "declaringAssemblyName": "Volo.Abp.Identity.Application",
+        "fullName": "Volo.Abp.Identity.IdentityAppServiceBase"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
           "name": "IProfileAppService",
           "namespace": "Volo.Abp.Account",
           "declaringAssemblyName": "Volo.Abp.Account.Application.Contracts",
@@ -275,6 +360,7 @@
       "methods": [
         {
           "returnType": "ProfileDto",
+          "namespace": "Volo.Abp.Account",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -285,6 +371,7 @@
         },
         {
           "returnType": "ProfileDto",
+          "namespace": "Volo.Abp.Account",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -301,6 +388,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Account",
           "name": "ChangePasswordAsync",
           "summary": null,
           "isAsync": true,

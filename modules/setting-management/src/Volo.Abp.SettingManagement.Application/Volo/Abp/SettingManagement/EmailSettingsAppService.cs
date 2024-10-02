@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Emailing;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Features;
@@ -68,7 +69,15 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
     {
         await CheckFeatureAsync();
 
-        await EmailSender.SendAsync(input.SenderEmailAddress, input.TargetEmailAddress, input.Subject, input.Body);
+        try
+        {
+            await EmailSender.SendAsync(input.SenderEmailAddress, input.TargetEmailAddress, input.Subject, input.Body);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError("Error sending test email: " + e);
+            throw new UserFriendlyException(L["MailSendingFailed"]);
+        }
     }
 
     protected virtual async Task CheckFeatureAsync()

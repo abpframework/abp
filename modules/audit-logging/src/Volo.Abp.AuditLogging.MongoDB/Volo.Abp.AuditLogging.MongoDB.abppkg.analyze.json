@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.MongoDB",
-  "hash": "ce6dfe92b247a77b0138c47e0da4a98c",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging.MongoDB",
@@ -71,7 +71,7 @@
         {
           "entityFullName": "Volo.Abp.AuditLogging.AuditLog",
           "contentType": "databaseCollection",
-          "name": "AbpAuditLogs",
+          "name": "AuditLogs",
           "summary": null
         }
       ],

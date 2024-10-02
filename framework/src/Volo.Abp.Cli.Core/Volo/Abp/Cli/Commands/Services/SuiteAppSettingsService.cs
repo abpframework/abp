@@ -92,7 +92,7 @@ public class SuiteAppSettingsService : ITransientDependency
             "volo.abp.suite",
             version,
             "tools",
-            "net8.0",
+            "net9.0",
             "any",
             "appsettings.json"
             );

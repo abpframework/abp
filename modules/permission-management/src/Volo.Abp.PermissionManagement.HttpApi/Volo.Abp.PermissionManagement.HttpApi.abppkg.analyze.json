@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.HttpApi",
-  "hash": "7250e0a57ae6777cf200341791f24bdd",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.HttpApi",
@@ -62,6 +62,51 @@
       ],
       "contentType": "abpModule",
       "name": "AbpPermissionManagementHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/permission-management/permissions",
+          "method": "GET",
+          "groupName": "Permissions",
+          "responseType": "Volo.Abp.PermissionManagement.GetPermissionListResultDto",
+          "responseTypeAsJson": "{\r\n  \"entityDisplayName\": \"string\",\r\n  \"groups\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"displayName\": \"string\",\r\n      \"displayNameKey\": \"string\",\r\n      \"displayNameResource\": \"string\",\r\n      \"permissions\": [\r\n        {\r\n          \"name\": \"string\",\r\n          \"displayName\": \"string\",\r\n          \"parentName\": \"string\",\r\n          \"isGranted\": false,\r\n          \"allowedProviders\": [\r\n            \"string\"\r\n          ],\r\n          \"grantedProviders\": [\r\n            {\r\n              \"providerName\": \"string\",\r\n              \"providerKey\": \"string\"\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "providerName",
+              "type": "String"
+            },
+            {
+              "name": "providerKey",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/permission-management/permissions",
+          "method": "PUT",
+          "groupName": "Permissions",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "providerName",
+              "type": "String"
+            },
+            {
+              "name": "providerKey",
+              "type": "String"
+            },
+            {
+              "name": "input",
+              "type": "UpdatePermissionsDto"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

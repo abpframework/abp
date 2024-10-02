@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Admin.Application",
-  "hash": "1cf0db9a201c7d8143e4f8efb6218d59",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin",
@@ -136,6 +136,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "AddTagToEntityAsync",
           "summary": null,
           "isAsync": true,
@@ -152,6 +153,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "RemoveTagFromEntityAsync",
           "summary": null,
           "isAsync": true,
@@ -168,6 +170,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "SetEntityTagsAsync",
           "summary": null,
           "isAsync": true,
@@ -296,6 +299,7 @@
       "methods": [
         {
           "returnType": "TagDto",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -312,6 +316,7 @@
         },
         {
           "returnType": "TagDto",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -333,6 +338,7 @@
         },
         {
           "returnType": "List<TagDefinitionDto>",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "GetTagDefinitionsAsync",
           "summary": null,
           "isAsync": true,
@@ -343,6 +349,7 @@
         },
         {
           "returnType": "TagDto",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -359,6 +366,7 @@
         },
         {
           "returnType": "PagedResultDto<TagDto>",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -375,6 +383,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Tags",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -497,6 +506,7 @@
       "methods": [
         {
           "returnType": "PageDto",
+          "namespace": "Volo.CmsKit.Admin.Pages",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -513,6 +523,7 @@
         },
         {
           "returnType": "PagedResultDto<PageDto>",
+          "namespace": "Volo.CmsKit.Admin.Pages",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -529,6 +540,7 @@
         },
         {
           "returnType": "PageDto",
+          "namespace": "Volo.CmsKit.Admin.Pages",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -545,6 +557,7 @@
         },
         {
           "returnType": "PageDto",
+          "namespace": "Volo.CmsKit.Admin.Pages",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -566,6 +579,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Pages",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -582,6 +596,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Pages",
           "name": "SetAsHomePageAsync",
           "summary": null,
           "isAsync": true,
@@ -668,6 +683,7 @@
       "methods": [
         {
           "returnType": "ListResultDto<MenuItemDto>",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -677,7 +693,8 @@
           "parameters": []
         },
         {
-          "returnType": "MenuItemDto",
+          "returnType": "MenuItemWithDetailsDto",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -694,6 +711,7 @@
         },
         {
           "returnType": "MenuItemDto",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -710,6 +728,7 @@
         },
         {
           "returnType": "MenuItemDto",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -731,6 +750,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -747,6 +767,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "MoveMenuItemAsync",
           "summary": null,
           "isAsync": true,
@@ -768,6 +789,7 @@
         },
         {
           "returnType": "PagedResultDto<PageLookupDto>",
+          "namespace": "Volo.CmsKit.Admin.Menus",
           "name": "GetPageLookupAsync",
           "summary": null,
           "isAsync": true,
@@ -854,6 +876,7 @@
       "methods": [
         {
           "returnType": "MediaDescriptorDto",
+          "namespace": "Volo.CmsKit.Admin.MediaDescriptors",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -875,6 +898,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.MediaDescriptors",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -961,6 +985,7 @@
       "methods": [
         {
           "returnType": "GlobalResourcesDto",
+          "namespace": "Volo.CmsKit.Admin.GlobalResources",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -971,6 +996,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.GlobalResources",
           "name": "SetGlobalResourcesAsync",
           "summary": null,
           "isAsync": true,
@@ -1057,6 +1083,7 @@
       "methods": [
         {
           "returnType": "PagedResultDto<CommentWithAuthorDto>",
+          "namespace": "Volo.CmsKit.Admin.Comments",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1073,6 +1100,7 @@
         },
         {
           "returnType": "CommentWithAuthorDto",
+          "namespace": "Volo.CmsKit.Admin.Comments",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -1089,6 +1117,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Comments",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -1102,6 +1131,56 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "name": "UpdateApprovalStatusAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CommentApprovalDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "name": "UpdateSettingsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "CommentSettingsDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Admin.Comments",
+          "name": "GetWaitingCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
         }
       ],
       "contentType": "applicationService",
@@ -1217,6 +1296,7 @@
       "methods": [
         {
           "returnType": "BlogDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -1233,6 +1313,7 @@
         },
         {
           "returnType": "PagedResultDto<BlogDto>",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1249,6 +1330,7 @@
         },
         {
           "returnType": "BlogDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -1265,6 +1347,7 @@
         },
         {
           "returnType": "BlogDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -1286,6 +1369,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -1372,6 +1456,7 @@
       "methods": [
         {
           "returnType": "List<BlogFeatureDto>",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1388,6 +1473,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "SetAsync",
           "summary": null,
           "isAsync": true,
@@ -1515,6 +1601,7 @@
       "methods": [
         {
           "returnType": "BlogPostDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -1531,6 +1618,7 @@
         },
         {
           "returnType": "BlogPostDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -1552,6 +1640,7 @@
         },
         {
           "returnType": "BlogPostDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -1568,6 +1657,7 @@
         },
         {
           "returnType": "PagedResultDto<BlogPostListDto>",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1584,6 +1674,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -1600,6 +1691,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "PublishAsync",
           "summary": null,
           "isAsync": true,
@@ -1616,6 +1708,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "DraftAsync",
           "summary": null,
           "isAsync": true,
@@ -1632,6 +1725,7 @@
         },
         {
           "returnType": "BlogPostDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "CreateAndPublishAsync",
           "summary": null,
           "isAsync": true,
@@ -1648,6 +1742,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "SendToReviewAsync",
           "summary": null,
           "isAsync": true,
@@ -1664,6 +1759,7 @@
         },
         {
           "returnType": "BlogPostDto",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "CreateAndSendToReviewAsync",
           "summary": null,
           "isAsync": true,
@@ -1680,6 +1776,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Admin.Blogs",
           "name": "HasBlogPostWaitingForReviewAsync",
           "summary": null,
           "isAsync": true,

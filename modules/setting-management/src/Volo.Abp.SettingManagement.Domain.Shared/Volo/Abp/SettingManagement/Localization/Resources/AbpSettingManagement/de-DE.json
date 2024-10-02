@@ -15,6 +15,7 @@
     "TestEmailSubject": "Test E-Mail {0}",
     "TestEmailBody": "Test E-Mail Nachricht hier eingeben",
     "SuccessfullySent": "Erfolgreich gesendet",
+    "MailSendingFailed": "E-Mail-Versand fehlgeschlagen. Bitte überprüfen Sie Ihre E-Mail-Konfiguration und versuchen Sie es erneut.",
     "Send": "Senden",
     "Menu:Emailing": "E-Mail",
     "Menu:TimeZone": "Zeitzone",

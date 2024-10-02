@@ -1,10 +1,10 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.OpenIddict.Authorizations;
 
-public class OpenIddictAuthorization : FullAuditedAggregateRoot<Guid>
+public class OpenIddictAuthorization : AggregateRoot<Guid>
 {
     public OpenIddictAuthorization()
     {
