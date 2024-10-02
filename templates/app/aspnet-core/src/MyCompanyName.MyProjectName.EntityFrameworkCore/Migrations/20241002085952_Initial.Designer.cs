@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20240923044720_Initial")]
+    [Migration("20241002085952_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -712,6 +712,13 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
                     b.Property<string>("Device")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -721,9 +728,14 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<string>("IpAddresses")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<DateTime?>("LastAccessed")
                         .HasColumnType("datetime2");

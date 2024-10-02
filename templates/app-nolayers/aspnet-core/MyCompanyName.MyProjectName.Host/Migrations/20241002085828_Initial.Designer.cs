@@ -3,18 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyCompanyName.MyProjectName.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
+namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    partial class MyProjectNameDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241002085828_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
