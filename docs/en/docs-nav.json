@@ -1227,6 +1227,10 @@
               "text": "Angular",
               "items": [
                 {
+                  "text": "Overview",
+                  "path": "framework/ui/angular/overview.md"
+                },
+                {
                   "text": "Quick Start",
                   "path": "framework/ui/angular/quick-start.md"
                 },
