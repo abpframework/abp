@@ -61,6 +61,7 @@ export class ConfigStateService {
 
     return this.getlocalizationResource(cultureName).pipe(
       map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
+      tap(() => (this.uiCultureFromAuthCodeFlow = undefined)),
     );
   }
 
