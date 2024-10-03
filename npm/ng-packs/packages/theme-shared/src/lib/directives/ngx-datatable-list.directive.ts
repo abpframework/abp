@@ -64,11 +64,11 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
 
   protected subscribeToLoadingState() {
     const requestStatus$ = this.list.requestStatus$.pipe(distinctUntilChanged());
-    const { emptyMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
+    const { emptyMessage, errorMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
 
     requestStatus$.subscribe(status => {
       this.table.loadingIndicator = false;
-      
+
       if (status === 'idle') {
         return;
       }
@@ -79,6 +79,12 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
         this.cdRef.detectChanges();
         this.updateLoadingIndicator();
         return;
+      }
+
+      if (status === 'error') {
+        this.table.messages.emptyMessage = this.localizationService.instant(errorMessage);
+        this.viewContainerRef.clear();
+        this.cdRef.markForCheck();
       }
 
       if (status === 'success') {
