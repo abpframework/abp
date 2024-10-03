@@ -5,7 +5,7 @@
 {
   "Next": {
     "Name": "Working with Kubernetes",
-    "Path": "studio/kubernetes.md"
+    "Path": "studio/kubernetes"
   }
 }
 ````

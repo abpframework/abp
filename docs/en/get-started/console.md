@@ -10,11 +10,13 @@ First, install the [ABP CLI](../cli) if you haven't installed before:
 dotnet tool install -g Volo.Abp.Studio.Cli
 ````
 
-Then use the `abp new` command in an empty folder to create a new solution:
+Then use the `abp new` command in an empty folder to create a new solution (with the `--old` parameter at the end of the command):
 
 ````bash
-abp new Acme.MyConsoleApp -t console
+abp new Acme.MyConsoleApp -t console --old
 ````
+
+> **Note**: Since this startup template is not provided by the new ABP Studio Templates yet, you need to pass the `--old` parameter at the end of the command to use the old CLI & templating system for this startup template.
 
 `Acme.MyConsoleApp` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
 

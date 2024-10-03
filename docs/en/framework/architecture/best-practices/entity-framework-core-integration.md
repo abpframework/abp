@@ -1,4 +1,4 @@
-## Entity Framework Core Integration Best Practices
+# Entity Framework Core Integration Best Practices
 
 > See [Entity Framework Core Integration document](../../data/entity-framework-core) for the basics of the EF Core integration.
 

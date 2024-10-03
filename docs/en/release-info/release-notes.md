@@ -295,7 +295,7 @@ See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-
 * Performance improvements (pre-compiling razor pages).
 * New **Organization Unit** Management UI for the [Identity Module](https://abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
 * Created **Angular UI** for the [Chat Module](https://abp.io/modules/Volo.Chat).
-* Implemented **Angular UI** for the [Easy CRM](https://docs.abp.io/en/commercial/latest/samples/easy-crm) application.
+* Implemented **Angular UI** for the [Easy CRM](../samples/easy-crm.md) application.
 * [ABP Suite](https://abp.io/tools/suite) code generation support for **module development**.
 * New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://abp.io/themes) components**.
 

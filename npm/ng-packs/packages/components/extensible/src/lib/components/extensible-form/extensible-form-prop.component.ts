@@ -15,10 +15,11 @@ import {
   inject,
   Injector,
   Input,
-  OnChanges, Optional,
+  OnChanges,
+  Optional,
   SimpleChanges,
   SkipSelf,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {
   ControlContainer,
@@ -124,10 +125,10 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   search = (text$: Observable<string>) =>
     text$
       ? text$.pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap(text => this.prop?.options?.(this.data, text) || of([])),
-      )
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap(text => this.prop?.options?.(this.data, text) || of([])),
+        )
       : of([]);
 
   typeaheadFormatter = (option: ABP.Option<any>) => option.key;

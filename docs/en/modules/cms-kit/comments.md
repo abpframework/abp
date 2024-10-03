@@ -92,7 +92,7 @@ You can configure the approval status of comments using the "Comment" tab under 
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### Comment
 
@@ -102,7 +102,7 @@ A comment represents a written comment from a user.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 The following custom repositories are defined for this feature:
 
@@ -110,7 +110,7 @@ The following custom repositories are defined for this feature:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### Comment Manager
 

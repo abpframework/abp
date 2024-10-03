@@ -303,7 +303,7 @@ public async Task DeleteAsync(Guid id)
 
 You can't compile the code since it is expecting some constants declared in the `BookStorePermissions` class.
 
-Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and add new permission names:
 
 ````csharp
 namespace Acme.BookStore.Permissions;
@@ -312,13 +312,8 @@ public static class BookStorePermissions
 {
     public const string GroupName = "BookStore";
 
-    public static class Books
-    {
-        public const string Default = GroupName + ".Books";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-    }
+    // other permissions...
+    // other permissions...
     
     // *** ADDED a NEW NESTED CLASS ***
     public static class Authors

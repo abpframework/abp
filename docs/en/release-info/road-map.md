@@ -4,18 +4,17 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v8.2
+### v8.3
 
-The next version will be 8.2 and planned to release the stable 8.2 version in June 2024. We will be mostly working on the following topics:
+The next version will be 8.3 and we will be mostly working on the following topics:
 
-* ABP Studio Community Edition
-* Blazor Full-Stack UI ([#18289](https://github.com/abpframework/abp/issues/18289))
-* Angular Universal ([#15782](https://github.com/abpframework/abp/issues/15782))
-* Upgrading React Native template to the latest major release 0.72.7 ([#18191](https://github.com/abpframework/abp/issues/18191))
-* Deployment Documents Improvements ([#15034](https://github.com/abpframework/abp/issues/15034))
-* Improvements on the existing features and provide more guides.
+* CMS Kit: Marked Items/Favorites & Approvement System for Comments
+* Docs Module: Added Google Translation Support & Introducing the Single Project Mode
+* Using DBFunction for Global Query Filters
+* Upgrade Angular Version to v18.1.x
+* Improvements on the existing features and provide more guides...
 
-See the [8.2 milestone](https://github.com/abpframework/abp/milestone/95) for all the issues we've planned to work on.
+See the [8.3 milestone](https://github.com/abpframework/abp/milestone/106) for all the issues we've planned to work on.
 
 ## Backlog Items
 

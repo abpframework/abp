@@ -1,6 +1,4 @@
-## Module Development Best Practices & Conventions
-
-### Introduction
+# Module Development Best Practices & Conventions
 
 This document describes the **best practices** and **conventions** for those who want to develop **modules** that satisfy the following specifications:
 
@@ -10,7 +8,7 @@ This document describes the **best practices** and **conventions** for those who
 
 Also, this guide is mostly usable for general **application development**.
 
-### Guides
+## The Guides
 
 * Overall
   * [Module Architecture](./module-architecture.md)

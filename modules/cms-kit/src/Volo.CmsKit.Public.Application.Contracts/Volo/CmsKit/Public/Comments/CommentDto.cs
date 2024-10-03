@@ -21,7 +21,7 @@ public class CommentDto : ExtensibleObject, IHasConcurrencyStamp
 
     public DateTime CreationTime { get; set; }
 
-    public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://docs.abp.io/en/abp/latest/Best-Practices/Application-Services
+    public CmsUserDto Author { get; set; } //TODO: Should only have AuthorId for the basic dto. see https://abp.io/docs/latest/framework/architecture/best-practices/application-services
 
     public string ConcurrencyStamp { get; set; }
 

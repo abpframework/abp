@@ -794,12 +794,19 @@ Examples:
 
 ````bash
 abp upgrade -t app
+abp upgrade -t app --language-management --gdpr --audit-logging-ui --text-template-management --openiddict-pro
+abp upgrade -t app-nolayers --audit-logging-ui
 abp upgrade -t app-nolayers -p D:\MyProjects\MyProject
 ````
 
 #### Options
 
 * `--path` or `-p`: Specifies the module path. The module should be in that directory. If not specified, the default is the current directory.
+* `--gdpr`: Installs GDPR module too.
+* `--language-management`: Installs Language Management module too.
+* `--audit-logging-ui`: Installs Audit Logging Pro (UI) module too.
+* `--text-template-management`: Installs Text Template Management module too.
+* `--openiddict-pro`: Installs OpenIddict Pro (UI) module too.
 
 ### translate
 
@@ -907,6 +914,7 @@ abp bundle [options]
 * ```--project-type``` or ```-t```: Specifies the project type. Default type is `webassembly`. Available types:
   * `webassembly`
   * `maui-blazor`
+* `--version` or `-v`: Specifies the ABP Framework version that the project is using. This is helpful for those who use central package management.
 
 `bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md)
 
