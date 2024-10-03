@@ -27,6 +27,10 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac.Builder;
+using Autofac.Core;
+using Autofac.Core.Activators;
+using Autofac.Core.Activators.Delegate;
+using Autofac.Core.Activators.Reflection;
 using Autofac.Core.Resolving.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -115,10 +119,82 @@ public static class AutofacRegistration
             .SingleInstance();
 
         // Shims for keyed service compatibility.
-        builder.RegisterServiceMiddlewareSource(new KeyedServiceMiddlewareSource());
         builder.RegisterSource<AnyKeyRegistrationSource>();
+        builder.ComponentRegistryBuilder.Registered += AddFromKeyedServiceParameterMiddleware;
 
         Register(builder, services, lifetimeScopeTagForSingletons);
+    }
+
+    /// <summary>
+    /// Inspect each component registration, and determine whether or not we can avoid adding the
+    /// <see cref="FromKeyedServicesAttribute"/> parameter to the resolve pipeline.
+    /// </summary>
+    private static void AddFromKeyedServiceParameterMiddleware(object? sender, ComponentRegisteredEventArgs e)
+    {
+        var needFromKeyedServiceParameter = false;
+
+        // We can optimise quite significantly in the case where we are using the reflection activator.
+        // In that state we can inspect the constructors ahead of time and determine whether the parameter will even need to be added.
+        if (e.ComponentRegistration.Activator is ReflectionActivator reflectionActivator)
+        {
+            var constructors = reflectionActivator.ConstructorFinder.FindConstructors(reflectionActivator.LimitType);
+
+            // Go through all the constructors; if any have a FromKeyedServices, then we must add our component middleware to
+            // the pipeline.
+            foreach (var constructor in constructors)
+            {
+                foreach (var constructorParameter in constructor.GetParameters())
+                {
+                    if (constructorParameter.GetCustomAttribute<FromKeyedServicesAttribute>() is not null)
+                    {
+                        // One or more of the constructors we will use to activate has a FromKeyedServicesAttribute,
+                        // we must add our middleware.
+                        needFromKeyedServiceParameter = true;
+                        break;
+                    }
+                }
+
+                if (needFromKeyedServiceParameter)
+                {
+                    break;
+                }
+            }
+        }
+        else if (e.ComponentRegistration.Activator is DelegateActivator)
+        {
+            // For delegate activation there are very few paths that would let the FromKeyedServicesAttribute
+            // actually work, and none that MSDI supports directly.
+            // We're explicitly choosing here not to support [FromKeyedServices] on the Autofac-specific generic
+            // delegate resolve methods, to improve performance for the 99% case of other delegates that only
+            // receive an IComponentContext or an IServiceProvider.
+            needFromKeyedServiceParameter = false;
+        }
+        else if (e.ComponentRegistration.Activator is InstanceActivator)
+        {
+            // Instance activators don't use parameters.
+            needFromKeyedServiceParameter = false;
+        }
+        else
+        {
+            // Unknown activator, assume we need the parameter.
+            needFromKeyedServiceParameter = true;
+        }
+
+        e.ComponentRegistration.PipelineBuilding += (_, pipeline) =>
+        {
+            var keyedServiceMiddlewareType = typeof(AutofacServiceProvider).Assembly.GetType("Autofac.Extensions.DependencyInjection.KeyedServiceMiddleware");
+            var instanceWithFromKeyedServicesParameter = (IResolveMiddleware)keyedServiceMiddlewareType!.GetProperty("InstanceWithFromKeyedServicesParameter", BindingFlags.Public | BindingFlags.Static)!.GetValue(null, null)!;
+            var instanceWithoutFromKeyedServicesParameter = (IResolveMiddleware)keyedServiceMiddlewareType!.GetProperty("InstanceWithoutFromKeyedServicesParameter", BindingFlags.Public | BindingFlags.Static)!.GetValue(null, null)!;
+
+            if (needFromKeyedServiceParameter)
+            {
+                pipeline.Use(instanceWithFromKeyedServicesParameter, MiddlewareInsertionMode.StartOfPhase);
+            }
+            else
+            {
+                pipeline.Use(instanceWithoutFromKeyedServicesParameter, MiddlewareInsertionMode.StartOfPhase);
+            }
+        };
     }
 
     /// <summary>

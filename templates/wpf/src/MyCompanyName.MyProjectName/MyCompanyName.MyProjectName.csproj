@@ -15,10 +15,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0-rc.1.24431.7" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
-        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
-        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="2.0.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="6.0.0.0" />
     </ItemGroup>
 
     <ItemGroup>
