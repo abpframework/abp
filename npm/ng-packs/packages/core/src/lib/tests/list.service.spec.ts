@@ -165,7 +165,7 @@ describe('ListService', () => {
       service.hookToQuery(callback).subscribe();
     });
 
-    it('should emit error requestStatus as side effect', done => {
+    it('should emit error requestStatus as side effect and stop processing', done => {
       const errCallback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query => {
         throw Error('A server error occurred');
       };
@@ -177,7 +177,9 @@ describe('ListService', () => {
         done();
       });
 
-      service.hookToQuery(errCallback).subscribe();
+      service.hookToQuery(errCallback).subscribe({
+        error: () => done(),
+      });
     });
   });
 });

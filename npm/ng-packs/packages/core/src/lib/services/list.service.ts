@@ -1,9 +1,9 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
 import {
+  EMPTY,
   BehaviorSubject,
   MonoTypeOperatorFunction,
   Observable,
-  of,
   ReplaySubject,
   Subject,
 } from 'rxjs';
@@ -130,16 +130,19 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this.query$.pipe(
       tap(() => this._isLoading$.next(true)),
       tap(() => this._requestStatus.next('loading')),
-      switchMap(query => streamCreatorCallback(query).pipe(catchError(() => of(null)))),
-      filter(Boolean),
-      tap(() => this._isLoading$.next(false)),
-      tap(() => this._requestStatus.next('success')),
-      shareReplay<any>({ bufferSize: 1, refCount: true }),
-      takeUntil(this.destroy$),
-      catchError(error => {
-        this._requestStatus.next('error');
-        throw error;
-      }),
+      switchMap(query =>
+        streamCreatorCallback(query).pipe(
+          catchError(() => {
+            this._requestStatus.next('error');
+            return EMPTY;
+          }),
+          filter(Boolean),
+          tap(() => this._isLoading$.next(false)),
+          tap(() => this._requestStatus.next('success')),
+          shareReplay<any>({ bufferSize: 1, refCount: true }),
+          takeUntil(this.destroy$),
+        ),
+      ),
     );
   }
 
