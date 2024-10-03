@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Εμφάνιση 0 έως 0 από 0 εγγραφές",
     "PagerInfoFiltered": "(φιλτραρισμένο από _MAX_ συνολικές εγγραφές)",
     "NoDataAvailableInDatatable": "Δεν υπάρχουν διαθέσιμα δεδομένα",
+    "ErrorLoadingDatatable": "Παρουσιάστηκε σφάλμα κατά τη διάρκεια του αιτήματος. Ελέγξτε το μήνυμα για λεπτομέρειες.",
     "Total": "Σύνολο",
     "Selected": "Έχει γίνει επιλογή",
     "PagerShowMenuEntries": "Εμφάνιση στοιχείων _MENU_",

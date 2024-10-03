@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Látható 0-tól 0-ig 0 elemből",
     "PagerInfoFiltered": "(szűrve _MAX_ elemből)",
     "NoDataAvailableInDatatable": "Nem elérhető adat",
+    "ErrorLoadingDatatable": "Hiba történt a kérés során. Ellenőrizze az üzenetet a részletekért.",
     "Total": "összesen",
     "Selected": "kiválasztott",
     "PagerShowMenuEntries": "Megjelenítve _MENU_ elem",

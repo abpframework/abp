@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Mostrando de 0 a 0 de 0 entradas",
     "PagerInfoFiltered": "(filtrado desde _MAX_ entradas totales)",
     "NoDataAvailableInDatatable": "No hay datos disponibles",
+    "ErrorLoadingDatatable": "Se produjo un error durante la solicitud. Consulte el mensaje para más detalles.",
     "Total": "Total",
     "Selected": "Seleccionado",
     "PagerShowMenuEntries": "Mostrar _MENU_ registros",

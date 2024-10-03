@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Pokaż od 0 do 0 z 0 rekordów",
     "PagerInfoFiltered": "(filtruj od _MAX_ wszystkich rekordów)",
     "NoDataAvailableInDatatable": "Nie znaleziono danych w tabeli",
+    "ErrorLoadingDatatable": "Wystąpił błąd podczas żądania. Sprawdź wiadomość, aby uzyskać szczegóły.",
     "Total": "całkowity",
     "Selected": "wybrany",
     "PagerShowMenuEntries": "Pokaż _MENU_ rekordów",

@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Записи с 0 до 0 из 0 записей.",
     "PagerInfoFiltered": "(отфильтровано из _MAX_ записей)",
     "NoDataAvailableInDatatable": "Данные в таблице отсутствуют",
+    "ErrorLoadingDatatable": "Произошла ошибка во время запроса. Проверьте сообщение для получения деталей.",
     "Total": "общий",
     "Selected": "выбранный",
     "PagerShowMenuEntries": "Показать _MENU_ записей",
