@@ -36,6 +36,7 @@ using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -109,6 +110,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         : base(options)
     {
         DbContextOptions = options;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(c => c.Ignore(RelationalEventId.PendingModelChangesWarning));
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -256,7 +263,10 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             {
                 EntityHistoryHelper.UpdateChangeList(entityChangeList);
                 auditLog!.EntityChanges.AddRange(entityChangeList);
-                Logger.LogDebug($"Added {entityChangeList.Count} entity changes to the current audit log");
+                if (entityChangeList.Count > 0)
+                {
+                    Logger.LogDebug($"Added {entityChangeList.Count} entity changes to the current audit log");
+                }
             }
 
             return result;
@@ -620,7 +630,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             originalExtraProperties = entry.OriginalValues.GetValue<ExtraPropertyDictionary>(nameof(IHasExtraProperties.ExtraProperties));
         }
 
-        entry.Reload();
+        //TODO: Reload will throw an exception. Check it when new EF Core versions released.
+        //entry.Reload();
+
+        var storeValues = entry.OriginalValues;
+        entry.CurrentValues.SetValues(storeValues);
+        entry.OriginalValues.SetValues(storeValues);
+        entry.State = EntityState.Unchanged;
 
         if (entry.Entity is IHasExtraProperties)
         {
@@ -769,6 +785,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 return;
             }
 
+            AbpDateTimeValueConverter.Clock = Clock;
+            AbpNullableDateTimeValueConverter.Clock = Clock;
+
             foreach (var property in mutableEntityType.GetProperties().
                          Where(property => property.PropertyInfo != null &&
                                            (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
@@ -779,8 +798,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                     .Entity<TEntity>()
                     .Property(property.Name)
                     .HasConversion(property.ClrType == typeof(DateTime)
-                        ? new AbpDateTimeValueConverter(Clock)
-                        : new AbpNullableDateTimeValueConverter(Clock));
+                        ? new AbpDateTimeValueConverter()
+                        : new AbpNullableDateTimeValueConverter());
             }
         }
     }

@@ -23,14 +23,14 @@
     "ThisFieldIsNotValid.": "Αυτό το πεδίο δεν είναι έγκυρο.",
     "ThisFieldIsNotAValidEmailAddress.": "Αυτό το πεδίο δεν περιέχει έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου.",
     "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "Αυτό το πεδίο δέχεται μόνο αρχεία με τις ακόλουθες επεκτάσεις: {0}",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "Αυτό το πεδίο πρέπει να είναι τύπος συμβολοσειράς ή πίνακας με μέγιστο μήκος'{0}'.",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Αυτό το πεδίο πρέπει να είναι τύπος συμβολοσειράς ή πίνακας με ελάχιστο μήκος'{0}'.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "Αυτό το πεδίο πρέπει να έχει το πολύ '{0}' χαρακτήρες.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Αυτό το πεδίο πρέπει να έχει τουλάχιστον '{0}' χαρακτήρες.",
     "ThisFieldIsNotAValidPhoneNumber.": "Αυτό το πεδίο δεν είναι έγκυρος αριθμός τηλεφώνου.",
     "ThisFieldMustBeBetween{0}And{1}": "Αυτό το πεδίο πρέπει να είναι μεταξύ {0} και {1}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "Αυτό το πεδίο πρέπει να ταιριάζει με την κανονική έκφραση'{0}'.",
     "ThisFieldIsRequired.": "Αυτό το πεδίο είναι υποχρεωτικό.",
-    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Αυτό το πεδίο πρέπει να είναι μια συμβολοσειρά με μέγιστο μήκος{0}.",
-    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Αυτό το πεδίο πρέπει να είναι μια συμβολοσειρά με ελάχιστο μήκος {1} και μέγιστο μήκος{0}.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Αυτό το πεδίο πρέπει να έχει το πολύ '{0}' χαρακτήρες.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Αυτό το πεδίο πρέπει να έχει τουλάχιστον {1} και το πολύ {0} χαρακτήρες.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "Αυτό το πεδίο δεν είναι έγκυρη πλήρως πιστοποιημένη διεύθυνση URL http, https ή ftp.",
     "ThisFieldIsInvalid.": "Αυτό το πεδίο δεν είναι έγκυρο."
   }

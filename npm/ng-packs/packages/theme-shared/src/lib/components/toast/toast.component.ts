@@ -18,22 +18,22 @@ export class ToastComponent implements OnInit {
 
   get iconClass(): string {
     const { iconClass } = this.toast.options || {};
-    
+
     if (iconClass) {
       return iconClass;
     }
 
     switch (this.toast.severity) {
       case 'success':
-        return 'fa-check-circle';
+        return 'bi-check';
       case 'info':
-        return 'fa-info-circle';
+        return 'bi-info-circle';
       case 'warning':
-        return 'fa-exclamation-triangle';
+        return 'bi-exclamation-triangle';
       case 'error':
-        return 'fa-times-circle';
+        return 'bi-shield-exclamation';
       default:
-        return 'fa-exclamation-circle';
+        return 'bi-exclamation-triangle';
     }
   }
 

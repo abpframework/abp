@@ -110,7 +110,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Add a new ABP package to a project by adding related NuGet package dependencies and [DependsOn(...)] attributes.";
     }

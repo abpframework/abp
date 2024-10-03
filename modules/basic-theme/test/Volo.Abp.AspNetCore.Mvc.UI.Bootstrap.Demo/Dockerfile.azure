@@ -1,0 +1,22 @@
+FROM node:16 AS nodebase
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+COPY --from=nodebase /usr/local/bin /usr/local/bin
+COPY --from=nodebase /usr/local/lib /usr/local/lib
+
+WORKDIR /app
+COPY . .
+
+RUN dotnet tool update --global Volo.Abp.Cli
+ENV PATH="${PATH}:/root/.dotnet/tools/"
+WORKDIR /app/abp/modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+RUN abp install-libs
+RUN dotnet publish -c Release -o bin/Release/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+EXPOSE 80
+ENV ASPNETCORE_URLS=http://+:80
+COPY --from=build /app/abp/modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/bin/Release/publish .
+ENTRYPOINT ["dotnet", "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.dll"]

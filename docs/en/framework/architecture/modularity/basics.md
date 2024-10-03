@@ -7,7 +7,7 @@ ABP was designed to support to build fully modular applications and systems wher
 * This document introduces the basics of the module system.
 * [Module development best practice guide](../best-practices) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
 * [Pre-built application modules](../../../modules) are **ready to use** in any kind of application.
-* [Module startup template](../../../solution-templates/layered-web-application) is a jump start way to **create a new module**.
+* [Module startup template](../../../solution-templates/application-module) is a jump start way to **create a new module**.
 * [ABP CLI](../../../cli/index.md) has commands to support modular development.
 * All other framework features are compatible to the modularity system.
 

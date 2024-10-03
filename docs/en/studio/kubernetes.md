@@ -25,6 +25,11 @@ The *Kubernetes* panel is available only in the [business and enterprise](https:
 * [Docker Desktop](https://www.docker.com/products/docker-desktop) (Enable Kubernetes option if not working with a real cluster)
 * [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy)
 * [mkcert](https://www.ibm.com/docs/en/fsmmn?topic=commands-mkcert)
+  * When you are installing the `mkcert` to allow ABP Studio to generate certificates for you, please ensure that `mkcert` is installed on the **Trusted Certificate Store** by running the following command (on **Windows**, this command must be executed with *Administrator* priviliges):
+
+    ```bash
+    mkcert -install
+    ```
 
 ## Profile
 
@@ -145,9 +150,9 @@ Upon disconnection from the cluster, we clean up the hosts file, excluding ingre
 
 ![disconnect](./images/kubernetes/disconnect.png)
 
-> When you list the services in the Kubernetes cluster with the `kubectl get svc` command, you should see the *abp-wg-easy* and *abp-wg-easy-vpn* services. After a while, if the *EXTERNAL-IP* is still *pending*, then it can't connect to the cluster. This could be caused by if you try to install the WireGuard VPN to a Docker Desktop Kubernetes cluster more than once. You can delete the previous WireGuard VPN by running the `helm uninstall abp-wg-easy` command in the previous namespace.
+> When you list the services in the Kubernetes cluster with the `kubectl get svc` command, you should see the *abp-wg-easy* and *abp-wg-easy-vpn* services. Each WireGuard installation has a unique port number for the related services. If you have multiple WireGuard installations for different Kubernetes profiles or solutions, you can see the port numbers in the *PORT(S)* field when you list them with the `kubectl get svc` command.
 
-> Connecting to the Kubernetes cluster is limited to one instance of ABP Studio at a time. Trying to connect with another instance simultaneously won't work as expected.
+> Connecting to the Kubernetes cluster is limited to one instance of ABP Studio at the same time. Trying to connect with another instance simultaneously won't work as expected.
 
 ### Intercept a Service
 

@@ -11,48 +11,74 @@
     Layout = null;
 }
 
-<form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
+<form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal"
+    data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
     <abp-modal size="Large">
-        <abp-modal-header title="@(L["Permissions"].Value) - @(HttpUtility.HtmlEncode(Model.EntityDisplayName))"></abp-modal-header>
-        <abp-modal-body class="custom-scroll-container">
-            <abp-input asp-for="SelectAllInAllTabs" check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None" label="@L["SelectAllInAllTabs"].Value" disabled="@Model.Groups.All(group => group.IsDisabled(Model.ProviderName))"/>
-            <hr class="my-2"/>
-            <input asp-for="@Model.ProviderKey"/>
-            <input asp-for="@Model.ProviderName"/>
-            <abp-tabs name="PermissionsTabs" tab-style="PillVertical" vertical-header-size="_4" class="custom-scroll-container">
-                @for (var i = 0; i < Model.Groups.Count; i++)
-                {
-                    var group = Model.Groups[i];
-                    <abp-tab title="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
-                        <div class="w-100" style="max-height: 640px;overflow-y: auto">
-                            <div class="ps-1">
-                                <abp-input asp-for="@group.IsAllPermissionsGranted"
-                                           check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
-                                           name="SelectAllInThisTab"
-                                           id="SelectAllInThisTab-@group.GetNormalizedGroupName()"
-                                           data-tab-id="v-pills-tab-@group.GetNormalizedGroupName()"
-                                           label="@L["SelectAllInThisTab"].Value"
-                                           disabled="@group.IsDisabled(Model.ProviderName)" />
-                                <hr class="mb-3"/>
-                                @for (var j = 0; j < group.Permissions.Count; j++)
-                                {
-                                    var permission = group.Permissions[j];
-                                    <abp-input asp-for="@permission.IsGranted"
-                                               check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
-                                               abp-id-name="@Model.Groups[i].Permissions[j].IsGranted"
-                                               label="@permission.GetShownName(Model.ProviderName)"
-                                               disabled="@permission.IsDisabled(Model.ProviderName)"
-                                               group-data-permission-name="@permission.Name"
-                                               group-data-parent-name="@(permission.ParentName ?? "")"
-                                               group-style="margin-inline-start: @(permission.Depth * 20)px"/>
-                                    <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name"/>
-                                }
+        <abp-modal-header
+            title="@(L["Permissions"].Value) - @(HttpUtility.HtmlEncode(Model.EntityDisplayName))"></abp-modal-header>
+        <input asp-for="@Model.ProviderKey" />
+        <input asp-for="@Model.ProviderName" />
+        <abp-modal-body class="">
+            <div class="row d-flex align-items-center mb-2">
+                <div class="col">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="permission-search" placeholder="Filter" aria-label="Username"
+                            aria-describedby="basic-addon1" />
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <abp-input asp-for="SelectAllInAllTabs"
+                        check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
+                        label="@L["SelectAllInAllTabs"].Value"
+                        disabled="@Model.Groups.All(group => group.IsDisabled(Model.ProviderName))" />
+                </div>
+            </div>
+            <fieldset class="border rounded-4 p-3">
+                <legend class="px-1 h5 mb-0">Permission Group</legend>
+
+                <abp-tabs name="PermissionsTabs" class="lpx-scroll-pills-container" tab-style="PillVertical"
+                    vertical-header-size="_4">
+                    @for (var i = 0; i < Model.Groups.Count; i++)
+                    {
+                        var group = Model.Groups[i];
+                        <abp-tab title="@group.DisplayName" name="v-pills-tab-@group.GetNormalizedGroupName()">
+                            <div class="w-100" style="height: 500px;overflow-y: auto">
+                                <div class="ps-1">
+                                    <abp-input asp-for="@group.IsAllPermissionsGranted"
+                                        check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
+                                        name="SelectAllInThisTab" id="SelectAllInThisTab-@group.GetNormalizedGroupName()"
+                                        data-tab-id="v-pills-tab-@group.GetNormalizedGroupName()"
+                                        label="@L["SelectAllInThisTab"].Value"
+                                        disabled="@group.IsDisabled(Model.ProviderName)" />
+                                    <hr class="mb-3" />
+                                    @for (var j = 0; j < group.Permissions.Count; j++)
+                                    {
+                                        var permission = group.Permissions[j];
+                                        <abp-input asp-for="@permission.IsGranted"
+                                            check-box-hidden-input-render-mode="CheckBoxHiddenInputRenderMode.None"
+                                            abp-id-name="@Model.Groups[i].Permissions[j].IsGranted"
+                                            label="@permission.GetShownName(Model.ProviderName)"
+                                            disabled="@permission.IsDisabled(Model.ProviderName)"
+                                            group-data-filter-text="@permission.GetShownName(Model.ProviderName)"
+                                            group-data-permission-name="@permission.Name"
+                                            group-data-parent-name="@(permission.ParentName ?? "")"
+                                            group-style="margin-inline-start: @(permission.Depth * 20)px" />
+                                        <input asp-for="@permission.Name" abp-id-name="@Model.Groups[i].Permissions[j].Name" />
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </abp-tab>
-                }
-            </abp-tabs>
+                        </abp-tab>
+                    }
+                </abp-tabs>
+            </fieldset>
+
+
         </abp-modal-body>
+
+
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>
+
+ 

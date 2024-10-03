@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "تطبيق ويب تقدمي",
     "Preview": "معاينة",
     "CreateANewSolution": "قم بإنشاء حل جديد",
-    "ABPFrameworkFeatures": "إطار عمل ABP <span class=\"gradient-framework\">ميزات</span>",
+    "FrameworkFeatures": "إطار عمل ABP <span class=\"gradient-framework\">ميزات</span>",
     "Commercial": "تجاري",
     "ThirdPartyTools": "أدوات الطرف الثالث",
     "Back": "عودة",

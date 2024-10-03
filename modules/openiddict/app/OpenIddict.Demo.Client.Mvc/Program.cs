@@ -49,7 +49,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.MapAbpStaticAssets();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

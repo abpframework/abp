@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Zwei-Faktor-Überprüfung",
     "DisplayName:IsActive": "Aktiv",
     "DisplayName:LockoutEnabled": "Konto-Sperrung",
+    "Description:LockoutEnabled": "Konto nach fehlgeschlagenen Anmeldeversuchen sperren",
     "NewRole": "Neue Rolle",
     "RoleName": "Rollenname",
     "CreationTime": "Erstellungszeitpunkt",

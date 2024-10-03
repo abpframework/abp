@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 
 /**
  * @deprecated use ShowPasswordDirective directive 
- * https://docs.abp.io/en/abp/latest/UI/Angular/Show-Password-Directive
+ * https://abp.io/docs/latest/framework/ui/angular/show-password-directive
  */
 @Component({
   selector: 'abp-password',

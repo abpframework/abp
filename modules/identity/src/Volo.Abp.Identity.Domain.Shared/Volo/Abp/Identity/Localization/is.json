@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Tvíþætt sannprófun",
     "DisplayName:IsActive": "Virkur",
     "DisplayName:LockoutEnabled": "Loka reikningi",
+    "Description:LockoutEnabled": "Loka reikningi eftir misheppnaðar innskráningar tilraunir",
     "NewRole": "Nýtt hlutverk",
     "RoleName": "Nafn hlutverks",
     "CreationTime": "Búið til",
