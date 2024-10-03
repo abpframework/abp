@@ -9,10 +9,10 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 
   async init() {
     this.checkRememberMeOption();
+    this.setUICulture();
 
     return super
       .init()
-      .then(() => this.setLanguageWithUICulture())
       .then(() => this.oAuthService.tryLogin().catch(noop))
       .then(() => this.oAuthService.setupAutomaticSilentRefresh());
   }
@@ -70,14 +70,14 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return { ...(lang && culture), ...queryParams };
   }
 
-  private setLanguageWithUICulture() {
+  private setUICulture() {
     this.oAuthService.events
       .pipe(
         filter(event => event.type === 'token_received'),
         tap(e => {
-          const urlParams = window.location.search;
-          const uiCulture = new URLSearchParams(urlParams).get('ui-culture');
-          this.sessionState.setLanguage(uiCulture);
+          const urlParams = new URLSearchParams(window.location.search);
+          this.configState.uiCultureFromAuthCodeFlow = urlParams.get('ui-culture');
+          window.history.replaceState(null, '', window.location.pathname);
         }),
       )
       .subscribe();

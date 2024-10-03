@@ -17,6 +17,8 @@ export class ConfigStateService {
   private updateSubject = new Subject<void>();
   private readonly store = new InternalStore({} as ApplicationConfigurationDto);
 
+  public uiCultureFromAuthCodeFlow: string;
+
   setState(config: ApplicationConfigurationDto) {
     this.store.set(config);
   }
@@ -53,7 +55,11 @@ export class ConfigStateService {
     if (!appState.localization.currentCulture.cultureName) {
       throw new Error('culture name should defined');
     }
-    return this.getlocalizationResource(appState.localization.currentCulture.cultureName).pipe(
+
+    const cultureName =
+      this.uiCultureFromAuthCodeFlow ?? appState.localization.currentCulture.cultureName;
+
+    return this.getlocalizationResource(cultureName).pipe(
       map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
     );
   }
@@ -71,10 +77,10 @@ export class ConfigStateService {
   }
 
   refreshLocalization(lang: string): Observable<null> {
-    if(this.includeLocalizationResources){
+    if (this.includeLocalizationResources) {
       return this.refreshAppState().pipe(map(() => null));
     }
-    
+
     return this.getlocalizationResource(lang)
       .pipe(
         tap(result =>
@@ -145,7 +151,7 @@ export class ConfigStateService {
     return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
   }
 
-  getFeatures$(keys: string[]): Observable<{ [key: string]: string; } | undefined> {
+  getFeatures$(keys: string[]): Observable<{ [key: string]: string } | undefined> {
     return this.store.sliceState(({ features }) => {
       if (!features?.values) return;
 
@@ -168,10 +174,13 @@ export class ConfigStateService {
 
     const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
 
-    return keysFound.reduce((acc, key) => {
-      acc[key] = settings[key];
-      return acc;
-    }, {} as Record<string, string>);
+    return keysFound.reduce(
+      (acc, key) => {
+        acc[key] = settings[key];
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
   }
 
   getSettings$(keyword?: string) {
@@ -183,10 +192,13 @@ export class ConfigStateService {
 
           const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
 
-          return keysFound.reduce((acc, key) => {
-            acc[key] = settings[key];
-            return acc;
-          }, {} as Record<string, string>);
+          return keysFound.reduce(
+            (acc, key) => {
+              acc[key] = settings[key];
+              return acc;
+            },
+            {} as Record<string, string>,
+          );
         }),
       );
   }
