@@ -10,7 +10,7 @@ In this article, I’ll highlight the latest .**NET 9 SignalR updates** for ASP.
 
 SignalR `Hub` class can now get a base class of a polymorphic class. As you see in the example below, I can send `Animal` to  `Process` method. Before .NET 9,  we could only pass the derived classes: `Cat` and `Dog`.
 
-```
+```csharp
 /*** My Base Class is Animal ***/
 [JsonPolymorphic]
 [JsonDerivedType(typeof(Cat), nameof(Cat))]
@@ -53,7 +53,7 @@ Microsoft focuses mainly on .NET Aspire nowadays. That’s why SignalR now integ
 
 1- Add these packages to your`csproj`:
 
-```
+```xml
 <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0" />
 <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
 <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
@@ -61,7 +61,7 @@ Microsoft focuses mainly on .NET Aspire nowadays. That’s why SignalR now integ
 
 2- Add the following startup code to your host project:
 
-```
+```csharp
 builder.Services.AddSignalR();
 /* After AddSignalR use AddOpenTelemetry() */
 builder
