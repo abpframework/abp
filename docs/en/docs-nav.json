@@ -1501,6 +1501,10 @@
                       "path": "framework/ui/angular/card-component.md"
                     },
                     {
+                      "text": "Password Complexity Indicator",
+                      "path": "framework/ui/angular/password-complexity-indicator-component.md"
+                    },
+                    {
                       "text": "Lookup Components(Pro)",
                       "path": "framework/ui/angular/lookup-components.md"
                     },
