@@ -1499,6 +1499,10 @@
                     {
                       "text": "Card",
                       "path": "framework/ui/angular/card-component.md"
+                    },
+                    {
+                      "text": "Lookup Components(Pro)",
+                      "path": "framework/ui/angular/lookup-components.md"
                     }
                   ]
                 }
