@@ -3,9 +3,9 @@ import { DOCUMENT } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class AbpWindowService {
-  protected readonly document = inject(DOCUMENT);
-  protected readonly window = this.document.defaultView;
-  protected readonly navigator = this.window.navigator;
+  public readonly document = inject(DOCUMENT);
+  public readonly window = this.document.defaultView;
+  public readonly navigator = this.window.navigator;
 
   copyToClipboard(text: string): Promise<void> {
     return this.navigator.clipboard.writeText(text);
