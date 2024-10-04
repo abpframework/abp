@@ -137,14 +137,16 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
             this._requestStatus.next('error');
             return EMPTY;
           }),
-          filter(Boolean),
-          tap(() => this._isLoading$.next(false)),
           tap(() => this._requestStatus.next('success')),
-          shareReplay<any>({ bufferSize: 1, refCount: true }),
-          finalize(() => this._requestStatus.next('idle')),
-          takeUntil(this.destroy$),
+          finalize(() => {
+            this._isLoading$.next(false);
+            this._requestStatus.next('idle');
+          }),
         ),
       ),
+      filter(Boolean),
+      shareReplay<any>({ bufferSize: 1, refCount: true }),
+      takeUntil(this.destroy$),
     );
   }
 
