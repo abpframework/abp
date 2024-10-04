@@ -24,7 +24,14 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   props.forEach(({ value: prop }) => {
     const name = prop.name;
     const isExtraProperty = prop.isExtra || name in extraProperties;
-    let value = isExtraProperty ? extraProperties[name] : name in record ? record[name] : undefined;
+
+    let value = undefined;
+
+    if (isExtraProperty) {
+      value = extraProperties[name];
+    } else if (name in record) {
+      value = record[name];
+    }
 
     if (typeof value === 'undefined') value = prop.defaultValue;
 
