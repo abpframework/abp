@@ -7,15 +7,19 @@ import {
   DoCheck,
   SimpleChanges,
   inject,
-  DestroyRef
+  DestroyRef,
+  ViewContainerRef,
+  Renderer2,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   defaultNgxDatatableMessages,
   NGX_DATATABLE_MESSAGES,
 } from '../tokens/ngx-datatable-messages.token';
+import { SpinnerComponent } from '../components';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -24,13 +28,15 @@ import {
   exportAs: 'ngxDatatableList',
 })
 export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
-  @Input() list!: ListService;
-
   protected readonly table = inject(DatatableComponent);
   protected readonly cdRef = inject(ChangeDetectorRef);
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly localizationService = inject(LocalizationService);
   protected readonly ngxDatatableMessages = inject(NGX_DATATABLE_MESSAGES, { optional: true });
+  protected readonly viewContainerRef = inject(ViewContainerRef);
+  protected readonly renderer = inject(Renderer2);
+
+  @Input() list!: ListService;
 
   constructor() {
     this.setInitialValues();
@@ -43,6 +49,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.subscribeToPage();
     this.subscribeToSort();
+    this.subscribeToRequestStatus();
   }
 
   ngOnChanges({ list }: SimpleChanges) {
@@ -55,32 +62,88 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     this.table.offset = page;
   }
 
+  protected subscribeToRequestStatus() {
+    const requestStatus$ = this.list.requestStatus$.pipe(distinctUntilChanged());
+    const { emptyMessage, errorMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
+
+    requestStatus$.subscribe(status => {
+      this.table.loadingIndicator = false;
+
+      if (status === 'idle') {
+        return;
+      }
+
+      if (status === 'loading') {
+        this.table.messages.emptyMessage = undefined;
+        this.table.loadingIndicator = true;
+        this.cdRef.detectChanges();
+        this.updateLoadingIndicator();
+        return;
+      }
+
+      if (status === 'error') {
+        this.table.messages.emptyMessage = this.localizationService.instant(errorMessage);
+        this.viewContainerRef.clear();
+        this.cdRef.markForCheck();
+      }
+
+      if (status === 'success') {
+        this.table.messages.emptyMessage = this.localizationService.instant(emptyMessage);
+        this.viewContainerRef.clear();
+      }
+    });
+  }
+
+  protected updateLoadingIndicator() {
+    const body = this.table.element.querySelector('datatable-body');
+    const progress = this.table.element.querySelector('datatable-progress');
+
+    if (!body) {
+      return;
+    }
+
+    if (progress) {
+      this.replaceLoadingIndicator(body, progress);
+    }
+  }
+
+  protected replaceLoadingIndicator(parent: Element, placeholder: Element) {
+    this.viewContainerRef.clear();
+
+    const spinnerRef = this.viewContainerRef.createComponent(SpinnerComponent);
+    const spinnerElement = spinnerRef.location.nativeElement;
+
+    this.renderer.insertBefore(parent, spinnerElement, placeholder);
+    this.renderer.removeChild(parent, placeholder);
+  }
+
   protected setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
 
-    const { emptyMessage, selectedMessage, totalMessage } =
+    const { selectedMessage, totalMessage } =
       this.ngxDatatableMessages || defaultNgxDatatableMessages;
 
     this.table.messages = {
-      emptyMessage: this.localizationService.instant(emptyMessage),
       totalMessage: this.localizationService.instant(totalMessage),
       selectedMessage: this.localizationService.instant(selectedMessage),
     };
   }
 
   protected subscribeToSort() {
-    this.table.sort.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ sorts: [{ prop, dir }] }) => {
-      if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
-        this.list.sortKey = '';
-        this.list.sortOrder = '';
-        this.table.sorts = [];
-        this.cdRef.detectChanges();
-      } else {
-        this.list.sortKey = prop;
-        this.list.sortOrder = dir;
-      }
-    });
+    this.table.sort
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ sorts: [{ prop, dir }] }) => {
+        if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
+          this.list.sortKey = '';
+          this.list.sortOrder = '';
+          this.table.sorts = [];
+          this.cdRef.detectChanges();
+        } else {
+          this.list.sortKey = prop;
+          this.list.sortOrder = dir;
+        }
+      });
   }
 
   protected subscribeToPage() {

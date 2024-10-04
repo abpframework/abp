@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Hiển thị từ 0 đến 0 trong 0 mục",
     "PagerInfoFiltered": "(được lọc từ tổng số _MAX_ mục)",
     "NoDataAvailableInDatatable": "Không có dữ liệu trong bảng",
+    "ErrorLoadingDatatable": "Đã xảy ra lỗi trong quá trình yêu cầu. Kiểm tra tin nhắn để biết chi tiết.",
     "Total": "toàn bộ",
     "Selected": "đã chọn",
     "PagerShowMenuEntries": "Hiển thị _MENU_ mục",

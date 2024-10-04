@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Toont 0 tot 0 van 0 vermeldingen",
     "PagerInfoFiltered": "(gefilterd uit in totaal _MAX_ vermeldingen)",
     "NoDataAvailableInDatatable": "Geen gegevens beschikbaar",
+    "ErrorLoadingDatatable": "Er is een fout opgetreden tijdens het verzoek. Controleer het bericht voor details.",
     "Total": "totaal",
     "Selected": "geselecteed",
     "PagerShowMenuEntries": "Toon _MENU_-vermeldingen",

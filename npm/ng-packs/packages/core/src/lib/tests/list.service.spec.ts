@@ -149,5 +149,37 @@ describe('ListService', () => {
 
       service.hookToQuery(callback).subscribe();
     });
+
+    it('should emit requestStatus as side effect', done => {
+      const callback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query =>
+        of({ items: [query], totalCount: 1 });
+
+      service.requestStatus$.pipe(bufferCount(3)).subscribe(([idle, init, end]) => {
+        expect(idle).toBe('idle');
+        expect(init).toBe('loading');
+        expect(end).toBe('success');
+
+        done();
+      });
+
+      service.hookToQuery(callback).subscribe();
+    });
+
+    it('should emit error requestStatus as side effect and stop processing', done => {
+      const errCallback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query => {
+        throw Error('A server error occurred');
+      };
+
+      service.requestStatus$.pipe(bufferCount(3)).subscribe(([idle, loading, error]) => {
+        expect(idle).toBe('idle');
+        expect(loading).toBe('loading');
+        expect(error).toBe('error');
+        done();
+      });
+
+      service.hookToQuery(errCallback).subscribe({
+        error: () => done(),
+      });
+    });
   });
 });

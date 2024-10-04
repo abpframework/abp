@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "نمایش از 0 تا 0 از مجموع 0 مورد",
     "PagerInfoFiltered": "(فیلتر شده از مجموع _MAX_ مورد)",
     "NoDataAvailableInDatatable": "داده ای وجود ندارد",
+    "ErrorLoadingDatatable": "در طول درخواست خطایی رخ داد. برای جزئیات پیام را بررسی کنید.",
     "Total": "مجموع",
     "Selected": "انتخاب شده",
     "PagerShowMenuEntries": "نمایش _MENU_ مورد",

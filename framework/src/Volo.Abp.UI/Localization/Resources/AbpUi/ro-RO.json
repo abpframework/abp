@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Afişate 0 din 0 înregistrări",
     "PagerInfoFiltered": "(filtrate de la _MAX_ înregistrări totale)",
     "NoDataAvailableInDatatable": "Nicio informaţie disponibilă",
+    "ErrorLoadingDatatable": "A apărut o eroare în timpul solicitării. Verificați mesajul pentru detalii.",
     "Total": "total",
     "Selected": "selectate",
     "PagerShowMenuEntries": "Afişează _MENU_ intrări",

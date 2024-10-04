@@ -1,5 +1,7 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   inject,
@@ -14,8 +16,7 @@ import {
 } from '@angular/core';
 import { AsyncPipe, formatDate, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, filter, map } from 'rxjs';
 
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -71,7 +72,15 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExtensibleTableComponent<R = any> implements OnChanges {
+export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewInit {
+  readonly #injector = inject(Injector);
+  readonly getInjected = this.#injector.get.bind(this.#injector);
+  protected readonly cdr = inject(ChangeDetectorRef);
+  protected readonly locale = inject(LOCALE_ID);
+  protected readonly config = inject(ConfigStateService);
+  protected readonly entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
+  protected readonly permissionService = inject(PermissionService);
+
   protected _actionsText!: string;
   @Input()
   set actionsText(value: string) {
@@ -103,13 +112,6 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
   readonly actionList: EntityActionList<R>;
 
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
-
-  locale = inject(LOCALE_ID);
-  private config = inject(ConfigStateService);
-  entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
-  #injector = inject(Injector);
-  getInjected = this.#injector.get.bind(this.#injector);
-  permissionService = this.#injector.get(PermissionService);
 
   constructor() {
     const extensions = this.#injector.get(ExtensionsService);
@@ -226,5 +228,12 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     });
 
     return visibleActions.length > 0;
+  }
+
+  ngAfterViewInit(): void {
+    this.list?.requestStatus$?.pipe(filter(status => status === 'loading')).subscribe(() => {
+      this.data = [];
+      this.cdr.markForCheck();
+    });
   }
 }
