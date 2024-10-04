@@ -1,12 +1,12 @@
-# Application (Single Layer) Startup Template
+# Single Layer Application Solution Template
 
 ## Introduction
 
 This template provides a simple solution structure with a single project. This document explains that solution structure in details.
 
-### The Difference Between the Application Startup Templates
+### The Difference Between the Application Solution Templates
 
-ABP's [Application Startup Template](../layered-web-application) provides a well-organized and layered solution to create maintainable business applications based on the [Domain Driven Design](../../framework/architecture/domain-driven-design) (DDD) practices. However, some developers find this template a little bit complex for simple and short-term applications. The single-layer application template has been created to provide a simpler development model for such applications. This template has the same functionality, features and modules on runtime with the [Application Startup Template](../layered-web-application) but the development model is minimal and everything is in a single project (`.csproj`).
+ABP's [Layered Application Solution Template](../layered-web-application) provides a well-organized and layered solution to create maintainable business applications based on the [Domain Driven Design](../../framework/architecture/domain-driven-design) (DDD) practices. However, some developers find this template a little bit complex for simple and short-term applications. The single-layer application template has been created to provide a simpler development model for such applications. This template has the same functionality, features and modules on runtime with the [Layered Application Solution Template](../layered-web-application) but the development model is minimal and everything is in a single project (`.csproj`).
 
 ## How to Start with It?
 
