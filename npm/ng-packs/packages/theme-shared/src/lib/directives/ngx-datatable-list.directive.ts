@@ -49,7 +49,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.subscribeToPage();
     this.subscribeToSort();
-    this.subscribeToLoadingState();
+    this.subscribeToRequestStatus();
   }
 
   ngOnChanges({ list }: SimpleChanges) {
@@ -62,7 +62,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     this.table.offset = page;
   }
 
-  protected subscribeToLoadingState() {
+  protected subscribeToRequestStatus() {
     const requestStatus$ = this.list.requestStatus$.pipe(distinctUntilChanged());
     const { emptyMessage, errorMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
 
