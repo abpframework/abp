@@ -265,6 +265,6 @@
     "ConfirmEmailForPost": "To be able to post, you need to confirm your email. Go to account.abp.io/Account/Manage and verify your email in the Personal Info tab.",
     "DailyPostCreateLimitation": "You have reached the daily post creation limit. You can create a new post in {0}.",
     "YourAccountDisabled": "Your user account is disabled!",
-    "MemberMetaDescription" : "ABP Blog for .NET development, cross-platform, ASP.NET application templates, ABP-related news and more..."
+    "BlogMemberMetaDescription" : "ABP Blog for .NET development, cross-platform, ASP.NET application templates, ABP-related news and more..."
   }
 }
