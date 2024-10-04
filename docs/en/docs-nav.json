@@ -1503,6 +1503,10 @@
                     {
                       "text": "Lookup Components(Pro)",
                       "path": "framework/ui/angular/lookup-components.md"
+                    },
+                    {
+                      "text": "Entity Filters(Pro)",
+                      "path": "framework/ui/angular/entity-filters.md"
                     }
                   ]
                 }
