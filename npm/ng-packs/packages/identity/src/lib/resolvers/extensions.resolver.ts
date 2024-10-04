@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { map, tap } from 'rxjs';
-import { ConfigStateService } from '@abp/ng.core';
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
@@ -25,6 +25,7 @@ import { ResolveFn } from '@angular/router';
 
 export const identityExtensionsResolver: ResolveFn<any> = () => {
   const configState = inject(ConfigStateService);
+  const permissionService = inject(PermissionService);
   const extensions = inject(ExtensionsService);
 
   const config = { optional: true };
@@ -40,7 +41,7 @@ export const identityExtensionsResolver: ResolveFn<any> = () => {
       [eIdentityComponents.Roles]: entities.Role,
       [eIdentityComponents.Users]: entities.User,
     })),
-    mapEntitiesToContributors(configState, 'AbpIdentity'),
+    mapEntitiesToContributors(configState, 'AbpIdentity', permissionService),
     tap(objectExtensionContributors => {
       mergeWithDefaultActions(
         extensions.entityActions,
