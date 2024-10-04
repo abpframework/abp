@@ -20,10 +20,14 @@ public class CmdHelper : ICmdHelper, ITransientDependency
 
     public void Open(string pathOrUrl)
     {
+        //directory might contain 'space' character
+        pathOrUrl = pathOrUrl.EnsureStartsWith('"');
+        pathOrUrl = pathOrUrl.EnsureEndsWith('"');
+        
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             pathOrUrl = pathOrUrl.Replace("&", "^&");
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {pathOrUrl}") { CreateNoWindow = true });
+            Process.Start(new ProcessStartInfo("cmd", $"/c start \"\" {pathOrUrl}") { CreateNoWindow = true });
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

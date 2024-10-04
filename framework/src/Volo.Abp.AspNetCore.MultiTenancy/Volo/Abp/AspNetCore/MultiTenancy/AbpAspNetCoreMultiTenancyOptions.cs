@@ -19,6 +19,7 @@ using Microsoft.Net.Http.Headers;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy;
 
@@ -92,15 +93,16 @@ public class AbpAspNetCoreMultiTenancyOptions
                 context.Response.ContentType = resolvedContentType;
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 
+                var cancellationTokenProvider = context.RequestServices.GetRequiredService<ICancellationTokenProvider>();
                 var responseStream = context.Response.Body;
                 if (resolvedContentTypeEncoding.CodePage == Encoding.UTF8.CodePage)
                 {
                     try
                     {
-                        await JsonSerializer.SerializeAsync(responseStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
-                        await responseStream.FlushAsync(context.RequestAborted);
+                        await JsonSerializer.SerializeAsync(responseStream, error, error.GetType(), jsonSerializerOptions, cancellationTokenProvider.Token);
+                        await responseStream.FlushAsync(cancellationTokenProvider.Token);
                     }
-                    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
+                    catch (OperationCanceledException) when (cancellationTokenProvider.Token.IsCancellationRequested) { }
                 }
                 else
                 {
@@ -108,10 +110,10 @@ public class AbpAspNetCoreMultiTenancyOptions
                     ExceptionDispatchInfo? exceptionDispatchInfo = null;
                     try
                     {
-                        await JsonSerializer.SerializeAsync(transcodingStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
-                        await transcodingStream.FlushAsync(context.RequestAborted);
+                        await JsonSerializer.SerializeAsync(transcodingStream, error, error.GetType(), jsonSerializerOptions, cancellationTokenProvider.Token);
+                        await transcodingStream.FlushAsync(cancellationTokenProvider.Token);
                     }
-                    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
+                    catch (OperationCanceledException) when (cancellationTokenProvider.Token.IsCancellationRequested) { }
                     catch (Exception ex)
                     {
                         exceptionDispatchInfo = ExceptionDispatchInfo.Capture(ex);

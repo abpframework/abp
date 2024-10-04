@@ -32,6 +32,8 @@ namespace Volo.Docs.FileSystem.Documents
                 localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
             }
 
+            version = File.GetLastWriteTime(path).ToString("yyyyMMddHHmmss");
+
             return new Document(GuidGenerator.Create(),
                 project.Id,
                 documentName,
