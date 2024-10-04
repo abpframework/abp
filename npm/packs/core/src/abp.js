@@ -480,7 +480,11 @@ var abp = abp || {};
 
             var args = Array.prototype.slice.call(arguments, 1);
             for (var i = 0; i < callbacks.length; i++) {
-                callbacks[i].apply(this, args);
+                try {
+                    callbacks[i].apply(this, args);
+                } catch(e) {
+                    console.error(e);
+                }
             }
         };
 
