@@ -34,19 +34,19 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
         {
             ApplicationId = _testData.App1Id,
             Payload = "TestPayload3",
-            Subject = "TestSubject3",
+            Subject = _testData.Subject3,
             Type = "TestType3",
             Status = OpenIddictConstants.Statuses.Inactive,
 
         }, CancellationToken.None);
 
-        var tokens = await _tokenStore.FindBySubjectAsync("TestSubject3", CancellationToken.None).ToListAsync();
+        var tokens = await _tokenStore.FindBySubjectAsync(_testData.Subject3, CancellationToken.None).ToListAsync();
 
         tokens.Count.ShouldBe(1);
         var token = tokens.First();
         token.ApplicationId.ShouldBe(_testData.App1Id);
         token.Payload.ShouldBe("TestPayload3");
-        token.Subject.ShouldBe("TestSubject3");
+        token.Subject.ShouldBe(_testData.Subject3);
         token.Type.ShouldBe("TestType3");
         token.Status.ShouldBe(OpenIddictConstants.Statuses.Inactive);
     }
@@ -73,7 +73,7 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
     [Fact]
     public async Task FindAsync_Should_Return_Tokens_If_Found()
     {
-        var tokens = await _tokenStore.FindAsync("TestSubject1", _testData.App1Id.ToString(),OpenIddictConstants.Statuses.Redeemed, "TestType1", CancellationToken.None).ToListAsync();
+        var tokens = await _tokenStore.FindAsync(_testData.Subject1, _testData.App1Id.ToString(),OpenIddictConstants.Statuses.Redeemed, "TestType1", CancellationToken.None).ToListAsync();
 
         tokens.Count.ShouldBe(1);
     }
@@ -110,7 +110,7 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
         token.ShouldNotBeNull();
         token.ApplicationId.ShouldBe(_testData.App1Id);
         token.Payload.ShouldBe("TestPayload1");
-        token.Subject.ShouldBe("TestSubject1");
+        token.Subject.ShouldBe(_testData.Subject1);
         token.Type.ShouldBe("TestType1");
         token.Status.ShouldBe(OpenIddictConstants.Statuses.Redeemed);
         token.ExpirationDate.ShouldNotBeNull();
