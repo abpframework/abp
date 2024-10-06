@@ -29,7 +29,7 @@
     <PackageVersion Include="Dapr.AspNetCore" Version="1.14.0" />
     <PackageVersion Include="Dapr.Client" Version="1.14.0" />
     <PackageVersion Include="DeviceDetector.NET" Version="6.3.3" />
-    <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.3.21" />
+    <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.3.21.8" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.7" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.0.3" />
     <PackageVersion Include="DeepL.net" Version="1.10.0" />
