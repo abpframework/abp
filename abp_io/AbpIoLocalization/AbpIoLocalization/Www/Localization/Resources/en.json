@@ -1866,6 +1866,7 @@
     "NewsletterEmailFooterTemplateDeleteSubscription": "<a style=\"color: #007bff;\" href=\"{0}\" data-root=\"{1}\">If you change your mind, you're always welcome to resubscribe!</a>",
     "GenerateQuote" : "Generate Quote" ,
     "GeneratePriceQuote": "Generate a Price Quote",
-    "Qa:QuestionPageTitle": "Support"
+    "Qa:QuestionPageTitle": "Support",
+    "MetaTwitterCard" : "summary_large_image"
   }
 }
