@@ -13,8 +13,8 @@
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
     <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.404" />
-    <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.4008" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.400.30" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.18.1" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.22.1" />
     <PackageVersion Include="Blazorise" Version="1.6.1" />
