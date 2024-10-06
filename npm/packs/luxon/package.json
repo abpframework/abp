@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@abp/core": "~8.3.1",
-    "luxon": "^3.4.4"
+    "luxon": "^3.5.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",
