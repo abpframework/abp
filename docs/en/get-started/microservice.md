@@ -73,11 +73,11 @@ Click the Next button to see *Additional Options* selection:
 
 If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which include the Helm charts and other Kubernetes related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login.
 
-Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the Create button, the dialog is closed and your solution is loaded into ABP Studio:
+Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the *Create* button, the dialog is closed and your solution is loaded into ABP Studio:
 
 ![abp-studio-created-new-microservice-solution](images/abp-studio-created-new-microservice-solution.png)
 
-You can explore the solution, but you need to wait for background tasks to be completed before running any application in the solution (it can take up to a few minutes to set up all).
+You can explore the solution, but you need to **wait for background tasks to be completed** before running any application in the solution (it can take up to a few minutes to set up all).
 
 > The solution structure can be different in your case based on the options you've selected.
 
@@ -123,9 +123,7 @@ In the *Solution Runner* section (on the left side) you can see all the runnable
 
 ![abp-studio-microservice-solution-runner-applications](images/abp-studio-microservice-solution-runner-applications.png)
 
-> All the leaf items in the *Solution Runner* is called as an *Application* as they are executable applications.
-
-> For a faster start process, first start the *Docker-Dependencies*, then you can start all applications.
+> A leaf item in the *Solution Runner* is called as an *Application* as it is an executable application.
 
 As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, `infrastructure`, and `services`. You can start/stop them all, a group (folder) of them, or one by one.
 
@@ -135,16 +133,14 @@ Before running the applications, it is good to be sure that all applications are
 
 > *Solution Runner* doesn't build an application before running it. That provides a great performance gain because most of the time you will work on one or a few services and you don't need to build all of the other applications in every run. However, if you want to build before running, you can right-click an item in the *Solution Runner* tree and select *Run* -> *Build & Start* command.
 
-It will take some time to build all. Once all is done, you can start the system. 
+It will take some time to build all. Once all is done, you can start the system. You can click the *Play* button on the root item in Solution Runner to start all the applications.
 
-You can click the *Play* button on the root item in Solution Runner to start all the applications. Or you can start `Docker-Dependencies` first, so the database and other infrastructure services get ready before the other applications:
-
-![abp-studio-microservice-solution-runner-docker-dependencies](images/abp-studio-microservice-solution-runner-docker-dependencies.png)
-
+> **About the Docker Containers**
+>
 > Docker will fetch the docker images before starting the containers in your first run (if they were not fetched before) and that process may take a few minutes depending on your internet connection speed.  So, please wait for it to completely start. If the process takes more time than you expect, you can right-click on `Docker-Dependencies` and select the *Logs* command to see what's happening.
 
-Once `Docker-Dependencies` is ready, you can click the *Play* button on the root item in Solution Runner to start all the applications.
-
+> **About Failing Services on Startup**
+>
 > Some applications/services may fail on the first run. That may be because of service and database dependencies were not satisfied and an error occurs on the application startup. ABP Studio automatically restarts failing services until it is successfully started. Being completely ready for such a distributed solution may take a while, but it will be eventually started.
 
 Once all the applications are ready, you can right-click the `Web` application and select the *Browse* command:

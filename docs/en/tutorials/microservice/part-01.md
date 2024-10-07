@@ -13,8 +13,10 @@
 Follow the *[Get Stared](../../get-started/microservice.md)* guide to create a new layered web application with the following configuration:
 
 * **Solution name**: `CloudCrm`
-* **UI Framework**: ASP.NET Core MVC / Razor Pages
 * **Database Provider**: Entity Framework Core
+* **Database Management System**: SQL Server
+* **UI Framework**: MVC / Razor Pages
+* **Mobile framework**: None
 * **Public website**: Selected
 
 You can select the other options based on your preference.
