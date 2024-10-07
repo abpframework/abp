@@ -1,3 +1,4 @@
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
 import { Observable, of } from 'rxjs';
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import {
@@ -24,7 +25,6 @@ import {
 } from '../models/props';
 import { PolicyGroup } from '../models/internal/object-extensions';
 import { ObjectExtensions } from '../models/object-extensions';
-import { ConfigStateService, PermissionService } from '@abp/ng.core';
 
 export function createExtraPropertyValueResolver<T>(
   name: string,
@@ -65,11 +65,8 @@ function isPolicyMet(
 export function checkPolicyProperties(
   properties: ObjectExtensions.EntityExtensionProperties,
   configState: ConfigStateService,
-  permissionService?: PermissionService,
+  permissionService: PermissionService,
 ) {
-  //TODO this check will be removed after configuring every contribution in the row 🪄
-  if (!permissionService) return;
-
   const checkPolicy = (policy: PolicyGroup): boolean => {
     const { permissions, globalFeatures, features } = policy;
 
@@ -129,108 +126,3 @@ type InferredProps<F> =
       : F extends EditFormPropsFactory<infer REF>
         ? FormProps<REF>
         : never;
-
-// export function checkPolicyProperties(
-//   properties: ObjectExtensions.EntityExtensionProperties,
-//   configState: ConfigStateService,
-//   permissionService?: PermissionService,
-// ) {
-//   Object.keys(properties).forEach((name: string) => {
-//     const property = properties[name];
-
-//     if (!property.policy) {
-//       return;
-//     }
-
-//     let isPolicyConstraintMet = false;
-
-//     const { permissions, features, globalFeatures } = property.policy;
-
-//     if (!permissionService) {
-//       return;
-//     }
-
-//     if (!permissions.permissionNames) {
-//       return;
-//     }
-
-//     const hasPermission = (permission: string): boolean =>
-//       permissionService.getGrantedPolicy(permission);
-
-//     isPolicyConstraintMet = permissions.requiresAll
-//       ? permissions.permissionNames.every(hasPermission)
-//       : permissions.permissionNames.some(hasPermission);
-
-//     if (!isPolicyConstraintMet) {
-//       delete properties[name];
-//     }
-
-//     if (!globalFeatures.features) {
-//       return;
-//     }
-
-//     const hasGlobalFeature = (globalFeature: string): boolean =>
-//       configState.getGlobalFeatureIsEnabled(globalFeature);
-
-//     isPolicyConstraintMet = globalFeatures.requiresAll
-//       ? globalFeatures.features.every(hasGlobalFeature)
-//       : globalFeatures.features.some(hasGlobalFeature);
-
-//     if (!isPolicyConstraintMet) {
-//       delete properties[name];
-//     }
-
-//     const hasFeature = (feature: string): boolean => configState.getFeatureIsEnabled(feature);
-
-//     isPolicyConstraintMet = features.requiresAll
-//       ? features.features.every(hasFeature)
-//       : features.features.some(hasFeature);
-
-//     if (!isPolicyConstraintMet) {
-//       delete properties[name];
-//     }
-//   });
-// }
-
-// export function checkPolicyProperties(
-//   properties: ObjectExtensions.EntityExtensionProperties,
-//   configState: ConfigStateService,
-//   permissionService?: PermissionService,
-// ) {
-//   if (!permissionService) return;
-
-//   const isConstraintMet = (
-//     items: string[] | undefined,
-//     requiresAll: boolean | undefined,
-//     checkFunction: (item: string) => boolean,
-//   ): boolean =>
-//     !items ||
-//     items.length === 0 ||
-//     (requiresAll ? items.every(checkFunction) : items.some(checkFunction));
-
-//   const policyCheckers = [
-//     {
-//       getItems: (policy: any) => policy.permissions?.permissionNames,
-//       check: (permission: string) => permissionService.getGrantedPolicy(permission),
-//     },
-//     {
-//       getItems: (policy: any) => policy.globalFeatures?.features,
-//       check: (feature: string) => configState.getGlobalFeatureIsEnabled(feature),
-//     },
-//     {
-//       getItems: (policy: any) => policy.features?.features,
-//       check: (feature: string) => configState.getFeatureIsEnabled(feature),
-//     },
-//   ];
-
-//   Object.keys(properties).forEach((name: string) => {
-//     const { policy } = properties[name];
-//     if (!policy) return;
-
-//     const shouldDelete = policyCheckers.some(
-//       ({ getItems, check }) => !isConstraintMet(getItems(policy), policy.features.requiresAll, check),
-//     );
-
-//     if (shouldDelete) delete properties[name];
-//   });
-// }

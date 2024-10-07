@@ -1,9 +1,3 @@
-import { Injectable, inject } from '@angular/core';
-
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-
-import { ConfigStateService, IAbpGuard } from '@abp/ng.core';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
@@ -11,6 +5,11 @@ import {
   mergeWithDefaultActions,
   mergeWithDefaultProps,
 } from '@abp/ng.components/extensible';
+import { ConfigStateService, IAbpGuard, PermissionService } from '@abp/ng.core';
+import { Injectable, inject } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { eIdentityComponents } from '../enums/components';
 import {
@@ -32,6 +31,7 @@ import {
 @Injectable()
 export class IdentityExtensionsGuard implements IAbpGuard {
   protected readonly configState = inject(ConfigStateService);
+  protected readonly permission = inject(PermissionService);
   protected readonly extensions = inject(ExtensionsService);
 
   canActivate(): Observable<boolean> {
@@ -48,7 +48,7 @@ export class IdentityExtensionsGuard implements IAbpGuard {
         [eIdentityComponents.Roles]: entities.Role,
         [eIdentityComponents.Users]: entities.User,
       })),
-      mapEntitiesToContributors(this.configState, 'AbpIdentity'),
+      mapEntitiesToContributors(this.configState, this.permission, 'AbpIdentity'),
       tap(objectExtensionContributors => {
         mergeWithDefaultActions(
           this.extensions.entityActions,

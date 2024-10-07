@@ -75,8 +75,8 @@ export function getObjectExtensionEntitiesFromStore(
 
 export function mapEntitiesToContributors<T = any>(
   configState: ConfigStateService,
+  permissionService: PermissionService,
   resource: string,
-  permissionService?: PermissionService,
 ) {
   return pipe(
     switchMap((entities: any) =>
