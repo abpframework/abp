@@ -8,22 +8,23 @@ using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters;
 
-public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDictionary, string>
+public class ExtraPropertiesValueConverter<TEntityType> : ValueConverter<ExtraPropertyDictionary, string>
 {
-    public ExtraPropertiesValueConverter(Type entityType)
+    public ExtraPropertiesValueConverter()
         : base(
-            d => SerializeObject(d, entityType),
-            s => DeserializeObject(s, entityType))
+            d => SerializeObject(d),
+            s => DeserializeObject(s))
     {
 
     }
 
     public readonly static JsonSerializerOptions SerializeOptions = new JsonSerializerOptions();
 
-    private static string SerializeObject(ExtraPropertyDictionary extraProperties, Type? entityType)
+    private static string SerializeObject(ExtraPropertyDictionary extraProperties)
     {
         var copyDictionary = new Dictionary<string, object?>(extraProperties);
 
+        var entityType = typeof(TEntityType);
         if (entityType != null)
         {
             var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
@@ -50,7 +51,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         }
     };
 
-    private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type? entityType)
+    private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson)
     {
         if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
         {
@@ -60,6 +61,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, DeserializeOptions) ??
                             new ExtraPropertyDictionary();
 
+        var entityType = typeof(TEntityType);
         if (entityType != null)
         {
             var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);

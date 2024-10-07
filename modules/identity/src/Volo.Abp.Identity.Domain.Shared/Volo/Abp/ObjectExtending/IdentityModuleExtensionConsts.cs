@@ -13,6 +13,8 @@ public static class IdentityModuleExtensionConsts
         public const string ClaimType = "ClaimType";
 
         public const string OrganizationUnit = "OrganizationUnit";
+
+        public const string IdentitySession = "IdentitySession";
     }
 
     public static class ConfigurationNames

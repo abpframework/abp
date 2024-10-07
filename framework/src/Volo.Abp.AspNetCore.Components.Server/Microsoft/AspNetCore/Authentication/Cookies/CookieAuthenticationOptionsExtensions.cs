@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Threading;
 
 namespace Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -70,7 +71,8 @@ public static class CookieAuthenticationOptionsExtensions
         var openIdConnectOptions = principalContext.HttpContext.RequestServices.GetRequiredService<IOptionsMonitor<OpenIdConnectOptions>>().Get(oidcAuthenticationScheme);
         if (openIdConnectOptions.Configuration == null && openIdConnectOptions.ConfigurationManager != null)
         {
-            openIdConnectOptions.Configuration = await openIdConnectOptions.ConfigurationManager.GetConfigurationAsync(principalContext.HttpContext.RequestAborted);
+            var cancellationTokenProvider = principalContext.HttpContext.RequestServices.GetRequiredService<ICancellationTokenProvider>();
+            openIdConnectOptions.Configuration = await openIdConnectOptions.ConfigurationManager.GetConfigurationAsync(cancellationTokenProvider.Token);
         }
 
         return openIdConnectOptions;
