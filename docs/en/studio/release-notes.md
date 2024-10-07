@@ -2,6 +2,14 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.8.4 (2024-10-07)
+
+* Fixed the ABP Suite does not open problem for macOS
+* Made improvements on the new microservice creation
+* Allowed using browser shortcuts (copy, paste, new tab etc.) for macOS
+* Prevented application being crashed on solution runner exceptions
+* Included `WebApp.Client` project styles in the main application to enable CSS in Isolation
+
 ## 0.8.3 (2024-09-24)
 
 * Allowed to set Execution Order (or dependency) from Solution Runner
