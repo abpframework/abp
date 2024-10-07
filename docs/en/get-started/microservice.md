@@ -218,6 +218,8 @@ Once the solution is ready in Kubernetes, you can open a browser and visit the f
 
 ![abp-studio-microservice-web-application-home-page](images/abp-studio-microservice-web-application-home-page.png)
 
+> We could use `cloudcrm-local-web` as the host name since ABP Studio has added an entry to the host file for us.
+
 Click the *Login* link in the application UI, it will redirect you to the *Authentication Server* application, enter `admin` as username and `1q2w3E*` as password to login to the application.
 
 > The services run independently from each other and perform some initial data seed logic on their startups. So, they may fail in their first run. In that case, Kubernetes will re-start them. So, it may initially get some time to make the solution fully ready and working.
@@ -244,11 +246,11 @@ Clicking the *Connect* button will start a process that establishes the VPN conn
 
 ![abp-studio-microservice-kubernetes-services](images/abp-studio-microservice-kubernetes-services.png)
 
-Now, you can access all the services inside the Kubernetes cluster, including the services those are not exposes out of the cluster. You can use the service name as DNS. For example, you can directly visit `http://cloudcrm-local-identity` in your Browser. You can also right-click to a service or application and select the Browse command to open it's UI in the built-in browser of ABP Studio:
+Now, you can access all the services inside the Kubernetes cluster, including the services those are not exposed out of the cluster. You can use the service name as DNS. For example, you can directly visit `http://cloudcrm-local-identity` in your Browser. You can also right-click to a service or application and select the Browse command to open it's UI in the built-in browser of ABP Studio:
 
 ![abp-studio-microservice-kubernetes-services-browse](images/abp-studio-microservice-kubernetes-services-browse.png)
 
-You can even use the other services (e.g. SQL Server or RabbitMQ) from your local computer (even if they were not exposed out of cluster) with their service names. `sa` password for the SQL server is `myPassw@rd` by default, you can use your SQL Server management studio to connect to it and see the databases:
+You can even use the other services (e.g. SQL Server or RabbitMQ) from your local computer (even if they were not exposed out of cluster) with their service names. `sa` password for the SQL server is `myPassw@rd` by default, you can use your SQL Server management studio to connect to it and see the databases (*Server name* is `cloudcrm-local-sqlserver`):
 
 ![abp-studio-microservice-sql-server-connection](images/abp-studio-microservice-sql-server-connection.png)
 
@@ -261,6 +263,8 @@ When you connect to Kubernetes, ABP Studio automatically connects to the applica
 ![abp-studio-microservice-kubernetes-application-monitor](images/abp-studio-microservice-kubernetes-application-monitor.png)
 
 In this way, you can easily track HTTP requests, distributed events, exceptions, logs and other details of your applications.
+
+> If you want to browse a web application in the integrated browser of ABP Studio, right-click to a service in the *Kubernetes* tab of the *Kubernetes* panel and select the *Browse* command.
 
 ## Kubernetes Integration: Intercepting Services
 
