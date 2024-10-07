@@ -69,7 +69,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.0-rc.1.24452.1" />
     <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.0-rc.1.24452.1" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0-rc.1.24431.7" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.0-rc.1.24451.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0-rc.1.24451.1" />
