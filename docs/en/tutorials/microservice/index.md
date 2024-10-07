@@ -14,7 +14,7 @@
 
 ABP is designed to be a powerful platform to build microservice solutions. It provides a [microservice solution template](../../solution-templates/microservice/index.md) to easily start a sophisticated microservice solution. All of the [pre-built application modules](../../modules/index.md) are microservice compatible and the core framework fully [supports and simplifies](../../framework/architecture/microservices/index.md) distributed application development.
 
-In this tutorial, you will learn how to create services and communicate them. You will also learn to use these services from a web application through an API gateway and automatically generate CRUD pages using the [ABP Suite](../../suite/index.md) tool.
+In this tutorial, you will learn how to start a new microservices solution, create services and communicate between them. You will also learn to use these services from a web application through an API gateway and automatically generate CRUD pages using the [ABP Suite](../../suite/index.md) tool.
 
 ## Tutorial Outline
 
