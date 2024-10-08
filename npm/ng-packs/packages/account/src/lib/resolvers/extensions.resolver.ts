@@ -1,13 +1,13 @@
+import { inject } from '@angular/core';
+import { ResolveFn } from '@angular/router';
+import { map, tap } from 'rxjs';
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
   mergeWithDefaultProps,
 } from '@abp/ng.components/extensible';
-import { ConfigStateService, PermissionService } from '@abp/ng.core';
-import { inject } from '@angular/core';
-import { ResolveFn } from '@angular/router';
-import { map, tap } from 'rxjs';
 import { eAccountComponents } from '../enums';
 import { ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS, DEFAULT_ACCOUNT_FORM_PROPS } from '../tokens';
 
