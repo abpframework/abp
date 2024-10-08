@@ -67,7 +67,7 @@
           ]
         },
         {
-          "text": "Book Store Application",
+          "text": "Web Application Development",
           "items": [
             {
               "text": "Overview",
@@ -1278,7 +1278,7 @@
                           "path": "framework/ui/angular/http-requests.md"
                         },
                         {
-                          "text": "Customize Error Handling",
+                          "text": "Error Handling",
                           "path": "framework/ui/angular/http-error-handling.md"
                         }
                       ]
