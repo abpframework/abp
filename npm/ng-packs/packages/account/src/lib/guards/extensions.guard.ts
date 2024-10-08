@@ -1,13 +1,13 @@
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+import { ConfigStateService, IAbpGuard, PermissionService } from '@abp/ng.core';
 import {
   ExtensionsService,
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
   mergeWithDefaultProps,
 } from '@abp/ng.components/extensible';
-import { ConfigStateService, IAbpGuard, PermissionService } from '@abp/ng.core';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
 
 import {
   ACCOUNT_EDIT_FORM_PROP_CONTRIBUTORS,
