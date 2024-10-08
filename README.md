@@ -18,7 +18,7 @@
 
 ABP bridges the gap between ASP.NET Core and real-world business application requirements, and makes you focus on your own business code.
 
-The following diagram shows the key components of the ABP at a glance:
+The following diagram contains the core components of the **ABP Platform** and shows how ABP sits between **ASP.NET Core** and **Your Application**:
 
 ![abp-overall-diagram](docs/en/images/abp-overall-diagram.png)
 
