@@ -35,7 +35,7 @@ ABP **bridges the gap** between ASP.NET Core and **real-world business applicati
 
 The following diagram contains the core components of the **ABP Platform** and shows how ABP sits between **ASP.NET Core** and **Your Application**:
 
-![abp-overall-diagram-1600](D:\Github\abp\docs\en\images\abp-overall-diagram-1600.png)
+![abp-overall-diagram-1600](images/abp-overall-diagram-1600.png)
 
 ## Exploring the Documentation
 
