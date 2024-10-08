@@ -1231,6 +1231,10 @@
               "text": "Angular",
               "items": [
                 {
+                  "text": "Overview",
+                  "path": "framework/ui/angular/overview.md"
+                },
+                {
                   "text": "Quick Start",
                   "path": "framework/ui/angular/quick-start.md"
                 },
@@ -1443,6 +1447,10 @@
                       "path": "framework/ui/angular/modifying-the-menu.md"
                     },
                     {
+                      "text": "Manage Profile Page Tabs",
+                      "path": "framework/ui/angular/manage-profile-page-tabs.md"
+                    },
+                    {
                       "text": "Sorting Navigation Elements",
                       "path": "framework/ui/angular/sorting-navigation-elements.md"
                     },
@@ -1495,6 +1503,18 @@
                     {
                       "text": "Card",
                       "path": "framework/ui/angular/card-component.md"
+                    },
+                    {
+                      "text": "Password Complexity Indicator",
+                      "path": "framework/ui/angular/password-complexity-indicator-component.md"
+                    },
+                    {
+                      "text": "Lookup Components(Pro)",
+                      "path": "framework/ui/angular/lookup-components.md"
+                    },
+                    {
+                      "text": "Entity Filters(Pro)",
+                      "path": "framework/ui/angular/entity-filters.md"
                     }
                   ]
                 }
