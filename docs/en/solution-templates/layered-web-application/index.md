@@ -1,4 +1,4 @@
-# Application Startup Template
+# Layered Application Solution Template
 
 ## Introduction
 
@@ -6,7 +6,7 @@ This template provides a layered application structure based on the [Domain Driv
 
 This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
 
-* [The getting started document](../../get-started/single-layer-web-application.md) explains how to create a new application in a few minutes.
+* [The getting started document](../../get-started/layered-web-application.md) explains how to create a new application in a few minutes.
 * [The application development tutorial](../../tutorials/book-store/part-01.md) explains step by step application development.
 
 ## How to Start With?
