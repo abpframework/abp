@@ -23,7 +23,7 @@ import {
   PropList,
   PropsFactory,
 } from '../models/props';
-import { PolicyGroup } from '../models/internal/object-extensions';
+import { Policy } from '../models/internal/object-extensions';
 import { ObjectExtensions } from '../models/object-extensions';
 
 export function createExtraPropertyValueResolver<T>(
@@ -67,7 +67,7 @@ export function checkPolicyProperties(
   configState: ConfigStateService,
   permissionService: PermissionService,
 ) {
-  const checkPolicy = (policy: PolicyGroup): boolean => {
+  const checkPolicy = (policy: Policy): boolean => {
     const { permissions, globalFeatures, features } = policy;
 
     const checks = [
