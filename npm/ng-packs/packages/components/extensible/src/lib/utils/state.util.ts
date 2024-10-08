@@ -16,7 +16,7 @@ import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
 import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
-import { checkPolicyProperties, createExtraPropertyValueResolver } from './props.util';
+import { checkPolicies, createExtraPropertyValueResolver } from './props.util';
 import {
   createTypeaheadDisplayNameGenerator,
   createTypeaheadOptions,
@@ -100,7 +100,7 @@ export function mapEntitiesToContributors<T = any>(
                 return acc;
               }
 
-              checkPolicyProperties(properties, configState, permissionService);
+              checkPolicies(properties, configState, permissionService);
 
               const mapPropertiesToContributors = createPropertiesToContributorsMapper<T>(
                 generateDisplayName,

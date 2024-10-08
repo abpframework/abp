@@ -51,22 +51,13 @@ export function mergeWithDefaultProps<F extends PropsFactory<any>>(
   });
 }
 
-function isPolicyMet(
-  checkFunction: (item: string) => boolean,
-  requiresAll: boolean,
-  items?: string[],
-): boolean {
-  if (!items?.length) {
-    return true;
-  }
-  return requiresAll ? items.every(checkFunction) : items.some(checkFunction);
-}
-
-export function checkPolicyProperties(
+export function checkPolicies(
   properties: ObjectExtensions.EntityExtensionProperties,
   configState: ConfigStateService,
   permissionService: PermissionService,
 ) {
+  const props = Object.entries(properties);
+
   const checkPolicy = (policy: Policy): boolean => {
     const { permissions, globalFeatures, features } = policy;
 
@@ -88,12 +79,16 @@ export function checkPolicyProperties(
       },
     ];
 
-    return checks.every(({ items, requiresAll, check }) =>
-      isPolicyMet(check, requiresAll ?? false, items),
-    );
+    return checks.every(({ items, requiresAll, check }) => {
+      if (!items?.length) {
+        return true;
+      }
+
+      return requiresAll ? items.every(check) : items.some(check);
+    });
   };
 
-  Object.entries(properties).forEach(([name, property]) => {
+  props.forEach(([name, property]) => {
     if (property.policy && !checkPolicy(property.policy)) {
       delete properties[name];
     }
