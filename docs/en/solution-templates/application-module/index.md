@@ -1,4 +1,4 @@
-# Module Startup Template
+# Module Solution Template
 
 This template can be used to create a **reusable [application module](../../modules)** based on the [module development best practices & conventions](../../framework/architecture/best-practices). It is also suitable for creating **microservices** (with or without UI).
 
