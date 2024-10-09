@@ -1,3 +1,4 @@
+# .NET 9 Performance Improvements Summary
 
 With every release, .NET becomes faster & faster! You get these improvements for free by just updating your project to the latest .NET!
 
