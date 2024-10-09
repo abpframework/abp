@@ -1,4 +1,4 @@
-## ABP Fundamentals: Overview
+# ABP Fundamentals: Overview
 
 The following documents explains the fundamental building blocks to create ABP solutions:
 
