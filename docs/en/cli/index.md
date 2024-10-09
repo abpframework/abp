@@ -991,7 +991,6 @@ public class MyPageModel
 
 ```cs
 @using System.Globalization
-@using Volo.Abp.AspNetCore.MultiTenancy.Views
 @using Volo.Abp.AspNetCore.RazorViews
 @inherits AbpCompilationRazorPageBase
 @{
