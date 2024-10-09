@@ -1,4 +1,4 @@
-# CMS Kit Pro Module (Pro)
+# CMS Kit Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.
 

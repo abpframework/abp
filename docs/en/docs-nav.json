@@ -1,41 +1,41 @@
 {
   "items": [
     {
-      "text": "Get started",
+      "text": "Get Started",
       "items": [
         {
           "text": "Overview",
           "path": "get-started"
         },
         {
-          "text": "Single-layer solution",
+          "text": "Single Layer Web Application",
           "path": "get-started/single-layer-web-application.md"
         },
         {
-          "text": "Layered solution",
+          "text": "Layered Web Application",
           "path": "get-started/layered-web-application.md"
         },
         {
-          "text": "Microservice solution",
+          "text": "Microservice Solution",
           "path": "get-started/microservice.md"
         },
         {
           "text": "Others",
           "items": [
             {
-              "text": "Empty ASP.NET Core application",
+              "text": "Empty ASP.NET Core MVC / Razor Pages Application",
               "path": "get-started/empty-aspnet-core-application.md"
             },
             {
-              "text": "MAUI application",
+              "text": "MAUI Application Startup Template",
               "path": "get-started/maui.md"
             },
             {
-              "text": "WPF application",
+              "text": "WPF Application Startup Template",
               "path": "get-started/wpf.md"
             },
             {
-              "text": "Console application",
+              "text": "Console Application Startup Template",
               "path": "get-started/console.md"
             }
           ]
@@ -57,36 +57,36 @@
               "path": "tutorials/todo"
             },
             {
-              "text": "Single-layer solution",
+              "text": "Single-Layer Solution",
               "path": "tutorials/todo/single-layer"
             },
             {
-              "text": "Layered solution",
+              "text": "Layered Solution",
               "path": "tutorials/todo/layered"
             }
           ]
         },
         {
-          "text": "Book Store Application",
+          "text": "Web Application Development",
           "items": [
             {
               "text": "Overview",
               "path": "tutorials/book-store"
             },
             {
-              "text": "1: Creating the server side",
+              "text": "1: Creating the Server Side",
               "path": "tutorials/book-store/part-01.md"
             },
             {
-              "text": "2: The Book List page",
+              "text": "2: The Book List Page",
               "path": "tutorials/book-store/part-02.md"
             },
             {
-              "text": "3: Creating, updating and deleting books",
+              "text": "3: Creating, Updating and Deleting Books",
               "path": "tutorials/book-store/part-03.md"
             },
             {
-              "text": "4: Integration tests",
+              "text": "4: Integration Tests",
               "path": "tutorials/book-store/part-04.md"
             },
             {
@@ -94,23 +94,23 @@
               "path": "tutorials/book-store/part-05.md"
             },
             {
-              "text": "6: Authors: Domain layer",
+              "text": "6: Authors: Domain Layer",
               "path": "tutorials/book-store/part-06.md"
             },
             {
-              "text": "7: Authors: Database integration",
+              "text": "7: Authors: Database Integration",
               "path": "tutorials/book-store/part-07.md"
             },
             {
-              "text": "8: Authors: Application layer",
+              "text": "8: Authors: Application Layer",
               "path": "tutorials/book-store/part-08.md"
             },
             {
-              "text": "9: Authors: User interface",
+              "text": "9: Authors: User Interface",
               "path": "tutorials/book-store/part-09.md"
             },
             {
-              "text": "10: Book to author relation",
+              "text": "10: Book to Author Relation",
               "path": "tutorials/book-store/part-10.md"
             }
           ]
@@ -123,35 +123,35 @@
               "path": "tutorials/modular-crm/index.md"
             },
             {
-              "text": "1: Creating the initial solution",
+              "text": "1: Creating the Initial Solution",
               "path": "tutorials/modular-crm/part-01.md"
             },
             {
-              "text": "2: Creating the initial Products module",
+              "text": "2: Creating the Initial Products Module",
               "path": "tutorials/modular-crm/part-02.md"
             },
             {
-              "text": "3: Building the Products module",
+              "text": "3: Building the Products Module",
               "path": "tutorials/modular-crm/part-03.md"
             },
             {
-              "text": "4: Creating the initial Ordering module",
+              "text": "4: Creating the Initial Ordering Module",
               "path": "tutorials/modular-crm/part-04.md"
             },
             {
-              "text": "5: Building the Ordering module",
+              "text": "5: Building the Ordering Module",
               "path": "tutorials/modular-crm/part-05.md"
             },
             {
-              "text": "6: Integrating the modules: Implementing Integration Services",
+              "text": "6: Integrating the Modules: Implementing Integration Services",
               "path": "tutorials/modular-crm/part-06.md"
             },
             {
-              "text": "7: Integrating the modules: Communication via Messages (Events)",
+              "text": "7: Integrating the Modules: Communication via Messages (Events)",
               "path": "tutorials/modular-crm/part-07.md"
             },
             {
-              "text": "8: Integrating the modules: Joining the Products and Orders Data",
+              "text": "8: Integrating the Modules: Joining the Products and Orders Data",
               "path": "tutorials/modular-crm/part-08.md"
             }
           ]
@@ -177,7 +177,7 @@
               "path": "cli"
             },
             {
-              "text": "Examples for the new command",
+              "text": "New Solution Sample Commands",
               "path": "cli/new-command-samples.md"
             }
           ]
@@ -256,7 +256,7 @@
               "path": "suite/add-solution.md"
             },
             {
-              "text": "Creating new ABP solution",
+              "text": "Creating New ABP Solution",
               "path": "suite/create-solution.md"
             },
             {
@@ -271,7 +271,7 @@
                   "path": "suite/creating-many-to-many-relationship.md"
                 },
                 {
-                  "text": "Generating from an Existing Database",
+                  "text": "Generating From an Existing Database",
                   "path": "suite/generating-entities-from-an-existing-database-table.md"
                 },
                 {
@@ -301,7 +301,7 @@
               "path": "suite/editing-templates.md"
             },
             {
-              "text": "How to uninstall",
+              "text": "How to Uninstall",
               "path": "suite/how-to-uninstall.md"
             }
           ]
@@ -336,7 +336,7 @@
               ]
             },
             {
-              "text": "Caching",
+              "text": "Distributed Caching",
               "items": [
                 {
                   "text": "Overview",
@@ -653,7 +653,7 @@
               "path": "framework/architecture"
             },
             {
-              "text": "Best Practices",
+              "text": "Module Development Best Practices & Conventions",
               "items": [
                 {
                   "text": "Overview",
@@ -1184,7 +1184,7 @@
                   "text": "Other Components",
                   "items": [
                     {
-                      "text": "SubmitButton",
+                      "text": "SubmitButton Component",
                       "path": "framework/ui/blazor/components/submit-button.md"
                     }
                   ]
@@ -1226,6 +1226,10 @@
             {
               "text": "Angular",
               "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/ui/angular/overview.md"
+                },
                 {
                   "text": "Quick Start",
                   "path": "framework/ui/angular/quick-start.md"
@@ -1278,7 +1282,7 @@
                           "path": "framework/ui/angular/http-requests.md"
                         },
                         {
-                          "text": "Customize Error Handling",
+                          "text": "Error Handling",
                           "path": "framework/ui/angular/http-error-handling.md"
                         }
                       ]
@@ -1439,6 +1443,10 @@
                       "path": "framework/ui/angular/modifying-the-menu.md"
                     },
                     {
+                      "text": "Manage Profile Page Tabs",
+                      "path": "framework/ui/angular/manage-profile-page-tabs.md"
+                    },
+                    {
                       "text": "Sorting Navigation Elements",
                       "path": "framework/ui/angular/sorting-navigation-elements.md"
                     },
@@ -1491,6 +1499,18 @@
                     {
                       "text": "Card",
                       "path": "framework/ui/angular/card-component.md"
+                    },
+                    {
+                      "text": "Password Complexity Indicator",
+                      "path": "framework/ui/angular/password-complexity-indicator-component.md"
+                    },
+                    {
+                      "text": "Lookup Components(Pro)",
+                      "path": "framework/ui/angular/lookup-components.md"
+                    },
+                    {
+                      "text": "Entity Filters(Pro)",
+                      "path": "framework/ui/angular/entity-filters.md"
                     }
                   ]
                 }
@@ -1631,7 +1651,7 @@
           "path": "solution-templates/microservice"
         },
         {
-          "text": "Application Module",
+          "text": "Module Solution",
           "path": "solution-templates/application-module"
         }
       ]
@@ -1946,7 +1966,7 @@
           "path": "others/why-abp-platform.md"
         },
         {
-          "text": "Free license vs Pro licenses?",
+          "text": "Free (Open Source) License vs Commercial (Pro) Licenses",
           "path": "others/free-licenses-vs-pro-licenses.md"
         },
         {
@@ -1954,7 +1974,7 @@
           "path": "others/penetration-test-report.md"
         },
         {
-          "text": "ASP.NET Zero vs ABP",
+          "text": "ABP vs ASP.NET Zero",
           "path": "others/aspnet-zero-vs-abp.md"
         },
         {
