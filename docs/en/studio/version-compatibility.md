@@ -4,7 +4,7 @@ This document provides an overview of the compatibility between various versions
 
 | **ABP Studio Version** | **ABP Version**           |
 |------------------------|---------------------------|
-| 0.8.4                  | 8.3.1                     |
+| 0.8.4 - 0.9.1          | 8.3.1                     |
 | 0.8.1 to 0.8.3         | 8.3.0                     |
 | 0.8.0                  | 8.2.3                     |
 | 0.7.8 - 0.7.9          | 8.2.2                     |
