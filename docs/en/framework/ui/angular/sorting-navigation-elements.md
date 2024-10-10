@@ -5,7 +5,7 @@ This documentation describes how the navigation elements are sorted and how to c
 - When you want to add the `Navigation Element` you can use the `RoutesService`. For more details, see the [document](../angular/modifying-the-menu.md).
 - However, in this documentation, we will talk more about how to sort the navigation elements.
 
-### Order Property
+## Order Property
 
 - Normally, you are able to sort your routes with this property. But you can customize our default sorting algorithm.
 
