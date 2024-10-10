@@ -41,7 +41,7 @@ This module follows the [module development best practices guide](../../framewor
 * @volo/abp.aspnetcore.mvc.ui.theme.leptonx
 * @volo/aspnetcore.components.server.leptonxtheme
 
-### Angular
+#### Angular
 
 * @volo/abp.ng.lepton-x.core
 * @volo/ngx-lepton-x.core
@@ -56,7 +56,7 @@ LeptonX Theme module doesn't provide any UI pages. It just changes the existing 
 
 ![lepton-theme-module-login-page](../../images/lepton-x-theme-module-login-page.png) 
 
-### Languages Page
+#### Languages Page
 
 ![lepton-theme-module-languages-page](../../images/lepton-x-theme-module-languages-page.png)
 
@@ -64,7 +64,7 @@ LeptonX Theme module doesn't provide any UI pages. It just changes the existing 
 
 This module doesn't define any pages.
 
-### Identity Module Settings UI
+#### Identity Module Settings UI
 
 LeptonX Theme module adds a new tab to the Settings page to customize the behavior on runtime.
 
