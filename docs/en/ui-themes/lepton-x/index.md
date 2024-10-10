@@ -56,7 +56,7 @@ LeptonX Theme module doesn't provide any UI pages. It just changes the existing 
 
 ![lepton-theme-module-login-page](../../images/lepton-x-theme-module-login-page.png) 
 
-#### Languages Page
+### Languages Page
 
 ![lepton-theme-module-languages-page](../../images/lepton-x-theme-module-languages-page.png)
 
