@@ -1,4 +1,4 @@
-## Release Information
+# Release Information
 
 * [Release Notes](./release-notes.md)
 * [Migration Guides](./migration-guides/index.md)

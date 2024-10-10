@@ -558,6 +558,7 @@ Open the `/src/app/route.provider.ts` and add `'BookStore.Books || BookStore.Aut
   layout: eLayoutType.application,
   requiredPolicy: 'BookStore.Books || BookStore.Authors',
 },
+````
 
 The final `configureRoutes` function declaration should be following:
 
