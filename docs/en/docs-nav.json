@@ -1887,12 +1887,16 @@
           "path": "samples"
         },
         {
+          "text": "EventHub",
+          "path": "https://github.com/abpframework/eventhub"
+        },
+        {
           "text": "eShopOnAbp",
           "path": "https://github.com/abpframework/eShopOnAbp"
         },
         {
-          "text": "EventHub",
-          "path": "https://github.com/abpframework/eventhub"
+          "text": "CMS Kit Demo",
+          "path": "https://github.com/abpframework/cms-kit-demo"
         },
         {
           "text": "Easy CRM",
