@@ -28,3 +28,23 @@ Enter the username and password of the account you want to link and click the `L
 You can login with linked accounts or delete it from the `Linked accounts` modal.
 
 ![linkedaccountmodalaction](../../images/linkedaccountmodalaction.png)
+
+## Multi-tenancy
+
+Linked accounts can be used in multi-tenancy. You can link accounts from different tenants.
+
+Enter the tenant name to link the account from another tenant's account:
+
+![linkedaccountloginmulti-tenancy](../../images/linkedaccountloginmulti-tenancy.png)
+
+You can see and login with linked accounts from different tenants:
+
+![linkedaccountmodalactionmulti-tenancy](../../images/linkedaccountmodalactionmulti-tenancy.png)
+
+## Indirect link
+
+You can link accounts indirectly. For example, if account A is linked to account B and account B is linked to account C, account A is indirectly linked to account C. 
+
+You can see the indirect link in the `Linked accounts` modal:
+
+![linkedaccountmodalactionindirectlink](../../images/linkedaccountmodalactionindirectlink.png)

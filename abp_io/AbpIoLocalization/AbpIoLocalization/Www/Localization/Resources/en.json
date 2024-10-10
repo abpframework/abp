@@ -735,7 +735,7 @@
     "Layout_Title": "{0} | ABP Community",
     "Layout_MetaDescription": "A hub for ABP Framework, .NET, and software development. Access articles, tutorials, news, and contribute to the ABP community.",
     "Index_Page_CommunityIntroduction": "This is a hub for ABP Framework, .NET and software development. You can read the articles, watch the video tutorials, get informed about ABP’s development progress and ABP-related events, help other developers and share your expertise with the ABP community.",
-    "TagsInArticle": "Tags in article",
+    "TagsInArticle": "Tags in Article",
     "IConsentToMedium": "I consent to the publication of this post at https://medium.com/volosoft.",
     "SearchResultsFor": "Search results for <span class=\"fw-bold\">\"{0}\"</span>",
     "SeeMoreVideos": "See More Videos",
