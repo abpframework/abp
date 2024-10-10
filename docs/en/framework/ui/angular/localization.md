@@ -209,7 +209,7 @@ The localizations above can be used like this:
 
 As of v2.9 ABP has RTL support. If you are generating a new project with v2.9 and above, everything is set, you do not need to do any changes. If you are migrating your project from an earlier version, please follow the 2 steps below:
 
-#### Step 1. Create Chunks for Bootstrap LTR and RTL
+### Step 1. Create Chunks for Bootstrap LTR and RTL
 
 Find [styles configuration in angular.json](https://angular.io/guide/workspace-config#style-script-config) and make sure the chunks in your project has `bootstrap-rtl.min` and `bootstrap-ltr.min` as shown below.
 
@@ -251,7 +251,7 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
 }
 ```
 
-#### Step 2. Clear Lazy Loaded Fontawesome in AppComponent
+### Step 2. Clear Lazy Loaded Fontawesome in AppComponent
 
 If you have created and injected chunks for Fontawesome as seen above, you no longer need the lazy loading in the `AppComponent` which was implemented before v2.9. Simply remove them. The `AppComponent` in the template of the new version looks like this:
 
