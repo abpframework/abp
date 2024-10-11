@@ -79,23 +79,25 @@ public class PackageSourceManager : ITransientDependency
     {
         var packageMappingNodes = doc.SelectNodes("/configuration/packageSourceMapping");
 
-        if (packageMappingNodes != null && packageMappingNodes.Count != 0)
+        if (packageMappingNodes == null)
         {
-            var packageSourceNode = doc.CreateElement("packageSource");
-            var sourceAttr = doc.CreateAttribute("key");
-            sourceAttr.Value = sourceKey;
-            packageSourceNode.Attributes.Append(sourceAttr);
-            packageMappingNodes[0]?.AppendChild(packageSourceNode);
-            foreach (var pattern in packageMappingPatterns)
-            {
-                var packageNode = doc.CreateElement("package");
-                var patternAttr = doc.CreateAttribute("pattern");
-                patternAttr.Value = pattern;
-                packageNode.Attributes.Append(patternAttr);
-                packageSourceNode.AppendChild(packageNode);
-            }
+            // If there is no packageSourceMapping node, leave it as it is.
+            Logger.LogWarning($"<packageSourceMapping> node not found in 'NuGet.Config' file. Skipping adding patterns for '{sourceKey}' source.");
+            return;
         }
-        // If there is no packageSourceMapping node, leave it as it is.
+        var packageSourceNode = doc.CreateElement("packageSource");
+        var sourceAttr = doc.CreateAttribute("key");
+        sourceAttr.Value = sourceKey;
+        packageSourceNode.Attributes.Append(sourceAttr);
+        packageMappingNodes[0]?.AppendChild(packageSourceNode);
+        foreach (var pattern in packageMappingPatterns)
+        {
+            var packageNode = doc.CreateElement("package");
+            var patternAttr = doc.CreateAttribute("pattern");
+            patternAttr.Value = pattern;
+            packageNode.Attributes.Append(patternAttr);
+            packageSourceNode.AppendChild(packageNode);
+        }
     }
 
     public void Remove(string solutionFolder, string sourceKey)
