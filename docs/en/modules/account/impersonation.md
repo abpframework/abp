@@ -258,6 +258,20 @@ if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
 }
 ```
 
+Add `impersonation: { userImpersonation: true, tenantImpersonation: true}` object to `oAuthConfig` of `environment` if not exits.
+
+```js
+export const environment = {
+  //Other props..
+  oAuthConfig: {
+    //Other props..
+    impersonation: {
+      userImpersonation: true,
+      tenantImpersonation: true,
+    },
+  },
+```
+
 ### Blazor WASM
 
 It is currently not supported.
