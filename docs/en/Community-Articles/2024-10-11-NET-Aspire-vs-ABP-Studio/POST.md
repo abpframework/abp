@@ -54,6 +54,47 @@ Both of ABP Studio and .NET Aspire provide startup solution templates for new ap
 
 So, when you start with .NET Aspire project template, you will need to deal with a lot of work to make your solution production and enterprise ready. On the other hand, ABP Studio's solution templates are ready to lunch your system from the first day and they provide you a perfect starting point for your new business idea.
 
-### Monitoring
+### Monitoring & Application Running
 
 Monitoring applications and services is an important requirement for building complex distributed systems. Both of ABP Studio and .NET Aspire provide excellent tools for that purpose.
+
+* ABP Studio's [Solution Runner panel](https://abp.io/docs/latest/studio/running-applications) provides a powerful UI to run and monitor application and services. You can see all HTTP requests, distributed events, exceptions and detailed application logs, trace and find problems in your system. You can use its fully functional built-in browser to navigate application UIs easily. You can also create multiple profiles to group and configure the applications for different teams.
+* .NET Aspire's [dashboard](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/dashboard/overview) can be used to see the states of the running applications and containers, explore their console output, logs, traces and metrics to understand what is happing in your distributed system.
+
+Both tools are pretty useful for monitoring. In addition to monitoring, ABP Studio offers an advanced UI to control the running applications, build, start and stop individually or by a group of applications.
+
+### Architecting / Building Solutions
+
+One of the unique features of ABP Studio is that it is an architectural tool that helps you create the structure and architecture of your solution. You can create any kind of application, from single-layer simple web applications to layered multi-application solutions, from monolith modular to microservice systems. In the next section, I will briefly explains these architectural features.
+
+#### Building Modular Monolith Solutions
+
+With ABP Studio, you can create a new solution, create modules and establish relations (dependencies) between modules to architect your overall modular monolith system easily.
+
+Here, a screenshot where we are adding an existing package reference to the Products module of a modular CRM solution:
+
+![abp-studio-add-existing-package](abp-studio-add-existing-package.png)
+
+You can see the [Modular Application Development tutorial](https://abp.io/docs/latest/tutorials/modular-crm) to learn how to build such an application step by step.
+
+#### Building Microservice Solutions
+
+ABP Studio provides a full featured [microservice startup solution template](https://abp.io/docs/latest/solution-templates/microservice) and the fundamental tooling to build large-scale microservice systems.
+
+Here a screenshot that shows how to add new microservices, API gateways or web applications to a microservice solution:
+
+![abp-studio-add-new-microservice](abp-studio-add-new-microservice.png)
+
+### Kubernetes Integration
+
+Another great ABP Studio feature is [Kubernetes Integration](https://abp.io/docs/latest/studio/kubernetes).
+
+TODO: ...
+
+## The ABP Framework
+
+TODO: ...
+
+## Conclusion
+
+TODO: ...
