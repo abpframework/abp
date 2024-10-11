@@ -258,6 +258,28 @@ if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
 }
 ```
 
+Add `impersonation: { userImpersonation: true, tenantImpersonation: true}` object to `oAuthConfig` of `environment`.
+
+```cs
+export const environment = {
+  production: false,
+  application: {
+    baseUrl,
+    name: 'MyProjectName',
+  },
+  oAuthConfig: {
+    issuer: 'https://localhost:44305/',
+    clientId: 'MyProjectName_App',
+    scope: 'offline_access MyProjectName',
+    redirectUri: baseUrl,
+    // responseType: 'code',
+    impersonation: {
+      userImpersonation: true,
+      tenantImpersonation: true,
+    },
+  },
+```
+
 ### Blazor WASM
 
 It is currently not supported.
