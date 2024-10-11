@@ -258,21 +258,13 @@ if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
 }
 ```
 
-Add `impersonation: { userImpersonation: true, tenantImpersonation: true}` object to `oAuthConfig` of `environment`.
+Add `impersonation: { userImpersonation: true, tenantImpersonation: true}` object to `oAuthConfig` of `environment` if not exits.
 
-```cs
+```js
 export const environment = {
-  production: false,
-  application: {
-    baseUrl,
-    name: 'MyProjectName',
-  },
+  //Other props..
   oAuthConfig: {
-    issuer: 'https://localhost:44305/',
-    clientId: 'MyProjectName_App',
-    scope: 'offline_access MyProjectName',
-    redirectUri: baseUrl,
-    // responseType: 'code',
+    //Other props..
     impersonation: {
       userImpersonation: true,
       tenantImpersonation: true,
