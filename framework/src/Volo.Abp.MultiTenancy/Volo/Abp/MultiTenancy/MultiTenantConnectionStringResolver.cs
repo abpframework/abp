@@ -118,27 +118,25 @@ public class MultiTenantConnectionStringResolver : DefaultConnectionStringResolv
             return connString!;
         }
 
+        //Fallback to the mapped database for the specific connection string
+        var database = Options.Databases.GetMappedDatabaseOrNull(connectionStringName);
+        if (database != null && database.IsUsedByTenants)
+        {
+            connString = tenant.ConnectionStrings?.GetOrDefault(database.DatabaseName);
+            if (!connString.IsNullOrWhiteSpace())
+            {
+                //Found for the tenant
+                return connString!;
+            }
+        }
+
         //Fallback to tenant's default connection string if available
         if (!tenantDefaultConnectionString.IsNullOrWhiteSpace())
         {
             return tenantDefaultConnectionString!;
         }
 
-        //Try to find the specific connection string for given name
-        var connStringInOptions = Options.ConnectionStrings.GetOrDefault(connectionStringName);
-        if (!connStringInOptions.IsNullOrWhiteSpace())
-        {
-            return connStringInOptions!;
-        }
-
-        //Fallback to the global default connection string
-        var defaultConnectionString = Options.ConnectionStrings.Default;
-        if (!defaultConnectionString.IsNullOrWhiteSpace())
-        {
-            return defaultConnectionString!;
-        }
-
-        throw new AbpException("No connection string defined!");
+        return base.Resolve(connectionStringName);
     }
 
     protected virtual async Task<TenantConfiguration?> FindTenantConfigurationAsync(Guid tenantId)
