@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,7 +17,7 @@ public class PackageSourceManager : ITransientDependency
         Logger = NullLogger<PackageSourceManager>.Instance;
     }
 
-    public void Add(string solutionFolder, string sourceKey, string sourceValue)
+    public void Add(string solutionFolder, string sourceKey, string sourceValue, params string[] packageMappingPatterns)
     {
         var nugetConfigPath = GetNugetConfigPath(solutionFolder);
 
@@ -61,11 +62,52 @@ public class PackageSourceManager : ITransientDependency
 
             sourceNodes?[0]?.AppendChild(newNode);
 
+            if (packageMappingPatterns.Any())
+            {
+                ConfigurePackageSourceMappings(doc, sourceKey, packageMappingPatterns);
+            }
+
             File.WriteAllText(nugetConfigPath, doc.OuterXml);
         }
         catch
         {
             Logger.LogWarning($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources FAILED.");
+        }
+    }
+
+    protected virtual void ConfigurePackageSourceMappings(XmlDocument doc, string sourceKey, string[] packageMappingPatterns)
+    {
+        var packageMappingNodes = doc.SelectNodes("/configuration/packageSourceMapping");
+
+        if (packageMappingNodes == null || packageMappingNodes.Count == 0)
+        {
+            var packageSourcesNode = doc.SelectSingleNode("/configuration/packageSources");
+            var packageMappingNode = doc.CreateElement("packageSourceMapping");
+            foreach (var pattern in packageMappingPatterns)
+            {
+                var patternNode = doc.CreateElement("packageSource");
+                var patternAttr = doc.CreateAttribute("key");
+                patternAttr.Value = pattern;
+                patternNode.Attributes.Append(patternAttr);
+                packageMappingNode.AppendChild(patternNode);
+            }
+            packageSourcesNode?.ParentNode?.InsertAfter(packageMappingNode, packageSourcesNode);
+        }
+        else
+        {
+            var packageSourceNode = doc.CreateElement("packageSource");
+            var sourceAttr = doc.CreateAttribute("key");
+            sourceAttr.Value = sourceKey;
+            packageSourceNode.Attributes.Append(sourceAttr);
+            packageMappingNodes[0]?.AppendChild(packageSourceNode);
+            foreach (var pattern in packageMappingPatterns)
+            {
+                var packageNode = doc.CreateElement("package");
+                var patternAttr = doc.CreateAttribute("pattern");
+                patternAttr.Value = pattern;
+                packageNode.Attributes.Append(patternAttr);
+                packageSourceNode.AppendChild(packageNode);
+            }
         }
     }
 
