@@ -79,21 +79,7 @@ public class PackageSourceManager : ITransientDependency
     {
         var packageMappingNodes = doc.SelectNodes("/configuration/packageSourceMapping");
 
-        if (packageMappingNodes == null || packageMappingNodes.Count == 0)
-        {
-            var packageSourcesNode = doc.SelectSingleNode("/configuration/packageSources");
-            var packageMappingNode = doc.CreateElement("packageSourceMapping");
-            foreach (var pattern in packageMappingPatterns)
-            {
-                var patternNode = doc.CreateElement("packageSource");
-                var patternAttr = doc.CreateAttribute("key");
-                patternAttr.Value = pattern;
-                patternNode.Attributes.Append(patternAttr);
-                packageMappingNode.AppendChild(patternNode);
-            }
-            packageSourcesNode?.ParentNode?.InsertAfter(packageMappingNode, packageSourcesNode);
-        }
-        else
+        if (packageMappingNodes != null && packageMappingNodes.Count != 0)
         {
             var packageSourceNode = doc.CreateElement("packageSource");
             var sourceAttr = doc.CreateAttribute("key");
@@ -109,6 +95,7 @@ public class PackageSourceManager : ITransientDependency
                 packageSourceNode.AppendChild(packageNode);
             }
         }
+        // If there is no packageSourceMapping node, leave it as it is.
     }
 
     public void Remove(string solutionFolder, string sourceKey)
