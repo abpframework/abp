@@ -2,11 +2,13 @@
 
 In this article, I will compare [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/) by [ABP Studio](https://abp.io/docs/latest/studio) by explaining their similarities and differences.
 
+![cover](cover.png)
+
 ## Introduction
 
-While .NET Aspire and ABP Studio are tools for different purpose with different scope and they have different approaches to solve the problems, many developers still may confuse since they also have some similar functionalities and solves some common problems.
+While .NET Aspire and ABP Studio are tools for different purpose with different scope and they have different approaches to solve the problems, many developers still may confuse since they also have some similar functionalities and solves some common problems. 
 
-Let's start by briefly define what are .NET Aspire and ABP Studio.
+In this article, I will clarify all, and you will have a clear understanding of what are the similarities and differences of them. Let's start by briefly define what are .NET Aspire and ABP Studio.
 
 ### What is .NET Aspire?
 
