@@ -32,9 +32,7 @@
     <PackageReference Include="System.Linq.Queryable" />
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Nito.AsyncEx.Context" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="System.Threading.Tasks.Extensions" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net5.0'))" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1')) ">
     <PackageReference Include="System.ComponentModel.Annotations" />

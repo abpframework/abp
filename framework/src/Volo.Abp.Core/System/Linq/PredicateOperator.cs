@@ -213,12 +213,12 @@ public class ExpressionStarter<T>
     }
 #endif
 
-#if !(NET35 || WINDOWS_APP || NETSTANDARD || PORTABLE || PORTABLE40 || UAP)
-        /// <summary></summary>
-        public Func<T, bool> Compile(DebugInfoGenerator debugInfoGenerator) { return Predicate.Compile(debugInfoGenerator); }
+#if !(NET35 || WINDOWS_APP || NETSTANDARD || NET5_0 || PORTABLE || PORTABLE40 || UAP)
+    /// <summary></summary>
+    public Func<T, bool> Compile(DebugInfoGenerator debugInfoGenerator) { return Predicate.Compile(debugInfoGenerator); }
 
-        /// <summary></summary>
-        public Expression<Func<T, bool>> Update(Expression body, IEnumerable<ParameterExpression> parameters) { return Predicate.Update(body, parameters); }
+    /// <summary></summary>
+    public Expression<Func<T, bool>> Update(Expression body, IEnumerable<ParameterExpression> parameters) { return Predicate.Update(body, parameters); }
 #endif
 
     #endregion
