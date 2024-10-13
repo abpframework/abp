@@ -166,6 +166,7 @@
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="System.Text.Encodings.Web" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.1.24431.7" />
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />

@@ -30,7 +30,7 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
         Check.NotNullOrWhiteSpace(name, nameof(name));
         var key = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        var timeoutReleaser = await _localSyncObjects.LockAsync(key, timeout, cancellationToken);
+        var timeoutReleaser = await _localSyncObjects.LockAsync(key, timeout, cancellationToken).ConfigureAwait(false);
         if (!timeoutReleaser.EnteredSemaphore)
         {
             timeoutReleaser.Dispose();
