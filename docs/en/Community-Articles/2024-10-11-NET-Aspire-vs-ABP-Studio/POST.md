@@ -113,6 +113,15 @@ The following diagram shows ABP Platform components at a glance:
 
 So, when you use ABP Studio, you also take full power of the [open source ABP Framework](https://github.com/abpframework/abp) and other ABP Platform features.
 
+## ABP Platform and .NET Aspire Integration
+
+I have a good news to you. It is actually possible and pretty easy to make ABP Platform and .NET Aspire working together.
+
+You can check [@berkansasmaz](https://abp.io/community/members/berkansasmaz)'s great article: **[How to use .NET Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk)**.
+
 ## Conclusion
 
-TODO: ...
+Both .NET Aspire and ABP Studio serve distinct purposes, catering to different types of development environments. While .NET Aspire excels in simplifying cloud-native application setups and observability, ABP Studio provides a comprehensive framework for modular monoliths and microservice architectures with full-fledged enterprise level production-ready templates and integrated tools.
+
+As said in the previous section, it is also possible to [use them together](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk).
+
