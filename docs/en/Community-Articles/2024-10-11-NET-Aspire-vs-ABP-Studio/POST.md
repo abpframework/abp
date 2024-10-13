@@ -87,15 +87,31 @@ Here a screenshot that shows how to add new microservices, API gateways or web a
 
 ![abp-studio-add-new-microservice](abp-studio-add-new-microservice.png)
 
+.NET Aspire has not such a feature or plan to provide such an architectural solution building experience.
+
 ### Kubernetes Integration
 
-Another great ABP Studio feature is [Kubernetes Integration](https://abp.io/docs/latest/studio/kubernetes).
+Another great ABP Studio feature is [Kubernetes Integration](https://abp.io/docs/latest/studio/kubernetes). It allows you to develop your distributed / microservice solutions as integrated to [Kubernetes](https://kubernetes.io/).
 
-TODO: ...
+Here, a few tasks you can accomplish using ABP Studio's Kubernetes integration:
 
-## The ABP Framework
+* **Build docker images** of your applications and services
+* **Install and uninstall Helm charts** to your Kubernetes cluster
+* **Connect to internal services** of your Kubernetes cluster
+* **Monitor** services and applications that are running in your Kubernetes cluster
+* **Intercept traffic** of a service and redirect requests to your local machine. In that way, you can develop, test and run individual services or applications in your local computer that is **fully integrated** to other services and applications running in Kubernetes.
 
-TODO: ...
+ABP Studio's Kubernetes Integration makes microservice development so easy and comfortable. On the other hand, .NET Aspire has no such a Kubernetes integrated development experience.
+
+## The ABP Platform
+
+Until now, I directly compared ABP Studio and .NET Aspire features. .NET Aspire is directly built on .NET and ASP.NET Core. However, ABP Studio is not a standalone tool that is built on .NET and ASP.NET Core. It is built on the [ABP Platform](https://abp.io/) (which is built on .NET and ASP.NET Core).
+
+The following diagram shows ABP Platform components at a glance:
+
+![abp-overall-diagram](D:\Github\abp\docs\en\Community-Articles\2024-10-11-NET-Aspire-vs-ABP-Studio\abp-overall-diagram.png)
+
+So, when you use ABP Studio, you also take full power of the [open source ABP Framework](https://github.com/abpframework/abp) and other ABP Platform features.
 
 ## Conclusion
 
