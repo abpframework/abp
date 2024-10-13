@@ -109,7 +109,7 @@ Until now, I directly compared ABP Studio and .NET Aspire features. .NET Aspire 
 
 The following diagram shows ABP Platform components at a glance:
 
-![abp-overall-diagram](D:\Github\abp\docs\en\Community-Articles\2024-10-11-NET-Aspire-vs-ABP-Studio\abp-overall-diagram.png)
+![abp-overall-diagram](abp-overall-diagram.png)
 
 So, when you use ABP Studio, you also take full power of the [open source ABP Framework](https://github.com/abpframework/abp) and other ABP Platform features.
 
