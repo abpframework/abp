@@ -28,7 +28,7 @@ Here, a screenshot from the ABP Studio [Solution Runner panel](https://abp.io/do
 
 ## A Brief Comparison
 
-Before deep diving details, I want to show a **table of features** to compare ABP Studio and .NET aspire side by side:
+Before deep diving details, I want to show a **table of features** to compare ABP Studio and .NET Aspire side by side:
 
 ![abp-studio-vs-net-aspire-comparison-table](abp-studio-vs-dotnet-aspire-comparison-table.png)
 
