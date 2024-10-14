@@ -106,7 +106,7 @@ public class AbpUowActionFilter : IAsyncActionFilter, IAbpFilter, ITransientDepe
             {
                 await currentUow.SaveChangesAsync(cancellationToken);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await currentUow.RollbackAsync(cancellationToken);
                 throw;

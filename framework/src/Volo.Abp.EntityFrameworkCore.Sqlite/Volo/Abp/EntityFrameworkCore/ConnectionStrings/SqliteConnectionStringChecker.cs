@@ -24,7 +24,7 @@ public class SqliteConnectionStringChecker : IConnectionStringChecker, ITransien
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

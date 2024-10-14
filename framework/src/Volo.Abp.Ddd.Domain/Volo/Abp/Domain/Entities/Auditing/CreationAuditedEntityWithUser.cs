@@ -15,7 +15,7 @@ public abstract class CreationAuditedEntityWithUser<TUser> : CreationAuditedEnti
 }
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="ICreationAuditedObjectObject{TCreator}"/>.
+/// This class can be used to simplify implementing <see cref="ICreationAuditedObject{TCreator}"/>.
 /// </summary>
 /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
 /// <typeparam name="TUser">Type of the user</typeparam>

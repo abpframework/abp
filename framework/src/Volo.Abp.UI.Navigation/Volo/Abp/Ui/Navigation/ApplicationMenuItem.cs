@@ -125,7 +125,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
         GroupName = groupName;
         RequiredPermissionName = requiredPermissionName;
         StateCheckers = new List<ISimpleStateChecker<ApplicationMenuItem>>();
-        Items = new ApplicationMenuItemList();
+        Items = new ApplicationMenuItemList();        
     }
 
     /// <summary>

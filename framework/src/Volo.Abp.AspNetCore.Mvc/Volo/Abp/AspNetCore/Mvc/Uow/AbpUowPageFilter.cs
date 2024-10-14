@@ -112,7 +112,7 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
             {
                 await currentUow.SaveChangesAsync(cancellationToken);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await currentUow.RollbackAsync(cancellationToken);
                 throw;
