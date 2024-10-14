@@ -10,10 +10,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameDbContext))]
-    [Migration("20241002093338_Initial")]
+    [Migration("20241010092009_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -657,13 +657,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
                     b.Property<string>("Device")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -674,7 +667,6 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("ExtraProperties")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 

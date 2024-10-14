@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity;
 
-public class IdentitySession : AggregateRoot<Guid>, IMultiTenant
+public class IdentitySession : BasicAggregateRoot<Guid>, IHasExtraProperties, IMultiTenant
 {
     public virtual string SessionId { get; protected set; }
 
@@ -28,9 +31,12 @@ public class IdentitySession : AggregateRoot<Guid>, IMultiTenant
 
     public virtual DateTime? LastAccessed { get; protected set; }
 
+    public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
+
     protected IdentitySession()
     {
-
+        ExtraProperties = new ExtraPropertyDictionary();
+        this.SetDefaultsForExtraProperties();
     }
 
     public IdentitySession(
@@ -55,6 +61,17 @@ public class IdentitySession : AggregateRoot<Guid>, IMultiTenant
         IpAddresses = ipAddresses;
         SignedIn = signedIn;
         LastAccessed = lastAccessed;
+
+        ExtraProperties = new ExtraPropertyDictionary();
+        this.SetDefaultsForExtraProperties();
+    }
+
+    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        return ExtensibleObjectValidator.GetValidationErrors(
+            this,
+            validationContext
+        );
     }
 
     public void SetSignedInTime(DateTime signedIn)
