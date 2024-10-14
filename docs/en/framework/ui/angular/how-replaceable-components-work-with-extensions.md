@@ -18,7 +18,8 @@ Open the generated `src/app/my-roles/my-roles.component.ts` file and replace its
 
 ```js
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
-import { eIdentityComponents, IdentityRoleDto, IdentityRoleService, RolesComponent } from '@abp/ng.identity';
+import { eIdentityComponents, RolesComponent } from '@abp/ng.identity';
+import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import {
@@ -232,7 +233,7 @@ We have added the `abp-page-toolbar`, `abp-extensible-table`, and `abp-extensibl
 You should import the required modules for the `MyRolesComponent` to `MyRolesModule`. Open the `src/my-roles/my-roles.module.ts` file and replace the content with the following:
 
 ```js
-import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
+import { ExtensibleModule } from '@abp/ng.components/extensible';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { MyRolesComponent } from './my-roles.component';
@@ -240,13 +241,13 @@ import { PermissionManagementModule } from '@abp/ng.permission-management';
 
 @NgModule({
   declarations: [MyRolesComponent],
-  imports: [SharedModule, UiExtensionsModule, PermissionManagementModule],
+  imports: [SharedModule, ExtensibleModule, PermissionManagementModule],
   exports: [MyRolesComponent],
 })
 export class MyRolesModule {}
 ```
 
-- `UiExtensionsModule` imported to be able to use the extension components in your component.
+- `ExtensionsModule` imported to be able to use the extension components in your component.
 - `PermissionManagementModule` imported to be able to use the `abp-permission-*management` in your component.
 
 As the last step, it is needs to be replaced the `RolesComponent` with the `MyRolesComponent`. Open the `app.component.ts` and modify its content as shown below:

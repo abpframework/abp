@@ -132,7 +132,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Update all ABP related NuGet packages and NPM packages in a solution or project to the latest version.";
     }

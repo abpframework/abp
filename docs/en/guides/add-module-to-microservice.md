@@ -4,13 +4,13 @@
 
 ## Adding a module
 
-After adding a new service to your microservice template by following the [add new microservice guide](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/add-microservice.md), you can add any module to this service in your microservice solution by using the ABP CLI. Use the following command to add the preferred module under the newly added microservice directory:
+After adding a new service to your microservice template by following the [add new microservice guide](../solution-templates/microservice/adding-new-microservices.md), you can add any module to this service in your microservice solution by using the ABP CLI. Use the following command to add the preferred module under the newly added microservice directory:
 
 ```powershell
 abp add-module CmsKit
 ```
 
-> To complete the CmsKit module steps, please have a look [here](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Index).
+> To complete the CmsKit module steps, please have a look [here](../modules/cms-kit/index.md).
 
 After completing the module documentation steps you can build your solution and continue with this documentation.
 
@@ -20,7 +20,7 @@ dotnet build
 
 ## Using the static proxy
 
-ABP supports [dynamic](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies) and [static](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Static-JavaScript-Proxies) proxies. Both have advantages and disadvantages. By default, the static proxy is used in the microservice template to remove the coupling between services. The static proxy should be configured manually in the `HttpApiClientModule` of the microservice you have installed your module on as below:
+ABP supports [dynamic](../framework/ui/mvc-razor-pages/dynamic-javascript-proxies.md) and [static](../framework/ui/mvc-razor-pages/static-javascript-proxies.md) proxies. Both have advantages and disadvantages. By default, the static proxy is used in the microservice template to remove the coupling between services. The static proxy should be configured manually in the `HttpApiClientModule` of the microservice you have installed your module on as below:
 
 ```csharp
 public class ProductServiceHttpApiClientModule : AbpModule
@@ -45,9 +45,9 @@ If the proxy is configured as `AddStaticHttpClientProxies`, you can start creati
 abp generate-proxy --type csharp --module cms-kit --url https://localhost:44335
 ```
 
-> Note: This port is used by `Public-Web`. You can check your port from `launchSetting.json`. The Public Web calls the Public Web Gateway so it has called the related services and has generated proxy files. [For more](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/gateways#public-web-gateway) 
+> Note: This port is used by `Public-Web`. You can check your port from `launchSetting.json`. The Public Web calls the Public Web Gateway so it has called the related services and has generated proxy files. [For more](../solution-templates/microservice/api-gateways.md) 
 
-> If you have generated a new microservice with the ABP CLI by following the [add new microservice guide](https://docs.abp.io/en/commercial/latest/startup-templates/microservice/add-microservice.md), it should already be configured to use the static proxy.
+> If you have generated a new microservice with the ABP CLI by following the [add new microservice guide](../solution-templates/microservice/adding-new-microservices.md), it should already be configured to use the static proxy.
 
 ## Configure Gateways
 The microservice template project has two gateway projects.

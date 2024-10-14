@@ -286,6 +286,58 @@ var abp = abp || {};
                 });
             }
             
+            $permissionSearchInput = $('#permission-search');
+
+            $permissionSearchInput.keyup(throttle(function() {
+                var searchTerm = $permissionSearchInput.val().toLowerCase();
+                filterTabs(searchTerm);
+            }, 300));
+
+            function filterTabs(searchTerm) {
+                var $tabs = $('#PermissionsTabs .nav-link');
+                $tabs.each(function(i) {
+                    var $tabItem = $(this);
+                    var $tab = $tabItem.parent();
+
+                    if (!searchTerm) {
+                        $tab.show();
+                        return;
+                    }
+
+                    var tabName = $tabItem.find('small').text().toLowerCase();
+
+                    var tabContentFilters = $($tabItem.attr('href')).find('[data-filter-text]');
+                    let includedInTabContent = false;
+                    tabContentFilters.each(function(i) {
+                        var permissionName = $(this).attr('data-filter-text').toLowerCase();
+                        includedInTabContent = permissionName.includes(searchTerm);
+                        if (includedInTabContent === true) {
+                            return false;
+                        }
+                    });
+
+                    if(includedInTabContent || tabName.includes(searchTerm)) {
+                        $tab.show();
+                    } else {
+                        $tab.hide();
+                    }
+                });
+            }
+
+            function throttle(mainFunction, delay) {
+                let timerFlag = null; // Variable to keep track of the timer
+              
+                // Returning a throttled version 
+                return (...args) => {
+                  if (timerFlag === null) { // If there is no timer currently running
+                    mainFunction(...args); // Execute the main function 
+                    timerFlag = setTimeout(() => { // Set a timer to clear the timerFlag after the specified delay
+                      timerFlag = null; // Clear the timerFlag to allow the main function to be executed again
+                    }, delay);
+                  }
+                };
+              }
+
         };
     };
 })(jQuery);

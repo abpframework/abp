@@ -57,6 +57,7 @@ public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter,
                                           {
                                               options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
                                               options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
+                                              options.SendExceptionDataToClientTypes = ExceptionHandlingOptions.SendExceptionDataToClientTypes;
                                           }))
                                       ?? new List<RemoteServiceErrorInfo>();
 

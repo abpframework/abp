@@ -23,7 +23,7 @@
     "ThisFieldIsNotValid.": "A mező nem érvényes.",
     "ThisFieldIsNotAValidEmailAddress.": "A mező nem érvényes email cím.",
     "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "A mező csak fileneveket fogad a következő kiterjesztésekkel: {0}",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "A mezőnek szöveg vagy felsorolás tpusúnak kell lennie maximum '{0}' hosszal.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "Ez a mező legfeljebb '{0}' karakter hosszú lehet.",
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "A mezőnek szöveg vagy felsorolás tpusúnak kell lennie minimum '{0}' hosszal.",
     "ThisFieldIsNotAValidPhoneNumber.": "A mező nem érvényes telefonszám.",
     "ThisFieldMustBeBetween{0}And{1}": "A mező értéke {0} és {1} között kell lennie.",
@@ -31,8 +31,8 @@
     "ThisFieldMustBeLessOrEqual{0}": "Ennek a mezőnek kisebbnek vagy egyenlőnek kell lennie, mint {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "A mezőnek meg kell felelnie a következő reguláris kifejezésnek '{0}'.",
     "ThisFieldIsRequired.": "A mező szükséges.",
-    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "A mezőnek szöveg tpusúnak kell lennie maximum {0} hosszal.",
-    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "A mezőnek szöveget kell tartalmaznia minimum  {1} és maximum {0} hosszan.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Ez a mező legfeljebb '{0}' karakter hosszú lehet.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Ennek a mezőnek legalább {1} és legfeljebb {0} karakter hosszúnak kell lennie.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "A mező nem érvényes fully-qualified http, https, vagy ftp URL cím.",
     "ThisFieldIsInvalid.": "A mező nem érvényes."
   }

@@ -2,29 +2,46 @@
 
 ABP offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, pre-built application modules, UI themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
-### Why ABP Platform?
+The following pages outline why you should use the ABP Platform and how it is used:
 
-Wondering why you should use the ABP Platform instead of creating a new solution from scratch? [Continue reading here](./others/why-abp-platform.md).
+* [Why choose ABP?](https://abp.io/why-choose-abp)
+* [How it works?](https://abp.io/how-it-works)
+* [Return on investment](https://abp.io/return-on-investment)
 
 ## Get Started
 
-The [Getting Started](get-started) guide can be used to create and run ABP based solutions with different options and details. Then you can follow the [Todo Application Tutorial](tutorials/todo) to create your first application with ABP, or build a full-featured and real-life web application by following the [Book Store Application Tutorial](tutorials/book-store/part-01.md).
+The [Getting Started](get-started) guide can be used to create and run ABP based solutions with different options and details.
+
+After getting started, you can read the following documents:
+
+* [Todo Application Tutorial](tutorials/todo) to create your first ABP application.
+* [Book Store Application Tutorial](tutorials/book-store/part-01.md) to build a full-featured and real-life web application with ABP.
 
 ### UI Framework Options
 
-ABP can work with any UI framework, while the following frameworks are supported out of the box:
+ABP can work with any UI framework, while the following frameworks are supported and well-integrated out of the box:
 
-<img width="540" src="images/ui-options.png" alt="ui options">
+<img width="340" src="images/ui-options.png" alt="ui options">
 
 ### Database Provider Options
 
-ABP can work with any database provider, while the following providers are supported out of the box:
+ABP can work with any database provider, while the following providers are supported and well-integrated out of the box:
 
-<img width="540" src="images/db-options.png" alt="ABP Database Providers" />
+<img width="340" src="images/db-options.png" alt="ABP Database Providers" />
+
+## The ABP Platform
+
+ABP **bridges the gap** between ASP.NET Core and **real-world business application requirements**, allowing you to focus on your business code.
+
+The following diagram contains the core components of the **ABP Platform** and shows how ABP sits between **ASP.NET Core** and **Your Application**:
+
+![abp-overall-diagram-1600](images/abp-overall-diagram-1600.png)
 
 ## Exploring the Documentation
 
 ABP has a **comprehensive documentation** that not only explains ABP, but also includes **guides** and **samples** to help you on creating a **maintainable solution** by introducing and discussing common **software development principle and best practices**.
+
+The next sections highlight important ABP components and provides links to related documents.
 
 ### The Framework
 

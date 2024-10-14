@@ -2,6 +2,50 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.9.1 (2024-10-10)
+
+* Fixed the ABP Studio CLI's Bundle Command
+* Fixed the Public Web project for the Microservice Template
+* Removed the React Native for the Community Edition (open-source)
+* Added multiple gateway and UI selection option during microservice creation
+* Added External Logins item to user menu for the Blazor templates
+
+## 0.8.4 (2024-10-07)
+
+* Fixed the ABP Suite does not open problem for macOS
+* Made improvements on the new microservice creation
+* Allowed using browser shortcuts (copy, paste, new tab etc.) for macOS
+* Prevented application being crashed on solution runner exceptions
+* Included `WebApp.Client` project styles in the main application to enable CSS in Isolation
+
+## 0.8.3 (2024-09-24)
+
+* Allowed to set Execution Order (or dependency) from Solution Runner
+* Added Icons for the Solution Runner's Context Menu
+* Fixed MongoDB database issues for the Microservice Template
+* Allowed parallel running for background tasks
+
+## 0.8.2 (2024-09-19)
+
+* Fixed WireGuard connection random port bug
+* Automated steps after microservice solution creation
+* Fixed unusable options/features for Trial License
+* Fixed blazor-server single-layer template
+
+## 0.8.1 (2024-09-12)
+
+* Fixed MySQL connection problem for nolayers template
+* Ignored failed solution runner profiles while loading
+* Added required ModalBuilder extensions for the imported/installed modules for EF Core
+
+## 0.8.0 (2024-09-11)
+
+* Added `Blazor WebApp UI` to **app-nolayers** and **microservice** templates
+* Fixed version problem for bundle command
+* Fixed optional module integrations
+* Added **LeptonX Theme** to module-list
+* Fixed bug related to Kubernetes user-specified connection
+
 ## 0.7.9 (2024-08-29)
 
 * Opened Readme.md file after module creation or opening a solution
