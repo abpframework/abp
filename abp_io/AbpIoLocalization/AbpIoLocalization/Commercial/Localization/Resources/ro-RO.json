@@ -382,7 +382,7 @@
     "TrialLicenseExpireMessage": "Utilizați licența de probă și licența de probă va expira pe {0}.",
     "TryForFree": "Încearcă pe gratis",
     "TrialLicenseExpiredInfo": "Perioada de licență de probă a expirat!",
-    "CommercialNewsletterConfirmationMessage": "Sunt de acord cu <a href=\"https://commercial.abp.io/TermsConditions\">Termenii și condițiile</a> și cu <a href=\"https://commercial.abp.io/Privacy\">Politica de confidențialitate </a>.",
+    "CommercialNewsletterConfirmationMessage": "Sunt de acord cu <a href=\"https://abp.io/terms-conditions\">Termenii și condițiile</a> și cu <a href=\"https://abp.io/privacy\">Politica de confidențialitate </a>.",
     "BlackFridayDiscount": "Black Friday Discount",
     "MultipleOrganizationInfo": "Vedeți toate organizațiile dvs",
     "PaymentFailedInfo": "Ne pare rău, plata nu a reușit! ",

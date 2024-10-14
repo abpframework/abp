@@ -102,6 +102,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientD
         {
             options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+            options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
         });
 
         var remoteServiceErrorInfoBuilder = new StringBuilder();

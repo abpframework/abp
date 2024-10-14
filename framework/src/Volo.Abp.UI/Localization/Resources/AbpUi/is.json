@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Sýnir 0 til 0 af 0 færslum",
     "PagerInfoFiltered": "(síað úr _MAX_ heildar færslum)",
     "NoDataAvailableInDatatable": "Engar upplýsingar fáanlegar",
+    "ErrorLoadingDatatable": "Villa kom upp við beiðni. Athugaðu skilaboðin til að fá frekari upplýsingar.",
     "Total": "Samtals",
     "Selected": "valið",
     "PagerShowMenuEntries": "Sýna færslur _MENU_",

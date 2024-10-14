@@ -49,4 +49,9 @@ public class UiMessageOptions
     /// Custom icon for the Cancel button.
     /// </summary>
     public object? CancelButtonIcon { get; set; }
+
+    /// <summary>
+    /// Whether the message is html (true) or plain text (false)
+    /// </summary>
+    public bool IsMessageHtmlMarkup { get; set; }
 }

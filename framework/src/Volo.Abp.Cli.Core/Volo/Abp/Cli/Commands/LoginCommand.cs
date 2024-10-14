@@ -188,7 +188,7 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Sign in to " + CliUrls.AccountAbpIo + ".";
     }

@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "0 से 0 प्रविष्टियों को दिखा रहा है",
     "PagerInfoFiltered": "(_MAX_ कुल प्रविष्टियों से फ़िल्टर किया गया)",
     "NoDataAvailableInDatatable": "कोई डेटा उपलब्ध नहीं है",
+    "ErrorLoadingDatatable": "अनुरोध के दौरान एक त्रुटि हुई। विवरण के लिए संदेश देखें।",
     "Total": "संपूर्ण",
     "Selected": "चयनित",
     "PagerShowMenuEntries": "_MENU_ प्रविष्टियाँ दिखाएँ",

@@ -7,12 +7,11 @@ import { debounceTime } from 'rxjs/operators';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[default]',
-  standalone:true,
+  standalone: true,
   exportAs: 'ngxDatatableDefault',
 })
-export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
+export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {    
   private subscription = new Subscription();
-
   private resizeDiff = 0;
 
   @Input() class = 'material bordered';
@@ -22,7 +21,10 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
     return `ngx-datatable ${this.class}`;
   }
 
-  constructor(private table: DatatableComponent, @Inject(DOCUMENT) private document: MockDocument) {
+  constructor(
+    private table: DatatableComponent,
+    @Inject(DOCUMENT) private document: MockDocument,
+  ) {
     this.table.columnMode = ColumnMode.force;
     this.table.footerHeight = 50;
     this.table.headerHeight = 50;

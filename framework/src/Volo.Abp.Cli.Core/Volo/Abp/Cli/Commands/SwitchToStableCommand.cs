@@ -38,7 +38,7 @@ public class SwitchToStableCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Switches packages to stable ABP version from preview version.";
     }

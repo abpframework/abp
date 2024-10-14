@@ -137,7 +137,7 @@ public abstract class ProjectCreationCommandBase
             Logger.LogInformation("Public Web Site: yes");
         }
 
-        var mobileApp = GetMobilePreference(commandLineArgs);
+        var mobileApp = GetMobilePreference(commandLineArgs, template);
         if (mobileApp != MobileApp.None)
         {
             Logger.LogInformation($"Mobile App: {mobileApp}");
@@ -633,7 +633,7 @@ public abstract class ProjectCreationCommandBase
         }
     }
 
-    protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
+    protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs, string template)
     {
         var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
 
@@ -642,9 +642,9 @@ public abstract class ProjectCreationCommandBase
             case null:
             case "none":
                 return MobileApp.None;
-            case "react-native":
+            case "react-native" when template is AppProTemplate.TemplateName or MicroserviceProTemplate.TemplateName:
                 return MobileApp.ReactNative;
-            case "maui":
+            case "maui" when template is AppProTemplate.TemplateName or MicroserviceProTemplate.TemplateName:
                 return MobileApp.Maui;
             default:
                 throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Mobile App"));

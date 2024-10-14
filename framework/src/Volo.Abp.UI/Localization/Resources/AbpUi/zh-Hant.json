@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "顯示0個紀錄中的0到0",
     "PagerInfoFiltered": "(從 _MAX_ 所有紀錄中過濾掉)",
     "NoDataAvailableInDatatable": "資料表中沒有資料",
+    "ErrorLoadingDatatable": "請求過程中發生錯誤。檢查消息以獲取詳細信息。",
     "Total": "總共",
     "Selected": "已選擇",
     "PagerShowMenuEntries": "顯示 _MENU_ 實體",

@@ -19,7 +19,7 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
         _tokenStore = ServiceProvider.GetRequiredService<IOpenIddictTokenStore<OpenIddictTokenModel>>();
         _testData = ServiceProvider.GetRequiredService<AbpOpenIddictTestData>();
     }
-    
+
     [Fact]
     public async Task CountAsync()
     {
@@ -30,18 +30,18 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
     [Fact]
     public async Task CreateAsync()
     {
-        await _tokenStore.CreateAsync(new OpenIddictTokenModel 
+        await _tokenStore.CreateAsync(new OpenIddictTokenModel
         {
             ApplicationId = _testData.App1Id,
             Payload = "TestPayload3",
             Subject = "TestSubject3",
             Type = "TestType3",
             Status = OpenIddictConstants.Statuses.Inactive,
-            
+
         }, CancellationToken.None);
 
         var tokens = await _tokenStore.FindBySubjectAsync("TestSubject3", CancellationToken.None).ToListAsync();
-        
+
         tokens.Count.ShouldBe(1);
         var token = tokens.First();
         token.ApplicationId.ShouldBe(_testData.App1Id);
@@ -50,11 +50,12 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
         token.Type.ShouldBe("TestType3");
         token.Status.ShouldBe(OpenIddictConstants.Statuses.Inactive);
     }
-    
+
     [Fact]
     public async Task DeleteAsync()
     {
         var token = await _tokenStore.FindByIdAsync(_testData.Token1Id.ToString(), CancellationToken.None);
+        token.ShouldNotBeNull();
         await _tokenStore.DeleteAsync(token, CancellationToken.None);
 
         token = await _tokenStore.FindByIdAsync(_testData.Token1Id.ToString(), CancellationToken.None);
@@ -65,15 +66,15 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
     public async Task FindAsync_Should_Return_Empty_If_Not_Found()
     {
         var tokens = await _tokenStore.FindAsync("non_existing_subject", _testData.App1Id.ToString(), "non_existing_status", "non_existing_type", CancellationToken.None).ToListAsync();
-        
+
         tokens.Count.ShouldBe(0);
     }
-    
+
     [Fact]
     public async Task FindAsync_Should_Return_Tokens_If_Found()
     {
         var tokens = await _tokenStore.FindAsync("TestSubject1", _testData.App1Id.ToString(),OpenIddictConstants.Statuses.Redeemed, "TestType1", CancellationToken.None).ToListAsync();
-        
+
         tokens.Count.ShouldBe(1);
     }
 
@@ -81,15 +82,15 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
     public async Task FindByApplicationIdAsync_Should_Return_Empty_If_Not_Found()
     {
         var tokens = await _tokenStore.FindByApplicationIdAsync(Guid.NewGuid().ToString(), CancellationToken.None).ToListAsync();
-        
+
         tokens.Count.ShouldBe(0);
     }
-    
+
     [Fact]
     public async Task FindByApplicationIdAsync_Should_Return_Tokens_If_Found()
     {
         var tokens = await _tokenStore.FindByApplicationIdAsync(_testData.App1Id.ToString(), CancellationToken.None).ToListAsync();
-        
+
         tokens.Count.ShouldBe(1);
     }
 
@@ -121,7 +122,7 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
         var token = await _tokenStore.FindByReferenceIdAsync(Guid.NewGuid().ToString(), CancellationToken.None);
         token.ShouldBeNull();
     }
-    
+
     [Fact]
     public async Task FindByReferenceIdAsync_Should_Return_Token_If_Found()
     {
@@ -145,7 +146,7 @@ public class AbpOpenIddictTokenStore_Tests : OpenIddictDomainTestBase
 
         await _tokenStore.UpdateAsync(token, CancellationToken.None);
         token = await _tokenStore.FindByIdAsync(_testData.Token1Id.ToString(), CancellationToken.None);
-        
+
         token.ApplicationId.ShouldBe(_testData.App2Id);
         token.Payload.ShouldBe("New payload");
         token.Subject.ShouldBe("New subject");

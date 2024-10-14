@@ -2,13 +2,11 @@
 
 This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. To see raw and detailed change logs for every release, please check <a href="https://github.com/abpframework/abp/milestones?state=closed" target="_blank">the related milestone</a> and [the change logs page](https://abp.io/pro-releases) (only for paid license holders).
 
-> If you want to read detailed release posts for each version, please see the [official ABP blog](https://abp.io/blog).
+> If you want to read the release notes for each ABP Studio release, check it out from [here](../studio/release-notes.md).
 
-## 8.3.0-rc.1 (2024-07-31)
+## 8.3 (2024-09-05)
 
-> This version is currently in preview. The final release date is planned for August, 2024.
-
-See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-3-release-candidate)** for the v8.3 release.
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-3-stable-release)** for the v8.3 release.
 
 * CMS Kit: Marked Items & Approvement System for Commenting Feature
 * Enhancements on the Docs Module (Google Translation support & new single project mode)

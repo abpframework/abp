@@ -80,7 +80,22 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         }
 
         // Retrieve the profile of the logged in user.
-        var dynamicPrincipal = await AbpClaimsPrincipalFactory.CreateDynamicAsync(result.Principal);
+        var dynamicPrincipal = result.Principal;
+        if (AbpClaimsPrincipalFactoryOptions.Value.IsDynamicClaimsEnabled)
+        {
+            dynamicPrincipal = await AbpClaimsPrincipalFactory.CreateDynamicAsync(dynamicPrincipal);
+            if (dynamicPrincipal == null)
+            {
+                return Challenge(
+                    authenticationSchemes: IdentityConstants.ApplicationScheme,
+                    properties: new AuthenticationProperties
+                    {
+                        RedirectUri = Request.PathBase + Request.Path + QueryString.Create(
+                            Request.HasFormContentType ? Request.Form.ToList() : Request.Query.ToList())
+                    });
+            }
+        }
+
         var user = await UserManager.GetUserAsync(dynamicPrincipal);
         if (user == null)
         {

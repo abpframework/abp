@@ -1,6 +1,6 @@
 FROM node:16 AS nodebase
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
 COPY --from=nodebase /usr/local/bin /usr/local/bin
 COPY --from=nodebase /usr/local/lib /usr/local/lib
@@ -14,7 +14,7 @@ WORKDIR /app/abp/modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.D
 RUN abp install-libs
 RUN dotnet publish -c Release -o bin/Release/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 EXPOSE 80
 ENV ASPNETCORE_URLS=http://+:80
