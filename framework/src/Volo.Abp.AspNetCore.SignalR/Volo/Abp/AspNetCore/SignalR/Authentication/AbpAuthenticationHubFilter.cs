@@ -34,17 +34,6 @@ public class AbpAuthenticationHubFilter : IHubFilter
         }
     }
 
-    public virtual async Task OnDisconnectedAsync(HubLifetimeContext context, Exception? exception, Func<HubLifetimeContext, Exception?, Task> next)
-    {
-        var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        var claimsPrincipal = context.Context.User;
-        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, context.ServiceProvider, context.Context, true);
-        using (currentPrincipalAccessor.Change(claimsPrincipal!))
-        {
-            await next(context, exception);
-        }
-    }
-
     protected virtual async Task HandleDynamicClaimsPrincipalAsync(ClaimsPrincipal? claimsPrincipal, IServiceProvider serviceProvider, HubCallerContext hubCallerContext, bool skipCheckDynamicClaimsInterval)
     {
         if (claimsPrincipal?.Identity != null &&
