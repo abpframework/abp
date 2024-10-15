@@ -16,6 +16,7 @@
     <RootNamespace />
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Backport.System.Threading.Lock" />
     <PackageReference Include="System.Collections.Immutable" />
     <PackageReference Include="Microsoft.Extensions.Localization" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
@@ -33,9 +34,6 @@
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Nito.AsyncEx.Context" />
   </ItemGroup>
-  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net9.0'))">
-    <PackageReference Include="Backport.System.Threading.Lock" />  
-  </ItemGroup>  
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETStandard' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1')) ">
     <PackageReference Include="System.ComponentModel.Annotations" />
   </ItemGroup>
