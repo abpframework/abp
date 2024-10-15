@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.HttpApi",
-  "hash": "26ffc9a7630f4d5dddf4eea1ac4c51cc",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs",
@@ -62,6 +62,228 @@
       ],
       "contentType": "abpModule",
       "name": "DocsHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/docs/projects",
+          "method": "GET",
+          "groupName": "DocsProject",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Docs.Projects.ProjectDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/docs/projects/{shortName}",
+          "method": "GET",
+          "groupName": "DocsProject",
+          "responseType": "Volo.Docs.Projects.ProjectDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "shortName",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/projects/{shortName}/defaultLanguage",
+          "method": "GET",
+          "groupName": "DocsProject",
+          "responseType": "System.String",
+          "responseTypeAsJson": "\"string\"",
+          "parameterDescriptions": [
+            {
+              "name": "shortName",
+              "type": "String"
+            },
+            {
+              "name": "version",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/projects/{shortName}/versions",
+          "method": "GET",
+          "groupName": "DocsProject",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Docs.Projects.VersionInfoDto]",
+          "responseTypeAsJson": "{\r\n  \"items\": [\r\n    {\r\n      \"displayName\": \"string\",\r\n      \"name\": \"string\"\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "shortName",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/projects/{shortName}/{version}/languageList",
+          "method": "GET",
+          "groupName": "DocsProject",
+          "responseType": "Volo.Docs.Documents.LanguageConfig",
+          "responseTypeAsJson": "{\r\n  \"languages\": [\r\n    {\r\n      \"displayName\": \"string\",\r\n      \"code\": \"string\",\r\n      \"isDefault\": false\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "shortName",
+              "type": "String"
+            },
+            {
+              "name": "version",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "Volo.Docs.Documents.DocumentWithDetailsDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Guid"
+            },
+            {
+              "name": "Name",
+              "type": "String"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents/default",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "Volo.Docs.Documents.DocumentWithDetailsDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Guid"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents/navigation",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "Volo.Docs.Documents.NavigationNode",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Guid"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents/resource",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "Volo.Docs.Documents.DocumentResourceDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Guid"
+            },
+            {
+              "name": "Name",
+              "type": "String"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents/search",
+          "method": "POST",
+          "groupName": "DocsDocument",
+          "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Docs.Documents.DocumentSearchOutput]",
+          "responseTypeAsJson": "{\r\n  \"totalCount\": 0,\r\n  \"items\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"fileName\": \"string\",\r\n      \"version\": \"string\",\r\n      \"languageCode\": \"string\",\r\n      \"highlight\": [\r\n        \"string\"\r\n      ]\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "DocumentSearchInput"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents/full-search-enabled",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "System.Boolean",
+          "responseTypeAsJson": "true",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/docs/documents/links",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "System.Collections.Generic.List`1[System.String]",
+          "responseTypeAsJson": "[\r\n  \"string\"\r\n]",
+          "parameterDescriptions": [
+            {
+              "name": "prefix",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/docs/documents/parameters",
+          "method": "GET",
+          "groupName": "DocsDocument",
+          "responseType": "Volo.Docs.Documents.DocumentParametersDto",
+          "responseTypeAsJson": "{\r\n  \"parameters\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"displayName\": \"string\",\r\n      \"values\": {\r\n        \"string\": \"string\"\r\n      }\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Guid"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

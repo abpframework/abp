@@ -38,7 +38,7 @@ public class SwitchToNightlyCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Switches packages to nightly preview ABP version.";
     }

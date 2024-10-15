@@ -15,6 +15,7 @@
     "TestEmailSubject": "Teszt e-mail {0}",
     "TestEmailBody": "Itt tesztelheti az e-mail törzsüzenetét",
     "SuccessfullySent": "Sikeresen elküldve",
+    "MailSendingFailed": "Az e-mail küldése sikertelen, ellenőrizze az e-mail konfigurációját, és próbálja újra.",
     "Send": "Küld",
     "Menu:Emailing": "E-mailezés",
     "Menu:TimeZone": "Időzóna",

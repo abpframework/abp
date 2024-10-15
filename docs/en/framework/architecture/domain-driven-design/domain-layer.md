@@ -1,4 +1,4 @@
-## Domain Driven Design: Domain Layer
+# Domain Driven Design: Domain Layer
 
 Domain Layer contains business objects and the core (domain) business rules of the application and it's the heart of the application. Here, is the list of building blocks of the Domain Layer:
 

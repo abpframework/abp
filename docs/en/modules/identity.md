@@ -252,7 +252,7 @@ Following custom repositories are defined for this module:
 
 ##### Claim type manager
 
-`IdenityClaimTypeManager` is used to perform some operations for the `IdentityClaimType` aggregate root.
+`IdentityClaimTypeManager` is used to perform some operations for the `IdentityClaimType` aggregate root.
 
 ##### Organization unit manager
 

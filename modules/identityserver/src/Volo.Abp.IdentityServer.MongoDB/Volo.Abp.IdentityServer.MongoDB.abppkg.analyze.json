@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.MongoDB",
-  "hash": "78375f5eb62811a80c4e7897e2f327df",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.MongoDB",
@@ -71,37 +71,37 @@
         {
           "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerApiResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerClients",
+          "name": "ApiResources",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
           "contentType": "databaseCollection",
-          "name": "IdentityServerApiScopes",
+          "name": "ApiScopes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
+          "contentType": "databaseCollection",
+          "name": "Clients",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
           "contentType": "databaseCollection",
-          "name": "IdentityServerIdentityResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
-          "contentType": "databaseCollection",
-          "name": "IdentityServerDeviceFlowCodes",
+          "name": "IdentityResources",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
           "contentType": "databaseCollection",
-          "name": "IdentityServerPersistedGrants",
+          "name": "PersistedGrants",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
+          "contentType": "databaseCollection",
+          "name": "DeviceFlowCodes",
           "summary": null
         }
       ],

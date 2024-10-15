@@ -52,7 +52,7 @@ public class ClearDownloadCacheCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Clears the templates download cache.";
     }

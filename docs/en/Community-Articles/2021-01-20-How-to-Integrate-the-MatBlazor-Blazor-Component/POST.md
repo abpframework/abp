@@ -1,4 +1,4 @@
-## Using MatBlazor UI Components With the ABP Framework
+# Using MatBlazor UI Components With the ABP Framework
 
 Hi, in this step by step article, I will show you how to integrate [MatBlazor](https://www.matblazor.com/), a blazor UI components into ABP Framework-based applications.
 

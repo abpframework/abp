@@ -70,6 +70,7 @@ Here, is the list of all available commands before explaining their details:
 * **`clear-download-cache`**: Clears the templates download cache.
 * **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
 * **`install-old-cli`**: Installs old ABP CLI.
+* **`generate-razor-page`**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 
 ### help
 
@@ -140,10 +141,10 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
       * `angular`: Angular UI. There are some additional options for this template:
         * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
-        * `--pwa`: Specifies the project as Progressive Web Application.
+        * `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
         * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
-        * `--pwa`: Specifies the project as Progressive Web Application.
+        * `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
       * `blazor-server`: Blazor Server UI. There are some additional options for this template:
         * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project. (*Available for* ***Team*** *or higher licenses*)
       * `maui-blazor`: Blazor Maui UI (*Available for* ***Team*** *or higher licenses*). There are some additional options for this template:
@@ -152,14 +153,18 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       * `none`: Without any mobile application.
-      * `react-native`: React Native.
+      * `react-native`: React Native. This mobile option is only available for active **license owners**.
       * `maui`: MAUI. This mobile option is only available for ABP. (*Available for* ***Team*** *or higher licenses*)
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
     * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
+    * `--skip-migrations` or `-sm`: Skips the creating initial database migration step.
+    * `--skip-migrator` or `-smr`: Skips the run database migrator step.
     * `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
+        * `--without-cms-kit`: When you add a public website to your solution, it automatically includes the [CmsKit](./../modules/cms-kit-pro/index.md) module. If you don't want to include *CmsKit*, you can use this parameter.
     * `--separate-tenant-schema`: Creates a different DbContext for tenant schema. If not specified, the tenant schema is shared with the host schema. This option is only included in PRO templates.
+    * `--sample-crud-page` or `-scp`: It adds the [BookStore](./../tutorials/book-store/index.md) sample to your solution.
     * `--theme` or `-th`: Specifes the theme. Default theme is `leptonx`. Available themes:
         * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
         * `leptonx-lite`: LeptonX-Lite Theme.
@@ -176,6 +181,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
     * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](../framework/data/entity-framework-core/other-dbms.md) (after creating the solution).
+    * `--skip-migrations` or `-sm`: Skips the creating initial database migration step.
+    * `--skip-migrator` or `-smr`: Skips the run database migrator step.
+    * `--sample-crud-page` or `-scp`: It adds the [BookStore](./../tutorials/book-store/index.md) sample to your solution.
     * `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
       * `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
       * `leptonx-lite`: LeptonX-Lite Theme.
@@ -213,6 +221,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 * `--dont-run-install-libs`: Skip installing client side packages.
 * `--dont-run-bundling`: Skip bundling for Blazor packages.
 * `--no-kubernetes-configuration` or `-nkc`: Skips the Kubernetes configuration files.
+* `--no-social-logins` or `-nsl`: Skipts the social login configuration.
 * *Module Options*: You can skip some modules if you don't want to add them to your solution (*Available for* ***Team*** *or higher licenses*). Available commands:
   * `-no-saas`: Skips the Saas module.
   * `-no-gdpr`: Skips the GDPR module.
@@ -796,12 +805,19 @@ Examples:
 
 ````bash
 abp upgrade -t app
+abp upgrade -t app --language-management --gdpr --audit-logging-ui --text-template-management --openiddict-pro
+abp upgrade -t app-nolayers --audit-logging-ui
 abp upgrade -t app-nolayers -p D:\MyProjects\MyProject
 ````
 
 #### Options
 
 * `--path` or `-p`: Specifies the module path. The module should be in that directory. If not specified, the default is the current directory.
+* `--gdpr`: Installs GDPR module too.
+* `--language-management`: Installs Language Management module too.
+* `--audit-logging-ui`: Installs Audit Logging Pro (UI) module too.
+* `--text-template-management`: Installs Text Template Management module too.
+* `--openiddict-pro`: Installs OpenIddict Pro (UI) module too.
 
 ### translate
 
@@ -909,6 +925,7 @@ abp bundle [options]
 * ```--project-type``` or ```-t```: Specifies the project type. Default type is `webassembly`. Available types:
   * `webassembly`
   * `maui-blazor`
+* `--version` or `-v`: Specifies the ABP Framework version that the project is using. This is helpful for those who use central package management.
 
 `bundle` command reads the `appsettings.json` file inside the Blazor and MAUI Blazor project for bundling options. For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../framework/ui/blazor/global-scripts-styles.md)
 
@@ -947,6 +964,118 @@ Usage:
 ```bash
 abp install-old-cli [options]
 ```
+
+### generate-razor-page
+
+`generate-razor-page` command to generate a page class and then use it in the ASP NET Core pipeline to return an HTML page.
+
+Usage:
+
+1. Create a new `Razor Page(MyPage.cshtml)` that inherits from `AbpCompilationRazorPageBase` in `Views` folder.
+2. Create a `MyPageModel` class in the same folder.
+3. Create a `MyPage.js` and `MyPage.css` files in the same folder.
+4. Add the following code to the `MyPage.cshtml`, `MyPage.css` and `MyPage.js` files.
+
+```cs
+public class MyPageModel
+{
+    public string Message { get; set; }
+
+    public MyPageModel(string message)
+    {
+        Message = message;
+    }
+}
+```
+
+```cs
+@using System.Globalization
+@using Volo.Abp.AspNetCore.RazorViews
+@inherits AbpCompilationRazorPageBase
+@{
+    Response.ContentType = "text/html; charset=utf-8";
+    Response.StatusCode = 200;
+}
+
+@functions{
+    public MyPage(MyPageModel model)
+    {
+        Model = model;
+    }
+
+    public MyPageModel Model { get; set; }
+}
+
+<html lang="@HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            <%$ include: MyPage.css %>
+        </style>
+        <title>@HtmlEncoder.Encode(Model.Message)</title>
+    </head>
+    <body>
+        <h3>@HtmlEncoder.Encode(Model.Message)</h3>
+
+        <ul class="list-group">
+            @for(int i = 0; i < 10; i++)
+            {
+                <li class="list-group-item">@i item</li>
+            }
+        </ul>
+
+        <script>
+            //<!--
+            <%$ include: MyPage.js %>
+            //-->
+        </script>
+    </body>
+</html>
+```
+
+```css
+body {
+    background-color: #65b2ff;
+    color: #495057;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+```
+
+```js
+console.log('MyPage.js loaded!');
+```
+
+5. Finally, run the `generate-razor-page` command under the `Views` folder:
+
+```bash
+> abp generate-razor-page
+
+Generating code files for pages in /MyProject/Views
+  Generating code file for page MyPage.cshtml ...
+    Inlining file MyPage.css
+    Inlining file MyPage.js
+    Done!
+1 files successfully generated.
+```
+
+The output will be like in the above command output, and `MyPage.Designer.cs` file will be created in the same folder. It's a standard C# class that you can use it in the pipeline to return an HTML page:
+
+```cs
+app.Use(async (httpContext, next) =>
+{
+    if (true) // Your condition
+    {
+        var page = new MyPage(new MyPageModel("Test message"));
+        await page.ExecuteAsync(httpContext);
+    }
+    else
+    {
+        await next();
+    }
+});
+```
+
+![Razor Page](./../images/abp-generate-razor-page.png)
 
 #### Options
 

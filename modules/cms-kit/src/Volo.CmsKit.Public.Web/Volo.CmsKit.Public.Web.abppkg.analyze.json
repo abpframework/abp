@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Web",
-  "hash": "a7ba6e8a7c5cd8f816a4fe9e11d41a02",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public.Web",
@@ -62,6 +62,30 @@
       ],
       "contentType": "abpModule",
       "name": "CmsKitPublicWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Pages",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "BlogPostModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Web.Pages.Public.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Modals.Login",
+      "contentType": "webPage",
+      "name": "LoginModalModel",
       "summary": null
     }
   ]

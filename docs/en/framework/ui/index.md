@@ -1,4 +1,4 @@
-## ABP UI Options
+# ABP UI Options
 
 ABP provides several options for building the user interface (UI) in your applications. Here are some of the officially supported UI options you can use with ABP:
 

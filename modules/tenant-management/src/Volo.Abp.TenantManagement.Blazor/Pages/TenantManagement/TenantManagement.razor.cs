@@ -87,7 +87,7 @@ public partial class TenantManagement
                         Clicked = async (data) =>
                         {
                             var tenant = data.As<TenantDto>();
-                            await FeatureManagementModal.OpenAsync(FeatureProviderName, tenant.Id.ToString());
+                            await FeatureManagementModal.OpenAsync(FeatureProviderName, tenant.Id.ToString(), tenant.Name);
                         }
                     },
                     new EntityAction

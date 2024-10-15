@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Application",
-  "hash": "688edf873e866db07c39a080b1d040f4",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
@@ -178,6 +178,7 @@
       "methods": [
         {
           "returnType": "TenantDto",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -194,6 +195,7 @@
         },
         {
           "returnType": "PagedResultDto<TenantDto>",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -210,6 +212,7 @@
         },
         {
           "returnType": "TenantDto",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -226,6 +229,7 @@
         },
         {
           "returnType": "TenantDto",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -247,6 +251,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -263,6 +268,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "GetDefaultConnectionStringAsync",
           "summary": null,
           "isAsync": true,
@@ -279,6 +285,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "UpdateDefaultConnectionStringAsync",
           "summary": null,
           "isAsync": true,
@@ -300,6 +307,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.TenantManagement",
           "name": "DeleteDefaultConnectionStringAsync",
           "summary": null,
           "isAsync": true,

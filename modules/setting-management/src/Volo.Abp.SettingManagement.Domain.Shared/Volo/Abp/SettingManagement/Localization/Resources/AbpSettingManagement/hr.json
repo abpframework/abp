@@ -15,6 +15,7 @@
     "TestEmailSubject": "Probna e-pošta {0}",
     "TestEmailBody": "Testirajte tijelo poruke e-pošte ovdje",
     "SuccessfullySent": "Uspješno poslano",
+    "MailSendingFailed": "Slanje e-pošte nije uspjelo, provjerite konfiguraciju e-pošte i pokušajte ponovo.",
     "Send": "Poslati",
     "Menu:Emailing": "Slanje e-poštom",
     "Menu:TimeZone": "Vremenska Zona",

@@ -36,7 +36,7 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
     protected ConcurrentQueue<QueueBindCommand> QueueBindCommands { get; }
 
-    protected Lock ChannelSendSyncLock { get; } = new Lock();
+    protected Lock ChannelSendSyncLock { get; } = LockFactory.Create();
 
     public RabbitMqMessageConsumer(
         IConnectionPool connectionPool,
@@ -90,8 +90,7 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                     return;
                 }
 
-                ChannelSendSyncLock.Enter();
-                try
+                lock (ChannelSendSyncLock)
                 {
                     if (QueueBindCommands.TryPeek(out var command))
                     {
@@ -117,10 +116,6 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
                         QueueBindCommands.TryDequeue(out command);
                     }
-                }
-                finally
-                {
-                    ChannelSendSyncLock.Exit();
                 }
             }
         }

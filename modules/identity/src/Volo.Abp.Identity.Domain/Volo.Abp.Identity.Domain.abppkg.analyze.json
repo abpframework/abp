@@ -296,6 +296,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -492,6 +493,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddClaim",
           "summary": null,
           "isAsync": false,
@@ -513,6 +515,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddClaims",
           "summary": null,
           "isAsync": false,
@@ -534,6 +537,7 @@
         },
         {
           "returnType": "IdentityRoleClaim",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindClaim",
           "summary": null,
           "isAsync": false,
@@ -550,6 +554,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveClaim",
           "summary": null,
           "isAsync": false,
@@ -566,6 +571,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "ChangeName",
           "summary": null,
           "isAsync": false,
@@ -582,6 +588,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "ToString",
           "summary": null,
           "isAsync": false,
@@ -778,6 +785,170 @@
     },
     {
       "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "SetSignedInTime",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "signedIn",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "UpdateLastAccessedTime",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<DateTime>",
+              "name": "lastAccessed",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "SetIpAddresses",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<String>",
+              "name": "ipAddresses",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IEnumerable<String>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetIpAddresses",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        }
+      ],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.String",
+          "name": "SessionId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Device",
+          "summary": "Web, Mobile ..."
+        },
+        {
+          "type": "System.String",
+          "name": "DeviceInfo",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "ClientId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "IpAddresses",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "SignedIn",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.DateTime]",
+          "name": "LastAccessed",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "IdentitySession",
+      "summary": null
+    },
+    {
+      "baseClass": {
         "name": "FullAuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
         "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -908,6 +1079,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddRole",
           "summary": null,
           "isAsync": false,
@@ -924,6 +1096,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveRole",
           "summary": null,
           "isAsync": false,
@@ -940,6 +1113,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsInRole",
           "summary": null,
           "isAsync": false,
@@ -956,6 +1130,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddClaim",
           "summary": null,
           "isAsync": false,
@@ -977,6 +1152,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddClaims",
           "summary": null,
           "isAsync": false,
@@ -998,6 +1174,7 @@
         },
         {
           "returnType": "IdentityUserClaim",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindClaim",
           "summary": null,
           "isAsync": false,
@@ -1014,6 +1191,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "ReplaceClaim",
           "summary": null,
           "isAsync": false,
@@ -1035,6 +1213,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveClaims",
           "summary": null,
           "isAsync": false,
@@ -1051,6 +1230,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveClaim",
           "summary": null,
           "isAsync": false,
@@ -1067,6 +1247,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddLogin",
           "summary": null,
           "isAsync": false,
@@ -1083,6 +1264,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveLogin",
           "summary": null,
           "isAsync": false,
@@ -1104,6 +1286,7 @@
         },
         {
           "returnType": "IdentityUserToken",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindToken",
           "summary": null,
           "isAsync": false,
@@ -1125,6 +1308,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetToken",
           "summary": null,
           "isAsync": false,
@@ -1151,6 +1335,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveToken",
           "summary": null,
           "isAsync": false,
@@ -1172,6 +1357,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddOrganizationUnit",
           "summary": null,
           "isAsync": false,
@@ -1188,6 +1374,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveOrganizationUnit",
           "summary": null,
           "isAsync": false,
@@ -1204,6 +1391,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsInOrganizationUnit",
           "summary": null,
           "isAsync": false,
@@ -1220,6 +1408,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetEmailConfirmed",
           "summary": null,
           "isAsync": false,
@@ -1236,6 +1425,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetPhoneNumberConfirmed",
           "summary": null,
           "isAsync": false,
@@ -1252,6 +1442,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetPhoneNumber",
           "summary": null,
           "isAsync": false,
@@ -1273,6 +1464,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetIsActive",
           "summary": null,
           "isAsync": false,
@@ -1289,6 +1481,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetShouldChangePasswordOnNextLogin",
           "summary": null,
           "isAsync": false,
@@ -1305,6 +1498,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetLastPasswordChangeTime",
           "summary": null,
           "isAsync": false,
@@ -1321,6 +1515,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "ToString",
           "summary": null,
           "isAsync": false,
@@ -1708,6 +1903,7 @@
       "methods": [
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "CreateCode",
           "summary": null,
           "isAsync": false,
@@ -1724,6 +1920,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "AppendCode",
           "summary": null,
           "isAsync": false,
@@ -1745,6 +1942,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetRelativeCode",
           "summary": null,
           "isAsync": false,
@@ -1766,6 +1964,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "CalculateNextCode",
           "summary": null,
           "isAsync": false,
@@ -1782,6 +1981,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetLastUnitCode",
           "summary": null,
           "isAsync": false,
@@ -1798,6 +1998,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetParentCode",
           "summary": null,
           "isAsync": false,
@@ -1814,6 +2015,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddRole",
           "summary": null,
           "isAsync": false,
@@ -1830,6 +2032,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveRole",
           "summary": null,
           "isAsync": false,
@@ -1846,6 +2049,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsInRole",
           "summary": null,
           "isAsync": false,
@@ -1919,6 +2123,7 @@
       "methods": [
         {
           "returnType": "IdentityClaimType",
+          "namespace": "Volo.Abp.Identity",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -1935,6 +2140,7 @@
         },
         {
           "returnType": "IdentityClaimType",
+          "namespace": "Volo.Abp.Identity",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -1945,6 +2151,23 @@
             {
               "type": "IdentityClaimType",
               "name": "claimType",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
               "isOptional": false
             }
           ]
@@ -1979,6 +2202,7 @@
       "methods": [
         {
           "returnType": "List<IdentityLinkUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -2005,6 +2229,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "LinkAsync",
           "summary": null,
           "isAsync": true,
@@ -2031,6 +2256,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsLinkedAsync",
           "summary": null,
           "isAsync": true,
@@ -2062,6 +2288,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "UnlinkAsync",
           "summary": null,
           "isAsync": true,
@@ -2088,6 +2315,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "GenerateLinkTokenAsync",
           "summary": null,
           "isAsync": true,
@@ -2114,6 +2342,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "VerifyLinkTokenAsync",
           "summary": null,
           "isAsync": true,
@@ -2173,6 +2402,7 @@
       "methods": [
         {
           "returnType": "IdentityRole",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -2189,6 +2419,7 @@
         },
         {
           "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetRoleNameAsync",
           "summary": null,
           "isAsync": true,
@@ -2210,6 +2441,7 @@
         },
         {
           "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -2260,6 +2492,7 @@
       "methods": [
         {
           "returnType": "List<IdentityUserDelegation>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -2286,6 +2519,7 @@
         },
         {
           "returnType": "List<IdentityUserDelegation>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetActiveDelegationsAsync",
           "summary": null,
           "isAsync": true,
@@ -2307,6 +2541,7 @@
         },
         {
           "returnType": "IdentityUserDelegation",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindActiveDelegationByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -2328,6 +2563,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "DelegateNewUserAsync",
           "summary": null,
           "isAsync": true,
@@ -2364,6 +2600,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "DeleteDelegationAsync",
           "summary": null,
           "isAsync": true,
@@ -2418,6 +2655,7 @@
       "methods": [
         {
           "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2443,7 +2681,25 @@
           ]
         },
         {
+          "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            }
+          ]
+        },
+        {
           "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -2460,6 +2716,7 @@
         },
         {
           "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetRolesAsync",
           "summary": null,
           "isAsync": true,
@@ -2481,6 +2738,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsInOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2502,6 +2760,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsInOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2523,6 +2782,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddToOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2544,6 +2804,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddToOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2565,6 +2826,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveFromOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2586,6 +2848,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveFromOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2607,6 +2870,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetOrganizationUnitsAsync",
           "summary": null,
           "isAsync": true,
@@ -2628,6 +2892,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetOrganizationUnitsAsync",
           "summary": null,
           "isAsync": true,
@@ -2649,6 +2914,7 @@
         },
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetOrganizationUnitsAsync",
           "summary": null,
           "isAsync": true,
@@ -2670,6 +2936,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUsersInOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2691,6 +2958,7 @@
         },
         {
           "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddDefaultRolesAsync",
           "summary": null,
           "isAsync": true,
@@ -2707,6 +2975,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "ShouldPeriodicallyChangePasswordAsync",
           "summary": null,
           "isAsync": true,
@@ -2723,6 +2992,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "ResetRecoveryCodesAsync",
           "summary": null,
           "isAsync": true,
@@ -2733,6 +3003,150 @@
             {
               "type": "IdentityUser",
               "name": "user",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
+          "name": "SetEmailAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "email",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityResult",
+          "namespace": "Volo.Abp.Identity",
+          "name": "SetUserNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IdentityUser",
+              "name": "user",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "UpdateRoleAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "sourceRoleId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "targetRoleId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "UpdateOrganizationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "sourceOrganizationId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "targetOrganizationId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
+          "name": "ValidateUserNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "userName",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetRandomUserNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Int32",
+              "name": "length",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetUserNameFromEmailAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "email",
               "isOptional": false
             }
           ]
@@ -2773,6 +3187,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2789,6 +3204,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -2805,6 +3221,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetNextChildCodeAsync",
           "summary": null,
           "isAsync": true,
@@ -2821,6 +3238,7 @@
         },
         {
           "returnType": "OrganizationUnit",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetLastChildOrNullAsync",
           "summary": null,
           "isAsync": true,
@@ -2837,6 +3255,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -2853,6 +3272,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "MoveAsync",
           "summary": null,
           "isAsync": true,
@@ -2874,6 +3294,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetCodeOrDefaultAsync",
           "summary": null,
           "isAsync": true,
@@ -2890,6 +3311,7 @@
         },
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindChildrenAsync",
           "summary": null,
           "isAsync": true,
@@ -2911,6 +3333,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "IsInOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2932,6 +3355,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddRoleToOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2953,6 +3377,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "AddRoleToOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2974,6 +3399,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveRoleFromOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -2995,6 +3421,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveRoleFromOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -3007,6 +3434,23 @@
               "name": "role",
               "isOptional": false
             },
+            {
+              "type": "OrganizationUnit",
+              "name": "organizationUnit",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "RemoveDynamicClaimCacheAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
             {
               "type": "OrganizationUnit",
               "name": "organizationUnit",
@@ -3078,6 +3522,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
           "name": "AnyAsync",
           "summary": null,
           "isAsync": true,
@@ -3104,6 +3549,7 @@
         },
         {
           "returnType": "List<IdentityClaimType>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3140,6 +3586,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3151,6 +3598,28 @@
               "type": "String",
               "name": "filter",
               "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityClaimType>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetListByNamesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<String>",
+              "name": "names",
+              "isOptional": false
             },
             {
               "type": "CancellationToken",
@@ -3209,6 +3678,7 @@
       "methods": [
         {
           "returnType": "IdentityLinkUser",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -3235,6 +3705,7 @@
         },
         {
           "returnType": "List<IdentityLinkUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3261,6 +3732,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -3330,6 +3802,7 @@
       "methods": [
         {
           "returnType": "IdentityRole",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindByNormalizedNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3355,7 +3828,50 @@
           ]
         },
         {
+          "returnType": "List<IdentityRoleWithUserCount>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetListWithUserCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3397,6 +3913,7 @@
         },
         {
           "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3418,6 +3935,7 @@
         },
         {
           "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetDefaultOnesAsync",
           "summary": null,
           "isAsync": true,
@@ -3439,6 +3957,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3449,6 +3968,33 @@
             {
               "type": "String",
               "name": "filter",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "RemoveClaimFromAllRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "claimType",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "autoSave",
               "isOptional": true
             },
             {
@@ -3508,6 +4054,7 @@
       "methods": [
         {
           "returnType": "List<IdentitySecurityLog>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3589,6 +4136,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3650,6 +4198,7 @@
         },
         {
           "returnType": "IdentitySecurityLog",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetByUserIdAsync",
           "summary": null,
           "isAsync": true,
@@ -3682,6 +4231,302 @@
       ],
       "contentType": "repositoryInterface",
       "name": "IIdentitySecurityLogRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.Identity",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "IdentitySession",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<IdentitySession, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentitySession, Guid>"
+        },
+        {
+          "name": "IBasicRepository<IdentitySession>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<IdentitySession>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentitySession>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentitySession>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<IdentitySession, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<IdentitySession, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "IdentitySession",
+          "namespace": "Volo.Abp.Identity",
+          "name": "FindAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sessionId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "IdentitySession",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sessionId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
+          "name": "ExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.Abp.Identity",
+          "name": "ExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sessionId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentitySession>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "device",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "userId",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "device",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "DeleteAllAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "exceptSessionId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "DeleteAllAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "device",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "exceptSessionId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "DeleteAllAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "TimeSpan",
+              "name": "inactiveTimeSpan",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IIdentitySessionRepository",
       "summary": null
     },
     {
@@ -3729,6 +4574,7 @@
       "methods": [
         {
           "returnType": "List<IdentityUserDelegation>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3755,6 +4601,7 @@
         },
         {
           "returnType": "List<IdentityUserDelegation>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetActiveDelegationsAsync",
           "summary": null,
           "isAsync": true,
@@ -3776,6 +4623,7 @@
         },
         {
           "returnType": "IdentityUserDelegation",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindActiveDelegationByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -3845,6 +4693,7 @@
       "methods": [
         {
           "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindByNormalizedUserNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3871,6 +4720,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetRoleNamesAsync",
           "summary": null,
           "isAsync": true,
@@ -3892,6 +4742,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetRoleNamesInOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -3913,6 +4764,7 @@
         },
         {
           "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindByLoginAsync",
           "summary": null,
           "isAsync": true,
@@ -3944,6 +4796,7 @@
         },
         {
           "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindByNormalizedEmailAsync",
           "summary": null,
           "isAsync": true,
@@ -3970,6 +4823,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListByClaimAsync",
           "summary": null,
           "isAsync": true,
@@ -3995,7 +4849,35 @@
           ]
         },
         {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "RemoveClaimFromAllUsersAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "claimType",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "autoSave",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListByNormalizedRoleNameAsync",
           "summary": null,
           "isAsync": true,
@@ -4021,7 +4903,30 @@
           ]
         },
         {
+          "returnType": "List<Guid>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetUserIdListByRoleIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4138,6 +5043,7 @@
         },
         {
           "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetRolesAsync",
           "summary": null,
           "isAsync": true,
@@ -4164,6 +5070,7 @@
         },
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetOrganizationUnitsAsync",
           "summary": null,
           "isAsync": true,
@@ -4190,6 +5097,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUsersInOrganizationUnitAsync",
           "summary": null,
           "isAsync": true,
@@ -4211,6 +5119,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUsersInOrganizationsListAsync",
           "summary": null,
           "isAsync": true,
@@ -4232,6 +5141,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUsersInOrganizationUnitWithChildrenAsync",
           "summary": null,
           "isAsync": true,
@@ -4253,6 +5163,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4349,6 +5260,7 @@
         },
         {
           "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
           "name": "FindByTenantIdAndUserNameAsync",
           "summary": null,
           "isAsync": true,
@@ -4380,6 +5292,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListByIdsAsync",
           "summary": null,
           "isAsync": true,
@@ -4396,6 +5309,82 @@
               "type": "Boolean",
               "name": "includeDetails",
               "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "UpdateRoleAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "sourceRoleId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "targetRoleId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "UpdateOrganizationAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "sourceOrganizationId",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "targetOrganizationId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityUserIdWithRoleNames>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetRoleNamesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<Guid>",
+              "name": "userIds",
+              "isOptional": false
             },
             {
               "type": "CancellationToken",
@@ -4454,6 +5443,7 @@
       "methods": [
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetChildrenAsync",
           "summary": null,
           "isAsync": true,
@@ -4480,6 +5470,7 @@
         },
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetAllChildrenWithParentCodeAsync",
           "summary": null,
           "isAsync": true,
@@ -4511,6 +5502,7 @@
         },
         {
           "returnType": "OrganizationUnit",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -4537,6 +5529,7 @@
         },
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4573,6 +5566,7 @@
         },
         {
           "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4598,7 +5592,35 @@
           ]
         },
         {
+          "returnType": "List<OrganizationUnit>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetListByRoleIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "roleId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetRolesAsync",
           "summary": null,
           "isAsync": true,
@@ -4639,7 +5661,50 @@
           ]
         },
         {
+          "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetRolesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid[]",
+              "name": "organizationUnitIds",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "Int32",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetRolesCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4661,6 +5726,7 @@
         },
         {
           "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUnaddedRolesAsync",
           "summary": null,
           "isAsync": true,
@@ -4707,6 +5773,7 @@
         },
         {
           "returnType": "Int32",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUnaddedRolesCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4733,6 +5800,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetMembersAsync",
           "summary": null,
           "isAsync": true,
@@ -4778,7 +5846,30 @@
           ]
         },
         {
+          "returnType": "List<Guid>",
+          "namespace": "Volo.Abp.Identity",
+          "name": "GetMemberIdsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "Int32",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetMembersCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4805,6 +5896,7 @@
         },
         {
           "returnType": "List<IdentityUser>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUnaddedUsersAsync",
           "summary": null,
           "isAsync": true,
@@ -4851,6 +5943,7 @@
         },
         {
           "returnType": "Int32",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetUnaddedUsersCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4877,6 +5970,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveAllRolesAsync",
           "summary": null,
           "isAsync": true,
@@ -4898,6 +5992,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "RemoveAllMembersAsync",
           "summary": null,
           "isAsync": true,

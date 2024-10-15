@@ -78,7 +78,7 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
         return path;
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Changes all NuGet package references to local project references for all the .csproj files in the specified folder" +
                " (and all its subfolders with any deep)";

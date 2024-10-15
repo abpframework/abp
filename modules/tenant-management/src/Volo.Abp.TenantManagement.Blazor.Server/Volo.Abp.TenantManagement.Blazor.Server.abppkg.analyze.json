@@ -1,11 +1,20 @@
 {
   "name": "Volo.Abp.TenantManagement.Blazor.Server",
-  "hash": "3cee9d89359b00bd39be9e09f6036218",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement.Blazor.Server",
       "dependsOnModules": [
-
+        {
+          "declaringAssemblyName": "Volo.Abp.TenantManagement.Blazor",
+          "namespace": "Volo.Abp.TenantManagement.Blazor",
+          "name": "AbpTenantManagementBlazorModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.FeatureManagement.Blazor.Server",
+          "namespace": "Volo.Abp.FeatureManagement.Blazor.Server",
+          "name": "AbpFeatureManagementBlazorServerModule"
+        }
       ],
       "implementingInterfaces": [
         {

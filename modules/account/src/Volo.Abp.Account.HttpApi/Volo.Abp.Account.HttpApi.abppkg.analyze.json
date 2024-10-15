@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Account.HttpApi",
-  "hash": "caa7279a6d55f90db90b3ec2313a4e12",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Account",
@@ -67,6 +67,107 @@
       ],
       "contentType": "abpModule",
       "name": "AbpAccountHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/account/register",
+          "method": "POST",
+          "groupName": "Account",
+          "responseType": "Volo.Abp.Identity.IdentityUserDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "RegisterDto"
+            }
+          ]
+        },
+        {
+          "path": "api/account/send-password-reset-code",
+          "method": "POST",
+          "groupName": "Account",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "SendPasswordResetCodeDto"
+            }
+          ]
+        },
+        {
+          "path": "api/account/verify-password-reset-token",
+          "method": "POST",
+          "groupName": "Account",
+          "responseType": "System.Boolean",
+          "responseTypeAsJson": "true",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "VerifyPasswordResetTokenInput"
+            }
+          ]
+        },
+        {
+          "path": "api/account/reset-password",
+          "method": "POST",
+          "groupName": "Account",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "ResetPasswordDto"
+            }
+          ]
+        },
+        {
+          "path": "api/account/dynamic-claims/refresh",
+          "method": "POST",
+          "groupName": "DynamicClaims",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/account/my-profile",
+          "method": "GET",
+          "groupName": "Profile",
+          "responseType": "Volo.Abp.Account.ProfileDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/account/my-profile",
+          "method": "PUT",
+          "groupName": "Profile",
+          "responseType": "Volo.Abp.Account.ProfileDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "UpdateProfileDto"
+            }
+          ]
+        },
+        {
+          "path": "api/account/my-profile/change-password",
+          "method": "POST",
+          "groupName": "Profile",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "ChangePasswordInput"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

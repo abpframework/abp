@@ -30,7 +30,7 @@ public static class ValidationAttributeHelper
             var errorMessageString = ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
             validationAttribute.ErrorMessage = errorMessageString;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // ignored
         }

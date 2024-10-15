@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.IdentityServer.EntityFrameworkCore",
-  "hash": "17dbfc67f1fd967841f05d2c9df3cbbf",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.IdentityServer.EntityFrameworkCore",
@@ -67,147 +67,27 @@
     {
       "namespace": "Volo.Abp.IdentityServer.EntityFrameworkCore",
       "connectionStringName": "AbpIdentityServer",
-      "databaseTables": [
+      "databaseTables": [],
+      "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
         {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiResourceClaims",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiResourceProperties",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceScope",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiResourceScopes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiResources.ApiResourceSecret",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiResourceSecrets",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiScopes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScopeClaim",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiScopeClaims",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScopeProperty",
-          "contentType": "databaseTable",
-          "name": "IdentityServerApiScopeProperties",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.Client",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClients",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientClaim",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientClaims",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientCorsOrigins",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientGrantType",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientGrantTypes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientIdPRestriction",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientIdPRestrictions",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientPostLogoutRedirectUris",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientProperty",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientProperties",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientRedirectUri",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientRedirectUris",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientScope",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientScopes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Clients.ClientSecret",
-          "contentType": "databaseTable",
-          "name": "IdentityServerClientSecrets",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Devices.DeviceFlowCodes",
-          "contentType": "databaseTable",
-          "name": "IdentityServerDeviceFlowCodes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.Grants.PersistedGrant",
-          "contentType": "databaseTable",
-          "name": "IdentityServerPersistedGrants",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource",
-          "contentType": "databaseTable",
-          "name": "IdentityServerIdentityResources",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceClaim",
-          "contentType": "databaseTable",
-          "name": "IdentityServerIdentityResourceClaims",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResourceProperty",
-          "contentType": "databaseTable",
-          "name": "IdentityServerIdentityResourceProperties",
-          "summary": null
+          "returnType": "Void",
+          "namespace": "Volo.Abp.IdentityServer.EntityFrameworkCore",
+          "name": "ConfigureIdentityServer",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
         }
       ],
-      "replacedDbContexts": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -262,6 +142,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",

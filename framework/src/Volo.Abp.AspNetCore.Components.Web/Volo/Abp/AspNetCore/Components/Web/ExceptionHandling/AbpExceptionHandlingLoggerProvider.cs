@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Threading;
 
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 
 public class AbpExceptionHandlingLoggerProvider : ILoggerProvider
 {
     private AbpExceptionHandlingLogger? _logger;
-    private static readonly Lock SyncObj = new Lock();
+    private static readonly Lock SyncObj = new();
     private readonly IServiceCollection _serviceCollection;
 
     public AbpExceptionHandlingLoggerProvider(IServiceCollection serviceCollection)

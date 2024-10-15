@@ -15,6 +15,7 @@
     "TestEmailSubject": "测试邮件 {0}",
     "TestEmailBody": "测试邮件内容",
     "SuccessfullySent": "发送成功",
+    "MailSendingFailed": "邮件发送失败，请检查您的电子邮件配置并重试。",
     "Send": "发送",
     "Menu:Emailing": "邮件",
     "Menu:TimeZone": "时区",

@@ -20,7 +20,7 @@ Currently, three themes are **officially provided**:
 
 * The [Basic Theme](basic-theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
 * The [Lepton Theme](https://abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://abp.io/) license.
-* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](https://docs.abp.io/en/commercial/latest/themes/lepton-x/angular) and [lite](../../../ui-themes/lepton-x-lite/angular.md) choices.
+* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](../../../ui-themes/lepton-x/angular.md) and [lite](../../../ui-themes/lepton-x-lite/angular.md) choices.
 
 ## Overall
 

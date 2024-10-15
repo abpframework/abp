@@ -11,7 +11,8 @@ public class ScribanLocalizedTemplateContentReaderFactory_Tests : LocalizedTempl
         LocalizedTemplateContentReaderFactory = new LocalizedTemplateContentReaderFactory(
             new PhysicalFileVirtualFileProvider(
                 new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
-                    "Volo", "Abp", "TextTemplating", "Scriban"))));
+                    "Volo", "Abp", "TextTemplating", "Scriban"))),
+            GetRequiredService<IAbpHostEnvironment>());
 
         WelcomeEmailEnglishContent = "Welcome {{model.name}} to the abp.io!";
         WelcomeEmailTurkishContent = "Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!";

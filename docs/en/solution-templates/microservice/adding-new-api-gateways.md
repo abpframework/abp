@@ -155,12 +155,6 @@ We should configure the AuthServer for **CORS** and **RedirectAllowedUrls**.
 }
 ```
 
-### Add the New Gateway to the Solution Runner
-
-We should add the new gateway to the solution runner [profile](../../studio/running-applications.md#profile) for running applications in the ABP Studio. You can follow the steps explained in the [Solution Runner](../../studio/running-applications.md#c-application) document to add the new gateway to the solution runner profile. Afterwards, you can start the new gateway by selecting it in the solution runner.
-
-![public-gateway-solution-runner](images/public-gateway-solution-runner.png)
-
 ## Creating Helm Chart for the New Gateway
 
 If you want to deploy the new gateway to Kubernetes, you should create a Helm chart for the new application.

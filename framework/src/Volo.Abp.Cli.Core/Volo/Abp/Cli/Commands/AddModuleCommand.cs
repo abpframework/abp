@@ -144,7 +144,7 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Add a multi-package module to a solution by finding all packages of the module, " +
                "finding related projects in the solution and adding each package to the corresponding project in the solution.";

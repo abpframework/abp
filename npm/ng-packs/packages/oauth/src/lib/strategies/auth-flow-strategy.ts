@@ -13,6 +13,7 @@ import {
 
 import {
   AbpLocalStorageService,
+  AbpWindowService,
   ConfigStateService,
   EnvironmentService,
   HttpErrorReporterService,
@@ -38,6 +39,7 @@ export abstract class AuthFlowStrategy {
   protected sessionState: SessionStateService;
   protected localStorageService: AbpLocalStorageService;
   protected rememberMeService: RememberMeService;
+  protected windowService: AbpWindowService;
   protected tenantKey: string;
   protected router: Router;
 
@@ -65,6 +67,7 @@ export abstract class AuthFlowStrategy {
     this.router = injector.get(Router);
     this.oAuthErrorFilterService = injector.get(OAuthErrorFilterService);
     this.rememberMeService = injector.get(RememberMeService);
+    this.windowService = injector.get(AbpWindowService);
 
     this.listenToOauthErrors();
   }

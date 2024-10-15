@@ -197,7 +197,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
             await SetNavigationAsync();
             SetLanguageSelectListItems();
-            SetDocumentPageTitle();
 
             return Page();
         }
@@ -472,7 +471,12 @@ namespace Volo.Docs.Pages.Documents.Project
         
         private void SetDocumentPageTitle()
         {
-            DocumentPageTitle = Navigation.FindNavigation(DocumentNameWithExtension)?.Text ?? DocumentName?.Replace("-", " ");
+            DocumentPageTitle = DocumentName?.Replace("-", " ");
+            var match = Regex.Match(Document.Content, @"#(?<PageTitle>.+)");
+            if (match.Success && match.Groups.TryGetValue("PageTitle", out var group))
+            {
+                DocumentPageTitle = Regex.Replace(group.Value, "<.*?>", string.Empty).Trim();
+            }
         }
 
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
@@ -508,6 +512,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     Document = await GetSpecificDocumentOrDefaultAsync(language);
                     DocumentLanguageCode = language;
                     DocumentNameWithExtension = Document.Name;
+                    SetDocumentPageTitle();
                     await ConvertDocumentContentToHtmlAsync();
                     return true;
                 }
@@ -561,6 +566,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 {
                     await OnSectionRenderingErrorAsync(e);
                 }
+            }
+            else
+            {
+                DocumentNavigationsDto = new DocumentNavigationsDto();
             }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);

@@ -1,0 +1,94 @@
+name: 🤠 ABP Studio
+description: Create a report to help us improve the ABP Studio
+labels: [studio]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome bug reports! This template will help us gather the information we need to start the triage process.
+        
+        Please keep in mind that the GitHub issue tracker is not intended as a general support forum, but for reporting **non-security** bugs and feature requests.
+        If you believe you have an issue that affects the SECURITY of the platform, please do NOT create an issue and instead email your issue details to info@abp.io.
+        For other types of questions, consider using [StackOverflow](https://stackoverflow.com/questions/tagged/abp).
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered or feature request ([abp/issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+label%3Astudio)).
+      options:
+      - label: I have searched the existing issues
+        required: true
+  - type: textarea
+    id: background
+    attributes:
+      label: Description
+      description: Please share a clear and concise description of the problem.
+      placeholder: Description
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Setup
+        Please provide more information on your ABP Studio setup.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Which version of ABP Studio are you using?
+      placeholder: Version
+    validations:
+      required: true
+  - type: dropdown
+    id: Operation-System
+    attributes:
+      label: Operation System
+      description: What is the operation system of the computer?
+      options:
+        - Windows (Default)
+        - Linux
+        - macOS
+        - Others
+    validations:
+      required: true
+  - type: textarea
+    id: solution-config
+    attributes:
+      label: Solution Configuration
+      description: |
+        If there is an open solution, what are the configurations of the solution? 
+        🧐 Hint: You can see all the information about your solution from the configuration window, which opens when you right-click on the [solution](https://abp.io/docs/latest/studio/solution-explorer#solution) and click on the `Solution Configuration` button.
+      placeholder: |
+        - **Template**: app
+        - **Created ABP Studio Version**: 0.7.9
+        - **Tiered**: No
+        - **UI Framework**: mvc
+        - **Theme**: leptonx
+        - **Theme Style**: system
+        - **Database Provider**: ef
+        - **Database Management System**: sqlserver
+        - **Separate Tenant Schema**: No
+        - **Mobile Framework**: none
+        - **Public Website**: No
+        - **Optional Modules**:
+          * GDPR
+          * TextTemplateManagement
+          * LanguageManagement
+          * AuditLogging
+          * SaaS
+          * OpenIddictAdmin
+    validations:
+      required: false      
+  - type: markdown
+    attributes:
+      value: |
+        ---
+  - type: textarea
+    id: other-info
+    attributes:
+      label: Other information
+      description: |
+        If you have an idea where the problem might lie, let us know that here. Please include any pointers to code, relevant changes, or related issues you know of.
+      placeholder: Other information
+    validations:
+      required: false

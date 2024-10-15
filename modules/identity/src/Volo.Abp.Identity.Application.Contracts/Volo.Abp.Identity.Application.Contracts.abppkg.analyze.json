@@ -131,6 +131,13 @@
       "summary": null
     },
     {
+      "displayName": "Manage roles",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "AbpIdentity.Users.Update.ManageRoles",
+      "summary": null
+    },
+    {
       "displayName": "Delete",
       "isEnabled": true,
       "contentType": "permission",

@@ -38,7 +38,7 @@ public class SwitchToPreviewCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Switches packages to preview ABP version.";
     }

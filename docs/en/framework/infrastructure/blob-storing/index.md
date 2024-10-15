@@ -22,6 +22,7 @@ The ABP has already the following storage provider implementations:
 * [Aliyun](./aliyun.md): Stores BLOBs on the [Aliyun Storage Service](https://help.aliyun.com/product/31815.html).
 * [Minio](./minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
 * [Aws](./aws.md): Stores BLOBs on the [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
+* [Google](./google.md): Stores BLOBs on the [Google Cloud Storage](https://cloud.google.com/storage).
 
 More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution) to the ABP.
 

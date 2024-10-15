@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.HttpApi",
-  "hash": "ac5f94dc37adf0b83aaf38cb220ee0f1",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
@@ -67,6 +67,137 @@
       ],
       "contentType": "abpModule",
       "name": "AbpTenantManagementHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/multi-tenancy/tenants/{id}",
+          "method": "GET",
+          "groupName": "Tenant",
+          "responseType": "Volo.Abp.TenantManagement.TenantDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants",
+          "method": "GET",
+          "groupName": "Tenant",
+          "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Abp.TenantManagement.TenantDto]",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "Filter",
+              "type": "String"
+            },
+            {
+              "name": "Sorting",
+              "type": "String"
+            },
+            {
+              "name": "SkipCount",
+              "type": "Int32"
+            },
+            {
+              "name": "MaxResultCount",
+              "type": "Int32"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants",
+          "method": "POST",
+          "groupName": "Tenant",
+          "responseType": "Volo.Abp.TenantManagement.TenantDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "TenantCreateDto"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants/{id}",
+          "method": "PUT",
+          "groupName": "Tenant",
+          "responseType": "Volo.Abp.TenantManagement.TenantDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "TenantUpdateDto"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants/{id}",
+          "method": "DELETE",
+          "groupName": "Tenant",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants/{id}/default-connection-string",
+          "method": "GET",
+          "groupName": "Tenant",
+          "responseType": "System.String",
+          "responseTypeAsJson": "\"string\"",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants/{id}/default-connection-string",
+          "method": "PUT",
+          "groupName": "Tenant",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "defaultConnectionString",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/multi-tenancy/tenants/{id}/default-connection-string",
+          "method": "DELETE",
+          "groupName": "Tenant",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

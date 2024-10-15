@@ -19,7 +19,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private IVirtualFileProvider _virtualFileProvider = default!;
     private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
-    private readonly Lock _syncObj = new Lock();
+    private readonly Lock _syncObj = LockFactory.Create();
     private LocalizationResourceBase _resource = default!;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)

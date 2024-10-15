@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.HttpApi",
-  "hash": "eaa44cd23162ceaf3ec1f00798ef4dd5",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -62,6 +62,68 @@
       ],
       "contentType": "abpModule",
       "name": "AbpFeatureManagementHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/feature-management/features",
+          "method": "GET",
+          "groupName": "Features",
+          "responseType": "Volo.Abp.FeatureManagement.GetFeatureListResultDto",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "providerName",
+              "type": "String"
+            },
+            {
+              "name": "providerKey",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "path": "api/feature-management/features",
+          "method": "PUT",
+          "groupName": "Features",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "providerName",
+              "type": "String"
+            },
+            {
+              "name": "providerKey",
+              "type": "String"
+            },
+            {
+              "name": "input",
+              "type": "UpdateFeaturesDto"
+            }
+          ]
+        },
+        {
+          "path": "api/feature-management/features",
+          "method": "DELETE",
+          "groupName": "Features",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "providerName",
+              "type": "String"
+            },
+            {
+              "name": "providerKey",
+              "type": "String"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

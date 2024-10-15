@@ -18,7 +18,7 @@ public class MongoModelBuilder : IMongoModelBuilder
 {
     private readonly Dictionary<Type, object> _entityModelBuilders;
 
-    private static readonly Lock SyncObj = new Lock();
+    private static readonly Lock SyncObj = LockFactory.Create();
 
     public MongoModelBuilder()
     {

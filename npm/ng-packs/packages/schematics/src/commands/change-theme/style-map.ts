@@ -196,6 +196,11 @@ styleMap.set(ThemeOptionsEnum.LeptonX, [
     inject: true,
     bundleName: 'bootstrap-icons',
   },
+  {
+    input: 'node_modules/ng-zorro-antd/tree/style/index.min.css',
+    inject: false,
+    bundleName: 'ng-zorro-antd-tree',
+  },
 ]);
 styleMap.set(ThemeOptionsEnum.LeptonXLite, [
   {

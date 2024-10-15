@@ -5,7 +5,7 @@
 {
   "Next": {
     "Name": "Overview",
-    "Path": "studio/overview.md"
+    "Path": "studio/overview"
   }
 }
 ````

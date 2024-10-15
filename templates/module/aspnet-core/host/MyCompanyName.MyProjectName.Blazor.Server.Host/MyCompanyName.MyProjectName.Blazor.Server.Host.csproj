@@ -3,7 +3,7 @@
     <Import Project="..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -13,11 +13,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise.Bootstrap5" Version="1.5.2" />
-        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.5.2" />
-        <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
-        <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
+        <PackageReference Include="Blazorise.Bootstrap5" Version="1.6.1.0" />
+        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.6.1.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.2.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="2.0.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-rc.2.24474.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,4 +1,4 @@
-# CMS Kit Pro Module (Pro)
+# CMS Kit Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.
 
@@ -17,6 +17,7 @@ The following features are provided by the open-source CMS Kit module:
 - [**Menu**](../cms-kit/menus.md) system to manage public menus dynamically.
 - [**Global resources**](../cms-kit/global-resources.md) system to add global styles and scripts dynamically.
 - [**Dynamic widget**](../cms-kit/dynamic-widget.md) system to create dynamic widgets for page and blog posts.
+- [**Marked Item**](../cms-kit/marked-items.md) system to flag favorites or important items with icons or emojis.
 
 The following features are provided by the CMS Kit Pro version:
 

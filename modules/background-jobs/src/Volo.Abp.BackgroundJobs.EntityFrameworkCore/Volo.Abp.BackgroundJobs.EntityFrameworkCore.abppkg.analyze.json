@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
-  "hash": "093b92974b3f005cca5e441d8cc1bafb",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
@@ -67,15 +67,27 @@
     {
       "namespace": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
       "connectionStringName": "AbpBackgroundJobs",
-      "databaseTables": [
+      "databaseTables": [],
+      "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
         {
-          "entityFullName": "Volo.Abp.BackgroundJobs.BackgroundJobRecord",
-          "contentType": "databaseTable",
-          "name": "AbpBackgroundJobs",
-          "summary": null
+          "returnType": "Void",
+          "namespace": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
+          "name": "ConfigureBackgroundJobs",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
         }
       ],
-      "replacedDbContexts": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -130,6 +142,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",

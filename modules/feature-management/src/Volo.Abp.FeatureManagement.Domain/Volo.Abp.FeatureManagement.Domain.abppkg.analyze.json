@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain",
-  "hash": "7dc58fbace956cd5b28d943e0568d553",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -117,6 +117,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "HasSameData",
           "summary": null,
           "isAsync": false,
@@ -133,6 +134,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "Patch",
           "summary": null,
           "isAsync": false,
@@ -153,11 +155,6 @@
       "namespace": "Volo.Abp.FeatureManagement",
       "primaryKeyType": "Guid",
       "properties": [
-        {
-          "type": "System.Guid",
-          "name": "Id",
-          "summary": null
-        },
         {
           "type": "System.String",
           "name": "GroupName",
@@ -266,6 +263,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "HasSameData",
           "summary": null,
           "isAsync": false,
@@ -282,6 +280,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "Patch",
           "summary": null,
           "isAsync": false,
@@ -302,11 +301,6 @@
       "namespace": "Volo.Abp.FeatureManagement",
       "primaryKeyType": "Guid",
       "properties": [
-        {
-          "type": "System.Guid",
-          "name": "Id",
-          "summary": null
-        },
         {
           "type": "System.String",
           "name": "Name",
@@ -436,6 +430,7 @@
       "methods": [
         {
           "returnType": "FeatureDefinitionRecord",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -552,6 +547,7 @@
       "methods": [
         {
           "returnType": "FeatureValue",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -583,6 +579,7 @@
         },
         {
           "returnType": "List<FeatureValue>",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "FindAllAsync",
           "summary": null,
           "isAsync": true,
@@ -614,6 +611,7 @@
         },
         {
           "returnType": "List<FeatureValue>",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -640,6 +638,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,

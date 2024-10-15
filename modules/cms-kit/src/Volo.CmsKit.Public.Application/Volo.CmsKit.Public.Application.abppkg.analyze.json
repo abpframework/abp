@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Application",
-  "hash": "b56557870806fcc0a1b72ff08f55da55",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
@@ -136,6 +136,7 @@
       "methods": [
         {
           "returnType": "ListResultDto<ReactionWithSelectionDto>",
+          "namespace": "Volo.CmsKit.Public.Reactions",
           "name": "GetForSelectionAsync",
           "summary": null,
           "isAsync": true,
@@ -157,6 +158,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Public.Reactions",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -183,6 +185,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Public.Reactions",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -279,6 +282,7 @@
       "methods": [
         {
           "returnType": "RatingDto",
+          "namespace": "Volo.CmsKit.Public.Ratings",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -305,6 +309,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Public.Ratings",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -326,6 +331,7 @@
         },
         {
           "returnType": "List<RatingWithStarCountDto>",
+          "namespace": "Volo.CmsKit.Public.Ratings",
           "name": "GetGroupedStarCountsAsync",
           "summary": null,
           "isAsync": true,
@@ -417,6 +423,7 @@
       "methods": [
         {
           "returnType": "PageDto",
+          "namespace": "Volo.CmsKit.Public.Pages",
           "name": "FindBySlugAsync",
           "summary": null,
           "isAsync": true,
@@ -433,6 +440,7 @@
         },
         {
           "returnType": "PageDto",
+          "namespace": "Volo.CmsKit.Public.Pages",
           "name": "FindDefaultHomePageAsync",
           "summary": null,
           "isAsync": true,
@@ -440,6 +448,23 @@
           "isPrivate": false,
           "isStatic": false,
           "parameters": []
+        },
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Public.Pages",
+          "name": "DoesSlugExistAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "slug",
+              "isOptional": false
+            }
+          ]
         }
       ],
       "contentType": "applicationService",
@@ -513,6 +538,7 @@
       "methods": [
         {
           "returnType": "List<MenuItemDto>",
+          "namespace": "Volo.CmsKit.Public.Menus",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -524,6 +550,120 @@
       ],
       "contentType": "applicationService",
       "name": "MenuItemPublicAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Public.MarkedItems",
+      "baseClass": {
+        "name": "CmsKitPublicAppServiceBase",
+        "namespace": "Volo.CmsKit.Public",
+        "declaringAssemblyName": "Volo.CmsKit.Public.Application",
+        "fullName": "Volo.CmsKit.Public.CmsKitPublicAppServiceBase"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IMarkedItemPublicAppService",
+          "namespace": "Volo.CmsKit.Public.MarkedItems",
+          "declaringAssemblyName": "Volo.CmsKit.Public.Application.Contracts",
+          "fullName": "Volo.CmsKit.Public.MarkedItems.IMarkedItemPublicAppService"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "MarkedItemWithToggleDto",
+          "namespace": "Volo.CmsKit.Public.MarkedItems",
+          "name": "GetForUserAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Public.MarkedItems",
+          "name": "ToggleAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "MarkedItemPublicAppService",
       "summary": null
     },
     {
@@ -593,6 +733,7 @@
       "methods": [
         {
           "returnType": "GlobalResourceDto",
+          "namespace": "Volo.CmsKit.Public.GlobalResources",
           "name": "GetGlobalScriptAsync",
           "summary": null,
           "isAsync": true,
@@ -603,6 +744,7 @@
         },
         {
           "returnType": "GlobalResourceDto",
+          "namespace": "Volo.CmsKit.Public.GlobalResources",
           "name": "GetGlobalStyleAsync",
           "summary": null,
           "isAsync": true,
@@ -683,6 +825,7 @@
       "methods": [
         {
           "returnType": "ListResultDto<CommentWithDetailsDto>",
+          "namespace": "Volo.CmsKit.Public.Comments",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -704,6 +847,7 @@
         },
         {
           "returnType": "CommentDto",
+          "namespace": "Volo.CmsKit.Public.Comments",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -730,6 +874,7 @@
         },
         {
           "returnType": "CommentDto",
+          "namespace": "Volo.CmsKit.Public.Comments",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -751,6 +896,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Public.Comments",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -837,6 +983,7 @@
       "methods": [
         {
           "returnType": "BlogPostCommonDto",
+          "namespace": "Volo.CmsKit.Public.Blogs",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -858,6 +1005,7 @@
         },
         {
           "returnType": "PagedResultDto<BlogPostCommonDto>",
+          "namespace": "Volo.CmsKit.Public.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -879,6 +1027,7 @@
         },
         {
           "returnType": "PagedResultDto<CmsUserDto>",
+          "namespace": "Volo.CmsKit.Public.Blogs",
           "name": "GetAuthorsHasBlogPostsAsync",
           "summary": null,
           "isAsync": true,
@@ -895,6 +1044,7 @@
         },
         {
           "returnType": "CmsUserDto",
+          "namespace": "Volo.CmsKit.Public.Blogs",
           "name": "GetAuthorHasBlogPostAsync",
           "summary": null,
           "isAsync": true,
@@ -905,6 +1055,40 @@
             {
               "type": "Guid",
               "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Public.Blogs",
+          "name": "DeleteAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "namespace": "Volo.CmsKit.Public.Blogs",
+          "name": "GetTagNameAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "tagId",
               "isOptional": false
             }
           ]

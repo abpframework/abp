@@ -96,6 +96,10 @@
             {
               "name": "MaxResultCount",
               "type": "Int32"
+            },
+            {
+              "name": "ExtraProperties",
+              "type": "ExtraPropertyDictionary"
             }
           ]
         },
@@ -190,6 +194,10 @@
             {
               "name": "MaxResultCount",
               "type": "Int32"
+            },
+            {
+              "name": "ExtraProperties",
+              "type": "ExtraPropertyDictionary"
             }
           ]
         },
@@ -348,6 +356,10 @@
             {
               "name": "MaxResultCount",
               "type": "Int32"
+            },
+            {
+              "name": "ExtraProperties",
+              "type": "ExtraPropertyDictionary"
             }
           ]
         },

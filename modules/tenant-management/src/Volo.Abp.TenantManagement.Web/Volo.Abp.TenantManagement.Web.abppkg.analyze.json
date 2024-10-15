@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Web",
-  "hash": "2870a361082a3b19907bdf95db3a74a8",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement.Web",
@@ -72,6 +72,24 @@
       ],
       "contentType": "abpModule",
       "name": "AbpTenantManagementWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants",
+      "contentType": "webPage",
+      "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants",
+      "contentType": "webPage",
+      "name": "EditModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]
