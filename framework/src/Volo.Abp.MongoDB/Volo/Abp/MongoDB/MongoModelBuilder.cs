@@ -10,7 +10,6 @@ using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
-using System.Threading;
 
 namespace Volo.Abp.MongoDB;
 

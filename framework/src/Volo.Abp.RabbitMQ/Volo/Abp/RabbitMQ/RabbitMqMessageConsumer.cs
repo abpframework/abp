@@ -10,7 +10,6 @@ using RabbitMQ.Client.Exceptions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
-using System.Threading;
 
 namespace Volo.Abp.RabbitMQ;
 
