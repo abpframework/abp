@@ -11,21 +11,21 @@ Example
 
 ShortDate, ShortTime and ShortDateTime format data like angular's data pipe but easier. Also the pipes get format from config service by culture.
 
-# ShortDate Pipe
+## ShortDate Pipe
 
 ```html
 <span> {{today | shortDate }}</span>
 ```
 
 
-# ShortTime Pipe
+## ShortTime Pipe
 
 ```html
 <span> {{today | shortTime }}</span>
 ```
 
 
-# ShortDateTime Pipe
+## ShortDateTime Pipe
 
 ```html
 <span> {{today | shortDateTime }}</span>

@@ -115,7 +115,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
 ## Properties
 
-##### Define a property
+### Define a property
 
 A property is a field in the entity which refers a column in the relational database table or a `JSON` field in `NoSQL` database collection. In the properties section, you can manage the properties your entity. To add a new property, click the "Add Property" button on the top-right of the page. 
 
@@ -306,7 +306,7 @@ abp suite generate --entity D:\Projects\BookStore\.suite\entities\Book.json --so
 
 In this example, `Book.json` was previously created via ABP Suite.
 
-##### Parameters
+### Parameters
 
 * `--entity` or `-e`: Path of the entity's JSON file.
 * `--solution` or `-s`: Path of the target solution file (***.sln**).

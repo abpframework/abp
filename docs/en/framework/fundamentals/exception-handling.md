@@ -31,7 +31,7 @@ Error Message is an instance of the `RemoteServiceErrorResponse` class. The simp
 
 There are **optional fields** those can be filled based upon the exception that has occurred.
 
-##### Error Code
+#### Error Code
 
 Error **code** is an optional and unique string value for the exception. Thrown `Exception` should implement the `IHasErrorCode` interface to fill this field. Example JSON value:
 
@@ -46,7 +46,7 @@ Error **code** is an optional and unique string value for the exception. Thrown 
 
 Error code can also be used to localize the exception and customize the HTTP status code (see the related sections below).
 
-##### Error Details
+#### Error Details
 
 Error **details** in an optional field of the JSON error message. Thrown `Exception` should implement the `IHasErrorDetails` interface to fill this field. Example JSON value:
 
@@ -60,7 +60,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 }
 ```
 
-##### Validation Errors
+#### Validation Errors
 
 **validationErrors** is a standard field that is filled if the thrown exception implements the `IHasValidationErrors` interface.
 

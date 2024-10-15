@@ -48,7 +48,7 @@ public static void ConfigureExtraProperties()
 * `AddOrUpdateProperty` gets a second argument (the `property =>` lambda expression) to configure additional options for the new property.
   * We can add data annotation attributes like shown here, just like adding a data annotation attribute to a class property.
 
-#### Create & Update Forms
+### Create & Update Forms
 
 Once you define a property, it appears in the create and update forms of the related entity:
 
