@@ -81,7 +81,7 @@ public abstract class ProjectCreationCommandBase
 
         if (version != null)
         {
-            Logger.LogInformation("Version: " + version);
+            Logger.LogInformation($"Version: {version}");
         }
 
         var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Long);
@@ -110,25 +110,25 @@ public abstract class ProjectCreationCommandBase
         var databaseProvider = GetDatabaseProvider(commandLineArgs);
         if (databaseProvider != DatabaseProvider.NotSpecified)
         {
-            Logger.LogInformation("Database provider: " + databaseProvider);
+            Logger.LogInformation($"Database provider: {databaseProvider}");
         }
 
         var connectionString = GetConnectionString(commandLineArgs);
         if (connectionString != null)
         {
-            Logger.LogInformation("Connection string: " + connectionString);
+            Logger.LogInformation($"Connection string: {connectionString}");
         }
 
         var databaseManagementSystem = GetDatabaseManagementSystem(commandLineArgs);
         if (databaseManagementSystem != DatabaseManagementSystem.NotSpecified)
         {
-            Logger.LogInformation("DBMS: " + databaseManagementSystem);
+            Logger.LogInformation($"DBMS: {databaseManagementSystem}");
         }
 
         var uiFramework = GetUiFramework(commandLineArgs, template);
         if (uiFramework != UiFramework.NotSpecified)
         {
-            Logger.LogInformation("UI Framework: " + uiFramework);
+            Logger.LogInformation($"UI Framework: {uiFramework}");
         }
 
         var publicWebSite = uiFramework != UiFramework.None && commandLineArgs.Options.ContainsKey(Options.PublicWebSite.Long);
@@ -140,25 +140,25 @@ public abstract class ProjectCreationCommandBase
         var mobileApp = GetMobilePreference(commandLineArgs, template);
         if (mobileApp != MobileApp.None)
         {
-            Logger.LogInformation("Mobile App: " + mobileApp);
+            Logger.LogInformation($"Mobile App: {mobileApp}");
         }
 
         var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
         if (gitHubAbpLocalRepositoryPath != null)
         {
-            Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
+            Logger.LogInformation($"GitHub Abp Local Repository Path: {gitHubAbpLocalRepositoryPath}");
         }
 
         var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
         if (gitHubVoloLocalRepositoryPath != null)
         {
-            Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
+            Logger.LogInformation($"GitHub Volo Local Repository Path: {gitHubVoloLocalRepositoryPath}");
         }
 
         var templateSource = commandLineArgs.Options.GetOrNull(Options.TemplateSource.Short, Options.TemplateSource.Long);
         if (templateSource != null)
         {
-            Logger.LogInformation("Template Source: " + templateSource);
+            Logger.LogInformation($"Template Source: {templateSource}");
         }
 
         var createSolutionFolder = GetCreateSolutionFolderPreference(commandLineArgs);
@@ -216,7 +216,7 @@ public abstract class ProjectCreationCommandBase
 
         IO.DirectoryHelper.CreateIfNotExists(outputFolder);
 
-        Logger.LogInformation("Output folder: " + outputFolder);
+        Logger.LogInformation($"Output folder: {outputFolder}");
 
         if (connectionString == null &&
             databaseManagementSystem != DatabaseManagementSystem.NotSpecified &&
@@ -309,10 +309,7 @@ public abstract class ProjectCreationCommandBase
         bool isTiered,
         CommandLineArgs commandLineArgs)
     {
-
-#if DEBUG
-        return;
-#endif
+#if !DEBUG
         if (AppTemplateBase.IsAppTemplate(template))
         {
             var isCommercial = template == AppProTemplate.TemplateName;
@@ -322,6 +319,7 @@ public abstract class ProjectCreationCommandBase
         {
             OpenMicroserviceDocumentPage();
         }
+#endif
     }
 
     protected UiFramework FindMicroserviceSolutionUiFramework(string outputFolderRoot)

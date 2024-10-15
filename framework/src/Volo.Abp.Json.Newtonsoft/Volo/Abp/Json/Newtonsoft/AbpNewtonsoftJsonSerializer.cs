@@ -45,6 +45,7 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
             indented
         }, _ =>
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             var settings = new JsonSerializerSettings
             {
                 Binder = Options.Value.JsonSerializerSettings.Binder,
@@ -80,6 +81,7 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
                 TypeNameHandling = Options.Value.JsonSerializerSettings.TypeNameHandling,
                 TypeNameAssemblyFormatHandling = Options.Value.JsonSerializerSettings.TypeNameAssemblyFormatHandling
             };
+#pragma warning restore CS0618 // Type or member is obsolete
 
             if (!camelCase)
             {
