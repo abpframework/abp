@@ -9,6 +9,8 @@ public class PageDto : ExtensibleEntityDto<Guid>
 
     public string Slug { get; set; }
 
+    public string LayoutName { get; set; }
+
     public string Content { get; set; }
 
     public string Script { get; set; }
