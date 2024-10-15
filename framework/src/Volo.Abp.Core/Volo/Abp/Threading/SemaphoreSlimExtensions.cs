@@ -10,21 +10,21 @@ public static class SemaphoreSlimExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async static ValueTask<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim)
     {
-        await semaphoreSlim.WaitAsync().ConfigureAwait(false);
+        await semaphoreSlim.WaitAsync();
         return GetDispose(semaphoreSlim);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async static ValueTask<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, CancellationToken cancellationToken)
     {
-        await semaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
+        await semaphoreSlim.WaitAsync(cancellationToken);
         return GetDispose(semaphoreSlim);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async static ValueTask<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, int millisecondsTimeout)
     {
-        if (await semaphoreSlim.WaitAsync(millisecondsTimeout).ConfigureAwait(false))
+        if (await semaphoreSlim.WaitAsync(millisecondsTimeout))
         {
             return GetDispose(semaphoreSlim);
         }
@@ -35,7 +35,7 @@ public static class SemaphoreSlimExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async static ValueTask<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, int millisecondsTimeout, CancellationToken cancellationToken)
     {
-        if (await semaphoreSlim.WaitAsync(millisecondsTimeout, cancellationToken).ConfigureAwait(false))
+        if (await semaphoreSlim.WaitAsync(millisecondsTimeout, cancellationToken))
         {
             return GetDispose(semaphoreSlim);
         }
@@ -46,7 +46,7 @@ public static class SemaphoreSlimExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async static ValueTask<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, TimeSpan timeout)
     {
-        if (await semaphoreSlim.WaitAsync(timeout).ConfigureAwait(false))
+        if (await semaphoreSlim.WaitAsync(timeout))
         {
             return GetDispose(semaphoreSlim);
         }
@@ -57,7 +57,7 @@ public static class SemaphoreSlimExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async static ValueTask<IDisposable> LockAsync(this SemaphoreSlim semaphoreSlim, TimeSpan timeout, CancellationToken cancellationToken)
     {
-        if (await semaphoreSlim.WaitAsync(timeout, cancellationToken).ConfigureAwait(false))
+        if (await semaphoreSlim.WaitAsync(timeout, cancellationToken))
         {
             return GetDispose(semaphoreSlim);
         }
