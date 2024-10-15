@@ -300,3 +300,7 @@ After making all our changes, we can run the `AspirationalAbp.AppHost` project.
 ## Conclusion
 
 Combining .NET Aspire with the ABP framework creates a powerful setup for building robust, observable, and feature-rich applications. By integrating Aspire's observability and cloud capabilities with ABP's approach of focusing on your business without repeating yourself, you can develop feature-rich, scalable applications with enhanced monitoring and seamless cloud integration. This guide provides a clear path to set up and configure these technologies, ensuring your applications are well-structured, maintainable, and ready for modern cloud environments.
+
+## See Also
+
+* [.NET Aspire vs ABP Studio: Side by Side](https://abp.io/community/articles/.net-aspire-vs-abp-studio-side-by-side-t1c73d1l)
