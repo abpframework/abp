@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,7 +15,7 @@ public class PackageSourceManager : ITransientDependency
         Logger = NullLogger<PackageSourceManager>.Instance;
     }
 
-    public void Add(string solutionFolder, string sourceKey, string sourceValue)
+    public void Add(string solutionFolder, string sourceKey, string sourceValue, params string[] packageMappingPatterns)
     {
         var nugetConfigPath = GetNugetConfigPath(solutionFolder);
 
@@ -60,11 +60,41 @@ public class PackageSourceManager : ITransientDependency
 
             sourceNodes?[0]?.AppendChild(newNode);
 
+            if (packageMappingPatterns.Any())
+            {
+                ConfigurePackageSourceMappings(doc, sourceKey, packageMappingPatterns);
+            }
+
             File.WriteAllText(nugetConfigPath, doc.OuterXml);
         }
         catch
         {
             Logger.LogWarning($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources FAILED.");
+        }
+    }
+
+    protected virtual void ConfigurePackageSourceMappings(XmlDocument doc, string sourceKey, string[] packageMappingPatterns)
+    {
+        var packageMappingNodes = doc.SelectNodes("/configuration/packageSourceMapping");
+
+        if (packageMappingNodes == null)
+        {
+            // If there is no packageSourceMapping node, leave it as it is.
+            Logger.LogWarning($"<packageSourceMapping> node not found in 'NuGet.Config' file. Skipping adding patterns for '{sourceKey}' source.");
+            return;
+        }
+        var packageSourceNode = doc.CreateElement("packageSource");
+        var sourceAttr = doc.CreateAttribute("key");
+        sourceAttr.Value = sourceKey;
+        packageSourceNode.Attributes.Append(sourceAttr);
+        packageMappingNodes[0]?.AppendChild(packageSourceNode);
+        foreach (var pattern in packageMappingPatterns)
+        {
+            var packageNode = doc.CreateElement("package");
+            var patternAttr = doc.CreateAttribute("pattern");
+            patternAttr.Value = pattern;
+            packageNode.Attributes.Append(patternAttr);
+            packageSourceNode.AppendChild(packageNode);
         }
     }
 

@@ -239,7 +239,7 @@
     "Trainings": "Trainings",
     "MeetTheABPCommunity": "Meet the ABP <span class=\"gradient-community\">Community</span>",
     "DisplayName:CommunityIndexPagePoll": "Community Index Page Poll",
-    "ReturnOnInvestment": "Return On Investment",
+    "ReturnOnInvestment": "Return on Investment",
     "PromotionalOffers": "Promotional Offers",
     "PromotionalOffersDefinition": "Discounts, seasonal campaigns, etc.",
     "EventsDefinition": "Community Talks, Webinars, ABP .NET Conference, etc.",
@@ -251,6 +251,7 @@
     "VideoCourses": "Essential Videos",
     "DoYouAgreePrivacyPolicy": "By clicking <b>Subscribe</b> button you agree to the <a href=\"https://account.abp.io/Account/TermsConditions\">Terms & Conditions</a> and <a href=\"https://account.abp.io/Account/Privacy\">Privacy Policy</a>.",
     "AbpConferenceDescription": "ABP Conference is a virtual event for .NET developers to learn and connect with the community.",
-    "Mobile": "Mobile"
+    "Mobile": "Mobile",
+    "MetaTwitterCard": "summary_large_image"
   }
 }

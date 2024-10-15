@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Zobrazených 0 až 0 z 0 záznamov",
     "PagerInfoFiltered": "(filtrované z celkom _MAX_ záznamov)",
     "NoDataAvailableInDatatable": "Nie sú k dispozícii žiadne údaje",
+    "ErrorLoadingDatatable": "Počas žiadosti došlo k chybe. Skontrolujte správu pre podrobnosti.",
     "Total": "celkom",
     "Selected": "vybrané",
     "PagerShowMenuEntries": "Zobraziť _MENU_ záznamov",

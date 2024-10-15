@@ -1,4 +1,4 @@
-## API Development
+# API Development
 
 The following documents explain the concepts, infrastructure and integrations to build HTTP APIs with ABP:
 

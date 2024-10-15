@@ -16,8 +16,11 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Volo.Abp.AspNetCore.MultiTenancy.Views;
+using Volo.Abp.AspNetCore.RazorViews;
 using Volo.Abp.Http;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy;
 
@@ -66,7 +69,7 @@ public class AbpAspNetCoreMultiTenancyOptions
                 }
             }
 
-            context.Response.Headers.Add("Abp-Tenant-Resolve-Error", HtmlEncoder.Default.Encode(exception.Message));
+            context.Response.Headers.Append("Abp-Tenant-Resolve-Error", HtmlEncoder.Default.Encode(exception.Message));
             if (isCookieAuthentication && context.Request.Method.Equals("Get", StringComparison.OrdinalIgnoreCase) && !context.Request.IsAjax())
             {
                 context.Response.Redirect(context.Request.GetEncodedUrl());
@@ -91,15 +94,16 @@ public class AbpAspNetCoreMultiTenancyOptions
                 context.Response.ContentType = resolvedContentType;
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 
+                var cancellationTokenProvider = context.RequestServices.GetRequiredService<ICancellationTokenProvider>();
                 var responseStream = context.Response.Body;
                 if (resolvedContentTypeEncoding.CodePage == Encoding.UTF8.CodePage)
                 {
                     try
                     {
-                        await JsonSerializer.SerializeAsync(responseStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
-                        await responseStream.FlushAsync(context.RequestAborted);
+                        await JsonSerializer.SerializeAsync(responseStream, error, error.GetType(), jsonSerializerOptions, cancellationTokenProvider.Token);
+                        await responseStream.FlushAsync(cancellationTokenProvider.Token);
                     }
-                    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
+                    catch (OperationCanceledException) when (cancellationTokenProvider.Token.IsCancellationRequested) { }
                 }
                 else
                 {
@@ -107,10 +111,10 @@ public class AbpAspNetCoreMultiTenancyOptions
                     ExceptionDispatchInfo? exceptionDispatchInfo = null;
                     try
                     {
-                        await JsonSerializer.SerializeAsync(transcodingStream, error, error.GetType(), jsonSerializerOptions, context.RequestAborted);
-                        await transcodingStream.FlushAsync(context.RequestAborted);
+                        await JsonSerializer.SerializeAsync(transcodingStream, error, error.GetType(), jsonSerializerOptions, cancellationTokenProvider.Token);
+                        await transcodingStream.FlushAsync(cancellationTokenProvider.Token);
                     }
-                    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }
+                    catch (OperationCanceledException) when (cancellationTokenProvider.Token.IsCancellationRequested) { }
                     catch (Exception ex)
                     {
                         exceptionDispatchInfo = ExceptionDispatchInfo.Capture(ex);
@@ -130,18 +134,11 @@ public class AbpAspNetCoreMultiTenancyOptions
             }
             else
             {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Response.ContentType = "text/html";
-
                 var message = exception.Message;
                 var details = exception is BusinessException businessException ? businessException.Details : string.Empty;
 
-                await context.Response.WriteAsync($"<html lang=\"{HtmlEncoder.Default.Encode(CultureInfo.CurrentCulture.Name)}\"><body>\r\n");
-                await context.Response.WriteAsync($"<h3>{HtmlEncoder.Default.Encode(message)}</h3>{HtmlEncoder.Default.Encode(details!)}<br>\r\n");
-                await context.Response.WriteAsync("</body></html>\r\n");
-
-                // Note the 500 spaces are to work around an IE 'feature'
-                await context.Response.WriteAsync(new string(' ', 500));
+                var errorPage = new MultiTenancyMiddlewareErrorPage(new MultiTenancyMiddlewareErrorPageModel(message, details!));
+                await errorPage.ExecuteAsync(context);
             }
 
             return true;

@@ -32,7 +32,7 @@ public class RemoveProxyCommand : ProxyCommandBase<RemoveProxyCommand>
         return sb.ToString();
     }
 
-    public override string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Remove client service proxies and DTOs to consume HTTP APIs.";
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -59,9 +60,11 @@ public static class AbpEntityTypeBuilderExtensions
             return;
         }
 
+        var type = typeof(ExtraPropertiesValueConverter<>).MakeGenericType(b.Metadata.ClrType);
+        var extraPropertiesValueConverter = Activator.CreateInstance(type)!.As<ValueConverter<ExtraPropertyDictionary, string>>();
         b.Property<ExtraPropertyDictionary>(nameof(IHasExtraProperties.ExtraProperties))
             .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
-            .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
+            .HasConversion(extraPropertiesValueConverter)
             .Metadata.SetValueComparer(new ExtraPropertyDictionaryValueComparer());
 
         b.TryConfigureObjectExtensions();

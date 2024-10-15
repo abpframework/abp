@@ -1,6 +1,6 @@
 # Migrating from Open Source Templates
 
-ABP Studio provides a way for users, who already started the development before purchasing a license, to auto-upgrade their solutions with Pro modules. You can use this functionality through ABP Studio UI or ABP Studio CLI:
+[ABP Studio](https://abp.io/studio) provides a way for the users who already started the development before purchasing a license to auto-upgrade their solutions with Pro modules. You can use this functionality through ABP Studio UI or ABP Studio CLI:
 
 * A new button labeled `Upgrade to Pro` will be visible if you have a license but the current solution is created with open-source (free) license.
 

@@ -145,7 +145,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
                 var redis = await ConnectionMultiplexer.ConnectAsync("127.0.0.1", options => options.ConnectTimeout = 3000);
                 isConnected = redis.IsConnected;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignored
             }
@@ -214,6 +214,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         sb.AppendLine("  abp new Acme.BookStore -u angular -d mongodb");
         sb.AppendLine("  abp new Acme.BookStore -m none");
         sb.AppendLine("  abp new Acme.BookStore -m react-native");
+        sb.AppendLine("  abp new Acme.BookStore -m maui");
         sb.AppendLine("  abp new Acme.BookStore -d mongodb");
         sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
         sb.AppendLine("  abp new Acme.BookStore -t module");
@@ -231,7 +232,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Generate a new solution based on the ABP startup templates.";
     }

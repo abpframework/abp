@@ -7,6 +7,8 @@
 
 # Getting Started with the React Native
 
+> React Native mobile option is *available for* ***Team*** *or higher licenses*
+
 ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
 
 ![React Native gif](../../../images/react-native-introduction.gif)

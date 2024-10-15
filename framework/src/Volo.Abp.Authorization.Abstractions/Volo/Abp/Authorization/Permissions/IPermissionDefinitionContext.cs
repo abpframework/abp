@@ -31,7 +31,6 @@ public interface IPermissionDefinitionContext
     /// Throws <see cref="AbpException"/> if there is a group with the name.
     /// <param name="name">Name of the group</param>
     /// <param name="displayName">Localized display name of the group</param>
-    /// <param name="multiTenancySide">Select a multi-tenancy side</param>
     /// </summary>
     PermissionGroupDefinition AddGroup(
         [NotNull] string name,

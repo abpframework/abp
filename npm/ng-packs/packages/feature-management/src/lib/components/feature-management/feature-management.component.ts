@@ -57,6 +57,9 @@ export class FeatureManagementComponent
   @Input()
   providerName: string;
 
+  @Input({ required: false })
+  providerTitle: string;
+
   selectedGroupDisplayName: string;
 
   groups: Pick<FeatureGroupDto, 'name' | 'displayName'>[] = [];

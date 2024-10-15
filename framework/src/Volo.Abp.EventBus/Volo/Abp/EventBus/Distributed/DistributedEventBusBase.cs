@@ -223,7 +223,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             await LocalEventBus.PublishAsync(distributedEvent);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             // ignored
         }
@@ -235,7 +235,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             await LocalEventBus.PublishAsync(distributedEvent);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             // ignored
         }

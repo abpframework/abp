@@ -32,7 +32,7 @@ public class MySqlConnectionStringChecker : IConnectionStringChecker, ITransient
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

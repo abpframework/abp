@@ -107,7 +107,7 @@ public class BuildCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Builds a dotnet repository and dependent repositories or a solution.";
     }

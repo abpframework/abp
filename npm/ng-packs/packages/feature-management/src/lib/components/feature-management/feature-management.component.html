@@ -1,7 +1,12 @@
 @if (visible) {
   <abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
     <ng-template #abpHeader>
-      <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
+      <h3>
+        {{ 'AbpFeatureManagement::Features' | abpLocalization }}
+        @if (providerTitle) {
+          - {{ providerTitle }}
+        }
+      </h3>
     </ng-template>
 
     <ng-template #abpBody>

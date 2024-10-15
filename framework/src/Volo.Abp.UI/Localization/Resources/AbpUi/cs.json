@@ -39,6 +39,7 @@
     "PagerInfoFiltered": "(filtrováno ze všech _MAX_ záznamů)",
     "NoDataAvailableInDatatable": "Nejsou žádná data",
     "Total": "celkem",
+    "ErrorLoadingDatatable": "Došlo k chybě během požadavku. Zkontrolujte zprávu pro podrobnosti.",
     "Selected": "vybráno",
     "PagerShowMenuEntries": "Zobrazit _MENU_ záznamů",
     "DatatableActionDropdownDefaultText": "Akce",

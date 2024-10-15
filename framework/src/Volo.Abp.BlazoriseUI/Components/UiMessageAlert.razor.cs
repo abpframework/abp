@@ -20,6 +20,9 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
     protected virtual bool ShowMessageIcon
        => Options?.ShowMessageIcon ?? true;
 
+    protected virtual bool IsMessageHtmlMarkup
+        => Options?.IsMessageHtmlMarkup ?? false;
+
     protected virtual object? MessageIcon => Options?.MessageIcon ?? MessageType switch
     {
         UiMessageType.Info => IconName.Info,

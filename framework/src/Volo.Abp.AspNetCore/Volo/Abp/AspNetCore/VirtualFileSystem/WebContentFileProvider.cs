@@ -85,23 +85,22 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
         return new CompositeChangeToken(
             new[]
             {
-                    _fileProvider.Watch(_rootPath + filter),
-                    _fileProvider.Watch(filter)
+                _fileProvider.Watch(_rootPath + filter),
+                _fileProvider.Watch(filter)
             }
         );
     }
 
     protected virtual IFileProvider CreateFileProvider()
     {
-        var fileProviders = new List<IFileProvider>
-            {
-                new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
-                _virtualFileProvider
-            };
+        var fileProviders = new List<IFileProvider>();
+        if (!_hostingEnvironment.ContentRootPath.IsNullOrEmpty())
+        {
+            fileProviders.Add(new PhysicalFileProvider(_hostingEnvironment.ContentRootPath));
+        }
 
-        return new CompositeFileProvider(
-            fileProviders
-        );
+        fileProviders.Add(_virtualFileProvider);
+        return new CompositeFileProvider(fileProviders);
     }
 
     protected virtual bool ExtraAllowedFolder(string path)

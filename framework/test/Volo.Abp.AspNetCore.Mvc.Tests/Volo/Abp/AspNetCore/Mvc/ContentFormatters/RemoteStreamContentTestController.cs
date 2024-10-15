@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Content;
 
@@ -26,7 +27,7 @@ public class RemoteStreamContentTestController : AbpController
         var memoryStream = new MemoryStream();
         await memoryStream.WriteAsync(Encoding.UTF8.GetBytes("DownloadAsync"));
         memoryStream.Position = 0;
-        Response.Headers.Add("Content-Disposition", "attachment; filename=myDownload.rtf");
+        Response.Headers.Append("Content-Disposition", "attachment; filename=myDownload.rtf");
         return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
     }
     
