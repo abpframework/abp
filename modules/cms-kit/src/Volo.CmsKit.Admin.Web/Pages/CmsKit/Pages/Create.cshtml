@@ -11,6 +11,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Uppy
+@using Volo.CmsKit.Admin.Web.Layouts
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Slugify
@@ -60,6 +61,8 @@
             <abp-input asp-for="@Model.ViewModel.Title" />
 
             <abp-input asp-for="ViewModel.Slug" label-tooltip-icon="fa fa-info-circle" label-tooltip="@L["PageSlugInformation"]" />
+
+            <abp-select id="Layout" asp-for="ViewModel.LayoutName" asp-items="@LayoutConstants.GetLayoutsSelectList()" label="@L["SelectLayout"]"></abp-select>
 
             <abp-input asp-for="@Model.ViewModel.Content" />
 
