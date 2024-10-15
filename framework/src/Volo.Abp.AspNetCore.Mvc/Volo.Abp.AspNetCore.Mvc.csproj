@@ -17,7 +17,6 @@
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
     <RootNamespace />
-    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

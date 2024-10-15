@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <IsTestProject Condition="$(MSBuildProjectFullPath.Contains('test')) and ($(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.TestBase')))">true</IsTestProject>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

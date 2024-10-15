@@ -8,7 +8,6 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <RootNamespace />
-    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
