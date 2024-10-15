@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.Admin.HttpApi",
-  "hash": "689f6b3f8cc4a2e9e75308df5a58b588",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging.Admin",
@@ -62,6 +62,90 @@
       ],
       "contentType": "abpModule",
       "name": "BloggingAdminHttpApiModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "api/blogging/blogs/admin",
+          "method": "GET",
+          "groupName": "BlogManagement",
+          "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Blogging.Blogs.Dtos.BlogDto]",
+          "responseTypeAsJson": "{\r\n  \"items\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"shortName\": \"string\",\r\n      \"description\": \"string\",\r\n      \"concurrencyStamp\": \"string\",\r\n      \"isDeleted\": false,\r\n      \"deleterId\": null,\r\n      \"deletionTime\": null,\r\n      \"lastModificationTime\": null,\r\n      \"lastModifierId\": null,\r\n      \"creationTime\": \"0001-01-01T00:00:00\",\r\n      \"creatorId\": null,\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "parameterDescriptions": []
+        },
+        {
+          "path": "api/blogging/blogs/admin/{id}",
+          "method": "GET",
+          "groupName": "BlogManagement",
+          "responseType": "Volo.Blogging.Blogs.Dtos.BlogDto",
+          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/blogs/admin",
+          "method": "POST",
+          "groupName": "BlogManagement",
+          "responseType": "Volo.Blogging.Blogs.Dtos.BlogDto",
+          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "input",
+              "type": "CreateBlogDto"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/blogs/admin/{id}",
+          "method": "PUT",
+          "groupName": "BlogManagement",
+          "responseType": "Volo.Blogging.Blogs.Dtos.BlogDto",
+          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"description\": \"string\",\r\n  \"concurrencyStamp\": \"string\",\r\n  \"isDeleted\": false,\r\n  \"deleterId\": null,\r\n  \"deletionTime\": null,\r\n  \"lastModificationTime\": null,\r\n  \"lastModifierId\": null,\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"creatorId\": null,\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            },
+            {
+              "name": "input",
+              "type": "UpdateBlogDto"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/blogs/admin/{id}",
+          "method": "DELETE",
+          "groupName": "BlogManagement",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        },
+        {
+          "path": "api/blogging/blogs/admin/clear-cache/{id}",
+          "method": "GET",
+          "groupName": "BlogManagement",
+          "responseType": "System.Void",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "id",
+              "type": "Guid"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
       "summary": null
     }
   ]

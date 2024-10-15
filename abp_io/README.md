@@ -9,7 +9,7 @@ By doing so, [abp.io](https://abp.io) websites will be translated into a new lan
 
 ## How to Translate abp.io Into Your Language:
 
-1. Install [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) command line tool.
+1. Install [ABP CLI](https://abp.io/docs/latest/cli) command line tool.
 
 2. Run the following command to generate the localization file. 
    For example, for translating from English to French `fr`: 
@@ -28,5 +28,5 @@ By doing so, [abp.io](https://abp.io) websites will be translated into a new lan
 
 
 ## References:
-* [ABP CLI Translate Command](https://docs.abp.io/en/abp/latest/Contribution/Index#using-the-abp-translate-command)
+* [ABP CLI Translate Command](https://abp.io/docs/latest/contribution#using-the-abp-translate-command)
 * [Contribution Guide](https://github.com/abpframework/abp/blob/dev/docs/en/Contribution/Index.md)

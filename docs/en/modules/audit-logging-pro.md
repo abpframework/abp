@@ -115,7 +115,7 @@ To see `AbpAuditingOptions` properties, please see its [documentation](../framew
 
 ### ExpiredAuditLogDeleterOptions
 
-`ExpiredAuditLogDeleterOptions` can be configured in the UI layer, within the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`ExpiredAuditLogDeleterOptions` can be configured in the UI layer, within the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
 ```csharp
 Configure<ExpiredAuditLogDeleterOptions>(options =>
@@ -241,7 +241,7 @@ You can modify the look and behavior of the module pages by passing the followin
 
 #### Services / Models
 
-Audit Logging module services and models are generated via `generate-proxy` command of the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI). If you need the module's proxies, you can run the following command in the Angular project directory:
+Audit Logging module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli/index.md). If you need the module's proxies, you can run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module auditLogging

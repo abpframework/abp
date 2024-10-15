@@ -32,6 +32,7 @@ using Volo.Abp.AspNetCore.Mvc.DataAnnotations;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Infrastructure;
 using Volo.Abp.AspNetCore.Mvc.Json;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
@@ -196,8 +197,8 @@ public class AbpAspNetCoreMvcModule : AbpModule
             options.EndpointConfigureActions.Add(endpointContext =>
             {
                 endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
-                endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                endpointContext.Endpoints.MapRazorPages();
+                endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+                endpointContext.Endpoints.MapRazorPages().WithStaticAssets();
             });
         });
 
@@ -231,6 +232,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         AddApplicationParts(context);
+        CheckLibs(context);
     }
 
     private static void AddApplicationParts(ApplicationInitializationContext context)
@@ -276,5 +278,10 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
         }
+    }
+
+    private static void CheckLibs(ApplicationInitializationContext context)
+    {
+        context.ServiceProvider.GetRequiredService<IAbpMvcLibsService>().CheckLibs(context);
     }
 }

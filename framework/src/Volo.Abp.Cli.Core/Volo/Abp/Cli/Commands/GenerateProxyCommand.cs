@@ -34,7 +34,7 @@ public class GenerateProxyCommand : ProxyCommandBase<GenerateProxyCommand>
         return sb.ToString();
     }
 
-    public override string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Generates client service proxies and DTOs to consume HTTP APIs.";
     }

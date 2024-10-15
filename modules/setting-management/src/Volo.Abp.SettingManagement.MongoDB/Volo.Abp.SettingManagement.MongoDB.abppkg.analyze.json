@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.MongoDB",
-  "hash": "3171fe44d81aa843b693ea20310d7ada",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement.MongoDB",
@@ -71,7 +71,13 @@
         {
           "entityFullName": "Volo.Abp.SettingManagement.Setting",
           "contentType": "databaseCollection",
-          "name": "AbpSettings",
+          "name": "Settings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.SettingManagement.SettingDefinitionRecord",
+          "contentType": "databaseCollection",
+          "name": "SettingDefinitionRecords",
           "summary": null
         }
       ],

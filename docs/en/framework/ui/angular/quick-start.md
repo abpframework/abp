@@ -1,5 +1,7 @@
 # ABP Angular Quick Start
 
+**In this version ABP uses Angular [17.3.x](https://github.com/angular/angular/tree/17.3.x) version. You don't have to install Angular CLI globally**
+
 ## How to Prepare Development Environment
 
 Please follow the steps below to prepare your development environment for Angular.

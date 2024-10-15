@@ -99,7 +99,7 @@ public class ListTemplatesCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Lists available templates to be created.";
     }

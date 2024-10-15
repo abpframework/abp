@@ -364,12 +364,14 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add("data-parent-el", options.ParentEl);
         }
 
+#pragma warning disable CS0618 // Type or member is obsolete
         if (!options.DateFormat.IsNullOrEmpty())
         {
             attrList.Add("data-date-format", options.DateFormat);
         }
-        
-        if(!options.VisibleDateFormat.IsNullOrEmpty())
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        if (!options.VisibleDateFormat.IsNullOrEmpty())
         {
             attrList.Add("data-visible-date-format", options.VisibleDateFormat);
         }

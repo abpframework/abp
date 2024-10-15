@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Guids;
+﻿using System;
+
+namespace Volo.Abp.Guids;
 
 /// <summary>
 /// Describes the type of a sequential GUID value.
@@ -12,7 +14,7 @@ public enum SequentialGuidType
     SequentialAsString,
 
     /// <summary>
-    /// The GUID should be sequential when formatted using the <see cref="Guid.ToByteArray" /> method.
+    /// The GUID should be sequential when formatted using the <see cref="Guid.ToByteArray()" /> method.
     /// Used by Oracle.
     /// </summary>
     SequentialAsBinary,

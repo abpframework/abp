@@ -58,6 +58,32 @@ The marking system provides a toggle widget to allow users to add/remove the mar
 * `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. 
 * `needsConfirmation` An optional parameter to let the user confirm when removing the mark.
 
+### Filtering on Marked Items
+
+Users can filter their marked items to easily find their favorites. Here's how to utilize the `GetEntityIdsFilteredByUserAsync` method to filter the user's marked items within your repository queries:
+
+```csharp
+List<string> entityIdFilters = null;
+if (userId.HasValue)
+{
+    entityIdFilters = await UserMarkedItemRepository.GetEntityIdsFilteredByUserAsync(
+        userId.Value, 
+        entityType, 
+        cancellationToken: cancellationToken
+    );
+}
+
+var queryable = (await GetDbSetAsync())
+    .WhereIf(entityIdFilters != null, x => entityIdFilters.Contains(x.Id.ToString()));
+
+// Additional query logic...
+```
+
+- `GetEntityIdsFilteredByUserAsync`: Retrieves a list of entity IDs marked by the user for the given entity type.
+- `userId`: The ID of the user performing the filtering.
+- `entityType`: The type of entity being filtered (e.g., "product").
+- `entityIdFilters`: A list of marked entity IDs that will be used to filter the items in the database.
+
 # Internals
 
 ## Domain Layer

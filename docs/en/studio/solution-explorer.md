@@ -47,6 +47,8 @@ It is the main solution that you can open with ABP Studio, an ABP solution can c
 - `Open With`
   - `Terminal`: Opens the terminal in the solution directory.
   - `Explorer`: Opens the file explorer in the solution directory.
+- `Solution Configuration`: You can see the project creation options in this menu. It opens the *Solution Configuration* window.
+- `Open Readme`: Opens the README file in the solution if available. If there is no README file, this option will not be visible.
 
 ## Folder
 
@@ -143,6 +145,10 @@ You can choose the database provider for your microservice module. Select one of
 
 ![create-new-microservice-nolayers-database-provider](./images/solution-explorer/create-new-microservice-nolayers-database-provider.png)
 
+When you create a microservice, you must edit some [configurations](../solution-templates/microservice/adding-new-microservices.md#configuring-the-appsettingsjson). If you select the *Enable integration* option, it automatically configures the required settings for the microservice to work with the gateway, web, and other modules.
+
+![create-new-microservice-nolayers-enable-integration](./images/solution-explorer/create-new-microservice-nolayers-enable-integration.png)
+
 After creating the *Microservice (service-nolayers)* module, it will be added to the solution, and you should see the following structure in the solution explorer.
 
 ![created-new-microservice-nolayers](./images/solution-explorer/created-new-microservice-nolayers.png)
@@ -157,7 +163,7 @@ ABP modules have their own file extension `.abpmdl`, and they are located in the
 
 ### Difference Between ABP Module Template and ABP Studio Module Approach
 
-In ABP, creating a module solution using the [CLI](https://docs.abp.io/en/commercial/latest/startup-templates/module/creating-a-new-solution) results in a solution with numerous projects, some of which may not be necessary for a specific use case. The ABP Studio module approach differs from the ABP module template, offering greater flexibility. With ABP Studio, we can create a module containing only the required projects; for example, an empty module with only the `Domain` and `Application` projects. In this approach, the term [Package](./concepts.md#package) is used for module projects.
+In ABP, creating a module solution using the [old CLI](../cli/differences-between-old-and-new-cli.md) results in a solution with numerous projects, some of which may not be necessary for a specific use case. The ABP Studio new module approach differs from the ABP old module template, offering greater flexibility. With ABP Studio, we can create a module containing only the required projects; for example, an empty module with only the `Domain` and `Application` projects. In this approach, the term [Package](./concepts.md#package) is used for module projects.
 
 Furthermore, it's important to mention that we can create not just DDD-principled modules. The [Modularity](../framework/architecture/modularity/basics.md) document clarifies the difference between *Framework* and *Application* modules. Basically, every C# project refers to the `Volo.Abp.Core` package and defines the *Module* class as an ABP Class Library. We have the option to develop an infrastructure module using only the *ABP Class Library* packages and provide a module reference to other modules.
 

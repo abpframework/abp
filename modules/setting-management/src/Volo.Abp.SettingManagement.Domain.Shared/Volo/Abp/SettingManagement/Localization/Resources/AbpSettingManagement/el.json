@@ -15,6 +15,7 @@
     "TestEmailSubject": "Δοκιμαστικό email {0}",
     "TestEmailBody": "Δοκιμαστικό κείμενο email εδώ",
     "SuccessfullySent": "Στάλθηκε με επιτυχία",
+    "MailSendingFailed": "Αποτυχία αποστολής email. Ελέγξτε τη διαμόρφωση του email σας και δοκιμάστε ξανά.",
     "Send": "Αποστολή",
     "Menu:Emailing": "Αποστολή email",
     "SmtpHost": "Διακομιστής",

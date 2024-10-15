@@ -1,7 +1,5 @@
 # Module Development Best Practices & Conventions
 
-### Introduction
-
 This document describes the **best practices** and **conventions** for those who want to develop **modules** that satisfy the following specifications:
 
 * Develop modules that conform to the **Domain Driven Design** patterns & best practices.
@@ -10,7 +8,7 @@ This document describes the **best practices** and **conventions** for those who
 
 Also, this guide is mostly usable for general **application development**.
 
-### Guides
+## The Guides
 
 * Overall
   * [Module Architecture](./module-architecture.md)

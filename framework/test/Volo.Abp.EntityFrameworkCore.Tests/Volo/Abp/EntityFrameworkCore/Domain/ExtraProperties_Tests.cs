@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
@@ -57,6 +58,27 @@ public class ExtraProperties_Tests : ExtraProperties_Tests<AbpEntityFrameworkCor
             indexes.ShouldNotBeEmpty();
             indexes.ShouldContain(x => x.IsUnique);
         });
+    }
+
+    [Fact]
+    public async Task Should_Get_An_Extra_Property_After_Soft_Deletion()
+    {
+        var london = await CityRepository.FindByNameAsync("London");
+        london.HasProperty("PhoneCode").ShouldBeTrue();
+        london.GetProperty<string>("PhoneCode").ShouldBe("42");
+
+        await CityRepository.DeleteAsync(london);
+
+        london = await CityRepository.FindByNameAsync("London");
+        london.ShouldBeNull();
+
+        using (var uow = ServiceProvider.GetRequiredService<IDataFilter>().Disable<ISoftDelete>())
+        {
+            london = await CityRepository.FindByNameAsync("London");
+            london.IsDeleted.ShouldBeTrue();
+            london.HasProperty("PhoneCode").ShouldBeTrue();
+            london.GetProperty<string>("PhoneCode").ShouldBe("42");
+        }
     }
 
     public enum Color

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Application",
-  "hash": "3ceeb88026645c5e1f479c66635735e1",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs",
@@ -146,6 +146,7 @@
       "methods": [
         {
           "returnType": "ListResultDto<ProjectDto>",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -156,6 +157,7 @@
         },
         {
           "returnType": "ProjectDto",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -172,6 +174,7 @@
         },
         {
           "returnType": "ListResultDto<VersionInfoDto>",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetVersionsAsync",
           "summary": null,
           "isAsync": true,
@@ -188,6 +191,7 @@
         },
         {
           "returnType": "LanguageConfig",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetLanguageListAsync",
           "summary": null,
           "isAsync": true,
@@ -209,6 +213,7 @@
         },
         {
           "returnType": "String",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetDefaultLanguageCodeAsync",
           "summary": null,
           "isAsync": true,
@@ -300,6 +305,7 @@
       "methods": [
         {
           "returnType": "DocumentWithDetailsDto",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -316,6 +322,7 @@
         },
         {
           "returnType": "DocumentWithDetailsDto",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetDefaultAsync",
           "summary": null,
           "isAsync": true,
@@ -332,6 +339,7 @@
         },
         {
           "returnType": "NavigationNode",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetNavigationAsync",
           "summary": null,
           "isAsync": true,
@@ -348,6 +356,7 @@
         },
         {
           "returnType": "DocumentResourceDto",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetResourceAsync",
           "summary": null,
           "isAsync": true,
@@ -363,7 +372,8 @@
           ]
         },
         {
-          "returnType": "List<DocumentSearchOutput>",
+          "returnType": "PagedResultDto<DocumentSearchOutput>",
+          "namespace": "Volo.Docs.Documents",
           "name": "SearchAsync",
           "summary": null,
           "isAsync": true,
@@ -380,6 +390,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Docs.Documents",
           "name": "FullSearchEnabledAsync",
           "summary": null,
           "isAsync": true,
@@ -390,6 +401,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetUrlsAsync",
           "summary": null,
           "isAsync": true,
@@ -406,6 +418,7 @@
         },
         {
           "returnType": "DocumentParametersDto",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetParametersAsync",
           "summary": null,
           "isAsync": true,

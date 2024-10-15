@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.MongoDB",
-  "hash": "010d09056500caecfaeb5cbb7f049f0a",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs.MongoDB",
@@ -69,15 +69,15 @@
       "connectionStringName": "Docs",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Docs.Documents.Document",
+          "entityFullName": "Volo.Docs.Projects.Project",
           "contentType": "databaseCollection",
-          "name": "DocsDocumentS",
+          "name": "Projects",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Docs.Projects.Project",
+          "entityFullName": "Volo.Docs.Documents.Document",
           "contentType": "databaseCollection",
-          "name": "DocsProjects",
+          "name": "Documents",
           "summary": null
         }
       ],

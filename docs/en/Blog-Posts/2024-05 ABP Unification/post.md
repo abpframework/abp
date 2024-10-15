@@ -108,4 +108,3 @@ ABP Commercial license holders may wonder if any license change happens. The ans
 ## Last Words
 
 With this post, we wanted to announce the changes to be made on the ABP platform to the ABP community, so don't be surprised or curious about what happened. If you have any questions or suggestions, feel free to write a comment for this blog post or send an email to info@abp.io.
-

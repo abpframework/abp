@@ -61,6 +61,23 @@ export interface ExtensionPropertyDto {
   configuration: Record<string, any>;
   defaultValue: any;
   formText?: string;
+  policy?: Policy;
+}
+
+export interface BaseDefinition {
+  requiresAll: boolean;
+}
+export interface FeatureDefinition extends BaseDefinition {
+  features?: string[];
+}
+export interface PermissionDefinition extends BaseDefinition {
+  permissionNames?: string[];
+}
+
+export interface Policy {
+  globalFeatures: FeatureDefinition;
+  features: FeatureDefinition;
+  permissions: PermissionDefinition;
 }
 
 export interface ExtensionPropertyUiDto {

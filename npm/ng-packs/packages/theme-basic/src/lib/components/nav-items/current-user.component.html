@@ -56,9 +56,7 @@
     </div>
   </div>
 } @else {
-  <ng-template #loginBtn>
-    <a role="button" class="nav-link pointer" (click)="navigateToLogin()">{{
-      'AbpAccount::Login' | abpLocalization
-    }}</a>
-  </ng-template>
+    <a role="button" class="nav-link pointer" (click)="navigateToLogin()">
+      {{ 'AbpAccount::Login' | abpLocalization }}
+    </a>
 }

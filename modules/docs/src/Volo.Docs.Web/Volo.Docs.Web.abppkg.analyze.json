@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Web",
-  "hash": "6de1a5d8b7e07b55bd1fc1f98dad11d0",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs",
@@ -82,6 +82,44 @@
       ],
       "contentType": "abpModule",
       "name": "DocsWebModule",
+      "summary": null
+    },
+    {
+      "apis": [
+        {
+          "path": "document-resources",
+          "method": "GET",
+          "groupName": "DocumentResource",
+          "responseType": "Volo.Abp.Http.RemoteServiceErrorResponse",
+          "responseTypeAsJson": "",
+          "parameterDescriptions": [
+            {
+              "name": "ProjectId",
+              "type": "Guid"
+            },
+            {
+              "name": "Name",
+              "type": "String"
+            },
+            {
+              "name": "Version",
+              "type": "String"
+            },
+            {
+              "name": "LanguageCode",
+              "type": "String"
+            }
+          ]
+        }
+      ],
+      "contentType": "httpApi",
+      "name": "Defined Http Apis",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Pages.Documents.Project",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]

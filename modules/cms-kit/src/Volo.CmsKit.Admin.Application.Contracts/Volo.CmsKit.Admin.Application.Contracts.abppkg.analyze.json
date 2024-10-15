@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Admin.Application.Contracts",
-  "hash": "ff0f4d058f512abcca9b3b61a7bb300e",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Admin",
@@ -60,7 +60,7 @@
       "summary": null
     },
     {
-      "displayName": "Comment Management",
+      "displayName": "Comment management",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Comments",
@@ -74,7 +74,21 @@
       "summary": null
     },
     {
-      "displayName": "Tag Management",
+      "displayName": "Permission:Comments.Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Permission:Comments.SettingManagement",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments.SettingManagement",
+      "summary": null
+    },
+    {
+      "displayName": "Tag management",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Tags",
@@ -102,7 +116,7 @@
       "summary": null
     },
     {
-      "displayName": "Page Management",
+      "displayName": "Page management",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Pages",
@@ -130,14 +144,14 @@
       "summary": null
     },
     {
-      "displayName": "Set As Home Page",
+      "displayName": "Set as home page",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Pages.SetAsHomePage",
       "summary": null
     },
     {
-      "displayName": "Blog Management",
+      "displayName": "Blog management",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Blogs",
@@ -172,7 +186,7 @@
       "summary": null
     },
     {
-      "displayName": "Blog Post Management",
+      "displayName": "Blog post management",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.BlogPosts",
@@ -207,7 +221,7 @@
       "summary": null
     },
     {
-      "displayName": "Menu Management",
+      "displayName": "Menu management",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.Menus",
@@ -235,7 +249,7 @@
       "summary": null
     },
     {
-      "displayName": "Global Resources",
+      "displayName": "Global resources",
       "isEnabled": true,
       "contentType": "permission",
       "name": "CmsKit.GlobalResources",

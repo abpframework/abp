@@ -5,7 +5,7 @@
 <Modal @ref="Modal" Closing="@ClosingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
-            <ModalTitle>@L["Features"]</ModalTitle>
+            <ModalTitle>@L["Features"]@ProviderKeyDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         @if (Groups == null || !Groups.Any())
@@ -54,11 +54,10 @@
                                             if (feature.ValueType is SelectionStringValueType)
                                             {
                                                 var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
-
+                                                var selectedValue = SelectionStringValues[feature.Name];
                                                 <Field Style="@GetFeatureStyles(feature)">
                                                     <FieldLabel>@feature.DisplayName</FieldLabel>
-                                                    <Select TValue="string"
-                                                    @bind-SelectedValue="@SelectionStringValues[feature.Name]">
+                                                    <Select TValue="string" SelectedValue="selectedValue" SelectedValueChanged="s => SelectionStringValues[feature.Name] = s">
                                                         @foreach (var item in items)
                                                         {
                                                             <SelectItem Value="@item.Value">

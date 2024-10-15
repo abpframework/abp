@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Application",
-  "hash": "a9ca2b4f663694fa5d258984dc689f56",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -136,6 +136,7 @@
       "methods": [
         {
           "returnType": "GetFeatureListResultDto",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -157,6 +158,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -183,6 +185,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,

@@ -16,9 +16,6 @@ This document is a guide for upgrading ABP v8.x solutions to ABP v8.2. There are
 Before this version, all of the projects above were targeting multiple frameworks (**netstandard2.0**, **netstandard2.1** and **net8.0**), with this version, we started to only target **net8.0** for these template projects. Note that, all other shared libraries still target multiple frameworks.
 
 > This change should not affect your pre-existing solutions and you don't need to make any changes in your application. See the PR for more info: https://github.com/abpframework/abp/pull/19565
-## Upgraded AutoMapper to 13.0.1
-
-In this version, **AutoMapper** library version upgraded to 13.0.1. See [the release notes of AutoMapper v13.0.1](https://github.com/AutoMapper/AutoMapper/releases/tag/v13.0.1) for more information.
 
 ## Added default padding to `.tab-content` class for Basic Theme
 
@@ -51,8 +48,71 @@ If the flag icon has been specified while defining the localization languages, t
 In this version, ABP Framework provides a new UI option called **Blazor Full-Stack WebApp**. We have already created an introduction/migration guide for you to check it: [Migrating to Blazor Web App](abp-8-2-blazor-web-app.md)
 
 > Please read the documentation carefully if you are considering migrating your existing **Blazor** project to **Blazor WebApp**.
+
+## Angular UI
+
+In this version, the Angular UI has been updated to use the Angular version 17.3.0 and Nx version to 19.0.0. See the PR for more information: [#19915](https://github.com/abpframework/abp/pull/19915/)
+
 ## Session Management Infrastructure
 
 The **Session Management** feature allows you to prevent concurrent login and manage user sessions.
 
 In this version, a new entity called `IdentitySession` has been added to the framework and you should create a new migration and apply it to your database.
+
+## Upgraded NuGet Dependencies
+
+You can see the following list of NuGet libraries that have been upgraded with this release, if you are using one of these packages explicitly, you may consider upgrading them in your solution:
+
+| Package                                                    | Old Version | New Version |
+| ---------------------------------------------------------- | ----------- | ----------- |
+| AutoMapper                                                 | 12.0.1      | 13.0.1      |
+| Blazorise                                                  | 1.4.1       | 1.5.2       |
+| Blazorise.Bootstrap5                                       | 1.4.1       | 1.5.2       |
+| Blazorise.Icons.FontAwesome                                | 1.4.1       | 1.5.2       |
+| Blazorise.Components                                       | 1.4.1       | 1.5.2       |
+| Blazorise.DataGrid                                         | 1.4.1       | 1.5.2       |
+| Blazorise.Snackbar                                         | 1.4.1       | 1.5.2       |
+| Hangfire.AspNetCore                                        | 1.8.6       | 1.8.14      |
+| Hangfire.SqlServer                                         | 1.8.6       | 1.8.14      |
+| Microsoft.AspNetCore.Authentication.JwtBearer              | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect          | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Authorization                         | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components                            | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components.Authorization              | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components.Web                        | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components.WebAssembly                | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components.WebAssembly.Server         | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Components.WebAssembly.DevServer      | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.DataProtection.StackExchangeRedis     | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Mvc.NewtonsoftJson 		     | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation          | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.Mvc.Testing                           | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.TestHost 		             | 8.0.0       | 8.0.4       |
+| Microsoft.AspNetCore.WebUtilities 		             | 8.0.0       | 8.0.4       |
+| Microsoft.Data.SqlClient                                   | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore                              | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.Design                       | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.InMemory                     | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.Proxies                      | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.Relational                   | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.Sqlite                       | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.SqlServer                    | 8.0.0       | 8.0.4       |
+| Microsoft.EntityFrameworkCore.Tools                        | 8.0.0       | 8.0.4       |
+| Microsoft.Extensions.DependencyInjection.Abstractions      | 8.0.0       | 8.0.1       |
+| Microsoft.Extensions.FileProviders.Embedded                | 8.0.0       | 8.0.4       |
+| Microsoft.Extensions.Logging.Abstractions                  | 8.0.0       | 8.0.1       |
+| Microsoft.Extensions.Options                               | 8.0.0       | 8.0.2       |
+| Microsoft.IdentityModel.Protocols.OpenIdConnect            | -           | 7.5.1       |
+| Microsoft.IdentityModel.Tokens                             | -           | 7.5.1       |
+| Microsoft.IdentityModel.JsonWebTokens                      | -           | 7.5.1       |
+| System.IdentityModel.Tokens.Jwt                            | -           | 7.5.1       |
+| OpenIddict.Abstractions                                    | 5.1.0       | 5.5.0       |
+| OpenIddict.Core                                            | 5.1.0       | 5.5.0       |
+| OpenIddict.Server.AspNetCore                               | 5.1.0       | 5.5.0       |
+| OpenIddict.Validation.AspNetCore                           | 5.1.0       | 5.5.0       |
+| OpenIddict.Validation.ServerIntegration                    | 5.1.0       | 5.5.0       |
+| Oracle.EntityFrameworkCore                                 | 8.21.121    | 8.23.40     |
+| Pomelo.EntityFrameworkCore.MySql                           | 8.0.0       | 8.0.2       |
+| SixLabors.ImageSharp                                       | 3.0.2       | 3.1.4       |
+

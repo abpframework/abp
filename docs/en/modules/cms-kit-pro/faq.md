@@ -8,7 +8,7 @@ The CMS kit provides a **FAQ** system to allow users to create, edit and delete 
 
 ## Enabling the FAQ System
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](https://docs.abp.io/en/abp/latest/Global-Features) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
 
 > Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
@@ -32,7 +32,7 @@ You can list, create, update and delete sections and their questions FAQ's on th
 
 ## Faq Widget
 
-The FAQ system provides a FAQ [widget](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) for users to display FAQ's. You can place the widget on a page like below:
+The FAQ system provides a FAQ [widget](../../framework/ui/mvc-razor-pages/widgets.md) for users to display FAQ's. You can place the widget on a page like below:
 
 ```csharp
 @await Component.InvokeAsync(
@@ -48,11 +48,11 @@ The FAQ system provides a FAQ [widget](https://docs.abp.io/en/abp/latest/UI/AspN
 - `groupName` (optional): It allows to specify which FAQ group to show. If not specified, all groups will be shown.
 - `sectionName` (optional): It is used to determine which section within the specified group will be shown. If not specified, all sections in the related group will be shown.
 
-The FAQ system can also be used in combination with the [dynamic widget](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit/Dynamic-Widget) feature.
+The FAQ system can also be used in combination with the [dynamic widget](../cms-kit/dynamic-widget.md) feature.
 
 ## Options
 
-The FAQ system provides a mechanism to group sections by group name. For example, if you want to use the FAQ system for  community and support page, you need to define two group names named Community and Support and add sections under these groups. So, before using the FAQ system, you need to define groups. For that, you can use `FaqOptions`. `FaqOptions` can be configured at the domain layer, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics).
+The FAQ system provides a mechanism to group sections by group name. For example, if you want to use the FAQ system for  community and support page, you need to define two group names named Community and Support and add sections under these groups. So, before using the FAQ system, you need to define groups. For that, you can use `FaqOptions`. `FaqOptions` can be configured at the domain layer, in the `ConfigureServices` method of your [module]../../framework/architecture/modularity/basics.md).
 
 ```csharp
 Configure<FaqOptions>(options =>
@@ -71,7 +71,7 @@ Configure<FaqOptions>(options =>
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### FAQ
 
@@ -82,7 +82,7 @@ A FAQ represents a generated FAQ with its questions:
 
 #### Repositories
 
-This module follows the guidelines of [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories).
+This module follows the guidelines of [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md).
 
 The following special repositories are defined for these features:
 
@@ -92,7 +92,7 @@ The following special repositories are defined for these features:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 
 ### Application layer
@@ -115,7 +115,7 @@ All tables/collections use the `Cms` prefix by default. Set static properties on
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 

@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Domain",
-  "hash": "a330d75df32c8b504c193f59fe9554e5",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit",
@@ -24,6 +24,11 @@
           "declaringAssemblyName": "Volo.Abp.BlobStoring",
           "namespace": "Volo.Abp.BlobStoring",
           "name": "AbpBlobStoringModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Domain",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "AbpSettingManagementDomainModule"
         }
       ],
       "implementingInterfaces": [
@@ -157,7 +162,7 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         },
         {
@@ -170,6 +175,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Users",
           "name": "Update",
           "summary": null,
           "isAsync": false,
@@ -353,13 +359,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -376,6 +383,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "SetEntityType",
           "summary": null,
           "isAsync": false,
@@ -469,7 +477,7 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
@@ -568,6 +576,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Ratings",
           "name": "SetStarCount",
           "summary": null,
           "isAsync": false,
@@ -736,13 +745,20 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        },
+        {
+          "name": "IHasEntityVersion",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasEntityVersion"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "SetTitle",
           "summary": null,
           "isAsync": false,
@@ -759,6 +775,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "SetContent",
           "summary": null,
           "isAsync": false,
@@ -775,6 +792,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "SetScript",
           "summary": null,
           "isAsync": false,
@@ -791,6 +809,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "SetStyle",
           "summary": null,
           "isAsync": false,
@@ -844,6 +863,11 @@
         {
           "type": "System.Boolean",
           "name": "IsHomePage",
+          "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "EntityVersion",
           "summary": null
         }
       ],
@@ -940,13 +964,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Menus",
           "name": "SetDisplayName",
           "summary": null,
           "isAsync": false,
@@ -963,6 +988,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Menus",
           "name": "SetUrl",
           "summary": null,
           "isAsync": false,
@@ -1156,13 +1182,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.MediaDescriptors",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -1211,6 +1238,99 @@
       ],
       "contentType": "aggregateRoot",
       "name": "MediaDescriptor",
+      "summary": null
+    },
+    {
+      "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
+        },
+        {
+          "name": "IMustHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMustHaveCreator"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.CmsKit.MarkedItems",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "CreatorId",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "CreationTime",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "EntityId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "EntityType",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "UserMarkedItem",
       "summary": null
     },
     {
@@ -1302,13 +1422,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.GlobalResources",
           "name": "SetValue",
           "summary": null,
           "isAsync": false,
@@ -1414,13 +1535,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "SetText",
           "summary": null,
           "isAsync": false,
@@ -1434,6 +1556,39 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "Approve",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        },
+        {
+          "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "Reject",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        },
+        {
+          "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "WaitForApproval",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
         }
       ],
       "collectionProperties": {},
@@ -1474,6 +1629,21 @@
         {
           "type": "System.DateTime",
           "name": "CreationTime",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Url",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "IdempotencyToken",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Boolean]",
+          "name": "IsApproved",
           "summary": null
         }
       ],
@@ -1594,13 +1764,14 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -1617,6 +1788,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetSlug",
           "summary": null,
           "isAsync": false,
@@ -1907,13 +2079,20 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        },
+        {
+          "name": "IHasEntityVersion",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasEntityVersion"
         }
       ],
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetTitle",
           "summary": null,
           "isAsync": false,
@@ -1930,6 +2109,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetShortDescription",
           "summary": null,
           "isAsync": false,
@@ -1946,6 +2126,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetContent",
           "summary": null,
           "isAsync": false,
@@ -1962,6 +2143,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetDraft",
           "summary": null,
           "isAsync": false,
@@ -1972,6 +2154,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetPublished",
           "summary": null,
           "isAsync": false,
@@ -1982,6 +2165,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetWaitingForReview",
           "summary": null,
           "isAsync": false,
@@ -2052,6 +2236,11 @@
           "type": "Volo.CmsKit.Blogs.BlogPostStatus",
           "name": "Status",
           "summary": null
+        },
+        {
+          "type": "System.Int32",
+          "name": "EntityVersion",
+          "summary": null
         }
       ],
       "contentType": "aggregateRoot",
@@ -2069,6 +2258,7 @@
       "methods": [
         {
           "returnType": "EntityTag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "AddTagToEntityAsync",
           "summary": null,
           "isAsync": true,
@@ -2105,6 +2295,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "RemoveTagFromEntityAsync",
           "summary": null,
           "isAsync": true,
@@ -2141,6 +2332,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "SetEntityTagsAsync",
           "summary": null,
           "isAsync": true,
@@ -2167,6 +2359,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetEntityIdsFilteredByTagAsync",
           "summary": null,
           "isAsync": true,
@@ -2193,6 +2386,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetEntityIdsFilteredByTagNameAsync",
           "summary": null,
           "isAsync": true,
@@ -2252,6 +2446,7 @@
       "methods": [
         {
           "returnType": "Tag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetOrAddAsync",
           "summary": null,
           "isAsync": true,
@@ -2273,6 +2468,7 @@
         },
         {
           "returnType": "Tag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2299,6 +2495,7 @@
         },
         {
           "returnType": "Tag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -2348,6 +2545,7 @@
       "methods": [
         {
           "returnType": "List<ReactionDefinition>",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "GetReactionsAsync",
           "summary": null,
           "isAsync": true,
@@ -2364,6 +2562,7 @@
         },
         {
           "returnType": "List<ReactionSummary>",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "GetSummariesAsync",
           "summary": null,
           "isAsync": true,
@@ -2385,6 +2584,7 @@
         },
         {
           "returnType": "UserReaction",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "GetOrCreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2416,6 +2616,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -2475,6 +2676,7 @@
       "methods": [
         {
           "returnType": "Rating",
+          "namespace": "Volo.CmsKit.Ratings",
           "name": "SetStarAsync",
           "summary": null,
           "isAsync": true,
@@ -2534,6 +2736,7 @@
       "methods": [
         {
           "returnType": "Page",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2570,6 +2773,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "SetSlugAsync",
           "summary": null,
           "isAsync": true,
@@ -2591,6 +2795,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "SetHomePageAsync",
           "summary": null,
           "isAsync": true,
@@ -2607,6 +2812,7 @@
         },
         {
           "returnType": "Page",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "GetHomePageAsync",
           "summary": null,
           "isAsync": true,
@@ -2645,6 +2851,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Menus",
           "name": "SetPageUrl",
           "summary": null,
           "isAsync": false,
@@ -2666,6 +2873,29 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Menus",
+          "name": "SetPageUrl",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "MenuItem",
+              "name": "menuItem",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "url",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Menus",
           "name": "MoveAsync",
           "summary": null,
           "isAsync": true,
@@ -2692,6 +2922,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Menus",
           "name": "OrganizeTreeOrderForMenuItem",
           "summary": null,
           "isAsync": false,
@@ -2741,6 +2972,7 @@
       "methods": [
         {
           "returnType": "MediaDescriptor",
+          "namespace": "Volo.CmsKit.MediaDescriptors",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2790,6 +3022,61 @@
       "summary": null
     },
     {
+      "namespace": "Volo.CmsKit.MarkedItems",
+      "baseClass": {
+        "name": "CmsKitDomainServiceBase",
+        "namespace": "Volo.CmsKit",
+        "declaringAssemblyName": "Volo.CmsKit.Domain",
+        "fullName": "Volo.CmsKit.CmsKitDomainServiceBase"
+      },
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "ToggleUserMarkedItemAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "creatorId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "MarkedItemManager",
+      "summary": null
+    },
+    {
       "namespace": "Volo.CmsKit.GlobalResources",
       "baseClass": {
         "name": "DomainService",
@@ -2800,6 +3087,7 @@
       "methods": [
         {
           "returnType": "GlobalResource",
+          "namespace": "Volo.CmsKit.GlobalResources",
           "name": "SetGlobalStyleAsync",
           "summary": null,
           "isAsync": true,
@@ -2816,6 +3104,7 @@
         },
         {
           "returnType": "GlobalResource",
+          "namespace": "Volo.CmsKit.GlobalResources",
           "name": "SetGlobalScriptAsync",
           "summary": null,
           "isAsync": true,
@@ -2832,6 +3121,7 @@
         },
         {
           "returnType": "GlobalResource",
+          "namespace": "Volo.CmsKit.GlobalResources",
           "name": "GetGlobalStyleAsync",
           "summary": null,
           "isAsync": true,
@@ -2842,6 +3132,7 @@
         },
         {
           "returnType": "GlobalResource",
+          "namespace": "Volo.CmsKit.GlobalResources",
           "name": "GetGlobalScriptAsync",
           "summary": null,
           "isAsync": true,
@@ -2880,6 +3171,7 @@
       "methods": [
         {
           "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -2906,6 +3198,11 @@
               "type": "String",
               "name": "text",
               "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "url",
+              "isOptional": true
             },
             {
               "type": "Nullable<Guid>",
@@ -2944,6 +3241,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetAsync",
           "summary": null,
           "isAsync": true,
@@ -2970,6 +3268,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetDefaultsAsync",
           "summary": null,
           "isAsync": true,
@@ -2986,6 +3285,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetIfNotSetAsync",
           "summary": null,
           "isAsync": true,
@@ -3012,6 +3312,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetDefaultsIfNotSetAsync",
           "summary": null,
           "isAsync": true,
@@ -3056,6 +3357,7 @@
       "methods": [
         {
           "returnType": "Blog",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -3077,6 +3379,7 @@
         },
         {
           "returnType": "Blog",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "UpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -3131,6 +3434,7 @@
       "methods": [
         {
           "returnType": "BlogPost",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "CreateAsync",
           "summary": null,
           "isAsync": true,
@@ -3182,6 +3486,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SetSlugUrlAsync",
           "summary": null,
           "isAsync": true,
@@ -3306,6 +3611,7 @@
       "methods": [
         {
           "returnType": "EntityTag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -3337,6 +3643,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "DeleteManyAsync",
           "summary": null,
           "isAsync": true,
@@ -3363,6 +3670,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetEntityIdsFilteredByTagAsync",
           "summary": null,
           "isAsync": true,
@@ -3389,6 +3697,7 @@
         },
         {
           "returnType": "List<String>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetEntityIdsFilteredByTagNameAsync",
           "summary": null,
           "isAsync": true,
@@ -3468,6 +3777,7 @@
       "methods": [
         {
           "returnType": "Tag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -3494,6 +3804,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "AnyAsync",
           "summary": null,
           "isAsync": true,
@@ -3520,6 +3831,7 @@
         },
         {
           "returnType": "Tag",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -3546,6 +3858,7 @@
         },
         {
           "returnType": "List<Tag>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3559,6 +3872,21 @@
               "isOptional": false
             },
             {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "sorting",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -3567,6 +3895,7 @@
         },
         {
           "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3588,6 +3917,7 @@
         },
         {
           "returnType": "List<Tag>",
+          "namespace": "Volo.CmsKit.Tags",
           "name": "GetAllRelatedTagsAsync",
           "summary": null,
           "isAsync": true,
@@ -3603,6 +3933,33 @@
             {
               "type": "String",
               "name": "entityId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<PopularTag>",
+          "namespace": "Volo.CmsKit.Tags",
+          "name": "GetPopularTagsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxCount",
               "isOptional": false
             },
             {
@@ -3662,6 +4019,7 @@
       "methods": [
         {
           "returnType": "UserReaction",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -3698,6 +4056,7 @@
         },
         {
           "returnType": "List<UserReaction>",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "GetListForUserAsync",
           "summary": null,
           "isAsync": true,
@@ -3729,6 +4088,7 @@
         },
         {
           "returnType": "List<ReactionSummaryQueryResultItem>",
+          "namespace": "Volo.CmsKit.Reactions",
           "name": "GetSummariesAsync",
           "summary": null,
           "isAsync": true,
@@ -3803,6 +4163,7 @@
       "methods": [
         {
           "returnType": "Rating",
+          "namespace": "Volo.CmsKit.Ratings",
           "name": "GetCurrentUserRatingAsync",
           "summary": null,
           "isAsync": true,
@@ -3834,6 +4195,7 @@
         },
         {
           "returnType": "List<RatingWithStarCountQueryResultItem>",
+          "namespace": "Volo.CmsKit.Ratings",
           "name": "GetGroupedStarCountsAsync",
           "summary": null,
           "isAsync": true,
@@ -3908,6 +4270,7 @@
       "methods": [
         {
           "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -3929,6 +4292,7 @@
         },
         {
           "returnType": "List<Page>",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -3965,6 +4329,7 @@
         },
         {
           "returnType": "Page",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "GetBySlugAsync",
           "summary": null,
           "isAsync": true,
@@ -3986,6 +4351,7 @@
         },
         {
           "returnType": "Page",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "FindBySlugAsync",
           "summary": null,
           "isAsync": true,
@@ -4007,6 +4373,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "ExistsAsync",
           "summary": null,
           "isAsync": true,
@@ -4028,6 +4395,7 @@
         },
         {
           "returnType": "List<Page>",
+          "namespace": "Volo.CmsKit.Pages",
           "name": "GetListOfHomePagesAsync",
           "summary": null,
           "isAsync": true,
@@ -4035,6 +4403,28 @@
           "isPrivate": false,
           "isStatic": false,
           "parameters": [
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "namespace": "Volo.CmsKit.Pages",
+          "name": "FindTitleAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "pageId",
+              "isOptional": false
+            },
             {
               "type": "CancellationToken",
               "name": "cancellationToken",
@@ -4142,6 +4532,145 @@
       "summary": null
     },
     {
+      "namespace": "Volo.CmsKit.MarkedItems",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.CmsKit.MarkedItems",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "UserMarkedItem",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<UserMarkedItem, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<UserMarkedItem, Guid>"
+        },
+        {
+          "name": "IBasicRepository<UserMarkedItem>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<UserMarkedItem>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<UserMarkedItem>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<UserMarkedItem>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<UserMarkedItem, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<UserMarkedItem, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "UserMarkedItem",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "FindAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<UserMarkedItem>",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "GetListForUserAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<String>",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "GetEntityIdsFilteredByUserAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "tenantId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IUserMarkedItemRepository",
+      "summary": null
+    },
+    {
       "namespace": "Volo.CmsKit.GlobalResources",
       "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.GlobalResources",
@@ -4186,6 +4715,7 @@
       "methods": [
         {
           "returnType": "GlobalResource",
+          "namespace": "Volo.CmsKit.GlobalResources",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -4255,6 +4785,7 @@
       "methods": [
         {
           "returnType": "CommentWithAuthorQueryResultItem",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "GetWithAuthorAsync",
           "summary": null,
           "isAsync": true,
@@ -4276,6 +4807,7 @@
         },
         {
           "returnType": "List<CommentWithAuthorQueryResultItem>",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4329,6 +4861,11 @@
               "isOptional": true
             },
             {
+              "type": "CommentApproveState",
+              "name": "commentApproveState",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -4337,6 +4874,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4375,6 +4913,11 @@
               "isOptional": true
             },
             {
+              "type": "CommentApproveState",
+              "name": "commentApproveState",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -4383,6 +4926,7 @@
         },
         {
           "returnType": "List<CommentWithAuthorQueryResultItem>",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "GetListWithAuthorsAsync",
           "summary": null,
           "isAsync": true,
@@ -4401,6 +4945,11 @@
               "isOptional": false
             },
             {
+              "type": "CommentApproveState",
+              "name": "commentApproveState",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -4409,6 +4958,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.CmsKit.Comments",
           "name": "DeleteWithRepliesAsync",
           "summary": null,
           "isAsync": true,
@@ -4419,6 +4969,28 @@
             {
               "type": "Comment",
               "name": "comment",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "ExistsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "idempotencyToken",
               "isOptional": false
             },
             {
@@ -4478,6 +5050,7 @@
       "methods": [
         {
           "returnType": "List<BlogFeature>",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4499,6 +5072,7 @@
         },
         {
           "returnType": "List<BlogFeature>",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4525,6 +5099,7 @@
         },
         {
           "returnType": "BlogFeature",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -4599,6 +5174,7 @@
       "methods": [
         {
           "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4640,6 +5216,7 @@
         },
         {
           "returnType": "List<BlogPost>",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4696,6 +5273,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SlugExistsAsync",
           "summary": null,
           "isAsync": true,
@@ -4722,6 +5300,7 @@
         },
         {
           "returnType": "BlogPost",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetBySlugAsync",
           "summary": null,
           "isAsync": true,
@@ -4748,6 +5327,7 @@
         },
         {
           "returnType": "List<CmsUser>",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetAuthorsHasBlogPostsAsync",
           "summary": null,
           "isAsync": true,
@@ -4784,6 +5364,7 @@
         },
         {
           "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetAuthorsHasBlogPostsCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4805,6 +5386,7 @@
         },
         {
           "returnType": "CmsUser",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetAuthorHasBlogPostAsync",
           "summary": null,
           "isAsync": true,
@@ -4826,6 +5408,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "HasBlogPostWaitingForReviewAsync",
           "summary": null,
           "isAsync": true,
@@ -4890,6 +5473,7 @@
       "methods": [
         {
           "returnType": "List<Blog>",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -4926,6 +5510,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -4947,6 +5532,7 @@
         },
         {
           "returnType": "Blog",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "GetBySlugAsync",
           "summary": null,
           "isAsync": true,
@@ -4968,6 +5554,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "ExistsAsync",
           "summary": null,
           "isAsync": true,
@@ -4989,6 +5576,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.Blogs",
           "name": "SlugExistsAsync",
           "summary": null,
           "isAsync": true,

@@ -3,7 +3,7 @@
 namespace MyCompanyName.MyProjectName.Blazor.Client;
 
 /* Add your global styles/scripts here.
- * See https://docs.abp.io/en/abp/latest/UI/Blazor/Global-Scripts-Styles to learn how to use it
+ * See https://abp.io/docs/latest/framework/ui/blazor/global-scripts-styles to learn how to use it
  */
 public class MyProjectNameBundleContributor : IBundleContributor
 {

@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.Public.Application.Contracts",
-  "hash": "399ba7790fef13507bce65ed77967e4b",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.Public",
@@ -62,6 +62,20 @@
       ],
       "contentType": "abpModule",
       "name": "CmsKitPublicApplicationContractsModule",
+      "summary": null
+    },
+    {
+      "displayName": "Comment management",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKitPublic.Comments",
+      "summary": null
+    },
+    {
+      "displayName": "Delete all",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKitPublic.Comments.DeleteAll",
       "summary": null
     }
   ]

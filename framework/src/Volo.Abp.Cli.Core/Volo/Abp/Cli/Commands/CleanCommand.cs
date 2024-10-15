@@ -57,7 +57,7 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Delete all BIN and OBJ folders in current folder.";
     }

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Blogging.EntityFrameworkCore",
-  "hash": "6a38802ee4510532b9dd8879c2b2b7ff",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Blogging.EntityFrameworkCore",
@@ -67,45 +67,27 @@
     {
       "namespace": "Volo.Blogging.EntityFrameworkCore",
       "connectionStringName": "Blogging",
-      "databaseTables": [
+      "databaseTables": [],
+      "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
         {
-          "entityFullName": "Volo.Blogging.Blogs.Blog",
-          "contentType": "databaseTable",
-          "name": "BlgBlogs",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Blogging.Comments.Comment",
-          "contentType": "databaseTable",
-          "name": "BlgComments",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Blogging.Posts.Post",
-          "contentType": "databaseTable",
-          "name": "BlgPosts",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Blogging.Posts.PostTag",
-          "contentType": "databaseTable",
-          "name": "BlgPostTags",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Blogging.Tagging.Tag",
-          "contentType": "databaseTable",
-          "name": "BlgTags",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Blogging.Users.BlogUser",
-          "contentType": "databaseTable",
-          "name": "BlgUsers",
-          "summary": null
+          "returnType": "Void",
+          "namespace": "Volo.Blogging.EntityFrameworkCore",
+          "name": "ConfigureBlogging",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
         }
       ],
-      "replacedDbContexts": [],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -160,6 +142,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",
