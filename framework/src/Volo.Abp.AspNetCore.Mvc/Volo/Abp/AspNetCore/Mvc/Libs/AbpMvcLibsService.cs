@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
+using Volo.Abp.AspNetCore.RazorViews;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Libs;
@@ -35,22 +36,8 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
             {
                 if (!await CheckLibsAsyncOnceAsync(httpContext))
                 {
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    httpContext.Response.ContentType = "text/html";
-                    await httpContext.Response.WriteAsync(
-                        "<html>" +
-                        "   <head>" +
-                        "       <title>Error - The Libs folder is missing!</title>" +
-                        "   </head>" +
-                        "   <body>" +
-                        "       <h1> &#9888;&#65039; The Libs folder under the <code style='background-color: #e7e7e7;'>wwwroot/libs</code> directory is empty!</h1>" +
-                        "       <p>The Libs folder contains mandatory NPM Packages for running the project.</p>" +
-                        "       <p>Make sure you run the <code style='background-color: #e7e7e7;'>abp install-libs</code> CLI tool command.</p>" +
-                        "       <p>For more information, check out the <a href='https://abp.io/docs/latest/CLI#install-libs'>ABP CLI documentation</a></p>" +
-                        "   </body>" +
-                        "</html>",
-                        Encoding.UTF8
-                    );
+                    var errorPage = new AbpMvcLibsErrorPage();
+                    await errorPage.ExecuteAsync(httpContext);
                     return;
                 }
 

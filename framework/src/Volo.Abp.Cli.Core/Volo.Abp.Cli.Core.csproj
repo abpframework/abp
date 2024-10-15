@@ -24,6 +24,7 @@
     <PackageReference Include="LibGit2Sharp" />
     <PackageReference Include="StackExchange.Redis" />
     <PackageReference Include="DeepL.net" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" />
   </ItemGroup>
 
   <ItemGroup>

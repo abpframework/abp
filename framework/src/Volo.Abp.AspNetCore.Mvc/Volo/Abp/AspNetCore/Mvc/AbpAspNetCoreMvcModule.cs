@@ -197,8 +197,8 @@ public class AbpAspNetCoreMvcModule : AbpModule
             options.EndpointConfigureActions.Add(endpointContext =>
             {
                 endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
-                endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                endpointContext.Endpoints.MapRazorPages();
+                endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+                endpointContext.Endpoints.MapRazorPages().WithStaticAssets();
             });
         });
 

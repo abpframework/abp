@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@abp/jquery": "~8.3.1",
-    "jstree": "^3.3.16"
+    "jstree": "^3.3.17"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

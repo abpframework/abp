@@ -1,22 +1,34 @@
-# Sample Applications
+# ABP Samples
 
 Here, a list of official samples built with ABP.
-
-## eShopOnAbp
-
-Reference microservice solution built with ABP and .NET.
-
-* [Source code](https://github.com/abpframework/eShopOnAbp)
 
 ## Event Hub
 
 A reference application built with ABP. It implements the Domain Driven Design with multiple application layers.
 
+* [Live demo](https://www.openeventhub.com/)
 * [Source code](https://github.com/abpframework/eventhub)
+
+## eShopOnAbp
+
+Reference microservice solution built with ABP and .NET.
+
+* [Live demo](https://www.eshoponabp.com/)
+* [Source code](https://github.com/abpframework/eShopOnAbp)
+
+## CMS Kit Demo
+
+A minimal example website built with the [CMS Kit module](../modules/cms-kit/index.md).
+
+* [Live demo](https://cms-kit-demo.abp.io/)
+* [Source code](https://github.com/abpframework/cms-kit-demo)
 
 ## Easy CRM
 
-A middle-size CRM application built with ABP. [Click here](easy-crm.md) to see the details.
+A middle-size CRM application built with ABP.
+
+* [Live demo](http://easycrm.abp.io/)
+* [Click here](easy-crm.md) to see the details and download the source code.
 
 ## Book Store
 

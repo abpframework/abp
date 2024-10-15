@@ -1,120 +1,309 @@
-  <div class="my-3 text-center">
-    <h3>Let's improve your application!</h3>
-    <p>Here are some links to help you get started:</p>
-  </div>
-  <div class="card mt-4 mb-5">
-    <div class="card-body">
-      <div class="row text-center justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'Learn the ABP Framework',
-                description:
-                  'Explore the comprehensive documentation to learn how to build a modern web application.',
-                links: [
-                  {
-                    href: 'https://abp.io/docs/latest?ref=tmpl',
-                    label: 'See Documents'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'Samples',
-                description: 'See the example projects built with the ABP Framework.',
-                links: [
-                  {
-                    href: 'https://abp.io/docs/latest/samples?ref=tmpl',
-                    label: 'All samples'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'ABP Community',
-                description: 'Get involved with a vibrant community and become a contributor.',
-                links: [
-                  {
-                    href: 'https://abp.io/community/',
-                    label: 'Community'
-                  },
-                  {
-                    href: 'https://abp.io/docs/latest/contribution?ref=tmpl',
-                    label: 'Contribute'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-      </div>
-      <div class="row text-center mt-lg-3 justify-content-md-center">
-        <ng-container
-          *ngTemplateOutlet="
-            starterLinkTemplate;
-            context: {
-              $implicit: {
-                title: 'ABP Blog',
-                description: 'Take a look at our recently published articles.',
-                links: [
-                  {
-                    href: 'https://abp.io/blog?ref=tmpl',
-                    label: 'See Blog'
-                  }
-                ]
-              }
-            }
-          "
-        ></ng-container>
-        
-        <ng-template #githubButtonsTemplate>
-          <p class="mb-1">
-            <iframe
-              scrolling="no"
-              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp&amp;title=&amp;aria-label=Star%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star&amp;data-size=large&amp;data-show-count=true"
-              style="
-                width: 122px;
-                height: 28px;
-                border: none;
-                display: inline-block;
-                margin-right: 4px;
-              "
-            ></iframe>
-            <iframe
-              scrolling="no"
-              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Fissues&amp;title=&amp;aria-label=Issue%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-issue-opened&amp;data-text=Issue&amp;data-size=large"
-              style="
-                width: 72px;
-                height: 28px;
-                border: none;
-                display: inline-block;
-                margin-right: 4px;
-              "
-            ></iframe>
-
-            <iframe
-              scrolling="no"
-              src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabpframework%2Fabp%2Ffork&amp;title=&amp;aria-label=Fork%20tabalinas%2Fjsgrid%20on%20GitHub&amp;data-icon=octicon-repo-forked&amp;data-text=Fork&amp;data-size=large&amp;"
-              style="width: 72px; height: 28px; border: none; display: inline-block"
-            ></iframe>
+<div class="row mb-3">
+  <div class="col-xl-6 col-12 d-flex">
+    <div class="card h-lg-100 w-100 overflow-hidden">
+      <div class="card-body">
+        <div class="starting-content">
+          @if(!hasLoggedIn){
+          <h3>Welcome</h3>
+          <p class="lead text-muted mb-2">
+            {{ '::LongWelcomeMessage' | abpLocalization }}
           </p>
-        </ng-template>
+          <a (click)="login()" class="px-4 btn btn-primary mb-4" role="button"
+            ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
+          >
+          }
+
+          <h3>Getting Started</h3>
+          <ng-container
+            *ngTemplateOutlet="
+              startingContentTemplate;
+              context: {
+                $implicit: {
+                  description:
+                    'Learn how to create and run a new web application using the application startup template.',
+                  href: 'https://docs.abp.io/en/commercial/latest/getting-started',
+                  label: 'Getting Started'
+                }
+              }
+            "
+          ></ng-container>
+
+          <h4>Web Application Development Tutorial</h4>
+          <ng-container
+            *ngTemplateOutlet="
+              startingContentTemplate;
+              context: {
+                $implicit: {
+                  description:
+                    'Learn how to build an ABP based web application named Acme.BookStore.',
+                  href: 'https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF',
+                  label: 'Explore Tutorial'
+                }
+              }
+            "
+          ></ng-container>
+
+          <h4>Customize Lepton Theme</h4>
+          <p class="text-muted mb-2">Learn how to customize LeptonX Theme as you wish.</p>
+          <a
+            href="https://docs.abp.io/en/commercial/latest/themes/lepton/customizing-lepton-theme"
+            class="btn btn-primary soft mb-5 mb-xl-0"
+            target="_blank"
+            >Customize Lepton</a
+          >
+        </div>
+
+        <img class="card-bg-image" src="assets/images/getting-started/bg-01.png" />
       </div>
     </div>
   </div>
+  <div class="col-xl-3 col-md-6 d-flex">
+    <div class="row">
+      <ng-container
+        *ngTemplateOutlet="
+          visitLinkTemplate;
+          context: {
+            $implicit: {
+              label: 'Visit Support',
+              description:
+                'You can check for similar problems and solutions, or open a new topic to discuss your specific issue.',
+              href: 'https://support.abp.io/QA/Questions',
+              card: 'card overflow-hidden',
+              imgClass: '',
+              imgSrc: 'assets/images/getting-started/img-support.png',
+              logo: 'abp-support abp-logo mb-2'
+            }
+          }
+        "
+      ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="
+          visitLinkTemplate;
+          context: {
+            $implicit: {
+              label: 'Visit Blog',
+              description:
+                'You can find content on .NET development, cross-platform, ASP.NET application templates, ABP-related news, and more.',
+              href: 'https://blog.abp.io/abp',
+              card: 'card h-md-100 overflow-hidden',
+              imgClass: 'margin-bottom: -24px',
+              imgSrc: 'assets/images/getting-started/img-blog.png',
+              logo: 'abp-blog abp-logo mb-2'
+            }
+          }
+        "
+      ></ng-container>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6 d-flex">
+    <div class="card h-100 overflow-hidden">
+      <div class="card-body">
+        <div class="abp-community abp-logo mb-2"></div>
+        <p class="lead text-muted">
+          A unique community platform for
+          <span class="fw-bold">ABP Lovers!</span>
+        </p>
+        <p class="text-muted mb-2">
+          Explore all ABP users' experiences with the ABP Framework, discover articles and videos on
+          how to use ABP, and join raffles for a chance to win surprise gifts!
+        </p>
+        <a class="btn btn-brand soft mb-3" href="https://community.abp.io/" target="_blank"
+          >Join ABP Community</a
+        >
+      </div>
+      <img class="mt-3" src="assets/images/getting-started/img-community.png" />
+    </div>
+  </div>
+</div>
+<div class="row">
+  <ng-container
+    *ngTemplateOutlet="
+      tableTemplate;
+      context: {
+        $implicit: {
+          title: 'More from ABP.IO',
+          items: [
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Latest Release Logs',
+              link: 'https://github.com/abpframework/abp/releases',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Video Courses',
+              link: 'https://abp.io/video-courses/essentials',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Samples',
+              link: 'https://docs.abp.io/en/abp/latest/Samples/Index',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Books',
+              link: 'https://abp.io/books',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'FAQ',
+              link: 'https://commercial.abp.io/faq',
+            },
+          ]
+        }
+      }
+    "
+  ></ng-container>
+  <div class="col-xl-6 col-lg-8 d-flex">
+    <div class="card">
+      <div class="card-body d-flex">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <p class="text-muted mb-0">THE OFFICIAL GUIDE</p>
+            <h3>Mastering ABP Framework</h3>
+            <p class="text-muted">
+              Written by the creator of the ABP Framework, this book will help you gain a complete
+              understanding of the framework and modern web application development techniques.
+            </p>
+            <div class="d-md-flex mb-2 mb-md-0">
+              <a
+                href="https://www.amazon.com/gp/product/B097Z2DM8Q"
+                target="_blank"
+                class="btn btn-primary soft me-md-2 mb-2 mb-md-0"
+              >
+                Buy on Amazon US
+              </a>
+              <a
+                href="https://www.packtpub.com/product/mastering-abp-framework/9781801079242"
+                target="_blank"
+                class="btn btn-primary soft mb-2 mb-md-0"
+              >
+                Buy on PACKT
+              </a>
+            </div>
+          </div>
+          <div class="col">
+            <img src="assets/images/getting-started/book.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container
+    *ngTemplateOutlet="
+      tableTemplate;
+      context: {
+        $implicit: {
+          title: 'Follow us on Social Media',
+          items: [
+            {
+              title: 'X.com',
+              icon: 'logo-x me-2',
+              link: 'https://twitter.com/abpframework'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/discord.svg',
+              title: 'Discord',
+              link: 'https://community.abp.io/discord'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/stack-overflow.svg',
+              title: 'Stack Overflow',
+              link: 'https://stackoverflow.com/questions/tagged/abp'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/youtube.svg',
+              title: 'YouTube',
+              link: 'https://www.youtube.com/@Volosoft'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/instagram.svg',
+              title: 'Instagram',
+              link: 'https://www.instagram.com/abpframework/'
+            }
+          ]
+        }
+      }
+    "
+  ></ng-container>
+</div>
+
+<ng-template #startingContentTemplate let-context>
+  <p class="lead text-muted mb-2" [innerHTML]="context.description"></p>
+  <a [href]="context.href" class="btn btn-brand mb-4" target="_blank">{{ context.label }}</a>
+</ng-template>
+
+<ng-template #visitLinkTemplate let-context>
+  <div class="col-12 d-flex">
+    <div [class]="context.card">
+      <div class="card-body pb-0">
+        <div [class]="context.logo"></div>
+        <p class="text-muted mb-2" [innerHTML]="context.description"></p>
+        <a [href]="context.href" class="btn btn-brand soft" target="_blank">{{ context.label }}</a>
+        <img [class]="context.imgClass" [src]="context.imgSrc" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #tableTemplate let-context>
+  <div class="col-xl-3 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title text-body">{{ context.title }}</div>
+      </div>
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <tbody>
+              @for(item of context.items; track $index; let last = $last){
+              <tr>
+                <td class="ps-0 d-flex" [class.border-bottom-0]="last">
+                  @if(item.icon){
+                  <div
+                    [ngClass]="item.iconClass"
+                    [style]="item.style ? 'width: 20px; height: 20px' : ''"
+                  >
+                    @if(item.iconType === 'image'){
+                    <img [src]="item.icon" class="me-2" />
+                    }@else if(item.iconType === 'icon'){
+                    <i [class]="item.icon"></i>
+                    }@else{
+                    <div [class]="item.icon"></div>
+                    }
+                  </div>
+                  }
+                  <div>{{ item.title }}</div>
+                </td>
+                <td class="text-end pe-0 opacity-25" [class.border-bottom-0]="last">
+                  <a [href]="item.link" target="_blank">
+                    <i class="bi bi-box-arrow-up-right text-dark"></i>
+                  </a>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

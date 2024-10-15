@@ -5,6 +5,7 @@ import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-co
 import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 import {
   ApplicationConfigurationDto,
+  ApplicationFeatureConfigurationDto,
   ApplicationGlobalFeatureConfigurationDto,
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { INCUDE_LOCALIZATION_RESOURCES_TOKEN } from '../tokens/include-localization-resources.token';
@@ -158,6 +159,18 @@ export class ConfigStateService {
 
       return keys.reduce((acc, key) => ({ ...acc, [key]: features.values[key] }), {});
     });
+  }
+
+  private isFeatureEnabled(key: string, features: ApplicationFeatureConfigurationDto) {
+    return features.values[key] === 'true';
+  }
+
+  getFeatureIsEnabled(key: string) {
+    return this.isFeatureEnabled(key, this.store.state.features);
+  }
+
+  getFeatureIsEnabled$(key: string) {
+    return this.store.sliceState(state => this.isFeatureEnabled(key, state.features));
   }
 
   getSetting(key: string) {

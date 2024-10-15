@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace MyCompanyName.MyProjectName.Mvc.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -269,8 +269,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     IpAddresses = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: true),
                     SignedIn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
