@@ -1,14 +1,13 @@
 # Web Application Development Tutorial - Part 9: Authors: User Interface
-
-```json
+````json
 //[doc-params]
 {
-  "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
-  "DB": ["EF", "Mongo"]
+    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "DB": ["EF","Mongo"]
 }
-```
+````
 
-```json
+````json
 //[doc-nav]
 {
   "Next": {
@@ -20,7 +19,7 @@
     "Path": "tutorials/book-store/part-08"
   }
 }
-```
+````
 
 ## Introduction
 
@@ -34,41 +33,51 @@ Create a new razor page, `Index.cshtml` under the `Pages/Authors` folder of the 
 
 ### Index.cshtml
 
-```html
-@page @using Acme.BookStore.Localization @using Acme.BookStore.Permissions
-@using Acme.BookStore.Web.Pages.Authors @using
-Microsoft.AspNetCore.Authorization @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<BookStoreResource>
-  L @inject IAuthorizationService AuthorizationService @model IndexModel
-  @section scripts {
-  <abp-script src="/Pages/Authors/Index.js" />
-  }
+````html
+@page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Permissions
+@using Acme.BookStore.Web.Pages.Authors
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<BookStoreResource> L
+@inject IAuthorizationService AuthorizationService
+@model IndexModel
 
-  <abp-card>
+@section scripts
+{
+    <abp-script src="/Pages/Authors/Index.js"/>
+}
+
+<abp-card>
     <abp-card-header>
-      <abp-row>
-        <abp-column size-md="_6">
-          <abp-card-title>@L["Authors"]</abp-card-title>
-        </abp-column>
-        <abp-column size-md="_6" class="text-end">
-          @if (await AuthorizationService
-          .IsGrantedAsync(BookStorePermissions.Authors.Create)) { <abp-button
-          id="NewAuthorButton" text="@L["NewAuthor"].Value" icon="plus"
-          button-type="Primary"/> }
-        </abp-column>
-      </abp-row>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Authors"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                @if (await AuthorizationService
+                    .IsGrantedAsync(BookStorePermissions.Authors.Create))
+                {
+                    <abp-button id="NewAuthorButton"
+                                text="@L["NewAuthor"].Value"
+                                icon="plus"
+                                button-type="Primary"/>
+                }
+            </abp-column>
+        </abp-row>
     </abp-card-header>
     <abp-card-body>
-      <abp-table striped-rows="true" id="AuthorsTable"></abp-table>
-    </abp-card-body> </abp-card
-></BookStoreResource>
-```
+        <abp-table striped-rows="true" id="AuthorsTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+````
 
 This is a simple page similar to the Books page we had created before. It imports a JavaScript file which will be introduced below.
 
 ### Index.cshtml.cs
 
-```csharp
+````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Acme.BookStore.Web.Pages.Authors;
@@ -80,97 +89,102 @@ public class IndexModel : PageModel
 
     }
 }
-```
+````
 
 ### Index.js
 
-```js
+````js
 $(function () {
-  var l = abp.localization.getResource("BookStore");
-  var createModal = new abp.ModalManager(abp.appPath + "Authors/CreateModal");
-  var editModal = new abp.ModalManager(abp.appPath + "Authors/EditModal");
+    var l = abp.localization.getResource('BookStore');
+    var createModal = new abp.ModalManager(abp.appPath + 'Authors/CreateModal');
+    var editModal = new abp.ModalManager(abp.appPath + 'Authors/EditModal');
 
-  var dataTable = $("#AuthorsTable").DataTable(
-    abp.libs.datatables.normalizeConfiguration({
-      serverSide: true,
-      paging: true,
-      order: [[1, "asc"]],
-      searching: false,
-      scrollX: true,
-      ajax: abp.libs.datatables.createAjax(
-        acme.bookStore.authors.author.getList
-      ),
-      columnDefs: [
-        {
-          title: l("Actions"),
-          rowAction: {
-            items: [
-              {
-                text: l("Edit"),
-                visible: abp.auth.isGranted("BookStore.Authors.Edit"),
-                action: function (data) {
-                  editModal.open({ id: data.record.id });
+    var dataTable = $('#AuthorsTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+            serverSide: true,
+            paging: true,
+            order: [[1, "asc"]],
+            searching: false,
+            scrollX: true,
+            ajax: abp.libs.datatables.createAjax(acme.bookStore.authors.author.getList),
+            columnDefs: [
+                {
+                    title: l('Actions'),
+                    rowAction: {
+                        items:
+                            [
+                                {
+                                    text: l('Edit'),
+                                    visible: 
+                                        abp.auth.isGranted('BookStore.Authors.Edit'),
+                                    action: function (data) {
+                                        editModal.open({ id: data.record.id });
+                                    }
+                                },
+                                {
+                                    text: l('Delete'),
+                                    visible: 
+                                        abp.auth.isGranted('BookStore.Authors.Delete'),
+                                    confirmMessage: function (data) {
+                                        return l(
+                                            'AuthorDeletionConfirmationMessage',
+                                            data.record.name
+                                        );
+                                    },
+                                    action: function (data) {
+                                        acme.bookStore.authors.author
+                                            .delete(data.record.id)
+                                            .then(function() {
+                                                abp.notify.info(
+                                                    l('SuccessfullyDeleted')
+                                                );
+                                                dataTable.ajax.reload();
+                                            });
+                                    }
+                                }
+                            ]
+                    }
                 },
-              },
-              {
-                text: l("Delete"),
-                visible: abp.auth.isGranted("BookStore.Authors.Delete"),
-                confirmMessage: function (data) {
-                  return l(
-                    "AuthorDeletionConfirmationMessage",
-                    data.record.name
-                  );
+                {
+                    title: l('Name'),
+                    data: "name"
                 },
-                action: function (data) {
-                  acme.bookStore.authors.author
-                    .delete(data.record.id)
-                    .then(function () {
-                      abp.notify.info(l("SuccessfullyDeleted"));
-                      dataTable.ajax.reload();
-                    });
-                },
-              },
-            ],
-          },
-        },
-        {
-          title: l("Name"),
-          data: "name",
-        },
-        {
-          title: l("BirthDate"),
-          data: "birthDate",
-          render: function (data) {
-            return luxon.DateTime.fromISO(data, {
-              locale: abp.localization.currentCulture.name,
-            }).toLocaleString();
-          },
-        },
-      ],
-    })
-  );
+                {
+                    title: l('BirthDate'),
+                    data: "birthDate",
+                    render: function (data) {
+                        return luxon
+                            .DateTime
+                            .fromISO(data, {
+                                locale: abp.localization.currentCulture.name
+                            }).toLocaleString();
+                    }
+                }
+            ]
+        })
+    );
 
-  createModal.onResult(function () {
-    dataTable.ajax.reload();
-  });
+    createModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
 
-  editModal.onResult(function () {
-    dataTable.ajax.reload();
-  });
+    editModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
 
-  $("#NewAuthorButton").click(function (e) {
-    e.preventDefault();
-    createModal.open();
-  });
+    $('#NewAuthorButton').click(function (e) {
+        e.preventDefault();
+        createModal.open();
+    });
 });
-```
+````
 
 Briefly, this JavaScript page;
 
-- Creates a Data table with `Actions`, `Name` and `BirthDate` columns.
-  - `Actions` column is used to add _Edit_ and _Delete_ actions.
-  - `BirthDate` provides a `render` function to format the `DateTime` value using the [luxon](https://moment.github.io/luxon/) library.
-- Uses the `abp.ModalManager` to open _Create_ and _Edit_ modal forms.
+* Creates a Data table with `Actions`, `Name` and `BirthDate` columns.
+  * `Actions` column is used to add *Edit* and *Delete* actions.
+  * `BirthDate` provides a `render` function to format the `DateTime` value using the [luxon](https://moment.github.io/luxon/) library.
+* Uses the `abp.ModalManager` to open *Create* and *Edit* modal forms.
 
 This code is very similar to the Books page created before, so we will not explain it more.
 
@@ -178,21 +192,21 @@ This code is very similar to the Books page created before, so we will not expla
 
 This page uses some localization keys we need to declare. Open the `en.json` file under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project and add the following entries:
 
-```json
+````json
 "Menu:Authors": "Authors",
 "Authors": "Authors",
 "AuthorDeletionConfirmationMessage": "Are you sure to delete the author '{0}'?",
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
-```
+````
 
 Notice that we've added more keys. They will be used in the next sections.
 
 ### Add to the Main Menu
 
-Open the `BookStoreMenuContributor.cs` in the `Menus` folder of the `Acme.BookStore.Web` project and add a new _Authors_ menu item under the _Book Store_ menu item. The following code (in the `ConfigureMainMenuAsync` method) shows the final code part:
+Open the `BookStoreMenuContributor.cs` in the `Menus` folder of the `Acme.BookStore.Web` project and add a new *Authors* menu item under the *Book Store* menu item. The following code (in the `ConfigureMainMenuAsync` method) shows the final code part:
 
-```csharp
+````csharp
 context.Menu.AddItem(
     new ApplicationMenuItem(
         "BooksStore",
@@ -212,19 +226,19 @@ context.Menu.AddItem(
         ).RequirePermissions(BookStorePermissions.Authors.Default)
     )
 );
-```
+````
 
 ### Run the Application
 
-Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `Identity/Roles` page, click to the _Actions_ button and select the _Permissions_ action for the **admin role**:
+Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `Identity/Roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
 ![bookstore-author-permissions](images/bookstore-author-permissions-3.png)
 
-As you see, the admin role has no _Author Management_ permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the _Authors_ menu item under the _Book Store_ in the main menu, after **refreshing the page**:
+As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
 ![bookstore-authors-page](images/bookstore-authors-page-3.png)
 
-The page is fully working except _New author_ and _Actions/Edit_ since we haven't implemented them yet.
+The page is fully working except *New author* and *Actions/Edit* since we haven't implemented them yet.
 
 > **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
@@ -318,12 +332,12 @@ This page model class simply injects and uses the `IAuthorAppService` to create 
 
 The main reason of this decision was to show you how to use a different model class inside the page. But there is one more benefit: We added two attributes to the class members, which were not present in the `CreateAuthorDto`:
 
-- Added `[DataType(DataType.Date)]` attribute to the `BirthDate` which shows a date picker on the UI for this property.
-- Added `[TextArea]` attribute to the `ShortBio` which shows a multi-line text area instead of a standard textbox.
+* Added `[DataType(DataType.Date)]` attribute to the `BirthDate` which shows a date picker on the UI for this property.
+* Added `[TextArea]` attribute to the `ShortBio` which shows a multi-line text area instead of a standard textbox.
 
 In this way, you can specialize the view model class based on your UI requirements without touching to the DTO. As a result of this decision, we have used `ObjectMapper` to map `CreateAuthorViewModel` to `CreateAuthorDto`. To be able to do that, you need to add a new mapping code to the `BookStoreWebAutoMapperProfile` constructor:
 
-```csharp
+````csharp
 using Acme.BookStore.Authors; // ADDED NAMESPACE IMPORT
 using Acme.BookStore.Books;
 using AutoMapper;
@@ -341,7 +355,7 @@ public class BookStoreWebAutoMapperProfile : Profile
                     CreateAuthorDto>();
     }
 }
-```
+````
 
 "New author" button will work as expected and open a new model when you run the application again:
 
@@ -353,7 +367,7 @@ Create a new razor page, `EditModal.cshtml` under the `Pages/Authors` folder of 
 
 ### EditModal.cshtml
 
-```html
+````html
 @page
 @using Acme.BookStore.Localization
 @using Acme.BookStore.Web.Pages.Authors
@@ -376,7 +390,7 @@ Create a new razor page, `EditModal.cshtml` under the `Pages/Authors` folder of 
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>
-```
+````
 
 ### EditModal.cshtml.cs
 
@@ -439,8 +453,8 @@ public class EditModalModel : BookStorePageModel
 
 This class is similar to the `CreateModal.cshtml.cs` while there are some main differences;
 
-- Uses the `IAuthorAppService.GetAsync(...)` method to get the editing author from the application layer.
-- `EditAuthorViewModel` has an additional `Id` property which is marked with the `[HiddenInput]` attribute that creates a hidden input for this property.
+* Uses the `IAuthorAppService.GetAsync(...)` method to get the editing author from the application layer.
+* `EditAuthorViewModel` has an additional `Id` property which is marked with the `[HiddenInput]` attribute that creates a hidden input for this property.
 
 This class requires to add two object mapping declarations to the `BookStoreWebAutoMapperProfile` class:
 
@@ -502,11 +516,11 @@ Done in 2.22s.
 Open the `/src/app/author/author.module.ts` and replace the content as shown below:
 
 ```js
-import { NgModule } from "@angular/core";
-import { SharedModule } from "../shared/shared.module";
-import { AuthorRoutingModule } from "./author-routing.module";
-import { AuthorComponent } from "./author.component";
-import { NgbDatepickerModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+import { AuthorRoutingModule } from './author-routing.module';
+import { AuthorComponent } from './author.component';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AuthorComponent],
@@ -523,7 +537,7 @@ export class AuthorModule {}
 
 Open the `src/app/route.provider.ts` file and add the following menu definition:
 
-```js
+````js
 {
   path: '/authors',
   name: '::Menu:Authors',
@@ -531,11 +545,11 @@ Open the `src/app/route.provider.ts` file and add the following menu definition:
   layout: eLayoutType.application,
   requiredPolicy: 'BookStore.Authors',
 }
-```
+````
 
 Open the `/src/app/route.provider.ts` and add `'BookStore.Books || BookStore.Authors'` to the `/book-store` route. The `/book-store` route block should be following:
 
-```js
+````js
 {
   path: '/book-store',
   name: '::Menu:BookStore',
@@ -544,7 +558,7 @@ Open the `/src/app/route.provider.ts` and add `'BookStore.Books || BookStore.Aut
   layout: eLayoutType.application,
   requiredPolicy: 'BookStore.Books || BookStore.Authors',
 },
-```
+````
 
 The final `configureRoutes` function declaration should be following:
 
@@ -553,33 +567,33 @@ function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
       {
-        path: "/",
-        name: "::Menu:Home",
-        iconClass: "fas fa-home",
+        path: '/',
+        name: '::Menu:Home',
+        iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
       },
       {
-        path: "/book-store",
-        name: "::Menu:BookStore",
-        iconClass: "fas fa-book",
+        path: '/book-store',
+        name: '::Menu:BookStore',
+        iconClass: 'fas fa-book',
         order: 2,
         layout: eLayoutType.application,
-        requiredPolicy: "BookStore.Books || BookStore.Authors",
+        requiredPolicy: 'BookStore.Books || BookStore.Authors',
       },
       {
-        path: "/books",
-        name: "::Menu:Books",
-        parentName: "::Menu:BookStore",
+        path: '/books',
+        name: '::Menu:Books',
+        parentName: '::Menu:BookStore',
         layout: eLayoutType.application,
-        requiredPolicy: "BookStore.Books",
+        requiredPolicy: 'BookStore.Books',
       },
       {
-        path: "/authors",
-        name: "::Menu:Authors",
-        parentName: "::Menu:BookStore",
+        path: '/authors',
+        name: '::Menu:Authors',
+        parentName: '::Menu:BookStore',
         layout: eLayoutType.application,
-        requiredPolicy: "BookStore.Authors",
+        requiredPolicy: 'BookStore.Authors',
       },
     ]);
   };
@@ -666,7 +680,7 @@ export class AuthorComponent implements OnInit {
       shortBio: [
         this.selectedAuthor.shortBio ? this.selectedAuthor.shortBio : null,
         Validators.required,
-      ]
+      ],
     });
   }
 
@@ -705,7 +719,7 @@ export class AuthorComponent implements OnInit {
 
 Open the `/src/app/author/author.component.html` and replace the content as below:
 
-```html
+````html
 <div class="card">
   <div class="card-header">
     <div class="row">
@@ -716,13 +730,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       </div>
       <div class="text-end col col-md-6">
         <div class="text-lg-end pt-2">
-          <button
-            *abpPermission="'BookStore.Authors.Create'"
-            id="create"
-            class="btn btn-primary"
-            type="button"
-            (click)="createAuthor()"
-          >
+          <button *abpPermission="'BookStore.Authors.Create'" id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
             <i class="fa fa-plus me-1"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
@@ -731,12 +739,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
     </div>
   </div>
   <div class="card-body">
-    <ngx-datatable
-      [rows]="author.items"
-      [count]="author.totalCount"
-      [list]="list"
-      default
-    >
+    <ngx-datatable [rows]="author.items" [count]="author.totalCount" [list]="list" default>
       <ngx-datatable-column
         [name]="'::Actions' | abpLocalization"
         [maxWidth]="150"
@@ -750,64 +753,40 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               aria-haspopup="true"
               ngbDropdownToggle
             >
-              <i class="fa fa-cog me-1"></i>{%{{{ '::Actions' | abpLocalization
-              }}}%}
+              <i class="fa fa-cog me-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
-              <button
-                *abpPermission="'BookStore.Authors.Edit'"
-                ngbDropdownItem
-                (click)="editAuthor(row.id)"
-              >
+              <button *abpPermission="'BookStore.Authors.Edit'" ngbDropdownItem (click)="editAuthor(row.id)">
                 {%{{{ '::Edit' | abpLocalization }}}%}
               </button>
-              <button
-                *abpPermission="'BookStore.Authors.Delete'"
-                ngbDropdownItem
-                (click)="delete(row.id)"
-              >
+              <button *abpPermission="'BookStore.Authors.Delete'" ngbDropdownItem (click)="delete(row.id)">
                 {%{{{ '::Delete' | abpLocalization }}}%}
               </button>
             </div>
           </div>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column
-        [name]="'::Name' | abpLocalization"
-        prop="name"
-      ></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::BirthDate' | abpLocalization">
         <ng-template let-row="row" ngx-datatable-cell-template>
           {%{{{ row.birthDate | date }}}%}
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column
-        [name]="'::ShortBio' | abpLocalization"
-        prop="shortBio"
-      ></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::ShortBio' | abpLocalization" prop="shortBio"></ngx-datatable-column>
     </ngx-datatable>
   </div>
 </div>
 
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
-    <h3>
-      {%{{{ (selectedAuthor.id ? '::Edit' : '::NewAuthor') | abpLocalization
-      }}}%}
-    </h3>
+    <h3>{%{{{ (selectedAuthor.id ? '::Edit' : '::NewAuthor') | abpLocalization }}}%}</h3>
   </ng-template>
 
   <ng-template #abpBody>
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="form-group">
         <label for="author-name">Name</label><span> * </span>
-        <input
-          type="text"
-          id="author-name"
-          class="form-control"
-          formControlName="name"
-          autofocus
-        />
+        <input type="text" id="author-name" class="form-control" formControlName="name" autofocus />
       </div>
 
       <div class="mt-2">
@@ -821,15 +800,9 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
           (click)="datepicker.toggle()"
         />
       </div>
-
       <div class="form-group">
         <label for="author-short-bio">Short Bio</label><span> * </span>
-        <textarea
-          id="author-short-bio"
-          class="form-control"
-          formControlName="shortBio"
-          rows="12"
-        ></textarea>
+        <textarea id="author-short-bio" class="form-control" formControlName="shortBio" rows="12"></textarea>
       </div>
     </form>
   </ng-template>
@@ -845,27 +818,27 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
     </button>
   </ng-template>
 </abp-modal>
-```
+````
 
 ### Localizations
 
 This page uses some localization keys we need to declare. Open the `en.json` file under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project and add the following entries:
 
-```json
+````json
 "Menu:Authors": "Authors",
 "Authors": "Authors",
 "AuthorDeletionConfirmationMessage": "Are you sure to delete the author '{0}'?",
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
-```
+````
 
 ### Run the Application
 
-Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `identity/roles` page, click to the _Actions_ button and select the _Permissions_ action for the **admin role**:
+Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `identity/roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
 ![bookstore-author-permissions](images/bookstore-author-permissions-2.png)
 
-As you see, the admin role has no _Author Management_ permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the _Authors_ menu item under the _Book Store_ in the main menu, after **refreshing the page**:
+As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
 ![bookstore-authors-page](images/bookstore-angular-authors-page-2.png)
 
@@ -883,7 +856,7 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStore.Blazor.Client` project with the following content:
 
-```xml
+````xml
 @page "/authors"
 @using Acme.BookStore.Authors
 @using Acme.BookStore.Localization
@@ -1061,16 +1034,16 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the `Acme.BookStor
         </Form>
     </ModalContent>
 </Modal>
-```
+````
 
-- This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
-- Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../../framework/api-development/dynamic-csharp-clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
-- Injects the `IAuthorizationService` to check [permissions](../../framework/fundamentals/authorization.md).
-- Injects the `IObjectMapper` for [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md).
+* This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
+* Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../../framework/api-development/dynamic-csharp-clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
+* Injects the `IAuthorizationService` to check [permissions](../../framework/fundamentals/authorization.md).
+* Injects the `IObjectMapper` for [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md).
 
 Create a new code behind file, `Authors.razor.cs`, under the `Pages` folder, with the following content:
 
-```csharp
+````csharp
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1106,9 +1079,9 @@ public partial class Authors
     private Modal EditAuthorModal { get; set; }
 
     private Validations CreateValidationsRef;
-
+    
     private Validations EditValidationsRef;
-
+    
     public Authors()
     {
         NewAuthor = new CreateAuthorDto();
@@ -1164,7 +1137,7 @@ public partial class Authors
     private void OpenCreateAuthorModal()
     {
         CreateValidationsRef.ClearAll();
-
+        
         NewAuthor = new CreateAuthorDto();
         CreateAuthorModal.Show();
     }
@@ -1177,7 +1150,7 @@ public partial class Authors
     private void OpenEditAuthorModal(AuthorDto author)
     {
         EditValidationsRef.ClearAll();
-
+        
         EditingAuthorId = author.Id;
         EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
         EditAuthorModal.Show();
@@ -1220,7 +1193,7 @@ public partial class Authors
         }
     }
 }
-```
+````
 
 This class typically defines the properties and methods used by the `Authors.razor` page.
 
@@ -1230,9 +1203,9 @@ This class typically defines the properties and methods used by the `Authors.raz
 
 Open the `BookStoreBlazorAutoMapperProfile.cs` in the `Acme.BookStore.Blazor.Client` project and add the following mapping code in the constructor:
 
-```csharp
+````csharp
 CreateMap<AuthorDto, UpdateAuthorDto>();
-```
+````
 
 You will need to declare a `using Acme.BookStore.Authors;` statement to the beginning of the file.
 
@@ -1240,36 +1213,36 @@ You will need to declare a `using Acme.BookStore.Authors;` statement to the begi
 
 Open the `BookStoreMenuContributor.cs` in the `Acme.BookStore.Blazor.Client` project and add the following code to the end of the `ConfigureMainMenuAsync` method:
 
-```csharp
+````csharp
 if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
 {
     context.Menu.AddItem(new ApplicationMenuItem(
         "BooksStore.Authors",
-        l["Menu:Authors"],
+        l["Menu:Authors"], 
         url: "/authors"
     ));
 }
-```
+````
 
 ### Localizations
 
 We should complete the localizations we've used above. Open the `en.json` file under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project and add the following entries:
 
-```json
+````json
 "Menu:Authors": "Authors",
 "Authors": "Authors",
 "AuthorDeletionConfirmationMessage": "Are you sure to delete the author '{0}'?",
 "BirthDate": "Birth date",
 "NewAuthor": "New author"
-```
+````
 
 ### Run the Application
 
-Run and login to the application. **If you don't see the Authors menu item under the Book Store menu, that means you don't have the permission yet.** Go to the `identity/roles` page, click to the _Actions_ button and select the _Permissions_ action for the **admin role**:
+Run and login to the application. **If you don't see the Authors menu item under the Book Store menu, that means you don't have the permission yet.** Go to the `identity/roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
 
 ![bookstore-author-permissions](images/bookstore-author-permissions-2.png)
 
-As you see, the admin role has no _Author Management_ permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the _Authors_ menu item under the _Book Store_ in the main menu, after **refreshing the page**:
+As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
 ![bookstore-authors-page](images/bookstore-authors-page-3.png)
 
