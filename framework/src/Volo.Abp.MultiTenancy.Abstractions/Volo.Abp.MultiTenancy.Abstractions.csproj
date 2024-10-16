@@ -19,6 +19,8 @@
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
         <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Auditing.Contracts\Volo.Abp.Auditing.Contracts.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Ddd.Domain.Shared\Volo.Abp.Ddd.Domain.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
