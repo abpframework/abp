@@ -103,7 +103,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
                 );
             }
 
-            await Repository.InsertAsync(localEntity);
+            await Repository.InsertAsync(localEntity, true);
         }
         else
         {
@@ -122,7 +122,7 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
                 );
             }
 
-            await Repository.UpdateAsync(localEntity);
+            await Repository.UpdateAsync(localEntity, true);
         }
 
         return true;
