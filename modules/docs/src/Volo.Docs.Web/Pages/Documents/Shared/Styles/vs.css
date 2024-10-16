@@ -427,7 +427,7 @@ body.scrolledMore .alert-criteria p.alert-p {
 }
 .docs-page .docs-content .docs-content-field article.docs-body {
   word-break: break-word;
-  color: #3a3e48;
+  color: #000;
 }
 .docs-page .docs-content .docs-content-field article.docs-body h1 {
   padding-top: 1rem;
