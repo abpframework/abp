@@ -232,9 +232,10 @@ namespace OpenIddict.Demo.Server.Migrations
                     TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClientId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
-                    IpAddresses = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    IpAddresses = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: true),
                     SignedIn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -623,7 +624,8 @@ namespace OpenIddict.Demo.Server.Migrations
                         name: "FK_OpenIddictAuthorizations_OpenIddictApplications_ApplicationId",
                         column: x => x.ApplicationId,
                         principalTable: "OpenIddictApplications",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -652,12 +654,14 @@ namespace OpenIddict.Demo.Server.Migrations
                         name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
                         column: x => x.ApplicationId,
                         principalTable: "OpenIddictApplications",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                         column: x => x.AuthorizationId,
                         principalTable: "OpenIddictAuthorizations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
