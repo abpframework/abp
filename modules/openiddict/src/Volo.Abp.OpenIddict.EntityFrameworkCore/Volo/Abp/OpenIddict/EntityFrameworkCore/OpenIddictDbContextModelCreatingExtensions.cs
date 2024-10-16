@@ -40,9 +40,6 @@ public static class OpenIddictDbContextModelCreatingExtensions
             b.Property(x => x.ClientType)
                 .HasMaxLength(OpenIddictApplicationConsts.ClientTypeMaxLength);
 
-            b.HasMany<OpenIddictAuthorization>().WithOne().HasForeignKey(x => x.ApplicationId).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
-            b.HasMany<OpenIddictToken>().WithOne().HasForeignKey(x => x.ApplicationId).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
-
             b.ApplyObjectExtensionMappings();
         });
 
@@ -69,7 +66,7 @@ public static class OpenIddictDbContextModelCreatingExtensions
             b.Property(x => x.Type)
                 .HasMaxLength(OpenIddictAuthorizationConsts.TypeMaxLength);
 
-            b.HasMany<OpenIddictToken>().WithOne().HasForeignKey(x => x.AuthorizationId).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
+            b.HasOne<OpenIddictApplication>().WithMany().HasForeignKey(x => x.ApplicationId).IsRequired(false);
 
             b.ApplyObjectExtensionMappings();
         });
@@ -118,6 +115,8 @@ public static class OpenIddictDbContextModelCreatingExtensions
             b.Property(x => x.Type)
                 .HasMaxLength(OpenIddictTokenConsts.TypeMaxLength);
 
+            b.HasOne<OpenIddictApplication>().WithMany().HasForeignKey(x => x.ApplicationId).IsRequired(false);
+            b.HasOne<OpenIddictAuthorization>().WithMany().HasForeignKey(x => x.AuthorizationId).IsRequired(false);
 
             b.ApplyObjectExtensionMappings();
         });
