@@ -20,7 +20,7 @@ Reference microservice solution built with ABP and .NET.
 
 A minimal example website built with the [CMS Kit module](../modules/cms-kit/index.md).
 
-* [Live demo](https://cms-kit-demo.abp.io/)
+* [Live demo](https://cms-kit-demo.abpdemo.com/)
 * [Source code](https://github.com/abpframework/cms-kit-demo)
 
 ## Easy CRM
