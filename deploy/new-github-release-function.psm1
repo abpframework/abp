@@ -67,7 +67,7 @@ function New-GitHubRelease
 	@{
 		GitHubUsername = 'deadlydog'
 		GitHubRepositoryName = 'New-GitHubRelease'
-		GitHubAccessToken = 'SomeLongHexidecimalString'
+		GitHubAccessToken = 'SomeLongHexadecimalString'
 		ReleaseName = "New-GitHubRelease v1.0.0"
 		TagName = "v1.0.0"
 		ReleaseNotes = "This release contains the following changes: ..."
@@ -113,7 +113,7 @@ function New-GitHubRelease
 		[Parameter(Mandatory=$true,HelpMessage="The repository name to create the release in (e.g. Invoke-MsBuild).")]
 		[string] $GitHubRepositoryName,
 
-		[Parameter(Mandatory=$true,HelpMessage="The Acess Token to use as credentials for GitHub.")]
+		[Parameter(Mandatory=$true,HelpMessage="The Access Token to use as credentials for GitHub.")]
 		[string] $GitHubAccessToken,
 
 		[Parameter(Mandatory=$true,HelpMessage="The name of the tag to create at the the Commitish.")]
