@@ -1,4 +1,6 @@
-﻿using Volo.Abp.EventBus;
+﻿using Volo.Abp.Auditing;
+using Volo.Abp.Domain;
+using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 
@@ -8,8 +10,10 @@ namespace Volo.Abp.Users;
 
 [DependsOn(
     typeof(AbpMultiTenancyModule),
-    typeof(AbpEventBusModule)
-    )]
+    typeof(AbpEventBusModule),
+    typeof(AbpDddDomainSharedModule),
+    typeof(AbpAuditingContractsModule)
+)]
 public class AbpUsersAbstractionModule : AbpModule
 {
 

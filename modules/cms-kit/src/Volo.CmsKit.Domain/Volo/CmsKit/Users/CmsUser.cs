@@ -24,6 +24,8 @@ public class CmsUser : AggregateRoot<Guid>, IUser, IUpdateUserData
 
     public virtual bool PhoneNumberConfirmed { get; protected set; }
 
+    public virtual int EntityVersion { get; protected set; }
+
     protected CmsUser()
     {
 

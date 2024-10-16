@@ -24,7 +24,9 @@ namespace Volo.Blogging.Users
         public virtual string PhoneNumber { get; protected set; }
 
         public virtual bool PhoneNumberConfirmed { get; protected set; }
-        
+
+        public virtual int EntityVersion { get; protected set; }
+
         [CanBeNull]
         public virtual string WebSite { get; set; }
 

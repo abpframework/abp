@@ -1,18 +1,11 @@
-﻿using Volo.Abp.Uow;
-using Volo.Abp.Users;
+﻿using Volo.Abp.Users;
 
 namespace Volo.Blogging.Users
 {
     public class BlogUserLookupService : UserLookupService<BlogUser, IBlogUserRepository>, IBlogUserLookupService
     {
-        public BlogUserLookupService(
-            IBlogUserRepository userRepository,
-            IUnitOfWorkManager unitOfWorkManager)
-            : base(
-                userRepository,
-                unitOfWorkManager)
+        public BlogUserLookupService()
         {
-            
         }
 
         protected override BlogUser CreateUser(IUserData externalUser)

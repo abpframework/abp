@@ -1,50 +1,37 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Events.Distributed;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Users;
 
-public class CmsUserSynchronizer :
-    IDistributedEventHandler<EntityUpdatedEto<UserEto>>,
-    ITransientDependency
+public class CmsUserSynchronizer : EntitySynchronizer<CmsUser, Guid, UserEto>
 {
-    protected ICmsUserRepository UserRepository { get; }
-
-    protected ICmsUserLookupService UserLookupService { get; }
-
-    public CmsUserSynchronizer(
-        ICmsUserRepository userRepository,
-        ICmsUserLookupService userLookupService)
-    {
-        UserRepository = userRepository;
-        UserLookupService = userLookupService;
-    }
-
-    public virtual async Task HandleEventAsync(EntityUpdatedEto<UserEto> eventData)
+    public CmsUserSynchronizer([NotNull] IObjectMapper objectMapper, [NotNull] IRepository<CmsUser, Guid> repository) :
+        base(objectMapper, repository)
     {
         if (!GlobalFeatureManager.Instance.IsEnabled<CmsUserFeature>())
         {
-            return;
+            IgnoreEntityCreatedEvent = true;
+            IgnoreEntityUpdatedEvent = true;
+            IgnoreEntityDeletedEvent = true;
         }
+    }
 
-        var user = await UserRepository.FindAsync(eventData.Entity.Id);
-        if (user == null)
-        {
-            user = await UserLookupService.FindByIdAsync(eventData.Entity.Id);
-            if (user == null)
-            {
-                return;
-            }
-        }
+    protected override Task<CmsUser> MapToEntityAsync(UserEto eto)
+    {
+        return Task.FromResult(new CmsUser(eto));
+    }
 
-        if (user.Update(eventData.Entity))
-        {
-            await UserRepository.UpdateAsync(user);
-        }
+    protected override Task MapToEntityAsync(UserEto eto, CmsUser localEntity)
+    {
+        localEntity.Update(eto);
+
+        return Task.CompletedTask;
     }
 }
