@@ -40,8 +40,7 @@ public class AbpAccountBlazorModule : AbpModule
         });
     }
     
-    public override void PostConfigureServices(ServiceConfigurationContext context)
-    {
+    public override void PostConfigureServices(ServiceConfigurationContext context)=>
         OneTimeRunner.Run(() =>
         {
             ModuleExtensionConfigurationHelper
@@ -51,5 +50,5 @@ public class AbpAccountBlazorModule : AbpModule
                     editFormTypes: new[] { typeof(PersonalInfoModel) }
                 );
         });
-    }
+    
 }

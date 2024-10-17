@@ -15,21 +15,14 @@ using Volo.Abp.Http;
 namespace Volo.Abp.Account.Web.Areas.Account.Controllers;
 
 [Area("account")]
-public class ErrorController : AbpController
+public class ErrorController(
+    IIdentityServerInteractionService interaction,
+    IWebHostEnvironment environment,
+    IOptions<AbpErrorPageOptions> abpErrorPageOptions) : AbpController
 {
-    private readonly IIdentityServerInteractionService _interaction;
-    private readonly IWebHostEnvironment _environment;
-    private readonly AbpErrorPageOptions _abpErrorPageOptions;
-
-    public ErrorController(
-        IIdentityServerInteractionService interaction,
-        IWebHostEnvironment environment,
-        IOptions<AbpErrorPageOptions> abpErrorPageOptions)
-    {
-        _interaction = interaction;
-        _environment = environment;
-        _abpErrorPageOptions = abpErrorPageOptions.Value;
-    }
+    private readonly IIdentityServerInteractionService _interaction = interaction;
+    private readonly IWebHostEnvironment _environment = environment;
+    private readonly AbpErrorPageOptions _abpErrorPageOptions = abpErrorPageOptions.Value;
 
     public virtual async Task<IActionResult> Index(string errorId)
     {

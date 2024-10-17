@@ -17,24 +17,17 @@ namespace Volo.Abp.Account;
 [ExposeServices(typeof(IProfileAppService), typeof(ProfileClientProxy))]
 public partial class ProfileClientProxy : ClientProxyBase<IProfileAppService>, IProfileAppService
 {
-    public virtual async Task<ProfileDto> GetAsync()
-    {
-        return await RequestAsync<ProfileDto>(nameof(GetAsync));
-    }
+    public virtual async Task<ProfileDto> GetAsync() => await RequestAsync<ProfileDto>(nameof(GetAsync));
 
-    public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
-    {
-        return await RequestAsync<ProfileDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
+    public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input) => 
+        await RequestAsync<ProfileDto>(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
             { typeof(UpdateProfileDto), input }
         });
-    }
 
-    public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
-    {
+    public virtual async Task ChangePasswordAsync(ChangePasswordInput input) => 
         await RequestAsync(nameof(ChangePasswordAsync), new ClientProxyRequestTypeValue
         {
             { typeof(ChangePasswordInput), input }
         });
-    }
 }

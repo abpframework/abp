@@ -25,8 +25,5 @@ public class AccountSettingDefinitionProvider : SettingDefinitionProvider
         );
     }
 
-    private static LocalizableString L(string name)
-    {
-        return LocalizableString.Create<AccountResource>(name);
-    }
+    private static LocalizableString L(string name) => LocalizableString.Create<AccountResource>(name);
 }

@@ -9,31 +9,17 @@ namespace Volo.Abp.Account;
 [Area(AccountRemoteServiceConsts.ModuleName)]
 [ControllerName("Profile")]
 [Route("/api/account/my-profile")]
-public class ProfileController : AbpControllerBase, IProfileAppService
+public class ProfileController(IProfileAppService profileAppService) : AbpControllerBase, IProfileAppService
 {
-    protected IProfileAppService ProfileAppService { get; }
-
-    public ProfileController(IProfileAppService profileAppService)
-    {
-        ProfileAppService = profileAppService;
-    }
+    protected IProfileAppService ProfileAppService { get; } = profileAppService;
 
     [HttpGet]
-    public virtual Task<ProfileDto> GetAsync()
-    {
-        return ProfileAppService.GetAsync();
-    }
+    public virtual Task<ProfileDto> GetAsync() => ProfileAppService.GetAsync();
 
     [HttpPut]
-    public virtual Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
-    {
-        return ProfileAppService.UpdateAsync(input);
-    }
+    public virtual Task<ProfileDto> UpdateAsync(UpdateProfileDto input) => ProfileAppService.UpdateAsync(input);
 
     [HttpPost]
     [Route("change-password")]
-    public virtual Task ChangePasswordAsync(ChangePasswordInput input)
-    {
-        return ProfileAppService.ChangePasswordAsync(input);
-    }
+    public virtual Task ChangePasswordAsync(ChangePasswordInput input) => ProfileAppService.ChangePasswordAsync(input);
 }

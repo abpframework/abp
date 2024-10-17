@@ -5,8 +5,6 @@ namespace Volo.Abp.Account.Emailing;
 
 public static class AppUrlProviderAccountExtensions
 {
-    public static Task<string> GetResetPasswordUrlAsync(this IAppUrlProvider appUrlProvider, string appName)
-    {
-        return appUrlProvider.GetUrlAsync(appName, AccountUrlNames.PasswordReset);
-    }
+    public static Task<string> GetResetPasswordUrlAsync(this IAppUrlProvider appUrlProvider, string appName) =>
+        appUrlProvider.GetUrlAsync(appName, AccountUrlNames.PasswordReset);
 }

@@ -9,15 +9,10 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password;
 
-public class AccountProfilePasswordManagementGroupViewComponent : AbpViewComponent
+public class AccountProfilePasswordManagementGroupViewComponent(
+    IProfileAppService profileAppService) : AbpViewComponent
 {
-    protected IProfileAppService ProfileAppService { get; }
-
-    public AccountProfilePasswordManagementGroupViewComponent(
-        IProfileAppService profileAppService)
-    {
-        ProfileAppService = profileAppService;
-    }
+    protected IProfileAppService ProfileAppService { get; } = profileAppService;
 
     public virtual async Task<IViewComponentResult> InvokeAsync()
     {
