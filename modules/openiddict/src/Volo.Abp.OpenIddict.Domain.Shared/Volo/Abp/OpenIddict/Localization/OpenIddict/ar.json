@@ -9,7 +9,7 @@
     "Authorization": "تفويض",
     "DoYouWantToGrantAccessToYourData": "هل تريد منح {0} حق الوصول إلى بياناتك؟",
     "ScopesRequested": "النطاقات المطلوبة",
-    "Accept": "يقبل",
-    "Deny": "ينكر"
+    "Accept": "قبول",
+    "Deny": "رفض"
   }
 }
