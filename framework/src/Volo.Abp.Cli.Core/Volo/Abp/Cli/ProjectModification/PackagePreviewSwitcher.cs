@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -193,7 +192,7 @@ public class PackagePreviewSwitcher : ITransientDependency
             var folder = Path.GetDirectoryName(project);
 
             _packageSourceManager.Add(FindSolutionFolder(project) ?? folder, "ABP Nightly",
-                "https://www.myget.org/F/abp-nightly/api/v3/index.json");
+                "https://www.myget.org/F/abp-nightly/api/v3/index.json", "Volo.*");
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 project,
@@ -213,7 +212,8 @@ public class PackagePreviewSwitcher : ITransientDependency
             var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             _packageSourceManager.Add(solutionFolder, "ABP Nightly",
-                "https://www.myget.org/F/abp-nightly/api/v3/index.json");
+                "https://www.myget.org/F/abp-nightly/api/v3/index.json",
+                "Volo.*");
 
             if (solutionPath != null)
             {

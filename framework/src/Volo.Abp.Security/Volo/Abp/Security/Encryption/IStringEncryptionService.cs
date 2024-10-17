@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Volo.Abp.Security.Encryption;
+﻿namespace Volo.Abp.Security.Encryption;
 
 /// <summary>
 /// Can be used to simply encrypt/decrypt texts.

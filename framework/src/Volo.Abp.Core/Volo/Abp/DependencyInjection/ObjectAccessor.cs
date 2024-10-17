@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-
 namespace Volo.Abp.DependencyInjection;
 
 public class ObjectAccessor<T> : IObjectAccessor<T>

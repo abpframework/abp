@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "Progressiivinen verkkosovellus",
     "Preview": "Esikatsele",
     "CreateANewSolution": "Luo uusi ratkaisu",
-    "ABPFrameworkFeatures": "ABP-kehyksen <span class=\"gradient-framework\">Ominaisuudet</span>",
+    "FrameworkFeatures": "ABP-kehyksen <span class=\"gradient-framework\">Ominaisuudet</span>",
     "Commercial": "Kaupallinen",
     "ThirdPartyTools": "Kolmannen osapuolen työkalut",
     "Back": "Takaisin",

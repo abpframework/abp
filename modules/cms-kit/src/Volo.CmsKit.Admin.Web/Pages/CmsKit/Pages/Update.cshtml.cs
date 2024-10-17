@@ -56,6 +56,10 @@ public class UpdateModel : CmsKitAdminPageModel
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
         public string Slug { get; set; }
 
+        [Required]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxLayoutNameLength))]
+        public string LayoutName { get; set; }
+
         [HiddenInput]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
         public string Content { get; set; }

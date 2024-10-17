@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Verifica a due fattori",
     "DisplayName:IsActive": "Attivo",
     "DisplayName:LockoutEnabled": "Blocco account",
+    "Description:LockoutEnabled": "Blocca l'account dopo tentativi di accesso non riusciti",
     "NewRole": "Nuovo ruolo",
     "RoleName": "Nome del ruolo",
     "CreationTime": "Orario di creazione",

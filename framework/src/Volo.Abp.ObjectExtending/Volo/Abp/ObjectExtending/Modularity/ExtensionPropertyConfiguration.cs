@@ -45,6 +45,9 @@ public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
     [NotNull]
     public ExtensionPropertyApiConfiguration Api { get; }
 
+    [NotNull]
+    public ExtensionPropertyPolicyConfiguration Policy { get; }
+
     /// <summary>
     /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
     /// </summary>
@@ -72,6 +75,7 @@ public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
         Entity = new ExtensionPropertyEntityConfiguration();
         UI = new ExtensionPropertyUiConfiguration();
         Api = new ExtensionPropertyApiConfiguration();
+        Policy = new ExtensionPropertyPolicyConfiguration();
 
         Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
         DefaultValue = TypeHelper.GetDefaultValue(Type);

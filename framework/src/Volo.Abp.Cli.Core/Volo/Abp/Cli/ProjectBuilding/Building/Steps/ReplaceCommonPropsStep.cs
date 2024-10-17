@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 using Volo.Abp.Cli.Utils;

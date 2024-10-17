@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace Volo.Abp.BackgroundJobs;
+﻿namespace Volo.Abp.BackgroundJobs;
 
 /// <summary>
 /// Defines interface of a background job.

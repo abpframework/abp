@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.Authorization;
+using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlazoriseUI;
@@ -12,7 +14,9 @@ namespace Volo.Abp.BlazoriseUI;
 [DependsOn(
     typeof(AbpAspNetCoreComponentsWebModule),
     typeof(AbpDddApplicationContractsModule),
-    typeof(AbpAuthorizationModule)
+    typeof(AbpAuthorizationModule),
+    typeof(AbpGlobalFeaturesModule),
+    typeof(AbpFeaturesModule)
 )]
 public class AbpBlazoriseUIModule : AbpModule
 {

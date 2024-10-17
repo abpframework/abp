@@ -157,7 +157,7 @@
     "ABPCLIExplanation": "ABP CLI (Command Line Interface) ist ein Befehlszeilentool zum Ausführen einiger allgemeiner Operationen für ABP-basierte Lösungen.",
     "ABPSuiteEasilyCURD": "ABP Suite ist ein Tool, mit dem Sie einfach CRUD-Seiten erstellen können",
     "WeAreHereToHelp": "Wir sind hier, um <span class=\"zero-text\">Hilfe</span>",
-    "BrowseOrAskQuestion": "Sie können unsere Hilfethemen durchsuchen oder in häufig gestellten Fragen suchen oder uns über das <a href=\"{0}\" class=\"text-success\">Kontaktformular</a> eine Frage stellen.",
+    "BrowseOrAskQuestion": "Sie können unsere Hilfethemen durchsuchen oder in häufig gestellten Fragen suchen oder uns über das <a href=\"{0}\" >Kontaktformular</a> eine Frage stellen.",
     "SearchQuestionPlaceholder": "Suche in häufig gestellten Fragen",
     "WhatIsTheABPCommercial": "Was ist der ABP-Werbespot?",
     "WhatAreDifferencesThanAbpFramework": "Was sind die Unterschiede zwischen dem Open Source ABP Framework und dem ABP Commercial?",

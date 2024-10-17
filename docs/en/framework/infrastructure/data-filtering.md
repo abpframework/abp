@@ -320,6 +320,81 @@ public override string GetCompiledQueryCacheKey()
 }
 ````
 
+##### Make User-defined function mapping compatible with [DevExtreme.AspNet.Data's](https://github.com/DevExpress/DevExtreme.AspNet.Data) `IAsyncAdapter`
+
+If you are using [DevExtreme.AspNet.Data](https://github.com/DevExpress/DevExtreme.AspNet.Data) and `User-defined function mapping`, You need to create a custom adapter to compatible with `IAsyncAdapter`.
+
+````csharp
+var adapter = new AbpDevExtremeAsyncAdapter();
+CustomAsyncAdapters.RegisterAdapter(typeof(AbpEntityQueryProvider), adapter);
+````
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using DevExtreme.AspNet.Data.Async;
+
+namespace Abp.EntityFrameworkCore;
+
+public class AbpDevExtremeAsyncAdapter : IAsyncAdapter
+{
+    private readonly MethodInfo _countAsyncMethod;
+    private readonly MethodInfo _toListAsyncMethod;
+
+    public AbpDevExtremeAsyncAdapter()
+    {
+        var extensionsType = Type.GetType("Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions, Microsoft.EntityFrameworkCore");
+        _countAsyncMethod = FindQueryExtensionMethod(extensionsType, "CountAsync");
+        _toListAsyncMethod = FindQueryExtensionMethod(extensionsType, "ToListAsync");
+    }
+
+    public Task<int> CountAsync(IQueryProvider provider, Expression expr, CancellationToken cancellationToken)
+    {
+        return InvokeCountAsync(_countAsyncMethod, provider, expr, cancellationToken);
+    }
+
+    public Task<IEnumerable<T>> ToEnumerableAsync<T>(IQueryProvider provider, Expression expr, CancellationToken cancellationToken)
+    {
+        return InvokeToListAsync<T>(_toListAsyncMethod, provider, expr, cancellationToken);
+    }
+
+    static MethodInfo FindQueryExtensionMethod(Type extensionsType, string name)
+    {
+        return extensionsType.GetMethods().First(m =>
+        {
+            if (!m.IsGenericMethod || m.Name != name)
+            {
+                return false;
+            }
+            var parameters = m.GetParameters();
+            return parameters.Length == 2 && parameters[1].ParameterType == typeof(CancellationToken);
+        });
+    }
+
+    static Task<int> InvokeCountAsync(MethodInfo method, IQueryProvider provider, Expression expr, CancellationToken cancellationToken)
+    {
+        var countArgument = ((MethodCallExpression)expr).Arguments[0];
+        var query = provider.CreateQuery(countArgument);
+        return (Task<int>)InvokeQueryExtensionMethod(method, query.ElementType, query, cancellationToken);
+    }
+
+    static async Task<IEnumerable<T>> InvokeToListAsync<T>(MethodInfo method, IQueryProvider provider, Expression expr, CancellationToken cancellationToken)
+    {
+        return await (Task<List<T>>)InvokeQueryExtensionMethod(method, typeof(T), provider.CreateQuery(expr), cancellationToken);
+    }
+
+    static object InvokeQueryExtensionMethod(MethodInfo method, Type elementType, IQueryable query, CancellationToken cancellationToken)
+    {
+        return method.MakeGenericMethod(elementType).Invoke(null, new object[] { query, cancellationToken });
+    }
+}
+````
+
 ### MongoDB
 
 ABP abstracts the `IMongoDbRepositoryFilterer` interface to implement data filtering for the [MongoDB Integration](../data/mongodb), it works only if you use the repositories properly. Otherwise, you should manually filter the data.
