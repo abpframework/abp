@@ -300,6 +300,23 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         }
     }
 
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(string identifier, CancellationToken cancellationToken)
+    {
+        Check.NotNullOrEmpty(identifier, nameof(identifier));
+
+        var key = ConvertIdentifierFromString(identifier);
+
+        return await Repository.RevokeByApplicationIdAsync(key, cancellationToken: cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken)
+    {
+        Check.NotNullOrEmpty(subject, nameof(subject));
+
+        return await Repository.RevokeBySubjectAsync(subject, cancellationToken: cancellationToken);
+    }
+
     public virtual async ValueTask SetApplicationIdAsync(OpenIddictAuthorizationModel authorization, string identifier, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));

@@ -98,4 +98,20 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<IOpenIdd
 
         return count + await (await GetDbSetAsync()).Where(x => authorizations.Contains(x.Id)).ExecuteDeleteAsync(cancellationToken);
     }
+
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default)
+    {
+        return await (from authorization in await GetQueryableAsync()
+            where authorization.ApplicationId == applicationId
+            select authorization).ExecuteUpdateAsync(entity => entity.SetProperty(
+            authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
+    }
+
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default)
+    {
+        return await (from authorization in await GetQueryableAsync()
+            where authorization.Subject == subject
+            select authorization).ExecuteUpdateAsync(entity => entity.SetProperty(
+            authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
+    }
 }

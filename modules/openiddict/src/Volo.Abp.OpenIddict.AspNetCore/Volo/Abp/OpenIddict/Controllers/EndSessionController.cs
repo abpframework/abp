@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Server.AspNetCore;
 
 namespace Volo.Abp.OpenIddict.Controllers;
 
-[Route("connect/logout")]
+[Route("connect/endsession")]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class LogoutController : AbpOpenIdDictControllerBase
 {

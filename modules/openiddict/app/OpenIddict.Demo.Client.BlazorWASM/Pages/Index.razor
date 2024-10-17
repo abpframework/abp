@@ -21,9 +21,9 @@ Welcome to your new app.
 
 @if (_claims.Count() > 0)
 {
-    <p>
+    <textarea style="width: -webkit-fill-available; height: 300px">
         @_accessToken
-    </p>
+    </textarea>
 
     <ul>
         @foreach (var claim in _claims)

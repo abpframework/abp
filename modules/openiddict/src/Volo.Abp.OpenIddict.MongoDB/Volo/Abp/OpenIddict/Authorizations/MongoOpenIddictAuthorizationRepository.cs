@@ -109,4 +109,22 @@ public class MongoOpenIddictAuthorizationRepository : MongoDbRepository<OpenIddi
         await DeleteManyAsync(authorizations, cancellationToken: cancellationToken);
         return authorizations.Count;
     }
+
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default)
+    {
+        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
+            filter           : authorization => authorization.ApplicationId == applicationId,
+            update           : Builders<OpenIddictAuthorization>.Update.Set(authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked),
+            options          : null,
+            cancellationToken: cancellationToken)).MatchedCount;
+    }
+
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default)
+    {
+        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
+            filter           : authorization => authorization.Subject == subject,
+            update           : Builders<OpenIddictAuthorization>.Update.Set(authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked),
+            options          : null,
+            cancellationToken: cancellationToken)).MatchedCount;
+    }
 }

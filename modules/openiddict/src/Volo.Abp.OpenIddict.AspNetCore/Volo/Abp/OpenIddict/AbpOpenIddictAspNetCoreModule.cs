@@ -62,13 +62,13 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     //.SetConfigurationEndpointUris()
                     // .well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("device")
+                    .SetDeviceAuthorizationEndpointUris("device")
                     .SetIntrospectionEndpointUris("connect/introspect")
-                    .SetLogoutEndpointUris("connect/logout")
+                    .SetEndSessionEndpointUris("connect/endsession")
                     .SetRevocationEndpointUris("connect/revocat")
                     .SetTokenEndpointUris("connect/token")
-                    .SetUserinfoEndpointUris("connect/userinfo")
-                    .SetVerificationEndpointUris("connect/verify");
+                    .SetUserInfoEndpointUris("connect/userinfo")
+                    .SetEndUserVerificationEndpointUris("connect/verify");
 
                 builder
                     .AllowAuthorizationCodeFlow()
@@ -77,7 +77,7 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     .AllowPasswordFlow()
                     .AllowClientCredentialsFlow()
                     .AllowRefreshTokenFlow()
-                    .AllowDeviceCodeFlow()
+                    .AllowDeviceAuthorizationFlow()
                     .AllowNoneFlow();
 
                 builder.RegisterScopes(new[]
@@ -94,9 +94,9 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                 builder.UseAspNetCore()
                     .EnableAuthorizationEndpointPassthrough()
                     .EnableTokenEndpointPassthrough()
-                    .EnableUserinfoEndpointPassthrough()
-                    .EnableLogoutEndpointPassthrough()
-                    .EnableVerificationEndpointPassthrough()
+                    .EnableUserInfoEndpointPassthrough()
+                    .EnableEndSessionEndpointPassthrough()
+                    .EnableEndUserVerificationEndpointPassthrough()
                     .EnableStatusCodePagesIntegration();
 
                 if (builderOptions.AddDevelopmentEncryptionAndSigningCertificate)
