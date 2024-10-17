@@ -1,7 +1,6 @@
 ﻿using System;
 using NuGet.Versioning;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-using Volo.Abp.Cli.ProjectBuilding.Templates;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Microservice;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;

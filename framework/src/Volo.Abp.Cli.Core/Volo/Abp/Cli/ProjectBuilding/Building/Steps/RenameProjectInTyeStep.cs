@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;

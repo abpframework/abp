@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-
 namespace Volo.Abp.Minify;
 
 public interface IMinifier

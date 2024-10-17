@@ -1,7 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 

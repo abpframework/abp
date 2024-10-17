@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-using Volo.Abp.Cli.ProjectBuilding.Templates;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building;
 
