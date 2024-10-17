@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NuGet.Versioning;
 using System.IO;
 using System.Linq;

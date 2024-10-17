@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
-using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending;
 
