@@ -15,4 +15,9 @@ public class AbpOpenIddictAspNetCoreOptions
     /// Default: true.
     /// </summary>
     public bool AddDevelopmentEncryptionAndSigningCertificate { get; set; } = true;
+
+    /// <summary>
+    /// Attach auth server current culture info to response.
+    /// </summary>
+    public bool AttachCultureInfo { get; set; } = true;
 }

@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using Minio.ApiEndpoints;
 using Minio.DataModel.Args;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -72,10 +72,8 @@ public class AbpBlobStoringMinioTestModule : AbpModule
         var minioClient = new MinioClient().WithEndpoint(_endPoint).WithCredentials(_accessKey, _secretKey).Build();
         if (await minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(_randomContainerName)))
         {
-            var objects = await minioClient.ListObjectsAsync(new ListObjectsArgs().WithBucket(_randomContainerName)
-                .WithPrefix(null).WithRecursive(true)).ToList();
-
-            foreach (var item in objects)
+            await foreach (var item in minioClient.ListObjectsEnumAsync(new ListObjectsArgs().WithBucket(_randomContainerName)
+                               .WithPrefix(null).WithRecursive(true)).ConfigureAwait(false))
             {
                 await minioClient.RemoveObjectAsync(new RemoveObjectArgs().WithBucket(_randomContainerName)
                     .WithObject(item.Key));

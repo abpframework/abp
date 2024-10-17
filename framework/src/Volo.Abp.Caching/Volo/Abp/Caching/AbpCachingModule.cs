@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Caching.Hybrid;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -24,6 +27,10 @@ public class AbpCachingModule : AbpModule
 
         context.Services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
         context.Services.AddSingleton(typeof(IDistributedCache<,>), typeof(DistributedCache<,>));
+
+        context.Services.AddHybridCache().AddSerializerFactory<AbpHybridCacheJsonSerializerFactory>();
+        context.Services.AddSingleton(typeof(IHybridCache<>), typeof(AbpHybridCache<>));
+        context.Services.AddSingleton(typeof(IHybridCache<,>), typeof(AbpHybridCache<,>));
 
         context.Services.Configure<AbpDistributedCacheOptions>(cacheOptions =>
         {

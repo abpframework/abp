@@ -5,6 +5,7 @@
     "Users": "کاربران",
     "NewUser": "کاربر جدید",
     "UserName": "نام کاربر",
+    "Surname":"نام خانوادگی",
     "EmailAddress": "آدرس ایمیل",
     "PhoneNumber": "شماره تلفن",
     "UserInformations": "اطلاعات کاربر",
@@ -27,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "احراز هویت دو مرحله ای",
     "DisplayName:IsActive": "فعال",
     "DisplayName:LockoutEnabled": "قفل کردن حساب",
+    "Description:LockoutEnabled": "قفل کردن حساب پس از تلاش های ناموفق برای ورود",
     "NewRole": "نقش/وظیفه جدید",
     "RoleName": "نام نقش/وظیفه",
     "CreationTime": "زمان ایجاد",
@@ -118,6 +120,13 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "آیا شماره تلفن توسط کاربر قابل تایید باشد یا خیر.",
     "Description:Abp.Identity.SignIn.RequireConfippedPhoneNumber": "آیا برای ورود به سیستم شماره تلفن تأیید شده لازم است یا خیر",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "آیا کاربر می تواند نام کاربری را به روز کند یا خیر.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "آیا کاربر می تواند آدرس ایمیل خود را به روز کند با خیر."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "آیا کاربر می تواند آدرس ایمیل خود را به روز کند با خیر.",
+    "Details": "جزئیات",
+    "CreatedBy": "ایجاد شده توسط",
+    "ModifiedBy": "ویرایش شده توسط",
+    "ModificationTime": "زمان اصلاح",
+    "PasswordUpdateTime": "زمان ویرایش رمز",
+    "LockoutEndTime": "زمان اتمام قفل",
+    "FailedAccessCount": "تعداد دسترسی ناموفق"
   }
 }

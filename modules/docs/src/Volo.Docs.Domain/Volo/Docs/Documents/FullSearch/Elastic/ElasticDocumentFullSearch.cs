@@ -283,7 +283,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         protected virtual string NormalizeField(string field)
         {
-            return field.Replace("-", "").ToLower();
+            return field?.Replace("-", "").ToLower();
         }
     }
 }

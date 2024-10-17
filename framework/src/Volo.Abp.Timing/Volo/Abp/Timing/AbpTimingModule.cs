@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing.Localization.Resources.AbpTiming;

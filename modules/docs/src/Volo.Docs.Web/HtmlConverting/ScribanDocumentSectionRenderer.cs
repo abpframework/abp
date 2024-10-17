@@ -13,8 +13,11 @@ namespace Volo.Docs.HtmlConverting
 {
     public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
     {
-        private const string JsonOpener = "````json";
-        private const string JsonCloser = "````";
+        private readonly static List<DocsJsonSection> DocsJsonSections = new List<DocsJsonSection>
+        {
+            new DocsJsonSection("````json", "````"),
+            new DocsJsonSection("```json", "```")
+        };
         private const string DocsParam = "//[doc-params]";
         private const string DocsTemplates = "//[doc-template]";
         private const string DocsNav = "//[doc-nav]";
@@ -59,12 +62,12 @@ namespace Volo.Docs.HtmlConverting
         {
             try
             {
-                if (!document.Contains(JsonOpener) || !document.Contains(sectionName))
+                if (!HasJsonSection(document) || !document.Contains(sectionName))
                 {
                     return new T();
                 }
 
-                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document, sectionName);
+                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection, _) = GetJsonBeginEndIndexesAndPureJson(document, sectionName);
 
                 if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                 {
@@ -96,12 +99,12 @@ namespace Volo.Docs.HtmlConverting
 
                 try
                 {
-                    if (!document.Contains(JsonOpener) || !document.Contains(sectionName))
+                    if (!HasJsonSection(document) || !document.Contains(sectionName))
                     {
                         continue;
                     }
 
-                    var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document, sectionName);
+                    var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection, jsonSection) = GetJsonBeginEndIndexesAndPureJson(document, sectionName);
 
                     if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                     {
@@ -109,8 +112,8 @@ namespace Volo.Docs.HtmlConverting
                     }
 
                     document = document.Remove(
-                        jsonBeginningIndex - JsonOpener.Length,
-                        (jsonEndingIndex + JsonCloser.Length) - (jsonBeginningIndex - JsonOpener.Length)
+                        jsonBeginningIndex - jsonSection.Opener.Length,
+                        (jsonEndingIndex + jsonSection.Closer.Length) - (jsonBeginningIndex - jsonSection.Opener.Length)
                     );
                 }
                 catch (Exception)
@@ -121,122 +124,193 @@ namespace Volo.Docs.HtmlConverting
             
             return document;
         }
-
-        private static (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document, string sectionName)
+        
+        private static bool HasJsonSection(string document)
         {
-            var searchedIndex = 0;
+            return DocsJsonSections.Any(section => document.Contains(section.Opener) && document.Contains(section.Closer));
+        }
 
-            while (searchedIndex < document.Length)
+        private static (int, int, string, DocsJsonSection) GetJsonBeginEndIndexesAndPureJson(string document, string sectionName)
+        {
+            foreach (var section in DocsJsonSections)
             {
-                var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length + searchedIndex;
+                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = section.GetJsonBeginEndIndexesAndPureJson(document, sectionName);
 
-                if (jsonBeginningIndex < 0)
+                if (jsonBeginningIndex >= 0 && jsonEndingIndex > 0 && !string.IsNullOrWhiteSpace(insideJsonSection))
                 {
-                    return (-1, -1, "");
+                    return (jsonBeginningIndex, jsonEndingIndex, insideJsonSection, section);
                 }
-
-                var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(JsonCloser, StringComparison.Ordinal) + jsonBeginningIndex;
-                var insideJsonSection = document[jsonBeginningIndex..jsonEndingIndex];
-
-                if (insideJsonSection.IndexOf(sectionName, StringComparison.Ordinal) < 0)
-                {
-                    searchedIndex = jsonEndingIndex + JsonCloser.Length;
-                    continue;
-                }
-
-                return (jsonBeginningIndex, jsonEndingIndex, insideJsonSection);
             }
 
-            return (-1, -1, "");
+            return (-1, -1, "", null);
         }
 
         public async Task<List<DocumentPartialTemplateWithValuesDto>> GetPartialTemplatesInDocumentAsync(string documentContent)
         {
             var templates = new List<DocumentPartialTemplateWithValuesDto>();
 
-            while (documentContent.Contains(JsonOpener))
+            foreach (var section in DocsJsonSections)
             {
-                var afterJsonOpener = documentContent.Substring(
-                    documentContent.IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length
-                );
-
-                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal)
-                );
-
-                documentContent = afterJsonOpener.Substring(
-                    afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal) + JsonCloser.Length
-                );
-
-                if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
-                {
-                    continue;
-                }
-
-                var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) + DocsTemplates.Length);
-
-                if (!DocsJsonSerializerHelper.TryDeserialize<DocumentPartialTemplateWithValuesDto>(json, out var template))
-                {
-                    throw new UserFriendlyException($"ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
-                }
-
-                templates.Add(template);
+                templates.AddRange(await section.GetPartialTemplatesInDocumentAsync(documentContent));
             }
 
-            return await Task.FromResult(templates);
+            return templates;
         }
 
         private static string SetPartialTemplates(string document, IReadOnlyCollection<DocumentPartialTemplateContent> templates)
         {
-            var newDocument = new StringBuilder();
-
-            while (document.Contains(JsonOpener))
+            foreach (var section in DocsJsonSections)
             {
-                var beforeJson = document.Substring(0,
-                    document.IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length
-                );
-
-                var afterJsonOpener = document.Substring(
-                    document.IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length
-                );
-
-                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal)
-                );
-
-                if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
-                {
-                    document = afterJsonOpener.Substring(
-                        afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal) + JsonCloser.Length
-                    );
-
-                    newDocument.Append(beforeJson + betweenJsonOpenerAndCloser + JsonCloser);
-                    continue;
-                }
-
-                var json = betweenJsonOpenerAndCloser.Substring(
-                    betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) + DocsTemplates.Length
-                );
-
-                if (DocsJsonSerializerHelper.TryDeserialize<DocumentPartialTemplateWithValuesDto>(json, out var documentPartialTemplateWithValuesDto))
-                {
-                    var template = templates.FirstOrDefault(t => t.Path == documentPartialTemplateWithValuesDto.Path);
-
-                    var beforeTemplate = document.Substring(0,
-                        document.IndexOf(JsonOpener, StringComparison.Ordinal)
-                    );
-
-                    newDocument.Append(beforeTemplate + template?.Content + JsonCloser);
-
-                    document = afterJsonOpener.Substring(
-                        afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal) + JsonCloser.Length
-                    );
-                }
+                document = section.SetPartialTemplates(document, templates);
+            }
+            
+            return document;
+        }
+        
+        private class DocsJsonSection
+        {
+            public string Opener { get; }
+            public string Closer { get; }
+            
+            public DocsJsonSection(string opener, string closer)
+            {
+                Opener = opener;
+                Closer = closer;
             }
 
-            newDocument.Append(document);
+            public (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document, string sectionName)
+            {
+                var searchedIndex = 0;
 
-            return newDocument.ToString();
+                while (searchedIndex < document.Length)
+                {
+                    var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(Opener, StringComparison.Ordinal);
+
+                    if (jsonBeginningIndex < 0)
+                    {
+                        return (-1, -1, "");
+                    }
+                    
+                    jsonBeginningIndex += Opener.Length + searchedIndex;
+
+                    var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(Closer, StringComparison.Ordinal);
+                    if (jsonEndingIndex < 0)
+                    {
+                        return (-1, -1, "");
+                    }
+                    
+                    jsonEndingIndex += jsonBeginningIndex;
+                    var insideJsonSection = document[jsonBeginningIndex..jsonEndingIndex];
+
+                    if (insideJsonSection.IndexOf(sectionName, StringComparison.Ordinal) < 0)
+                    {
+                        searchedIndex = jsonEndingIndex + Closer.Length;
+                        continue;
+                    }
+
+                    return (jsonBeginningIndex, jsonEndingIndex, insideJsonSection);
+                }
+
+                return (-1, -1, "");
+            }
+
+            public async Task<List<DocumentPartialTemplateWithValuesDto>> GetPartialTemplatesInDocumentAsync(
+                string documentContent)
+            {
+                var templates = new List<DocumentPartialTemplateWithValuesDto>();
+
+                while (documentContent.Contains(Opener))
+                {
+                    var afterJsonOpener = documentContent.Substring(
+                        documentContent.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
+                    );
+
+                    var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
+                        afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal)
+                    );
+
+                    documentContent = afterJsonOpener.Substring(
+                        afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal) + Closer.Length
+                    );
+
+                    if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
+                    {
+                        continue;
+                    }
+
+                    var json = betweenJsonOpenerAndCloser.Substring(
+                        betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) +
+                        DocsTemplates.Length);
+
+                    if (!DocsJsonSerializerHelper.TryDeserialize<DocumentPartialTemplateWithValuesDto>(json,
+                            out var template))
+                    {
+                        throw new UserFriendlyException(
+                            $"ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
+                    }
+
+                    templates.Add(template);
+                }
+
+                return await Task.FromResult(templates);
+            }
+
+            public string SetPartialTemplates(string document,
+                IReadOnlyCollection<DocumentPartialTemplateContent> templates)
+            {
+                var newDocument = new StringBuilder();
+
+                while (document.Contains(Opener))
+                {
+                    var beforeJson = document.Substring(0,
+                        document.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
+                    );
+
+                    var afterJsonOpener = document.Substring(
+                        document.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
+                    );
+
+                    var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
+                        afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal)
+                    );
+
+                    if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
+                    {
+                        document = afterJsonOpener.Substring(
+                            afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal) + Closer.Length
+                        );
+
+                        newDocument.Append(beforeJson + betweenJsonOpenerAndCloser + Closer);
+                        continue;
+                    }
+
+                    var json = betweenJsonOpenerAndCloser.Substring(
+                        betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) +
+                        DocsTemplates.Length
+                    );
+
+                    if (DocsJsonSerializerHelper.TryDeserialize<DocumentPartialTemplateWithValuesDto>(json,
+                            out var documentPartialTemplateWithValuesDto))
+                    {
+                        var template =
+                            templates.FirstOrDefault(t => t.Path == documentPartialTemplateWithValuesDto.Path);
+
+                        var beforeTemplate = document.Substring(0,
+                            document.IndexOf(Opener, StringComparison.Ordinal)
+                        );
+
+                        newDocument.Append(beforeTemplate + template?.Content + Closer);
+
+                        document = afterJsonOpener.Substring(
+                            afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal) + Closer.Length
+                        );
+                    }
+                }
+
+                newDocument.Append(document);
+
+                return newDocument.ToString();
+            }
         }
     }
 }

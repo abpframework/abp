@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "Progresszív webes alkalmazás",
     "Preview": "Előnézet",
     "CreateANewSolution": "Hozzon létre egy új megoldást",
-    "ABPFrameworkFeatures": "Az ABP keretrendszer <span class=\"gradient-framework\">jellemzői</span>",
+    "FrameworkFeatures": "Az ABP keretrendszer <span class=\"gradient-framework\">jellemzői</span>",
     "Commercial": "Kereskedelmi",
     "ThirdPartyTools": "Harmadik féltől származó eszközök",
     "Back": "Vissza",

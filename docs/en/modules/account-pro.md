@@ -119,7 +119,7 @@ Follow the steps below to install a new external/social login. We will show Face
 
 #### Add the NuGet Package
 
-Add the [Microsoft.AspNetCore.Authentication.Facebook](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.Facebook) package to your project. Based on your architecture, this can be `.Web`, `.IdentityServer` (for tiered setup) or `.Host` project.
+Add the [Microsoft.AspNetCore.Authentication.Facebook](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.Facebook) package to your project. Based on your architecture, this can be `.Web`, `.AuthServer` (for tiered setup) or `.Host` project.
 
 #### Configure the Provider
 
@@ -194,12 +194,26 @@ context.Services.AddAuthentication()
 context.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureAccountExternalProviderOptions<OpenIdConnectOptions>, OpenIdConnectPostConfigureAccountExternalProviderOptions>());
 ````
 
-#### For Tiered / Separate IdentityServer Solutions
+#### For Tiered / Separate AuthServer Solutions
 
-If your `.IdentityServer` is separated from the `.Host` project, then the `.Host` project should also be configured.
+If your `.AuthServer` is separated from the `.Host` project, then the `.Host` project should also be configured.
 
 * Add the [Microsoft.AspNetCore.Authentication.Facebook](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.Facebook) package to your `.Host` project.
-* Add `WithDynamicOptions<FacebookOptions>()` configuration into the `ConfigureServices` method of your module (just copy the all code above and remove the `.AddFacebook(...)` part since it is only needed in the IdentityServer side).
+* Add `WithDynamicOptions<FacebookOptions>()` configuration into the `ConfigureServices` method of your module (just copy the all code above and remove the `.AddFacebook(...)` part since it is only needed in the AuthServer side).
+
+## Manage External Logins
+
+You can link an external login in `Account/ExternalLogins` page of `Account` module.
+
+![my-externa-logins](../images/my-externa-logins.png)
+
+![new-external-login](../images/new-external-login.png)
+
+### Social Account Security Setting
+
+Users who register via both local registration and external/social login using the same email address will be required to enter their local password on the first external/social login.
+
+![require-local-password-on-social-account-linking](../images/require-local-password-on-social-account-linking.png)
 
 ## Internals
 

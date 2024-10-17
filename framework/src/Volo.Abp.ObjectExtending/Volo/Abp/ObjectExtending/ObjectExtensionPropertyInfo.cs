@@ -59,6 +59,8 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
 
     public ExtensionPropertyUI UI { get; set; }
 
+    public ExtensionPropertyPolicyConfiguration Policy { get; set; }
+
     public ObjectExtensionPropertyInfo(
         [NotNull] ObjectExtensionInfo objectExtension,
         [NotNull] Type type,
@@ -76,6 +78,7 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
         DefaultValue = TypeHelper.GetDefaultValue(Type);
         Lookup = new ExtensionPropertyLookupConfiguration();
         UI = new ExtensionPropertyUI();
+        Policy = new ExtensionPropertyPolicyConfiguration();
     }
 
     public object? GetDefaultValue()
@@ -86,7 +89,7 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     public class ExtensionPropertyUI
     {
         public int Order { get; set; }
-        
+
         public ExtensionPropertyUIEditModal EditModal { get; set; }
 
         public ExtensionPropertyUI()

@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
@@ -9,7 +8,10 @@ namespace Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 public class TableColumn
 {
     public string Title { get; set; } = default!;
+
     public string Data { get; set; } = default!;
+
+    public string Width { get; set; } = default!;
 
     public string PropertyName { get; set; } = default!;
 
@@ -24,7 +26,7 @@ public class TableColumn
     public Func<object, string>? ValueConverter { get; set; }
 
     public bool Sortable { get; set; }
-    
+
     public bool Visible { get; set; } = true;
 
     public TableColumn()

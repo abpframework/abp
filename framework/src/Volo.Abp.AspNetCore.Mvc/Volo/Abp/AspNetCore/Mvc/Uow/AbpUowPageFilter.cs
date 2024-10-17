@@ -1,12 +1,13 @@
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Filters;
-using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Mvc.Uow;
@@ -43,6 +44,7 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
         var options = CreateOptions(context, unitOfWorkAttr);
 
         var unitOfWorkManager = context.GetRequiredService<IUnitOfWorkManager>();
+        var cancellationTokenProvider = context.GetRequiredService<ICancellationTokenProvider>();
 
         //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
         if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
@@ -50,11 +52,11 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
             var result = await next();
             if (Succeed(result))
             {
-                await SaveChangesAsync(context, unitOfWorkManager);
+                await SaveChangesAsync(context, unitOfWorkManager, cancellationTokenProvider.Token);
             }
             else
             {
-                await RollbackAsync(context, unitOfWorkManager);
+                await RollbackAsync(context, unitOfWorkManager, cancellationTokenProvider.Token);
             }
 
             return;
@@ -65,11 +67,11 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
             var result = await next();
             if (Succeed(result))
             {
-                await uow.CompleteAsync(context.HttpContext.RequestAborted);
+                await uow.CompleteAsync(cancellationTokenProvider.Token);
             }
             else
             {
-                await uow.RollbackAsync(context.HttpContext.RequestAborted);
+                await uow.RollbackAsync(cancellationTokenProvider.Token);
             }
         }
     }
@@ -91,27 +93,27 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
         return options;
     }
 
-    private async Task RollbackAsync(PageHandlerExecutingContext context, IUnitOfWorkManager unitOfWorkManager)
+    private async Task RollbackAsync(PageHandlerExecutingContext context, IUnitOfWorkManager unitOfWorkManager, CancellationToken cancellationToken)
     {
         var currentUow = unitOfWorkManager.Current;
         if (currentUow != null)
         {
-            await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+            await currentUow.RollbackAsync(cancellationToken);
         }
     }
 
-    private async Task SaveChangesAsync(PageHandlerExecutingContext context, IUnitOfWorkManager unitOfWorkManager)
+    private async Task SaveChangesAsync(PageHandlerExecutingContext context, IUnitOfWorkManager unitOfWorkManager, CancellationToken cancellationToken)
     {
         var currentUow = unitOfWorkManager.Current;
         if (currentUow != null)
         {
             try
             {
-                await currentUow.SaveChangesAsync(context.HttpContext.RequestAborted);
+                await currentUow.SaveChangesAsync(cancellationToken);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+                await currentUow.RollbackAsync(cancellationToken);
                 throw;
             }
         }

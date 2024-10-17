@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 
@@ -17,6 +16,8 @@ public class ExtensionPropertyDto
 
     public ExtensionPropertyUiDto Ui { get; set; }
 
+    public ExtensionPropertyPolicyDto Policy { get; set; }
+
     public List<ExtensionPropertyAttributeDto> Attributes { get; set; }
 
     public Dictionary<string, object> Configuration { get; set; }
@@ -27,6 +28,7 @@ public class ExtensionPropertyDto
     {
         Api = new ExtensionPropertyApiDto();
         Ui = new ExtensionPropertyUiDto();
+        Policy = new ExtensionPropertyPolicyDto();
         Attributes = new List<ExtensionPropertyAttributeDto>();
         Configuration = new Dictionary<string, object>();
     }

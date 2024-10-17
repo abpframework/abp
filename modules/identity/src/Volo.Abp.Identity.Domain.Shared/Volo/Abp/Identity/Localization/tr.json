@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "İki aşamalı doğrulama",
     "DisplayName:IsActive": "Aktif",
     "DisplayName:LockoutEnabled": "Hesap kilitlenmesi",
+    "Description:LockoutEnabled": "Başarısız giriş denemelerinden sonra hesabı kitle",
     "NewRole": "Yeni rol",
     "RoleName": "Rol adı",
     "CreationTime": "Oluşturma zamanı",

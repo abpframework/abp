@@ -5,6 +5,7 @@ import {
   ExtensionEnumDto,
   ExtensionPropertyUiLookupDto,
   ObjectExtensionsDto,
+  PermissionService,
 } from '@abp/ng.core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
@@ -15,7 +16,7 @@ import { ObjectExtensions } from '../models/object-extensions';
 import { PropCallback } from '../models/props';
 import { createEnum, createEnumOptions, createEnumValueResolver } from './enum.util';
 import { createDisplayNameLocalizationPipeKeyGenerator } from './localization.util';
-import { createExtraPropertyValueResolver } from './props.util';
+import { checkPolicies, createExtraPropertyValueResolver } from './props.util';
 import {
   createTypeaheadDisplayNameGenerator,
   createTypeaheadOptions,
@@ -39,15 +40,18 @@ function selectEnums(
 ): Observable<Record<string, ExtensionEnumDto>> {
   return selectObjectExtensions(configState).pipe(
     map((extensions: ObjectExtensionsDto) =>
-      Object.keys(extensions.enums).reduce((acc, key) => {
-        const { fields, localizationResource } = extensions.enums[key];
-        acc[key] = {
-          fields,
-          localizationResource,
-          transformed: createEnum(fields),
-        };
-        return acc;
-      }, {} as Record<string, ObjectExtensions.ExtensionEnumDto>),
+      Object.keys(extensions.enums).reduce(
+        (acc, key) => {
+          const { fields, localizationResource } = extensions.enums[key];
+          acc[key] = {
+            fields,
+            localizationResource,
+            transformed: createEnum(fields),
+          };
+          return acc;
+        },
+        {} as Record<string, ObjectExtensions.ExtensionEnumDto>,
+      ),
     ),
   );
 }
@@ -71,6 +75,7 @@ export function getObjectExtensionEntitiesFromStore(
 
 export function mapEntitiesToContributors<T = any>(
   configState: ConfigStateService,
+  permissionService: PermissionService,
   resource: string,
 ) {
   return pipe(
@@ -86,10 +91,16 @@ export function mapEntitiesToContributors<T = any>(
               acc.editForm[key] = [];
 
               const entity: ObjectExtensions.EntityExtensionDto = entities[key];
-              if (!entity) return acc;
+              if (!entity) {
+                return acc;
+              }
 
               const properties = entity.properties;
-              if (!properties) return acc;
+              if (!properties) {
+                return acc;
+              }
+
+              checkPolicies(properties, configState, permissionService);
 
               const mapPropertiesToContributors = createPropertiesToContributorsMapper<T>(
                 generateDisplayName,

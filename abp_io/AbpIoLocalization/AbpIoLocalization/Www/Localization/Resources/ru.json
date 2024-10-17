@@ -299,7 +299,7 @@
     "ProgressiveWebApplication": "Прогрессивное веб-приложение",
     "Preview": "Предварительный просмотр",
     "CreateANewSolution": "Создать новое решение",
-    "ABPFrameworkFeatures": "Структура ABP <span class=\"gradient-framework\">Функции</span>",
+    "FrameworkFeatures": "Структура ABP <span class=\"gradient-framework\">Функции</span>",
     "Commercial": "Коммерческий",
     "ThirdPartyTools": "Сторонние инструменты",
     "Back": "Назад",

@@ -1,30 +1,30 @@
-import {ConfigStateService} from '@abp/ng.core';
-import {firstValueFrom, of} from 'rxjs';
-import {take} from 'rxjs/operators';
-import {ePropType} from '../lib/enums/props.enum';
-import {EntityPropList} from '../lib/models/entity-props';
-import {FormPropList} from '../lib/models/form-props';
-import {ObjectExtensions} from '../lib/models/object-extensions';
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
+import { firstValueFrom, lastValueFrom, of } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ePropType } from '../lib/enums/props.enum';
+import { EntityPropList } from '../lib/models/entity-props';
+import { FormPropList } from '../lib/models/form-props';
+import { ObjectExtensions } from '../lib/models/object-extensions';
 import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
 
-const fakeAppConfigService = {get: () => of(createMockState())} as any;
-const fakeLocalizationService = {get: () => of(createMockState())} as any;
+const fakeAppConfigService = { get: () => of(createMockState()) } as any;
+const fakeLocalizationService = { get: () => of(createMockState()) } as any;
 const configState = new ConfigStateService(fakeAppConfigService, fakeLocalizationService, false);
 configState.refreshAppState();
+const permissionService = new PermissionService(configState);
 
 describe('State Utils', () => {
   describe('#getObjectExtensionEntitiesFromStore', () => {
     it('should return observable entities of an existing module', async () => {
-
       const objectExtensionEntitiesFromStore$ = getObjectExtensionEntitiesFromStore(
         configState,
         'Identity',
-      )
+      );
 
-      const entities = await firstValueFrom(objectExtensionEntitiesFromStore$)
+      const entities = await firstValueFrom(objectExtensionEntitiesFromStore$);
       expect('Role' in entities).toBe(true);
     });
 
@@ -48,9 +48,12 @@ describe('State Utils', () => {
 
   describe('#mapEntitiesToContributors', () => {
     it('should return contributors from given entities', async () => {
-      const contributors = await of(createMockEntities())
-        .pipe(mapEntitiesToContributors(configState, 'AbpIdentity'), take(1))
-        .toPromise();
+      const contributors = await lastValueFrom(
+        of(createMockEntities()).pipe(
+          mapEntitiesToContributors(configState, permissionService, 'AbpIdentity'),
+          take(1),
+        ),
+      );
 
       const propList = new EntityPropList();
       contributors.prop.Role.forEach(callback => callback(propList));
@@ -118,7 +121,7 @@ function createMockState() {
       },
       defaultResourceName: 'Default',
       currentCulture: {
-        cultureName: 'en'
+        cultureName: 'en',
       },
       languages: [],
     },

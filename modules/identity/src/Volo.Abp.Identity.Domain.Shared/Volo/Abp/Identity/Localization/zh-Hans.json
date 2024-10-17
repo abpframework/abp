@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "二次认证",
     "DisplayName:IsActive": "启用",
     "DisplayName:LockoutEnabled": "账户锁定",
+    "Description:LockoutEnabled": "登录尝试失败后锁定帐户",
     "NewRole": "新角色",
     "RoleName": "角色名称",
     "CreationTime": "创建时间",

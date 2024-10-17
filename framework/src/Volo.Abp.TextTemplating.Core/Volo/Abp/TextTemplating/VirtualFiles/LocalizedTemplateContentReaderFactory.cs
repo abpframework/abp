@@ -13,16 +13,23 @@ public class LocalizedTemplateContentReaderFactory : ILocalizedTemplateContentRe
     protected IVirtualFileProvider VirtualFileProvider { get; }
     protected ConcurrentDictionary<string, ILocalizedTemplateContentReader> ReaderCache { get; }
     protected SemaphoreSlim SyncObj;
+    protected IAbpHostEnvironment AbpHostEnvironment { get; }
 
-    public LocalizedTemplateContentReaderFactory(IVirtualFileProvider virtualFileProvider)
+    public LocalizedTemplateContentReaderFactory(IVirtualFileProvider virtualFileProvider, IAbpHostEnvironment abpHostEnvironment)
     {
         VirtualFileProvider = virtualFileProvider;
+        AbpHostEnvironment = abpHostEnvironment;
         ReaderCache = new ConcurrentDictionary<string, ILocalizedTemplateContentReader>();
         SyncObj = new SemaphoreSlim(1, 1);
     }
 
     public virtual async Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition)
     {
+        if (AbpHostEnvironment.IsDevelopment())
+        {
+            return await CreateInternalAsync(templateDefinition);
+        }
+
         if (ReaderCache.TryGetValue(templateDefinition.Name, out var reader))
         {
             return reader;

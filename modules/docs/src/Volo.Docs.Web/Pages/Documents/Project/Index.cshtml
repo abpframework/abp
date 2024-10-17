@@ -23,12 +23,13 @@
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
 @inject IOptions<DocsWebGoogleOptions> DocsWebGoogleOptions
+@inject IOptions<DocsUiOptions> DocsUiOptions
 
 @model IndexModel
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
-    PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
+    PageLayout.Content.Title = Model.DocumentPageTitle;
     ViewBag.Description = Model.GetDescription();
     ViewBag.CanonicalUrl = Model.IsLatestVersion ? null : Model.GetFullUrlOfTheLatestDocument(); //issue #12355
 }
@@ -40,6 +41,10 @@
         <abp-style src="/Pages/Documents/Project/bootstrap-toc.css"/>
         <abp-style src="/Pages/Documents/Shared/Styles/vs.css"/>
         <abp-style src="/Pages/Documents/Project/index.css"/>
+        @if (DocsUiOptions.Value.EnableEnlargeImage)
+        {
+            <abp-style src="/Pages/Documents/Project/enlarge-image.css"/>
+        }
     </abp-style-bundle>
 }
 
@@ -57,6 +62,10 @@
             <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
             <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
             <abp-script src="/Pages/Documents/Project/index.js"/>
+            @if (DocsUiOptions.Value.EnableEnlargeImage)
+            {
+            <abp-script src="/Pages/Documents/Project/enlarge-image.js"/>
+            }
         </abp-script-bundle>
         if (DocsWebGoogleOptions.Value.EnableGoogleTranslate)
         {

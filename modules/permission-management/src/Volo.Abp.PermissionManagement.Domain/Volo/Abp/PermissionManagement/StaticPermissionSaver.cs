@@ -11,6 +11,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
@@ -29,8 +30,8 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     protected AbpPermissionOptions PermissionOptions { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     protected AbpDistributedCacheOptions CacheOptions { get; }
-
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
+    protected IDistributedEventBus DistributedEventBus { get; }
 
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
@@ -43,9 +44,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         IAbpDistributedLock distributedLock,
         IOptions<AbpPermissionOptions> permissionOptions,
         ICancellationTokenProvider cancellationTokenProvider,
-        IUnitOfWorkManager unitOfWorkManager)
+        IUnitOfWorkManager unitOfWorkManager,
+        IDistributedEventBus distributedEventBus)
     {
         UnitOfWorkManager = unitOfWorkManager;
+        DistributedEventBus = distributedEventBus;
         StaticStore = staticStore;
         PermissionGroupRepository = permissionGroupRepository;
         PermissionRepository = permissionRepository;
@@ -104,12 +107,13 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                 throw new AbpException("Could not acquire distributed lock for saving static permissions!");
             }
 
+            var newOrChangedPermissions = new List<string>();
             using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true))
             {
                 try
                 {
                     var hasChangesInGroups = await UpdateChangedPermissionGroupsAsync(permissionGroupRecords);
-                    var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords);
+                    var hasChangesInPermissions = await UpdateChangedPermissionsAsync(permissionRecords, newOrChangedPermissions);
 
                     if (hasChangesInGroups || hasChangesInPermissions)
                     {
@@ -133,11 +137,19 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                     {
                         /* ignored */
                     }
-                    
+
                     throw;
                 }
 
                 await unitOfWork.CompleteAsync();
+            }
+
+            if (newOrChangedPermissions.Any())
+            {
+                await DistributedEventBus.PublishAsync(new DynamicPermissionDefinitionsChangedEto
+                {
+                    Permissions = newOrChangedPermissions.Distinct().ToList()
+                });
             }
         }
 
@@ -207,8 +219,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
 
-    private async Task<bool> UpdateChangedPermissionsAsync(
-        IEnumerable<PermissionDefinitionRecord> permissionRecords)
+    private async Task<bool> UpdateChangedPermissionsAsync(IEnumerable<PermissionDefinitionRecord> permissionRecords, List<string> newOrChangedPermissions)
     {
         var newRecords = new List<PermissionDefinitionRecord>();
         var changedRecords = new List<PermissionDefinitionRecord>();
@@ -221,7 +232,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             var permissionRecordInDatabase = permissionRecordsInDatabase.GetOrDefault(permissionRecord.Name);
             if (permissionRecordInDatabase == null)
             {
-                /* New group */
+                /* New permission */
                 newRecords.Add(permissionRecord);
                 continue;
             }
@@ -258,11 +269,13 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
         if (newRecords.Any())
         {
+            newOrChangedPermissions.AddRange(newRecords.Select(x => x.Name));
             await PermissionRepository.InsertManyAsync(newRecords);
         }
 
         if (changedRecords.Any())
         {
+            newOrChangedPermissions.AddRange(newRecords.Select(x => x.Name));
             await PermissionRepository.UpdateManyAsync(changedRecords);
         }
 

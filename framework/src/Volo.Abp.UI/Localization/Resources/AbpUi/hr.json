@@ -38,6 +38,7 @@
     "PagerInfoEmpty": "Prikazano 0 do 0 od 0 zapisa",
     "PagerInfoFiltered": "(filtrirano od _MAX_ ukupnih zapisa)",
     "NoDataAvailableInDatatable": "Nema dostupnih podataka",
+    "ErrorLoadingDatatable": "Došlo je do pogreške tijekom zahtjeva. Provjerite poruku za detalje.",
     "Total": "ukupno",
     "Selected": "odabrano",
     "PagerShowMenuEntries": "Pokaži _MENU_ zapise",
