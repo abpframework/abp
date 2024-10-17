@@ -8,6 +8,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.ObjectExtending;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
@@ -21,6 +22,8 @@ namespace Volo.CmsKit.Admin.Pages;
 public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
 {
     protected IPageRepository PageRepository { get; }
+    
+    protected ICommentRepository CommentRepository { get; }
 
     protected PageManager PageManager { get; }
     
@@ -29,11 +32,13 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public PageAdminAppService(
         IPageRepository pageRepository,
         PageManager pageManager, 
-        IDistributedCache<PageCacheItem> pageCache)
+        IDistributedCache<PageCacheItem> pageCache, 
+        ICommentRepository commentRepository)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
         PageCache = pageCache;
+        CommentRepository = commentRepository;
     }
 
     public virtual async Task<PageDto> GetAsync(Guid id)
@@ -108,6 +113,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         
         await PageRepository.DeleteAsync(page);
         await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
+        await CommentRepository.DeleteByEntityTypeAsync(PageConsts.EntityType, id.ToString());
     }
 
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]
