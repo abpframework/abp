@@ -123,7 +123,7 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
 
 ### Adding a New Empty Module
 
-Create a new module by clicking the *Add* -> *New Module* -> *Empty Module* button at the root of the solution or in the solution folder context menu. The *Microservice* solution template also includes *Microservice*, *Gateway*, and *Web* modules. Other solution templates, such as *Application (Layered)*, can only create *Empty*, *DDD* and *Minimal* modules.
+Create a new module by clicking the *Add* -> *New Module* -> *Empty Module* button at the root of the solution or in the solution folder context menu. The *Microservice* solution template also includes *Microservice*, *Gateway*, and *Web* modules. Other solution templates, such as *Application (Layered)*, can only create *Empty*, *DDD* and *Standard* modules.
 
 ![create-new-module](./images/solution-explorer/create-new-module.png)
 
