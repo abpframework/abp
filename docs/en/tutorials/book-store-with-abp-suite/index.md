@@ -32,7 +32,8 @@ This tutorial is organized as the following parts:
 - [Part 1: Creating the Solution](part-01.md),
 - [Part 2: Creating the Books](part-02.md)
 - [Part 3: Creating the Authors](part-03.md)
-- [Part 4: Customizing the Generated Code](part-04.md)
+- [Part 4: Book to Author Relation](part-04.md)
+- [Part 5: Customizing the Generated Code](part-05.md)
 
 ### Download the Source Code
 
