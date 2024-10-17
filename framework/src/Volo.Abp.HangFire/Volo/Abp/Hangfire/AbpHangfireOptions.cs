@@ -7,6 +7,7 @@ using Hangfire.Server;
 using Hangfire.States;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.Hangfire;
 
@@ -33,7 +34,7 @@ public class AbpHangfireOptions
     private BackgroundJobServer CreateJobServer(IServiceProvider serviceProvider)
     {
         Storage = Storage ?? serviceProvider.GetRequiredService<JobStorage>();
-        ServerOptions = ServerOptions ?? serviceProvider.GetService<BackgroundJobServerOptions>() ?? new BackgroundJobServerOptions();
+        ServerOptions = ServerOptions ?? serviceProvider.GetService<IOptions<BackgroundJobServerOptions>>()?.Value ?? new BackgroundJobServerOptions();
         AdditionalProcesses = AdditionalProcesses ?? serviceProvider.GetServices<IBackgroundProcess>();
 
         return new BackgroundJobServer(ServerOptions, Storage, AdditionalProcesses,
