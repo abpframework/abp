@@ -67,7 +67,7 @@
           ]
         },
         {
-          "text": "Web Application Development",
+          "text": "Book Store Application",
           "items": [
             {
               "text": "Overview",
@@ -115,6 +115,19 @@
             }
           ]
         },
+        {
+          "text": "Book Store Application (with ABP Suite)",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "tutorials/book-store-with-abp-suite"
+            },
+            {
+              "text": "1: Creating the Solution",
+              "path": "tutorials/book-store-with-abp-suite/part-01.md"
+            }
+          ]
+        },        
         {
           "text": "Modular Monolith Application",
           "items": [
