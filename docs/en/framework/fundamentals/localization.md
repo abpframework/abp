@@ -157,6 +157,7 @@ services.Configure<AbpLocalizationOptions>(options =>
 ````
 
 * If an extension file defines the same localized string, it overrides the string.
+* It is crucial to set extension .json files as EmbeddedResource in your project file. This ensures that the files are correctly included in the assembly during both development and production builds, making them available for use at runtime.
 
 ## Getting the Localized Texts
 
