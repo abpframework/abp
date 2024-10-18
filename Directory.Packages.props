@@ -48,6 +48,7 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageVersion Include="LdapForNet" Version="2.7.15" />
     <PackageVersion Include="LibGit2Sharp" Version="0.30.0" />
+    <PackageVersion Include="ListShuffle" Version="2.1.0" />
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="13.4.0" />
     <PackageVersion Include="MailKit" Version="4.8.0" />
     <PackageVersion Include="Markdig.Signed" Version="0.37.0" />
@@ -168,6 +169,7 @@
     <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.2.24473.5" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
+    <PackageVersion Include="ThreadSafeRandomizer" Version="1.2.0" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />
     <PackageVersion Include="xunit" Version="2.9.2" />
