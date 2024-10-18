@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.IdentityModel;
 

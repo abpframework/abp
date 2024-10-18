@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
-using Volo.Abp.Cli.ProjectBuilding.Templates;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building;
 

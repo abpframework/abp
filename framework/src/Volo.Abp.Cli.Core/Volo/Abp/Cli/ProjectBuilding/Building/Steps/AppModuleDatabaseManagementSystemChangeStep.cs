@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
-using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
