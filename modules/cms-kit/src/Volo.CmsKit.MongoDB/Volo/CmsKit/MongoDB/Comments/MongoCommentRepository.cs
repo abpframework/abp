@@ -207,4 +207,9 @@ public class MongoCommentRepository : MongoDbRepository<ICmsKitMongoDbContext, C
             .WhereIf(CommentApproveState.Disapproved == commentApproveState, c => c.IsApproved == false)
             .WhereIf(CommentApproveState.Waiting == commentApproveState, c => c.IsApproved == null);
     }
+
+    public async Task DeleteByEntityTypeAsync(string entityType, string entityId, CancellationToken cancellationToken = default)
+    {
+        await (await GetDbContextAsync(cancellationToken)).Comments.DeleteManyAsync(x => x.EntityType == entityType && x.EntityId == entityId, GetCancellationToken(cancellationToken));
+    }
 }
