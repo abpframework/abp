@@ -19,7 +19,7 @@ import {
   TrackByFunction,
   ViewChildren,
 } from '@angular/core';
-import { concat, of } from 'rxjs';
+import { BehaviorSubject, concat, of } from 'rxjs';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
 import { PermissionManagement } from '../models/permission-management';
 
@@ -41,9 +41,37 @@ type PermissionWithGroupName = PermissionGrantInfoDto & {
         max-height: 70vh;
         overflow-y: scroll;
       }
+
       .scroll-in-modal {
         overflow: auto;
         max-height: calc(100vh - 15rem);
+      }
+
+      fieldset legend {
+        float: none;
+        width: auto;
+      }
+
+      .lpx-scroll-pills-container ul {
+        display: block;
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .lpx-scroll-pills-container .tab-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+
+      .lpx-scroll-pills-container ul li {
+        margin-bottom: 10px;
+        border-radius: 10px;
+      }
+
+      .lpx-scroll-pills-container ul li a.active {
+        color: #fff !important;
+        border-color: #6c5dd3 !important;
+        background-color: #6c5dd3 !important;
       }
     `,
   ],
@@ -120,6 +148,10 @@ export class PermissionManagementComponent
   modalBusy = false;
 
   selectedGroupPermissions: PermissionWithStyle[] = [];
+
+  filter = '';
+
+  permissionGroupSubject = new BehaviorSubject<PermissionGroupDto[]>(null);
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
@@ -364,9 +396,11 @@ export class PermissionManagementComponent
 
     return this.service.get(this.providerName, this.providerKey).pipe(
       tap((permissionRes: GetPermissionListResultDto) => {
+        const { groups } = permissionRes;
         this.data = permissionRes;
-        this.permissions = getPermissions(permissionRes.groups);
-        this.setSelectedGroup(permissionRes.groups[0]);
+        this.permissionGroupSubject.next(groups);
+        this.permissions = getPermissions(groups);
+        this.setSelectedGroup(groups[0]);
         this.disabledSelectAllInAllTabs = this.permissions.every(
           per =>
             per.isGranted &&
@@ -400,6 +434,17 @@ export class PermissionManagementComponent
     if (this.providerName === 'U') return currentUser.id === this.providerKey;
 
     return false;
+  }
+
+  get permissionGroups(): PermissionGroupDto[] {
+    const permissionGroups = this.permissionGroupSubject.getValue();
+    if (!permissionGroups) {
+      return;
+    }
+    const search = this.filter.toLowerCase();
+    return permissionGroups.filter(group =>
+      group.permissions.some(permission => permission.displayName.toLowerCase().includes(search)),
+    );
   }
 }
 
