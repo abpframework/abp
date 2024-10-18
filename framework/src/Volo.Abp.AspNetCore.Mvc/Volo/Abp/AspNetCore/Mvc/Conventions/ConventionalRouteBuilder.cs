@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -35,7 +36,8 @@ public class ConventionalRouteBuilder : IConventionalRouteBuilder, ITransientDep
         var idParameterModel = action.Parameters.FirstOrDefault(p => p.ParameterName == "id");
         if (idParameterModel != null)
         {
-            if (TypeHelper.IsPrimitiveExtended(idParameterModel.ParameterType, includeEnums: true))
+            if (TypeHelper.IsPrimitiveExtended(idParameterModel.ParameterType, includeEnums: true)
+                || TypeDescriptor.GetConverter(idParameterModel.ParameterType).CanConvertFrom(typeof(string)))
             {
                 url += "/{id}";
             }
