@@ -16,13 +16,13 @@
 
 If you have an existing database table, you can generate the entities using ABP Suite and create a CRUD page based on those entities, let's get started.
 
-# Create/open your project
+## Create/open your project
 
 ![abpsuite](../images/abpsuite.png)
 
 Either create a new project or open an existing project that's based on an app or module template.
 
-# Generate the Entities
+## Generate the Entities
 
 After opening the project in ABP Suite, scroll down to the bottom and click the **Load Entity From Database** button:![abpsuite2](../images/abpsuite2.8.1.png)
 
@@ -41,6 +41,6 @@ After that, make sure the primary key type is selected, then click **Save and ge
 
 The following GIF is a summary of the previous steps: ![SUTIE_GIF](../images/SUTIE_GIF.gif)
 
-# Run the Project!
+## Run the Project!
 
 After that, run the project and watch the magic! An easy CRUD app using the entities from an existing database table!![SUITE_GIF_2](../images/SUITE_GIF_2.gif)
