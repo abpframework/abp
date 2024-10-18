@@ -13,7 +13,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
 {
     protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
     protected volatile ObjectExtensionsDto? CachedValue;
-    protected readonly object SyncLock = new object();
+    protected readonly Lock SyncLock = new();
 
     public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)
     {
