@@ -94,14 +94,9 @@ public partial class PermissionManagementModal
 
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _allGroups = result.Groups;
-            _groups = _allGroups;
+            _groups = _allGroups.ToList();
 
             NormalizePermissionGroup();
-
-            foreach (var group in _groups)
-            {
-                SetPermissionDepths(group.Permissions, null, 0);
-            }
 
             await InvokeAsync(_modal.Show);
         }
@@ -135,8 +130,16 @@ public partial class PermissionManagementModal
                 _notGrantedPermissionCount++;
             }
         }
+        
+        foreach (var group in _groups)
+        {
+            SetPermissionDepths(group.Permissions, null, 0);
+        }
 
-        _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
+        if (_groups.Count != 0)
+        {
+            _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
+        }
     }
 
     protected Task CloseModal()
@@ -337,7 +340,7 @@ public partial class PermissionManagementModal
         }
         
         _permissionGroupSearchText = value;
-        _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+        _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase))).ToList();
             
         NormalizePermissionGroup();
 
