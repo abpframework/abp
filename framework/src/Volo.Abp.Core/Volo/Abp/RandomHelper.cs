@@ -103,10 +103,15 @@ public static class RandomHelper
     /// <param name="items">items</param>
     public static List<T> GenerateRandomizedList<T>([NotNull] IEnumerable<T> items)
     {
+        var array = items.ToArray();
 #if NETSTANDARD2_0 || NETSTANDARD2_1
-        return items.Shuffle(Rnd).ToList();
+        lock (Rnd)
+        {
+            return array.Shuffle(Rnd).ToList();
+        }
 #else
-        return items.Shuffle(Random.Shared).ToList();
+        Random.Shared.Shuffle(array);
+        return array.ToList();
 #endif
     }
 }
