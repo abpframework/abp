@@ -60,11 +60,32 @@ namespace Volo.Docs
                     .Value.Value;
 
                 var routePrefix = docsOptions.RoutePrefix;
+                
+                var languageCode = docsOptions.MultiLanguageMode ? "{languageCode}/" : string.Empty;
 
-                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
-                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
-                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
-                options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/{languageCode}/{projectName}/{version}");
+                if (docsOptions.SingleProjectMode.Enable)
+                {
+                    if (routePrefix != "/")
+                    {
+                        options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix);
+                    }
+                    if(routePrefix + languageCode != "/")
+                    {
+                        options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode);
+                    }
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode + "{version}/{*documentName}");
+                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/" + languageCode + "{version}");
+                }
+                else
+                {
+                    if(routePrefix + languageCode != "/")
+                    {
+                        options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
+                    }
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode +  "{projectName}");
+                    options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode + "{projectName}/{version}/{*documentName}");
+                    options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/" + languageCode + "{projectName}/{version}");
+                }
             });
 
             context.Services.AddAutoMapperObjectMapper<DocsWebModule>();

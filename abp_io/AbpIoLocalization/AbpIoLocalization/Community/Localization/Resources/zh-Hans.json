@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> 支持的。",
     "Preview": "预览",
     "VisitPage": "访问页面",
-    "VisitVideoCourseDescription": "如果您想学习 ABP 框架的基础知识，请查看 ABP Essentials 视频课程。"
+    "VisitVideoCourseDescription": "如果您想学习 ABP 框架的基础知识，请查看 ABP Essentials 视频课程。",
+    "ConfirmEmailForPost": "为了能够发帖，您需要确认您的电子邮件。转到 account.abp.io/Account/Manage 并在“个人信息”选项卡中验证您的电子邮件。",
+    "DailyPostCreateLimitation": "您已达到每日帖子创建限制。您可以在 {0} 中创建新帖子。"
   }
 }

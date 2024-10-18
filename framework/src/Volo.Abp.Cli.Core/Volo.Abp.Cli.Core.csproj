@@ -15,7 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" />
     <PackageReference Include="SharpZipLib" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" />
     <PackageReference Include="NuGet.Versioning" />
     <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="System.Security.Permissions" />

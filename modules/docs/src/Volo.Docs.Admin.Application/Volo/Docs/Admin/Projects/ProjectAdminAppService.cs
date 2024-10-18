@@ -81,7 +81,7 @@ namespace Volo.Docs.Admin.Projects
 
             foreach (var extraProperty in input.ExtraProperties)
             {
-                project.ExtraProperties.Add(extraProperty.Key, extraProperty.Value);
+                project.SetProperty(extraProperty.Key, extraProperty.Value);
             }
 
             project = await _projectRepository.InsertAsync(project);
@@ -106,7 +106,7 @@ namespace Volo.Docs.Admin.Projects
 
             foreach (var extraProperty in input.ExtraProperties)
             {
-                project.ExtraProperties[extraProperty.Key] = extraProperty.Value;
+                project.SetProperty(extraProperty.Key, extraProperty.Value);
             }
 
             project = await _projectRepository.UpdateAsync(project);
@@ -135,14 +135,28 @@ namespace Volo.Docs.Admin.Projects
                 throw new Exception("Cannot find the project with the Id " + projectId);
             }
 
-            var docs = (await _documentRepository.GetListByProjectId(project.Id))
-                .Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName)
-                .ToList();
             await _elasticSearchService.DeleteAllByProjectIdAsync(project.Id);
 
-            if(docs.Any())
+            var docsCount = await _documentRepository.GetUniqueDocumentCountByProjectIdAsync(projectId);
+
+            if (docsCount == 0)
             {
-                await _elasticSearchService.AddOrUpdateManyAsync(docs);    
+                return;
+            }
+
+            const int maxResultCount = 1000;
+
+            var skipCount = 0;
+            while(skipCount < docsCount)
+            {
+                var docs = await _documentRepository.GetUniqueDocumentsByProjectIdPagedAsync(projectId, skipCount, maxResultCount);
+                docs = docs.Where(doc => doc.FileName != project.NavigationDocumentName && doc.FileName != project.ParametersDocumentName).ToList();
+                if (!docs.Any())
+                {
+                    return;
+                }
+                await _elasticSearchService.AddOrUpdateManyAsync(docs);
+                skipCount += maxResultCount;
             }
         }
 
@@ -150,13 +164,13 @@ namespace Volo.Docs.Admin.Projects
         {
             _elasticSearchService.ValidateElasticSearchEnabled();
             var projects = await _projectRepository.GetListAsync();
-         
+
             foreach (var project in projects)
             {
                 await ReindexProjectAsync(project.Id);
             }
         }
-        
+
         public virtual async Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync()
         {
             var projects = await _projectRepository.GetListWithoutDetailsAsync();

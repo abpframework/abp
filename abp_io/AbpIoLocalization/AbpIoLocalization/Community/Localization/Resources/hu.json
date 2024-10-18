@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> támogatott.",
     "Preview": "Előnézet",
     "VisitPage": "Látogassa meg az oldalt",
-    "VisitVideoCourseDescription": "Ha meg szeretné tanulni az ABP Framework alapjait, nézze meg az ABP Essentials Video tanfolyamokat."
+    "VisitVideoCourseDescription": "Ha meg szeretné tanulni az ABP Framework alapjait, nézze meg az ABP Essentials Video tanfolyamokat.",
+    "ConfirmEmailForPost": "A bejegyzések közzétételéhez meg kell erősítenie e-mail-címét. Nyissa meg az account.abp.io/Account/Manage oldalt, és ellenőrizze e-mail-címét a Személyes adatok lapon.",
+    "DailyPostCreateLimitation": "Elérte a napi bejegyzéslétrehozási korlátot. Új bejegyzést itt hozhat létre: {0}."
   }
 }

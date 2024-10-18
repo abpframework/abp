@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.CmsKit.Admin.Comments;
+using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments;
 
@@ -15,6 +16,8 @@ public class DetailsModel : CmsKitAdminPageModel
     public DateTime? CreationStartDate { get; set; }
 
     public DateTime? CreationEndDate { get; set; }
+
+    public CommentApproveState CommentApproveState { get; set; }
 
     public CommentWithAuthorDto CommentWithAuthorDto { get; protected set; }
 

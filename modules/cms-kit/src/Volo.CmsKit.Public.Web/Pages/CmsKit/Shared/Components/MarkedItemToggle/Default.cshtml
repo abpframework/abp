@@ -1,0 +1,14 @@
+﻿@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.MarkedItemToggle.MarkedItemToggleViewComponent.MarkedItemToggleViewModel
+@{
+}
+
+<div class="cms-markedItem-area"
+     data-entity-type="@Model.EntityType"
+     data-entity-id="@Model.EntityId"
+     data-needs-confirmation="@Model.NeedsConfirmation"
+     data-return-url="@(CurrentUser.IsAuthenticated ? "" : Model.ReturnUrl)">
+    <i class="cms-markedItem-icon @Model.MarkedItem.Icon @(Model.MarkedItem.IsMarkedByCurrentUser ? (Model.NeedsConfirmation ? "confirm" : "") : "unmarked")"
+       data-is-authenticated="@(CurrentUser.IsAuthenticated ? "true" : "false")"></i>
+</div>

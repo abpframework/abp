@@ -37,7 +37,9 @@ public class ChangeThemeStep : ProjectBuildPipelineStep
     {
         var defaultThemeName = context.BuildArgs.TemplateName is AppTemplate.TemplateName or AppNoLayersTemplate.TemplateName
             ? LeptonXLite : LeptonX;
-
+        
+        new RemoveFilesStep($"/Themes/{defaultThemeName}").Execute(context);
+        
         ChangeThemeToBasicForMvcProjects(context, defaultThemeName);
         ChangeThemeToBasicForBlazorProjects(context, defaultThemeName);
         ChangeThemeToBasicForBlazorServerProjects(context, defaultThemeName);

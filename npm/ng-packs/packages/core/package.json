@@ -1,16 +1,16 @@
 {
   "name": "@abp/ng.core",
-  "version": "8.2.3",
+  "version": "8.3.2",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/utils": "~8.2.3",
+    "@abp/utils": "~8.3.2",
     "just-clone": "^6.0.0",
     "just-compare": "^2.0.0",
-    "ts-toolbelt": "6.15.4",
+    "ts-toolbelt": "^9.0.0",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

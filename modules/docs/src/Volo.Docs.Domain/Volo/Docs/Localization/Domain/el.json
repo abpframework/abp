@@ -36,6 +36,7 @@
     "Volo.Docs.Domain:010002": "Το Μικρό όνομα {ShortName} υπάρχει ήδη.",
     "Preview": "προεπισκόπηση",
     "Search": "Αναζήτηση",
-    "SearchResults": "Αποτελέσματα αναζήτησης"
+    "SearchResults": "Αποτελέσματα αναζήτησης",
+    "GoogleTranslate": "Μετάφραση στα ελληνικά"
   }
 }

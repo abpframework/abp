@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Guids;
+﻿using Volo.Abp.EntityFrameworkCore.GlobalFilters;
+using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.MySQL;
@@ -16,6 +17,11 @@ public class AbpEntityFrameworkCoreMySQLModule : AbpModule
             {
                 options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
             }
+        });
+
+        Configure<AbpEfCoreGlobalFilterOptions>(options =>
+        {
+            options.UseDbFunction = true;
         });
     }
 }

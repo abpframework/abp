@@ -206,6 +206,8 @@ public partial class TokenController
                 return await SetSuccessResultAsync(request, user);
             }
 
+            await UserManager.AccessFailedAsync(user);
+
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", request.Username);
 
             var properties = new AuthenticationProperties(new Dictionary<string, string>

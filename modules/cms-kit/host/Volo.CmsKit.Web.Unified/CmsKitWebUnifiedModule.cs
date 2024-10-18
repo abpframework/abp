@@ -42,6 +42,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.CmsKit.Public.Pages;
+using Volo.CmsKit.MarkedItems;
 
 
 #if EntityFrameworkCore
@@ -233,6 +234,16 @@ public class CmsKitWebUnifiedModule : AbpModule
         Configure<CmsKitRatingOptions>(options =>
         {
             options.EntityTypes.Add(new RatingEntityTypeDefinition("quote"));
+        });
+
+        Configure<CmsKitMarkedItemOptions>(options =>
+        {
+            options.EntityTypes.Add(
+                new MarkedItemEntityTypeDefinition(
+                    "product",
+                    StandardMarkedItems.Favorite
+                    )
+                );
         });
     }
 

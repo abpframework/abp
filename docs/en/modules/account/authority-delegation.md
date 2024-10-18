@@ -77,6 +77,8 @@ You can click the `Delegate New User` button to delegate a new user:
 * You can specify a time range to ensure the delegation is only available within the time range.
 * You can make multiple delegates to the same user and set different delegate time ranges.
 
+> You have to enter the full username to query and delegate a user.
+
 > The delegation has three states: `Expired`, `Active`, and `Future`. These states are set automatically by checking the specified time interval.
 
 ### My delegated users

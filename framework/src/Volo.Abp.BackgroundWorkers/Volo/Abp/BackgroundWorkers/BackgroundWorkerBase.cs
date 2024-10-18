@@ -22,8 +22,9 @@ public abstract class BackgroundWorkerBase : IBackgroundWorker
 
     protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    protected CancellationTokenSource StoppingTokenSource { get; }
-    protected CancellationToken StoppingToken { get; }
+    protected CancellationTokenSource StoppingTokenSource { get; set; }
+	
+    protected CancellationToken StoppingToken { get; set; }
 
     public BackgroundWorkerBase()
     {

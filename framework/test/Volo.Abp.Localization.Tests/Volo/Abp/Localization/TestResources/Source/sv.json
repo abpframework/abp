@@ -1,0 +1,16 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Hello <b>{0}</b>.": "Hej <b>{0}</b>.",
+    "Car": "Bil",
+    "CarPlural": "Bilar",
+    "MaxLenghtErrorMessage": "Längden på detta fält kan vara högst '{0}' tecken",
+    "Universe": "Universum",
+    "FortyTwo": "Fyrtiotvå",
+    "Enum:BookType.Undefined": "Odefinierad",
+    "Enum:BookType.0": "Odefinierad med värde 0",
+    "BookType.Adventure": "Äventyr",
+    "BookType.1": "Äventyr med värde 1",
+    "Biography": "Biografi"
+  }
+}

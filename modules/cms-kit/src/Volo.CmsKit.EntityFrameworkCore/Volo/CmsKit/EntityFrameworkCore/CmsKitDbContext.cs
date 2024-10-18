@@ -4,6 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -30,6 +31,7 @@ public class CmsKitDbContext : AbpDbContext<CmsKitDbContext>, ICmsKitDbContext
     public DbSet<MediaDescriptor> MediaDescriptors { get; set; }
     public DbSet<MenuItem> MenuItems { get; set; }
     public DbSet<GlobalResource> GlobalResources { get; set; }
+    public DbSet<UserMarkedItem> UserMarkedItems { get; set; }
 
     public CmsKitDbContext(DbContextOptions<CmsKitDbContext> options)
         : base(options)

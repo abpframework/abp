@@ -21,6 +21,9 @@
     "404Message": "Seite nicht gefunden",
     "500Message": "Interner Serverfehler",
     "403MessageDetail": "Sie sind nicht berechtigt, diesen Vorgang durchzuführen!",
-    "404MessageDetail": "Entschuldigung, unter dieser Adresse ist nichts."
+    "404MessageDetail": "Entschuldigung, unter dieser Adresse ist nichts.",
+    "Unauthorized": "Nicht autorisiert",
+    "invalid_token": "Ungültiges Token",
+    "SessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an, um in der Anwendung fortzufahren."
   }
 }

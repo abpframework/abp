@@ -56,83 +56,86 @@ namespace ModularCrm.Ordering.Contracts.Events
 
 ### Using the `IDistributedEventBus` Service
 
-The `IDistributedEventBus` service publishes events to the event bus. Until this point, the Ordering module has no functionality to create new orders.
-
-In Part 3, we used ABP's Auto HTTP API Controller feature to expose HTTP APIs from application services automatically. In this section, we will create an ASP.NET Core API controller class to create a new order. In that way, you will also see that it is not different from creating a regular ASP.NET Core controller.
-
-Open the `ModularCrm.Ordering` module's .NET solution, create a `Controllers` folder in the `ModularCrm.Ordering` project and place a controller class named `OrdersController` in that new folder. The final folder structure should be like that:
-
-![visual-studio-ordering-controller](images/visual-studio-ordering-controller.png)
-
-Here is the full `OrdersController` class:
+The `IDistributedEventBus` service publishes events to the event bus. Until this point, the Ordering module has no functionality to create new orders. Let's change that and place an order, for that purpose open the `ModularCrm.Ordering` module's .NET solution, and update the `OrderAppService` as follows:
 
 ````csharp
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ModularCrm.Ordering.Contracts.Enums;
 using ModularCrm.Ordering.Contracts.Events;
+using ModularCrm.Ordering.Contracts.Services;
 using ModularCrm.Ordering.Entities;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Volo.Abp.AspNetCore.Mvc;
+using ModularCrm.Products.Integration;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
 
-namespace ModularCrm.Ordering.Controllers
+namespace ModularCrm.Ordering.Services;
+
+public class OrderAppService : ApplicationService, IOrderAppService
 {
-    [Route("api/orders")]
-    [ApiController]
-    public class OrdersController : AbpControllerBase
+    private readonly IRepository<Order> _orderRepository;
+    private readonly IProductIntegrationService _productIntegrationService;
+    private readonly IDistributedEventBus _distributedEventBus;
+
+    public OrderAppService(
+        IRepository<Order, Guid> orderRepository,
+        IProductIntegrationService productIntegrationService,
+        IDistributedEventBus distributedEventBus)
     {
-        private readonly IRepository<Order, Guid> _orderRepository;
-        private readonly IDistributedEventBus _distributedEventBus;
+        _orderRepository = orderRepository;
+        _productIntegrationService = productIntegrationService;
+        _distributedEventBus = distributedEventBus;
+        ObjectMapperContext = typeof(OrderingWebModule);
+    }
 
-        public OrdersController(
-            IRepository<Order, Guid> orderRepository,
-            IDistributedEventBus distributedEventBus)
-        {
-            _orderRepository = orderRepository;
-            _distributedEventBus = distributedEventBus;
-        }
+    public async Task<List<OrderDto>> GetListAsync()
+    {
+        var orders = await _orderRepository.GetListAsync();
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(OrderCreationModel input)
+        // Prepare a list of products we need
+        var productIds = orders.Select(o => o.ProductId).Distinct().ToList();
+        var products = (await _productIntegrationService
+            .GetProductsByIdsAsync(productIds))
+            .ToDictionary(p => p.Id, p => p.Name);
+
+        var orderDtos = ObjectMapper.Map<List<Order>, List<OrderDto>>(orders);
+
+        orderDtos.ForEach(orderDto =>
         {
-            // Create a new Order entity
-            var order = new Order
+            orderDto.ProductName = products[orderDto.ProductId];
+        });
+
+        return orderDtos;
+    }
+
+    public async Task CreateAsync(OrderCreationDto input)
+    {
+        // Create a new Order entity
+        var order = new Order
+        {
+            CustomerName = input.CustomerName,
+            ProductId = input.ProductId,
+            State = OrderState.Placed
+        };
+
+        // Save it to the database
+        await _orderRepository.InsertAsync(order);
+
+        // Publish an event so other modules can be informed
+        await _distributedEventBus.PublishAsync(
+            new OrderPlacedEto
             {
-                CustomerName = input.CustomerName,
-                ProductId = input.ProductId,
-                State = OrderState.Placed
-            };
-
-            // Save it to the database
-            await _orderRepository.InsertAsync(order);
-
-            // Publish an event so other modules can be informed
-            await _distributedEventBus.PublishAsync(
-                new OrderPlacedEto
-                {
-                    ProductId = order.ProductId,
-                    CustomerName = order.CustomerName
-                });
-
-            return Created();
-        }
-
-        public class OrderCreationModel
-        {
-            public Guid ProductId { get; set; }
-
-            [Required]
-            [StringLength(120)]
-            public string CustomerName { get; set; }
-        }
+                ProductId = order.ProductId,
+                CustomerName = order.CustomerName
+            });
     }
 }
 ````
 
-The `OrdersController.CreateAsync` method creates a new `Order` entity, saves it to the database and finally publishes an `OrderPlacedEto` event.
+The `OrderAppService.CreateAsync` method creates a new `Order` entity, saves it to the database and finally publishes an `OrderPlacedEto` event.
 
 ## Subscribing to an Event
 

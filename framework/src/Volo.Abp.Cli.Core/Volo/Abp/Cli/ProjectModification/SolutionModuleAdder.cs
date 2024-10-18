@@ -114,7 +114,7 @@ public class SolutionModuleAdder : ITransientDependency
 
         var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
-        await AddNugetAndNpmReferences(module, projectFiles, !(newTemplate || newProTemplate));
+        await AddNugetAndNpmReferences(module, projectFiles, !(newTemplate || newProTemplate), version);
 
         var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
 
@@ -624,7 +624,7 @@ public class SolutionModuleAdder : ITransientDependency
     }
 
     private async Task AddNugetAndNpmReferences(ModuleWithMastersInfo module, string[] projectFiles,
-        bool useDotnetCliToInstall)
+        bool useDotnetCliToInstall, string version = null)
     {
         var webPackagesWillBeAddedToBlazorServerProject = ShouldWebPackagesBeAddedToBlazorServerProject(module, projectFiles);
 
@@ -657,7 +657,7 @@ public class SolutionModuleAdder : ITransientDependency
                 continue;
             }
 
-            await ProjectNugetPackageAdder.AddAsync(null, targetProjectFile, nugetPackage, null, useDotnetCliToInstall);
+            await ProjectNugetPackageAdder.AddAsync(null, targetProjectFile, nugetPackage, version, useDotnetCliToInstall);
         }
 
         var mvcNpmPackages = module.NpmPackages?.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc))

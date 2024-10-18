@@ -71,7 +71,7 @@ Click the Next button to see *Additional Options* selection:
 
 ![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options-microservice.png)
 
-If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which include the Helm charts and other Kubernetes related files. 
+If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which include the Helm charts and other Kubernetes related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login.
 
 Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the Create button, the dialog is closed and your solution is loaded into ABP Studio:
 
@@ -124,6 +124,8 @@ In the *Solution Runner* section (on the left side) you can see all the runnable
 ![abp-studio-microservice-solution-runner-applications](images/abp-studio-microservice-solution-runner-applications.png)
 
 > All the leaf items in the *Solution Runner* is called as an *Application* as they are executable applications.
+
+> For a faster start process, first start the *Docker-Dependencies*, then you can start all applications.
 
 As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, `infrastructure`, and `services`. You can start/stop them all, a group (folder) of them, or one by one.
 

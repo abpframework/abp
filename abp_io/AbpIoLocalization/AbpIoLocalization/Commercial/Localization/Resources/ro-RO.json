@@ -408,6 +408,7 @@
     "SendUsEmail": "Trimite-ne e-mail",
     "ErrorExceptionMessage": "A apărut o eroare în timpul procesării cererii dumneavoastră",
     "WatchTakeCodeGeneration": "Urmărește videoclipul „Explorați potențialul generării codului: ABP Suite”!",
-    "ExtendNow": "Extinde/Reînnoiește"
+    "ExtendNow": "Extinde/Reînnoiește",
+    "AbpStudio_ComingSoon": "Dacă doriți să testați ABP Studio înaintea oricui, deveniți un tester BETA"
   }
 }

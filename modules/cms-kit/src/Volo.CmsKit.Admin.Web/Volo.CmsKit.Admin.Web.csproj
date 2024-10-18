@@ -40,5 +40,4 @@
     <_ContentIncludedByDefault Remove="Pages\Admin\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Admin\_ViewImports.cshtml" />
   </ItemGroup>
-
 </Project>

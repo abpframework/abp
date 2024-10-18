@@ -71,7 +71,7 @@
           "method": "GET",
           "groupName": "DocsProject",
           "responseType": "Volo.Abp.Application.Dtos.ListResultDto`1[Volo.Docs.Projects.ProjectDto]",
-          "responseTypeAsJson": "{\r\n  \"items\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"shortName\": \"string\",\r\n      \"format\": \"string\",\r\n      \"defaultDocumentName\": \"string\",\r\n      \"navigationDocumentName\": \"string\",\r\n      \"minimumVersion\": \"string\",\r\n      \"mainWebsiteUrl\": \"string\",\r\n      \"latestVersionBranchName\": \"string\",\r\n      \"documentStoreType\": \"string\",\r\n      \"extraProperties\": {\r\n        \"string\": \"object\"\r\n      },\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": []
         },
         {
@@ -79,7 +79,7 @@
           "method": "GET",
           "groupName": "DocsProject",
           "responseType": "Volo.Docs.Projects.ProjectDto",
-          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"format\": \"string\",\r\n  \"defaultDocumentName\": \"string\",\r\n  \"navigationDocumentName\": \"string\",\r\n  \"minimumVersion\": \"string\",\r\n  \"mainWebsiteUrl\": \"string\",\r\n  \"latestVersionBranchName\": \"string\",\r\n  \"documentStoreType\": \"string\",\r\n  \"extraProperties\": {\r\n    \"string\": \"object\"\r\n  },\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "shortName",
@@ -139,7 +139,7 @@
           "method": "GET",
           "groupName": "DocsDocument",
           "responseType": "Volo.Docs.Documents.DocumentWithDetailsDto",
-          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"version\": \"string\",\r\n  \"languageCode\": \"string\",\r\n  \"fileName\": \"string\",\r\n  \"content\": \"string\",\r\n  \"format\": \"string\",\r\n  \"editLink\": \"string\",\r\n  \"rootUrl\": \"string\",\r\n  \"rawRootUrl\": \"string\",\r\n  \"localDirectory\": \"string\",\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"lastUpdatedTime\": \"0001-01-01T00:00:00\",\r\n  \"lastCachedTime\": \"0001-01-01T00:00:00\",\r\n  \"project\": {\r\n    \"name\": \"string\",\r\n    \"shortName\": \"string\",\r\n    \"format\": \"string\",\r\n    \"defaultDocumentName\": \"string\",\r\n    \"navigationDocumentName\": \"string\",\r\n    \"minimumVersion\": \"string\",\r\n    \"mainWebsiteUrl\": \"string\",\r\n    \"latestVersionBranchName\": \"string\",\r\n    \"documentStoreType\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"contributors\": [\r\n    {\r\n      \"username\": \"string\",\r\n      \"userProfileUrl\": \"string\",\r\n      \"avatarUrl\": \"string\",\r\n      \"commitCount\": 0\r\n    }\r\n  ]\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "ProjectId",
@@ -164,7 +164,7 @@
           "method": "GET",
           "groupName": "DocsDocument",
           "responseType": "Volo.Docs.Documents.DocumentWithDetailsDto",
-          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"version\": \"string\",\r\n  \"languageCode\": \"string\",\r\n  \"fileName\": \"string\",\r\n  \"content\": \"string\",\r\n  \"format\": \"string\",\r\n  \"editLink\": \"string\",\r\n  \"rootUrl\": \"string\",\r\n  \"rawRootUrl\": \"string\",\r\n  \"localDirectory\": \"string\",\r\n  \"creationTime\": \"0001-01-01T00:00:00\",\r\n  \"lastUpdatedTime\": \"0001-01-01T00:00:00\",\r\n  \"lastCachedTime\": \"0001-01-01T00:00:00\",\r\n  \"project\": {\r\n    \"name\": \"string\",\r\n    \"shortName\": \"string\",\r\n    \"format\": \"string\",\r\n    \"defaultDocumentName\": \"string\",\r\n    \"navigationDocumentName\": \"string\",\r\n    \"minimumVersion\": \"string\",\r\n    \"mainWebsiteUrl\": \"string\",\r\n    \"latestVersionBranchName\": \"string\",\r\n    \"documentStoreType\": \"string\",\r\n    \"extraProperties\": {\r\n      \"string\": \"object\"\r\n    },\r\n    \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n  },\r\n  \"contributors\": [\r\n    {\r\n      \"username\": \"string\",\r\n      \"userProfileUrl\": \"string\",\r\n      \"avatarUrl\": \"string\",\r\n      \"commitCount\": 0\r\n    }\r\n  ]\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "ProjectId",

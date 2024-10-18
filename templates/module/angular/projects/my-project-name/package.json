@@ -2,10 +2,10 @@
   "name": "@my-company-name/my-project-name",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": ">=14",
-    "@angular/core": ">=14",
-    "@abp/ng.core": ">=8.2.3",
-    "@abp/ng.theme.shared": ">=8.2.3"
+    "@angular/common": "~18.1.0",
+    "@angular/core": "~18.1.0",
+    "@abp/ng.core": "~8.3.2",
+    "@abp/ng.theme.shared": "~8.3.2"
   },
   "dependencies": {
     "tslib": "^2.1.0"

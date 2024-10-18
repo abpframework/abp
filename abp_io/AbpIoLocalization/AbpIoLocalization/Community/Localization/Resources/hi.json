@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> का समर्थन किया।",
     "Preview": "पूर्व दर्शन",
     "VisitPage": "यात्रा पेज",
-    "VisitVideoCourseDescription": "यदि आप एबीपी फ्रेमवर्क की मूल बातें सीखना चाहते हैं, तो एबीपी एसेंशियल वीडियो पाठ्यक्रम देखें।"
+    "VisitVideoCourseDescription": "यदि आप एबीपी फ्रेमवर्क की मूल बातें सीखना चाहते हैं, तो एबीपी एसेंशियल वीडियो पाठ्यक्रम देखें।",
+    "ConfirmEmailForPost": "पोस्ट करने में सक्षम होने के लिए, आपको अपने ईमेल की पुष्टि करनी होगी। account.abp.io/Account/Manage पर जाएं और व्यक्तिगत जानकारी टैब में अपना ईमेल सत्यापित करें।",
+    "DailyPostCreateLimitation": "आप दैनिक पोस्ट निर्माण सीमा तक पहुंच गए हैं। आप {0} में एक नई पोस्ट बना सकते हैं।"
   }
 }

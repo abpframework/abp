@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.UI.Navigation;
 
@@ -46,10 +47,22 @@ public class ApplicationMenuGroup
     /// </summary>
     public int Order { get; set; }
 
+    /// <summary>
+    /// Icon of the menu item if exists.
+    /// </summary>
+    public string? Icon { get; set; }
+
+    /// <summary>
+    /// Can be used to store a custom object related to this menu item. Optional.
+    /// </summary>
+    [NotNull]
+    public Dictionary<string, object> CustomData { get; } = new();
+
     public ApplicationMenuGroup(
         [NotNull] string name,
         [NotNull] string displayName,
         string? elementId = null,
+        string? icon = null,
         int order = DefaultOrder)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
@@ -58,6 +71,7 @@ public class ApplicationMenuGroup
         Name = name;
         DisplayName = displayName;
         ElementId = elementId ?? GetDefaultElementId();
+        Icon = icon;
         Order = order;
     }
 
@@ -69,6 +83,16 @@ public class ApplicationMenuGroup
     private string? NormalizeElementId(string? elementId)
     {
         return elementId?.Replace(".", "_");
+    }
+
+    /// <summary>
+    /// Adds a custom data item to <see cref="CustomData"/> with given key &amp; value.
+    /// </summary>
+    /// <returns>This <see cref="ApplicationMenuGroup"/> itself.</returns>
+    public ApplicationMenuGroup WithCustomData(string key, object value)
+    {
+        CustomData[key] = value;
+        return this;
     }
 
     public override string ToString()

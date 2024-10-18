@@ -27,10 +27,10 @@ export function generatePassword(injector?: Injector, length = 8) {
 
   length = Math.min(Math.max(4, length), 128);
 
-  const lowers = 'abcdefghijklmnopqrstuvwxyz';
-  const uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
-  const specials = '!@#$%&*()_+{}<>?[]./';
+  const lowers = 'abcdefghjkmnpqrstuvwxyz';
+  const uppers = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+  const numbers = '23456789';
+  const specials = '!*_#/+-.';
   const all = lowers + uppers + numbers + specials;
 
   const getRandom = (chrSet: string) => chrSet[Math.floor(Math.random() * chrSet.length)];

@@ -250,7 +250,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         var small = new TagBuilder("small");
         small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
-        small.AddCssClass("form-text text-muted");
+        small.AddCssClass("form-text");
         small.InnerHtml.Append(localizedText);
 
         return small.ToHtmlString();

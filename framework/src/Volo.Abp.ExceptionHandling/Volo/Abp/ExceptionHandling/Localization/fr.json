@@ -21,6 +21,9 @@
     "404Message": "Page introuvable",
     "500Message": "Erreur Interne du Serveur",
     "403MessageDetail": "Vous n'êtes pas autorisé à effectuer cette opération!",
-    "404MessageDetail": "Désolé, il n'y a rien à cette adresse."
+    "404MessageDetail": "Désolé, il n'y a rien à cette adresse.",
+    "Unauthorized": "Non autorisé",
+    "invalid_token": "Le jeton n'est pas valide.",
+    "SessionExpired": "Votre session a expiré. Veuillez vous reconnecter pour continuer dans l'application."
   }
 }

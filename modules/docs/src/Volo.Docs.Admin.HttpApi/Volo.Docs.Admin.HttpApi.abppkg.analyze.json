@@ -221,7 +221,7 @@
           "method": "GET",
           "groupName": "ProjectsAdmin",
           "responseType": "Volo.Abp.Application.Dtos.PagedResultDto`1[Volo.Docs.Admin.Projects.ProjectDto]",
-          "responseTypeAsJson": "{\r\n  \"totalCount\": 0,\r\n  \"items\": [\r\n    {\r\n      \"name\": \"string\",\r\n      \"shortName\": \"string\",\r\n      \"format\": \"string\",\r\n      \"defaultDocumentName\": \"string\",\r\n      \"navigationDocumentName\": \"string\",\r\n      \"parametersDocumentName\": \"string\",\r\n      \"minimumVersion\": \"string\",\r\n      \"mainWebsiteUrl\": \"string\",\r\n      \"latestVersionBranchName\": \"string\",\r\n      \"documentStoreType\": \"string\",\r\n      \"extraProperties\": {\r\n        \"string\": \"object\"\r\n      },\r\n      \"concurrencyStamp\": \"string\",\r\n      \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n    }\r\n  ]\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "Sorting",
@@ -242,7 +242,7 @@
           "method": "GET",
           "groupName": "ProjectsAdmin",
           "responseType": "Volo.Docs.Admin.Projects.ProjectDto",
-          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"format\": \"string\",\r\n  \"defaultDocumentName\": \"string\",\r\n  \"navigationDocumentName\": \"string\",\r\n  \"parametersDocumentName\": \"string\",\r\n  \"minimumVersion\": \"string\",\r\n  \"mainWebsiteUrl\": \"string\",\r\n  \"latestVersionBranchName\": \"string\",\r\n  \"documentStoreType\": \"string\",\r\n  \"extraProperties\": {\r\n    \"string\": \"object\"\r\n  },\r\n  \"concurrencyStamp\": \"string\",\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "id",
@@ -255,7 +255,7 @@
           "method": "POST",
           "groupName": "ProjectsAdmin",
           "responseType": "Volo.Docs.Admin.Projects.ProjectDto",
-          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"format\": \"string\",\r\n  \"defaultDocumentName\": \"string\",\r\n  \"navigationDocumentName\": \"string\",\r\n  \"parametersDocumentName\": \"string\",\r\n  \"minimumVersion\": \"string\",\r\n  \"mainWebsiteUrl\": \"string\",\r\n  \"latestVersionBranchName\": \"string\",\r\n  \"documentStoreType\": \"string\",\r\n  \"extraProperties\": {\r\n    \"string\": \"object\"\r\n  },\r\n  \"concurrencyStamp\": \"string\",\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "input",
@@ -268,7 +268,7 @@
           "method": "PUT",
           "groupName": "ProjectsAdmin",
           "responseType": "Volo.Docs.Admin.Projects.ProjectDto",
-          "responseTypeAsJson": "{\r\n  \"name\": \"string\",\r\n  \"shortName\": \"string\",\r\n  \"format\": \"string\",\r\n  \"defaultDocumentName\": \"string\",\r\n  \"navigationDocumentName\": \"string\",\r\n  \"parametersDocumentName\": \"string\",\r\n  \"minimumVersion\": \"string\",\r\n  \"mainWebsiteUrl\": \"string\",\r\n  \"latestVersionBranchName\": \"string\",\r\n  \"documentStoreType\": \"string\",\r\n  \"extraProperties\": {\r\n    \"string\": \"object\"\r\n  },\r\n  \"concurrencyStamp\": \"string\",\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\"\r\n}",
+          "responseTypeAsJson": "",
           "parameterDescriptions": [
             {
               "name": "id",

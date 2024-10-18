@@ -34,7 +34,9 @@ public class AbpJsonSystemTextJsonModule : AbpModule
         context.Services.AddOptions<AbpSystemTextJsonSerializerModifiersOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
-                options.Modifiers.Add(new AbpDateTimeConverterModifier().CreateModifyAction(rootServiceProvider));
+                options.Modifiers.Add(new AbpDateTimeConverterModifier(
+                    rootServiceProvider.GetRequiredService<AbpDateTimeConverter>(),
+                    rootServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>()).CreateModifyAction());
             });
     }
 }

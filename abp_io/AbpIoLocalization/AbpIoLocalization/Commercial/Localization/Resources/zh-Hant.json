@@ -897,7 +897,6 @@
     "AbpStudio_Description": "ABP Studio 仍在開發中。您可以填寫下面的表单，成為第一批使用者之一。",
     "AbpStudio_Description1": "ABP Studio 是一款針對 ABP 開發人員的<span class=\"text-highlight-white\">跨平台桌面應用程式</span>。",
     "AbpStudio_Description2": "它與 ABP 框架<span class=\"text-highlight-white\">很好地集成</span>，旨在透過<span class=\"text-highlight-white\">自動化為您提供一個舒適的開發環境，提供有關您的解決方案的見解</span>，使<span class=\"text-highlight-white\">開發、運行</span>和<span class=\"text-highlight-white\">部署</span>您的解決方案變得更加容易。",
-    "AbpStudio_ComingSoon": "即將推出<span class=\"opacity-50 ms-0 ms-md-3 d-block d-md-inline-block \">計劃測試版發布日期：2023 年第四季。</span>",
     "AbpStudio_PlannedPreviewDate": "計畫預覽版發布日期：2023 年第四季。",
     "BetaRequest": "測試版請求",
     "CreateNewSolutions": "建立新的解決方案",
@@ -1100,6 +1099,7 @@
     "WatchTakeCodeGeneration": "观看“探索代码生成的潜力：ABP Suite”视频！",
     "ExtendNow": "延长 / 续订",
     "PreBuiltApplicationModulesTitle": "预构建应用程序 <span class=\"gradient-commercial\">模块</span>",
-    "RegisterDemo": "登记"
+    "RegisterDemo": "登记",
+    "AbpStudio_ComingSoon": "如果您想先于其他人测试 ABP Studio，请成为 BETA 测试员"
   }
 }

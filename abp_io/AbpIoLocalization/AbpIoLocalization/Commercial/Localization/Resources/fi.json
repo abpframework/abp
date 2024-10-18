@@ -852,6 +852,7 @@
     "ErrorExceptionMessage": "Virhe pyynnön käsittelyn yhteydessä",
     "WatchTakeCodeGeneration": "Katso \"Tutki koodin luomisen potentiaalia: ABP Suite\" -video!",
     "ExtendNow": "Laajenna / Uusi",
-    "RegisterDemo": "Rekisteröidy"
+    "RegisterDemo": "Rekisteröidy",
+    "AbpStudio_ComingSoon": "Jos haluat testata ABP Studiota ennen muita, ryhdy BETA-testaajaksi"
   }
 }

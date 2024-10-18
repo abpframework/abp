@@ -1,0 +1,16 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resursnamnet finns redan: {Namn}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api-resursnamnet finns redan: {Namn}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Namnet på Api-omfånget finns redan: {Namn}",
+    "Volo.IdentityServer:DuplicateClientId": "KlientId finns redan: {KlientId}",
+    "UserLockedOut": "Användarkontot har låsts på grund av ogiltiga inloggningsförsök. Vänligen vänta ett tag och försök igen.",
+    "InvalidUserNameOrPassword": "Ogiltigt användarnamn eller lösenord!",
+    "LoginIsNotAllowed": "Du får inte logga in! Ditt konto är inaktivt eller så behöver du bekräfta din e-post eller ditt telefonnummer.",
+    "InvalidUsername": "Ogiltigt användarnamn eller lösenord!",
+    "InvalidAuthenticatorCode": "Ogiltig autentiseringskod!",
+    "InvalidRecoveryCode": "Ogiltig återställningskod!",
+    "TheTargetUserIsNotLinkedToYou": "Målanvändaren är inte kopplad till dig!"
+  }
+}

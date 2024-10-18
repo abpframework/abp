@@ -1,0 +1,7 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Volo.Abp.Identity:PasswordTooShort": "Lösenordslängden måste vara större än {0} tecken.",
+    "Volo.Abp.Identity:PasswordRequiresNonAlphanumeric": "Lösenordet måste innehålla minst ett icke-alfanumeriskt tecken."
+  }
+}

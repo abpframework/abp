@@ -7,6 +7,7 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -283,6 +284,28 @@ public static class CmsKitDbContextModelCreatingExtensions
         else
         {
             builder.Ignore<GlobalResource>();
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<MarkedItemsFeature>())
+        {
+            builder.Entity<UserMarkedItem>(b =>
+            {
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "UserMarkedItems", AbpCmsKitDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.EntityType).IsRequired();
+                b.Property(x => x.EntityId).IsRequired();
+
+                b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+                b.HasIndex(x => new { x.TenantId, x.CreatorId, x.EntityType, x.EntityId });
+
+                b.ApplyObjectExtensionMappings();
+            });
+        }
+        else
+        {
+            builder.Ignore<UserMarkedItem>();
         }
 
         builder.TryConfigureObjectExtensions<CmsKitDbContext>();

@@ -150,6 +150,12 @@
           "contentType": "databaseCollection",
           "name": "GlobalResources",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.MarkedItems.UserMarkedItem",
+          "contentType": "databaseCollection",
+          "name": "UserMarkedItems",
+          "summary": null
         }
       ],
       "implementingInterfaces": [

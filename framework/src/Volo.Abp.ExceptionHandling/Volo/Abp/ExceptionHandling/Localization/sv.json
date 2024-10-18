@@ -1,0 +1,29 @@
+{
+  "culture": "sv",
+  "texts": {
+    "InternalServerErrorMessage": "Ett internt fel uppstod under din förfrågan!",
+    "ValidationErrorMessage": "Din begäran är inte giltig!",
+    "ValidationNarrativeErrorMessageTitle": "Följande fel upptäcktes under valideringen.",
+    "DefaultErrorMessage": "Ett fel har inträffat!",
+    "DefaultErrorMessageDetail": "Felinformationen skickades inte av servern.",
+    "DefaultErrorMessage401": "Du är inte autentiserad!",
+    "DefaultErrorMessage401Detail": "Du måste logga in för att utföra den här åtgärden.",
+    "DefaultErrorMessage403": "Du är inte behörig!",
+    "DefaultErrorMessage403Detail": "Du får inte utföra den här operationen!",
+    "DefaultErrorMessage404": "Resurs hittades inte!",
+    "DefaultErrorMessage404Detail": "Den begärda resursen kunde inte hittas på servern!",
+    "EntityNotFoundErrorMessage": "Det finns ingen entitet {0} med id = {1}!",
+    "AbpDbConcurrencyErrorMessage": "De uppgifter du har skickat har redan ändrats av en annan användare. Kassera dina ändringar och försök igen.",
+    "Error": "Fel",
+    "UnhandledException": "Obehandlat undantag!",
+    "401Message": "Obehörig",
+    "403Message": "Förbjudet",
+    "404Message": "Sidan hittades inte",
+    "500Message": "Internt serverfel",
+    "403MessageDetail": "Du är inte behörig att utföra denna operation!",
+    "404MessageDetail": "Tyvärr, det finns inget på den här adressen.",
+    "Unauthorized": "Obehörig",
+    "invalid_token": "Ogiltig token",
+    "SessionExpired": "Din session har löpt ut. Vänligen logga in igen för att fortsätta i applikationen."
+  }
+}

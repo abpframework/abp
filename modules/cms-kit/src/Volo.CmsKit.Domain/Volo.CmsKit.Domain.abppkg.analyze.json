@@ -24,6 +24,11 @@
           "declaringAssemblyName": "Volo.Abp.BlobStoring",
           "namespace": "Volo.Abp.BlobStoring",
           "name": "AbpBlobStoringModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Domain",
+          "namespace": "Volo.Abp.SettingManagement",
+          "name": "AbpSettingManagementDomainModule"
         }
       ],
       "implementingInterfaces": [
@@ -1237,6 +1242,99 @@
     },
     {
       "baseClass": {
+        "name": "BasicAggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
+        "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+        "fullName": "Volo.Abp.Domain.Entities.BasicAggregateRoot<Guid>"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IEntity",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IEntity<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IEntity<Guid>"
+        },
+        {
+          "name": "IAggregateRoot<Guid>",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot<Guid>"
+        },
+        {
+          "name": "IAggregateRoot",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IAggregateRoot"
+        },
+        {
+          "name": "IGeneratesDomainEvents",
+          "namespace": "Volo.Abp.Domain.Entities",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.IGeneratesDomainEvents"
+        },
+        {
+          "name": "IHasCreationTime",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
+        },
+        {
+          "name": "IMustHaveCreator",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IMustHaveCreator"
+        },
+        {
+          "name": "IMultiTenant",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
+          "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
+        }
+      ],
+      "methods": [],
+      "collectionProperties": {},
+      "navigationProperties": {},
+      "namespace": "Volo.CmsKit.MarkedItems",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "CreatorId",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "CreationTime",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "EntityId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "EntityType",
+          "summary": null
+        }
+      ],
+      "contentType": "aggregateRoot",
+      "name": "UserMarkedItem",
+      "summary": null
+    },
+    {
+      "baseClass": {
         "name": "AuditedAggregateRoot<Guid>",
         "namespace": "Volo.Abp.Domain.Entities.Auditing",
         "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -1458,6 +1556,39 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "Approve",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        },
+        {
+          "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "Reject",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
+        },
+        {
+          "returnType": "Comment",
+          "namespace": "Volo.CmsKit.Comments",
+          "name": "WaitForApproval",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": []
         }
       ],
       "collectionProperties": {},
@@ -1508,6 +1639,11 @@
         {
           "type": "System.String",
           "name": "IdempotencyToken",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.Boolean]",
+          "name": "IsApproved",
           "summary": null
         }
       ],
@@ -2883,6 +3019,61 @@
       ],
       "contentType": "domainService",
       "name": "MediaDescriptorManager",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.MarkedItems",
+      "baseClass": {
+        "name": "CmsKitDomainServiceBase",
+        "namespace": "Volo.CmsKit",
+        "declaringAssemblyName": "Volo.CmsKit.Domain",
+        "fullName": "Volo.CmsKit.CmsKitDomainServiceBase"
+      },
+      "methods": [
+        {
+          "returnType": "Boolean",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "ToggleUserMarkedItemAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "creatorId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDomainService",
+          "namespace": "Volo.Abp.Domain.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Services.IDomainService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "domainService",
+      "name": "MarkedItemManager",
       "summary": null
     },
     {
@@ -4341,6 +4532,145 @@
       "summary": null
     },
     {
+      "namespace": "Volo.CmsKit.MarkedItems",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.CmsKit.MarkedItems",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "UserMarkedItem",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IBasicRepository<UserMarkedItem, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<UserMarkedItem, Guid>"
+        },
+        {
+          "name": "IBasicRepository<UserMarkedItem>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<UserMarkedItem>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<UserMarkedItem>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<UserMarkedItem>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<UserMarkedItem, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<UserMarkedItem, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "UserMarkedItem",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "FindAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<UserMarkedItem>",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "GetListForUserAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<String>",
+          "namespace": "Volo.CmsKit.MarkedItems",
+          "name": "GetEntityIdsFilteredByUserAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "userId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "entityType",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "tenantId",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IUserMarkedItemRepository",
+      "summary": null
+    },
+    {
       "namespace": "Volo.CmsKit.GlobalResources",
       "entityAnalyzeModel": {
         "namespace": "Volo.CmsKit.GlobalResources",
@@ -4531,6 +4861,11 @@
               "isOptional": true
             },
             {
+              "type": "CommentApproveState",
+              "name": "commentApproveState",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -4578,6 +4913,11 @@
               "isOptional": true
             },
             {
+              "type": "CommentApproveState",
+              "name": "commentApproveState",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -4603,6 +4943,11 @@
               "type": "String",
               "name": "entityId",
               "isOptional": false
+            },
+            {
+              "type": "CommentApproveState",
+              "name": "commentApproveState",
+              "isOptional": true
             },
             {
               "type": "CancellationToken",

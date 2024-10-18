@@ -777,6 +777,7 @@
     "SendUsEmail": "Küldjön nekünk e-mailt",
     "ErrorExceptionMessage": "Hiba történt a kérése feldolgozása során",
     "WatchTakeCodeGeneration": "Nézze meg a \"Fedezze fel a kódgenerálás lehetőségét: ABP Suite\" videót!",
-    "ExtendNow": "Bővítés / Megújítás"
+    "ExtendNow": "Bővítés / Megújítás",
+    "AbpStudio_ComingSoon": "Ha bárki más előtt szeretné tesztelni az ABP Studio-t, legyen BÉTA tesztelő"
   }
 }

@@ -21,6 +21,7 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     );
 
@@ -31,12 +32,14 @@ public interface ICommentRepository : IBasicRepository<Comment, Guid>
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     );
 
     Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
         [NotNull] string entityType,
         [NotNull] string entityId,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     );
 

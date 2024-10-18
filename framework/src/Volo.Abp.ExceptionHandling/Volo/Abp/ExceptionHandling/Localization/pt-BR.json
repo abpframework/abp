@@ -21,6 +21,9 @@
     "404Message": "Página não encontrada",
     "500Message": "Erro interno do servidor",
     "403MessageDetail": "Você não está autorizado a realizar esta operação!",
-    "404MessageDetail": "Desculpe, não há nada neste endereço."
+    "404MessageDetail": "Desculpe, não há nada neste endereço.",
+    "Unauthorized": "Não autorizado",
+    "invalid_token": "Token inválido",
+    "SessionExpired": "Sua sessão expirou. Por favor, faça login novamente para continuar na aplicação."
   }
 }

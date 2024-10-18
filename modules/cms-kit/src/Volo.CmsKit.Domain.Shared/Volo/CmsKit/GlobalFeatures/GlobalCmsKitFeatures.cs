@@ -29,6 +29,8 @@ public class GlobalCmsKitFeatures : GlobalModuleFeatures
     
     public BlogPostScrollIndexFeature BlogPostScrollIndex => GetFeature<BlogPostScrollIndexFeature>();
 
+    public MarkedItemsFeature MarkedItemsFeature => GetFeature<MarkedItemsFeature>();
+
     public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
         : base(featureManager)
     {
@@ -43,5 +45,6 @@ public class GlobalCmsKitFeatures : GlobalModuleFeatures
         AddFeature(new MenuFeature(this));
         AddFeature(new GlobalResourcesFeature(this));
         AddFeature(new BlogPostScrollIndexFeature(this));
+        AddFeature(new MarkedItemsFeature(this));
     }
 }

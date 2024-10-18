@@ -34,6 +34,10 @@ public class AbpAsyncIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProv
     public virtual async Task DisposeAsync()
     {
         await Application.ShutdownAsync();
+        if (RootServiceProvider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
         TestServiceScope.Dispose();
         Application.Dispose();
     }

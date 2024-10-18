@@ -83,6 +83,7 @@ public class CliService : ITransientDependency
         catch (CliUsageException usageException)
         {
             Logger.LogWarning(usageException.Message);
+            Environment.ExitCode = 1;
         }
         catch (Exception ex)
         {

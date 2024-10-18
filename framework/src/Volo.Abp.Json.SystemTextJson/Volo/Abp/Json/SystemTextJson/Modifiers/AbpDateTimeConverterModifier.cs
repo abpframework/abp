@@ -10,11 +10,17 @@ namespace Volo.Abp.Json.SystemTextJson.Modifiers;
 
 public class AbpDateTimeConverterModifier
 {
-    private IServiceProvider _serviceProvider = default!;
+    private readonly AbpDateTimeConverter _abpDateTimeConverter;
+    private readonly AbpNullableDateTimeConverter _abpNullableDateTimeConverter;
 
-    public Action<JsonTypeInfo> CreateModifyAction(IServiceProvider serviceProvider)
+    public AbpDateTimeConverterModifier(AbpDateTimeConverter abpDateTimeConverter, AbpNullableDateTimeConverter abpNullableDateTimeConverter)
     {
-        _serviceProvider = serviceProvider;
+        _abpDateTimeConverter = abpDateTimeConverter;
+        _abpNullableDateTimeConverter = abpNullableDateTimeConverter;
+    }
+
+    public Action<JsonTypeInfo> CreateModifyAction()
+    {
         return Modify;
     }
 
@@ -31,8 +37,8 @@ public class AbpDateTimeConverterModifier
                 !property.AttributeProvider.GetCustomAttributes(typeof(DisableDateTimeNormalizationAttribute), false).Any())
             {
                 property.CustomConverter = property.PropertyType == typeof(DateTime)
-                    ? _serviceProvider.GetRequiredService<AbpDateTimeConverter>()
-                    : _serviceProvider.GetRequiredService<AbpNullableDateTimeConverter>();
+                    ? _abpDateTimeConverter
+                    : _abpNullableDateTimeConverter;
             }
         }
     }

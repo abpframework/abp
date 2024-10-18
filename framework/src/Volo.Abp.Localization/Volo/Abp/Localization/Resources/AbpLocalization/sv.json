@@ -1,0 +1,7 @@
+{
+  "culture": "sv",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Standardspråk",
+    "Description:Abp.Localization.DefaultLanguage": "Standardspråket för programmet."
+  }
+}

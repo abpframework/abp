@@ -367,7 +367,7 @@ You can use [ABP](https://github.com/abpframework/abp/) GitHub documents to conf
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'', N'12f21123e08e4f15bedbae0b2d939659')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"","GitHubUserAgent":""}', N'/', N'dev', N'', N'12f21123e08e4f15bedbae0b2d939659')
 ```
 
 Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
@@ -407,7 +407,7 @@ You can use [ABP](https://github.com/abpframework/abp/) GitHub documents to conf
 For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'', N'12f21123e08e4f15bedbae0b2d939659')
 ```
 
 Add one of the sample projects above and run the application. In the menu you will see `Documents` link, click the menu link to open the documents page. 
@@ -666,9 +666,61 @@ See the following examples:
 	```
 ```
 
----
+## Referencing Next & Previous Documents
 
+The **Docs Module** supports referencing previous and next documents. It's useful if you have a series of documents that are strictly related to each other and need to be followed one after the other. 
 
+To reference the previous and next documents from a document, you should specify the documentation titles and their paths as follows:
+
+```
+
+	  ````json
+	  //[doc-nav]
+	  {
+	    "Previous": {
+	      "Name": "Overall",
+	      "Path": "testing/overall"
+	    },
+	    "Next": {
+	      "Name": "Integration tests",
+	      "Path": "testing/integration-tests"
+	    }
+	  }
+	  ````
+
+```
+
+After you specify the next & previous documents, they will appear at the end of the current documentation like in the following figure:
+
+![](../images/docs-referencing.png)
+
+## Single Project Mode
+
+The **single project mode** allows you to use a single name as a project name in your application. If you are not considering supporting multiple projects with their multiple docs and instead if you have a single project and want to have documentation only for it, it's especially useful for you. 
+
+You just need to configure the `DocsUiOptions`, set the single project mode as **enabled** and also define a constant project name:
+
+```csharp
+Configure<DocsUiOptions>(options => 
+{
+    options.RoutePrefix = "docs";
+    options.SingleProjectMode.Enable = true;
+    options.SingleProjectMode.ProjectName = "abp";
+});
+```
+
+## Multi Language Mode
+
+The **multi language mode** allows you to show a combobox that lists and shows all documentation languages and configures the related languages in routes. 
+
+It's enabled by default and supports multiple languages, but if you are considering only supporting a single language, and don't want to show the language combobox in the sidebar of your docs system, you can configure the `DocsUiOptions` and set the multi language mode support as **false** to disable it:
+
+```csharp
+Configure<DocsUiOptions>(options => 
+{
+    options.MultiLanguageMode = false;
+});
+```
 
 ## See Also
 

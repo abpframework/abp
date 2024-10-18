@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> podprt.",
     "Preview": "Predogled",
     "VisitPage": "Obiščite stran",
-    "VisitVideoCourseDescription": "Če se želite naučiti osnov ogrodja ABP, si oglejte video tečaje ABP Essentials."
+    "VisitVideoCourseDescription": "Če se želite naučiti osnov ogrodja ABP, si oglejte video tečaje ABP Essentials.",
+    "ConfirmEmailForPost": "Če želite objavljati, morate potrditi svoj e-poštni naslov. Pojdite na account.abp.io/Account/Manage in potrdite svoj e-poštni naslov na zavihku Osebni podatki.",
+    "DailyPostCreateLimitation": "Dosegli ste dnevno omejitev za ustvarjanje objav. Novo objavo lahko ustvarite v {0}."
   }
 }

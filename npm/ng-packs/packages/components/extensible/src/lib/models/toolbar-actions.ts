@@ -1,5 +1,4 @@
 import { Injector, Type } from '@angular/core';
-import { O } from 'ts-toolbelt';
 import {
   Action,
   ActionContributorCallback,
@@ -10,6 +9,7 @@ import {
   ActionsFactory,
   ReadonlyActionData,
 } from './actions';
+import { FilteredWithOptions, PartialWithOptions } from '../utils/model.utils';
 
 export class ToolbarActionList<R = any> extends ActionList<R, ToolbarActionDefault<R>> {}
 
@@ -61,15 +61,19 @@ export class ToolbarComponent<R = any> extends Action<R> {
   }
 }
 
-export type ToolbarActionOptions<R = any> = O.Optional<
-  O.Writable<ToolbarAction<R>>,
-  'permission' | 'visible' | 'icon' | 'btnClass'
->;
+type OptionalActionKeys = 'permission' | 'visible' | 'icon' | 'btnClass';
+export type ToolbarActionOptions<R = any> = PartialWithOptions<
+  ToolbarAction<R>,
+  OptionalActionKeys
+> &
+  FilteredWithOptions<ToolbarAction<R>, OptionalActionKeys>;
 
-export type ToolbarComponentOptions<R = any> = O.Optional<
-  O.Writable<ToolbarComponent<R>>,
-  'permission' | 'visible' | 'action'
->;
+type OptionalComponentKeys = 'permission' | 'visible' | 'action';
+export type ToolbarComponentOptions<R = any> = PartialWithOptions<
+  ToolbarComponent<R>,
+  OptionalComponentKeys
+> &
+  FilteredWithOptions<ToolbarComponent<R>, OptionalComponentKeys>;
 
 export type ToolbarActionDefault<R = any> = ToolbarAction<R> | ToolbarComponent<R>;
 

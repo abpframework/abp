@@ -49,7 +49,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 8.0+](https://dotnet.microsoft.com/download/dotnet) development.
-* [Node v16.x](https://nodejs.org/)
+* [Node v18.19+](https://nodejs.org/)
 
 {{if DB=="Mongo"}}
 

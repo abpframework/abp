@@ -41,7 +41,7 @@ We will use the *DDD Module* template for the Product module and the *Empty Modu
 
 Right-click the `modules` folder on the *Solution Explorer* panel, and select the *Add* -> *New Module* -> *DDD Module* command:
 
-![abp-studio-add-new-dd-module](images/abp-studio-add-new-dd-module.png)
+![abp-studio-add-new-ddd-module](images/abp-studio-add-new-ddd-module.png)
 
 This command opens a new dialog to define the properties of the new module. You can use the following values to create a new module named `ModularCrm.Products`:
 

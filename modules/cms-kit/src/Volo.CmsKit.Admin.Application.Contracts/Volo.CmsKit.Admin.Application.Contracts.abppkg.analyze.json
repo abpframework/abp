@@ -74,6 +74,20 @@
       "summary": null
     },
     {
+      "displayName": "Permission:Comments.Update",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments.Update",
+      "summary": null
+    },
+    {
+      "displayName": "Permission:Comments.SettingManagement",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "CmsKit.Comments.SettingManagement",
+      "summary": null
+    },
+    {
       "displayName": "Tag management",
       "isEnabled": true,
       "contentType": "permission",

@@ -7,7 +7,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Authentication.JwtBearer;
 
-[DependsOn(typeof(AbpSecurityModule), typeof(AbpCachingModule))]
+[DependsOn(typeof(AbpSecurityModule), typeof(AbpCachingModule), typeof(AbpAspNetCoreAbstractionsModule))]
 public class AbpAspNetCoreAuthenticationJwtBearerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -21,5 +21,6 @@ public class AbpAspNetCoreAuthenticationJwtBearerModule : AbpModule
             context.Services.AddTransient<WebRemoteDynamicClaimsPrincipalContributor>();
             context.Services.AddTransient<WebRemoteDynamicClaimsPrincipalContributorCache>();
         }
+
     }
 }

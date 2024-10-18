@@ -1,12 +1,12 @@
 {
-  "version": "8.2.3",
+  "version": "8.3.2",
   "name": "@abp/jstree",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~8.2.3",
-    "jstree": "^3.3.12"
+    "@abp/jquery": "~8.3.2",
+    "jstree": "^3.3.16"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

@@ -70,7 +70,7 @@ public class AbpAuditingTestModule : AbpModule
         connection.Open();
 
         using (var context = new AbpAuditingTestDbContext(new DbContextOptionsBuilder<AbpAuditingTestDbContext>()
-            .UseSqlite(connection).Options))
+            .UseSqlite(connection).AddAbpDbContextOptionsExtension().Options))
         {
             context.GetService<IRelationalDatabaseCreator>().CreateTables();
         }

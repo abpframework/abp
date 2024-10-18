@@ -90,7 +90,7 @@ var abp = abp || {};
                     return "";
                 }
 
-                var $button = $('<button type="button" class="btn btn-primary abp-action-button"></button>');
+                var $button = $('<button type="button" class="btn btn-primary btn-sm abp-action-button"></button>');
 
                 if (firstItem.displayNameHtml) {
                     $button.html(abp.utils.isFunction(firstItem.text) ? firstItem.text(record, tableInstance) : firstItem.text);
@@ -240,8 +240,15 @@ var abp = abp || {};
 
             if (tableInstance.aoColumns) {
                 columns = tableInstance.aoColumns;
-            } else {
+            } else if (abp.utils.isFunction(tableInstance.fnSettings)) {
                 columns = tableInstance.fnSettings().aoColumns;
+            }
+
+            if (!columns && abp.utils.isFunction(tableInstance.api)) {
+                var settings = tableInstance.api().settings();
+                if (settings.length === 1 && settings[0].aoColumns) {
+                    columns = settings[0].aoColumns;
+                }
             }
 
             if (!columns) {
@@ -271,8 +278,9 @@ var abp = abp || {};
             }
         };
 
-        var _existingApiRenderRowActionsFunction = $.fn.dataTableExt.oApi.renderRowActions;
-        $.fn.dataTableExt.oApi.renderRowActions =
+        if ($.fn.dataTableExt.oApi) {
+            var _existingApiRenderRowActionsFunction = $.fn.dataTableExt.oApi.renderRowActions;
+            $.fn.dataTableExt.oApi.renderRowActions =
             function (tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                 if (_existingApiRenderRowActionsFunction) {
                     _existingApiRenderRowActionsFunction(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
@@ -280,7 +288,8 @@ var abp = abp || {};
 
                 renderRowActions(tableInstance, nRow, aData, iDisplayIndex, iDisplayIndexFull);
             };
-
+        }
+        
         if (!$.fn.dataTable) {
             return;
         }

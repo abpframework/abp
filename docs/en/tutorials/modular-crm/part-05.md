@@ -232,9 +232,215 @@ After the operation completes, you can check your database to see the new `Order
 
 ![sql-server-products-database-table](images/sql-server-orders-database-table.png)
 
-## Creating the User Interface
+## Creating the Application Service
 
-Since this is a non-layered module, we can use entities and repositories directly on the user interface. If you think that is not a good practice, then use the layered module template as we've already done for the *Products* module. But for the Ordering module, we will keep it very simple for this tutorial to show it is also possible.
+We will create an application service to manage the `Order` entities. 
+
+### Defining the Application Service Contract
+
+We're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project but first, we need to add `Volo.Abp.Ddd.Application.Contracts` package reference.
+
+Right-click the `ModularCrm.Ordering.Contracts` project in the *Solution Explorer* panel and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-6](images/abp-studio-add-package-reference-6.png)
+
+This command opens a dialog to add a new package reference:
+
+![abp-studio-add-package-reference-dialog-5](images/abp-studio-add-package-reference-dialog-5.png)
+
+Select the *NuGet* tab, type `Volo.Abp.Ddd.Application.Contracts` as the *Package name* and write the version of the package you want to install. Please be sure that you are installing the same version as the other ABP packages you are already using.
+
+Click the *Ok* button. Now you can check the *Packages* under the `ModularCrm.Ordering.Contracts` project *Dependencies* to see the `Volo.Abp.Ddd.Application.Contracts` package is installed:
+
+![abp-studio-added-ddd-contracts-package](images/abp-studio-added-ddd-contracts-package.png)
+
+Return to your IDE, open the `ModularCrm.Ordering` module's .NET solution and create an `IOrderAppService` interface under the `Services` folder for `ModularCrm.Ordering.Contracts` project:
+
+````csharp
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+
+namespace ModularCrm.Ordering.Contracts.Services;
+
+public interface IOrderAppService : IApplicationService
+{
+    Task<List<OrderDto>> GetListAsync();
+    Task CreateAsync(OrderCreationDto input);
+}
+````
+
+### Defining Data Transfer Objects
+
+The `GetListAsync` and `CreateAsync` methods will use data transfer objects (DTOs) to communicate with the client. We will create two DTO classes for that purpose.
+
+Create a `OrderCreationDto` class under the `ModularCrm.Ordering.Contracts` project:
+
+````csharp
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace ModularCrm.Ordering.Contracts.Services;
+
+public class OrderCreationDto
+{
+    [Required]
+    [StringLength(150)]
+    public string CustomerName { get; set; }
+
+    [Required]
+    public Guid ProductId { get; set; }
+}
+````
+
+Create a `OrderDto` class under the `ModularCrm.Ordering.Contracts` project:
+
+````csharp
+using System;
+using ModularCrm.Ordering.Contracts.Enums;
+
+namespace ModularCrm.Ordering.Contracts.Services;
+
+public class OrderDto
+{
+    public Guid Id { get; set; }
+    public string CustomerName { get; set; }
+    public Guid ProductId { get; set; }
+    public OrderState State { get; set; }
+}
+````
+
+The new files under the `ModularCrm.Ordering.Contracts` project should be like the following figure:
+
+![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts.png)
+
+### Implementing the Application Service
+
+Before creating the `OrderAppService` class, we need to add the `Volo.Abp.Ddd.Application` and `Volo.Abp.AutoMapper` packages to the Ordering module. 
+
+Right-click the `ModularCrm.Ordering` package in the *Solution Explorer* panel and select the *Add Package Reference* command:
+
+![abp-studio-add-package-reference-7](images/abp-studio-add-package-reference-7.png)
+
+This command opens a dialog to add a new package reference:
+
+![abp-studio-add-package-reference-dialog-6](images/abp-studio-add-package-reference-dialog-6.png)
+
+Select the *NuGet* tab, enter `Volo.Abp.Ddd.Application` as the *Package name*, and specify the version of the package you wish to install. Afterward, you can add the `Volo.Abp.AutoMapper` package in the same dialog. Ensure that you install the same version as the other ABP packages you are already using.
+
+Click the *OK* button. Now we should configure the *AutoMapper* object to map the `Order` entity to the `OrderDto` object. We will create a class named `OrderingApplicationAutoMapperProfile` under the `ModularCrm.Ordering` project:
+
+````csharp
+using AutoMapper;
+using ModularCrm.Ordering.Contracts.Services;
+using ModularCrm.Ordering.Entities;
+
+namespace ModularCrm.Ordering;
+
+public class OrderingApplicationAutoMapperProfile : Profile
+{
+    public OrderingApplicationAutoMapperProfile()
+    {
+        CreateMap<Order, OrderDto>();
+    }
+}
+````
+
+And configure the `OrderingWebModule` class to use the `OrderingApplicationAutoMapperProfile`:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    //Add these lines
+    context.Services.AddAutoMapperObjectMapper<OrderingWebModule>();
+    Configure<AbpAutoMapperOptions>(options =>
+    {
+        options.AddMaps<OrderingWebModule>(validate: true);
+    });
+}
+````
+
+Now, we can implement the `IOrderAppService` interface. Create an `OrderAppService` class under the `Services` folder of the `ModularCrm.Ordering` project:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ModularCrm.Ordering.Contracts.Enums;
+using ModularCrm.Ordering.Contracts.Services;
+using ModularCrm.Ordering.Entities;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace ModularCrm.Ordering.Services;
+
+public class OrderAppService : ApplicationService, IOrderAppService
+{
+    private readonly IRepository<Order> _orderRepository;
+
+    public OrderAppService(IRepository<Order, Guid> orderRepository)
+    {
+        _orderRepository = orderRepository;
+        ObjectMapperContext = typeof(OrderingWebModule);
+    }
+
+    public async Task<List<OrderDto>> GetListAsync()
+    {
+        var orders = await _orderRepository.GetListAsync();
+        return ObjectMapper.Map<List<Order>, List<OrderDto>>(orders);
+    }
+
+    public async Task CreateAsync(OrderCreationDto input)
+    {
+        var order = new Order
+        {
+            CustomerName = input.CustomerName,
+            ProductId = input.ProductId,
+            State = OrderState.Placed
+        };
+
+        await _orderRepository.InsertAsync(order);
+    }
+}
+````
+
+Open the `ModularCrmWebModule` class in the main application's solution (the `ModularCrm` solution), find the `ConfigureAutoApiControllers` method and add the following lines inside that method:
+
+````csharp
+private void ConfigureAutoApiControllers()
+{
+    Configure<AbpAspNetCoreMvcOptions>(options =>
+    {
+        options.ConventionalControllers.Create(typeof(ModularCrmApplicationModule).Assembly);
+        options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly);
+
+        //ADD THE FOLLOWING LINE:
+        options.ConventionalControllers.Create(typeof(OrderingWebModule).Assembly);
+    });
+}
+````
+
+### Creating Example Orders
+
+This section will create a few example orders using the [Swagger UI](../../framework/api-development/swagger.md). Thus, we will have some sample orders to show on the UI.
+
+Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel and select the *Dotnet CLI* -> *Graph Build* command. This will ensure that the order module and the main application are built and ready to run.
+
+After the build process completes, open the Solution Runner panel and click the *Play* button near the solution root. Once the `ModularCrm.Web` application runs, we can right-click it and select the *Browse* command to open the user interface.
+
+Once you see the user interface of the web application, type `/swagger` at the end of the URL to open the Swagger UI. If you scroll down, you should see the `Orders` API:
+
+![abp-studio-ordering-swagger-ui-in-browser](images/abp-studio-ordering-swagger-ui-in-browser.png)
+
+Expand the `/api/app/order` API and click the *Try it out* button. Then, create a few orders by filling in the request body and clicking the *Execute* button:
+
+![abp-studio-swagger-ui-create-order-execute](images/abp-studio-swagger-ui-create-order-execute.png)
+
+If you check the database, you should see the entities created in the *Orders* table:
+
+![sql-server-orders-database-table-filled](images/sql-server-orders-database-table-filled.png)
+
+## Creating the User Interface
 
 ### Creating a `_ViewImports.cshtml` File
 
@@ -257,28 +463,26 @@ Create an `Orders` folder under the `Pages` folder and add an `Index.cshtml` Raz
 
 ````csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModularCrm.Ordering.Entities;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
+using ModularCrm.Ordering.Contracts.Services;
 
 namespace ModularCrm.Ordering.Pages.Orders
 {
     public class IndexModel : PageModel
     {
-        public List<Order> Orders { get; set; }
+        public List<OrderDto> Orders { get; set; }
 
-        private readonly IRepository<Order, Guid> _orderRepository;
+        private readonly IOrderAppService _orderAppService;
 
-        public IndexModel(IRepository<Order, Guid> orderRepository)
+        public IndexModel(IOrderAppService orderAppService)
         {
-            _orderRepository = orderRepository;
+            _orderAppService = orderAppService;
         }
 
         public async Task OnGetAsync()
         {
-            Orders = await _orderRepository.GetListAsync();
+            Orders = await _orderAppService.GetListAsync();
         }
     }
 }
@@ -309,14 +513,6 @@ Here, we are injecting a repository to query `Order` entities from the database 
 ````
 
 This page shows a list of orders on the UI. We haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
-
-### Creating Some Sample Data
-
-You can open the database and manually create a few order records to show on the UI:
-
-![sql-server-orders-table-content](images/sql-server-orders-table-content.png)
-
-You can get `ProductId` values from the `Products` table and [generate](https://www.guidgenerator.com/) some random GUIDs for other GUID fields.
 
 ### Building the Application
 
@@ -375,11 +571,13 @@ namespace ModularCrm.Ordering
 
 `OrderingMenuContributor` implements the `IMenuContributor` interface, which forces us to implement the `ConfigureMenuAsync` method. In that method, we can manipulate the menu items (add new menu items, remove existing menu items or change the properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
 
-After creating such a class, we should configure the `AbpNavigationOptions` to add that contributor. Open the `OrderingWebModule` class in the `ModularCrm.Ordering` project and add the following configuration code into the `ConfigureServices` method (if there is no `ConfigureServices` method, first create it as shown below):
+After creating such a class, we should configure the `AbpNavigationOptions` to add that contributor. Open the `OrderingWebModule` class in the `ModularCrm.Ordering` project and add the following configuration code into the `ConfigureServices` method:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
+    //... other configurations
+
     Configure<AbpNavigationOptions>(options =>
     {
         options.MenuContributors.Add(new OrderingMenuContributor());

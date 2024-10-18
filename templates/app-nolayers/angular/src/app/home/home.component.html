@@ -1,55 +1,310 @@
-<div class="container">
-  <div class="card">
-    <div class="card-header">
-      <h5 class="card-title">
-        {{ '::Welcome_Title' | abpLocalization }}
-      </h5>
-    </div>
-    <div class="card-body">
-      @if(!hasLoggedIn){
-        <button class="btn btn-primary mb-2" (click)="login()">
-          {{ 'AbpUi::Login' | abpLocalization }}
-        </button>
-      }
-      <p>{{ '::Welcome_Text' | abpLocalization }}</p>
+<div class="row mb-3">
+  <div class="col-xl-6 col-12 d-flex">
+    <div class="card h-lg-100 w-100 overflow-hidden">
+      <div class="card-body">
+        <div class="starting-content">
+          @if(!hasLoggedIn){
+          <h3>Welcome</h3>
+          <p class="lead text-muted mb-2">
+            Welcome to the application. This is a startup project based on the ABP framework. For
+            more information visit abp.io.
+          </p>
+          <a (click)="login()" class="px-4 btn btn-primary mb-4" role="button"
+            ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
+          >
+          }
+
+          <h3>Getting Started</h3>
+          <ng-container
+            *ngTemplateOutlet="
+              startingContentTemplate;
+              context: {
+                $implicit: {
+                  description:
+                    'Learn how to create and run a new web application using the application startup template.',
+                  href: 'https://docs.abp.io/en/abp/latest/Getting-Started-Overall',
+                  label: 'Getting Started'
+                }
+              }
+            "
+          ></ng-container>
+
+          <h4>Web Application Development Tutorial</h4>
+          <ng-container
+            *ngTemplateOutlet="
+              startingContentTemplate;
+              context: {
+                $implicit: {
+                  description:
+                    'Learn how to build an ABP based web application named Acme.BookStore.',
+                  href: 'https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=NG&DB=EF',
+                  label: 'Explore Tutorial'
+                }
+              }
+            "
+          ></ng-container>
+
+          <h4>Customize Lepton Theme</h4>
+          <p class="text-muted mb-2">Learn how to customize LeptonX Theme as you wish.</p>
+          <a
+            href="https://docs.abp.io/en/abp/latest/UI/Angular/Theming"
+            class="btn btn-primary soft mb-5 mb-xl-0"
+            target="_blank"
+            >Customize Lepton</a
+          >
+        </div>
+
+        <img class="card-bg-image" src="assets/images/getting-started/bg-01.png" />
+      </div>
     </div>
   </div>
-  <div class="card mt-5">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-auto text-center">
-          <img
-            src="https://abp.io/assets/png/mastering-abp-framework.webp"
-            style="max-width: 400px"
-            class="w-100 mb-5 my-md-3"
-          />
-        </div>
-        <div class="col-md d-flex align-items-center">
-          <div class="pe-0 pe-md-4">
-            <small class="text-uppercase text-muted">THE OFFICIAL GUIDE</small>
-            <h2 class="mb-4">Mastering ABP Framework</h2>
-            <p class="mb-4">
+  <div class="col-xl-3 col-md-6 d-flex">
+    <div class="row">
+      <ng-container
+        *ngTemplateOutlet="
+          visitLinkTemplate;
+          context: {
+            $implicit: {
+              label: 'Visit Support',
+              description:
+                'You can check for similar problems and solutions, or open a new topic to discuss your specific issue.',
+              href: 'https://support.abp.io/QA/Questions',
+              card: 'card overflow-hidden',
+              imgClass: '',
+              imgSrc: 'assets/images/getting-started/img-support.png',
+              logo: 'abp-support abp-logo mb-2'
+            }
+          }
+        "
+      ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="
+          visitLinkTemplate;
+          context: {
+            $implicit: {
+              label: 'Visit Blog',
+              description:
+                'You can find content on .NET development, cross-platform, ASP.NET application templates, ABP-related news, and more.',
+              href: 'https://blog.abp.io/abp',
+              card: 'card h-md-100 overflow-hidden',
+              imgClass: 'margin-bottom: -24px',
+              imgSrc: 'assets/images/getting-started/img-blog.png',
+              logo: 'abp-blog abp-logo mb-2'
+            }
+          }
+        "
+      ></ng-container>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6 d-flex">
+    <div class="card h-100 overflow-hidden">
+      <div class="card-body">
+        <div class="abp-community abp-logo mb-2"></div>
+        <p class="lead text-muted">
+          A unique community platform for
+          <span class="fw-bold">ABP Lovers!</span>
+        </p>
+        <p class="text-muted mb-2">
+          Explore all ABP users' experiences with the ABP Framework, discover articles and videos on
+          how to use ABP, and join raffles for a chance to win surprise gifts!
+        </p>
+        <a class="btn btn-brand soft mb-3" href="https://community.abp.io/" target="_blank"
+          >Join ABP Community</a
+        >
+      </div>
+      <img class="mt-3" src="assets/images/getting-started/img-community.png" />
+    </div>
+  </div>
+</div>
+<div class="row">
+  <ng-container
+    *ngTemplateOutlet="
+      tableTemplate;
+      context: {
+        $implicit: {
+          title: 'More from ABP.IO',
+          items: [
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Latest Release Logs',
+              link: 'https://github.com/abpframework/abp/releases',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Video Courses',
+              link: 'https://abp.io/video-courses/essentials',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Samples',
+              link: 'https://docs.abp.io/en/abp/latest/Samples/Index',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'Books',
+              link: 'https://abp.io/books',
+            },
+            {
+              iconType: 'icon',
+              style: true,
+              icon: 'bi bi-check fs-4',
+              iconClass: 'rounded-circle me-2 flex-center bg-brand soft',
+              title: 'FAQ',
+              link: 'https://commercial.abp.io/faq',
+            },
+          ]
+        }
+      }
+    "
+  ></ng-container>
+  <div class="col-xl-6 col-lg-8 d-flex">
+    <div class="card">
+      <div class="card-body d-flex">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <p class="text-muted mb-0">THE OFFICIAL GUIDE</p>
+            <h3>Mastering ABP Framework</h3>
+            <p class="text-muted">
               Written by the creator of the ABP Framework, this book will help you gain a complete
               understanding of the framework and modern web application development techniques.
             </p>
-            <div class="mb-4">
+            <div class="d-md-flex mb-2 mb-md-0">
               <a
-                href="https://www.amazon.com/gp/product/B097Z2DM8Q/ref=dbs_a_def_rwt_hsch_vapi_tkin_p1_i0"
-                class="btn btn-success mb-1"
+                href="https://www.amazon.com/gp/product/B097Z2DM8Q"
+                target="_blank"
+                class="btn btn-primary soft me-md-2 mb-2 mb-md-0"
               >
                 Buy on Amazon US
               </a>
-              &nbsp;
               <a
                 href="https://www.packtpub.com/product/mastering-abp-framework/9781801079242"
-                class="btn btn-primary mb-1"
+                target="_blank"
+                class="btn btn-primary soft mb-2 mb-md-0"
               >
                 Buy on PACKT
               </a>
             </div>
           </div>
+          <div class="col">
+            <img src="assets/images/getting-started/book.png" />
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <ng-container
+    *ngTemplateOutlet="
+      tableTemplate;
+      context: {
+        $implicit: {
+          title: 'Follow us on Social Media',
+          items: [
+            {
+              title: 'X.com',
+              icon: 'logo-x me-2',
+              link: 'https://twitter.com/abpframework'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/discord.svg',
+              title: 'Discord',
+              link: 'https://community.abp.io/discord'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/stack-overflow.svg',
+              title: 'Stack Overflow',
+              link: 'https://stackoverflow.com/questions/tagged/abp'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/youtube.svg',
+              title: 'YouTube',
+              link: 'https://www.youtube.com/@Volosoft'
+            },
+            {
+              iconType: 'image',
+              icon: 'assets/images/getting-started/instagram.svg',
+              title: 'Instagram',
+              link: 'https://www.instagram.com/abpframework/'
+            }
+          ]
+        }
+      }
+    "
+  ></ng-container>
 </div>
+
+<ng-template #startingContentTemplate let-context>
+  <p class="lead text-muted mb-2" [innerHTML]="context.description"></p>
+  <a [href]="context.href" class="btn btn-brand mb-4" target="_blank">{{ context.label }}</a>
+</ng-template>
+
+<ng-template #visitLinkTemplate let-context>
+  <div class="col-12 d-flex">
+    <div [class]="context.card">
+      <div class="card-body pb-0">
+        <div [class]="context.logo"></div>
+        <p class="text-muted mb-2" [innerHTML]="context.description"></p>
+        <a [href]="context.href" class="btn btn-brand soft" target="_blank">{{ context.label }}</a>
+        <img [class]="context.imgClass" [src]="context.imgSrc" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #tableTemplate let-context>
+  <div class="col-xl-3 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title text-body">{{ context.title }}</div>
+      </div>
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <tbody>
+              @for(item of context.items; track $index; let last = $last){
+              <tr>
+                <td class="ps-0 d-flex" [class.border-bottom-0]="last">
+                  @if(item.icon){
+                  <div
+                    [ngClass]="item.iconClass"
+                    [style]="item.style ? 'width: 20px; height: 20px' : ''"
+                  >
+                    @if(item.iconType === 'image'){
+                    <img [src]="item.icon" class="me-2" />
+                    }@else if(item.iconType === 'icon'){
+                    <i [class]="item.icon"></i>
+                    }@else{
+                    <div [class]="item.icon"></div>
+                    }
+                  </div>
+                  }
+                  <div>{{ item.title }}</div>
+                </td>
+                <td class="text-end pe-0 opacity-25" [class.border-bottom-0]="last">
+                  <a [href]="item.link" target="_blank">
+                    <i class="bi bi-box-arrow-up-right text-dark"></i>
+                  </a>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,56 +1,84 @@
 {
   "migrations": [
     {
-      "version": "18.1.0-beta.3",
-      "description": "Moves affected.defaultBase to defaultBase in `nx.json`",
-      "implementation": "./src/migrations/update-17-2-0/move-default-base",
+      "cli": "nx",
+      "version": "19.2.0-beta.2",
+      "description": "Updates the default workspace data directory to .nx/workspace-data",
+      "implementation": "./src/migrations/update-19-2-0/move-workspace-data-directory",
       "package": "nx",
-      "name": "move-default-base-to-nx-json-root"
+      "name": "19-2-0-move-graph-cache-directory"
     },
     {
       "cli": "nx",
-      "version": "18.1.0-beta.3",
-      "description": "Update to Cypress ^13.6.6 if the workspace is using Cypress v13 to ensure workspaces don't use v13.6.5 which has an issue when verifying Cypress.",
-      "implementation": "./src/migrations/update-18-1-0/update-cypress-version-13-6-6",
-      "package": "@nx/cypress",
-      "name": "update-cypress-version-13-6-6"
+      "version": "19.2.2-beta.0",
+      "description": "Updates the nx wrapper.",
+      "implementation": "./src/migrations/update-17-3-0/update-nxw",
+      "package": "nx",
+      "name": "19-2-2-update-nx-wrapper"
+    },
+    {
+      "version": "19.2.4-beta.0",
+      "description": "Set project name in nx.json explicitly",
+      "implementation": "./src/migrations/update-19-2-4/set-project-name",
+      "x-repair-skip": true,
+      "package": "nx",
+      "name": "19-2-4-set-project-name"
     },
     {
       "cli": "nx",
-      "version": "18.1.0-beta.1",
-      "requires": {
-        "@angular/core": ">=17.2.0"
-      },
-      "description": "Update the @angular/cli package version to ~17.2.0.",
-      "factory": "./src/migrations/update-18-1-0/update-angular-cli",
+      "version": "19.1.0-beta.6",
+      "description": "Migrate no-extra-semi rules into user config, out of nx extendable configs",
+      "implementation": "./src/migrations/update-19-1-0-migrate-no-extra-semi/migrate-no-extra-semi",
+      "package": "@nx/eslint-plugin",
+      "name": "update-19-1-0-rename-no-extra-semi"
+    },
+    {
+      "cli": "nx",
+      "version": "19.1.0-beta.2",
+      "requires": { "@angular/core": ">=18.0.0" },
+      "description": "Update the @angular/cli package version to ~18.0.0.",
+      "factory": "./src/migrations/update-19-1-0/update-angular-cli",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-17-2-0"
+      "name": "update-angular-cli-version-18-0-0"
     },
     {
       "cli": "nx",
-      "version": "18.1.1-beta.0",
-      "description": "Ensure targetDefaults inputs for task hashing when '@nx/angular:webpack-browser' is used are correct for Module Federation.",
-      "factory": "./src/migrations/update-18-1-1/fix-target-defaults-inputs",
+      "version": "19.2.1-beta.0",
+      "requires": { "@angular-eslint/eslint-plugin": ">=18.0.0" },
+      "description": "Installs the '@typescript-eslint/utils' package when having installed '@angular-eslint/eslint-plugin' or '@angular-eslint/eslint-plugin-template' with version >=18.0.0.",
+      "factory": "./src/migrations/update-19-2-1/add-typescript-eslint-utils",
       "package": "@nx/angular",
-      "name": "fix-target-defaults-for-webpack-browser"
+      "name": "add-typescript-eslint-utils"
     },
     {
       "cli": "nx",
-      "version": "18.2.0-beta.0",
-      "requires": {
-        "@angular/core": ">=17.3.0"
-      },
-      "description": "Update the @angular/cli package version to ~17.3.0.",
-      "factory": "./src/migrations/update-18-2-0/update-angular-cli",
+      "version": "19.5.0-beta.1",
+      "requires": { "@angular/core": ">=18.1.0" },
+      "description": "Update the @angular/cli package version to ~18.1.0.",
+      "factory": "./src/migrations/update-19-5-0/update-angular-cli",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-17-3-0"
+      "name": "update-angular-cli-version-18-1-0"
     },
     {
-      "version": "17.3.0",
+      "version": "18.0.0",
       "description": "Updates two-way bindings that have an invalid expression to use the longform expression instead.",
       "factory": "./migrations/invalid-two-way-bindings/bundle",
       "package": "@angular/core",
       "name": "invalid-two-way-bindings"
+    },
+    {
+      "version": "18.0.0",
+      "description": "Replace deprecated HTTP related modules with provider functions",
+      "factory": "./migrations/http-providers/bundle",
+      "package": "@angular/core",
+      "name": "migration-http-providers"
+    },
+    {
+      "version": "18.1.0",
+      "description": "Updates calls to afterRender with an explicit phase to the new API",
+      "factory": "./migrations/after-render-phase/bundle",
+      "package": "@angular/core",
+      "name": "migration-after-render-phase"
     }
   ]
 }

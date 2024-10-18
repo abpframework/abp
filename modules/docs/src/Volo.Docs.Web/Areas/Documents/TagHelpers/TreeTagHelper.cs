@@ -18,6 +18,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         private readonly DocsUiOptions _uiOptions;
 
         private readonly IStringLocalizer<DocsResource> _localizer;
+        
+        private readonly IDocsLinkGenerator _docsLinkGenerator;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -45,10 +47,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, IDocsLinkGenerator docsLinkGenerator)
         {
             _localizer = localizer;
             _uiOptions = urlOptions.Value;
+            _docsLinkGenerator = docsLinkGenerator;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -161,11 +164,6 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         private string NormalizePath(string path)
         {
-            if (UrlHelper.IsExternalLink(path))
-            {
-                return path;
-            }
-
             var pathWithoutFileExtension = RemoveFileExtensionFromPath(path);
 
             if (string.IsNullOrWhiteSpace(path))
@@ -173,10 +171,13 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            var prefix = _uiOptions.RoutePrefix;
-            
-            var sb = new StringBuilder();
-            return sb.Append(prefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(Version).Append("/").Append(pathWithoutFileExtension).ToString();
+            if (!UrlHelper.IsExternalLink(path))
+            {
+                path = _docsLinkGenerator.GenerateLink(ProjectName, LanguageCode, Version, pathWithoutFileExtension);
+            }
+
+
+            return path;
         }
 
         private string RemoveFileExtensionFromPath(string path)

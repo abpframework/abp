@@ -7,7 +7,7 @@ The Lepton Theme is a professional theme for the ABP.
 * Built on the [Bootstrap 5](https://getbootstrap.com) library.
 * 100% compatible with  [Bootstrap 5](https://getbootstrap.com) HTML structure and CSS classes
 * Responsive & mobile-compatible.
-* Provides different style like Material, Dark, Light.
+* Provides different styles like Material, Dark, Light.
 * Provides styles for [Datatables](https://datatables.net).
 
 A screenshot from the light style of the theme:
@@ -18,7 +18,7 @@ A screenshot from the light style of the theme:
 
 ## How to Install
 
-Lepton Theme module is pre-installed in [the startup templates](../../get-started). So, no need to manually install it.
+Lepton Theme module can be pre-installed to [the startup templates](../../get-started), if you specify the theme as **LeptonTheme** (see the [CLI documentation](../../cli/index.md)). So, no need to manually install it.
 
 ## Packages
 
@@ -73,10 +73,16 @@ See the `LeptonThemeManagementPermissions` class members for all permissions def
 
 ### Source code
 
-To download the source-code of the Lepton Theme use the following CLI command
+To download the source-code of the Lepton Theme use the following CLI command:
 
+```bash
+abp get-source Volo.Abp.LeptonTheme # for new ABP CLI
 ```
-abp get-source Volo.LeptonTheme 
+
+If you are using the old ABP CLI, you can use the following command:
+
+```bash
+abp get-source Volo.LeptonTheme
 ```
 
 ## Lepton Theme Customization

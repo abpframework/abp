@@ -1,5 +1,5 @@
 {
-  "version": "8.2.3",
+  "version": "8.3.2",
   "name": "@abp/datatables.net",
   "repository": {
     "type": "git",
@@ -10,8 +10,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "~8.2.3",
-    "datatables.net": "^1.11.4"
+    "@abp/jquery": "~8.3.2",
+    "datatables.net": "^2.0.8"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

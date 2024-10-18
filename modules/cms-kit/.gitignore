@@ -257,4 +257,4 @@ host/Volo.CmsKit.HttpApi.Host/Logs/logs.txt
 host/Volo.CmsKit.Web.Host/Logs/logs.txt
 host/Volo.CmsKit.Web.Unified/Logs/logs.txt
 
-host/**/wwwroot/libs/**/*
+**/wwwroot/libs/**

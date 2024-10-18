@@ -40,6 +40,7 @@
     "SearchInTheAllDocuments": "Search in the all documents",
     "Next": "Next",
     "Previous": "Previous",
-    "ProjectDeletionWarningMessage": "Project will be deleted."
+    "ProjectDeletionWarningMessage": "Project will be deleted.",
+    "GoogleTranslate": "Google Translate"
   }
 }

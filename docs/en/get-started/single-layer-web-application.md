@@ -21,8 +21,8 @@ The following tools should be installed on your development machine:
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (v17.3+) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
 * [.NET 8.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
 {{ if UI != "Blazor" }}
-* [Node v16 or v18](https://nodejs.org/)
-* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v6+ (already installed with Node)
+* [Node v18.19+](https://nodejs.org/)
+* [Yarn v1.22+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v10+ (already installed with Node)
 {{ end }}
 {{ if Tiered == "Yes" }}
 * [Redis](https://redis.io/) (as the [distributed cache](../framework/fundamentals/caching.md)).

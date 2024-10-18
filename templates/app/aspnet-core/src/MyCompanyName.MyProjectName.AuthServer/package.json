@@ -3,6 +3,6 @@
   "name": "my-app-authserver",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "~3.2.3"
+    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "~3.3.2"
   }
 }

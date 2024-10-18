@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.Content;
@@ -218,10 +220,21 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
     {
+        var wwwAuthenticate = response.Headers.WwwAuthenticate.ToString() ?? string.Empty;
+        var errorMatch = Regex.Match(wwwAuthenticate, "error=\"([^\"]+)\"");
+        var errorDescriptionMatch = Regex.Match(wwwAuthenticate, "error_description=\"([^\"]+)\"");
+        var errorUriMatch = Regex.Match(wwwAuthenticate, "error_uri=\"([^\"]+)\"");
+        var error = errorMatch.Success ? errorMatch.Groups.Count == 2 ? errorMatch.Groups[1].Value : null : null;
+        var errorDescription = errorDescriptionMatch.Success ? errorDescriptionMatch.Groups.Count == 2 ? errorDescriptionMatch.Groups[1].Value : null : null;
+        var errorUri = errorUriMatch.Success ? errorUriMatch.Groups.Count == 2 ? errorUriMatch.Groups[1].Value : null : null;
+
         await LocalEventBus.PublishAsync(new ClientProxyExceptionEventData()
         {
             StatusCode = (int?)response.StatusCode,
-            ReasonPhrase = response.ReasonPhrase
+            ReasonPhrase = response.ReasonPhrase,
+            Error = error,
+            ErrorDescription = errorDescription,
+            ErrorUri = errorUri,
         });
 
         if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
@@ -239,7 +252,8 @@ public class ClientProxyBase<TService> : ITransientDependency
                     new RemoteServiceErrorInfo
                     {
                         Message = response.ReasonPhrase,
-                        Code = response.StatusCode.ToString()
+                        Code = response.StatusCode.ToString(),
+                        Details = errorDescription
                     },
                     ex
                 )
@@ -259,7 +273,8 @@ public class ClientProxyBase<TService> : ITransientDependency
                 new RemoteServiceErrorInfo
                 {
                     Message = response.ReasonPhrase,
-                    Code = response.StatusCode.ToString()
+                    Code = response.StatusCode.ToString(),
+                    Details = errorDescription
                 }
             )
             {

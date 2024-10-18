@@ -21,6 +21,9 @@
     "404Message": "Síðan fannst ekki",
     "500Message": "Villa í netþjóni",
     "403MessageDetail": "Þú hefur ekki heimild fyrir þessa aðgerð!",
-    "404MessageDetail": "Því miður, það er ekkert á þessu heimilisfangi."
+    "404MessageDetail": "Því miður, það er ekkert á þessu heimilisfangi.",
+    "Unauthorized": "Óheimilt",
+    "invalid_token": "Ógildur auðkenni",
+    "SessionExpired": "Sessían þín er útrunnin. Vinsamlegast skráðu þig inn aftur til að halda áfram í forritinu."
   }
 }

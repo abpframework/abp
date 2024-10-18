@@ -237,7 +237,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Generate a new solution based on the ABP startup templates.";
     }

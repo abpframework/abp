@@ -203,6 +203,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 return;
             }
 
+            await UserManager.AccessFailedAsync(user);
+
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.UserName);
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidAuthenticatorCode"]);
         }

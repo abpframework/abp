@@ -409,6 +409,7 @@
     "ErrorExceptionMessage": "Pri obdelavi vaše zahteve je prišlo do napake",
     "WatchTakeCodeGeneration": "Oglejte si video »Raziščite potencial generiranja kode: zbirka ABP«!",
     "ExtendNow": "Podaljšaj / obnovi",
-    "RegisterDemo": "Registrirajte se"
+    "RegisterDemo": "Registrirajte se",
+    "AbpStudio_ComingSoon": "Če želite preizkusiti ABP Studio pred vsemi drugimi, postanite BETA tester"
   }
 }

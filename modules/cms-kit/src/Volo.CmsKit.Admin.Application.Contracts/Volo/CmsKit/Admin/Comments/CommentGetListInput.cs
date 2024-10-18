@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.CmsKit.Comments;
 
 namespace Volo.CmsKit.Admin.Comments;
 
@@ -17,4 +18,6 @@ public class CommentGetListInput : PagedAndSortedResultRequestDto
     public DateTime? CreationStartDate { get; set; }
 
     public DateTime? CreationEndDate { get; set; }
+
+    public CommentApproveState CommentApproveState { get; set; }
 }

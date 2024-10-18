@@ -1,0 +1,9 @@
+{
+  "culture": "sv",
+  "texts": {
+    "TenantNotFoundMessage": "Hyresgäst inte hittad!",
+    "TenantNotFoundDetails": "Det finns ingen hyresgäst med hyresgäst-ID eller namn: {0}",
+    "TenantNotActiveMessage": "Hyresgästen är inte aktiv!",
+    "TenantNotActiveDetails": "Hyresgästen är inte aktiv med hyresgäst-ID eller namn: {0}"
+  }
+}

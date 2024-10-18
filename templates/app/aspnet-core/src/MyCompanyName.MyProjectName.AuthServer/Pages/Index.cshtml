@@ -90,6 +90,10 @@
                                         <abp-column size-md="@Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid.ColumnSize._4" class="mb-2">
                                             <abp-card>
                                                 <abp-card-body>
+                                                    @{ 
+                                                        var clientUri = application.ClientUri.Contains("Swagger") ? application.ClientUri.EnsureEndsWith('/') + "swagger/index.html" : application.ClientUri; 
+                                                    }
+                                                    
                                                     @if (!application.LogoUri.IsNullOrEmpty())
                                                     {
                                                         <div class="mx-auto">
@@ -98,7 +102,7 @@
                                                     }
 
                                                     <h4>@application.DisplayName</h4>
-                                                    <a href="@application.ClientUri" class="text-muted stretched-link">@application.ClientUri</a>
+                                                    <a href="@clientUri" class="text-muted stretched-link">@clientUri</a>
                                                 </abp-card-body>
                                             </abp-card>
                                         </abp-column>

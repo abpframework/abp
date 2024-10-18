@@ -53,7 +53,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 ## Pre-Requirements
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 8.0+](https://dotnet.microsoft.com/download/dotnet) development.
-* [Node v16.x](https://nodejs.org/)
+* [Node v18.19+](https://nodejs.org/)
 
 {{if DB=="Mongo"}}
 
@@ -65,17 +65,17 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 We will use the [ABP CLI](../../../cli/index.md) to create new ABP solutions. You can run the following command on a terminal window to install this dotnet tool:
 
-```
+````bash
 dotnet tool install -g Volo.Abp.Studio.Cli
-```
+````
 
 ## Create Your ABP Solution
 
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
-```
+````bash
 abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
-```
+````
 
 {{if UI=="NG"}}
 
@@ -107,9 +107,9 @@ However, sometimes this command might need to be manually run. For example, you 
 
 For such cases, run the `abp install-libs` command on the root directory of your solution to install all required NPM packages:
 
-```
+````bash
 abp install-libs
-```
+````
 
 > We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
 
@@ -121,9 +121,9 @@ abp install-libs
 
 However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your blazor application:
 
-```
+````bash
 abp bundle
-```
+````
 
 > For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../../../framework/ui/blazor/global-scripts-styles.md).
 
@@ -167,9 +167,9 @@ You can explore and test your HTTP API with this UI. If it works, we can run the
 
 You can run the application using the following command:
 
-```
+````bash
 npm start
-```
+````
 
 This command takes time, but eventually runs and opens the application in your default browser:
 
@@ -185,7 +185,7 @@ All ready. We can start coding!
 
 This application has a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
 
-```csharp
+````csharp
 using System;
 using Volo.Abp.Domain.Entities;
 
@@ -196,7 +196,7 @@ namespace TodoApp
         public string Text { get; set; } = string.Empty;
     }
 }
-```
+````
 
 `BasicAggregateRoot` is the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
 
@@ -242,9 +242,9 @@ The startup solution is configured to use Entity Framework Core [Code First Migr
 
 Open a command-line terminal in the directory of the *TodoApp.EntityFrameworkCore* project and type the following command:
 
-```
+````bash
 dotnet ef migrations add Added_TodoItem
-```
+````
 
 This will add a new migration class to the project:
 
@@ -252,9 +252,9 @@ This will add a new migration class to the project:
 
 You can apply changes to the database using the following command, in the same command-line terminal:
 
-```
+````bash
 dotnet ef database update
-```
+````
 
 > If you are using Visual Studio, you may want to use the `Add-Migration Added_TodoItem` and `Update-Database` commands in the *Package Manager Console (PMC)*. In this case, ensure that {{if UI=="MVC"}}`TodoApp.Web`{{else if UI=="BlazorServer" || UI=="Blazor" || UI=="BlazorWebApp"}}`TodoApp.Blazor`{{else if UI=="Blazor" || UI=="NG"}}`TodoApp.HttpApi.Host`{{end}} is the startup project and `TodoApp.EntityFrameworkCore` is the *Default Project* in PMC.
 
@@ -264,18 +264,18 @@ Next step is to setup the [MongoDB](../../../framework/data/mongodb/index.md) co
 
 1. Add a new property to the class:
 
-```csharp
+````csharp
 public IMongoCollection<TodoItem> TodoItems => Collection<TodoItem>();
-```
+````
 
 2. Add the following code inside the `CreateModel` method:
 
-```csharp
+````csharp
 modelBuilder.Entity<TodoItem>(b =>
 {
     b.CollectionName = "TodoItems";
 });
-```
+````
 
 {{end}}
 
@@ -293,7 +293,7 @@ An [Application Service](../../../framework/architecture/domain-driven-design/ap
 
 We can start by defining an interface for the application service. Create a new `ITodoAppService` interface in the *TodoApp.Application.Contracts* project, as shown below:
 
-```csharp
+````csharp
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -308,13 +308,13 @@ namespace TodoApp
         Task DeleteAsync(Guid id);
     }
 }
-```
+````
 
 ### Data Transfer Object
 
 `GetListAsync` and `CreateAsync` methods return `TodoItemDto`. `ApplicationService` typically gets and returns DTOs ([Data Transfer Objects](../../../framework/architecture/domain-driven-design/data-transfer-objects.md)) instead of entities. So, we should define the DTO class here. Create a new `TodoItemDto` class inside the *TodoApp.Application.Contracts* project:
 
-```csharp
+````csharp
 using System;
 
 namespace TodoApp
@@ -325,7 +325,7 @@ namespace TodoApp
         public string Text { get; set; } = string.Empty;
     }
 }
-```
+````
 
 This is a very simple DTO class that matches our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
 
@@ -333,7 +333,7 @@ This is a very simple DTO class that matches our `TodoItem` entity. We are ready
 
 Create a `TodoAppService` class inside the *TodoApp.Application* project, as shown below:
 
-```csharp
+````csharp
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -355,7 +355,7 @@ namespace TodoApp
         // TODO: Implement the methods here...
     }
 }
-```
+````
 
 This class inherits from the `ApplicationService` class of the ABP and implements the `ITodoAppService` that was defined before. ABP provides default generic [repositories](../../../framework/architecture/domain-driven-design/entities.md) for the entities. We can use them to perform the fundamental database operations. This class [injects](../../../framework/fundamentals/dependency-injection.md) `IRepository<TodoItem, Guid>`, which is the default repository for the `TodoItem` entity. We will use it to implement the use cases described before.
 
@@ -363,7 +363,7 @@ This class inherits from the `ApplicationService` class of the ABP and implement
 
 Let's start by implementing the `GetListAsync` method:
 
-```csharp
+````csharp
 public async Task<List<TodoItemDto>> GetListAsync()
 {
     var items = await _todoItemRepository.GetListAsync();
@@ -374,7 +374,7 @@ public async Task<List<TodoItemDto>> GetListAsync()
             Text = item.Text
         }).ToList();
 }
-```
+````
 
 We are simply getting the complete `TodoItem` list from the database, mapping them to `TodoItemDto` objects and returning as the result.
 
@@ -382,7 +382,7 @@ We are simply getting the complete `TodoItem` list from the database, mapping th
 
 Next method is `CreateAsync` and we can implement it as shown below:
 
-```csharp
+````csharp
 public async Task<TodoItemDto> CreateAsync(string text)
 {
     var todoItem = await _todoItemRepository.InsertAsync(
@@ -395,7 +395,7 @@ public async Task<TodoItemDto> CreateAsync(string text)
         Text = todoItem.Text
     };
 }
-```
+````
 
 The repository's `InsertAsync` method inserts the given `TodoItem` to the database and returns the same `TodoItem` object. It also sets the `Id`, so we can use it on the returning object. We are simply returning a `TodoItemDto` by creating from the new `TodoItem` entity.
 
@@ -403,12 +403,12 @@ The repository's `InsertAsync` method inserts the given `TodoItem` to the databa
 
 Finally, we can implement the `DeleteAsync` as the following code block:
 
-```csharp
+````csharp
 public async Task DeleteAsync(Guid id)
 {
     await _todoItemRepository.DeleteAsync(id);
 }
-```
+````
 
 The application service is ready to be used from the UI layer.
 
@@ -426,7 +426,7 @@ It is time to show the todo items on the UI! Before starting to write the code, 
 
 Open the `Index.cshtml.cs` file in the `Pages` folder of the *TodoApp.Web* project and replace the content with the following code block:
 
-```csharp
+````csharp
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -449,7 +449,7 @@ namespace TodoApp.Web.Pages
         }
     }
 }
-```
+````
 
 This class uses the `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
 
@@ -743,13 +743,13 @@ You first need to run the `TodoApp.HttpApi.Host` project since the proxy generat
 
 Once you run the `TodoApp.HttpApi.Host` project, open a command-line terminal in the `angular` folder and type the following command:
 
-```
+````bash
 abp generate-proxy -t ng
-```
+````
 
 If everything goes well, it should generate an output as shown below:
 
-```
+```bash
 CREATE src/app/proxy/generate-proxy.json (170978 bytes)
 CREATE src/app/proxy/README.md (1000 bytes)
 CREATE src/app/proxy/todo.service.ts (794 bytes)

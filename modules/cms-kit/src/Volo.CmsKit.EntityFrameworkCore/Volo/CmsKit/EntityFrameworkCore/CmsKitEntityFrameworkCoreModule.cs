@@ -11,6 +11,7 @@ using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Tags;
 using Volo.CmsKit.Users;
+using Volo.CmsKit.MarkedItems;
 
 namespace Volo.CmsKit.EntityFrameworkCore;
 
@@ -37,6 +38,7 @@ public class CmsKitEntityFrameworkCoreModule : AbpModule
             options.AddRepository<BlogFeature, EfCoreBlogFeatureRepository>();
             options.AddRepository<MediaDescriptor, EfCoreMediaDescriptorRepository>();
             options.AddRepository<GlobalResource, EfCoreGlobalResourceRepository>();
+            options.AddRepository<UserMarkedItem, EfCoreUserMarkedItemRepository>();
         });
     }
 }

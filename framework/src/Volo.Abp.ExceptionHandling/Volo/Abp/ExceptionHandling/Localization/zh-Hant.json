@@ -21,6 +21,9 @@
     "404Message": "網頁未找到",
     "500Message": "內部伺服器錯誤",
     "403MessageDetail": "你不被授權執行此操作",
-    "404MessageDetail": "對不起，地址是空的"
+    "404MessageDetail": "對不起，地址是空的",
+    "Unauthorized": "未授權",
+    "invalid_token": "無效的令牌",
+    "SessionExpired": "你的會話已過期.請重新登入以繼續應用程式."
   }
 }

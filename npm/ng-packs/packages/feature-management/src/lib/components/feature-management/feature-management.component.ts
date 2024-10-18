@@ -1,4 +1,4 @@
-import { ConfigStateService, TrackByService } from '@abp/ng.core';
+import { ConfigStateService, LocalizationModule, TrackByService } from '@abp/ng.core';
 import {
   FeatureDto,
   FeatureGroupDto,
@@ -9,10 +9,15 @@ import {
   Confirmation,
   ConfirmationService,
   LocaleDirection,
+  ThemeSharedModule,
   ToasterService,
 } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { finalize } from 'rxjs/operators';
+import { FreeTextInputDirective } from '../../directives';
 import { FeatureManagement } from '../../models/feature-management';
 
 enum ValueTypes {
@@ -22,9 +27,18 @@ enum ValueTypes {
 }
 
 @Component({
+  standalone: true,
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
   exportAs: 'abpFeatureManagement',
+  imports: [
+    ThemeSharedModule,
+    LocalizationModule,
+    FormsModule,
+    NgbNavModule,
+    FreeTextInputDirective,
+    NgTemplateOutlet,
+  ],
 })
 export class FeatureManagementComponent
   implements
@@ -125,7 +139,7 @@ export class FeatureManagementComponent
       .subscribe(() => {
         this.visible = false;
 
-        this.toasterService.success('AbpFeatureManagement::Saved');
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         if (!this.providerKey) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();

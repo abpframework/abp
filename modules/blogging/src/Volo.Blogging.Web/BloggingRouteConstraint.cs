@@ -22,14 +22,12 @@ public class BloggingRouteConstraint : IRouteConstraint
         {
             return true;
         }
-        
-        var displayUrl = httpContext.Request.GetDisplayUrl();
-        
-        if (BloggingUrlOptions.IgnoredPaths.Any(path => displayUrl.Contains(path, StringComparison.InvariantCultureIgnoreCase)))
+
+        if (!values.TryGetValue(routeKey, out var routeValue) || routeValue is not string routeValueString)
         {
-            return false;
+            return true;
         }
 
-        return true;
+        return !BloggingUrlOptions.IgnoredPaths.Any(path => routeValueString.StartsWith(path, StringComparison.InvariantCultureIgnoreCase));
     }
 }

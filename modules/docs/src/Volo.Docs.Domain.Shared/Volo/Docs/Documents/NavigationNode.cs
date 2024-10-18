@@ -35,7 +35,17 @@ namespace Volo.Docs.Documents
                 return false;
             }
 
-            if (string.Equals(documentName, Path, StringComparison.OrdinalIgnoreCase))
+            var path = Path ?? string.Empty;
+            var pathHasExtension = System.IO.Path.HasExtension(path);
+
+            if (!pathHasExtension)
+            {
+                var extension = System.IO.Path.GetExtension(documentName);
+                path = path.EnsureEndsWith('/') + "index" + extension;
+            }
+            
+
+            if (string.Equals(documentName, path, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

@@ -555,7 +555,7 @@ public class TranslateCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Mainly used to translate ABP's resources (JSON files) easier.";
     }

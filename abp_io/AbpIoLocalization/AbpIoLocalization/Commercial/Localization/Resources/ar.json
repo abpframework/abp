@@ -816,6 +816,7 @@
     "ErrorExceptionMessage": "حدث خطأ أثناء معالجة طلبك",
     "WatchTakeCodeGeneration": "شاهد فيديو \"استكشاف إمكانات إنشاء الأكواد البرمجية: ABP Suite\"!",
     "ExtendNow": "تمديد / تجديد",
-    "RegisterDemo": "يسجل"
+    "RegisterDemo": "يسجل",
+    "AbpStudio_ComingSoon": "إذا كنت ترغب في اختبار ABP Studio قبل أي شخص آخر، يمكنك أن تصبح أحد مختبري النسخة التجريبية"
   }
 }

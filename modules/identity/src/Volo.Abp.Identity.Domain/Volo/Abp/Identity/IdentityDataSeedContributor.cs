@@ -8,6 +8,8 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
 {
     public const string AdminEmailPropertyName = "AdminEmail";
     public const string AdminEmailDefaultValue = "admin@abp.io";
+    public const string AdminUserNamePropertyName = "AdminUserName";
+    public const string AdminUserNameDefaultValue = "admin";
     public const string AdminPasswordPropertyName = "AdminPassword";
     public const string AdminPasswordDefaultValue = "1q2w3E*";
 
@@ -23,7 +25,8 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
         return IdentityDataSeeder.SeedAsync(
             context?[AdminEmailPropertyName] as string ?? AdminEmailDefaultValue,
             context?[AdminPasswordPropertyName] as string ?? AdminPasswordDefaultValue,
-            context?.TenantId
+            context?.TenantId,
+            context?[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue
         );
     }
 }

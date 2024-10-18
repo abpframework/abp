@@ -20,4 +20,29 @@
   color: #0B1621;
 }
 
+body {
+  top: 0px !important;
+}
+
+.skiptranslate iframe {
+  display: none !important;
+}
+
+.google_translate_text {
+  color: #aaa;
+  font-family: var(--bs-body-font-family);
+  font-size: 10pt;
+  margin-left: 2px;
+  font-weight: 500;
+}
+
+.goog-te-gadget {
+  white-space: break-spaces !important;
+}
+
+.goog-te-combo:focus-visible {
+  border: 0px;
+  outline: none;
+}
+
 /*# sourceMappingURL=Index.css.map */

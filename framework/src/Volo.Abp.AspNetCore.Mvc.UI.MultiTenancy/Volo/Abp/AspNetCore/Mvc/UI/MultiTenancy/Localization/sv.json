@@ -1,0 +1,13 @@
+{
+  "culture": "sv",
+  "texts": {
+    "GivenTenantIsNotExist": "Given hyresgäst existerar inte: {0}",
+    "GivenTenantIsNotAvailable": "Angiven hyresgäst är inte tillgänglig: {0}",
+    "Tenant": "Hyresgäst",
+    "Switch": "Växla",
+    "Name": "Namn",
+    "SwitchTenantHint": "Lämna namnfältet tomt för att växla till värdsidan.",
+    "SwitchTenant": "Byta hyresgäst",
+    "NotSelected": "Ej vald"
+  }
+}

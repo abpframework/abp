@@ -194,14 +194,14 @@
                                             {
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
-                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})" aria-label="Go to user profile">
+                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})" aria-label="Go to user profile">
                                                             <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="last-post-image" alt="User Avatar"/>
                                                         </a>
                                                     </div>
                                                     
                                                     <div class="col">
                                                         <h5 class="last-post-name">
-                                                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = Model.Post.Writer.UserName})">
+                                                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                 @(post.Writer!.UserName)
                                                             </a>
                                                         </h5>
@@ -212,7 +212,7 @@
                                     </div>
                                     <div class="col mt-2">
                                         <p>
-                                            <a class="last-post-title" asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                            <a class="last-post-title" asp-page="./Detail" asp-route-postUrl="@post.Url">@post.Title</a>
                                         </p>
                                     </div>
                                 </div>

@@ -259,6 +259,8 @@
     "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> sprijinit.",
     "Preview": "previzualizare",
     "VisitPage": "Vizitați pagina",
-    "VisitVideoCourseDescription": "Dacă doriți să aflați elementele de bază ale cadrului ABP, consultați cursurile video ABP Essentials."
+    "VisitVideoCourseDescription": "Dacă doriți să aflați elementele de bază ale cadrului ABP, consultați cursurile video ABP Essentials.",
+    "ConfirmEmailForPost": "Pentru a putea posta, trebuie să vă confirmați adresa de e-mail. Accesați account.abp.io/Account/Manage și verificați e-mailul în fila Informații personale.",
+    "DailyPostCreateLimitation": "Ați atins limita zilnică de creare a postărilor. Puteți crea o postare nouă în {0}."
   }
 }

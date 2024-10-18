@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.OpenIddict.Tokens;
 
@@ -27,11 +28,13 @@ public class OpenIddictToken : FullAuditedAggregateRoot<Guid>
     /// <summary>
     /// Gets or sets the UTC creation date of the current token.
     /// </summary>
+    [DisableDateTimeNormalization]
     public virtual DateTime? CreationDate { get; set; }
 
     /// <summary>
     /// Gets or sets the UTC expiration date of the current token.
     /// </summary>
+    [DisableDateTimeNormalization]
     public virtual DateTime? ExpirationDate { get; set; }
 
     /// <summary>
@@ -50,6 +53,7 @@ public class OpenIddictToken : FullAuditedAggregateRoot<Guid>
     /// <summary>
     /// Gets or sets the UTC redemption date of the current token.
     /// </summary>
+    [DisableDateTimeNormalization]
     public virtual DateTime? RedemptionDate { get; set; }
 
     /// <summary>

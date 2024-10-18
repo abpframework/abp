@@ -8,7 +8,7 @@
 Before you begin the installation process for ABP Studio, ensure that your system meets the following pre-requirements:
 
 ### Node
-Make sure [Node.js](https://nodejs.org/en) is installed on your system. If you have not installed Node.js, you can download the `v16` or `v18` version from the official [Node.js website](https://nodejs.org/en/download/prebuilt-installer).
+Make sure [Node.js](https://nodejs.org/en) is installed on your system. If you have not installed Node.js, you can download the `v18.19+` version from the official [Node.js website](https://nodejs.org/en/download/prebuilt-installer).
 
 ### WireGuard (Optional) 
 ABP Studio needs [WireGuard](https://www.wireguard.com/) for Kubernetes operations. You can find the installation instructions for your specific operating system below:

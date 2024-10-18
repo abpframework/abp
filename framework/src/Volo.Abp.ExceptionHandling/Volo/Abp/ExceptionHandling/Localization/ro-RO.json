@@ -21,6 +21,9 @@
     "404Message": "Pagina nu a fost găsită",
     "500Message": "Eroare internă a serverului",
     "403MessageDetail": "Nu sunteţi autorizat să efectuaţi această operaţie!",
-    "404MessageDetail": "Ne cerem scuze, nu este nimic la această adresă."
+    "404MessageDetail": "Ne cerem scuze, nu este nimic la această adresă.",
+    "Unauthorized": "Nu sunteţi autorizat să efectuaţi această operaţie.",
+    "invalid_token": "Tokenul nu este valid sau a expirat.",
+    "SessionExpired": "Sesiunea dumneavoastră a expirat. Vă rugăm să vă autentificaţi din nou pentru a continua în aplicaţie."
   }
 }

@@ -21,6 +21,9 @@
     "404Message": "Stranica nije pronađena",
     "500Message": "Interna pogreška poslužitelja",
     "403MessageDetail": "Niste ovlašteni za izvođenje ove operacije!",
-    "404MessageDetail": "Nažalost, na ovoj adresi nema ničega."
+    "404MessageDetail": "Nažalost, na ovoj adresi nema ničega.",
+    "Unauthorized": "Niste ovlašteni za izvođenje ove operacije.",
+    "invalid_token": "Neispravan token",
+    "SessionExpired": "Vaša sesija je istekla. Prijavite se ponovno kako biste nastavili s radom u aplikaciji."
   }
 }

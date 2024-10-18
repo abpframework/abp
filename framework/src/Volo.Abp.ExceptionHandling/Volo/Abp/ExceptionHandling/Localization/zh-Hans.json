@@ -21,6 +21,9 @@
     "404Message": "未找到页面",
     "500Message": "内部服务器错误",
     "403MessageDetail": "您无权执行此操作！",
-    "404MessageDetail": "抱歉，这个地址没有任何信息。"
+    "404MessageDetail": "抱歉，这个地址没有任何信息。",
+    "Unauthorized": "未经授权",
+    "invalid_token": "无效的令牌",
+    "SessionExpired": "您的会话已过期。请重新登录以继续应用程序。"
   }
 }

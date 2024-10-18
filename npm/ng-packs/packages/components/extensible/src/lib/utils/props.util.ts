@@ -47,26 +47,29 @@ export function mergeWithDefaultProps<F extends PropsFactory<any>>(
     );
   });
 }
-type InferredPropDefaults<F> = F extends EntityPropsFactory<infer RE>
-  ? EntityPropDefaults<RE>
-  : F extends CreateFormPropsFactory<infer RCF>
-  ? CreateFormPropDefaults<RCF>
-  : F extends EditFormPropsFactory<infer REF>
-  ? EditFormPropDefaults<REF>
-  : never;
+type InferredPropDefaults<F> =
+  F extends EntityPropsFactory<infer RE>
+    ? EntityPropDefaults<RE>
+    : F extends CreateFormPropsFactory<infer RCF>
+      ? CreateFormPropDefaults<RCF>
+      : F extends EditFormPropsFactory<infer REF>
+        ? EditFormPropDefaults<REF>
+        : never;
 
-type InferredPropContributorCallbacks<F> = F extends EntityPropsFactory<infer RE>
-  ? EntityPropContributorCallbacks<RE>
-  : F extends CreateFormPropsFactory<infer RCF>
-  ? CreateFormPropContributorCallbacks<RCF>
-  : F extends EditFormPropsFactory<infer REF>
-  ? EditFormPropContributorCallbacks<REF>
-  : never;
+type InferredPropContributorCallbacks<F> =
+  F extends EntityPropsFactory<infer RE>
+    ? EntityPropContributorCallbacks<RE>
+    : F extends CreateFormPropsFactory<infer RCF>
+      ? CreateFormPropContributorCallbacks<RCF>
+      : F extends EditFormPropsFactory<infer REF>
+        ? EditFormPropContributorCallbacks<REF>
+        : never;
 
-type InferredProps<F> = F extends EntityPropsFactory<infer RE>
-  ? EntityProps<RE>
-  : F extends CreateFormPropsFactory<infer RCF>
-  ? FormProps<RCF>
-  : F extends EditFormPropsFactory<infer REF>
-  ? FormProps<REF>
-  : never;
+type InferredProps<F> =
+  F extends EntityPropsFactory<infer RE>
+    ? EntityProps<RE>
+    : F extends CreateFormPropsFactory<infer RCF>
+      ? FormProps<RCF>
+      : F extends EditFormPropsFactory<infer REF>
+        ? FormProps<REF>
+        : never;

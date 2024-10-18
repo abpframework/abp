@@ -21,6 +21,22 @@ public class AutoRegistrationHelper_Tests
     }
 
     [Fact]
+    public void Should_Get_Conventional_Exposed_Types_By_Default_Case_Insensitive()
+    {
+        //Act
+
+        var exposedServices = ExposedServiceExplorer.GetExposedServices(typeof(defaultderivedservice));
+
+        //Assert
+
+        exposedServices.Count.ShouldBe(3);
+        exposedServices.ShouldContain(typeof(defaultderivedservice));
+        exposedServices.ShouldContain(typeof(IService));
+        exposedServices.ShouldContain(typeof(IDerivedService));
+    }
+
+
+    [Fact]
     public void Should_Get_Custom_Exposed_Types_If_Available()
     {
         //Act
@@ -49,6 +65,10 @@ public class AutoRegistrationHelper_Tests
 
 
     public class DefaultDerivedService : IDerivedService
+    {
+    }
+
+    public class defaultderivedservice : IDerivedService
     {
     }
 

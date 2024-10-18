@@ -15,6 +15,7 @@ export const INPUT_TYPES = {
 };
 
 @Directive({
+  standalone: true,
   selector: 'input[abpFeatureManagementFreeText]',
   exportAs: 'inputAbpFeatureManagementFreeText',
 })

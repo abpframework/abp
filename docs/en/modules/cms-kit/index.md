@@ -17,6 +17,7 @@ The following features are currently available:
 * Provides a [**menu**](./menus.md) system to manage public menus dynamically.
 * Provides a [**global resources**](./global-resources.md) system to add global styles and scripts dynamically.
 * Provides a [**Dynamic Widget**](./dynamic-widget.md) system to create dynamic widgets for page and blog posts.
+* Provides a [**Marked Item**](./marked-items.md) system to mark any kind of resource, like a blog post or a product, as a favorite, starred, flagged, or bookmarked.
 
 > You can click on the any feature links above to understand and learn how to use it.
 

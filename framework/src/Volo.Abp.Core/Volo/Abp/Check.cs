@@ -10,7 +10,7 @@ public static class Check
 {
     [ContractAnnotation("value:null => halt")]
     public static T NotNull<T>(
-        T? value,
+        [System.Diagnostics.CodeAnalysis.NotNull] T? value,
         [InvokerParameterName][NotNull] string parameterName)
     {
         if (value == null)
@@ -23,7 +23,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static T NotNull<T>(
-        T? value,
+        [System.Diagnostics.CodeAnalysis.NotNull] T? value,
         [InvokerParameterName][NotNull] string parameterName,
         string message)
     {
@@ -37,7 +37,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNull(
-        string? value,
+        [System.Diagnostics.CodeAnalysis.NotNull] string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -62,7 +62,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNullOrWhiteSpace(
-        string? value,
+        [System.Diagnostics.CodeAnalysis.NotNull] string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -87,7 +87,7 @@ public static class Check
 
     [ContractAnnotation("value:null => halt")]
     public static string NotNullOrEmpty(
-        string? value,
+        [System.Diagnostics.CodeAnalysis.NotNull] string? value,
         [InvokerParameterName][NotNull] string parameterName,
         int maxLength = int.MaxValue,
         int minLength = 0)
@@ -111,7 +111,9 @@ public static class Check
     }
 
     [ContractAnnotation("value:null => halt")]
-    public static ICollection<T> NotNullOrEmpty<T>(ICollection<T>? value, [InvokerParameterName][NotNull] string parameterName)
+    public static ICollection<T> NotNullOrEmpty<T>(
+        [System.Diagnostics.CodeAnalysis.NotNull] ICollection<T>? value,
+        [InvokerParameterName][NotNull] string parameterName)
     {
         if (value == null || value.Count <= 0)
         {
@@ -339,7 +341,7 @@ public static class Check
     }
 
     public static T NotDefaultOrNull<T>(
-        T? value,
+        [System.Diagnostics.CodeAnalysis.NotNull] T? value,
         [InvokerParameterName][NotNull] string parameterName)
         where T : struct
     {

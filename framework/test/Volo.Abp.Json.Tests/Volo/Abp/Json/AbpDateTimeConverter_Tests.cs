@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Shouldly;
+using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Localization;
 using Xunit;
@@ -21,7 +22,13 @@ public class AbpDatetimeToEnum_Tests : AbpJsonSystemTextJsonTestBase
         {
             TypeInfoResolver = new DefaultJsonTypeInfoResolver()
             {
-                Modifiers = { new AbpDateTimeConverterModifier().CreateModifyAction(ServiceProvider) }
+                Modifiers =
+                {
+                    new AbpDateTimeConverterModifier(
+                            GetRequiredService<AbpDateTimeConverter>(),
+                            GetRequiredService<AbpNullableDateTimeConverter>())
+                        .CreateModifyAction()
+                }
             }
         };
 

@@ -46,6 +46,12 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
 
     public static string? GetDateEditInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
+        var dataFormatString = property.GetDataFormatStringOrNull();
+        if (dataFormatString != null)
+        {
+            return dataFormatString;
+        }
+
         if (property.IsDate())
         {
             return "{0:yyyy-MM-dd}";
@@ -57,6 +63,14 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
         }
 
         return null;
+    }
+
+    public static string? GetDataFormatStringOrNull(this IBasicObjectExtensionPropertyInfo property)
+    {
+        return property
+            .Attributes
+            .OfType<DisplayFormatAttribute>()
+            .FirstOrDefault()?.DataFormatString;
     }
 
     public static string? GetTextInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object? value)

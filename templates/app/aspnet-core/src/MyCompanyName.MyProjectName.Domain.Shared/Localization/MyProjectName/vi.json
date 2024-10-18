@@ -1,6 +1,7 @@
 {
   "culture": "vi",
   "texts": {
+    "AppName": "MyProjectName",
     "Menu:Home": "Trang chủ",
     "Welcome": "Chào mừng bạn",
     "LongWelcomeMessage": "Chào mừng bạn đến ứng dụng. Đây là một dự án khởi nghiệp dựa trên khung ABP. Để biết thêm thông tin, hãy truy cập abp.io."

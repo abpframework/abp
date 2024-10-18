@@ -8,6 +8,8 @@ public static class CmsKitAdminPermissions
     {
         public const string Default = GroupName + ".Comments";
         public const string Delete = Default + ".Delete";
+        public const string Update = Default + ".Update";
+        public const string SettingManagement = Default + ".SettingManagement";
     }
 
     public static class Tags
