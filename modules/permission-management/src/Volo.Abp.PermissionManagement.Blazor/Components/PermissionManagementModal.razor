@@ -1,6 +1,4 @@
-﻿@using Microsoft.Extensions.Localization
-@using Volo.Abp.PermissionManagement.Localization
-@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+﻿@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
 <Modal @ref="_modal" Closing="@ClosingModal">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
@@ -8,74 +6,95 @@
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         <ModalBody MaxHeight="50">
-            
-            <Field>
-                <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool">
-                    @L["SelectAllInAllTabs"]
-                </Check>
-            </Field>
-            
-            <Divider />
-            
-            @if (_groups != null)
-            {
-                <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@_selectedTabName">
-                    <Items>
-                        @foreach (var group in _groups)
-                        {
-                            <Tab Name="@GetNormalizedGroupName(group.Name)">
-                                @if (group.Permissions.Any(x => x.IsGranted))
-                                {
-                                    <span>
-                                        <b>@group.DisplayName ( @(group.Permissions.Count(x => x.IsGranted)) )</b>
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span>
-                                        @group.DisplayName ( @(group.Permissions.Count(x => x.IsGranted)) )
-                                    </span>
-                                }
-                            </Tab>
-                        }
-                    </Items>
-                    <Content>
-                        @foreach (var group in _groups)
-                        {
-                            <TabPanel Name="@GetNormalizedGroupName(group.Name)">
-                                
-                                <Field>
-                                    <Check
-                                        Disabled="@(IsPermissionGroupDisabled(group))"
-                                        Checked="@(group.Permissions.All(x => x.IsGranted))"
-                                        Cursor="Cursor.Pointer"
-                                        CheckedChanged="@(b => GroupGrantAllChanged(b, group))"
-                                        TValue="bool">
-                                        @L["SelectAllInThisTab"]
-                                    </Check>
-                                </Field>
 
-                                <Divider />
-                                
-                                @foreach (var permission in group.Permissions)
+            <Row Class="row d-flex align-items-center mb-2">
+                <Column>
+                    <Field Class="mb-2">
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <span class="input-group-text">
+                                   <Icon Name="IconName.Search"/>
+                                </span>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
+                                <TextEdit Text="@_permissionGroupSearchText" TextChanged="OnPermissionGroupSearchTextChangedAsync"/>
+                            </Addon>
+                        </Addons>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.IsAuto">
+                    <Field>
+                        <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" @bind-Checked="@GrantAll" TValue="bool">
+                            @L["SelectAllInAllTabs"]
+                        </Check>
+                    </Field>
+                </Column>
+            </Row>
+            
+            <fieldset class="border rounded-4 p-3">
+                <legend class="px-1 h5 mb-0">@L["PermissionGroup"]</legend>
+                
+                    @if (_groups != null && _groups.Any())
+                    {
+                        <Tabs @key="_groups" TabPosition="TabPosition.Start" Pills="true" SelectedTab="@_selectedTabName" SelectedTabChanged="@OnSelectedTabChangedAsync">
+                            <Items>
+                                @foreach (var group in _groups)
                                 {
-                                    <Field Style="@($"margin-inline-start: {GetPermissionDepthOrDefault(permission.Name) * 20}px")">
-                                        <Check
-                                            Disabled="@(IsDisabledPermission(permission))"
-                                            Cursor="Cursor.Pointer"
-                                            Checked="@permission.IsGranted"
-                                            CheckedChanged="@(b => PermissionChanged(b, group, permission))"
-                                            TValue="bool">
-                                            @GetShownName(permission)
-                                        </Check>
-                                    </Field>
+                                    <Tab Name="@GetNormalizedGroupName(group.Name)">
+                                        @if (group.Permissions.Any(x => x.IsGranted))
+                                        {
+                                            <span>
+                                                <b>@group.DisplayName ( @(group.Permissions.Count(x => x.IsGranted)) )</b>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                @group.DisplayName ( @(group.Permissions.Count(x => x.IsGranted)) )
+                                            </span>
+                                        }
+                                    </Tab>
                                 }
-                                
-                            </TabPanel>
-                        }
-                    </Content>
-                </Tabs>
-            }
+                            </Items>
+                            <Content>
+                                @foreach (var group in _groups)
+                                {
+                                    <TabPanel Name="@GetNormalizedGroupName(group.Name)">
+                                        
+                                        <Field>
+                                            <Check
+                                                Disabled="@(IsPermissionGroupDisabled(group))"
+                                                Checked="@(group.Permissions.All(x => x.IsGranted))"
+                                                Cursor="Cursor.Pointer"
+                                                CheckedChanged="@(b => GroupGrantAllChanged(b, group))"
+                                                TValue="bool">
+                                                @L["SelectAllInThisTab"]
+                                            </Check>
+                                        </Field>
+
+                                        <Divider />
+                                        
+                                        @foreach (var permission in group.Permissions)
+                                        {
+                                            <Field Style="@($"margin-inline-start: {GetPermissionDepthOrDefault(permission.Name) * 20}px")">
+                                                <Check
+                                                    Disabled="@(IsDisabledPermission(permission))"
+                                                    Cursor="Cursor.Pointer"
+                                                    Checked="@permission.IsGranted"
+                                                    CheckedChanged="@(b => PermissionChanged(b, group, permission))"
+                                                    TValue="bool">
+                                                    @GetShownName(permission)
+                                                </Check>
+                                            </Field>
+                                        }
+                                        
+                                    </TabPanel>
+                                }
+                            </Content>
+                        </Tabs>
+                    }
+                
+            </fieldset>
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Primary" Outline Clicked="CloseModal">@L["Cancel"]</Button>

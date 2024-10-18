@@ -6,6 +6,7 @@
     "All": "Όλα",
     "SelectAllInAllTabs": "Χορήγηση όλων των δικαιώματων",
     "SelectAllInThisTab": "Επιλογή όλων",
-    "SaveWithoutAnyPermissionsWarningMessage": "Είστε βέβαιοι ότι θέλετε να αποθηκεύσετε χωρίς δικαιώματα;"
+    "SaveWithoutAnyPermissionsWarningMessage": "Είστε βέβαιοι ότι θέλετε να αποθηκεύσετε χωρίς δικαιώματα;",
+    "PermissionGroup": "Ομάδα δικαιωμάτων"
   }
 }

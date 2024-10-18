@@ -6,6 +6,7 @@
     "All": "Tous",
     "SelectAllInAllTabs": "Accorder toutes les autorisations",
     "SelectAllInThisTab": "Sélectionner tous les",
-    "SaveWithoutAnyPermissionsWarningMessage": "Êtes-vous sûr de vouloir enregistrer sans aucune autorisation ?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Êtes-vous sûr de vouloir enregistrer sans aucune autorisation ?",
+    "PermissionGroup": "Groupe d'autorisations"
   }
 }

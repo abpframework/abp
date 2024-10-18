@@ -6,6 +6,7 @@
     "All": "Vse",
     "SelectAllInAllTabs": "Dodeli vsa dovoljenja",
     "SelectAllInThisTab": "Izberi vse",
-    "SaveWithoutAnyPermissionsWarningMessage": "Ali ste prepričani, da želite shraniti brez kakršnih koli dovoljenj?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Ali ste prepričani, da želite shraniti brez kakršnih koli dovoljenj?",
+    "PermissionGroup": "Skupina dovoljenj"
   }
 }

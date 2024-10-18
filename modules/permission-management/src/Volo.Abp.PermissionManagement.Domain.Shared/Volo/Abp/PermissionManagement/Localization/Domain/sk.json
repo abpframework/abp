@@ -6,6 +6,7 @@
     "All": "Všetky",
     "SelectAllInAllTabs": "Udeliť všetky oprávnenia",
     "SelectAllInThisTab": "Vybrať všetky",
-    "SaveWithoutAnyPermissionsWarningMessage": "Naozaj chcete ukladať bez akýchkoľvek povolení?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Naozaj chcete ukladať bez akýchkoľvek povolení?",
+    "PermissionGroup": "Skupina oprávnení"
   }
 }

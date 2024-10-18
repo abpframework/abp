@@ -6,6 +6,7 @@
         "All": "Svi",
         "SelectAllInAllTabs": "Dodijelite sva dopuštenja",
         "SelectAllInThisTab": "Odaberi sve",
-        "SaveWithoutAnyPermissionsWarningMessage": "Jeste li sigurni da želite spremiti bez ikakvih dopuštenja?"
+        "SaveWithoutAnyPermissionsWarningMessage": "Jeste li sigurni da želite spremiti bez ikakvih dopuštenja?",
+        "PermissionGroup": "Grupa dozvola"
     }
 }

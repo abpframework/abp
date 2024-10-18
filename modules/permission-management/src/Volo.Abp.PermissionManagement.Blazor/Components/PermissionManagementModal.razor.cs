@@ -24,6 +24,7 @@ public partial class PermissionManagementModal
     protected string _providerKey;
 
     protected string _entityDisplayName;
+    protected List<PermissionGroupDto> _allGroups;
     protected List<PermissionGroupDto> _groups;
 
     protected List<PermissionGrantInfoDto> _disabledPermissions = new List<PermissionGrantInfoDto>();
@@ -34,6 +35,8 @@ public partial class PermissionManagementModal
     protected int _notGrantedPermissionCount = 0;
 
     protected bool _selectAllDisabled;
+    
+    protected string _permissionGroupSearchText;
 
     protected bool GrantAll {
         get {
@@ -85,46 +88,57 @@ public partial class PermissionManagementModal
         {
             _providerName = providerName;
             _providerKey = providerKey;
+            _permissionGroupSearchText = null;
 
             var result = await PermissionAppService.GetAsync(_providerName, _providerKey);
 
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
-            _groups = result.Groups;
+            _allGroups = result.Groups;
+            _groups = _allGroups.ToList();
 
-            _selectAllDisabled = _groups.All(IsPermissionGroupDisabled);
-
-            _grantedPermissionCount = 0;
-            _notGrantedPermissionCount = 0;
-            foreach (var permission in _groups.SelectMany(x => x.Permissions))
-            {
-                if (permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
-                {
-                    _disabledPermissions.Add(permission);
-                    continue;
-                }
-
-                if (permission.IsGranted)
-                {
-                    _grantedPermissionCount++;
-                }
-                else
-                {
-                    _notGrantedPermissionCount++;
-                }
-            }
-
-            _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
-
-            foreach (var group in _groups)
-            {
-                SetPermissionDepths(group.Permissions, null, 0);
-            }
+            NormalizePermissionGroup();
 
             await InvokeAsync(_modal.Show);
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+        }
+    }
+    
+    protected void NormalizePermissionGroup()
+    {
+        _selectAllDisabled = _groups.All(IsPermissionGroupDisabled);
+
+        _grantedPermissionCount = 0;
+        _notGrantedPermissionCount = 0;
+        _disabledPermissions.Clear();
+        foreach (var permission in _groups.SelectMany(x => x.Permissions))
+        {
+            if (permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
+            {
+                _disabledPermissions.Add(permission);
+                continue;
+            }
+
+            if (permission.IsGranted)
+            {
+                _grantedPermissionCount++;
+            }
+            else
+            {
+                _notGrantedPermissionCount++;
+            }
+        }
+        
+        foreach (var group in _groups)
+        {
+            SetPermissionDepths(group.Permissions, null, 0);
+        }
+
+        if (_groups.Count != 0)
+        {
+            _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
         }
     }
 
@@ -316,5 +330,27 @@ public partial class PermissionManagementModal
         var grantedProviders = permissions.SelectMany(x => x.GrantedProviders);
 
         return permissions.All(x => x.IsGranted) && grantedProviders.Any(p => p.ProviderName != _providerName);
+    }
+    
+    protected virtual async Task OnPermissionGroupSearchTextChangedAsync(string value)
+    {
+        if (value == _permissionGroupSearchText)
+        {
+            return;
+        }
+        
+        _permissionGroupSearchText = value;
+        _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase))).ToList();
+            
+        NormalizePermissionGroup();
+
+        await InvokeAsync(StateHasChanged);
+    }
+    
+    protected virtual Task OnSelectedTabChangedAsync(string name)
+    {
+        _selectedTabName = name;
+
+        return Task.CompletedTask;
     }
 }
