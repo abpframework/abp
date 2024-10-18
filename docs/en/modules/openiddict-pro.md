@@ -333,7 +333,7 @@ LogoutController    -> connect/logout
 UserInfoController  -> connect/userinfo
 ```
 
-#### AbpOpenIddictAspNetCoreOptions
+### AbpOpenIddictAspNetCoreOptions
 
 `AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
