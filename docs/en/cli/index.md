@@ -2,7 +2,7 @@
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
 
-> 🛈 With **v8.2+**, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and [ABP Studio](../studio/index.md). The new ABP CLI commands are explained in this documentation. However, if you want to learn more about the differences between the old and new CLIs, want to learn the reason for the change, or need guidance to use the old ABP CLI, please refer to the [Old vs New CLI](differences-between-old-and-new-cli.md) documentation.
+> With **v8.2+**, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and [ABP Studio](../studio/index.md). The new ABP CLI commands are explained in this documentation. However, if you want to learn more about the differences between the old and new CLIs, want to learn the reason for the change, or need guidance to use the old ABP CLI, please refer to the [Old vs New CLI](differences-between-old-and-new-cli.md) documentation.
 >
 > You may need to remove the Old CLI before installing the New CLI, by running the following command: `dotnet tool uninstall -g Volo.Abp.Cli`
 
@@ -140,6 +140,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
       * `angular`: Angular UI. There are some additional options for this template:
         * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
+        * `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
+      * `blazor-webapp`: Blazor Web App UI. There are some additional options for this template:
+        * `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
         * `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
       * `blazor`: Blazor UI. There are some additional options for this template:
         * `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)

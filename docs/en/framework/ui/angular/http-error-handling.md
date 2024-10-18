@@ -1,6 +1,6 @@
 # HTTP Error Handling
 
-### Error Configurations
+## Error Configurations
 
 ABP offers a configurations for errors handling like below
 

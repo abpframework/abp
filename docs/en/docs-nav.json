@@ -23,19 +23,19 @@
           "text": "Others",
           "items": [
             {
-              "text": "Empty ASP.NET Core MVC / Razor Pages Application",
+              "text": "Empty ASP.NET Core Application",
               "path": "get-started/empty-aspnet-core-application.md"
             },
             {
-              "text": "MAUI Application Startup Template",
+              "text": "MAUI Application",
               "path": "get-started/maui.md"
             },
             {
-              "text": "WPF Application Startup Template",
+              "text": "WPF Application",
               "path": "get-started/wpf.md"
             },
             {
-              "text": "Console Application Startup Template",
+              "text": "Console Application",
               "path": "get-started/console.md"
             }
           ]
@@ -67,7 +67,7 @@
           ]
         },
         {
-          "text": "Web Application Development",
+          "text": "Book Store Application",
           "items": [
             {
               "text": "Overview",
@@ -653,7 +653,7 @@
               "path": "framework/architecture"
             },
             {
-              "text": "Module Development Best Practices & Conventions",
+              "text": "Module Development Best Practices",
               "items": [
                 {
                   "text": "Overview",
@@ -1651,7 +1651,7 @@
           "path": "solution-templates/microservice"
         },
         {
-          "text": "Module Solution",
+          "text": "Application Module",
           "path": "solution-templates/application-module"
         }
       ]
