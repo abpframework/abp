@@ -81,7 +81,7 @@ namespace MyProject
 {
     public class CustomerService : ITransientDependency
     {
-        public async Task BuyAlcohol(Customer customer)
+        public async Task BookRoom(Customer customer)
         {
             if (!new Age18PlusCustomerSpecification().IsSatisfiedBy(customer))
             {
@@ -120,7 +120,7 @@ namespace MyProject
             _customerRepository = customerRepository;
         }
 
-        public async Task<List<Customer>> GetCustomersCanBuyAlcohol()
+        public async Task<List<Customer>> GetCustomersCanBookRoom()
         {
             var queryable = await _customerRepository.GetQueryableAsync();
             var query = queryable.Where(
