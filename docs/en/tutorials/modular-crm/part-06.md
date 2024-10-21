@@ -26,7 +26,7 @@ Let's begin from the first one: The Integration Services.
 
 ## The Need for the Integration Services
 
-Remember from the [previous part](part-05.md), the Orders page shows products' identities instead of their names:
+Remember from the [previous part](part-05.md), the Orders page shows product's identities instead of their names:
 
 ![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item.png)
 
