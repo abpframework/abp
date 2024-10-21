@@ -6,6 +6,7 @@
     "All": "Alla",
     "SelectAllInAllTabs": "Ge alla behörigheter",
     "SelectAllInThisTab": "Välj alla",
-    "SaveWithoutAnyPermissionsWarningMessage": "Är du säker på att du vill spara utan några behörigheter?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Är du säker på att du vill spara utan några behörigheter?",
+    "PermissionGroup": "Behörighetsgrupp"
   }
 }

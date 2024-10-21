@@ -6,6 +6,7 @@
     "All": "Tất cả",
     "SelectAllInAllTabs": "Cấp tất cả các quyền",
     "SelectAllInThisTab": "Chọn tất cả",
-    "SaveWithoutAnyPermissionsWarningMessage": "Bạn có chắc chắn muốn lưu mà không có bất kỳ quyền nào không?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Bạn có chắc chắn muốn lưu mà không có bất kỳ quyền nào không?",
+    "PermissionGroup": "Nhóm quyền"
   }
 }

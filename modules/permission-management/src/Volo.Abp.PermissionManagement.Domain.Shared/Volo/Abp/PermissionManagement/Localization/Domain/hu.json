@@ -6,6 +6,7 @@
     "All": "Összes",
     "SelectAllInAllTabs": "Adjon meg minden engedélyt",
     "SelectAllInThisTab": "Mindet kiválaszt",
-    "SaveWithoutAnyPermissionsWarningMessage": "Biztos, hogy engedélyek nélkül akar menteni?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Biztos, hogy engedélyek nélkül akar menteni?",
+    "PermissionGroup": "Engedélycsoport"
   }
 }
