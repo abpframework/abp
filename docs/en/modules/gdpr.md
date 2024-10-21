@@ -236,9 +236,17 @@ This [Event Transfer Object](../framework/infrastructure/event-bus/distributed#e
 
 Cookie Consent can be used to inform the users of the application, before saving any specific data about the users. 
 
-This feature is enabled by default for the [Application](../solution-templates/layered-web-application) and [Application Single Layer](../solution-templates/single-layer-web-application) Startup Templates.
+This feature is enabled by default for the [Application](../solution-templates/layered-web-application) and [Application Single Layer](../solution-templates/single-layer-web-application) Startup Templates. You can easily enable/disable showing Cookie Consent by configuring the `AbpCookieConsentOptions`
 
-> You can easily enable/disable to show the Cookie Consent by configuring the `AbpCookieConsentOptions`, which explained above.
+If you want to override the texts in the Cookie Consent component, you just need to define the following localization keys in your localization resource files and change text as you wish:
+
+```json
+    "ThisWebsiteUsesCookie": "This website uses cookies to ensure you get the best experience on the website.",
+    "CookieConsentAgreePolicies": "If you continue to browse, then you agree to our {0} and {1}.",
+    "CookieConsentAgreePolicy": "If you continue to browse, then you agree to our {0}.",
+```
+
+> Refer to the [Localization documentation](../framework/fundamentals/localization.md) for more info about defining localization resources and overriding existing localization entries that comes from pre-built modules.
 
 ### Configuring the Cookie Consent
 
