@@ -1,0 +1,31 @@
+fieldset legend {
+    float: none;
+    width: auto;
+}
+
+.lpx-scroll-pills-container ul {
+    display: block;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.lpx-scroll-pills-container .tab-content {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.lpx-scroll-pills-container ul li {
+    border: 1px solid #e8eef3;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.lpx-scroll-pills-container ul li a.active {
+    color: #fff !important;
+    border-color: #6c5dd3 !important;
+    background-color: #6c5dd3 !important;
+}
+
+.lpx-theme-dark .lpx-scroll-pills-container ul li {
+    border: 1px solid #23262a;
+}
