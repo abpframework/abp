@@ -31,7 +31,7 @@ abp generate-proxy -t csharp -url http://localhost:{your-service-port}/ -m {remo
 * You should run this command in the directory of your host application, and your microservices should be up and running.
 * The command will generate proxy classes for your microservice in the host application, which you can see under the **ClientProxies** folder.
 
-> **Note:** After each entity generation/modification in your service, then you should run this command to update client-proxies.
+> **Note:** After each entity generation/modification in your services, then you should run this command to update client-proxies.
 
 2. Configure the application for the static client proxy:
 
@@ -54,4 +54,6 @@ public class MyClientAppModule : AbpModule
 }
 ```
 
-After you applied these steps, you're ready to go to run your microservices and see the generated CRUD pages.
+After you apply these steps, you're ready to go to run your microservices and see the generated CRUD pages:
+
+![abp-suite-product-pages](images/abp-suite-products-pages.png)
