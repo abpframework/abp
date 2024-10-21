@@ -16,7 +16,8 @@
               class="form-control"
               id="permission-search"
               placeholder="Filter"
-              [(ngModel)]="filter"
+              [ngModel]="filter()"
+              (ngModelChange)="filter.set($event)"
             />
           </div>
         </div>
@@ -44,7 +45,7 @@
           <div class="col-md-4">
             <div class="overflow-auto lpx-scroll-pills-container scroll-in-modal">
               <ul class="nav nav-pills flex-column">
-                @for (group of permissionGroups; track $index) {
+                @for (group of permissionGroups(); track $index) {
                   <li class="border nav-item">
                     @if ({ assignedCount: getAssignedCount(group.name) }; as count) {
                       <a

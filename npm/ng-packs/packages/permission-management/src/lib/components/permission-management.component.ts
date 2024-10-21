@@ -1,4 +1,5 @@
 import { ConfigStateService, CurrentUserDto } from '@abp/ng.core';
+import { LocaleDirection, ToasterService } from '@abp/ng.theme.shared';
 import {
   GetPermissionListResultDto,
   PermissionGrantInfoDto,
@@ -7,19 +8,20 @@ import {
   ProviderInfoDto,
   UpdatePermissionDto,
 } from '@abp/ng.permission-management/proxy';
-import { LocaleDirection, ToasterService } from '@abp/ng.theme.shared';
 import {
   Component,
+  computed,
   ElementRef,
   EventEmitter,
   inject,
   Input,
   Output,
   QueryList,
+  signal,
   TrackByFunction,
   ViewChildren,
 } from '@angular/core';
-import { BehaviorSubject, concat, of } from 'rxjs';
+import { concat, of } from 'rxjs';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
 import { PermissionManagement } from '../models/permission-management';
 
@@ -149,9 +151,25 @@ export class PermissionManagementComponent
 
   selectedGroupPermissions: PermissionWithStyle[] = [];
 
-  filter = '';
+  filter = signal<string>('');
+  permissionGroupSignal = signal<PermissionGroupDto[]>([]);
 
-  permissionGroupSubject = new BehaviorSubject<PermissionGroupDto[]>(null);
+  permissionGroups = computed(() => {
+    const search = this.filter().toLowerCase().trim();
+    const groups = this.permissionGroupSignal();
+
+    if (!search) {
+      return groups;
+    }
+
+    const includesSearch = text => text.toLowerCase().includes(search);
+
+    return groups.filter(group =>
+      group.permissions.some(
+        permission => includesSearch(permission.displayName) || includesSearch(group.displayName),
+      ),
+    );
+  });
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
 
@@ -398,7 +416,8 @@ export class PermissionManagementComponent
       tap((permissionRes: GetPermissionListResultDto) => {
         const { groups } = permissionRes;
         this.data = permissionRes;
-        this.permissionGroupSubject.next(groups);
+        // this.permissionGroupSubject.next(groups);
+        this.permissionGroupSignal.set(groups);
         this.permissions = getPermissions(groups);
         this.setSelectedGroup(groups[0]);
         this.disabledSelectAllInAllTabs = this.permissions.every(
@@ -434,17 +453,6 @@ export class PermissionManagementComponent
     if (this.providerName === 'U') return currentUser.id === this.providerKey;
 
     return false;
-  }
-
-  get permissionGroups(): PermissionGroupDto[] {
-    const permissionGroups = this.permissionGroupSubject.getValue();
-    if (!permissionGroups) {
-      return;
-    }
-    const search = this.filter.toLowerCase();
-    return permissionGroups.filter(group =>
-      group.permissions.some(permission => permission.displayName.toLowerCase().includes(search)),
-    );
   }
 }
 
