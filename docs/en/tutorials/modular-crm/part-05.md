@@ -192,7 +192,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 ````
 
-In this way, the Ordering module can use' ModularCrmDbContext' over the `IProductsDbContext` interface. This part is only needed once for a module. Next time, you can add a new database migration, as explained in the next section.
+In this way, the Ordering module can use 'ModularCrmDbContext' over the `IProductsDbContext` interface. This part is only needed once for a module. Next time, you can add a new database migration, as explained in the next section.
 
 #### Add a Database Migration
 
@@ -229,19 +229,16 @@ We will create an application service to manage the `Order` entities.
 We're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project. Return to your IDE, open the `ModularCrm.Ordering` module's .NET solution and create an `IOrderAppService` interface under the `Services` folder for `ModularCrm.Ordering.Contracts` project:
 
 ````csharp
-using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
 
 namespace ModularCrm.Ordering.Services;
 
-public class OrderCreationDto
+public interface IOrderAppService : IApplicationService
 {
-    [Required]
-    [StringLength(150)]
-    public string CustomerName { get; set; }
-
-    [Required]
-    public Guid ProductId { get; set; }
+    Task<List<OrderDto>> GetListAsync();
+    Task CreateAsync(OrderCreationDto input);
 }
 ````
 
@@ -498,7 +495,7 @@ We've performed a graph build since we've made a change on a module, and more th
 
 ![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item.png)
 
-Great! We can see the list of orders. However, there is a problems:
+Great! We can see the list of orders. However, there is a problem:
 
 1. We see Product's GUID ID instead of its name. This is because the Ordering module has no integration with the Products module and doesn't have access to Product module's database to perform a JOIN query.
 
