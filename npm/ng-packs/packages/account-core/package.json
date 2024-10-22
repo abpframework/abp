@@ -1,14 +1,14 @@
 {
   "name": "@abp/ng.account.core",
-  "version": "8.3.2",
+  "version": "9.0.0-rc.1",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.core": "~8.3.2",
-    "@abp/ng.theme.shared": "~8.3.2",
+    "@abp/ng.core": "~9.0.0-rc.1",
+    "@abp/ng.theme.shared": "~9.0.0-rc.1",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

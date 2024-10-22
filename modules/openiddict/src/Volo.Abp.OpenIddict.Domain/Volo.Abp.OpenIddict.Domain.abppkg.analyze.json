@@ -86,10 +86,10 @@
     },
     {
       "baseClass": {
-        "name": "FullAuditedAggregateRoot<Guid>",
-        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
         "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
-        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
@@ -133,66 +133,6 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Data",
           "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
-        },
-        {
-          "name": "ICreationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
-        },
-        {
-          "name": "IHasCreationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
-        },
-        {
-          "name": "IMayHaveCreator",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
-        },
-        {
-          "name": "IAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IAuditedObject"
-        },
-        {
-          "name": "IModificationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
-        },
-        {
-          "name": "IHasModificationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
-        },
-        {
-          "name": "IFullAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
-        },
-        {
-          "name": "IDeletionAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
-        },
-        {
-          "name": "IHasDeletionTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
-        },
-        {
-          "name": "ISoftDelete",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [],
@@ -420,10 +360,10 @@
     },
     {
       "baseClass": {
-        "name": "FullAuditedAggregateRoot<Guid>",
-        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
         "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
-        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
@@ -467,66 +407,6 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Data",
           "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
-        },
-        {
-          "name": "ICreationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
-        },
-        {
-          "name": "IHasCreationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
-        },
-        {
-          "name": "IMayHaveCreator",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
-        },
-        {
-          "name": "IAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IAuditedObject"
-        },
-        {
-          "name": "IModificationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
-        },
-        {
-          "name": "IHasModificationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
-        },
-        {
-          "name": "IFullAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
-        },
-        {
-          "name": "IDeletionAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
-        },
-        {
-          "name": "IHasDeletionTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
-        },
-        {
-          "name": "ISoftDelete",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [],
