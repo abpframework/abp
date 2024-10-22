@@ -414,12 +414,14 @@ export class PermissionManagementComponent
 
     return this.service.get(this.providerName, this.providerKey).pipe(
       tap((permissionRes: GetPermissionListResultDto) => {
-        const { groups } = permissionRes;
+        const { groups } = permissionRes || {};
+
         this.data = permissionRes;
-        // this.permissionGroupSubject.next(groups);
+
         this.permissionGroupSignal.set(groups);
         this.permissions = getPermissions(groups);
         this.setSelectedGroup(groups[0]);
+        
         this.disabledSelectAllInAllTabs = this.permissions.every(
           per =>
             per.isGranted &&
