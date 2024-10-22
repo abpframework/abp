@@ -26,9 +26,9 @@ Let's begin from the first one: The Integration Services.
 
 ## The Need for the Integration Services
 
-Remember from the [previous part](part-05.md), the Orders page shows products' identities instead of their names:
+Remember from the [previous part](part-05.md), the Orders page shows product's identities instead of their names:
 
-![abp-studio-solution-runner-orders-page](images/abp-studio-solution-runner-orders-page.png)
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item.png)
 
 That is because the Orders module has no access to the product data, so it can not perform a JOIN query to get the names of products from the `Products` table. That is a natural result of the modular design. However, we also don't want to show a product's identity on the UI, which is not a good user experience.
 
@@ -152,8 +152,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ModularCrm.Ordering.Contracts.Enums;
-using ModularCrm.Ordering.Contracts.Services;
+using ModularCrm.Ordering.Enums;
 using ModularCrm.Ordering.Entities;
 using ModularCrm.Products.Integration;
 using Volo.Abp.Application.Services;
@@ -172,7 +171,6 @@ public class OrderAppService : ApplicationService, IOrderAppService
     {
         _orderRepository = orderRepository;
         _productIntegrationService = productIntegrationService;
-        ObjectMapperContext = typeof(OrderingWebModule);
     }
 
     public async Task<List<OrderDto>> GetListAsync()
@@ -182,7 +180,7 @@ public class OrderAppService : ApplicationService, IOrderAppService
         // Prepare a list of products we need
         var productIds = orders.Select(o => o.ProductId).Distinct().ToList();
         var products = (await _productIntegrationService
-            .GetProductsByIdsAsync(productIds))
+                .GetProductsByIdsAsync(productIds))
             .ToDictionary(p => p.Id, p => p.Name);
 
         var orderDtos = ObjectMapper.Map<List<Order>, List<OrderDto>>(orders);
@@ -213,9 +211,9 @@ And also, open the `OrderDto` class (the `OrderDto.cs` file under the `Services`
 
 ````csharp
 using System;
-using ModularCrm.Ordering.Contracts.Enums;
+using ModularCrm.Ordering.Enums;
 
-namespace ModularCrm.Ordering.Contracts.Services;
+namespace ModularCrm.Ordering.Services;
 
 public class OrderDto
 {
@@ -227,11 +225,11 @@ public class OrderDto
 }
 ````
 
-Lastly, open the `OrderingApplicationAutoMapperProfile` class (the `OrderingApplicationAutoMapperProfile.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and ignore the `ProductName` property in the mapping configuration:
+Lastly, open the `OrderingAutoMapperProfile` class (the `OrderingAutoMapperProfile.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and ignore the `ProductName` property in the mapping configuration:
 
 ````csharp
 using AutoMapper;
-using ModularCrm.Ordering.Contracts.Services;
+using ModularCrm.Ordering.Services;
 using ModularCrm.Ordering.Entities;
 using Volo.Abp.AutoMapper;
 
@@ -262,7 +260,7 @@ Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@Model.
 
 ````html
 @page
-@model ModularCrm.Ordering.Pages.Orders.IndexModel
+@model ModularCrm.Ordering.UI.Pages.Ordering.IndexModel
 
 <h1>Orders</h1>
 
@@ -271,11 +269,11 @@ Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@Model.
         <abp-list-group>
             @foreach (var order in Model.Orders)
             {
-            <abp-list-group-item>
-                <strong>Customer:</strong> @order.CustomerName <br />
-                <strong>Product:</strong> @order.ProductName <br />
-                <strong>State:</strong> @order.State
-            </abp-list-group-item>
+                <abp-list-group-item>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </abp-list-group-item>
             }
         </abp-list-group>
     </abp-card-body>
