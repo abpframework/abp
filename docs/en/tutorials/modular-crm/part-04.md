@@ -48,7 +48,7 @@ Since we've created a standard module, it doesn't have multiple layers like the 
 
 ![file-system-odering-module-initial-folder](images/file-system-ordering-module-initial-folder.png)
 
-Because only a single UI package can be chosen, the UI type doesn’t matter. This is why the package name is changed to *ModuleCrm.Ordering.UI*. Additionally, there are no *Domain*, *EntityFrameworkCore*, or *Http* layers like in the DDD module. We're going to use the `ModularCrm.Ordering` package for the domain business logic. You can open `ModularCrm.Ordering.sln` in your favorite IDE (e.g. Visual Studio):
+Because only a single UI package can be chosen, the UI type doesn’t matter. This is why the package name is changed to *ModularCrm.Ordering.UI*. Additionally, there are no *Domain*, *EntityFrameworkCore*, or *Http* layers like in the DDD module. We're going to use the `ModularCrm.Ordering` package for the domain business logic. You can open `ModularCrm.Ordering.sln` in your favorite IDE (e.g. Visual Studio):
 
 ![ordering-module-visual-studio](images/ordering-module-visual-studio.png)
 
