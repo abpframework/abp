@@ -1,0 +1,15 @@
+{
+  "culture": "fa",
+    "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "درخواست OpenID Connect قابل بازیابی نیست.",
+    "TheUserDetailsCannotBbeRetrieved" : "جزئیات کاربر قابل بازیابی نیست.",
+    "TheApplicationDetailsCannotBeFound": "جزئیات اپلیکیشن را نمی توان یافت.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "جزئیات مربوط به اپلیکیشن کلاینت فراخوانی کننده را نمی توان یافت.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "گرنت تایپ مشخص شده {0} پیاده سازی نشده است.",
+    "Authorization": "مجوز",
+    "DoYouWantToGrantAccessToYourData": "آیا می خواهید به {0} اجازه دسترسی به داده های خود را بدهید؟",
+    "ScopesRequested": "محدوده های درخواستی",
+    "Accept": "پذیرش",
+    "Deny": "رد"
+  }
+}

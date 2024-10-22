@@ -62,7 +62,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     [Authorize(CmsKitAdminPermissions.Pages.Create)]
     public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
     {
-        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style);
+        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style, input.LayoutName);
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
@@ -88,6 +88,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         page.SetContent(input.Content);
         page.SetScript(input.Script);
         page.SetStyle(input.Style);
+        page.SetLayoutName(input.LayoutName);
         page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(page);
 

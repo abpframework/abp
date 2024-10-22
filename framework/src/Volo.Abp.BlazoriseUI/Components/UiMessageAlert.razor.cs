@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Blazorise;
@@ -20,6 +19,9 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
 
     protected virtual bool ShowMessageIcon
        => Options?.ShowMessageIcon ?? true;
+
+    protected virtual bool IsMessageHtmlMarkup
+        => Options?.IsMessageHtmlMarkup ?? false;
 
     protected virtual object? MessageIcon => Options?.MessageIcon ?? MessageType switch
     {

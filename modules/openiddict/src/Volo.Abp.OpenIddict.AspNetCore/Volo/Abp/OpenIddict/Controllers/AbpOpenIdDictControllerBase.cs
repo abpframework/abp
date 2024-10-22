@@ -28,6 +28,7 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
     protected IOpenIddictTokenManager TokenManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictTokenManager>();
     protected AbpOpenIddictClaimsPrincipalManager OpenIddictClaimsPrincipalManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimsPrincipalManager>();
     protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory => LazyServiceProvider.LazyGetRequiredService<IAbpClaimsPrincipalFactory>();
+    protected IOptions<AbpClaimsPrincipalFactoryOptions> AbpClaimsPrincipalFactoryOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>();
 
     protected AbpOpenIdDictControllerBase()
     {

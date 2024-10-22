@@ -5,8 +5,6 @@ using Aliyun.Acs.Core.Profile;
 using Aliyun.OSS;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Encryption;

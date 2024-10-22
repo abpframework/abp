@@ -157,7 +157,7 @@
     "ABPCLIExplanation": "ABP CLI (vmesnik ukazne vrstice) je orodje ukazne vrstice za izvajanje nekaterih običajnih operacij za rešitve, ki temeljijo na ABP.",
     "ABPSuiteEasilyCURD": "ABP Suite je orodje, ki vam omogoča preprosto ustvarjanje strani CRUD",
     "WeAreHereToHelp": "Tukaj smo za <span class=\"zero-text\">pomoč</span>",
-    "BrowseOrAskQuestion": "Brskate lahko po naših temah pomoči ali iščete po pogostih vprašanjih ali pa nam postavite vprašanje z uporabo <a href=\"{0}\" class=\"text-success\">kontaktnega obrazca</a>.",
+    "BrowseOrAskQuestion": "Brskate lahko po naših temah pomoči ali iščete po pogostih vprašanjih ali pa nam postavite vprašanje z uporabo <a href=\"{0}\">kontaktnega obrazca</a>.",
     "SearchQuestionPlaceholder": "Iščite v pogosto zastavljenih vprašanjih",
     "WhatIsTheABPCommercial": "Kaj je reklama ABP?",
     "WhatAreDifferencesThanAbpFramework": "Kakšne so razlike med odprtokodnim okvirom ABP in ABP Commercial?",

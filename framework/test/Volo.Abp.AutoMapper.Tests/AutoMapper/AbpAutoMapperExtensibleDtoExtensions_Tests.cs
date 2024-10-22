@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending.TestObjects;

@@ -488,6 +488,10 @@
                       "path": "framework/infrastructure/blob-storing/aws.md"
                     },
                     {
+                      "text": "Google Cloud Storage Provider",
+                      "path": "framework/infrastructure/blob-storing/google.md"
+                    },
+                    {
                       "text": "Create a Custom Provider",
                       "path": "framework/infrastructure/blob-storing/custom-provider.md"
                     }

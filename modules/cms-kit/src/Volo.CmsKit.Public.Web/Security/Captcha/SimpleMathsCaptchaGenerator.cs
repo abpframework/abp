@@ -100,72 +100,83 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
 
     private byte[] GenerateInternal(string stringText, CaptchaOptions options)
     {
-        var random = new Random();
-        var family = MagickNET.FontFamilies.First();
+        try
+        {
+            var random = new Random();
         
-        var drawables = new Drawables()
-            .Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal)
-            .FontPointSize(options.FontSize)
-            .StrokeColor(MagickColors.Transparent);
+            var drawables = new Drawables()
+                .FontPointSize(options.FontSize)
+                .StrokeColor(MagickColors.Transparent);
+            
+            var family = MagickNET.FontFamilies.FirstOrDefault();
+            if (!family.IsNullOrWhiteSpace())
+            {
+                drawables = drawables.Font(family, options.FontStyle, FontWeight.Normal, FontStretch.Normal);
+            }
 
-        var size = (ushort)(drawables.FontTypeMetrics(stringText)?.TextWidth ?? 0);
-        using var image = new MagickImage(MagickColors.White, size + 15, options.Height);
+            var size = (ushort)(drawables.FontTypeMetrics(stringText)?.TextWidth ?? 0);
+            using var image = new MagickImage(MagickColors.White, size + 15, options.Height);
 
-        double position = 0;
-        var startWith = (byte)random.Next(5, 10);
+            double position = 0;
+            var startWith = (byte)random.Next(5, 10);
 
-        foreach (var character in stringText)
-        {
-            var text = character.ToString();
-            var color = options.TextColor[random.Next(0, options.TextColor.Length)];
-            drawables.FillColor(new MagickColor(color.R, color.G, color.B, color.A))
-                .Text(startWith + position,
-                    RandomTextGenerator.GenerateNextFloat(image.BaseHeight / 2.3, image.BaseHeight / 1.7), text);
+            foreach (var character in stringText)
+            {
+                var text = character.ToString();
+                var color = options.TextColor[random.Next(0, options.TextColor.Length)];
+                drawables.FillColor(new MagickColor(color.R, color.G, color.B, color.A))
+                    .Text(startWith + position,
+                        RandomTextGenerator.GenerateNextFloat(image.BaseHeight / 2.3, image.BaseHeight / 1.7), text);
 
-            position += drawables.FontTypeMetrics(text)?.TextWidth ?? 0;
+                position += drawables.FontTypeMetrics(text)?.TextWidth ?? 0;
+            }
+
+            // add rotation
+            var rotation = GetRotation(options);
+            drawables.Rotation(rotation);
+
+            drawables.Draw(image);
+
+            Parallel.For(0, options.DrawLines, _ =>
+            {
+                // ReSharper disable once AccessToDisposedClosure
+                if (image is { IsDisposed: false })
+                {
+                    var x0 = random.Next(0, random.Next(0, 30));
+                    var y0 = random.Next(10, image.Height);
+
+                    var x1 = random.Next(30, image.Width);
+                    var y1 = random.Next(0, image.Height);
+
+                    image.Draw(new Drawables()
+                        .StrokeColor(options.DrawLinesColor[random.Next(0, options.DrawLinesColor.Length)])
+                        .StrokeWidth(RandomTextGenerator.GenerateNextFloat(options.MinLineThickness,
+                            options.MaxLineThickness))
+                        .Line(x0, y0, x1, y1));
+                }
+            });
+
+            Parallel.For(0, options.NoiseRate, _ =>
+            {
+                if (image is { IsDisposed: false })
+                {
+                    var x = random.Next(0, image.Width);
+                    var y = random.Next(0, image.Height);
+                    image.Draw(new Drawables()
+                        .FillColor(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)])
+                        .Point(x, y)
+                    );
+                }
+            });
+
+            image.Resize(new MagickGeometry(options.Width, options.Height) { IgnoreAspectRatio = true });
+
+            return image.ToByteArray(options.Encoder);
         }
-
-        // add rotation
-        var rotation = GetRotation(options);
-        drawables.Rotation(rotation);
-
-        drawables.Draw(image);
-
-        Parallel.For(0, options.DrawLines, _ =>
+        catch (Exception e)
         {
-            // ReSharper disable once AccessToDisposedClosure
-            if (image is { IsDisposed: false })
-            {
-                var x0 = random.Next(0, random.Next(0, 30));
-                var y0 = random.Next(10, image.Height);
-
-                var x1 = random.Next(30, image.Width);
-                var y1 = random.Next(0, image.Height);
-
-                image.Draw(new Drawables()
-                    .StrokeColor(options.DrawLinesColor[random.Next(0, options.DrawLinesColor.Length)])
-                    .StrokeWidth(RandomTextGenerator.GenerateNextFloat(options.MinLineThickness,
-                        options.MaxLineThickness))
-                    .Line(x0, y0, x1, y1));
-            }
-        });
-
-        Parallel.For(0, options.NoiseRate, _ =>
-        {
-            if (image is { IsDisposed: false })
-            {
-                var x = random.Next(0, image.Width);
-                var y = random.Next(0, image.Height);
-                image.Draw(new Drawables()
-                    .FillColor(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)])
-                    .Point(x, y)
-                );
-            }
-        });
-
-        image.Resize(new MagickGeometry(options.Width, options.Height) { IgnoreAspectRatio = true });
-
-        return image.ToByteArray(options.Encoder);
+            return Array.Empty<byte>();
+        }
     }
 
     private double GetRotation(CaptchaOptions options)

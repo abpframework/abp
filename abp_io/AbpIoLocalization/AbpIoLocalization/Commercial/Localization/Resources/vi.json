@@ -157,7 +157,7 @@
     "ABPCLIExplanation": "ABP CLI (Giao diện dòng lệnh) là một công cụ dòng lệnh để thực hiện một số hoạt động phổ biến cho các giải pháp dựa trên ABP.",
     "ABPSuiteEasilyCURD": "ABP Suite là một công cụ cho phép bạn dễ dàng tạo các trang CRUD",
     "WeAreHereToHelp": "Chúng tôi ở đây để <span class=\"zero-text\"> Trợ giúp </span>",
-    "BrowseOrAskQuestion": "Bạn có thể duyệt qua các chủ đề trợ giúp của chúng tôi hoặc tìm kiếm trong các câu hỏi thường gặp hoặc bạn có thể đặt câu hỏi cho chúng tôi bằng cách sử dụng <a href=\"{0}\" class=\"text-success\"> biểu mẫu liên hệ </a>.",
+    "BrowseOrAskQuestion": "Bạn có thể duyệt qua các chủ đề trợ giúp của chúng tôi hoặc tìm kiếm trong các câu hỏi thường gặp hoặc bạn có thể đặt câu hỏi cho chúng tôi bằng cách sử dụng <a href=\"{0}\"> biểu mẫu liên hệ </a>.",
     "SearchQuestionPlaceholder": "Tìm kiếm trong các câu hỏi thường gặp",
     "WhatIsTheABPCommercial": "ABP thương mại là gì?",
     "WhatAreDifferencesThanAbpFramework": "Sự khác biệt giữa Khung ABP nguồn mở và ABP Thương mại là gì?",

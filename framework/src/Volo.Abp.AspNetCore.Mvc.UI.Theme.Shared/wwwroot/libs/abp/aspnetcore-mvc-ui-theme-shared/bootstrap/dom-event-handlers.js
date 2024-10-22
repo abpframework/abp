@@ -210,7 +210,7 @@
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
         abp.dom.initializers.initializeAutocompleteSelects(args.$el.findWithSelf('.auto-complete-select'));
-        abp.dom.initializers.initializeAbpCspStyles($("link[abp-csp-style]"));
+        abp.dom.initializers.initializeAbpCspStyles(args.$el.findWithSelf("link[abp-csp-style]"));
     });
 
     abp.dom.onNodeRemoved(function (args) {

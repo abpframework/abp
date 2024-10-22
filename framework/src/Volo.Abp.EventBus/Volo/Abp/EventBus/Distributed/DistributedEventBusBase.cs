@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.EventBus.Local;
@@ -224,7 +223,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             await LocalEventBus.PublishAsync(distributedEvent);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             // ignored
         }
@@ -236,7 +235,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             await LocalEventBus.PublishAsync(distributedEvent);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             // ignored
         }
