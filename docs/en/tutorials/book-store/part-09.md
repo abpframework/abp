@@ -801,7 +801,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
         />
       </div>
       <div class="form-group">
-        <label for="author-short-bio">Short Bio</label><span> * </span>
+        <label for="author-short-bio">{%{{{ '::Short Bio' | abpLocalization }}}%}</label><span> * </span>
         <textarea id="author-short-bio" class="form-control" formControlName="shortBio" rows="12"></textarea>
       </div>
     </form>
