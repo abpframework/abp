@@ -29,14 +29,14 @@ Here is a brief list of titles explained in the next sections:
 * Docs Module: Show larger images on the same page
 * Google Cloud Storage BLOB Provider
 * Removed React Native mobile option from free templates
-* Suite: Better naming for multiple navigation properties to same entity
+* Suite: Better naming for multiple navigation properties to the same entity
 * CMS Kit Pro: Feedback feature improvements
 
 ### Upgraded to .NET 9.0
 
 We've upgraded ABP to .NET 9.0, so you need to move your solutions to .NET 9.0 if you want to use ABP 9.0. You can check [Microsoft’s Migrate from ASP.NET Core 8.0 to 9.0 documentation](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90), to see how to update an existing ASP.NET Core 8.0 project to ASP.NET Core 9.0.
 
-> **Note:** Since the stable version of .NET 9 hasn't released yet, we upgraded ABP to .NET v9.0-rc.2. We will update the entire ABP Platform to .NET 9 stable, after Microsoft releases it on November 13-14 with the stable ABP 9.0 release.
+> **Note:** Since the stable version of .NET 9 hasn't been released yet, we upgraded ABP to .NET v9.0-rc.2. We will update the entire ABP Platform to .NET 9 stable, after Microsoft releases it on November 13-14 with the stable ABP 9.0 release.
 
 ### Introducing the Extension Property Policy
 
@@ -129,9 +129,7 @@ If you want to access the open-source React-Native template, you can visit the a
 
 Prior to this version, when you defined multiple (same) navigation properties to same entity, then ABP Suite was renaming them with a duplicate number.
 
-Consider the following scenario for an example: 
-
-If you have a book with an author and coauthor, prior to this version ABP Suite was creating a DTO class as below:
+As an example,let's assume that you have a book with an author and coauthor, prior to this version ABP Suite was creating a DTO class as below:
 
 ```csharp
 public class BookWithNavigationPropertiesDto
@@ -158,7 +156,7 @@ public class BookWithNavigationPropertiesDto
 }
 ```
 
-ABP Suite respects the specified property name for the related navigation property and generate codes regarding that (by removing the *Id* postfix for the related places):
+ABP Suite respects the specified property name for the related navigation property and generates codes regarding that (by removing the *Id* postfix for the related places):
 
 ![](suite-navigation-properties.png)
 
@@ -170,7 +168,7 @@ In this version, we revised the [CMS Kit's Feedback Feature](https://abp.io/docs
 * You can now require users to enter a note when submitting negative feedback. This can be configured in the settings page, ensuring that users provide context when they submit critical feedback.
 * We've added a feedback user ID that is saved in local storage. This allows you to track the number of unique users submitting feedback or determine if the same user is sending new feedback on updated documents.
 
-> For further information about Page Feedback System, please refer to the [documentation](https://abp.io/docs/9.0/modules/cms-kit-pro/page-feedback).
+> For further information about the Page Feedback System, please refer to the [documentation](https://abp.io/docs/9.0/modules/cms-kit-pro/page-feedback).
 
 ## Community News
 
@@ -184,7 +182,7 @@ Also, don't miss out on the co-founder of [Volosoft](https://volosoft.com/) and 
 
 ### ABP Team Attended the .NETDeveloperDays 2024
 
-We are thrilled to announce that we sponsored the [.NETDevelopersDays 2024](https://developerdays.eu/warsaw/) event. It's one of the premier conferences for .NET developers with **Over 1.000 attendees**, **50+ expert speakers** and **40+ sessions and workshops**.
+We are thrilled to announce that we sponsored the [.NETDevelopersDays 2024](https://developerdays.eu/warsaw/) event. It's one of the premier conferences for .NET developers with **over 1.000 attendees**, **50+ expert speakers**, and **40+ sessions and workshops**.
 
 ![](dotnet-developer-days-2024.jpg)
 
@@ -192,11 +190,11 @@ Core team members of the ABP Framework, [Halil Ibrahim Kalkan](https://twitter.c
 
 These 2 days with the team were all about chatting and having fun with amazing attendees and speakers. We met with talented and passionate software developers and introduced the [ABP](https://github.com/abpframework/abp) - web application framework built on ASP.NET Core - to them.
 
-Also, we made a raffle and gifted a Xbox Series S to the lucky winner at the event: 
+Also, we made a raffle and gifted an Xbox Series S to the lucky winner at the event: 
 
 ![](abp-team-raffle.jpg)
 
-Thanks to everyone who joined the fun!
+Thanks to everyone who joined the fun and visited at our booth :)
 
 ### New ABP Community Articles
 
