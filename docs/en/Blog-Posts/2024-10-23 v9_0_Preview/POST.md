@@ -40,19 +40,82 @@ We've upgraded ABP to .NET 9.0, so you need to move your solutions to .NET 9.0 i
 
 ### Introducing the Extension Property Policy
 
-//TODO:...
+ABP provides a module entity extension system, which is a high level extension system that allows you to define new properties for existing entities of the depended modules. This is a powerful way to dynamically add additional properties to entities without modifying the core structure. However, managing these properties across different modules and layers can become complex, especially when different policies or validation rules are required.
 
-### Allow Wildcards For RedirectAllowedURLs
+**Extension Property Policy** feature allows developers to define custom policies for these properties, such as access control, validation, and data transformation, directly within ABP.
 
-//TODO:...
+**Example:**
+
+```csharp
+ObjectExtensionManager.Instance.Modules().ConfigureIdentity(identity =>
+{
+    identity.ConfigureUser(user =>
+    {
+        user.AddOrUpdateProperty<string>( //property type: string
+            "SocialSecurityNumber", //property name
+            property =>
+            {
+                //validation rules
+                property.Attributes.Add(new RequiredAttribute());
+                property.Attributes.Add(new StringLengthAttribute(64) {MinimumLength = 4});
+
+                //Global Features
+                property.Policy.GlobalFeatures = new ExtensionPropertyGlobalFeaturePolicyConfiguration()
+                {
+                     Features = new[] {"GlobalFeatureName1", "GlobalFeatureName2"},
+                     RequiresAll = true
+                };
+
+                //Features
+                property.Policy.Features = new ExtensionPropertyFeaturePolicyConfiguration()
+                {
+                    Features = new[] {"FeatureName1", "FeatureName2"},
+                    RequiresAll = false
+                };
+
+                //Permissions
+                property.Policy.Permissions = new ExtensionPropertyPermissionPolicyConfiguration()
+                {
+                    PermissionNames = new[] {"AbpTenantManagement.Tenants.Update", "AbpTenantManagement.Tenants.Delete"},
+                    RequiresAll = true
+                };
+            }
+        );
+    });
+});
+```
+
+### Allow Wildcards for RedirectAllowedURLs
+
+In this version, we made an improvement to the `RedirectAllowedUrls` configuration, which now allows greater flexibility in defining redirect URLs. Previously, developers faced restrictions when configuring URL redirects. Specifically, the `RedirectAllowedUrls` did not support using **wildcards (*)**, limiting how developers could specify which URLs were permissible for redirects.
+
+With the new changes in [#20628](https://github.com/abpframework/abp/pull/20628), the restriction has been relaxed, allowing developers to define redirect URLs that include wildcards. This makes it easier to handle scenarios where a broad range of URLs need to be allowed, without explicitly listing each one.
+
+```json
+{
+  "App": {
+    //...
+    "RedirectAllowedUrls": "http://*.domain,http://*.domain:4567"
+  }
+```
 
 ### Docs Module: Show Larger Images
 
-//TODO:...
+As developers, we rely heavily on clear documentation to understand complex concepts and workflows. Often, an image is worth more than a thousand words, especially when explaining intricate user interfaces, workflows, or code structures. In recognition of this, we recently rolled out an improvement to the Docs Module that enables larger images to be displayed more effectively.
+
+![](docs-image-larger.png)
+
+Before this enhancement, images embedded in documentation were often limited in size, which sometimes made it difficult to see the details in the diagrams, screenshots, or other visual contents. Now, images can be displayed at a larger size, offering better clarity and usability.
+
+> See [https://github.com/abpframework/abp/pull/20557](https://github.com/abpframework/abp/pull/20557) for more information.
 
 ### Google Cloud Storage BLOB Provider
 
-//TODO:...
+ABP provides a BLOB Storing System, which allows you to work with BLOBs. This system is typically used to store file contents in a project and read these file contents when they are needed. Since ABP provides an abstraction to work with BLOBs, it also provides some pre-built storage providers such as [Azure](https://abp.io/docs/latest/framework/infrastructure/blob-storing/azure), [Aws](https://abp.io/docs/latest/framework/infrastructure/blob-storing/aws) and [Aliyun](https://abp.io/docs/latest/framework/infrastructure/blob-storing/aliyun).
+
+In this version, we have introduced a new BLOB Storage Provider for Google Cloud Storage: [`Volo.Abp.BlobStoring.Google`](https://www.nuget.org/packages/Volo.Abp.BlobStoring.Google)
+
+You can [read the documentation](https://abp.io/docs/9.0/framework/infrastructure/blob-storing/google) for configurations and use Google Cloud Storage as your BLOB Storage Provider easily.
 
 ### Removed React Native Mobile Option From Free Templates
 
