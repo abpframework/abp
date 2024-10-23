@@ -17,7 +17,7 @@ The .NET 9 stable version is planned to be released on **November 12, 2024** bef
 
 - There are many enhancements and bug fixes with ABP 9.0. Read the ABP 9 announcement:
   
-  TODO
+  https://abp.io/blog/announcing-abp-9-0-release-candidate
   
 - 
   Read **our migration ABP 9.0 migration guide** from the following link:
