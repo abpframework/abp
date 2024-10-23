@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
+using ListShuffle;
+using ThreadSafeRandomizer;
 
 namespace Volo.Abp;
 
@@ -11,8 +12,6 @@ namespace Volo.Abp;
 /// </summary>
 public static class RandomHelper
 {
-    private static readonly Random Rnd = new Random();
-
     /// <summary>
     /// Returns a random number within a specified range.
     /// </summary>
@@ -25,10 +24,7 @@ public static class RandomHelper
     /// </returns>
     public static int GetRandom(int minValue, int maxValue)
     {
-        lock (Rnd)
-        {
-            return Rnd.Next(minValue, maxValue);
-        }
+        return ThreadSafeRandom.Instance.Next(minValue, maxValue);
     }
 
     /// <summary>
@@ -42,10 +38,7 @@ public static class RandomHelper
     /// </returns>
     public static int GetRandom(int maxValue)
     {
-        lock (Rnd)
-        {
-            return Rnd.Next(maxValue);
-        }
+        return ThreadSafeRandom.Instance.Next(maxValue);
     }
 
     /// <summary>
@@ -54,10 +47,7 @@ public static class RandomHelper
     /// <returns>A 32-bit signed integer greater than or equal to zero and less than <see cref="int.MaxValue"/>.</returns>
     public static int GetRandom()
     {
-        lock (Rnd)
-        {
-            return Rnd.Next();
-        }
+        return ThreadSafeRandom.Instance.Next();
     }
 
     /// <summary>
@@ -91,18 +81,9 @@ public static class RandomHelper
     /// <param name="items">items</param>
     public static List<T> GenerateRandomizedList<T>([NotNull] IEnumerable<T> items)
     {
-        Check.NotNull(items, nameof(items));
+        var list = new List<T>(items);
+        list.Shuffle();
 
-        var currentList = new List<T>(items);
-        var randomList = new List<T>();
-
-        while (currentList.Any())
-        {
-            var randomIndex = RandomHelper.GetRandom(0, currentList.Count);
-            randomList.Add(currentList[randomIndex]);
-            currentList.RemoveAt(randomIndex);
-        }
-
-        return randomList;
+        return list;
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
@@ -16,6 +16,7 @@
     <RootNamespace />
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="ListShuffle" />
     <PackageReference Include="System.Collections.Immutable" />
     <PackageReference Include="Microsoft.Extensions.Localization" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
@@ -32,6 +33,7 @@
     <PackageReference Include="System.Linq.Queryable" />
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Nito.AsyncEx.Context" />
+    <PackageReference Include="ThreadSafeRandomizer" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.Threading.Tasks.Extensions" />
