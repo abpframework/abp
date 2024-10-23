@@ -84,7 +84,8 @@ public class BookWithNavigationPropertiesDto
 
     public AuthorDto Author { get; set; }
 
-    public AuthorDto Author1 { get; set; }
+    //used the specified property name
+    public AuthorDto CoAuthor { get; set; }
 }
 ```
 
