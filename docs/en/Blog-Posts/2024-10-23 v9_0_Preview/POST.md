@@ -1,5 +1,7 @@
 # ABP Platform 9.0 Has Been Released Based on .NET 9.0
 
+![](cover-image.png)
+
 Today, we are happy to release the [ABP](https://abp.io/) version **9.0 RC** (Release Candidate). This blog post introduces the new features and important changes in this new version.
 
 Try this version and provide feedback for a more stable version of ABP v9.0! Thanks to all of you.
@@ -20,6 +22,47 @@ There are a few breaking changes in this version that may affect your applicatio
 
 In this section, I will introduce some major features released in this version.
 Here is a brief list of titles explained in the next sections:
+
+* Upgraded to .NET 9.0
+* Introducing the **Extension Property Policy**
+* Allow wildcards for Redirect Allowed URLs
+* Docs Module: Show larger images on the same page
+* Google Cloud Storage BLOB Provider
+* Removed React Native mobile option from free templates
+* Suite: Better naming for multiple navigation properties to same entity
+* CMS Kit Pro: Feedback feature improvements
+
+### Upgraded to .NET 9.0
+
+We've upgraded ABP to .NET 9.0, so you need to move your solutions to .NET 9.0 if you want to use ABP 9.0. You can check [Microsoft’s Migrate from ASP.NET Core 8.0 to 9.0 documentation](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90), to see how to update an existing ASP.NET Core 8.0 project to ASP.NET Core 9.0.
+
+> **Note:** Since the stable version of .NET 9 hasn't released yet, we upgraded ABP to .NET v9.0-rc.2. We will update the entire ABP Platform to .NET 9 stable, after Microsoft releases it on November 13-14 with the stable ABP 9.0 release.
+
+### Introducing the Extension Property Policy
+
+//TODO:...
+
+### Allow Wildcards For RedirectAllowedURLs
+
+//TODO:...
+
+### Docs Module: Show Larger Images
+
+//TODO:...
+
+### Google Cloud Storage BLOB Provider
+
+//TODO:...
+
+### Removed React Native Mobile Option From Free Templates
+
+//TODO:...
+
+### Suite: Better Naming For Multiple Navigation Properties
+
+//TODO:...
+
+### CMS Kit Pro: Feedback Feature Improvements
 
 //TODO:...
 
