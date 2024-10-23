@@ -6,7 +6,49 @@ This document is a guide for upgrading ABP v8.x solutions to ABP v9.0. There are
 
 ## Open-Source (Framework)
 
+### Upgraded to .NET 9.0
 
+We've upgraded ABP to .NET 9.0, so you need to move your solutions to .NET 9.0 if you want to use ABP 9.0. You can check Microsoft’s [Migrate from ASP.NET Core 8.0 to 9.0](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90) documentation, to see how to update an existing ASP.NET Core 8.0 project to ASP.NET Core 9.0.
+
+After updating your solution to .NET 9.0, you should apply the following steps:
+
+* Change the `app.UseStaticFiles()` to `app.MapAbpStaticAssets()` in your module classes of your host applications.
+    * Some JavaScript/CSS/Images files exist in the Virtual File System, but ASP NET Core 9's `MapStaticAssets` can't handle them. This is why we created the **MapAbpStaticAssets**.
+* Upgrade the Microsoft packages (also other packages) for .NET 9.0. You can check the [Directory.Packages.props](https://github.com/abpframework/abp/blob/rel-9.0/Directory.Packages.props) file for package versions and update the necessary ones.
+
+### Made the IdentitySession Entity Extensible & Updated the MaxIpAddressesLength
+
+In this version, we made the `IdentitySession` entity as extensible and as a result of that, you should aware of the changes explained below:
+
+* `IdentitySession` entity inherits from **AggregateRoot** instead of **BasicAggregateRoot**. Here is the PR for the related change: [#20771](https://github.com/abpframework/abp/pull/20771)
+* `IdentitySession` entity's **MaxIpAddress** property now allows up to 2048 character. You can check the related PR, [here](https://github.com/abpframework/abp/pull/20819).
+
+You should create a new migration and apply it to your database for the changes explained above.
+
+### Removed Auditing Properties From the `OpenIddictAuthorization` and `OpenIddictToken` Entities
+
+In this version, we removed the auditing properties from the `OpenIddictAuthorization` and `OpenIddictToken` entities. Now, these entities are inherited from `AggregateRoot` instead of `FullAuditedAggregateRoot`.
+
+> See the PR, if you need further information: https://github.com/abpframework/abp/pull/20671
+
+Since the auditing properties are removed, you should create a new migration and apply it to your database.
+
+### Updated Method Signature of `AbpCrudPageBase`
+
+The method signature of [framework/src/Volo.Abp.BlazoriseUI/AbpCrudPageBase.cs](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.BlazoriseUI/AbpCrudPageBase.cs) has been changed as follows:
+
+```diff
+- IEnumerable<TableColumn> GetExtensionTableColumns(string moduleName, string entityType) 
++ Task<List<TableColumn>> GetExtensionTableColumnsAsync(string moduleName, string entityType)
+```
+
+### Removed React Native Mobile Option From Open Source Templates
+
+In this version, we removed the **React Native** mobile option from the open source templates due to maintaining reasons. We updated the related documents and the ABP CLI (both old & new CLI) for this change, and with v9.0, you will not be able to create a free template with react-native as the mobile option.
+
+> **Note:** Pro templates still provides the **React Native** as the mobile option and we will continue supporting it.
+
+If you want to access the open-source React-Native template, you can visit the **abp-archive** repository: https://github.com/abpframework/abp-archive
 
 ## PRO
 
