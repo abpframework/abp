@@ -1644,7 +1644,52 @@
         },
         {
           "text": "Layered Solution",
-          "path": "solution-templates/layered-web-application"
+          "path": "solution-templates/layered-web-application",
+          "items": [
+            {
+              "text": "Deployment",
+              "path": "solution-templates/layered-web-application/deployment",
+              "items": [
+                {
+                  "text": "Docker Deployment",
+                  "path": "solution-templates/layered-web-application/deployment/deployment-docker-compose.md"
+                },
+                {
+                  "text": "Azure Deployment",
+                  "items": [
+                    {
+                      "text": "Deploy to Azure Web App Service",
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/azure-deployment.md"
+                    },
+                    {
+                      "text": "Creating an Azure Web App Service Environment",
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step1-create-azure-resources.md"
+                    },
+                    {
+                      "text": "Customizing the Configuration of Your ABP Application",
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step2-configuration-application.md"
+                    },
+                    {
+                      "text": "Deploying Application With GitHub Actions",
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step3-deployment-github-action.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "IIS Deployment",
+                  "path": "solution-templates/layered-web-application/deployment/deployment-iis.md"
+                },
+                {
+                  "text": "IdentityServer Deployment",
+                  "path": "solution-templates/layered-web-application/deployment/identityserver-deployment.md"
+                },
+                {
+                  "text": "OpenIddict Deployment",
+                  "path": "solution-templates/layered-web-application/deployment/openiddict-deployment.md"
+                }
+              ]
+            }
+          ]
         },
         {
           "text": "Microservice Solution",
