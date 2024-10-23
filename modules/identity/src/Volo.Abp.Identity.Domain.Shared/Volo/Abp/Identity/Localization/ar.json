@@ -26,7 +26,7 @@
     "DisplayName:Email": "البريد الإلكتروني",
     "DisplayName:PhoneNumber": "رقم الهاتف",
     "DisplayName:TwoFactorEnabled": "التحقق من عاملين",
-    "DisplayName:IsActive": "نشيط",
+    "DisplayName:IsActive": "فعّال",
     "DisplayName:LockoutEnabled": "تأمين الحساب",
     "Description:LockoutEnabled": "قفل الحساب بعد محاولات تسجيل الدخول الفاشلة",
     "NewRole": "دور جديد",
