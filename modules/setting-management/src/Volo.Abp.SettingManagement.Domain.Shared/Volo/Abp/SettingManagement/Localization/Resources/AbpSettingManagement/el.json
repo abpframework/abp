@@ -31,6 +31,7 @@
     "Feature:SettingManagementEnable": "Ενεργοποίηση διαχείρισης ρυθμίσεων",
     "Feature:SettingManagementEnableDescription": "Ενεργοποίηση συστήματος διαχείρισης ρυθμίσεων στην εφαρμογή.",
     "Feature:AllowChangingEmailSettings": "Επιτρέψτε την αλλαγή των ρυθμίσεων email.",
-    "Feature:AllowChangingEmailSettingsDescription": "Επιτρέψτε την αλλαγή των ρυθμίσεων email."
+    "Feature:AllowChangingEmailSettingsDescription": "Επιτρέψτε την αλλαγή των ρυθμίσεων email.",
+    "SmtpPasswordPlaceholder": "Εισαγάγετε μια τιμή για ενημέρωση κωδικού πρόσβασης"
   }
 }

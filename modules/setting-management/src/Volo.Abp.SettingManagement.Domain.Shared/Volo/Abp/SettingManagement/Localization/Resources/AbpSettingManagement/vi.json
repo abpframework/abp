@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Bật quản lý cài đặt",
     "Feature:SettingManagementEnableDescription": "Bật cài đặt hệ thống quản lý trong ứng dụng.",
     "Feature:AllowChangingEmailSettings": "Cho phép thay đổi cài đặt email.",
-    "Feature:AllowChangingEmailSettingsDescription": "Cho phép thay đổi cài đặt email."
+    "Feature:AllowChangingEmailSettingsDescription": "Cho phép thay đổi cài đặt email.",
+    "SmtpPasswordPlaceholder": "Nhập một giá trị để cập nhật mật khẩu"
   }
 }

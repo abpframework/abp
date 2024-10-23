@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "सेटिंग प्रबंधन सक्षम करें",
     "Feature:SettingManagementEnableDescription": "एप्लिकेशन में सेटिंग प्रबंधन प्रणाली सक्षम करें।",
     "Feature:AllowChangingEmailSettings": "ईमेल सेटिंग्स बदलने की अनुमति दें।",
-    "Feature:AllowChangingEmailSettingsDescription": "ईमेल सेटिंग्स बदलने की अनुमति दें।"
+    "Feature:AllowChangingEmailSettingsDescription": "ईमेल सेटिंग्स बदलने की अनुमति दें।",
+    "SmtpPasswordPlaceholder": "पासवर्ड अपडेट करने के लिए एक मान दर्ज करें"
   }
 }

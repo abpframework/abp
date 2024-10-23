@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Aktivieren Sie die Einstellungsverwaltung",
     "Feature:SettingManagementEnableDescription": "Aktivieren Sie das Einstellungsverwaltungssystem in der Anwendung.",
     "Feature:AllowChangingEmailSettings": "Erlauben Sie das Ändern der E-Mail-Einstellungen.",
-    "Feature:AllowChangingEmailSettingsDescription": "Erlauben Sie das Ändern der E-Mail-Einstellungen."
+    "Feature:AllowChangingEmailSettingsDescription": "Erlauben Sie das Ändern der E-Mail-Einstellungen.",
+    "SmtpPasswordPlaceholder": "Geben Sie einen Wert ein, um das Passwort zu aktualisieren"
   }
 }

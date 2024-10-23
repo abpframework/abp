@@ -33,6 +33,7 @@
     "Feature:SettingManagementEnable": "Aktivera hantering av inställningar",
     "Feature:SettingManagementEnableDescription": "Aktivera inställningshanteringssystem i applikationen.",
     "Feature:AllowChangingEmailSettings": "Tillåt ändring av e-postinställningar.",
-    "Feature:AllowChangingEmailSettingsDescription": "Tillåt ändring av e-postinställningar."
+    "Feature:AllowChangingEmailSettingsDescription": "Tillåt ändring av e-postinställningar.",
+    "SmtpPasswordPlaceholder": "Ange ett värde för att uppdatera lösenordet"
   }
 }

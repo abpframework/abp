@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Instellingenbeheer inschakelen",
     "Feature:SettingManagementEnableDescription": "Schakel het instellingsbeheersysteem in de toepassing in.",
     "Feature:AllowChangingEmailSettings": "Toestaan om e-mailinstellingen te wijzigen.",
-    "Feature:AllowChangingEmailSettingsDescription": "Toestaan om e-mailinstellingen te wijzigen."
+    "Feature:AllowChangingEmailSettingsDescription": "Toestaan om e-mailinstellingen te wijzigen.",
+    "SmtpPasswordPlaceholder": "Voer een waarde in om het wachtwoord bij te werken"
   }
 }

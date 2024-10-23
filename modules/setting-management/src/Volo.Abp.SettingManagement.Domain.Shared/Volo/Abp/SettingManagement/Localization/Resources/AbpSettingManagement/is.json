@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Virkja stillingar",
     "Feature:SettingManagementEnableDescription": "Virkja stillingar í forritinu.",
     "Feature:AllowChangingEmailSettings": "Leyfa að breyta stillingum tölvupósts.",
-    "Feature:AllowChangingEmailSettingsDescription": "Leyfa að breyta stillingum tölvupósts."
+    "Feature:AllowChangingEmailSettingsDescription": "Leyfa að breyta stillingum tölvupósts.",
+    "SmtpPasswordPlaceholder": "Sláðu inn gildi til að uppfæra lykilorð"
   }
 }
