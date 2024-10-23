@@ -139,36 +139,85 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 <!-- DO NOT WORRY, ONLY ONE REQUEST WILL BE MADE -->
 ```
 
-...or...
+## Handle request status
+To handle the request status `ListService` provides a `requestStatus$` observable. This observable emits the current status of a request, which can be one of the following values: `idle`, `loading`, `success` or `error`. These statuses allow you to easily manage the UI flow based on the request's state.
 
+![RequestStatus](./images/list-service-request-status.gif)
 
 ```js
-  @Select(BookState.getBooks)
-  books$: Observable<BookDto[]>;
+import { ListService } from '@abp/ng.core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { BookDto, BooksService } from './books.service';
 
-  @Select(BookState.getBookCount)
-  bookCount$: Observable<number>;
+@Component({
+  standalone: true,
+  selector: 'app-books',
+  templateUrl: './books.component.html',
+  providers: [ListService, BooksService],
+  imports: [AsyncPipe],
+})
+export class BooksComponent {
+  list = inject(ListService);
+  booksService = inject(BooksService);
 
-  ngOnInit() {
-    this.list.hookToQuery((query) => this.store.dispatch(new GetBooks(query))).subscribe();
+  items = new Array<BookDto>();
+  count = 0;
+
+  //It's an observable variable
+  requestStatus$ = this.list.requestStatus$;
+
+  ngOnInit(): void {
+    this.list
+      .hookToQuery(() => this.booksService.getList())
+      .subscribe(response => {
+        this.items = response.items;
+        this.count = response.totalCount;
+      });
   }
+}
 ```
 
 ```html
-<!-- simplified representation of the template -->
+<div class="card">
+  <div class="card-header">
+    @if (requestStatus$ | async; as status) {
+      @switch (status) {
+        @case ('loading') {
+          <div style="height: 62px">
+            <div class="spinner-border" role="status" id="loading">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        }
+        @case ('error') {
+          <h4>Error occured</h4>
+        }
+        @default {
+          <h4>Books</h4>
+        }
+      }
+    }
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+      </tr>
+    </thead>
 
-<ngx-datatable
-  [rows]="(books$ | async) || []"
-  [count]="(bookCount$ | async) || 0"
-  [list]="list"
-  default
->
-  <!-- column templates here -->
-</ngx-datatable>
+    <tbody>
+      @for (book of items; track book.id) {
+        <tr>
+          <td>{{ book.id }}</td>
+          <td>{{ book.name }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
 ```
-
-> We do not recommend using the NGXS store for CRUD pages unless your application needs to share list information between components or use it later on in another page.
-
 
 ## How to Refresh Table on Create/Update/Delete
 
@@ -182,15 +231,6 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
       // Other subscription logic here
     });
 ```
-
-...or...
-
-```js
-  this.store.dispatch(new DeleteBook(id)).subscribe(this.list.get);
-```
-
-> We do not recommend using the NGXS store for CRUD pages unless your application needs to share list information between components or use it later on in another page.
-
 
 ## How to Implement Server-Side Search in a Table
 
