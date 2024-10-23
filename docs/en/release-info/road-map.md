@@ -4,43 +4,39 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v9.0
+### v9.1
 
-The next version will be 9.0 and planned to release the stable 9.0 version in November 2024. We will be mostly working on the following topics:
+The next version will be 9.1 and planned to release the stable 9.1 version in January 2025. We will be mostly working on the following topics:
 
 * Framework
-  * Upgrading to .NET 9.0
-  * Google Cloud Storage BLOB Provider
-  * Better handling localization resources in a microservice scenario
+  * Lazy expandable feature for documentation
+  * Unify the bundling system of Blazor and MVC
   * SSR support for the Angular UI
   * Upgrading 3rd-party dependencies
 
 * ABP Suite
-  * Multiple navigation properties to the same target entity
   * Define navigation properties without target string property dependency
   * Improvements one-to-many scenarios
   * Access to default code generation templates for customized templates
+  * File Upload Modal enhancements
 
 * ABP Studio
-  * Blazor WebApp UI option for the new startup templates
-  * Execution order (dependency management) for Solution Runner
   * Automate more details on new service creation for a microservice solution
   * Support multiple concurrent Kubernetes deployment/integration scenarios
-  * Show the README file when you create a new solution or open an existing solution
-  * Improve ABP Suite code-generation possibilities for microservice solutions
-  * Improve the module installation experience
+  * Improve the module installation experience / installation guides
   * Auto-install 3rd-party dependencies
   * Better handle long log files
   * Allow to directly create new solutions with ABP's RC (Release Candidate) versions
   * Support Intel processors for Mac computers, support ARM chipset for Windows and support Linux OS
   * Improve client proxy generation experience
+  * Modular Monolith Application Startup Template
 
 * Application modules
   * Account module: Support mixed social/local login scenarios
+  * Idle session warning
   * UI/UX improvements on existing application modules
 
 * New tutorials
-  * Modular monolith development
   * Microservice development
 
 ## Backlog Items
@@ -83,7 +79,6 @@ Here, are some of the important planned features for next ABP Studio versions:
 
 * Theme builder for the LeptonX theme
 * Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects.
-* Add status bar to the built-in browser to easily see errors
 * Swagger authentication support for the built-in browser
 * Show related requests/events (traces) together in the solution runner panel
 * Integrate common tool dashboards into ABP Studio (such a Garana, Redis, RabbitMQ, Kibana, etc)
@@ -94,8 +89,8 @@ Here, are some of the important planned features for next ABP Studio versions:
 * Downloading samples in ABP studio
 * Built-in ABP documentation experience
 * Auto-execute terminal commands in markdown files
-* Compare changed on the startup templates when a new ABP version is published
-* Remove unused projects while downloading source code of an existing module
+* Compare changes on the startup templates when a new ABP version is published
+* Remove unused projects while downloading the source code of an existing module
 * Testing/hosting applications for module templates
 * Easily explore all module and package dependencies of a large solution
 * Built-in deployment options
@@ -106,7 +101,7 @@ Here, are some of the important planned features for next ABP Studio versions:
 
 [ABP Suite](../suite/index.md) is a GUI application that is mainly used to generate CRUD style pages in your application. You define your entity and it can generate all the code from the database layer to the UI layer. The generated code is clean and a perfect starting point to implement your custom requirements on top of it.
 
-Here, are some of the important planned features for next ABP Suite versions:
+Here, are some of the important planned features for the next ABP Suite versions:
 
 * Handle image properties for entities
 * Allow to define extra properties for DTOs those are not a part of the entity
