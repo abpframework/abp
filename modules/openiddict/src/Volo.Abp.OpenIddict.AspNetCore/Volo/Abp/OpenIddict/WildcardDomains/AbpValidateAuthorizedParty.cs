@@ -5,10 +5,10 @@ using OpenIddict.Server;
 
 namespace Volo.Abp.OpenIddict.WildcardDomains;
 
-public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<AbpValidateAuthorizedParty, OpenIddictServerHandlers.Session.ValidateAuthorizedParty, OpenIddictServerEvents.ValidateLogoutRequestContext>
+public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<AbpValidateAuthorizedParty, OpenIddictServerHandlers.Session.ValidateAuthorizedParty, OpenIddictServerEvents.ValidateEndSessionRequestContext>
 {
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
-        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateLogoutRequestContext>()
+        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateEndSessionRequestContext>()
             .UseScopedHandler<AbpValidateAuthorizedParty>()
             .SetOrder(OpenIddictServerHandlers.Session.ValidateEndpointPermissions.Descriptor.Order + 1_000)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
@@ -22,7 +22,7 @@ public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<AbpVal
         OriginalHandler = new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager);
     }
 
-    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateEndSessionRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 

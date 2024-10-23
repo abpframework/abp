@@ -15,7 +15,7 @@ builder.Services.AddOidcAuthentication(options =>
     options.ProviderOptions.ClientId = "AbpBlazorWASMApp";
     options.ProviderOptions.ResponseType = "code";
 
-    options.UserOptions.NameClaim = JwtClaimTypes.Name;
+    options.UserOptions.NameClaim = JwtClaimTypes.PreferredUserName;
     options.UserOptions.RoleClaim = JwtClaimTypes.Role;
 
     options.ProviderOptions.DefaultScopes.Add("roles");

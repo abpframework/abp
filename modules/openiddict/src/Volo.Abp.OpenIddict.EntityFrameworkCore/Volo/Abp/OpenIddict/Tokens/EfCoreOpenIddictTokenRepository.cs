@@ -117,4 +117,20 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
                 entity => entity.SetProperty(token => token.Status, OpenIddictConstants.Statuses.Revoked),
                 GetCancellationToken(cancellationToken));
     }
+
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
+    {
+        return await (from token in await GetQueryableAsync()
+            where token.ApplicationId == applicationId
+            select token).ExecuteUpdateAsync(entity => entity.SetProperty(
+            token => token.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
+    }
+
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken)
+    {
+        return await (from token in await GetQueryableAsync()
+            where token.Subject == subject
+            select token).ExecuteUpdateAsync(entity => entity.SetProperty(
+            token => token.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
+    }
 }
