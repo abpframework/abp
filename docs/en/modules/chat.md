@@ -100,19 +100,19 @@ You can visit [Chat module package list page](https://abp.io/packages?moduleName
 
 ## User interface
 
-#### Manage chat feature
+### Manage chat feature
 
 Chat module defines the chat feature, you need to enable the chat feature to use chat.
 
 ![chat-feature](../images/chat-feature.png)
 
-#### Chat page
+### Chat page
 
 This is the page that users send messages to each other.
 
 ![chat-page](../images/chat-page.png)
 
-#### Chat icon on navigation bar
+### Chat icon on navigation bar
 
 An icon that shows unread message count of the user and leads to chat page when clicked is added to navigation menu.
 

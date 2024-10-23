@@ -69,7 +69,11 @@ The next step is to select the database provider (or providers) you want to supp
 
 ![abp-studio-create-new-module-dialog-step-db](images/abp-studio-create-new-module-dialog-step-db.png)
 
-Since our main application is using Entity Framework Core and we will use the `ModularCrm.Products` module only for that main application, we can select the *Entity Framework Core* option and click the *Create* button.
+Since our main application is using Entity Framework Core and we will use the `ModularCrm.Products` module only for that main application, we can select the *Entity Framework Core* option and click the *Next* button.
+
+![abp-studio-create-new-module-dialog-step-additional-options](images/abp-studio-create-new-module-dialog-step-additional-options.png)
+
+Lastly, you can uncheck the *Include Tests* option if you don't want to include test projects in your module. Click the *Create* button to create the new module.
 
 ### Exploring the New Module
 

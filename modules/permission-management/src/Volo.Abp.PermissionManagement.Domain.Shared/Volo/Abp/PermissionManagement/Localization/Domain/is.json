@@ -6,6 +6,7 @@
     "All": "Allt",
     "SelectAllInAllTabs": "Veita allar heimildir",
     "SelectAllInThisTab": "Velja allt",
-    "SaveWithoutAnyPermissionsWarningMessage": "Ertu viss um að þú viljir vista án nokkurra heimilda?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Ertu viss um að þú viljir vista án nokkurra heimilda?",
+    "PermissionGroup": "Heimildahópur"
   }
 }

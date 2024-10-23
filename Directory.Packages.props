@@ -6,7 +6,7 @@
     <PackageVersion Include="AlibabaCloud.SDK.Dysmsapi20170525" Version="3.0.0" />
     <PackageVersion Include="aliyun-net-sdk-sts" Version="3.1.2" />
     <PackageVersion Include="Aliyun.OSS.SDK.NetCore" Version="2.14.1" />
-    <PackageVersion Include="AsyncKeyedLock" Version="7.0.1" />
+    <PackageVersion Include="AsyncKeyedLock" Version="7.0.2" />
     <PackageVersion Include="Autofac" Version="8.1.0" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageVersion Include="Autofac.Extras.DynamicProxy" Version="7.1.0" />
@@ -166,6 +166,7 @@
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="9.0.0-rc.2.24473.5" />
     <PackageVersion Include="System.Text.Encodings.Web" Version="9.0.0-rc.2.24473.5" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.2.24473.5" />
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
     <PackageVersion Include="TimeZoneConverter" Version="6.1.0" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />

@@ -183,7 +183,7 @@ public class MyService : ITransientDependency
 }
 ````
 
-##### Format Arguments
+### Format Arguments
 
 Format arguments can be passed after the localization key. If your message is `Hello {0}, welcome!`, then you can pass the `{0}` argument to the localizer like `_localizer["HelloMessage", "John"]`.
 
