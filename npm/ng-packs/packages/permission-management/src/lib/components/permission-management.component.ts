@@ -107,7 +107,9 @@ export class PermissionManagementComponent
   }
 
   set visible(value: boolean) {
-    if (value === this._visible) return;
+    if (value === this._visible) {
+      return;
+    }
 
     if (value) {
       this.openModal().subscribe(() => {
@@ -123,6 +125,7 @@ export class PermissionManagementComponent
       this.setSelectedGroup(null);
       this._visible = false;
       this.visibleChange.emit(false);
+      this.filter.set('');
     }
   }
 
@@ -149,9 +152,10 @@ export class PermissionManagementComponent
 
   modalBusy = false;
 
+  filter = signal<string>('');
+
   selectedGroupPermissions: PermissionWithStyle[] = [];
 
-  filter = signal<string>('');
   permissionGroupSignal = signal<PermissionGroupDto[]>([]);
 
   permissionGroups = computed(() => {
@@ -163,12 +167,20 @@ export class PermissionManagementComponent
     }
 
     const includesSearch = text => text.toLowerCase().includes(search);
-
-    return groups.filter(group =>
+    const matchingGroups = groups.filter(group =>
       group.permissions.some(
         permission => includesSearch(permission.displayName) || includesSearch(group.displayName),
       ),
     );
+
+    if (matchingGroups.length) {
+      this.setSelectedGroup(matchingGroups[0]);
+      this.disabledSelectAllInAllTabs = false;
+      return matchingGroups;
+    } else {
+      this.disabledSelectAllInAllTabs = true;
+      this.selectedGroupPermissions = [];
+    }
   });
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
@@ -357,11 +369,24 @@ export class PermissionManagementComponent
   }
 
   onClickSelectAll() {
+    // TODO: To be updated for the latest point
+    // const filteredPermissions = getPermissions(this.permissionGroups());
+
+    // if (filteredPermissions) {
+    //   this.permissions = filteredPermissions;
+    // }
+
     this.permissions = this.permissions.map(permission => ({
       ...permission,
       isGranted:
         this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
     }));
+    // .filter(permission => {
+    //   return filteredPermissions.find(
+    //     filteredPermission => filteredPermission.name === permission.name,
+    //   );
+    // });
+
     if (!this.disableSelectAllTab) {
       this.selectThisTab = !this.selectAllTab;
       this.setTabCheckboxState();
@@ -417,11 +442,10 @@ export class PermissionManagementComponent
         const { groups } = permissionRes || {};
 
         this.data = permissionRes;
-
         this.permissionGroupSignal.set(groups);
         this.permissions = getPermissions(groups);
         this.setSelectedGroup(groups[0]);
-        
+
         this.disabledSelectAllInAllTabs = this.permissions.every(
           per =>
             per.isGranted &&
