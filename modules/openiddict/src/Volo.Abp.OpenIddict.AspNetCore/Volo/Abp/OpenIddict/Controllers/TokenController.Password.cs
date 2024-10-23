@@ -108,10 +108,13 @@ public partial class TokenController
                     });
 
                     string errorDescription;
+                    string errorCode;
+                    
                     if (result.IsLockedOut)
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
                         errorDescription = "The user account has been locked out due to invalid login attempts. Please wait a while and try again.";
+                        errorCode = "account_locked";
                     }
                     else if (result.IsNotAllowed)
                     {
@@ -128,16 +131,18 @@ public partial class TokenController
                         }
 
                         errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
+                        errorCode = "account_inactive";
                     }
                     else
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
                         errorDescription = "Invalid username or password!";
+                        errorCode = OpenIddictConstants.Errors.InvalidGrant;
                     }
 
                     var properties = new AuthenticationProperties(new Dictionary<string, string>
                     {
-                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = errorCode,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
                     });
 
