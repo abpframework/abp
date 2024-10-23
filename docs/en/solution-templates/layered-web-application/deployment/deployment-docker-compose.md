@@ -449,7 +449,7 @@ ENTRYPOINT ["dotnet", "Acme.BookStore.Blazor.dll"]
 
 You can come across an error when the image is being built. This occurs because of `dotnet dev-certs` command trying to list the existing certificates **inside the container** and unavailable to. This error is not important since we aim to generate the **authserver.pfx** file and discard the container it is built in.
 
-![auth-server-pfx-generation-error](../../../en/images/auth-server-pfx-generation-error.png)
+![auth-server-pfx-generation-error](../../../images/auth-server-pfx-generation-error.png)
 
 Since it contains the OpenID-provider within, it also uses multi-stages to generate `authserver.pfx` file which is **used by OpenIddict as a signing and encryption certificate**. This configuration is found under the `PreConfigureServices` method of the **BlazorModule**:
 
@@ -794,7 +794,7 @@ ENTRYPOINT ["dotnet", "Acme.BookStore.HttpApi.Host.dll"]
 
 You can come across an error when the image is being built. This occurs because of `dotnet dev-certs` command trying to list the existing certificates **inside the container** and unavailable to. This error is not important since we aim to generate the **authserver.pfx** file and discard the container it is built in.
 
-![auth-server-pfx-generation-error](../../../en/images/auth-server-pfx-generation-error.png)
+![auth-server-pfx-generation-error](../../../images/auth-server-pfx-generation-error.png)
 
 Since it contains the openid-provider within, it also uses multi-stages to generate `authserver.pfx` file which is **used by OpenIddict as a signing and encryption certificate**. This configuration is found under the `PreConfigureServices` method of the **HttpApiHostModule**:
 

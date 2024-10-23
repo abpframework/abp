@@ -22,7 +22,7 @@ If **Angular** or **Blazor** (Web Assembly) is used as a back-office web applica
 
 Update DbMigrator project `appsettings.json` **OpenIddict.Applications.RootUrls** with production values or override them:
 
-![db-migrator-appsettings](../images/db-migrator-openiddict-appsettings.png)
+![db-migrator-appsettings](../../../images/db-migrator-openiddict-appsettings.png)
 
 
 > If you are using microservice template self-migration and not using DbMigrator project, update **IdentityService** appsettings.
@@ -39,7 +39,7 @@ The default development environment uses [developer signing certificates option]
 
 Update **AuthServerModule** by using a real certificate on `OpenIddictBuilder` pre-configuration.
 
-![openiddict-certificate](../images/openiddict-certificate.png)
+![openiddict-certificate](../../../images/openiddict-certificate.png)
 
 When you create a new application from the application template, ABP CLI automatically generates a new self-signed certificate with the name `openiddict.pfx` and a random password. This file and the password are provided in the `GetSigningCertificate` method.
 

@@ -134,7 +134,7 @@ Rename the created file extension to ".pfx"
 
 Import the certificate to IIS
 
-![Import the certificate](../../images/iis-install-cert.gif)
+![Import the certificate](../../../images/iis-install-cert.gif)
 
 ### Add domain names to hosts file
 
@@ -240,19 +240,19 @@ You can add as website from IIS.
 
 > For {{ if Tiered == "Yes" }}authserver{{ else if UI == "NG" || UI == "Blazor" }}apihost{{ else if UI == "BlazorServer" }}blazor{{ else }}web{{ end }} we need to enable load user profile to true from application pool for created web site.
 
-![Load User Profile](../../images/load-user-profile-iis.png)
+![Load User Profile](../../../images/load-user-profile-iis.png)
 
 > For local deployment select the SSL certificate when you add the web site.
 
-![SSL Certificate Selection](../../images/ssl-cert-selection-in-iis.png)
+![SSL Certificate Selection](../../../images/ssl-cert-selection-in-iis.png)
 
 The final result should look like this (depending on your project type).
 
-![IIS deployment](../../images/iis-sample-deployment.png)
+![IIS deployment](../../../images/iis-sample-deployment.png)
 
 We can visit the websites from a browser.
 
-![Tiered IIS deployment](../../images/iis-sample-tiered-deployment.gif)
+![Tiered IIS deployment](../../../images/iis-sample-tiered-deployment.gif)
 
 ## What's next?
 

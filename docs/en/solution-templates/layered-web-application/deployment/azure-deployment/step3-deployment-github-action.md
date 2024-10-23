@@ -19,7 +19,7 @@
 
 4. Click the **set up a workflow yourself** button.
 
-    ![Set up this workflow](../../../images/azure-deploy-set-up-this-workflow.png)
+    ![Set up this workflow](../../../../images/azure-deploy-set-up-this-workflow.png)
 
 5. Copy this content to the opened file and commit it.
 
@@ -685,7 +685,7 @@ jobs:
     
 9. Click the **New repository secret** button.
 
-    ![New repository secret](../../../images/azure-deploy-new-repository-secret.png)
+    ![New repository secret](../../../../images/azure-deploy-new-repository-secret.png)
 
 10. Add the following secrets:
 
@@ -693,17 +693,17 @@ jobs:
     
     Example of Azure SQL connection string:
     
-    ![Azure sql connection string](../../../images/azure-deploy-connection-string.png)
+    ![Azure sql connection string](../../../../images/azure-deploy-connection-string.png)
 
   - **AZUREAPPSERVICE_PUBLISHPROFILE**: The publish the profile of your Azure Web App Service. You can download it from the **Overview** tab of your Azure Web App Service.
 
-    ![Publish profile](../../../images/azure-deploy-publish-profile.png)
+    ![Publish profile](../../../../images/azure-deploy-publish-profile.png)
 
 {{ if UI == "NG" || UI == "Blazor"}}
 
   - **AZURE_STATIC_WEB_APPS_API_TOKEN_AMBITIOUS**: The API token of your Azure Static Web App. You can get it from the **Overview** tab of your Azure Static Web App.
 
-    ![API token](../../../images/azure-deploy-api-token.png)
+    ![API token](../../../../images/azure-deploy-api-token.png)
 
 {{end}}
 
@@ -711,15 +711,15 @@ jobs:
 
 12. Click the **Deploy to Azure Web App** workflow.
 
-    ![Deploy to Azure Web App](../../../images/azure-deploy-deploy-to-azure-web-app.png)
+    ![Deploy to Azure Web App](../../../../images/azure-deploy-deploy-to-azure-web-app.png)
 
 13. Click the **Run workflow** button.
 
-    ![Run workflow](../../../images/azure-deploy-run-workflow.png)
+    ![Run workflow](../../../../images/azure-deploy-run-workflow.png)
 
 14. Navigate to the web app URL to see the deployed application.
 
-    ![Azure Web App](../../../images/azure-deploy-runtime-stack2.png)
+    ![Azure Web App](../../../../images/azure-deploy-runtime-stack2.png)
 
 > If deploying your application was unsuccessful, you can check the logs of the deployment by clicking the **Deploy to Azure Web App** workflow and then clicking the **deploy-to-webapp** job.
 

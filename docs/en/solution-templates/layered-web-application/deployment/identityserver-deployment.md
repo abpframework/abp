@@ -24,7 +24,7 @@ This configuration must be done if **Angular** or **Blazor** (web assembly) is u
 
 Update DbMigrator project `appsettings.json` **IdentityServer.Clients.RootUrls** with production values:
 
-![db-migrator-appsettings](../../images/db-migrator-appsettings.png)
+![db-migrator-appsettings](../../../images/db-migrator-appsettings.png)
 
 Or, manually add production values to `IdentityServerClientRedirectUris`, `IdentityServerClientPostLogoutRedirectUris`, `IdentityServerClientCorsOrigins` tables in your database.
 
@@ -42,7 +42,7 @@ Default development environment uses [developer signing certificates option](htt
 
 Update **IdentityServerModule** with using real certificate on `IIdentityServerBuilder` pre-configuration.
 
-![idsrv-certificate](../../images/idsrv-certificate.png)
+![idsrv-certificate](../../../images/idsrv-certificate.png)
 
 You can also [create self-signed certificate](https://docs.abp.io/en/commercial/5.0/startup-templates/microservice/tye-integration#create-developer-certificates) and use it.
 
@@ -52,7 +52,7 @@ You can also [create self-signed certificate](https://docs.abp.io/en/commercial/
 
 Update **IdentityServerModule** to [enfcore https](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio). Add `UseHsts` to add hsts headers to clients, add `UseHttpsRedirection` to redirect http requests to https.
 
-![use-https](../../images/use-https.png)
+![use-https](../../../images/use-https.png)
 
 ### Behind Load Balancer
 
@@ -70,11 +70,11 @@ app.Use((httpContext, next) =>
 
 A common scenario is running applications in kubernetes environment. While IdentityServer needs to face internet on https, internal requests can be done using http.
 
-![idsrv-k8s](../../images/idsrv-k8s.png)
+![idsrv-k8s](../../../images/idsrv-k8s.png)
 
 **HttpApi.Host** and **Web** applications authority should be set to http since token validations will done using http request.
 
-![api-resource-internal-idsrv](../../images/api-resource-internal-idsrv.png)
+![api-resource-internal-idsrv](../../../images/api-resource-internal-idsrv.png)
 
 > You can use different appsettings files like *appsettings.production.json* to override these values or directly override environment values from kubernetes.
 
