@@ -7,7 +7,7 @@ If you add the account module to your project;
 - "My account" link in the current user dropdown on the top bar will redirect the user to a page in the account module.
 - You can switch the authentication flow to the resource owner password flow.
 
-### Account Module Implementation
+## Account Module Implementation
 
 Install the `@abp/ng.account` NPM package by running the below command:
 
@@ -49,7 +49,7 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-### Account Public Module Implementation for Commercial Templates
+## Account Public Module Implementation for Commercial Templates
 
 The pro startup template comes with `@volo/abp.ng.account` package. You should update the package version to v4.3 or higher version. The package can be updated by running the following command:
 
@@ -97,11 +97,11 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-### My Account Page
+## My Account Page
 
 Before v4.3, the "My account" link in the current user dropdown on the top bar redirected the user to MVC's profile management page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account module instead.
 
-### Personal Info Page Confirm Message
+## Personal Info Page Confirm Message
 
 When the user changes their own data on the personal settings tab in My Account, The data can not update the CurrentUser key of Application-Configuration. The information of the user is stored in claims. The only way to apply this information to the CurrentUser of Application-Configuration is user should log out and log in. When the Refresh-Token feature is implemented, it will be fixed. So We've added a confirmation alert.
 
@@ -119,11 +119,11 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-### Security Logs Page [COMMERCIAL]
+## Security Logs Page [COMMERCIAL]
 
 Before v4.3, the "Security Logs" link in the current user dropdown on the top bar redirected the user to MVC's security logs page. As of v4.3, if you added the account module to your project, the same link will land on a page in the Angular UI account public module instead.
 
-### Resource Owner Password Flow
+## Resource Owner Password Flow
 
 OAuth is preconfigured as authorization code flow in Angular application templates by default. If you added the account module to your project, you can switch the flow to resource owner password flow by changing the OAuth configuration in the _environment.ts_ files as shown below:
 

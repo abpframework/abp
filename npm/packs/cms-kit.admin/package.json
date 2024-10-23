@@ -1,16 +1,16 @@
 {
-  "version": "8.3.1",
+  "version": "9.0.0-rc.1",
   "name": "@abp/cms-kit.admin",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/codemirror": "~8.3.1",
-    "@abp/jstree": "~8.3.1",
-    "@abp/markdown-it": "~8.3.1",
-    "@abp/slugify": "~8.3.1",
-    "@abp/tui-editor": "~8.3.1",
-    "@abp/uppy": "~8.3.1"
+    "@abp/codemirror": "~9.0.0-rc.1",
+    "@abp/jstree": "~9.0.0-rc.1",
+    "@abp/markdown-it": "~9.0.0-rc.1",
+    "@abp/slugify": "~9.0.0-rc.1",
+    "@abp/tui-editor": "~9.0.0-rc.1",
+    "@abp/uppy": "~9.0.0-rc.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

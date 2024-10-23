@@ -1,7 +1,6 @@
 ﻿using Volo.Abp.Ldap.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Ldap;

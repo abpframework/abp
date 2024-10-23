@@ -14,7 +14,7 @@ An **audit log object** (see the Audit Log Object section below) is typically cr
 
 > [Startup templates](../../solution-templates) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
 
-### Database Provider Support
+## Database Provider Support
 
 * Fully supported by the [Entity Framework Core](../data/entity-framework-core) provider.
 * Entity change logging is not supported by the [MongoDB](../data/mongodb) provider. Other features work as expected.

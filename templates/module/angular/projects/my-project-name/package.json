@@ -4,8 +4,8 @@
   "peerDependencies": {
     "@angular/common": "~18.1.0",
     "@angular/core": "~18.1.0",
-    "@abp/ng.core": "~8.3.1",
-    "@abp/ng.theme.shared": "~8.3.1"
+    "@abp/ng.core": "~9.0.0-rc.1",
+    "@abp/ng.theme.shared": "~9.0.0-rc.1"
   },
   "dependencies": {
     "tslib": "^2.1.0"

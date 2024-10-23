@@ -6,6 +6,7 @@
     "All": "الكل",
     "SelectAllInAllTabs": "منح كافة الأذونات",
     "SelectAllInThisTab": "تحديد الكل",
-    "SaveWithoutAnyPermissionsWarningMessage": "هل أنت متأكد أنك تريد الحفظ بدون أي أذونات؟"
+    "SaveWithoutAnyPermissionsWarningMessage": "هل أنت متأكد أنك تريد الحفظ بدون أي أذونات؟",
+    "PermissionGroup": "مجموعة الأذونات"
   }
 }

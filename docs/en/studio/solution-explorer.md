@@ -123,7 +123,7 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
 
 ### Adding a New Empty Module
 
-Create a new module by clicking the *Add* -> *New Module* -> *Empty Module* button at the root of the solution or in the solution folder context menu. The *Microservice* solution template also includes *Microservice*, *Gateway*, and *Web* modules. Other solution templates, such as *Application (Layered)*, can only create *Empty*, and *DDD* modules.
+Create a new module by clicking the *Add* -> *New Module* -> *Empty Module* button at the root of the solution or in the solution folder context menu. The *Microservice* solution template also includes *Microservice*, *Gateway*, and *Web* modules. Other solution templates, such as *Application (Layered)*, can only create *Empty*, *DDD* and *Standard* modules.
 
 ![create-new-module](./images/solution-explorer/create-new-module.png)
 
@@ -148,6 +148,10 @@ You can choose the database provider for your microservice module. Select one of
 When you create a microservice, you must edit some [configurations](../solution-templates/microservice/adding-new-microservices.md#configuring-the-appsettingsjson). If you select the *Enable integration* option, it automatically configures the required settings for the microservice to work with the gateway, web, and other modules.
 
 ![create-new-microservice-nolayers-enable-integration](./images/solution-explorer/create-new-microservice-nolayers-enable-integration.png)
+
+You can uncheck the *Include Tests* option if you don't want to include test projects in your microservice module. Click the *Create* button to add the microservice module to the solution.
+
+![create-new-microservice-nolayers-additional-options](./images/solution-explorer/create-new-microservice-nolayers-additional-options.png)
 
 After creating the *Microservice (service-nolayers)* module, it will be added to the solution, and you should see the following structure in the solution explorer.
 

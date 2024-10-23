@@ -6,6 +6,7 @@
     "All": "全部",
     "SelectAllInAllTabs": "授予所有權限",
     "SelectAllInThisTab": "全選",
-    "SaveWithoutAnyPermissionsWarningMessage": "您確定要在沒有任何權限的情況下保存嗎？"
+    "SaveWithoutAnyPermissionsWarningMessage": "您確定要在沒有任何權限的情況下保存嗎？",
+    "PermissionGroup": "權限組"
   }
 }

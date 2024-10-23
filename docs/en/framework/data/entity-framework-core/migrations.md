@@ -4,7 +4,7 @@ This document begins by **introducing the default structure** provided by [the a
 
 > This document is for who want to fully understand and customize the database structure comes with [the application startup template](../../../solution-templates/layered-web-application). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](../../../tutorials/book-store/part-01.md).
 
-### Source Code
+## Source Code
 
 You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
 
