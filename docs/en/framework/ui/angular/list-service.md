@@ -140,7 +140,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 ```
 
 ## Handle request status
-`ListService` expose a `getter`  as `requestStatus$`. With this getter you can track request status. You can manage your flow with `idle`, `loading`, `success` or `error` options.
+To handle the request status `ListService` provides a `requestStatus$` observable. This observable emits the current status of a request, which can be one of the following values: `idle`, `loading`, `success` or `error`. These statuses allow you to easily manage the UI flow based on the request's state.
 
 ![RequestStatus](./images/list-service-request-status.gif)
 
