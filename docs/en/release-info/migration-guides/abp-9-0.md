@@ -12,16 +12,16 @@ We've upgraded ABP to .NET 9.0, so you need to move your solutions to .NET 9.0 i
 
 After updating your solution to .NET 9.0, you should apply the following steps:
 
-* Change the `app.UseStaticFiles()` to `app.MapAbpStaticAssets()` in your module classes of your host applications.
+* Change the `app.UseStaticFiles()` to `app.MapAbpStaticAssets()` in the module classes of your host applications.
     * Some JavaScript/CSS/Images files exist in the Virtual File System, but ASP NET Core 9's `MapStaticAssets` can't handle them. This is why we created the **MapAbpStaticAssets**.
 * Upgrade the Microsoft packages (also other packages) for .NET 9.0. You can check the [Directory.Packages.props](https://github.com/abpframework/abp/blob/rel-9.0/Directory.Packages.props) file for package versions and update the necessary ones.
 
 ### Made the IdentitySession Entity Extensible & Updated the MaxIpAddressesLength
 
-In this version, we made the `IdentitySession` entity as extensible and as a result of that, you should aware of the changes explained below:
+In this version, we made the `IdentitySession` entity extensible and as a result of that, you should be aware of the changes explained below:
 
 * `IdentitySession` entity inherits from **AggregateRoot** instead of **BasicAggregateRoot**. Here is the PR for the related change: [#20771](https://github.com/abpframework/abp/pull/20771)
-* `IdentitySession` entity's **MaxIpAddress** property now allows up to 2048 character. You can check the related PR, [here](https://github.com/abpframework/abp/pull/20819).
+* `IdentitySession` entity's **MaxIpAddress** property now allows up to 2048 characters. You can check the related PR, [here](https://github.com/abpframework/abp/pull/20819).
 
 You should create a new migration and apply it to your database for the changes explained above.
 
@@ -46,7 +46,7 @@ The method signature of [framework/src/Volo.Abp.BlazoriseUI/AbpCrudPageBase.cs](
 
 In this version, we removed the **React Native** mobile option from the open source templates due to maintaining reasons. We updated the related documents and the ABP CLI (both old & new CLI) for this change, and with v9.0, you will not be able to create a free template with react-native as the mobile option.
 
-> **Note:** Pro templates still provides the **React Native** as the mobile option and we will continue supporting it.
+> **Note:** Pro templates still provide the **React Native** as the mobile option and we will continue supporting it.
 
 If you want to access the open-source React-Native template, you can visit the **abp-archive** repository: https://github.com/abpframework/abp-archive
 
@@ -58,11 +58,11 @@ If you are a paid-license owner and using the ABP's paid version, then please fo
 
 ### ABP Suite: Better Naming For Multiple Navigation Properties
 
-> **Note:** As a developer, you don't need to make any changes in your solution regarding this change. We just wanted to highlight this change to let you know.
+> **Note:** As a developer, you don't need to make any changes in your solution regarding this change. We just wanted to highlight this change and let you know.
 
 Prior to this version, when you defined multiple (same) navigation properties to same entity, then ABP Suite was renaming them with a duplicate number.
 
-Consider the following scenerio for an example. If you have a book with an author and coauthor, prior to this version ABP Suite was creating a DTO class as below:
+Consider the following scenario for an example: If you have a book with an author and coauthor, prior to this version ABP Suite was creating a DTO class as below:
 
 ```csharp
 public class BookWithNavigationPropertiesDto
@@ -75,7 +75,7 @@ public class BookWithNavigationPropertiesDto
 }
 ```
 
-Notice, the since the book entity has two same navigation properties, ABP Suite renamed them with a duplicate number. In this version on, ABP Suite will ask you to define a propertyName for the navigationProperties and you'll be able to specify a meaningful name such as:
+Notice, that since the book entity has two same navigation properties, ABP Suite renamed them with a duplicate number. In this version, ABP Suite will ask you to define a propertyName for the **navigation properties** and you'll be able to specify a meaningful name such as:
 
 ```csharp
 public class BookWithNavigationPropertiesDto
