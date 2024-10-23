@@ -11,12 +11,16 @@ The .NET 9 stable version is planned to be released on **November 12, 2024** bef
 
 ---
 
-- You can **download the .NET 9 runtime** and SDK from the following link:
+- **Download the .NET 9 runtime** and SDK from the following link:
 
   [https://dotnet.microsoft.com/en-us/download/dotnet/9.0](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 
-- There are many enhancements and bug fixes in ABP 9.0. 
-  You can read **our migration guide for ABP 9.0** from the following link:
+- There are many enhancements and bug fixes with ABP 9.0. Read the ABP 9 announcement:
+  
+  TODO
+  
+- 
+  Read **our migration ABP 9.0 migration guide** from the following link:
 
   [abp.io/docs/9.0/release-info/migration-guides/abp-9-0](https://abp.io/docs/9.0/release-info/migration-guides/abp-9-0)
 
@@ -48,7 +52,7 @@ So you can decide which version you want to use in your startup Host Application
 
 In [this link](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp/Volo.Abp.csproj#L7) you can see that netstandard2.0/2.1 and net8/9 are supported.
 
-```
+```xml
 <Project Sdk="Microsoft.NET.Sdk">
     <TargetFrameworks>
       netstandard2.0;netstandard2.1;net8.0;net9.0
@@ -72,7 +76,7 @@ ABP’s new extension method is available [here](https://github.com/abpframework
 Install the latest .NET 9 SDK from [this link](https://dotnet.microsoft.com/en-us/download/dotnet/9.0).
 Upgrade [dotnet-ef](https://learn.microsoft.com/en-us/ef/core/cli/dotnet) tool version with the following command:
 
-```
+```bash
 dotnet tool uninstall --global dotnet-ef && dotnet tool install --global dotnet-ef
 ```
 
