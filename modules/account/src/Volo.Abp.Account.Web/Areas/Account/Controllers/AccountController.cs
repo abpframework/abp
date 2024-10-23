@@ -105,10 +105,7 @@ public class AccountController : AbpControllerBase
     [HttpPost]
     [Route("checkPassword")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login)
-    {
-        return CheckPassword(login);
-    }
+    public virtual Task<AbpLoginResult> CheckPasswordCompatible(UserLoginInfo login) => CheckPassword(login);
 
     [HttpPost]
     [Route("check-password")]

@@ -7,9 +7,7 @@ namespace Volo.Abp.Account.Emailing.Templates;
 
 public class AccountEmailTemplateDefinitionProvider : TemplateDefinitionProvider
 {
-    public override void Define(ITemplateDefinitionContext context)
-    {
-        context.Add(
+    public override void Define(ITemplateDefinitionContext context) => context.Add(
             new TemplateDefinition(
                 AccountEmailTemplates.PasswordResetLink,
                 displayName: LocalizableString.Create<AccountResource>($"TextTemplate:{AccountEmailTemplates.PasswordResetLink}"),
@@ -17,5 +15,4 @@ public class AccountEmailTemplateDefinitionProvider : TemplateDefinitionProvider
                 localizationResource: typeof(AccountResource)
             ).WithVirtualFilePath("/Volo/Abp/Account/Emailing/Templates/PasswordResetLink.tpl", true)
         );
-    }
 }

@@ -15,27 +15,18 @@ using Volo.Abp.UI.Navigation.Urls;
 
 namespace Volo.Abp.Account.Emailing;
 
-public class AccountEmailer : IAccountEmailer, ITransientDependency
+public class AccountEmailer(
+    IEmailSender emailSender,
+    ITemplateRenderer templateRenderer,
+    IStringLocalizer<AccountResource> stringLocalizer,
+    IAppUrlProvider appUrlProvider,
+    ICurrentTenant currentTenant) : IAccountEmailer, ITransientDependency
 {
-    protected ITemplateRenderer TemplateRenderer { get; }
-    protected IEmailSender EmailSender { get; }
-    protected IStringLocalizer<AccountResource> StringLocalizer { get; }
-    protected IAppUrlProvider AppUrlProvider { get; }
-    protected ICurrentTenant CurrentTenant { get; }
-
-    public AccountEmailer(
-        IEmailSender emailSender,
-        ITemplateRenderer templateRenderer,
-        IStringLocalizer<AccountResource> stringLocalizer,
-        IAppUrlProvider appUrlProvider,
-        ICurrentTenant currentTenant)
-    {
-        EmailSender = emailSender;
-        StringLocalizer = stringLocalizer;
-        AppUrlProvider = appUrlProvider;
-        CurrentTenant = currentTenant;
-        TemplateRenderer = templateRenderer;
-    }
+    protected ITemplateRenderer TemplateRenderer { get; } = templateRenderer;
+    protected IEmailSender EmailSender { get; } = emailSender;
+    protected IStringLocalizer<AccountResource> StringLocalizer { get; } = stringLocalizer;
+    protected IAppUrlProvider AppUrlProvider { get; } = appUrlProvider;
+    protected ICurrentTenant CurrentTenant { get; } = currentTenant;
 
     public virtual async Task SendPasswordResetLinkAsync(
         IdentityUser user,

@@ -14,21 +14,19 @@ namespace Volo.Abp.Account;
     typeof(AbpAspNetCoreMvcModule))]
 public class AbpAccountHttpApiModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
+    public override void PreConfigureServices(ServiceConfigurationContext context)=>
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountHttpApiModule).Assembly);
         });
-    }
+    
 
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
+    public override void ConfigureServices(ServiceConfigurationContext context)=>
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
                 .Get<AccountResource>()
                 .AddBaseTypes(typeof(AbpUiResource));
         });
-    }
+    
 }

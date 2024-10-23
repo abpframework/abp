@@ -17,8 +17,5 @@ namespace Volo.Abp.Account;
 [ExposeServices(typeof(IDynamicClaimsAppService), typeof(DynamicClaimsClientProxy))]
 public partial class DynamicClaimsClientProxy : ClientProxyBase<IDynamicClaimsAppService>, IDynamicClaimsAppService
 {
-    public virtual async Task RefreshAsync()
-    {
-        await RequestAsync(nameof(RefreshAsync));
-    }
+    public virtual async Task RefreshAsync() => await RequestAsync(nameof(RefreshAsync));
 }

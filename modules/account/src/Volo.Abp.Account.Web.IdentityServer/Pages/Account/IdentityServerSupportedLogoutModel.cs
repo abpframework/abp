@@ -9,14 +9,9 @@ using Volo.Abp.Identity;
 namespace Volo.Abp.Account.Web.Pages.Account;
 
 [ExposeServices(typeof(LogoutModel))]
-public class IdentityServerSupportedLogoutModel : LogoutModel
+public class IdentityServerSupportedLogoutModel(IIdentityServerInteractionService interaction) : LogoutModel
 {
-    protected IIdentityServerInteractionService Interaction { get; }
-
-    public IdentityServerSupportedLogoutModel(IIdentityServerInteractionService interaction)
-    {
-        Interaction = interaction;
-    }
+    protected IIdentityServerInteractionService Interaction { get; } = interaction;
 
     public async override Task<IActionResult> OnGetAsync()
     {
