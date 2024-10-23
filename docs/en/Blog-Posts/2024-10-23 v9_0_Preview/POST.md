@@ -56,15 +56,58 @@ We've upgraded ABP to .NET 9.0, so you need to move your solutions to .NET 9.0 i
 
 ### Removed React Native Mobile Option From Free Templates
 
-//TODO:...
+In this version, we removed the **React Native** mobile option from the open source templates due to maintaining reasons. We updated the related documents and the ABP CLI (both old & new CLI) for this change, and with v9.0, you will not be able to create a free template with react-native as the mobile option.
+
+> **Note:** Pro templates still provide the **React Native** as the mobile option and we will continue supporting it.
+
+If you want to access the open-source React-Native template, you can visit the abp-archive repository from [here](https://github.com/abpframework/abp-archive).
 
 ### Suite: Better Naming For Multiple Navigation Properties
 
-//TODO:...
+Prior to this version, when you defined multiple (same) navigation properties to same entity, then ABP Suite was renaming them with a duplicate number.
+
+Consider the following scenario for an example: 
+
+If you have a book with an author and coauthor, prior to this version ABP Suite was creating a DTO class as below:
+
+```csharp
+public class BookWithNavigationPropertiesDto
+{
+    public BookDto Book { get; set; }
+
+    public AuthorDto Author { get; set; }
+
+    public AuthorDto Author1 { get; set; }
+}
+```
+
+Notice, that since the book entity has two same navigation properties, ABP Suite renamed them with a duplicate number. In this version, ABP Suite will ask you to define a propertyName for the **navigation properties** and you'll be able to specify a meaningful name such as (*CoAuthor*, in this example):
+
+```csharp
+public class BookWithNavigationPropertiesDto
+{
+    public BookDto Book { get; set; }
+
+    public AuthorDto Author { get; set; }
+
+    //used the specified property name
+    public AuthorDto CoAuthor { get; set; }
+}
+```
+
+ABP Suite respects the specified property name for the related navigation property and generate codes regarding that (by removing the *Id* postfix for the related places):
+
+![](suite-navigation-properties.png)
 
 ### CMS Kit Pro: Feedback Feature Improvements
 
-//TODO:...
+In this version, we revised the [CMS Kit's Feedback Feature](https://abp.io/docs/9.0/modules/cms-kit-pro/page-feedback) and as a result, we made the following improvements:
+
+* A new **auto-handle** setting has been added to the settings page. When this feature is enabled, if feedback is submitted without a user note, the feedback is automatically marked as handled.
+* You can now require users to enter a note when submitting negative feedback. This can be configured in the settings page, ensuring that users provide context when they submit critical feedback.
+* We've added a feedback user ID that is saved in local storage. This allows you to track the number of unique users submitting feedback or determine if the same user is sending new feedback on updated documents.
+
+> For further information about Page Feedback System, please refer to the [documentation](https://abp.io/docs/9.0/modules/cms-kit-pro/page-feedback).
 
 ## Community News
 
