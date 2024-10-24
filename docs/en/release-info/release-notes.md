@@ -4,6 +4,19 @@ This document contains **brief release notes** for each release. Release notes o
 
 > If you want to read the release notes for each ABP Studio release, check it out from [here](../studio/release-notes.md).
 
+## 9.0 (2024-10-22)
+
+> This version is currently in preview. The final release date is planned for November, 2024.
+
+See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-9-0-release-candidate)** for the v9.0 release.
+
+* Upgraded to .NET 9.0
+* Introducing the `Extension Property Policy`
+* Google Cloud Storage BLOB Provider
+* Removed React Native mobile option from free templates
+* ABP Suite: Better naming for multiple navigation properties to the same entity
+* CMS Kit Pro: Feedback feature improvements
+
 ## 8.3 (2024-09-05)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-3-stable-release)** for the v8.3 release.
