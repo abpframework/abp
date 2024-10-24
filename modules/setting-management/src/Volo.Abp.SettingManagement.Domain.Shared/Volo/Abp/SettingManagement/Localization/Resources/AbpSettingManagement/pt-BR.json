@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Habilitar gerenciamento de configuração",
     "Feature:SettingManagementEnableDescription": "Habilite o sistema de gerenciamento de configuração no aplicativo.",
     "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail.",
-    "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail."
+    "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail.",
+    "SmtpPasswordPlaceholder": "Digite um valor para atualizar a senha"
   }
 }

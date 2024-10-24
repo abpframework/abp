@@ -79,7 +79,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["SmtpPassword"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword">
+                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword" Placeholder="@L["SmtpPasswordPlaceholder"].Value">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
@@ -99,7 +99,7 @@
                 }
                 <SubmitButton Clicked="@UpdateSettingsAsync"/>
             </Column>
-            
+
         </Row>
     </Form>
 

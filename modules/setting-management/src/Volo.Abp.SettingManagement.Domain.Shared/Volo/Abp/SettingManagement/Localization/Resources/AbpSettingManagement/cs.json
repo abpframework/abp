@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Povolit správu nastavení",
     "Feature:SettingManagementEnableDescription": "Povolit systém správy nastavení v aplikaci.",
     "Feature:AllowChangingEmailSettings": "Povolit změnu nastavení e-mailu.",
-    "Feature:AllowChangingEmailSettingsDescription": "Povolit změnu nastavení e-mailu."
+    "Feature:AllowChangingEmailSettingsDescription": "Povolit změnu nastavení e-mailu.",
+    "SmtpPasswordPlaceholder": "Zadejte hodnotu pro aktualizaci hesla",
   }
 }

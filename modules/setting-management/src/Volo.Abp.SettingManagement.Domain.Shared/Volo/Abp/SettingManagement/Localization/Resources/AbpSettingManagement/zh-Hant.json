@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "啟用設定管理",
     "Feature:SettingManagementEnableDescription": "在應用程序中啟用設定管理系統.",
     "Feature:AllowChangingEmailSettings": "允許更改電子郵件設置。",
-    "Feature:AllowChangingEmailSettingsDescription": "允許更改電子郵件設置。"
+    "Feature:AllowChangingEmailSettingsDescription": "允許更改電子郵件設置。",
+    "SmtpPasswordPlaceholder": "輸入一個值以更新密碼"
   }
 }

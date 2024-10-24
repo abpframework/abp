@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Włącz zarządzanie ustawieniami",
     "Feature:SettingManagementEnableDescription": "Włącz system zarządzania ustawieniami w aplikacji.",
     "Feature:AllowChangingEmailSettings": "Zezwól na zmianę ustawień poczty e-mail.",
-    "Feature:AllowChangingEmailSettingsDescription": "Zezwól na zmianę ustawień poczty e-mail."
+    "Feature:AllowChangingEmailSettingsDescription": "Zezwól na zmianę ustawień poczty e-mail.",
+    "SmtpPasswordPlaceholder": "Wprowadź wartość, aby zaktualizować hasło"
   }
 }

@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Ota asetusten hallinta käyttöön",
     "Feature:SettingManagementEnableDescription": "Ota asetustenhallintajärjestelmä käyttöön sovelluksessa.",
     "Feature:AllowChangingEmailSettings": "Salli sähköpostiasetusten muuttaminen.",
-    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen."
+    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen.",
+    "SmtpPasswordPlaceholder": "Syötä arvo päivittääksesi salasana"
   }
 }

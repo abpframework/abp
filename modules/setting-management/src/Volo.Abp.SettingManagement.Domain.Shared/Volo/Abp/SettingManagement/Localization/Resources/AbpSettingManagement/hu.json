@@ -34,6 +34,7 @@
     "Feature:SettingManagementEnable": "Beállításkezelés engedélyezése",
     "Feature:SettingManagementEnableDescription": "A beállításkezelő rendszer engedélyezése az alkalmazásban.",
     "Feature:AllowChangingEmailSettings": "Az e-mail beállítások módosításának engedélyezése.",
-    "Feature:AllowChangingEmailSettingsDescription": "Az e-mail beállítások módosításának engedélyezése."
+    "Feature:AllowChangingEmailSettingsDescription": "Az e-mail beállítások módosításának engedélyezése.",
+    "SmtpPasswordPlaceholder": "Adjon meg egy értéket a jelszó frissítéséhez"
   }
 }
