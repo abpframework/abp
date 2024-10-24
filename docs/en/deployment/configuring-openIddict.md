@@ -26,7 +26,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 ## Development Environment
 
-We've enabled `AddDevelopmentEncryptionAndSigningCertificate` by default on the development environment. It registers (and generates if necessary) a user-specific development encryption/development signing certificate. This is a certificate used for signing and encrypting the tokens and for **development environment only**.
+`AddDevelopmentEncryptionAndSigningCertificate` is enabled by default on the development environment. It registers (and also generates, if necessary, a user-specific development encryption/development signing certificate. This is a certificate used for signing and encrypting the tokens and for **development environment only**.
 
 `AddDevelopmentEncryptionAndSigningCertificate` cannot be used in applications deployed on IIS or Azure App Service: trying to use them on IIS or Azure App Service will result in an exception being thrown at runtime (unless the application pool is configured to [load a user profile](https://learn.microsoft.com/en-us/iis/manage/configuring-security/application-pool-identities#user-profile)). 
 
@@ -34,7 +34,7 @@ To avoid that, consider creating self-signed certificates and storing them in th
 
 ## Production Environment
 
-We've disabled `AddDevelopmentEncryptionAndSigningCertificate` in the production environment and tried to setup signing and encrypting certificates using `openiddict.pfx` file.
+`AddDevelopmentEncryptionAndSigningCertificate` is disabled in production environment. Signing and encryption of certificates is done using `openiddict.pfx` file in production environment.
 
 You can use the `dotnet dev-certs https -v -ep openiddict.pfx -p 00000000-0000-0000-0000-000000000000` command to generate the `authserver.pfx` certificate.
 
