@@ -160,27 +160,28 @@ export class PermissionManagementComponent
 
   permissionGroups = computed(() => {
     const search = this.filter().toLowerCase().trim();
-    const groups = this.permissionGroupSignal();
+    let groups = this.permissionGroupSignal();
 
     if (!search) {
       return groups;
     }
 
     const includesSearch = text => text.toLowerCase().includes(search);
-    const matchingGroups = groups.filter(group =>
+    groups = groups.filter(group =>
       group.permissions.some(
         permission => includesSearch(permission.displayName) || includesSearch(group.displayName),
       ),
     );
 
-    if (matchingGroups.length) {
-      this.setSelectedGroup(matchingGroups[0]);
+    if (groups.length) {
+      this.setSelectedGroup(groups[0]);
       this.disabledSelectAllInAllTabs = false;
-      return matchingGroups;
     } else {
       this.disabledSelectAllInAllTabs = true;
       this.selectedGroupPermissions = [];
     }
+
+    return groups;
   });
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
@@ -369,27 +370,38 @@ export class PermissionManagementComponent
   }
 
   onClickSelectAll() {
-    // TODO: To be updated for the latest point
-    // const filteredPermissions = getPermissions(this.permissionGroups());
+    if (this.filter()) {
+      this.permissionGroups().forEach(group => {
+        group.permissions.forEach(permission => {
+          if (
+            permission.isGranted &&
+            this.isGrantedByOtherProviderName(permission.grantedProviders)
+          )
+            return;
 
-    // if (filteredPermissions) {
-    //   this.permissions = filteredPermissions;
-    // }
+          const index = this.permissions.findIndex(per => per.name === permission.name);
 
-    this.permissions = this.permissions.map(permission => ({
-      ...permission,
-      isGranted:
-        this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
-    }));
-    // .filter(permission => {
-    //   return filteredPermissions.find(
-    //     filteredPermission => filteredPermission.name === permission.name,
-    //   );
-    // });
+          this.permissions = [
+            ...this.permissions.slice(0, index),
+            { ...this.permissions[index], isGranted: !this.selectAllTab },
+            ...this.permissions.slice(index + 1),
+          ];
+        });
+      });
+    } else {
+      this.permissions = this.permissions.map(permission => ({
+        ...permission,
+        isGranted:
+          this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
+      }));
+    }
 
     if (!this.disableSelectAllTab) {
       this.selectThisTab = !this.selectAllTab;
       this.setTabCheckboxState();
+      if (this.filter()) {
+        this.setGrantCheckboxState();
+      }
     }
     this.onChangeGroup(this.selectedGroup);
   }
