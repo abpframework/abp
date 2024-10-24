@@ -1,22 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Blazorise;
-using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.Data;
-using Volo.Abp.Http;
-using Volo.Abp.Http.Client;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 

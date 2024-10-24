@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Security.Claims;
 
@@ -31,17 +29,6 @@ public class AbpAuthenticationHubFilter : IHubFilter
         using (currentPrincipalAccessor.Change(claimsPrincipal!))
         {
             await next(context);
-        }
-    }
-
-    public virtual async Task OnDisconnectedAsync(HubLifetimeContext context, Exception? exception, Func<HubLifetimeContext, Exception?, Task> next)
-    {
-        var currentPrincipalAccessor = context.ServiceProvider.GetRequiredService<ICurrentPrincipalAccessor>();
-        var claimsPrincipal = context.Context.User;
-        await HandleDynamicClaimsPrincipalAsync(claimsPrincipal, context.ServiceProvider, context.Context, true);
-        using (currentPrincipalAccessor.Change(claimsPrincipal!))
-        {
-            await next(context, exception);
         }
     }
 

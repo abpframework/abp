@@ -22,7 +22,7 @@ public abstract class FullAuditedEntityWithUser<TUser> : FullAuditedEntity, IFul
 }
 
 /// <summary>
-/// Implements <see cref="IFullAuditedObjectObject{TUser}"/> to be a base class for full-audited entities.
+/// Implements <see cref="IFullAuditedObject{TUser}"/> to be a base class for full-audited entities.
 /// </summary>
 /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
 /// <typeparam name="TUser">Type of the user</typeparam>

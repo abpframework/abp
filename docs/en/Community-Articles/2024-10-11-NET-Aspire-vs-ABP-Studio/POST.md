@@ -119,8 +119,20 @@ I have a good news to you. It is actually possible and pretty easy to make ABP P
 
 You can check [@berkansasmaz](https://abp.io/community/members/berkansasmaz)'s great article: **[How to use .NET Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk)**.
 
+## Licensing
+
+ABP Studio has a Community Edition which is completely free and available to everyone. It includes many of the features I mentioned here. There is also a commercial edition that is included in [commercial ABP licenses](https://abp.io/pricing). You can [check that blog post](https://abp.io/blog/announcing-abp-studio-general-availability) which clearly explains the license differences and introduces the fundamental ABP Studio features.
+
+On the other hand, .NET Aspire is a free tool developed and published by Microsoft. It has no commercial version.
+
 ## Conclusion
 
 Both .NET Aspire and ABP Studio serve distinct purposes, catering to different types of development environments. While .NET Aspire excels in simplifying cloud-native application setups and observability, ABP Studio provides a comprehensive framework for modular monoliths and microservice architectures with full-fledged enterprise level production-ready startup solution templates and integrated tools.
 
-In the previous section, it was mentioned that it is possible to [use them together](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk). You don't have to select one of them. However, in my opinion, when you use ABP Studio, you won't need .NET Aspire since ABP Studio can do everything and much more.
+In the previous section, it was mentioned that it is possible to [use them together](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk). You don't have to select one of them. However, in my opinion, when you use ABP Studio, you won't need .NET Aspire since ABP Studio can do everything and much more. If you have budget, I suggest to purchase a commercial ABP Studio [license](https://abp.io/pricing) so you can fully unlock its power.
+
+## Resources / Further Reading
+
+* [ABP Studio documentation](https://abp.io/docs/latest/studio)
+* [.NET Aspire documentation](https://learn.microsoft.com/en-us/dotnet/aspire/)
+* [How to use .NET Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk)

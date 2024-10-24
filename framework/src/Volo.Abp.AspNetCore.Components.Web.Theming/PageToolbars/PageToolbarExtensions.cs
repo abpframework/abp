@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.BlazoriseUI.Components;
-using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
 

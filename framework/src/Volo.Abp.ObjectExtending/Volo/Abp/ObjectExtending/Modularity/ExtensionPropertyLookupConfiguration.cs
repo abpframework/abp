@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Volo.Abp.ObjectExtending.Modularity;
+﻿namespace Volo.Abp.ObjectExtending.Modularity;
 
 public class ExtensionPropertyLookupConfiguration
 {

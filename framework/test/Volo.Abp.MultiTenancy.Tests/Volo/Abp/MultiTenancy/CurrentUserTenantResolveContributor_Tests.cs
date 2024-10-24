@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
-using Volo.Abp.Settings;
 using Xunit;
 
 namespace Volo.Abp.MultiTenancy;

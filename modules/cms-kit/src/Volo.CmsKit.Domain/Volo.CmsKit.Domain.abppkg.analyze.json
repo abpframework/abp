@@ -823,6 +823,23 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.CmsKit.Pages",
+          "name": "SetLayoutName",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "layoutName",
+              "isOptional": false
+            }
+          ]
         }
       ],
       "collectionProperties": {},
@@ -868,6 +885,11 @@
         {
           "type": "System.Int32",
           "name": "EntityVersion",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "LayoutName",
           "summary": null
         }
       ],
@@ -2767,6 +2789,11 @@
             {
               "type": "String",
               "name": "style",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "layoutName",
               "isOptional": true
             }
           ]

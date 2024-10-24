@@ -6,6 +6,7 @@
     "All": "Alle",
     "SelectAllInAllTabs": "Verleen alle rechten",
     "SelectAllInThisTab": "Selecteer alles",
-    "SaveWithoutAnyPermissionsWarningMessage": "Weet u zeker dat u zonder rechten wilt opslaan?"
+    "SaveWithoutAnyPermissionsWarningMessage": "Weet u zeker dat u zonder rechten wilt opslaan?",
+    "PermissionGroup": "Rechtengroep"
   }
 }

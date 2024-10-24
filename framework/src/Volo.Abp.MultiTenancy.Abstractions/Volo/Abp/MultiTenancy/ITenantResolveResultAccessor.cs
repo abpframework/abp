@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Volo.Abp.MultiTenancy;
+﻿namespace Volo.Abp.MultiTenancy;
 
 public interface ITenantResolveResultAccessor
 {
