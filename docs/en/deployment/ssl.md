@@ -1,10 +1,8 @@
 # Configuring SSL certificate(HTTPS)
 
-A website needs an SSL certificate in order to keep user data secure, verify ownership of the website, prevent attackers from creating a fake version of the site, and gain user trust.
+A website needs an SSL certificate to keep user data secure, verify ownership, prevent attackers from creating a fake version of the site, and gain user trust.
 
-This document introduces how to get and use an SSL certificate(HTTPS) for your application.
-
-
+This document introduces how to get and use an SSL certificate (HTTPS) for your application.
 
 ## Get an SSL Certificate from a Certificate Authority
 
@@ -16,15 +14,11 @@ Once you have a certificate, you need to configure your web server to use it. Th
 * [Host ASP.NET Core on Linux with Nginx: HTTPS configuration](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx)
 * [How to Set Up SSL on IIS 7 or later](https://learn.microsoft.com/en-us/iis/manage/configuring-security/how-to-set-up-ssl-on-iis)
 
-
-
 ### How to get a free SSL certificate from Let's Encrypt?
 
 Let's Encrypt is **a free, automated, and open certificate authority (CA)**. It gives the digital certificates to enable HTTPS (SSL/TLS) for websites. To get a free SSL certificate, we will use [acme.sh](https://github.com/acmesh-official/acme.sh) and Cloudflare DNS API to get a free SSL certificate from [Let's Encrypt](https://letsencrypt.org/).
 
 > If you have any problem with the following steps, you can read the [acme.sh](https://github.com/acmesh-official/acme.sh/wiki/dnsapi) tutorial.
-
-
 
 #### Install [acme.sh](https://github.com/acmesh-official/acme.sh)
 
@@ -34,10 +28,7 @@ Ensure that you have `curl` command in your terminal. And run the following comm
 curl https://get.acme.sh | sh -s email=my@example.com
 ```
 
-
-
 #### [Cloudflare DNS API token](https://dash.cloudflare.com/profile/api-tokens)
-
 
 You will need to create an API token which either:
 
@@ -57,8 +48,6 @@ You provide this info by setting the environment variable CF_Zone_ID to this zon
 You must give acme.sh the account ID of the Cloudflare account to which the relevant DNS zones belong. This is a 32-character hexadecimal string, and should not be confused with other account identifiers, such as the account email address (e.g. alice@example.com) or global API key (which is also a 32-character hexadecimal string). This account ID can be found via the Cloudflare dashboard, as the end of the URL when logged in, or on the Overview page of any of your zones, in the right-hand sidebar, beneath the zone ID.
 
 You provide this info by setting the environment variable CF_Account_ID to this account ID, e.g. run export CF_Account_ID="763eac4f1bcebd8b5c95e9fc50d010b4".
-
-
 
 #### Issue a certificate
 
@@ -123,8 +112,6 @@ openssl pkcs12 -export \
 
 If you want to set a password for the PFX file, you can set the password with `-passout pass:your_password`.
 
-
-
 ## Common Exceptions
 
 If you encounter the following exceptions, it means your **certificate is not trusted by the client or the certificate is not valid**. 
@@ -139,8 +126,6 @@ You will may see the following SSL certificate errors in your browser when you t
 ---> System.Net.Http.HttpRequestException: The SSL connection could not be established, see inner exception.
 ---> System.Security.Authentication.AuthenticationException: The remote certificate is invalid because of errors in the certificate chain: UntrustedRoot
 ```
-
-
 
 ## References
 

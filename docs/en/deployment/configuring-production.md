@@ -1,10 +1,13 @@
 # Configuring Your Application for Production Environments
 
-ABP has a lot of options to configure and fine-tune its features. They are all explained in their own documents. Default values for these options are pretty well for most of the deployment environments. However, you may need to care about some options based on how you've structured your deployment environment. In this document, we will highlight these kind of options. So, it is highly recommended to read this document in order to not have unexpected behaviors in your system in production.
+ABP predefines the configurations for the best performance for common deployment scenarios. 
+However, depending on how you have structured your deployment environment, you may need to consider some extra options. This document highlights these options. 
+It is highly recommended that you read it to prevent unexpected behaviors in your production environment.
 
 ## Distributed Cache Prefix
 
-ABP's [distributed cache infrastructure](../framework/fundamentals/caching.md) provides an option to set a key prefix for all of your data that is saved into your distributed cache provider. The default value of this option is not set (it is `null`). If you are using a distributed cache server that is shared by different applications, then you can set a prefix value to isolate an application's cache data from others.
+ABP's [distributed cache infrastructure](../framework/fundamentals/caching.md) provides an option to set a key prefix for all your data saved into your distributed cache provider. 
+The default value of this option is not set (it is `null`). If you are using a distributed cache server that is shared by different applications, then you can set a prefix value to isolate an application's cache data from others.
 
 ````csharp
 Configure<AbpDistributedCacheOptions>(options =>
@@ -13,19 +16,21 @@ Configure<AbpDistributedCacheOptions>(options =>
 });
 ````
 
-That's all. ABP, then will add this prefix to all of your cache keys in your application as along as you use ABP's `IDistributedCache<TCacheItem>` or `IDistributedCache<TCacheItem,TKey>` services. See the [Caching documentation](../framework/fundamentals/caching.md) if you are new to distributed caching.
+That's all! This prefix will be added to all cache keys in your application, as long as you use ABP's `IDistributedCache<TCacheItem>` or `IDistributedCache<TCacheItem,TKey>` services. 
+If you are new to distributed caching, check out the [caching documentation](../framework/fundamentals/caching.md).
 
-> **Warning**: If you use ASP.NET Core's standard `IDistributedCache` service, it's your responsibility to add the key prefix (you can get the value by injecting `IOptions<AbpDistributedCacheOptions>`). ABP can not do it.
+
+> **Warning**: If you use ASP.NET Core's standard `IDistributedCache` [service](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.distributed.idistributedcache), it is your responsibility to add the key prefix (you can get the value by injecting `IOptions<AbpDistributedCacheOptions>`). ABP can not do it anymore.
 
 > **Warning**: Even if you have never used distributed caching in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your caching server is shared among multiple systems.
 
-> **Warning**: If you are building a microservice system, then you will have multiple applications that share the same distributed cache server. In such systems, all applications (or services) should normally use the same cache prefix, because you want all the applications to use the same cache data to have consistency between them.
+> **Warning**: If you are building a microservice architecture, then you will have multiple applications that share the same distributed cache server. All applications (sub-services) in these systems should use the same cache prefix and cache values to have application-wide consistency.
 
-> **Warning**: Some of ABP's startup templates are pre-configured to set a prefix value for the distributed cache. So, please check your application code if it is already configured.
+> **Warning**: Some of ABP's startup templates are pre-configured to set a prefix value for the distributed cache. If your application code is already configured, please check it.
 
 ## Distributed Lock Prefix
 
-ABP's [distributed locking infrastructure](../framework/infrastructure/distributed-locking.md) provides an option to set a prefix for all the keys you are using in the distributed lock server. The default value of this option is not set (it is `null`). If you are using a distributed lock server that is shared by different applications, then you can set a prefix value to isolate an application's lock from others.
+ABP's [distributed locking infrastructure](../framework/infrastructure/distributed-locking.md) provides an option to set a prefix for all the keys you use in the distributed lock server. The default value of this option is not set (it is `null`). If you use a distributed lock server shared by different applications, you can set a prefix value to isolate an application's lock from others.
 
 ````csharp
 Configure<AbpDistributedLockOptions>(options =>
@@ -34,29 +39,31 @@ Configure<AbpDistributedLockOptions>(options =>
 });
 ````
 
-That's all. ABP, then will add this prefix to all of your keys in your application. See the [Distributed Locking documentation](../framework/infrastructure/distributed-locking.md) if you are new to distributed locking.
+That's all! ABP will add this prefix to all of your keys in your application. See the [Distributed Locking documentation](../framework/infrastructure/distributed-locking.md) if you are new to distributed locking.
 
 > **Warning**: Even if you have never used distributed locking in your own codebase, ABP still uses it for some features. So, you should always configure this prefix if your distributed lock server is shared among multiple systems.
 
 > **Warning**: If you are building a microservice system, then you will have multiple applications that share the same distributed locking server. In such systems, all applications (or services) should normally use the same lock prefix, because you want to globally lock your resources in your system.
 
-> **Warning**: Some of ABP's startup templates are pre-configured to set a prefix value for distributed locking. So, please check your application code if it is already configured.
+> **Warning**: Some of ABP's startup templates are pre-configured to set a prefix value for distributed locking. Please check your application code to see if it has already been configured.
 
 ## Email Sender
 
 ABP's [Email Sending](../framework/infrastructure/emailing.md) system abstracts sending emails from your application and module code and allows you to configure the email provider and settings in a single place.
 
-Email service is configured to write email contents to the standard [application log](../framework/fundamentals/logging.md) in development environment. You should configure the email settings to be able to send emails to users in your production environment.
+For the development environment, ABP will not send real emails. The email service is configured to write email contents in the development environment's standard [application log](../framework/fundamentals/logging.md). By default, it will write to the `Logs.txt` in your host project's `Logs` folder. You should configure the email settings to be able to send emails to users in your production environment.
 
-Please see the [Email Sending](../framework/infrastructure/emailing.md) document to learn how to configure its settings to really send emails.
+See the [Sending Email](../framework/infrastructure/emailing.md) document to learn what settings to configure to send actual email without writing to the logs.
 
 > **Warning**: If you don't configure the email settings, you will get errors while trying to send emails. For example, the [Account module](../modules/account.md)'s *Password Reset* feature sends email to the users to reset their passwords if they forget it.
 
 ## SMS Sender
 
-ABP's [SMS Sending abstraction](../framework/infrastructure/sms-sending.md) provides a unified interface to send SMS to users. However, its implementation is left to you. Because, typically a paid SMS service is used to send SMS, and ABP doesn't depend on a specific SMS provider.
+ABP's [SMS Sending abstraction](../framework/infrastructure/sms-sending.md) provides a unified interface for sending SMS to users. 
+However, its implementation is left to you. Typically, a paid SMS service is used to send SMS, and ABP doesn't depend on a specific SMS provider.
+> PRO users can use the [Twilio SMS module](../modules/twilio-sms.md) to send SMS.
 
-So, if you are using the `ISmsSender` service, you must implement it yourself, as shown in the following code block:
+In the following code-block you can see where to implement the `ISmsSender` service:
 
 ````csharp
 public class MySmsSender : ISmsSender, ITransientDependency
@@ -89,11 +96,11 @@ Configure<AbpStringEncryptionOptions>(options =>
 });
 ````
 
-Note that ABP CLI automatically sets the password to a random value on a new project creation. However, it is stored in the `appsettings.json` file and is generally added to your source control. It is suggested to use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) or [Environment Variables](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration) to set that value.
+Note that ABP CLI automatically sets the password to a random value on new project creation. However, it is stored in the `appsettings.json` file and is generally added to your source control. It is suggested to use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) or [Environment Variables](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration) to set that value.
 
 ## Logging
 
-ABP uses .NET's standard [Logging services](../framework/fundamentals/logging.md). So, it is compatible with any logging provider that works with .NET. ABP's startup solution templates come with [Serilog](https://serilog.net/) pre-installed and configured for you. It writes logs to file system and console with the initial configuration. File system is useful for development environment, but it is suggested you to use a different provider for your production environment, like Elasticsearch, database or any other provider that can properly work.
+ABP uses .NET's standard [Logging services](../framework/fundamentals/logging.md). So, it is compatible with any logging provider that works with .NET. ABP's startup solution templates come with [Serilog](https://serilog.net/) pre-installed and configured for you. It writes logs to the file system and console with the initial configuration. The file system is useful for the development environment, but it is suggested you use a different provider for your production environment, like Elasticsearch, database or any other provider that can properly work.
 
 ## The Swagger UI
 
