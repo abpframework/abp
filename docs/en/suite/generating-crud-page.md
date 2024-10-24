@@ -166,7 +166,7 @@ Let's see how to create a navigation property for a **Book Store** project.  We 
 
 #### 1- Create the "Author" entity
 
-`Author` entity is the dependent or child entity of the `Book` entity. So we will firstly create the `Author` entity. In the **Entity Info** tab, write "**Author**" in the **name** field. The rest will be automatically filled. Then click **Properties** tab and add the below 2 properties:
+`Author` entity is the principal or parent entity of the `Book` entity. So we will firstly create the `Author` entity. In the **Entity Info** tab, write "**Author**" in the **name** field. The rest will be automatically filled. Then click **Properties** tab and add the below 2 properties:
 
 1. **Property name:** `NameSurname`, **Property type:** `string`
 2. **Property name:** `Age`, **Property type:** `int`
@@ -185,7 +185,7 @@ After it finishes, run the web project and go to **Authors** page. Click **New A
 
 #### 2- Create the "Book" entity
 
-`Book` is the principal (parent) entity. It will hold a reference to the `Author` entity in `AuthorId` property. Let's create the `Book` entity in the ABP Suite. Click **-New entity-** in the **Entity** dropdown on the top of the page and write **"Book"** in the **Name** field. The rest will be automatically filled. Then click **Properties** tab and add 2 properties:
+`Book` is the dependent (child) entity. It will hold a reference to the `Author` entity in `AuthorId` property. Let's create the `Book` entity in the ABP Suite. Click **-New entity-** in the **Entity** dropdown on the top of the page and write **"Book"** in the **Name** field. The rest will be automatically filled. Then click **Properties** tab and add 2 properties:
 
 1. **Property name:** `Title`, **Property type:** `string`
 2. **Property name:** `Year`, **Property type:** `int`
