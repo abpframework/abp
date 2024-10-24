@@ -177,7 +177,7 @@ export class BooksComponent {
   }
 }
 ```
-
+{%{
 ```html
 <div class="card">
   <div class="card-header">
@@ -206,7 +206,6 @@ export class BooksComponent {
         <th>Name</th>
       </tr>
     </thead>
-
     <tbody>
       @for (book of items; track book.id) {
         <tr>
@@ -218,6 +217,8 @@ export class BooksComponent {
   </table>
 </div>
 ```
+}%}
+
 
 ## How to Refresh Table on Create/Update/Delete
 
