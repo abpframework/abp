@@ -1,10 +1,10 @@
 # Configuring SSL certificate(HTTPS)
 
-A website needs an SSL certificate in order to keep user data secure, verify ownership of the website, prevent attackers from creating a fake version of the site, and gain user trust.
+A website needs an SSL certificate to keep user data secure, verify ownership, prevent attackers from creating a fake version of the site, and gain user trust.
 
-This document introduces how to get and use SSL certificate(HTTPS) for your application.
+This document introduces how to get and use an SSL certificate (HTTPS) for your application.
 
-## Get a SSL Certificate from a Certificate Authority
+## Get an SSL Certificate from a Certificate Authority
 
 You can get a SSL certificate from a certificate authority (CA) such as [Let's Encrypt](https://letsencrypt.org/) or [Cloudflare](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/) and so on.
 
@@ -18,7 +18,7 @@ Once you have a certificate, you need to configure your web server to use it. Th
 
 You can create a self-signed certificate for testing purposes or internal use.
 
-There is an article about [how to create a self-signed certificate](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/self-signed-certificates-guide), If you are using IIS, you can use the following this document to [obtain a Certificate](https://learn.microsoft.com/en-us/iis/manage/configuring-security/how-to-set-up-ssl-on-iis#obtain-a-certificate)
+There is an article about [how to create a self-signed certificate](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/self-signed-certificates-guide); if you are using IIS, you can use the following document to [obtain a Certificate](https://learn.microsoft.com/en-us/iis/manage/configuring-security/how-to-set-up-ssl-on-iis#obtain-a-certificate)
 
 ## Common Problems
 
