@@ -40,7 +40,8 @@ public class AppUrlProvider_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
                 "https://wwww.volosoft.com",
                 "https://wwww.aspnetzero.com",
                 "https://{{tenantName}}.abp.io",
-                "https://{{tenantId}}.abp.io"
+                "https://{{tenantId}}.abp.io",
+                "https://*.demo.myabp.io"
             });
 
             options.Applications["BLAZOR"].RootUrl = "https://{{tenantId}}.abp.io";
@@ -101,12 +102,16 @@ public class AppUrlProvider_Tests : AbpIntegratedTest<AbpUiNavigationTestModule>
     [Fact]
     public async Task IsRedirectAllowedUrlAsync()
     {
-        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://community.abp.io")).ShouldBeFalse();
         (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://wwww.volosoft.com")).ShouldBeTrue();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://wwww.demo.myabp.io")).ShouldBeTrue();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://demo.myabp.io")).ShouldBeTrue();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://api.demo.myabp.io")).ShouldBeTrue();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://test.api.demo.myabp.io")).ShouldBeTrue();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://volosoft.com/demo.myabp.io")).ShouldBeFalse();
+        (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://wwww.myabp.io")).ShouldBeFalse();
 
         using (_currentTenant.Change(null))
         {
-            (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://www.abp.io")).ShouldBeFalse();
             (await _appUrlProvider.IsRedirectAllowedUrlAsync("https://abp.io")).ShouldBeTrue();
         }
 

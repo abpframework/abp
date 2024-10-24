@@ -70,6 +70,7 @@ Here, is the list of all available commands before explaining their details:
 * **`clear-download-cache`**: Clears the templates download cache.
 * **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
 * **`install-old-cli`**: Installs old ABP CLI.
+* **`generate-razor-page`**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 
 ### help
 
@@ -155,7 +156,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         * `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
     * `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       * `none`: Without any mobile application.
-      * `react-native`: React Native.
+      * `react-native`: React Native. This mobile option is only available for active **license owners**.
       * `maui`: MAUI. This mobile option is only available for ABP. (*Available for* ***Team*** *or higher licenses*)
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
@@ -966,6 +967,118 @@ Usage:
 ```bash
 abp install-old-cli [options]
 ```
+
+### generate-razor-page
+
+`generate-razor-page` command to generate a page class and then use it in the ASP NET Core pipeline to return an HTML page.
+
+Usage:
+
+1. Create a new `Razor Page(MyPage.cshtml)` that inherits from `AbpCompilationRazorPageBase` in `Views` folder.
+2. Create a `MyPageModel` class in the same folder.
+3. Create a `MyPage.js` and `MyPage.css` files in the same folder.
+4. Add the following code to the `MyPage.cshtml`, `MyPage.css` and `MyPage.js` files.
+
+```cs
+public class MyPageModel
+{
+    public string Message { get; set; }
+
+    public MyPageModel(string message)
+    {
+        Message = message;
+    }
+}
+```
+
+```cs
+@using System.Globalization
+@using Volo.Abp.AspNetCore.RazorViews
+@inherits AbpCompilationRazorPageBase
+@{
+    Response.ContentType = "text/html; charset=utf-8";
+    Response.StatusCode = 200;
+}
+
+@functions{
+    public MyPage(MyPageModel model)
+    {
+        Model = model;
+    }
+
+    public MyPageModel Model { get; set; }
+}
+
+<html lang="@HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            <%$ include: MyPage.css %>
+        </style>
+        <title>@HtmlEncoder.Encode(Model.Message)</title>
+    </head>
+    <body>
+        <h3>@HtmlEncoder.Encode(Model.Message)</h3>
+
+        <ul class="list-group">
+            @for(int i = 0; i < 10; i++)
+            {
+                <li class="list-group-item">@i item</li>
+            }
+        </ul>
+
+        <script>
+            //<!--
+            <%$ include: MyPage.js %>
+            //-->
+        </script>
+    </body>
+</html>
+```
+
+```css
+body {
+    background-color: #65b2ff;
+    color: #495057;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+```
+
+```js
+console.log('MyPage.js loaded!');
+```
+
+5. Finally, run the `generate-razor-page` command under the `Views` folder:
+
+```bash
+> abp generate-razor-page
+
+Generating code files for pages in /MyProject/Views
+  Generating code file for page MyPage.cshtml ...
+    Inlining file MyPage.css
+    Inlining file MyPage.js
+    Done!
+1 files successfully generated.
+```
+
+The output will be like in the above command output, and `MyPage.Designer.cs` file will be created in the same folder. It's a standard C# class that you can use it in the pipeline to return an HTML page:
+
+```cs
+app.Use(async (httpContext, next) =>
+{
+    if (true) // Your condition
+    {
+        var page = new MyPage(new MyPageModel("Test message"));
+        await page.ExecuteAsync(httpContext);
+    }
+    else
+    {
+        await next();
+    }
+});
+```
+
+![Razor Page](./../images/abp-generate-razor-page.png)
 
 #### Options
 

@@ -28,6 +28,7 @@
     "DisplayName:TwoFactorEnabled": "Xác thực hai yếu tố",
     "DisplayName:IsActive": "Tích cực",
     "DisplayName:LockoutEnabled": "Khóa tài khoản",
+    "Description:LockoutEnabled": "Khóa tài khoản sau các lần đăng nhập thất bại",
     "NewRole": "Vai trò mới",
     "RoleName": "Tên vai trò",
     "CreationTime": "Thời gian tạo",

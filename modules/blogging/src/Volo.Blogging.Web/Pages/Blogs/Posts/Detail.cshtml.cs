@@ -98,7 +98,9 @@ namespace Volo.Blogging.Pages.Blogs.Posts
 
             await GetData();
 
-            return Page();
+            // PRG pattern
+            // Redirect to the same page to prevent form resubmission
+            return RedirectToPage();
         }
 
         private async Task GetData()

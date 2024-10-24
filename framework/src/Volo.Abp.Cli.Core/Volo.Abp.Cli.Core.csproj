@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -24,6 +24,7 @@
     <PackageReference Include="LibGit2Sharp" />
     <PackageReference Include="StackExchange.Redis" />
     <PackageReference Include="DeepL.net" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Language" />
   </ItemGroup>
 
   <ItemGroup>

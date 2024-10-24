@@ -1,11 +1,11 @@
 <div class="abp-toast" [ngClass]="severityClass" (click)="tap()">
   <div class="abp-toast-icon">
-    <i class="fa icon" [ngClass]="iconClass" aria-hidden="true"></i>
+    <i class="bi icon" [ngClass]="iconClass" aria-hidden="true"></i>
   </div>
   <div class="abp-toast-content">
     @if (toast.options?.closable) {
       <button class="abp-toast-close-button" (click)="close()">
-        <i class="fa fa-times" aria-hidden="true"></i>
+        <i class="bi bi-x fs-4" aria-hidden="true"></i>
       </button>
     }
     <div class="abp-toast-title">

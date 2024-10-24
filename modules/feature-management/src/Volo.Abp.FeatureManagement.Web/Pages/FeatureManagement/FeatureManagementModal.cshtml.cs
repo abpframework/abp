@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
@@ -24,6 +25,10 @@ public class FeatureManagementModal : AbpPageModel
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ProviderKey { get; set; }
+    
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)] 
+    public string ProviderKeyDisplayName { get; set; }
 
     [BindProperty]
     public List<FeatureGroupViewModel> FeatureGroups { get; set; }
@@ -51,7 +56,10 @@ public class FeatureManagementModal : AbpPageModel
     public virtual async Task<IActionResult> OnGetAsync()
     {
         ValidateModel();
-
+        if (!ProviderKeyDisplayName.IsNullOrWhiteSpace())
+        {
+            ProviderKeyDisplayName = " - " + HttpUtility.HtmlEncode(ProviderKeyDisplayName);
+        }
         FeatureListResultDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
         return Page();

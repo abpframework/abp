@@ -9,7 +9,6 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.DynamicProxy;
 using Volo.Abp.Modularity;
 
 namespace Autofac.Builder;

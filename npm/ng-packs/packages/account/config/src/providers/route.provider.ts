@@ -14,6 +14,8 @@ export function configureRoutes(routes: RoutesService) {
         name: eAccountRouteNames.Account,
         invisible: true,
         layout: eLayoutType.account,
+        breadcrumbText: eAccountRouteNames.Account,
+        iconClass: 'bi bi-person-fill-gear',
         order: 1,
       },
       {
@@ -33,6 +35,8 @@ export function configureRoutes(routes: RoutesService) {
         name: eAccountRouteNames.ManageProfile,
         parentName: eAccountRouteNames.Account,
         layout: eLayoutType.application,
+        breadcrumbText: 'AbpAccount::Manage',
+        iconClass: 'bi bi-kanban-fill',
         order: 3,
       },
       {

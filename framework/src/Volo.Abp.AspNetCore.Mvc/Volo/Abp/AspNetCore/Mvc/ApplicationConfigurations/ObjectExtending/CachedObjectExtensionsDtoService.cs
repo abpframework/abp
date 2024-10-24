@@ -142,6 +142,24 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
                 {
                     IsVisible = propertyConfig.UI.OnTable.IsVisible
                 }
+            },
+            Policy = new ExtensionPropertyPolicyDto
+            {
+                GlobalFeatures = new ExtensionPropertyGlobalFeaturePolicyDto
+                {
+                    Features = propertyConfig.Policy.Features.Features,
+                    RequiresAll = propertyConfig.Policy.Features.RequiresAll
+                },
+                Features = new ExtensionPropertyFeaturePolicyDto
+                {
+                    Features = propertyConfig.Policy.Features.Features,
+                    RequiresAll = propertyConfig.Policy.Features.RequiresAll
+                },
+                Permissions = new ExtensionPropertyPermissionPolicyDto
+                {
+                    PermissionNames = propertyConfig.Policy.Permissions.PermissionNames,
+                    RequiresAll = propertyConfig.Policy.Permissions.RequiresAll
+                }
             }
         };
 
@@ -156,7 +174,6 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
                 FilterParamName = propertyConfig.UI.Lookup.FilterParamName
             };
         }
-
 
         foreach (var attribute in propertyConfig.Attributes)
         {

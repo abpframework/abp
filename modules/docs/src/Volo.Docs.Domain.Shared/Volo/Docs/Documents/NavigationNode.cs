@@ -30,11 +30,16 @@ namespace Volo.Docs.Documents
 
         public bool IsSelected(string documentName)
         {
+            return FindNavigation(documentName) != null;
+        }
+
+        public NavigationNode FindNavigation(string documentName)
+        {
             if (documentName == null)
             {
-                return false;
+                return null;
             }
-
+            
             var path = Path ?? string.Empty;
             var pathHasExtension = System.IO.Path.HasExtension(path);
 
@@ -44,26 +49,26 @@ namespace Volo.Docs.Documents
                 path = path.EnsureEndsWith('/') + "index" + extension;
             }
             
-
             if (string.Equals(documentName, path, StringComparison.OrdinalIgnoreCase))
             {
-                return true;
+                return this;
             }
 
             if (Items == null)
             {
-                return false;
+                return null;
             }
 
             foreach (var childItem in Items)
             {
-                if (childItem.IsSelected(documentName))
+                var node = childItem.FindNavigation(documentName);
+                if (node != null)
                 {
-                    return true;
+                    return node;
                 }
             }
 
-            return false;
+            return null;
         }
     }
 

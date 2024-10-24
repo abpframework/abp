@@ -64,7 +64,7 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
                 .ShouldBeTrue();
         });
     }
-    
+
     [Theory]
     [InlineData("https://abp.io/features")]
     public async Task CreateAsync_ShouldCreateComment_If_Url_Allowed(string text)
@@ -84,8 +84,8 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Theory]
-    [InlineData("[ABP Community](https://abp.io/community/)")]
-    [InlineData("<a href='https://abp.io/docs/latest'>abp.io/docs</a>")]
+    [InlineData("[ABP Community](https://community.abp.io/)")] //not allowed URL
+    [InlineData("<a href='https://docs.abp.io/en/abp/latest'>docs.abp.io</a>")] //not allowed URL
     public async Task CreateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed(string text)
     {
         _currentUser.Id.Returns(_cmsKitTestData.User2Id);
@@ -94,7 +94,7 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
             await _commentAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
-                new CreateCommentInput 
+                new CreateCommentInput
                 {
                     RepliedCommentId = null,
                     Text = text, //not allowed URL
@@ -104,7 +104,7 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
     }
 
     [Fact]
-    public async Task CreateAsync_ShouldThrowUserFriendlyException_If_IdempotencyToken_Not_Unique() 
+    public async Task CreateAsync_ShouldThrowUserFriendlyException_If_IdempotencyToken_Not_Unique()
     {
         _currentUser.Id.Returns(_cmsKitTestData.User2Id);
 
@@ -112,10 +112,10 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
             await _commentAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
-                new CreateCommentInput 
+                new CreateCommentInput
                 {
                     RepliedCommentId = null,
-                    Text = "<text>", 
+                    Text = "<text>",
                     IdempotencyToken = _cmsKitTestData.IdempotencyToken_1
                 }
             ));
@@ -139,7 +139,7 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
             comment.Text.ShouldBe("I'm Updated");
         });
     }
-    
+
     [Fact]
     public async Task UpdateAsync_ShouldThrowUserFriendlyException_If_Url_UnAllowed()
     {
@@ -148,9 +148,9 @@ public class CommentPublicAppService_Tests : CmsKitApplicationTestBase
         await Should.ThrowAsync<UserFriendlyException>(async () =>
             await _commentAppService.UpdateAsync(
                 _cmsKitTestData.CommentWithChildId,
-                new UpdateCommentInput 
+                new UpdateCommentInput
                 {
-                    Text = "[ABP Community - Update](https://abp.io/community/)", //not allowed URL
+                    Text = "[ABP Community - Update](https://community.abp.io/)", //not allowed URL
                 }
             ));
     }

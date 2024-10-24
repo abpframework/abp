@@ -77,7 +77,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientD
         {
             if (!context.HttpContext.Response.HasStarted)
             {
-                context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+                context.HttpContext.Response.Headers.Append(AbpHttpConsts.AbpErrorFormat, "true");
                 context.HttpContext.Response.StatusCode = (int)context
                     .GetRequiredService<IHttpExceptionStatusCodeFinder>()
                     .GetStatusCode(context.HttpContext, context.Exception);
@@ -102,6 +102,7 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientD
         {
             options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+            options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
         });
 
         var remoteServiceErrorInfoBuilder = new StringBuilder();

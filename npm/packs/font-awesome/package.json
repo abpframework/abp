@@ -1,5 +1,5 @@
 {
-  "version": "8.3.2",
+  "version": "9.0.0-rc.1",
   "name": "@abp/font-awesome",
   "repository": {
     "type": "git",
@@ -10,8 +10,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~8.3.2",
-    "@fortawesome/fontawesome-free": "^6.5.2"
+    "@abp/core": "~9.0.0-rc.1",
+    "@fortawesome/fontawesome-free": "^6.6.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

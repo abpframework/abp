@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending;
@@ -129,5 +131,34 @@ public static class ObjectExtensionManagerExtensions
         }
 
         return extensionInfo.GetProperties();
+    }
+
+    public static Task<ImmutableList<ObjectExtensionPropertyInfo>> GetPropertiesAndCheckPolicyAsync<TObject>(
+        [NotNull] this ObjectExtensionManager objectExtensionManager,
+        [NotNull] IServiceProvider serviceProvider)
+    {
+        return objectExtensionManager.GetPropertiesAndCheckPolicyAsync(typeof(TObject), serviceProvider);
+    }
+
+    public async static Task<ImmutableList<ObjectExtensionPropertyInfo>> GetPropertiesAndCheckPolicyAsync(
+        [NotNull] this ObjectExtensionManager objectExtensionManager,
+        [NotNull] Type objectType,
+        [NotNull] IServiceProvider serviceProvider)
+    {
+        Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+        Check.NotNull(objectType, nameof(objectType));
+        Check.NotNull(serviceProvider, nameof(serviceProvider));
+
+        var extensionPropertyPolicyConfigurationChecker = serviceProvider.GetRequiredService<ExtensionPropertyPolicyChecker>();
+        var properties = new List<ObjectExtensionPropertyInfo>();
+        foreach (var propertyInfo in objectExtensionManager.GetProperties(objectType))
+        {
+            if (await extensionPropertyPolicyConfigurationChecker.CheckPolicyAsync(propertyInfo.Policy))
+            {
+                properties.Add(propertyInfo);
+            }
+        }
+
+        return properties.ToImmutableList();
     }
 }

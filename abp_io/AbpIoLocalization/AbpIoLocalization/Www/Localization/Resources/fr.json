@@ -301,7 +301,7 @@
     "ProgressiveWebApplication": "Application Web progressive",
     "Preview": "Aperçu",
     "CreateANewSolution": "Créer une nouvelle solution",
-    "ABPFrameworkFeatures": "<span class=\"gradient-framework\">Fonctionnalités</span> du cadre ABP",
+    "FrameworkFeatures": "<span class=\"gradient-framework\">Fonctionnalités</span> du cadre ABP",
     "Commercial": "Commercial",
     "ThirdPartyTools": "Outils tiers",
     "Back": "Dos",

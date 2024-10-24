@@ -1,12 +1,12 @@
 {
-  "version": "8.3.2",
+  "version": "9.0.0-rc.1",
   "name": "@abp/highlight.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~8.3.2",
-    "@highlightjs/cdn-assets": "~11.9.0"
+    "@abp/core": "~9.0.0-rc.1",
+    "@highlightjs/cdn-assets": "~11.10.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

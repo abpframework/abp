@@ -2,6 +2,14 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 0.9.2 (2024-10-22)
+
+* Added "Sample CRUD Page" option for pro templates
+* Generated *Signing-Certificate* for appnolayers template
+* Added test projects optionally for all templates
+* Added automapper configuration to apps/web project for ms template
+* Disabled *transaction* for `MongoDB` and `SQLite` by default
+
 ## 0.9.1 (2024-10-10)
 
 * Fixed the ABP Studio CLI's Bundle Command

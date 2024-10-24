@@ -157,7 +157,7 @@
     "ABPCLIExplanation": "ABP CLI (Command Line Interface) je nástroj v príkazovom riadku na vykonávanie niektorých bežných operácií v riešeniach založených na ABP.",
     "ABPSuiteEasilyCURD": "ABP Suite je nástroj, ktorý vám umožňuje jednoducho vytvárať CRUD stránky.",
     "WeAreHereToHelp": "Sme tu, aby sme <span class=\"zero-text\">pomohli</span>",
-    "BrowseOrAskQuestion": "Môžete si prezerať témy našej nápovedy alebo vyhľadávať v často kladených otázkach, prípadne nám môžete položiť otázku pomocou <a href=\"{0}\" class=\"text-success\">kontaktného formulára</a>.",
+    "BrowseOrAskQuestion": "Môžete si prezerať témy našej nápovedy alebo vyhľadávať v často kladených otázkach, prípadne nám môžete položiť otázku pomocou <a href=\"{0}\">kontaktného formulára</a>.",
     "SearchQuestionPlaceholder": "Vyhľadávanie v často kladených otázkach",
     "WhatIsTheABPCommercial": "Čo je to ABP Commercial?",
     "WhatAreDifferencesThanAbpFramework": "Aké sú rozdiely medzi open source ABP Framework a ABP Commercial?",

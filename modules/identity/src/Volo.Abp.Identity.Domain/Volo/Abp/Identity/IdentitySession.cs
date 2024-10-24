@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity;
 
-public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
+public class IdentitySession : BasicAggregateRoot<Guid>, IHasExtraProperties, IMultiTenant
 {
     public virtual string SessionId { get; protected set; }
 
@@ -28,9 +31,12 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
 
     public virtual DateTime? LastAccessed { get; protected set; }
 
+    public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
+
     protected IdentitySession()
     {
-
+        ExtraProperties = new ExtraPropertyDictionary();
+        this.SetDefaultsForExtraProperties();
     }
 
     public IdentitySession(
@@ -55,6 +61,17 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
         IpAddresses = ipAddresses;
         SignedIn = signedIn;
         LastAccessed = lastAccessed;
+
+        ExtraProperties = new ExtraPropertyDictionary();
+        this.SetDefaultsForExtraProperties();
+    }
+
+    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        return ExtensibleObjectValidator.GetValidationErrors(
+            this,
+            validationContext
+        );
     }
 
     public void SetSignedInTime(DateTime signedIn)
@@ -80,7 +97,22 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
     private static string JoinAsString(IEnumerable<string> list)
     {
         var serialized = string.Join(",", list);
-        return serialized.IsNullOrWhiteSpace() ? null : serialized;
+        if (serialized.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        while (serialized.Length > IdentitySessionConsts.MaxIpAddressesLength)
+        {
+            var lastCommaIndex = serialized.IndexOf(',');
+            if (lastCommaIndex < 0)
+            {
+                return serialized;
+            }
+            serialized = serialized.Substring(lastCommaIndex + 1);
+        }
+
+        return serialized;
     }
 
     private string[] GetArrayFromString(string str)
