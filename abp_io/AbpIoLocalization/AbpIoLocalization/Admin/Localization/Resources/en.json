@@ -755,4 +755,10 @@
     "TelemetryReports:ChartLabels:Monthly": "Monthly",
     "TelemetryReports:ChartLabels:Users" : "Users"
   }
+        "Permission:SolutionReports": "Solution Reports",
+        "Permission:UserReports": "User Reports",
+        "Menu:SolutionReports": "Solution Reports",
+        "Menu:UserReports": "User Reports",
+        "Menu:AnalyticsMenu": "Analytics"
+    }
 }
