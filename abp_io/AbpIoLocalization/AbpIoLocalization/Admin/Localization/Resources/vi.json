@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Báo cáo",
+    "Permission:Reports:Telemetry": "Báo cáo telemetry",
     "Search": "Tìm kiếm",
     "ClearFilter": "LÀm sạch bộ lọc",
     "LicensePrivateKey": "Cấp phép khóa cá nhân",

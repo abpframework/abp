@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Analitice Cli",
     "Permission:CliAnalytics": "Analitice Cli",
     "Permission:Reports": "Rapoarte",
+    "Permission:Reports:Telemetry": "Rapoarte de telemetrie",
     "Search": "Caută",
     "ClearFilter": "Şterge filtru",
     "LicensePrivateKey": "Cheie privată licenţă",

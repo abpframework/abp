@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "تحليلات Cli",
     "Permission:CliAnalytics": "تحليلات Cli",
     "Permission:Reports": "التقارير",
+    "Permission:Reports:Telemetry": "تقارير القياس عن بعد",
     "Search": "بحث",
     "ClearFilter": "مرشح واضح",
     "LicensePrivateKey": "مفتاح خاص للترخيص",

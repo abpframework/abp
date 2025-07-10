@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli-analytiikat",
     "Permission:CliAnalytics": "Cli-analytiikka",
     "Permission:Reports": "Raportit",
+    "Permission:Reports:Telemetry": "Telemetria-raportit",
     "Search": "Hae",
     "ClearFilter": "Tyhjennä suodatin",
     "LicensePrivateKey": "Lisenssin yksityinen avain",

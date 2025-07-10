@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Analyses Cli",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Rapports",
+    "Permission:Reports:Telemetry": "Rapports de télémétrie",
     "Search": "Rechercher",
     "ClearFilter": "Effacer le filtre",
     "LicensePrivateKey": "Clé privée de licence",

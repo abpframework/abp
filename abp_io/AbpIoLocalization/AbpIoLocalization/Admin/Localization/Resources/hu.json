@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analytics",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Jelentések",
+    "Permission:Reports:Telemetry": "Telemetria jelentések",
     "Search": "Keresés",
     "ClearFilter": "Tiszta szűrő",
     "LicensePrivateKey": "Licenc privát kulcs",

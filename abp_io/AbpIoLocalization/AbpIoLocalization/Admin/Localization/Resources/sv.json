@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Rapporter",
+    "Permission:Reports:Telemetry": "Telemetrirapporter",
     "Search": "Sök",
     "ClearFilter": "Rensa filter",
     "LicensePrivateKey": "Licens privat nyckel",

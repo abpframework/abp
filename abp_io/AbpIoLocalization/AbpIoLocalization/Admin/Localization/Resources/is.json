@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Skýrslur",
+    "Permission:Reports:Telemetry": "Fjarmælingarskýrslur",
     "Search": "Leita",
     "ClearFilter": "Hreinsa Síu",
     "LicensePrivateKey": "Einkalykill leyfishafa",

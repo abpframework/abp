@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli 分析",
     "Permission:Reports": "报告",
+    "Permission:Reports:Telemetry": "遥测报告",
     "Search": "搜索",
     "ClearFilter": "清除过滤器",
     "LicensePrivateKey": "许可证私钥",

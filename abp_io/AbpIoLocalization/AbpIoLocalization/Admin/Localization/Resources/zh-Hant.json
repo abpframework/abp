@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "客戶端分析",
     "Permission:CliAnalytics": "客戶端分析",
     "Permission:Reports": "報告",
+    "Permission:Reports:Telemetry": "遙測報告",
     "Search": "搜索",
     "ClearFilter": "清除過濾器",
     "LicensePrivateKey": "許可證私鑰",

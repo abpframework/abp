@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli-analyses",
     "Permission:CliAnalytics": "Cli-analyse",
     "Permission:Reports": "Rapporten",
+    "Permission:Reports:Telemetry": "Telemetrierapporten",
     "Search": "Zoeken",
     "ClearFilter": "Filter wissen",
     "LicensePrivateKey": "Licentie privésleutel",

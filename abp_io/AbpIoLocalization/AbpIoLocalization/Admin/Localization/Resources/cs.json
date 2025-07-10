@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analytics",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Zprávy",
+    "Permission:Reports:Telemetry": "Telemetrické sestavy",
     "Search": "Vyhledávání",
     "ClearFilter": "Vymazat filtr",
     "LicensePrivateKey": "Soukromý klíč licence",

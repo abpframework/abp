@@ -236,6 +236,7 @@
     "Permission:CliAnalytics": "Cli Analytics",
     "Reports": "Отчеты",
     "Permission:Reports": "Отчеты",
+    "Permission:Reports:Telemetry": "Отчеты телеметрии",
     "Search": "Поиск",
     "ClearFilter": "Очистить фильтр",
     "LicensePrivateKey": "Лицензионный закрытый ключ",

@@ -233,6 +233,8 @@
     "CliAnalytics": "Cli Analitik",
     "Permission:CliAnalyticses": "Cli Analitikleri",
     "Permission:CliAnalytics": "Cli Analitik",
+    "Permission:Reports": "Raporlar",
+    "Permission:Reports:Telemetry": "Telemetri raporları",
     "Search": "Ara",
     "ClearFilter": "Filtreyi temizle",
     "LicensePrivateKey": "Lisans özel anahtar",

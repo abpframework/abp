@@ -236,6 +236,7 @@
     "Permission:CliAnalyticses": "Cli Analyticses",
     "Permission:CliAnalytics": "Cli Analytics",
     "Permission:Reports": "Izvještaji",
+    "Permission:Reports:Telemetry": "Telemetrijski izvještaji",
     "Search": "traži",
     "ClearFilter": "Očisti filter",
     "LicensePrivateKey": "Privatni ključ licence",
