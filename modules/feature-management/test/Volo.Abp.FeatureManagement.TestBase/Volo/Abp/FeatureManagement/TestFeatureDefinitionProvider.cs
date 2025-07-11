@@ -7,6 +7,7 @@ public class TestFeatureDefinitionProvider : FeatureDefinitionProvider
 {
     public const string SocialLogins = "SocialLogins";
     public const string EmailSupport = "EmailSupport";
+    public const string EmailSupportMaxNumber = "EmailSupportMaxNumber";
     public const string DailyAnalysis = "DailyAnalysis";
     public const string UserCount = "UserCount";
     public const string ProjectCount = "ProjectCount";
@@ -21,10 +22,16 @@ public class TestFeatureDefinitionProvider : FeatureDefinitionProvider
             valueType: new ToggleStringValueType()
         );
 
-        group.AddFeature(
+        var emailSupport = group.AddFeature(
             EmailSupport,
+            "true",
             valueType: new ToggleStringValueType()
         );
+
+        emailSupport.CreateChild(
+            EmailSupportMaxNumber,
+            "false",
+            valueType: new ToggleStringValueType());
 
         group.AddFeature(
             DailyAnalysis,

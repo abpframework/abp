@@ -1,6 +1,14 @@
 # Microservice Tutorial Part 02: Creating the initial Catalog service
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG"],
+    "DB": ["EF","Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -20,11 +28,11 @@ In this tutorial, you will create a new Catalog service and integrate it to the 
 
 Right-click the `services` folder in the *Solution Explorer* panel, select the *Add* -> *New Module* -> *Microservice* command:
 
-![abp-studio-add-new-microservice-command](images/abp-studio-add-new-microservice-command.png)
+![abp-studio-add-new-microservice-command](images/abp-studio-add-new-microservice-command-dark.png)
 
 This command opens a new dialog to define the properties of the new microservice. You can use the following values to create a new microservice named `CatalogService`:
 
-![abp-studio-add-new-microservice-dialog](images/abp-studio-add-new-microservice-dialog.png)
+![abp-studio-add-new-microservice-dialog](images/abp-studio-add-new-microservice-dialog-dark.png)
 
 When you click the *Next* button, you are redirected to the database provider selection step.
 
@@ -32,27 +40,48 @@ When you click the *Next* button, you are redirected to the database provider se
 
 Here, you can select the database provider to be used by the new microservice:
 
-![abp-studio-add-new-microservice-dialog-database-step](images/abp-studio-add-new-microservice-dialog-database-step.png)
+{{if DB == "Mongo"}}
+
+![abp-studio-add-new-microservice-dialog-database-step-mongo](images/abp-studio-add-new-microservice-dialog-database-step-mongo-dark.png)
+
+Select *MongoDB* option and proceed the *Next* step.
+{{end}}
+
+{{if DB == "EF"}}
+
+![abp-studio-add-new-microservice-dialog-database-step](images/abp-studio-add-new-microservice-dialog-database-step-dark.png)
 
 Select *Entity Framework Core* option and proceed the *Next* step.
+
+### Selecting Database Management System
+
+![abp-studio-add-new-microservice-dialog-database-step](images/abp-studio-add-new-microservice-dialog-database-management-dark.png)
+
+Select the desired option and proceed to the next step.
+
+{{end}}
+
+### Additional Options
+
+![abp-studio-add-new-microservice-dialog-additional-options-step](images/abp-studio-add-new-microservice-dialog-additional-options-step-dark.png)
+
+In this step, you can select additional options for the new microservice. You can leave them as default and click the *Create* button.
+
+That's all, ABP Studio creates the new microservice and arranges all the integration and configuration for you.
 
 ### Integrating to the Solution
 
 In this step, we can select the options for integrating the new microservice to the rest of the solution components:
 
-![abp-studio-add-new-microservice-dialog-integration-step](images/abp-studio-add-new-microservice-dialog-integration-step.png)
+{{if UI == "NG"}}
+![abp-studio-add-new-microservice-dialog-integration-step](images/abp-studio-add-new-microservice-dialog-integration-step-ng-dark.png)
+{{else}}
+![abp-studio-add-new-microservice-dialog-integration-step](images/abp-studio-add-new-microservice-dialog-integration-step-dark.png)
+{{end}}
 
 ABP Studio intelligently selects the right values for you, but you should still check them carefully since they directly affect what we will do in the next parts of this tutorial.
 
 **Ensure the options are configured the same as in the preceding figure**, and click the *Next* button.
-
-### Additional Options
-
-![abp-studio-add-new-microservice-dialog-additional-options-step](images/abp-studio-add-new-microservice-dialog-additional-options-step.png)
-
-In this step, you can select additional options for the new microservice. You can leave them as default and click the *Create* button.
-
-That's all, ABP Studio creates the new microservice and arranges all the integration and configuration for you.
 
 ## Exploring the New Catalog Microservice
 
@@ -62,7 +91,7 @@ In this section, we will investigate the new microservice in overall.
 
 The new microservice is added under the `services` folder in the `CloudCrm` ABP Studio solution:
 
-![abp-studio-new-catalog-service-in-solution-explorer](images/abp-studio-new-catalog-service-in-solution-explorer.png)
+![abp-studio-new-catalog-service-in-solution-explorer](images/abp-studio-new-catalog-service-in-solution-explorer-dark.png)
 
 The new microservice has its own separate .NET solution that includes three packages (.NET projects):
 
@@ -74,11 +103,11 @@ The new microservice has its own separate .NET solution that includes three pack
 
 You can open the new microservice in your favorite IDE for development. As a shortcut, you can right-click it in ABP Studio, select the *Open with* -> *Visual Studio* command for example:
 
-![abp-studio-open-with-visual-studio](images/abp-studio-open-with-visual-studio.png)
+![abp-studio-open-with-visual-studio](images/abp-studio-open-with-visual-studio-dark.png)
 
 Here is the `CloudCrm.CatalogService` .NET solution in Visual Studio:
 
-![visual-studio-solution-explorer-catalog-service](images/visual-studio-solution-explorer-catalog-service.png)
+![visual-studio-solution-explorer-catalog-service](images/visual-studio-solution-explorer-catalog-service-dark.png)
 
 ### Running the New Service
 
@@ -88,17 +117,17 @@ You can run the solution using ABP Studio's *Solution Runner*. It will also run 
 
 Click the *Play* button near to the solution root:
 
-![abp-studio-solution-runner-play-all](images/abp-studio-solution-runner-play-all.png)
+![abp-studio-solution-runner-play-all](images/abp-studio-solution-runner-play-all-dark.png)
 
 ### Browsing the Catalog Service
 
 Once all of the applications have started, right-click the Catalog service and select the *Browse* command:
 
-![abp-studio-browse-catalog-service](images/abp-studio-browse-catalog-service.png)
+![abp-studio-browse-catalog-service](images/abp-studio-browse-catalog-service-dark.png)
 
 It will open the built-in browser and you will see the Swagger UI for the Catalog service:
 
-![abp-studio-browser-catalog-service-swagger-ui](images/abp-studio-browser-catalog-service-swagger-ui.png)
+![abp-studio-browser-catalog-service-swagger-ui](images/abp-studio-browser-catalog-service-swagger-ui-dark.png)
 
 You can test the APIs on the Swagger UI to see if the new microservice is properly working.
 

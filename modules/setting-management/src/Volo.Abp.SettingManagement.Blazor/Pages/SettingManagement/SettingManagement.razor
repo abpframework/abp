@@ -24,20 +24,22 @@
                 </div>
             </Items>
             <Content>
-                @foreach (var group in SettingComponentCreationContext.Groups)
-                {
-                    <TabPanel Name="@GetNormalizedString(group.Id)" class="abp-md-form">
-                        @{
-                            SettingItemRenders.Add(builder =>
-                            {
-                                builder.OpenComponent(0, group.ComponentType);
-                                builder.CloseComponent();
-                            });
-                        }
+                <div class="pt-3">
+                    @foreach (var group in SettingComponentCreationContext.Groups)
+                    {
+                        <TabPanel Name="@GetNormalizedString(group.Id)" class="abp-md-form">
+                            @{
+                                SettingItemRenders.Add(builder =>
+                                {
+                                    builder.OpenComponent(0, group.ComponentType);
+                                    builder.CloseComponent();
+                                });
+                            }
 
-                        @SettingItemRenders.Last()
-                    </TabPanel>
-                }
+                            @SettingItemRenders.Last()
+                        </TabPanel>
+                    }
+                </div>
             </Content>
         </Tabs>
     </CardBody>

@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Az Ön által elküldött adatokat egy másik felhasználó/ügyfél már megváltoztatta. Kérjük, dobja el az elvégzett módosításokat, és próbálja elölről.",
     "Error": "Nincs {0} elem, amelynek id értéke {1}!",
     "UnhandledException": "Nem kezelt kivétel!",
+    "Authorizing": "Engedélyezés…",
     "401Message": "Jogosulatlan",
     "403Message": "Tiltott",
     "404Message": "Az oldal nem található",

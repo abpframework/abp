@@ -97,9 +97,48 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
     {
         await CheckProviderPolicy(providerName, providerKey);
 
+        var inputFeatureNames = input.Features.Select(f => f.Name).ToHashSet();
+        var featureMap = input.Features.ToDictionary(f => f.Name);
+        var features = new Dictionary<UpdateFeatureDto, List<UpdateFeatureDto>>();
+        var processed = new HashSet<string>();
+
         foreach (var feature in input.Features)
         {
-            await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
+            if (!processed.Add(feature.Name))
+            {
+                continue;
+            }
+
+            var featureDefinition = await FeatureDefinitionManager.GetAsync(feature.Name);
+            var validChildren = new List<UpdateFeatureDto>();
+
+            foreach (var childFeature in featureDefinition.Children)
+            {
+                if (inputFeatureNames.Contains(childFeature.Name) &&
+                    featureMap.TryGetValue(childFeature.Name, out var childDto) &&
+                    processed.Add(childFeature.Name))
+                {
+                    validChildren.Add(childDto);
+                }
+            }
+
+            features[feature] = validChildren;
+        }
+
+        foreach (var feature in features)
+        {
+            var forceToSet = false;
+            foreach (var childFeature in feature.Value)
+            {
+                await FeatureManager.SetAsync(childFeature.Name, childFeature.Value, providerName, providerKey);
+                var value = await FeatureManager.GetOrNullWithProviderAsync(childFeature.Name, providerName, providerKey);
+                if (value.Provider.Name == providerName && value.Provider.Key == providerKey)
+                {
+                    forceToSet = true;
+                }
+            }
+
+            await FeatureManager.SetAsync(feature.Key.Name, feature.Key.Value, providerName, providerKey, forceToSet: forceToSet);
         }
     }
 
@@ -137,6 +176,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
     public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
     {
+        await CheckProviderPolicy(providerName, providerKey);
         await FeatureManager.DeleteAsync(providerName, providerKey);
     }
 }

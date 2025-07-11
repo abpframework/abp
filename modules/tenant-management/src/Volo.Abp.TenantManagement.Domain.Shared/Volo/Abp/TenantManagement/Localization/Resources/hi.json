@@ -16,7 +16,7 @@
     "Permission:Edit": "संपादित करें",
     "Permission:Delete": "हटाएं",
     "Permission:ManageConnectionStrings": "कनेक्शन स्ट्रिंग्स प्रबंधित करें",
-    "Permission:ManageFeatures": "सुविधाओं को प्रबंधित करें",
+    "Permission:ManageFeatures": "सुविधाएं",
     "DisplayName:AdminEmailAddress": "ईमेल पता",
     "DisplayName:AdminPassword": "व्यवस्थापक का पारण शब्द"
   }

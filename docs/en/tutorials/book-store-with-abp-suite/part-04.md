@@ -51,7 +51,7 @@ Here is the details:
 * Selected the display property as *Name*, this will be used in the dropdown component to set an author with a book & also it will be shown in the datatable of the *Books* page. 
 * Also, made the relation **required** and set it **filterable** so books can be filterable by authors.
 
-> **Note**: You should delete all existing books in the database (if any), before the code generation. Because, a new foreign-key will be added to the _books_ table and if there is any record in the table, then a new migration can't apply to the database and you may need to update the database manually.
+> **Note**: You should delete all existing books in the database (if any), before the code generation. Because, a new foreign-key will be added to the _books_ table and if there is any record in the table, then a new migration can't apply to the database and you may need to update the database manually. Deleting existing records from UI will not be enough because of soft-delete, therefore you will have to delete the records manually.
 
 After, specifying the metadata, you can click the *Ok* button to close the modal. Then, click the **Save and generate** button to start code generation process. ABP Suite will establish one-to-many relationship between the entities, and will generate all necessary code automatically:
 

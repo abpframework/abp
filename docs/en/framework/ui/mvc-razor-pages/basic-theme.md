@@ -14,7 +14,7 @@ If you need to manually this theme, follow the steps below:
 
 * Install the [Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic) NuGet package to your web project.
 * Add `AbpAspNetCoreMvcUiBasicThemeModule` into the `[DependsOn(...)]` attribute for your [module class](../../architecture/modularity/basics.md) in the web project.
-* Install the [@abp/aspnetcore.mvc.ui.theme.basic](https://www.npmjs.com/package/@abp/aspnetcore.mvc.ui.theme.basic) NPM package to your web project (e.g. `npm install @abp/aspnetcore.mvc.ui.theme.basic` or `yarn add @abp/aspnetcore.mvc.ui.theme.basic`).
+* Install the [@abp/aspnetcore.mvc.ui.theme.basic](https://www.npmjs.com/package/@abp/aspnetcore.mvc.ui.theme.basic) NPM package to your web project (e.g. `abp add-package @abp/aspnetcore.mvc.ui.theme.basic`).
 * Run `abp install-libs` command in a command line terminal in the web project's folder.
 
 ## Layouts

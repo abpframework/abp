@@ -15,7 +15,7 @@ namespace Volo.Abp.Cli.Commands;
 public class AddPackageCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "add-package";
-    
+
     public ILogger<AddPackageCommand> Logger { get; set; }
 
     protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -40,12 +40,12 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
             );
         }
 
-        var isAngularPackage = false;
+        var isNpmPackage = false;
         var isNugetPackage = true;
 
         if (commandLineArgs.Target.StartsWith("@"))
         {
-            isAngularPackage = true;
+            isNpmPackage = true;
             isNugetPackage = false;
         }
 
@@ -66,16 +66,15 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
                 addSourceCodeToSolutionFile
             );
         }
-        else if (isAngularPackage)
+        else if (isNpmPackage)
         {
-            await ProjectNpmPackageAdder.AddAngularPackageAsync(
+            await ProjectNpmPackageAdder.AddNpmPackageAsync(
                 GetAngularDirectory(commandLineArgs),
                 commandLineArgs.Target,
                 version,
                 withSourceCode
             );
         }
-
     }
 
     public string GetUsageInfo()
@@ -84,7 +83,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
 
         sb.AppendLine("");
         sb.AppendLine("'add-package' command is used to add an ABP package to a project.");
-        sb.AppendLine("It should be used in a folder containing a .csproj file, .sln file or angular.json.");
+        sb.AppendLine("It should be used in a folder containing a .csproj file, .sln file or packages.json.");
         sb.AppendLine("");
         sb.AppendLine("Usage:");
         sb.AppendLine("");
@@ -94,7 +93,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("  -p|--project <project-file>                           Specifies the project file explicitly. (Only available for NuGet packages)");
         sb.AppendLine("  -s|--solution <solution-file>                         Specifies the solution file explicitly. (Only available for NuGet packages)");
-        sb.AppendLine("  --with-source-code                                    Downloads the source code of the NPM/NuGet package and make other projects depends on it.");
+        sb.AppendLine("  --with-source-code                                    Downloads the source code of the Angular NPM/NuGet package and make other projects depends on it.");
         sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to the .sln file, when source code is downloaded. (Only available for NuGet packages)");
         sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Specifies the Angular project directory explicitly. (Only available for Angular packages)");
         sb.AppendLine("  -v|--version <version>                                Specifies the version of the package. Default is your project's ABP version or latest ABP version.");
@@ -103,6 +102,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the NuGet package to the current project.");
         sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the NuGet package to the given project.");
+        sb.AppendLine("  abp add-package @abp/signalr                                               Adds the NPM package to the given corresponding project.");
         sb.AppendLine("  abp add-package @abp/ng.theme.basic                                        Adds the NPM package to the given corresponding project.");
         sb.AppendLine("");
         sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");

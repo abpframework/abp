@@ -113,8 +113,6 @@ Run the `abp install-libs` command on the root directory of your solution to ins
 abp install-libs
 ```
 
-> We suggest you install [Yarn v1.22+ (not v2)](https://classic.yarnpkg.com/en/docs/install) to prevent possible package inconsistencies, if you haven't installed it yet.
-
 ### Run the Application
 
 {{if UI=="MVC" || UI=="BlazorServer"}}
@@ -152,7 +150,7 @@ This command takes time, but eventually runs and opens the application in your d
 
 {{end}}
 
-![todo-ui-initial](../images/todo-ui-initial.png)
+![todo-ui-initial](../images/todo-ui-initial-v2.png)
 
 You can click on the *Login* button and use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
@@ -173,7 +171,7 @@ public class TodoItem : BasicAggregateRoot<Guid>
 }
 ````
 
-`BasicAggregateRoot` is the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
+`BasicAggregateRoot` is the simplest base class to create root [entities](../../../framework/architecture/domain-driven-design/entities.md), and `Guid` is the primary key (`Id`) of the entity here.
 
 ## Database Integration
 
@@ -223,7 +221,7 @@ dotnet ef migrations add Added_TodoItem
 
 This will add a new migration class to the project. You should see the new migration in the `Migrations` folder:
 
-![todo-efcore-migration](todo-efcore-migration-single-layer.png) 
+![todo-efcore-migration](todo-efcore-migration-single-layer-v2.png) 
 
 Then, you can apply changes to the database using the following command, in the same command-line terminal:
 
@@ -836,7 +834,7 @@ Now, you can run the application again to see the result.
 
 ## Conclusion 
 
-In this tutorial, we've built a very simple application to warm up with the ABP.
+In this tutorial, we've built a very simple application to warm up with the ABP. Check the [Web Application Development Tutorial](../../book-store/part-01.md) to see a real-life web application development in a layered architecture using the [Layered Application Startup Template](../../../solution-templates/layered-web-application).
 
 ## Source Code
 
@@ -844,4 +842,4 @@ You can find the source code of the completed application [here](https://github.
 
 ## See Also
 
-* Check the [Web Application Development Tutorial](../../book-store/part-01.md) to see a real-life web application development in a layered architecture using the [Layered Application Startup Template](../../../solution-templates/layered-web-application).
+* [Web Application Development Tutorial](../../book-store/part-01.md)

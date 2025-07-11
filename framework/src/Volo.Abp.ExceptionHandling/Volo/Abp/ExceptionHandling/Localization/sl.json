@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Podatke, ki ste jih poslali, je že spremenil drug uporabnik/stranka. Zavrzite spremembe, ki ste jih naredili, in poskusite od začetka.",
     "Error": "Napaka",
     "UnhandledException": "Neobravnavana napaka!",
+    "Authorizing": "Avtorizacija…",
     "401Message": "Nepooblaščeno",
     "403Message": "Prepovedano",
     "404Message": "Strani ni mogoče najti",

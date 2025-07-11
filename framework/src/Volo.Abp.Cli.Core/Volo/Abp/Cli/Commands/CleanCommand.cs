@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
@@ -13,11 +14,14 @@ namespace Volo.Abp.Cli.Commands;
 public class CleanCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "clean";
-    
+
     public ILogger<CleanCommand> Logger { get; set; }
 
-    public CleanCommand()
+    protected ICmdHelper CmdHelper { get; }
+
+    public CleanCommand(ICmdHelper cmdHelper)
     {
+        CmdHelper = cmdHelper;
         Logger = NullLogger<CleanCommand>.Instance;
     }
 
@@ -26,6 +30,10 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
         var binEntries = Directory.EnumerateDirectories(Directory.GetCurrentDirectory(), "bin", SearchOption.AllDirectories);
         var objEntries = Directory.EnumerateDirectories(Directory.GetCurrentDirectory(), "obj", SearchOption.AllDirectories);
 
+        Logger.LogInformation("Cleaning the solution with 'dotnet clean' command...");
+        CmdHelper.RunCmd($"dotnet clean", workingDirectory: Directory.GetCurrentDirectory());
+
+        Logger.LogInformation($"Removing 'bin' and 'obj' folders...");
         foreach (var path in binEntries.Concat(objEntries))
         {
             if (path.IndexOf("node_modules", StringComparison.OrdinalIgnoreCase) > 0)
@@ -38,9 +46,9 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
                 Directory.Delete(path, true);
             }
         }
+        Logger.LogInformation($"'bin' and 'obj' folders removed successfully!");
 
-        Logger.LogInformation($"BIN and OBJ folders have been successfully deleted!");
-
+        Logger.LogInformation("Solution cleaned successfully!");
         return Task.CompletedTask;
     }
 

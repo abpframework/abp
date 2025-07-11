@@ -14,86 +14,64 @@ In this part, you will learn how to perform a database-level JOIN operation on t
 
 ## The Problem
 
-One essential purpose of modularity is to create modules that hide (encapsulate) their internal data and implementation details from the other modules. These modules communicate with each other through well-defined [integration services](../../framework/api-development/integration-services.md) and [events](framework/infrastructure/event-bus/distributed). In that way, you can independently develop and change module implementations (even modules' database structures) from each other as long as you don't break these inter-module integration points.
+One essential purpose of modularity is to create modules that hide (encapsulate) their internal data and implementation details from the other modules. These modules communicate with each other through well-defined [integration services](../../framework/api-development/integration-services.md) and [events](framework/infrastructure/event-bus/distributed). In that way, you can develop and change module implementations (even modules' database structures) independently from each other as long as you don't introduce break changes on these module integration points.
 
 In a non-modular application, accessing the related data is easy. You could write a LINQ expression that joins `Orders` and `Products` database tables to get the data with a single database query. It would be easier to implement and execute with a good performance.
 
-On the other hand, it becomes harder to perform operations or get reports requiring access to multiple modules' internal data in a modular system. Remember the *[Implementing Integration Services](part-06.md)* part; We couldn't access the product data inside the Ordering module (`IOrderingDbContext` only defines a `DbSet<Order>`), so we needed to create an integration service just to get names of products. This approach is harder to implement and less performant (yet it is acceptable if you don't show too many orders on the UI or properly implement a caching layer). Still, it gives freedom to the Products module about its internal database or application logic changes. For example, you can decide to move product data to another physical database or even to another database management system (DBMS) without affecting the other modules.
+On the other hand, it becomes harder to perform operations or get reports requiring access to multiple modules' internal data in a modular system. Remember the *[Implementing Integration Services](part-06.md)* part; We couldn't access the product data inside the Ordering module (`IOrderingDbContext` only defines a `DbSet<Order>`), so we needed to create an integration service just to get names of products with a list of IDs. This approach is harder to implement and less performant (yet it is acceptable if you don't show too many orders on the UI or properly implement a caching layer). Still, it gives freedom to the Catalog module about its internal database or application logic changes. For example, you can decide to move product data to another physical database or even to another database management system (DBMS) without affecting the other modules.
 
 ## A Solution Option
 
 If you want to perform a single database query that spans database tables of multiple modules in a modular system, you still have some options. One option can be creating a reporting module with access to all entities (or database tables). However, when you do that, you accept the following limitations:
 
 * When you change a module's database structure, you should also update your reporting code. That is reasonable, but all module developers should let you know in such a case.
-* You can not change the DBMS of a module easily. For example, performing such a JOIN operation would be impossible if you decide to use MongoDB for your Products module while the Ordering module still uses SQL Server. Moving the Products module to another SQL Server database in another physical server can also break your reporting logic.
+* You can not change the DBMS of a module easily. For example, performing such a JOIN operation would be impossible if you decide to use MongoDB for your Catalog module while the Ordering module still uses SQL Server. Moving the Catalog module to another SQL Server database in another physical server can also break your reporting logic.
 
 If these are not problems for you, or if you can handle them when they become problems, you can create reporting modules or aggregator modules that work with multiple modules' data.
 
-In the next section, we will use the main application's codebase to implement such a JOIN operation to keep the tutorial short. However, you already learned how to create new modules, so you can create a new module and develop your JOIN logic inside that new module if you want.
+In the next section, we will use the main application's codebase to implement such a JOIN operation to keep the tutorial short. However, you already learned how to create new modules, so you can create a new reporting module and develop your JOIN logic inside that new module if you want.
 
 ## The Implementation
 
 In this section, we will create an application service in the main application's .NET solution. That application service will perform a LINQ operation on the `Product` and `Order` entities.
 
-### Defining the Reporting Service Interface
-
-We will define the `IOrderReportingAppService` interface in the main application's .NET solution.
-
-#### Adding `ModularCrm.Ordering.Contracts` Package Reference
-
-As the first step, we should reference the `ModularCrm.Ordering.Contracts` package (of the `ModularCrm.Ordering` module) since we will reuse the `OrderState` enum defined in that package.
-
-Open the ABP Studio's *Solution Explorer* panel, right-click the `ModularCrm` package and select the *Add Package Reference* command:
-
-![abp-studio-add-package-reference-5](images/abp-studio-add-package-reference-5.png)
-
-Select the *Imported modules* tab, find and check the `ModularCrm.Ordering.Contracts` package and click the OK button:
-
-![abp-studio-add-package-reference-dialog-4](images/abp-studio-add-package-reference-dialog-4.png)
-
-The package reference has been added, and we can now use the types in the `ModularCrm.Ordering.Contracts` package.
-
-#### Defining the `IOrderReportingAppService` Interface
+### Defining the `IOrderReportingAppService` Interface
 
 Open the main `ModularCrm` .NET solution in your IDE, create an `Orders` folder under the `Services` folder and add an `IOrderReportingAppService` interface. Here is the definition of that interface:
 
 ````csharp
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ModularCrm.Services.Dtos.Orders;
 using Volo.Abp.Application.Services;
 
-namespace ModularCrm.Orders
+namespace ModularCrm.Services.Orders;
+
+public interface IOrderReportingAppService : IApplicationService
 {
-    public interface IOrderReportingAppService : IApplicationService
-    {
-        Task<List<OrderReportDto>> GetLatestOrders();
-    }
+    Task<List<OrderReportDto>> GetLatestOrders();
 }
 ````
 
-We have a single method, `GetLatestOrders`, that will return a list of the latest orders. We should also define the `OrderReportDto` class that that method returns. Create the `Orders` folder under the `Services/Dtos` folder and create a class named `OrderReportDto`.
+We have a single method, `GetLatestOrders`, that will return a list of the latest orders. We should also define the `OrderReportDto` class that method returns. Create the `Orders` folder under the `Services/Dtos` folder and create a class named `OrderReportDto`.
 
 ````csharp
-using System;
-using ModularCrm.Ordering.Contracts.Enums;
+using ModularCrm.Ordering;
 
-namespace ModularCrm.Orders
+namespace ModularCrm.Services.Dtos.Orders;
+
+public class OrderReportDto
 {
-    public class OrderReportDto
-    {
-        // Order data
-        public Guid OrderId { get; set; }
-        public string CustomerName { get; set; }
-        public OrderState State { get; set; }
+    // Order data
+    public Guid OrderId { get; set; }
+    public string CustomerName { get; set; } = null!;
+    public OrderState State { get; set; }
 
-        // Product data
-        public Guid ProductId { get; set; }
-        public string ProductName { get; set; }
-    }
+    // Product data
+    public Guid ProductId { get; set; }
+    public string ProductName { get; set; } = null!;
 }
 ````
 
-`OrderReportDto` contains data from both the `Order` and `Product` entities. We could use the `OrderState` since we have a reference to the package that defines that enum.
+`OrderReportDto` contains data from both the `Order` and `Product` entities.
 
 After adding these files, the final folder structure should be like this:
 
@@ -106,52 +84,48 @@ Create a class named `OrderReportingAppService` under the `Services/Orders` fold
 Open the `OrderReportingAppService.cs` file and change its content by the following code block:
 
 ````csharp
-using ModularCrm.Ordering.Entities;
-using ModularCrm.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ModularCrm.Catalog;
+using ModularCrm.Ordering;
+using ModularCrm.Services.Dtos.Orders;
 using Volo.Abp.Domain.Repositories;
 
-namespace ModularCrm.Orders
+namespace ModularCrm.Services.Orders;
+
+public class OrderReportingAppService :
+    ModularCrmAppService,
+    IOrderReportingAppService
 {
-    public class OrderReportingAppService :
-    	ModularCrmAppService,
-        IOrderReportingAppService
+    private readonly IRepository<Order, Guid> _orderRepository;
+    private readonly IRepository<Product, Guid> _productRepository;
+
+    public OrderReportingAppService(
+        IRepository<Order, Guid> orderRepository,
+        IRepository<Product, Guid> productRepository)
     {
-        private readonly IRepository<Order, Guid> _orderRepository;
-        private readonly IRepository<Product, Guid> _productRepository;
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;
+    }
 
-        public OrderReportingAppService(
-            IRepository<Order, Guid> orderRepository,
-            IRepository<Product, Guid> productRepository)
-        {
-            _orderRepository = orderRepository;
-            _productRepository = productRepository;
-        }
+    public async Task<List<OrderReportDto>> GetLatestOrders()
+    {
+        var orders = await _orderRepository.GetQueryableAsync();
+        var products = await _productRepository.GetQueryableAsync();
 
-        public async Task<List<OrderReportDto>> GetLatestOrders()
-        {
-            var orders = await _orderRepository.GetQueryableAsync();
-            var products = await _productRepository.GetQueryableAsync();
+        var latestOrders = (from order in orders
+                join product in products on order.ProductId equals product.Id
+                orderby order.CreationTime descending
+                select new OrderReportDto
+                {
+                    OrderId = order.Id,
+                    CustomerName = order.CustomerName,
+                    State = order.State,
+                    ProductId = product.Id,
+                    ProductName = product.Name
+                })
+            .Take(10)
+            .ToList();
 
-            var latestOrders = (from order in orders
-                    join product in products on order.ProductId equals product.Id
-                    orderby order.CreationTime descending
-                    select new OrderReportDto
-                    {
-                        OrderId = order.Id,
-                        CustomerName = order.CustomerName,
-                        State = order.State,
-                        ProductId = product.Id,
-                        ProductName = product.Name
-                    })
-                .Take(10)
-                .ToList();
-
-            return latestOrders;
-        }
+        return latestOrders;
     }
 }
 ````
@@ -168,13 +142,13 @@ That's all. In that way, you can execute JOIN queries that use data from multipl
 
 We haven't created a UI to show list of the latest orders using `OrderReportingAppService`. However, we can use the Swagger UI again to test it.
 
-Open the ABP Studio UI, stop the application if it is running, build and run it again. Once the application starts, browse it, then add `/swagger` to the end of the URL to open the Swagger UI:
+Open the ABP Studio UI, stop the application if it is running, build and run it again. Once the application starts, browse it, then add `/swagger` to the end of the URL to open the Swagger UI. Here, find the `OrderReporting` API and execute it as shown below:
 
 ![abp-studio-swagger-list-orders](images/abp-studio-swagger-list-orders.png)
 
-Here, find the `OrderReporting` API and execute it as shown above. You should get the order objects with product names.
+You should get the order objects with product names.
 
-Alternatively, you can visit the `/api/app/order-reporting/latest-orders` URL to directly execute the HTTP API on the browser (you should write the full URL, like `https://localhost:44303/api/app/order-reporting/latest-orders` - port can be different for your case)
+Alternatively, you can visit the `/api/app/order-reporting/latest-orders` URL to directly execute the HTTP API on the browser (you should write the full URL, like `https://localhost:44303/api/app/order-reporting/latest-orders` - the **port number** can be different for your case)
 
 ## Summary
 
@@ -188,7 +162,7 @@ Now, you know the fundamental principles and mechanics of building sophisticated
 
 ## Download the Source Code
 
-You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCrm).
+You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCRM).
 
 ## See Also
 

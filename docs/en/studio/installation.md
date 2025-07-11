@@ -1,11 +1,10 @@
 # Installing ABP Studio
 
-> **Warning: Beta Version Information**\
-> Currently, ABP Studio is in its beta phase and available for everyone. To access the beta version, kindly visit [this web page](https://abp.io/studio).
+This document explains how to install the ABP Studio tool.
 
 ## Pre-requirements
 
-ABP Studio now features automatic installation of most required dependencies. When you first launch the application, it will check for and install the following components:
+ABP Studio automatically instals most of the required dependencies. When you first launch the application, it will check for and install the following components if missed:
 
 * .NET SDK
 * Node.js
@@ -13,12 +12,14 @@ ABP Studio now features automatic installation of most required dependencies. Wh
 * mkcert (for HTTPS development)
 * WireGuard (for Kubernetes operations)
 
-The only manual installation required is:
+However, the followings should be manually installed:
 
 ### Docker (Required for Kubernetes Operations)
-ABP Studio needs [Docker](https://www.docker.com/) for [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
+
+ABP Studio needs [Docker](https://www.docker.com/) for Docker and [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
 
 ### Package Manager Prerequisites
+
 * **Windows:** The automatic installation process uses `winget`. If not already installed, ABP Studio will attempt to install it.
 * **macOS:** The automatic installation process uses `brew`. If not already installed, you'll need to install it manually from [brew.sh](https://brew.sh/).
 

@@ -339,9 +339,10 @@ export class PermissionManagementComponent
   }
 
   setTabCheckboxState() {
-    const selectablePermissions = this.permissions.filter(per =>
+    const selectablePermissions = this.selectedGroupPermissions.filter(per =>
       per.grantedProviders.every(p => p.providerName === this.providerName),
     );
+
     const selectedPermissions = selectablePermissions.filter(per => per.isGranted);
     const element = document.querySelector('#select-all-in-this-tabs') as any;
     if (!element) {

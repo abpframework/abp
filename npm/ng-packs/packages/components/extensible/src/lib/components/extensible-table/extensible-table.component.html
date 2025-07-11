@@ -64,17 +64,24 @@
       [prop]="prop.name"
       [sortable]="prop.sortable"
     >
-      <ng-template ngx-datatable-header-template let-column="column">
+      <ng-template ngx-datatable-header-template let-column="column" let-sortFn="sortFn">
         @if (prop.tooltip) {
           <span
             [ngbTooltip]="prop.tooltip.text | abpLocalization"
             [placement]="prop.tooltip.placement || 'auto'"
             container="body"
+            [class.pointer]="prop.sortable"
+            (click)="prop.sortable && sortFn(column)"
           >
             {{ column.name }} <i class="fa fa-info-circle" aria-hidden="true"></i>
           </span>
         } @else {
-          {{ column.name }}
+          <span
+            [class.pointer]="prop.sortable"
+            (click)="prop.sortable && sortFn(column)"
+          >
+            {{ column.name }}
+          </span>
         }
       </ng-template>
       <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>

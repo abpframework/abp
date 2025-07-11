@@ -12,7 +12,7 @@ export function configureRoutes() {
   const routes = inject(RoutesService);
   routes.add([
       {
-        path: '/<%= kebab(libraryName) %>',
+        path: undefined,
         name: e<%= pascal(libraryName) %>RouteNames.<%= pascal(libraryName) %>,
         iconClass: 'fas fa-book',
         layout: eLayoutType.application,

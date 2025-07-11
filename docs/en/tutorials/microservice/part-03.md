@@ -1,6 +1,14 @@
 # Microservice Tutorial Part 03: Building the Catalog service
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG"],
+    "DB": ["EF","Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -24,21 +32,21 @@ First of all, **stop all the applications** in ABP Studio's *Solution Runner* pa
 
 Now, select the *ABP Suite* -> *Open* command on the main menu to open ABP Suite:
 
-![abp-studio-open-abp-suite](images/abp-studio-open-abp-suite.png)
+![abp-studio-open-abp-suite](images/abp-studio-open-abp-suite-dark.png)
 
 It will ask to you which module you want to use:
 
-![abp-studio-open-abp-suite-select-module](images/abp-studio-open-abp-suite-select-module.png)
+![abp-studio-open-abp-suite-select-module](images/abp-studio-open-abp-suite-select-module-dark.png)
 
 The `CloudCrm` microservice solution contains more than one .NET solution. Typically, each ABP Studio module represents a separate .NET solution (see the [concepts](../../studio/concepts.md) document). ABP Suite works on a single .NET solution to generate code, so we should select a module here.
 
 Select the `CloudCrm.CatalogService` module and click the *OK* button. It will open ABP Suite as shown below:
 
-![abp-studio-abp-suite-inside](images/abp-studio-abp-suite-inside.png)
+![abp-studio-abp-suite-inside](images/abp-studio-abp-suite-inside-dark.png)
 
 ## Generating a Products Page
 
-In the next section, we will use ABP Suite to create a fully functional CRUD page with ABP Suite. The UI part will be in the main web application (`CloudCrm.Web`) and the application service and other parts will be generated in the Catalog microservice.
+In the next section, we will use ABP Suite to create a fully functional CRUD page with ABP Suite. The UI part will be in the main web application (`{{if UI == "MVC"}} `CloudCrm.Web` {{else if UI == "BlazorServer" || UI == "Blazor" || UI == "BlazorWebApp"}} `CloudCrm.Blazor` {{else}} `Angular` {{end}}`) and the application service and other parts will be generated in the Catalog microservice.
 
 ### Configuring the Product Entity Information
 
@@ -71,7 +79,7 @@ That's all. You can click the *Save and generate* button to start the code gener
 
 ABP Suite will generate the necessary code for you. It will take some time to complete the process. After the process is completed, you will see a success message, click the *OK* button.
 
-![abp-studio-catalog-service-build-and-start](images/abp-studio-catalog-service-start.png)
+![abp-studio-catalog-service-build-and-start](images/abp-studio-catalog-service-start-dark.png)
 
 We can now start the `CloudCrm.CatalogService` application by clicking the *Start* button (or alternatively, directly clicking the *run* icon) in the *Solution Runner* panel.
 
@@ -79,39 +87,65 @@ We can now start the `CloudCrm.CatalogService` application by clicking the *Star
 
 After the application is started, you can right-click and [Browse](../../studio/running-applications.md#monitoring) on the `CloudCrm.CatalogService` application to open it in the ABP Studio's pre-integrated browser. You can see the *Products* controller in the Swagger UI.
 
+{{if UI == "NG"}}
 ### Generating the UI Proxy
 
-Now, we need to generate the [Static API Proxy](../../framework/api-development/static-csharp-clients.md) for the *Web* project. Right-click the *CloudCrm.Web* [package](../../studio/concepts.md#package) and select the *ABP CLI* -> *Generate Proxy* -> *C#* command:
+ABP Suite automatically generates the UI proxy for the `Angular` project. If you want to create manually, run this command under the `Angular` project folder:
 
-![abp-studio-generate-proxy](images/abp-studio-generate-proxy.png)
+```bash
+abp generate-proxy -t ng -m catalog -u http://localhost:44384 --target catalog-service
+```
 
-It will open the *Generate C# Proxies* window. Select the `CloudCrm.CatalogService` application, and it will automatically populate the *URL* field. Select the *catalog* module, set the service type to *application*, and check the *Without contracts* checkbox, as the `CloudCrm.Web` project already depends on the `CloudCrm.CatalogService.Contracts` package:
+For more information, please refer to the [Service Proxies](https://abp.io/docs/latest/framework/ui/angular/service-proxies) documentation.
+{{end}}
 
-![abp-studio-generate-proxy-window](images/abp-studio-generate-proxy-window.png)
+{{if UI == "MVC" || UI == "Blazor" || UI == "BlazorServer" || UI == "BlazorWebApp"}}
+### Generating the UI Proxy
+
+{{if UI == "BlazorWebApp"}}
+
+Now, we need to generate the [Static API Proxy](../../framework/api-development/static-csharp-clients.md) for the UI project. Since we are using `BlazorWebApp`, we will generate client proxies in both the `CloudCrm.Blazor` and `CloudCrm.Blazor.Client` projects, as pages are sometimes rendered on the server side and sometimes on the client side.
+
+#### For the Server Project
+![abp-studio-generate-proxy-blazor-server](images/abp-studio-generate-proxy-blazor-webapp-server-dark.png)
+
+This will open the Generate C# Proxies window. Select the `CloudCrm.CatalogService` application this will automatically fill in the *URL* field. Next, choose the catalog module, set the service type to *Application*, and check the *Without contracts* option, since the `CloudCrm.Blazor` project already references the `CloudCrm.CatalogService.Contracts` package.
+
+#### For client project
+![abp-studio-generate-proxy-blazor](images/abp-studio-generate-proxy-blazor-dark.png)
+
+This will open the Generate C# Proxies window. Select the `CloudCrm.CatalogService` application this will automatically fill in the *URL* field. Next, choose the catalog module, set the service type to *Application*, and check the *Without contracts* option, since the `CloudCrm.Blazor.Client` project already references the `CloudCrm.CatalogService.Contracts` package.
+
+{{else}}
+
+Now, we need to generate the [Static API Proxy](../../framework/api-development/static-csharp-clients.md) for the UI project. Right-click the {{if UI == "MVC"}} `CloudCrm.Web` {{else if UI == "BlazorServer"}} `CloudCrm.Blazor` {{else if UI == "Blazor"}} `CloudCrm.Blazor.Client` {{end}} [package](../../studio/concepts.md#package) and select the *ABP CLI* -> *Generate Proxy* -> *C#* command:
+
+{{if UI == "MVC"}}
+![abp-studio-generate-proxy](images/abp-studio-generate-proxy-dark.png)
+{{else if UI == "BlazorServer"}}
+![abp-studio-generate-proxy-blazor-server](images/abp-studio-generate-proxy-blazor-server-dark.png)
+{{else if UI == "Blazor"}}
+![abp-studio-generate-proxy-blazor](images/abp-studio-generate-proxy-blazor-dark.png)
+{{end}}
+
+{{end}}
+
+It will open the *Generate C# Proxies* window. Select the `CloudCrm.CatalogService` application, and it will automatically populate the *URL* field. Select the *catalog* module, set the service type to *application*, and check the *Without contracts* checkbox, as the {{if UI == "MVC"}} `CloudCrm.Web` {{else}} `CloudCrm.Blazor` {{end}}  project already depends on the `CloudCrm.CatalogService.Contracts` package:
+
+![abp-studio-generate-proxy-window](images/abp-studio-generate-proxy-window-dark.png)
 
 > To be able to select the *Application*, you must *Start* the related application beforehand. You can start the application using [Solution Runner](../../studio/running-applications.md) as explained in the previous parts.
 
-Lastly, we need to configure the use of a static HTTP client for the `CatalogService` in the `CloudCrm.Web` project. Open the `CloudCrmWebModule.cs` file in the `Web` project and add the following line to the `ConfigureServices` method:
+{{end}}
 
-```csharp
-//...
-using CloudCrm.CatalogService;
-
-public override void ConfigureServices(ServiceConfigurationContext context)
-{
-    // Code omitted for brevity
-    context.Services.AddStaticHttpClientProxies(
-      typeof(CloudCrmCatalogServiceContractsModule).Assembly);
-}
-```
 
 ### Running the Application
 
 Now, stop any application running in the *Solution Runner* panel, and then run the applications by clicking the *Start All* button on the root item in the *Solution Runner* panel:
 
-![abp-studio-run-build-and-start-all](images/abp-studio-run-start-all.png)
+![abp-studio-run-build-and-start-all](images/abp-studio-run-start-all-dark.png)
 
-After the application is started, you can right-click and [Browse](../../studio/running-applications.md#monitoring) on the `CloudCrm.Web` application to open it in the ABP Studio's pre-integrated browser:
+After the application is started, you can right-click and [Browse](../../studio/running-applications.md#monitoring) on the {{if UI == "MVC"}} `CloudCrm.Web` {{else if UI == "NG"}} `CloudCrm.Angular` {{else}} `CloudCrm.Blazor` {{end}} application to open it in the ABP Studio's pre-integrated browser:
 
 ![abp-studio-browse-cloud-crm-products](images/abp-studio-browse-cloud-crm-products.png)
 
@@ -125,4 +159,4 @@ You can open the Sql Server Management Studio to see the created tables and data
 
 ## Summary
 
-In this part, we've created a new entity named *Product* and generated the necessary code for it. We've also generated the UI proxy for the `CatalogService` application and configured the static HTTP client for it in the `Web` project. We've run the application and tested the *Products* page.
+In this part, we've created a new entity named *Product* and generated the necessary code for it. We've also generated the UI proxy for the `CatalogService` application and configured the static HTTP client for it in the {{if UI == "MVC"}} `CloudCrm.Web` {{else if UI == "BlazorServer"}} `CloudCrm.Blazor` {{else}} `CloudCrm.Blazor.Client` {{end}} project. We've run the application and tested the *Products* page.

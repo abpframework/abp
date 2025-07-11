@@ -16,7 +16,7 @@
     "Permission:Edit": "Szerkesztés",
     "Permission:Delete": "Törlés",
     "Permission:ManageConnectionStrings": "Kapcsolati beállítások kezelése",
-    "Permission:ManageFeatures": "Funkciók kezelése",
+    "Permission:ManageFeatures": "Funkciók",
     "DisplayName:AdminEmailAddress": "Admin email cím",
     "DisplayName:AdminPassword": "Admin jelszó"
   }

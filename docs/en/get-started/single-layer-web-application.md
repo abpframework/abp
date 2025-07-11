@@ -16,14 +16,14 @@ First things first! Let's setup your development environment before creating the
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/) or another IDE that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [.NET 9.0+](https://dotnet.microsoft.com/en-us/download/dotnet){{ if UI != "Blazor" }}
-* [Node v22.11+](https://nodejs.org/)
+* [Node v22.11+](https://nodejs.org/){{ end }}{{ if UI == "NG" }}
 * [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node){{ end }}
 
 > Check the [Pre-requirements document](pre-requirements.md) for more detailed information about these tools.
 
 ## Creating a New Solution
 
-> 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is in the beta version now. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.
+> 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. You can also use the [ABP CLI](../cli/index.md) to create new solutions and use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands.
 
 > ABP startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
@@ -31,7 +31,7 @@ Assuming that you have [installed and logged in](../studio/installation.md) to t
 
 ![abp-studio-welcome-screen](images/abp-studio-welcome-screen.png)
 
-Select the *File* -> *New Solution* in the main menu, or click the *New solution* button on the Welcome screen to open the *Create new solution* wizard:
+Select the *File* -> *New Solution* in the main menu, or click the *New solution* button on the *Welcome* screen to open the *Create new solution* wizard:
 
 ![abp-studio-new-solution-dialog](images/abp-studio-no-layers-new-solution-dialog-0.9.13.png)
 
@@ -73,9 +73,15 @@ Here, you can select the database management systems (DBMS){{ if DB == "EF" }} a
 
 ![abp-studio-no-layers-new-solution-additional-options](images/abp-studio-no-layers-new-solution-additional-options-0.9.13.png)
 
+Configure any additional options as needed and click the *Next* button to continue. On the next screen, you can configure the modularity options for your solution:
+
+> If you select the *Setup as a modular solution* option, the solution is created more ready for [modular monolith development](../tutorials/modular-crm/index.md) and allows you to add sub-modules during the solution creation phase.
+
+![abp-studio-no-layers-new-solution-modularity](images/abp-studio-no-layers-new-solution-modularity.png)
+
 Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you.
 
-After clicking the Create button, the dialog is closed and your solution is loaded into ABP Studio:
+After clicking the *Create* button, the dialog is closed and your solution is loaded into ABP Studio:
 
 ![abp-studio-created-new-solution](images/abp-studio-no-layers-created-new-solution.png)
 

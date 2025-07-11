@@ -69,7 +69,7 @@ A modular monolith application that demonstrates how to create, compose, and com
 
 * **ModularCRM: Razor Pages UI & Entity Framework Core**
   * [Tutorial](../tutorials/modular-crm/part-01.md?UI=MVC&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCrm)
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCRM)
 
 ## CloudCrm
 

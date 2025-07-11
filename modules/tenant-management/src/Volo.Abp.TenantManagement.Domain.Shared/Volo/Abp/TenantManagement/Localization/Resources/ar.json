@@ -16,7 +16,7 @@
     "Permission:Edit": "تحرير",
     "Permission:Delete": "حذف",
     "Permission:ManageConnectionStrings": "Manage connection strings",
-    "Permission:ManageFeatures": "إدارة الميزات",
+    "Permission:ManageFeatures": "الميزات",
     "DisplayName:AdminEmailAddress": "عنوان البريد الإلكتروني للمسؤول",
     "DisplayName:AdminPassword": "كلمة مرور المسؤول"
   }

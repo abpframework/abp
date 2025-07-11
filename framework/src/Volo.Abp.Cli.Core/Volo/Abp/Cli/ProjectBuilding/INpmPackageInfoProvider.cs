@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.Cli.ProjectModification;
 
 namespace Volo.Abp.Cli.ProjectBuilding;
@@ -6,4 +7,6 @@ namespace Volo.Abp.Cli.ProjectBuilding;
 public interface INpmPackageInfoProvider
 {
     Task<NpmPackageInfo> GetAsync(string name);
+
+    Task<List<NpmPackageInfo>> GetPackageListAsync();
 }

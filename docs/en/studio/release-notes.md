@@ -2,6 +2,37 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 1.0.2 (2025-06-24)
+
+* Enhanced the ABP NuGet package installation experience.
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.2.1`)
+* Replaced the `System.Data` package with `Microsoft.Data`.
+* Fixed a dynamic-env file path configuration issue in Angular templates.
+* Disabled Pushed Authorization for MAUI applications.
+* Improved the IDE experience by displaying the main project in a dedicated 'main' folder and hiding `.abppkg` files.
+
+## 1.0.1 (2025-06-13)
+
+* Fixed an issue with language selection during solution creation.
+* Resolved a logo visibility problem in the Angular semi-dark theme.
+* Added and corrected the handling of CEF (Chromium Embedded Framework) resources for the Windows version. 
+
+## 1.0.0 (2025-06-11)
+
+* **Solution Runner with Health Checks:** ABP Studio's Solution Runner now provides visual health monitoring that makes tracking your applications' status easily.
+* **Improved Multi-DbContext Migration Handling:** ABP Studio now prompts you to select the correct DbContext for migration operations when working with multiple DbContexts.
+* **Theme Style Selection on Project Creation:** When creating a new solution, you can now choose your theme, theme style, and layout right from the project creation wizard instead of having to configure these settings later.
+* **Solution & Module Creation:** Introduced major enhancements, including language selection, database provider choice for microservices, improved folder handling, theme visualization, and better module installation recommendations.
+* **MAUI & Blazor:** Configured the new MAUI/Blazor bundling system, added dashboard pages to MAUI projects, and applied various fixes for themes and dependencies.
+* **Solution Runner & Docker:** Added Docker container support to the solution runner, enabling users to add and manage containers within run profiles.
+* **Authentication & Authorization:** Fixed Swagger authentication, and added dynamic claims support for microservices.
+* **ABP Studio Login:** Improved login flows with selecting account and organization support.
+* **Language Selection:** Added language selection during solution creation. You can now include only the languages you need in your project.
+* **Performance:** Sped up the development cycle by skipping package restores during project runs when no dependencies have changed.
+* **Dependency Updates:** Upgraded ABP Framework, LeptonX, and other Microsoft dependencies to the latest versions. (targeting ABP `9.2.0`)
+* **User Experience:** Implemented several UI/UX improvements, such as remembering user choices in wizards and sorting items alphabetically.
+* **Testing & Internals:** Switched to `MongoSandbox` for integration tests, improved local development against abp.io websites, and made various fixes to CI/CD workflows.
+
 ## 0.9.26 (2025-04-30)
 
 * Fixed the issue where C# applications would not stop when requested.  

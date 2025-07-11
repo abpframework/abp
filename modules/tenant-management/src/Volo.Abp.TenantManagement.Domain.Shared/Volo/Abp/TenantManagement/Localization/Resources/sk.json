@@ -16,7 +16,7 @@
     "Permission:Edit": "Upraviť",
     "Permission:Delete": "Zmazať",
     "Permission:ManageConnectionStrings": "Správa connection stringov",
-    "Permission:ManageFeatures": "Správa funkcií",
+    "Permission:ManageFeatures": "Funkcie",
     "DisplayName:AdminEmailAddress": "Emailová adresa administrátora",
     "DisplayName:AdminPassword": "Heslo administrátora"
   }

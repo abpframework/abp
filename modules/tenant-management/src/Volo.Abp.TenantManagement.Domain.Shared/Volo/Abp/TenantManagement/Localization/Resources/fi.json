@@ -16,7 +16,7 @@
     "Permission:Edit": "Muokkaus",
     "Permission:Delete": "Poisto",
     "Permission:ManageConnectionStrings": "Hallitse tietokantayhteyksiä",
-    "Permission:ManageFeatures": "Hallitse ominaisuuksia",
+    "Permission:ManageFeatures": "Ominaisuudet",
     "DisplayName:AdminEmailAddress": "Järjestelmänvalvojan sähköpostiosoite",
     "DisplayName:AdminPassword": "Järjestelmänvalvojan salasana"
   }

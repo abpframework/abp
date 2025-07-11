@@ -1,6 +1,14 @@
 # Microservice Tutorial Part 07: Integrating the services: Using Distributed Events
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG"],
+    "DB": ["EF","Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -135,21 +143,21 @@ Since the `OrderPlacedEto` class is in the `CloudCrm.OrderingService.Contracts` 
 
 Open the ABP Studio UI and stop the applications if they are running. Then, open the *Solution Explorer* panel and right-click on the `CloudCrm.CatalogService`. Select *Import Module* from the context menu:
 
-![Import Module](images/import-module.png)
+![Import Module](images/import-module-dark.png)
 
 In the opening dialog, find and select the `CloudCrm.OrderingService` module, check the *Install this module* option, click the *OK* button:
 
-![Import Module Dialog](images/import-module-dialog.png)
+![Import Module Dialog](images/import-module-dialog-dark.png)
 
 Once you click the OK button, the Ordering service is imported to the Catalog service. It opens the *Install Module* dialog:
 
-![Install Module Dialog](images/install-module-dialog.png)
+![Install Module Dialog](images/install-module-dialog-dark.png)
 
 Here, select the `CloudCrm.OrderingService.Contracts` package on the left side (because we want to add that package reference) and `CloudCrm.CatalogService` package on the middle area (because we want to add the package reference to that project).
 
 You can check the ABP Studio's *Solution Explorer* panel to see the module and the project reference (dependency):
 
-![catalog-service-dependency](images/catalog-service-dependency.png)
+![catalog-service-dependency](images/catalog-service-dependency-dark.png)
 
 ### Handling the `OrderPlacedEto` Event
 
@@ -205,7 +213,7 @@ To keep this tutorial simple, we will not implement a user interface for creatin
 
 Once the application is running and ready, [Browse](../../studio/running-applications.md#c-application) the `CloudCrm.OrderingService` application. Use the `POST /api/ordering/order` endpoint to create a new order:
 
-![Create Order](images/create-order.png)
+![Create Order](images/create-order-dark.png)
 
 Find the *Order* API, click the *Try it out* button, enter a sample value the *Request body* section, and click the *Execute* button:
 
@@ -218,9 +226,9 @@ Find the *Order* API, click the *Try it out* button, enter a sample value the *R
 
 > **IMPORTANT:** Here, you should type a valid Product Id from the Products table of your database!
 
-Once you press the *Execute* button, a new order is created. At that point, you can check the `/Orders` page to see if the new order is listed. You can also check the `/Products` page to see if the stock count of the related product is decreased by one in the `CloudCrm.Web` application.
+Once you press the *Execute* button, a new order is created. At that point, you can check the `/Orders` page to see if the new order is listed. You can also check the `/Products` page to see if the stock count of the related product is decreased by one in the {{if UI == "MVC"}} `CloudCrm.Web` {{else if UI == "NG"}} `Angular` {{else}} `CloudCrm.Blazor` {{end}} application.
 
-Here are sample screenshots from the Orders and Products pages of the `CloudCrm.Web` application:
+Here are sample screenshots from the Orders and Products pages of the {{if UI == "MVC"}} `CloudCrm.Web` {{else if UI == "NG"}} `Angular` {{else}} `CloudCrm.Blazor` {{end}} application:
 
 ![Orders](images/orders.png)
 

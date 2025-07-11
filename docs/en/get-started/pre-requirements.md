@@ -47,11 +47,13 @@ If you have already installed the `EF Core CLI`, you can update it by running th
 dotnet tool update --global dotnet-ef
 ```
 
-## Node.js and Yarn
+## Node.js
 
-ABP projects include some frontend resource packages, so you need to install Node.js and Yarn to manage these resource packages. You can download Node.js from the [official Node.js website](https://nodejs.org/). We recommend installing version v20.11+.
+ABP projects include some frontend resource packages, so you need to install Node.js/NPM manage these resource packages. You can download Node.js from the [official Node.js website](https://nodejs.org/). We recommend installing version v20.11+.
 
-Using Yarn (classic) to manage frontend resource packages is faster and more stable than using npm. You can download `Yarn` from the [Yarn official website](https://classic.yarnpkg.com/en/docs/install). We recommend installing Yarn v1.22+ (make sure to install the Classic version, not v2+).
+## Yarn (Required Only for Angular Projects)
+
+ABP Angular projects use Yarn as the package manager to manage frontend dependencies and run build tasks, You can download `Yarn` from the [Yarn official website](https://classic.yarnpkg.com/en/docs/install). We recommend installing Yarn v1.22+ (make sure to install the Classic version, not v2+).
 
 To install Yarn using npm, run the following command:
 

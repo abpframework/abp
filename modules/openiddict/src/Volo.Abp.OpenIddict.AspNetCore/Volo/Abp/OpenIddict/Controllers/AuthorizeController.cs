@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -148,6 +149,13 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
             case OpenIddictConstants.ConsentTypes.Explicit when authorizations.Any() && !request.HasPromptValue(OpenIddictConstants.PromptValues.Consent):
                 var principal = await SignInManager.CreateUserPrincipalAsync(user);
 
+                var sid = dynamicPrincipal.FindFirst(JwtRegisteredClaimNames.Sid);
+                if (sid != null)
+                {
+                    principal.RemoveClaims(JwtRegisteredClaimNames.Sid);
+                    principal.AddClaim(JwtRegisteredClaimNames.Sid, sid.Value);
+                }
+
                 if (result.Properties != null && result.Properties.IsPersistent)
                 {
                     var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
@@ -246,6 +254,13 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         }
 
         var principal = await SignInManager.CreateUserPrincipalAsync(user);
+
+        var sid = User.FindFirst(JwtRegisteredClaimNames.Sid);
+        if (sid != null)
+        {
+            principal.RemoveClaims(JwtRegisteredClaimNames.Sid);
+            principal.AddClaim(JwtRegisteredClaimNames.Sid, sid.Value);
+        }
 
         var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
         if (result.Succeeded && result.Properties != null && result.Properties.IsPersistent)

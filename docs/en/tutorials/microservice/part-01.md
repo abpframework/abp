@@ -1,6 +1,14 @@
 # Microservice Tutorial Part 01: Creating the Initial Solution
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG"],
+    "DB": ["EF","Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Next": {
@@ -13,19 +21,49 @@
 Follow the *[Get Started](../../get-started/microservice.md)* guide to create a new layered web application with the following configurations:
 
 * **Solution name**: `CloudCrm`
+{{if DB == "EF"}}
 * **Database Provider**: Entity Framework Core
-* **Database Management System**: SQL Server
+{{end}}
+{{if DB == "Mongo"}}
+* **Database Provider**: MongoDB
+{{end}}
+{{if UI == "MVC"}}
 * **UI Framework**: MVC / Razor Pages
+{{end}}
+{{if UI == "Blazor"}}
+* **UI Framework**: Blazor WebAssembly
+{{end}}
+{{if UI == "BlazorServer"}}
+* **UI Framework**: Blazor Server
+{{end}}
+{{if UI == "BlazorWebApp"}}
+* **UI Framework**: Blazor Web App
+{{end}}
+{{if UI == "NG"}}
+* **UI Framework**: Angular
+{{end}}
 * **Mobile framework**: None
 * **Public website**: Selected
 
 You can select the other options based on your preference.
 
-> **Please complete the *[Get Started](../../get-started/microservice.md)* guide and run the applications before going further.** You can skip the sections after the *Running the Solution* section, if you don't prefer to complete all.
+> **Please complete the *[Get Started](../../get-started/layered-web-application.md)* guide and run the web application before going further.** You can skip the sections after the *Running the Solution* section, if you don't prefer to complete all.
 
 The initial solution structure should be like the following in ABP Studio's *[Solution Explorer](../../studio/solution-explorer.md)*:
 
-![abp-studio-solution-explorer-initial-cloud-crm-microservice-solution](images/abp-studio-solution-explorer-initial-cloud-crm-microservice-solution.png)
+{{if UI == "MVC"}}
+
+![abp-studio-solution-explorer-initial-cloud-crm-microservice-solution](images/abp-studio-solution-explorer-initial-cloud-crm-microservice-solution-dark.png)
+
+{{else if UI == "NG"}}
+
+![abp-studio-solution-explorer-initial-cloud-crm-microservice-solution-ng](images/abp-studio-solution-explorer-initial-cloud-crm-microservice-solution-ng-dark.png)
+
+{{else}}
+
+![abp-studio-solution-explorer-initial-cloud-crm-microservice-solution-blazor](images/abp-studio-solution-explorer-initial-cloud-crm-microservice-solution-blazor-dark.png)
+
+{{end}}
 
 > ABP Studio will perform a few additional steps after creating your solution. **Please wait until all the background tasks are completed** before going further.
 

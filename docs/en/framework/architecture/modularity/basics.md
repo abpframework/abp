@@ -2,10 +2,11 @@
 
 ABP was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;
 
-* This document introduces the basics of the module system.
-* [Module development best practice guide](../best-practices) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
-* [Pre-built application modules](../../../modules) are **ready to use** in any kind of application.
-* [Module startup template](../../../solution-templates/application-module) is a jump start way to **create a new module**.
+* This document introduces the **basics** of the module system.
+* The [modular monolith application development tutorial](../../../tutorials/modular-crm/index.md) explains and demonstrates how to build **modular monolith applications** with ABP.
+* [Pre-built application modules](../../../modules/index.md) are **ready to use** in any kind of application.
+* [Module startup template](../../../solution-templates/application-module/index.md) is a jump start way to **create a new reusable application module**.
+* [Module development best practice guide](../best-practices/index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
 * [ABP CLI](../../../cli/index.md) has commands to support modular development.
 * All other framework features are compatible to the modularity system.
 
@@ -189,4 +190,5 @@ There are **two types of modules.** They don't have any structural difference bu
 - **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](../../../modules).
 
 ## See Also
-* [Video tutorial](https://abp.io/video-courses/essentials/modularity)
+* [Modular monolith application development tutorial](../../../tutorials/modular-crm/index.md)
+* [Video tutorial for basic modularity](https://abp.io/video-courses/essentials/modularity)

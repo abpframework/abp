@@ -17,15 +17,13 @@ First things first! Let's setup your development environment before creating the
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/) or another IDE that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [.NET 9.0+](https://dotnet.microsoft.com/en-us/download/dotnet){{ if UI != "Blazor" }}
-* [Node v22.11+](https://nodejs.org/)
+* [Node v22.11+](https://nodejs.org/){{ end }}{{ if UI == "NG" }}
 * [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node){{ end }}
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 > Check the [Pre-requirements document](pre-requirements.md) for more detailed information about these tools.
 
 ## Creating a New Solution
-
-> This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. **ABP Studio** is in the beta version now. If you have any issues, you can use the [ABP CLI](../cli/index.md) to create new solutions. You can also use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands for new project creations.
 
 > ABP startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
@@ -104,6 +102,12 @@ Here, you can select the database management systems (DBMS){{ if DB == "EF" }} a
 ![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options.png)
 
 If you uncheck the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files, such as Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include or exclude the test projects from the solution.
+
+On the next screen, you can configure the modularity options for your solution:
+
+> If you select the *Setup as a modular solution* option, the solution is created more ready for [modular monolith development](../tutorials/modular-crm/index.md) and allows you to add sub-modules during the solution creation phase.
+
+![abp-studio-new-solution-modularity](images/abp-studio-new-solution-dialog-modularity.png)
 
 Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the Create button, the dialog is closed and your solution is loaded into ABP Studio:
 

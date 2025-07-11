@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "The data you have submitted has already been changed by another user. Discard your changes and try again.",
     "Error": "Error",
     "UnhandledException": "Unhandled exception!",
+    "Authorizing": "Authorizing…",
     "401Message": "Unauthorized",
     "403Message": "Forbidden",
     "404Message": "Page not found",

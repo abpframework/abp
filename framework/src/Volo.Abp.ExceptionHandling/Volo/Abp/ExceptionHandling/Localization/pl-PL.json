@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Przesłane przez Ciebie dane zostały już zmienione przez innego użytkownika/klienta. Odrzuć wprowadzone zmiany i spróbuj od początku.",
     "Error": "Błąd",
     "UnhandledException": "Nieobsługiwany wyjątek!",
+    "Authorizing": "Autoryzacja…",
     "401Message": "Nieautoryzowany",
     "403Message": "Zabroniony",
     "404Message": "Strona nie znaleziona",

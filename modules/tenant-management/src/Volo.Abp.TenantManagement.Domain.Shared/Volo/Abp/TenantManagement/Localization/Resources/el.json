@@ -15,7 +15,7 @@
     "Permission:Edit": "Επεξεργασία",
     "Permission:Delete": "Διαγραφή",
     "Permission:ManageConnectionStrings": "Διαχείριση συμβολοσειρών σύνδεσης",
-    "Permission:ManageFeatures": "Διαχείριση λειτουργιών",
+    "Permission:ManageFeatures": "Λειτουργίες",
     "DisplayName:AdminEmailAddress": "Διεύθυνση email διαχειριστή",
     "DisplayName:AdminPassword": "Κωδικός διαχειριστή"
   }

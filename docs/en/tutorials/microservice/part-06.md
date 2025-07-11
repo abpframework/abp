@@ -1,6 +1,14 @@
 # Microservice Tutorial Part 06: Integrating the services: HTTP API Calls
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG"],
+    "DB": ["EF","Mongo"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -22,7 +30,7 @@ In this section, we will integrate the Ordering service with the Catalog service
 
 In a microservices architecture, each service is responsible for its own data and business logic. However, services often need to communicate with each other to fulfill their responsibilities. This communication can be synchronous or asynchronous, depending on the requirements.
 
-![web-orders-page](images/web-orders-page.png)
+![web-orders-page](images/web-orders-page-dark.png)
 
 In our case, the Ordering service needs to display the product name instead of the product ID. To achieve this, we need to call the Catalog service to retrieve the product details based on the product ID. This is a typical example of a synchronous communication pattern between microservices. As a solution to that problem, we will use an [integration service](../../framework/api-development/integration-services.md) that will handle the communication with the Catalog service. Integration service concept in ABP is designed for request/response style inter-module (in modular applications) and inter-microservice (in distributed systems) communication.
 
@@ -111,11 +119,11 @@ Now that we have created the `IProductIntegrationService` interface and the `Pro
 
 First, we need to add a reference to the `CloudCrm.OrderingService` package in the Ordering service. Open the ABP Studio, and stop the application(s) if it is running. Then, open the *Solution Explorer* and right-click on the `CloudCrm.OrderingService` package. Select *Add* -> *Package Reference* command:
 
-![add-package-reference-ordering-service](images/add-package-reference-ordering-service.png)
+![add-package-reference-ordering-service](images/add-package-reference-ordering-service-dark.png)
 
 In the *Add Package Reference* window, select the `CloudCrm.CatalogService.Contracts` package from the *This solution* tab. Click the *OK* button to add the reference:
 
-![add-catalog-service-contracts-reference](images/add-catalog-service-contracts-reference.png)
+![add-catalog-service-contracts-reference](images/add-catalog-service-contracts-reference-dark.png)
 
 ABP Studio adds the package reference and arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
 
@@ -236,25 +244,13 @@ Let's explain the changes we made:
 
 We have created the `IProductIntegrationService` interface and the `ProductIntegrationService` class in the `CloudCrm.CatalogService` solution. Now, we need to generate the proxy classes for the integration service in the `CloudCrm.OrderingService` package. First, *Start* the `CloudCrm.CatalogService` application in ABP Studio *Solution Runner*. Then, open the *Solution Explorer* and right-click on the `CloudCrm.OrderingService` package. Select the *ABP CLI* -> *Generate Proxy* -> *C#* command:
 
-![generate-proxy-catalog-service](images/generate-proxy-catalog-service.png)
+![generate-proxy-catalog-service](images/generate-proxy-catalog-service-dark.png)
 
 It opens the *Generate C# proxies* window. Select the `CloudCrm.CatalogService` application from the *Application* dropdown list. Then, choose the *catalog* module from the *Module* dropdown list and choose the *integration* service from the *Service type* dropdown list. Check the *Without contracts* checkbox and click the *Generate* button:
 
-![generate-catalog-service-proxy](images/generate-catalog-service-proxy.png)
+![generate-catalog-service-proxy](images/generate-catalog-service-proxy-dark.png)
 
-We have generated the proxy classes for the `IProductIntegrationService` interface. Now, we must add the *Remote Service* url to the `appsettings.json` file of the `CloudCrm.OrderingService` project. Open the `appsettings.json` file (the `appsettings.json` file of the `CloudCrm.OrderingService` project of the `CloudCrm.OrderingService` .NET solution) and add the *CatalogService* section following configuration:
-
-```json
-{
-  "RemoteServices": {
-    "CatalogService": {
-      "BaseUrl": "http://localhost:44334"
-    }
-  }
-}
-```
-
-> **BaseUrl** refers to the base URL of the Catalog service. You can use the *Copy Url* option from the Catalog service's context menu in the ABP Studio **Solution Runner** to paste it here.
+Proxy classes for the `IProductIntegrationService` interface have been generated.
 
 Lastly, open the `CloudCrmOrderingServiceModule` class (the `CloudCrmOrderingServiceModule.cs` file under the `CloudCrm.OrderingService` project of the `CloudCrm.OrderingService` .NET solution) and add the following code to the `ConfigureServices` method:
 
@@ -270,6 +266,8 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 ```
 
 ### Updating the UI to Display the Product Name
+
+{{if UI == "MVC"}}
 
 Open the `Index.cshtml` file (the `Index.cshtml` file under the `Pages/Orders` folder of the `CloudCrm.Web` project of the `CloudCrm.Web` .NET solution) and update the table content to display the product name instead of the product ID:
 
@@ -295,9 +293,53 @@ Open the `Index.cshtml` file (the `Index.cshtml` file under the `Pages/Orders` f
 </abp-card>
 ```
 
+{{else if UI == "NG"}}
+
+Open the `order.component.html` file (the `order.component.html` file under the `angular\projects\ordering-service\src\lib\order`) and update the table content to display the product name instead of the product ID:
+
+```html
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product Name</th>
+                    <th>Customer Name</th>
+                </tr>
+                <tr *ngFor="let item of items">
+                    <td>{%{{{item.id}}}%}</td>
+                    <td>{%{{{item.productName}}}%}</td>
+                    <td>{%{{{item.customerName}}}%}</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+```
+
+{{else if UI == "Blazor" || UI == "BlazorServer" || UI == "BlazorWebApp"}}
+
+Open the `Orders.razor` file (the `Orders.razor` file under the {{if UI == "BlazorServer"}} `CloudCrm.Blazor\Pages` {{else}} `CloudCrm.Blazor.Client\Pages` {{end}} and update the table content to display the product name instead of the product ID:
+
+```html
+<ul class="list-group">
+    @foreach (var order in OrderList)
+    {
+        <li class="list-group-item">
+            <strong>Customer:</strong> @order.CustomerName <br />
+            <strong>Product Name:</strong> @order.ProductName <br />
+            <strong>State:</strong> @order.State
+        </li>
+    }
+</ul>
+```
+
+{{end}}
+
 That's it! Now, you can *Start* the all applications and browse it in ABP Studio to see the result:
 
-![web-orders-page-with-product-name](images/web-orders-page-with-product-name.png)
+![web-orders-page-with-product-name](images/web-orders-page-with-product-name-dark.png)
 
 Now, the Ordering service displays the product name instead of the product ID. We have successfully integrated the Ordering service with the Catalog service using HTTP API calls.
 

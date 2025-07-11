@@ -159,14 +159,24 @@ app.UseAbpHangfireDashboard("/hangfire", options =>
 `AbpHangfireAuthorizationFilter` class has the following fields:
 
 * **`enableTenant`  (`bool`, default: `false`):** Enables/disables accessing the Hangfire dashboard on tenant users.
-* **`requiredPermissionName`  (`string`, default: `null`):** Hangfire dashboard is accessible only if the current user has the specified permission. In this case, if we specify a permission name, we don't need to set `enableTenant` `true` because the permission system already does it.
+* **`requiredPermissionName`  (`string`, default: `null`):** Hangfire dashboard is accessible only if the current user has the specified permission. 
+* **`requiredRoleNames`  (`string[]`, default: `[]`):** Hangfire dashboard is accessible only if the current user has one of the specified roles. 
 
-If you want to require an additional permission, you can pass it into the constructor as below:
+If you want to require more policies, you can use the `PolicyBuilder` property of the `AbpHangfireAuthorizationFilter` class. 
 
 ```csharp
 app.UseAbpHangfireDashboard("/hangfire", options =>
 {
-    options.AsyncAuthorization = new[] { new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName") };
+    var hangfireAuthorizationFilter = new AbpHangfireAuthorizationFilter(requiredPermissionName: "MyHangFireDashboardPermissionName");
+
+    //hangfireAuthorizationFilter.PolicyBuilder.AddRequirements(new PermissionRequirement("YourPermissionName"));
+    //hangfireAuthorizationFilter.PolicyBuilder.RequireRole("YourCustomRole");
+    //hangfireAuthorizationFilter.PolicyBuilder.Requirements.Add(new YourCustomRequirement());
+
+    options.AsyncAuthorization = new[]
+    {
+        hangfireAuthorizationFilter
+    };
 });
 ```
 
@@ -190,18 +200,20 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
             options.Authority = configuration["AuthServer:Authority"];
             options.RequireHttpsMetadata = configuration.GetValue<bool>("AuthServer:RequireHttpsMetadata");
             options.Audience = "MyProjectName";
-        });
 
-    context.Services.AddAuthentication()
-        .AddCookie("Cookies")
-        .AddOpenIdConnect("oidc", options =>
+            options.ForwardDefaultSelector = httpContext => httpContext.Request.Path.StartsWithSegments("/hangfire", StringComparison.OrdinalIgnoreCase)
+                ? CookieAuthenticationDefaults.AuthenticationScheme
+                : null;
+        })
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddAbpOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {
             options.Authority = configuration["AuthServer:Authority"];
-            options.RequireHttpsMetadata = configuration.GetValue<bool>("AuthServer:RequireHttpsMetadata");
-            options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+            options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+            options.ResponseType = OpenIdConnectResponseType.Code;
 
-            options.ClientId = configuration["AuthServer:ClientId"];
-            options.ClientSecret = configuration["AuthServer:ClientSecret"];
+            options.ClientId = configuration["AuthServer:HangfireClientId"];
+            options.ClientSecret = configuration["AuthServer:HangfireClientSecret"];
 
             options.UsePkce = true;
             options.SaveTokens = true;
@@ -211,6 +223,8 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
             options.Scope.Add("email");
             options.Scope.Add("phone");
             options.Scope.Add("MyProjectName");
+
+            options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         });
 }
 ```
@@ -218,26 +232,27 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 ```csharp
 app.Use(async (httpContext, next) =>
 {
-    if (httpContext.Request.Path.StartsWithSegments("/hangfire"))
+    if (httpContext.Request.Path.StartsWithSegments("/hangfire", StringComparison.OrdinalIgnoreCase))
     {
-        var result = await httpContext.AuthenticateAsync("Cookies");
-        if (result.Succeeded)
+        var authenticateResult = await httpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        if (!authenticateResult.Succeeded)
         {
-            httpContext.User = result.Principal;
-            await next(httpContext);
+            await httpContext.ChallengeAsync(
+                OpenIdConnectDefaults.AuthenticationScheme,
+                new AuthenticationProperties
+                {
+                    RedirectUri = httpContext.Request.Path + httpContext.Request.QueryString
+                });
             return;
         }
-
-        await httpContext.ChallengeAsync("oidc");
     }
-    else
-    {
-        await next(httpContext);
-    }
+    await next.Invoke();
 });
-
 app.UseAbpHangfireDashboard("/hangfire", options =>
 {
-    options.AsyncAuthorization = new[] {new AbpHangfireAuthorizationFilter()};
+    options.AsyncAuthorization = new[]
+    {
+        new AbpHangfireAuthorizationFilter()
+    };
 });
 ```

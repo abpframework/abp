@@ -111,8 +111,9 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
 
     const spinnerRef = this.viewContainerRef.createComponent(SpinnerComponent);
     const spinnerElement = spinnerRef.location.nativeElement;
-
-    this.renderer.insertBefore(parent, spinnerElement, placeholder);
+    if (placeholder?.parentNode === parent) {
+      this.renderer.insertBefore(parent, spinnerElement, placeholder);
+    }
     this.renderer.removeChild(parent, placeholder);
   }
 

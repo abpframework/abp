@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Údaje, ktoré ste odoslali, už zmenil iný používateľ/klient. Zahoďte zmeny, ktoré ste vykonali, a skúste to od začiatku.",
     "Error": "Error",
     "UnhandledException": "Neošetrená výnimka!",
+    "Authorizing": "Overovanie…",
     "401Message": "Neoprávnený",
     "403Message": "Zakázané",
     "404Message": "Stránka nebola nájdená",

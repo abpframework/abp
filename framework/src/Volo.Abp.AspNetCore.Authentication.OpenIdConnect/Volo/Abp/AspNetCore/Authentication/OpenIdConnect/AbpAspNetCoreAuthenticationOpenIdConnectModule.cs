@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.RemoteServices;
@@ -16,5 +17,10 @@ public class AbpAspNetCoreAuthenticationOpenIdConnectModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClient();
+
+        Configure<AbpSecurityHeadersOptions>(options =>
+        {
+            options.IgnoredScriptNoncePaths.Add("/signout-oidc");
+        });
     }
 }

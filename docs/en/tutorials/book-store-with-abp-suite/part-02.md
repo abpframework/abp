@@ -128,7 +128,7 @@ It will take some time to complete the process. After the process is completed, 
 
 {{ end }}
 
-After the application is started, you can right-click and *Browse* on the application to open it in the ABP Studio's pre-integrated browser. You can see the Books page in the following figure with a single record:
+After the application is started, you can right-click and *Browse* on the application to open it in the ABP Studio's pre-integrated browser. After logging in using the default credentials (`admin` / `1q2w3E*`), you can see the Books page in the following figure with a single record:
 
 ![](./images/suite-book-pages-browser.png)
 

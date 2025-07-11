@@ -16,8 +16,9 @@
         "Permission:Edit": "Uredi",
         "Permission:Delete": "Izbrisati",
         "Permission:ManageConnectionStrings": "Upravljanje vezom na bazu podataka",
-        "Permission:ManageFeatures": "Upravljanje značajkama",
+        "Permission:ManageFeatures": "Značajke",
         "DisplayName:AdminEmailAddress": "Adresa e-pošte administratora",
         "DisplayName:AdminPassword": "Administratorska lozinka"
     }
 }
+

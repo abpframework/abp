@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -129,17 +130,22 @@ public static class TypeHelper
 
     public static bool IsDictionary(Type type, out Type? keyType, out Type? valueType)
     {
-        var dictionaryTypes = ReflectionHelper
-            .GetImplementedGenericTypes(
-                type,
-                typeof(IDictionary<,>)
-            );
-
-        if (dictionaryTypes.Count == 1)
+        var knownDictionaryInterfaces = new Type[]
         {
-            keyType = dictionaryTypes[0].GenericTypeArguments[0];
-            valueType = dictionaryTypes[0].GenericTypeArguments[1];
-            return true;
+            typeof(IDictionary<,>),
+            typeof(IReadOnlyDictionary<,>),
+            typeof(IImmutableDictionary<,>)
+        };
+
+        foreach (var dictInterface in knownDictionaryInterfaces)
+        {
+            var dictionaryTypes = ReflectionHelper.GetImplementedGenericTypes(type, dictInterface);
+            if (dictionaryTypes.Count == 1)
+            {
+                keyType = dictionaryTypes[0].GenericTypeArguments[0];
+                valueType = dictionaryTypes[0].GenericTypeArguments[1];
+                return true;
+            }
         }
 
         if (typeof(IDictionary).IsAssignableFrom(type))
@@ -151,7 +157,6 @@ public static class TypeHelper
 
         keyType = null;
         valueType = null;
-
         return false;
     }
 

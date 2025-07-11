@@ -3,9 +3,8 @@
 
 ABP can work with any type of client side package management systems. You can even decide to use no package management system and manage your dependencies manually.
 
-However, ABP works best with **NPM/Yarn**. By default, built-in modules are configured to work with NPM/Yarn.
+However, ABP works best with **NPM**. By default, built-in modules are configured to work with NPM.
 
-Finally, we suggest the [**Yarn**](https://classic.yarnpkg.com/) over the NPM since it's faster, stable and also compatible with the NPM.
 
 ### @ABP NPM Packages
 
@@ -35,13 +34,11 @@ It's suggested to depend on a standard package instead of directly depending on 
 
 #### Package Installation
 
-After depending on a NPM package, all you should do is to run the **yarn** command from the command line to install all the packages and their dependencies:
+After depending on a NPM package, you should run the **abp install-libs** command from the command line to install all the packages and their dependencies, and copy the required resources to the wwwroot/libs folder:
 
 ```bash
-yarn
+abp install-libs
 ```
-
-Alternatively, you can use `npm install` but [Yarn v1.22+ (not v2)](https://classic.yarnpkg.com/en/docs/install) is suggested as mentioned before.
 
 #### Package Contribution
 
@@ -57,7 +54,7 @@ See current standard packages for examples.
 
 ### Mapping The Library Resources
 
-Using NPM packages and NPM/Yarn tool is the de facto standard for client side libraries. NPM/Yarn tool creates a **node_modules** folder in the root folder of your web project.
+Using NPM packages and NPM tool is the de facto standard for client side libraries. NPM tool creates a **node_modules** folder in the root folder of your web project.
 
 Next challenge is copying needed resources (js, css, img... files) from the `node_modules` into a folder inside the **wwwroot** folder to make it accessible to the clients/browsers.
 

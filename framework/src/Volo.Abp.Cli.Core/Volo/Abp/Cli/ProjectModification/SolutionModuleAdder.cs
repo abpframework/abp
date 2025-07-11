@@ -513,7 +513,7 @@ public class SolutionModuleAdder : ITransientDependency
 
             foreach (var npmPackage in angularPackages)
             {
-                await ProjectNpmPackageAdder.AddAngularPackageAsync(angularPath, npmPackage);
+                await ProjectNpmPackageAdder.AddNpmPackageAsync(angularPath, npmPackage);
             }
         }
     }

@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Los datos que ha enviado ya han sido modificados por otro usuario/cliente. Descarte los cambios que ha realizado e inténtelo desde el principio.",
     "Error": "Error",
     "UnhandledException": "Excepción no manejada!",
+    "Authorizing": "Autorizando…",
     "401Message": "No autorizado",
     "403Message": "Prohibido",
     "404Message": "Página no encontrada",

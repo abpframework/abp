@@ -34,10 +34,13 @@ You can use the following configurations:
 * **Database Provider:** {{DB_Value}}
 * **Public Website:** No
 * **Tiered:** No
+* **Sample Crud Page:** No
 
 You can select the other options based on your preference.
 
 > **Please complete the [Get Started](../../get-started/layered-web-application.md) guide and run the web application before going further.**
+
+> **Please do not check the `Sample Crud Page` option while creating the solution, since it conflicts with this tutorial.**
 
 ## Summary
 

@@ -160,7 +160,7 @@ Please note that the **search component** filters only the routes and cannot hid
 
 ### Download Lepton Theme Source-Code
 
-Download the Lepton Theme source-code to retrieve the existing CSS files. To do this create a new folder named as `LeptonTheme` and run the following ABP CLI command inside the `LeptonTheme` folder:
+Download the Lepton Theme source-code to retrieve the existing CSS files. To do this create a new folder named as `LeptonTheme` in your project root folder and run the following ABP CLI command inside the `LeptonTheme` folder:
 
 ```bash
 abp get-source Volo.LeptonTheme

@@ -18,10 +18,10 @@
     <PackageVersion Include="BunnyCDN.Net.Storage" Version="1.0.4" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.19.0" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.24.0" />
-    <PackageVersion Include="Blazorise" Version="1.7.7" />
-    <PackageVersion Include="Blazorise.Components" Version="1.7.7" />
-    <PackageVersion Include="Blazorise.DataGrid" Version="1.7.7" />
-    <PackageVersion Include="Blazorise.Snackbar" Version="1.7.7" />
+    <PackageVersion Include="Blazorise" Version="1.8.0" />
+    <PackageVersion Include="Blazorise.Components" Version="1.8.0" />
+    <PackageVersion Include="Blazorise.DataGrid" Version="1.8.0" />
+    <PackageVersion Include="Blazorise.Snackbar" Version="1.8.0" />
     <PackageVersion Include="Castle.Core" Version="5.1.1" />
     <PackageVersion Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
     <PackageVersion Include="CommonMark.NET" Version="0.15.1" />

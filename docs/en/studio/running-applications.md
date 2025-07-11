@@ -19,9 +19,10 @@ Use the *Solution Runner* to easily run your application(s) and set up infrastru
 The solution runner contains 4 different types to define tree structure.
 
 - **Profile**: We can create different profiles to manage the tree as our needs. For example we can create 2 different profile for `team-1` and `team-2`. `team-1` want to see the only *Administration* and *Identity* service, `team-2` see the *Saas* and *AuditLogging* services. With that way each team see the only services they need to run. In this example `Default` profile *Acme.BookStore (Default)* comes out of the box when we create the project.
-- **Folder**: We can organize the applications with *Folder* type. In this example for docker set up we use `Docker-Dependencies` CLI application and keep it in `infrastructure`, similarly in `services` folder for our microservice projects. We can also use nested folder if we want `apps`, `gateways`, `infrastructure` and `services` is the folders in current(`Default`) profile. 
+- **Folder**: We can organize the applications with *Folder* type. In this example, we keep services in `services` folder for our microservice projects. We can also use nested folder if we want `apps`, `gateways`` and `services` is the folders in current(`Default`) profile. 
 - **C# Application**: We can add any C# application from our [Solution Explorer](./solution-explorer.md). If the application is not in our solution, we can add it externally by providing the *.csproj* file path. The .NET icon indicates that the application is a C# project. For example, `Acme.BookStore.AuthServer`, `Acme.BookStore.Web`, `Acme.BookStore.WebGateway`, etc., are C# applications.
-- **CLI Application**: We can add [powershell](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core) commands to prepare some environments or run other application types than C# such as angular. In this example `Docker-Dependencies` is the CLI application for docker environment.
+- **CLI Application**: We can add [powershell](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core) commands to prepare some environments or run other application types than C# such as angular.
+- **Docker Container**: We can add Docker container files to control them on UI, start/stop containers individually.
 
 ## Profile
 
@@ -233,6 +234,68 @@ CLI applications uses the [powershell](https://learn.microsoft.com/en-us/powersh
 - `Remove`: This option allows you to delete the selected application.
 
 > When CLI applications start chain icon won't be visible, because only C# applications can connect the ABP Studio.
+
+## Docker Containers
+
+Each Docker container represents a `.yml` file. Each file can be run on UI individually. A file may contain one or more services. To start/stop each service individually, we recommend to keep services in separate files.
+
+An example `rabbitmq.yml` container file:
+
+```yml
+volumes:
+  bookstore_rabbitmq:
+networks:
+  bookstore:
+    external: true
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.12.7-management-alpine
+    volumes:
+      - bookstore_rabbitmq:/var/lib/rabbitmq
+    networks:
+      - bookstore
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+```
+
+> Note: We suggest to use `container_name` property in your services. Otherwise, tracking the container may not be possible in some cases.
+
+To add this file to `containers`, we can use `Add Docker Container` menu:
+
+![docker-container-example-add](images/solution-runner/docker-container-example-add.png)
+
+It will open a simple dialog with a file picker:
+
+![docker-container-example-add-dialog](images/solution-runner/docker-container-example-add-dialog.png)
+
+Then we have the `rabbitmq` on the Studio UI under containers:
+
+![docker-container-example-rabbitmq](images/solution-runner/docker-container-example-rabbitmq.png)
+
+Name of the `yml` file is used as label in the UI, so we recommend to create the file with the name of service inside.
+
+If the `yml` file contains multiple services, they will be represented as a single container with the file name. In this case, when we start/stop it, all services inside the file will be started/stopped.
+
+> If a service is shut down externally, it will be shown as `Stopped` in the UI. In this case you can start them again. If it is constantly stopping, there may be a problem in the `yml` file.
+
+> It may take stuck in `starting` state a while to download images if they don't exist.
+
+>  A warning icon is displayed when a service is stopped externally inside the container. In this case, yo can restart the application on Studio UI:
+>
+> ![docker-container-warning](images/solution-runner/docker-container-warning.png)
+
+
+
+### Properties
+
+![docker-container-properties](images/solution-runner/docker-container-properties.png)
+
+In properties dialog, you can set the name of docker compose stack name of the containers. In the example above, it is set as `BookStore-Containers`. In Docker Desktop UI the containers are stacked under that name. Exmple:
+
+![docker-container-stack](images/solution-runner/docker-container-stack.png)
 
 ## Docker Compose
 

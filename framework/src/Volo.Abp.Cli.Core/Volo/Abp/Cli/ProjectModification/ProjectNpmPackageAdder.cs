@@ -24,16 +24,20 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
     public IInstallLibsService InstallLibsService { get; }
     public ICmdHelper CmdHelper { get; }
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
+    public CliHttpClientFactory CliHttpClientFactory { get; }
+    public INpmPackageInfoProvider NpmPackageInfoProvider { get; }
+
     public ILogger<ProjectNpmPackageAdder> Logger { get; set; }
 
-    public ProjectNpmPackageAdder(CliHttpClientFactory cliHttpClientFactory,
+    public ProjectNpmPackageAdder(
         IJsonSerializer jsonSerializer,
         SourceCodeDownloadService sourceCodeDownloadService,
         AngularSourceCodeAdder angularSourceCodeAdder,
         IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
         IInstallLibsService installLibsService,
-        ICmdHelper cmdHelper)
+        ICmdHelper cmdHelper,
+        CliHttpClientFactory cliHttpClientFactory,
+        INpmPackageInfoProvider npmPackageInfoProvider)
     {
         JsonSerializer = jsonSerializer;
         SourceCodeDownloadService = sourceCodeDownloadService;
@@ -41,14 +45,16 @@ public class ProjectNpmPackageAdder : ITransientDependency
         RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
         InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
-        _cliHttpClientFactory = cliHttpClientFactory;
+        CliHttpClientFactory = cliHttpClientFactory;
+        NpmPackageInfoProvider = npmPackageInfoProvider;
+
         Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
     }
 
-    public async Task AddAngularPackageAsync(string directory, string npmPackageName, string version = null,
+    public async Task AddNpmPackageAsync(string directory, string npmPackageName, string version = null,
         bool withSourceCode = false)
     {
-        await AddAngularPackageAsync(
+        await AddNpmPackageAsync(
             directory,
             await FindNpmPackageInfoAsync(npmPackageName),
             version,
@@ -56,7 +62,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         );
     }
 
-    public async Task AddAngularPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
+    public async Task AddNpmPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
         bool withSourceCode = false)
     {
         var packageJsonFilePath = Path.Combine(directory, "package.json");
@@ -83,16 +89,27 @@ public class ProjectNpmPackageAdder : ITransientDependency
             Logger.LogInformation($"'{npmPackage.Name}' is already installed.");
         }
 
-        if (withSourceCode)
+        if (withSourceCode && await DownloadAngularSourceCode(directory, npmPackage, version))
         {
-            await DownloadAngularSourceCode(directory, npmPackage, version);
             await AngularSourceCodeAdder.AddAsync(directory, npmPackage);
         }
     }
 
-    protected virtual async Task DownloadAngularSourceCode(string angularDirectory, NpmPackageInfo package,
+    protected virtual async Task<bool> DownloadAngularSourceCode(string angularDirectory, NpmPackageInfo package,
         string version = null)
     {
+        var downloadablePackages = await NpmPackageInfoProvider.GetPackageListAsync();
+        if (!downloadablePackages.Exists(p => p.Name == package.Name))
+        {
+            Logger.LogError($"'{package.Name}' is not downloadable!");
+            Logger.LogInformation("The downloadable packages are: ");
+            foreach (var downloadablePackage in downloadablePackages)
+            {
+                Logger.LogInformation($"> {downloadablePackage.Name}");
+            }
+            return false;
+        }
+
         var targetFolder = Path.Combine(angularDirectory, "projects",
             package.Name.RemovePreFix("@").Replace("/", "-"));
 
@@ -106,6 +123,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
             targetFolder,
             version
         );
+
+        return true;
     }
 
     public async Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
@@ -210,9 +229,9 @@ public class ProjectNpmPackageAdder : ITransientDependency
     private async Task<NpmPackageInfo> FindNpmPackageInfoAsync(string packageName)
     {
         var url = $"{CliUrls.WwwAbpIo}api/app/npmPackage/byName/?name=" + packageName;
-        var client = _cliHttpClientFactory.CreateClient();
+        var client = CliHttpClientFactory.CreateClient();
 
-        using (var response = await client.GetAsync(url, _cliHttpClientFactory.GetCancellationToken()))
+        using (var response = await client.GetAsync(url, CliHttpClientFactory.GetCancellationToken()))
         {
             if (!response.IsSuccessStatusCode)
             {

@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Údaje, které jste odeslali, již změnil jiný uživatel/klient. Zahoďte provedené změny a zkuste to od začátku.",
     "Error": "Chyba",
     "UnhandledException": "Neošetřená výjimka!",
+    "Authorizing": "Ověřování…",
     "401Message": "Neoprávněno",
     "403Message": "Zakázáno",
     "404Message": "Stránka nenalezena",
