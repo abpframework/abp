@@ -46,7 +46,7 @@ public sealed class TelemetryApplicationInfoEnricher : TelemetryActivityEventEnr
 
             if (!_telemetryActivityStorage.ShouldAddProjectInfo(projectMetaData.ProjectId.Value))
             {
-                CancelChildren = true;
+                IgnoreChildren = true;
                 return Task.CompletedTask;
             }
 
@@ -54,7 +54,7 @@ public sealed class TelemetryApplicationInfoEnricher : TelemetryActivityEventEnr
 
             if (!solutionId.HasValue)
             {
-                CancelChildren = true;
+                IgnoreChildren = true;
                 context.Terminate();
                 return Task.CompletedTask;
             }

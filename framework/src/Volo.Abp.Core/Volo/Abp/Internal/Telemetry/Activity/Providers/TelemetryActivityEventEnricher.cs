@@ -12,7 +12,7 @@ namespace Volo.Abp.Internal.Telemetry.Activity.Providers;
 public abstract class TelemetryActivityEventEnricher : ITelemetryActivityEventEnricher, IScopedDependency
 {
     public virtual int ExecutionOrder { get; set; } = 0;
-    protected bool CancelChildren { get; set; }
+    protected bool IgnoreChildren { get; set; }
     protected virtual Type? ReplaceParentType { get; set; }
 
     private readonly IServiceProvider _serviceProvider;
@@ -40,9 +40,9 @@ public abstract class TelemetryActivityEventEnricher : ITelemetryActivityEventEn
 
     protected abstract Task ExecuteAsync(ActivityContext context);
 
-    private async Task ExecuteChildrenAsync(ActivityContext context)
+    protected virtual async Task ExecuteChildrenAsync(ActivityContext context)
     {
-        if (CancelChildren)
+        if (IgnoreChildren)
         {
             return;
         }
