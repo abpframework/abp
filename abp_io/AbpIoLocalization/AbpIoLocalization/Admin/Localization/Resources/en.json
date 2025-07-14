@@ -754,10 +754,10 @@
         "TelemetryReports:ChartLabels:Daily": "Daily",
         "TelemetryReports:ChartLabels:Monthly": "Monthly",
         "TelemetryReports:ChartLabels:Users": "Users",
-        "Permission:SolutionReports": "Solution Reports",
-        "Permission:UserReports": "User Reports",
-        "Menu:SolutionReports": "Solution Reports",
-        "Menu:UserReports": "User Reports",
+        "Permission:SolutionAnalytics": "Solution Reports",
+        "Permission:UserReports": "User Analytics",
+        "Menu:SolutionAnalytics": "Solution Analytics",
+        "Menu:UserAnalytics": "User Analytics",
         "Menu:AnalyticsMenu": "Analytics"
     }      
 }
