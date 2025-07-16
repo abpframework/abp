@@ -9,26 +9,48 @@ See the documents below for the details:
 * [Page Toolbar Extension](page-toolbar-extensions.md)
 * [Dynamic Form (or Form Prop) Extensions](dynamic-form-extensions.md)
 
-##  Extensible Table Component
+## Extensible Table Component
 
-Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensible table.
+Using `ngx-datatable` in extensible table.
 
-````ts
-      <abp-extensible-table
-         actionsText="Your Action"
-         [data]="items"
-         [recordsTotal]="totalCount"
-         [actionsColumnWidth]="38"
-         [actionsTemplate]="customAction"
-         [list]="list"
-         (tableActivate)="onTableSelect($event)" > 
-      </abp-extensible-table>
-````
+```html
+<abp-extensible-table
+  actionsText="Your Action"
+  [data]="items"
+  [recordsTotal]="totalCount"
+  [actionsColumnWidth]="38"
+  [actionsTemplate]="customAction"
+  [list]="list"
+  [selectable]="true"
+  [selectionType]="'single'"
+  (tableActivate)="onTableSelect($event)"
+  (selectionChanged)="onSelectionChanged($event)">
+</abp-extensible-table>
+```
 
- * `       actionsText : ` ** Column name of action column. **Type** : string
- * `              data : ` Items shows in your table. **Type** : Array<any>
- * `              list : ` Instance of ListService. **Type** : ListService
- * `actionsColumnWidth : ` Width of your action column. **Type** : number
- * `   actionsTemplate : ` Template of the action when "click this button" or whatever. Generally ng-template. **Type** : TemplateRef<any>
- * `      recordsTotal : ` Count of the record total. **Type** : number
- * `    tableActivate  : ` The Output(). A cell or row was focused via the keyboard or a mouse click. **Type** : EventEmitter() 
+### Inputs
+
+| Name                   | Description                                                            | Type            |
+|------------------------|------------------------------------------------------------------------|-----------------|
+| actionsText            | Column name of the action column                                        | string          |
+| data                   | Items shown in your table                                             | Array<any>      |
+| list                   | Instance of ListService                                               | ListService     |
+| actionsColumnWidth     | Width of the action column                                             | number          |
+| actionsTemplate        | Template of the action button (usually a ng-template)                 | TemplateRef<any> |
+| recordsTotal           | Total number of records                                                | number          |
+| selectable             | Enables row selection                                                  | boolean         |
+| selectionType          | Selection mode: 'single' for radio buttons or 'multiClick' for checkboxes | 'single' | 'multiClick' |
+
+### Outputs
+
+| Name              | Description                                                              | Type                        |
+|-------------------|--------------------------------------------------------------------------|-----------------------------|
+| tableActivate      | Triggered when a cell or row is activated via keyboard or mouse         | EventEmitter<any>           |
+| selectionChanged   | Emits the currently selected row(s) whenever selection changes          | EventEmitter<any[] \| any>  |
+
+### Selection Behavior Summary
+
+| selectionType    | Row Control   | Column Header        | Behavior                         |
+|------------------|---------------|----------------------|----------------------------------|
+| 'single'         | radio         | none                 | Only one row selected at a time  |
+| 'multiClick' (default) | checkbox | select all checkbox | Multiple rows selectable         |
