@@ -4,6 +4,7 @@ using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
+using Volo.Docs.Common;
 using Volo.Docs.Documents;
 
 namespace Volo.Docs
@@ -13,6 +14,7 @@ namespace Volo.Docs
         typeof(DocsApplicationContractsModule),
         typeof(AbpCachingModule),
         typeof(AbpAutoMapperModule),
+        typeof(DocsCommonApplicationModule),
         typeof(AbpDddApplicationModule)
         )]
     public class DocsApplicationModule : AbpModule

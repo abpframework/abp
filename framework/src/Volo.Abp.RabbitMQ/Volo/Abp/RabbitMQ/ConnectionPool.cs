@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.RabbitMQ;
 
@@ -11,55 +13,51 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
 {
     protected AbpRabbitMqOptions Options { get; }
 
-    protected ConcurrentDictionary<string, Lazy<IConnection>> Connections { get; }
+    protected ConcurrentDictionary<string, IConnection> Connections { get; }
+
+    protected SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
 
     private bool _isDisposed;
 
     public ConnectionPool(IOptions<AbpRabbitMqOptions> options)
     {
         Options = options.Value;
-        Connections = new ConcurrentDictionary<string, Lazy<IConnection>>();
+        Connections = new ConcurrentDictionary<string, IConnection>();
     }
 
-    public virtual IConnection Get(string? connectionName = null)
+    public virtual async Task<IConnection> GetAsync(string? connectionName = null)
     {
-        connectionName ??= RabbitMqConnections.DefaultConnectionName;
-        var connectionFactory = Options.Connections.GetOrDefault(connectionName);
-        try
+        using (await Semaphore.LockAsync())
         {
-            var connection = GetConnection(connectionName, connectionFactory);
-        
-            if (connection.IsOpen)
+            connectionName ??= RabbitMqConnections.DefaultConnectionName;
+
+            if (Connections.TryGetValue(connectionName, out var existingConnection) && existingConnection.IsOpen)
             {
-                return connection;
+                return existingConnection;
             }
-            
-            connection.Dispose();
-            Connections.TryRemove(connectionName, out _);
-            return GetConnection(connectionName, connectionFactory);
-        }
-        catch (Exception)
-        {
-            Connections.TryRemove(connectionName, out _);
-            throw;
-        }
-    }
 
-    protected virtual IConnection GetConnection(string connectionName, ConnectionFactory connectionFactory)
-    {
-        return Connections.GetOrAdd(
-            connectionName, () => new Lazy<IConnection>(() =>
+            if(existingConnection != null)
             {
-                var hostnames = connectionFactory.HostName.TrimEnd(';').Split(';');
-                // Handle Rabbit MQ Cluster.
-                return hostnames.Length == 1
-                    ? connectionFactory.CreateConnection()
-                    : connectionFactory.CreateConnection(hostnames);
-            })
-        ).Value;
+                await existingConnection.DisposeAsync();
+            }
+
+            var connectionFactory = Options.Connections.GetOrDefault(connectionName);
+            var connection = await GetConnectionAsync(connectionName, connectionFactory);
+            Connections[connectionName] = connection;
+            return connection;
+        }
     }
 
-    public void Dispose()
+    protected virtual async Task<IConnection> GetConnectionAsync(string connectionName, ConnectionFactory connectionFactory)
+    {
+        var hostnames = connectionFactory.HostName.TrimEnd(';').Split(';');
+        // Handle Rabbit MQ Cluster.
+        return hostnames.Length == 1
+            ? await connectionFactory.CreateConnectionAsync()
+            : await connectionFactory.CreateConnectionAsync(hostnames);
+    }
+
+    public async ValueTask DisposeAsync()
     {
         if (_isDisposed)
         {
@@ -72,11 +70,11 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
         {
             try
             {
-                connection.Value.Dispose();
+                await connection.DisposeAsync();
             }
             catch
             {
-
+                // ignored
             }
         }
 

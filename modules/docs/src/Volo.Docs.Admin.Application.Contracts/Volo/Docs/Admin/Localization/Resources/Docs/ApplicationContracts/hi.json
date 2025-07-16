@@ -57,6 +57,18 @@
     "LastCachedTime": "कैश समय",
     "Project": "परियोजना",
     "AdvancedFilters": "उन्नत फ़िल्टर",
-    "RemoveCacheAndReIndexConfirmation": "दस्u200Dतावेज़ \"{0}\" को संचय से हटा दिया जाएगा और पुन: अनुक्रमित किया जाएगा। क्या आप पुष्टि करते हैं?"
+    "RemoveCacheAndReIndexConfirmation": "दस्तावेज़ \"{0}\" को संचय से हटा दिया जाएगा और पुन: अनुक्रमित किया जाएगा। क्या आप पुष्टि करते हैं?",
+    "GeneratePdf": "PDF उत्पन्न करें",
+    "Generating": "उत्पन्न कर रहा है...",
+    "Language": "भाषा",
+    "ForceToGenerateNewPdf": "नया PDF उत्पन्न करें",
+    "PdfGeneratedSuccessfully": "PDF सफलतापूर्वक उत्पन्न हो गया",
+    "GenerateAndDownloadPdf": "PDF उत्पन्न और डाउनलोड करें",
+    "PdfFileDeletionWarningMessage": "क्या आप वाकई \"{0}\" के PDF फ़ाइल को हटाना चाहते हैं?",
+    "ManagePdfFiles": "PDF फ़ाइलें प्रबंधित करें",
+    "Permission:ManagePdfFiles": "PDF फ़ाइलें प्रबंधित करें",
+    "PdfDeletedSuccessfully": "PDF फ़ाइल सफलतापूर्वक हटा दी गई",
+    "PdfGenerationStarted": "PDF जनरेशन शुरू हो गया है",
+    "PdfGenerationStartedInfoMessage": "PDF जनरेशन शुरू हो गया है। पूरा होने के बाद, आप जांच सकते हैं कि फ़ाइल PDF फ़ाइल सेक्शन में जोड़ी गई है या नहीं।"
   }
 }

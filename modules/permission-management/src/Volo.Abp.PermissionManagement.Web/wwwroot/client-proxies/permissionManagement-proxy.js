@@ -18,6 +18,13 @@
       }, ajaxParams));
     };
 
+    volo.abp.permissionManagement.permissions.getByGroup = function(groupName, providerName, providerKey, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/by-group' + abp.utils.buildQueryString([{ name: 'groupName', value: groupName }, { name: 'providerName', value: providerName }, { name: 'providerKey', value: providerKey }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
     volo.abp.permissionManagement.permissions.update = function(providerName, providerKey, input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/permission-management/permissions' + abp.utils.buildQueryString([{ name: 'providerName', value: providerName }, { name: 'providerKey', value: providerKey }]) + '',

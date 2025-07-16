@@ -103,6 +103,13 @@ public static class AbpAuditLoggingDbContextModelBuilderExtensions
             b.ApplyObjectExtensionMappings();
         });
 
+        builder.Entity<AuditLogExcelFile>(b =>
+        {
+            b.ToTable(AbpAuditLoggingDbProperties.DbTablePrefix + "AuditLogExcelFiles", AbpAuditLoggingDbProperties.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.FileName).HasMaxLength(AuditLogExcelFileConsts.MaxFileNameLength).HasColumnName(nameof(AuditLogExcelFile.FileName));
+        });
+
         builder.TryConfigureObjectExtensions<AbpAuditLoggingDbContext>();
     }
 }

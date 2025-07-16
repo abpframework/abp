@@ -2,6 +2,12 @@
 
 In this article, we'll create a basic application to demonstrate how "Concurrency Check/Control" can be implemented in an ABP project.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Creating the Solution
 
 For this article, we will create a simple BookStore application and add CRUD functionality to the pages. Hence we deal with the concurrency situation.
@@ -546,3 +552,9 @@ Then we can run the application, navigate to the **/Books** endpoint and see the
 * After the first user updated the record, the second user tries to update the same record without getting the last state of the record. And therefore `AbpDbConcurrencyException` is thrown because **ConcurrencyStamp** values are different from each other.
 
 * The second user should close and re-open the model to get the last state of the record and then they can make changes to the current record.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---

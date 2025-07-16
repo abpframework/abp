@@ -233,19 +233,17 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             switch (dataTypeAttribute.DataType)
             {
                 case DataType.Password:
+                case DataType.EmailAddress:
+                case DataType.Url:
+                case DataType.PhoneNumber:
                     return typeof(TextExtensionProperty<,>);
                 case DataType.Date:
+                case DataType.DateTime:
                     return typeof(DateTimeExtensionProperty<,>);
                 case DataType.Time:
                     return typeof(TimeExtensionProperty<,>);
-                case DataType.EmailAddress:
-                    return typeof(TextExtensionProperty<,>);
-                case DataType.Url:
-                    return typeof(TextExtensionProperty<,>);
-                case DataType.PhoneNumber:
-                    return typeof(TextExtensionProperty<,>);
-                case DataType.DateTime:
-                    return typeof(DateTimeExtensionProperty<,>);
+                case DataType.MultilineText:
+                    return typeof(TextAreaExtensionProperty<,>);
             }
         }
 

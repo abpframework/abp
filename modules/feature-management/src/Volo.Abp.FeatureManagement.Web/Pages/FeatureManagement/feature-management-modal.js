@@ -88,7 +88,7 @@ var abp = abp || {};
                 $('.custom-scroll-content').mCustomScrollbar({
                     theme: 'minimal-dark',
                 });
-                $('.custom-scroll-container > .col-4').mCustomScrollbar({
+                $('.custom-scroll-container > .col-md-4').mCustomScrollbar({
                     theme: 'minimal-dark',
                 });
             });

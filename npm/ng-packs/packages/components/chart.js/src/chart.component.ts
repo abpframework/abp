@@ -16,7 +16,6 @@ import {
 let Chart: any;
 
 @Component({
-  standalone: false,
   selector: 'abp-chart',
   template: `
     <div

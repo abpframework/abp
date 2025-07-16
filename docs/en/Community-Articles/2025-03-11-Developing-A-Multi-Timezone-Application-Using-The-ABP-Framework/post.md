@@ -6,6 +6,8 @@ All these scenarios require us to handle timezone conversions correctly in our a
 
 In this article, we'll show you step by step how to handle multi-timezone in the ABP framework.
 
+> The content mentioned in this article will be available after the ABP 9.2 version
+
 ## Timezone Settings
 
 The ABP framework provides a setting called `Abp.Timing.TimeZone` for setting and getting the timezone of users, tenants, or applications. The default value is empty, which means the application will use the server's time zone. Check out the [Timing documentation](https://abp.io/docs/latest/framework/infrastructure/timing) for more information.

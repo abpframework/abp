@@ -1,8 +1,8 @@
 import { ApplicationInfo, EnvironmentService } from '@abp/ng.core';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'abp-logo',
   template: `
     <a class="navbar-brand" routerLink="/">
@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
       }
     </a>
   `,
+  imports: [CommonModule],
 })
 export class LogoComponent {
   get appInfo(): ApplicationInfo {

@@ -136,7 +136,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
         if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
         {
             var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
-            if (fallbackValue == value)
+            if (string.Equals(fallbackValue, value, StringComparison.OrdinalIgnoreCase))
             {
                 //Clear the value if it's same as it's fallback value
                 value = null;

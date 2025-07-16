@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -19,7 +20,6 @@ public class AbpRabbitMqModule : AbpModule
         {
             foreach (var connectionFactory in options.Connections.Values)
             {
-                connectionFactory.DispatchConsumersAsync = true;
                 connectionFactory.AutomaticRecoveryEnabled = false;
             }
         });
@@ -27,12 +27,17 @@ public class AbpRabbitMqModule : AbpModule
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        context.ServiceProvider
-            .GetRequiredService<IChannelPool>()
-            .Dispose();
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
+    }
 
-        context.ServiceProvider
+    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        await context.ServiceProvider
+            .GetRequiredService<IChannelPool>()
+            .DisposeAsync();
+
+        await context.ServiceProvider
             .GetRequiredService<IConnectionPool>()
-            .Dispose();
+            .DisposeAsync();
     }
 }

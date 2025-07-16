@@ -16,7 +16,7 @@
     "Permission:Edit": "Editează",
     "Permission:Delete": "Şterge",
     "Permission:ManageConnectionStrings": "Administrează stringurile de conexiune",
-    "Permission:ManageFeatures": "Administrarea caracteristicilor",
+    "Permission:ManageFeatures": "Caracteristici",
     "DisplayName:AdminEmailAddress": "Adresa de email admin",
     "DisplayName:AdminPassword": "Parola admin"
   }

@@ -13,6 +13,7 @@ public class AbpAuditLoggingEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<AbpAuditLoggingDbContext>(options =>
         {
             options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
+            options.AddRepository<AuditLogExcelFile, EfCoreAuditLogExcelFileRepository>();
         });
     }
 }

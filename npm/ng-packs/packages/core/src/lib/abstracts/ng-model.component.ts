@@ -3,7 +3,6 @@ import { ControlValueAccessor } from '@angular/forms';
 
 // Not an abstract class on purpose. Do not change!
 @Component({
-  standalone: false,
   template: '',
 })
 export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {

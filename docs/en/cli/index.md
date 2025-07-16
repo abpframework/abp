@@ -889,6 +889,7 @@ Some features of the CLI requires to be logged in to ABP Platform. The login com
 ```bash
 abp login                                             # Opens a default browser to log in to ABP Platform via abp.io
 abp login --device                                    # Use device login flow
+abp login username -p ****** --password               # Use user password login
 ```
 
 A new login with an already active session overwrites the previous session.

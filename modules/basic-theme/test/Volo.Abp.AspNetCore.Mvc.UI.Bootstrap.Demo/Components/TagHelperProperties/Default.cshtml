@@ -1,0 +1,32 @@
+﻿@using System.Reflection
+
+@model List<PropertyInfo>
+
+<h4>Properties</h4>
+
+<ul>
+    @foreach (var property in Model)
+    {
+        <li>
+            <strong>@property.Name</strong>
+            @{
+                var typeName = property.PropertyType.Name;
+                if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    typeName = property.PropertyType.GetGenericArguments()[0].Name;
+                }
+            }
+            (<code>@typeName</code>)
+            @if (property.PropertyType.IsEnum)
+            {
+                <ul>
+                    <li>
+                        <span class="text-muted">
+                            [ @string.Join(", ", Enum.GetNames(property.PropertyType)) ]
+                        </span>
+                    </li>
+                </ul>
+            }
+        </li>
+    }
+</ul>

@@ -9,6 +9,8 @@ A reference application built with ABP. It implements the Domain Driven Design w
 * [Live demo](https://www.openeventhub.com/)
 * [Source code](https://github.com/abpframework/eventhub)
 
+![samples-event-hub](../images/samples-eventhub.png)
+
 ## eShopOnAbp
 
 > ⚠️ **Important Notice**  
@@ -18,6 +20,8 @@ Reference microservice solution built with ABP and .NET.
 
 * [Source code](https://github.com/abpframework/eShopOnAbp)
 
+![eshoponabp](../images/samples-eshoponabp.png)
+
 ## CMS Kit Demo
 
 A minimal example website built with the [CMS Kit module](../modules/cms-kit/index.md).
@@ -25,12 +29,16 @@ A minimal example website built with the [CMS Kit module](../modules/cms-kit/ind
 * [Live demo](https://cms-kit-demo.abpdemo.com/)
 * [Source code](https://github.com/abpframework/cms-kit-demo)
 
+![samples-cms-kit](../images/samples-cms-kit.png)
+
 ## Easy CRM
 
 A middle-size CRM application built with ABP.
 
 * [Live demo](http://easycrm.abp.io/)
 * [Click here](easy-crm.md) to see the details and download the source code.
+
+![samples-easy-crm](../images/samples-easycrm.png)
 
 ## Book Store
 

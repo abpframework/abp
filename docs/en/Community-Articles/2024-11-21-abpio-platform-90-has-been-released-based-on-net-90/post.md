@@ -80,7 +80,7 @@ In addition to [the articles to highlight .NET 9.0 features written by our team]
 * [How to create your Own AI Bot on WhatsApp Using an ABP.io Template](https://abp.io/community/articles/how-to-create-your-own-ai-bot-on-whatsapp-using-the-abp-framework-c6jgvt9c) by [Michael Kokula](https://abp.io/community/members/Michal_Kokula)
 * [ABP Now Supports .NET 9](https://abp.io/community/articles/abp-now-supports-.net-9-zpkznc4f) by [Alper Ebiçoğlu](https://x.com/alperebicoglu)
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
 ## Conclusion
 

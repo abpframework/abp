@@ -5,12 +5,15 @@ import {
   PageToolbarContainerComponent,
   PageParts,
 } from './page-parts.component';
+import { BreadcrumbComponent } from '@abp/ng.theme.shared';
+import { PageToolbarComponent } from '@abp/ng.components/extensible';
+import { PagePartDirective } from './page-part.directive';
 
 @Component({
-  standalone: false,
   selector: 'abp-page',
   templateUrl: './page.component.html',
   encapsulation: ViewEncapsulation.None,
+  imports: [BreadcrumbComponent, PageToolbarComponent, PagePartDirective],
 })
 export class PageComponent {
   @Input() title?: string;

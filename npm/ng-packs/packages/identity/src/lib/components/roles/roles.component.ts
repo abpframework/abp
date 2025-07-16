@@ -1,19 +1,39 @@
-import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
-import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import {
+  InitDirective,
+  ListService,
+  LocalizationPipe,
+  PagedAndSortedResultRequestDto,
+  PagedResultDto,
+  ReplaceableTemplateDirective,
+} from '@abp/ng.core';
+import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
+import {
+  ePermissionManagementComponents,
+  PermissionManagementComponent,
+} from '@abp/ng.permission-management';
+import {
+  ButtonComponent,
+  Confirmation,
+  ConfirmationService,
+  ModalCloseDirective,
+  ModalComponent,
+  ToasterService,
+} from '@abp/ng.theme.shared';
+import {
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
 import { Component, inject, Injector, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
+import { PageComponent } from '@abp/ng.components/page';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
-  standalone: false,
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
   providers: [
@@ -22,6 +42,20 @@ import { eIdentityComponents } from '../../enums/components';
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eIdentityComponents.Roles,
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    LocalizationPipe,
+    ExtensibleTableComponent,
+    ModalComponent,
+    ButtonComponent,
+    PageComponent,
+    ExtensibleFormComponent,
+    ModalCloseDirective,
+    PermissionManagementComponent,
+    ReplaceableTemplateDirective,
+    NgxValidateCoreModule,
+    InitDirective,
   ],
 })
 export class RolesComponent implements OnInit {

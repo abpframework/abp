@@ -4,12 +4,14 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Docs.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Docs.Common;
 
 namespace Volo.Docs.Admin
 {
     [DependsOn(
         typeof(DocsAdminApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule)
+        typeof(AbpAspNetCoreMvcModule),
+        typeof(DocsCommonHttpApiModule)
         )]
     public class DocsAdminHttpApiModule : AbpModule
     {

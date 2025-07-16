@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace VoloDocs.EntityFrameworkCore
             modelBuilder.ConfigureSettingManagement();
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureDocs();
+            modelBuilder.ConfigureBlobStoring();
         }
     }
 }

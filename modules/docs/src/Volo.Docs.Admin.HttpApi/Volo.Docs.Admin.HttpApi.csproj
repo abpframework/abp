@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.Docs.Common.HttpApi\Volo.Docs.Common.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
   </ItemGroup>
 

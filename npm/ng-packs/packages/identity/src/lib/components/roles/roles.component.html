@@ -15,7 +15,7 @@
     </ng-template>
 
     <ng-template #abpBody>
-      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
         <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
       </form>
     </ng-template>

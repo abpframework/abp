@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "De uppgifter du har skickat har redan ändrats av en annan användare. Kassera dina ändringar och försök igen.",
     "Error": "Fel",
     "UnhandledException": "Obehandlat undantag!",
+    "Authorizing": "Auktoriserar…",
     "401Message": "Obehörig",
     "403Message": "Förbjudet",
     "404Message": "Sidan hittades inte",

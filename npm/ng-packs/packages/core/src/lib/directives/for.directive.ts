@@ -33,7 +33,6 @@ class RecordView {
 }
 
 @Directive({
-  standalone: true,
   selector: '[abpFor]',
 })
 export class ForDirective implements OnChanges {

@@ -4,6 +4,12 @@
 
 In this article, we'll explore the [`CurrentUser` service](https://abp.io/docs/latest/framework/infrastructure/current-user), its use cases, and how to change it when necessary.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Understanding the ICurrentUser Service
 
 The `ICurrentUser` interface is the primary service in ABP Framework for obtaining information about the logged-in user. It provides some key properties, such as `Id`, `UserName`, `TenantId`, `Roles` (roleNames), and more...
@@ -107,6 +113,12 @@ Here's what the code does step by step:
 **The important part here is that any audit properties (like `CreatorId`, `LastModifierId`, etc.) will be set to the admin user's ID because we changed the current principal. Once the using block ends, the original user context is automatically restored.**
 
 This pattern is particularly useful in background jobs, event handlers, or any scenario where you need to perform operations under a specific user's context, regardless of the actual authenticated user.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

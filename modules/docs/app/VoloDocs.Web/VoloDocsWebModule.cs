@@ -32,10 +32,15 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.Account;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.Validation.Localization;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Docs.Common.Documents;
+using Volo.Docs.Projects.Pdf;
 
 namespace VoloDocs.Web
 {
@@ -58,7 +63,8 @@ namespace VoloDocs.Web
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
-        ,typeof(AbpCachingStackExchangeRedisModule)
+        ,typeof(AbpCachingStackExchangeRedisModule),
+        typeof(AbpBackgroundJobsModule)
     )]
     public class VoloDocsWebModule : AbpModule
     {
@@ -67,6 +73,11 @@ namespace VoloDocs.Web
             PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(typeof(DocsResource), typeof(VoloDocsWebModule).Assembly);
+            });
+            
+            PreConfigure<AbpBackgroundJobWorkerOptions>(options =>
+            {
+                options.ApplicationName = context.Services.GetApplicationName()!;
             });
         }
 
@@ -82,7 +93,7 @@ namespace VoloDocs.Web
             //     options.SingleProjectMode.ProjectName = "abp";
             //     options.MultiLanguageMode = false;
             // });
-
+            
             Configure<DocsElasticSearchOptions>(options =>
             {
                 options.Enable = false;
@@ -169,6 +180,22 @@ namespace VoloDocs.Web
                 options.EnableGoogleTranslate = true;
                 options.EnableGoogleProgrammableSearchEngine = true;
                 options.GoogleSearchEngineId = "77c7266532da1427f";
+            });
+            
+            Configure<DocsProjectPdfGeneratorOptions>(options =>
+            {
+                options.BaseUrl = configuration["App:SelfUrl"];
+                options.IndexPagePath = "index.md";
+                options.CalculatePdfFileTitle = project => project.ShortName == "abp" ? "ABP Documentation" : null;
+                options.DocumentContentNormalizer = content => content.Replace("<i class=\"fa fa-minus text-secondary\"></i>", "No").Replace("<i class=\"fa fa-check text-success\"></i>", "Yes");
+            });
+            
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureDefault(container =>
+                {
+                    container.UseDatabase();
+                });
             });
         }
 

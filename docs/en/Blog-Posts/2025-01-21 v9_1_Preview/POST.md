@@ -138,7 +138,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [The new Unit Test structure in ABP application](https://abp.io/community/articles/the-new-unit-test-structure-in-abp-application-4vvvp2oy) by [Liming Ma](https://github.com/maliming)
 * [How to Use OpenAI API with ABP Framework](https://abp.io/community/articles/how-to-use-openai-api-with-abp-framework-rsfvihla) by [Berkan Şaşmaz](https://github.com/berkansasmaz) 
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
 ## Conclusion
 

@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ListGroup
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.ListGroupsModel
 @{
     ViewData["Title"] = "List Groups";
@@ -347,3 +348,7 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpListGroupTagHelper))

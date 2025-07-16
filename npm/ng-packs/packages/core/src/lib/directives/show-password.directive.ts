@@ -1,7 +1,6 @@
 import { Directive, ElementRef, Input, inject } from '@angular/core';
 
 @Directive({
-  standalone: true,
   selector: '[abpShowPassword]',
 })
 export class ShowPasswordDirective {

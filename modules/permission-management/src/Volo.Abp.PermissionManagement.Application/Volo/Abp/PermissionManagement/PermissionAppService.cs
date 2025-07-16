@@ -34,6 +34,16 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
 
     public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
     {
+        return await GetInternalAsync(null, providerName, providerKey);
+    }
+
+    public virtual async Task<GetPermissionListResultDto> GetByGroupAsync(string groupName, string providerName, string providerKey)
+    {
+        return await GetInternalAsync(groupName, providerName, providerKey);
+    }
+
+    protected virtual async Task<GetPermissionListResultDto> GetInternalAsync(string groupName, string providerName, string providerKey)
+    {
         await CheckProviderPolicy(providerName);
 
         var result = new GetPermissionListResultDto
@@ -45,7 +55,7 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         var multiTenancySide = CurrentTenant.GetMultiTenancySide();
         var permissionGroups = new List<PermissionGroupDto>();
 
-        foreach (var group in await PermissionDefinitionManager.GetGroupsAsync())
+        foreach (var group in (await PermissionDefinitionManager.GetGroupsAsync()).WhereIf(!groupName.IsNullOrWhiteSpace(), x => x.Name == groupName))
         {
             var groupDto = CreatePermissionGroupDto(group);
             var permissions = group.GetPermissionsWithChildren()
@@ -108,7 +118,7 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         return result;
     }
 
-    protected virtual  PermissionGrantInfoDto CreatePermissionGrantInfoDto(PermissionDefinition permission)
+    protected virtual PermissionGrantInfoDto CreatePermissionGrantInfoDto(PermissionDefinition permission)
     {
         return new PermissionGrantInfoDto
         {

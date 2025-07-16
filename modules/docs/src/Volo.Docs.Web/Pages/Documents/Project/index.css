@@ -45,4 +45,18 @@ body {
   outline: none;
 }
 
+.docs-sidebar-footer {
+  border-block-start: 1px solid #aaa;
+  border-block-end: 1px solid #aaa;
+}
+
+.download-pdf-btn {
+  text-align: left;
+  width: 100%;
+  color: #aaa;
+  background-color: #0000;
+  border-color:#0000;
+  font-size: 14px;
+}
+
 /*# sourceMappingURL=Index.css.map */

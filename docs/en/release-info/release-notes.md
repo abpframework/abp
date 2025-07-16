@@ -7,6 +7,15 @@ Also see the following notes about ABP releases:
 * [ABP Studio release notes](../studio/release-notes.md)
 * [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 9.3 (2025-06-17)
+
+This is currently a RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-9-3-release-candidate-4dqgiryf)** for the v9.3 release.
+
+* Cron Expression Support for Background Workers
+* Docs Module: PDF Export
+* Angular UI: Standalone Package Structure
+* Upgraded to `Blazorise` **v1.7.7**
+* Audit Logging Module: Excel Export
 
 ## 9.2 (2025-06-02)
 

@@ -35,12 +35,12 @@
                                 {
                                     <div class="mt-2">
                                         @{
-                                            var disabled = IsDisabled(feature.Provider.Name);
+                                            var disabled = IsDisabled(feature);
 
                                             if (feature.ValueType is FreeTextStringValueType)
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <FieldLabel>@feature.DisplayName</FieldLabel>
+                                                    <FieldLabel>@GetShownName(feature)</FieldLabel>
                                                     <TextEdit Disabled="@disabled"
                                                           Text="@feature.Value"
                                                           TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))" />
@@ -56,8 +56,8 @@
                                                 var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
                                                 var selectedValue = SelectionStringValues[feature.Name];
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <FieldLabel>@feature.DisplayName</FieldLabel>
-                                                    <Select TValue="string" SelectedValue="selectedValue" SelectedValueChanged="s => SelectionStringValues[feature.Name] = s">
+                                                    <FieldLabel>@GetShownName(feature)</FieldLabel>
+                                                    <Select TValue="string" Disabled="disabled" SelectedValue="selectedValue" SelectedValueChanged="s => SelectionStringValues[feature.Name] = s">
                                                         @foreach (var item in items)
                                                         {
                                                             <SelectItem Value="@item.Value">
@@ -75,8 +75,8 @@
                                             if (feature.ValueType is ToggleStringValueType)
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <Check TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
-                                                        @feature.DisplayName
+                                                    <Check TValue="bool" Disabled="disabled" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
+                                                        @GetShownName(feature)
                                                     </Check>
                                                     @if (feature.Description != null)
                                                     {

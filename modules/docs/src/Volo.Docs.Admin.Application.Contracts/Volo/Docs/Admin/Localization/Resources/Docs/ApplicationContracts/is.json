@@ -57,6 +57,18 @@
     "LastCachedTime": "Tími geymt í skyndiminni",
     "Project": "Verkefni",
     "AdvancedFilters": "Ítarlegar síur",
-    "RemoveCacheAndReIndexConfirmation": "Skjalið \"{0}\" verður fjarlægt úr skyndiminni og endurtryggt. Staðfestir þú?"
+    "RemoveCacheAndReIndexConfirmation": "Skjalið \"{0}\" verður fjarlægt úr skyndiminni og endurtryggt. Staðfestir þú?",
+    "GeneratePdf": "Generate PDF",
+    "Generating": "Generating...",
+    "Language": "Language",
+    "ForceToGenerateNewPdf": "Force to generate new PDF",
+    "PdfGeneratedSuccessfully": "PDF generated successfully",
+    "GenerateAndDownloadPdf": "Generate and download PDF",
+    "PdfFileDeletionWarningMessage": "Are you sure you want to delete the PDF file \"{0}\"?",
+    "ManagePdfFiles": "Manage PDF files",
+    "Permission:ManagePdfFiles": "Manage PDF files",
+    "PdfDeletedSuccessfully": "PDF skrá var eytt með góðum árangri",
+    "PdfGenerationStarted": "PDF gerð hefur hafist",
+    "PdfGenerationStartedInfoMessage": "PDF gerð hefur hafist. Þegar henni er lokið geturðu athugað hvort skráin hafi verið bætt við í PDF skráarhlutanum."
   }
 }

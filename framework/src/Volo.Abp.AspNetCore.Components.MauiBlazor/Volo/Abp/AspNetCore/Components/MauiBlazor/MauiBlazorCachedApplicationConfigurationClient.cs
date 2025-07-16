@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -23,6 +24,8 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor
 
         protected ICurrentTimezoneProvider CurrentTimezoneProvider { get; }
 
+        protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
+
         protected IJSRuntime JSRuntime { get; }
 
         protected IClock Clock { get; }
@@ -34,6 +37,7 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor
             ICurrentTimezoneProvider currentTimezoneProvider,
             AuthenticationStateProvider authenticationStateProvider,
             AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
+            ApplicationConfigurationChangedService applicationConfigurationChangedService,
             IJSRuntime jsRuntime,
             IClock clock)
         {
@@ -42,6 +46,7 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor
             CurrentTenantAccessor = currentTenantAccessor;
             CurrentTimezoneProvider = currentTimezoneProvider;
             ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
+            ApplicationConfigurationChangedService = applicationConfigurationChangedService;
             JSRuntime = jsRuntime;
             Clock = clock;
 
@@ -81,6 +86,8 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor
 
                 await JSRuntime.InvokeAsync<string>("abp.clock.setBrowserTimeZoneToCookie");
             }
+
+            ApplicationConfigurationChangedService.NotifyChanged();
         }
 
         public virtual Task<ApplicationConfigurationDto> GetAsync()

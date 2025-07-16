@@ -6,7 +6,7 @@
         "applicationName": "VoloDocs.Web",
         "module": "docs-admin",
         "url": "https://localhost:5001",
-        "output": "wwwroot/client-proxies",
+        "output": "wwwroot/client-proxies/",
         "serviceType": "application"
       }
     }

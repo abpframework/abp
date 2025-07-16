@@ -13,11 +13,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise.Bootstrap5" Version="1.7.6" />
-        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.7.6" />
+        <PackageReference Include="Blazorise.Bootstrap5" Version="1.8.0" />
+        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.8.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5" />
     </ItemGroup>
 
     <ItemGroup>

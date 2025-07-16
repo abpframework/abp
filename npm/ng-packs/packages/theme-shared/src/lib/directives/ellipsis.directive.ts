@@ -10,7 +10,6 @@ import {
 
 @Directive({
   selector: '[abpEllipsis]',
-  standalone:true
 })
 export class EllipsisDirective implements AfterViewInit {
   @Input('abpEllipsis')
@@ -38,7 +37,10 @@ export class EllipsisDirective implements AfterViewInit {
     return this.enabled && this.width ? this.width || '170px' : undefined;
   }
 
-  constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private elRef: ElementRef,
+  ) {}
 
   ngAfterViewInit() {
     this.title = this.title || (this.elRef.nativeElement as HTMLElement).innerText;

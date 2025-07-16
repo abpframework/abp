@@ -3,8 +3,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
-using Volo.Abp.DynamicProxy;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
 
@@ -25,28 +23,23 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
 
     }
 
-    public void BuildWorker(IBackgroundWorker worker)
+    public virtual void BuildWorker(IBackgroundWorker worker)
     {
-        int? period;
-        var workerType = ProxyHelper.GetUnProxiedType(worker);
+        int? period = null;
+        string? CronExpression = null;
 
-        if (worker is AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase)
+        if (worker is AsyncPeriodicBackgroundWorkerBase asyncPeriodicBackgroundWorkerBase)
         {
-            if (typeof(TWorker) != workerType)
-            {
-                throw new ArgumentException($"{nameof(worker)} type is different from the generic type");
-            }
-
-            var timer = workerType.GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-
-            period = worker is AsyncPeriodicBackgroundWorkerBase ? ((AbpAsyncTimer?)timer)?.Period : ((AbpTimer?)timer)?.Period;
+            period = asyncPeriodicBackgroundWorkerBase.Period;
+            CronExpression = asyncPeriodicBackgroundWorkerBase.CronExpression;
         }
-        else
+        else if (worker is PeriodicBackgroundWorkerBase periodicBackgroundWorkerBase)
         {
-            return;
+            period = periodicBackgroundWorkerBase.Period;
+            CronExpression = periodicBackgroundWorkerBase.CronExpression;
         }
 
-        if (period == null)
+        if (period == null && CronExpression.IsNullOrWhiteSpace())
         {
             return;
         }
@@ -55,10 +48,21 @@ public class QuartzPeriodicBackgroundWorkerAdapter<TWorker> : QuartzBackgroundWo
             .Create<QuartzPeriodicBackgroundWorkerAdapter<TWorker>>()
             .WithIdentity(BackgroundWorkerNameAttribute.GetName<TWorker>())
             .Build();
-        Trigger = TriggerBuilder.Create()
-            .WithIdentity(BackgroundWorkerNameAttribute.GetName<TWorker>())
-            .WithSimpleSchedule(builder => builder.WithInterval(TimeSpan.FromMilliseconds(period.Value)).RepeatForever())
-            .Build();
+
+        var triggerBuilder = TriggerBuilder.Create()
+            .ForJob(JobDetail)
+            .WithIdentity(BackgroundWorkerNameAttribute.GetName<TWorker>());
+
+        if (!CronExpression.IsNullOrWhiteSpace())
+        {
+            triggerBuilder.WithCronSchedule(CronExpression);
+        }
+        else
+        {
+            triggerBuilder.WithSimpleSchedule(builder => builder.WithInterval(TimeSpan.FromMilliseconds(period!.Value)).RepeatForever());
+        }
+
+        Trigger = triggerBuilder.Build();
     }
 
     public async override Task Execute(IJobExecutionContext context)

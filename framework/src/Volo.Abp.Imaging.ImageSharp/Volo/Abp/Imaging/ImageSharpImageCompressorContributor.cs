@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Formats.Webp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 
@@ -32,7 +29,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
             return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var image = await Image.LoadAsync(stream, cancellationToken);
+        using var image = await Image.LoadAsync(stream, cancellationToken);
 
         if (!CanCompress(image.Metadata.DecodedImageFormat!.DefaultMimeType))
         {
@@ -46,7 +43,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
             return new ImageCompressResult<Stream>(memoryStream, ImageProcessState.Done);
         }
 
-        memoryStream.Dispose();
+        await memoryStream.DisposeAsync();
         return new ImageCompressResult<Stream>(stream, ImageProcessState.Canceled);
     }
 
@@ -69,7 +66,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         }
 
         var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
-        result.Result.Dispose();
+        await result.Result.DisposeAsync();
         return new ImageCompressResult<byte[]>(newBytes, result.State);
     }
 
@@ -100,7 +97,7 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         }
         catch
         {
-            memoryStream.Dispose();
+            await memoryStream.DisposeAsync();
             throw;
         }
     }
@@ -110,11 +107,11 @@ public class ImageSharpImageCompressorContributor : IImageCompressorContributor,
         switch (format.DefaultMimeType)
         {
             case MimeTypes.Image.Jpeg:
-                return Options.JpegEncoder ?? new JpegEncoder();
+                return Options.JpegEncoder;
             case MimeTypes.Image.Png:
-                return Options.PngEncoder ?? new PngEncoder();
+                return Options.PngEncoder;
             case MimeTypes.Image.Webp:
-                return Options.WebpEncoder ?? new WebpEncoder();
+                return Options.WebpEncoder;
             default:
                 throw new NotSupportedException($"No encoder available for the given format: {format.Name}");
         }

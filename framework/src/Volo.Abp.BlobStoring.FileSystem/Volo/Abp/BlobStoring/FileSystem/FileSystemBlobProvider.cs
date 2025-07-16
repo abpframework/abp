@@ -70,13 +70,7 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
 
         return await Policy.Handle<IOException>()
             .WaitAndRetryAsync(2, retryCount => TimeSpan.FromSeconds(retryCount))
-            .ExecuteAsync(async () =>
-            {
-                using (var fileStream = File.OpenRead(filePath))
-                {
-                    return await TryCopyToMemoryStreamAsync(fileStream, args.CancellationToken);
-                }
-            });
+            .ExecuteAsync(() => Task.FromResult(File.OpenRead(filePath)));
     }
 
     protected virtual Task<bool> ExistsAsync(string filePath)

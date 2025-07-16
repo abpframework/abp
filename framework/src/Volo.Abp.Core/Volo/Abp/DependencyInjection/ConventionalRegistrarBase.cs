@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.DependencyInjection;
@@ -11,14 +12,30 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
 {
     public virtual void AddAssembly(IServiceCollection services, Assembly assembly)
     {
-        var types = AssemblyHelper
-            .GetAllTypes(assembly)
-            .Where(
-                type => type != null &&
-                        type.IsClass &&
-                        !type.IsAbstract &&
-                        !type.IsGenericType
-            ).ToArray();
+        var logger = services.GetInitLogger<ConventionalRegistrarBase>();
+        var types = Array.Empty<Type>();
+
+        try
+        {
+            types = AssemblyHelper
+                .GetAllTypes(assembly)
+                .Where(
+                    type => type != null &&
+                            type.IsClass &&
+                            !type.IsAbstract &&
+                            !type.IsGenericType
+                ).ToArray();
+        }
+        catch (ReflectionTypeLoadException e)
+        {
+            types = e.Types.Select(x => x!).ToArray();
+            logger.LogException(e);
+        }
+        catch (Exception e)
+        {
+            //TODO: Trigger a global event?
+            logger.LogException(e);
+        }
 
         AddTypes(services, types);
     }

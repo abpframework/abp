@@ -1,11 +1,74 @@
 [
-    {
+  {
+    "version": "9.2.2",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.2.2"
+    }
+  },
+  {
+    "version": "9.2.1",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.2.1"
+    }
+  },
+  {
+    "version": "9.2.0",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.2.0"
+    }
+  },
+  {
+    "version": "9.1.3",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.1.3"
+    }
+  },
+  {
+    "version": "9.1.1",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.1.1"
+    }
+  },
+  {
     "version": "9.1.0",
     "releaseDate": "",
     "type": "stable",
     "message": "",
     "leptonx": {
       "version": "4.1.0"
+    }
+  },
+  {
+    "version": "9.0.8",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.0.9"
+    }
+  },
+  {
+    "version": "9.0.7",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.0.8"
     }
   },
   {

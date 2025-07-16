@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.GridsModel
 @{
     ViewData["Title"] = "Grids";
@@ -829,5 +830,39 @@
 </div>
 
 <hr />
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-container</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpContainerTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-row</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpRowTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-column</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpColumnTagHelper))
+    </abp-card-body>
+</abp-card>
 
 <a asp-page="../">&lt; back</a>

@@ -24,7 +24,6 @@ import { SpinnerComponent } from '../components';
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: 'ngx-datatable[list]',
-  standalone: true,
   exportAs: 'ngxDatatableList',
 })
 export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
@@ -112,8 +111,9 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
 
     const spinnerRef = this.viewContainerRef.createComponent(SpinnerComponent);
     const spinnerElement = spinnerRef.location.nativeElement;
-
-    this.renderer.insertBefore(parent, spinnerElement, placeholder);
+    if (placeholder?.parentNode === parent) {
+      this.renderer.insertBefore(parent, spinnerElement, placeholder);
+    }
     this.renderer.removeChild(parent, placeholder);
   }
 

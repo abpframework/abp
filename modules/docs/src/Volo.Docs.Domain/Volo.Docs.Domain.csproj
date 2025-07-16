@@ -20,7 +20,11 @@
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Octokit" />
     <PackageReference Include="NEST" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />       
+    <PackageReference Include="itext.bouncy-castle-adapter" />
+    <PackageReference Include="itext7" />
+    <PackageReference Include="itext7.pdfhtml" />
+    <PackageReference Include="Markdig.Signed" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +32,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
   </ItemGroup>
 
 </Project>

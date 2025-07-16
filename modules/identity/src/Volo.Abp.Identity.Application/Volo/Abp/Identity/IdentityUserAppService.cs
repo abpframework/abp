@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -58,7 +59,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     {
         //TODO: Should also include roles of the related OUs.
 
-        var roles = await UserRepository.GetRolesAsync(id);
+        var roles = (await UserRepository.GetRolesAsync(id)).OrderBy(x => x.Name).ToList();
 
         return new ListResultDto<IdentityRoleDto>(
             ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
@@ -68,9 +69,8 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     [Authorize(IdentityPermissions.Users.Default)]
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
     {
-        var list = await RoleRepository.GetListAsync();
-        return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
+        var list = (await RoleRepository.GetListAsync()).OrderBy(x => x.Name).ToList();
+        return new ListResultDto<IdentityRoleDto>(ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
     }
 
     [Authorize(IdentityPermissions.Users.Create)]

@@ -64,7 +64,7 @@ public class MongoDbContextEventInbox<TMongoDbContext> : IMongoDbContextEventInb
         var outgoingEventRecords = await dbContext
             .IncomingEvents
             .AsQueryable()
-            .Where(x => !x.Processed)
+            .Where(x => x.Processed == false)
             .WhereIf(transformedFilter != null, transformedFilter!)
             .OrderBy(x => x.CreationTime)
             .Take(maxCount)

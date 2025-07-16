@@ -4,11 +4,12 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v9.3
+### v10.0
 
-The next version will be 9.3 and planned to release the stable 9.3 version in July 2025. We will be mostly working on the following topics:
+The next version will be 10.0 and planned to release the stable 10.0 version in December 2025. We will be mostly working on the following topics:
 
 * Framework
+  * Upgrading to .NET 10
   * Upgrading 3rd-party dependencies
   * Enhancements in the core points
 
@@ -16,7 +17,6 @@ The next version will be 9.3 and planned to release the stable 9.3 version in Ju
   * Define navigation properties without target string property dependency
   * Improvements one-to-many scenarios
   * File Upload Modal enhancements
-  * Master/Detail DataGrid Toggle Detail Row Enhancements for Blazor UI
 
 
 * ABP Studio

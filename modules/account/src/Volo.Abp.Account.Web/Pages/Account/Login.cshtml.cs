@@ -75,7 +75,7 @@ public class LoginModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        LoginInput = new LoginInputModel();
+        LoginInput ??= new LoginInputModel();
 
         ExternalProviders = await GetExternalProviders();
 

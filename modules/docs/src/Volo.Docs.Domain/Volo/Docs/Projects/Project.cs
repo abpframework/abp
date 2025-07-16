@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Projects
@@ -47,9 +50,12 @@ namespace Volo.Docs.Projects
         public virtual string MainWebsiteUrl { get; set; }
 
         public virtual string LatestVersionBranchName { get; set; }
+        
+        public virtual List<ProjectPdfFile> PdfFiles { get; set; }
 
         protected Project()
         {
+            PdfFiles = new List<ProjectPdfFile>();
         }
 
         public Project(
@@ -102,6 +108,54 @@ namespace Volo.Docs.Projects
         private void NormalizeShortName()
         {
             ShortName = ShortName.ToLower();
+        }
+        
+        public virtual ProjectPdfFile FindPdfFile(string fileName)
+        {
+            return PdfFiles.Find(x => x.FileName == fileName);
+        }
+        
+        public virtual void AddPdfFile(Guid projectId, string fileName, string version, string languageCode)
+        {
+            PdfFiles.Add(new ProjectPdfFile(projectId, fileName, version, languageCode));
+        }
+        
+        public virtual void RemovePdfFile(string fileName)
+        {
+            var pdfFile = FindPdfFile(fileName);
+            if (pdfFile != null)
+            {
+                PdfFiles.Remove(pdfFile);
+            }
+        }
+        
+        public virtual string GetFullVersion(string version)
+        {
+            var prefix = GetProjectVersionPrefixIfExist(this);
+            if (string.IsNullOrWhiteSpace(prefix) || version.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return version;
+            }
+
+            var inputVersionStringBuilder = new StringBuilder();
+            return inputVersionStringBuilder.Append(prefix).Append(version).ToString();
+        }
+        
+        protected virtual string GetProjectVersionPrefixIfExist(Project project)
+        {
+            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
+            {
+                return string.Empty;
+            }
+
+            return project.GetProperty<string>("VersionBranchPrefix");
+        }
+    
+        protected virtual GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
+        {
+            return project.HasProperty("GithubVersionProviderSource")
+                ? project.GetProperty<GithubVersionProviderSource>("GithubVersionProviderSource")
+                : GithubVersionProviderSource.Releases;
         }
     }
 }

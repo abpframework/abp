@@ -2,6 +2,12 @@
 
 In this post, I describe the new **"keyed service"** support for the dependency injection container, which came with .NET 8.0. Then, I'll show you an example of usage within the ABP Framework.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## What Are Keyed Services?
 
 ASP.NET Core ships with a built-in dependency injection container, which is a pretty basic DI container that supports minimal features a dependency injection container is supposed to have. For that reason, most of the .NET users use third-party containers like [Autofac](https://autofac.org/), or Ninject.
@@ -202,6 +208,12 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 > Notice that the ExposeKeyedServiceAttribute only exposes the keyed services. So, you can not inject the ITaxCalculator or ICalculator interfaces in your application without using the FromKeyedServicesAttribute as shown in the example above. If you want to expose both keyed and non-keyed services, you can use the ExposeServicesAttribute and ExposeKeyedServiceAttribute attributes altogether.
 
 Please refer to the [Dependency Injection document](https://abp.io/docs/latest/framework/fundamentals/dependency-injection#exposekeyedservice-attribute) for further info.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Summary
 

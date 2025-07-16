@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.RabbitMQ;
 
-public interface IChannelPool : IDisposable
+public interface IChannelPool : IAsyncDisposable
 {
-    IChannelAccessor Acquire(string? channelName = null, string? connectionName = null);
+    Task<IChannelAccessor> AcquireAsync(string? channelName = null, string? connectionName = null);
 }

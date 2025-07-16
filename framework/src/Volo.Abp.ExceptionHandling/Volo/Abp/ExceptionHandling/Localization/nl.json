@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "De door u ingevulde gegevens zijn al gewijzigd door een andere gebruiker/klant. Negeer de wijzigingen die u heeft aangebracht en probeer het vanaf het begin.",
     "Error": "Fout",
     "UnhandledException": "Onverwerkte uitzondering!",
+    "Authorizing": "Autoriseren…",
     "401Message": "Ongeautoriseerd",
     "403Message": "Verboden",
     "404Message": "Pagina niet gevonden",

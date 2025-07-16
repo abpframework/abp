@@ -2,6 +2,12 @@
 
 In this article, I will highlight ABP Commercial's [GDPR Module](https://commercial.abp.io/modules/Volo.Gdpr) and show you how to provide personal data to the GDPR Module that is collected by your application and make it aligned with personal data download results.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## GDPR Module
 
 [GDPR Module](https://docs.abp.io/en/commercial/latest/modules/gdpr) allows users to download and delete the data collected by the application. It's used for Personal Data Management obligating by the GDPR regulation and provides the following features:
@@ -142,6 +148,12 @@ Then, when we clicked the download button, a zip file will be downloaded. We can
 ```json
 {"City":"Istanbul","Postcode":"..."}
 ```
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

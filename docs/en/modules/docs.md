@@ -73,25 +73,25 @@ Or you can also manually install nuget package to each project:
 * Install [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Domain` project.
 
   ```bash
-  Install-Package Volo.Docs.Domain
+  dotnet add package Volo.Docs.Domain
   ```
 
 * Install [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget package to `Acme.MyProject.EntityFrameworkCore` project.
 
   ```bash
-  Install-Package Volo.Docs.EntityFrameworkCore
+  dotnet add package Volo.Docs.EntityFrameworkCore
   ```
 
 * Install [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget package to `Acme.MyProject.Application` project.
 
   ```bash
-  Install-Package Volo.Docs.Application
+  dotnet add package Volo.Docs.Application
   ```
 
 * Install [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Web` project.
 
   ```bash
-  Install-Package Volo.Docs.Web
+  dotnet add package Volo.Docs.Web
   ```
 
 ##### 3.2.1- Adding Module Dependencies

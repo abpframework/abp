@@ -22,6 +22,13 @@ public class PermissionsController : AbpControllerBase, IPermissionAppService
         return PermissionAppService.GetAsync(providerName, providerKey);
     }
 
+    [HttpGet]
+    [Route("by-group")]
+    public virtual Task<GetPermissionListResultDto> GetByGroupAsync(string groupName, string providerName, string providerKey)
+    {
+        return PermissionAppService.GetByGroupAsync(groupName, providerName, providerKey);
+    }
+
     [HttpPut]
     public virtual Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
     {

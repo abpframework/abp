@@ -14,8 +14,9 @@ describe('LoadingDirective', () => {
   let spectator: SpectatorDirective<LoadingDirective>;
   const createDirective = createDirectiveFactory({
     directive: LoadingDirective,
-    declarations: [LoadingComponent, DummyComponent],
-    entryComponents: [LoadingComponent],
+    declarations: [],
+    entryComponents: [],
+    imports: [LoadingComponent, DummyComponent],
   });
 
   describe('default', () => {

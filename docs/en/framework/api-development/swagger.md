@@ -29,7 +29,7 @@ If you want to manually install;
 
 1. Add the [Volo.Abp.Swashbuckle](https://www.nuget.org/packages/Volo.Abp.Swashbuckle) NuGet package to your `Web` or `HttpApi.Host` project:
 
-   `Install-Package Volo.Abp.Swashbuckle`
+   `dotnet add package Volo.Abp.Swashbuckle`
 
 2. Add the `AbpSwashbuckleModule` to the dependency list of your module:
 

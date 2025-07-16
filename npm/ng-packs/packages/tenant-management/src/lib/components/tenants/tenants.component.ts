@@ -1,19 +1,42 @@
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { eFeatureManagementComponents } from '@abp/ng.feature-management';
-import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
-import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import {
+  ListService,
+  LocalizationPipe,
+  PagedResultDto,
+  ReplaceableTemplateDirective,
+} from '@abp/ng.core';
+import {
+  eFeatureManagementComponents,
+  FeatureManagementComponent,
+} from '@abp/ng.feature-management';
+import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
+import {
+  ButtonComponent,
+  Confirmation,
+  ConfirmationService,
+  ModalCloseDirective,
+  ModalComponent,
+  ToasterService,
+} from '@abp/ng.theme.shared';
+import {
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
 import { Component, inject, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
+import { PageComponent } from '@abp/ng.components/page';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
-  standalone: false,
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
   providers: [
@@ -22,6 +45,20 @@ import { eTenantManagementComponents } from '../../enums/components';
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eTenantManagementComponents.Tenants,
     },
+  ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    PageComponent,
+    LocalizationPipe,
+    ExtensibleTableComponent,
+    ModalComponent,
+    FeatureManagementComponent,
+    ButtonComponent,
+    ReplaceableTemplateDirective,
+    ExtensibleFormComponent,
+    ModalCloseDirective,
+    NgxValidateCoreModule,
   ],
 })
 export class TenantsComponent implements OnInit {

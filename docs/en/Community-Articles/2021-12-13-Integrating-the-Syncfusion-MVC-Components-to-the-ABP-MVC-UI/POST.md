@@ -4,6 +4,12 @@
 
 In this article we will see how we can integrate the Syncfusion MVC Components into our ABP application.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Source Code
 
 You can find the source code of the application at https://github.com/EngincanV/ABP-Syncfusion-Components-Demo.
@@ -313,6 +319,12 @@ After injecting the Syncfusion style and script into our application, our config
 * Then when we run the application, we need to see the relevant calendar component as below.
 
 ![](./calendar-component.png)
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ### Conclusion
 

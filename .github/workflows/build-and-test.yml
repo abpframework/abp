@@ -48,7 +48,7 @@ permissions:
 jobs:
   build-test:
     runs-on: ubuntu-22.04
-    timeout-minutes: 40
+    timeout-minutes: 50
     if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v2

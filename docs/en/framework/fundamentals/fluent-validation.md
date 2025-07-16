@@ -21,7 +21,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.FluentValidation](https://www.nuget.org/packages/Volo.Abp.FluentValidation) NuGet package to your project:
 
    ````
-   Install-Package Volo.Abp.FluentValidation
+   dotnet add package Volo.Abp.FluentValidation
    ````
 
 2.  Add the `AbpFluentValidationModule` to the dependency list of your module:

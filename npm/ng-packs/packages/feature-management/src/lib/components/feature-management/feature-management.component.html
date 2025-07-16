@@ -28,6 +28,10 @@
                     <hr class="mt-2 mb-3" />
 
                     @for (feature of features[group.name]; track feature.id || i; let i = $index) {
+                      @let provider = feature.provider.name;
+                      @let isFeatureDisabled =
+                        provider !== providerName && provider !== defaultProviderName;
+
                       <div class="mt-2" [ngStyle]="feature.style" (keyup.enter)="save()">
                         @switch (feature.valueType?.name) {
                           @case (valueTypes.ToggleStringValueType) {
@@ -38,11 +42,15 @@
                                 [id]="feature.name"
                                 [(ngModel)]="feature.value"
                                 (ngModelChange)="onCheckboxClick($event, feature)"
+                                [disabled]="isFeatureDisabled"
                               />
 
-                              <label class="form-check-label" [htmlFor]="feature.name">{{
-                                feature.displayName
-                              }}</label>
+                              <label class="form-check-label" [htmlFor]="feature.name">
+                                {{ feature.displayName }}
+                                @if (isFeatureDisabled) {
+                                  <span>({{ provider }})</span>
+                                }
+                              </label>
                               <ng-container
                                 *ngTemplateOutlet="
                                   descTmp;
@@ -53,15 +61,19 @@
                           }
                           @case (valueTypes.FreeTextStringValueType) {
                             <div class="mb-3 form-group" [class.px-2]="!!feature.parentName">
-                              <label [htmlFor]="feature.name" class="form-label">{{
-                                feature.displayName
-                              }}</label>
+                              <label [htmlFor]="feature.name" class="form-label">
+                                {{ feature.displayName }}
+                                @if (isFeatureDisabled) {
+                                  <span>({{ provider }})</span>
+                                }
+                              </label>
                               <input
                                 class="form-control"
                                 type="text"
                                 [id]="feature.name"
                                 [(ngModel)]="feature.value"
                                 [abpFeatureManagementFreeText]="feature"
+                                [disabled]="isFeatureDisabled"
                               />
 
                               <ng-container
@@ -75,13 +87,17 @@
                           @case (valueTypes.SelectionStringValueType) {
                             @if (feature.valueType.itemSource?.items?.length) {
                               <div class="mb-3 form-group" [class.px-2]="!!feature.parentName">
-                                <label [htmlFor]="feature.name" class="form-label">{{
-                                  feature.displayName
-                                }}</label>
+                                <label [htmlFor]="feature.name" class="form-label">
+                                  {{ feature.displayName }}
+                                  @if (isFeatureDisabled) {
+                                    <span>({{ provider }})</span>
+                                  }
+                                </label>
                                 <select
                                   class="form-select"
                                   [id]="feature.name"
                                   [(ngModel)]="feature.value"
+                                  [disabled]="isFeatureDisabled"
                                 >
                                   @for (
                                     item of feature.valueType.itemSource?.items;

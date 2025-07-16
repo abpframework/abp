@@ -39,6 +39,12 @@ public class TenantResolver : ITenantResolver, ITransientDependency
             }
         }
 
+        if (result.TenantIdOrName.IsNullOrEmpty() && !string.IsNullOrWhiteSpace(_options.FallbackTenant))
+        {
+            result.TenantIdOrName = _options.FallbackTenant;
+            result.AppliedResolvers.Add(TenantResolverNames.FallbackTenant);
+        }
+
         return result;
     }
 }

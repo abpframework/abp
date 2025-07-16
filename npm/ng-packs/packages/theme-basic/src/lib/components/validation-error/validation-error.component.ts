@@ -1,8 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-validate/core';
+import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
-  standalone: false,
   selector: 'abp-validation-error',
   template: `
     @for (error of abpErrors; track $index) {
@@ -13,6 +14,7 @@ import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-val
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [CommonModule, LocalizationPipe],
 })
 export class ValidationErrorComponent extends ErrorComponent {
   get abpErrors(): (Validation.Error & { interpoliteParams?: string[] })[] {

@@ -19,7 +19,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.TextTemplating.Scriban](https://www.nuget.org/packages/Volo.Abp.TextTemplating.Scriban) NuGet package to your project:
 
 ````
-Install-Package Volo.Abp.TextTemplating.Scriban
+dotnet add package Volo.Abp.TextTemplating.Scriban
 ````
 
 2. Add the `AbpTextTemplatingScribanModule` to the dependency list of your module:

@@ -12,9 +12,9 @@ import { findRoute, getRoutePath } from '../utils/route-utils';
 import { TreeNode } from '../utils/tree-utils';
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 import { EnvironmentService } from '../services';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'abp-dynamic-layout',
   template: `
     @if (isLayoutVisible) {
@@ -22,6 +22,7 @@ import { EnvironmentService } from '../services';
     }
   `,
   providers: [SubscriptionService],
+  imports: [CommonModule],
 })
 export class DynamicLayoutComponent implements OnInit {
   layout?: Type<any>;

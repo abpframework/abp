@@ -1,5 +1,5 @@
 import { LinkedList } from '@abp/utils';
-import { InjectFlags, InjectionToken, InjectOptions, Type } from '@angular/core';
+import { InjectionToken, InjectOptions, Type } from '@angular/core';
 
 export abstract class ActionList<R = any, A = Action<R>> extends LinkedList<A> {}
 
@@ -7,7 +7,7 @@ export abstract class ActionData<R = any> {
   abstract getInjected: <T>(
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
-    flags?: InjectOptions | InjectFlags,
+    flags?: InjectOptions,
   ) => T;
   index?: number;
   abstract record: R;

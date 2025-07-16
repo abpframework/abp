@@ -8,6 +8,12 @@ In the issue, there are helpful comments about hiding the ABP related endpoints 
 
 I thought it would be better to enable/disable showing endpoints on runtime by simply selecting a checkbox on the Setting Management page and in this article I wanted to show you how, so let's dive in.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Source Code
 
 You can find the source code of the application at https://github.com/EngincanV/ABP-Hide-Swagger-Endpoint-Demo.
@@ -445,6 +451,10 @@ services.AddAbpSwaggerGen(
 
 > For more info, please see the [Swagger Integration](https://docs.abp.io/en/abp/latest/API/Swagger-Integration#hide-abp-endpoints-on-swagger-ui) docs.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
 ---
 
 Thanks for reading.

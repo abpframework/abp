@@ -12,6 +12,7 @@ namespace Volo.Docs.Admin
             public const string Delete = Default + ".Delete";
             public const string Update = Default + ".Update";
             public const string Create = Default + ".Create";
+            public const string ManagePdfFiles = Default + ".ManagePdfFiles";
         }
 
         public static class Documents

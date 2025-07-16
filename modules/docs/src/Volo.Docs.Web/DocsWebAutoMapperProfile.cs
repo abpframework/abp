@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Volo.Abp.AutoMapper;
-using Volo.Docs.Documents;
 
 namespace Volo.Docs
 {
@@ -8,7 +6,6 @@ namespace Volo.Docs
     {
         public DocsWebAutoMapperProfile()
         {
-
         }
     }
 }

@@ -26,7 +26,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.Sms](https://www.nuget.org/packages/Volo.Abp.Sms) NuGet package to your project:
 
 ```
-Install-Package Volo.Abp.Sms
+dotnet add package Volo.Abp.Sms
 ```
 
 2. Add the `AbpSmsModule` to the dependency list of your module:

@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.NavsModel
 @{
     ViewData["Title"] = "Navs";
@@ -201,3 +202,31 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-nav-bar</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpNavBarTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-nav-item</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpNavItemTagHelper))
+    </abp-card-body>
+</abp-card>
+
+
+
+

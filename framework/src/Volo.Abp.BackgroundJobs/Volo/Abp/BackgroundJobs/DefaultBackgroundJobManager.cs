@@ -18,6 +18,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     protected IBackgroundJobSerializer Serializer { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IBackgroundJobStore Store { get; }
+    protected IOptions<AbpBackgroundJobOptions> BackgroundJobOptions { get; }
     protected IOptions<AbpBackgroundJobWorkerOptions> BackgroundJobWorkerOptions { get; }
 
     public DefaultBackgroundJobManager(
@@ -25,18 +26,20 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
         IBackgroundJobSerializer serializer,
         IBackgroundJobStore store,
         IGuidGenerator guidGenerator,
+        IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
         IOptions<AbpBackgroundJobWorkerOptions> backgroundJobWorkerOptions)
     {
         Clock = clock;
         Serializer = serializer;
         GuidGenerator = guidGenerator;
+        BackgroundJobOptions = backgroundJobOptions;
         BackgroundJobWorkerOptions = backgroundJobWorkerOptions;
         Store = store;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
-        var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
+        var jobName = BackgroundJobOptions.Value.GetBackgroundJobName(typeof(TArgs));
         var jobId = await EnqueueAsync(jobName, args!, priority, delay);
         return jobId.ToString();
     }

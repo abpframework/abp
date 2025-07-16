@@ -1,13 +1,7 @@
-import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { ExtensibleModule } from '@abp/ng.components/extensible';
+import { LazyModuleFactory } from '@abp/ng.core';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementExtensionsGuard } from './guards/extensions.guard';
 import { TenantManagementConfigOptions } from './models/config-options';
-import { TenantManagementRoutingModule } from './tenant-management-routing.module';
 import {
   TENANT_MANAGEMENT_CREATE_FORM_PROP_CONTRIBUTORS,
   TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS,
@@ -15,22 +9,13 @@ import {
   TENANT_MANAGEMENT_ENTITY_PROP_CONTRIBUTORS,
   TENANT_MANAGEMENT_TOOLBAR_ACTION_CONTRIBUTORS,
 } from './tokens/extensions.token';
-import { PageModule } from '@abp/ng.components/page';
-import { FeatureManagementComponent } from '@abp/ng.feature-management';
+import { TenantsComponent } from './components';
+import { TenantManagementRoutingModule } from './tenant-management-routing.module';
 
 @NgModule({
-  declarations: [TenantsComponent],
-  exports: [TenantsComponent],
-  imports: [
-    TenantManagementRoutingModule,
-    NgxValidateCoreModule,
-    CoreModule,
-    ThemeSharedModule,
-    NgbDropdownModule,
-    ExtensibleModule,
-    PageModule,
-    FeatureManagementComponent,
-  ],
+  declarations: [],
+  exports: [],
+  imports: [TenantManagementRoutingModule, TenantsComponent],
 })
 export class TenantManagementModule {
   static forChild(
@@ -63,7 +48,9 @@ export class TenantManagementModule {
       ],
     };
   }
-
+  /**
+   * @deprecated `TenantManagementModule.forLazy()` is deprecated. You can use `createRoutes` **function** instead.
+   */
   static forLazy(
     options: TenantManagementConfigOptions = {},
   ): NgModuleFactory<TenantManagementModule> {

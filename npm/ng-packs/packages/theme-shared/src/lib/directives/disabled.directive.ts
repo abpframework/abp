@@ -3,7 +3,6 @@ import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[abpDisabled]',
-  standalone:true,
 })
 export class DisabledDirective implements OnChanges {
   @Input()

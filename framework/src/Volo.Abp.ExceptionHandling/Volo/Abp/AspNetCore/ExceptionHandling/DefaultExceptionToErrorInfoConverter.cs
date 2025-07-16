@@ -236,6 +236,8 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
             errorInfo.ValidationErrors = GetValidationErrorInfos((exception as AbpValidationException)!);
         }
 
+        TryToLocalizeExceptionMessage(exception, errorInfo);
+
         return errorInfo;
     }
 

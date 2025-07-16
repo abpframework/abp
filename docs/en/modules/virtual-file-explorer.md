@@ -24,7 +24,7 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
 * Install [Volo.Abp.VirtualFileExplorer.Web](https://www.nuget.org/packages/Volo.Abp.VirtualFileExplorer.Web/) nuget package to `Acme.MyProject.Web` project.
 
-  `Install-Package Volo.Abp.VirtualFileExplorer.Web`
+  `dotnet add package Volo.Abp.VirtualFileExplorer.Web`
 
 ##### 2.1- Adding Module Dependencies
 

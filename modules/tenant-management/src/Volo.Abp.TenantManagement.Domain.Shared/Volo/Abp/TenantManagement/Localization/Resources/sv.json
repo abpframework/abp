@@ -16,7 +16,7 @@
     "Permission:Edit": "Redigera",
     "Permission:Delete": "Radera",
     "Permission:ManageConnectionStrings": "Hantera anslutningssträngar",
-    "Permission:ManageFeatures": "Hantera funktioner",
+    "Permission:ManageFeatures": "Funktioner",
     "DisplayName:AdminEmailAddress": "Admin E-postadress",
     "DisplayName:AdminPassword": "Lösenord för administratör"
   }

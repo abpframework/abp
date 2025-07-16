@@ -9,6 +9,8 @@ public class AuditLoggingMongoDbContext : AbpMongoDbContext, IAuditLoggingMongoD
 {
     public IMongoCollection<AuditLog> AuditLogs => Collection<AuditLog>();
 
+    public IMongoCollection<AuditLogExcelFile> AuditLogExcelFiles => Collection<AuditLogExcelFile>();
+
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
         base.CreateModel(modelBuilder);

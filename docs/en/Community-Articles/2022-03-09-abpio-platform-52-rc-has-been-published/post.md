@@ -186,7 +186,7 @@ We organized the 3rd live [ABP Community Talks](https://community.abp.io/events)
 * [Enis Necipoğlu](https://twitter.com/EnisNecipoglu) has also created [an article](https://community.abp.io/posts/using-autofilterer-with-abp-framework-uuqv81jm) to demonstrate how to use his own open source [AutoFilterer](https://github.com/enisn/AutoFilterer) library with the ABP Framework.
 * [Jonathan Potts](https://github.com/jonathanpotts) has created his first ABP Community article that shows how to use Bootswatch themes with the ABP Framework. [See it here](https://community.abp.io/posts/customizing-the-abp-basic-theme-with-bootswatch-4luoqzr0).
 
-Thanks to all the contributors. It is appreciated if you want to submit your post and share your knowledge with the ABP community: https://community.abp.io/posts/submit
+Thanks to all the contributors. It is appreciated if you want to submit your post and share your knowledge with the ABP community: https://community.abp.io/posts/create
 
 ## Conclusion
 

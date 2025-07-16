@@ -4,7 +4,9 @@ var abp = abp || {};
     /* Application paths *****************************************/
 
     //Current application root path (including virtual directory if exists).
-    abp.appPath = abp.appPath || '/';
+    var baseElement = document.querySelector('base');
+    var baseHref = baseElement ? baseElement.getAttribute('href') : null;
+    abp.appPath = baseHref || abp.appPath || '/';
 
     abp.pageLoadTime = new Date();
 

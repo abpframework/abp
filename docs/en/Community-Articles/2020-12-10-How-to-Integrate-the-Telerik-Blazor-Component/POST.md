@@ -4,6 +4,12 @@
 
 Hi, in this step by step article, we will see how we can integrate the Telerik Blazor Components to our Blazor UI.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Creating the Solution
 
 > ABP Framework offers startup templates to get into business faster.
@@ -531,6 +537,12 @@ namespace TelerikComponents.Blazor.Pages
 * When we navigate to `Posts` route, we should see the following screenshot in this page.
 
 ![final-result](./final-result.jpg)
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

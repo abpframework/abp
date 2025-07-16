@@ -4,6 +4,466 @@
       "rootPath": "docs-admin",
       "remoteServiceName": "AbpDocsAdmin",
       "controllers": {
+        "Volo.Docs.Admin.DocumentPdfAdminController": {
+          "controllerName": "DocumentPdfAdmin",
+          "controllerGroupName": "DocumentsPdfAdmin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Docs.Admin.DocumentPdfAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService",
+              "name": "IDocumentPdfAdminAppService",
+              "methods": [
+                {
+                  "name": "GeneratePdfAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPdfFilesAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.GetPdfFilesInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                      "typeSimple": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>"
+                  }
+                },
+                {
+                  "name": "DeletePdfFileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.DeletePdfFileInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                      "typeSimple": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DownloadPdfAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "ExistsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Volo.Docs.Common.Documents.IDocumentPdfAppService",
+              "name": "IDocumentPdfAppService",
+              "methods": [
+                {
+                  "name": "DownloadPdfAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "ExistsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GeneratePdfAsyncByInput": {
+              "uniqueName": "GeneratePdfAsyncByInput",
+              "name": "GeneratePdfAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/generate",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "GetPdfFilesAsyncByInput": {
+              "uniqueName": "GetPdfFilesAsyncByInput",
+              "name": "GetPdfFilesAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/files",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.GetPdfFilesInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                  "typeSimple": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "DeletePdfFileAsyncByInput": {
+              "uniqueName": "DeletePdfFileAsyncByInput",
+              "name": "DeletePdfFileAsync",
+              "httpMethod": "DELETE",
+              "url": "api/docs/admin/documents/pdf/delete-file",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.DeletePdfFileInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                  "typeSimple": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "DownloadPdfAsyncByInput": {
+              "uniqueName": "DownloadPdfAsyncByInput",
+              "name": "DownloadPdfAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/download",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Common.Documents.IDocumentPdfAppService"
+            },
+            "ExistsAsyncByInput": {
+              "uniqueName": "ExistsAsyncByInput",
+              "name": "ExistsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/exists",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Common.Documents.IDocumentPdfAppService"
+            }
+          }
+        },
         "Volo.Docs.Admin.DocumentsAdminController": {
           "controllerName": "DocumentsAdmin",
           "controllerGroupName": "DocumentsAdmin",

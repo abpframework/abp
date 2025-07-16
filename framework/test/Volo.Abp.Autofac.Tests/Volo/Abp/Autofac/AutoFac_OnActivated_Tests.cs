@@ -31,9 +31,9 @@ public class AutoFac_OnActivated_Tests : Autofac_Interception_Test
         var server = ServiceProvider.GetRequiredService<MyServer>();
         server.Name.ShouldBe("MyServer12");
     }
-}
 
-class MyServer
-{
-    public string Name { get; set; } = "MyServer";
+    class MyServer
+    {
+        public string Name { get; set; } = "MyServer";
+    }
 }

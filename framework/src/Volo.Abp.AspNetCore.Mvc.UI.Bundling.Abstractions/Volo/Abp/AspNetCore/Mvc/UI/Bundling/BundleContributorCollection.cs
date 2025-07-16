@@ -76,6 +76,36 @@ public class BundleContributorCollection
         }
     }
 
+    public void RemoveBundleFile(string fileName)
+    {
+        RemoveBundleFile([fileName]);
+    }
+
+    public void RemoveBundleFile(string[] fileNames)
+    {
+        var contributors = _contributors
+            .Where(x => x is BundleFileContributor bundleContributor &&
+                        bundleContributor.Files.Any(f => fileNames.Any(name => name.Equals(f.FileName, StringComparison.OrdinalIgnoreCase))))
+            .Cast<BundleFileContributor>();
+        foreach (var contributor in contributors)
+        {
+            contributor.Files.RemoveAll(x => fileNames.Any(name => name.Equals(x.FileName, StringComparison.OrdinalIgnoreCase)));
+        }
+    }
+
+    public void RemoveBundleFile(Func<string, bool> predicate)
+    {
+        var contributors = _contributors
+            .Where(x => x is BundleFileContributor bundleContributor &&
+                        bundleContributor.Files.Any(f => predicate(f.FileName)))
+            .Cast<BundleFileContributor>();
+
+        foreach (var contributor in contributors)
+        {
+            contributor.Files.RemoveAll(x => predicate(x.FileName));
+        }
+    }
+
     public IReadOnlyList<IBundleContributor> GetAll()
     {
         return _contributors.ToImmutableList();

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Volo.Docs.Documents;
-using Volo.Docs.Projects;
 using Volo.Abp.AutoMapper;
+using Volo.Docs.Common.Projects;
+using Volo.Docs.Projects;
 
 namespace Volo.Docs
 {

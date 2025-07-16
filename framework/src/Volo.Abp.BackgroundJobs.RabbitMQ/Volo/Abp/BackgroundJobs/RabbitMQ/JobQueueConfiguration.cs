@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using RabbitMQ.Client;
 using Volo.Abp.RabbitMQ;
 
@@ -34,15 +35,15 @@ public class JobQueueConfiguration : QueueDeclareConfiguration
         DelayedQueueName = delayedQueueName;
     }
 
-    public virtual QueueDeclareOk DeclareDelayed(IModel channel)
+    public virtual async Task<QueueDeclareOk> DeclareDelayedAsync(IChannel channel)
     {
-        var delayedArguments = new Dictionary<string, object>(Arguments)
+        var delayedArguments = new Dictionary<string, object?>(Arguments)
         {
             ["x-dead-letter-routing-key"] = QueueName,
             ["x-dead-letter-exchange"] = string.Empty
         };
 
-        return channel.QueueDeclare(
+        return await channel.QueueDeclareAsync(
             queue: DelayedQueueName,
             durable: Durable,
             exclusive: Exclusive,

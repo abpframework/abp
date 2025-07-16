@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.35906.104
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0BC55E3B-4964-48E3-A390-2ADD37980149}"
@@ -64,6 +67,9 @@ Global
 		{D02053D9-10EF-4717-A792-A53F83347816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D02053D9-10EF-4717-A792-A53F83347816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D02053D9-10EF-4717-A792-A53F83347816}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C8068E7F-4A04-4755-8976-C2A4C0ADC708} = {ED6D078F-B0A2-48E8-A09D-3B7CDF6CE3D1}

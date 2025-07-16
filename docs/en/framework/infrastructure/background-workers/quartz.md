@@ -21,7 +21,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.BackgroundWorkers.Quartz](https://www.nuget.org/packages/Volo.Abp.BackgroundWorkers.Quartz) NuGet package to your project:
 
    ````
-   Install-Package Volo.Abp.BackgroundWorkers.Quartz
+   dotnet add package Volo.Abp.BackgroundWorkers.Quartz
    ````
 
 2. Add the `AbpBackgroundWorkersQuartzModule` to the dependency list of your module:

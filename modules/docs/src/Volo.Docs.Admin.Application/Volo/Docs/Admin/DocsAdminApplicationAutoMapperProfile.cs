@@ -16,6 +16,7 @@ namespace Volo.Docs.Admin
             CreateMap<DocumentWithoutContent, DocumentDto>();
             CreateMap<ProjectWithoutDetails, ProjectWithoutDetailsDto>();
             CreateMap<DocumentInfo, DocumentInfoDto>();
+            CreateMap<ProjectPdfFile, ProjectPdfFileDto>();
         }
     }
 }

@@ -75,7 +75,7 @@ Let's create a simple Vue component to display the TODO list.
 
 ```html
 <div id="vue-app">
-    <message-component :message="'Welcome, @CurrentUser.UserName !'"></todo-component>
+    <message-component :message="'Welcome, @CurrentUser.UserName !'"></message-component>
 </div>
 ```
 

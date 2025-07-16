@@ -32,7 +32,7 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
 
         permissionListResultDto.ShouldNotBeNull();
         permissionListResultDto.EntityDisplayName.ShouldBe(PermissionTestDataBuilder.User1Id.ToString());
-        permissionListResultDto.Groups.Count.ShouldBe(1);
+        permissionListResultDto.Groups.Count.ShouldBe(2);
         permissionListResultDto.Groups.ShouldContain(x => x.Name == "TestGroup");
 
         permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission1");
@@ -50,16 +50,31 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
             result.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission5");
             result.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission5.ChildPermission1");
         }
-        
+
         permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission6");
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyPermission6.ChildDisabledPermission1");
         permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission6.ChildPermission2");
-        
+
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission1");
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2");
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2.ChildPermission1");
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2.ChildPermission2");
         permissionListResultDto.Groups.First().Permissions.ShouldNotContain(x => x.Name == "MyDisabledPermission2.ChildPermission2.ChildPermission1");
+    }
+
+    [Fact]
+    public async Task GetByGroupAsync()
+    {
+        var permissionListResultDto = await _permissionAppService.GetByGroupAsync("TestGroup2", UserPermissionValueProvider.ProviderName,
+            PermissionTestDataBuilder.User1Id.ToString());
+
+        permissionListResultDto.ShouldNotBeNull();
+        permissionListResultDto.EntityDisplayName.ShouldBe(PermissionTestDataBuilder.User1Id.ToString());
+        permissionListResultDto.Groups.Count.ShouldBe(1);
+        permissionListResultDto.Groups.ShouldContain(x => x.Name == "TestGroup2");
+
+        permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission7");
+        permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission8");
     }
 
     [Fact]

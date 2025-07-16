@@ -97,6 +97,21 @@
     "Description:ExpiredDeleterPeriod": "Set the number of days after which expired items will be automatically deleted.",
     "ExpiredDeleterPeriodUnit": "day(s)",
     "AuditLogsBeforeXWillBeDeleted": "Audit logs before {0} will be deleted.",
-    "TenantId": "Tenant Id"
+    "TenantId": "Tenant Id",
+    "Permission:Export": "Export audit logs",
+    "ExportToExcel": "Export to Excel",
+    "Exporting": "Exporting",
+    "ExportCompleted": "Export completed successfully",
+    "ExportFailed": "Export failed",
+    "ExportJobQueued": "Export job has been queued for {0} records. You will receive an email when the export is completed.",
+    "ExportReady": "Export completed for {0} records and is ready for download.",
+    "FileName": "File name",
+    "TotalRecords": "Total records",
+    "ExcelFileAttachedMessage": "The Excel file is attached to this email.",
+    "EntityChangeExportCompletedSubject": "Entity change export completed",
+    "AuditLogExportCompletedSubject": "Audit log export completed",
+    "DownloadLinkExplanation": "You can download the file using the link below until {0} (UTC)",
+    "DownloadNow": "Download now",
+    "TryAgainMessage": "Please try again. If the problem persists, please contact support."
   }
 }

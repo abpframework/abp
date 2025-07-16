@@ -25,7 +25,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.TextTemplating.Razor](https://www.nuget.org/packages/Volo.Abp.TextTemplating.Razor) NuGet package to your project:
 
 ````
-Install-Package Volo.Abp.TextTemplating.Razor
+dotnet add package Volo.Abp.TextTemplating.Razor
 ````
 
 2. Add the `AbpTextTemplatingRazorModule` to the dependency list of your module:

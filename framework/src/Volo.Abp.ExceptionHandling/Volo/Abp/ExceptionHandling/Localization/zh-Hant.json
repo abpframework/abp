@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "你提交的數據已經被其他用戶/客戶端修改.請放棄你所做的修改並再次嘗試.",
     "Error": "錯誤",
     "UnhandledException": "未處理的異常!",
+    "Authorizing": "正在授權…",
     "401Message": "未授權",
     "403Message": "禁止訪問",
     "404Message": "網頁未找到",

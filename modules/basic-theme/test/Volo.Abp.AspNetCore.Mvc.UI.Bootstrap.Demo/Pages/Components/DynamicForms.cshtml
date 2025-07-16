@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 @model DynamicFormsModel
 
 @{
@@ -429,3 +430,7 @@ public class DynamicFormsModel : PageModel
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpDynamicFormTagHelper))

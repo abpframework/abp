@@ -1,18 +1,33 @@
-import { ListService, PagedResultDto } from '@abp/ng.core';
+import {
+  InitDirective,
+  ListService,
+  LocalizationPipe,
+  PagedResultDto,
+  ReplaceableTemplateDirective,
+} from '@abp/ng.core';
 import {
   GetIdentityUsersInput,
   IdentityRoleDto,
   IdentityUserDto,
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import {
+  ePermissionManagementComponents,
+  PermissionManagementComponent,
+} from '@abp/ng.permission-management';
+import {
+  ButtonComponent,
   Confirmation,
   ConfirmationService,
   eFormComponets,
+  FormCheckboxComponent,
+  ModalCloseDirective,
+  ModalComponent,
   ToasterService,
 } from '@abp/ng.theme.shared';
 import {
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
@@ -28,15 +43,19 @@ import {
 } from '@angular/core';
 import {
   AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormArray,
   UntypedFormBuilder,
   UntypedFormGroup,
 } from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
+import { PageComponent } from '@abp/ng.components/page';
+import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
-  standalone: false,
   selector: 'abp-users',
   templateUrl: './users.component.html',
   providers: [
@@ -45,6 +64,24 @@ import { eIdentityComponents } from '../../enums/components';
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eIdentityComponents.Users,
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    PermissionManagementComponent,
+    PageComponent,
+    NgbNavModule,
+    NgbDropdownModule,
+    NgxValidateCoreModule,
+    LocalizationPipe,
+    ExtensibleTableComponent,
+    ModalComponent,
+    ExtensibleFormComponent,
+    FormCheckboxComponent,
+    ButtonComponent,
+    ReplaceableTemplateDirective,
+    ModalCloseDirective,
+    InitDirective,
   ],
 })
 export class UsersComponent implements OnInit {

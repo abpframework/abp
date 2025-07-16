@@ -82,6 +82,21 @@
     "Feature:AuditLoggingEnable": "İşlem kayıtları sayfasını etkinleştirin",
     "Feature:AuditLoggingEnableDescription": "Uygulamadanızdaki işlem kayıtları sayfasını etkinleştirir.",
     "MinMaxDuration": "Süre (Min. - Max.)",
-    "TenantId": "Müşteri Id"
+    "TenantId": "Müşteri Id",
+    "Permission:Export": "İşlem kayıtlarını dışa aktar",
+    "ExportToExcel": "Excel'e Aktar",
+    "Exporting": "Aktarılıyor",
+    "ExportCompleted": "Aktarma başarıyla tamamlandı",
+    "ExportFailed": "Aktarma başarısız",
+    "ExportJobQueued": "{0} kayıt için dışa aktarma işi sıraya alındı. İşlem tamamlandığında e-posta ile bilgilendirileceksiniz.",
+    "ExportReady": "{0} kayıt için dışa aktarma tamamlandı ve indirme için hazır.",
+    "FileName": "Dosya adı",
+    "TotalRecords": "Toplam kayıt",
+    "ExcelFileAttachedMessage": "Excel dosyası bu e-postaya eklenmiştir.",
+    "EntityChangeExportCompletedSubject": "Entity değişiklik dışa aktarma tamamlandı",
+    "AuditLogExportCompletedSubject": "İşlem log dışa aktarma tamamlandı",
+    "DownloadLinkExplanation": "Dosyayı aşağıdaki bağlantıyı kullanarak {0} (UTC) tarihine kadar indirebilirsiniz",
+    "DownloadNow": "Şimdi İndir",
+    "TryAgainMessage": "Lütfen tekrar deneyin. Sorun devam ederse, lütfen destek ekibiyle iletişime geçin."
   }
 }

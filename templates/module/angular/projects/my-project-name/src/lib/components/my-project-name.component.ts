@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MyProjectNameService } from '../services/my-project-name.service';
 
 @Component({
-  standalone: false,
   selector: 'lib-my-project-name',
   template: ` <p>my-project-name works!</p> `,
   styles: [],

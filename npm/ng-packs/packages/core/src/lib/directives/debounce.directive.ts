@@ -4,7 +4,6 @@ import { debounceTime } from 'rxjs/operators';
 import { SubscriptionService } from '../services/subscription.service';
 
 @Directive({
-  standalone: true,
   selector: '[input.debounce]',
   providers: [SubscriptionService],
 })
@@ -13,7 +12,10 @@ export class InputEventDebounceDirective implements OnInit {
 
   @Output('input.debounce') readonly debounceEvent = new EventEmitter<Event>();
 
-  constructor(private el: ElementRef, private subscription: SubscriptionService) {}
+  constructor(
+    private el: ElementRef,
+    private subscription: SubscriptionService,
+  ) {}
 
   ngOnInit(): void {
     const input$ = fromEvent<InputEvent>(this.el.nativeElement, 'input').pipe(

@@ -14,8 +14,10 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Docs.Caching;
+using Volo.Docs.Common.Projects;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Projects;
+using Volo.Docs.Utils;
 using Volo.Extensions;
 
 namespace Volo.Docs.Documents
@@ -281,7 +283,7 @@ namespace Volo.Docs.Documents
         private List<string> GetDocumentLinks(NavigationNode node, List<string> documentUrls, string prefix,
             string shortName, DocumentWithoutDetails document)
         {
-            if (!IsExternalLink(node.Path))
+            if (!UrlHelper.IsExternalLink(node.Path))
             {
                 documentUrls.AddIfNotContains(
                     NormalizePath(prefix, node.Path, shortName, document)
@@ -317,17 +319,6 @@ namespace Volo.Docs.Documents
             return path.EndsWith("." + format)
                 ? path.Left(path.Length - format.Length - 1)
                 : path;
-        }
-
-        private static bool IsExternalLink(string path)
-        {
-            if (path.IsNullOrEmpty())
-            {
-                return false;
-            }
-
-            return path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                   path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
         }
 
         public virtual async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)

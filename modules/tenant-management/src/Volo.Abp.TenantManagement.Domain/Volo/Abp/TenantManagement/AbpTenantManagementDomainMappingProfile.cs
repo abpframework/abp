@@ -28,7 +28,8 @@ public class AbpTenantManagementDomainMappingProfile : Profile
                     return connStrings;
                 });
             })
-            .ForMember(x => x.IsActive, x => x.Ignore());
+            .ForMember(x => x.IsActive, x => x.Ignore())
+            .ForMember(x => x.EditionId, x => x.Ignore());
 
         CreateMap<Tenant, TenantEto>();
     }

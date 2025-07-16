@@ -1,5 +1,4 @@
 /* eslint-disable @angular-eslint/no-output-native */
-import { ABP } from '@abp/ng.core';
 import {
   Component,
   ElementRef,
@@ -10,9 +9,10 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ABP } from '@abp/ng.core';
 
 @Component({
-  standalone: false,
   selector: 'abp-button',
   template: `
     <button
@@ -29,6 +29,7 @@ import {
       <i [ngClass]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
     </button>
   `,
+  imports: [CommonModule],
 })
 export class ButtonComponent implements OnInit {
   @Input()

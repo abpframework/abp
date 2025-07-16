@@ -65,7 +65,42 @@ public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
                 x.Name == TestFeatureDefinitionProvider.SocialLogins &&
                 x.Value == false.ToString().ToLowerInvariant())
             .ShouldBeTrue();
+    }
 
+    [Fact]
+    public async Task Select_Child_Feature_Should_Also_Update_Parent_Feature()
+    {
+        Login(_testData.User1Id);
+
+        await _featureAppService.UpdateAsync(EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString(), new UpdateFeaturesDto()
+            {
+                Features = new List<UpdateFeatureDto>()
+                {
+                    new UpdateFeatureDto()
+                    {
+                        Name = TestFeatureDefinitionProvider.EmailSupport,
+                        Value = true.ToString().ToLowerInvariant()
+                    },
+                    new UpdateFeatureDto()
+                    {
+                        Name = TestFeatureDefinitionProvider.EmailSupportMaxNumber,
+                        Value = true.ToString().ToLowerInvariant()
+                    }
+                }
+            });
+
+        (await _featureAppService.GetAsync(EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Regular.ToString())).Groups.SelectMany(g => g.Features).Any(x =>
+                x.Name == TestFeatureDefinitionProvider.EmailSupportMaxNumber &&
+                x.Value == true.ToString().ToLowerInvariant())
+            .ShouldBeTrue();
+
+        (await _featureAppService.GetAsync(EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Regular.ToString())).Groups.SelectMany(g => g.Features).Any(x =>
+                x.Name == TestFeatureDefinitionProvider.EmailSupport &&
+                x.Value == true.ToString().ToLowerInvariant())
+            .ShouldBeTrue();
     }
 
     [Fact]

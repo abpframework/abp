@@ -4,26 +4,27 @@ This document explains how to install the ABP Studio tool.
 
 ## Pre-requirements
 
-Before you begin the installation process for ABP Studio, ensure that your system meets the following pre-requirements:
+ABP Studio automatically instals most of the required dependencies. When you first launch the application, it will check for and install the following components if missed:
 
-### Node
-Make sure [Node.js](https://nodejs.org/en) is installed on your system. If you have not installed Node.js, you can download the `v22+` version from the official [Node.js website](https://nodejs.org/en/download/prebuilt-installer).
+* .NET SDK
+* Node.js
+* ABP CLI
+* mkcert (for HTTPS development)
+* WireGuard (for Kubernetes operations)
 
-### Docker 
-ABP Studio needs [Docker](https://www.docker.com/) for [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
+However, the followings should be manually installed:
 
-### WireGuard (Optional) 
+### Docker (Required for Kubernetes Operations)
 
-ABP Studio needs [WireGuard](https://www.wireguard.com/) for Kubernetes operations. You can find the installation instructions for your specific operating system below:
+ABP Studio needs [Docker](https://www.docker.com/) for Docker and [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
 
-**For Windows:** 
-Installation instructions for your Windows operating system are on the official [WireGuard website](https://www.wireguard.com/install/#windows-7-81-10-11-2008r2-2012r2-2016-2019-2022).
+### Package Manager Prerequisites
 
-**For macOS:**
-Installation instructions for your macOS operating system are on the official [WireGuard website](https://www.wireguard.com/install/#macos-homebrew-and-macports-basic-cli-homebrew-userspace-go-homebrew-tools-macports-userspace-go-macports-tools).
+* **Windows:** The automatic installation process uses `winget`. If not already installed, ABP Studio will attempt to install it.
+* **macOS:** The automatic installation process uses `brew`. If not already installed, you'll need to install it manually from [brew.sh](https://brew.sh/).
 
 ## Installation
-Now you have met the pre-requirements, follow the steps below to install ABP Studio:
+Follow these steps to install ABP Studio:
 
 1. **Download ABP Studio:** Visit [abp.io](https://abp.io/studio) to download the latest version of ABP Studio.
 
@@ -31,8 +32,10 @@ Now you have met the pre-requirements, follow the steps below to install ABP Stu
 
 2. **Run the Installer:** Execute the installer and follow the on-screen instructions to install ABP Studio on your computer.
 
+3. **First Launch:** When you first launch ABP Studio, it will automatically check for and install required dependencies. This process may take several minutes, and you'll see progress indicators for each component being installed.
+
 ## Login
-After you install ABP Studio, you can log in to access all the features. To log in, follow the below steps:
+After installation is complete, you can log in to access all features:
 
 1. **Launch ABP Studio:** Open ABP Studio on your desktop.
 

@@ -1,14 +1,6 @@
-import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
-import { PermissionManagementModule } from '@abp/ng.permission-management';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { ExtensibleModule } from '@abp/ng.components/extensible';
+import { LazyModuleFactory } from '@abp/ng.core';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
-import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { RolesComponent } from './components/roles/roles.component';
-import { UsersComponent } from './components/users/users.component';
 import { IdentityExtensionsGuard } from './guards/extensions.guard';
-import { IdentityRoutingModule } from './identity-routing.module';
 import { IdentityConfigOptions } from './models/config-options';
 import {
   IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS,
@@ -17,22 +9,13 @@ import {
   IDENTITY_ENTITY_PROP_CONTRIBUTORS,
   IDENTITY_TOOLBAR_ACTION_CONTRIBUTORS,
 } from './tokens/extensions.token';
-import { PageModule } from '@abp/ng.components/page';
+import { IdentityRoutingModule } from './identity-routing.module';
+import { RolesComponent, UsersComponent } from './components';
 
 @NgModule({
-  declarations: [RolesComponent, UsersComponent],
-  exports: [RolesComponent, UsersComponent],
-  imports: [
-    CoreModule,
-    IdentityRoutingModule,
-    NgbNavModule,
-    ThemeSharedModule,
-    ExtensibleModule,
-    NgbDropdownModule,
-    PermissionManagementModule,
-    NgxValidateCoreModule,
-    PageModule,
-  ],
+  declarations: [],
+  exports: [],
+  imports: [IdentityRoutingModule, RolesComponent, UsersComponent],
 })
 export class IdentityModule {
   static forChild(options: IdentityConfigOptions = {}): ModuleWithProviders<IdentityModule> {
@@ -63,7 +46,9 @@ export class IdentityModule {
       ],
     };
   }
-
+  /**
+   * @deprecated `IdentityModule.forLazy()` is deprecated. You can use `createRoutes` **function** instead.
+   */
   static forLazy(options: IdentityConfigOptions = {}): NgModuleFactory<IdentityModule> {
     return new LazyModuleFactory(IdentityModule.forChild(options));
   }

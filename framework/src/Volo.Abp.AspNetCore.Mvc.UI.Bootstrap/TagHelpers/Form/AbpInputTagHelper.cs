@@ -47,10 +47,12 @@ public class AbpInputTagHelper : AbpTagHelper<AbpInputTagHelper, AbpInputTagHelp
     public bool SuppressLabel { get; set; }
 
     [HtmlAttributeName("floating-label")]
-
     public bool FloatingLabel { get; set; }
 
     public CheckBoxHiddenInputRenderMode? CheckBoxHiddenInputRenderMode { get; set; }
+
+    [HtmlAttributeName("use-switch-checkbox")]
+    public bool UseSwitchCheckBox { get; set; } = false;
 
     public bool AddMarginBottomClass  { get; set; } = true;
 

@@ -35,6 +35,7 @@
     "UpdatedExplanation": "Updated in the last two weeks.",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} already exists.",
     "Preview": "preview",
-    "GoogleTranslate": "Google Translate"
+    "GoogleTranslate": "Google Translate",
+    "DownloadPDF": "Download PDF"
   }
 }

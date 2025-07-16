@@ -104,7 +104,7 @@ Replacing ASP.NET Core's DI system by Autofac and integrating to ABP is pretty e
 1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
 
 ````
-Install-Package Volo.Abp.Autofac
+dotnet add package Volo.Abp.Autofac
 ````
 
 2. Add the ``AbpAutofacModule`` Dependency

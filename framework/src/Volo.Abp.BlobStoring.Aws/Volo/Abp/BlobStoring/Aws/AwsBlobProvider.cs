@@ -103,7 +103,7 @@ public class AwsBlobProvider : BlobProviderBase, ITransientDependency
                 Key = blobName
             });
 
-            return await TryCopyToMemoryStreamAsync(response.ResponseStream, args.CancellationToken);
+            return response.ResponseStream;
         }
     }
 

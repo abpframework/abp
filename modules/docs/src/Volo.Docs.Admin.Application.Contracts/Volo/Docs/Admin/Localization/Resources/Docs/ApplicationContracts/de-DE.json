@@ -56,6 +56,18 @@
     "FileName": "Dateiname",
     "LastCachedTime": "Cache-Zeit",
     "Project": "Projekt",
-    "RemoveCacheAndReIndexConfirmation": "Das Dokument \"{0}\" wird aus dem Cache entfernt und neu indiziert. Können Sie das bestätigen?"
+    "RemoveCacheAndReIndexConfirmation": "Das Dokument \"{0}\" wird aus dem Cache entfernt und neu indiziert. Können Sie das bestätigen?",
+    "GeneratePdf": "PDF generieren",
+    "Generating": "Generieren...",
+    "Language": "Sprache",
+    "ForceToGenerateNewPdf": "Neues PDF erzwingen",
+    "PdfGeneratedSuccessfully": "PDF erfolgreich generiert",
+    "GenerateAndDownloadPdf": "PDF generieren und herunterladen",
+    "PdfFileDeletionWarningMessage": "Sind Sie sicher, dass Sie das PDF-Datei \"{0}\" löschen wollen?",
+    "ManagePdfFiles": "PDF-Dateien verwalten",
+    "Permission:ManagePdfFiles": "PDF-Dateien verwalten",
+    "PdfDeletedSuccessfully": "PDF-Datei wurde erfolgreich gelöscht",
+    "PdfGenerationStarted": "PDF-Generierung wurde gestartet",
+    "PdfGenerationStartedInfoMessage": "Die PDF-Generierung wurde gestartet. Nach Abschluss können Sie überprüfen, ob die Datei im PDF-Dateibereich hinzugefügt wurde."
   }
 }

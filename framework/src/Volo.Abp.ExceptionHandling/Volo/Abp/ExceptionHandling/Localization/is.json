@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Gögnunum sem þú hefur sent inn hefur þegar verið breytt af öðrum notanda/viðskiptavini. Fleygðu breytingunum sem þú hefur gert og reyndu frá upphafi.",
     "Error": "Villa",
     "UnhandledException": "Ómeðhöndluð villa",
+    "Authorizing": "Heimilun…",
     "401Message": "Ekki er heimild fyrir þessari aðgerð",
     "403Message": "Bannað",
     "404Message": "Síðan fannst ekki",

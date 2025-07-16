@@ -82,6 +82,9 @@
     "Feature:AuditLoggingGroup": "ऑडिट लॉगिंग",
     "Feature:AuditLoggingEnable": "सक्षम ऑडिट लॉगिंग पृष्ठ",
     "Feature:AuditLoggingEnableDescription": "एप्लिकेशन में ऑडिट लॉगिंग पृष्ठ सक्षम करें।",
-    "TenantId": "किरायेदार आईडी"
+    "TenantId": "किरायेदार आईडी",
+    "DownloadLinkExplanation": "आप {0} (UTC) तक नीचे दिए गए लिंक का उपयोग करके फ़ाइल डाउनलोड कर सकते हैं",
+    "DownloadNow": "अभी डाउनलोड करें",
+    "TryAgainMessage": "कृपया पुनः प्रयास करें। यदि समस्या बनी रहती है, तो कृपया सहायता से संपर्क करें।"
   }
 }

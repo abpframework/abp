@@ -8,8 +8,8 @@ import { ToasterService } from '../services/toaster.service';
 
 @NgModule({
   exports: [ToastContainerComponent],
-  declarations: [ToastContainerComponent, ToastComponent],
-  imports: [CoreTestingModule.withConfig()],
+  declarations: [],
+  imports: [CoreTestingModule.withConfig(), ToastContainerComponent, ToastComponent],
 })
 export class MockModule {}
 const toastClassPrefix = 'abp-toast';

@@ -81,6 +81,9 @@
     "Feature:AuditLoggingGroup": "Audit-Protokollierung",
     "Feature:AuditLoggingEnable": "Aktivieren Sie die Überwachungsprotokollseite",
     "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Überwachungsprotokollseite in der App.",
-    "TenantId": "Mandanten-ID"
+    "TenantId": "Mandanten-ID",
+    "DownloadLinkExplanation": "Sie können die Datei über den Link unten bis {0} (UTC) herunterladen",
+    "DownloadNow": "Jetzt herunterladen",
+    "TryAgainMessage": "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Support."
   }
 }

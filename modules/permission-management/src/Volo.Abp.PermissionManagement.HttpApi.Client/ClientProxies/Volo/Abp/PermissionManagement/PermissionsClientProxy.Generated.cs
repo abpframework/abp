@@ -26,6 +26,16 @@ public partial class PermissionsClientProxy : ClientProxyBase<IPermissionAppServ
         });
     }
 
+    public virtual async Task<GetPermissionListResultDto> GetByGroupAsync(string groupName, string providerName, string providerKey)
+    {
+        return await RequestAsync<GetPermissionListResultDto>(nameof(GetByGroupAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), groupName },
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
+        });
+    }
+
     public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
     {
         await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue

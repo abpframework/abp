@@ -316,6 +316,34 @@ See:
 - https://learn.microsoft.com/en-us/aspnet/web-api/overview/testing-and-debugging/troubleshooting-http-405-errors-after-publishing-web-api-applications#resolve-http-405-errors
 - https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/http-error-405-website#resolution-for-cause-3
 
+## Publish the Application(s) as IIS sub-application
+
+If your MVC application is a sub-application, you need to set the `BaseUrl` property of `AbpThemingOptions` to the sub-application’s path. The `BaseUrl` is used to configure the `base` element in the `head` section of the layout page.
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    Configure<AbpThemingOptions>(options =>
+    {
+        options.BaseUrl = "/myapp/";
+    });
+}
+```
+
+```html
+<html>
+  <head>
+    <base href="/myapp/" />
+    ...
+  </head>
+  <body>
+    ...
+  </body>
+</html>
+```
+
+For Blazor applications, you can to set the `base` tag in the `App.razor` file instead of configure `AbpThemingOptions`.
+
 ## How to get stdout-log
 
 If your application is running on IIS and getting errors like `502.5, 500.3x`, you can enable stdout logs to see the error details.

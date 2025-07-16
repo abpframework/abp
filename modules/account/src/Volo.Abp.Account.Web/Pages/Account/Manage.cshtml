@@ -13,6 +13,11 @@
     <abp-script-bundle name="@typeof(ManageModel).FullName"/>
 }
 
+
+@section styles {
+    <abp-style src="/Pages/Account/Manage.css" />
+}
+
 @if (!Model.ReturnUrl.IsNullOrWhiteSpace())
 {
     <abp-row class="mb-2">
@@ -31,8 +36,6 @@
                 @foreach (var group in Model.ProfileManagementPageCreationContext.Groups)
                 {
                     <abp-tab title="@group.DisplayName">
-                        <h2>@group.DisplayName</h2>
-                        <hr class="my-4" />
                         @await Component.InvokeAsync(group.ComponentType, new
                         {
                             parameter = group.Parameter

@@ -82,6 +82,9 @@
     "Feature:AuditLoggingGroup": "Endurskoðunarskráning",
     "Feature:AuditLoggingEnable": "Virkjað endurskoðunarskráningarsíða",
     "Feature:AuditLoggingEnableDescription": "Virkjaðu endurskoðunarskráningarsíðu í forritinu.",
-    "TenantId": "Leigutakaauðkenni"
+    "TenantId": "Leigutakaauðkenni",
+    "DownloadLinkExplanation": "Þú getur sótt skrána með tenglinum hér að neðan til {0} (UTC)",
+    "DownloadNow": "Sækja núna",
+    "TryAgainMessage": "Vinsamlegast reyndu aftur. Ef vandamálið er viðvarandi, hafðu samband við þjónustuaðila."
   }
 }

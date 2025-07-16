@@ -16,7 +16,7 @@ body {
     }
 
     .btn-primary {
-        background-color: #b84297 !important;
+        background-color: #E83090 !important;
         font-size: 12px;
     }
 
@@ -268,7 +268,7 @@ body {
             
             > ul {
                 display: block;
-                height: calc(100vh - 310px);
+                height: calc(100vh - 350px);
                 overflow-y: auto;
                 margin-right: -4px !important;
                 margin-top: 20px !important;
@@ -368,7 +368,7 @@ body {
                         > span {
                             .fa {
                                 transform: rotate(90deg);
-                                color: #b84297;
+                                color: #E83090;
                             }
                         }
 
@@ -734,9 +734,9 @@ body {
                         font-weight: normal;
 
                         &.active {
-                            border-left: 1px solid #b84297;
+                            border-left: 1px solid #E83090;
                             background: none;
-                            color: #b84297;
+                            color: #E83090;
                             font-weight: normal;
                         }
                     }
@@ -744,14 +744,14 @@ body {
                     .nav-pills {
                         .nav-link {
                             &.active {
-                                color: #b84297;
+                                color: #E83090;
                             }
                         }
 
                         .nav-pills {
                             .nav-link {
                                 &.active {
-                                    color: #b84297;
+                                    color: #E83090;
                                 }
                             }
                         }

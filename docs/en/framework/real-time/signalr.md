@@ -27,7 +27,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.AspNetCore.SignalR](https://www.nuget.org/packages/Volo.Abp.AspNetCore.SignalR) NuGet package to your project:
 
    ```
-   Install-Package Volo.Abp.AspNetCore.SignalR
+   dotnet add package Volo.Abp.AspNetCore.SignalR
    ```
 
    Or use the Visual Studio NuGet package management UI to install it.

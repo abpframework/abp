@@ -66,8 +66,16 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
                 }
                 if (isCheckBox)
                 {
-                    output.Attributes.AddClass("custom-checkbox");
-                    output.Attributes.AddClass("custom-control");
+                    if (!TagHelper.UseSwitchCheckBox)
+                    {
+                        output.Attributes.AddClass("custom-checkbox");
+                        output.Attributes.AddClass("custom-control");
+                    }
+                    else
+                    {
+                        output.Attributes.AddClass("form-switch");
+                    }
+
                     output.Attributes.AddClass("form-check");
                 }
             }
@@ -266,7 +274,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
-    {        
+    {
         if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
         {
             return string.Empty;
@@ -395,7 +403,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             }
             innerOutput.Content.AppendHtml($" <i class=\"{iconClass}\"></i>");
         }
-        
+
         innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
 
         return innerOutput.Render(_encoder);

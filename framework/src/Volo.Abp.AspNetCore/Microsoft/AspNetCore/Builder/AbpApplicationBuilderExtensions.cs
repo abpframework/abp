@@ -115,7 +115,7 @@ public static class AbpApplicationBuilderExtensions
         return app.UseMiddleware<AbpExceptionHandlingMiddleware>();
     }
 
-    [Obsolete("Replace with AbpClaimsTransformation")]
+    [Obsolete("Use the TransformAbpClaims extension method from IServiceCollection instead.")]
     public static IApplicationBuilder UseAbpClaimsMap(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AbpClaimsMapMiddleware>();

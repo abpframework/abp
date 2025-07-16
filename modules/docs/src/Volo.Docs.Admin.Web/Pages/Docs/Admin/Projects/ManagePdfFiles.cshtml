@@ -1,0 +1,41 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Docs.Localization
+@model Volo.Docs.Admin.Pages.Docs.Admin.Projects.ManagePdfFiles
+@inject IHtmlLocalizer<DocsResource> L
+
+@{
+    Layout = null;
+}
+
+<abp-modal size="@(AbpModalSize.Large)">
+    <abp-modal-header title="@L["ManagePdfFiles"].Value"></abp-modal-header>
+    <abp-modal-body>
+        <abp-card>
+            <abp-card-header>
+                <abp-row>
+                    <abp-column size-md="_12" class="text-end">
+                        <abp-button button-type="Primary" icon="plus" text="@L["GeneratePdf"].Value" id="GeneratePdfBtn" />
+                    </abp-column>
+                </abp-row>
+            </abp-card-header>
+            <abp-card-body>
+                <abp-table id="ProjectPdfFilesTable" class="nowrap">
+                    <thead>
+                    <tr>
+                        <th>@L["Actions"]</th>
+                        <th>@L["FileName"]</th>
+                        <th>@L["Version"]</th>
+                        <th>@L["LanguageCode"]</th>
+                        <th>@L["CreationTime"]</th>
+                        <th>@L["LastUpdateTime"]</th>
+                    </tr>
+                    </thead>
+                </abp-table>
+            </abp-card-body>
+        </abp-card>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@(AbpModalButtons.Close)">
+    </abp-modal-footer>
+</abp-modal>

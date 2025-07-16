@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Toinen käyttäjä/asiakas on jo muuttanut lähettämiäsi tietoja. Hylkää tekemäsi muutokset ja yritä alusta.",
     "Error": "Virhe",
     "UnhandledException": "Käsittelemätön poikkeus!",
+    "Authorizing": "Valtuuttaminen…",
     "401Message": "Luvaton",
     "403Message": "Kielletty",
     "404Message": "Sivua ei löydetty",

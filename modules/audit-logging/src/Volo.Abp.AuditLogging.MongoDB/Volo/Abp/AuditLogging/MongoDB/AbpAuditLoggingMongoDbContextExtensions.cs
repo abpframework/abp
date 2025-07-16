@@ -13,5 +13,10 @@ public static class AbpAuditLoggingMongoDbContextExtensions
         {
             b.CollectionName = AbpAuditLoggingDbProperties.DbTablePrefix + "AuditLogs";
         });
+
+        builder.Entity<AuditLogExcelFile>(b =>
+        {
+            b.CollectionName = AbpAuditLoggingDbProperties.DbTablePrefix + "AuditLogExcelFiles";
+        });
     }
 }

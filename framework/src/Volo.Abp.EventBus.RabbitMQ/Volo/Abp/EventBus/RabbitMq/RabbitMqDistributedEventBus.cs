@@ -97,7 +97,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
     }
 
-    private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
+    private async Task ProcessEventAsync(IChannel channel, BasicDeliverEventArgs ea)
     {
         var eventName = ea.RoutingKey;
         var eventType = EventTypes.GetOrDefault(eventName);
@@ -224,10 +224,10 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         IEnumerable<OutgoingEventInfo> outgoingEvents,
         OutboxConfig outboxConfig)
     {
-        using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
+        using (var channel = await (await ConnectionPool.GetAsync(AbpRabbitMqEventBusOptions.ConnectionName))
+                   .CreateChannelAsync(new CreateChannelOptions(publisherConfirmationsEnabled: true, publisherConfirmationTrackingEnabled: true, new ThrottlingRateLimiter(256))))
         {
             var outgoingEventArray = outgoingEvents.ToArray();
-            channel.ConfirmSelect();
 
             foreach (var outgoingEvent in outgoingEventArray)
             {
@@ -248,8 +248,6 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
                     });
                 }
             }
-
-            channel.WaitForConfirmsOrDie();
         }
     }
 
@@ -293,31 +291,33 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         return PublishAsync(eventName, body, headersArguments, eventId, correlationId);
     }
 
-    protected virtual Task PublishAsync(
+    protected virtual async Task PublishAsync(
         string eventName,
         byte[] body,
         Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
         string? correlationId = null)
     {
-        using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
+        using (var channel = await (await ConnectionPool.GetAsync(AbpRabbitMqEventBusOptions.ConnectionName)).CreateChannelAsync())
         {
-            return PublishAsync(channel, eventName, body, headersArguments, eventId, correlationId);
+            await PublishAsync(channel, eventName, body, headersArguments, eventId, correlationId);
         }
     }
 
-    protected virtual Task PublishAsync(
-        IModel channel,
+    protected virtual async Task PublishAsync(
+        IChannel channel,
         string eventName,
         byte[] body,
         Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
         string? correlationId = null)
     {
-        EnsureExchangeExists(channel);
+        await EnsureExchangeExistsAsync(channel);
 
-        var properties = channel.CreateBasicProperties();
-        properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
+        var properties = new BasicProperties
+        {
+            DeliveryMode = DeliveryModes.Persistent
+        };
 
         if (properties.MessageId.IsNullOrEmpty())
         {
@@ -331,18 +331,16 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         SetEventMessageHeaders(properties, headersArguments);
 
-        channel.BasicPublish(
+        await channel.BasicPublishAsync(
             exchange: AbpRabbitMqEventBusOptions.ExchangeName,
             routingKey: eventName,
-            mandatory: true,
+            mandatory: false,
             basicProperties: properties,
             body: body
         );
-
-        return Task.CompletedTask;
     }
 
-    private void EnsureExchangeExists(IModel channel)
+    protected virtual async Task EnsureExchangeExistsAsync(IChannel channel)
     {
         if (_exchangeCreated)
         {
@@ -351,14 +349,14 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         try
         {
-            using (var temporaryChannel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
+            using (var temporaryChannel = await (await ConnectionPool.GetAsync(AbpRabbitMqEventBusOptions.ConnectionName)).CreateChannelAsync())
             {
-                temporaryChannel.ExchangeDeclarePassive(AbpRabbitMqEventBusOptions.ExchangeName);
+                await temporaryChannel.ExchangeDeclarePassiveAsync(AbpRabbitMqEventBusOptions.ExchangeName);
             }
         }
         catch (Exception)
         {
-            channel.ExchangeDeclare(
+            await channel.ExchangeDeclareAsync(
                 AbpRabbitMqEventBusOptions.ExchangeName,
                 AbpRabbitMqEventBusOptions.GetExchangeTypeOrDefault(),
                 durable: true
@@ -367,14 +365,14 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         _exchangeCreated = true;
     }
 
-    private void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object>? headersArguments)
+    protected virtual void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object>? headersArguments)
     {
         if (headersArguments == null)
         {
             return;
         }
 
-        properties.Headers ??= new Dictionary<string, object>();
+        properties.Headers ??= new Dictionary<string, object?>();
 
         foreach (var header in headersArguments)
         {

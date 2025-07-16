@@ -1,10 +1,18 @@
 # Using Elsa Workflow with ABP Framework
 
+> **UPDATE:** There is a newer version of this article, which covers Elsa 3 with ABP Framework. You can check it at https://abp.io/community/articles/using-elsa-3-workflow-with-abp-framework-usqk8afg
+
 **Elsa Core** is an open-source workflows library that can be used in any kind of .NET Core application. Using such a workflow library can be useful to implement business rules visually or programmatically.
 
 ![elsa-overview](./elsa-overview.gif)
 
 This article shows how we can use this workflow library within our ABP-based application. We will start with a couple of examples and then we will integrate the **Elsa Dashboard** (you can see it in the above gif) into our application to be able to design our workflows visually.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Source Code
 
@@ -454,3 +462,9 @@ namespace ElsaDemo.Web.Menus
 * Now we can click the "Workflow" menu item, display the Elsa Dashboard and designing workflows.
 
 ![elsa-demo-result](./elsa-demo-result.gif)
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---

@@ -165,7 +165,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [How to use .NET Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk) by [Berkan Şaşmaz](https://twitter.com/berkansasmazz)
 * [Exciting New Feature in ABP.IO CMS Kit: Marked Item System](https://abp.io/community/articles/exciting-new-feature-in-abp.io-cms-kit-marked-item-system.-2hvpq0me) by [Suhaib Mousa](https://abp.io/community/members/suhaibmousa032@gmail.com)
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
 ## Conclusion
 

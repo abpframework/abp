@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Scriban" />
     <PackageReference Include="NuGet.Versioning" />
   </ItemGroup>
 

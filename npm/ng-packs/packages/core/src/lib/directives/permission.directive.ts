@@ -17,7 +17,6 @@ import { QUEUE_MANAGER } from '../tokens/queue.token';
 import { QueueManager } from '../utils/queue';
 
 @Directive({
-  standalone: true,
   selector: '[abpPermission]',
 })
 export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit {

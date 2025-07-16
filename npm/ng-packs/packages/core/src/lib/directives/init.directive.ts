@@ -1,7 +1,6 @@
 import { Directive, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 
 @Directive({
-  standalone: true,
   selector: '[abpInit]',
 })
 export class InitDirective implements AfterViewInit {

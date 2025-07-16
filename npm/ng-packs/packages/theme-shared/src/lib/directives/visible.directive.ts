@@ -2,7 +2,6 @@ import { OnInit, Directive, OnDestroy, Input, ViewContainerRef, TemplateRef } fr
 import { EMPTY, from, Observable, of, Subscription } from 'rxjs';
 
 @Directive({
-  standalone: true,
   selector: '[abpVisible]',
 })
 export class AbpVisibleDirective implements OnDestroy, OnInit {

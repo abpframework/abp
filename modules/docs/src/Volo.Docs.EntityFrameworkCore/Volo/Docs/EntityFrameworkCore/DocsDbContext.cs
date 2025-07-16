@@ -16,6 +16,8 @@ namespace Volo.Docs.EntityFrameworkCore
         public DbSet<Document> Documents { get; set; }
 
         public DbSet<DocumentContributor> DocumentContributors { get; set; }
+        
+        public DbSet<ProjectPdfFile> ProjectPdfFiles { get; set; }
 
         public DocsDbContext(DbContextOptions<DocsDbContext> options)
             : base(options)

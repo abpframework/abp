@@ -17,10 +17,10 @@ public class AbpRabbitMqEventBusOptions
 
     public ushort? PrefetchCount { get; set; }
 
-    public IDictionary<string, object> QueueArguments { get; set; } = new Dictionary<string, object>();
+    public IDictionary<string, object?> QueueArguments { get; set; } = new Dictionary<string, object?>();
 
-    public IDictionary<string, object> ExchangeArguments { get; set; } = new Dictionary<string, object>();
-    
+    public IDictionary<string, object?> ExchangeArguments { get; set; } = new Dictionary<string, object?>();
+
     public string GetExchangeTypeOrDefault()
     {
         return string.IsNullOrEmpty(ExchangeType)

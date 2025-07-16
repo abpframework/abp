@@ -21,8 +21,6 @@ First things first! Let's setup your development environment before creating the
 
 ## Creating a New Solution
 
-> 🛈 This document uses [ABP Studio](../studio/index.md) to create new ABP solutions. You can also use the [ABP CLI](../cli/index.md) to create new solutions and use the [getting started page](https://abp.io/get-started) to easily build ABP CLI commands.
-
 > ABP startup solution templates have many options for your specific needs. If you don't understand an option that probably means you don't need it. We selected common defaults for you, so you can leave these options as they are.
 
 Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:

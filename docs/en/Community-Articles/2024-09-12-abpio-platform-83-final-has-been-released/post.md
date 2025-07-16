@@ -70,7 +70,7 @@ As always, exciting articles have been contributed by the ABP community. I will 
 * [Introducing the Google Cloud Storage BLOB Provider](https://abp.io/community/articles/introducing-the-google-cloud-storage-blob-provider-yrt6azc0) by [Engincan Veske](https://twitter.com/EngincanVeske)
 * [Switching Between Organization Units](https://abp.io/community/articles/switching-between-organization-units-i5tokpzt) by [Liming Ma](https://github.com/maliming)
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
 ## About the Next Version
 

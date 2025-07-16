@@ -82,6 +82,9 @@
     "Feature:AuditLoggingGroup": "Ghi nhật ký kiểm tra",
     "Feature:AuditLoggingEnable": "Đã bật trang ghi nhật ký kiểm tra",
     "Feature:AuditLoggingEnableDescription": "Kích hoạt trang ghi nhật ký kiểm tra trong ứng dụng.",
-    "TenantId": "ID người thuê"
+    "TenantId": "ID người thuê",
+    "DownloadLinkExplanation": "Bạn có thể tải xuống tệp bằng liên kết bên dưới cho đến {0} (UTC)",
+    "DownloadNow": "Tải xuống ngay",
+    "TryAgainMessage": "Vui lòng thử lại. Nếu sự cố vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ."
   }
 }

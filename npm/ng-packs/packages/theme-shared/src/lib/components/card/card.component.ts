@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: false,
   selector: 'abp-card',
   template: ` <div class="card" [ngClass]="cardClass" [ngStyle]="cardStyle">
     <ng-content></ng-content>
   </div>`,
+  imports: [CommonModule],
 })
 export class CardComponent {
   @Input() cardClass: string;

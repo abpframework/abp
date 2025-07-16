@@ -65,12 +65,12 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this._totalCount;
   }
 
-  private _sortKey = '';
-  set sortKey(value: string) {
+  private _sortKey: string | number = '';
+  set sortKey(value: string | number) {
     this._sortKey = value;
     this.get();
   }
-  get sortKey(): string {
+  get sortKey(): string | number {
     return this._sortKey;
   }
 

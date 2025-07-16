@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -16,9 +18,11 @@ public class AbpBackgroundWorkersModule : AbpModule
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
         if (options.IsEnabled)
         {
+            var hostApplicationLifetime = context.ServiceProvider.GetService<IHostApplicationLifetime>();
+            var cancellationToken = hostApplicationLifetime?.ApplicationStopping ?? CancellationToken.None;
             await context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
-                .StartAsync();
+                .StartAsync(cancellationToken);
         }
     }
 
@@ -27,9 +31,11 @@ public class AbpBackgroundWorkersModule : AbpModule
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
         if (options.IsEnabled)
         {
+            var hostApplicationLifetime = context.ServiceProvider.GetService<IHostApplicationLifetime>();
+            var cancellationToken = hostApplicationLifetime?.ApplicationStopping ?? CancellationToken.None;
             await context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
-                .StopAsync();
+                .StopAsync(cancellationToken);
         }
     }
 

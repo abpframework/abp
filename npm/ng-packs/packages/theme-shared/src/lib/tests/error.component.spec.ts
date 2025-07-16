@@ -9,7 +9,7 @@ describe('ErrorComponent', () => {
   let spectator: SpectatorHost<HttpErrorWrapperComponent>;
   const createHost = createHostFactory({
     component: HttpErrorWrapperComponent,
-    declarations: [LocalizationPipe],
+    declarations: [],
     mocks: [HttpClient],
     providers: [
       { provide: CORE_OPTIONS, useValue: {} },
@@ -19,7 +19,7 @@ describe('ErrorComponent', () => {
         useValue: { nativeElement: document.createElement('div') },
       },
     ],
-    imports:[HttpClientModule]
+    imports: [HttpClientModule, LocalizationPipe],
   });
 
   beforeEach(() => {

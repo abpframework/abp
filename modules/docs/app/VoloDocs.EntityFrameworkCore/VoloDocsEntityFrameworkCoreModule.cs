@@ -1,4 +1,5 @@
-﻿using Volo.Abp.EntityFrameworkCore.SqlServer;
+﻿using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace VoloDocs.EntityFrameworkCore
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule))]
     public class VoloDocsEntityFrameworkCoreModule : AbpModule
     {

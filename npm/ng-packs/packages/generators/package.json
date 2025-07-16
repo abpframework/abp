@@ -1,6 +1,6 @@
 {
   "name": "@abp/nx.generators",
-  "version": "9.2.2",
+  "version": "9.3.0-rc.3",
   "homepage": "https://abp.io",
   "generators": "./generators.json",
   "type": "commonjs",

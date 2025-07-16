@@ -79,6 +79,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                     OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
                     OpenIddictConstants.Permissions.GrantTypes.DeviceCode,
                     OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                    OpenIddictConstants.Permissions.GrantTypes.TokenExchange,
                     OpenIddictConstants.Permissions.Prefixes.GrantType + MyTokenExtensionGrant.ExtensionGrantName,
 
                     OpenIddictConstants.Permissions.ResponseTypes.Code,

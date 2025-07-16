@@ -2,9 +2,10 @@ import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.c
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  standalone: false,
   selector: 'abp-languages',
   template: `
     @if (((dropdownLanguages$ | async)?.length || 0) > 0) {
@@ -38,6 +39,7 @@ import { map } from 'rxjs/operators';
       </div>
     }
   `,
+  imports: [CommonModule, NgbDropdownModule],
 })
 export class LanguagesComponent {
   get smallScreen(): boolean {

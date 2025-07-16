@@ -15,6 +15,7 @@
     "EntityNotFoundErrorMessage": "There is no entity {0} with id = {1}!",
     "Error": "Error",
     "UnhandledException": "Unhandled exception!",
+    "Authorizing": "Authorizing…",
     "401Message": "Unauthorized",
     "403Message": "Forbidden",
     "404Message": "Page not found",

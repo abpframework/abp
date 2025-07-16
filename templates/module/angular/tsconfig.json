@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.prod.json",
   "compilerOptions": {
+    "skipLibCheck": true,
     "paths": {
       "@my-company-name/my-project-name": [
         "projects/my-project-name/src/public-api.ts"

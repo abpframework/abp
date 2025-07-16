@@ -23,7 +23,6 @@ internal static class InternalServiceCollectionExtensions
     {
         var moduleLoader = new ModuleLoader();
         var assemblyFinder = new AssemblyFinder(abpApplication);
-        var typeFinder = new TypeFinder(assemblyFinder);
 
         if (!services.IsAdded<IConfiguration>())
         {
@@ -36,8 +35,9 @@ internal static class InternalServiceCollectionExtensions
 
         services.TryAddSingleton<IModuleLoader>(moduleLoader);
         services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
-        services.TryAddSingleton<ITypeFinder>(typeFinder);
         services.TryAddSingleton<IInitLoggerFactory>(new DefaultInitLoggerFactory());
+        var typeFinder = new TypeFinder(services.GetInitLogger<TypeFinder>(), assemblyFinder);
+        services.TryAddSingleton<ITypeFinder>(typeFinder);
 
         services.AddAssemblyOf<IAbpApplication>();
 

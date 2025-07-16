@@ -1,5 +1,7 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
+@using Volo.Abp.DependencyInjection
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.CardsModel
 @{
     ViewData["Title"] = "Cards";
@@ -41,7 +43,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+&lt;div class=&quot;card mb-3&quot; style=&quot;width: 18rem;&quot;&gt;
   &lt;img class=&quot;card-img-top&quot; src=&quot;.../100px180/&quot; alt=&quot;Card image cap&quot;&gt;
   &lt;div class=&quot;card-body&quot;&gt;
     &lt;h5 class=&quot;card-title&quot;&gt;Card title&lt;/h5&gt;
@@ -88,7 +90,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+&lt;div class=&quot;card mb-3&quot; style=&quot;width: 18rem;&quot;&gt;
   &lt;div class=&quot;card-body&quot;&gt;
     &lt;h5 class=&quot;card-title&quot;&gt;Card title&lt;/h5&gt;
     &lt;h6 class=&quot;card-subtitle mb-2 text-muted&quot;&gt;Card subtitle&lt;/h6&gt;
@@ -132,7 +134,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+&lt;div class=&quot;card mb-3&quot; style=&quot;width: 18rem;&quot;&gt;
   &lt;ul class=&quot;list-group list-group-flush&quot;&gt;
     &lt;li class=&quot;list-group-item&quot;&gt;Cras justo odio&lt;/li&gt;
     &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
@@ -174,7 +176,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+&lt;div class=&quot;card mb-3&quot; style=&quot;width: 18rem;&quot;&gt;
   &lt;div class=&quot;card-header&quot;&gt;
     Featured
   &lt;/div&gt;
@@ -237,7 +239,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+&lt;div class=&quot;card mb-3&quot; style=&quot;width: 18rem;&quot;&gt;
   &lt;img class=&quot;card-img-top&quot; src=&quot;.../100px180/?text=Image cap&quot; alt=&quot;Card image cap&quot;&gt;
   &lt;div class=&quot;card-body&quot;&gt;
     &lt;h5 class=&quot;card-title&quot;&gt;Card title&lt;/h5&gt;
@@ -290,7 +292,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot;&gt;
+&lt;div class=&quot;card mb-3&quot;&gt;
   &lt;div class=&quot;card-header&quot;&gt;
     Featured
   &lt;/div&gt;
@@ -337,7 +339,7 @@
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;card&quot;&gt;
+&lt;div class=&quot;card mb-3&quot;&gt;
   &lt;div class=&quot;card-header&quot;&gt;
     Quote
   &lt;/div&gt;
@@ -587,3 +589,7 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpCardTagHelper))

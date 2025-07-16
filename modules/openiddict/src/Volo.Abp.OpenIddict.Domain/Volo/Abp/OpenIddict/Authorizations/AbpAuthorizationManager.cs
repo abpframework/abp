@@ -16,7 +16,7 @@ public class AbpAuthorizationManager : OpenIddictAuthorizationManager<OpenIddict
         [NotNull] [ItemNotNull] IOpenIddictAuthorizationCache<OpenIddictAuthorizationModel> cache,
         [NotNull] [ItemNotNull] ILogger<OpenIddictAuthorizationManager<OpenIddictAuthorizationModel>> logger,
         [NotNull] [ItemNotNull] IOptionsMonitor<OpenIddictCoreOptions> options,
-        [NotNull] IOpenIddictAuthorizationStoreResolver resolver,
+        [NotNull] IOpenIddictAuthorizationStore<OpenIddictAuthorizationModel> resolver,
         AbpOpenIddictIdentifierConverter identifierConverter)
         : base(cache, logger, options, resolver)
     {

@@ -1,7 +1,8 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { AbstractNgModelComponent } from '@abp/ng.core';
-import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AbstractNgModelComponent } from '@abp/ng.core';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 /**
  * @deprecated use ShowPasswordDirective directive
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
  */
 @Component({
   selector: 'abp-password',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxValidateCoreModule],
   templateUrl: `./password.component.html`,
   providers: [
     {

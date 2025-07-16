@@ -2,13 +2,14 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { toastInOut } from '../../animations/toast.animations';
 import { Toaster } from '../../models/toaster';
+import { ToastComponent } from '../toast/toast.component';
 
 @Component({
-  standalone: false,
   selector: 'abp-toast-container',
   templateUrl: './toast-container.component.html',
   styleUrls: ['./toast-container.component.scss'],
   animations: [toastInOut],
+  imports: [ToastComponent],
 })
 export class ToastContainerComponent implements OnInit {
   toasts$!: ReplaySubject<Toaster.Toast[]>;

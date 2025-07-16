@@ -10,6 +10,12 @@ You can see the ER Diagram of our application below. This diagram will be helpfu
 
 When we've examined the ER Diagram, we can see the one-to-many relationship between the **Author** and the **Book** tables. Also, the many-to-many relationship (**BookCategory** table) between the **Book** and the **Category** tables. (There can be more than one category on each book and vice-versa in our scenario).
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ### Source Code
 
 You can find the source code of the application at https://github.com/EngincanV/ABP-Many-to-Many-Relationship-Demo .
@@ -1663,6 +1669,12 @@ namespace BookStore.Web.Pages.Books
 * When the user updates the inputs and submits the form, the `OnPostAsync` method runs. Inside of this method, we get the selected categories and pass them into the **CategoryNames** array of the Book object and call the `IBookAppService.UpdateAsync` method to update the book.
 
 ![Edit Book Modal](./book-update-modal.png)
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ### Conclusion
 

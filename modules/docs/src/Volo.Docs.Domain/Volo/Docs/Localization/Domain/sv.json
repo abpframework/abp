@@ -43,6 +43,7 @@
     "ProjectDeletionWarningMessage": "Projektet kommer att raderas.",
     "Docs_Page_Title": "ABP-dokumentation",
     "Docs_Page_Description": "Få tillgång till omfattande guider och API-referenser i ABP Documentation, vilket underlättar utveckling och felsökning.",
-    "GoogleTranslate": "Google Översätt"
+    "GoogleTranslate": "Google Översätt",
+    "DownloadPDF": "Ladda ner PDF"
   }
 }

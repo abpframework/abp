@@ -6,6 +6,12 @@ It offers a flexible caching solution that combines the best aspects of local an
 
 In this article, we’ll explore **HybridCache** in .NET 9 and how it integrates with ABP Framework using `AbpHybridCache`. This new feature offers a robust solution for applications that need to scale while maintaining efficient caching strategies.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## What is HybridCache?
 
 **HybridCache** is designed to merge different caching layers, commonly including an in-memory cache (for high-speed access) and a distributed cache (for scalability across multiple instances). This hybrid approach allows for:
@@ -108,6 +114,12 @@ When you debug the `IHybridCache` service, you'll notice the L1 and L2 cache sto
 As you can see from the figure, it only set the cache item to the **LocalCache** (`MemoryCache`) and did not set the **BackendCache** (`DistributedCache`) because I did not configure the distributed cache and not running my application in multiple instances. But as you can notice, even without an `IDistributedCache` configuration, the `HybridCache` service will still provide in-process caching.
 
 **Note:** If you configure distributed caching options, `HybridCache` service uses the distributed cache and sets the **BackendCache**.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

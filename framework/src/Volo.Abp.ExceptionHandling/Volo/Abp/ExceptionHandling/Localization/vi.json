@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Dữ liệu bạn gửi đã bị người dùng/khách hàng khác thay đổi. Vui lòng hủy các thay đổi bạn đã thực hiện và thử lại từ đầu.",
     "Error": "Lỗi",
     "UnhandledException": "Tình huống ngoại lệ không thể xử lí được!",
+    "Authorizing": "Đang ủy quyền…",
     "401Message": "Không được phép",
     "403Message": "Cấm",
     "404Message": "Không tìm thấy trang",

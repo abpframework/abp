@@ -1,19 +1,45 @@
 {
   "migrations": [
     {
-      "version": "20.3.0-beta.1",
-      "description": "Update ESLint flat config to include .cjs, .mjs, .cts, and .mts files in overrides (if needed)",
-      "implementation": "./src/migrations/update-20-3-0/add-file-extensions-to-overrides",
-      "package": "@nx/eslint",
-      "name": "add-file-extensions-to-overrides"
+      "cli": "nx",
+      "version": "21.2.0-beta.3",
+      "requires": { "@angular/core": ">=20.0.0" },
+      "description": "Update the @angular/cli package version to ~20.0.0.",
+      "factory": "./src/migrations/update-21-2-0/update-angular-cli",
+      "package": "@nx/angular",
+      "name": "update-angular-cli-version-20-0-0"
     },
     {
-      "cli": "nx",
-      "version": "20.3.0-beta.2",
-      "description": "If workspace includes Module Federation projects, ensure the new @nx/module-federation package is installed.",
-      "factory": "./src/migrations/update-20-3-0/ensure-nx-module-federation-package",
+      "version": "21.2.0-beta.3",
+      "requires": { "@angular/core": ">=20.0.0" },
+      "description": "Migrate imports of `provideServerRendering` from `@angular/platform-server` to `@angular/ssr`.",
+      "factory": "./src/migrations/update-21-2-0/migrate-provide-server-rendering-import",
       "package": "@nx/angular",
-      "name": "ensure-nx-module-federation-package"
+      "name": "migrate-provide-server-rendering-import"
+    },
+    {
+      "version": "21.2.0-beta.3",
+      "requires": { "@angular/core": ">=20.0.0" },
+      "description": "Replace `provideServerRouting` and `provideServerRoutesConfig` with `provideServerRendering` using `withRoutes`.",
+      "factory": "./src/migrations/update-21-2-0/replace-provide-server-routing",
+      "package": "@nx/angular",
+      "name": "replace-provide-server-routing"
+    },
+    {
+      "version": "21.2.0-beta.3",
+      "requires": { "@angular/core": ">=20.0.0" },
+      "description": "Update the generator defaults to maintain the previous style guide behavior.",
+      "factory": "./src/migrations/update-21-2-0/set-generator-defaults-for-previous-style-guide",
+      "package": "@nx/angular",
+      "name": "set-generator-defaults-for-previous-style-guide"
+    },
+    {
+      "version": "21.2.0-beta.3",
+      "requires": { "@angular/core": ">=20.0.0" },
+      "description": "Update 'moduleResolution' to 'bundler' in TypeScript configurations. You can read more about this here: https://www.typescriptlang.org/tsconfig/#moduleResolution.",
+      "factory": "./src/migrations/update-21-2-0/update-module-resolution",
+      "package": "@nx/angular",
+      "name": "update-module-resolution"
     }
   ]
 }

@@ -10,15 +10,22 @@ import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http
 import { ErrorHandler } from '../handlers';
 import { DEFAULT_ERROR_LOCALIZATIONS, DEFAULT_ERROR_MESSAGES } from '../constants/default-errors';
 import { ConfirmationService } from '../services';
-import { httpErrorConfigFactory } from '../tokens/http-error.token';
+import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
+import { CustomHttpErrorHandlerService } from '../models';
+
+const customHandlerMock: CustomHttpErrorHandlerService = {
+  priority: 100,
+  canHandle: jest.fn().mockReturnValue(true),
+  execute: jest.fn(),
+};
 
 const reporter$ = new Subject();
 
 @NgModule({
   exports: [HttpErrorWrapperComponent],
-  declarations: [HttpErrorWrapperComponent],
+  declarations: [],
   //entryComponents: [HttpErrorWrapperComponent],
-  imports: [CoreTestingModule],
+  imports: [CoreTestingModule, HttpErrorWrapperComponent],
 })
 class MockModule {}
 
@@ -47,14 +54,19 @@ describe('ErrorHandler', () => {
       },
       { provide: APP_BASE_HREF, useValue: '/' },
       {
-        provide: 'HTTP_ERROR_CONFIG',
-        useFactory: httpErrorConfigFactory,
-      },
-      {
         provide: ConfirmationService,
         useValue: {
           error: errorConfirmation,
         },
+      },
+      {
+        provide: CUSTOM_ERROR_HANDLERS,
+        useValue: customHandlerMock,
+        multi: true,
+      },
+      {
+        provide: HTTP_ERROR_CONFIG,
+        useFactory: () => ({}),
       },
     ],
   });
@@ -71,67 +83,26 @@ describe('ErrorHandler', () => {
   });
 
   test('should display HttpErrorWrapperComponent when server error occurs', () => {
-    const createComponent = jest.spyOn(service, 'createErrorComponent');
     const error = new HttpErrorResponse({ status: 500 });
-    const params = {
-      title: {
-        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.title,
-        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
-      },
-      details: {
-        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.details,
-        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
-      },
-      status: 500,
-    };
 
     expect(selectHtmlErrorWrapper()).toBeNull();
-
     httpErrorReporter.reportError(error);
-
-    expect(createComponent).toHaveBeenCalledWith(params);
+    expect(selectHtmlErrorWrapper()).not.toBeNull();
   });
 
   test('should display HttpErrorWrapperComponent when authorize error occurs', () => {
-    const createComponent = jest.spyOn(service, 'createErrorComponent');
     const error = new HttpErrorResponse({ status: 403 });
-    const params = {
-      title: {
-        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.title,
-        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
-      },
-      details: {
-        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.details,
-        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
-      },
-      status: 403,
-    };
 
     expect(selectHtmlErrorWrapper()).toBeNull();
-
     httpErrorReporter.reportError(error);
-
-    expect(createComponent).toHaveBeenCalledWith(params);
+    expect(selectHtmlErrorWrapper()).not.toBeNull();
   });
 
   test('should display HttpErrorWrapperComponent when unknown error occurs', () => {
-    const createComponent = jest.spyOn(service, 'createErrorComponent');
-    const error = new HttpErrorResponse({
-      status: 0,
-      statusText: 'Unknown Error',
-    });
-    const params = {
-      title: {
-        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
-        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
-      },
-      details: error.message,
-      isHomeShow: false,
-    };
+    const error = new HttpErrorResponse({ status: 0 });
 
     httpErrorReporter.reportError(error);
-
-    expect(createComponent).toHaveBeenCalledWith(params);
+    expect(selectHtmlErrorWrapper()).not.toBeNull();
   });
 
   test('should call error method of ConfirmationService when not found error occurs', () => {
@@ -215,6 +186,15 @@ describe('ErrorHandler', () => {
       CONFIRMATION_BUTTONS,
     );
   });
+
+  test('should delegate to CUSTOM_ERROR_HANDLERS and call execute if canHandle is true', () => {
+    const error = new HttpErrorResponse({ status: 418 });
+
+    httpErrorReporter.reportError(error);
+
+    expect(customHandlerMock.canHandle).toHaveBeenCalledWith(error);
+    expect(customHandlerMock.execute).toHaveBeenCalled();
+  });
 });
 
 @Component({
@@ -227,9 +207,9 @@ class DummyErrorComponent {
 }
 
 @NgModule({
-  declarations: [DummyErrorComponent],
+  declarations: [],
   exports: [DummyErrorComponent],
-  entryComponents: [DummyErrorComponent],
+  imports: [DummyErrorComponent],
 })
 class ErrorModule {}
 
@@ -309,15 +289,6 @@ class ErrorModule {}
 //     });
 //   });
 // });
-
-export function customHttpErrorConfigFactory() {
-  return httpErrorConfigFactory({
-    errorScreen: {
-      component: DummyErrorComponent,
-      forWhichErrors: [401, 403, 404, 500],
-    },
-  });
-}
 
 function removeIfExistsInDom(errorSelector: () => HTMLDivElement | null) {
   const abpError = errorSelector();

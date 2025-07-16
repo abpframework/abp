@@ -134,6 +134,25 @@ namespace MyProject
 }
 ```
 
+##### Custom Job Name
+
+You can configure `GetBackgroundJobName` delegate of the `AbpBackgroundJobOptions` to change the default job name.
+
+```csharp
+Configure<AbpBackgroundJobOptions>(options =>
+{
+    options.GetBackgroundJobName = (jobType) =>
+    {
+        if (jobTyep == typeof(EmailSendingArgs))
+        {
+            return "emails";
+        }
+
+        return BackgroundJobNameAttribute.GetName(jobType);
+    };
+});
+```
+
 ### Queue a Job Item
 
 Now, you can queue an email sending job using the `IBackgroundJobManager` service:

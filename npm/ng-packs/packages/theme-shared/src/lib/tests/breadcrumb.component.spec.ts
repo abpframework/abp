@@ -33,8 +33,14 @@ describe('BreadcrumbComponent', () => {
         useFactory: () => mockRoutesService(),
       },
     ],
-    declarations: [LocalizationPipe, BreadcrumbComponent, BreadcrumbItemsComponent],
-    imports: [RouterModule,HttpClientModule],
+    declarations: [],
+    imports: [
+      RouterModule,
+      HttpClientModule,
+      LocalizationPipe,
+      BreadcrumbComponent,
+      BreadcrumbItemsComponent,
+    ],
     routes: [
       {
         path: '',

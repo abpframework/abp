@@ -1,4 +1,4 @@
-@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.DatePickerModel
 
 <h2>Date Picker & Date Range Picker</h2>
@@ -775,5 +775,7 @@ public class DatePickerModel : PageModel
 </div>
 </div>
 
+<hr />
 
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpDatePickerTagHelper))
 

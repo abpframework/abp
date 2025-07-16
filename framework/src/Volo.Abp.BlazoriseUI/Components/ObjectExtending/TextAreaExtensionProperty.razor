@@ -1,0 +1,19 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.Localization
+@inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
+        <Field>
+            <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+            <MemoEdit @bind-Text="@Value" AutoSize Disabled="IsReadonlyField">
+                <Feedback>
+                    <ValidationError/>
+                </Feedback>
+            </MemoEdit>
+        </Field>
+    </Validation>
+}

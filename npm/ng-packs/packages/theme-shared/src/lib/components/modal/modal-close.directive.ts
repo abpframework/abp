@@ -2,7 +2,6 @@ import { Directive, HostListener, Optional } from '@angular/core';
 import { ModalComponent } from './modal.component';
 
 @Directive({
-  standalone: false,
   selector: '[abpClose]',
 })
 export class ModalCloseDirective {

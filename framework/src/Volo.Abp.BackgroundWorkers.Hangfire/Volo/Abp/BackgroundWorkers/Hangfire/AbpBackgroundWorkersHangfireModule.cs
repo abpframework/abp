@@ -1,5 +1,4 @@
-﻿using System;
-using Hangfire;
+﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Hangfire;
@@ -23,17 +22,12 @@ public class AbpBackgroundWorkersHangfireModule : AbpModule
         if (!options.IsEnabled)
         {
             var hangfireOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
-            hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
+            context.ServiceProvider.GetRequiredService<JobStorage>();
+            hangfireOptions.BackgroundJobServerFactory = _ => null;
         }
         
         context.ServiceProvider
             .GetRequiredService<HangfireBackgroundWorkerManager>()
             .Initialize(); 
-    }
-    
-    private BackgroundJobServer? CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
-    {
-        serviceProvider.GetRequiredService<JobStorage>();
-        return null;
     }
 }

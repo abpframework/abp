@@ -1,4 +1,6 @@
-﻿@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
+﻿@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.ContentTitle
@@ -12,6 +14,8 @@
 @using Volo.Abp.Ui.LayoutHooks
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
+@inject IOptions<AbpThemingOptions> ThemingOptions
+
 @{
     Layout = null;
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
@@ -41,6 +45,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="~/themes/basic/favicon.svg" type="image/svg+xml">
+    @if (!ThemingOptions.Value.BaseUrl.IsNullOrWhiteSpace())
+    {
+        <base href="@ThemingOptions.Value.BaseUrl" />
+    }
 
     <title>@pageTitle</title>
 

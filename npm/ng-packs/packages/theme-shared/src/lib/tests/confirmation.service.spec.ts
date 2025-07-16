@@ -10,8 +10,8 @@ import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from '../tokens/confir
 
 @NgModule({
   exports: [ConfirmationComponent],
-  declarations: [ConfirmationComponent],
-  imports: [CoreTestingModule.withConfig()],
+  declarations: [],
+  imports: [CoreTestingModule.withConfig(), ConfirmationComponent],
   providers: [{ provide: CONFIRMATION_ICONS, useValue: DEFAULT_CONFIRMATION_ICONS }],
 })
 export class MockModule {}

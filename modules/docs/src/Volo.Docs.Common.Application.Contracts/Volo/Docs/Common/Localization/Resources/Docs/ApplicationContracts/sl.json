@@ -1,0 +1,7 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Skupna dokumentna upravljanja",
+    "Permission:PdfDownload": "Prenos PDF"
+  }
+}

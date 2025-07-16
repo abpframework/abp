@@ -23,7 +23,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
             return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var image = await Image.LoadAsync(stream, cancellationToken);
+        using var image = await Image.LoadAsync(stream, cancellationToken);
 
         if (!CanResize(image.Metadata.DecodedImageFormat!.DefaultMimeType))
         {
@@ -49,7 +49,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         }
         catch
         {
-            memoryStream.Dispose();
+            await memoryStream.DisposeAsync();
             throw;
         }
     }
@@ -76,7 +76,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
 
         var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
 
-        result.Result.Dispose();
+        await result.Result.DisposeAsync();
 
         return new ImageResizeResult<byte[]>(newBytes, result.State);
     }

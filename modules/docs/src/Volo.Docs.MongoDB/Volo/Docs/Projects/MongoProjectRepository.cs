@@ -20,7 +20,12 @@ namespace Volo.Docs.Projects
         {
         }
 
-        public virtual async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Project>> GetListAsync(
+            string sorting, 
+            int maxResultCount, 
+            int skipCount,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
         {
             var projects = await (await GetQueryableAsync(cancellationToken)).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting).PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

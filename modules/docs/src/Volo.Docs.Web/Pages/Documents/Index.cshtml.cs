@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
-using Volo.Docs.Projects;
+using Volo.Docs.Common.Projects;
 
 namespace Volo.Docs.Pages.Documents
 {

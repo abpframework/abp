@@ -23,7 +23,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.BackgroundWorkers.Hangfire](https://www.nuget.org/packages/Volo.Abp.BackgroundWorkers.Hangfire) NuGet package to your project:
 
    ````
-   Install-Package Volo.Abp.BackgroundWorkers.Hangfire
+   dotnet add package Volo.Abp.BackgroundWorkers.Hangfire
    ````
 
 2. Add the `AbpBackgroundWorkersHangfireModule` to the dependency list of your module:

@@ -6,6 +6,12 @@ OpenIddict provides an event-driven model ([event models](https://documentation.
 
 In this article, we will explore OpenIddict event models, their key use cases, and how to implement them effectively.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Understanding OpenIddict Event Model
 
 OpenIddict events are primarily used within the OpenIddict server component. These events provide hooks into the OpenID Connect flow, allowing developers to modify behavior at different stages of authentication & authorization processes.
@@ -100,6 +106,12 @@ That's it! After these steps, your `SignOutEventHandler.HandleAsync()` method sh
 * and other 40+ server events...
 
 Each event provides access to the relevant context, allowing you to access and modify the authentication flow's behavior.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

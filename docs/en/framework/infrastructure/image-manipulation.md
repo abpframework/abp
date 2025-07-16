@@ -22,7 +22,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.Imaging.Abstractions](https://www.nuget.org/packages/Volo.Abp.Imaging.Abstractions) NuGet package to your project:
 
 ```
-Install-Package Volo.Abp.Imaging.Abstractions
+dotnet add package Volo.Abp.Imaging.Abstractions
 ```
 
 2. Add the `AbpImagingAbstractionsModule` to the dependency list of your module:
@@ -240,7 +240,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.Imaging.MagickNet](https://www.nuget.org/packages/Volo.Abp.Imaging.MagickNet) NuGet package to your project:
 
 ```
-Install-Package Volo.Abp.Imaging.MagickNet
+dotnet add package Volo.Abp.Imaging.MagickNet
 ```
 
 2. Add `AbpImagingMagickNetModule` to your [module](../architecture/modularity/basics.md)'s dependency list:
@@ -284,7 +284,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.Imaging.ImageSharp](https://www.nuget.org/packages/Volo.Abp.Imaging.ImageSharp) NuGet package to your project:
 
 ```
-Install-Package Volo.Abp.Imaging.ImageSharp
+dotnet add package Volo.Abp.Imaging.ImageSharp
 ```
 
 2. Add `AbpImagingImageSharpModule` to your [module](../architecture/modularity/basics.md)'s dependency list:
@@ -350,7 +350,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.Imaging.AspNetCore](https://www.nuget.org/packages/Volo.Abp.Imaging.AspNetCore) NuGet package to your project:
 
 ```
-Install-Package Volo.Abp.Imaging.AspNetCore
+dotnet add package Volo.Abp.Imaging.AspNetCore
 ```
 
 2. Add `AbpImagingAspNetCoreModule` to your [module](../architecture/modularity/basics.md)'s dependency list:

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
+using OpenIddict.Core;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.DistributedLocking;
@@ -65,15 +66,15 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .SetDefaultTokenEntity<OpenIddictTokenModel>();
 
                 builder
-                    .AddApplicationStore<AbpOpenIddictApplicationStore>()
-                    .AddAuthorizationStore<AbpOpenIddictAuthorizationStore>()
-                    .AddScopeStore<AbpOpenIddictScopeStore>()
-                    .AddTokenStore<AbpOpenIddictTokenStore>();
+                    .ReplaceApplicationStore<OpenIddictApplicationModel, AbpOpenIddictApplicationStore>()
+                    .ReplaceAuthorizationStore<OpenIddictAuthorizationModel, AbpOpenIddictAuthorizationStore>()
+                    .ReplaceScopeStore<OpenIddictScopeModel, AbpOpenIddictScopeStore>()
+                    .ReplaceTokenStore<OpenIddictTokenModel, AbpOpenIddictTokenStore>();
 
-                builder.ReplaceApplicationManager(typeof(AbpApplicationManager));
-                builder.ReplaceAuthorizationManager(typeof(AbpAuthorizationManager));
-                builder.ReplaceScopeManager(typeof(AbpScopeManager));
-                builder.ReplaceTokenManager(typeof(AbpTokenManager));
+                builder.ReplaceApplicationManager<OpenIddictApplicationModel, AbpApplicationManager>();
+                builder.ReplaceAuthorizationManager<OpenIddictAuthorizationModel, AbpAuthorizationManager>();
+                builder.ReplaceScopeManager<OpenIddictScopeModel, AbpScopeManager>();
+                builder.ReplaceTokenManager<OpenIddictTokenModel, AbpTokenManager>();
 
                 builder.Services.TryAddScoped(provider => (IAbpApplicationManager)provider.GetRequiredService<IOpenIddictApplicationManager>());
 

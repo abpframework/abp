@@ -41,6 +41,8 @@ Start your worker in the `StartAsync` (which is called when the application begi
 
 Assume that we want to make a user passive, if the user has not logged in to the application in last 30 days. `AsyncPeriodicBackgroundWorkerBase` class simplifies to create periodic workers, so we will use it for the example below:
 
+> You can use `CronExpression` property to set the cron expression for the background worker if you will use the [Hangfire Background Worker Manager](./hangfire.md) or [Quartz Background Worker Manager](./quartz.md).
+
 ````csharp
 public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 {
@@ -52,6 +54,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
             serviceScopeFactory)
     {
         Timer.Period = 600000; //10 minutes
+        //CronExpression = "0 0/10 * * * ?"; //Run every 10 minutes, Only for Quartz or Hangfire integration.
     }
 
     protected async override Task DoWorkAsync(

@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Podatke koje ste dostavili već je promijenio drugi korisnik/klijent. Odbacite promjene koje ste napravili i pokušajte ispočetka.",
     "Error": "Greška",
     "UnhandledException": "Neobrađena iznimka!",
+    "Authorizing": "Ovjeravanje…",
     "401Message": "Neovlašteno",
     "403Message": "Zabranjeno",
     "404Message": "Stranica nije pronađena",

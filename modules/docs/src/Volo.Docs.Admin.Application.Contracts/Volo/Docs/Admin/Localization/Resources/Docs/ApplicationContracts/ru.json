@@ -1,7 +1,7 @@
 {
   "culture": "ru",
   "texts": {
-    "Permission:DocumentManagement": "Управление документацией",
+    "Permission:DocumentManagement": "Управление документами",
     "Permission:Projects": "Проекты",
     "Permission:Edit": "Редактировать",
     "Permission:Delete": "Удалить",
@@ -57,6 +57,18 @@
     "LastCachedTime": "Время кеширования",
     "Project": "Проект",
     "AdvancedFilters": "Расширенные фильтры",
-    "RemoveCacheAndReIndexConfirmation": "Документ \"{0}\" будет удален из кэша и переиндексирован. Вы подтверждаете?"
+    "RemoveCacheAndReIndexConfirmation": "Документ \"{0}\" будет удален из кэша и переиндексирован. Вы подтверждаете?",
+    "GeneratePdf": "Генерировать PDF",
+    "Generating": "Генерация...",
+    "Language": "Язык",
+    "ForceToGenerateNewPdf": "Принудительное создание нового PDF",
+    "PdfGeneratedSuccessfully": "PDF успешно сгенерирован",
+    "GenerateAndDownloadPdf": "Сгенерировать и скачать PDF",
+    "PdfFileDeletionWarningMessage": "Вы уверены, что хотите удалить файл PDF \"{0}\"?",
+    "ManagePdfFiles": "Управление PDF файлами",
+    "Permission:ManagePdfFiles": "Управление PDF файлами",
+    "PdfDeletedSuccessfully": "PDF файл успешно удален",
+    "PdfGenerationStarted": "Началась генерация PDF",
+    "PdfGenerationStartedInfoMessage": "Началась генерация PDF. После завершения вы можете проверить, добавлен ли файл в раздел PDF файлов."
   }
 }

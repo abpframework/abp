@@ -27,7 +27,7 @@ The following diagram contains the core components of the **ABP Platform** and s
 
 ABP offers a complete architectural model to build modern enterprise software solutions. Here, the fundamental architectural structures offered and first-class supported by ABP:
 
-* [Domain Driven Design](https://abp.io/docs/latest/framework/architecture/domain-driven-design)
+* [Domain Driven Design (DDD)](https://abp.io/docs/latest/framework/architecture/domain-driven-design)
 * [Microservices](https://abp.io/docs/latest/framework/architecture/microservices)
 * [Modularity](https://abp.io/docs/latest/framework/architecture/modularity/basics)
 * [Multi-Tenancy](https://abp.io/docs/latest/framework/architecture/multi-tenancy)

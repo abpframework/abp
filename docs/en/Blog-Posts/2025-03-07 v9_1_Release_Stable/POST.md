@@ -67,7 +67,7 @@ As always, exciting articles have been contributed by the ABP community. I will 
 * [Containerization: Blazor WASM + JWT Web API => Docker](https://abp.io/community/articles/containerization-blazor-wasm-jwt-web-api-docker-i3eirlsf) by [Bart Van Hoey](https://abp.io/community/members/bartvanhoey)
 * [Configuring Post-Logout Redirect URI in ABP Based Blazor Applications with OpenIddict](https://abp.io/community/articles/configuring-postlogout-redirect-uri-in-abp-based-blazor-applications-with-openiddict-1t84suxg) by [Engincan Veske](https://github.com/EngincanV)
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
 ### ABP Community Talks 2025.2: Real World Problems and Solutions with AI
 

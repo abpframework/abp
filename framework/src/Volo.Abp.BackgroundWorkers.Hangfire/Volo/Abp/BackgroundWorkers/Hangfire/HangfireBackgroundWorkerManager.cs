@@ -1,14 +1,15 @@
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
+using Hangfire.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Hangfire;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
@@ -55,10 +56,21 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
             }
             case AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase:
             {
-                var timer = worker.GetType().GetProperty("Timer", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(worker);
-                var period = worker is AsyncPeriodicBackgroundWorkerBase ? ((AbpAsyncTimer?)timer)?.Period : ((AbpTimer?)timer)?.Period;
+                int? period = null;
+                string? CronExpression = null;
 
-                if (period == null)
+                if (worker is AsyncPeriodicBackgroundWorkerBase asyncPeriodicBackgroundWorkerBase)
+                {
+                    period = asyncPeriodicBackgroundWorkerBase.Period;
+                    CronExpression = asyncPeriodicBackgroundWorkerBase.CronExpression;
+                }
+                else if (worker is PeriodicBackgroundWorkerBase periodicBackgroundWorkerBase)
+                {
+                    period = periodicBackgroundWorkerBase.Period;
+                    CronExpression = periodicBackgroundWorkerBase.CronExpression;
+                }
+
+                if (period == null && CronExpression.IsNullOrWhiteSpace())
                 {
                     return;
                 }
@@ -66,35 +78,42 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                 var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
                 var workerAdapter = (Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker)!;
 
-                if (workerAdapter.RecurringJobId.IsNullOrWhiteSpace())
-                {
-                    RecurringJob.AddOrUpdate(
-                        () => workerAdapter.DoWorkAsync(cancellationToken),
-                        GetCron(period.Value),
-                        workerAdapter.TimeZone ,
-                        workerAdapter.Queue.IsNullOrWhiteSpace() ? defaultQueue : defaultQueuePrefix + workerAdapter.Queue);
-                }
-                else
-                {
+                Expression<Func<Task>> methodCall = () => workerAdapter.DoWorkAsync(cancellationToken);
+                var recurringJobId = !workerAdapter.RecurringJobId.IsNullOrWhiteSpace() ? workerAdapter.RecurringJobId : GetRecurringJobId(worker, methodCall);
 
-                    RecurringJob.AddOrUpdate(
-                        workerAdapter.RecurringJobId,
-                        workerAdapter.Queue.IsNullOrWhiteSpace() ? defaultQueue : defaultQueuePrefix + workerAdapter.Queue,
-                        () => workerAdapter.DoWorkAsync(cancellationToken),
-                        GetCron(period.Value),
-                        new RecurringJobOptions
-                        {
-                            TimeZone = workerAdapter.TimeZone
-                        });
-                }
-
-
+                RecurringJob.AddOrUpdate(
+                    recurringJobId,
+                    workerAdapter.Queue.IsNullOrWhiteSpace() ? defaultQueue : defaultQueuePrefix + workerAdapter.Queue,
+                    methodCall,
+                    CronExpression ?? GetCron(period!.Value),
+                    new RecurringJobOptions
+                    {
+                        TimeZone = workerAdapter.TimeZone
+                    });
                 break;
             }
             default:
                 await base.AddAsync(worker, cancellationToken);
                 break;
         }
+    }
+
+    private readonly static MethodInfo? GetRecurringJobIdMethodInfo = typeof(RecurringJob).GetMethod("GetRecurringJobId", BindingFlags.NonPublic | BindingFlags.Static);
+    protected virtual string? GetRecurringJobId(IBackgroundWorker worker, Expression<Func<Task>> methodCall)
+    {
+        string? recurringJobId = null;
+        if (GetRecurringJobIdMethodInfo != null)
+        {
+            var job = Job.FromExpression(methodCall);
+            recurringJobId = (string)GetRecurringJobIdMethodInfo.Invoke(null, [job])!;
+        }
+
+        if (recurringJobId.IsNullOrWhiteSpace())
+        {
+            recurringJobId = $"HangfirePeriodicBackgroundWorkerAdapter<{worker.GetType().Name}>.DoWorkAsync";
+        }
+
+        return recurringJobId;
     }
 
     protected virtual string GetCron(int period)
@@ -120,8 +139,7 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
         }
         else
         {
-            throw new AbpException(
-                $"Cannot convert period: {period} to cron expression, use HangfireBackgroundWorkerBase to define worker");
+            throw new AbpException($"Cannot convert period: {period} to cron expression, use HangfireBackgroundWorkerBase to define worker");
         }
 
         return cron;

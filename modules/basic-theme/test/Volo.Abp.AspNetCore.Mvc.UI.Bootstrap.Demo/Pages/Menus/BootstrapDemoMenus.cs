@@ -11,6 +11,7 @@ public class BootstrapDemoMenus
         public const string Alerts = Root + ".Alerts";
         public const string Badges = Root + ".Badges";
         public const string Borders = Root + ".Borders";
+        public const string Blockquotes = Root + ".Blockquotes";
         public const string Breadcrumbs = Root + ".Breadcrumbs";
         public const string ButtonGroups = Root + ".ButtonGroups";
         public const string Buttons = Root + ".Buttons";

@@ -82,6 +82,9 @@
     "Feature:AuditLoggingGroup": "Zapisivanje revizije",
     "Feature:AuditLoggingEnable": "Omogućena stranica za bilježenje revizije",
     "Feature:AuditLoggingEnableDescription": "Omogućite stranicu za bilježenje revizije u aplikaciji.",
-    "TenantId": "ID stanara"
+    "TenantId": "ID stanara",
+    "DownloadLinkExplanation": "Datoteku možete preuzeti pomoću veze u nastavku do {0} (UTC)",
+    "DownloadNow": "Preuzmi odmah",
+    "TryAgainMessage": "Molimo pokušajte ponovno. Ako se problem nastavi, obratite se podršci."
   }
 }

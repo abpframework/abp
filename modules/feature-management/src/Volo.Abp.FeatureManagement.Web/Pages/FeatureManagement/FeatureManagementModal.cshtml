@@ -21,6 +21,7 @@
 }
 
 <abp-script src="/Pages/FeatureManagement/feature-management-modal.js" />
+<abp-style src="/Pages/FeatureManagement/feature-management-modal.css" />
 
 <form method="post" asp-page="/FeatureManagement/FeatureManagementModal" data-script-class="abp.modals.FeatureManagement" id="FeatureManagementForm">
     <abp-modal id="featureManagmentModal" size="Large">
@@ -39,49 +40,45 @@
                         <abp-tab title="@featureGroup.DisplayName" name="v-pills-tab-@featureGroup.GetNormalizedGroupName()">
                             <h4>@featureGroup.DisplayName</h4>
                             <hr class="mt-2 mb-3"/>
-                            <div class="custom-scroll-content">
+                            <div class="custom-scroll-content" style="height: 400px;">
                                 <div class="pl-1 pt-1">
                                     @for (var j = 0; j < featureGroup.Features.Count; j++)
                                     {
                                         var feature = featureGroup.Features[j];
+                                        var disabled = Model.IsDisabled(feature);
                                         <div class="mt-2">
 
+                                            <input type="text" abp-id-name="@Model.FeatureGroups[i].Features[j].IsDisabled" value="@(disabled.ToString())" hidden/>
                                             <input type="text" abp-id-name="@Model.FeatureGroups[i].Features[j].Type" value="@feature.ValueType?.Name" hidden/>
-
                                             @if (feature.ValueType is ToggleStringValueType)
                                             {
                                                 <abp-input asp-for="@feature.Value"
-                                                           type="checkbox"
-                                                           class="d-inline"
-                                                           abp-id-name="@Model.FeatureGroups[i].Features[j].BoolValue"
-                                                           label="@feature.DisplayName"
-                                                           group-data-feature-name="@feature.Name"
-                                                           group-data-parent-name="@(feature.ParentName ?? "")"
-                                                           group-style="margin-inline-start: @(feature.Depth * 20)px"/>
-
-                                                @if (feature.Description != null)
+                                                    type="checkbox"
+                                                    class="d-inline"
+                                                    abp-id-name="@Model.FeatureGroups[i].Features[j].BoolValue"
+                                                    label="@Model.GetShownName(feature)"
+                                                    disabled="disabled"
+                                                    group-data-feature-name="@feature.Name"
+                                                    group-data-parent-name="@(feature.ParentName ?? "")"
+                                                    group-style="margin-inline-start: @(feature.Depth * 20)px"/>
+                                                if (feature.Description != null)
                                                 {
                                                     <div class="form-text" style="margin-inline-start: @(feature.Depth * 20)px">@feature.Description</div>
                                                 }
-
                                             }
 
                                             @if (feature.ValueType is FreeTextStringValueType)
                                             {
-                                                var type = "text";
-                                                if(feature.ValueType.Validator is NumericValueValidator)
-                                                {
-                                                    type = "number";
-                                                }
-
+                                                var type = feature.ValueType.Validator is NumericValueValidator ? "number" : "text";
                                                 <abp-input asp-for="@feature.Value"
-                                                           label="@feature.DisplayName"
-                                                           abp-id-name="@Model.FeatureGroups[i].Features[j].Value"
-                                                           type="@type"
-                                                           group-data-feature-name="@feature.Name"
-                                                           group-data-parent-name="@(feature.ParentName ?? "")"
-                                                           group-style="margin-inline-start: @(feature.Depth * 25)px"/>
-                                                @if (feature.Description != null)
+                                                    label="@Model.GetShownName(feature)"
+                                                    abp-id-name="@Model.FeatureGroups[i].Features[j].Value"
+                                                    type="@type"
+                                                    disabled="disabled"
+                                                    group-data-feature-name="@feature.Name"
+                                                    group-data-parent-name="@(feature.ParentName ?? "")"
+                                                    group-style="margin-inline-start: @(feature.Depth * 25)px"/>
+                                                if (feature.Description != null)
                                                 {
                                                     <div class="form-text" style="margin-inline-start: @(feature.Depth * 25)px">@feature.Description</div>
                                                 }
@@ -90,19 +87,12 @@
                                             @if (feature.ValueType is SelectionStringValueType selectType)
                                             {
                                                 <div data-feature-name="@feature.Name" data-parent-name="@(feature.ParentName ?? "")" style="margin-inline-start: @(feature.Depth * 25)px" class="mb-3">
-                                                    <label class="form-label" for="@feature.Name">@feature.DisplayName</label>
-
-                                                    <select id="@feature.Name" name="FeatureGroups[@i].Features[@j].Value" class="form-select">
+                                                    <label class="form-label" for="@feature.Name">@Model.GetShownName(feature)</label>
+                                                    <select id="@feature.Name" name="FeatureGroups[@i].Features[@j].Value" class="form-select" @(disabled ? "disabled" : "")>
                                                         @foreach (var item in selectType.ItemSource.Items)
                                                         {
-                                                            if (item.Value == feature.Value)
-                                                            {
-                                                                <option value="@item.Value" selected="selected"> @CreateHtmlLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name) </option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@item.Value"> @CreateHtmlLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name) </option>
-                                                            }
+                                                            var selected = item.Value == feature.Value ? "selected=\"selected\"" : "";
+                                                            <!option value="@item.Value" @(selected) >@CreateHtmlLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name) </!option>
                                                         }
                                                     </select>
                                                     @if (feature.Description != null)
@@ -111,8 +101,8 @@
                                                     }
                                                 </div>
                                             }
-
                                             <input value="@feature.Name" abp-id-name="@Model.FeatureGroups[i].Features[j].Name" hidden/>
+
                                         </div>
                                     }
                                 </div>

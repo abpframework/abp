@@ -18,8 +18,14 @@ describe('ModalComponent', () => {
   let mockConfirmation$: Subject<Confirmation.Status>;
   const createHost = createHostFactory({
     component: ModalComponent,
-    imports: [RouterTestingModule, NgbModalModule],
-    declarations: [ConfirmationComponent, LocalizationPipe, ButtonComponent],
+    imports: [
+      RouterTestingModule,
+      NgbModalModule,
+      ConfirmationComponent,
+      LocalizationPipe,
+      ButtonComponent,
+    ],
+    declarations: [],
     providers: [
       {
         provide: ConfirmationService,

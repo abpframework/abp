@@ -16,6 +16,7 @@
     "AbpDbConcurrencyErrorMessage": "Gönderdiğiniz veri başka bir kullanıcı/istemci tarafından değiştirilmiş. Lütfen işlemi iptal edip baştan deneyin.",
     "Error": "Hata",
     "UnhandledException": "Yakalanmamış hata!",
+    "Authorizing": "Yetkilendirme…",
     "401Message": "Yetkisiz İşlem",
     "403Message": "İzinsiz",
     "404Message": "Sayfa bulunamadı",

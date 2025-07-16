@@ -83,47 +83,59 @@
             {
               "text": "Overview",
               "path": "tutorials/book-store",
-              "isIndex": true
+              "isIndex": true,
+              "isInSeries": true
             },
             {
               "text": "1: Creating the Server Side",
-              "path": "tutorials/book-store/part-01.md"
+              "path": "tutorials/book-store/part-01.md",
+              "isInSeries": true
+              
             },
             {
               "text": "2: The Book List Page",
-              "path": "tutorials/book-store/part-02.md"
+              "path": "tutorials/book-store/part-02.md",
+              "isInSeries": true
             },
             {
               "text": "3: Creating, Updating and Deleting Books",
-              "path": "tutorials/book-store/part-03.md"
+              "path": "tutorials/book-store/part-03.md",
+              "isInSeries": true
             },
             {
               "text": "4: Integration Tests",
-              "path": "tutorials/book-store/part-04.md"
+              "path": "tutorials/book-store/part-04.md",
+              "isInSeries": true
             },
             {
               "text": "5: Authorization",
-              "path": "tutorials/book-store/part-05.md"
+              "path": "tutorials/book-store/part-05.md",
+              "isInSeries": true
             },
             {
               "text": "6: Authors: Domain Layer",
-              "path": "tutorials/book-store/part-06.md"
+              "path": "tutorials/book-store/part-06.md",
+              "isInSeries": true
             },
             {
               "text": "7: Authors: Database Integration",
-              "path": "tutorials/book-store/part-07.md"
+              "path": "tutorials/book-store/part-07.md",
+              "isInSeries": true
             },
             {
               "text": "8: Authors: Application Layer",
-              "path": "tutorials/book-store/part-08.md"
+              "path": "tutorials/book-store/part-08.md",
+              "isInSeries": true
             },
             {
               "text": "9: Authors: User Interface",
-              "path": "tutorials/book-store/part-09.md"
+              "path": "tutorials/book-store/part-09.md",
+              "isInSeries": true
             },
             {
               "text": "10: Book to Author Relation",
-              "path": "tutorials/book-store/part-10.md"
+              "path": "tutorials/book-store/part-10.md",
+              "isInSeries": true
             }
           ]
         },
@@ -135,27 +147,33 @@
             {
               "text": "Overview",
               "path": "tutorials/book-store-with-abp-suite",
-              "isIndex": true
+              "isIndex": true,
+              "isInSeries": true
             },
             {
               "text": "1: Creating the Solution",
-              "path": "tutorials/book-store-with-abp-suite/part-01.md"
+              "path": "tutorials/book-store-with-abp-suite/part-01.md",
+              "isInSeries": true
             },
             {
               "text": "2: Creating the Books",
-              "path": "tutorials/book-store-with-abp-suite/part-02.md"
+              "path": "tutorials/book-store-with-abp-suite/part-02.md",
+              "isInSeries": true
             },
             {
               "text": "3: Creating the Authors",
-              "path": "tutorials/book-store-with-abp-suite/part-03.md"
+              "path": "tutorials/book-store-with-abp-suite/part-03.md",
+              "isInSeries": true
             },
             {
               "text": "4: Book to Author Relation",
-              "path": "tutorials/book-store-with-abp-suite/part-04.md"
+              "path": "tutorials/book-store-with-abp-suite/part-04.md",
+              "isInSeries": true
             },
             {
               "text": "5: Customizing the Generated Code",
-              "path": "tutorials/book-store-with-abp-suite/part-05.md"
+              "path": "tutorials/book-store-with-abp-suite/part-05.md",
+              "isInSeries": true
             }               
           ]
         },        
@@ -614,7 +632,7 @@
                       "path": "framework/infrastructure/blob-storing/google.md"
                     },
                     {
-                      "text": "Bunny Provider",
+                      "text": "Bunny.Net Provider",
                       "path": "framework/infrastructure/blob-storing/bunny.md"
                     },
                     {
@@ -2070,19 +2088,23 @@
                   "items": [
                     {
                       "text": "Deploy to Azure Web App Service",
-                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/azure-deployment.md"
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/azure-deployment.md",
+                      "isInSeries": true
                     },
                     {
                       "text": "Creating an Azure Web App Service Environment",
-                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step1-create-azure-resources.md"
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step1-create-azure-resources.md",
+                      "isInSeries": true
                     },
                     {
                       "text": "Customizing the Configuration of Your ABP Application",
-                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step2-configuration-application.md"
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step2-configuration-application.md",
+                      "isInSeries": true
                     },
                     {
                       "text": "Deploying Application With GitHub Actions",
-                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step3-deployment-github-action.md"
+                      "path": "solution-templates/layered-web-application/deployment/azure-deployment/step3-deployment-github-action.md",
+                      "isInSeries": true
                     }
                   ]
                 },

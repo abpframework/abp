@@ -22,7 +22,7 @@ If you want to manually install;
 
 1. Add the [Volo.Abp.Security](https://www.nuget.org/packages/Volo.Abp.Security) NuGet package to your project:
 
-   `Install-Package Volo.Abp.Security`
+   `dotnet add package Volo.Abp.Security`
 
 2. Add the `AbpSecurityModule` to the dependency list of your module:
 

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
-using Volo.Docs.Projects;
+using Volo.Docs.Common.Projects;
 using Xunit;
 
 namespace Volo.Docs

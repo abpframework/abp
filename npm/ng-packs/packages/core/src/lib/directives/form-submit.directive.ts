@@ -18,7 +18,6 @@ type Controls = { [key: string]: UntypedFormControl } | UntypedFormGroup[];
  * @deprecated FormSubmitDirective will be removed in V7.0.0. Use `ngSubmit` instead.
  */
 @Directive({
-  standalone: true,
   selector: 'form[ngSubmit][formGroup]',
   providers: [SubscriptionService],
 })

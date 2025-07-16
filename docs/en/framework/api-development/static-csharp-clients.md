@@ -47,7 +47,7 @@ Implement this class in your service application. You can use [auto API controll
 First, add [Volo.Abp.Http.Client](https://www.nuget.org/packages/Volo.Abp.Http.Client) nuget package to your client project:
 
 ````
-Install-Package Volo.Abp.Http.Client
+dotnet add package Volo.Abp.Http.Client
 ````
 
 Then add `AbpHttpClientModule` dependency to your module:

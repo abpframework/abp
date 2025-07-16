@@ -15,7 +15,8 @@ describe('CardComponent', () => {
 
   const createHost = createHostFactory({
     component: CardComponent,
-    declarations: [
+    declarations: [],
+    imports: [
       CardHeaderComponent,
       CardTitleDirective,
       CardSubtitleDirective,
@@ -32,7 +33,7 @@ describe('CardComponent', () => {
         <abp-card>
           <abp-card-header>
             <abp-card-title>Card title</abp-card-title>
-            <p abp-card-subtitle>Card subtitle</p>  
+            <p abp-card-subtitle>Card subtitle</p>
           </abp-card-header>
           <abp-card-body>
             <abp-card-img-top src="https://picsum.photos/200/300"></abp-card-img-top>

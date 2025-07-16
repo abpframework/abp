@@ -421,5 +421,12 @@ var doc = doc || {};
             return originalSet.call(this, key, value);
         };
         
+        $('#DownloadPdfBtn').click(function () {
+            var url = $(this).data('url');
+            if (url) {
+                window.open(url, '_blank');
+            }
+        });
+        
     });
 })(jQuery);

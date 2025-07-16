@@ -25,21 +25,19 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
             return new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported);
         }
 
-        using (var memoryStream = new MemoryStream(bytes))
+        using var memoryStream = new MemoryStream(bytes);
+        var result = await TryResizeAsync(memoryStream, resizeArgs, mimeType, cancellationToken);
+
+        if (result.State != ImageProcessState.Done)
         {
-            var result = await TryResizeAsync(memoryStream, resizeArgs, mimeType, cancellationToken);
-
-            if (result.State != ImageProcessState.Done)
-            {
-                return new ImageResizeResult<byte[]>(bytes, result.State);
-            }
-
-            var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
-
-            result.Result.Dispose();
-
-            return new ImageResizeResult<byte[]>(newBytes, result.State);
+            return new ImageResizeResult<byte[]>(bytes, result.State);
         }
+
+        var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
+
+        result.Result.Dispose();
+
+        return new ImageResizeResult<byte[]>(newBytes, result.State);
     }
 
     public virtual async Task<ImageResizeResult<Stream>> TryResizeAsync(Stream stream, ImageResizeArgs resizeArgs, string? mimeType = null, CancellationToken cancellationToken = default)
@@ -51,21 +49,14 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
 
         var (memoryBitmapStream, memorySkCodecStream) = await CreateMemoryStream(stream);
 
-        using (var original = SKBitmap.Decode(memoryBitmapStream))
-        {
-            using (var resized = original.Resize(new SKImageInfo(resizeArgs.Width, resizeArgs.Height), Options.SKFilterQuality))
-            {
-                using (var image = SKImage.FromBitmap(resized))
-                {
-                    using (var codec = SKCodec.Create(memorySkCodecStream))
-                    {
-                        var memoryStream = new MemoryStream();
-                        image.Encode(codec.EncodedFormat, Options.Quality).SaveTo(memoryStream);
-                        return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
-                    }
-                }
-            }
-        }
+        using var original = SKBitmap.Decode(memoryBitmapStream);
+        using var resized = original.Resize(new SKImageInfo(resizeArgs.Width, resizeArgs.Height), Options.SKFilterQuality);
+        using var image = SKImage.FromBitmap(resized);
+        using var codec = SKCodec.Create(memorySkCodecStream);
+        var memoryStream = new MemoryStream();
+        using var skData = image.Encode(codec.EncodedFormat, Options.Quality);
+        skData.SaveTo(memoryStream);
+        return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
     }
 
     protected virtual async Task<(MemoryStream, MemoryStream)> CreateMemoryStream(Stream stream)

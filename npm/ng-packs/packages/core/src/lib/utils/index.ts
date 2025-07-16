@@ -18,3 +18,4 @@ export * from './queue';
 export * from './route-utils';
 export * from './string-utils';
 export * from './tree-utils';
+export { NgxValidateCoreModule, Validation } from '@ngx-validate/core';

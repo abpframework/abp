@@ -19,9 +19,14 @@ namespace Volo.Docs.Projects
         {
         }
 
-        public virtual async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Project>> GetListAsync(
+            string sorting,
+            int maxResultCount,
+            int skipCount, 
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
         {
-            var projects = await (await GetDbSetAsync()).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting)
+            var projects = await (await GetDbSetAsync()).IncludeDetails(includeDetails).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -63,6 +68,11 @@ namespace Volo.Docs.Projects
         private string NormalizeShortName(string shortName)
         {
             return shortName.ToLower();
+        }
+
+        public async override Task<IQueryable<Project>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }
