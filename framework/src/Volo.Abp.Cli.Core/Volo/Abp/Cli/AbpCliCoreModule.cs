@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Internal;
@@ -67,6 +67,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[CreateMigrationAndRunMigratorCommand.Name] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
+            options.Commands[CleanLogsCommand.Name] = typeof(CleanLogsCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
             options.Commands[ClearDownloadCacheCommand.Name] = typeof(ClearDownloadCacheCommand);
             options.Commands[RecreateInitialMigrationCommand.Name] = typeof(RecreateInitialMigrationCommand);
