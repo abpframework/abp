@@ -12,7 +12,7 @@ public static class CliConsts
 
     public static string GithubHttpClientName = "GithubHttpClient";
 
-    public static string LogoutUrl = CliUrls.WwwAbpIo + "api/license/logout";
+    public static string LogoutUrl = CliUrls.AccountAbpIo + "api/license/logout";
 
     public static string LicenseCodePlaceHolder = @"<LICENSE_CODE/>";
 

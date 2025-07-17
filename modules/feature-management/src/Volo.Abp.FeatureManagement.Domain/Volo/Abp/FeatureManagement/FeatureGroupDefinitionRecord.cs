@@ -6,11 +6,11 @@ namespace Volo.Abp.FeatureManagement;
 
 public class FeatureGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    public string Name { get; set; }
+    public virtual string Name { get; set; }
 
-    public string DisplayName { get; set; }
+    public virtual string DisplayName { get; set; }
 
-    public ExtraPropertyDictionary ExtraProperties { get; protected set; }
+    public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
     public FeatureGroupDefinitionRecord()
     {

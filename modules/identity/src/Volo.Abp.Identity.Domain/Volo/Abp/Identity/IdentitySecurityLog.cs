@@ -8,29 +8,29 @@ namespace Volo.Abp.Identity;
 
 public class IdentitySecurityLog : AggregateRoot<Guid>, IMultiTenant
 {
-    public Guid? TenantId { get; protected set; }
+    public virtual Guid? TenantId { get; protected set; }
 
-    public string ApplicationName { get; protected set; }
+    public virtual string ApplicationName { get; protected set; }
 
-    public string Identity { get; protected set; }
+    public virtual string Identity { get; protected set; }
 
-    public string Action { get; protected set; }
+    public virtual string Action { get; protected set; }
 
-    public Guid? UserId { get; protected set; }
+    public virtual Guid? UserId { get; protected set; }
 
-    public string UserName { get; protected set; }
+    public virtual string UserName { get; protected set; }
 
-    public string TenantName { get; protected set; }
+    public virtual string TenantName { get; protected set; }
 
-    public string ClientId { get; protected set; }
+    public virtual string ClientId { get; protected set; }
 
-    public string CorrelationId { get; protected set; }
+    public virtual string CorrelationId { get; protected set; }
 
-    public string ClientIpAddress { get; protected set; }
+    public virtual string ClientIpAddress { get; protected set; }
 
-    public string BrowserInfo { get; protected set; }
+    public virtual string BrowserInfo { get; protected set; }
 
-    public DateTime CreationTime { get; protected set; }
+    public virtual DateTime CreationTime { get; protected set; }
 
     protected IdentitySecurityLog()
     {

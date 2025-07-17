@@ -1,5 +1,14 @@
 [
   {
+    "version": "9.2.2",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.2.2"
+    }
+  },
+  {
     "version": "9.2.1",
     "releaseDate": "",
     "type": "stable",
