@@ -82,7 +82,8 @@ public interface IProductIntegrationService : IApplicationService
 
 We've defined the integration service interface. Now, you can implement it in the  `ModularCrm.Catalog` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like this:
 
-![visual-studio-product-integration-service-implementation](images/visual-studio-product-integration-service-implementation.png)
+<img width="781" height="379" alt="{9F29AD1A-2E2B-42D5-B4E0-90A9771ADAE4}" src="https://github.com/user-attachments/assets/df0c0529-6137-484d-ad78-601d8abe0757" />
+
 
 Open the `ProductIntegrationService.cs` file and replace its content with the following code block:
 
