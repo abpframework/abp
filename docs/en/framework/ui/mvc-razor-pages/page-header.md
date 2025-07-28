@@ -6,6 +6,22 @@
 
 `IPageLayout` can be injected in any page/view to set the page header properties.
 
+### RenderLayoutElements
+
+The `RenderLayoutElements` property controls whether the application layout (navigation menu, toolbar, etc.) should be rendered around the page content:
+
+```csharp
+@inject IPageLayout PageLayout
+@{
+    PageLayout.RenderLayoutElements = false; // Hide navigation and layout elements
+}
+```
+
+* When set to `true` (default), the full application layout including navigation menu is rendered.
+* When set to `false`, only the page content is rendered without the surrounding layout elements.
+* This is useful for pages public pages, error pages, or embedded content where you want a clean layout without navigation.
+* This is not `Empty` Layout, it's still the same layout with related page, but without the navigation menu, toolbar and footer. All the layout hooks are still available.
+
 ### Page Title
 
 Page Title can be set as shown in the example below:

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP Embedding Auto-Height Demo</title>
+    <link rel="stylesheet" href="../src/abp-embedding.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            margin: 40px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .demo-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .status {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ABP Embedding Auto-Height Demo</h1>
+    
+    <div class="demo-section">
+        <h3>Basic Auto-Height Example</h3>
+        <p>This iframe will automatically resize to match its content height:</p>
+        
+        <abp-embedding 
+            id="basicExample"
+            src="test-iframe-content.html" 
+            width="100%" 
+            auto-height="true">
+        </abp-embedding>
+        
+        <div class="status" id="basicStatus">Status: Loading...</div>
+        
+        <button onclick="toggleAutoHeight('basicExample')">Toggle Auto-Height</button>
+        <button onclick="requestHeight('basicExample')">Request Height Update</button>
+        <button onclick="debugCurrentHeight('basicExample')">Debug Height</button>
+    </div>
+    
+    <div class="demo-section">
+        <h3>Programmatic Example</h3>
+        <p>This example shows how to enable auto-height programmatically with custom options:</p>
+        
+        <abp-embedding 
+            id="programmaticExample"
+            src="test-iframe-content.html" 
+            width="100%" 
+            height="300px">
+        </abp-embedding>
+        
+        <div class="status" id="programmaticStatus">Status: Auto-height disabled</div>
+        
+        <button onclick="enableAutoHeightWithOptions()">Enable Auto-Height with Options</button>
+        <button onclick="disableAutoHeight('programmaticExample')">Disable Auto-Height</button>
+        <button onclick="debugCurrentHeight('programmaticExample')">Debug Height</button>
+    </div>
+    
+    <div class="demo-section">
+        <h3>Event Monitoring</h3>
+        <p>Monitor events from the embedding component:</p>
+        
+        <div class="status" id="eventLog">Events will appear here...</div>
+        <button onclick="clearEventLog()">Clear Events</button>
+    </div>
+
+    <script src="../src/abp-embedding.js"></script>
+    <script>
+        // Event monitoring
+        function logEvent(message) {
+            const eventLog = document.getElementById('eventLog');
+            const timestamp = new Date().toLocaleTimeString();
+            eventLog.innerHTML += `[${timestamp}] ${message}<br>`;
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+
+        function clearEventLog() {
+            document.getElementById('eventLog').innerHTML = 'Events cleared...<br>';
+        }
+
+        // Set up event listeners for all embedding elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const embeddingElements = document.querySelectorAll('abp-embedding');
+            
+            embeddingElements.forEach(element => {
+                element.addEventListener('iframe-loaded', function(event) {
+                    logEvent(`${element.id}: Iframe loaded`);
+                    updateStatus(element.id, 'Iframe loaded');
+                });
+                
+                element.addEventListener('height-updated', function(event) {
+                    const detail = event.detail;
+                    logEvent(`${element.id}: Height updated from ${detail.originalHeight}px to ${detail.appliedHeight}px`);
+                    updateStatus(element.id, `Height: ${detail.appliedHeight}px`);
+                    
+                    if (detail.wasConstrained) {
+                        logEvent(`${element.id}: Height was constrained (original: ${detail.originalHeight}px)`);
+                    }
+                });
+                
+                element.addEventListener('iframe-message', function(event) {
+                    logEvent(`${element.id}: Received message: ${JSON.stringify(event.detail.data)}`);
+                });
+            });
+        });
+
+        function updateStatus(elementId, status) {
+            const statusElement = document.getElementById(elementId.replace('Example', 'Status'));
+            if (statusElement) {
+                statusElement.textContent = `Status: ${status}`;
+            }
+        }
+
+        // Demo functions
+        function toggleAutoHeight(elementId) {
+            const element = document.getElementById(elementId);
+            if (element.hasAttribute('auto-height')) {
+                abp.embedding.disableAutoHeight(element);
+                updateStatus(elementId, 'Auto-height disabled');
+                logEvent(`${elementId}: Auto-height disabled`);
+            } else {
+                abp.embedding.enableAutoHeight(element);
+                updateStatus(elementId, 'Auto-height enabled');
+                logEvent(`${elementId}: Auto-height enabled`);
+            }
+        }
+
+        function requestHeight(elementId) {
+            const element = document.getElementById(elementId);
+            element.requestHeightUpdate();
+            logEvent(`${elementId}: Height update requested`);
+        }
+
+        function enableAutoHeightWithOptions() {
+            const element = document.getElementById('programmaticExample');
+            abp.embedding.enableAutoHeight(element, {
+                minHeight: 150,
+                maxHeight: 800,
+                watchForChanges: true
+            });
+            updateStatus('programmaticExample', 'Auto-height enabled with custom options');
+            logEvent('programmaticExample: Auto-height enabled with custom options (min: 150px, max: 800px)');
+        }
+
+        function debugCurrentHeight(elementId) {
+            const element = document.getElementById(elementId);
+            const iframe = element.getIframe();
+            if (iframe) {
+                const computedStyle = window.getComputedStyle(iframe);
+                const elementStyle = window.getComputedStyle(element);
+                
+                logEvent(`${elementId} DEBUG:`);
+                logEvent(`  Iframe height: ${iframe.style.height} (computed: ${computedStyle.height})`);
+                logEvent(`  Iframe min-height: ${iframe.style.minHeight} (computed: ${computedStyle.minHeight})`);
+                logEvent(`  Element height: ${element.style.height} (computed: ${elementStyle.height})`);
+                logEvent(`  Element classes: ${element.className}`);
+                logEvent(`  Auto-height attr: ${element.hasAttribute('auto-height')}`);
+            }
+        }
+
+        function disableAutoHeight(elementId) {
+            const element = document.getElementById(elementId);
+            abp.embedding.disableAutoHeight(element);
+            updateStatus(elementId, 'Auto-height disabled');
+            logEvent(`${elementId}: Auto-height disabled`);
+        }
+    </script>
+</body>
+</html> 

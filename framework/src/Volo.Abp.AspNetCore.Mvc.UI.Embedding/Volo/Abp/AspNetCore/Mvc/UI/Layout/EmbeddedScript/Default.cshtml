@@ -1,0 +1,9 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject EmbeddingPageLayout PageLayout
+
+
+@if (PageLayout.IsEmbedded)
+{
+    <script src="/libs/abp/embedding/abp-embedding-iframe.js">
+    </script>
+}

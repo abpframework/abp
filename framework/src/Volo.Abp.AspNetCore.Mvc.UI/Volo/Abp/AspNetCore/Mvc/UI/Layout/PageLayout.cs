@@ -4,10 +4,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
 
 public class PageLayout : IPageLayout, IScopedDependency
 {
-    public ContentLayout Content { get; }
+    public ContentLayout Content { get; } = new();
 
-    public PageLayout()
-    {
-        Content = new ContentLayout();
-    }
+    public virtual bool RenderLayoutElements { get; set; } = true;
 }

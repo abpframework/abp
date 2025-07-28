@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP Embedding - Basic Usage</title>
+    <link rel="stylesheet" href="../src/abp-embedding.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .example {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .controls {
+            margin: 10px 0;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .logs {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .iframe-container {
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>ABP Embedding Web Component - Basic Usage</h1>
+    
+    <div class="example">
+        <h2>Example 1: Basic Iframe Embedding</h2>
+        <p>This example shows a basic iframe embedding with data communication.</p>
+        
+        <div class="controls">
+            <button onclick="sendUserData()">Send User Data</button>
+            <button onclick="sendConfigData()">Send Config</button>
+            <button onclick="changeUrl()">Change URL</button>
+        </div>
+        
+        <div class="iframe-container">
+            <abp-embedding 
+                id="basic-embedding"
+                src="iframe-content.html" 
+                width="100%" 
+                height="100%">
+            </abp-embedding>
+        </div>
+        
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script src="../src/abp-embedding.js"></script>
+    <script>
+        // Get references
+        const embedding = document.getElementById('basic-embedding');
+        const logsElement = document.getElementById('logs');
+        
+        // Logger function
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logsElement.innerHTML += `[${timestamp}] ${message}<br>`;
+            logsElement.scrollTop = logsElement.scrollHeight;
+        }
+        
+        // Event listeners
+        embedding.addEventListener('iframe-loaded', function(event) {
+            log('✅ Iframe loaded successfully');
+        });
+        
+        embedding.addEventListener('iframe-message', function(event) {
+            log(`📨 Received from iframe: ${JSON.stringify(event.detail.data)}`);
+        });
+        
+        // Functions for buttons
+        function sendUserData() {
+            const userData = {
+                type: 'user-data',
+                payload: {
+                    userId: 123,
+                    name: 'John Doe',
+                    email: 'john@example.com',
+                    role: 'admin'
+                }
+            };
+            
+            embedding.sendData(userData);
+            log(`📤 Sent user data: ${JSON.stringify(userData)}`);
+        }
+        
+        function sendConfigData() {
+            const configData = {
+                type: 'config',
+                payload: {
+                    theme: 'dark',
+                    language: 'en',
+                    features: {
+                        notifications: true,
+                        analytics: false
+                    }
+                }
+            };
+            
+            embedding.sendData(configData);
+            log(`📤 Sent config: ${JSON.stringify(configData)}`);
+        }
+        
+        function changeUrl() {
+            const newUrl = prompt('Enter new URL:', 'iframe-content.html');
+            if (newUrl) {
+                embedding.setAttribute('src', newUrl);
+                log(`🔄 Changed URL to: ${newUrl}`);
+            }
+        }
+        
+        // Initial log
+        log('🚀 ABP Embedding example started');
+    </script>
+</body>
+</html> 

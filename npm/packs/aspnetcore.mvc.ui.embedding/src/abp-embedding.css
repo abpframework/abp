@@ -1,0 +1,95 @@
+/* ABP Embedding Component Styles */
+
+abp-embedding {
+    display: block;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+abp-embedding iframe {
+    border: none !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    outline: none !important;
+    outline-width: 0 !important;
+    outline-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    display: block;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    text-shadow: none !important;
+    -webkit-text-shadow: none !important;
+    -moz-text-shadow: none !important;
+    width: 100%;
+    min-height: 50vh; /* Minimum height for better UX */
+}
+
+/* Responsive behavior */
+abp-embedding.responsive {
+    aspect-ratio: 16 / 9;
+}
+
+abp-embedding.responsive iframe {
+    width: 100%;
+}
+
+/* Loading state */
+abp-embedding[loading]::before {
+    content: 'Loading...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    z-index: 1;
+}
+
+abp-embedding[loading] iframe {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+abp-embedding.loaded iframe {
+    opacity: 1;
+}
+
+/* Custom styling variables for easy theming */
+abp-embedding {
+    --border-radius: 0;
+    --box-shadow: none;
+    --background-color: transparent;
+}
+
+abp-embedding iframe {
+    border-radius: var(--border-radius) !important;
+    box-shadow: var(--box-shadow) !important;
+    background-color: var(--background-color) !important;
+}
+
+/* Auto-height specific styles - only non-height related rules */
+abp-embedding[auto-height] {
+    /* Let JavaScript handle all height management */
+}
+
+abp-embedding[auto-height] iframe {
+    /* Let JavaScript handle all height management */
+}
+
+/* Disable transitions during height updates to prevent conflicts */
+abp-embedding[auto-height].height-updating iframe {
+    transition: none !important;
+} 

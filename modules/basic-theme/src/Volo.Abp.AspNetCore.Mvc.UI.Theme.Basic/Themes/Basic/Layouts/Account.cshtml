@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.MultiTenancy
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
@@ -19,6 +20,7 @@
 @inject IStringLocalizer<AbpUiMultiTenancyResource> MultiTenancyStringLocalizer
 @inject ITenantResolveResultAccessor TenantResolveResultAccessor
 @inject IOptions<AbpThemingOptions> ThemingOptions
+@inject IPageLayout PageLayout
 
 @{
     Layout = null;
@@ -58,7 +60,10 @@
 <body class="abp-account-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
-    @(await Component.InvokeAsync<MainNavbarViewComponent>())
+    @if (PageLayout.RenderLayoutElements)
+    {
+        @(await Component.InvokeAsync<MainNavbarViewComponent>())
+    }
 
     <div class="@containerClass">
         <abp-row>

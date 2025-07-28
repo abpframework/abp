@@ -125,6 +125,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
+    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Embedding",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Embedding</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Embedding</PackageId>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI\Volo.Abp.AspNetCore.Mvc.UI.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -18,7 +18,7 @@
 
 @{
     Layout = null;
-    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+    var containerClass = ViewBag.FluidLayout == true || PageLayout.RenderLayoutElements == false ? "container-fluid" : "container"; //TODO: Better and type-safe options
 
     var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
 
@@ -63,7 +63,10 @@
 <body class="abp-application-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
 
-    @(await Component.InvokeAsync<MainNavbarViewComponent>())
+    @if (PageLayout.RenderLayoutElements)
+    {
+        @(await Component.InvokeAsync<MainNavbarViewComponent>())
+    }
 
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
