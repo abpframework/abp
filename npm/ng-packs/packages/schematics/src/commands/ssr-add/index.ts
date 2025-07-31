@@ -21,7 +21,7 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { posix } from 'node:path';
-import { Schema as ServerOptions } from '../server/schema';
+import { Schema as ServerOptions } from './server/schema';
 import {
   DependencyType,
   ExistingBehavior,
