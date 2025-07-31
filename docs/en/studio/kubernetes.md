@@ -214,10 +214,10 @@ To do that, open the ABP Solution (*.abpsln*) file with *Visual Studio Code* it'
       ],
       "displayName": " Redeploy with Push Image",
       "workingDirectory": "etc/helm",
-      "terminalCommand": "./build-image.ps1 -ProjectPath {%{{{chart.metadata.projectPath}}}%} -ImageName {%{{{chart.metadata.imageName}}}%} -ProjectType {%{{{chart.metadata.projectType}}}%} &&& ./push-image.ps1 -ImageName {%{{{chart.metadata.imageName}}}%} &&& ./install.ps1 -ChartName {%{{{mainChart.name}}}%} -Namespace {%{{{profile.namespace}}}%} -ReleaseName {%{{{mainChart.name}}}%}-{%{{{profile.name}}}%} -DotnetEnvironment {%{{{mainChart.metadata.dotnetEnvironment}}}%}",
+      "terminalCommand": "./build-image.ps1 -ProjectPath {{chart.metadata.projectPath}} -ImageName {{chart.metadata.imageName}} -ProjectType {{chart.metadata.projectType}} &&& ./push-image.ps1 -ImageName {{chart.metadata.imageName}} &&& ./install.ps1 -ChartName {{mainChart.name}} -Namespace {{profile.namespace}} -ReleaseName {{mainChart.name}}-{{profile.name}} -DotnetEnvironment {{mainChart.metadata.dotnetEnvironment}}",
       "requireConfirmation": "true",
-      "confirmationText": "Are you sure to redeploy with push image the related chart '{%{{{chart.name}}}%}' for the service '{%{{{name}}}%}'?",
-      "condition": "{%{{{chart != null && chart.metadata.projectPath != null && chart.metadata.imageName != null && chart.metadata.projectType != null}}}%}"
+      "confirmationText": "Are you sure to redeploy with push image the related chart '{{chart.name}}' for the service '{{name}}'?",
+      "condition": "{{chart != null && chart.metadata.projectPath != null && chart.metadata.imageName != null && chart.metadata.projectType != null}}"
     }
 ```
 
