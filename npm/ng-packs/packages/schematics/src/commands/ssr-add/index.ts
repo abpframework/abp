@@ -307,12 +307,12 @@ function addDependencies({ skipInstall }: SSROptions, isUsingApplicationBuilder:
   const install = skipInstall ? InstallBehavior.None : InstallBehavior.Auto;
 
   const rules: Rule[] = [
-    addDependency('express', latestVersions['express'], {
+    addDependency('express', latestVersions.dependencies.express, {
       type: DependencyType.Default,
       install,
       existing: ExistingBehavior.Replace,
     }),
-    addDependency('@types/express', latestVersions['@types/express'], {
+    addDependency('@types/express', latestVersions.dependencies['@types/express'], {
       type: DependencyType.Dev,
       install,
       existing: ExistingBehavior.Replace,
@@ -321,7 +321,7 @@ function addDependencies({ skipInstall }: SSROptions, isUsingApplicationBuilder:
 
   if (!isUsingApplicationBuilder) {
     rules.push(
-      addDependency('browser-sync', latestVersions['browser-sync'], {
+      addDependency('browser-sync', latestVersions.dependencies['browser-sync'], {
         type: DependencyType.Dev,
         install,
       }),
