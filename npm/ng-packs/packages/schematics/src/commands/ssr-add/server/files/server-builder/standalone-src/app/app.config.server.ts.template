@@ -5,7 +5,7 @@ import { provideAbpOAuth } from '@abp/ng.oauth';
 
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideAbpOAuth({ ssr: true })
+    provideAbpOAuth({ ssr: true }),
     provideServerRendering()
   ]
 };
