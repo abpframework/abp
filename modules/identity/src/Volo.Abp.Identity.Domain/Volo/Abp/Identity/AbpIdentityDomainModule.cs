@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Mapperly;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity;
     typeof(AbpDddDomainModule),
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpUsersDomainModule),
-    typeof(AbpMapperlyModule)
+    typeof(AbpAutoMapperModule)
     )]
 public class AbpIdentityDomainModule : AbpModule
 {
@@ -35,7 +35,12 @@ public class AbpIdentityDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddMapperlyObjectMapper<AbpIdentityDomainModule>();
+        context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<IdentityDomainMappingProfile>(validate: true);
+        });
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {

@@ -2,7 +2,7 @@
 using Volo.Abp.Account.Blazor.Pages.Account;
 using Volo.Abp.AspNetCore.Components.Web.Theming;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.Mapperly;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -13,16 +13,21 @@ namespace Volo.Abp.Account.Blazor;
 
 [DependsOn(
     typeof(AbpAspNetCoreComponentsWebThemingModule),
-    typeof(AbpMapperlyModule),
+    typeof(AbpAutoMapperModule),
     typeof(AbpAccountApplicationContractsModule)
     )]
 public class AbpAccountBlazorModule : AbpModule
 {
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
-
+    
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddMapperlyObjectMapper<AbpAccountBlazorModule>();
+        context.Services.AddAutoMapperObjectMapper<AbpAccountBlazorModule>();
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<AbpAccountBlazorAutoMapperProfile>(validate: true);
+        });
 
         Configure<AbpNavigationOptions>(options =>
         {
@@ -34,7 +39,7 @@ public class AbpAccountBlazorModule : AbpModule
             options.AdditionalAssemblies.Add(typeof(AbpAccountBlazorModule).Assembly);
         });
     }
-
+    
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

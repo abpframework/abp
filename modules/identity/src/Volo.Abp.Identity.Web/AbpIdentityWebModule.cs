@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-using Volo.Abp.Mapperly;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web.Navigation;
@@ -19,7 +19,7 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.Identity.Web;
 
 [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
-[DependsOn(typeof(AbpMapperlyModule))]
+[DependsOn(typeof(AbpAutoMapperModule))]
 [DependsOn(typeof(AbpPermissionManagementWebModule))]
 [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
 public class AbpIdentityWebModule : AbpModule
@@ -51,7 +51,12 @@ public class AbpIdentityWebModule : AbpModule
             options.FileSets.AddEmbedded<AbpIdentityWebModule>();
         });
 
-        context.Services.AddMapperlyObjectMapper<AbpIdentityWebModule>();
+        context.Services.AddAutoMapperObjectMapper<AbpIdentityWebModule>();
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
+        });
 
         Configure<RazorPagesOptions>(options =>
         {

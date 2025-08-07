@@ -1,7 +1,7 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.Mapperly;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.BlazoriseUI;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
@@ -16,7 +16,7 @@ namespace Volo.Abp.Identity.Blazor;
 
 [DependsOn(
     typeof(AbpIdentityApplicationContractsModule),
-    typeof(AbpMapperlyModule),
+    typeof(AbpAutoMapperModule),
     typeof(AbpPermissionManagementBlazorModule),
     typeof(AbpBlazoriseUIModule)
     )]
@@ -26,7 +26,12 @@ public class AbpIdentityBlazorModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddMapperlyObjectMapper<AbpIdentityBlazorModule>();
+        context.Services.AddAutoMapperObjectMapper<AbpIdentityBlazorModule>();
+
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddProfile<AbpIdentityBlazorAutoMapperProfile>(validate: true);
+        });
 
         Configure<AbpNavigationOptions>(options =>
         {
@@ -37,7 +42,7 @@ public class AbpIdentityBlazorModule : AbpModule
         {
             options.AdditionalAssemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
         });
-
+        
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
