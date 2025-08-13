@@ -34,18 +34,69 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
 
     public virtual TDestination Map<TSource, TDestination>(object source)
     {
-        if (TryToMapCollection<TSource, TDestination>((TSource)source, default, out var collectionResult))
-        {
-            return collectionResult;
-        }
-
         var mapper = ServiceProvider.GetService<IAbpMapperlyMapper<TSource, TDestination>>();
         if (mapper != null)
         {
+            var beforeMapAttributes = mapper.GetType().GetCustomAttributes(typeof(BeforeMap<>)).Where(x => typeof(TSource).IsAssignableFrom(x.GetType().GetGenericArguments().FirstOrDefault()))
+                .ToList();
+            var beforeMapAttributeExecuteMethod = typeof(BeforeMap<>).GetMethod(nameof(BeforeMap<object>.Execute),
+                BindingFlags.Instance | BindingFlags.Public);
+            if (beforeMapAttributeExecuteMethod != null)
+            {
+                foreach (var beforeMapAttribute in beforeMapAttributes)
+                {
+                    var executeMethod = beforeMapAttributeExecuteMethod.MakeGenericMethod(typeof(TSource));
+                    executeMethod.Invoke(beforeMapAttribute, [source]);
+                }
+            }
             mapper.BeforeMap((TSource)source);
+            var afterMapAttributes = mapper.GetType().GetCustomAttributes(typeof(AfterMap<,>)).Where(x => typeof(TSource).IsAssignableFrom(x.GetType().GetGenericArguments().FirstOrDefault()) &&
+                typeof(TDestination).IsAssignableFrom(x.GetType().GetGenericArguments().LastOrDefault())).ToArray();
+            var afterMapAttributesWithContext = afterMapAttributes
+                .Where(x => typeof(AfterMap<, ,>).IsInstanceOfType(x))
+                .ToList();
+            var contexts = new List<object?>();
+            var createContextMethod = typeof(AfterMap<, ,>).GetMethod(nameof(AfterMap<object, object, object>.CreateContext),
+                BindingFlags.Instance | BindingFlags.Public);
+            if (createContextMethod != null)
+            {
+                foreach (var afterMapAttribute in afterMapAttributesWithContext)
+                {
+                    var context = createContextMethod.Invoke(afterMapAttribute, [source]);
+                    contexts.Add(context);
+                }
+            }
             var destination = mapper.Map((TSource)source);
             TryMapExtraProperties(mapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, new ExtraPropertyDictionary());
             mapper.AfterMap((TSource)source, destination);
+            
+            var afterMapExecuteMethod = typeof(AfterMap<, ,>).GetMethod(nameof(AfterMap<object, object, object>.Execute),
+                BindingFlags.Instance | BindingFlags.Public);
+            if (afterMapExecuteMethod != null)
+            {
+                for (var i = 0; i < afterMapAttributesWithContext.Count; i++)
+                {
+                    var afterMapAttribute = afterMapAttributesWithContext[i];
+                    var executeMethod = afterMapExecuteMethod.MakeGenericMethod(typeof(TSource), typeof(TDestination));
+                    executeMethod.Invoke(afterMapAttribute, [source, destination, contexts[i]]);
+                }
+            }
+            
+            var afterMapAttributesWithoutContext = afterMapAttributes
+                .Where(x => !typeof(AfterMap<, ,>).IsInstanceOfType(x))
+                .ToList();
+            
+            var afterMapExecuteMethodWithoutContext = typeof(AfterMap<,>).GetMethod(nameof(AfterMap<object, object>.Execute),
+                BindingFlags.Instance | BindingFlags.Public);
+            if (afterMapExecuteMethodWithoutContext != null)
+            {
+                foreach (var afterMapAttribute in afterMapAttributesWithoutContext)
+                {
+                    var executeMethod = afterMapExecuteMethodWithoutContext.MakeGenericMethod(typeof(TSource), typeof(TDestination));
+                    executeMethod.Invoke(afterMapAttribute, [source, destination]);
+                }
+            }
+         
             return destination;
         }
 
@@ -58,6 +109,11 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
             reverseMapper.AfterReverseMap((TSource)source, destination);
             return destination;
         }
+        
+        if (TryToMapCollection<TSource, TDestination>((TSource)source, default, out var collectionResult))
+        {
+            return collectionResult;
+        }
 
         throw new AbpException($"No {TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(IAbpMapperlyMapper<TSource, TDestination>))} or" +
                                $" {TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(IAbpReverseMapperlyMapper<TSource, TDestination>))} was found");
@@ -65,11 +121,6 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
 
     public virtual TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
     {
-        if (TryToMapCollection<TSource, TDestination>(source, destination, out var collectionResult))
-        {
-            return collectionResult;
-        }
-
         var mapper = ServiceProvider.GetService<IAbpMapperlyMapper<TSource, TDestination>>();
         if (mapper != null)
         {
@@ -90,6 +141,11 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
             TryMapExtraProperties(reverseMapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), source, destination, destinationExtraProperties);
             reverseMapper.AfterReverseMap(source, destination);
             return destination;
+        }
+        
+        if (TryToMapCollection<TSource, TDestination>(source, destination, out var collectionResult))
+        {
+            return collectionResult;
         }
 
         throw new AbpException($"No {TypeHelper.GetFullNameHandlingNullableAndGenerics(typeof(IAbpMapperlyMapper<TSource, TDestination>))} or" +
@@ -216,21 +272,6 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
         return Expression.Lambda<Func<object, object, object, object?>>(callConvert, instanceParam, sourceParam, destinationParam).Compile();
     }
 
-    protected virtual ExtraPropertyDictionary GetExtraProperties<TDestination>(TDestination destination)
-    {
-        var extraProperties = new ExtraPropertyDictionary();
-        if (destination is not IHasExtraProperties hasExtraProperties)
-        {
-            return extraProperties;
-        }
-
-        foreach (var property in hasExtraProperties.ExtraProperties)
-        {
-            extraProperties.Add(property.Key, property.Value);
-        }
-        return extraProperties;
-    }
-
     protected virtual void TryMapExtraProperties<TSource, TDestination>(MapExtraPropertiesAttribute? mapExtraPropertiesAttribute, TSource source, TDestination destination, ExtraPropertyDictionary destinationExtraProperty)
     {
         if (mapExtraPropertiesAttribute != null &&
@@ -245,37 +286,6 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
                 mapExtraPropertiesAttribute.IgnoredProperties,
                 mapExtraPropertiesAttribute.MapToRegularProperties
             );
-        }
-    }
-    protected virtual void MapExtraProperties<TSource, TDestination>(
-        IHasExtraProperties source,
-        IHasExtraProperties destination,
-        ExtraPropertyDictionary destinationExtraProperty,
-        MappingPropertyDefinitionChecks? definitionChecks = null,
-        string[]? ignoredProperties = null,
-        bool mapToRegularProperties = false)
-    {
-        var result = destinationExtraProperty.IsNullOrEmpty()
-            ? new Dictionary<string, object?>()
-            : new Dictionary<string, object?>(destinationExtraProperty);
-
-        if (source.ExtraProperties != null && destination.ExtraProperties != null)
-        {
-            ExtensibleObjectMapper
-                .MapExtraPropertiesTo(
-                    typeof(TSource),
-                    typeof(TDestination),
-                    source.ExtraProperties,
-                    result,
-                    definitionChecks,
-                    ignoredProperties
-                );
-        }
-
-        ObjectHelper.TrySetProperty(destination, x => x.ExtraProperties, () => new ExtraPropertyDictionary(result));
-        if (mapToRegularProperties)
-        {
-            destination.SetExtraPropertiesToRegularProperties();
         }
     }
 }
