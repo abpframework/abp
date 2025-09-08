@@ -124,7 +124,7 @@ export function createActionToSignatureMapper() {
       }
 
       let type = adaptType(p.typeSimple);
-      if (p.typeSimple === 'enum' || p.typeSimple === '[enum]') {
+      if (p.typeSimple === 'enum' || p.typeSimple === '[enum]' || p.typeSimple === 'enum?' || p.typeSimple === '[enum]?') {
         type = adaptType(p.type);
       }
 
