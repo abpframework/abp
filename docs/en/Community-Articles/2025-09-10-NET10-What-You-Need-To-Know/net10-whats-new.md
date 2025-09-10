@@ -1,6 +1,6 @@
 # .NET 10: What You Need to Know (LTS Release, Coming November 2025)
 
-The next version of .NET is .NET 10 and it is coming with **Long-Term Support (LTS)**, scheduled for **November 2025**.
+The next version of .NET is .NET 10, and it is coming with **Long-Term Support (LTS)**, scheduled for **November 2025**.
 
 On **September 9, 2025**, Microsoft released **.NET 10 Release Candidate 1 (RC1)**, which supports go-live usage and is compatible with [Visual Studio 2026 Insider](https://visualstudio.microsoft.com/insiders/) and [Visual Studio Code Insider](https://code.visualstudio.com/insiders/) via the [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) extension.
 
@@ -10,7 +10,7 @@ On **September 9, 2025**, Microsoft released **.NET 10 Release Candidate 1 (RC1)
 
 - **JIT Speed-ups**: Enhanced struct argument handling—members now go directly into registers, reducing memory load/store operations.
 - **Advanced Loop Optimization**: New graph-based loop inversion improves precision and boosts further optimizations.
-- **Array Interface De-virtualization**: Critical for performance, now array-based enumerations inline and skip virtual calls including de-abstraction of array enumeration and small-array stack allocation.
+- **Array Interface De-virtualization**: Critical for performance, now array-based enumerations are inline and skip virtual calls, including de-abstraction of array enumeration and small-array stack allocation.
 - **General JIT Improvements**: Better code layout and branch reduction support overall efficiency.
 
 ------
