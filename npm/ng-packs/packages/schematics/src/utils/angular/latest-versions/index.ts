@@ -3,11 +3,11 @@ export const latestVersions = {
   comment: 'This file is needed so that dependencies are synced by Renovate.',
   private: true,
   dependencies: {
-    '@types/express': '^5.0.1',
+    '@types/express': '~5.0.0',
     '@types/jasmine': '~5.1.0',
-    '@types/node': '^20.17.19',
+    '@types/node': '~20.11.0',
     'browser-sync': '^3.0.0',
-    express: '^5.1.0',
+    express: '~5.1.0',
     'jasmine-core': '~5.9.0',
     'jasmine-spec-reporter': '~7.0.0',
     'karma-chrome-launcher': '~3.2.0',
@@ -21,7 +21,7 @@ export const latestVersions = {
     rxjs: '~7.8.0',
     tslib: '^2.3.0',
     'ts-node': '~10.9.0',
-    typescript: '~5.8.2',
+    typescript: '~5.8.0',
     'zone.js': '~0.15.0',
   },
 };

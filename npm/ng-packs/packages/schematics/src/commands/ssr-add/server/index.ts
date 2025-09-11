@@ -153,7 +153,7 @@ function addDependencies(skipInstall: boolean | undefined): Rule {
     const install = skipInstall ? InstallBehavior.None : InstallBehavior.Auto;
 
     return chain([
-      addDependency('@angular/ssr', '20.0.0', {
+      addDependency('@angular/ssr', '~20.0.0', {
         type: DependencyType.Default,
         install,
       }),
