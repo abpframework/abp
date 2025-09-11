@@ -30,7 +30,7 @@ public class MenuItemPublicAppService : CmsKitPublicAppServiceBase, IMenuItemPub
             MenuApplicationConsts.MainMenuCacheKey,
             async () =>
             {
-                var menuItems = await MenuItemRepository.GetListAsync();
+                var menuItems = await MenuItemRepository.GetOrderedListAsync();
 
                 if (menuItems == null)
                 {

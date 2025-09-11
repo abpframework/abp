@@ -62,8 +62,13 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
             input.SkipCount, input.Sorting);
 
         return new PagedResultDto<BlogPostCommonDto>(
-            await BlogPostRepository.GetCountAsync(blogId: blog.Id, tagId: input.TagId,
-                statusFilter: BlogPostStatus.Published, authorId: input.AuthorId),
+            await BlogPostRepository.GetCountAsync(
+                blogId: blog.Id, 
+                tagId: input.TagId, 
+                favoriteUserId: favoriteUserId,
+                statusFilter: BlogPostStatus.Published, 
+                authorId: input.AuthorId
+            ),
             ObjectMapper.Map<List<BlogPost>, List<BlogPostCommonDto>>(blogPosts));
     }
 

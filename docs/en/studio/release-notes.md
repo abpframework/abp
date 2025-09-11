@@ -2,6 +2,42 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 1.2.1 (2025-08-14)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.1`)
+* Migrated templates to standalone structure for Angular UI.
+* Allowed relating tools with Kubernetes Services (allows to browse tools dashboard those are running in k8s).
+* Made several enhancements for Solution Runner.
+* Added test projects to **Application (Single Layer)** template (optional).
+
+
+## 1.1.2 (2025-07-31)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.2.3`)
+* Configured LeptonX Lite logos in the templates.
+* Added browser tab memory feature to remember previously selected tabs.
+* Enhanced tools section with default credentials display for first-time tool usage.
+* Improved module and package loading with better error handling.
+
+## 1.1.1 (2025-07-22)
+
+* Enhanced tools section with clear cookies option.
+* Fixed language management module name display for imported modules.
+* Improved update window messaging with "Skip this version" option.
+* Fixed Docker Compose file issues in microservice template.
+* Resolved RabbitMQ tool cookie problems.
+
+## 1.1.0 (2025-07-16)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.2.2`)
+* Enhanced UI scaling for all windows and improved user experience.
+* Added tools section in solution runner main area with basic Grafana dashboard for microservice template.
+* Improved container management during application building.
+* Enhanced background task exception handling.
+* Added public account module package reference to Blazor WebApp client.
+* Fixed tenant database context updating errors.
+* Improved optional module selection UI with better documentation integration.
+
 ## 1.0.2 (2025-06-24)
 
 * Enhanced the ABP NuGet package installation experience.

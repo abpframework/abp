@@ -472,16 +472,11 @@ In `appsettings.json` replace **IdentityServer** section with **OpenIddict** and
   typeof(AbpOpenIddictProWebModule),
   ```
 
-- In **IdentityServiceWebModule.cs** add object mapping configurations:
+- In **IdentityServiceWebModule.cs** add object mapping configurations for [Mapperly](https://mapperly.riok.app/) (if you are using an another mapping providers, see the [Object to Object Mapping](../../../framework/infrastructure/object-to-object-mapping.md) documentation):
 
   ```csharp
-  context.Services.AddAutoMapperObjectMapper<IdentityServiceWebModule>();
-          Configure<AbpAutoMapperOptions>(options =>
-          {
-              options.AddMaps<IdentityServiceWebModule>(validate: true);
-          });
+  context.Services.AddMapperlyObjectMapper<IdentityServiceWebModule>();
   ```
-
 
 ### Shared Hosting Module
 

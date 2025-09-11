@@ -48,11 +48,6 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             return;
         }
 
-        if (!NpmHelper.IsYarnAvailable())
-        {
-            Logger.LogWarning("YARN is not installed, which may cause package inconsistency. ABP uses 'npx yarn <command>' behind the scenes to prevent possible inconsistencies.");
-        }
-
         Logger.LogInformation($"Found {projectPaths.Count} projects.");
         foreach (var projectPath in projectPaths)
         {

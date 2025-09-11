@@ -1,11 +1,9 @@
 import { camel } from './text';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const shouldQuote = require('should-quote');
 export const getParamName = (paramName: string) =>
   shouldQuote(paramName) ? `["${paramName}"]` : paramName;
 
-// check dot exists in param name and camelize access continuously
 export const getParamValueName = (paramName: string, descriptorName: string) => {
   if (paramName.includes('.')) {
     const splitted = paramName.split('.');
@@ -17,3 +15,8 @@ export const getParamValueName = (paramName: string, descriptorName: string) => 
   }
   return `${descriptorName}.${paramName}`;
 };
+
+export function isDictionaryType(type?: string, typeSimple?: string): boolean {
+  const haystacks = [type || '', typeSimple || ''];
+  return haystacks.some(t => /(^|\b)(System\.Collections\.Generic\.)?(I)?Dictionary\s*</.test(t));
+}

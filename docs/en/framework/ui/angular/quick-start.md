@@ -1,12 +1,12 @@
 # ABP Angular Quick Start
 
-**In this version ABP uses Angular [17.3.x](https://github.com/angular/angular/tree/17.3.x) version. You don't have to install Angular CLI globally**
+**In this version ABP uses Angular [20.0.x](https://github.com/angular/angular/tree/20.0.x) version. You don't have to install Angular CLI globally**
 
 ## How to Prepare Development Environment
 
 Please follow the steps below to prepare your development environment for Angular.
 
-1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js `v20.11+` installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
+1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js `v20.19+` installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
 2. **[Optional] Install Yarn:** You may install Yarn v1.22+ (not v2) following the instructions on [the installation page](https://classic.yarnpkg.com/en/docs/install). Yarn v1 delivers an arguably better developer experience compared to npm v10 and below. You may skip this step and work with npm, which is built-in in Node.js, instead.
 3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE which works seamlessly with TypeScript. Although you can use any IDE including Visual Studio or Rider, VS Code will most likely deliver the best developer experience when it comes to Angular projects. ABP project templates even contain plugin recommendations for VS Code users, which VS Code will ask you to install when you open the Angular project folder. Here is a list of recommended extensions:
    - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=angular.ng-template)
@@ -54,28 +54,27 @@ Here is what these folders and files are for:
 - **.vscode** has extension recommendations in it.
 - **e2e** is a separate app for possible end-to-end tests.
 - **src** is where the source files for your application are placed. We will have a closer look in a minute.
-- **.browserlistrc** helps [configuring browser compatibility of your Angular app](https://angular.io/guide/build#configuring-browser-compatibility).
+- **.browserlistrc** helps [configuring browser compatibility of your Angular app](https://angular.dev/tools/cli/build#configuring-browser-compatibility).
 - **.editorconfig** helps you have a shared coding style for separate editors and IDEs. Check [EditorConfig.org](https://editorconfig.org/) for details.
 - **.gitignore** defined which files and folders should not be tracked by git. Check [git documentation](https://git-scm.com/docs/gitignore) for details.
 - **.prettierrc** includes simple coding style choices for [Prettier](https://prettier.io/), an auto-formatter for TypeScript, HTML, CSS, and more. If you install recommended extensions to VS Code, you will never have to format your code anymore.
-- **angular.json** is where Angular workspace is defined. It holds project configurations and workspace preferences. Please refer to [Angular workspace configuration](https://angular.io/guide/workspace-config) for details.
+- **angular.json** is where Angular workspace is defined. It holds project configurations and workspace preferences. Please refer to [Angular workspace configuration](https://angular.dev/reference/configs/workspace-config) for details.
 - **karma.conf.js** holds [Karma test runner](https://karma-runner.github.io/) configurations.
-- **package.json** is where your [package dependencies](https://angular.io/guide/npm-packages) are listed. It also includes some useful scripts for developing, testing, and building your application.
+- **package.json** is where your [package dependencies](https://angular.dev/reference/configs/npm-packages) are listed. It also includes some useful scripts for developing, testing, and building your application.
 - **README.md** includes some of Angular CLI command examples. You either have to install Angular CLI globally or run these commands starting with `yarn` or `npx` to make them work.
-- **start.ps1** is a simple PowerShell script to install dependencies and start a [development server via Angular CLI](https://angular.io/cli/serve), but you probably will not need that after reading this document.
-- **tsconfig.json** and all other [tsconfig files](https://angular.io/guide/typescript-configuration) in general, include some TypeScript and Angular compile options.
+- **start.ps1** is a simple PowerShell script to install dependencies and start a [development server via Angular CLI](https://angular.dev/cli/serve), but you probably will not need that after reading this document.
+- **tsconfig.json** and all other [tsconfig files](https://angular.dev/reference/configs/angular-compiler-options) in general, include some TypeScript and Angular compile options.
 - **yarn.lock** enables installing consistent package versions across different devices so that working application build will not break because of a package update. Please read [Yarn documentation](https://classic.yarnpkg.com/en/docs/yarn-lock/) if you are interested in more information on the topic. If you have decided to use npm, please remove this file and keep the [package-lock.json](https://docs.npmjs.com/files/package-lock.json) instead.
 
 Now let us take a look at the contents of the source folder.
 
 <img alt="Angular project source folder structure" src="./images/quick-start---source-folder-structure.png" width="300px" style="max-width:100%">
 
-- **app** is the main directory you put your application files in. Any module, component, directive, service, pipe, guard, interceptor, etc. should be placed here. You are free to choose any folder structure, but [organizing Angular applications based on modules](https://angular.io/guide/module-types) is generally a fine practice.
-- **home** is a predefined module and acts as a welcome page. It also demonstrates how a feature-based folder structure may look like. More complex features will probably have sub-features, thus inner folders. You may change the home folder however you like.
-- **shared** is spared for reusable code that works for several modules. Some, including yours truly, may disagree with using a single module for all shared code, so consider adding standalone sub-modules inside this folder instead of adding everything into **shared.module.ts**.
-- **app-routing.module.ts** is where your top-level routes are defined. Angular is capable of [lazy loading feature modules](https://angular.io/guide/lazy-loading-ngmodules), so not all routes will be here. You may think of Angular routing as a tree and this file is the top of the tree.
+- **app** is the main directory you put your application files in. Any component, directive, service, pipe, guard, interceptor, etc. should be placed here. You are free to choose any folder structure, but [organizing Angular applications using configuration-based structure](https://angular.dev/reference/configs/file-structure) is generally a fine practice, especially when using standalone APIs. This replaces the older convention of organizing strictly by NgModules.
+- **home** is a predefined component and acts as a welcome page. It also demonstrates how a feature-based folder structure may look like. More complex features will probably have sub-features, thus inner folders. You may change the home folder however you like.
+- **app.routes.ts** is where your top-level routes are defined. Angular is capable of [lazy loading routes now](https://angular.dev/reference/migrations/route-lazy-loading), so not all routes will be here. You may think of Angular routing as a tree and this file is the top of the tree.
 - **app.component.ts** is essentially the top component that holds the dynamic application layout.
-- **app.module.ts** is the [root module](https://angular.io/guide/bootstrapping) that includes information about how parts of your application are related and what to run at the initiation of your application.
+- **app.config.ts** is the [root configuration](https://angular.dev/api/platform-browser/bootstrapApplication) that includes information about how parts of your application are related and what to run at the initiation of your application.
 - **route.provider.ts** is used for [modifying the menu](../angular/modifying-the-menu.md).
 - **assets** is for static files. A file (e.g. an image) placed in this folder will be available as is when the application is served.
 - **environments** includes one file per environment configuration. There are two configurations by default, but you may always introduce another one. These files are directly referred to in _angular.json_ and help you have different builds and application variables. Please refer to [configuring Angular application environments](https://angular.io/guide/build#configuring-application-environments) for details.
@@ -155,7 +154,7 @@ export const environment = {
 } as Config.Environment;
 ```
 
-When you run the development server, variables defined in _environment.ts_ take effect. Similarly, in production mode, the default environment is replaced by _environment.prod.ts_ and completely different variables become effective. You may even [create a new build configuration](https://angular.io/guide/workspace-config#build-configs) and set [file replacements](https://angular.io/guide/build#configure-target-specific-file-replacements) to use a completely new environment. For now, we will start a production build:
+When you run the development server, variables defined in _environment.ts_ take effect. Similarly, in production mode, the default environment is replaced by _environment.prod.ts_ and completely different variables become effective. You may even [create a new build configuration](https://angular.dev/reference/configs/workspace-config#alternate-build-configurations) and set [file replacements](https://angular.io/guide/build#configure-target-specific-file-replacements) to use a completely new environment. For now, we will start a production build:
 
 1. Open your terminal and navigate to the root Angular folder.
 2. Run `yarn` or `npm install` if you have not installed dependencies already.

@@ -394,6 +394,22 @@ public class MyProfile : Profile
 
 It has the same parameters with the `MapExtraPropertiesTo` method.
 
+#### Mapperly Integration
+
+If you're using the [Mapperly](https://github.com/riok/mapperly) library, the ABP also provides an extension method to utilize the `MapExtraPropertiesTo` method defined above.
+
+You can use the `MapExtraProperties` attribute to Mapperly class:
+
+````csharp
+[Mapper]
+[MapExtraProperties]
+public partial class IdentityUserToProfileDtoMapper : MapperBase<IdentityUser, IdentityUserDto>
+{
+    public override partial IdentityUserDto Map(IdentityUser source);
+    public override partial void Map(IdentityUser source, IdentityUserDto destination);
+}
+````
+
 ## Entity Framework Core Database Mapping
 
 If you're using the EF Core, you can map an extra property to a table field in the database. Example:

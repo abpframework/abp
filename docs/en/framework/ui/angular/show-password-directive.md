@@ -4,24 +4,20 @@ In password input, text can be shown easily via changing input type attribute to
 
 
 ## Getting Started
-`ShowPasswordDirective` is standalone. In order to use the `ShowPasswordDirective` in an HTML template, import it to related module or your standalone component:
+`ShowPasswordDirective` is standalone. In order to use the it in an HTML template, import it to your component:
 
-**Importing to NgModule**
+**Importing to Component**
 ```ts
 import { ShowPasswordDirective } from '@abp/ng.core';
 
-@NgModule({
+@Component({
   //...
-  declarations: [
-   ...,
-   TestComponent
-  ],
   imports: [
-   ...,
+   // ...,
    ShowPasswordDirective
   ],
 })
-export class MyFeatureModule {}
+export class TestComponent {}
 ```
 
 ## Usage
@@ -30,28 +26,10 @@ The `ShowPasswordDirective` is very easy to use. The directive's selector is **`
 
 See an example usage:
 
-**NgModule Component usage**
-```ts
-@Component({
-  selector: 'test-component',
-  template: `
-    <div class="d-flex flex-column">
-      <label>Password</label>
-      <input [abpShowPassword]="showPassword"/>
-      <i (click)="showPassword = !showPassword">icon</i>
-    </div>
-  `
-})
-export class TestComponent{
-  showPassword = false;
-}
-```
-**Standalone Component usage**
 ```ts
 import { ShowPasswordDirective } from '@abp/ng.core';
 @Component({
-  selector: 'standalone-component',
-  standalone: true,
+  selector: 'sample-component',
   template: `
     <div class="d-flex flex-column">
       <label>Password</label>
@@ -61,7 +39,7 @@ import { ShowPasswordDirective } from '@abp/ng.core';
   `,
   imports: [ShowPasswordDirective]
 })
-export class StandaloneComponent{
+export class SampleComponent{
   showPassword = false;
 }
 ```

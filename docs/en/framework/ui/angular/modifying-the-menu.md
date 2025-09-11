@@ -59,32 +59,33 @@ An alternative and probably cleaner way is to use a route provider. First create
 ```js
 // route.provider.ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
-import { APP_INITIALIZER } from '@angular/core';
+import { provideAppInitializer } from '@angular/core';
 
 export const APP_ROUTE_PROVIDER = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+  provideAppInitializer(() => {
+    configureRoutes();
+  }),
 ];
 
-function configureRoutes(routes: RoutesService) {
-  return () => {
-    routes.add([
-      {
-        path: '/your-path',
-        name: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 101,
-        iconClass: 'fas fa-question-circle',
-        layout: eLayoutType.application,
-      },
-      {
-        path: '/your-path/child',
-        name: 'Your child navigation',
-        parentName: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 1,
-      },
-    ]);
-  };
+function configureRoutes() {
+  const routesService = inject(RoutesService);
+  routes.add([
+    {
+      path: '/your-path',
+      name: 'Your navigation',
+      requiredPolicy: 'permission key here',
+      order: 101,
+      iconClass: 'fas fa-question-circle',
+      layout: eLayoutType.application,
+    },
+    {
+      path: '/your-path/child',
+      name: 'Your child navigation',
+      parentName: 'Your navigation',
+      requiredPolicy: 'permission key here',
+      order: 1,
+    },
+  ]);
 }
 ```
 
@@ -95,22 +96,21 @@ We can also define a group for navigation elements. It's an optional property
 // route.provider.ts
 import { RoutesService } from '@abp/ng.core';
 
-function configureRoutes(routes: RoutesService) {  
-  return () => {
-    routes.add([
-      {
-        //etc..
-        group: 'ModuleName::GroupName'
-      },
-      {
-        path: '/your-path/child',
-        name: 'Your child navigation',
-        parentName: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 1,
-      },
-    ]);
-  };
+function configureRoutes() {  
+  const routesService = inject(RoutesService);
+  routes.add([
+    {
+      //etc..
+      group: 'ModuleName::GroupName'
+    },
+    {
+      path: '/your-path/child',
+      name: 'Your child navigation',
+      parentName: 'Your navigation',
+      requiredPolicy: 'permission key here',
+      order: 1,
+    },
+  ]);
 }
 ```
 
@@ -131,25 +131,23 @@ export class AppComponent {
 }
 ```
 
-...and then in app.module.ts...
+...and then in app.config.ts...
  - The `groupedVisible` method will return the `Others` group for ungrouped items, the default key is `AbpUi::OthersGroup`, we can change this `key` via the `OTHERS_GROUP` injection token
 
 ```js
-import { NgModule } from '@angular/core';
 import { OTHERS_GROUP } from '@abp/ng.core';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
+    // ...
     APP_ROUTE_PROVIDER,
     {
       provide: OTHERS_GROUP,
       useValue: 'ModuleName::MyOthersGroupKey',
     },
   ],
-  // imports, declarations, and bootstrap
-})
-export class AppModule {}
+};
 ```
 
 ### Singularize Route Item
@@ -182,9 +180,9 @@ Here is what every property works as:
 - `invisible` makes the item invisible in the menu. (default: `false`)
 - `group` is an optional property that is used to group together related routes in an application. (type: `string`, default: `AbpUi::OthersGroup`)
 
-### Via `routes` Property in `AppRoutingModule`
+### Via `routes` Property in `APP_ROUTES`
 
-You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `RoutesService`.
+You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app.routes.ts`. The `@abp/ng.core` package organizes your routes and stores them in the `RoutesService`.
 
 You can add the `routes` property like below:
 

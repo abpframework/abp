@@ -69,6 +69,7 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
         var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
         var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
+        var skipOpeningDocumentation = commandLineArgs.Options.ContainsKey(Options.SkipOpeningDocumentation.Long);
         var skipDbMigrations = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.DbMigrations.Skip);
         var solutionFile = GetSolutionFile(commandLineArgs);
 
@@ -98,7 +99,8 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
              withSourceCode,
              addSourceCodeToSolutionFile,
              newTemplate,
-             newProTemplate
+             newProTemplate,
+             skipOpeningDocumentation
          );
 
         _lastAddedModuleInfo = new AddModuleInfoOutput
@@ -222,6 +224,11 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "t";
             public const string Long = "template";
+        }
+
+        public class SkipOpeningDocumentation
+        {
+            public const string Long = "skip-opening-documentation";
         }
     }
 }

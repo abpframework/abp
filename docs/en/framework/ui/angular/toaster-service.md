@@ -4,7 +4,7 @@ You can use the `ToasterService` in @abp/ng.theme.shared package to display mess
 
 ## Getting Started
 
-You do not have to provide the `ToasterService` at module or component level, because it is already **provided in root**. You can inject and start using it immediately in your components, directives, or services.
+You do not have to provide the `ToasterService` at component level, because it is already **provided in root**. You can inject and start using it immediately in your components, directives, or services.
 
 ```js
 import { ToasterService } from '@abp/ng.theme.shared';
@@ -170,19 +170,19 @@ export class CustomToasterService implements Toaster.Service {
 ```
 
 ```js
-// app.module.ts
+// app.config.ts
 
 import { ToasterService } from '@abp/ng.theme.shared';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
-      // ...
+    // ...
       {
         provide: ToasterService,
         useClass: CustomToasterService,
       },
-  ]
-})
+  ],
+};
 ```
 
 ## API

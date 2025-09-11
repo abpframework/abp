@@ -29,7 +29,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement;
@@ -101,11 +101,12 @@ public class MyProjectNameWebHostModule : AbpModule
         ConfigureCache(configuration);
         ConfigureUrls(configuration);
         ConfigureAuthentication(context, configuration);
-        ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureSwaggerServices(context.Services);
         ConfigureMultiTenancy();
         ConfigureDataProtection(context, configuration, hostingEnvironment);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameWebHostModule>();
     }
 
     private void ConfigureMenu(IConfiguration configuration)
@@ -167,14 +168,6 @@ public class MyProjectNameWebHostModule : AbpModule
                 options.Scope.Add("phone");
                 options.Scope.Add("MyProjectName");
             });
-    }
-
-    private void ConfigureAutoMapper()
-    {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameWebHostModule>();
-        });
     }
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)

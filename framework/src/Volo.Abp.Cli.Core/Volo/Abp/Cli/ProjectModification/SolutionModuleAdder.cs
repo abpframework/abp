@@ -98,7 +98,8 @@ public class SolutionModuleAdder : ITransientDependency
         bool withSourceCode = false,
         bool addSourceCodeToSolutionFile = false,
         bool newTemplate = false,
-        bool newProTemplate = false)
+        bool newProTemplate = false,
+        bool skipOpeningDocumentation = false)
     {
         Check.NotNull(solutionFile, nameof(solutionFile));
         Check.NotNull(moduleName, nameof(moduleName));
@@ -159,10 +160,13 @@ public class SolutionModuleAdder : ITransientDependency
             await SetLeptonXAbpVersionsAsync(solutionFile, Path.Combine(modulesFolderInSolution, module.Name));
         }
 
-        var documentationLink = module.GetFirstDocumentationLinkOrNull();
-        if (documentationLink != null)
+        if (!skipOpeningDocumentation)
         {
-            CmdHelper.Open(documentationLink);
+            var documentationLink = module.GetFirstDocumentationLinkOrNull();
+            if (documentationLink != null)
+            {
+                CmdHelper.Open(documentationLink);
+            }
         }
 
         return module;

@@ -9,7 +9,7 @@ export class AbpOAuthModule {
   static forRoot(): ModuleWithProviders<AbpOAuthModule> {
     return {
       ngModule: AbpOAuthModule,
-      providers: [provideAbpOAuth({ ssr: false })],
+      providers: [provideAbpOAuth()],
     };
   }
 }

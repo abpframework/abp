@@ -9,6 +9,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.PermissionManagement.Localization;
 
 namespace Volo.Abp.PermissionManagement;
 
@@ -26,6 +27,9 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         IOptions<PermissionManagementOptions> options,
         ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
     {
+        LocalizationResource = typeof(AbpPermissionManagementResource);
+        ObjectMapperContext = typeof(AbpPermissionManagementApplicationModule);
+
         Options = options.Value;
         PermissionManager = permissionManager;
         PermissionDefinitionManager = permissionDefinitionManager;

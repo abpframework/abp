@@ -100,11 +100,10 @@ export class CustomPermissionService extends PermissionService {
 }
 ```
 
-- Then, in `app.module.ts`, provide this service as follows: 
+- Then, in `app.config.ts`, provide this service as follows: 
 
 ```js
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     {
@@ -112,9 +111,7 @@ export class CustomPermissionService extends PermissionService {
       useExisting: CustomPermissionService,
     },
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
 That's it. Now, when a directive/guard asks for `PermissionService` from angular, it will inject your service.

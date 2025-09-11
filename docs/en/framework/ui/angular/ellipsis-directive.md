@@ -5,47 +5,26 @@ Text inside an HTML element can be truncated easily with an ellipsis by using CS
 
 ## Getting Started
 
-In order to use the `EllipsisDirective` in an HTML template, the **`ThemeSharedModule`** should be imported into your module like this:
+In order to use the `EllipsisDirective` in an HTML template, it should be imported in your component. The selector of directive is **`abpEllipsis`**. By adding the `abpEllipsis` attribute to an HTML element, you can activate the `EllipsisDirective` for the HTML element.
 
 ```js
 // ...
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { EllipsisDirective } from '@abp/ng.theme.shared';
 
-@NgModule({
+@Component({
   //...
-  imports: [..., ThemeSharedModule],
+  imports: [EllipsisDirective],
+  template: `
+    <p abpEllipsis>
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam commodi quae aspernatur,
+      corporis velit et suscipit id consequuntur amet minima expedita cum reiciendis dolorum
+      cupiditate? Voluptas eaque voluptatum odio deleniti quo vel illum nemo accusamus nulla ratione
+      impedit dolorum expedita necessitatibus fugiat ullam beatae, optio eum cupiditate ducimus
+      architecto.
+    </p>
+  `
 })
-export class MyFeatureModule {}
-```
-
-or **if you would not like to import** the `ThemeSharedModule`, you can import the **`EllipsisModule`** as shown below:
-
-
-```js
-// ...
-import { EllipsisModule } from '@abp/ng.theme.shared';
-
-@NgModule({
-  //...
-  imports: [..., EllipsisModule],
-})
-export class MyFeatureModule {}
-```
-
-## Usage
-
-The `EllipsisDirective` is very easy to use. The directive's selector is **`abpEllipsis`**. By adding the `abpEllipsis` attribute to an HTML element, you can activate the `EllipsisDirective` for the HTML element.
-
-See an example usage:
-
-```html
-<p abpEllipsis>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam commodi quae aspernatur,
-    corporis velit et suscipit id consequuntur amet minima expedita cum reiciendis dolorum
-    cupiditate? Voluptas eaque voluptatum odio deleniti quo vel illum nemo accusamus nulla ratione
-    impedit dolorum expedita necessitatibus fugiat ullam beatae, optio eum cupiditate ducimus
-    architecto.
-  </p>
+export class SampleComponent {}
 ```
 
 The `abpEllipsis` attribute has been added to the `<p>` element that containing very long text inside to activate the `EllipsisDirective`.

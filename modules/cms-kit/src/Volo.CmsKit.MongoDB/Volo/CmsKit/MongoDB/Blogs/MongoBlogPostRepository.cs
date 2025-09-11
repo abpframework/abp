@@ -86,8 +86,9 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
+        
         var dbContext = await GetDbContextAsync(cancellationToken);
-        var blogPostQueryable = await GetQueryableAsync();
+        var blogPostQueryable = await GetQueryableAsync(cancellationToken);
 
         var tagFilteredEntityIds = await GetEntityIdsByTagId(tagId, cancellationToken);
 
@@ -134,6 +135,12 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
         var entityIds =
             await _entityTagManager.GetEntityIdsFilteredByTagAsync(tagId.Value, CurrentTenant.Id, cancellationToken);
 
+        if (entityIds.Count == 0)
+        {
+            entityIdFilters.Add(Guid.Empty);
+            return entityIdFilters;
+        }
+        
         foreach (var entityId in entityIds)
         {
             if (Guid.TryParse(entityId, out var parsedEntityId))
@@ -153,9 +160,19 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
             return entityIdFilters;
         }
 
-        var entityIds =
-            await _markedItemManager.GetEntityIdsFilteredByUserAsync(userId.Value, BlogPostConsts.EntityType, CurrentTenant.Id, cancellationToken);
+        var entityIds = await _markedItemManager.GetEntityIdsFilteredByUserAsync(
+            userId.Value, 
+            BlogPostConsts.EntityType, 
+            CurrentTenant.Id, 
+            cancellationToken
+        );
 
+        if (entityIds.Count == 0)
+        {
+            entityIdFilters.Add(Guid.Empty);
+            return entityIdFilters;
+        }
+        
         foreach (var entityId in entityIds)
         {
             if (Guid.TryParse(entityId, out var parsedEntityId))

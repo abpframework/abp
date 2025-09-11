@@ -17,7 +17,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.MongoDB;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
@@ -56,7 +56,7 @@ namespace MyCompanyName.MyProjectName;
     // ABP Framework packages
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAutofacModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
@@ -159,7 +159,7 @@ public class MyProjectNameModule : AbpModule
         ConfigureMultiTenancy();
         ConfigureUrls(configuration);
         ConfigureBundles();
-        ConfigureAutoMapper(context);
+        ConfigureMapperly(context);
         ConfigureSwagger(context.Services);
         ConfigureNavigationServices();
         ConfigureAutoApiControllers();
@@ -287,17 +287,9 @@ public class MyProjectNameModule : AbpModule
         );
     }
 
-    private void ConfigureAutoMapper(ServiceConfigurationContext context)
+    private void ConfigureMapperly(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<MyProjectNameModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            /* Uncomment `validate: true` if you want to enable the Configuration Validation feature.
-             * See AutoMapper's documentation to learn what it is:
-             * https://docs.automapper.org/en/stable/Configuration-validation.html
-             */
-            options.AddMaps<MyProjectNameModule>(/* validate: true */);
-        });
+        context.Services.AddMapperlyObjectMapper<MyProjectNameModule>();
     }
 
     private void ConfigureMongoDB(ServiceConfigurationContext context)

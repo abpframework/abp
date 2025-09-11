@@ -42,7 +42,7 @@ The `PasswordComplexityIndicatorService` is for calculating the password complex
 It's easy, imagine you have a password input that you want to add the complexity indicator under. Put this component under the input
 
 ```ts
-  <abp-password-complexity-indicator [progressBar]="ProgressBarStatsObject"></abp-password-complexity-indicator>
+  <abp-password-complexity-indicator [progressBar]="ProgressBarStatsObject" />
 ```
 
 - Pass the password to the `validatePassword` method of the `PasswordComplexityIndicatorService`, and bind return the value to the `progressBar` property of the `abp-password-complexity-indicator` 

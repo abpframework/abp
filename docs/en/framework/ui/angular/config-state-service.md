@@ -13,11 +13,11 @@ import { ConfigStateService } from '@abp/ng.core';
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private config: ConfigStateService) {}
+   private config = inject(ConfigStateService);
 }
 ```
 
-You do not have to provide the `ConfigStateService` at module or component/directive level, because it is already **provided in root**.
+You do not have to provide the `ConfigStateService` at component or directive level, because it is already **provided in root**.
 
 ## Get Methods
 
@@ -35,9 +35,9 @@ You can use the `getAll` or `getAll$` method of `ConfigStateService` to get all 
 const config = this.config.getAll();
 
 // or
-this.config.getAll$().subscribe(config => {
-   // use config here
-})
+this.config.getAll$().subscribe((config) => {
+  // use config here
+});
 ```
 
 ### How to Get a Specific Configuration
@@ -50,9 +50,9 @@ You can use the `getOne` or `getOne$` method of `ConfigStateService` to get a sp
 const currentUser = this.config.getOne("currentUser");
 
 // or
-this.config.getOne$("currentUser").subscribe(currentUser => {
-   // use currentUser here
-})
+this.config.getOne$("currentUser").subscribe((currentUser) => {
+  // use currentUser here
+});
 ```
 
 On occasion, you will probably want to be more specific than getting just the current user. For example, here is how you can get the `tenantId`:
@@ -61,9 +61,9 @@ On occasion, you will probably want to be more specific than getting just the cu
 const tenantId = this.config.getDeep("currentUser.tenantId");
 
 // or
-this.config.getDeep$("currentUser.tenantId").subscribe(tenantId => {
-   // use tenantId here
-})
+this.config.getDeep$("currentUser.tenantId").subscribe((tenantId) => {
+  // use tenantId here
+});
 ```
 
 or by giving an array of keys as parameter:
@@ -84,9 +84,11 @@ You can use the `getFeature` or `getFeature$` method of `ConfigStateService` to 
 const enableLdapLogin = this.config.getFeature("Account.EnableLdapLogin");
 
 // or
-this.config.getFeature$("Account.EnableLdapLogin").subscribe(enableLdapLogin => {
-   // use enableLdapLogin here
-})
+this.config
+  .getFeature$("Account.EnableLdapLogin")
+  .subscribe((enableLdapLogin) => {
+    // use enableLdapLogin here
+  });
 ```
 
 > For more information, see the [features document](./features.md).
@@ -98,12 +100,16 @@ You can use the `getSetting` or `getSetting$` method of `ConfigStateService` to 
 ```js
 // this.config is instance of ConfigStateService
 
-const twoFactorBehaviour = this.config.getSetting("Abp.Identity.TwoFactor.Behaviour");
+const twoFactorBehaviour = this.config.getSetting(
+  "Abp.Identity.TwoFactor.Behaviour"
+);
 
 // or
-this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorBehaviour => {
-   // use twoFactorBehaviour here
-})
+this.config
+  .getSetting$("Abp.Identity.TwoFactor.Behaviour")
+  .subscribe((twoFactorBehaviour) => {
+    // use twoFactorBehaviour here
+  });
 ```
 
 > For more information, see the [settings document](./settings.md).
@@ -112,7 +118,6 @@ this.config.getSetting$("Abp.Identity.TwoFactor.Behaviour").subscribe(twoFactorB
 
 Please refer to `ApplicationConfigurationDto` type for all the properties you can get with `getOne` and `getDeep`. It can be found in the [models.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/proxy/volo/abp/asp-net-core/mvc/application-configurations/models.ts#L11).
 
-
 ## Set State
 
 `ConfigStateService` has a method named `setState` which allow you to set the state value.
@@ -120,9 +125,12 @@ Please refer to `ApplicationConfigurationDto` type for all the properties you ca
 You can get the application configuration response and set the `ConfigStateService` state value as shown below:
 
 ```js
-import {AbpApplicationConfigurationService, ConfigStateService} from '@abp/ng.core';
+import { AbpApplicationConfigurationService, ConfigStateService } from '@abp/ng.core';
 
-constructor(private abpApplicationConfigurationService: AbpApplicationConfigurationService, private config: ConfigStateService) {
+private abpApplicationConfigurationService = inject(AbpApplicationConfigurationService);
+private config = inject(ConfigStateService);
+
+constructor() {
   this.abpApplicationConfigurationService.get({ includeLocalizationResources: false }).subscribe(config => {
     this.config.setState(config);
   })

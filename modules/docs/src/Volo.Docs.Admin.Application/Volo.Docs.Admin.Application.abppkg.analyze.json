@@ -16,19 +16,29 @@
           "name": "DocsAdminApplicationContractsModule"
         },
         {
+          "declaringAssemblyName": "Volo.Docs.Common.Application",
+          "namespace": "Volo.Docs.Common",
+          "name": "DocsCommonApplicationModule"
+        },
+        {
           "declaringAssemblyName": "Volo.Abp.Caching",
           "namespace": "Volo.Abp.Caching",
           "name": "AbpCachingModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.Ddd.Application",
           "namespace": "Volo.Abp.Application",
           "name": "AbpDddApplicationModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BackgroundJobs.Abstractions",
+          "namespace": "Volo.Abp.BackgroundJobs",
+          "name": "AbpBackgroundJobsAbstractionsModule"
         }
       ],
       "implementingInterfaces": [
@@ -470,6 +480,133 @@
       ],
       "contentType": "applicationService",
       "name": "DocumentAdminAppService",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Documents",
+      "baseClass": {
+        "name": "DocumentPdfAppService",
+        "namespace": "Volo.Docs.Common.Documents",
+        "declaringAssemblyName": "Volo.Docs.Common.Application",
+        "fullName": "Volo.Docs.Common.Documents.DocumentPdfAppService"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
+        },
+        {
+          "name": "IAvoidDuplicateCrossCuttingConcerns",
+          "namespace": "Volo.Abp.Aspects",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.Aspects.IAvoidDuplicateCrossCuttingConcerns"
+        },
+        {
+          "name": "IValidationEnabled",
+          "namespace": "Volo.Abp.Validation",
+          "declaringAssemblyName": "Volo.Abp.Validation",
+          "fullName": "Volo.Abp.Validation.IValidationEnabled"
+        },
+        {
+          "name": "IUnitOfWorkEnabled",
+          "namespace": "Volo.Abp.Uow",
+          "declaringAssemblyName": "Volo.Abp.Uow",
+          "fullName": "Volo.Abp.Uow.IUnitOfWorkEnabled"
+        },
+        {
+          "name": "IAuditingEnabled",
+          "namespace": "Volo.Abp.Auditing",
+          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
+          "fullName": "Volo.Abp.Auditing.IAuditingEnabled"
+        },
+        {
+          "name": "IGlobalFeatureCheckingEnabled",
+          "namespace": "Volo.Abp.GlobalFeatures",
+          "declaringAssemblyName": "Volo.Abp.GlobalFeatures",
+          "fullName": "Volo.Abp.GlobalFeatures.IGlobalFeatureCheckingEnabled"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        },
+        {
+          "name": "IDocumentPdfAppService",
+          "namespace": "Volo.Docs.Common.Documents",
+          "declaringAssemblyName": "Volo.Docs.Common.Application.Contracts",
+          "fullName": "Volo.Docs.Common.Documents.IDocumentPdfAppService"
+        },
+        {
+          "name": "IDocumentPdfAdminAppService",
+          "namespace": "Volo.Docs.Admin.Documents",
+          "declaringAssemblyName": "Volo.Docs.Admin.Application.Contracts",
+          "fullName": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
+          "name": "GeneratePdfAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DocumentPdfGeneratorInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "PagedResultDto<ProjectPdfFileDto>",
+          "namespace": "Volo.Docs.Admin.Documents",
+          "name": "GetPdfFilesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "GetPdfFilesInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Docs.Admin.Documents",
+          "name": "DeletePdfFileAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DeletePdfFileInput",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "DocumentPdfAdminAppService",
       "summary": null
     }
   ]

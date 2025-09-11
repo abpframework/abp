@@ -27,7 +27,7 @@ Besides the overall solution structure, the internals of each project in a solut
 
 ### Library Integrations & Configurations
 
-When you use ABP startup solution templates to create a new solution, some **fundamental library installations** ([Serilog](https://serilog.net/), [Autofac](https://autofac.org/), [AutoMapper](https://automapper.org/), [Swagger](https://swagger.io/), [HealthCheck](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks) and others..) and their fine-tuned configurations are already prepared for you. Also, required **[ABP packages](https://abp.io/packages)** are just installed based on your preferences and configured for **development and production environments**.
+When you use ABP startup solution templates to create a new solution, some **fundamental library installations** ([Serilog](https://serilog.net/), [Autofac](https://autofac.org/), [Mapperly](https://mapperly.riok.app/), [Swagger](https://swagger.io/), [HealthCheck](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks) and others..) and their fine-tuned configurations are already prepared for you. Also, required **[ABP packages](https://abp.io/packages)** are just installed based on your preferences and configured for **development and production environments**.
 
 ### Development Ready
 

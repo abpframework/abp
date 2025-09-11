@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.Threading;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
 using Volo.Docs.Projects;
@@ -18,6 +20,8 @@ namespace Volo.Docs.Common.Projects
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentSourceFactory _documentSource;
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
+
+        private readonly SemaphoreSlim _syncSemaphore = new SemaphoreSlim(1, 1);
 
         public ProjectAppService(
             IProjectRepository projectRepository,
@@ -56,21 +60,31 @@ namespace Volo.Docs.Common.Projects
         public virtual async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
-
-            var versions = await _versionCache.GetOrAddAsync(
-                CacheKeyGenerator.GenerateProjectVersionsCacheKey(project),
-                () => GetVersionsAsync(project),
-                () => new DistributedCacheEntryOptions
+            using (await _syncSemaphore.LockAsync())
+            {
+                var versions = await _versionCache.GetAsync(CacheKeyGenerator.GenerateProjectVersionsCacheKey(project));
+                if (versions.IsNullOrEmpty())
                 {
-                    //TODO: Configurable?
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12),
-                    SlidingExpiration = TimeSpan.FromMinutes(60)
+                    versions = await GetVersionsAsync(project);
+                    if (!versions.IsNullOrEmpty())
+                    {
+                        await _versionCache.SetAsync(
+                            CacheKeyGenerator.GenerateProjectVersionsCacheKey(project),
+                            versions,
+                            new DistributedCacheEntryOptions
+                            {
+                                //TODO: Configurable?
+                                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12),
+                                SlidingExpiration = TimeSpan.FromMinutes(60)
+                            }
+                        );
+                    }
                 }
-            );
 
-            return new ListResultDto<VersionInfoDto>(
-                ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions)
-            );
+                return new ListResultDto<VersionInfoDto>(
+                    ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions)
+                );
+            }
         }
 
         protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)

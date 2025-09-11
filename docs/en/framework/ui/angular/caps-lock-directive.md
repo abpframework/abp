@@ -5,66 +5,27 @@ In password inputs, You may want to show if Caps Lock is on. To make this even e
 
 ## Getting Started
 
-`TrackCapsLockDirective` is standalone. In order to use the `TrackCapsLockDirective` in an HTML template, import it to related module or your standalone component:
-
-**Importing to NgModule**
-```ts
-import { TrackCapsLockDirective } from '@abp/ng.core';
-
-@NgModule({
-  //...
-  declarations: [
-   ...,
-   TestComponent
-  ],
-  imports: [
-   ...,
-   TrackCapsLockDirective
-  ],
-})
-export class MyFeatureModule {}
-```
-
-## Usage
-
-The `TrackCapsLockDirective` is very easy to use. The directive's selector is **`abpCapsLock`**. By adding the `abpCapsLock` event to an element, you can track the status of Caps Lock. You can use this to warn user.
+`TrackCapsLockDirective` is standalone. In order to use the `TrackCapsLockDirective` in an HTML template, import it to related component. The selector of the directive is **`abpCapsLock`**. By adding the `abpCapsLock` event to an element, you can track the status of Caps Lock. You can use this to warn user.
 
 See an example usage:
 
-**NgModule Component usage**
-```ts
-@Component({
-  selector: 'test-component',
-  template: `
-    <div class="d-flex flex-column">
-      <label>Password</label>
-      <input (abpCapsLock)="capsLock = $event"/>
-      <i *ngIf="capsLock">icon</i>
-    </div>
-  `
-})
-export class TestComponent{
-  capsLock = false;
-}
-```
-
-**Standalone Component usage**
 ```ts
 import { TrackCapsLockDirective } from '@abp/ng.core'
 
 @Component({
-  selector: 'standalone-component',
-  standalone: true,
+  selector: 'sample-component',
   template: `
     <div class="d-flex flex-column">
       <label>Password</label>
       <input (abpCapsLock)="capsLock = $event"/>
-      <i *ngIf="capsLock">icon</i>
+      @if (capslock) {
+        <i>icon</i>
+      }
     </div>
   `,
   imports: [TrackCapsLockDirective]
 })
-export class StandaloneComponent{
+export class SampleComponent{
   capsLock = false;
 }
 ```

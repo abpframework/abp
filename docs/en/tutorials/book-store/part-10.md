@@ -578,11 +578,17 @@ Let's see the changes we've done:
 
 ### Object to Object Mapping Configuration
 
-Introduced the `AuthorLookupDto` class and used object mapping inside the `GetAuthorLookupAsync` method. So, we need to add a new mapping definition inside the `BookStoreApplicationAutoMapperProfile.cs` file of the `Acme.BookStore.Application` project:
+Introduced the `AuthorLookupDto` class and used object mapping inside the `GetAuthorLookupAsync` method. So, we need to add a new mapping definition inside the `BookStoreApplicationMappers.cs` file of the `Acme.BookStore.Application` project:
 
-````csharp
-CreateMap<Author, AuthorLookupDto>();
-````
+```csharp
+[Mapper]
+public partial class AuthorToAuthorLookupDtoMapper : MapperBase<Author, AuthorLookupDto>
+{
+    public override partial AuthorLookupDto Map(Author source);
+
+    public override partial void Map(Author source, AuthorLookupDto destination);
+}
+```
 
 ## Unit Tests
 
@@ -898,12 +904,37 @@ These changes require a small change in the `EditModal.cshtml`. Remove the `<abp
 
 ### Object to Object Mapping Configuration
 
-The changes above requires to define some object to object mappings. Open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and add the following mapping definitions inside the constructor:
+The changes above requires to define some object to object mappings. Open the `BookStoreWebMappers.cs` in the `Acme.BookStore.Web` project and create the following mapping definitions:
 
 ```csharp
-CreateMap<Pages.Books.CreateModalModel.CreateBookViewModel, CreateUpdateBookDto>();
-CreateMap<BookDto, Pages.Books.EditModalModel.EditBookViewModel>();
-CreateMap<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>();
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
+
+//...
+
+[Mapper]
+public partial class CreateBookViewModelToCreateUpdateBookDtoMapper : MapperBase<Pages.Books.CreateModalModel.CreateBookViewModel, CreateUpdateBookDto>
+{
+    public override partial CreateUpdateBookDto Map(Pages.Books.CreateModalModel.CreateBookViewModel source);
+
+    public override partial void Map(Pages.Books.CreateModalModel.CreateBookViewModel source, CreateUpdateBookDto destination);
+}
+
+[Mapper]
+public partial class BookDtoToEditBookViewModelMapper : MapperBase<BookDto, Pages.Books.EditModalModel.EditBookViewModel>
+{
+    public override partial Pages.Books.EditModalModel.EditBookViewModel Map(BookDto source);
+
+    public override partial void Map(BookDto source, Pages.Books.EditModalModel.EditBookViewModel destination);
+}
+
+[Mapper]
+public partial class EditBookViewModelToCreateUpdateBookDtoMapper : MapperBase<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>
+{
+    public override partial CreateUpdateBookDto Map(Pages.Books.EditModalModel.EditBookViewModel source);
+
+    public override partial void Map(Pages.Books.EditModalModel.EditBookViewModel source, CreateUpdateBookDto destination);
+}
 ```
 
 You can run the application and try to create a new book or update an existing book. You will see a drop down list on the create/update form to select the author of the book:

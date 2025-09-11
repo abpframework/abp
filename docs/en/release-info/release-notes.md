@@ -16,6 +16,7 @@ This is currently a RC (release-candidate) and you can see the detailed **[blog 
 * Angular UI: Standalone Package Structure
 * Upgraded to `Blazorise` **v1.7.7**
 * Audit Logging Module: Excel Export
+* Angular UI: Version Upgrade to **v20**
 
 ## 9.2 (2025-06-02)
 

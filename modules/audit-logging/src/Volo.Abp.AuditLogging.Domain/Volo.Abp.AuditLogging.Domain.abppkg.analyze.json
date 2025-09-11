@@ -133,6 +133,25 @@
       "primaryKeyType": "Guid",
       "properties": [
         {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "FileName",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "AuditLogExcelFile",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
           "type": "System.Guid",
           "name": "AuditLogId",
           "summary": null
@@ -415,6 +434,105 @@
       ],
       "contentType": "aggregateRoot",
       "name": "AuditLog",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.AuditLogging",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
+        "name": "AuditLogExcelFile",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository<AuditLogExcelFile, Guid>"
+        },
+        {
+          "name": "IRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IReadOnlyRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IBasicRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IReadOnlyRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyRepository<AuditLogExcelFile, Guid>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<AuditLogExcelFile, Guid>"
+        },
+        {
+          "name": "IBasicRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<AuditLogExcelFile, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.AuditLogging",
+          "name": "GetListCreationTimeBeforeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "creationTimeBefore",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IAuditLogExcelFileRepository",
       "summary": null
     },
     {

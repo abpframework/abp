@@ -5,25 +5,25 @@
 ABP offers a configurations for errors handling like below
 
 ```ts
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { MyCustomRouteErrorComponent } from './my-custom-route.component';
+//app.config.ts
+import { provideAbpThemeShared } from '@abp/ng.theme.shared';
+import { CustomErrorComponent } from './custom-error.component';
 
-@NgModule({
-  imports: [
-    ThemeSharedModule.forRoot({
-      httpErrorConfig: {
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAbpThemeShared(
+      withHttpErrorConfig({
         skipHandledErrorCodes: [403],
         errorScreen: {
-          forWhichErrors: [404],
           component: CustomErrorComponent,
-          hideCloseIcon: false
-        }
-      }
-    }),
-    ...
+          forWhichErrors: [404],
+          hideCloseIcon: false,
+        },
+      }),
+    ),
   ],
-})
-export class AppModule {}
+};
+
 ```
 
 - `ErrorScreenErrorCodes` the error codes that you can pass to `skipHandledErrorCodes` and `forWhichErrors`.
@@ -67,27 +67,24 @@ export function handleHttpErrors(injector: Injector, httpError: HttpErrorRespons
   return of(httpError);
 }
 
-// app.module.ts
+// app.config.ts
 import { Error404Component } from './error404/error404.component';
 import { handleHttpErrors } from './http-error-handling';
 import { HTTP_ERROR_HANDLER, ... } from '@abp/ng.theme.shared';
 
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
-    // ...
-    { provide: HTTP_ERROR_HANDLER, useValue: handleHttpErrors }
+    ...
+    { provide: HTTP_ERROR_HANDLER, useValue: handleHttpErrors },
+    ...
   ],
-  declarations: [
-   //...
-   Error404Component],
-})
-export class AppModule {}
+};
+
 ```
 
 In the example above:
 
-- Created a function named `handleHttpErrors` and defined as value of the `HTTP_ERROR_HANDLER` provider in app.module. After this, the function executes when an HTTP error occurs.
+- Created a function named `handleHttpErrors` and defined as value of the `HTTP_ERROR_HANDLER` provider in `app.config.ts`. After this, the function executes when an HTTP error occurs.
 - 400 bad request errors is handled. When a 400 error occurs.
 
 - Since `of(httpError)` is returned at bottom of the `handleHttpErrors`, the `ErrorHandler` will handle the HTTP errors except 400 and 404 errors.
@@ -195,22 +192,20 @@ export class MyCustomErrorHandlerService
 
 ```ts
 
-// app.module.ts
+// app.config.ts
 import { CUSTOM_ERROR_HANDLERS, ... } from '@abp/ng.theme.shared';
 import { MyCustomErrorHandlerService } from './custom-error-handler.service';
 
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
-    // ...
+    //...
     {
       provide: CUSTOM_ERROR_HANDLERS,
       useExisting: MyCustomErrorHandlerService,
       multi: true,
     }
-  ]
-})
-export class AppModule {}
+  ],
+};
 ```
 
 In the example above:

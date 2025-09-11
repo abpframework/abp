@@ -1,33 +1,32 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { OAuthStorage } from 'angular-oauth2-oidc';
+import { REQUEST } from '@angular/core';
 
-@Injectable({
-  providedIn: null,
-})
+@Injectable({ providedIn: null })
 export class ServerTokenStorageService implements OAuthStorage {
-  private cookies: Map<string, string> = new Map();
-  constructor(@Inject('cookies') c: string | undefined) {
-    if (c) {
-      const cookieItems = c.split(';');
-      for (const item of cookieItems) {
-        const index = item.indexOf('=');
-        if (index > -1) {
-          const key = item.slice(0, index).trim();
-          const value = item.slice(index + 1).trim();
-          this.cookies.set(key, value);
-        }
+  private cookies = new Map<string, string>();
+
+  constructor(@Optional() @Inject(REQUEST) private req: Request | null) {
+    const cookieHeader = this.req?.headers.get('cookie') ?? '';
+    for (const part of cookieHeader.split(';')) {
+      const i = part.indexOf('=');
+      if (i > -1) {
+        const k = part.slice(0, i).trim();
+        const v = decodeURIComponent(part.slice(i + 1).trim());
+        this.cookies.set(k, v);
       }
     }
   }
 
   getItem(key: string): string {
-    if (this.cookies) {
-      return this.cookies.get(key);
+    const fromCookie = this.cookies.get(key);
+    if (fromCookie) {
+      return fromCookie;
     }
+
     return '';
   }
 
-  removeItem(key: string): void {}
-
-  setItem(key: string, data: string): void {}
+  setItem(_k: string, _v: string): void {}
+  removeItem(_k: string): void {}
 }

@@ -108,5 +108,5 @@ export interface IAuthService {
 
   getAccessToken(): string;
 
-  refreshToken(): Promise<AbpAuthResponse>;
+  refreshToken(): Promise<AbpAuthResponse | void>;
 }

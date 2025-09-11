@@ -6,7 +6,7 @@ import {
   ModalComponent,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { Component, inject, makeStateKey, OnInit, TransferState } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ReactiveFormsModule,
@@ -22,8 +22,7 @@ import {
   ConfigStateService,
   LocalizationPipe,
   LocalizationService,
-  PermissionDirective,
-  SSRService,
+  PermissionDirective
 } from '@abp/ng.core';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { CommonModule } from '@angular/common';
@@ -52,7 +51,6 @@ export class EmailSettingGroupComponent implements OnInit {
 
   protected readonly localizationService = inject(LocalizationService);
   protected readonly configStateSevice = inject(ConfigStateService);
-  protected readonly ssrService = inject(SSRService);
   protected readonly currentUserEmail = toSignal(
     this.configStateSevice.getDeep$(['currentUser', 'email']),
   );
@@ -63,29 +61,17 @@ export class EmailSettingGroupComponent implements OnInit {
   emailingPolicy = SettingManagementPolicyNames.Emailing;
   isEmailTestModalOpen = false;
   modalSize: NgbModalOptions = { size: 'lg' };
-  EMAIL_SETTINGS_KEY = makeStateKey<any>('emailSettings');
 
-  constructor(
-    private transferState: TransferState,
-  ) {}
+  constructor() {}
 
   ngOnInit() {
     this.getData();
   }
 
   private getData() {
-    if (this.transferState.hasKey(this.EMAIL_SETTINGS_KEY)) {
-      const emailSettings = this.transferState.get<EmailSettingsDto>(this.EMAIL_SETTINGS_KEY, null);
-      this.buildForm(emailSettings);
-      this.transferState.remove(this.EMAIL_SETTINGS_KEY);
-    } else {
-      this.emailSettingsService.get().subscribe(res => {
-        this.buildForm(res);
-        if (this.ssrService.isServer) {
-          this.transferState.set(this.EMAIL_SETTINGS_KEY, res);
-        }
-      });
-    }
+    this.emailSettingsService.get().subscribe(res => {
+      this.buildForm(res);
+    });
   }
 
   private buildForm(emailSettings: EmailSettingsDto) {

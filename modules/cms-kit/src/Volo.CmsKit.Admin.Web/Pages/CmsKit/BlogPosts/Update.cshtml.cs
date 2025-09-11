@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -56,8 +55,6 @@ public class UpdateModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(BlogPostDto))]
-    [AutoMap(typeof(UpdateBlogPostDto), ReverseMap = true)]
     public class UpdateBlogPostViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]

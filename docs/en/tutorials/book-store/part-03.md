@@ -298,23 +298,17 @@ public class EditModalModel : BookStorePageModel
 
 ### Mapping from BookDto to CreateUpdateBookDto
 
-To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` file in the `Acme.BookStore.Web` project and change it as shown below:
+To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebMappers.cs` file in the `Acme.BookStore.Web` project and change it as shown below:
 
-````csharp
-using AutoMapper;
-
-namespace Acme.BookStore.Web;
-
-public class BookStoreWebAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class BookDtoToCreateUpdateBookDtoMapper : MapperBase<BookDto, CreateUpdateBookDto>
 {
-    public BookStoreWebAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
-    }
-}
-````
+    public override partial CreateUpdateBookDto Map(BookDto source);
 
-* We have just added `CreateMap<BookDto, CreateUpdateBookDto>();` to define this mapping.
+    public override partial void Map(BookDto source, CreateUpdateBookDto destination);
+}
+```
 
 > Notice that we do the mapping definition in the web layer as a best practice since it is only needed in this layer.
 
@@ -1288,28 +1282,26 @@ We can now define a modal to edit the book. Add the following code to the end of
 </Modal>
 ````
 
-### AutoMapper Configuration
+### Mapperly Configuration
 
 The base `AbpCrudPageBase` uses the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
 
-Open the `BookStoreBlazorAutoMapperProfile` inside the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and change the content as the following:
+Open the `BookStoreBlazorMappers` inside the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and change the content as the following:
 
-````csharp
-using Acme.BookStore.Books;
-using AutoMapper;
+```csharp
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
 
 {{ if UI == "BlazorServer" }}namespace Acme.BookStore.Blazor; {{ else if UI == "MAUIBlazor" }}namespace Acme.BookStore.MauiBlazor; {{ else }}namespace Acme.BookStore.Blazor.Client;{{ end }}
 
-public class BookStoreBlazorAutoMapperProfile : Profile
+[Mapper]
+public partial class BookDtoToCreateUpdateBookDtoMapper : MapperBase<BookDto, CreateUpdateBookDto>
 {
-    public BookStoreBlazorAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
-    }
-}
-````
+    public override partial CreateUpdateBookDto Map(BookDto source);
 
-* We've just added the `CreateMap<BookDto, CreateUpdateBookDto>();` line to define the mapping.
+    public override partial void Map(BookDto source, CreateUpdateBookDto destination);
+}
+```
 
 ### Test the Editing Modal
 

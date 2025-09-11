@@ -55,7 +55,16 @@ namespace Acme.BookStore.Web
 }
 ```
 
-* `IApplicationConfigurationContributor` defines the `ContributeAsync` method to extend the **application-configuration** endpoint with the specified additional data.
-* You can inject services and perform any logic needed to extend the endpoint as you wish.
+Add your contributor instance to the `AbpApplicationConfigurationOptions`
 
-> Application configuration contributors are automatically discovered by the ABP and executed as a part of the application configuration initialization process.
+```csharp
+Configure<AbpApplicationConfigurationOptions>(options =>
+{
+    options.Contributors.AddIfNotContains(new MyApplicationConfigurationContributor());
+});
+```
+
+* `IApplicationConfigurationContributor` defines the `ContributeAsync` method to extend the **application-configuration** endpoint with the specified additional data.
+* You can get services from `context.ServiceProvider` and perform any logic needed to extend the endpoint as you wish.
+
+> Application configuration contributors are executed as a part of the application configuration initialization process.

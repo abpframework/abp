@@ -162,45 +162,39 @@ See the `TextTemplateManagementPermissions` class members for all permissions de
 
 #### Installation
 
-In order to configure the application to use the `TextTemplateManagementModule`, you first need to import `TextTemplateManagementConfigModule` from `@volo/abp.ng.text-template-management/config` to root module. `TextTemplateManagementConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the text template management module, you first need to import `provideTextTemplateManagementConfig` from `@volo/abp.ng.text-template-management/config` to root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { TextTemplateManagementConfigModule } from '@volo/abp.ng.text-template-management/config';
+// app.config.ts
+import { provideTextTemplateManagementConfig } from '@volo/abp.ng.text-template-management/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    TextTemplateManagementConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideTextTemplateManagementConfig()
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `TextTemplateManagementModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.text-template-management`.
+The text template management module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.text-template-management`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'text-template-management',
     loadChildren: () =>
-      import('@volo/abp.ng.text-template-management').then(m => m.TextTemplateManagementModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.text-template-management').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `TextTemplateManagementConfigModule` and `TextTemplateManagementModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both configurations implemented.
 
 <h4 id="h-text-template-management-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `TextTemplateManagementModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

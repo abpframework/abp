@@ -57,7 +57,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string filter = null,
-        bool includeDetails = true,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await GetListInternalAsync(sorting , maxResultCount, skipCount, filter, includeDetails, cancellationToken);
@@ -111,7 +111,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string filter = null,
-        bool includeDetails = true,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())

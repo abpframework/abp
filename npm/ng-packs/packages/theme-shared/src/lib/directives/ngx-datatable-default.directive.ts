@@ -57,7 +57,6 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
   }
 
   private fixStyleOnWindowResize() {
-    // avoided @HostListener('window:resize') in favor of performance
     if (isPlatformBrowser(this.platformId)) {
       const subscription = fromEvent(window, 'resize')
         .pipe(debounceTime(500))

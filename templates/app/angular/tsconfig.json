@@ -6,15 +6,15 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "es2020",
+    "module": "esnext",
     "skipLibCheck": true,
+    "esModuleInterop": true,
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ],
     "paths": {

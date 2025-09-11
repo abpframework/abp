@@ -38,7 +38,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
@@ -108,7 +108,6 @@ public class MyProjectNameBlazorModule : AbpModule
         ConfigureBundles();
         ConfigureMultiTenancy();
         ConfigureAuthentication(context, configuration);
-        ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureBlazorise(context);
         ConfigureRouter(context);
@@ -116,6 +115,8 @@ public class MyProjectNameBlazorModule : AbpModule
         ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureDistributedLocking(context, configuration);
         ConfigureSwaggerServices(context.Services);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameBlazorModule>();
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -298,15 +299,6 @@ public class MyProjectNameBlazorModule : AbpModule
             options.AppAssembly = typeof(MyProjectNameBlazorModule).Assembly;
         });
     }
-
-    private void ConfigureAutoMapper()
-    {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameBlazorModule>();
-        });
-    }
-
     private void ConfigureSwaggerServices(IServiceCollection services)
     {
         services.AddAbpSwaggerGen(

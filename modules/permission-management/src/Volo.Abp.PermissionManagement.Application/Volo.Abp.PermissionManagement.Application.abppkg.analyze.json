@@ -157,6 +157,33 @@
           ]
         },
         {
+          "returnType": "GetPermissionListResultDto",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "GetByGroupAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "groupName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            }
+          ]
+        },
+        {
           "returnType": "Void",
           "namespace": "Volo.Abp.PermissionManagement",
           "name": "UpdateAsync",

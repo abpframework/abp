@@ -2,6 +2,7 @@ import {
   AuthService,
   AuthGuard,
   authGuard,
+  asyncAuthGuard,
   ApiInterceptor,
   PIPE_TO_LOGIN_FN_KEY,
   CHECK_AUTHENTICATION_STATE_FN_KEY,
@@ -10,7 +11,7 @@ import {
 import { Provider, makeEnvironmentProviders, inject, provideAppInitializer } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
-import { AbpOAuthGuard, abpOAuthGuard } from '../guards';
+import { AbpOAuthGuard, abpOAuthGuard, asyncAbpOAuthGuard,  } from '../guards';
 import { OAuthConfigurationHandler } from '../handlers';
 import { OAuthApiInterceptor } from '../interceptors';
 import { AbpOAuthService, BrowserTokenStorageService, OAuthErrorFilterService } from '../services';
@@ -18,7 +19,7 @@ import { pipeToLogin, checkAccessToken, oAuthStorageFactory } from '../utils';
 import { NavigateToManageProfileProvider } from './navigate-to-manage-profile.provider';
 import { ServerTokenStorageService } from '../services/server-token-storage.service';
 
-export function provideAbpOAuth({ ssr = false }: { ssr?: boolean }) {
+export function provideAbpOAuth() {
   const providers = [
     {
       provide: AuthService,
@@ -31,6 +32,10 @@ export function provideAbpOAuth({ ssr = false }: { ssr?: boolean }) {
     {
       provide: authGuard,
       useValue: abpOAuthGuard,
+    },
+    {
+      provide: asyncAuthGuard,
+      useValue: asyncAbpOAuthGuard,
     },
     {
       provide: ApiInterceptor,
@@ -54,18 +59,14 @@ export function provideAbpOAuth({ ssr = false }: { ssr?: boolean }) {
       inject(OAuthConfigurationHandler);
     }),
     OAuthModule.forRoot().providers as Provider[],
+    ServerTokenStorageService,
+    BrowserTokenStorageService,
     {
       provide: OAuthStorage,
       useFactory: oAuthStorageFactory,
     },
     { provide: AuthErrorFilterService, useExisting: OAuthErrorFilterService },
   ];
-  console.log('ssr --->>>>', ssr);
-  if (ssr) {
-    providers.push(ServerTokenStorageService);
-  } else {
-    providers.push(BrowserTokenStorageService);
-  }
 
   return makeEnvironmentProviders(providers);
 }

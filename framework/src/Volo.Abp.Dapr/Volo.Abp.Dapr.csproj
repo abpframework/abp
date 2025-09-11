@@ -18,7 +18,7 @@
 
     <ItemGroup>
         <PackageReference Include="Dapr.Client" />
-        <PackageReference Include="IdentityModel" />
+        <PackageReference Include="Duende.IdentityModel" />
     </ItemGroup>
 
 </Project>

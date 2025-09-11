@@ -37,6 +37,7 @@ using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Volo.Abp.EntityFrameworkCore;
 
@@ -124,19 +125,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         TrySetDatabaseProvider(modelBuilder);
 
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToArray())
         {
-            ConfigureBasePropertiesMethodInfo
-                .MakeGenericMethod(entityType.ClrType)
-                .Invoke(this, new object[] { modelBuilder, entityType });
-
-            ConfigureValueConverterMethodInfo
-                .MakeGenericMethod(entityType.ClrType)
-                .Invoke(this, new object[] { modelBuilder, entityType });
-
-            ConfigureValueGeneratedMethodInfo
-                .MakeGenericMethod(entityType.ClrType)
-                .Invoke(this, new object[] { modelBuilder, entityType });
+            ConfigureEntityTypeProperties(modelBuilder, entityType);
         }
 
         if (LazyServiceProvider == null || Options == null)
@@ -149,6 +140,23 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             onModelCreatingAction.As<Action<DbContext, ModelBuilder>>().Invoke(this, modelBuilder);
         }
+    }
+
+    protected virtual void ConfigureEntityTypeProperties(
+        ModelBuilder modelBuilder,
+        IMutableEntityType entityType)
+    {
+        ConfigureBasePropertiesMethodInfo
+            .MakeGenericMethod(entityType.ClrType)
+            .Invoke(this, new object[] { modelBuilder, entityType });
+
+        ConfigureValueConverterMethodInfo
+            .MakeGenericMethod(entityType.ClrType)
+            .Invoke(this, new object[] { modelBuilder, entityType });
+
+        ConfigureValueGeneratedMethodInfo
+            .MakeGenericMethod(entityType.ClrType)
+            .Invoke(this, new object[] { modelBuilder, entityType });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -762,7 +770,9 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         AuditPropertySetter?.IncrementEntityVersionProperty(entry.Entity);
     }
 
-    protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    protected virtual void ConfigureBaseProperties<TEntity>(
+        ModelBuilder modelBuilder,
+        IMutableEntityType mutableEntityType)
         where TEntity : class
     {
         if (mutableEntityType.IsOwned())
@@ -775,54 +785,82 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
-        modelBuilder.Entity<TEntity>().ConfigureByConvention();
+        var entityTypeBuilder = CreateEntityTypeBuilderFromMutableEntityType<TEntity>(
+            modelBuilder,
+            mutableEntityType
+        );
+        
+        entityTypeBuilder.ConfigureByConvention();
 
-        ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);
+        ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType, entityTypeBuilder);
     }
 
-    protected virtual void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    protected virtual EntityTypeBuilder<TEntity> CreateEntityTypeBuilderFromMutableEntityType<TEntity>(
+        ModelBuilder modelBuilder,
+        IMutableEntityType mutableEntityType) where TEntity : class
+    {
+        return mutableEntityType.HasSharedClrType
+            ? modelBuilder.SharedTypeEntity<TEntity>(mutableEntityType.Name)
+            : modelBuilder.Entity<TEntity>();
+    }
+
+    protected virtual void ConfigureGlobalFilters<TEntity>(
+        ModelBuilder modelBuilder,
+        IMutableEntityType mutableEntityType, 
+        EntityTypeBuilder<TEntity> entityTypeBuilder)
         where TEntity : class
     {
         if (mutableEntityType.BaseType == null && ShouldFilterEntity<TEntity>(mutableEntityType))
         {
-            var filterExpression = CreateFilterExpression<TEntity>(modelBuilder);
+            var filterExpression = CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder);
             if (filterExpression != null)
             {
-                modelBuilder.Entity<TEntity>().HasAbpQueryFilter(filterExpression);
+                entityTypeBuilder.HasAbpQueryFilter(filterExpression);
             }
         }
     }
 
-    protected virtual void ConfigureValueConverter<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    protected virtual void ConfigureValueConverter<TEntity>(
+        ModelBuilder modelBuilder,
+        IMutableEntityType mutableEntityType)
         where TEntity : class
     {
-        if (mutableEntityType.BaseType == null &&
-            !typeof(TEntity).IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) &&
-            !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
-            !mutableEntityType.IsOwned())
+        if (mutableEntityType.BaseType != null ||
+            typeof(TEntity).IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) ||
+            typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) ||
+            mutableEntityType.IsOwned())
         {
-            if (LazyServiceProvider == null || Clock == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            foreach (var property in mutableEntityType.GetProperties().
-                         Where(property => property.PropertyInfo != null &&
-                                           (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
-                                           property.PropertyInfo.CanWrite &&
-                                           ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property.PropertyInfo) == null))
-            {
-                modelBuilder
-                    .Entity<TEntity>()
-                    .Property(property.Name)
-                    .HasConversion(property.ClrType == typeof(DateTime)
-                        ? new AbpDateTimeValueConverter(Clock)
-                        : new AbpNullableDateTimeValueConverter(Clock));
-            }
+        if (LazyServiceProvider == null || Clock == null)
+        {
+            return;
+        }
+        
+
+        foreach (var property in mutableEntityType.GetProperties().
+                     Where(property => property.PropertyInfo != null &&
+                                       (property.PropertyInfo.PropertyType == typeof(DateTime) || property.PropertyInfo.PropertyType == typeof(DateTime?)) &&
+                                       property.PropertyInfo.CanWrite &&
+                                       ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<DisableDateTimeNormalizationAttribute>(property.PropertyInfo) == null))
+        {
+            var entityTypeBuilder = CreateEntityTypeBuilderFromMutableEntityType<TEntity>(
+                modelBuilder,
+                mutableEntityType
+            );
+            
+            entityTypeBuilder
+                .Property(property.Name)
+                .HasConversion(property.ClrType == typeof(DateTime)
+                    ? new AbpDateTimeValueConverter(Clock)
+                    : new AbpNullableDateTimeValueConverter(Clock));
         }
     }
 
-    protected virtual void ConfigureValueGenerated<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    protected virtual void ConfigureValueGenerated<TEntity>(
+        ModelBuilder modelBuilder, 
+        IMutableEntityType mutableEntityType)
         where TEntity : class
     {
         if (!typeof(IEntity<Guid>).IsAssignableFrom(typeof(TEntity)))
@@ -830,7 +868,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
-        var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>)x).Id);
+        var entityTypeBuilder = CreateEntityTypeBuilderFromMutableEntityType<TEntity>(modelBuilder, mutableEntityType);
+        var idPropertyBuilder = entityTypeBuilder.Property(x => ((IEntity<Guid>)x).Id);
         if (idPropertyBuilder.Metadata.PropertyInfo!.IsDefined(typeof(DatabaseGeneratedAttribute), true))
         {
             return;
@@ -854,25 +893,30 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         return false;
     }
 
-    protected virtual Expression<Func<TEntity, bool>>? CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+    protected virtual Expression<Func<TEntity, bool>>? CreateFilterExpression<TEntity>(
+        ModelBuilder modelBuilder,
+        EntityTypeBuilder<TEntity> entityTypeBuilder)
         where TEntity : class
     {
         Expression<Func<TEntity, bool>>? expression = null;
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {
-            var softDeleteColumnName = modelBuilder.Entity<TEntity>().Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.GetColumnName() ?? "IsDeleted";
+            var softDeleteColumnName = entityTypeBuilder.Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.GetColumnName() ?? "IsDeleted";
             expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeleteColumnName);
             if (UseDbFunction())
             {
                 expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
-                modelBuilder.ConfigureSoftDeleteDbFunction(AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilterMethodInfo, this.GetService<AbpEfCoreCurrentDbContext>());
+                modelBuilder.ConfigureSoftDeleteDbFunction(
+                    AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilterMethodInfo,
+                    this.GetService<AbpEfCoreCurrentDbContext>()
+                );
             }
         }
 
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
-            var multiTenantColumnName = modelBuilder.Entity<TEntity>().Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.GetColumnName() ?? "TenantId";
+            var multiTenantColumnName = entityTypeBuilder.Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.GetColumnName() ?? "TenantId";
             Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantColumnName) == CurrentTenantId;
             if (UseDbFunction())
             {

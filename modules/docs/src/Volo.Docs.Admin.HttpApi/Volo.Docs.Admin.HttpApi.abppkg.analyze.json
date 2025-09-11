@@ -14,6 +14,11 @@
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
           "namespace": "Volo.Abp.AspNetCore.Mvc",
           "name": "AbpAspNetCoreMvcModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Docs.Common.HttpApi",
+          "namespace": "Volo.Docs",
+          "name": "DocsCommonHttpApiModule"
         }
       ],
       "implementingInterfaces": [

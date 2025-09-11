@@ -1,9 +1,9 @@
- We are excited to announce Official ABP Discord Server is created! You can join the ABP Discord Community by clicking [here](https://discord.gg/wbcQAsUrs9).
+ We are excited to announce Official ABP Discord Server is created! You can join the ABP Discord Community by clicking [here](https://abp.io/join-discord).
 
  In the first week of opening ABP Discord Server, member amount reached more than 500. We are grateful to and blessed by your interest. Thanks to all of you! This also made us sure that an ABP Discord Server was actually a need for the community members to interact with each other.
 
  ABP Community is growing by the second, and we are grateful for all your contributions towards ABP Framework. We noticed that ABP Community’s communication were significant on ABP Framework’s GitHub, we wanted to take it to the next level and have an area where all of us can easily chat with each other.
-> [Join ABP Discord Server Now](https://discord.gg/wbcQAsUrs9)
+> [Join ABP Discord Server Now](https://abp.io/join-discord)
 
 # What Can You Do on ABP Community Discord Server?
 
@@ -42,11 +42,11 @@
 
 #  How Can You Join To ABP Discord Server?
 
- You can join ABP Discord Server by simply clicking to [https://discord.gg/abp](https://discord.gg/wbcQAsUrs9).
+ You can join ABP Discord Server by simply clicking to [https://abp.io/join-discord](https://abp.io/join-discord).
 
  We are excited to welcome you in ABP Discord Server!
 
-> [Click Here to Join ABP Discord Server Now](https://discord.gg/wbcQAsUrs9)
+> [Click Here to Join ABP Discord Server Now](https://abp.io/join-discord)
 
 ### What is Discord?
 
@@ -62,4 +62,4 @@
 
  In Discord Servers, users communicate with each other in a way that is convenient for them. Discord allows people to make voice calls, video chats, or simply text messages. Communities are created by wether fans of a specific topic(games, open-source frameworks, NFT, etc.) or by the official authorities of that specific topic(game creator, framework core team, creator of a token, etc).
 
- In ABP Community Discord Server’s case, it is a server created by official authorities with core team being present in the server along with the community members. Even though it is created for the framework community members to communicate with each other easily, everyone who is interested in following the latest news about ABP Platform are welcome to [join ABP Discord Server](https://discord.gg/wbcQAsUrs9)!
+ In ABP Community Discord Server’s case, it is a server created by official authorities with core team being present in the server along with the community members. Even though it is created for the framework community members to communicate with each other easily, everyone who is interested in following the latest news about ABP Platform are welcome to [join ABP Discord Server](https://abp.io/join-discord)!

@@ -134,7 +134,7 @@ The `CreateAsync` method above manually creates a `Book` entity from given `Crea
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](../../infrastructure/object-to-object-mapping.md) infrastructure to make this even easier.
 
-Object to object mapping provides abstractions and it is implemented by the [AutoMapper](https://automapper.org/) library by default.
+Object to object mapping provides abstractions and it is implemented by the [Mapperly](https://mapperly.riok.app/) library by default.
 
 Let's create another method to get a book. First, define the method in the `IBookAppService` interface:
 
@@ -162,36 +162,32 @@ public class BookDto
 }
 ````
 
-AutoMapper requires to create a mapping [profile class](https://docs.automapper.org/en/stable/Configuration.html#profile-instances). Example:
+[Mapperly](https://mapperly.riok.app/) requires to create a mapping class that implements the `MapperBase<Book, BookDto>` class with the `[Mapper]` attribute as follows:
 
-````csharp
-public class MyProfile : Profile
+```csharp
+[Mapper]
+public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
-    public MyProfile()
-    {
-        CreateMap<Book, BookDto>();
-    }
-}
-````
+    public override partial BookDto Map(Book source);
 
-You should then register profiles using the `AbpAutoMapperOptions`:
+    public override partial void Map(Book source, BookDto destination);
+}
+```
+
+Then, if your application uses multiple mapping providers, you should add the following configuration to your module's `ConfigureServices` method to decide which mapping provider to use:
 
 ````csharp
-[DependsOn(typeof(AbpAutoMapperModule))]
+[DependsOn(typeof(AbpMapperlyModule))]
 public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            //Add all mappings defined in the assembly of the MyModule class
-            options.AddMaps<MyModule>();
-        });
+        context.Services.AddMapperlyObjectMapper<MyModule>();
     }
 }
 ````
 
-`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html).
+With this configuration, your module will use [Mapperly](https://mapperly.riok.app/) as the default mapping provider and you don't need to register mapping classes manually.
 
 Then you can implement the `GetAsync` method as shown below:
 
@@ -291,16 +287,21 @@ public class CreateUpdateBookDto
 }
 ````
 
-[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class of DTO class.
+Define the mapping classes for [Mapperly](https://mapperly.riok.app/) as follows:
 
 ```csharp
-public class MyProfile : Profile
+[Mapper]
+public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
-    public MyProfile()
-    {
-        CreateMap<Book, BookDto>();
-        CreateMap<CreateUpdateBookDto, Book>();
-    }
+    public override partial BookDto Map(Book source);
+    public override partial void Map(Book source, BookDto destination);
+}
+
+[Mapper]
+public partial class CreateUpdateBookDtoToBookMapper : MapperBase<CreateUpdateBookDto, Book>
+{
+    public override partial Book Map(CreateUpdateBookDto source);
+    public override partial void Map(CreateUpdateBookDto source, Book destination);
 }
 ```
 

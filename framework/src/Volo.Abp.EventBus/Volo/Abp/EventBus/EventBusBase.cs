@@ -7,8 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Collections;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus;
@@ -203,7 +205,7 @@ public abstract class EventBusBase : IEventBus
         {
             try
             {
-                var handlerType = eventHandlerWrapper.EventHandler.GetType();
+                var handlerType = ProxyHelper.GetUnProxiedType(eventHandlerWrapper.EventHandler);
 
                 if (inboxConfig?.HandlerSelector != null &&
                     !inboxConfig.HandlerSelector(handlerType))

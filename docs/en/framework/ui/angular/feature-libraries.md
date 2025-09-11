@@ -4,10 +4,10 @@ ABP has an ever-growing number of feature modules and [introducing a new one](..
 
 ## Feature Library Content
 
-Each library has at least two modules:
+Each library has at least two key elements:
 
-1. The main module contains all components, services, types, enums, etc. to deliver the required UI when the feature is loaded. From here on, we will refer to these modules as **"feature module"**.
-2. There is also a **"config module"** per library which helps us configure applications to run these modules or make them accessible.
+1. A **feature definition** that encapsulates all components, services, types, enums, and routing logic needed to deliver the UI for a given feature. With standalone structure, this is often expressed through a `routes.ts` file and associated components, and we will refer to this as the **"feature structure"**.
+2. A **configuration provider** that exposes setup logic, such as `provideMyProjectNameConfig()` functions or environment, specific tokens—allowing the feature to be initialized or integrated differently across applications. We will refer to this as the **configuration structure**.
 
 ## How to Add a Feature Library to Your Project
 
@@ -37,55 +37,46 @@ yarn add @abp/ng.identity
 
 > Identity is used just as an example. If you have initiated your project with ABP CLI or ABP Suite, the identity library will already be installed and configured in your project.
 
-### 2. Import the Config Module
+### 2. Import the Configuration Provider
 
-As of ABP v3.0, every lazy-loaded module has a config module available via a secondary entry point on the same package. Importing them in your root module looks like this:
+As of ABP v9.3, every lazy-loaded route has a config provider available via a secondary entry point on the same package. Importing them in your root configuration looks like this:
 
 ```ts
 import { provideIdentityConfig } from "@abp/ng.identity/config";
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
-    // other imports
+    // other providers
     provideIdentityConfig(),
   ],
-  // providers, declarations, and bootstrap
-})
-export class AppModule {}
+};
 ```
 
-We need the config modules for actions required before feature modules are loaded (lazily). For example, the above import configures the menu to display links to identity pages.
+We need the config providers for actions required before feature structure is loaded (lazily). For example, the above import configures the menu to display links to identity pages.
 
-Furthermore, depending on the library, the `.forRoot` static method may receive some options that configure how the feature works.
+Furthermore, depending on the library, the `.createRoutes` static method may receive some options that configure how the feature works.
 
-### 3. Import the Feature Module
+### 3. Import the Feature Definition
 
-Finally, the feature module should be [loaded lazily via Angular router](https://angular.io/guide/lazy-loading-ngmodules). If you open the `/src/app/app-routing.module.ts` file, you should see `IdentityModule` is loaded exactly as follows:
+Finally, the feature structure should be [loaded lazily via Angular router](https://angular.dev/reference/migrations/route-lazy-loading). In a standalone setup, routing is typically defined in a `app.routes.ts` file, and feature modules are replaced with route-level feature definitions. You should see the identity routes configured like this:
 
 ```js
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 
-const routes: Routes = [
+const APP_ROUTES: Routes = [
   // other routes
   {
     path: "identity",
     loadChildren: () =>
-      import("@abp/ng.identity").then((m) => m.IdentityModule.forLazy()),
+      import("@abp/ng.identity").then((m) => m.createRoutes()),
   },
   // other routes
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
 ```
 
 When you load the identity feature like this, the "Users" page, for example, will have a route path of `/identity/users`. <sup id="a-modify-route">[1](#f-modify-route)</sup>
 
-Depending on the library, the `.forLazy` static method may also receive some options that configure how the feature works.
+Depending on the library, the `.createRoutes` static method may also receive some options that configure how the feature works.
 
 ---
 

@@ -11,9 +11,9 @@
           "name": "CmsKitAdminApplicationContractsModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.CmsKit.Common.Application",
@@ -818,6 +818,23 @@
               "type": "PermissionLookupInputDto",
               "name": "inputDto",
               "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Admin.Menus",
+          "name": "GetAvailableMenuOrderAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": true
             }
           ]
         }

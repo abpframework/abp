@@ -183,45 +183,29 @@ The issue management page is empty in the beginning. You may change the content 
 
 Now, let's have a closer look at some key elements of your project.
 
-### The Main Module
+### The Main Component
 
-`IssueManagementModule` at the _angular/projects/issue-management/src/lib/issue-management.module.ts_ path is the main module of your module project. There are a few things worth mentioning in it:
+`IssueManagementComponent` at the _angular/projects/issue-management/src/lib/issue-management.routes.ts_ path is the main component of your module project. There are a few things worth mentioning in it:
 
-- Essential ABP modules, i.e. `CoreModule` and `ThemeSharedModule`, are imported.
-- `IssueManagementRoutingModule` is imported.
-- `IssueManagementComponent` is declared.
-- It is prepared for configurability. The `forLazy` static method enables [a configuration to be passed to the module when it is loaded by the router](https://volosoft.com/blog/how-to-configure-angular-modules-loaded-by-the-router).
-
-
-### The Main Routing Module
-
-`IssueManagementRoutingModule` at the _angular/projects/issue-management/src/lib/issue-management-routing.module.ts_ path is the main routing module of your module project. It currently does two things:
-
-- Loads `DynamicLayoutComponent` at base path it is given.
-- Loads `IssueManagementComponent` as child to the layout, again at the given base path.
-
-You can rearrange this module to load more than one component at different routes, but you need to update the route provider at _angular/projects/issue-management/config/src/providers/route.provider.ts_ to match the new routing structure with the routes in the menu. Please check [Modifying the Menu](../../framework/ui/angular/modifying-the-menu.md) to see how route providers work.
+- `IssueManagementComponent` is declared as standalone within the latest migration.
+- `ISSUE_MANAGEMENT_ROUTES` is configured to be lazy-loaded.
 
 ### The Config Module
 
-There is a config module at the _angular/projects/issue-management/config/src/issue-management-config.module.ts_ path. The static `forRoot` method of this module is supposed to be called at the route level. So, you may assume the following will take place:
+There is a config module at the _angular/projects/issue-management/config/src/providers/route.provider.ts_ path. The static `provideIssueManagement` method of this module is supposed to be called at the route level. So, you may assume the following will take place:
 
 ```js
-@NgModule({
-  imports: [
-    /* other imports */
-
-    IssueManagementConfigModule.forRoot(),
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideIssueManagement(),
+    // ...
   ],
-
-  /* rest of the module meta data */
-})
-export class AppModule {}
+};
 ```
 
 You can use this static method to configure an application that uses your module project. An example of such configuration is already implemented and the `ISSUE_MANAGEMENT_ROUTE_PROVIDERS` token is provided here. The method can take options which enables further configuration possibilities.
 
-The difference between the `forRoot` method of the config module and the `forLazy` method of the main module is that, for smallest bundle size, the former should only be used when you have to configure an app before your module is even loaded.
 
 ### Testing Angular UI
 

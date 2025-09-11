@@ -92,12 +92,12 @@ You can define new localization entries in the language files under the **Locali
 
 Angular UI gets the localization resources from the [`application-localization`](../../framework/api-development/standard-apis/localization.md) API's response and merges these resources in the `ConfigStateService` for the localization entries/resources coming from the backend side.
 
-In addition, you may need to define some localization entries and only use them on the UI side. ABP already provides the related configuration for you, so you don't need to make any configurations related to that and instead you can directly define localization entries in the `app.-module.ts` file of your angular application as follows:
+In addition, you may need to define some localization entries and only use them on the UI side. ABP already provides the related configuration for you, so you don't need to make any configurations related to that and instead you can directly define localization entries in the `app.config.ts` file of your angular application as follows:
 
 ```ts
 import { provideAbpCore, withOptions } from '@abp/ng.core';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     provideAbpCore(
@@ -119,11 +119,8 @@ import { provideAbpCore, withOptions } from '@abp/ng.core';
         ]
       }),
     ),
-    ...
   ],
-})
-export class AppModule {}
-
+};
 ```
 
 After defining the localization entries, it can be used as below:

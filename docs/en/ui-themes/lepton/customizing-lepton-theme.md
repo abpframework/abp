@@ -12,19 +12,28 @@ You may want to change certain aspects of your website’s  appearance with a cu
 
 ## Adding Custom Style
 
-There is a `customStyle` boolean configuration in `ThemeLeptonModule`'s `forRoot` method. If this configuration is true, the style selection box is not included in the theme settings form and `ThemeLeptonModule` does not load its own styles. In this case, a custom style file must be added to the styles array in `angular.json` or must be imported by `style.scss`.
+There is a `customStyle` boolean configuration in `provideThemeLepton(withLeptonOptions({...}))` method. If this configuration is true, the style selection box is not included in the theme settings form and `theme-lepton` does not load its own styles. In this case, a custom style file must be added to the styles array in `angular.json` or must be imported by `style.scss`.
 
 > Only angular project styles can be changed in this way. If the authorization flow is authorization code flow, MVC pages (login, profile, etc) are not affected by this change.
 
 Custom style implementation can be done with the following steps
 
-Set `customStyle` property to `true` where is `ThemeLeptonModule` imported with `forRoot` method. 
+Set `customStyle` property to `true` where `provideThemeLepton(withLeptonOptions({...}))` method is called. 
 
 ```javascript
-// app.module.ts
-ThemeLeptonModule.forRoot({
-    customStyle: true
-})
+// app.config.ts
+import { provideThemeLepton, withOptions as withLeptonOptions } from '@volo/abp.ng.theme.lepton';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideThemeLepton(
+      withLeptonOptions({
+        customStyle: true
+      })
+    )
+  ],
+};
 ```
 
 Import your style file to `src/style.scss`
@@ -68,7 +77,7 @@ Or add your style file to the `styles` arrays which in `angular.json` file
 
 ## Inserting Custom Content To Lepton Menu
 
-Lepton menu can take custom content both before and after the menu items displayed. In order to achieve this, pass a component as content through the parameters of `ThemeLeptonModule.forRoot` when you import the module in your root module, i.e. `AppModule`. Let's take a look at some examples.
+Lepton menu can take custom content both before and after the menu items displayed. In order to achieve this, pass a component as content through the parameters of `provideThemeLepton(withLeptonOptions({...}))` when you import the provider in your root app configuration, i.e. `appConfig`. Let's take a look at some examples.
 
 
 ### Placing Custom Content Before & After Menu Items
@@ -76,7 +85,10 @@ Lepton menu can take custom content both before and after the menu items display
 First step is to create a component which will serve as the custom content.
 
 ```js
+// ...
 @Component({
+  // ...
+  imports: [AsyncPipe],
   template: `<a href="https://support.my-domain.com">
     <span class="lp-icon"><i class="fas fa-headset"></i></span>
     <span class="lp-text">Support Issues</span>
@@ -88,27 +100,23 @@ First step is to create a component which will serve as the custom content.
 export class SupportLinkComponent {
   issueCount$ = of(26); // dummy count, replace this with an actual service
 }
-
-@NgModule({
-  declarations: [SupportLinkComponent],
-  imports: [CommonModule],
-})
-export class SupportLinkModule {}
 ```
 
-Now, pass this component as `contentAfterRoutes` option to `ThemeLeptonModule`.
+Now, pass this component as `contentAfterRoutes` option to `provideThemeLepton(withLeptonOptions({...}))`.
 
 ```js
-@NgModule({
-  imports: [
-    // other imports are removed for sake of brevity
-    SupportLinkModule,
-    ThemeLeptonModule.forRoot({
-      contentAfterRoutes: [SupportLinkComponent],
-    })
+import { provideThemeLepton, withOptions as withLeptonOptions } from '@volo/abp.ng.theme.lepton';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideThemeLepton(
+      withLeptonOptions({
+        contentAfterRoutes: [SupportLinkComponent],
+      })
+    )
   ],
-})
-export class AppModule {}
+};
 ```
 
 If you start the dev server, you must see the inserted content as follows:
@@ -124,24 +132,25 @@ Placing the content before menu items is straightforward: Just replace `contentA
 
 ### Placing a Search Input Before Menu Items
 
-The Lepton package has a search component designed to work with the routes in the menu. You can simply import the module and pass the component as `contentBeforeRoutes` option to `ThemeLeptonModule`.
+The Lepton package has a search component designed to work with the routes in the menu. You can simply import the provider and pass the component as `contentBeforeRoutes` option to `provideThemeLepton(withLeptonOptions({...}))`.
 
 ```js
-import { MenuSearchComponent, MenuSearchModule } from '@volo/abp.ng.theme.lepton/extensions';
+import { provideThemeLepton, withOptions as withLeptonOptions } from '@volo/abp.ng.theme.lepton';
+import { MenuSearchComponent, provideMenuSearch } from '@volo/abp.ng.theme.lepton/extensions';
 
-@NgModule({
-  imports: [
-    // other imports are removed for sake of brevity
-
-    MenuSearchModule.forRoot({
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideThemeLepton(
+      withLeptonOptions({
+        contentBeforeRoutes: [MenuSearchComponent],
+      })
+    ),
+    provideMenuSearch({
       limit: 3 // search result limit (default: Infinity)
-    }),
-    ThemeLeptonModule.forRoot({
-      contentBeforeRoutes: [MenuSearchComponent],
     })
   ],
-})
-export class AppModule {}
+};
 ```
 
 Here is how the search input works:

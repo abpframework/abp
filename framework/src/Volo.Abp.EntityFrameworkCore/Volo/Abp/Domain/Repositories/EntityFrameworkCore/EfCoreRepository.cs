@@ -61,7 +61,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     }
 
     [Obsolete("Use GetDbSetAsync() method.")]
-    public virtual DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
+    public virtual DbSet<TEntity> DbSet => GetDbSetInternal(DbContext);
 
     Task<DbSet<TEntity>> IEfCoreRepository<TEntity>.GetDbSetAsync()
     {
@@ -70,7 +70,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
     protected async Task<DbSet<TEntity>> GetDbSetAsync()
     {
-        return (await GetDbContextAsync()).Set<TEntity>();
+        return GetDbSetInternal(await GetDbContextAsync());
     }
 
     protected async Task<IDbConnection> GetDbConnectionAsync()
@@ -93,6 +93,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     public IEfCoreBulkOperationProvider? BulkOperationProvider => LazyServiceProvider.LazyGetService<IEfCoreBulkOperationProvider>();
 
     public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
+        : base(AbpEfCoreConsts.ProviderName)
     {
         _dbContextProvider = dbContextProvider;
 
@@ -110,7 +111,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
         var dbContext = await GetDbContextAsync();
 
-        var savedEntity = (await dbContext.Set<TEntity>().AddAsync(entity, GetCancellationToken(cancellationToken))).Entity;
+        var savedEntity = (await GetDbSetInternal(dbContext).AddAsync(entity, GetCancellationToken(cancellationToken))).Entity;
 
         if (autoSave)
         {
@@ -118,6 +119,13 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
         }
 
         return savedEntity;
+    }
+
+    private DbSet<TEntity> GetDbSetInternal(TDbContext dbContext)
+    {
+        return EntityName != null
+            ? dbContext.Set<TEntity>(EntityName)
+            : dbContext.Set<TEntity>();
     }
 
     public async override Task InsertManyAsync(IEnumerable<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -147,7 +155,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
             return;
         }
 
-        await dbContext.Set<TEntity>().AddRangeAsync(entityArray, cancellationToken);
+        await GetDbSetInternal(dbContext).AddRangeAsync(entityArray, cancellationToken);
 
         if (autoSave)
         {
@@ -159,9 +167,10 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         var dbContext = await GetDbContextAsync();
 
-        if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+        var dbSet = GetDbSetInternal(dbContext);
+        if (dbSet.Local.All(e => e != entity))
         {
-            dbContext.Set<TEntity>().Attach(entity);
+            dbSet.Attach(entity);
             dbContext.Update(entity);
         }
 
@@ -197,7 +206,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
 
         var dbContext = await GetDbContextAsync();
 
-        dbContext.Set<TEntity>().UpdateRange(entityArray);
+        GetDbSetInternal(dbContext).UpdateRange(entityArray);
 
         if (autoSave)
         {
@@ -209,7 +218,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     {
         var dbContext = await GetDbContextAsync();
 
-        dbContext.Set<TEntity>().Remove(entity);
+        GetDbSetInternal(dbContext).Remove(entity);
 
         if (autoSave)
         {
@@ -318,7 +327,7 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     public async override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        var dbSet = dbContext.Set<TEntity>();
+        var dbSet = GetDbSetInternal(dbContext);
 
         var entities = await dbSet
             .Where(predicate)
@@ -335,8 +344,9 @@ public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IE
     public async override Task DeleteDirectAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        var dbSet = dbContext.Set<TEntity>();
-        await dbSet.Where(predicate).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+        await GetDbSetInternal(dbContext)
+            .Where(predicate)
+            .ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task EnsureCollectionLoadedAsync<TProperty>(

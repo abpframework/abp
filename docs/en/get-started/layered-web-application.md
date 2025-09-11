@@ -29,15 +29,15 @@ First things first! Let's setup your development environment before creating the
 
 Assuming that you have [installed and logged in](../studio/installation.md) to the application, you should see the following screen when you open ABP Studio:
 
-![abp-studio-welcome-screen](images/abp-studio-welcome-screen.png)
+![abp-studio-welcome-screen](images/abp-studio-welcome-screen_dark.png)
 
 Select the *File* -> *New Solution* in the main menu, or click the *New solution* button on the Welcome screen to open the *Create new solution* wizard:
 
-![abp-studio-new-solution-dialog](images/abp-studio-new-solution-dialog.png)
+![abp-studio-new-solution-dialog](images/abp-studio-new-solution-dialog_dark.png)
 
 We will use the *Application (Layered)* solution template for this tutorial, so pick it and click the *Next* button:
 
-![abp-studio-new-solution-dialog-solution-properties](images/abp-studio-new-solution-dialog-solution-properties.png)
+![abp-studio-new-solution-dialog-solution-properties](images/abp-studio-new-solution-dialog-solution-properties_dark.png)
 
 On that screen, you choose a name for your solution. You can use different levels of namespaces; e.g. `BookStore`, `Acme.BookStore` or `Acme.Retail.BookStore`.
 
@@ -45,29 +45,61 @@ Then select an *output folder* to create your solution. The *Create solution fol
 
 Once your configuration is done, click the *Next* button to navigate to the *UI Framework* selection:
 
-![abp-studio-new-solution-dialog-ui-framework](images/abp-studio-new-solution-dialog-ui-framework.png)
+{{ if UI == "MVC" }}
+![abp-studio-new-solution-dialog-ui-framework-mvc](images/abp-studio-new-solution-dialog-ui-framework-mvc_dark.png)
+{{ else if UI == "Blazor" }}
+![abp-studio-new-solution-dialog-ui-framework-blazor-wasm](images/abp-studio-new-solution-dialog-ui-framework-blazor-wasm_dark.png)
+{{ else if UI == "BlazorServer" }}
+![abp-studio-new-solution-dialog-ui-framework-blazor-server](images/abp-studio-new-solution-dialog-ui-framework-blazor-server_dark.png)
+{{ else if UI == "BlazorWebApp" }}
+![abp-studio-new-solution-dialog-ui-framework-blazor-webapp](images/abp-studio-new-solution-dialog-ui-framework-blazor-webapp_dark.png)
+{{ else if UI == "NG" }}
+![abp-studio-new-solution-dialog-ui-framework-ng](images/abp-studio-new-solution-dialog-ui-framework-ng_dark.png)
+{{ end }}
 
 Here, you see all the possible UI options supported by that startup solution template. Pick the **{{ UI_Value }}**.
 
-Notice that; Once you select a UI type, some additional options will be available under the UI Framework list. You can further configure the options or leave them as default and click the *Next* button for the *UI Theme* selection screen:
+Notice that; Once you select a UI type, some additional options will be available under the UI Framework list. You can further configure the options or leave them as default and click the Next button for the *Database Provider* selection screen:
 
-![abp-studio-new-solution-dialog-ui-theme](images/abp-studio-new-solution-dialog-ui-theme.png)
+{{ if DB == "EF" }}
+![abp-studio-new-solution-dialog-database-provider](images/abp-studio-new-solution-dialog-database-provider-efcore_dark.png)
+{{ else }}
+![abp-studio-new-solution-dialog-database-provider](images/abp-studio-new-solution-dialog-database-provider-mongo_dark.png)
+{{ end }}
+
+On that screen, you can decide on your database provider by selecting one of the provided options. There are some additional options for each database provider. Leave them as default or change them based on your preferences, then click the *Next* button for additional *Database Configurations*:
+
+{{ if DB == "EF" }}
+![abp-studio-new-solution-dialog-database-configurations](images/abp-studio-new-solution-dialog-database-configurations-efcore_dark.png)
+{{ else }}
+![abp-studio-new-solution-dialog-database-configurations](images/abp-studio-new-solution-dialog-database-configurations-mongo_dark.png)
+{{ end }}
+
+Here, you can select the database management systems (DBMS){{ if DB == "EF" }} and the connection string{{ end }}. Then, click the *Next* button for additional *Multi-Tenancy* selection:
+
+![abp-studio-new-solution-dialog-multi-tenancy](images/abp-studio-new-solution-dialog-multi-tenancy_dark.png)
+
+Here, you can enable or disable multi-tenancy for your solution. You can further configure the options or leave them as default and click the *Next* button for the *UI Theme* selection screen:
+
+![abp-studio-new-solution-dialog-ui-theme](images/abp-studio-new-solution-dialog-ui-theme_dark.png)
+
+Notice that; Once you select a UI type, some additional options will be available under the UI Framework list. You can further configure the options or leave them as default and click the Next button for the *Database Provider* selection screen:
 
 LeptonX is the suggested UI theme that is proper for production usage. Select one of the themes, configure the additional options, and click the *Next* button for the *Mobile Framework* selection:
 
-![abp-studio-new-solution-dialog-mobile-framework](images/abp-studio-new-solution-dialog-mobile-framework.png)
+![abp-studio-new-solution-dialog-mobile-framework](images/abp-studio-new-solution-dialog-mobile-framework_dark.png)
 
 Here, you see all the mobile applications available in that startup solution template. These mobile applications are well-integrated into your solution and can use the same backend with your web application. They are simple (do not have pre-built features as much as the web application) but a very good starting point to build your mobile application.
 
 Pick the one best for you, or select the *None* if you don't want a mobile application in your solution, then click Next to navigate to the *Public website* screen:
 
-![abp-studio-new-solution-dialog-public-website](images/abp-studio-new-solution-dialog-public-website.png)
+![abp-studio-new-solution-dialog-public-website](images/abp-studio-new-solution-dialog-public-website_dark.png)
 
 That startup solution template also provides an option to create a second web application inside the solution. The second application is called the Public website, an ASP.NET Core MVC / Razor Page application. It can be used to create a public landing/promotion for your product. It is well integrated into the solution (can share the same services, entities, database, and the same authentication logic, for example). If you want, you can also include the [CMS Kit module](../modules/cms-kit) to your solution to add dynamic content features to your web application.
 
 So, either select the *Public website* or skip it and click the Next button for the *Optional Modules* selection:
 
-![abp-studio-new-solution-dialog-optional-modules.png](images/abp-studio-new-solution-dialog-optional-modules.png)
+![abp-studio-new-solution-dialog-optional-modules.png](images/abp-studio-new-solution-dialog-optional-modules_dark.png)
 
 Each item in that list is a pre-built application module. You can click the blue icon near to the module name to get more information about the module. You can leave the list as is (so, it installs the most common and used modules for you) or customize based on your preference.
 
@@ -77,11 +109,11 @@ Once you select the desired modules, click the *Next* button for the *Solution S
 
 {{ if Tiered == "Yes" }}
 
-![abp-studio-new-solution-dialog-solution-structure-tiered](images/abp-studio-new-solution-dialog-solution-structure-tiered.png)
+![abp-studio-new-solution-dialog-solution-structure-tiered](images/abp-studio-new-solution-dialog-solution-structure-tiered_dark.png)
 
 {{ else }}
 
-![abp-studio-new-solution-dialog-solution-structure](images/abp-studio-new-solution-dialog-solution-structure.png)
+![abp-studio-new-solution-dialog-solution-structure](images/abp-studio-new-solution-dialog-solution-structure_dark.png)
 
 {{ end }}
 
@@ -89,25 +121,23 @@ It creates a separate host application that only serves the HTTP (REST) APIs. Th
 
 The tiered architecture allows you to host the web (UI) application in a server that can not access to your database server. However, it brings a slight loss of performance (because of the HTTP calls between UI and HTTP API applications) and makes your architecture, development, and deployment more complex. If you don't understand the tiered structure, just skip it.
 
-After making your *Tiered* selection, you can click the *Next* button for the *Database Provider* selection:
+After making your *Tiered* selection, you can click the *Next* button for the *Language Selection* page:
 
-{{ if DB == "EF" }}
-![abp-studio-new-solution-dialog-database-provider](images/abp-studio-new-solution-dialog-database-provider-efcore.png)
-{{ else }}
-![abp-studio-new-solution-dialog-database-provider](images/abp-studio-new-solution-dialog-database-provider-mongo.png)
-{{ end }}
+![abp-studio-no-layers-new-solution-language-selection](images/abp-studio-new-solution-language-selection_dark.png)
 
-On that screen, you can decide on your database provider by selecting one of the provided options. There are some additional options for each database provider. Leave them as default or change them based on your preferences, then click the *Next* button for additional *Database Configurations*:
+In this step, you can choose which languages your application will support.
 
-{{ if DB == "EF" }}
-![abp-studio-new-solution-dialog-database-configurations](images/abp-studio-new-solution-dialog-database-configurations-efcore.png)
-{{ else }}
-![abp-studio-new-solution-dialog-database-configurations](images/abp-studio-new-solution-dialog-database-configurations-mongo.png)
-{{ end }}
+* Default Language: Select the main language for your app.
 
-Here, you can select the database management systems (DBMS){{ if DB == "EF" }} and the connection string{{ end }}. Click *Next* button to see the *Additional Options*.
+* Localizable User Interface: Turn this on to support multiple languages.
 
-![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options.png)
+* Available Languages: Check the languages you want to include.
+
+* Click Add Custom Language if you want to add a language that is not listed.
+
+You can change these settings later if needed. Thenk click the *Next* button for the *Additional Options* page:
+
+![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options_dark.png)
 
 If you uncheck the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files, such as Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include or exclude the test projects from the solution.
 
@@ -115,11 +145,11 @@ On the next screen, you can configure the modularity options for your solution:
 
 > If you select the *Setup as a modular solution* option, the solution is created more ready for [modular monolith development](../tutorials/modular-crm/index.md) and allows you to add sub-modules during the solution creation phase.
 
-![abp-studio-new-solution-modularity](images/abp-studio-new-solution-dialog-modularity.png)
+![abp-studio-new-solution-modularity](images/abp-studio-new-solution-dialog-modularity_dark.png)
 
 Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the Create button, the dialog is closed and your solution is loaded into ABP Studio:
 
-![abp-studio-created-new-solution](images/abp-studio-created-new-solution.png)
+![abp-studio-created-new-solution](images/abp-studio-created-new-solution_dark.png)
 
 You can explore the solution, but you need to wait for background tasks to be completed before running any application in the solution.
 
@@ -133,13 +163,13 @@ Open the [Solution Runner](../studio/running-applications.md) section on the lef
 
 > The solution runner structure can be different in your case based on the options you've selected.
 
-![abp-studio-quick-start-application-solution-runner](images/abp-studio-quick-start-application-solution-runner.png)
+![abp-studio-quick-start-application-solution-runner](images/abp-studio-quick-start-application-solution-runner_dark.png)
 
 Once you click the *Play* icon on the left side, the section is open in the same place as the Solution Explorer section. ABP Studio also opens the *Application Monitor* view on the main content area. *Application Monitor* shows useful insights for your applications (e.g. *HTTP Request*, *Events* and *Exceptions*) in real-time. You can use it to see the happenings in your applications, so you can easily track errors and many helpful details.
 
 In the Solution Runner section (on the left side) you can see all the runnable applications in the current solution. For the MVC with public website and MAUI mobile example, we have four applications:
 
-![abp-studio-quick-start-example-applications-in-solution-runner](images/abp-studio-quick-start-example-applications-in-solution-runner.png)
+![abp-studio-quick-start-example-applications-in-solution-runner](images/abp-studio-quick-start-example-applications-in-solution-runner_dark.png)
 
 You can run all the applications or start them one by one. To start an application, either click the *Play* icon near to the application or right-click and select the *Run* -> *Start* context menu item.
 
@@ -172,17 +202,17 @@ You can start the following application(s):
 
 Once the `Acme.BookStore.{{ if UI == "NG" }}Angular{{ else if UI == "BlazorServer" || UI == "Blazor" || UI == "BlazorWebApp" }}Blazor{{ else }}Web{{ end }}` application started, you can right-click it and select the *Browse* command:
 
-![abp-studio-quick-start-browse-command](images/abp-studio-quick-start-browse-command.png)
+![abp-studio-quick-start-browse-command](images/abp-studio-quick-start-browse-command_dark.png)
 
 The *Browse* command opens the UI of the web application in the built-in browser:
 
-![abp-studio-quick-start-browse](images/abp-studio-quick-start-browse.png)
+![abp-studio-quick-start-browse](images/abp-studio-quick-start-browse_dark.png)
 
 You can browse your application in a full-featured web browser in ABP Studio. Click the *Login* button in the application UI, enter `admin` as username and `1q2w3E*` as password to login to the application.
 
 The following screenshot was taken from the *User Management* page of the [Identity module](../modules/identity.md) that is pre-installed in the application:
 
-![abp-studio-quick-start-browse-user-list](images/abp-studio-quick-start-browse-user-list.png)
+![abp-studio-quick-start-browse-user-list](images/abp-studio-quick-start-browse-user-list_dark.png)
 
 ## Open the Solution in Visual Studio
 
@@ -192,7 +222,7 @@ First of all, we can stop the application(s) in ABP Studio, so it won't conflict
 
 You can use ABP Studio to open the solution with Visual Studio. Right-click to the `Acme.BookStore` [module](../modules), and select the *Open with* -> *Visual Studio* command:
 
-![abp-studio-open-in-visual-studio](images/abp-studio-open-in-visual-studio.png)
+![abp-studio-open-in-visual-studio](images/abp-studio-open-in-visual-studio_dark.png)
 
 If the *Visual Studio* command is not available, that means ABP Studio could not detect it on your computer. You can open the solution folder in your local file system (you can use the *Open with* -> *Explorer* as a shortcut) and manually open the solution in Visual Studio.
 
@@ -200,11 +230,11 @@ Once the solution is opened in Visual Studio, you should see a screen like shown
 
 > The solution structure can be different in your case based on the options you've selected.
 
-![visual-studio-bookstore-application](images/visual-studio-bookstore-application.png)
+![visual-studio-bookstore-application](images/visual-studio-bookstore-application_dark.png)
 
 Right-click the `Acme.BookStore.{{ if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" || UI == "BlazorWebApp" }}Blazor{{ else }}Web{{ end }}` project and select the *Set as Startup Project* command. You can then hit *F5* or *Ctrl + F5* to run the web application. It will run and open the application UI in your default browser:
 
-![bookstore-browser-users-page](images/bookstore-browser-users-page.png)
+![bookstore-browser-users-page](images/bookstore-browser-users-page_dark.png)
 
 You can use `admin` as username and `1q2w3E*` as default password to login to the application.
 

@@ -244,45 +244,39 @@ See the `SaasHostPermissions` class members for all permissions defined for this
 
 #### Installation
 
-In order to configure the application to use the `SaasModule`, you first need to import `SaasConfigModule` from `@volo/abp.ng.saas/config` to root module. `SaasConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the saas module, you first need to import `provideSaasConfig` from `@volo/abp.ng.saas/config` to root module. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { SaasConfigModule } from '@volo/abp.ng.saas/config';
+// app.config.ts
+import { provideSaasConfig } from '@volo/abp.ng.saas/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    SaasConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideSaasConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `SaasModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.saas`.
+The saas module should be imported and lazy-loaded in your routing configuration. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.saas`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'saas',
     loadChildren: () =>
-      import('@volo/abp.ng.saas').then(m => m.SaasModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.saas').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `SaasConfigModule` and `SaasModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both configurations implemented.
 
 <h4 id="h-saas-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `SaasModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

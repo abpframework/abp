@@ -6,23 +6,24 @@ You may want to block a part of the UI and show a spinner for a while; the `Load
 
 ## Getting Started
 
-In order to use the `LoadingDirective` in an HTML template, the **`ThemeSharedModule`** should be imported into your module like this:
+In order to use the `LoadingDirective` in an HTML template, it should be imported into your component like this:
 
 ```js
 // ...
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { LoadingDirective } from '@abp/ng.theme.shared';
 
-@NgModule({
-  //...
-  imports: [..., ThemeSharedModule],
+@Component({
+  // ...
+  imports: [ LoadingDirective ]
+  // ...
 })
-export class MyFeatureModule {}
+export class SampleComponent {}
 ```
 
 
 ## Usage
 
-The `LoadingDirective` is easy to use. The directive's selector is **`abpLoading`**. By adding the `abpLoading` attribute to an HTML element, you can activate the `LoadingDirectiveective` for the HTML element when the value is true.
+The `LoadingDirective` is easy to use. The directive's selector is **`abpLoading`**. By adding the `abpLoading` attribute to an HTML element, you can activate the `LoadingDirective` for the HTML element when the value is true.
 
 See an example usage:
 
@@ -33,7 +34,7 @@ See an example usage:
     cupiditate? Voluptas eaque voluptatum odio deleniti quo vel illum nemo accusamus nulla ratione
     impedit dolorum expedita necessitatibus fugiat ullam beatae, optio eum cupiditate ducimus
     architecto.
-  </div>
+</div>
 ```
 
 

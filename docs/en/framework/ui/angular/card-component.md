@@ -23,27 +23,7 @@ In addition to these components, the Card component provides directives like `Ca
 
 # Usage
 
-ABP Card Component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, you don't need to import it again. If not, first import it as shown below:
-
-```ts
-// my-feature.module.ts
-
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { CardDemoComponent } from './card-demo.component';
-
-@NgModule({
-  imports: [
-    ThemeSharedModule ,
-    // ...
-  ],
-  declarations: [CardDemoComponent],
-  // ...
-})
-export class MyFeatureModule {}
-
-```
-
-Then, the `abp-card` component can be used. See the examples below:
+ABP Card Component is a part of the `theme-shared` package. Once you import the necessary components, you can use them. See the examples below:
 
 ## CardBody
 
@@ -51,16 +31,18 @@ Then, the `abp-card` component can be used. See the examples below:
 // card-demo.component.ts
 
 import { Component } from '@angular/core';
+import { CardComponent, CardBodyComponent } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-card-demo',
+  imports: [CardComponent, CardBodyComponent],
   template: ` 
     <abp-card [cardStyle]="{width: '18rem'}">
       <abp-card-body>This is some text within a card body</abp-card-body>
     </abp-card> 
   `,
 })
-export class CardDemoComponent { }
+export class CardDemoComponent {}
 ```
 See the card body result below:
 
@@ -72,22 +54,36 @@ See the card body result below:
 
 //card-demo.component.ts
 import { Component } from '@angular/core';
+import { 
+  CardComponent,
+  CardBodyComponent,
+  CardTitleDirective,
+  CardSubtitleDirective
+} from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-card-demo',
+  imports: [
+    CardComponent,
+    CardBodyComponent,
+    CardTitleDirective,
+    CardSubtitleDirective
+  ],
   template: ` 
     <abp-card [cardStyle]="{width: '18rem'}">
       <abp-card-body>
         <h5 abpCardTitle>Card Title</h5>
         <h6 abpCardSubtitle class="mb-2 text-muted">Card subtitle</h6>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="card-link" >Card link</a>
-        <a href="#" class="card-link" >Another link</a>
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the bulk of the card's content.
+        </p>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
       </abp-card-body>
     </abp-card> 
   `,
 })
-export class CardDemoComponent { }
+export class CardDemoComponent {}
 ```
 See the card title, text and link result below:
 
@@ -99,19 +95,23 @@ See the card title, text and link result below:
 
 //card-demo.component.ts
 import { Component } from '@angular/core';
+import { CardComponent, CardBodyComponent, CardImgTopDirective } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-card-demo',
+  imports: [CardComponent, CardBodyComponent, CardImgTopDirective],
   template: ` 
     <abp-card [cardStyle]="{width:'18rem'}">
       <img abpCardImgTop src="..." alt="...">
       <abp-card-body>
-        <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the bulk of the card's content.
+        </p>
       </abp-card-body>
     </abp-card>
   `,
 })
-export class CardDemoComponent { }
+export class CardDemoComponent {}
 ```
 See the card image result below:
 
@@ -123,9 +123,11 @@ See the card image result below:
 
 //card-demo.component.ts
 import { Component } from '@angular/core';
+import { CardComponent } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-card-demo',
+  imports: [CardComponent],
   template: ` 
     <abp-card [cardStyle]="{width:'18rem'}">
       <ul class="list-group list-group-flush">
@@ -136,7 +138,7 @@ import { Component } from '@angular/core';
     </abp-card>
   `,
 })
-export class CardDemoComponent { }
+export class CardDemoComponent {}
 ```
 See the group list result below:
 
@@ -148,15 +150,29 @@ See the group list result below:
 
 //card-demo.component.ts
 import { Component } from '@angular/core';
+import { 
+  CardComponent,
+  CardBodyComponent,
+  CardImgTopDirective,
+  CardTitleDirective
+} from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-card-demo',
+  imports: [
+    CardComponent,
+    CardBodyComponent,
+    CardImgTopDirective,
+    CardTitleDirective
+  ],
   template: ` 
     <abp-card [cardStyle]="{width:'18rem'}">
       <img abpCardImgTop src="../../assets/thinh-nguyen-aRrS37GKlVA-unsplash.jpg" alt="...">
       <abp-card-body>
         <h5 abpCardTitle>Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the bulk of the card's content.
+        </p>
       </abp-card-body>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">An item</li>
@@ -170,7 +186,7 @@ import { Component } from '@angular/core';
     </abp-card>
   `,
 })
-export class CardDemoComponent { }
+export class CardDemoComponent {}
 ```
 See kitchen sink result below:
 
@@ -182,15 +198,31 @@ See kitchen sink result below:
 
 //card-demo.component.ts
 import { Component } from '@angular/core';
+import { 
+  CardComponent,
+  CardHeaderComponent,
+  CardBodyComponent,
+  CardTitleDirective,
+  CardFooterComponent
+} from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-card-demo',
+  imports: [
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    CardTitleDirective,
+    CardFooterComponent
+  ],
   template: ` 
     <abp-card class="text-center">
       <abp-card-header>Featured</abp-card-header>
       <abp-card-body>
         <h5 abpCardTitle>Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text">
+          With supporting text below as a natural lead-in to additional content.
+        </p>
         <a class="card-link" href="#" class="btn btn-primary">Go somewhere</a>
       </abp-card-body>
       <abp-card-footer class="text-muted">
@@ -199,7 +231,7 @@ import { Component } from '@angular/core';
     </abp-card>
   `,
 })
-export class CardDemoComponent { }
+export class CardDemoComponent {}
 ```
 See the header and footer result below:
 

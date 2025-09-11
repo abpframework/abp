@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,6 +18,7 @@ using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
@@ -44,6 +46,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
     protected ICurrentApiVersionInfo CurrentApiVersionInfo => LazyServiceProvider.LazyGetRequiredService<ICurrentApiVersionInfo>();
     protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
+    protected IOptions<AbpSystemTextJsonSerializerOptions>? SystemTextJsonSerializerOptions => LazyServiceProvider.LazyGetService<IOptions<AbpSystemTextJsonSerializerOptions>>();
 
     protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
@@ -53,6 +56,21 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
         return await RequestAsync<T>(BuildHttpProxyClientProxyContext(methodName, arguments));
+    }
+
+    protected virtual async IAsyncEnumerable<T> RequestAsyncEnumerable<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
+    {
+        var requestContext = BuildHttpProxyClientProxyContext(methodName, arguments);
+        var responseContent = await RequestAsync(requestContext);
+        var options = SystemTextJsonSerializerOptions?.Value.JsonSerializerOptions;
+        var stream = await responseContent.ReadAsStreamAsync();
+        var items = options != null
+            ? System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream, options)
+            : System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream);
+        await foreach (var item in items)
+        {
+            yield return item!;
+        }
     }
 
     protected virtual ClientProxyRequestContext BuildHttpProxyClientProxyContext(string methodName, ClientProxyRequestTypeValue? arguments = null)

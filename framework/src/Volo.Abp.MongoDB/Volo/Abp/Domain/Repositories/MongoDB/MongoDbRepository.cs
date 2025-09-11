@@ -101,6 +101,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     public IMongoDbRepositoryFilterer<TEntity> RepositoryFilterer => LazyServiceProvider.LazyGetService<IMongoDbRepositoryFilterer<TEntity>>()!;
 
     public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
+        : base(AbpMongoDbConsts.ProviderName)
     {
         DbContextProvider = dbContextProvider;
     }

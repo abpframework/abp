@@ -85,7 +85,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.targetElement) {
       const { offsetHeight, offsetWidth } = this.elRef.nativeElement;
-      if (!offsetHeight && !offsetWidth && this.elRef.nativeElement.children.length) {
+      if (!offsetHeight && !offsetWidth && this.elRef.nativeElement.children?.length) {
         this.targetElement = this.elRef.nativeElement.children[0] as HTMLElement;
       } else {
         this.targetElement = this.elRef.nativeElement;

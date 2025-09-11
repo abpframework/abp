@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 const string email = "admin@abp.io";

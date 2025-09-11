@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -50,7 +49,6 @@ public class CreateModel : CmsKitAdminPageModel
         return new OkObjectResult(createResult);
     }
 
-    [AutoMap(typeof(CreateBlogPostDto), ReverseMap = true)]
     public class CreateBlogPostViewModel : ExtensibleObject
     {
         [Required]

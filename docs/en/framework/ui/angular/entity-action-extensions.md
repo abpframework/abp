@@ -14,7 +14,7 @@ In this example, we will add a "Click Me!" action and alert the current row's `u
 
 ### Step 1. Create Entity Action Contributors
 
-The following code prepares a constant named `identityEntityActionContributors`, ready to be imported and used in your root module:
+The following code prepares a constant named `identityEntityActionContributors`, ready to be imported and used in your root application configuration:
 
 ```ts
 // src/app/entity-action-contributors.ts
@@ -49,22 +49,22 @@ The list of actions, conveniently named as `actionList`, is a **doubly linked li
 
 ### Step 2. Import and Use Entity Action Contributors
 
-Import `identityEntityActionContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
+Import `identityEntityActionContributors` in your routing configuration and pass it to the static `configureRoutes` method for `identity` routes as seen below:
 
 ```js
-// src/app/app-routing.module.ts
+// src/app/app.routes.ts
 
 // other imports
 import { identityEntityActionContributors } from './entity-action-contributors';
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
   // other routes
 
   {
     path: 'identity',
     loadChildren: () =>
-      import('@abp/ng.identity').then(m =>
-        m.IdentityModule.forLazy({
+      import('@abp/ng.identity').then(c =>
+        c.createRoutes({
           entityActionContributors: identityEntityActionContributors,
         })
       ),
@@ -74,11 +74,11 @@ const routes: Routes = [
 ];
 ```
 
-That is it, `alertUserName` entity action will be added as the last action on the grid dropdown in the "Users" page (`UsersComponent`) of the `IdentityModule`.
+That is it, `alertUserName` entity action will be added as the last action on the grid dropdown in the "Users" page (`UsersComponent`) of the `identity` package.
 
 ## How to Place a Custom Modal and Trigger It by Entity Actions
 
-Let's employ dependency injection to extend the functionality of `IdentityModule` and add a quick view action for the User entity. We will take a lazy-loaded approach.
+Let's employ dependency injection to extend the functionality of `identity` package and add a quick view action for the User entity. We will take a lazy-loaded approach.
 
 <img alt="Entity Action Extension Example: Custom Modal" src="./images/entity-action-extensions---custom-modal.gif" width="800px" style="max-width:100%">
 
@@ -117,16 +117,27 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
   };
   ```
 
-3. Create a parent component to the identity module.
+3. Create a parent component to the identity package.
   ```js
   // src/app/identity-extended/identity-extended.component.ts
 
-  import { IdentityUserDto } from '@abp/ng.identity';
+  import { LocalizationPipe } from '@abp/ng.core';
+  import { IdentityUserDto } from '@abp/ng.identity/proxy';
+  import { ModalCloseDirective, ModalComponent } from '@abp/ng.theme.shared';
+  import { CommonModule } from '@angular/common';
   import { Component } from '@angular/core';
+  import { RouterOutlet } from '@angular/router';
 
   @Component({
     selector: 'app-identity-extended',
     templateUrl: './identity-extended.component.html',
+    imports: [
+      CommonModule, 
+      ModalComponent, 
+      RouterOutlet, 
+      LocalizationPipe, 
+      ModalCloseDirective
+    ]
   })
   export class IdentityExtendedComponent {
     isUserQuickViewVisible: boolean;
@@ -184,55 +195,47 @@ Let's employ dependency injection to extend the functionality of `IdentityModule
   </abp-modal>
   ```
 
-5. Add a module for the component and load `IdentityModule` as seen below:
+5. Add a routing configuration for the component as seen below:
   ```js
-  // src/app/identity-extended/identity-extended.module.ts
+  //  src/app/identity-extended/identity-extended.routes.ts
 
-  import { CoreModule } from '@abp/ng.core';
-  import { IdentityModule } from '@abp/ng.identity';
-  import { ThemeSharedModule } from '@abp/ng.theme.shared';
-  import { NgModule } from '@angular/core';
-  import { RouterModule } from '@angular/router';
-  import { identityEntityActionContributors } from './entity-action-contributors';
+  import { Routes } from '@angular/router';
   import { IdentityExtendedComponent } from './identity-extended.component';
+  import { identityEntityActionContributors } from './entity-action-contributors';
 
-  @NgModule({
-    imports: [
-      CoreModule,
-      ThemeSharedModule,
-      RouterModule.forChild([
+  export const createExtendedIdentityRoutes = (): Routes => [
+    {
+      path: '',
+      component: IdentityExtendedComponent,
+      children: [
         {
           path: '',
-          component: IdentityExtendedComponent,
-          children: [
-            {
-              path: '',
-              loadChildren: () =>
-                IdentityModule.forLazy({
-                  entityActionContributors: identityEntityActionContributors,
-                }),
-            },
-          ],
+          loadChildren: () =>
+            import('@abp/ng.identity').then(c =>
+              c.createRoutes({
+                entityActionContributors: identityEntityActionContributors,
+              }),
+            ),
         },
-      ]),
-    ],
-    declarations: [IdentityExtendedComponent],
-  })
-  export class IdentityExtendedModule {}
+      ],
+    },
+  ];
   ```
 
-6. Load `IdentityExtendedModule` instead of `IdentityModule` in your root routing module.
-  ```js
-  // src/app/app-routing.module.ts
+6. Use `createExtendedIdentityRoutes` instead of the `createRoutes` function in your root routing configuration.
+Since the routes are already lazily loaded in the `createExtendedIdentityRoutes` function, you can directly use its children array to avoid an unnecessary additional lazy-loading call.
 
-  const routes: Routes = [
+  ```js
+  // src/app/app.routes.ts
+
+  export const APP_ROUTES: Routes = [
     // other routes
 
     {
       path: 'identity',
-      loadChildren: () =>
-        import('./identity-extended/identity-extended.module')
-          .then(m => m.IdentityExtendedModule),
+      children: [
+        ...createExtendedIdentityRoutes()
+      ],
     },
 
     // other routes
@@ -387,7 +390,7 @@ export function reorderUserContributors(
 
 ### EntityActionContributorCallback\<R = any\>
 
-`EntityActionContributorCallback` is the type that you can pass as entity action contributor callbacks to static `forLazy` methods of the modules.
+`EntityActionContributorCallback` is the type that you can pass as entity action contributor callbacks to static `createRoutes` methods of the packages.
 
 ```js
 // lockUserContributor should have EntityActionContributorCallback<IdentityUserDto> type

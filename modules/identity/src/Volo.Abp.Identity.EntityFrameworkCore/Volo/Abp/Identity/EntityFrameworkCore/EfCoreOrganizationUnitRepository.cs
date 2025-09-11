@@ -48,7 +48,7 @@ public class EfCoreOrganizationUnitRepository
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
-        bool includeDetails = true,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())

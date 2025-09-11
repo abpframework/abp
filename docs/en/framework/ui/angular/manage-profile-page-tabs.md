@@ -9,7 +9,7 @@ See the example below, covers all features:
 ```ts
 // manage-profile-tabs.provider.ts
 
-import { APP_INITIALIZER, Component } from "@angular/core";
+import { provideAppInitializer, Component } from "@angular/core";
 import { TwoFactorTabComponent } from "@volo/abp.ng.account/public";
 import {
   eAccountManageProfileTabNames,
@@ -18,48 +18,47 @@ import {
 import { MyAwesomeTabComponent } from "./my-awesome-tab/my-awesome-tab.component";
 
 @Component({
-  standalone: true,
   selector: "abp-my-awesome-tab",
   template: `My Awesome Tab`,
 })
 class MyAwesomeTabComponent {}
 
 export const MANAGE_PROFILE_TAB_PROVIDER = {
-  provide: APP_INITIALIZER,
-  useFactory: configureManageProfileTabs,
-  deps: [ManageProfileTabsService],
-  multi: true,
+  provideAppInitializer(()=>{
+    configureManageProfileTabs();
+  }),
 };
 
-export function configureManageProfileTabs(tabs: ManageProfileTabsService) {
-  return () => {
-    tabs.add([
-      {
-        name: "::MyAwesomeTab", // supports localization keys
-        order: 5,
-        component: MyAwesomeTabComponent,
-      },
-    ]);
+export function configureManageProfileTabs() {
+  tabs = inject(ManageProfileTabsService);
+  tabs.add([
+    {
+      name: "::MyAwesomeTab", // supports localization keys
+      order: 5,
+      component: MyAwesomeTabComponent,
+    },
+  ]);
 
-    tabs.patch(eAccountManageProfileTabNames.TwoFactor, {
-      name: "Two factor authentication",
-      component: TwoFactorTabComponent,
-    });
+  tabs.patch(eAccountManageProfileTabNames.TwoFactor, {
+    name: "Two factor authentication",
+    component: TwoFactorTabComponent,
+  });
 
-    tabs.remove([eAccountManageProfileTabNames.ProfilePicture]);
-  };
+  tabs.remove([eAccountManageProfileTabNames.ProfilePicture]);
 }
 ```
 
 ```ts
-//app.module.ts
+//app.config.ts
 
 import { MANAGE_PROFILE_TAB_PROVIDER } from "./manage-profile-tabs.provider";
 
-@NgModule({
-  providers: [MANAGE_PROFILE_TAB_PROVIDER],
-})
-export class AppModule {}
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    MANAGE_PROFILE_TAB_PROVIDER
+  ],
+};
 ```
 
 What we have done above;
@@ -70,7 +69,7 @@ What we have done above;
   - Renamed the "Two factor" tab label.
   - Removed the "Profile picture" tab.
 - Determined the `MANAGE_PROFILE_TAB_PROVIDER` to be able to run the `configureManageProfileTabs` function on initialization.
-- Registered the `MANAGE_PROFILE_TAB_PROVIDER` to the `AppModule` providers.
+- Registered the `MANAGE_PROFILE_TAB_PROVIDER` to the `appConfig` providers.
 
 See the result:
 

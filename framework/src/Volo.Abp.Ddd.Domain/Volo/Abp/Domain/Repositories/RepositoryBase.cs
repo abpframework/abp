@@ -14,6 +14,11 @@ namespace Volo.Abp.Domain.Repositories;
 public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
     where TEntity : class, IEntity
 {
+    protected RepositoryBase(string providerName)
+        : base(providerName)
+    {
+    }
+
     [Obsolete("Use WithDetailsAsync method.")]
     public virtual IQueryable<TEntity> WithDetails()
     {
@@ -92,6 +97,11 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
+    protected RepositoryBase(string providerName)
+        : base(providerName)
+    {
+    }
+    
     public abstract Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
     public abstract Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);

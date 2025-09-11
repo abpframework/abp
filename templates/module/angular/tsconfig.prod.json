@@ -9,10 +9,11 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2017",
-    "module": "es2020",
+    "target": "es2020",
+    "module": "esnext",
+    "esModuleInterop": true,
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ],
   },

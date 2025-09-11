@@ -746,6 +746,10 @@
               "path": "framework/infrastructure/image-manipulation.md"
             },
             {
+              "text": "Interceptors",
+              "path": "framework/infrastructure/interceptors.md"
+            },
+            {
               "text": "JSON",
               "path": "framework/infrastructure/json.md"
             },
@@ -2345,11 +2349,91 @@
         },
         {
           "text": "CMS Kit",
-          "path": "modules/cms-kit"
+          "isLazyExpandable": true,
+          "path": "modules/cms-kit",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/cms-kit.md",
+              "isIndex": true
+            },
+            {
+              "text": "Pages",
+              "path": "modules/cms-kit/pages.md"
+            },
+            {
+              "text": "Blogging",
+              "path": "modules/cms-kit/blogging.md"
+            },
+            {
+              "text": "Tag Management",
+              "path": "modules/cms-kit/tags.md"
+            },
+            {
+              "text": "Comments",
+              "path": "modules/cms-kit/comments.md"
+            },
+            {
+              "text": "Reaction System",
+              "path": "modules/cms-kit/reactions.md"
+            },
+            {
+              "text": "Rating System",
+              "path": "modules/cms-kit/ratings.md"
+            },
+            {
+              "text": "Menus",
+              "path": "modules/cms-kit/menus.md"
+            },
+            {
+              "text": "Global Resources",
+              "path": "modules/cms-kit/global-resources.md"
+            },
+            {
+              "text": "Dynamic Widget",
+              "path": "modules/cms-kit/dynamic-widget.md"
+            },
+            {
+              "text": "Marked Item System",
+              "path": "modules/cms-kit/marked-items.md"
+            }
+          ]
         },
         {
           "text": "CMS Kit (Pro)",
-          "path": "modules/cms-kit-pro"
+          "isLazyExpandable": true,
+          "path": "modules/cms-kit-pro",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/cms-kit-pro.md",
+              "isIndex": true
+            },
+            {
+              "text": "Newsletter System",
+              "path": "modules/cms-kit-pro/newsletter.md"
+            },
+            {
+              "text": "Contact Management",
+              "path": "modules/cms-kit-pro/contact-form.md"
+            },
+            {
+              "text": "URL Forwarding System",
+              "path": "modules/cms-kit-pro/URL-forwarding.md"
+            },
+            {
+              "text": "Poll System",
+              "path": "modules/cms-kit-pro/poll.md"
+            },
+            {
+              "text": "Page Feedback System",
+              "path": "modules/cms-kit-pro/page-feedback.md"
+            },
+            {
+              "text": "FAQ System",
+              "path": "modules/cms-kit-pro/faq.md"
+            }
+          ]
         },
         {
           "text": "Docs",

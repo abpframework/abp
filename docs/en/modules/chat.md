@@ -206,38 +206,33 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 
 #### Installation
 
-In order to configure the application to use the `ChatModule`, you first need to import `ChatConfigModule` from `@volo/abp.ng.chat/config` to root module. `ChatConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the chat module, you first need to import `provideChatConfig` from `@volo/abp.ng.chat/config` to root application confiuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { ChatConfigModule } from '@volo/abp.ng.chat/config';
+// app.config.ts
+import { provideChatConfig } from '@volo/abp.ng.chat/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    ChatConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideChatConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
+
 ```
 
-The `ChatModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. It is available for import from `@volo/abp.ng.chat`.
+The chat module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. It is available for import from `@volo/abp.ng.chat`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'chat',
     loadChildren: () =>
-      import('@volo/abp.ng.chat').then(m => m.ChatModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.chat').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
 #### Services / Models

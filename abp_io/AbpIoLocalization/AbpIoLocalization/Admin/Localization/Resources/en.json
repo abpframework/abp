@@ -774,6 +774,7 @@
     "Menu:TelemetryMenu": "Telemetry Reports",
     "Menu:Studio": "Studio",
     "Menu:Solutions": "Solutions",
-    "Menu:Users": "Users"
+    "Menu:Users": "Users",
+    "Menu:UserReports": "Users"
   }
 }

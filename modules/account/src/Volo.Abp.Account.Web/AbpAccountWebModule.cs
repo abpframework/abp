@@ -8,7 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Identity.AspNetCore;
@@ -24,14 +24,14 @@ namespace Volo.Abp.Account.Web;
 [DependsOn(
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpExceptionHandlingModule)
     )]
 public class AbpAccountWebModule : AbpModule
 {
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
-    
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -59,11 +59,7 @@ public class AbpAccountWebModule : AbpModule
 
         ConfigureProfileManagementPage();
 
-        context.Services.AddAutoMapperObjectMapper<AbpAccountWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpAccountWebModule>();
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
@@ -96,7 +92,7 @@ public class AbpAccountWebModule : AbpModule
         });
 
     }
-    
+
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

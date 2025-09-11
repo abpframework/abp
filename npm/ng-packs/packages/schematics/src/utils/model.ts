@@ -229,7 +229,7 @@ function renamePropForTenant(interfaces: Interface[]) {
       const isTenant = prop.name.toLocaleLowerCase().includes(TENANT_KEY);
       const isSaasDto = prop.refs.filter(f => f.startsWith(SAAS_NAMESPACE)).length > 0;
 
-      if (isTenant && isSaasDto) {
+      if (isTenant && isSaasDto && !prop.type.startsWith('Saas')) {
         prop.type = 'Saas' + prop.type;
       }
     }

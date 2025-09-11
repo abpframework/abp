@@ -4,22 +4,7 @@ The Angular UI of ABP Commercial introduces some components with `abp-lookup-...
 
 ## Setup
 
-The components are in the _@volo/abp.commercial.ng.ui_ package, which is included in the ABP templates. So, as long as your project is a product of these templates and unless you delete the package, you have access to the lookup components. Here is how you import them in your Angular module:
-
-```javascript
-import { CommercialUiModule } from '@volo/abp.commercial.ng.ui';
-
-@NgModule({
-  imports: [
-    // other imports
-    CommercialUiModule,
-  ],
-  // rest of the module metadata
-})
-export class YourModule {}
-```
-
-Now you can use the lookup components in your components declared by this module.
+The components are in the _@volo/abp.commercial.ng.ui_ package, which is included in the ABP templates. So, as long as your project is a product of these templates and unless you delete the package, you have access to the lookup components. You can import these in your standalone components in order to be able to use them.
 
 ## Lookup HTTP Requests
 
@@ -48,7 +33,7 @@ Typeahead is a good choice when you have an unknown number of records for the re
 
 ![ABP Angular UI Typeahead Lookup](./images/angular-lookup-typeahead.gif)
 
-Here is how it is used in the template.
+Do not forget to import `LookupTypeaheadComponent` in your component, and here is how it is used in the template.
 
 ```html
 <abp-lookup-typeahead
@@ -57,7 +42,7 @@ Here is how it is used in the template.
   displayNameProp="name"
   [editingData]="selected?.country"
   [getFn]="service.getCountryLookup"
-></abp-lookup-typeahead>
+/>
 ```
 
 The available properties are as follows:
@@ -77,7 +62,7 @@ Select is a good choice when you have a low (and usually fixed) number of record
 
 ![ABP Angular UI Select Lookup](./images/angular-lookup-select.gif)
 
-Here is how it is used in the template.
+Do not forget to import `LookupSelectComponent` in your component, and here is how it is used in the template.
 
 ```html
 <abp-lookup-select
@@ -85,7 +70,7 @@ Here is how it is used in the template.
   formControlName="countryId"
   displayNameProp="name"
   [getFn]="service.getCountryLookup"
-></abp-lookup-select>
+/>
 ```
 
 The available properties are as follows:

@@ -4,7 +4,7 @@ You can use the `ConfirmationService` in @abp/ng.theme.shared package to display
 
 ## Getting Started
 
-You do not have to provide the `ConfirmationService` at module or component level, because it is already **provided in root**. You can inject and start using it immediately in your components, directives, or services.
+You do not have to provide the `ConfirmationService` at component level, because it is already **provided in root**. You can inject and start using it immediately in your components, directives, or services.
 
 ```js
 import { ConfirmationService } from '@abp/ng.theme.shared';
@@ -129,24 +129,25 @@ this.confirmation.clear();
 
 ### How to Change Icons of The Confirmation Popup
 
-You can change icons with the `withConfirmationIcon()` method of `provideAbpThemeShared` function in the app.module.ts. The changes will affect all confirmation popup in the project.
+You can change icons with the `withConfirmationIcon()` method inside `provideAbpThemeShared` function in the app.config.ts. The changes will affect all confirmation popup in the project.
 
 ```ts
 import { provideAbpThemeShared, withConfirmationIcon } from '@abp/ng.theme.shared';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
-    provideAbpThemeShared(withConfirmationIcon({
-      info: 'fa fa-info-circle',
-      success: 'fa fa-check-circle',
-      warning: 'fa fa-exclamation-triangle',
-      error: 'fa fa-times-circle',
-      default: 'fa fa-question-circle',
-    })),
+    provideAbpThemeShared(
+      withConfirmationIcon({
+        info: 'fa fa-info-circle',
+        success: 'fa fa-check-circle',
+        warning: 'fa fa-exclamation-triangle',
+        error: 'fa fa-times-circle',
+        default: 'fa fa-question-circle',
+      })
+    ),
   ],
-})
-export class AppModule {}
+};
 ```
 
 ## API

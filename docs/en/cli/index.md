@@ -33,44 +33,44 @@ While each command may have a set of options, there are some global options that
 
 Here, is the list of all available commands before explaining their details:
 
-* **`help`**: Shows help on the usage of the ABP CLI.
-* **`cli`**: Update or remove ABP CLI.
-* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
-* **`new-module`**: Generates a new module based on the given template.
-* **`new-package`**: Generates a new package based on the given template.
-* **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
-* **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
-* **`add-package`**: Adds an ABP package to a project.
-* **`add-package-ref`**: Adds package to given project.
-* **`install-module`**: Adds a [multi-package application module](../modules/index.md) to a given module.
-* **`install-local-module`**: Installs a local module to given module.
-* **`list-modules`**: Lists names of application modules.
-* **`list-templates`**: Lists the names of available templates to create a solution.
-* **`get-source`**: Downloads the source code of a module.
-* **`add-source-code`**: Downloads the source code and replaces package references with project references.
-* **`init-solution`**: Creates ABP Studio configuration files for a given solution.
-* **`kube-connect`**: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-* **`kube-intercept`**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-* **`list-module-sources`**: Lists the remote module sources.
-* **`add-module-source`**: Adds a remote module source.
-* **`delete-module-source`**: Deletes a remote module source.
-* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
-* **`remove-proxy`**: Removes previously generated client side proxies.
-* **`switch-to-preview`**: Switches to the latest preview version of the ABP.
-* **`switch-to-nightly`**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
-* **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
-* **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
-* **`upgrade`**: It converts the application to use pro modules.
-* **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
-* **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
-* **`login-info`**: Shows the current user's login information.
-* **`logout`**: Logouts from your computer if you've authenticated before.
-* **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
-* **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
-* **`clear-download-cache`**: Clears the templates download cache.
-* **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
-* **`install-old-cli`**: Installs old ABP CLI.
-* **`generate-razor-page`**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
+* **[`help`](../cli#help)**: Shows help on the usage of the ABP CLI.
+* **[`cli`](../cli#cli)**: Update or remove ABP CLI.
+* **[`new`](../cli#new)**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
+* **[`new-module`](../cli#new-module)**: Generates a new module based on the given template.
+* **[`new-package`](../cli#new-package)**: Generates a new package based on the given template.
+* **[`update`](../cli#update)**: Automatically updates all ABP related NuGet and NPM packages in a solution.
+* **[`clean`](../cli#clean)**: Deletes all `BIN` and `OBJ` folders in the current folder.
+* **[`add-package`](../cli#add-package)**: Adds an ABP package to a project.
+* **[`add-package-ref`](../cli#add-package-ref)**: Adds package to given project.
+* **[`install-module`](../cli#install-module)**: Adds a [multi-package application module](../modules/index.md) to a given module.
+* **[`install-local-module`](../cli#install-local-module)**: Installs a local module to given module.
+* **[`list-modules`](../cli#list-modules)**: Lists names of application modules.
+* **[`list-templates`](../cli#list-templates)**: Lists the names of available templates to create a solution.
+* **[`get-source`](../cli#get-source)**: Downloads the source code of a module.
+* **[`add-source-code`](../cli#add-source-code)**: Downloads the source code and replaces package references with project references.
+* **[`init-solution`](../cli#init-solution)**: Creates ABP Studio configuration files for a given solution.
+* **[`kube-connect`](../cli#kube-connect)**: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+* **[`kube-intercept`](../cli#kube-intercept)**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+* **[`list-module-sources`](../cli#list-module-sources)**: Lists the remote module sources.
+* **[`add-module-source`](../cli#add-module-source)**: Adds a remote module source.
+* **[`delete-module-source`](../cli#delete-module-source)**: Deletes a remote module source.
+* **[`generate-proxy`](../cli#generate-proxy)**: Generates client side proxies to use HTTP API endpoints.
+* **[`remove-proxy`](../cli#remove-proxy)**: Removes previously generated client side proxies.
+* **[`switch-to-preview`](../cli#switch-to-preview)**: Switches to the latest preview version of the ABP.
+* **[`switch-to-nightly`](../cli#switch-to-nightly)**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
+* **[`switch-to-stable`](../cli#switch-to-stable)**: Switches to the latest stable versions of the ABP related packages on a solution.
+* **[`switch-to-local`](../cli#switch-to-local)**: Changes NuGet package references on a solution to local project references.
+* **[`upgrade`](../cli#upgrade)**: It converts the application to use pro modules.
+* **[`translate`](../cli#translate)**: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
+* **[`login`](../cli#login)**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+* **[`login-info`](../cli#login-info)**: Shows the current user's login information.
+* **[`logout`](../cli#logout)**: Logouts from your computer if you've authenticated before.
+* **[`bundle`](../cli#bundle)**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
+* **[`install-libs`](../cli#install-libs)**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
+* **[`clear-download-cache`](../cli#clear-download-cache)**: Clears the templates download cache.
+* **[`check-extensions`](../cli#check-extensions)**: Checks the latest version of the ABP CLI extensions.
+* **[`install-old-cli`](../cli#install-old-cli)**: Installs old ABP CLI.
+* **[`generate-razor-page`](../cli#generate-razor-page)**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 
 ### help
 

@@ -226,25 +226,21 @@ Angular application folder structure looks like below:
 ![angular-folder-structure](../images/angular-folder-structure.png)
 
 
-Each of ABP modules is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules install with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
+Each of ABP module is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules are installed with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
 
 ```bash
 yarn list --pattern abp
 ```
 
-Angular application module structure:
+### Application Config
 
-![Angular template structure diagram](../images/angular-template-structure-diagram.png)
+Application config is the root module of the application. Some of ABP modules and some essential modules are imported to the `appConfig`.
 
-### AppModule
+ABP Config modules also have been imported to `appConfig`  for initially requirements of lazy-loadable ABP modules.
 
-`AppModule` is the root module of the application. Some of ABP modules and some essential modules imported to the `AppModule`.
+### APP_ROUTES
 
-ABP Config modules also have imported to `AppModule`  for initially requirements of lazy-loadable ABP modules.
-
-### AppRoutingModule
-
-There are lazy-loadable ABP modules in the `AppRoutingModule` as routes.
+There are lazy-loadable ABP modules in the `APP_ROUTES` as routes.
 
 > Paths of ABP Modules should not be changed.
 
@@ -253,7 +249,7 @@ You should add `routes` property in the `data` object to add a link on the menu 
 ```js
 {
    path: 'dashboard',
-   loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+   loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
    canActivate: [authGuard, permissionGuard],
    data: {
       routes: {
@@ -274,25 +270,19 @@ In the above example;
 
 After the above `routes` definition, if the user is authorized, the dashboard link will appear on the menu.
 
-### Shared Module
-
-The modules that may be required for all modules have imported to the `SharedModule`. You should import the `SharedModule` to all modules.
-
-See the [Sharing Modules](https://angular.io/guide/sharing-ngmodules) document.
-
 ### Environments
 
 The files under the `src/environments` folder has the essential configuration of the application.
 
-### Home Module
+### Home Component
 
-Home module is an example lazy-loadable module that loads on the root address of the application.
+Home component is an example lazy-loadable standalone component that loads on the root address of the application.
 
-### Dashboard Module
+### Dashboard Component
 
-Dashboard module is a lazy-loadable module. `HostDashboardComponent` and `TenantDashboardComponent` declared to this module. One of these components is shown according to the user's authorization. 
+Dashboard component is a lazy-loadable component. `HostDashboardComponent` and `TenantDashboardComponent` are declared within this root component. One of these components is shown according to authorization of the user. 
 
-There are four widgets in the `HostDashboardComponent` which declared in ABP modules.
+There are four widgets in the `HostDashboardComponent` which are declared in ABP modules.
 
 ### Styles
 

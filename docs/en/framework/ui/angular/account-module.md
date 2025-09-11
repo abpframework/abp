@@ -17,36 +17,35 @@ npm install @abp/ng.account
 
 > Make sure v4.3 or higher version is installed.
 
-Open the `app.module.ts` and add `provideAccountConfig()` to the providers array as shown below:
+Open the `app.config.ts` and add `provideAccountConfig()` to the providers array as shown below:
 
 ```js
-// app.module.ts
+// app.config.ts
 
 import { provideAccountConfig } from "@abp/ng.account/config";
-//...
+// ...
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
-    //...
+    // ...
     provideAccountConfig(),
+    // ...
   ],
-  //...
-})
-export class AppModule {}
+};
 ```
 
-Open the `app-routing.module.ts` and add the `account` route to `routes` array as follows:
+Open the `app.routes.ts` and add the `account` route to `APP_ROUTES` array as follows:
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
+// app.routes.ts
+export const APP_ROUTES: Routes = [
   //...
   {
     path: 'account',
-    loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule.forLazy()),
+    loadChildren: () => import('@abp/ng.account').then(c => c.createRoutes()),
   },
   //...
-export class AppRoutingModule {}
+];
 ```
 
 ## Account Public Module Implementation for Commercial Templates
@@ -59,42 +58,42 @@ npm install @volo/abp.ng.account
 
 > Make sure v4.3 or higher version is installed.
 
-Open the `app.module.ts` and add `AccountPublicConfigModule.forRoot()` to the imports array as shown below:
+Open the `app.config.ts` and add `provideAccountPublicConfig()` to the providers array as shown below:
 
-> Ensure that the `Account Layout Module` has been added if you are using the Lepton X theme. If you miss the step, you will get an error message that says `Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.` when you try to access the account pages. Otherwise, you can skip adding the `AccountLayoutModule` step.
+> Ensure that the `Account Layout Provider` has been added if you are using the Lepton X theme. If you miss the step, you will get an error message that says `Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "provideAccountLayout()" to your app configuration.` Otherwise, you can skip adding the `provideAccountLayout()` step.
 
 ```js
-// app.module.ts
+// app.config.ts
 
-import { AccountPublicConfigModule } from "@volo/abp.ng.account/public/config";
-// if you are using or want to use Lepton X, you should add AccountLayoutModule
-// import { AccountLayoutModule } from '@volosoft/abp.ng.theme.lepton-x/account'
+import { provideAccountPublicConfig } from "@volo/abp.ng.account/public/config";
+// if you are using or want to use Lepton X, you should add provideAccountLayout
+// import { provideAccountLayout } from '@volosoft/abp.ng.theme.lepton-x/account'
 
 //...
 
-@NgModule({
-  imports: [
-    //...
-    AccountPublicConfigModule.forRoot(),
-    // AccountLayoutModule.forRoot() // Only for Lepton X
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideAccountPublicConfig(),
+    provideAccountLayout() // Only for Lepton X
+    // ...
   ],
-  //...
-})
-export class AppModule {}
+};
 ```
 
-Open the `app-routing.module.ts` and add the `account` route to `routes` array as follows:
+Open the `app.routes.ts` and add the `account` route to `APP_ROUTES` array as follows:
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
+// app.routes.ts
+
+export const APP_ROUTES: Routes = [
   //...
   {
     path: 'account',
-    loadChildren: () => import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy()),
+    loadChildren: () => import('@volo/abp.ng.account/public').then(c => c.createRoutes()),
   },
   //...
-export class AppRoutingModule {}
+];
 ```
 
 ## My Account Page
@@ -108,15 +107,15 @@ When the user changes their own data on the personal settings tab in My Account,
 If you want to disable these warning, You should set `isPersonalSettingsChangedConfirmationActive` false
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
+// app.routes.ts
+export const APP_ROUTES: Routes = [
   //...
   {
     path: 'account',
-    loadChildren: () => import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy({ isPersonalSettingsChangedConfirmationActive:false })),
+    loadChildren: () => import('@volo/abp.ng.account/public').then(c => c.create({ isPersonalSettingsChangedConfirmationActive:false })),
   },
   //...
-export class AppRoutingModule {}
+];
 ```
 
 ## Security Logs Page [COMMERCIAL]

@@ -224,7 +224,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
         return true;
     }
 
-    protected virtual Task<string> ConvertValueToStringAsync(object value)
+    protected virtual Task<string> ConvertValueToStringAsync(object? value)
     {
         if (value is DateTime dateTimeValue)
         {
@@ -236,6 +236,6 @@ public class ClientProxyUrlBuilder : ITransientDependency
             return Task.FromResult(dateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss.fffffff").TrimEnd('0').TrimEnd('.'));
         }
 
-        return Task.FromResult(value.ToString()!);
+        return Task.FromResult(value?.ToString() ?? string.Empty);
     }
 }

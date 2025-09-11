@@ -151,4 +151,15 @@ background-color: rgba(0, 0, 0, 0.6);
 .abp-md-form {
     max-width: 540px;
   }
+
+.ngx-datatable.material:has(.datatable-body-row) .datatable-footer {
+  border-top: none;
+}
+
+.ngx-datatable.material:not(:has(.datatable-body-row)) .datatable-footer {
+  border-top: 1px solid #dee2e6;
+}
+
 `;
+
+

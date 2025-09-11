@@ -84,18 +84,23 @@ public class StaticPermissionDefinitionStore : IStaticPermissionDefinitionStore,
 
             foreach (var provider in providers)
             {
+                context.CurrentProvider = provider;
                 provider.PreDefine(context);
             }
 
             foreach (var provider in providers)
             {
+                context.CurrentProvider = provider;
                 provider.Define(context);
             }
 
             foreach (var provider in providers)
             {
+                context.CurrentProvider = provider;
                 provider.PostDefine(context);
             }
+            
+            context.CurrentProvider = null;
 
             return context.Groups;
         }

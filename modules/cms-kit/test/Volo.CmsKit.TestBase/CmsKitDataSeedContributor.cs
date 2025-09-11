@@ -442,7 +442,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                 new MenuItem(
                     _cmsKitTestData.MenuItem_1_Id,
                     _cmsKitTestData.MenuItem_1_Name,
-                    _cmsKitTestData.MenuItem_1_Url),
+                    _cmsKitTestData.MenuItem_1_Url,
+                    order: _cmsKitTestData.HighestMenuItemOrder),
                 new MenuItem(
                     _cmsKitTestData.MenuItem_2_Id,
                     _cmsKitTestData.MenuItem_2_Name,
@@ -451,7 +452,19 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                     _cmsKitTestData.MenuItem_3_Id,
                     _cmsKitTestData.MenuItem_3_Name,
                     _cmsKitTestData.MenuItem_3_Url),
-                menuItem4
+                menuItem4,
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_5_Id,
+                    _cmsKitTestData.MenuItem_5_Name,
+                    _cmsKitTestData.MenuItem_5_Url,
+                    order: 0,
+                    parentId: _cmsKitTestData.MenuItem_1_Id),
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_6_Id,
+                    _cmsKitTestData.MenuItem_6_Name,
+                    _cmsKitTestData.MenuItem_6_Url,
+                    order: 1,
+                    parentId: _cmsKitTestData.MenuItem_1_Id)
             });
     }
 

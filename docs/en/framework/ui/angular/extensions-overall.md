@@ -21,8 +21,8 @@ Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensible t
          [actionsColumnWidth]="38"
          [actionsTemplate]="customAction"
          [list]="list"
-         (tableActivate)="onTableSelect($event)" > 
-      </abp-extensible-table>
+         (tableActivate)="onTableSelect($event)" 
+      /> 
 ````
 
  * `       actionsText : ` ** Column name of action column. **Type** : string

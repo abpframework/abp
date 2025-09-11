@@ -133,12 +133,9 @@ Example:
 ```ts
 import { TENANT_NOT_FOUND_BY_NAME } from '@abp/ng.core';
 
-@NgModule({
-  imports: [
-  // removed for clarity
-  ],
+export const appConfig: ApplicationConfig = {
   providers: [
-    // removed for clarity
+     // removed for clarity
     {
       provide: TENANT_NOT_FOUND_BY_NAME,
       useFactory: function () {
@@ -148,11 +145,7 @@ import { TENANT_NOT_FOUND_BY_NAME } from '@abp/ng.core';
       },
     },
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
-
+};
 ``` 
 
 ## See Also

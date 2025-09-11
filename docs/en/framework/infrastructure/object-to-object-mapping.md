@@ -84,7 +84,7 @@ public class UserAppService : ApplicationService
 }
 ````
 
-You should have defined the mappings before to be able to map objects. See the AutoMapper integration section to learn how to define mappings.
+You should have defined the mappings before to be able to map objects. See the AutoMapper/Mapperly integration section to learn how to define mappings.
 
 ## AutoMapper Integration
 
@@ -217,13 +217,296 @@ public class MyProfile : Profile
 }
 ````
 
+## Mapperly Integration
+
+[Mapperly](https://github.com/riok/mapperly) is a .NET source generator for generating object mappings. [Volo.Abp.Mapperly](https://www.nuget.org/packages/Volo.Abp.Mapperly) package defines the Mapperly integration for the `IObjectMapper`.
+
+Once you define mappings class as below, you can use the `IObjectMapper` interface just like explained before.
+
+### Define Mapping Classes
+
+You can define a mapper class by using the `Mapper` attribute. The class and methods must be `partial` to allow the Mapperly to generate the implementation during the build process:
+
+````csharp
+[Mapper]
+public partial class UserToUserDtoMapper : MapperBase<User, UserDto>
+{
+    public override partial UserDto Map(User source);
+    public override partial void Map(User source, UserDto destination);
+}
+````
+
+If you also want to map `UserDto` to `User`, you can inherit from the `TwoWayMapperBase<User, UserDto>` class:
+
+````csharp
+[Mapper]
+public partial class UserToUserDtoMapper : TwoWayMapperBase<User, UserDto>
+{
+    public override partial UserDto Map(User source);
+    public override partial void Map(User source, UserDto destination);
+
+    public override partial User ReverseMap(UserDto destination);
+    public override partial void ReverseMap(UserDto destination, User source);
+}
+````
+
+### Before and After Mapping Methods
+
+The base class provides `BeforeMap` and `AfterMap` methods that can be overridden to perform actions before and after the mapping:
+
+````csharp
+[Mapper]
+public partial class UserToUserDtoMapper : TwoWayMapperBase<User, UserDto>
+{
+    public override partial UserDto Map(User source);
+    public override partial void Map(User source, UserDto destination);
+
+    public override partial void BeforeMap(User source)
+    {
+        //TODO: Perform actions before the mapping
+    }
+
+    public override partial void AfterMap(User source, UserDto destination)
+    {
+        //TODO: Perform actions after the mapping
+    }
+
+    public override partial User ReverseMap(UserDto destination);
+    public override partial void ReverseMap(UserDto destination, User source);
+
+    public override partial void BeforeReverseMap(UserDto destination)
+    {
+        //TODO: Perform actions before the reverse mapping
+    }
+
+    public override partial void AfterReverseMap(UserDto destination, User source)
+    {
+        //TODO: Perform actions after the reverse mapping
+    }
+}
+````
+
+### Mapping the Object Extensions
+
+[Object extension system](../fundamentals/object-extensions.md) allows to define extra properties for existing classes. ABP provides a mapping definition extension to properly map extra properties of two objects:
+
+````csharp
+[Mapper]
+[MapExtraProperties]
+public partial class UserToUserDtoMapper : MapperBase<User, UserDto>
+{
+    public override partial UserDto Map(User source);
+    public override partial void Map(User source, UserDto destination);
+}
+````
+
+It is suggested to use the `MapExtraPropertiesAttribute` attribute if both classes are extensible objects (implement the `IHasExtraProperties` interface). See the [object extension document](../fundamentals/object-extensions.md) for more.
+
+### Property Setter Method
+
+Mapperly requires that properties of both source and destination objects have `setter` methods. Otherwise, the property will be ignored. You can use `protected set` or `private set` to control the visibility of the `setter` method, but each property must have a `setter` method.
+
+### Deep Cloning
+
+By default, Mapperly does not create deep copies of objects to improve performance. If an object can be directly assigned to the target, it will do so (e.g., if the source and target type are both `List<T>`, the list and its entries will not be cloned). To create deep copies, set the `UseDeepCloning` property on the `MapperAttribute` to `true`.
+
+````csharp
+[Mapper(UseDeepCloning = true)]
+public partial class UserToUserDtoMapper : MapperBase<User, UserDto>
+{
+    public override partial UserDto Map(User source);
+    public override partial void Map(User source, UserDto destination);
+}
+````
+
+### Lists and Arrays Support
+
+ABP Mapperly integration also supports mapping lists and arrays as explained in the [IObjectMapper<TSource, TDestination> Interface](#iobjectmappertsource-tdestination-interface) section. 
+
+**Example**:
+
+````csharp
+[Mapper]
+public partial class UserToUserDtoMapper : MapperBase<User, UserDto>
+{
+    public override partial UserDto Map(User source);
+    public override partial void Map(User source, UserDto destination);
+}
+
+var users = await _userRepository.GetListAsync(); // returns List<User>
+var dtos = ObjectMapper.Map<List<User>, List<UserDto>>(users); // creates List<UserDto>
+````
+
+### Nested Mapping
+
+When working with nested object mapping, there's an important limitation to be aware of. If you have separate mappers for nested types like in the example below, the parent mapper (`SourceTypeToDestinationTypeMapper`) will not automatically use the nested mapper (`SourceNestedTypeToDestinationNestedTypeMapper`) to handle the mapping of nested properties. This means that configurations like the `MapperIgnoreTarget` attribute on the nested mapper will be ignored during the parent mapping operation.
+
+````csharp
+public class SourceNestedType
+{
+    public string Name { get; set; }
+
+    public string Ignored { get; set; }
+}
+
+public class SourceType
+{
+    public string Name { get; set; }
+
+    public SourceNestedType Nested { get; set; }
+}
+
+public class DestinationNestedType
+{
+    public string Name { get; set; }
+
+    public string Ignored { get; set; }
+}
+
+public class DestinationType
+{
+    public string Name { get; set; }
+
+    public DestinationNestedType Nested { get; set; }
+}
+
+[Mapper]
+public partial class SourceTypeToDestinationTypeMapper : MapperBase<SourceType, DestinationType>
+{
+    public override partial DestinationType Map(SourceType source);
+    public override partial void Map(SourceType source, DestinationType destination);
+}
+
+[Mapper]
+public partial class SourceNestedTypeToDestinationNestedTypeMapper : MapperBase<SourceNestedType, DestinationNestedType>
+{
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public override partial DestinationNestedType Map(SourceNestedType source);
+
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public override partial void Map(SourceNestedType source, DestinationNestedType destination);
+}
+````
+
+There are several ways to solve this nested mapping issue. Choose the approach that best fits your specific requirements:
+
+#### Solution 1: Multi-Interface Implementation
+
+Implement both mapping interfaces (`IAbpMapperlyMapper<SourceType, DestinationType>` and `IAbpMapperlyMapper<SourceNestedType, DestinationNestedType>`) in a single mapper class. This approach consolidates all related mapping logic into one class.
+
+**Important:** Remember to implement `ITransientDependency` to register the mapper class with the dependency injection container.
+
+````csharp
+[Mapper]
+public partial class SourceTypeToDestinationTypeMapper : IAbpMapperlyMapper<SourceType, DestinationType>, IAbpMapperlyMapper<SourceNestedType, DestinationNestedType>, ITransientDependency
+{
+    public partial DestinationType Map(SourceType source);
+    public partial void Map(SourceType source, DestinationType destination);
+    public void BeforeMap(SourceType source)
+    {
+    }
+
+    public void AfterMap(SourceType source, DestinationType destination)
+    {
+    }
+
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public partial DestinationNestedType Map(SourceNestedType source);
+
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public partial void Map(SourceNestedType source, DestinationNestedType destination);
+
+    public void BeforeMap(SourceNestedType source)
+    {
+    }
+
+    public void AfterMap(SourceNestedType source, DestinationNestedType destination)
+    {
+    }
+}
+````
+
+#### Solution 2: Consolidate Mapping Methods
+
+Copy the nested mapping methods from `SourceNestedTypeToDestinationNestedTypeMapper` to the parent `SourceTypeToDestinationTypeMapper` class. This ensures all mapping logic is contained within a single mapper.
+
+Example:
+
+````csharp
+[Mapper]
+public partial class SourceTypeToDestinationTypeMapper : MapperBase<SourceType, DestinationType>
+{
+    public override partial DestinationType Map(SourceType source);
+    public override partial void Map(SourceType source, DestinationType destination);
+
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public override partial DestinationNestedType Map(SourceNestedType source);
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public override partial void Map(SourceNestedType source, DestinationNestedType destination);
+}
+
+[Mapper]
+public partial class SourceNestedTypeToDestinationNestedTypeMapper : MapperBase<SourceNestedType, DestinationNestedType>
+{
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public override partial DestinationNestedType Map(SourceNestedType source);
+
+    [MapperIgnoreTarget(nameof(SourceNestedType.Ignored))]
+    public override partial void Map(SourceNestedType source, DestinationNestedType destination);
+}
+````
+
+#### Solution 3: Dependency Injection Approach
+
+Inject the nested mapper as a dependency into the parent mapper and use it in the `AfterMap` method to handle nested object mapping manually.
+
+Example:
+
+````csharp
+[Mapper]
+public partial class SourceTypeToDestinationTypeMapper : MapperBase<SourceType, DestinationType>
+{
+    private readonly SourceNestedTypeToDestinationNestedTypeMapper _sourceNestedTypeToDestinationNestedTypeMapper;
+
+    public SourceTypeToDestinationTypeMapper(SourceNestedTypeToDestinationNestedTypeMapper sourceNestedTypeToDestinationNestedTypeMapper)
+    {
+        _sourceNestedTypeToDestinationNestedTypeMapper = sourceNestedTypeToDestinationNestedTypeMapper;
+    }
+
+    public override partial DestinationType Map(SourceType source);
+    public override partial void Map(SourceType source, DestinationType destination);
+
+    public override void AfterMap(SourceType source, DestinationType destination)
+    {
+        if (source.Nested != null)
+        {
+            destination.Nested = _sourceNestedTypeToDestinationNestedTypeMapper.Map(source.Nested);
+        }
+    }
+}
+````
+
+#### Choosing the Right Solution
+
+Each solution has its own advantages:
+
+- **Solution 1** consolidates all mapping logic in one place and works well when mappings are tightly related.
+- **Solution 2** is simple but can lead to code duplication if you need the nested mapper elsewhere.
+- **Solution 3** maintains separation of concerns and reusability but requires manual mapping in the `AfterMap` method.
+
+Choose the approach that best aligns with your application's architecture and maintainability requirements.
+
+### More Mapperly Features
+
+Most of Mapperly's features such as `Ignore` can be configured through its attributes. See the [Mapperly documentation](https://mapperly.riok.app/docs/intro/) for more details.
+
 ## Advanced Topics
 
 ### IObjectMapper<TContext> Interface
 
-Assume that you have created a **reusable module** which defines AutoMapper profiles and uses `IObjectMapper` when it needs to map objects. Your module then can be used in different applications, by nature of the [modularity](../architecture/modularity/basics.md).
+Assume that you have created a **reusable module** which defines AutoMapper/Mapperly profiles and uses `IObjectMapper` when it needs to map objects. Your module then can be used in different applications, by nature of the [modularity](../architecture/modularity/basics.md).
 
-`IObjectMapper` is an abstraction and can be replaced by the final application to use another mapping library. The problem here that your reusable module is designed to use the AutoMapper library, because it only defines mappings for it. In such a case, you will want to guarantee that your module always uses AutoMapper even if the final application uses another default object mapping library.
+`IObjectMapper` is an abstraction and can be replaced by the final application to use another mapping library. The problem here that your reusable module is designed to use the AutoMapper/Mapperly library, because it only defines mappings for it. In such a case, you will want to guarantee that your module always uses AutoMapper/Mapperly even if the final application uses another default object mapping library.
 
 `IObjectMapper<TContext>` is used to contextualize the object mapper, so you can use different libraries for different modules/contexts.
 
@@ -281,6 +564,8 @@ public class UserAppService : ApplicationService
 
 While using the contextualized object mapper is same as the normal object mapper, you should register the contextualized mapper in your module's `ConfigureServices` method:
 
+When using AutoMapper:
+
 ````csharp
 [DependsOn(typeof(AbpAutoMapperModule))]
 public class MyModule : AbpModule
@@ -294,6 +579,20 @@ public class MyModule : AbpModule
         {
             options.AddMaps<MyModule>(validate: true);
         });
+    }
+}
+````
+
+When using Mapperly:
+
+````csharp
+[DependsOn(typeof(AbpMapperlyModule))]
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //Use Mapperly for MyModule
+        context.Services.AddMapperlyObjectMapper<MyModule>();
     }
 }
 ````

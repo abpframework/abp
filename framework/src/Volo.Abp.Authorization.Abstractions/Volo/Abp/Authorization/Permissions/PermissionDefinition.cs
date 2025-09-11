@@ -108,6 +108,8 @@ public class PermissionDefinition :
             Parent = this
         };
 
+        child[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName] = this[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName];
+       
         _children.Add(child);
 
         return child;

@@ -167,7 +167,7 @@ The `ReplaceDbContext` attribute allows the use of the `ModularCrmDbContext` cla
 ````csharp
 public class ModularCrmDbContext :
     AbpDbContext<ModularCrmDbContext>,
-    IProductsDbContext,
+    ICatalogDbContext,
     IOrderingDbContext //NEW: IMPLEMENT THE INTERFACE
 {
     public DbSet<Product> Products { get; set; }
@@ -283,21 +283,17 @@ The new files under the `ModularCrm.Ordering.Contracts` project should be like t
 
 ### Implementing the Application Service
 
-First we configure the *AutoMapper* to map the `Order` entity to the `OrderDto` object, because we will need it later. Open the `OrderingAutoMapperProfile` under the `ModularCrm.Ordering` project:
+First, create a new mapping class (under the `ModularCrm.Ordering` project) that implements the `MapperBase<Order, OrderDto>` class with the `[Mapper]` attribute to map `Order` entities to `OrderDto` objects as follows, because we will need it later:
 
-````csharp
-using AutoMapper;
-
-namespace ModularCrm.Ordering;
-
-public class OrderingAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class OrderToOrderDtoMapper : MapperBase<Order, OrderDto>
 {
-    public OrderingAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>();
-    }
+    public override partial OrderDto Map(Order source);
+
+    public override partial void Map(Order source, OrderDto destination);
 }
-````
+```
 
 Now, you can implement the `IOrderAppService` interface. Create an `OrderAppService` class under the `ModularCrm.Ordering` project:
 

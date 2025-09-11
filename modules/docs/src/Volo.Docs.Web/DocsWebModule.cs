@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -9,7 +8,7 @@ using Volo.Abp.Ui.LayoutHooks;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -23,7 +22,7 @@ namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsApplicationContractsModule),
-        typeof(AbpAutoMapperModule),
+        typeof(AbpMapperlyModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpAspNetCoreMvcUiPackagesModule),
@@ -46,6 +45,8 @@ namespace Volo.Docs
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddMapperlyObjectMapper<DocsWebModule>();
+            
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsWebModule>();
@@ -86,12 +87,6 @@ namespace Volo.Docs
                     options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + languageCode + "{projectName}/{version}/{*documentName}");
                     options.Conventions.AddPageRoute("/Documents/Search", routePrefix + "search/" + languageCode + "{projectName}/{version}");
                 }
-            });
-
-            context.Services.AddAutoMapperObjectMapper<DocsWebModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<DocsWebAutoMapperProfile>(validate: true);
             });
 
             Configure<DocumentToHtmlConverterOptions>(options =>

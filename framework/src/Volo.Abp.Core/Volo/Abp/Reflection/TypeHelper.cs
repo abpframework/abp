@@ -80,6 +80,37 @@ public static class TypeHelper
         return false;
     }
 
+    public static TProperty? ChangeTypePrimitiveExtended<TProperty>(object? value)
+    {
+        if (value == null)
+        {
+            return default;
+        }
+        
+        if (IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
+        {
+            var conversionType = typeof(TProperty);
+            if (IsNullable(conversionType))
+            {
+                conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+            }
+
+            if (conversionType == typeof(Guid))
+            {
+                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString()!)!;
+            }
+
+            if (conversionType.IsEnum)
+            {
+                return (TProperty)Enum.Parse(conversionType, value.ToString()!);
+            }
+
+            return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+        }
+
+        throw new AbpException("ChangeTypePrimitiveExtended<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
+    }
+
     public static bool IsNullable(Type type)
     {
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -176,6 +207,10 @@ public static class TypeHelper
                type == typeof(decimal) ||
                type == typeof(DateTime) ||
                type == typeof(DateTimeOffset) ||
+#if NETCOREAPP
+               type == typeof(DateOnly) ||
+               type == typeof(TimeOnly) ||
+#endif
                type == typeof(TimeSpan) ||
                type == typeof(Guid);
     }

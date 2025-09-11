@@ -10,7 +10,8 @@
     "importHelpers": true,
     "target": "es2020",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2020", "dom"],
+    "esModuleInterop": true,
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "paths": {

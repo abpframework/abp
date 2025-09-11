@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Volo.Abp.DependencyInjection;
 
@@ -25,7 +26,7 @@ public class DefaultObjectMapper<TContext> : DefaultObjectMapper, IObjectMapper<
 
 public class DefaultObjectMapper : IObjectMapper, ITransientDependency
 {
-    protected static ConcurrentDictionary<string, MethodInfo> MethodInfoCache { get; } = new ConcurrentDictionary<string, MethodInfo>();
+    protected static readonly ConcurrentDictionary<string, Func<object, object, object, object?>> MapCache = new();
 
     public IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
     protected IServiceProvider ServiceProvider { get; }
@@ -122,7 +123,7 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
 
     protected virtual bool TryToMapCollection<TSource, TDestination>(IServiceScope serviceScope, TSource source, TDestination? destination, out TDestination collectionResult)
     {
-        if (!IsCollectionGenericType<TSource, TDestination>(out var sourceArgumentType, out var destinationArgumentType, out var definitionGenericType))
+        if (!ObjectMappingHelper.IsCollectionGenericType<TSource, TDestination>(out var sourceArgumentType, out var destinationArgumentType, out var definitionGenericType))
         {
             collectionResult = default!;
             return false;
@@ -137,46 +138,9 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
             return false;
         }
 
-        var cacheKey = $"{mapperType.FullName}_{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}";
-        var method = MethodInfoCache.GetOrAdd(
-            cacheKey,
-            _ =>
-            {
-                var methods = specificMapper
-                    .GetType()
-                    .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Where(x => x.Name == nameof(IObjectMapper<object, object>.Map))
-                    .Where(x =>
-                    {
-                        var parameters = x.GetParameters();
-                        if (destination == null && parameters.Length != 1 ||
-                            destination != null && parameters.Length != 2 ||
-                            parameters[0].ParameterType != sourceArgumentType)
-                        {
-                            return false;
-                        }
-
-                        return destination == null || parameters[1].ParameterType == destinationArgumentType;
-                    })
-                    .ToList();
-
-                if (methods.IsNullOrEmpty())
-                {
-                    throw new AbpException($"Could not find a method named '{nameof(IObjectMapper<object, object>.Map)}'" +
-                                           $" with parameters({(destination == null ? sourceArgumentType.ToString() : sourceArgumentType + "," + destinationArgumentType)})" +
-                                           $" in the type '{mapperType}'.");
-                }
-
-                if (methods.Count > 1)
-                {
-                    throw new AbpException($"Found more than one method named '{nameof(IObjectMapper<object, object>.Map)}'" +
-                                           $" with parameters({(destination == null ? sourceArgumentType.ToString() : sourceArgumentType + "," + destinationArgumentType)})" +
-                                           $" in the type '{mapperType}'.");
-                }
-
-                return methods.First();
-            }
-        );
+        var invoker = MapCache.GetOrAdd(
+            $"{mapperType.FullName}_{(destination == null ? "MapMethodWithSingleParameter" : "MapMethodWithDoubleParameters")}",
+            _ => CreateMapDelegate(mapperType, sourceArgumentType, destinationArgumentType, destination != null));
 
         var sourceList = source!.As<IList>();
         var result = definitionGenericType.IsGenericType
@@ -192,8 +156,8 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
         for (var i = 0; i < sourceList.Count; i++)
         {
             var invokeResult = destination == null
-                ? method.Invoke(specificMapper, new [] { sourceList[i] })!
-                : method.Invoke(specificMapper, new [] { sourceList[i], Activator.CreateInstance(destinationArgumentType)! })!;
+                ? invoker(specificMapper, sourceList[i]!, null!)
+                : invoker(specificMapper, sourceList[i]!, Activator.CreateInstance(destinationArgumentType)!);
 
             if (definitionGenericType.IsGenericType)
             {
@@ -218,61 +182,64 @@ public class DefaultObjectMapper : IObjectMapper, ITransientDependency
         return true;
     }
 
-    protected virtual bool IsCollectionGenericType<TSource, TDestination>(out Type sourceArgumentType, out Type destinationArgumentType, out Type definitionGenericType)
+    protected virtual Func<object, object, object, object?> CreateMapDelegate(
+        Type mapperType,
+        Type sourceArgumentType,
+        Type destinationArgumentType,
+        bool hasDestination)
     {
-        sourceArgumentType = default!;
-        destinationArgumentType = default!;
-        definitionGenericType = default!;
+        var methods = mapperType
+            .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(x => x.Name == nameof(IObjectMapper<object, object>.Map))
+            .Where(x =>
+            {
+                var parameters = x.GetParameters();
+                if (!hasDestination && parameters.Length != 1 ||
+                    hasDestination && parameters.Length != 2 ||
+                    parameters[0].ParameterType != sourceArgumentType)
+                {
+                    return false;
+                }
 
-        if ((!typeof(TSource).IsGenericType && !typeof(TSource).IsArray) ||
-            (!typeof(TDestination).IsGenericType && !typeof(TDestination).IsArray))
+                return !hasDestination || parameters[1].ParameterType == destinationArgumentType;
+            })
+            .ToList();
+
+        if (methods.Count == 0)
         {
-            return false;
+            throw new AbpException($"Could not find a method named '{nameof(IObjectMapper<object, object>.Map)}'" +
+                                   $" with parameters({(hasDestination ? sourceArgumentType + ", " + destinationArgumentType : sourceArgumentType.ToString())})" +
+                                   $" in the type '{mapperType}'.");
         }
 
-        var supportedCollectionTypes = new[]
+        if (methods.Count > 1)
         {
-            typeof(IEnumerable<>),
-            typeof(ICollection<>),
-            typeof(Collection<>),
-            typeof(IList<>),
-            typeof(List<>)
+            throw new AbpException($"Found more than one method named '{nameof(IObjectMapper<object, object>.Map)}'" +
+                                   $" with parameters({(hasDestination ? sourceArgumentType + ", " + destinationArgumentType : sourceArgumentType.ToString())})" +
+                                   $" in the type '{mapperType}'.");
+        }
+
+        var method = methods[0];
+
+        var instanceParam = Expression.Parameter(typeof(object), "mapper");
+        var sourceParam = Expression.Parameter(typeof(object), "source");
+        var destinationParam = Expression.Parameter(typeof(object), "destination");
+
+        var instanceCast = Expression.Convert(instanceParam, method.DeclaringType!);
+        var callParams = new List<Expression>
+        {
+            Expression.Convert(sourceParam, sourceArgumentType)
         };
 
-        if (typeof(TSource).IsGenericType && supportedCollectionTypes.Any(x => x == typeof(TSource).GetGenericTypeDefinition()))
+        if (hasDestination)
         {
-            sourceArgumentType = typeof(TSource).GenericTypeArguments[0];
+            callParams.Add(Expression.Convert(destinationParam, destinationArgumentType));
         }
 
-        if (typeof(TSource).IsArray)
-        {
-            sourceArgumentType = typeof(TSource).GetElementType()!;
-        }
+        var call = Expression.Call(instanceCast, method, callParams);
+        var callConvert = Expression.Convert(call, typeof(object));
 
-        if (sourceArgumentType == default!)
-        {
-            return false;
-        }
-
-        definitionGenericType = typeof(List<>);
-        if (typeof(TDestination).IsGenericType && supportedCollectionTypes.Any(x => x == typeof(TDestination).GetGenericTypeDefinition()))
-        {
-            destinationArgumentType = typeof(TDestination).GenericTypeArguments[0];
-
-            if (typeof(TDestination).GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                typeof(TDestination).GetGenericTypeDefinition() == typeof(Collection<>))
-            {
-                definitionGenericType = typeof(Collection<>);
-            }
-        }
-
-        if (typeof(TDestination).IsArray)
-        {
-            destinationArgumentType = typeof(TDestination).GetElementType()!;
-            definitionGenericType = typeof(Array);
-        }
-
-        return destinationArgumentType != default!;
+        return Expression.Lambda<Func<object, object, object, object?>>(callConvert, instanceParam, sourceParam, destinationParam).Compile();
     }
 
     protected virtual TDestination AutoMap<TSource, TDestination>(object source)

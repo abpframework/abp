@@ -245,45 +245,39 @@ See the `AbpIdentityServerPermissions` class members for all permissions defined
 
 #### Installation
 
-In order to configure the application to use the `IdentityServerModule`, you first need to import `IdentityServerConfigModule` from `@volo/abp.ng.identity-server/config` to root module. `IdentityServerConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the identity server, you first need to import `provideIdentityServerConfig` from `@volo/abp.ng.identity-server/config` to root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { IdentityServerConfigModule } from '@volo/abp.ng.identity-server/config';
+// app.config.ts
+import { provideIdentityServerConfig } from '@volo/abp.ng.identity-server/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    IdentityServerConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideIdentityServerConfig()
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `IdentityServerModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.identity-server`.
+The identity server module should be imported and lazy-loaded in your routing module. It has a static `creatRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.identity-server`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
+// app.routes.ts
+const APP_ROUTES: Routes = [
   // other route definitions
   {
     path: 'identity-server',
     loadChildren: () =>
-      import('@volo/abp.ng.identity-server').then(m => m.IdentityServerModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.identity-server').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `IdentityServerConfigModule` and `IdentityServerModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both files configured.
 
 <h4 id="h-identity-server-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `IdentityServerModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

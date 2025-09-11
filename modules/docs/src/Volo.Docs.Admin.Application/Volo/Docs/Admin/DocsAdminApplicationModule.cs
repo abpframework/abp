@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
 using Volo.Docs.Common;
@@ -13,7 +13,7 @@ namespace Volo.Docs.Admin
         typeof(DocsAdminApplicationContractsModule),
         typeof(DocsCommonApplicationModule),
         typeof(AbpCachingModule),
-        typeof(AbpAutoMapperModule),
+        typeof(AbpMapperlyModule),
         typeof(AbpDddApplicationModule),
         typeof(AbpBackgroundJobsAbstractionsModule)
     )]
@@ -21,11 +21,7 @@ namespace Volo.Docs.Admin
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<DocsAdminApplicationModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<DocsAdminApplicationAutoMapperProfile>(validate: true);
-            });
+            context.Services.AddMapperlyObjectMapper<DocsAdminApplicationModule>();
         }
     }
 }

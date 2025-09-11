@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
@@ -11,6 +11,7 @@ import { filter, take, tap } from 'rxjs/operators';
 import { AuthService, IAbpGuard } from '../abstracts';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
+import { isPlatformServer } from '@angular/common';
 /**
  * @deprecated Use `permissionGuard` *function* instead.
  */
@@ -57,6 +58,7 @@ export const permissionGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const permissionService = inject(PermissionService);
   const httpErrorReporter = inject(HttpErrorReporterService);
+  const platformId = inject(PLATFORM_ID);
 
   let { requiredPolicy } = route.data || {};
 
@@ -66,6 +68,11 @@ export const permissionGuard: CanActivateFn = (
   }
 
   if (!requiredPolicy) {
+    return of(true);
+  }
+
+  //TODO enable permission check on ssr
+  if (isPlatformServer(platformId)) {
     return of(true);
   }
 

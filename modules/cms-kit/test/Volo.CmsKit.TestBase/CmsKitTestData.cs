@@ -132,6 +132,18 @@ public class CmsKitTestData : ISingletonDependency
 
     public string MenuItem_4_With_Page_1_Name { get; } = "Products";
 
+    public Guid MenuItem_5_Id { get; } = Guid.NewGuid();
+
+    public string MenuItem_5_Name { get; } = "FAQ";
+    public string MenuItem_5_Url { get; } = "/faq";
+
+    public Guid MenuItem_6_Id { get; } = Guid.NewGuid();
+
+    public string MenuItem_6_Name { get; } = "Contact Us";
+    public string MenuItem_6_Url { get; } = "/contact-us";
+
+    public int HighestMenuItemOrder { get; } = 2;
+
     public string PollName { get; } = "Poll";
 
     public string WidgetName { get; } = "CmsPollByCode";

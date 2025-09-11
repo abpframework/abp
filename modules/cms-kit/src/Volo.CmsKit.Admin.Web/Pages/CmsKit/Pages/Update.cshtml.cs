@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -44,8 +43,6 @@ public class UpdateModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(PageDto))]
-    [AutoMap(typeof(UpdatePageInputDto), ReverseMap = true)]
     public class UpdatePageViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]

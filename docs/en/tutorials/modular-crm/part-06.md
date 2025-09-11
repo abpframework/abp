@@ -217,21 +217,17 @@ public class OrderDto
 }
 ````
 
-Lastly, open the `OrderingAutoMapperProfile` class (the `OrderingAutoMapperProfile.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and ignore the `ProductName` property in the mapping configuration:
+Lastly, open the `OrderingApplicationMappers` class (the `OrderingApplicationMappers.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and add the following mapping class:
 
 ````csharp
-using AutoMapper;
-using Volo.Abp.AutoMapper;
-
-namespace ModularCrm.Ordering;
-
-public class OrderingApplicationAutoMapperProfile : Profile
+[Mapper]
+public partial class OrderToOrderDtoMapper : MapperBase<Order, OrderDto>
 {
-    public OrderingApplicationAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>()
-            .Ignore(x => x.ProductName); // New line
-    }
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial OrderDto Map(Order source);
+
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial void Map(Order source, OrderDto destination);
 }
 ````
 

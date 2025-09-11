@@ -14,10 +14,10 @@ Let's look at the following example without `abp-page` component.
     <h1 class="content-header-title">{%{{{ '::Dashboard' | abpLocalization }}}%}</h1>
   </div>
   <div id="breadcrumb" class="col-lg-auto pl-lg-0">
-    <abp-breadcrumb></abp-breadcrumb>
+    <abp-breadcrumb />
   </div>
   <div class="col">
-    <abp-page-toolbar [record]="data"></abp-page-toolbar>
+    <abp-page-toolbar [record]="data" />
   </div>
 </div>
 
@@ -42,22 +42,19 @@ export enum PageParts {
 
 ## Usage
 
-Firstly, you need to import `PageModule` from `@abp/ng.components/page` as follows:
+Firstly, you need to import Page components from `@abp/ng.components/page` based on your usage. Here is an example:
 
-`dashboard.module.ts`
+`dashboard.component.ts`
 
 ```javascript
-import { PageModule } from '@abp/ng.components/page';
-import { DashboardComponent } from './dashboard.component';
 
-@NgModule({
-  declarations: [DashboardComponent],
-  imports: [PageModule]
+@Component({
+  imports: [ PageComponent, ... ]
 })
-export class DashboardModule {}
+export class  DashboardComponent {}
 ```
 
-And change the template of `dashboard.component.ts` to the following:
+And change the template of `dashboard.component.html` to the following:
 
 ```html
 <abp-page [title]="'::Dashboard' | abpLocalization" [toolbar]="data">
@@ -75,35 +72,55 @@ And change the template of `dashboard.component.ts` to the following:
 
 ## Overriding template
 
-If you need to replace the template of any part, you can use the following sub-components. 
+If you need to replace the template of any part, you can use the following sub-components. You will need to import these components and modify the html template accordingly.
 
-```html
-<abp-page>
-  <abp-page-title-container class="col">
-    <h2>Custom Title</h2>
-  </abp-page-title-container>
+```javascript
+import { 
+  PageComponent, 
+  PageTitleContainerComponent,
+  PageBreadcrumbContainerComponent,
+  PageToolbarContainerComponent
+} from '@abp/ng.components/page';
 
-  <abp-page-breacrumb-container class="col">
-    <my-breadcrumb></my-breadcrumb>
-  </abp-page-breacrumb-container>
+@Component({
+  selector: 'app-sample-component',
+  template: `
+    <abp-page>
+      <abp-page-title-container class="col">
+        <h2>Custom Title</h2>
+      </abp-page-title-container>
 
-  <abp-page-toolbar-container class="col">
-    <button (click)="doSth()">Some Action</button>
-  </abp-page-toolbar-container>
-</abp-page>
+      <abp-page-breacrumb-container class="col">
+        <my-breadcrumb />
+      </abp-page-breacrumb-container>
+
+      <abp-page-toolbar-container class="col">
+        <button (click)="doSth()">Some Action</button>
+      </abp-page-toolbar-container>
+    </abp-page>
+  `
+  imports: [
+    PageComponent, 
+    PageTitleContainerComponent, 
+    PageBreadcrumbContainerComponent, 
+    MyBreadcrumbComponent,
+    PageToolbarContainerComponent
+  ]
+})
+export class SampleCompnent {}
 ```
 
 You do not have to provide them all. You can just use which one you need to replace. These components have priority over the inputs declared above. If you use these components, you can omit the inputs.
 
 ## PagePartDirective
 
-`PageModule` provides a structural directive that is used internally within `PageComponent` and can also be used externally.
+`Components` package provides a structural directive that is used internally within `PageComponent` and can also be used externally.
 
 `PageComponent` employs this directive internally as follows: 
 
 ```html
 <div class="col-lg-auto pl-lg-0" *abpPagePart="pageParts.breadcrumb">
-  <abp-breadcrumb></abp-breadcrumb>
+  <abp-breadcrumb />
 </div>
 ```
 
@@ -111,7 +128,7 @@ It also can take a context input as follows:
 
 ```html
 <div class="col" *abpPagePart="pageParts.toolbar; context: toolbarData">
-  <abp-page-toolbar [record]="toolbarData"></abp-page-toolbar>
+  <abp-page-toolbar [record]="toolbarData" />
 </div>
 ```
 
@@ -194,17 +211,14 @@ export class MyPageRenderStrategy implements PageRenderStrategy {
 })
 export class DashboardComponent {}
 
-@NgModule({
-  imports: [PageModule],
-  declarations: [DashboardComponent],
+export const appConfig: ApplicationConfig = {
   providers: [
     {
       provide: PAGE_RENDER_STRATEGY,
       useClass: MyPageRenderStrategy,
     }
-  ]
-})
-export class DashboardModule {}
+  ],
+};
 ```
 
 ## See Also

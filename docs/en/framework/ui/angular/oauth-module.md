@@ -2,8 +2,7 @@
 
 The authentication functionality has been moved from @abp/ng.core to @abp/ng.ouath since v7.0.
 
-If your app is version 8.3 or higher, you should include "provideAbpOAuth()" in your app.module.ts as an providers after "provideAbpCore()
-".
+If your app is version 8.3 or higher, you should include "provideAbpOAuth()" after "provideAbpCore()" in the `appConfig` array  of your `app.config.ts`.
 
 Those abstractions can be found in the @abp/ng-core packages.
 

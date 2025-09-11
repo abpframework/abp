@@ -4,13 +4,17 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp;
 
@@ -148,6 +152,56 @@ public abstract class AbpApplicationBase : IAbpApplication
                 StartupModuleType,
                 options.PlugInSources
             );
+    }
+    protected void SetupTelemetryTracking()
+    {
+        if (!ShouldSendTelemetryData())
+        {
+            return;
+        }
+
+        AsyncHelper.RunSync(InitializeTelemetryTracking);
+    }
+
+    protected async Task SetupTelemetryTrackingAsync()
+    {
+        if (!ShouldSendTelemetryData())
+        {
+            return;
+        }
+
+        await InitializeTelemetryTracking();
+    }
+
+    private async Task InitializeTelemetryTracking()
+    {
+        try
+        {
+            using var scope = ServiceProvider.CreateScope();
+            var telemetryService = scope.ServiceProvider.GetRequiredService<ITelemetryService>();
+            await telemetryService.AddActivityAsync(ActivityNameConsts.ApplicationRun);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                using var scope = ServiceProvider.CreateScope();
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<AbpApplicationBase>>();
+                logger.LogException(ex, LogLevel.Trace);
+            }
+            catch
+            {
+                /* ignored */
+            }
+        }
+    }
+
+    private bool ShouldSendTelemetryData()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var abpHostEnvironment = scope.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") == true;
     }
 
     //TODO: We can extract a new class for this

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,8 +46,6 @@ public class FeaturesModalModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(BlogFeatureDto), ReverseMap = true)]
-    [AutoMap(typeof(BlogFeatureInputDto), ReverseMap = true)]
     public class BlogFeatureViewModel
     {
         private string featureName;

@@ -50,6 +50,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
     public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
     public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
+        : base(AbpMemoryDbConsts.ProviderName)
     {
         DatabaseProvider = databaseProvider;
     }

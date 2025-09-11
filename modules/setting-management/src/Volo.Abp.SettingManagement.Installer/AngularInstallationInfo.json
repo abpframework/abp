@@ -4,7 +4,7 @@
 			"name": "@abp/ng.setting-management",
 			"appRoutingModuleConfiguration":{
 				"routes":[
-					"{ path: 'setting-management', loadChildren: () => import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),}"
+					"{ path: 'setting-management', loadChildren: () => import('@abp/ng.setting-management').then(c => c.createRoutes()),}"
 				]
 			},
 			"appModuleConfiguration":{
@@ -15,8 +15,6 @@
 						],
 						"namespace": "@abp/ng.setting-management/config"
 					}
-				],
-				"ngModuleImports":[
 				],
 				"providerNames":[
 					"provideSettingManagementConfig()"

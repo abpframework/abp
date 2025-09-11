@@ -48,7 +48,7 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
 
         result.ShouldNotBeNull();
         result.Items.ShouldNotBeEmpty();
-        result.Items.Count.ShouldBe(4);
+        result.Items.Count.ShouldBe(6);
     }
 
     [Fact]
@@ -117,5 +117,21 @@ public class MenuItemAdminAppService_Tests : CmsKitApplicationTestBase
         var menu = await MenuRepository.FindAsync(TestData.MenuItem_1_Id);
 
         menu.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetAvailableMenuOrderAsync_ShouldWorkProperly_WithParentId()
+    {
+        var order = await MenuAdminAppService.GetAvailableMenuOrderAsync(TestData.MenuItem_1_Id);
+
+        order.ShouldBe(2); //has two items with order 0 and 1, so the next available order is 2
+    }
+
+    [Fact]
+    public async Task GetAvailableMenuOrderAsync_ShouldWorkProperly_WithoutParentId()
+    {
+        var order = await MenuAdminAppService.GetAvailableMenuOrderAsync();
+
+        order.ShouldBe(TestData.HighestMenuItemOrder + 1);
     }
 }

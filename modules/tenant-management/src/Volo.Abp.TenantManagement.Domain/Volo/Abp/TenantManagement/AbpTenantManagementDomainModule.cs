@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
@@ -16,7 +16,7 @@ namespace Volo.Abp.TenantManagement;
 [DependsOn(typeof(AbpTenantManagementDomainSharedModule))]
 [DependsOn(typeof(AbpDataModule))]
 [DependsOn(typeof(AbpDddDomainModule))]
-[DependsOn(typeof(AbpAutoMapperModule))]
+[DependsOn(typeof(AbpMapperlyModule))]
 [DependsOn(typeof(AbpCachingModule))]
 public class AbpTenantManagementDomainModule : AbpModule
 {
@@ -24,12 +24,7 @@ public class AbpTenantManagementDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpTenantManagementDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpTenantManagementDomainMappingProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpTenantManagementDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {

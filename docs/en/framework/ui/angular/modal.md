@@ -15,27 +15,33 @@ The `abp-modal` provides some additional benefits:
 
 ## Getting Started
 
-In order to use the `abp-modal` in an HTML template, the **`ThemeSharedModule`** should be imported into your module like this:
+In order to use the `abp-modal` in an HTML template, the **`ModalComponent`** should be imported into your component like this:
 
 ```js
+// sample.component.ts
 // ...
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { ModalComponent, ModalCloseDirective } from '@abp/ng.theme.shared';
 
-@NgModule({
+@Component({
   //...
-  imports: [..., ThemeSharedModule],
+  ,
+  imports: [
+    // ..., 
+    ModalComponent,
+    ModalCloseDirective // if you use `abpClose` directive in the html template
+  ],
 })
-export class MyFeatureModule {}
+export class SampleComponent {
+  isModalOpen = false;
+}
 ```
-
-## Usage
-
-You can add the `abp-modal` to your component very quickly. See an example:
 
 ```html
 <!-- sample.component.html -->
 
-<button class="btn btn-primary" (click)="isModalOpen = true">Open modal</button>
+<button class="btn btn-primary" (click)="isModalOpen = true">
+  Open modal
+</button>
 
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
@@ -43,22 +49,15 @@ You can add the `abp-modal` to your component very quickly. See an example:
   </ng-template>
 
   <ng-template #abpBody>
-  <p>Modal content</p>
+    <p>Modal content</p>
   </ng-template>
 
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" abpClose>Close</button>
+    <button type="button" class="btn btn-secondary" abpClose>
+      Close
+    </button>
   </ng-template>
 </abp-modal>
-```
-
-```js
-// sample.component.ts
-
-@Component(/* component metadata */)
-export class SampleComponent {
-    isModalOpen = false
-}
 ```
 
 ![Example modal result](./images/modal-result-1.jpg)
@@ -136,7 +135,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 @Component(/* component metadata */)
 export class BookComponent {
- form = this.fb.group({
+  private fb = inject(FormBuilder);
+  private service = inject(BookService);
+ 
+  form = this.fb.group({
     author: [null, [Validators.required]],
     name: [null, [Validators.required]],
     price: [null, [Validators.required, Validators.min(0)]],
@@ -148,10 +150,10 @@ export class BookComponent {
 
   isModalOpen: boolean;
 
-  constructor(private fb: FormBuilder, private service: BookService) {}
-
   save() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      return;
+    }
 
     this.inProgress = true;
 
@@ -257,19 +259,16 @@ export class NgbdModalOptions {
 **`suppressUnsavedChangesWarning`** is a boolean input that determines whether the confirmation popup triggering active or not. It can also be set globally as shown below:
 
 ```ts
-//app.module.ts
-
-// app.module.ts
+// app.config.ts
 
 import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '@abp/ng.theme.shared';
 
-// ...
-
-@NgModule({
-  // ...
-  providers: [{provide: SUPPRESS_UNSAVED_CHANGES_WARNING, useValue: true}]
-})
-export class AppModule {}
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    { provide: SUPPRESS_UNSAVED_CHANGES_WARNING, useValue: true }
+  ],
+};
 ```
 
 Note: The `suppressUnsavedChangesWarning` input of `abp-modal` value overrides the `SUPPRESS_UNSAVED_CHANGES_WARNING` injection token value.

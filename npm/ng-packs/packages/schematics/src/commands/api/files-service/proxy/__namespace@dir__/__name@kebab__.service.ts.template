@@ -21,7 +21,11 @@ export class <%= name %>Service {
       if (isBlob) { %>
       responseType: 'blob',<% } %>
       url: <%= body.url %>,<%
-      if (body.params.length) { %>
+      if (body.dictParamVar && !body.params.length) { %>
+      params: <%= body.dictParamVar %>,<% } %><%
+      if (body.dictParamVar && body.params.length) { %>
+      params: { ...<%= body.dictParamVar %>, <%= body.params.join(', ') %> },<% } %><%
+      if (!body.dictParamVar && body.params.length) { %>
       params: { <%= body.params.join(', ') %> },<% }
       if (body.body) { %>
       body: <%= body.body %>,<% } %>

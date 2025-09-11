@@ -250,4 +250,13 @@ public static class RepositoryExtensions
         hardDeleteEntities.Add(entity);
         await repository.DeleteAsync(entity, autoSave, cancellationToken);
     }
+    
+    public static TRepository SetEntityName<TRepository>(
+        this TRepository repository,
+        string name
+        ) where TRepository : class, IRepository
+    {
+        repository.EntityName = name;
+        return repository;
+    }
 }

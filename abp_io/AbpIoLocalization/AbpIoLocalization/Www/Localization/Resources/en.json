@@ -431,6 +431,9 @@
     "WhoWeAre_Expert": "About Me",
     "CreateSolutionFolder": "Create Solution Folder",
     "CreateSolutionFolderOption": "Specifies if the project will be in a new folder in the output folder or directly the output folder.",
+    "CreateCrudPage": "Create CRUD Page",
+    "CreateCrudPageOption": "Generates a sample CRUD page with a Book entity to demonstrate basic operations (Create, Read, Update, Delete).",
+    "ConnectionString": "Connection string",
     "BooksPageTitle": "ABP Books",
     "BooksPageDescription": "Explore ABP books to deepen your understanding and mastery of ABP.",
     "PackageDetailPage_NuGetPackageInstallationOptions": "There are three ways to install <code>{0}</code> NuGet package to your project",
@@ -907,6 +910,7 @@
     "ProudToWorkWith": "Proud to Work With",
     "JoinOurConsumers": "Join them and build amazing products fast.",
     "AdditionalServicesExplanation": "Do you need additional or custom services?  <strong>We and our partners can provide;</strong>",
+    "CustomLicense": "Custom License",
     "CustomProjectDevelopment": "Custom Project Development",
     "CustomProjectDevelopmentExplanation": "Dedicated developers for your custom projects.",
     "PortingExistingProjects": "Porting Existing Projects",
@@ -1894,6 +1898,19 @@
     "SelectAnOption": "Select an option",
     "MostPopular": "Most Popular",
     "AnnouncmentsPageTitle": "ABP Community Announcements | Stay Updated with the Latest News",
-    "AnnouncmentsPageDescription": "Get the latest news, feature updates, release notes, and important announcements about the ABP framework and .NET ecosystem. Stay ahead with timely information directly from the ABP team."
+    "AnnouncmentsPageDescription": "Get the latest news, feature updates, release notes, and important announcements about the ABP framework and .NET ecosystem. Stay ahead with timely information directly from the ABP team.",
+    "CanIUseABPProductsOnMoreThanOneComputer": "Can I use ABP products on more than one computer?",
+    "ABPProductsOnMoreThanOneComputerExplanation": "Yes. Each developer can install the software on up to two machines. A third machine requires approval via email. When you stop using one of your computers, the system understands and automatically invalidates that computer from your paired computer list.",
+    "CanIShareTheLicensedABPCommercialProducts": "Can I share the licensed ABP commercial products publicly or make them open source?",
+    "ShareTheLicensedABPCommercialProductsExplanation": "No! Sharing or sublicensing a Commercial (PRO) ABP package is strictly prohibited.",
+    "AreSubscriptionRenewalsAutomatic": "Are subscription renewals automatic?",
+    "SubscriptionRenewalsAutomaticExplanation": "By default, no, the renewals are manual. On the other hand, when you purchase a new license and use the payment gateway 'Iyzico' with your credit card, you will see a checkbox called 'Automatic Renewal' in the purchase steps which allows ABP system automatically renew your license. When you check that checkbox, the auto-renewal process lets you renew your license without losing this discount, and your development will never be interrupted. ABP does not save your credit card information, but our payment gateway does secure savings. You can disable auto-renewal at any time by accessing your Organization Management page.",
+    "DoYouProvideSupportForThird-partyLibraries": "Do you provide support for third-party libraries?",
+    "ProvideSupportForThird-partyExplanation": "No. Support only covers ABP Framework, ABP commercial packages and products which have been created by Volosoft.",
+    "DoYouSupportCustomABPArchitectures": "Do you support custom ABP architectures?",
+    "SupportCustomABPArchitecturesExplanation": "No. Support is only provided for standard ABP solution structures. On the other hand, you can always get support for your custom needs with a paid consultancy from the ABP Team.",
+    "DoesABPCollectAnyPersonalOrTechnicalData": "Does ABP collect any personal or technical data?",
+    "ABPCollectAnyDataExplanation": "The software may collect information about you and your use of the software, and send that to Volosoft. Volosoft as the software and service provider may use this information to provide services and improve its products & services. You may opt-out of these scenarios, as described in the <a href=\"{0}\">EULA</a> under PRIVACY AND COLLECTION OF PERSONAL DATA topic .",
+    "InThisDocument": "In this document"
   }
 }

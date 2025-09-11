@@ -49,6 +49,21 @@
       }, ajaxParams));
     };
 
+    volo.cmsKit.admin.blogs.blogAdmin.getAllList = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/all',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.blogs.blogAdmin.moveAllBlogPosts = function(blogId, assignToBlogId, id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/blogs/' + id + '/move-all-blog-posts' + abp.utils.buildQueryString([{ name: 'blogId', value: blogId }, { name: 'assignToBlogId', value: assignToBlogId }]) + '',
+        type: 'PUT',
+        dataType: null
+      }, ajaxParams));
+    };
+
   })();
 
   // controller volo.cmsKit.admin.blogs.blogFeatureAdmin
@@ -326,6 +341,20 @@
     volo.cmsKit.admin.menus.menuItemAdmin.getPageLookup = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/cms-kit-admin/menu-items/lookup/pages' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.menus.menuItemAdmin.getPermissionLookup = function(inputDto, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/menu-items/lookup/permissions' + abp.utils.buildQueryString([{ name: 'filter', value: inputDto.filter }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.menus.menuItemAdmin.getAvailableMenuOrder = function(parentId, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/menu-items/available-order' + abp.utils.buildQueryString([{ name: 'parentId', value: parentId }]) + '',
         type: 'GET'
       }, ajaxParams));
     };

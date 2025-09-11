@@ -15,7 +15,7 @@ In this example, we will add a "Date of Birth" field in the user management page
 
 ### Step 1. Create Form Prop Contributors
 
-The following code prepares two constants named `identityCreateFormPropContributors` and `identityEditFormPropContributors`, ready to be imported and used in your root module:
+The following code prepares two constants named `identityCreateFormPropContributors` and `identityEditFormPropContributors`, ready to be imported and used in your root application configuration:
 
 ```js
 // src/app/form-prop-contributors.ts
@@ -57,10 +57,10 @@ The list of props, conveniently named as `propList`, is a **doubly linked list**
 
 ### Step 2. Import and Use Form Prop Contributors
 
-Import `identityCreateFormPropContributors` and `identityEditFormPropContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
+Import `identityCreateFormPropContributors` and `identityEditFormPropContributors` in your routing configuration and pass it to the static `createRoutes` method for `identity` route as seen below:
 
 ```js
-// src/app/app-routing.module.ts
+// src/app/app.routes.ts
 
 // other imports
 import {
@@ -68,14 +68,14 @@ import {
   identityEditFormPropContributors,
 } from './form-prop-contributors';
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
   // other routes
 
   {
     path: 'identity',
     loadChildren: () =>
-      import('@abp/ng.identity').then(m =>
-        m.IdentityModule.forLazy({
+      import('@abp/ng.identity').then(c =>
+        c.createRoutes({
           createFormPropContributors: identityCreateFormPropContributors,
           editFormPropContributors: identityEditFormPropContributors,
         })
@@ -86,7 +86,7 @@ const routes: Routes = [
 ];
 ```
 
-That is it, `birthdayProp` form prop will be added, and you will see the datepicker for the "Date of Birth" field right before the "Email address" in the forms of the users page in the `IdentityModule`.
+That is it, `birthdayProp` form prop will be added, and you will see the datepicker for the "Date of Birth" field right before the "Email address" in the forms of the users page in the `identity` package.
 
 ## Object Extensions
 
@@ -309,7 +309,7 @@ export function reorderUserContributors(
 
 ### CreateFormPropContributorCallback\<R = any\>
 
-`CreateFormPropContributorCallback` is the type that you can pass as **create form** prop contributor callbacks to static `forLazy` methods of the modules.
+`CreateFormPropContributorCallback` is the type that you can pass as **create form** prop contributor callbacks to static `createRoutes` methods of the packages.
 
 ```js
 export function myPropCreateContributor(
@@ -326,7 +326,7 @@ export const identityCreateFormPropContributors = {
 
 ### EditFormPropContributorCallback\<R = any\>
 
-`EditFormPropContributorCallback` is the type that you can pass as **edit form** prop contributor callbacks to static `forLazy` methods of the modules.
+`EditFormPropContributorCallback` is the type that you can pass as **edit form** prop contributor callbacks to static `createRoutes` methods of the packages.
 
 ```js
 export function myPropEditContributor(

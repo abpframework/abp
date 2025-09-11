@@ -95,6 +95,7 @@ public class MethodInvocationValidator : IMethodInvocationValidator, ITransientD
     {
         var allowNulls = parameterInfo.IsOptional ||
                          parameterInfo.IsOut ||
+                         TypeHelper.IsNullable(parameterInfo.ParameterType) ||
                          TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
 
         context.Errors.AddRange(

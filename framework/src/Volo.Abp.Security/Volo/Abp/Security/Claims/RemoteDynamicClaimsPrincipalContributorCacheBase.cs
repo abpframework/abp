@@ -42,7 +42,8 @@ public abstract class RemoteDynamicClaimsPrincipalContributorCacheBase<TContribu
         dynamicClaims = await GetCacheAsync(userId, tenantId);
         if (dynamicClaims == null)
         {
-            throw new AbpException($"Failed to refresh remote claims for user: {userId}");
+            throw new AbpException($"Failed to get dynamic claims for user: {userId} from cache after refreshing, " +
+                                   $"Ensure all applications use the same distributed cache and the same cache key prefix.");
         }
 
         return dynamicClaims;

@@ -216,25 +216,25 @@ public class OrderDto
 }
 ```
 
-Lastly, open the `OrderingServiceApplicationAutoMapperProfile` class (the `OrderingServiceApplicationAutoMapperProfile.cs` file under the `ObjectMapping` folder of the `CloudCrm.OrderingService` project of the `CloudCrm.OrderingService` .NET solution) and ignore the `ProductName` property in the mapping configuration:
+Lastly, open the `OrderingServiceApplicationMappers` class (the `OrderingServiceApplicationMappers.cs` file under the `ObjectMapping` folder of the `CloudCrm.OrderingService` project of the `CloudCrm.OrderingService` .NET solution) and ignore the `ProductName` property in the mapping configuration:
 
 ```csharp
-using AutoMapper;
-using CloudCrm.OrderingService.Entities;
-using CloudCrm.OrderingService.Services;
-using Volo.Abp.AutoMapper;
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
 
 namespace CloudCrm.OrderingService.ObjectMapping;
 
-public class OrderingServiceApplicationAutoMapperProfile : Profile
+[Mapper]
+public partial class OrderingServiceApplicationMappers : MapperBase<Order, OrderDto>
 {
-    public OrderingServiceApplicationAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>()
-            .Ignore(x => x.ProductName); // New line
-    }
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial OrderDto Map(Order source);
+
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial void Map(Order source, OrderDto destination);
 }
 ```
+
 Let's explain the changes we made:
 
 - We added a new property named `ProductName` to the `OrderDto` class. This property will hold the product name.

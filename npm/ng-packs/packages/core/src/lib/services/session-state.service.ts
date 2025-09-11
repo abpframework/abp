@@ -7,6 +7,8 @@ import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenan
 import { InternalStore } from '../utils/internal-store-utils';
 import { ConfigStateService } from './config-state.service';
 import { AbpLocalStorageService } from './local-storage.service';
+import { APP_STARTED_WITH_SSR } from '../tokens';
+import { AbpCookieStorageService } from './cookie-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +16,18 @@ import { AbpLocalStorageService } from './local-storage.service';
 export class SessionStateService {
   private configState = inject(ConfigStateService);
   private localStorageService = inject(AbpLocalStorageService);
+  private appStartedWithSSR = inject(APP_STARTED_WITH_SSR, { optional: true });
+  private cookieStorageService = inject(AbpCookieStorageService);
 
   private readonly store = new InternalStore({} as Session.State);
   protected readonly document = inject(DOCUMENT);
 
   private updateLocalStorage = () => {
-    this.localStorageService.setItem('abpSession', JSON.stringify(this.store.state));
+    if (this.appStartedWithSSR) {
+      this.cookieStorageService.setItem('abpSession', JSON.stringify(this.store.state));
+    } else {
+      this.localStorageService.setItem('abpSession', JSON.stringify(this.store.state));
+    }
   };
 
   constructor() {
@@ -28,7 +36,8 @@ export class SessionStateService {
   }
 
   private init() {
-    const session = this.localStorageService.getItem('abpSession');
+    let session: string;
+    session = this.appStartedWithSSR ? this.cookieStorageService.getItem('abpSession') : this.localStorageService.getItem('abpSession');
     if (session) {
       this.store.set(JSON.parse(session));
     }
@@ -49,7 +58,7 @@ export class SessionStateService {
         if (lang.includes(';')) {
           lang = lang.split(';')[0];
         }
-        
+
         this.setLanguage(lang);
       });
   }

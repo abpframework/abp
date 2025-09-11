@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
@@ -32,7 +31,6 @@ public class CreateModel : CmsKitAdminPageModel
         return new OkObjectResult(created);
     }
 
-    [AutoMap(typeof(CreatePageInputDto), ReverseMap = true)]
     public class CreatePageViewModel : ExtensibleObject
     {
         [Required]

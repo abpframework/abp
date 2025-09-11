@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -175,13 +176,15 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     {
         using (PermissionGrantRepository.DisableTracking())
         {
+            var permissionNames = new HashSet<string>(notCacheKeys.Select(GetPermissionNameFormCacheKeyOrNull));
             var permissions = (await PermissionDefinitionManager.GetPermissionsAsync())
-                .Where(x => notCacheKeys.Any(k => GetPermissionNameFormCacheKeyOrNull(k) == x.Name)).ToList();
+                .Where(x => permissionNames.Contains(x.Name))
+                .ToList();
 
             Logger.LogDebug($"Getting not cache granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
 
             var grantedPermissionsHashSet = new HashSet<string>(
-                (await PermissionGrantRepository.GetListAsync(notCacheKeys.Select(GetPermissionNameFormCacheKeyOrNull).ToArray(), providerName, providerKey)).Select(p => p.Name)
+                (await PermissionGrantRepository.GetListAsync(permissionNames.ToArray(), providerName, providerKey)).Select(p => p.Name)
             );
 
             Logger.LogDebug($"Setting the cache items. Count: {permissions.Count}");

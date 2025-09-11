@@ -323,23 +323,17 @@ Notice that `ProductAppService` class implements the `IProductAppService` and al
 
 #### Object Mapping
 
-`ProductAppService.GetListAsync` method uses the `ObjectMapper` service to convert `Product` entities to `ProductDto` objects. The mapping should be configured. Open the `CatalogAutoMapperProfile` class in the `ModularCrm.Catalog` project and change it to the following code block:
+`ProductAppService.GetListAsync` method uses the `ObjectMapper` service to convert `Product` entities to `ProductDto` objects. The mapping should be configured. So, create a new mapping class in the `ModularCrm.Catalog` project that implements the `MapperBase<Product, ProductDto>` class with the `[Mapper]` attribute as follows:
 
-````csharp
-using AutoMapper;
-
-namespace ModularCrm.Catalog;
-
-public class CatalogAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class ProductToProductDtoMapper : MapperBase<Product, ProductDto>
 {
-    public CatalogAutoMapperProfile()
-    {
-        CreateMap<Product, ProductDto>();
-    }
-}
-````
+    public override partial ProductDto Map(Product source);
 
-We've added the `CreateMap<Product, ProductDto>();` line to define the mapping.
+    public override partial void Map(Product source, ProductDto destination);
+}
+```
 
 ### Exposing Application Services as HTTP API Controllers
 

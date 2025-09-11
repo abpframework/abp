@@ -43,10 +43,19 @@ public abstract class BasicRepositoryBase<TEntity> :
     public IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
 
     public bool? IsChangeTrackingEnabled { get; protected set; }
-
-    protected BasicRepositoryBase()
+    
+    public string? EntityName { get; set; }
+    
+    public void SetEntityName(string? name)
     {
+        EntityName = name;
+    }
 
+    public string ProviderName { get; }
+
+    protected BasicRepositoryBase(string providerName)
+    {
+        ProviderName = Check.NotNullOrWhiteSpace(providerName, nameof(providerName));
     }
 
     public abstract Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
@@ -139,6 +148,12 @@ public abstract class BasicRepositoryBase<TEntity> :
 public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
+    protected BasicRepositoryBase(string providerName) 
+        : base(providerName)
+    {
+        
+    }
+
     public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         var entity = await FindAsync(id, includeDetails, cancellationToken);

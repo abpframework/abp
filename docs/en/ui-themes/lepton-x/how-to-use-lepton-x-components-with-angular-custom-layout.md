@@ -5,25 +5,22 @@ First, The custom layout component should be created and implemented for the Ang
 Related content can be found in the [Component Replacement Document](../../framework/ui/angular/component-replacement.md#how-to-replace-a-layout)
 
 
- 
-After creating a custom layout, these imports should be imported in the `app.module.ts` file because the modules contain definitions of the Lepton X components.
+After creating a custom layout, these imports should be imported in the `app.config.ts` file because the modules contain definitions of the Lepton X components.
 
 
 ```javascript
-// app.module.ts
+// app.config.ts
 import { LpxSideMenuLayoutModule } from '@volosoft/ngx-lepton-x/layouts';
 import { LpxResponsiveModule } from '@volo/ngx-lepton-x.core';// optional. Only, if you are using lpxResponsive directive
 
- @NgModule({
- //... removed for clearity
-  imports: [
-  	//... removed for clearity
-  	LpxSideMenuLayoutModule,
-  	LpxResponsiveModule // <-- Optional
-  	]
-})
-export class AppModule {}
-
+export const appConfig: ApplicationConfig = {
+  providers: [
+    importProvidersFrom([
+      LpxSideMenuLayoutModule,
+  	  LpxResponsiveModule // <-- Optional
+    ])
+  ],
+};
 ```
 
 Here is the simplified version of the `side-menu-layout.ts` file. Only the ABP Component Replacement code has been removed.

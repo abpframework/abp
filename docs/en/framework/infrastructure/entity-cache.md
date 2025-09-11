@@ -88,6 +88,17 @@ public class MyMapperProfile : Profile
 }
 ```
 
+If you are using [Mapperly](https://mapperly.riok.app/), you can create a new mapping class that implements the `MapperBase<Product, ProductDto>` class with the `[Mapper]` attribute as follows:
+
+```csharp
+[Mapper]
+public partial class ProductToProductDtoMapper : MapperBase<Product, ProductDto>
+{
+    public override partial ProductDto Map(Product source);
+    public override partial void Map(Product source, ProductDto destination);
+}
+```
+
 Now, you can inject the `IEntityCache<ProductDto, Guid>` service wherever you want:
 
 ```csharp

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Action;
+using iText.Layout.Font;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Utils;
@@ -14,13 +15,13 @@ namespace Volo.Docs.Projects.Pdf.IText;
 public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependency
 {
     protected IOptions<DocsProjectPdfGeneratorOptions> Options { get; }
-    
+
     public ITextHtmlToPdfRenderer(IOptions<DocsProjectPdfGeneratorOptions> options)
     {
         Options = options;
     }
-    
-    public virtual Task<Stream> RenderAsync(string title, string html, List<PdfDocument> documents)
+
+    public virtual async Task<Stream> RenderAsync(string title, string html, List<PdfDocument> documents)
     {
         var pdfStream = new MemoryStream();
         using (var pdfWriter = new PdfWriter(pdfStream))
@@ -29,33 +30,43 @@ public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependency
             using (var pdfDocument = new iText.Kernel.Pdf.PdfDocument(pdfWriter))
             {
                 pdfDocument.GetDocumentInfo().SetTitle(title);
-                CreatePdfFromHtml(html, pdfDocument);
-                AddOutlinesToPdf(pdfDocument, documents);
+                await CreatePdfFromHtmlAsync(html, pdfDocument);
+                await AddOutlinesToPdfAsync(pdfDocument, documents);
             }
         }
-            
+
         pdfStream.Position = 0;
-        return Task.FromResult<Stream>(pdfStream);
+        return pdfStream;
     }
 
-    private void CreatePdfFromHtml(string html, iText.Kernel.Pdf.PdfDocument pdfDocument)
+    protected virtual async Task CreatePdfFromHtmlAsync(string html, iText.Kernel.Pdf.PdfDocument pdfDocument)
     {
         var converter = new ConverterProperties();
+        var fontProvider = await GetFontProviderAsync();
+        if (fontProvider != null)
+        {
+            converter.SetFontProvider(fontProvider);
+        }
         var tagWorkerFactory = new HtmlIdTagWorkerFactory(pdfDocument);
         converter.SetTagWorkerFactory(tagWorkerFactory);
-        
         HtmlConverter.ConvertToDocument(html, pdfDocument, converter);
-        
         tagWorkerFactory.AddNamedDestinations();
     }
 
-    private void AddOutlinesToPdf(iText.Kernel.Pdf.PdfDocument pdfDocument, List<PdfDocument> documents)
+    protected virtual Task<FontProvider> GetFontProviderAsync()
+    {
+        return Task.FromResult<FontProvider>(null);
+    }
+
+    protected virtual Task AddOutlinesToPdfAsync(iText.Kernel.Pdf.PdfDocument pdfDocument, List<PdfDocument> documents)
     {
         var pdfOutlines = pdfDocument.GetOutlines(false);
         BuildPdfOutlines(pdfOutlines, documents);
+
+        return Task.CompletedTask;
     }
 
-    private void BuildPdfOutlines(PdfOutline parentOutline, List<PdfDocument> pdfDocumentNodes)
+    protected virtual Task BuildPdfOutlines(PdfOutline parentOutline, List<PdfDocument> pdfDocumentNodes)
     {
         foreach (var pdfDocumentNode in pdfDocumentNodes)
         {
@@ -63,7 +74,7 @@ public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependency
             {
                 continue;
             }
-            
+
             var outline = parentOutline.AddOutline(pdfDocumentNode.Title);
             if (!pdfDocumentNode.Id.IsNullOrWhiteSpace())
             {
@@ -75,5 +86,7 @@ public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependency
                 BuildPdfOutlines(outline, pdfDocumentNode.Children);
             }
         }
+
+        return Task.CompletedTask;
     }
 }

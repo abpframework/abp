@@ -221,6 +221,7 @@ $projects = (
     "framework/src/Volo.Abp.Ldap",
     "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MailKit",
+    "framework/src/Volo.Abp.Mapperly",
     "framework/src/Volo.Abp.Maui.Client",
     "framework/src/Volo.Abp.Localization",
     "framework/src/Volo.Abp.MemoryDb",

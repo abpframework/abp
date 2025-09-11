@@ -1,4 +1,4 @@
-import { Component, inject, isDevMode, OnInit, Type } from '@angular/core';
+import { Component, inject, isDevMode, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -13,6 +13,7 @@ import { TreeNode } from '../utils/tree-utils';
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 import { EnvironmentService } from '../services';
 import { NgComponentOutlet } from '@angular/common';
+import { filter, take } from 'rxjs';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -24,7 +25,7 @@ import { NgComponentOutlet } from '@angular/common';
   providers: [SubscriptionService],
   imports: [NgComponentOutlet],
 })
-export class DynamicLayoutComponent implements OnInit {
+export class DynamicLayoutComponent {
   layout?: Type<any>;
   layoutKey?: eLayoutType;
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
@@ -40,7 +41,7 @@ export class DynamicLayoutComponent implements OnInit {
   protected readonly environment = inject(EnvironmentService);
 
   constructor() {
-    const dynamicLayoutComponent = inject(DynamicLayoutComponent, { optional: true, skipSelf: true })!;
+    const dynamicLayoutComponent = inject(DynamicLayoutComponent, { optional: true, skipSelf: true });
 
     if (dynamicLayoutComponent) {
       if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
@@ -48,17 +49,7 @@ export class DynamicLayoutComponent implements OnInit {
     }
     this.checkLayoutOnNavigationEnd();
     this.listenToLanguageChange();
-  }
-
-  ngOnInit(): void {
-    if (this.layout) {
-      return;
-    }
-
-    const { oAuthConfig } = this.environment.getEnvironment();
-    if (oAuthConfig.responseType === 'code') {
-      this.getLayout();
-    }
+    this.listenToEnvironmentChange();
   }
 
   private checkLayoutOnNavigationEnd() {
@@ -105,7 +96,7 @@ export class DynamicLayoutComponent implements OnInit {
     let message = `Layout ${layoutName} not found.`;
     if (layoutName === 'account') {
       message =
-        'Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "AccountLayoutModule.forRoot()" to your app.module configuration.';
+        'Account layout not found. Please check your configuration. If you are using LeptonX, please make sure you have added "provideAccountLayout()" to your app configuration.';
     }
     console.warn(message);
   }
@@ -119,5 +110,20 @@ export class DynamicLayoutComponent implements OnInit {
 
   private getComponent(key: string): ReplaceableComponents.ReplaceableComponent | undefined {
     return this.replaceableComponents.get(key);
+  }
+
+  private listenToEnvironmentChange() {
+    this.environment
+      .createOnUpdateStream(x => x.oAuthConfig)
+      .pipe(
+        take(1),
+        filter(config => config.responseType === 'code'),
+      )
+      .subscribe(() => {
+        if (this.layout) {
+          return;
+        }
+        this.getLayout();
+      });
   }
 }

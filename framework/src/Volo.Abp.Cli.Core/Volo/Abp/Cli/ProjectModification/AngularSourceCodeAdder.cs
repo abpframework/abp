@@ -14,11 +14,11 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class AngularSourceCodeAdder : ITransientDependency
 {
-    public ILogger<SolutionModuleAdder> Logger { get; set; }
+    public ILogger<AngularSourceCodeAdder> Logger { get; set; }
 
     public AngularSourceCodeAdder()
     {
-        Logger = NullLogger<SolutionModuleAdder>.Instance;
+        Logger = NullLogger<AngularSourceCodeAdder>.Instance;
     }
 
     public async Task AddFromModuleAsync(string solutionFilePath, string angularPath)

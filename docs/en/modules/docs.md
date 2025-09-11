@@ -148,11 +148,6 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
               {
                   options.DefinitionProviders.Add<MyProjectPermissionDefinitionProvider>();
               });
-  
-              Configure<AbpAutoMapperOptions>(options =>
-              {
-                  options.AddProfile<MyProjectApplicationAutoMapperProfile>();
-              });
           }
       }
   ```

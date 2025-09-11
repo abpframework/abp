@@ -335,27 +335,16 @@ The main reason of this decision was to show you how to use a different model cl
 * Added `[DataType(DataType.Date)]` attribute to the `BirthDate` which shows a date picker on the UI for this property.
 * Added `[TextArea]` attribute to the `ShortBio` which shows a multi-line text area instead of a standard textbox.
 
-In this way, you can specialize the view model class based on your UI requirements without touching to the DTO. As a result of this decision, we have used `ObjectMapper` to map `CreateAuthorViewModel` to `CreateAuthorDto`. To be able to do that, you need to add a new mapping code to the `BookStoreWebAutoMapperProfile` constructor:
+In this way, you can specialize the view model class based on your UI requirements without touching to the DTO. As a result of this decision, we have used `ObjectMapper` to map `CreateAuthorViewModel` to `CreateAuthorDto`. To be able to do that, you need to define a new mapping configuration in the `BookStoreWebMappers` class:
 
-````csharp
-using Acme.BookStore.Authors; // ADDED NAMESPACE IMPORT
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore.Web;
-
-public class BookStoreWebAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class CreateAuthorViewModelToCreateAuthorDtoMapper : MapperBase<Pages.Authors.CreateModalModel.CreateAuthorViewModel, CreateAuthorDto>
 {
-    public BookStoreWebAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
-
-        // ADD a NEW MAPPING
-        CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
-                    CreateAuthorDto>();
-    }
+    public override partial CreateAuthorDto Map(Pages.Authors.CreateModalModel.CreateAuthorViewModel source);
+    public override partial void Map(Pages.Authors.CreateModalModel.CreateAuthorViewModel source, CreateAuthorDto destination);
 }
-````
+```
 
 "New author" button will work as expected and open a new model when you run the application again:
 
@@ -456,29 +445,22 @@ This class is similar to the `CreateModal.cshtml.cs` while there are some main d
 * Uses the `IAuthorAppService.GetAsync(...)` method to get the editing author from the application layer.
 * `EditAuthorViewModel` has an additional `Id` property which is marked with the `[HiddenInput]` attribute that creates a hidden input for this property.
 
-This class requires to add two object mapping declarations to the `BookStoreWebAutoMapperProfile` class:
+This class requires to add two object mapping declarations, so open the `BookStoreWebMappers` class and add the following mappings:
 
 ```csharp
-using Acme.BookStore.Authors;
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore.Web;
-
-public class BookStoreWebAutoMapperProfile : Profile
+[Mapper]
+public partial class AuthorDtoToEditAuthorViewModelMapper : MapperBase<AuthorDto, EditAuthorViewModel>
 {
-    public BookStoreWebAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
+    public override partial EditAuthorViewModel Map(AuthorDto source);
 
-        CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
-                    CreateAuthorDto>();
+    public override partial void Map(AuthorDto source, EditAuthorViewModel destination);
+}
 
-        // ADD THESE NEW MAPPINGS
-        CreateMap<AuthorDto, Pages.Authors.EditModalModel.EditAuthorViewModel>();
-        CreateMap<Pages.Authors.EditModalModel.EditAuthorViewModel,
-                    UpdateAuthorDto>();
-    }
+[Mapper]
+public partial class EditAuthorViewModelToUpdateAuthorDtoMapper : MapperBase<Pages.Authors.EditModalModel.EditAuthorViewModel, UpdateAuthorDto>
+{
+    public override partial UpdateAuthorDto Map(Pages.Authors.EditModalModel.EditAuthorViewModel source);
+    public override partial void Map(Pages.Authors.EditModalModel.EditAuthorViewModel source, UpdateAuthorDto destination);
 }
 ```
 
@@ -1220,13 +1202,23 @@ This class typically defines the properties and methods used by the `Authors.raz
 
 `Authors` class uses the `IObjectMapper` in the `OpenEditAuthorModal` method. So, we need to define this mapping.
 
-Open the `BookStoreBlazorAutoMapperProfile.cs` in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following mapping code in the constructor:
+Open the `BookStoreBlazorMappers.cs` in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following mappings in the class:
 
-````csharp
-CreateMap<AuthorDto, UpdateAuthorDto>();
-````
+```csharp
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
+using Acme.BookStore.Authors;
 
-You will need to declare a `using Acme.BookStore.Authors;` statement to the beginning of the file.
+//...
+
+[Mapper]
+public partial class AuthorDtoToUpdateAuthorDtoMapper : MapperBase<AuthorDto, UpdateAuthorDto>
+{
+    public override partial UpdateAuthorDto Map(AuthorDto source);
+
+    public override partial void Map(AuthorDto source, UpdateAuthorDto destination);
+}
+```
 
 ### Add to the Main Menu
 

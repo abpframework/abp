@@ -15,8 +15,6 @@
 						"namespace": "@abp/ng.feature-management"
 					}
 				],
-				"ngModuleImports":[
-				],
 				"providerNames":[
 					"provideFeatureManagementConfig()"
 				]

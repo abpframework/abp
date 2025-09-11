@@ -5,27 +5,9 @@ Every CRUD page includes some sort of inputs to filter the listed data. Some of 
 ## Setup
 
 The components are in the _@volo/abp.commercial.ng.ui_ package, which is included in the ABP templates. So, as long as your project is a product of these templates and unless you delete the package, you have access to the entity filter components.
-You can either import the `CommercialUiModule` which contains other components as well as `AdvancedEntityFilters` or you can directly import the `AdvancedEntityFiltersModule` if you do not need other components. Here is how you import them in your Angular module:
 
-```javascript
-import {
-  CommercialUiModule,
-  AdvancedEntityFiltersModule,
-} from "@volo/abp.commercial.ng.ui";
+Advanced entity filters are composed of several components: `AdvancedEntityFiltersComponent`, `AdvancedEntityFiltersToggleComponent`, `AdvancedEntityFiltersFormComponent`, and `AdvancedEntityFiltersAboveSearchComponent`. You can use these components directly by importing them into your standalone components.
 
-@NgModule({
-  imports: [
-    // other imports
-    CommercialUiModule,
-
-    // OR
-
-    AdvancedEntityFiltersModule,
-  ],
-  // rest of the module metadata
-})
-export class YourModule {}
-```
 
 ## Usage
 
@@ -33,7 +15,7 @@ Let's take a look at the `Users` page from the `Identity` module.
 
 ![ABP Angular UI Users Page with Advanced Entity Filters](./images/angular-advanced-entity-filters.png)
 
-As shown in the screenshot, `abp-advanced-entity-filters` usually contain two parts, an entity filter (common among entities), i.e. `abp-entity-filter`, and entity-specific filters which are encapsulated within the `abp-advanced-entity-filters-form` component.
+As shown in the screenshot, `abp-advanced-entity-filters` usually contain two parts, an entity filter (common among entities), i.e. `abp-entity-filter`, and entity-specific filters which are encapsulated within the `abp-advanced-entity-filters-form` component. You will need to add `AdvancedEntityFiltersComponent` and `AdvancedEntityFiltersFormComponent` to your components' imports array to be able to use them.
 
 `users.component.html`
 
@@ -72,7 +54,7 @@ As shown in the screenshot, `abp-advanced-entity-filters` usually contain two pa
 </abp-advanced-entity-filters>
 ```
 
-The `abp-advanced-entity-filters` already contains the `abp-entity-filter` component so you do not need to pass it. However, the `abp-entity-filter` component needs an instance of `ListService` which is usually stored in the `list` field of the page. You can also change the placeholder of the component via `entityFilterPlaceholder` input which is passed into the `abpLocalization` pipe so that it uses the translated text. Default is `'AbpUi::PagerSearch'`
+The `abp-advanced-entity-filters` already contains the `abp-entity-filter` component so you do not need to pass it. However, the `abp-entity-filter` component needs an instance of `ListService` which is usually stored in the `list` field of the page. You can also change the placeholder of the component via `entityFilterPlaceholder` input which is passed into the `abpLocalization` pipe so that it uses the translated text. The default is `'AbpUi::PagerSearch'`
 
 E.g
 
@@ -100,8 +82,7 @@ E.g.
 Let's remove `form` from the `Users` page
 
 ```html
-<abp-advanced-entity-filters [list]="list" localizationSourceName="AbpIdentity">
-</abp-advanced-entity-filters>
+<abp-advanced-entity-filters [list]="list" localizationSourceName="AbpIdentity" />
 ```
 
 ![ABP Angular UI Users Page with Advanced Entity Filters without form](./images/angular-advanced-entity-filters-without-form.png)
@@ -122,7 +103,7 @@ E.g.
 
 ![ABP Angular UI Users Page with Advanced Entity Filters with form](./images/angular-advanced-entity-filters-with-form.png)
 
-Last but not least, if you need to render some content above the `abp-entity-filter` component, you can use the `abp-advanced-entity-filters-above-search`.
+Last but not least, if you need to render some content above the `abp-entity-filter` component, you can use the `abp-advanced-entity-filters-above-search`. This time, you will need to add `AdvancedEntityFiltersComponent`, `AdvancedEntityFiltersFormComponent`, and `AdvancedEntityFiltersAboveSearchComponent` to the imports' array of your component.
 
 E.g.
 

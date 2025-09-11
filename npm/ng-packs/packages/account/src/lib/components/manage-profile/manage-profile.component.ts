@@ -1,12 +1,12 @@
 import { ProfileService } from '@abp/ng.account.core/proxy';
 import { fadeIn, LoadingDirective } from '@abp/ng.theme.shared';
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { Component, inject, makeStateKey, OnInit, TransferState } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { eAccountComponents } from '../../enums/components';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 import { NgClass, AsyncPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LocalizationPipe, ReplaceableTemplateDirective, SSRService } from '@abp/ng.core';
+import { LocalizationPipe, ReplaceableTemplateDirective } from '@abp/ng.core';
 import { PersonalSettingsComponent } from '../personal-settings/personal-settings.component';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 
@@ -37,7 +37,6 @@ export class ManageProfileComponent implements OnInit {
   protected profileService = inject(ProfileService);
   protected manageProfileState = inject(ManageProfileStateService);
 
-  protected readonly ssrService = inject(SSRService);
   selectedTab = 0;
 
   changePasswordKey = eAccountComponents.ChangePassword;
@@ -47,32 +46,17 @@ export class ManageProfileComponent implements OnInit {
   profile$ = this.manageProfileState.getProfile$();
 
   hideChangePasswordTab?: boolean;
-  PROFILE_SETTINGS_KEY = makeStateKey<any>('profileSettings');
 
   constructor(
-    private transferState: TransferState
   ) {}
 
   ngOnInit() {
-    if (this.transferState.hasKey(this.PROFILE_SETTINGS_KEY)) {
-      const profileSettings = this.transferState.get(this.PROFILE_SETTINGS_KEY, null);
-      this.manageProfileState.setProfile(profileSettings);
-      if (profileSettings.isExternal) {
+    this.profileService.get().subscribe(profile => {
+      this.manageProfileState.setProfile(profile);
+      if (profile.isExternal) {
         this.hideChangePasswordTab = true;
         this.selectedTab = 1;
       }
-      this.transferState.remove(this.PROFILE_SETTINGS_KEY);
-    } else {
-      this.profileService.get().subscribe(profile => {
-        this.manageProfileState.setProfile(profile);
-        if (profile.isExternal) {
-          this.hideChangePasswordTab = true;
-          this.selectedTab = 1;
-        }
-        if (this.ssrService.isServer) {
-          this.transferState.set(this.PROFILE_SETTINGS_KEY, profile);
-        }
-      });
-    }
+    });
   }
 }

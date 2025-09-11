@@ -343,45 +343,39 @@ See the `IdentityPermissions` class members for all permissions defined for this
 
 #### Installation
 
-In order to configure the application to use the `IdentityModule`, you first need to import `IdentityConfigModule` from `@volo/abp.ng.identity/config` to root module. `IdentityConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the identity module, you first need to import `provideIdentityConfig` from `@volo/abp.ng.identity/config` to root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { IdentityConfigModule } from '@volo/abp.ng.identity/config';
+// app.config.ts
+import { provideIdentityConfig } from '@volo/abp.ng.identity/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    IdentityConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideIdentityConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `IdentityModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.identity`.
+The identity module should be imported and lazy-loaded in your routing configuration. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.identity`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'identity',
     loadChildren: () =>
-      import('@volo/abp.ng.identity').then(m => m.IdentityModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.identity').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `IdentityConfigModule` and `IdentityModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both configurations added.
 
 <h4 id="h-identity-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `IdentityModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

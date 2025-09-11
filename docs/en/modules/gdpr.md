@@ -177,45 +177,46 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 
 ### Installation
 
-In order to configure the application to use the `GdprModule`, you first need to import `GdprConfigModule` from `@volo/abp.ng.gdpr/config` to the root module. `GdprConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the gdpr module, you first need to import `provideGdprConfig` from `@volo/abp.ng.gdpr/config` to the root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { GdprConfigModule } from '@volo/abp.ng.gdpr/config';
+// app.config.ts
+import {
+  provideGdprConfig,
+  withCookieConsentOptions,
+} from '@volo/abp.ng.gdpr/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    GdprConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideGdprConfig(
+      withCookieConsentOptions({
+        cookiePolicyUrl: '/gdpr-cookie-consent/cookie',
+        privacyPolicyUrl: '/gdpr-cookie-consent/privacy',
+      }),
+    ),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `GdprModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.gdpr`.
+The gdpr module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.gdpr`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
+// app.routes.ts
+const APP_ROUTES: Routes = [
   // other route definitions
   {
     path: 'gdpr',
     loadChildren: () =>
-      import('@volo/abp.ng.gdpr').then(m => m.GdprModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.gdpr').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `GdprConfigModule` and `GdprModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both files configured.
 
 <h4 id="h-gdpr-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to the `GdprModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to the `createRoutes` static method:
 
 - **entityActionContributors:** Changes the grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes the page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

@@ -19,16 +19,15 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         {
             types = AssemblyHelper
                 .GetAllTypes(assembly)
-                .Where(
-                    type => type != null &&
-                            type.IsClass &&
-                            !type.IsAbstract &&
-                            !type.IsGenericType
-                ).ToArray();
+                .Where(type => type != null && type.IsClass && !type.IsAbstract && !type.IsGenericType)
+                .ToArray();
         }
         catch (ReflectionTypeLoadException e)
         {
-            types = e.Types.Select(x => x!).ToArray();
+            types = e.Types
+                .Where(type => type != null && type.IsClass && !type.IsAbstract && !type.IsGenericType)
+                .Select(x => x!)
+                .ToArray();
             logger.LogException(e);
         }
         catch (Exception e)

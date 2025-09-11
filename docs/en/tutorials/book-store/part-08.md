@@ -193,7 +193,7 @@ public async Task<AuthorDto> GetAsync(Guid id)
 }
 ````
 
-This method simply gets the `Author` entity by its `Id`, converts to the `AuthorDto` using the [object to object mapper](../../framework/infrastructure/object-to-object-mapping.md). This requires to configure the AutoMapper, which will be explained later.
+This method simply gets the `Author` entity by its `Id`, converts to the `AuthorDto` using the [object to object mapper](../../framework/infrastructure/object-to-object-mapping.md). This requires to configure the Mapperly, which will be explained later.
 
 ### GetListAsync
 
@@ -350,12 +350,18 @@ Finally, add the following entries to the `Localization/BookStore/en.json` insid
 
 ## Object to Object Mapping
 
-`AuthorAppService` is using the `ObjectMapper` to convert the `Author` objects to `AuthorDto` objects. So, we need to define this mapping in the AutoMapper configuration.
+`AuthorAppService` is using the `ObjectMapper` to convert the `Author` objects to `AuthorDto` objects. So, we need to define this mapping in the Mapperly configuration.
 
-Open the `BookStoreApplicationAutoMapperProfile` class inside the `Acme.BookStore.Application` project and add the following line to the constructor:
+Open the `BookStoreApplicationMappers` class inside the `Acme.BookStore.Application` project and define the following mapping class:
 
 ````csharp
-CreateMap<Author, AuthorDto>();
+[Mapper]
+public partial class AuthorToAuthorDtoMapper : MapperBase<Author, AuthorDto>
+{
+    public override partial AuthorDto Map(Author source);
+    
+    public override partial void Map(Author source, AuthorDto destination);
+}
 ````
 
 ## Data Seeder

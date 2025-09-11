@@ -81,38 +81,36 @@ This page is used to send Name, Surname and Email Address of user to PayU.
 
 #### Installation
 
-In order to configure the application to use the `PaymentModule`, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root module. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
+In order to configure the application to use the payment module, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root configuration. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
 
 ```js
-// app.module.ts
+// app.config.ts
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { PaymentAdminConfigModule } from '@volo/abp.ng.payment/admin/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    PaymentAdminConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    importProvidersFrom([
+      PaymentAdminConfigModule.forRoot()
+    ]),
   ],
-  // ...
-})
-export class AppModule {}
+};
+
 ```
 
-The `PaymentAdminModule` should be imported and lazy-loaded in your routing module as below:
+The payment admin module should be imported and lazy-loaded in your routing array as below:
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+const APP_ROUTES: Routes = [
+  // ...
   {
   path: 'payment',
   loadChildren: () =>
-    import('@volo/abp.ng.payment/admin').then(m => m.PaymentAdminModule.forLazy()),
+    import('@volo/abp.ng.payment/admin').then(c => c.createRoutes()),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
 #### Payment plans page

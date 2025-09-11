@@ -9,51 +9,36 @@ To add `LeptonX` into your existing projects, follow the steps below.
 
 Add theme-specific styles into the `styles` array of the file. Check the [Theme Configurations](../../framework/ui/angular/theme-configurations.md#lepton-x-commercial) documentation for more information.
 
-Importing a CSS file as an ECMA module is not supported in Angular 14. Therefore, we need to add the styles in the angular.json file.
 
-- At last, remove `ThemeLeptonModule` from `app.module.ts` and `shared.module.ts`, and import the following modules in `app.module.ts`
+- At last, remove `provideThemeLepton` from `app.config.ts`, and add the following providers in `app.config.ts`
+
 
 ```ts
-import {
-  HttpErrorComponent,
-  ThemeLeptonXModule,
-} from "@volosoft/abp.ng.theme.lepton-x";
-import { SideMenuLayoutModule } from "@volosoft/abp.ng.theme.lepton-x/layouts";
+import { provideThemeLeptonX } from '@volosoft/abp.ng.theme.lepton-x';
+import { provideSideMenuLayout } from '@volosoft/abp.ng.theme.lepton-x/layouts';
+// import { provideThemeLepton } from '@volo/abp.ng.theme.lepton'; 
 
-@NgModule({
-  // ...
-  imports: [
-    // ...
-    // ThemeLeptonModule.forRoot(), -> remove this line.
-    ThemeLeptonXModule.forRoot(),
-    SideMenuLayoutModule.forRoot(), // depends on which layout you choose
-    // ...
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // provideThemeLepton() delete this
+    provideSideMenuLayout(), // depends on which layout you choose
+    provideThemeLeptonX(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-If you want to use the **`Top Menu`** instead of the **`Side Menu`**, add TopMenuLayoutModule as below,and [this style imports](https://docs.abp.io/en/abp/7.4/UI/Angular/Theme-Configurations#lepton-x-commercial)
+If you want to use the **`Top Menu`** instead of the **`Side Menu`**, add `provideTopMenuLayout` as below,and [this style imports](https://docs.abp.io/en/abp/7.4/UI/Angular/Theme-Configurations#lepton-x-commercial)
 
 ```ts
-import {
-  HttpErrorComponent,
-  ThemeLeptonXModule,
-} from "@volosoft/abp.ng.theme.lepton-x";
-import { TopMenuLayoutModule } from "@volosoft/abp.ng.theme.lepton-x/layouts";
+import { provideThemeLeptonX } from '@volosoft/abp.ng.theme.lepton-x';
+import { provideTopMenuLayout } from '@volosoft/abp.ng.theme.lepton-x/layouts';
 
-@NgModule({
-  // ...
-  imports: [
-    // ...
-    // ThemeLeptonModule.forRoot(), -> remove this line.
-    ThemeLeptonXModule.forRoot(),
-    TopMenuLayoutModule.forRoot(),
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideTopMenuLayout(),
+    provideThemeLeptonX(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
 - At this point, `LeptonX` theme should be up and running within your application. However, you may need to overwrite some css variables based your needs for every theme available as follows:

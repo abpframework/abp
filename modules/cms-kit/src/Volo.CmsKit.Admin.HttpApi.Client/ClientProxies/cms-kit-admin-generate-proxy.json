@@ -2184,6 +2184,23 @@
                     "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Menus.PermissionLookupDto>",
                     "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Menus.PermissionLookupDto>"
                   }
+                },
+                {
+                  "name": "GetAvailableMenuOrderAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "parentId",
+                      "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "type": "System.Guid?",
+                      "typeSimple": "string?",
+                      "isOptional": true,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Int32",
+                    "typeSimple": "number"
+                  }
                 }
               ]
             }
@@ -2535,6 +2552,43 @@
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Menus.PermissionLookupDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.CmsKit.Admin.Menus.PermissionLookupDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.Menus.IMenuItemAdminAppService"
+            },
+            "GetAvailableMenuOrderAsyncByParentId": {
+              "uniqueName": "GetAvailableMenuOrderAsyncByParentId",
+              "name": "GetAvailableMenuOrderAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-admin/menu-items/available-order",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "parentId",
+                  "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": true,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "parentId",
+                  "name": "parentId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Int32",
+                "typeSimple": "number"
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.CmsKit.Admin.Menus.IMenuItemAdminAppService"

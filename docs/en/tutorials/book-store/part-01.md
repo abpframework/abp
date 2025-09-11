@@ -291,22 +291,17 @@ public class BookDto : AuditedEntityDto<Guid>
 * The `BookDto` is used to transfer the book data to the presentation layer in order to show the book information on the UI.
 * The `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` entity defined above.
 
-It will be needed to map the `Book` entities to the `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. The startup template comes with AutoMapper pre-configured. So, you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
+It will be needed to map the `Book` entities to the `BookDto` objects while returning books to the presentation layer. [Mapperly](https://mapperly.riok.app/) library can automate this conversion when you define the proper mapping. The startup template comes with Mapperly pre-configured. So, you can just define the mapping in the `BookStoreApplicationMappers` class in the `Acme.BookStore.Application` project:
 
-````csharp
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore;
-
-public class BookStoreApplicationAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
-    public BookStoreApplicationAutoMapperProfile()
-    {
-        CreateMap<Book, BookDto>();
-    }
+    public override partial BookDto Map(Book source);
+
+    public override partial void Map(Book source, BookDto destination);
 }
-````
+```
 
 > See the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) document for details.
 
@@ -343,21 +338,23 @@ public class CreateUpdateBookDto
 
 As done to the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be as shown below:
 
-````csharp
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore;
-
-public class BookStoreApplicationAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
-    public BookStoreApplicationAutoMapperProfile()
-    {
-        CreateMap<Book, BookDto>();
-        CreateMap<CreateUpdateBookDto, Book>();
-    }
+    public override partial BookDto Map(Book source);
+
+    public override partial void Map(Book source, BookDto destination);
 }
-````
+
+[Mapper]
+public partial class CreateUpdateBookDtoToBookMapper : MapperBase<CreateUpdateBookDto, Book>
+{
+    public override partial Book Map(CreateUpdateBookDto source);
+
+    public override partial void Map(CreateUpdateBookDto source, Book destination);
+}
+```
 
 ### IBookAppService
 
@@ -416,7 +413,7 @@ public class BookAppService :
 
 * `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD (create, read, update, delete) methods defined by the `ICrudAppService`.
 * `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](../../framework/architecture/domain-driven-design/repositories.md).
-* `BookAppService` uses `IObjectMapper` service ([see](../../framework/infrastructure/object-to-object-mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
+* `BookAppService` uses `IObjectMapper` service ([see](../../framework/infrastructure/object-to-object-mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [Mapperly](https://mapperly.riok.app/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
 
 ## Auto API Controllers
 

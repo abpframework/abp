@@ -61,15 +61,18 @@ The `AuthErrorFilterService` is an abstract service that needs to be replaced wi
 
 ### Usage
 
-#### 1.Create an auth-filter.provider
+#### 1.Create an auth filter provider
 
 ```js
-import { APP_INITIALIZER, inject } from '@angular/core';
+//auth-filter.provider.ts
+import { inject, provideAppInitializer } from '@angular/core';
 import { AuthErrorFilter, AuthErrorEvent, AuthErrorFilterService } from '@abp/ng.core';
 import { eCustomersAuthFilterNames } from '../enums';
 
 export const CUSTOMERS_AUTH_FILTER_PROVIDER = [
-  { provide: APP_INITIALIZER, useFactory: configureAuthFilter, multi: true },
+  provideAppInitializer(() => {
+      configureAuthFilter()
+  }),
 ];
 
 type Reason = object & { error: { grant_type: string | undefined } };
@@ -100,20 +103,17 @@ function configureAuthFilter() {
   - `executable:` a status for the filter object. If it's false then it won't work, yet it'll stay in the list
   - `execute:` a function that stores the skip logic
 
-#### 2.Add to the FeatureConfigModule
+#### 2.Add to the customer configuration provider
 
 ```js
-import { ModuleWithProviders, NgModule } from "@angular/core";
-import { CUSTOMERS_AUTH_FILTER_PROVIDER } from "./providers/auth-filter.provider";
+// customer-config.provider.ts
+import { EnvironmentProviders, makeEnvironmentProviders } from "@angular/core";
+import { CUSTOMERS_AUTH_FILTER_PROVIDER } from "./auth-filter.provider";
 
-@NgModule()
-export class CustomersConfigModule {
-  static forRoot(): ModuleWithProviders<CustomersConfigModule> {
-    return {
-      ngModule: CustomersConfigModule,
-      providers: [CUSTOMERS_AUTH_FILTER_PROVIDER],
-    };
-  }
+export function provideCustomerConfig(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    CUSTOMERS_AUTH_FILTER_PROVIDER
+  ])
 }
 ```
 

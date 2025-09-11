@@ -9,7 +9,7 @@ The Localization key format consists of 2 sections which are **Resource Name** a
 
 ```js
 const environment = {
-  //...
+  // ...
   localization: {
     defaultResourceName: "MyProjectName",
   },
@@ -49,7 +49,7 @@ Localization data is stored in key-value pairs:
 
 ```js
 {
-  //...
+  // ...
   AbpAccount: { // AbpAccount is the resource name
     Key: "Value",
     PagerInfo: "Showing {0} to {1} of {2} entries"
@@ -121,12 +121,12 @@ See an example:
 ```ts
 import { provideAbpCore, withOptions } from '@abp/ng.core';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     provideAbpCore(
       withOptions({
-        ...,
+        // ...,
         localizations: [
           {
             culture: 'en',
@@ -155,22 +155,18 @@ import { provideAbpCore, withOptions } from '@abp/ng.core';
         ],
       }),
     ),
-    ...
   ],
-})
-export class AppModule {}
+};
 ```
 
-...or, you can determine the localizations in a feature module:
+...or, you can determine the localizations in a feature provider configuration:
 
 ```ts
-// your feature module
+// your feature configuration
 
-@NgModule({
-  imports: [
-    //...other imports
-    CoreModule.forChild({
-      localizations: [
+export function provideFeatureConfiguration(): EnvironmentProviders{
+  return provideAbpCoreChild({
+    localizations: [
         {
           culture: 'en',
           resources: [
@@ -196,9 +192,8 @@ export class AppModule {}
           ],
         },
       ],
-    }),
-  ]
-})
+  })
+}
 ```
 
 The localizations above can be used like this:
@@ -267,8 +262,8 @@ import { Component } from "@angular/core";
 @Component({
   selector: "app-root",
   template: `
-    <abp-loader-bar></abp-loader-bar>
-    <router-outlet></router-outlet>
+    <abp-loader-bar />
+    <router-outlet />
   `,
 })
 export class AppComponent {}
@@ -276,7 +271,7 @@ export class AppComponent {}
 
 ## Registering a New Locale
 
-Since ABP has more than one language, Angular locale files loads lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and register to Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `CoreModule`.
+Since ABP has more than one language, Angular locale files loads lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and register to Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `provideAbpCore(withOptions({...}))`.
 
 ### registerLocaleFn
 
@@ -286,11 +281,12 @@ Since ABP has more than one language, Angular locale files loads lazily using [W
 import { provideAbpCore, withOptions } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
+    // ...
     provideAbpCore(
       withOptions({
-        ...,
+        // ...,
         registerLocaleFn: registerLocale(
           // you can pass the cultureNameLocaleFileMap and errorHandlerFn as optionally
           {
@@ -302,10 +298,9 @@ import { registerLocale } from '@abp/ng.core/locale';
         ),
       }),
     ),
-    ...
+    // ...
   ],
-})
-export class AppModule {}
+};
 ```
 
 ### Mapping of Culture Name to Angular Locale File Name
@@ -317,19 +312,18 @@ Some of the culture names defined in .NET do not match Angular locales. In such 
 If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to the `registerLocale` function.
 
 ```js
-// app.module.ts
+// app.config.ts
 
 import { registerLocale } from '@abp/ng.core/locale';
 // if you have commercial license and the language management module, add the below import
 // import { registerLocale } from '@volo/abp.ng.language-management/locale';
 
-
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     provideAbpCore(
       withOptions({
-        ...,
+        // ...,
         registerLocaleFn: registerLocale(
           {
             cultureNameLocaleFileMap: {
@@ -340,18 +334,18 @@ import { registerLocale } from '@abp/ng.core/locale';
         )
       }),
     ),
-  ]
-})
+  ],
+};
 ```
 
 See [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales).
 
 ### Adding a New Culture
 
-Add the below code to the `app.module.ts` by replacing `your-locale` placeholder with a correct locale name.
+Add the below code to the `app.config.ts` by replacing `your-locale` placeholder with a correct locale name.
 
 ```js
-//app.module.ts
+//app.config.ts
 
 import { storeLocaleData } from "@abp/ng.core/locale";
 import(
@@ -361,7 +355,7 @@ import(
 ).then((m) => storeLocaleData(m.default, "your-locale"));
 ```
 
-...or a custom `registerLocale` function can be passed to the `CoreModule`:
+...or a custom `registerLocale` function can be passed to the abp core provider configuration options:
 
 ```js
 // register-locale.ts
@@ -376,22 +370,22 @@ export function registerLocale(locale: string) {
   )
 }
 
-// app.module.ts
+// app.config.ts
 
 import { registerLocale } from './register-locale';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
-    // ...
+     // ...
     provideAbpCore(
       withOptions({
-        ...,
+        // ...,
         registerLocaleFn: registerLocale,
       }),
     ),
     //...
-  ]
-})
+  ],
+};
 ```
 
 After this custom `registerLocale` function, since the en and fr added to the `webpackInclude`, only en and fr locale files will be created as chunks:

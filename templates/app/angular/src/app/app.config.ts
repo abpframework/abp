@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
@@ -14,36 +14,30 @@ import { provideAccountConfig } from '@abp/ng.account/config';
 import { provideIdentityConfig } from '@abp/ng.identity/config';
 import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
 import { provideFeatureManagementConfig } from '@abp/ng.feature-management';
-import {ThemeLeptonXModule} from "@abp/ng.theme.lepton-x";
-import {SideMenuLayoutModule} from "@abp/ng.theme.lepton-x/layouts";
-import {AccountLayoutModule} from "@abp/ng.theme.lepton-x/account";
-import {provideClientHydration, withEventReplay, withHttpTransferCacheOptions} from '@angular/platform-browser';
+import { provideThemeLeptonX } from '@abp/ng.theme.lepton-x';
+import { provideSideMenuLayout } from '@abp/ng.theme.lepton-x/layouts';
 import { provideLogo, withEnvironmentOptions } from '@volo/ngx-lepton-x.core';
 
 export const appConfig: ApplicationConfig = {
-    providers: [
-      provideRouter(appRoutes),
-      APP_ROUTE_PROVIDER,
-      provideAbpCore(
-        withOptions({
-          environment,
-          registerLocaleFn: registerLocale(),
-        })
-      ),
-      provideAbpOAuth({ssr: false}),
-      provideAbpThemeShared(),
-      provideSettingManagementConfig(),
-      provideAccountConfig(),
-      provideIdentityConfig(),
-      provideTenantManagementConfig(),
-      provideFeatureManagementConfig(),
-      provideAnimations(),
-      provideAbpCore(),
-      provideLogo(withEnvironmentOptions(environment)),
-      importProvidersFrom([
-        ThemeLeptonXModule.forRoot(),
-        SideMenuLayoutModule.forRoot(),
-        AccountLayoutModule.forRoot(),
-      ]), provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({}))
-    ],
+  providers: [
+    provideRouter(appRoutes),
+    APP_ROUTE_PROVIDER,
+    provideAbpCore(
+      withOptions({
+        environment,
+        registerLocaleFn: registerLocale(),
+      })
+    ),
+    provideThemeLeptonX(),
+    provideSideMenuLayout(),
+    provideAbpOAuth(),
+    provideAbpThemeShared(),
+    provideSettingManagementConfig(),
+    provideAccountConfig(),
+    provideIdentityConfig(),
+    provideTenantManagementConfig(),
+    provideFeatureManagementConfig(),
+    provideAnimations(),
+    provideLogo(withEnvironmentOptions(environment)),
+  ],
 };
