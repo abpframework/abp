@@ -256,6 +256,9 @@ export default function (options: ServerOptions): Rule {
           code`${external('provideClientHydration', '@angular/platform-browser')}(${external(
             'withEventReplay',
             '@angular/platform-browser',
+          )}(), (${external(
+            'withIncrementalHydration',
+            '@angular/platform-browser',
           )}(), ${external('withHttpTransferCacheOptions', '@angular/platform-browser')}({}))`,
       ),
     ]);
