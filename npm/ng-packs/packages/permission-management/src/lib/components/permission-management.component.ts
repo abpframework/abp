@@ -17,6 +17,7 @@ import {
 import {
   Component,
   computed,
+  DOCUMENT,
   ElementRef,
   EventEmitter,
   inject,
@@ -109,6 +110,7 @@ export class PermissionManagementComponent
   protected readonly service = inject(PermissionsService);
   protected readonly configState = inject(ConfigStateService);
   protected readonly toasterService = inject(ToasterService);
+  private document = inject(DOCUMENT);
 
   @Input()
   readonly providerName!: string;
@@ -220,7 +222,7 @@ export class PermissionManagementComponent
     }
 
     const margin = `margin-${
-      (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
+      (this.document.body?.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
     }.px`;
 
     const permissions =
@@ -344,7 +346,7 @@ export class PermissionManagementComponent
     );
 
     const selectedPermissions = selectablePermissions.filter(per => per.isGranted);
-    const element = document.querySelector('#select-all-in-this-tabs') as any;
+    const element = this.document.querySelector('#select-all-in-this-tabs') as any;
     if (!element) {
       return;
     }
@@ -365,7 +367,7 @@ export class PermissionManagementComponent
       per.grantedProviders.every(p => p.providerName === this.providerName),
     );
     const selectedAllPermissions = selectablePermissions.filter(per => per.isGranted);
-    const checkboxElement = document.querySelector('#select-all-in-all-tabs') as any;
+    const checkboxElement = this.document.querySelector('#select-all-in-all-tabs') as any;
 
     if (selectedAllPermissions.length === selectablePermissions.length) {
       checkboxElement.indeterminate = false;

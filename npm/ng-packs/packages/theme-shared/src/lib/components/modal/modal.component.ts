@@ -12,7 +12,7 @@ import {
   output,
   viewChild,
 } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubscriptionService, uuid } from '@abp/ng.core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -41,6 +41,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     optional: true,
   });
   protected readonly destroyRef = inject(DestroyRef);
+  private document = inject(DOCUMENT);
 
   visible = model<boolean>(false);
 
@@ -80,7 +81,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   modalIdentifier = `modal-${uuid()}`;
 
   get modalWindowRef() {
-    return document.querySelector(`ngb-modal-window.${this.modalIdentifier}`);
+    return this.document.querySelector(`ngb-modal-window.${this.modalIdentifier}`);
   }
 
   get isFormDirty(): boolean {

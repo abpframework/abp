@@ -9,12 +9,11 @@ import cookieParser from 'cookie-parser';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {environment} from './environments/environment';
-
-// ESM import
 import * as oidc from 'openid-client';
 
-//TODO: Remove this line in production
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+if (environment.production === false) {
+  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+}
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');

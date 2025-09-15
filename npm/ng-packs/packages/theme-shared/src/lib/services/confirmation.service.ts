@@ -4,10 +4,12 @@ import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
 import { Confirmation } from '../models/confirmation';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
   private contentProjectionService = inject(ContentProjectionService);
+  private document = inject(DOCUMENT);
 
   status$!: Subject<Confirmation.Status>;
   confirmation$ = new ReplaySubject<Confirmation.DialogData | null>(1);
@@ -87,7 +89,7 @@ export class ConfirmationService {
   }
 
   private listenToEscape() {
-    fromEvent<KeyboardEvent>(document, 'keyup')
+    fromEvent<KeyboardEvent>(this.document, 'keyup')
       .pipe(
         takeUntil(this.status$),
         debounceTime(150),
