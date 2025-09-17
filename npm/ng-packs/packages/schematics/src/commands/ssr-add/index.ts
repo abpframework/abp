@@ -319,6 +319,11 @@ function addDependencies({ skipInstall }: SSROptions, isUsingApplicationBuilder:
       install,
       existing: ExistingBehavior.Replace,
     }),
+    addDependency('openid-client', latestVersions.dependencies['openid-client'], {
+      type: DependencyType.Default,
+      install,
+      existing: ExistingBehavior.Skip,
+    }),
   ];
 
   if (!isUsingApplicationBuilder) {

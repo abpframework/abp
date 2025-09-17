@@ -23,5 +23,6 @@ export const latestVersions = {
     'ts-node': '~10.9.0',
     typescript: '~5.8.0',
     'zone.js': '~0.15.0',
+    'openid-client': '^6.6.4',
   },
 };
