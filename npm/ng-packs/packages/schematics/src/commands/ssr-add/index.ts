@@ -21,6 +21,7 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { posix } from 'node:path';
+// @ts-ignore
 import { Schema as ServerOptions } from './server/schema';
 import {
   DependencyType,
@@ -40,6 +41,7 @@ import {
 import { getMainFilePath } from '../../utils/angular/standalone/util';
 import { getWorkspace } from '../../utils/angular/workspace';
 
+// @ts-ignore
 import { Schema as SSROptions } from './schema';
 
 const SERVE_SSR_TARGET_NAME = 'serve-ssr';

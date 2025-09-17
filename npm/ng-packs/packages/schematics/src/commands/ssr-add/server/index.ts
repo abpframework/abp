@@ -39,6 +39,8 @@ import { resolveBootstrappedComponentData } from '../../../utils/angular/standal
 import { getMainFilePath } from '../../../utils/angular/standalone/util';
 import { getWorkspace, updateWorkspace } from '../../../utils/angular/workspace';
 import { Builders } from '../../../utils/angular/workspace-models';
+
+// @ts-ignore
 import { Schema as ServerOptions } from './schema';
 
 const serverMainEntryName = 'main.server.ts';
