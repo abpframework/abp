@@ -6,13 +6,12 @@ import {
   NAVIGATE_TO_MANAGE_PROFILE,
   PermissionDirective,
   SessionStateService,
-  SSRService,
   ToInjectorPipe,
 } from '@abp/ng.core';
 import { AbpVisibleDirective, UserMenu, UserMenuService } from '@abp/ng.theme.shared';
 import { Component, TrackByFunction, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NgComponentOutlet, AsyncPipe } from '@angular/common';
+import { NgComponentOutlet, AsyncPipe, DOCUMENT } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -34,18 +33,14 @@ export class CurrentUserComponent {
   private authService = inject(AuthService);
   private configState = inject(ConfigStateService);
   private sessionState = inject(SessionStateService);
+  private document = inject(DOCUMENT);
 
   currentUser$: Observable<CurrentUserDto> = this.configState.getOne$('currentUser');
   selectedTenant$ = this.sessionState.getTenant$();
   trackByFn: TrackByFunction<UserMenu> = (_, element) => element.id;
-  private ssrService = inject(SSRService);
 
   get smallScreen(): boolean {
-    if (this.ssrService.isServer) {
-      return false;
-    } else {
-      return window.innerWidth < 992;
-    }
+    return this.document.defaultView?.innerWidth < 992;
   }
 
   navigateToLogin() {

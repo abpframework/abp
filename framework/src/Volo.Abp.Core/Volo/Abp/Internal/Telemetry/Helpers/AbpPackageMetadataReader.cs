@@ -11,7 +11,7 @@ static internal class AbpProjectMetadataReader
 {
     private const string AbpPackageSearchPattern = "*.abppkg";
     private const string AbpSolutionSearchPattern = "*.abpsln";
-    private const int MaxDepth = 5; 
+    private const int MaxDepth = 10; 
     public static AbpProjectMetaData? ReadProjectMetadata(Assembly assembly)
     {
         var assemblyPath = assembly.Location;

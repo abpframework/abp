@@ -269,7 +269,12 @@ this.routes.remove(['Your navigation']);
 // or
 this.routes.removeByParam({ name: 'Your navigation' });
 ```
+**Method Parameters:**
+- `remove(routeNames: string[])`: Takes an array of route names to remove.
+- `removeByParam(routeProperty: Partial<ABP.Route>)`: Takes any route property (name, path, parentName, etc.) to match and remove routes.
+<br>
 
+**Results of the operations above:**
 - Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
 - Added an icon to _Home_.
 - Specified the order and made _Home_ the first item in list.

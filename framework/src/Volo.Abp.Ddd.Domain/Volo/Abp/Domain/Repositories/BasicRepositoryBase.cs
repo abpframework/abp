@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
@@ -43,9 +43,9 @@ public abstract class BasicRepositoryBase<TEntity> :
     public IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
 
     public bool? IsChangeTrackingEnabled { get; protected set; }
-    
+
     public string? EntityName { get; set; }
-    
+
     public void SetEntityName(string? name)
     {
         EntityName = name;
@@ -148,10 +148,10 @@ public abstract class BasicRepositoryBase<TEntity> :
 public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
-    protected BasicRepositoryBase(string providerName) 
+    protected BasicRepositoryBase(string providerName)
         : base(providerName)
     {
-        
+
     }
 
     public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
@@ -160,7 +160,7 @@ public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<T
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity), id);
+            throw new EntityNotFoundException<TEntity>(id);
         }
 
         return entity;

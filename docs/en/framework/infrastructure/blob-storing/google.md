@@ -27,11 +27,11 @@ Configure<AbpBlobStoringOptions>(options =>
     {
         container.UseGoogle(google =>
         {
-            google.ClientEmail = "your coogle client email";
-            google.ProjectId = "your coogle project id";
-            google.PrivateKey = "your coogle private key";
-            google.Scopes = "your coogle scopes";
-            google.ContainerName = "your coogle container name";
+            google.ClientEmail = "your google client email";
+            google.ProjectId = "your google project id";
+            google.PrivateKey = "your google private key";
+            google.Scopes = "your google scopes";
+            google.ContainerName = "your google container name";
             google.CreateContainerIfNotExists = true;
             //google.UseApplicationDefaultCredentials = true; // If you want to use application default credentials
         });

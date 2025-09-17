@@ -5,6 +5,34 @@ namespace Volo.Abp.Domain.Entities;
 /// <summary>
 /// This exception is thrown if an entity is expected to be found but not found.
 /// </summary>
+public class EntityNotFoundException<TEntityType> : EntityNotFoundException
+{
+    /// <summary>
+    /// Creates a new <see cref="EntityNotFoundException{TEntityType}"/> object.
+    /// </summary>
+    public EntityNotFoundException()
+        : base(typeof(TEntityType))
+    {
+    }
+    /// <summary>
+    /// Creates a new <see cref="EntityNotFoundException{TEntityType}"/> object.
+    /// </summary>
+    public EntityNotFoundException(object? id)
+        : base(typeof(TEntityType), id)
+    {
+    }
+    /// <summary>
+    /// Creates a new <see cref="EntityNotFoundException{TEntityType}"/> object.
+    /// </summary>
+    public EntityNotFoundException(object? id, Exception? innerException)
+        : base(typeof(TEntityType), id, innerException)
+    {
+    }
+}
+
+/// <summary>
+/// This exception is thrown if an entity is expected to be found but not found.
+/// </summary>
 public class EntityNotFoundException : AbpException
 {
     /// <summary>

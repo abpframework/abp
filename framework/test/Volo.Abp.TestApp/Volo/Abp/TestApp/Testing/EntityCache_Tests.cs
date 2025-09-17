@@ -37,8 +37,8 @@ public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStart
     public async Task Should_Throw_EntityNotFoundException_IF_Entity_Not_Exist()
     {
         var notExistId = Guid.NewGuid();
-        await Assert.ThrowsAsync<EntityNotFoundException>(() => ProductEntityCache.GetAsync(notExistId));
-        await Assert.ThrowsAsync<EntityNotFoundException>(() => ProductCacheItem.GetAsync(notExistId));
+        await Assert.ThrowsAsync<EntityNotFoundException<Product>>(() => ProductEntityCache.GetAsync(notExistId));
+        await Assert.ThrowsAsync<EntityNotFoundException<Product>>(() => ProductCacheItem.GetAsync(notExistId));
     }
 
     [Fact]

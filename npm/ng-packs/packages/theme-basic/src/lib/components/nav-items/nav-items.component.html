@@ -1,5 +1,5 @@
 <ul class="navbar-nav">
-  @if (ssrService.isBrowser) {
+  @if (isBrowser) {
     @for (item of navItems.items$ | async; track $index) {
       <ng-container *abpVisible="!item.visible || item.visible(item)">
         <li class="nav-item d-flex align-items-center" *abpPermission="item.requiredPolicy">

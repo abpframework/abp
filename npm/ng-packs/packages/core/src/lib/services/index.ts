@@ -25,6 +25,5 @@ export * from './local-storage-listener.service';
 export * from './title-strategy.service';
 export * from './timezone.service';
 export * from './time.service';
-export * from './ssr.service';
 export * from './cookie-storage.service';
 export * from './dom-strategy.service';

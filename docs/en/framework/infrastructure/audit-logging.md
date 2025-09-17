@@ -230,6 +230,28 @@ public class MyUser : Entity<Guid>
 }
 ````
 
+#### Ignore Update Audit Properties And Publish Entity Updated Event
+
+The `[DisableAuditing]` attribute supports additional configuration options when applied to **entity properties**.
+
+* **UpdateModificationProps** (default: `true`): When set to `false`, changes to this entity property will not update audit properties (like `LastModificationTime`.
+* **PublishEntityEvent** (default: `true`): When set to `false`, changes to this entity property will not publish entity change events (`EntityUpdatedEvent`).
+
+
+````csharp
+public class MyUser : Entity<Guid>
+{
+    public string Name { get; set; }
+
+    [DisableAuditing(UpdateModificationProps = false, PublishEntityEvent = false)]
+    public string ReadCount { get; set; }
+}
+````
+
+This example will ignore update audit properties and publish entity updated event when the `ReadCount` property is updated.
+
+> The `UpdateModificationProps` and `PublishEntityEvent` only work for [Entity Framework Core](../data/entity-framework-core). It will not work for [MongoDB](../data/mongodb).
+
 ## IAuditingStore
 
 `IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP. If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](../fundamentals/dependency-injection.md).

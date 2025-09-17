@@ -34,6 +34,15 @@ public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVe
 
     public int EntityVersion { get; set; }
 
+    [DisableAuditing(UpdateModificationProps = false)]
+    public string DisableAuditingUpdateModificationPropsProperty { get; set; }
+
+    [DisableAuditing(PublishEntityEvent = false)]
+    public string DisableAuditingPublishEntityEventProperty { get; set; }
+
+    [DisableAuditing]
+    public string DisableAuditingProperty { get; set; }
+
     private Person()
     {
     }

@@ -1,6 +1,6 @@
 # Plug-In Modules
 
-It is possible to load [modules](../modularity/basics.md) as plug-ins. That means you may not reference to a module's assembly in your solution, but you can load that module in the application startup just like any other module.
+[Modules](../modularity/basics.md) can also be loaded as plug-ins. This means that you don’t need to reference a module’s assembly directly in your solution; instead, you can load it during application startup in the same way as any other module.
 
 ## Basic Usage
 
@@ -28,7 +28,7 @@ That's all. ABP will discover the modules in the given folder, configure and ini
 options.PlugInSources.Add(new FolderPlugInSource(@"D:\Temp\MyPlugIns"));
 ````
 
-> `AddFolder()` only looks for the assembly file in the given folder, but not looks for the sub-folders. You can pass `SearchOption.AllDirectories` as a second parameter to explore plug-ins also from the sub-folders, recursively.
+> `AddFolder()` only looks for the assembly file in the given folder, but doesn't look for the sub-folders. You can pass `SearchOption.AllDirectories` as a second parameter to explore plug-ins also from the sub-folders, recursively.
 
 There are two more built-in Plug-In Source implementations:
 
@@ -124,13 +124,13 @@ Edit the `.csproj` file content:
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <OutputType>Library</OutputType>
         <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="4.0.1" />
+      <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="9.3.3" />
     </ItemGroup>
 
 </Project>

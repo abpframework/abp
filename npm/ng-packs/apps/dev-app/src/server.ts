@@ -5,11 +5,11 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {environment} from './environments/environment';
 import * as oidc from 'openid-client';
+import { ServerCookieParser } from '@abp/ng.core';
 
 if (environment.production === false) {
   process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
@@ -21,7 +21,7 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-const ISSUER = new URL(environment.oAuthConfig.issuer);  // OIDC issuer
+const ISSUER = new URL(environment.oAuthConfig.issuer);
 const CLIENT_ID = environment.oAuthConfig.clientId;
 const REDIRECT_URI = environment.oAuthConfig.redirectUri;
 const SCOPE = environment.oAuthConfig.scope;
@@ -30,7 +30,7 @@ const config = await oidc.discovery(ISSUER, CLIENT_ID, /* client_secret */ undef
 const secureCookie = { httpOnly: true, sameSite: 'lax' as const, secure: environment.production, path: '/' };
 const tokenCookie = { ...secureCookie, httpOnly: false };
 
-app.use(cookieParser());
+app.use(ServerCookieParser.middleware());
 
 const sessions = new Map<string, { pkce?: string; state?: string; refresh?: string; at?: string, returnUrl?: string }>();
 
@@ -159,7 +159,14 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then(response => (response ? writeResponseToNodeResponse(response, res) : next()))
+    .then(response => {
+      if (response) {
+        res.cookie('ssr-init', 'true', {...secureCookie, httpOnly: false});
+        return writeResponseToNodeResponse(response, res);
+      } else {
+        return next()
+      }
+    })
     .catch(next);
 });
 

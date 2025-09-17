@@ -85,6 +85,8 @@ export const asyncAbpOAuthGuard: CanActivateFn = (
   const oAuthService = inject(OAuthService);
   const authService = inject(AuthService);
   const environmentService = inject(EnvironmentService);
+  const platformId = inject(PLATFORM_ID);
+  const resInit = inject(RESPONSE_INIT);
 
   const { oAuthConfig } = environmentService.getEnvironment();
 
@@ -96,6 +98,16 @@ export const asyncAbpOAuthGuard: CanActivateFn = (
         take(1),
         timeout(3000),
         catchError(() => {
+          if (isPlatformServer(platformId) && resInit) {
+            const ssrAuthorizationUrl = environmentService.getEnvironment().oAuthConfig.ssrAuthorizationUrl;
+            const url = buildLoginUrl(ssrAuthorizationUrl, { returnUrl: state.url });
+            const headers = new Headers(resInit.headers);
+            headers.set('Location', url);
+            resInit.status = 302;
+            resInit.statusText = 'Found';
+            resInit.headers = headers;
+            return;
+          }
           authService.navigateToLogin({ returnUrl: state.url });
           return of(false);
         })

@@ -59,6 +59,51 @@ Run the `.DbMigrator` project to create the database, apply the changes and seed
 
 Oracle limits strings to `NVARCHAR2(2000)` when the migration is created. Some of the entity properties may extend it. You can check the known and reported properties of ABP modules entities that can extend this limit. To prevent this problem, you need to convert the `string` type to `long`  type first and generate a new migration. Then convert the `long` type to `clob` type with maximum length. 
 
+## ORA-00904: "FALSE": invalid identifier 
+
+In the 23ai release, Oracle has added new `OracleSQLCompatibility` enumeration values:
+
+- `OracleSQLCompatibility.DatabaseVersion19`
+- `OracleSQLCompatibility.DatabaseVersion21`
+- `OracleSQLCompatibility.DatabaseVersion23`
+
+By default, the enumeration value will match the ODP.NET version number. In the case of ODP.NET 23, the enumeration is `OracleSQLCompatibility.DatabaseVersion23`.
+
+In DB 23ai, BOOLEAN columns and native JSON columns are supported. Thus, Oracle EF Core 8.23.40 use these in its SQL when `OracleSQLCompatibility.DatabaseVersion23` or no value is set. If you'd like to revert to 19c compatible behavior, use the `OracleSQLCompatibility.DatabaseVersion19` value.
+
+See the following issue for more details:
+https://github.com/oracle/dotnet-db-samples/issues/377#issuecomment-2096419703
+
+
+If you want to change the `OracleSQLCompatibility` value, you need to change it at  `AbpDbContextOptions` and `MyProjectNameDbContextFactory` files.
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{ 
+    Configure<AbpDbContextOptions>(options =>   
+    {   
+        options.UseOracle(x => x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19)); 
+    });
+}
+```
+
+```csharp
+public MyProjectNameDbContext CreateDbContext(string[] args)
+{
+    var configuration = BuildConfiguration();
+
+    AbpSolution4EfCoreEntityExtensionMappings.Configure();
+
+    var builder = new DbContextOptionsBuilder<MyProjectNameDbContext>()
+        .UseOracle(configuration.GetConnectionString("Default"), x =>
+        {
+            x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19);
+        });
+
+    return new MyProjectNameDbContext(builder.Options);
+}
+```
+
 ### First Migration
 
 Update you application DbContext `OnModelCreating` method:

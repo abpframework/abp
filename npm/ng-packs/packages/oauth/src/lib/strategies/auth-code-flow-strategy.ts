@@ -123,7 +123,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   logout(queryParams?: Params) {
     this.rememberMeService.remove();
 
-    if (APP_STARTED_WITH_SSR) {
+    if (this.appStartedWithSSR) {
       if (this.document.defaultView) {
         this.document.defaultView.location.replace('/logout');
       }

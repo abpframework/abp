@@ -178,7 +178,41 @@ The modal with form looks like this:
 @Input() visible: boolean
 ```
 
-**`visible`** is a boolean input that determines whether the modal is open. It is also can be used two-way binding.
+**`visible`** is a boolean input that controls whether the modal is open.
+
+Important details:
+
+- Default value: `false` (the modal is closed initially).
+- Required binding: You must bind `visible` to a component property. If you omit it completely, the modal will never appear because it is only instantiated when `visible` becomes `true`.
+- Two-way binding recommended: The component emits `visibleChange` when it needs to close (e.g., user presses the close button or backdrop). For this reason, using a constant like `[visible]="true"` or `visible="true"` is not supported—Angular cannot update a literal, so the modal cannot properly close and this may lead to an error. Always bind to a variable.
+- Correct patterns:
+  - Preferred shorthand: `[(visible)]="isModalOpen"`
+  - Or explicit form: `[visible]="isModalOpen" (visibleChange)="isModalOpen = $event"`
+
+Example (already shown above):
+
+```html
+<abp-modal [(visible)]="isModalOpen">
+  <!-- content -->
+</abp-modal>
+```
+
+Programmatic control:
+
+```ts
+// In your component class
+isModalOpen = false;
+
+open() { this.isModalOpen = true; }
+close() { this.isModalOpen = false; }
+```
+
+Avoid (incorrect):
+
+```html
+<!-- This will open once but cannot close properly and may throw an error -->
+<abp-modal [visible]="true"></abp-modal>
+```
 
 #### busy
 

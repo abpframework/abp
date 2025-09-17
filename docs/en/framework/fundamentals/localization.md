@@ -91,6 +91,34 @@ A JSON localization file content is shown below:
 
 > ABP will ignore (skip) the JSON file if the `culture` section is missing.
 
+You can also use nesting or array in localization files, like this:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    "HelloWorld": "Hello World!",
+    "Hello": {
+        "World": "Hello World!"
+    },
+    "Hi":[
+        "Bye": "Bye World!"
+        "Hello": "Hello World!"
+    ]
+  }
+}
+````
+
+Then you can use it like this:
+
+> The double underscore (`__`) is used to separate the parent key from the child key.
+
+````csharp
+var str = L["Hello__World"]; // Hello World!
+var str2 = L["Hi__0"]; // Bye World!
+var str3 = L["Hi__1"]; // Hello World!
+````
+
 ### Default Resource
 
 `AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:

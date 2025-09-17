@@ -1,4 +1,4 @@
-import { inject, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Params, Router } from '@angular/router';
 

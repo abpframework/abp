@@ -121,8 +121,6 @@ export class UsersComponent implements OnInit {
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
-  constructor() {}
-
   onVisiblePermissionChange = (event: boolean) => {
     this.visiblePermissions = event;
   };

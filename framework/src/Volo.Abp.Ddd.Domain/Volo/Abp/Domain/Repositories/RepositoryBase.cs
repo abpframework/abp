@@ -1,10 +1,10 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
@@ -60,7 +60,7 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity));
+            throw new EntityNotFoundException<TEntity>();
         }
 
         return entity;
@@ -101,7 +101,7 @@ public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, I
         : base(providerName)
     {
     }
-    
+
     public abstract Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
     public abstract Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);

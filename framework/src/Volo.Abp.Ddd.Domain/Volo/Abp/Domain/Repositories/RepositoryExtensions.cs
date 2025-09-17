@@ -56,7 +56,7 @@ public static class RepositoryExtensions
     {
         if (!await repository.AnyAsync(x => x.Id!.Equals(id), cancellationToken))
         {
-            throw new EntityNotFoundException(typeof(TEntity), id);
+            throw new EntityNotFoundException<TEntity>(id);
         }
     }
 
@@ -69,7 +69,7 @@ public static class RepositoryExtensions
     {
         if (!await repository.AnyAsync(expression, cancellationToken))
         {
-            throw new EntityNotFoundException(typeof(TEntity));
+            throw new EntityNotFoundException<TEntity>();
         }
     }
 
@@ -250,7 +250,7 @@ public static class RepositoryExtensions
         hardDeleteEntities.Add(entity);
         await repository.DeleteAsync(entity, autoSave, cancellationToken);
     }
-    
+
     public static TRepository SetEntityName<TRepository>(
         this TRepository repository,
         string name

@@ -23,9 +23,13 @@ public class IncomingEventRecord :
 
     public DateTime CreationTime { get; private set; }
 
-    public bool Processed { get; set; }
+    public IncomingEventStatus Status { get; set; } = IncomingEventStatus.Pending;
 
-    public DateTime? ProcessedTime { get; set; }
+    public DateTime? HandledTime { get; set; }
+
+    public int RetryCount { get; set; } = 0;
+
+    public DateTime? NextRetryTime { get; set; } = null;
 
     protected IncomingEventRecord()
     {
@@ -41,7 +45,10 @@ public class IncomingEventRecord :
         EventName = eventInfo.EventName;
         EventData = eventInfo.EventData;
         CreationTime = eventInfo.CreationTime;
-
+        Status = eventInfo.Status;
+        HandledTime = eventInfo.HandledTime;
+        RetryCount = eventInfo.RetryCount;
+        NextRetryTime = eventInfo.NextRetryTime;
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
         foreach (var property in eventInfo.ExtraProperties)
@@ -57,7 +64,11 @@ public class IncomingEventRecord :
             MessageId,
             EventName,
             EventData,
-            CreationTime
+            CreationTime,
+            Status,
+            HandledTime,
+            RetryCount,
+            NextRetryTime
         );
 
         foreach (var property in ExtraProperties)
@@ -70,7 +81,20 @@ public class IncomingEventRecord :
 
     public void MarkAsProcessed(DateTime processedTime)
     {
-        Processed = true;
-        ProcessedTime = processedTime;
+        Status = IncomingEventStatus.Processed;
+        HandledTime = processedTime;
+    }
+
+    public void MarkAsDiscarded(DateTime discardedTime)
+    {
+        Status = IncomingEventStatus.Discarded;
+        HandledTime = discardedTime;
+    }
+
+    public void RetryLater(int retryCount, DateTime nextRetryTime)
+    {
+        Status = IncomingEventStatus.Pending;
+        NextRetryTime = nextRetryTime;
+        RetryCount = retryCount;
     }
 }

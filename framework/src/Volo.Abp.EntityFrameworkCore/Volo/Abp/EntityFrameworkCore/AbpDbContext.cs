@@ -436,20 +436,29 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             case EntityState.Modified:
                 if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
-                    if (entry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey()))
+                    var modifiedProperties = entry.Properties.Where(x => x.IsModified).ToList();
+                    if (modifiedProperties.All(x => x.Metadata.IsForeignKey()))
                     {
                         // Skip `PublishEntityDeletedEvent/PublishEntityUpdatedEvent` if only foreign keys have changed.
                         break;
                     }
 
-                    ApplyAbpConceptsForModifiedEntity(entry);
-                    if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
+                    var disableAuditingAttributes = modifiedProperties.Select(x => x.Metadata.PropertyInfo?.GetCustomAttribute<DisableAuditingAttribute>()).ToList();
+                    if (disableAuditingAttributes.Any(x => x == null || x.UpdateModificationProps))
                     {
-                        EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
+                        ApplyAbpConceptsForModifiedEntity(entry);
                     }
-                    else
+
+                    if (disableAuditingAttributes.Any(x => x == null || x.PublishEntityEvent))
                     {
-                        EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
+                        if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
+                        {
+                            EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
+                        }
+                        else
+                        {
+                            EntityChangeEventHelper.PublishEntityUpdatedEvent(entry.Entity);
+                        }
                     }
                 }
                 else if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges &&

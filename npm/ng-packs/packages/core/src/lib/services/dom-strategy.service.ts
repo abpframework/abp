@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { DomStrategy } from '../strategies';
 
 @Injectable({ providedIn: 'root' })
 export class DomStrategyService {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  private document = inject(DOCUMENT);
 
   afterElement(el: HTMLElement) {
     return new DomStrategy(() => el, 'afterend');

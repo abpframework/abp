@@ -36,12 +36,11 @@ export class SessionStateService {
   }
 
   private init() {
-    let session: string;
-    session = this.appStartedWithSSR ? this.cookieStorageService.getItem('abpSession') : this.localStorageService.getItem('abpSession');
+    const storageService = this.appStartedWithSSR ? this.cookieStorageService : this.localStorageService;
+    const session = storageService.getItem('abpSession');
     if (session) {
       this.store.set(JSON.parse(session));
     }
-
     this.store.sliceUpdate(state => state).subscribe(this.updateLocalStorage);
   }
 

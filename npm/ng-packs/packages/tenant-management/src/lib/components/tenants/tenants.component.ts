@@ -91,8 +91,6 @@ export class TenantsComponent implements OnInit {
     return Boolean(this.selected.id);
   }
 
-  constructor() {}
-
   onVisibleFeaturesChange = (value: boolean) => {
     this.visibleFeatures = value;
   };

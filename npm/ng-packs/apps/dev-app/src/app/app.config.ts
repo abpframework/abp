@@ -11,7 +11,7 @@ import { appRoutes } from './app.routes';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { provideAbpCore, withOptions } from '@abp/ng.core';
 import { environment } from '../environments/environment';
-import { registerLocale } from '@abp/ng.core/locale';
+import { registerLocaleForEsBuild } from '@abp/ng.core/locale';
 import { provideAbpOAuth } from '@abp/ng.oauth';
 import { provideAbpThemeShared } from '@abp/ng.theme.shared';
 import { provideSettingManagementConfig } from '@abp/ng.setting-management/config';
@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideAbpCore(
       withOptions({
         environment,
-        registerLocaleFn: registerLocale(),
+        registerLocaleFn: registerLocaleForEsBuild(),
         sendNullsAsQueryParam: false,
         skipGetAppConfiguration: false,
       }),

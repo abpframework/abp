@@ -337,6 +337,8 @@ var users = await _userRepository.GetListAsync(); // returns List<User>
 var dtos = ObjectMapper.Map<List<User>, List<UserDto>>(users); // creates List<UserDto>
 ````
 
+> When mapping a collection property, if the source value is null Mapperly will keep the destination value as null. This is different from AutoMapper, which will map the destination field to an empty collection.
+
 ### Nested Mapping
 
 When working with nested object mapping, there's an important limitation to be aware of. If you have separate mappers for nested types like in the example below, the parent mapper (`SourceTypeToDestinationTypeMapper`) will not automatically use the nested mapper (`SourceNestedTypeToDestinationNestedTypeMapper`) to handle the mapping of nested properties. This means that configurations like the `MapperIgnoreTarget` attribute on the nested mapper will be ignored during the parent mapping operation.

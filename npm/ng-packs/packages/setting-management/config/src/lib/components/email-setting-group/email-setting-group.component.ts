@@ -62,8 +62,6 @@ export class EmailSettingGroupComponent implements OnInit {
   isEmailTestModalOpen = false;
   modalSize: NgbModalOptions = { size: 'lg' };
 
-  constructor() {}
-
   ngOnInit() {
     this.getData();
   }

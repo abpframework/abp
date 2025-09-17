@@ -47,9 +47,6 @@ export class ManageProfileComponent implements OnInit {
 
   hideChangePasswordTab?: boolean;
 
-  constructor(
-  ) {}
-
   ngOnInit() {
     this.profileService.get().subscribe(profile => {
       this.manageProfileState.setProfile(profile);

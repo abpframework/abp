@@ -35,7 +35,7 @@ export const transferStateInterceptor: HttpInterceptorFn = (
     tap(event => {
       if (isPlatformServer(platformId) && event instanceof HttpResponse) {
         transferState.set(stateKey, event.body);
-        console.log(`Interceptor: ${req.urlWithParams} verisi TransferState'e kaydedildi.`);
+        console.log(`Interceptor: ${req.urlWithParams} is stored in TransferState.`);
       }
     }),
   );

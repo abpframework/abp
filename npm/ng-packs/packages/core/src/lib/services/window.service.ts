@@ -18,6 +18,7 @@ export class AbpWindowService {
   reloadPage(): void {
     this.window.location.reload();
   }
+
   downloadBlob(blob: Blob, fileName: string) {
     const blobUrl = this.window.URL.createObjectURL(blob);
     const a = this.document.createElement('a');

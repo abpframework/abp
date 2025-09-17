@@ -196,7 +196,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         {
             _localizer["CarPlural"].Value.ShouldBe("汽车");
         }
-        
+
         using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hans-CN")))
         {
             _localizer["Car"].Value.ShouldBe("汽车");
@@ -214,7 +214,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         {
             _localizer["CarPlural"].Value.ShouldBe("汽車");
         }
-        
+
         using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-TW")))
         {
             _localizer["Car"].Value.ShouldBe("汽車");
@@ -223,7 +223,7 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         {
             _localizer["CarPlural"].Value.ShouldBe("汽車");
         }
-        
+
         using (CultureHelper.Use(CultureInfo.GetCultureInfo("zh-Hant-TW")))
         {
             _localizer["Car"].Value.ShouldBe("汽車");
@@ -374,5 +374,22 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
     {
         var externalLocalizer = _localizerFactory.CreateByResourceName(TestExternalLocalizationStore.TestExternalResourceNames.ExternalResource1);
         externalLocalizer["Car"].Value.ShouldBe("Car");
+    }
+
+    [Fact]
+    public void Should_Get_Nested_Translations()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            _localizer["MyNestedTranslation__SomeKey"].Value.ShouldBe("Some nested value");
+            _localizer["MyNestedTranslation__SomeOtherKey"].Value.ShouldBe("Some other nested value");
+            _localizer["MyNestedTranslation__DeeplyNested__DeepKey"].Value.ShouldBe("A deeply nested value");
+
+            _localizer["MyNestedTranslation__DeeplyNestedArray__0"].Value.ShouldBe("First value in array");
+            _localizer["MyNestedTranslation__DeeplyNestedArray__1"].Value.ShouldBe("Second value in array");
+            _localizer["MyNestedTranslation__DeeplyNestedArray__2__InnerDeepKey"].Value.ShouldBe("Inner deeply nested value");
+            _localizer["MyNestedTranslation__DeeplyNestedArray__3__InnerDeepArray__0"].Value.ShouldBe("First inner deep array value");
+            _localizer["MyNestedTranslation__DeeplyNestedArray__3__InnerDeepArray__1"].Value.ShouldBe("Second inner deep array value");
+        }
     }
 }
