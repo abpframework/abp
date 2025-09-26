@@ -123,3 +123,25 @@ GitHub repository stars are an important indicator of popularity and the size of
 ## Discord Server
 
 We have a Discord server where you can chat with other ABP users. Share your ideas, report technical issues, showcase your creations, share the tips that worked for you and catch up with the latest news and announcements about ABP Framework. Join 👉 https://abp.io/join-discord.
+
+
+<!-- GitHub Frontend Bot Testing Improvement Contribution -->
+
+This comment was added by GitHub Frontend Bot as part of a testing infrastructure improvement initiative.
+
+**Suggested Testing Improvements:**
+
+**Recommended Testing Stack:**
+- **xUnit** or **NUnit** - Modern testing frameworks
+- **MSTest** - Microsoft's testing framework
+- **Moq** - Mocking framework
+- **FluentAssertions** - Better assertion syntax
+
+**Example setup:**
+```xml
+<PackageReference Include="xunit" Version="2.4.2" />
+<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+```
+
+---
+*Generated on 2025-08-27T18:44:31.929Z*
