@@ -1,15 +1,6 @@
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  ResolveEnd,
-  ResolveStart,
-  Router,
-  RouterEvent,
-} from '@angular/router';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { Router, RouterEvent, NavigationStart, ResolveStart, NavigationError, NavigationEnd, ResolveEnd, NavigationCancel } from '@angular/router';
 import { Subject } from 'rxjs';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { take } from 'rxjs/operators';
 import { NavigationEventKey, RouterEvents } from '../services/router-events.service';
 
@@ -56,7 +47,7 @@ describe('RouterEvents', () => {
         const stream = service.getNavigationEvents(...filtered);
         const collected: number[] = [];
 
-        stream.pipe(take(2)).subscribe(event => collected.push(event.id));
+        stream.pipe(take(2)).subscribe((event: any) => collected.push(event.id));
 
         emitRouterEvents();
 
@@ -70,7 +61,7 @@ describe('RouterEvents', () => {
       const stream = service.getAllNavigationEvents();
       const collected: number[] = [];
 
-      stream.pipe(take(4)).subscribe(event => collected.push(event.id));
+      stream.pipe(take(4)).subscribe((event: any) => collected.push(event.id));
 
       emitRouterEvents();
 
@@ -83,7 +74,7 @@ describe('RouterEvents', () => {
       const stream = service.getEvents(ResolveEnd, ResolveStart);
       const collected: number[] = [];
 
-      stream.pipe(take(2)).subscribe(event => collected.push(event.id));
+      stream.pipe(take(2)).subscribe((event: any) => collected.push(event.id));
 
       emitRouterEvents();
 
@@ -96,7 +87,7 @@ describe('RouterEvents', () => {
       const stream = service.getAllEvents();
       const collected: number[] = [];
 
-      stream.pipe(take(8)).subscribe((event: RouterEvent) => collected.push(event.id));
+      stream.pipe(take(8)).subscribe((event: any) => collected.push(event.id));
 
       emitRouterEvents();
 

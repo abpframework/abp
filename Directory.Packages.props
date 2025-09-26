@@ -66,8 +66,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0-rc.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.0-rc.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.0-rc.*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.110" />
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.110" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.0-rc.*" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.0-rc.*" />
     <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="10.0.0-rc.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.0-rc.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.0-rc.*" />

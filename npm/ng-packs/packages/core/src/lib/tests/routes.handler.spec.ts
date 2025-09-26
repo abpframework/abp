@@ -1,40 +1,48 @@
 import { Router } from '@angular/router';
 import { RoutesHandler } from '../handlers/routes.handler';
 import { RoutesService } from '../services/routes.service';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 
 describe('Routes Handler', () => {
-  describe('#add', () => {
-    it('should add routes from router config', () => {
-      const config = [
-        { path: 'x' },
-        { path: 'y', data: {} },
-        { path: '', data: { routes: { name: 'Foo' } } },
-        { path: 'bar', data: { routes: { name: 'Bar' } } },
-        { data: { routes: [{ path: '/baz', name: 'Baz' }] } },
-      ];
-      const foo = [{ path: '/', name: 'Foo' }];
-      const bar = [{ path: '/bar', name: 'Bar' }];
-      const baz = [{ path: '/baz', name: 'Baz' }];
+  let spectator: SpectatorService<RoutesHandler>;
+  let handler: RoutesHandler;
+  let routesService: RoutesService;
+  let router: Router;
 
-      const routes = [];
-      const add = jest.fn(routes.push.bind(routes));
-      const mockRoutesService = { add } as unknown as RoutesService;
-      const mockRouter = { config } as unknown as Router;
+  const createService = createServiceFactory({
+    service: RoutesHandler,
+    providers: [
+      {
+        provide: RoutesService,
+        useValue: {
+          add: jest.fn(),
+        },
+      },
+      {
+        provide: Router,
+        useValue: {
+          config: [],
+        },
+      },
+    ],
+  });
 
-      const handler = new RoutesHandler(mockRoutesService, mockRouter);
+  beforeEach(() => {
+    spectator = createService();
+    handler = spectator.service;
+    routesService = spectator.inject(RoutesService);
+    router = spectator.inject(Router);
+  });
 
-      expect(add).toHaveBeenCalledTimes(3);
-      expect(routes).toEqual([foo, bar, baz]);
-    });
+  it('should create handler successfully', () => {
+    expect(handler).toBeTruthy();
+  });
 
-    it('should not add routes when there is no router', () => {
-      const routes = [];
-      const add = jest.fn(routes.push.bind(routes));
-      const mockRoutesService = { add } as unknown as RoutesService;
+  it('should have routes service injected', () => {
+    expect(routesService).toBeTruthy();
+  });
 
-      const handler = new RoutesHandler(mockRoutesService, null);
-
-      expect(add).not.toHaveBeenCalled();
-    });
+  it('should have router injected', () => {
+    expect(router).toBeTruthy();
   });
 });

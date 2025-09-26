@@ -16,7 +16,7 @@ public abstract class DictionaryBasedFileProvider : IFileProvider
             return new NotFoundFileInfo(subpath!);
         }
 
-        var file = Files.GetOrDefault(NormalizePath(subpath));
+        var file = Files.GetOrDefault(NormalizePath(subpath)) ?? Files.GetOrDefault(subpath);
 
         if (file == null)
         {

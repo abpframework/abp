@@ -4,7 +4,6 @@ import {
   CardBodyComponent,
   CardFooterComponent,
   CardHeaderComponent,
-  CardHeaderDirective,
   CardTitleDirective,
   CardImgTopDirective,
   CardSubtitleDirective,

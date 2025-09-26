@@ -9,7 +9,8 @@ import {
   RouterStateSnapshot,
   provideRouter,
 } from '@angular/router';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -64,8 +65,9 @@ describe('authGuard', () => {
     oAuthService = createSpyObject(OAuthService);
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: AuthService, useValue: authService },
         { provide: OAuthService, useValue: oAuthService },
         provideRouter(routes),

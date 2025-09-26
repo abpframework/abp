@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
 
@@ -129,10 +130,35 @@ public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
             return resourceName;
         }
 
-        var folder = pathParts.Take(pathParts.Length - 2).JoinAsString("/");
-        var fileName = pathParts[pathParts.Length - 2] + "." + pathParts[pathParts.Length - 1];
+        if (pathParts.Length >= 4 && (pathParts[pathParts.Length - 2] == "min" || pathParts[pathParts.Length - 2] == "rtl"))
+        {
+            // Fix NET 10 RC 1 Microsoft.Extensions.FileProviders.Embedded issue temporarily
+            //https://github.com/dotnet/aspnetcore/issues/63719
+            pathParts = pathParts[pathParts.Length - 3] == "bundle"
+                ? pathParts.Take(pathParts.Length - 4).Concat([pathParts.Skip(pathParts.Length - 4).JoinAsString(".")]).ToArray()
+                : pathParts.Take(pathParts.Length - 3).Concat([pathParts.Skip(pathParts.Length - 3).JoinAsString(".")]).ToArray();
 
-        return folder + "/" + fileName;
+            if (pathParts.Length <= 2)
+            {
+                return resourceName;
+            }
+
+            var folder = pathParts.Take(pathParts.Length - 1).JoinAsString("/").Replace("_", "-");
+            var fileName = pathParts[pathParts.Length - 1].Replace("_", "-");
+            return folder + "/" + fileName;
+        }
+        else
+        {
+            if (pathParts.Length <= 2)
+            {
+                return resourceName;
+            }
+
+            var folder = pathParts.Take(pathParts.Length - 2).JoinAsString("/");
+            var fileName = pathParts[pathParts.Length - 2] + "." + pathParts[pathParts.Length - 1];
+
+            return folder + "/" + fileName;
+        }
     }
 
     private static string CalculateFileName(string filePath)
