@@ -14,6 +14,7 @@ import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 import { EnvironmentService } from '../services';
 import { NgComponentOutlet } from '@angular/common';
 import { filter, take } from 'rxjs';
+import { DEFAULT_LAYOUT } from '../tokens';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -39,6 +40,7 @@ export class DynamicLayoutComponent {
   protected readonly subscription = inject(SubscriptionService);
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly environment = inject(EnvironmentService);
+  protected readonly defaultLayout = inject(DEFAULT_LAYOUT, { optional: true });
 
   constructor() {
     const dynamicLayoutComponent = inject(DynamicLayoutComponent, { optional: true, skipSelf: true });
@@ -89,7 +91,7 @@ export class DynamicLayoutComponent {
         break;
       }
     }
-    return expectedLayout;
+    return expectedLayout ?? this.defaultLayout;
   }
 
   showLayoutNotFoundError(layoutName: string) {
