@@ -18,4 +18,3 @@ export * from './compare-func.token';
 export * from './dynamic-layout.token';
 export * from './title-strategy-disable-project-name.token';
 export * from './ssr-state.token';
-export * from './default-layout.token';

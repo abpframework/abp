@@ -1,4 +1,4 @@
-import { Component, inject, isDevMode, Type } from '@angular/core';
+import { Component, inject, input, isDevMode, Type } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -14,7 +14,6 @@ import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 import { EnvironmentService } from '../services';
 import { NgComponentOutlet } from '@angular/common';
 import { filter, take } from 'rxjs';
-import { DEFAULT_LAYOUT } from '../tokens';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -40,10 +39,13 @@ export class DynamicLayoutComponent {
   protected readonly subscription = inject(SubscriptionService);
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly environment = inject(EnvironmentService);
-  protected readonly defaultLayout = inject(DEFAULT_LAYOUT, { optional: true });
+  readonly defaultLayout = input<eLayoutType>(undefined);
 
   constructor() {
-    const dynamicLayoutComponent = inject(DynamicLayoutComponent, { optional: true, skipSelf: true });
+    const dynamicLayoutComponent = inject(DynamicLayoutComponent, {
+      optional: true,
+      skipSelf: true,
+    });
 
     if (dynamicLayoutComponent) {
       if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
@@ -91,7 +93,7 @@ export class DynamicLayoutComponent {
         break;
       }
     }
-    return expectedLayout ?? this.defaultLayout;
+    return expectedLayout ?? this.defaultLayout();
   }
 
   showLayoutNotFoundError(layoutName: string) {
