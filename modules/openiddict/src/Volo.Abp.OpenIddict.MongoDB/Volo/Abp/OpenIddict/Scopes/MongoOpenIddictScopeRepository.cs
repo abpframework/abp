@@ -54,7 +54,7 @@ public class MongoOpenIddictScopeRepository : MongoDbRepository<OpenIddictMongoD
     public virtual async Task<List<OpenIddictScope>> FindByNamesAsync(string[] names, CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
-            .Where(x => names.Contains(x.Name))
+            .Where(x => names.AsEnumerable().Contains(x.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

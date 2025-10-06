@@ -204,8 +204,8 @@ DbMigrator is a console application that is used to migrate the database of your
 `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "BookStore.DbMigrator.dll"]
 ```
@@ -273,8 +273,8 @@ The `appsettings.json` file does not contain `AuthServer:IsOnK8s` and `AuthServe
 `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Acme.BookStore.Web.dll"]
 ```
@@ -289,8 +289,8 @@ docker build -f Dockerfile.local -t acme/bookstore-web:latest . #Builds the imag
 ​	{{ end }}	{{ if Tiered == "No" }}MVC/Razor Pages application is a server-side rendering application that contains both the OpenID-provider and the Http.Api endpoints within self; it will be a single application to deploy. `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -397,8 +397,8 @@ The `appsettings.json` file does not contain `AuthServer:IsOnK8s` and `AuthServe
 `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Acme.BookStore.Blazor.dll"]
 ```
@@ -413,8 +413,8 @@ docker build -f Dockerfile.local -t acme/bookstore-blazor:latest . #Builds the i
 ​	{{ end }}	{{ if Tiered == "No" }}Blazor Server application is a server-side rendering application that contains both the OpenID-provider and the Http.Api endpoints within self; it will be a single application to deploy. `Dockerfile.local` is provided under this project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -607,8 +607,8 @@ docker build -f Dockerfile.local -t acme/bookstore-angular:latest . #Builds the 
 The Blazor application uses [nginx:alpine-slim](https://hub.docker.com/layers/library/nginx/alpine-slim/images/sha256-0f859db466fda2c52f62b48d0602fb26867d98edbd62c26ae21414b3dea8d8f4?context=explore) base image to host the blazor application. You can modify the base image based on your preference in the `Dockerfile.local` which provided under the Blazor folder of your solution as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS build
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS build
+COPY bin/Release/net10.0/publish/ app/
   
 FROM nginx:alpine-slim AS final
 WORKDIR /usr/share/nginx/html
@@ -663,8 +663,8 @@ docker build -f Dockerfile.local -t acme/bookstore-blazor:latest . #Builds the i
 This is the backend application that contains the openid-provider functionality as well. The `dockerfile.local` is located under the `Http.Api.Host` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -720,8 +720,8 @@ docker build -f Dockerfile.local -t acme/bookstore-api:latest . #Builds the imag
 This is the backend application that contains the OpenID-provider functionality as well. The `dockerfile.local` is located under the `Http.Api.Host` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -779,8 +779,8 @@ docker build -f Dockerfile.local -t acme/bookstore-api:latest . #Builds the imag
 This is the openid-provider application, the authentication server, which should be individually hosted compared to non-tiered application templates. The `dockerfile.local` is located under the `AuthServer` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -832,8 +832,8 @@ docker build -f Dockerfile.local -t acme/bookstore-authserver:latest . #Builds t
 This is the backend application that exposes the endpoints and swagger UI. It is not a multi-stage dockerfile; hence you need to have already built this application in **Release mode** to use this dockerfile. The `dockerfile.local` is located under the `Http.Api.Host` project as below;
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-COPY bin/Release/net9.0/publish/ app/
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+COPY bin/Release/net10.0/publish/ app/
 WORKDIR /app
 ENTRYPOINT ["dotnet", "Acme.BookStore.HttpApi.Host.dll"]
 ```

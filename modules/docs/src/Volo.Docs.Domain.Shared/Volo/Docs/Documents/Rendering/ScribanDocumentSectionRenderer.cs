@@ -213,12 +213,15 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
                     documentContent.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
                 );
 
-                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal)
-                );
+                var closerIndex = afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal);
+                if(closerIndex < 0)
+                {
+                    break;
+                }
+                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0, closerIndex);
 
                 documentContent = afterJsonOpener.Substring(
-                    afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal) + Closer.Length
+                    closerIndex + Closer.Length
                 );
 
                 if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
@@ -257,9 +260,12 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
                     document.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
                 );
 
-                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal)
-                );
+                var closerIndex = afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal);
+                if (closerIndex < 0)
+                {
+                    break;
+                }
+                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0, closerIndex);
 
                 if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
                 {

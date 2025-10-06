@@ -93,6 +93,8 @@ $solutions = (
 $projects = (
 
     # framework
+    "framework/src/Volo.Abp.AI.Abstractions",
+    "framework/src/Volo.Abp.AI",
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
     "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
@@ -158,6 +160,7 @@ $projects = (
     "framework/src/Volo.Abp.BlobStoring.Aws",
     "framework/src/Volo.Abp.BlobStoring.Google",
     "framework/src/Volo.Abp.BlobStoring.Bunny",
+    "framework/src/Volo.Abp.BlobStoring.Memory",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Caching.StackExchangeRedis",
     "framework/src/Volo.Abp.Castle.Core",

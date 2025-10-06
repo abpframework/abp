@@ -31,7 +31,11 @@ namespace Volo.Blogging
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(BloggingResource), typeof(BloggingWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(BloggingResource), 
+                    typeof(BloggingWebModule).Assembly, 
+                    typeof(BloggingApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>

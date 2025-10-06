@@ -12,6 +12,7 @@
 import { ListService } from '@abp/ng.core';
 import { BookDto } from '../models';
 import { BookService } from '../services';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
@@ -32,10 +33,10 @@ class BookComponent {
   items: BookDto[] = [];
   count = 0;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-  ) {
+  public readonly list = inject(ListService);
+  private bookService = inject(BookService);
+
+  constructor() {
     // change ListService defaults here
     this.list.maxResultCount = 20;
   }
@@ -78,7 +79,7 @@ You can extend the query parameter of the `ListService`'s `hookToQuery` method.
 Firstly, you should pass your own type to `ListService` as shown below:
 
 ```typescript
-constructor(public readonly list: ListService<BooksSearchParamsDto>) { }
+public readonly list = inject(ListService<BooksSearchParamsDto>);
 ```
 
 Then update the `bookStreamCreator` constant like following:

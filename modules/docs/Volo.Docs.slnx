@@ -1,0 +1,43 @@
+<Solution>
+  <Folder Name="/app/">
+    <Project Path="app/VoloDocs.EntityFrameworkCore/VoloDocs.EntityFrameworkCore.csproj" />
+    <Project Path="app/VoloDocs.Migrator/VoloDocs.Migrator.csproj" />
+    <Project Path="app/VoloDocs.Web/VoloDocs.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/admin-app/">
+    <Project Path="src/Volo.Docs.Admin.Application.Contracts/Volo.Docs.Admin.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Docs.Admin.Application/Volo.Docs.Admin.Application.csproj" />
+    <Project Path="src/Volo.Docs.Admin.HttpApi.Client/Volo.Docs.Admin.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Docs.Admin.HttpApi/Volo.Docs.Admin.HttpApi.csproj" />
+    <Project Path="src/Volo.Docs.Admin.Web/Volo.Docs.Admin.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/common/">
+    <Project Path="src/Volo.Docs.Common.Application.Contracts/Volo.Docs.Common.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Docs.Common.Application/Volo.Docs.Common.Application.csproj" />
+    <Project Path="src/Volo.Docs.Common.HttpApi.Client/Volo.Docs.Common.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Docs.Common.HttpApi/Volo.Docs.Common.HttpApi.csproj" />
+  </Folder>
+  <Folder Name="/src/domain/">
+    <Project Path="src/Volo.Docs.Domain.Shared/Volo.Docs.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Docs.Domain/Volo.Docs.Domain.csproj" />
+    <Project Path="src/Volo.Docs.EntityFrameworkCore/Volo.Docs.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Docs.Installer/Volo.Docs.Installer.csproj" />
+    <Project Path="src/Volo.Docs.MongoDB/Volo.Docs.MongoDB.csproj" />
+  </Folder>
+  <Folder Name="/src/public-app/">
+    <Project Path="src/Volo.Docs.Application.Contracts/Volo.Docs.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Docs.Application/Volo.Docs.Application.csproj" />
+    <Project Path="src/Volo.Docs.HttpApi.Client/Volo.Docs.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Docs.HttpApi/Volo.Docs.HttpApi.csproj" />
+    <Project Path="src/Volo.Docs.Web/Volo.Docs.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Docs.Admin.Application.Tests/Volo.Docs.Admin.Application.Tests.csproj" />
+    <Project Path="test/Volo.Docs.Application.Tests/Volo.Docs.Application.Tests.csproj" />
+    <Project Path="test/Volo.Docs.Domain.Tests/Volo.Docs.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Docs.EntityFrameworkCore.Tests/Volo.Docs.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Docs.MongoDB.Tests/Volo.Docs.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Docs.TestBase/Volo.Docs.TestBase.csproj" />
+  </Folder>
+</Solution>

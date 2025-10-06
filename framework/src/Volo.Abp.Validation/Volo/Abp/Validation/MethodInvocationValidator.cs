@@ -91,7 +91,7 @@ public class MethodInvocationValidator : IMethodInvocationValidator, ITransientD
         }
     }
 
-    protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
+    protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object? parameterValue)
     {
         var allowNulls = parameterInfo.IsOptional ||
                          parameterInfo.IsOut ||

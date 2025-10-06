@@ -60,7 +60,39 @@ export const appConfig: ApplicationConfig = {
 
 ```
 
-To change the logos and brand color of `LeptonX`, simply add the following CSS to the `styles.scss`
+To change the logos and brand color of `LeptonX`, you have two options:
+
+1) Provide logo and application name via the Theme Shared provider (recommended)
+
+```ts
+// app.config.ts
+import { provideLogo, withEnvironmentOptions } from '@abp/ng.theme.shared';
+import { environment } from './environments/environment';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideLogo(withEnvironmentOptions(environment)),
+  ],
+};
+```
+
+Ensure your environment contains the logo url and app name:
+
+```ts
+// environment.ts
+export const environment = {
+  // ...
+  application: {
+    name: 'MyProjectName',
+    logoUrl: '/assets/images/logo.png',
+  },
+};
+```
+
+The LeptonX brand component reads these values automatically from `@abp/ng.theme.shared`.
+
+2) Or override via CSS variables in `styles.scss`
 
 ```css
 :root {
@@ -73,6 +105,8 @@ To change the logos and brand color of `LeptonX`, simply add the following CSS t
 - `--lpx-logo` is used to place the logo in the menu.
 - `--lpx-logo-icon` is a square icon used when the menu is collapsed.
 - `--lpx-brand` is a color used throughout the application, especially on active elements.
+
+Tip: You can combine both approaches. For example, provide the main logo via `provideLogo(...)` and still fine-tune visuals (sizes, colors) with CSS.
 
 ### Server Side
 
@@ -97,15 +131,16 @@ The **Layout components** and all the replacable components are predefined in `e
 ```js
 import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
-import { eThemeLeptonXComponents } from '@abp/ng.theme.lepton-x';   // imported eThemeLeptonXComponents enum
+import { eThemeLeptonXComponents } from '@abp/ng.theme.lepton-x'; // imported eThemeLeptonXComponents enum
+import { Component, inject } from '@angular/core';
 
 //...
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(
-    private replaceableComponents: ReplaceableComponentsService, // injected the service
-  ) {
+  private replaceableComponents = inject(ReplaceableComponentsService);
+
+  constructor() {
     this.replaceableComponents.add({
       component: YourNewApplicationLayoutComponent,
       key: eThemeLeptonXComponents.ApplicationLayout,

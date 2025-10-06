@@ -30,7 +30,11 @@ public class AbpIdentityWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(IdentityResource), typeof(AbpIdentityWebModule).Assembly);
+            options.AddAssemblyResource(
+                typeof(IdentityResource), 
+                typeof(AbpIdentityWebModule).Assembly, 
+                typeof(AbpIdentityApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>

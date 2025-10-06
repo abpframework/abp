@@ -8,12 +8,13 @@ In order to use the `ConfigStateService` you must inject it in your class as a d
 
 ```js
 import { ConfigStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-   private config = inject(ConfigStateService);
+  private config = inject(ConfigStateService);
 }
 ```
 
@@ -126,9 +127,11 @@ You can get the application configuration response and set the `ConfigStateServi
 
 ```js
 import { AbpApplicationConfigurationService, ConfigStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 private abpApplicationConfigurationService = inject(AbpApplicationConfigurationService);
 private config = inject(ConfigStateService);
+
 
 constructor() {
   this.abpApplicationConfigurationService.get({ includeLocalizationResources: false }).subscribe(config => {

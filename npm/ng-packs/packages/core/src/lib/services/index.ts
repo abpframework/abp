@@ -2,6 +2,7 @@ export * from './config-state.service';
 export * from './content-projection.service';
 export * from './dom-insertion.service';
 export * from './environment.service';
+export * from './html-encoding.service';
 export * from './http-error-reporter.service';
 export * from './http-wait.service';
 export * from './lazy-load.service';

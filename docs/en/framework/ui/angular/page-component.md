@@ -175,7 +175,7 @@ export class MyPageRenderStrategy implements PageRenderStrategy {
    * shouldRender can also return an Observable<boolean> which means
    * an async service can be used within.
 
-  constructor(private service: SomeAsyncService) {}
+  service = inject(SomeAsyncService)
 
   shouldRender(type: string) {
     return this.service.checkTypeAsync(type).pipe(map(val => val.isTrue()));

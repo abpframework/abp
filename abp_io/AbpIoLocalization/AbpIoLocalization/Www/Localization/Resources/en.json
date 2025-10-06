@@ -1464,6 +1464,7 @@
     "BlazoriseSupportExplanation3": "Log into the Blazorise support website at <a href=\"https://blazorise.com/support/login\">blazorise.com/support/login</a>.",
     "BlazoriseSupportExplanation4": "If you have an active ABP Commercial License, you will also have a Blazorise PRO license. You can get your Blazorise license key at <a href=\"https://blazorise.com/support/user/manage/license\">blazorise.com/support/user/manage/license</a>.",
     "BlazoriseSupportExplanation5": "You can post your questions on the support website and generate a product token for your application.",
+    "BlazoriseSupportMoreInfo": "For more information <a href=\"{0}\">click here</a>.",
     "AbpLiveTrainingPackages": "ABP Live Training Packages",
     "Releases": "Releases",
     "ReleasesDescription": "This page contains detailed information about each release. You can see all the closed pull requests for a specific release. For overall milestone developments, you can check out the <a href=\"https://abp.io/docs/latest/release-info/release-notes\">brief release notes page</a>.",
@@ -1911,6 +1912,7 @@
     "SupportCustomABPArchitecturesExplanation": "No. Support is only provided for standard ABP solution structures. On the other hand, you can always get support for your custom needs with a paid consultancy from the ABP Team.",
     "DoesABPCollectAnyPersonalOrTechnicalData": "Does ABP collect any personal or technical data?",
     "ABPCollectAnyDataExplanation": "The software may collect information about you and your use of the software, and send that to Volosoft. Volosoft as the software and service provider may use this information to provide services and improve its products & services. You may opt-out of these scenarios, as described in the <a href=\"{0}\">EULA</a> under PRIVACY AND COLLECTION OF PERSONAL DATA topic .",
-    "InThisDocument": "In this document"
+    "InThisDocument": "In this document",
+    "RecommendedArticles":  "Recommended Articles"
   }
 }

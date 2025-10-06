@@ -8,12 +8,13 @@ You do not have to provide the `ContentProjectionService` at module or component
 
 ```js
 import { ContentProjectionService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private contentProjectionService: ContentProjectionService) {}
+  private contentProjectionService = inject(ContentProjectionService);
 }
 ```
 

@@ -30,7 +30,11 @@ public class AbpTenantManagementWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AbpTenantManagementResource), typeof(AbpTenantManagementWebModule).Assembly);
+            options.AddAssemblyResource(
+                typeof(AbpTenantManagementResource), 
+                typeof(AbpTenantManagementWebModule).Assembly, 
+                typeof(AbpTenantManagementApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>

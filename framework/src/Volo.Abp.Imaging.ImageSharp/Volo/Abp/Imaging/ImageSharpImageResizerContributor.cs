@@ -55,7 +55,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     }
 
     public virtual async Task<ImageResizeResult<byte[]>> TryResizeAsync(
-        byte[] bytes, 
+        byte[] bytes,
         ImageResizeArgs resizeArgs,
         string? mimeType = null,
         CancellationToken cancellationToken = default)
@@ -107,15 +107,15 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     private static Size GetSize(ImageResizeArgs resizeArgs)
     {
         var size = new Size();
-        
+
         if (resizeArgs.Width > 0)
         {
-            size.Width = resizeArgs.Width;
+            size.Width = (int)resizeArgs.Width;
         }
 
         if (resizeArgs.Height > 0)
         {
-            size.Height = resizeArgs.Height;
+            size.Height = (int)resizeArgs.Height;
         }
 
         return size;

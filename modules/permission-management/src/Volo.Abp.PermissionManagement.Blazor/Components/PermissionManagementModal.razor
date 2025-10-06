@@ -30,10 +30,10 @@
                     </Field>
                 </Column>
             </Row>
-            
+
             <fieldset class="border rounded-4 p-3">
                 <legend class="px-1 h5 mb-0">@L["PermissionGroup"]</legend>
-                
+
                     @if (_groups != null && _groups.Any())
                     {
                         <div class="lpx-scroll-pills-container" >
@@ -85,7 +85,7 @@
                                                             Disabled="@(IsDisabledPermission(permission))"
                                                             Cursor="Cursor.Pointer"
                                                             Checked="@permission.IsGranted"
-                                                            CheckedChanged="@(b => PermissionChanged(b, group, permission))"
+                                                            CheckedChanged="@(async (b) => await PermissionChanged(b, group, permission))"
                                                             TValue="bool">
                                                             @GetShownName(permission)
                                                         </Check>
@@ -97,9 +97,9 @@
                                 </Content>
                             </Tabs>
                         </div>
-                       
+
                     }
-                
+
             </fieldset>
         </ModalBody>
         <ModalFooter>

@@ -9,14 +9,14 @@ The `ConfigStateService.getGlobalFeatures` API allows you to get the enabled fea
 ````js
 
 import { ConfigStateService } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent implements OnInit {
-  constructor(private config: ConfigStateService) {}
- 
+  private config = inject(ConfigStateService);
+
   ngOnInit(): void {
     // Gets all enabled global features.
     const getGlobalFeatures = this.config.getGlobalFeatures();
@@ -43,5 +43,4 @@ class DemoComponent implements OnInit {
     })
   }
 }
-
 

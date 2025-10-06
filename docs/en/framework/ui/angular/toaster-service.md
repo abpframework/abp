@@ -8,12 +8,13 @@ You do not have to provide the `ToasterService` at component level, because it i
 
 ```js
 import { ToasterService } from '@abp/ng.theme.shared';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private toaster: ToasterService) {}
+  private toaster = inject(ToasterService);
 }
 ```
 
@@ -36,22 +37,23 @@ Options can be passed as the third parameter to `success`, `warn`, `error`, and 
 
 ```js
 import { Toaster, ToasterService } from '@abp/ng.theme.shared';
-//...
+import { inject } from '@angular/core';
 
-constructor(private toaster: ToasterService) {}
+// inside the class
+private toaster = inject(ToasterService);
 
 //...
 const options: Partial<Toaster.ToastOptions> = {
-    life: 10000,
-    sticky: false,
-    closable: true,
-    tapToDismiss: true,
-    messageLocalizationParams: ['Demo', '1'],
-    titleLocalizationParams: [],
-    iconClass: 'custom-icon-name';
-  };
+  life: 10000,
+  sticky: false,
+  closable: true,
+  tapToDismiss: true,
+  messageLocalizationParams: ['Demo', '1'],
+  titleLocalizationParams: [],
+  iconClass: 'custom-icon-name'
+};
 
-  this.toaster.error('AbpUi::EntityNotFoundErrorMessage', 'AbpUi::Error', options);
+this.toaster.error('AbpUi::EntityNotFoundErrorMessage', 'AbpUi::Error', options);
 ```
 
 - `life` option is the closing time in milliseconds. Default value is `5000`.
@@ -93,15 +95,16 @@ If you want the ABP to utilize 3rd party libraries for the toasters instead of t
 
 ```js
 // your-custom-toaster.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Config, LocalizationService } from '@abp/ng.core';
 import { Toaster } from '@abp/ng.theme.shared';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class CustomToasterService implements Toaster.Service {
-  constructor(private toastr: ToastrService, private localizationService: LocalizationService) {}
-
+  private toastr = inject(ToastrService);
+  private localizationService = inject(LocalizationService)
+  
   error(
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,

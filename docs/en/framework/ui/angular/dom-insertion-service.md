@@ -8,12 +8,13 @@ You do not have to provide the `DomInsertionService` at module or component leve
 
 ```js
 import { DomInsertionService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private domInsertionService: DomInsertionService) {}
+  private domInsertionService = inject(DomInsertionService);
 }
 ```
 
@@ -27,12 +28,13 @@ The first parameter of `insertContent` method expects a `ContentStrategy`. If yo
 
 ```js
 import { DomInsertionService, CONTENT_STRATEGY } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private domInsertionService: DomInsertionService) {}
+  private domInsertionService = inject(DomInsertionService);
 
   ngOnInit() {
     const scriptElement = this.domInsertionService.insertContent(
@@ -54,12 +56,13 @@ If you pass a `StyleContentStrategy` instance as the first parameter of `insertC
 
 ```js
 import { DomInsertionService, CONTENT_STRATEGY } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private domInsertionService: DomInsertionService) {}
+  private domInsertionService = inject(DomInsertionService);
 
   ngOnInit() {
     const styleElement = this.domInsertionService.insertContent(
@@ -81,14 +84,14 @@ If you pass the inserted `HTMLScriptElement` or `HTMLStyleElement` element as th
 
 ```js
 import { DomInsertionService, CONTENT_STRATEGY } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
+  private domInsertionService = inject(DomInsertionService);
   private styleElement: HTMLStyleElement;
-
-  constructor(private domInsertionService: DomInsertionService) {}
 
   ngOnInit() {
     this.styleElement = this.domInsertionService.insertContent(

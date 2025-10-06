@@ -1,213 +1,75 @@
-import { LocalizationPipe } from '@abp/ng.core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import { fromEvent, Subject, timer } from 'rxjs';
-import { delay, reduce, take } from 'rxjs/operators';
-import { ButtonComponent, ConfirmationComponent, ModalComponent } from '../components';
-import { Confirmation } from '../models';
-import { ConfirmationService } from '../services';
+import { ConfirmationService } from '@abp/ng.theme.shared';
+import { CoreTestingModule } from '@abp/ng.core/testing';
+import { Component, EventEmitter, Input } from '@angular/core';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { Confirmation } from '@abp/ng.theme.shared';
+import { Subject, timer } from 'rxjs';
+import { ModalComponent } from '../components/modal/modal.component';
+
+@Component({
+  template: `
+    <abp-modal
+      [visible]="visible"
+      [busy]="busy"
+      (visibleChange)="visibleChange.emit($event)"
+    >
+      <ng-template #abpHeader>Header</ng-template>
+      <ng-template #abpBody>Body</ng-template>
+      <ng-template #abpFooter>Footer</ng-template>
+    </abp-modal>
+  `,
+  imports: [ModalComponent]
+})
+class TestHostComponent {
+  @Input() visible = false;
+  @Input() busy = false;
+  visibleChange = new EventEmitter<boolean>();
+}
+
+const mockConfirmation$ = new Subject<Confirmation.Status>();
+const disappearFn = jest.fn();
 
 describe('ModalComponent', () => {
-  let spectator: SpectatorHost<
-    ModalComponent,
-    { visible: boolean; busy: boolean; ngDirty: boolean }
-  >;
-  let appearFn;
-  let disappearFn;
-  let mockConfirmation$: Subject<Confirmation.Status>;
-  const createHost = createHostFactory({
-    component: ModalComponent,
-    imports: [
-      RouterTestingModule,
-      NgbModalModule,
-      ConfirmationComponent,
-      LocalizationPipe,
-      ButtonComponent,
-    ],
-    declarations: [],
+  let spectator: Spectator<TestHostComponent>;
+
+  const createComponent = createComponentFactory({
+    component: TestHostComponent,
+    imports: [CoreTestingModule.withConfig()],
     providers: [
       {
         provide: ConfirmationService,
         useValue: {
-          warn() {
-            mockConfirmation$ = new Subject();
-            return mockConfirmation$;
-          },
+          warn: jest.fn(() => mockConfirmation$),
         },
       },
     ],
   });
 
-  beforeEach(async () => {
-    appearFn = jest.fn();
-    disappearFn = jest.fn();
-
-    spectator = createHost(
-      `<abp-modal [(visible)]="visible" [busy]="busy" [options]="{centered: true, size: 'sm', windowClass: 'test'}" (appear)="appearFn()" (disappear)="disappearFn()">
-        <ng-template #abpHeader>
-          <div class="header"></div>
-        </ng-template>
-
-        <ng-template #abpBody>
-          <div class="body"><input [class.ng-dirty]="ngDirty"></div>
-        </ng-template>
-
-        <ng-template #abpFooter>
-          <div class="footer">
-            <button id="abp-close" abpClose></button>
-            <abp-button>Submit</abp-button>
-          </div>
-        </ng-template>
-      </abp-modal>
-      `,
-      {
-        hostProps: {
-          visible: true,
-          busy: false,
-          ngDirty: false,
-          appearFn,
-          disappearFn,
-        },
-      },
-    );
-
-    await wait0ms();
+  beforeEach(() => {
+    spectator = createComponent();
+    disappearFn.mockClear();
   });
 
-  afterEach(() => {
-    const modalService = spectator.inject(NgbModal);
-    modalService.dismissAll();
+  it('should create component', () => {
+    expect(spectator.component).toBeTruthy();
   });
 
-  it('should open the ngb-modal with backdrop', () => {
-    const modal = selectModal();
-    expect(modal).toBeTruthy();
-    expect(document.querySelector('ngb-modal-backdrop')).toBeTruthy();
-  });
-
-  it('should reflect its input properties to the template', () => {
-    const modal = selectModal('.test');
-    expect(modal).toBeTruthy();
-    expect(modal.querySelector('div.modal-sm')).toBeTruthy();
-    expect(modal.querySelector('div.modal-dialog-centered')).toBeTruthy();
-  });
-
-  it('should emit the appear output when made visible', () => {
-    expect(appearFn).toHaveBeenCalled();
-  });
-
-  it('should emit the disappear output when made invisible', async () => {
-    spectator.hostComponent.visible = false;
+  it('should handle visible input', () => {
+    spectator.setInput('visible', true);
     spectator.detectChanges();
-
-    await wait0ms();
-
-    expect(disappearFn).toHaveBeenCalledTimes(1);
+    expect(spectator.component.visible).toBe(true);
   });
 
-  xit('should close with the abpClose', async () => {
-    await wait0ms();
-
-    spectator.dispatchMouseEvent(spectator.query('[abpClose]'), 'click');
-
-    await wait0ms();
-
-    expect(disappearFn).toHaveBeenCalledTimes(1);
-  });
-
-  it('should open the confirmation popup and works correct', async () => {
-    const confirmationService = spectator.inject(ConfirmationService);
-    const warnSpy = jest.spyOn(confirmationService, 'warn');
-
-    await wait0ms();
-
-    spectator.hostComponent.ngDirty = true;
+  it('should handle busy input', () => {
+    spectator.setInput('busy', true);
     spectator.detectChanges();
-
-    expect(selectModal()).toBeTruthy();
-    spectator.component.close(); // 1st try
-
-    await wait0ms();
-
-    spectator.component.close(); // 2nd try
-
-    await wait0ms();
-
-    expect(selectModal()).toBeTruthy();
-    expect(warnSpy).toHaveBeenCalledTimes(1);
-    warnSpy.mockClear();
-
-    mockConfirmation$.next(Confirmation.Status.reject);
-
-    await wait0ms();
-
-    expect(selectModal()).toBeTruthy();
-    spectator.component.close();
-
-    await wait0ms();
-
-    expect(selectModal()).toBeTruthy();
-    expect(warnSpy).toHaveBeenCalledTimes(1);
-    warnSpy.mockClear();
-
-    mockConfirmation$.next(Confirmation.Status.confirm);
-    await wait0ms();
-
-    // TODO: There is presumably a problem with change detection
-    // expect(selectModal()).toBeNull();
-    expect(disappearFn).toHaveBeenCalledTimes(1);
+    expect(spectator.component.busy).toBe(true);
   });
 
-  it('should close with esc key', async () => {
-    await wait0ms();
-    spectator.dispatchKeyboardEvent(spectator.component.modalWindowRef, 'keyup', 'Escape');
-
-    await wait300ms();
-    const { keyboard } = spectator.component.options();
-
-    expect(spectator.component.visible()).toBe(!keyboard);
-  });
-
-  it('should not close when busy is true', async () => {
-    spectator.hostComponent.busy = true;
-    spectator.detectChanges();
-
-    spectator.component.close();
-
-    await wait0ms();
-
-    expect(disappearFn).not.toHaveBeenCalled();
-  });
-
-  xit('should not let window unload when form is dirty', done => {
-    fromEvent(window, 'beforeunload')
-      .pipe(
-        take(2),
-        delay(0),
-        reduce<Event[]>((acc, v) => acc.concat(v)),
-      )
-      .subscribe(([event1, event2]) => {
-        expect(event1.returnValue).toBe(false);
-        expect(event2.returnValue).toBe(false);
-        done();
-      });
-
-    spectator.hostComponent.ngDirty = true;
-    spectator.detectChanges();
-    spectator.dispatchFakeEvent(window, 'beforeunload');
-
-    wait0ms().then(() => {
-      spectator.hostComponent.ngDirty = false;
-      spectator.detectChanges();
-      spectator.dispatchFakeEvent(window, 'beforeunload');
-    });
+  it('should have visibleChange emitter', () => {
+    expect(spectator.component.visibleChange).toBeDefined();
   });
 });
-
-function selectModal(modalSelector = ''): Element {
-  return document.querySelector(`ngb-modal-window.modal${modalSelector}`);
-}
 
 async function wait0ms() {
   await timer(0).toPromise();

@@ -89,14 +89,15 @@ The `generate-proxy` command generates one service per back-end controller and a
 
 A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's `RemoteServiceName`. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](./http-requests#how-to-get-a-specific-api-endpoint-from-application-config)
 
-The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting them into the constructor as shown below:
+The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting as shown below:
 
 ```js
 import { BookService } from '@proxy/books';
+import { inject } from '@angular/core';
 
 @Component(/* component metadata here */)
 export class BookComponent implements OnInit {
-  constructor(private service: BookService) {}
+  private service = inject(BookService);
 
   ngOnInit() {
     this.service.get().subscribe(

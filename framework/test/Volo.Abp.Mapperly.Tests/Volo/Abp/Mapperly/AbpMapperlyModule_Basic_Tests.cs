@@ -106,14 +106,27 @@ public class AbpMapperlyModule_Basic_Tests : AbpIntegratedTest<MapperlyTestModul
     public void Should_Throw_Exception_If_Mapper_Is_Not_Found()
     {
         var exception = Assert.Throws<AbpException>(() =>_objectMapper.Map<MyEntity, MyClassDto>(new MyEntity()));
-        exception.Message.ShouldBe("No object mapping was found for the specified source and destination types.\n\n" +
-                                   "Mapping attempted:\n" +
-                                   "MyEntity -> MyClassDto\n" +
-                                   "Volo.Abp.Mapperly.SampleClasses.MyEntity -> Volo.Abp.Mapperly.MyClassDto\n\n" +
-                                   "How to fix:\n" +
-                                   "Define a mapping class for these types:" + "\n" +
-                                   "   - Use MapperBase<TSource, TDestination> for one-way mapping.\n" +
-                                   "   - Use TwoWayMapperBase<TDestination, TSource> for two-way mapping.\n\n" +
-                                   "For details, see the Mapperly integration document https://abp.io/docs/latest/framework/infrastructure/object-to-object-mapping#mapperly-integration");
+        var newLine = Environment.NewLine;
+        var message = "No object mapping was found for the specified source and destination types." +
+                      newLine +
+                      newLine +
+                      "Mapping attempted:" +
+                      newLine +
+                      $"{typeof(MyEntity).Name} -> {typeof(MyClassDto).Name}" +
+                      newLine +
+                      $"{typeof(MyEntity).FullName} -> {typeof(MyClassDto).FullName}" +
+                      newLine +
+                      newLine +
+                      "How to fix:" +
+                      newLine +
+                      "Define a mapping class for these types:" +
+                      newLine +
+                      "   - Use MapperBase<TSource, TDestination> for one-way mapping." +
+                      newLine +
+                      "   - Use TwoWayMapperBase<TDestination, TSource> for two-way mapping." +
+                      newLine +
+                      newLine +
+                      "For details, see the Mapperly integration document https://abp.io/docs/latest/framework/infrastructure/object-to-object-mapping#mapperly-integration";
+        exception.Message.ShouldBe(message);
     }
 }

@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/app/">
+    <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.HangFire/Volo.Abp.BackgroundJobs.DemoApp.HangFire.csproj" />
+    <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.Quartz/Volo.Abp.BackgroundJobs.DemoApp.Quartz.csproj" />
+    <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.RabbitMq/Volo.Abp.BackgroundJobs.DemoApp.RabbitMq.csproj" />
+    <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.Shared/Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj" />
+    <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp/Volo.Abp.BackgroundJobs.DemoApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.BackgroundJobs.Domain.Shared/Volo.Abp.BackgroundJobs.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.BackgroundJobs.Domain/Volo.Abp.BackgroundJobs.Domain.csproj" />
+    <Project Path="src/Volo.Abp.BackgroundJobs.EntityFrameworkCore/Volo.Abp.BackgroundJobs.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.BackgroundJobs.Installer/Volo.Abp.BackgroundJobs.Installer.csproj" />
+    <Project Path="src/Volo.Abp.BackgroundJobs.MongoDB/Volo.Abp.BackgroundJobs.MongoDB.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.BackgroundJobs.Domain.Tests/Volo.Abp.BackgroundJobs.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests/Volo.Abp.BackgroundJobs.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.BackgroundJobs.MongoDB.Tests/Volo.Abp.BackgroundJobs.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.BackgroundJobs.TestBase/Volo.Abp.BackgroundJobs.TestBase.csproj" />
+  </Folder>
+</Solution>

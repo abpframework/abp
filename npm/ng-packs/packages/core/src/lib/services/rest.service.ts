@@ -38,13 +38,14 @@ export class RestService {
     config = config || ({} as Rest.Config);
     api = api || this.getApiFromStore(config.apiName);
     const { method, params, ...options } = request;
-    const { observe = Rest.Observe.Body, skipHandleError } = config;
+    const { observe = Rest.Observe.Body, skipHandleError, responseType = Rest.ResponseType.JSON } = config;
     const url = this.removeDuplicateSlashes(api + request.url);
 
     const httpClient: HttpClient = this.getHttpClient(config.skipAddingHeader);
     return httpClient
       .request<R>(method, url, {
         observe,
+        responseType: responseType as any,
         ...(params && {
           params: this.getParams(params, config.httpParamEncoder),
         }),

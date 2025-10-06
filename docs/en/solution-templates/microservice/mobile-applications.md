@@ -139,22 +139,28 @@ You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/
 This is the mobile application that is built based on Facebook's [React Native framework](https://reactnative.dev/) and [Expo](https://expo.dev/). It will be in the solution only if you've selected React Native as your mobile application option.
 
 #### Project Structure
-- **Environment.js**: file using for provide application level variables like `apiUrl`, `oAuthConfig` and etc.
+- **Environment.ts**: file using for providing application level variables like `apiUrl`, `oAuthConfig` and etc.
 
 - **api**: The `api` folder contains HTTP request files that simplify API management in the React Native starter template
-  - `API.js:` exports **axiosInstance**. It provides axios instance filled api url
+  - `API.ts:` exports **axiosInstance**. It provides axios instance filled api url.
 
-- **components**: In the `components` folder you can reach built in react native components that you can use in your app. These components **facilitates** your list, select and etc. operations
+- **components**: In the `components` folder, you can reach built in react native components that you can use in your app. These components **facilitates** your list, select and etc. operations.
 
 - **contexts**: `contexts` folder contains [react context](https://react.dev/reference/react/createContext). You can expots your contexts in this folder. `Localization context provided in here`
 
-- **navigators**: folder contains [react-native stacks](https://reactnavigation.org/docs/stack-navigator/). After create new *FeatureName*Navigator we need to provide in `DrawerNavigator.js` file as `Drawer.Screen`
+- **hocs**: this folder is added to contain higher order components. The purpose is to wrap components with additional features or properties. It initially has a `PermissionHoc.tsx` that wraps a component to check the permission grant status.
 
-- **screens**: is the content of navigated page. We'll pass as component property to [Stack.Screen](https://reactnavigation.org/docs/native-stack-navigator/)
+- **hooks**: covers the react native hooks where you can get a reference from [the official documentation](https://react.dev/reference/react/hooks).
 
-- **store**: folder manages state-management operations. We will define `actions`, `reducers`, `sagas` and `selectors` here.
+- **interceptors**: initializes a file called `APIInterceptor.ts` that has a function to manage the http operations in a better way.
 
-- **styles**: folder contains app styles. `system-style.js` comes built in template we can also add new styles.
+- **navigators**: folder contains [react-native stacks](https://reactnavigation.org/docs/stack-navigator/). After creating a new *FeatureName*Navigator we need to provide in `DrawerNavigator.ts` file as `Drawer.Screen`
+
+- **screens**: folder has the content of navigated page. We will pass as component property to [Stack.Screen](https://reactnavigation.org/docs/native-stack-navigator/)
+
+- **store**: folder manages state-management operations. We will define `actions`, `listeners`, `reducers`, and `selectors` here.
+
+- **styles**: folder contains app styles. `system-style.ts` comes built in template we can also add new styles.
 
 - **utils**: folder contains helper functions that we can use in application
 
@@ -162,6 +168,6 @@ This is the mobile application that is built based on Facebook's [React Native f
 
 React Native applications can't be run with the solution runner. You need to run them with the React Native CLI. You can check the [React Native documentation](https://reactnative.dev/docs/environment-setup) to learn how to setup the environment for React Native development.
 
-Before running the React Native application, rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices.
+Before running the React Native application, the rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices.
 
 Then you can run the React Native application by following this documentation: [Getting Started with the React Native](../../framework/ui/react-native/index.md).

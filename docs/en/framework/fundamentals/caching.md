@@ -224,9 +224,8 @@ Configure<AbpDistributedCacheOptions>(options =>
 
 > Write that code inside the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md).
 
-#### Available Options
 
-* `HideErrors` (`bool`, default: `true`): Enables/disables hiding the errors on writing/reading values from the cache server.
+* `HideErrors` (`bool`, default: `true`): Enables or disables hiding errors when reading from or writing to the cache server. In the **development** environment, this option is **disabled** to help developers detect and fix any cache server issues.
 * `KeyPrefix` (`string`, default: `null`): If your cache server is shared by multiple applications, you can set a prefix for the cache keys for your application. In this case, different applications can not overwrite each other's cache items.
 * `GlobalCacheEntryOptions` (`DistributedCacheEntryOptions`): Used to set default distributed cache options (like `AbsoluteExpiration` and `SlidingExpiration`) used when you don't specify the options while saving cache items. The default value uses the `SlidingExpiration` as 20 minutes.
 

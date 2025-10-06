@@ -4,6 +4,8 @@ This document provides a general overview of the relationship between various ve
 
 | **ABP Studio Version** | **ABP Version of Startup Template**           |
 |------------------------|---------------------------|
+| 1.3.0 - 1.3.2          | 9.3.4                     |
+| 1.2.2                  | 9.3.2                     |
 | 1.2.1                  | 9.3.1                     |
 | 1.1.2                  | 9.2.3                     |
 | 1.1.0 - 1.1.1          | 9.2.2                     |

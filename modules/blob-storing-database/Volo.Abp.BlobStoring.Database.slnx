@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/host/">
+    <Project Path="host/BlobStoring.Database.Host.ConsoleApp/src/BlobStoring.Database.Host.ConsoleApp.ConsoleApp/BlobStoring.Database.Host.ConsoleApp.ConsoleApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.BlobStoring.Database.Domain.Shared/Volo.Abp.BlobStoring.Database.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.BlobStoring.Database.Domain/Volo.Abp.BlobStoring.Database.Domain.csproj" />
+    <Project Path="src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.BlobStoring.Database.Installer/Volo.Abp.BlobStoring.Database.Installer.csproj" />
+    <Project Path="src/Volo.Abp.BlobStoring.Database.MongoDB/Volo.Abp.BlobStoring.Database.MongoDB.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.BlobStoring.Database.Domain.Tests/Volo.Abp.BlobStoring.Database.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests/Volo.Abp.BlobStoring.Database.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.BlobStoring.Database.MongoDB.Tests/Volo.Abp.BlobStoring.Database.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.BlobStoring.Database.TestBase/Volo.Abp.BlobStoring.Database.TestBase.csproj" />
+  </Folder>
+</Solution>

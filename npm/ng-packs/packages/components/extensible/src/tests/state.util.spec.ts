@@ -9,18 +9,85 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
+import { TestBed } from '@angular/core/testing';
 import { Injector } from '@angular/core';
-
-const fakeAppConfigService = { get: () => of(createMockState()) } as any;
-const fakeLocalizationService = { get: () => of(createMockState()) } as any;
-const configState = new ConfigStateService(fakeAppConfigService, fakeLocalizationService, false);
-configState.refreshAppState();
 
 describe('State Utils', () => {
   let injector: Injector;
+  let configStateService: ConfigStateService;
+
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: ConfigStateService,
+          useValue: {
+            refreshAppState: jest.fn(),
+            getAll: jest.fn(),
+            getOne: jest.fn(),
+            getOne$: jest.fn().mockReturnValue(of({
+              modules: {
+                Identity: {
+                  entities: createMockEntities(),
+                  configuration: null,
+                },
+              },
+              enums: {
+                'MyCompanyName.MyProjectName.MyEnum': {
+                  fields: [
+                    {
+                      name: 'MyEnumValue0',
+                      value: 0,
+                    },
+                    {
+                      name: 'MyEnumValue1',
+                      value: 1,
+                    },
+                    {
+                      name: 'MyEnumValue2',
+                      value: 2,
+                    },
+                  ],
+                  localizationResource: null,
+                },
+              },
+            })),
+            getDeep: jest.fn(),
+            getDeep$: jest.fn().mockReturnValue(of({
+              modules: {
+                Identity: {
+                  entities: createMockEntities(),
+                  configuration: null,
+                },
+              },
+              enums: {
+                'MyCompanyName.MyProjectName.MyEnum': {
+                  fields: [
+                    {
+                      name: 'MyEnumValue0',
+                      value: 0,
+                    },
+                    {
+                      name: 'MyEnumValue1',
+                      value: 1,
+                    },
+                    {
+                      name: 'MyEnumValue2',
+                      value: 2,
+                    },
+                  ],
+                  localizationResource: null,
+                },
+              },
+            })),
+          },
+        },
+      ],
+    });
+
+    configStateService = TestBed.inject(ConfigStateService);
     injector = {
-      get: jest.fn().mockReturnValue(configState),
+      get: jest.fn().mockReturnValue(configStateService),
     };
   });
 
@@ -41,7 +108,14 @@ describe('State Utils', () => {
     });
 
     it('should not emit when object extensions do not exist', done => {
-      const emptyConfigState = new ConfigStateService(null, null, false);
+      const emptyConfigState = {
+        refreshAppState: jest.fn(),
+        getAll: jest.fn(),
+        getOne: jest.fn(),
+        getOne$: jest.fn().mockReturnValue(of(undefined)),
+        getDeep: jest.fn(),
+        getDeep$: jest.fn().mockReturnValue(of(undefined)),
+      };
       const emit = jest.fn();
 
       injector = {

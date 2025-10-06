@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Resurs hittades inte!",
     "DefaultErrorMessage404Detail": "Den begärda resursen kunde inte hittas på servern!",
     "EntityNotFoundErrorMessage": "Det finns ingen entitet {0} med id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Det finns ingen entitet {0}!",
     "AbpDbConcurrencyErrorMessage": "De uppgifter du har skickat har redan ändrats av en annan användare. Kassera dina ändringar och försök igen.",
     "Error": "Fel",
     "UnhandledException": "Obehandlat undantag!",

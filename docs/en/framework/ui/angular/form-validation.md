@@ -232,7 +232,7 @@ buildForm() {
 ```html
 <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
-    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
+    <h3>{%{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}%}</h3>
   </ng-template>
 
   <ng-template #abpBody>
@@ -240,7 +240,7 @@ buildForm() {
       <form [formGroup]="form" (ngSubmit)="save()">
         <ul ngbNav #nav="ngbNav" class="nav-tabs">
           <li ngbNavItem>
-            <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
+            <a ngbNavLink>{%{{ 'AbpIdentity::UserInformations' | abpLocalization }}%}</a>
             <ng-template ngbNavContent>
               <!-- Automatically displays all entity fields and their validation -->
               <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
@@ -248,7 +248,7 @@ buildForm() {
           </li>
 
           <li ngbNavItem>
-            <a ngbNavLink>{{ 'AbpIdentity::Roles' | abpLocalization }}</a>
+            <a ngbNavLink>{%{{ 'AbpIdentity::Roles' | abpLocalization }}%}</a>
             <ng-template ngbNavContent>
               <!-- Dynamic roles list: nested FormArray and FormGroup -->
               @for (roleGroup of roleGroups; track $index; let i = $index) {

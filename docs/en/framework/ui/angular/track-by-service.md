@@ -10,6 +10,7 @@ You do not have to provide the `TrackByService` at module or component level, be
 
 ```js
 import { TrackByService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
@@ -17,7 +18,7 @@ import { TrackByService } from '@abp/ng.core';
 class DemoComponent {
   list: Item[];
 
-  constructor(public readonly track: TrackByService<Item>) {}
+  public readonly track = inject(TrackByService<Item>);
 }
 ```
 

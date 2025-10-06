@@ -3,6 +3,7 @@
 ABP provides a complete infrastructure for creating real world software solutions with modern architectures based on the .NET platform. Each of the following documents explains an infrastructure feature:
 
 * [Audit Logging](./audit-logging.md)
+* [Artificial Intelligence](./artificial-intelligence.md)
 * [Background Jobs](./background-jobs/index.md)
 * [Background Workers](./background-workers/index.md)
 * [BLOB Storing](./blob-storing/index.md)

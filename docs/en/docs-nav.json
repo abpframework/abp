@@ -604,6 +604,10 @@
                   "text": "Storage Providers",
                   "items": [
                     {
+                      "text": "Memory Provider",
+                      "path": "framework/infrastructure/blob-storing/memory.md"
+                    },
+                    {
                       "text": "File System Provider",
                       "path": "framework/infrastructure/blob-storing/file-system.md"
                     },
@@ -2440,6 +2444,10 @@
           "path": "modules/docs.md"
         },
         {
+          "text": "Elsa (Pro)",
+          "path": "modules/elsa-pro.md"
+        },
+        {
           "text": "Feature Management",
           "path": "modules/feature-management.md"
         },
@@ -2651,6 +2659,10 @@
         {
           "text": "Easy CRM",
           "path": "samples/easy-crm.md"
+        },
+        {
+          "text": "Elsa Workflows Demo",
+          "path": "samples/elsa-workflows-demo.md"
         }
       ]
     },

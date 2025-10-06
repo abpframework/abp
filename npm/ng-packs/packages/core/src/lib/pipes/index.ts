@@ -7,3 +7,4 @@ export * from './short-time.pipe';
 export * from './short-date-time.pipe';
 export * from './utc-to-local.pipe';
 export * from './lazy-localization.pipe';
+export * from './html-encode.pipe';

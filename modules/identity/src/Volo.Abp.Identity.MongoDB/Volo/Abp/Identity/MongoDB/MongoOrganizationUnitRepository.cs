@@ -69,7 +69,7 @@ public class MongoOrganizationUnitRepository
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(cancellationToken))
-            .Where(x => displayNames.Contains(x.DisplayName))
+            .Where(x => displayNames.AsEnumerable().Contains(x.DisplayName))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -107,7 +107,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
 
         return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => roleIds.Contains(r.Id))
@@ -125,10 +125,10 @@ public class MongoOrganizationUnitRepository
         CancellationToken cancellationToken = default)
     {
         var organizationUnits = await (await GetQueryableAsync(cancellationToken))
-            .Where(ou => organizationUnitIds.Contains(ou.Id))
+            .Where(ou => organizationUnitIds.AsEnumerable().Contains(ou.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
-        var roleIds = organizationUnits.SelectMany(ou => ou.Roles.Select(r => r.RoleId)).ToArray();
+        var roleIds = organizationUnits.SelectMany(ou => ou.Roles.Select(r => r.RoleId)).ToList();
 
         return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => roleIds.Contains(r.Id))
@@ -141,7 +141,7 @@ public class MongoOrganizationUnitRepository
         OrganizationUnit organizationUnit,
         CancellationToken cancellationToken = default)
     {
-        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
 
         return await (await GetQueryableAsync<IdentityRole>(cancellationToken)).Where(r => roleIds.Contains(r.Id)).CountAsync(GetCancellationToken(cancellationToken));
     }
@@ -155,7 +155,7 @@ public class MongoOrganizationUnitRepository
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
 
         return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => !roleIds.Contains(r.Id))
@@ -170,7 +170,7 @@ public class MongoOrganizationUnitRepository
         string filter = null,
         CancellationToken cancellationToken = default)
     {
-        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+        var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
 
         return await (await GetQueryableAsync<IdentityRole>(cancellationToken))
             .Where(r => !roleIds.Contains(r.Id))

@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Resursa nu a fost găsită!",
     "DefaultErrorMessage404Detail": "Resursa solicitată nu a fost găsită pe server!",
     "EntityNotFoundErrorMessage": "Nu există entitatea {0} cu id-ul {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Nu există entitatea {0}!",
     "AbpDbConcurrencyErrorMessage": "Datele pe care le-aţi trimis au fost modificate deja de către alt utilizator/client. Vă rugăm să renunţaţi la modificările pe care le-aţi făcut şi să încercaţi de la început.",
     "Error": "Eroare",
     "UnhandledException": "Excepţie netratată!",

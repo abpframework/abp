@@ -3,6 +3,6 @@
   "name": "demo-app",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "~9.3.4"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "~9.3.5"
   }
 }

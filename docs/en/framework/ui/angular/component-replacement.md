@@ -13,13 +13,14 @@ Then, open the `app.component.ts` and execute the `add` method of `ReplaceableCo
 ```js
 import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
+import { Component, inject } from '@angular/core';
 //...
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(
-    private replaceableComponents: ReplaceableComponentsService, // injected the service
-  ) {
+  private replaceableComponents = inject(ReplaceableComponentsService);
+
+  constructor() {
     this.replaceableComponents.add({
       component: YourNewRoleComponent,
       key: eIdentityComponents.Roles,
@@ -56,12 +57,13 @@ Open `app.component.ts` in `src/app` folder and modify it as shown below:
 import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents enum for component keys
 import { MyApplicationLayoutComponent } from './my-application-layout/my-application-layout.component'; // imported MyApplicationLayoutComponent
+import { Component, inject } from '@angular/core';
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(
-    private replaceableComponents: ReplaceableComponentsService, // injected the service
-  ) {
+  private replaceableComponents = inject(ReplaceableComponentsService);
+
+  constructor() {
     this.replaceableComponents.add({
       component: MyApplicationLayoutComponent,
       key: eThemeBasicComponents.ApplicationLayout,
@@ -213,6 +215,23 @@ function configureRoutes() {
 
 ![LogoComponent](./images/logo-component.png)
 
+Note
+- If your goal is only to change the logo image or application name, you don't need to replace the component. Prefer providing the logo via `@abp/ng.theme.shared` so all themes/components consume it consistently:
+
+```ts
+// app.config.ts
+import { provideLogo, withEnvironmentOptions } from '@abp/ng.theme.shared';
+import { environment } from './environments/environment';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideLogo(withEnvironmentOptions(environment)),
+  ],
+};
+```
+
+If you still want to completely replace the logo component UI, follow the steps below:
+
 Run the following command in `angular` folder to create a new component called `LogoComponent`.
 
 ```bash
@@ -251,15 +270,15 @@ import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeB
 
 @Component(/* component metadata */)
 export class AppComponent implements OnInit {
-  constructor(..., private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
+  private replaceableComponents = inject(ReplaceableComponentsService);
 
   ngOnInit() {
     //...
 
     this.replaceableComponents.add({
-        component: LogoComponent,
-        key: eThemeBasicComponents.Logo,
-      });
+      component: LogoComponent,
+      key: eThemeBasicComponents.Logo,
+    });
   }
 }
 ```
@@ -437,15 +456,15 @@ import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeB
 
 @Component(/* component metadata */)
 export class AppComponent implements OnInit {
-  constructor(..., private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
+  private replaceableComponents = inject(ReplaceableComponentsService);
 
   ngOnInit() {
     //...
 
     this.replaceableComponents.add({
-        component: RoutesComponent,
-        key: eThemeBasicComponents.Routes,
-      });
+      component: RoutesComponent,
+      key: eThemeBasicComponents.Routes,
+    });
   }
 }
 ```
@@ -476,7 +495,7 @@ import {
   SessionStateService,
   LocalizationPipe
 } from '@abp/ng.core';
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -495,9 +514,13 @@ import snq from 'snq';
   ]
 })
 export class NavItemsComponent {
+  private configState = inject(ConfigStateService);
+  private authService = inject(AuthService);
+  private sessionState = inject(SessionStateService);
+  @Inject(NAVIGATE_TO_MANAGE_PROFILE) public navigateToManageProfile: any;
+
   currentUser$: Observable<CurrentUserDto> = this.configState.getOne$('currentUser');
   selectedTenant$ = this.sessionState.getTenant$();
-
   languages$: Observable<LanguageInfo[]> = this.configState.getDeep$('localization.languages');
 
   get smallScreen(): boolean {
@@ -529,13 +552,6 @@ export class NavItemsComponent {
   get selectedLangCulture(): string {
     return this.sessionState.getLanguage();
   }
-
-  constructor(
-    @Inject(NAVIGATE_TO_MANAGE_PROFILE) public navigateToManageProfile,
-    private configState: ConfigStateService,
-    private authService: AuthService,
-    private sessionState: SessionStateService
-  ) {}
 
   onChangeLang(cultureName: string) {
     this.sessionState.setLanguage(cultureName);
@@ -652,15 +668,15 @@ import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeB
 
 @Component(/* component metadata */)
 export class AppComponent implements OnInit {
-  constructor(..., private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
+  private replaceableComponents = inject(ReplaceableComponentsService);
 
   ngOnInit() {
     //...
 
     this.replaceableComponents.add({
-        component: NavItemsComponent,
-        key: eThemeBasicComponents.NavItems,
-      });
+      component: NavItemsComponent,
+      key: eThemeBasicComponents.NavItems,
+    });
   }
 }
 ```

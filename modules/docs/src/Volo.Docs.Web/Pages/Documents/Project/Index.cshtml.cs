@@ -22,11 +22,12 @@ using Volo.Docs.Common.Documents;
 using Volo.Docs.Common.Projects;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.Rendering;
+using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.HtmlConverting;
+using Volo.Docs.Localization;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
-using Volo.Docs.GitHub.Documents.Version;
-using Volo.Docs.Localization;
+using Volo.Docs.TableOfContents;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.Pages.Documents.Project
@@ -75,6 +76,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string DocumentsUrlPrefix { get; set; }
 
+        public List<TocItem> TocItems { get; set; } = [];
+
         public bool ShowProjectsCombobox { get; set; }
 
         public bool ShowProjectsComboboxLabel { get; set; }
@@ -98,6 +101,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
+        private const int TocLevelCount = 2;
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
@@ -105,6 +109,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly DocsUiOptions _uiOptions;
         private readonly IPermissionChecker _permissionChecker;
         private readonly IDocumentPdfAppService _documentPdfAppService;
+        private readonly ITocGeneratorService _tocGeneratorService;
 
         protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
         
@@ -117,7 +122,8 @@ namespace Volo.Docs.Pages.Documents.Project
             IOptions<DocsUiOptions> options,
             IWebDocumentSectionRenderer webDocumentSectionRenderer, 
             IPermissionChecker permissionChecker, 
-            IDocumentPdfAppService documentPdfAppService)
+            IDocumentPdfAppService documentPdfAppService,
+            ITocGeneratorService tocGeneratorService)
         {
             ObjectMapperContext = typeof(DocsWebModule);
 
@@ -128,6 +134,7 @@ namespace Volo.Docs.Pages.Documents.Project
             _permissionChecker = permissionChecker;
             _documentPdfAppService = documentPdfAppService;
             _uiOptions = options.Value;
+            _tocGeneratorService = tocGeneratorService;
             
             LocalizationResourceType = typeof(DocsResource);
         }
@@ -534,7 +541,14 @@ namespace Volo.Docs.Pages.Documents.Project
                     DocumentLanguageCode = language;
                     DocumentNameWithExtension = Document.Name;
                     SetDocumentPageTitle();
+
+                    if (Document != null && !Document.Content.IsNullOrEmpty())
+                    {
+                        TocItems = _tocGeneratorService.GenerateTocItems(Document.Content, TocLevelCount);
+                    }
+
                     await ConvertDocumentContentToHtmlAsync();
+
                     return true;
                 }
                 catch (DocumentNotFoundException e)

@@ -17,6 +17,10 @@ yarn ng generate component my-roles/my-roles --flat --export
 Open the generated `src/app/my-roles/my-roles.component.ts` file and replace its content with the following:
 
 ```js
+import { Component, Injector, inject, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+
 import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { eIdentityComponents, RolesComponent } from '@abp/ng.identity';
 import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
@@ -27,9 +31,6 @@ import {
   FormPropData,
   generateFormFromProps
 } from '@abp/ng.components/extensible';
-import { Component, Injector, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-roles',
@@ -40,13 +41,18 @@ import { finalize } from 'rxjs/operators';
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eIdentityComponents.Roles,
     },
-    { 
-      provide: RolesComponent, 
-      useExisting: MyRolesComponent 
-    }
+    {
+      provide: RolesComponent,
+      useExisting: MyRolesComponent,
+    },
   ],
 })
 export class MyRolesComponent implements OnInit {
+  public readonly list = inject<ListService<PagedAndSortedResultRequestDto>>(ListService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly injector = inject(Injector);
+  protected readonly service = inject(IdentityRoleService);
+
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
 
   form: FormGroup;
@@ -63,16 +69,9 @@ export class MyRolesComponent implements OnInit {
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
-  onVisiblePermissionChange = event => {
+  onVisiblePermissionChange = (event) => {
     this.visiblePermissions = event;
   };
-
-  constructor(
-    public readonly list: ListService<PagedAndSortedResultRequestDto>,
-    protected confirmationService: ConfirmationService,
-    protected injector: Injector,
-    protected service: IdentityRoleService,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();
@@ -253,13 +252,18 @@ export class MyRolesModule {}
 As the last step, it is needs to be replaced the `RolesComponent` with the `MyRolesComponent`. Open the `app.component.ts` and modify its content as shown below:
 
 ```js
+import { Component, inject } from '@angular/core';
 import { ReplaceableComponentsService } from '@abp/ng.core';
 import { eIdentityComponents } from '@abp/ng.identity';
 import { MyRolesComponent } from './my-roles/my-roles.component';
 
-@Component(/* component metadata */)
+@Component({
+  // component metadata
+})
 export class AppComponent {
-  constructor(private replaceableComponents: ReplaceableComponentsService) {
+  private replaceableComponents = inject(ReplaceableComponentsService);
+
+  constructor() {
     this.replaceableComponents.add({ component: MyRolesComponent, key: eIdentityComponents.Roles });
   }
 }

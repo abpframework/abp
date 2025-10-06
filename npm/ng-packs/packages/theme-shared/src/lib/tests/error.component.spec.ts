@@ -22,10 +22,12 @@ describe('ErrorComponent', () => {
     imports: [HttpClientModule, LocalizationPipe],
   });
 
-  beforeEach(() => {
-    spectator = createHost('<abp-http-error-wrapper></abp-http-error-wrapper>');
-    spectator.component.destroy$ = new Subject();
-  });
+    beforeEach(() => {
+      spectator = createHost(
+        '<abp-http-error-wrapper title="_::Oops!" details="_::Sorry, an error has occured."></abp-http-error-wrapper>',
+      );
+      spectator.component.destroy$ = new Subject();
+    });
 
   describe('#destroy', () => {
     it('should be call when pressed the esc key', done => {

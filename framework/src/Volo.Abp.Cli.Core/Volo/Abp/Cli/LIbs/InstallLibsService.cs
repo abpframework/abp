@@ -188,7 +188,9 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             }
         }
 
-        foreach (var directoryInfo in Directory.GetDirectories(Path.Combine(directory, resourceMapping.Clean.First()), "*", SearchOption.AllDirectories).Reverse())
+        var directoryInfos = Directory.GetDirectories(Path.Combine(directory, resourceMapping.Clean.First()), "*", SearchOption.AllDirectories);
+        directoryInfos.Reverse();
+        foreach (var directoryInfo in directoryInfos)
         {
             if (!Directory.EnumerateFileSystemEntries(directoryInfo).Any())
             {

@@ -2,6 +2,41 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 1.3.2 (2025-09-25)
+
+* Enhanced AI Assistant with bug fixes and improvements.
+* Implemented new public website layout for public website projects.
+* Added container priority setting in Solution Runner.
+* Fixed relative image path problems in markdown files and added SVG support.
+* Enhanced Angular templates with application builder support.
+* Fixed Aspire profile database creation issues in microservice template.
+
+## 1.3.1 (2025-09-22)
+
+* Added Blazor WebApp application information to ReadMe in application template.
+
+## 1.3.0 (2025-09-22)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.4`)
+* **Added .NET Aspire Integration** to ABP Studio and Microservice Startup Template.
+* **Introduced AI Support Assistant** for enhanced development experience.
+* Added new package option: **C# Console Application (With ABP)**.
+* Enhanced Solution Runner with double-click browse functionality.
+* Made Blazor WebApp option available for module templates.
+* Updated React Native templates to use latest Expo/React Native standards.
+* Removed LeptonX Theme Management by default from templates.
+* Added Scriban template build-time validation.
+* Enhanced MVC UI layer with localization and loading indicators.
+
+## 1.2.2 (2025-08-27)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.2`)
+* Fixed LeptonX Lite logo problems.
+* Redesigned LeptonX footer component.
+* Enhanced language selection with sorting by display name.
+* Improved template configuration with default language handling.
+* Optimized search depth for restore need detection.
+
 ## 1.2.1 (2025-08-14)
 
 * Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.1`)

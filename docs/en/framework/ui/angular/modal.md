@@ -132,12 +132,12 @@ See an example form inside a modal:
 
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { inject } from '@angular/core';
 
 @Component(/* component metadata */)
 export class BookComponent {
   private fb = inject(FormBuilder);
   private service = inject(BookService);
- 
   form = this.fb.group({
     author: [null, [Validators.required]],
     name: [null, [Validators.required]],
@@ -147,7 +147,6 @@ export class BookComponent {
   });
 
   inProgress: boolean;
-
   isModalOpen: boolean;
 
   save() {

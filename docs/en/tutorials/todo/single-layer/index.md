@@ -718,7 +718,7 @@ Open the `/angular/src/app/home/home.component.ts` file and replace its content 
 
 ```ts
 import { ToasterService } from "@abp/ng.theme.shared";
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TodoItemDto } from "@proxy/services/dtos";
 import { TodoService } from "@proxy/services";
 
@@ -727,16 +727,13 @@ import { TodoService } from "@proxy/services";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-
 export class HomeComponent implements OnInit {
 
   todoItems: TodoItemDto[];
   newTodoText: string;
 
-  constructor(
-      private todoService: TodoService,
-      private toasterService: ToasterService)
-  { }
+  private readonly todoService = inject(TodoService);
+  private readonly toasterService = inject(ToasterService);
 
   ngOnInit(): void {
     this.todoService.getList().subscribe(response => {
@@ -744,7 +741,7 @@ export class HomeComponent implements OnInit {
     });
   }
   
-  create(): void{
+  create(): void {
     this.todoService.create(this.newTodoText).subscribe((result) => {
       this.todoItems = this.todoItems.concat(result);
       this.newTodoText = null;

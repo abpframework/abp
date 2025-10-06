@@ -576,7 +576,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto } from '@proxy/books';
 
 @Component({
@@ -588,9 +588,10 @@ import { BookService, BookDto } from '@proxy/books';
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  isModalOpen = false; // add this line
+  isModalOpen = false;
 
-  constructor(public readonly list: ListService, private bookService: BookService) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -600,7 +601,7 @@ export class BookComponent implements OnInit {
     });
   }
 
-  // add new method
+  //add new method
   createBook() {
     this.isModalOpen = true;
   }
@@ -668,7 +669,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
@@ -688,11 +689,9 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder // inject FormBuilder
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder); // inject FormBuilder
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -702,6 +701,7 @@ export class BookComponent implements OnInit {
     });
   }
 
+  // add new method
   createBook() {
     this.buildForm(); // add this line
     this.isModalOpen = true;
@@ -735,7 +735,7 @@ export class BookComponent implements OnInit {
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
 * Added a `form: FormGroup` property.
 * Added a `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
-* Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
+* Injected with the `FormBuilder` inject function.. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
 * Added a `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
 * Added a `save` method.
 
@@ -823,7 +823,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -848,11 +848,9 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -903,7 +901,7 @@ Open `/src/app/book/book.component.ts` and replace the content as shown below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
@@ -925,11 +923,9 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -1039,34 +1035,40 @@ This template will show the **Edit** text for edit record operation, **New Book*
 
 Open the `/src/app/book/book.component.ts` file and inject the `ConfirmationService`.
 
-Replace the constructor as below:
+Replace the injected services as below:
 
 ```js
 // ...
 
 // add new imports
 import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { Component, OnInit, inject } from '@angular/core';
 
-//change the constructor
-constructor(
-  public readonly list: ListService,
-  private bookService: BookService,
-  private fb: FormBuilder,
-  private confirmation: ConfirmationService // inject the ConfirmationService
-) {}
+// ...
 
-// Add a delete method
-delete(id: string) {
-  this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
-    if (status === Confirmation.Status.confirm) {
-      this.bookService.delete(id).subscribe(() => this.list.get());
-    }
-  });
+export class BookComponent implements OnInit {
+  // ...
+
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
+  private readonly confirmation = inject(ConfirmationService); // inject the ConfirmationService
+
+  // ...
+
+  // Add a delete method
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.bookService.delete(id).subscribe(() => this.list.get());
+      }
+    });
+  }
 }
 ```
 
 * We imported `ConfirmationService`.
-* We injected `ConfirmationService` to the constructor.
+* We injected `ConfirmationService` using the `inject()` function.
 * Added a `delete` method.
 
 > Check out the [Confirmation Popup documentation](../../framework/ui/angular/confirmation-service.md) for more about this service.

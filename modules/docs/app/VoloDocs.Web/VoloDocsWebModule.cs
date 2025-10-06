@@ -72,7 +72,11 @@ namespace VoloDocs.Web
         {
             PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(DocsResource), typeof(VoloDocsWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(DocsResource), 
+                    typeof(VoloDocsWebModule).Assembly, 
+                    typeof(DocsAdminApplicationModule).Assembly
+                );
             });
             
             PreConfigure<AbpBackgroundJobWorkerOptions>(options =>

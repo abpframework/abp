@@ -41,6 +41,11 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
 
             var root = doc.RootElement;
 
+            if (root.TryGetProperty("versions", out var versions))
+            {
+                AddVersions(context, versions);
+            }
+            
             if (root.TryGetProperty("creatingStudioConfiguration", out var creatingStudioConfiguration))
             {
                 AddSolutionCreationConfiguration(context, creatingStudioConfiguration);
@@ -59,6 +64,12 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
         }
 
         return Task.CompletedTask;
+    }
+
+    private static void AddVersions(ActivityContext context, JsonElement config)
+    {
+        context.Current[ActivityPropertyNames.FirstAbpVersion] = TelemetryJsonExtensions.GetStringOrNull(config, "AbpFramework");
+        context.Current[ActivityPropertyNames.FirstDotnetVersion] = TelemetryJsonExtensions.GetStringOrNull(config, "TargetDotnetFramework");
     }
 
     private static void AddSolutionCreationConfiguration(ActivityContext context, JsonElement config)

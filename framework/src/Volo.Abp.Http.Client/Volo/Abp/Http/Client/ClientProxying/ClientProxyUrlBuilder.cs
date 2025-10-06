@@ -49,7 +49,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
         Clock = clock;
     }
 
-    public async Task<string> GenerateUrlWithParametersAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+    public async Task<string> GenerateUrlWithParametersAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
     {
         // The ASP.NET Core route value provider and query string value provider:
         //  Treat values as invariant culture.
@@ -65,7 +65,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
         }
     }
 
-    protected virtual async Task ReplacePathVariablesAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+    protected virtual async Task ReplacePathVariablesAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
     {
         var pathParameters = action.Parameters
             .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
@@ -129,7 +129,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
         }
     }
 
-    protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+    protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
     {
         var queryStringParameters = action.Parameters
             .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))

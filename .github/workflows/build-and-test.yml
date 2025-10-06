@@ -51,10 +51,14 @@ jobs:
     timeout-minutes: 50
     if: ${{ !github.event.pull_request.draft }}
     steps:
+    - uses: jlumbroso/free-disk-space@main
+    - uses: PSModule/install-powershell@v1
+      with:
+        Version: latest
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 9.0.100
+        dotnet-version: 10.0.x
 
     - name: Build All
       run: ./build-all.ps1

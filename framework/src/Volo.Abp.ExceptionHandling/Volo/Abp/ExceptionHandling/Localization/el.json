@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Ο πόρος δεν βρέθηκε!",
     "DefaultErrorMessage404Detail": "Ο πόρος που ζητήθηκε δεν βρέθηκε στον διακομιστή!",
     "EntityNotFoundErrorMessage": "Δεν υπάρχει οντότητα {0} με id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Δεν υπάρχει οντότητα {0}!",
     "AbpDbConcurrencyErrorMessage": "Τα δεδομένα που έχετε υποβάλλει έχουν ήδη τροποποιηθεί από άλλον χρήστη/πελάτη. Απορρίψτε τις αλλαγές που κάνατε και δοκιμάστε από την αρχή.",
     "Error": "Σφάλμα",
     "UnhandledException": "Απρόσμενη Εξαίρεση!",

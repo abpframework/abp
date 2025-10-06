@@ -1,8 +1,6 @@
 (function ($) {
     $(function () {
 
-        window.Toc.helpers.initNavEvent();
-
         var scrollTopBtn = $('.scroll-top-btn');
         var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height();
         var enoughHeightPlus = 500;
@@ -64,10 +62,10 @@
             handleCustomScrolls();
 
             var $myNav = $('#docs-sticky-index');
-            Toc.init($myNav);
 
             $('body').scrollspy({
                 target: $myNav,
+                offset:100
             });
 
             $('#docs-sticky-index a').on('click', function (event) {
@@ -86,6 +84,23 @@
                 }
             });
 
+            $("body").on('activate.bs.scrollspy', function (e) {
+                var $activeLink = $('.nav-link.active', $('#docs-sticky-index'));
+
+                var $activeLi = $activeLink.parent('li.nav-item');
+
+                $myNav.find('li.toc-item-has-children.open').each(function () {
+                    if ($(this).has($activeLi).length === 0) {
+                        $(this).removeClass('open');
+                    }
+                });
+
+                var $parentToOpen = $activeLi.closest('li.toc-item-has-children');
+                if ($parentToOpen.length > 0) {
+                    $parentToOpen.addClass('open');
+                }
+            });
+
             $('.btn-toggle').on('click', function () {
                 $('.toggle-row').slideToggle(400);
                 $(this).toggleClass('less');
@@ -99,6 +114,7 @@
                 $('.docs-tree-list').slideToggle();
             });
 
+            initMenuToggle();
             scrollToHashLink();
         });
 
@@ -125,26 +141,7 @@
         });
     }
 
-    window.Toc.helpers.createNavList = function () {
-        return $('<ul class="nav nav-pills flex-column"></ul>');
-    };
-
-    window.Toc.helpers.createChildNavList = function ($parent) {
-        var $childList = this.createNavList();
-        $parent.append($childList);
-        return $childList;
-    };
-
-    window.Toc.helpers.generateNavEl = function (anchor, text) {
-        var $a = $('<a class="nav-link"></a>');
-        $a.attr('href', '#' + anchor);
-        $a.text(text);
-        var $li = $('<li class="nav-item"></li>');
-        $li.append($a);
-        return $li;
-    };
-    
-    window.Toc.helpers.initNavEvent = function () {
+     function initMenuToggle() {
         $('li:not(.last-link) a.tree-toggle').off('click');
         $('li:not(.last-link) span.plus-icon i.fa-chevron-right').off('click');
         

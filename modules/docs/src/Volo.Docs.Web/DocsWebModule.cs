@@ -34,7 +34,11 @@ namespace Volo.Docs
         {
             PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(DocsResource), typeof(DocsWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(DocsResource), 
+                    typeof(DocsWebModule).Assembly, 
+                    typeof(DocsApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>

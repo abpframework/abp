@@ -36,7 +36,11 @@ public class AbpAccountWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AccountResource), typeof(AbpAccountWebModule).Assembly);
+            options.AddAssemblyResource(
+                typeof(AccountResource), 
+                typeof(AbpAccountWebModule).Assembly, 
+                typeof(AbpAccountApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>

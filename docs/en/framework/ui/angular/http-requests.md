@@ -31,12 +31,13 @@ In order to use the `RestService`, you must inject it in your class as a depende
 
 ```js
 import { RestService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Injectable({
   /* class metadata here */
 })
 class DemoService {
-  constructor(private rest: RestService) {}
+  private rest = inject(RestService);
 }
 ```
 

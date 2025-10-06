@@ -41,12 +41,12 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         if (setting == null)
         {
             setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
-            await SettingRepository.InsertAsync(setting);
+            await SettingRepository.InsertAsync(setting, true);
         }
         else
         {
             setting.Value = value;
-            await SettingRepository.UpdateAsync(setting);
+            await SettingRepository.UpdateAsync(setting, true);
         }
 
         await Cache.SetAsync(CalculateCacheKey(name, providerName, providerKey), new SettingCacheItem(setting?.Value), considerUow: true);
@@ -64,7 +64,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
         if (setting != null)
         {
-            await SettingRepository.DeleteAsync(setting);
+            await SettingRepository.DeleteAsync(setting, true);
             await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey), considerUow: true);
         }
     }

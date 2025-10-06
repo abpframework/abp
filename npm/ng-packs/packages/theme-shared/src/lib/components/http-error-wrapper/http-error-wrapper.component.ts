@@ -39,9 +39,9 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
 
   status: ErrorScreenErrorCodes = 0;
 
-  title: LocalizationParam = 'Oops!';
+  title: LocalizationParam = '_::Oops!';
 
-  details: LocalizationParam = 'Sorry, an error has occured.';
+  details: LocalizationParam = '_::Sorry, an error has occured.';
 
   customComponent: Type<any> | undefined = undefined;
 

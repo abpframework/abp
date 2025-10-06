@@ -1009,12 +1009,12 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder,
-    private confirmation: ConfirmationService
-  ) {
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
+  private readonly confirmation = inject(ConfirmationService);
+
+  constructor() {
     this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));
   }
 

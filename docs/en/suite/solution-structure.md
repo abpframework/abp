@@ -318,8 +318,8 @@ React Native application folder structure is like below:
 
 ![react-native-folder-structure](../images/react-native-folder-structure.png)
 
-* `App.js` is the bootstrap component of the application.
-* `Environment.js` file has the essential configuration of the application. `prod` and `dev` configurations are defined in this file. 
+* `App.tsx` is the bootstrap component of the application.
+* `Environment.ts` file has the essential configuration of the application. `prod` and `dev` configurations are defined in this file. 
 * [Contexts](https://reactjs.org/docs/context.html) are created in the `src/contexts` folder.
 * [Higher order components](https://reactjs.org/docs/higher-order-components.html) are created in the `src/hocs` folder.
 * [Custom hooks](https://reactjs.org/docs/hooks-custom.html#extracting-a-custom-hook) are created in the `src/hooks`.
@@ -353,12 +353,11 @@ Actions, reducers, sagas, selectors are created in the `src/store` folder. Store
 * [**Store**](https://redux.js.org/basics/store) is defined in the `src/store/index.js` file.
 * [**Actions**](https://redux.js.org/basics/actions/) are payloads of information that send data from your application to your store.
 * [**Reducers**](https://redux.js.org/basics/reducers) specify how the application's state changes in response to actions sent to the store. 
-* [**Redux-Saga**](https://redux-saga.js.org/) is a library that aims to make application side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) easier to manage. Sagas are created in the `src/store/sagas` folder.
 * [**Reselect**](https://github.com/reduxjs/reselect) library is used to create memoized selectors. Selectors are created in the `src/store/selectors` folder.
 
 ### APIs
 
-[Axios](https://github.com/axios/axios) is used as the HTTP client library. An Axios instance is exported from  `src/api/API.js` file to make HTTP calls with the same config. `src/api` folder also has the API files that have been created for API calls.
+[Axios](https://github.com/axios/axios) is used as the HTTP client library. An Axios instance is exported from  `src/api/API.ts` file to make HTTP calls with the same config. `src/api` folder also has the API files that have been created for API calls.
 
 ### Theming
 
@@ -381,7 +380,6 @@ See the [Testing Overview](https://reactjs.org/docs/testing.html) document.
 * [Axios](https://github.com/axios/axios) is used as HTTP client library.
 * [Redux](https://redux.js.org/) is used as state management library.
 * [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
-* [Redux-Saga](https://redux-saga.js.org/) is used to manage asynchronous processes.
 * [Redux Persist](https://github.com/rt2zz/redux-persist) is used for state persistance.
 * [Reselect](https://github.com/reduxjs/reselect) is used to create memoized selectors.
 * [i18n-js](https://github.com/fnando/i18n-js) is used as i18n library.

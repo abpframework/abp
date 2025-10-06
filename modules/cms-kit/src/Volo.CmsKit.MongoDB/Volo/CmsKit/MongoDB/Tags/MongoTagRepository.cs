@@ -91,7 +91,7 @@ public class MongoTagRepository : MongoDbRepository<ICmsKitMongoDbContext, Volo.
             .Select(x => new { x.Id, x.Name })
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
 
-        var tagIds = tags.Select(x => x.Id);
+        var tagIds = tags.Select(x => x.Id).ToList();
 
         var entityTagCounts = await (await GetQueryableAsync<EntityTag>(cancellationToken))
             .Where(q => tagIds.Contains(q.TagId))

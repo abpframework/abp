@@ -18,7 +18,11 @@ public class AbpPermissionManagementWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
+            options.AddAssemblyResource(
+                typeof(AbpPermissionManagementResource),
+                typeof(AbpPermissionManagementWebModule).Assembly, 
+                typeof(AbpPermissionManagementApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>

@@ -21,7 +21,11 @@ namespace Volo.Docs.Admin
         {
             PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(DocsResource), typeof(DocsAdminWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(DocsResource), 
+                    typeof(DocsAdminWebModule).Assembly, 
+                    typeof(DocsAdminApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>

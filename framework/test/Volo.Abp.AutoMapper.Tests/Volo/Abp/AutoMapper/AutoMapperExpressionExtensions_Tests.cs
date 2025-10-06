@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Volo.Abp.Auditing;
 using Xunit;
@@ -101,7 +102,7 @@ public class AutoMapperExpressionExtensions_Tests
 
     private static IMapper CreateMapper(Action<IMapperConfigurationExpression> configure)
     {
-        var configuration = new MapperConfiguration(configure);
+        var configuration = new MapperConfiguration(configure, NullLoggerFactory.Instance);
         configuration.AssertConfigurationIsValid();
         return configuration.CreateMapper();
     }

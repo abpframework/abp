@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DistDemoApp.EfCoreRabbitMq/DistDemoApp.EfCoreRabbitMq.csproj" />
+  <Project Path="DistDemoApp.MongoDbKafka/DistDemoApp.MongoDbKafka.csproj" />
+  <Project Path="DistDemoApp.MongoDbRebus/DistDemoApp.MongoDbRebus.csproj" />
+  <Project Path="DistDemoApp.Shared/DistDemoApp.Shared.csproj" />
+</Solution>

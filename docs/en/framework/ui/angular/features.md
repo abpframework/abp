@@ -10,12 +10,13 @@ To use the `ConfigStateService`, you must inject it in your class as a dependenc
 
 ```js
 import { ConfigStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private config: ConfigStateService) {}
+  private config = inject(ConfigStateService);
 }
 ```
 

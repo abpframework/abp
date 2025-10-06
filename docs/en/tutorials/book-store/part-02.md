@@ -446,7 +446,7 @@ Open the `/src/app/book/book.component.ts` file and replace the content as below
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto } from '@proxy/books';
 
 @Component({
@@ -458,7 +458,8 @@ import { BookService, BookDto } from '@proxy/books';
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  constructor(public readonly list: ListService, private bookService: BookService) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);

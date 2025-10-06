@@ -227,10 +227,15 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
             return extraProperties;
         }
 
-        foreach (var property in hasExtraProperties.ExtraProperties)
+
+        if(hasExtraProperties.ExtraProperties is not null)
         {
-            extraProperties.Add(property.Key, property.Value);
+            foreach (var property in hasExtraProperties.ExtraProperties)
+            {
+                extraProperties.Add(property.Key, property.Value);
+            }
         }
+        
         return extraProperties;
     }
 

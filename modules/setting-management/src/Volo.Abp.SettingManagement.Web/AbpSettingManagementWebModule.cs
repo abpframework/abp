@@ -25,7 +25,11 @@ public class AbpSettingManagementWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AbpSettingManagementResource), typeof(AbpSettingManagementWebModule).Assembly);
+            options.AddAssemblyResource(
+                typeof(AbpSettingManagementResource), 
+                typeof(AbpSettingManagementWebModule).Assembly, 
+                typeof(AbpSettingManagementApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>

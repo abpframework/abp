@@ -643,7 +643,7 @@ export const ORDER_SERVICE_ROUTES: Routes = [
 * Create `order.component.ts` file under the `projects/ordering-service/src/lib/order` folder as following code:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderDto, OrderService } from './proxy/ordering-service/services';
 
@@ -657,12 +657,13 @@ export class OrderComponent {
 
   items: OrderDto[] = [];
 
-  constructor(private readonly proxy: OrderService) {
+  private readonly proxy = inject(OrderService);
+
+  constructor() {
     this.proxy.getList().subscribe((res) => {
       this.items = res;
     });
   }
-  
 }
 ```
 

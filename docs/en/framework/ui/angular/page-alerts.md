@@ -8,12 +8,13 @@ You can simply import `PageAlertService` from `@abp/ng.theme.shared` and utilize
 
 ```js
 import { PageAlertService } from '@abp/ng.theme.shared';
+import { inject } from '@angular/core';
 
 @Component({
   // ...
 })
 export class MyComponent {
-  constructor(private service: PageAlertService) {}
+  private service = inject(PageAlertService);
 
   showWarning() {
     this.service.show({

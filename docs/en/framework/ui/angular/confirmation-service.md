@@ -8,12 +8,13 @@ You do not have to provide the `ConfirmationService` at component level, because
 
 ```js
 import { ConfirmationService } from '@abp/ng.theme.shared';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private confirmation: ConfirmationService) {}
+  private confirmation = inject(ConfirmationService);
 }
 ```
 
@@ -36,8 +37,10 @@ You can subscribe to the confirmation closing event like below:
 
 ```js
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import { inject } from '@angular/core';
 
-constructor(private confirmation: ConfirmationService) {}
+// inside the class:
+private confirmation = inject(ConfirmationService);
 
 this.confirmation
   .warn('::WillBeDeleted', { key: '::AreYouSure', defaultValue: 'Are you sure?' })
@@ -132,7 +135,10 @@ this.confirmation.clear();
 You can change icons with the `withConfirmationIcon()` method inside `provideAbpThemeShared` function in the app.config.ts. The changes will affect all confirmation popup in the project.
 
 ```ts
-import { provideAbpThemeShared, withConfirmationIcon } from '@abp/ng.theme.shared';
+import {
+  provideAbpThemeShared,
+  withConfirmationIcon,
+} from "@abp/ng.theme.shared";
 
 export const appConfig: ApplicationConfig = {
   providers: [

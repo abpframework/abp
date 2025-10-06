@@ -105,12 +105,14 @@ The [Application Startup Template](../../../solution-templates/application-modul
 
 ```ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(routes: RoutesService) {
-    routes.add([
+  private routes = inject(RoutesService);
+
+  constructor() {
+    this.routes.add([
       {
         path: '/your-path',
         name: 'Your navigation',
@@ -141,7 +143,7 @@ See the [Modifying the Menu](modifying-the-menu.md) document to learn more about
 
 ````ts
 import { NavItemsService } from '@abp/ng.theme.shared';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   template: `
@@ -153,8 +155,10 @@ export class MySearchInputComponent {}
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(private navItems: NavItemsService) {
-    navItems.addItems([
+  private navItems = inject(NavItemsService);
+
+  constructor() {
+    this.navItems.addItems([
       {
         id: 'MySearchInput',
         order: 1,
@@ -184,25 +188,25 @@ Language Selection toolbar item is generally a dropdown that is used to switch b
 **Example: Get the currently selected language**
 
 ````ts
-import {SessionStateService} from '@abp/ng.core';
+import { SessionStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 //...
 
-constructor(private sessionState: SessionStateService) {
-    const lang = this.sessionState.getLanguage()
-}
+const sessionState = inject(SessionStateService);
+const lang = sessionState.getLanguage();
 ````
 
 **Example: Set the selected language**
 
 ````ts
-import {SessionStateService} from '@abp/ng.core';
+import { SessionStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 //...
 
-constructor(private sessionState: SessionStateService) {
-    const lang = this.sessionState.setLanguage('en')
-}
+const sessionState = inject(SessionStateService);
+sessionState.setLanguage('en');
 ````
 
 
@@ -219,7 +223,7 @@ All of the options are shown below. You can choose either of them.
 ````ts
 import { eUserMenuItems } from '@abp/ng.theme.basic';
 import { UserMenuService } from '@abp/ng.theme.shared';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 // make sure that you import this component in a NgModule
@@ -234,20 +238,23 @@ import { Router } from '@angular/router';
 })
 export class UserMenuItemComponent {
   // you can inject the data through `INJECTOR_PIPE_DATA_TOKEN` token
-  constructor(@Inject(INJECTOR_PIPE_DATA_TOKEN) public data: UserMenu) {}
+  public data = inject<UserMenu>(INJECTOR_PIPE_DATA_TOKEN);
 }
 
 @Component({/* component metadata */})
 export class AppComponent {
-  constructor(private userMenu: UserMenuService, private router: Router) {
+  private userMenu = inject(UserMenuService);
+  private router = inject(Router);
+
+  constructor() {
     this.userMenu.addItems([
       {
         id: 'UserMenu.MyAccount',
         order: 1,
-        
+
         // HTML example
         html: `<a class="dropdown-item pointer">My account</a>`,
-        
+
         // text template example
         textTemplate: {
           text: 'AbpAccount::MyAccount',

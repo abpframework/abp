@@ -94,22 +94,22 @@ You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/
 This is the mobile application that is built based on Facebook's [React Native framework](https://reactnative.dev/) and [Expo](https://expo.dev/). It will be in the solution only if you've selected React Native as your mobile application option.
 
 #### Project Structure
-- **Environment.js**: file using for provide application level variables like `apiUrl`, `oAuthConfig` and etc.
+- **Environment.ts**: file using for provide application level variables like `apiUrl`, `oAuthConfig` and etc.
 
 - **api**: The `api` folder contains HTTP request files that simplify API management in the React Native starter template
-  - `API.js:` exports **axiosInstance**. It provides axios instance filled api url
+  - `API.ts:` exports **axiosInstance**. It provides axios instance filled api url
 
 - **components**: In the `components` folder you can reach built in react native components that you can use in your app. These components **facilitates** your list, select and etc. operations
 
 - **contexts**: `contexts` folder contains [react context](https://react.dev/reference/react/createContext). You can expots your contexts in this folder. `Localization context provided in here`
 
-- **navigators**: folder contains [react-native stacks](https://reactnavigation.org/docs/stack-navigator/). After create new *FeatureName*Navigator we need to provide in `DrawerNavigator.js` file as `Drawer.Screen`
+- **navigators**: folder contains [react-native stacks](https://reactnavigation.org/docs/stack-navigator/). After create new *FeatureName*Navigator we need to provide in `DrawerNavigator.tsx` file as `Drawer.Screen`
 
 - **screens**: is the content of navigated page. We'll pass as component property to [Stack.Screen](https://reactnavigation.org/docs/native-stack-navigator/)
 
-- **store**: folder manages state-management operations. We will define `actions`, `reducers`, `sagas` and `selectors` here.
+- **store**: folder manages state-management operations. We will define `actions`, `listeners`, `reducers`, and `selectors` here.
 
-- **styles**: folder contains app styles. `system-style.js` comes built in template we can also add new styles.
+- **styles**: folder contains app styles. `system-style.ts` comes built in template we can also add new styles.
 
 - **utils**: folder contains helper functions that we can use in application
 

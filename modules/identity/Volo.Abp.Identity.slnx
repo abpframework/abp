@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.Identity.Application.Contracts/Volo.Abp.Identity.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Application/Volo.Abp.Identity.Application.csproj" />
+    <Project Path="src/Volo.Abp.Identity.AspNetCore/Volo.Abp.Identity.AspNetCore.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Blazor.Server/Volo.Abp.Identity.Blazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Blazor.WebAssembly/Volo.Abp.Identity.Blazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Blazor/Volo.Abp.Identity.Blazor.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Domain.Shared/Volo.Abp.Identity.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Domain/Volo.Abp.Identity.Domain.csproj" />
+    <Project Path="src/Volo.Abp.Identity.EntityFrameworkCore/Volo.Abp.Identity.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.Identity.HttpApi.Client/Volo.Abp.Identity.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Abp.Identity.HttpApi/Volo.Abp.Identity.HttpApi.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Installer/Volo.Abp.Identity.Installer.csproj" />
+    <Project Path="src/Volo.Abp.Identity.MongoDB/Volo.Abp.Identity.MongoDB.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Web/Volo.Abp.Identity.Web.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Domain.Identity/Volo.Abp.PermissionManagement.Domain.Identity.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.Identity.Application.Tests/Volo.Abp.Identity.Application.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Identity.AspNetCore.Tests/Volo.Abp.Identity.AspNetCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Identity.Domain.Tests/Volo.Abp.Identity.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Identity.EntityFrameworkCore.Tests/Volo.Abp.Identity.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Identity.MongoDB.Tests/Volo.Abp.Identity.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Identity.TestBase/Volo.Abp.Identity.TestBase.csproj" />
+  </Folder>
+</Solution>

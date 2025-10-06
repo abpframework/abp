@@ -71,9 +71,10 @@ First of all you should import the `LocalizationService` from **@abp/ng.core**
 
 ```js
 import { LocalizationService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 class MyClass {
-  constructor(private localizationService: LocalizationService) {}
+  private localizationService = inject(LocalizationService);
 }
 ```
 

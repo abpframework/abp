@@ -242,6 +242,8 @@ You can use `admin` as username and `1q2w3E*` as default password to login to th
 
 > Note: If you haven't selected a mobile framework, you can skip this step. 
 
+Before starting the mobile application, ensure that you have configured it for [react-native](../framework/ui/react-native) or [MAUI](../framework/ui/maui).
+
 You can start the following application(s): 
 
 {{ if Tiered == "Yes" }}
@@ -255,8 +257,7 @@ You can start the following application(s):
 {{ else }}
 - `Acme.BookStore.Web`
 {{ end }}
-
-Before starting the mobile application, ensure that you configure it for [react-native](../framework/ui/react-native) or [MAUI](../framework/ui/maui).
+- `react-native` or `Acme.Bookstore.Maui`
 
 ![mobile-sample](images/abp-studio-mobile-sample.gif)
 

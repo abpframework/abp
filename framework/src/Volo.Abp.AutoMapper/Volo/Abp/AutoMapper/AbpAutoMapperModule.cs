@@ -2,6 +2,7 @@
 using AutoMapper;
 using AutoMapper.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
@@ -39,7 +40,8 @@ public class AbpAutoMapperModule : AbpModule
                 {
                     configurator(autoMapperConfigurationContext);
                 }
-                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression);
+
+                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression, sp.GetRequiredService<ILoggerFactory>());
 
                 foreach (var profileType in options.ValidatingProfiles)
                 {

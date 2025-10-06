@@ -97,7 +97,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         return new ClientProxyRequestContext(
             action,
                 actionArguments
-                .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values[i].Value))
+                .Select((x, i) => new KeyValuePair<string, object?>(x.Key, arguments.Values[i].Value))
                 .ToDictionary(x => x.Key, x => x.Value),
             typeof(TService));
     }
@@ -308,7 +308,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     }
 
     protected virtual void AddHeaders(
-        IReadOnlyDictionary<string, object> argumentsDictionary,
+        IReadOnlyDictionary<string, object?> argumentsDictionary,
         ActionApiDescriptionModel action,
         HttpRequestMessage requestMessage,
         ApiVersionInfo apiVersion)
@@ -375,7 +375,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         return input;
     }
 
-    protected virtual CancellationToken GetCancellationToken(IReadOnlyDictionary<string, object> arguments)
+    protected virtual CancellationToken GetCancellationToken(IReadOnlyDictionary<string, object?> arguments)
     {
         var cancellationTokenArg = arguments.LastOrDefault();
 
