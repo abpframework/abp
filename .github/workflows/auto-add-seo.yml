@@ -235,37 +235,42 @@ jobs:
             const processedCount = parseInt(stats[0]) || 0;
             const skippedCount = parseInt(stats[1]) || 0;
             const skippedTooShort = parseInt(stats[2]) || 0;
+            const prNumber = ${{ github.event.pull_request.number }};
+            const baseRef = '${{ github.event.pull_request.base.ref }}';
+            const branchName = '${{ env.BRANCH_NAME }}';
             
             if (processedCount > 0) {
-              const changedFiles = `${{ steps.changed-files.outputs.changed_files }}`.trim().split('\n').filter(f => f.trim() && f.endsWith('.md'));
+              const changedFilesStr = `${{ steps.changed-files.outputs.changed_files }}`;
+              const changedFiles = changedFilesStr.trim().split('\n').filter(f => f.trim() && f.endsWith('.md'));
               
-              const prBody = `🤖 **Automated SEO Descriptions**
-
-This PR automatically adds SEO descriptions to documentation files that were modified in PR #${{ github.event.pull_request.number }}.
-
-## 📊 Summary
-- ✅ **Updated:** ${processedCount} file(s)
-- ⏭️ **Skipped (total):** ${skippedCount} file(s)
-${skippedTooShort > 0 ? `- ⏭️ **Skipped (content < 200 chars):** ${skippedTooShort} file(s)\n` : ''}
-## 📝 Modified Files
-${changedFiles.slice(0, 20).map(f => `- \`${f}\``).join('\n')}${changedFiles.length > 20 ? `\n- ... and ${changedFiles.length - 20} more` : ''}
-
-## 🔧 Details
-- **Model:** gpt-4o-mini
-- **Max Description Length:** 200 characters
-- **Related PR:** #${{ github.event.pull_request.number }}
-
-These descriptions were automatically generated to improve SEO and search engine visibility. 🚀`;
+              let prBody = '🤖 **Automated SEO Descriptions**\n\n';
+              prBody += `This PR automatically adds SEO descriptions to documentation files that were modified in PR ${prNumber}.\n\n`;
+              prBody += '## 📊 Summary\n';
+              prBody += `- ✅ **Updated:** ${processedCount} file(s)\n`;
+              prBody += `- ⏭️ **Skipped (total):** ${skippedCount} file(s)\n`;
+              if (skippedTooShort > 0) {
+                prBody += `- ⏭️ **Skipped (content < 200 chars):** ${skippedTooShort} file(s)\n`;
+              }
+              prBody += '\n## 📝 Modified Files\n';
+              prBody += changedFiles.slice(0, 20).map(f => `- \`${f}\``).join('\n');
+              if (changedFiles.length > 20) {
+                prBody += `\n- ... and ${changedFiles.length - 20} more`;
+              }
+              prBody += '\n\n## 🔧 Details\n';
+              prBody += '- **Model:** gpt-4o-mini\n';
+              prBody += '- **Max Description Length:** 200 characters\n';
+              prBody += `- **Related PR:** ${prNumber}\n\n`;
+              prBody += 'These descriptions were automatically generated to improve SEO and search engine visibility. 🚀';
 
               const { data: pr } = await github.rest.pulls.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: `docs: Add SEO descriptions (from PR #${{ github.event.pull_request.number }})`,
-                head: '${{ env.BRANCH_NAME }}',
-                base: '${{ github.event.pull_request.base.ref }}',
+                title: `docs: Add SEO descriptions (from PR ${prNumber})`,
+                head: branchName,
+                base: baseRef,
                 body: prBody
               });
               
-              console.log(`✅ Created PR #${pr.number}: ${pr.html_url}`);
+              console.log(`✅ Created PR: ${pr.html_url}`);
             }
 
