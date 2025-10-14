@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.ref }}
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,6 +36,10 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
+          # Checkout base branch first
+          git checkout ${{ github.event.pull_request.base.ref }}
+          
+          # Create new branch from base
           BRANCH_NAME="auto-seo/${{ github.event.pull_request.number }}"
           git checkout -b $BRANCH_NAME
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
@@ -44,15 +48,38 @@ jobs:
         id: changed-files
         run: |
           # Get files changed in the merged PR
-          FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} | grep 'docs/en/.*\.md$' || true)
+          FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.merge_commit_sha }} | grep 'docs/en/.*\.md$' || true)
+          
+          echo "Files changed in the merged PR:"
+          echo "$FILES"
+          echo ""
+          
           echo "changed_files<<EOF" >> $GITHUB_OUTPUT
           echo "$FILES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
           
           if [ -z "$FILES" ]; then
             echo "has_files=false" >> $GITHUB_OUTPUT
+            echo "No markdown files changed in docs/en/"
           else
             echo "has_files=true" >> $GITHUB_OUTPUT
+            
+            # Checkout the changed files from merge commit to get the merged content
+            echo ""
+            echo "Checking out changed files from merge commit..."
+            while IFS= read -r file; do
+              if [ -n "$file" ]; then
+                echo "  Checking out: $file"
+                # Create directory if it doesn't exist
+                mkdir -p "$(dirname "$file")"
+                # Checkout the file from merge commit
+                git show "${{ github.event.pull_request.merge_commit_sha }}:$file" > "$file" 2>/dev/null || echo "  Warning: Could not checkout $file"
+              fi
+            done <<< "$FILES"
+            
+            echo ""
+            echo "Files now in working directory:"
+            git status --short
           fi
 
       - name: Process changed files and add SEO descriptions
@@ -97,32 +124,12 @@ jobs:
           def generate_description(content, filename):
               """Generate SEO description using OpenAI with system prompt from OpenAIService.cs"""
               try:
-                  preview = get_content_preview(content)
+                  # SIMULATION MODE - No API call to save tokens
+                  print(f"   🎭 SIMULATION MODE: Generating mock description...")
                   
-                  response = client.chat.completions.create(
-                      model="gpt-4o-mini",
-                      messages=[
-                          {"role": "system", "content": """Create a short and engaging summary (1–2 sentences) for sharing this documentation link on Discord, LinkedIn, Reddit, Twitter and Facebook. Clearly describe what the page explains or teaches.
-          Highlight the value for developers using ABP Framework.
-          Be written in a friendly and professional tone.
-          Stay under 200 characters.
-          --> https://abp.io/docs/latest <--"""},
-                          {"role": "user", "content": f"""Generate a concise, informative meta description for this documentation page.
-
-          File: {filename}
-          Content Preview:
-          {preview}
-
-          Requirements:
-          - Maximum 200 characters
-
-          Generate only the description text, nothing else:"""}
-                      ],
-                      max_tokens=150,
-                      temperature=0.7
-                  )
-                  
-                  description = response.choices[0].message.content.strip()
+                  # Generate a simple description based on filename
+                  base_name = os.path.splitext(filename)[0].replace('-', ' ').replace('_', ' ').title()
+                  description = f"Learn about {base_name} in ABP Framework. Comprehensive guide for developers building enterprise applications."
                   
                   # Ensure max length
                   if len(description) > 200:
@@ -211,16 +218,45 @@ jobs:
           
           PYTHON_SCRIPT
 
+      - name: Debug - Check file changes after Python script
+        if: steps.changed-files.outputs.has_files == 'true'
+        run: |
+          echo "=== Checking what Python script changed ==="
+          echo ""
+          echo "Files in working directory:"
+          ls -la docs/en/ 2>/dev/null || echo "docs/en/ not found"
+          echo ""
+          echo "Git status:"
+          git status
+          echo ""
+          echo "Git diff (all changes):"
+          git diff
+          echo ""
+          echo "Modified files according to git:"
+          git diff --name-only
+
       - name: Commit and push changes
         if: steps.changed-files.outputs.has_files == 'true'
         run: |
-          git add docs/en/**/*.md
+          # Show git status for debugging
+          echo "Git status before adding:"
+          git status
+          echo ""
+          
+          # Add all changes in docs/en directory
+          git add -A docs/en/
+          
+          echo ""
+          echo "Git status after adding:"
+          git status
           
           if git diff --staged --quiet; then
             echo "No changes to commit"
             echo "has_commits=false" >> $GITHUB_ENV
           else
+            echo "Committing changes..."
             git commit -m "docs: Add SEO descriptions to modified documentation files" -m "Related to PR #${{ github.event.pull_request.number }}"
+            echo "Pushing to branch ${{ env.BRANCH_NAME }}..."
             git push origin ${{ env.BRANCH_NAME }}
             echo "has_commits=true" >> $GITHUB_ENV
           fi
