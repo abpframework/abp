@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<Import Project="..\..\..\configureawait.props" />
+<Import Project="..\..\..\common.props" />
+
+<PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <AssemblyName>Volo.Abp.TickerQ</AssemblyName>
+    <PackageId>Volo.Abp.TickerQ</PackageId>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace />
+</PropertyGroup>
+
+<ItemGroup>
+    <PackageReference Include="TickerQ" />
+</ItemGroup>
+
+<ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+</ItemGroup>
+
+</Project>

@@ -16,6 +16,8 @@ public static class IdentitySettingNames
         public const string RequireDigit = PasswordPrefix + ".RequireDigit";
         public const string ForceUsersToPeriodicallyChangePassword = PasswordPrefix + ".ForceUsersToPeriodicallyChangePassword";
         public const string PasswordChangePeriodDays = PasswordPrefix + ".PasswordChangePeriodDays";
+        public const string EnablePreventPasswordReuse = PasswordPrefix + ".EnablePreventPasswordReuse";
+        public const string PreventPasswordReuseCount = PasswordPrefix + ".PreventPasswordReuseCount";
     }
 
     public static class Lockout

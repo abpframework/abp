@@ -166,6 +166,9 @@
     <Project Path="src/Volo.Abp/Volo.Abp.csproj" />
     <Project Path="src/Volo.Abp.AI.Abstractions/Volo.Abp.AI.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.AI/Volo.Abp.AI.csproj" />
+    <Project Path="src/Volo.Abp.TickerQ/Volo.Abp.TickerQ.csproj" />
+    <Project Path="src/Volo.Abp.BackgroundJobs.TickerQ/Volo.Abp.BackgroundJobs.TickerQ.csproj" />
+    <Project Path="src/Volo.Abp.BackgroundWorkers.TickerQ/Volo.Abp.BackgroundWorkers.TickerQ.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/AbpTestBase/AbpTestBase.csproj" />

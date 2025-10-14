@@ -22,6 +22,7 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
     protected const string DocsParam = "//[doc-params]";
     protected const string DocsTemplates = "//[doc-template]";
     protected const string DocsNav = "//[doc-nav]";
+    protected const string DocsSeo = "//[doc-seo]";
 
     public ILogger<ScribanDocumentSectionRenderer> Logger { get; set; }
 
@@ -49,7 +50,7 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
 
         var result = await scribanTemplate.RenderAsync(parameters);
 
-        return RemoveOptionsJson(result, DocsParam, DocsNav);
+        return RemoveOptionsJson(result, DocsParam, DocsNav, DocsSeo);
     }
 
     public Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document)

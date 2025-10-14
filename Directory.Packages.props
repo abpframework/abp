@@ -182,6 +182,10 @@
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
     <PackageVersion Include="TencentCloudSDK.Sms" Version="3.0.1273" />
     <PackageVersion Include="TimeZoneConverter" Version="7.0.0" />
+    <PackageVersion Include="TickerQ" Version="2.5.3" />
+    <PackageVersion Include="TickerQ.Dashboard" Version="2.5.3" />
+    <PackageVersion Include="TickerQ.Utilities" Version="2.5.3" />
+    <PackageVersion Include="TickerQ.EntityFrameworkCore" Version="2.5.3" />
     <PackageVersion Include="Unidecode.NET" Version="2.1.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.extensibility.execution" Version="2.9.3" />

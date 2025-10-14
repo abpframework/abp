@@ -4,9 +4,6 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
 {
-    [DependsOn(
-        typeof(AbpBackgroundJobsModule)
-        )]
     public class DemoAppSharedModule : AbpModule
     {
         public override void OnPostApplicationInitialization(ApplicationInitializationContext context)

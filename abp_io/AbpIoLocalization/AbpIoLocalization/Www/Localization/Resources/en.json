@@ -616,6 +616,7 @@
     "QuestionItemErrorMessage": "Could not get the latest question details from Stackoverflow.",
     "Oops": "Oops!",
     "CreatePostSuccessMessage": "The Post has been successfully submitted. It will be published after a review from the site admin.",
+    "PostCreationFailed": "An error occurred while creating the post. Please try again later.",
     "Browse": "Browse",
     "CoverImage": "Cover Image",
     "ShareYourExperiencesWithTheABPFramework": "ABP Community Articles | Read or Submit Articles",

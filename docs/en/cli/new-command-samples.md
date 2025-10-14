@@ -164,7 +164,7 @@ It's a template of a basic .NET console application with ABP module architecture
 * This project consists of the following files: `Acme.BookStore.csproj`, `appsettings.json`, `BookStoreHostedService.cs`, `BookStoreModule.cs`, `HelloWorldService.cs` and `Program.cs`.
 
   ```bash
-  abp new Acme.BookStore -t console -csf
+  abp new Acme.BookStore -t console -csf --old
   ```
 
 ## Module

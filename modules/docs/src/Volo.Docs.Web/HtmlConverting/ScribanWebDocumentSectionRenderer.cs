@@ -11,6 +11,11 @@ namespace Volo.Docs.HtmlConverting
             return GetSectionAsync<DocumentNavigationsDto>(documentContent, DocsNav);
         }
 
+        public Task<DocumentSeoDto> GetDocumentSeoAsync(string documentContent)
+        {
+            return GetSectionAsync<DocumentSeoDto>(documentContent, DocsSeo);
+        }
+
         public async Task<List<DocumentPartialTemplateWithValues>> GetPartialTemplatesInDocumentAsync(
             string documentContent)
         {

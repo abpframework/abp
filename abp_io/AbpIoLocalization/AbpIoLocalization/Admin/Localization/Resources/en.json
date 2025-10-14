@@ -776,6 +776,13 @@
     "Menu:Studio": "Studio",
     "Menu:Solutions": "Solutions",
     "Menu:Users": "Users",
-    "Menu:UserReports": "Users"
+    "Menu:UserReports": "Users",
+    "Enum:TokenType:1": "Free",
+    "Enum:TokenType:2": "Paid",
+    "Enum:SourceChannel:1": "Studio",
+    "Enum:SourceChannel:2": "Support Site",
+    "Enum:SourceChannel:3": "Suite",
+    "Menu:OrganizationTokenUsage": "Organization Token Usage",
+    "Permission:OrganizationTokenUsage": "Organization Token Usage"
   }
 }

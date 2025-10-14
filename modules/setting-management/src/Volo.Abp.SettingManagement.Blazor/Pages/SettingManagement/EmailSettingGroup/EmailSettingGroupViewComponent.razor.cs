@@ -119,6 +119,8 @@ public partial class EmailSettingGroupViewComponent
             await EmailSettingsAppService.SendTestEmailAsync(ObjectMapper.Map<SendTestEmailViewModel, SendTestEmailInput>(SendTestEmailInput));
 
             await Notify.Success(L["SentSuccessfully"]);
+
+            await CloseSendTestEmailModalAsync();
         }
         catch (Exception ex)
         {

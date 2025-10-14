@@ -348,6 +348,7 @@ See pre-built job manager alternatives:
 * [Hangfire Background Job Manager](./hangfire.md)
 * [RabbitMQ Background Job Manager](./rabbitmq.md)
 * [Quartz Background Job Manager](./quartz.md)
+* [TickerQ Background Job Manager](./tickerq.md) 
 
 ## See Also
 * [Background Workers](../background-workers)
