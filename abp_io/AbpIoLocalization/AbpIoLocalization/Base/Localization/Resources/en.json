@@ -255,6 +255,11 @@
     "MetaTwitterCard": "summary_large_image",
     "IPAddress": "IP Address",
     "LicenseBanner:InfoText": "Your license will <b>expire in {0} days.</b>",
-    "LicenseBanner:CallToAction": "Please <a href=\"/my-organizations/{0}\" class=\"text-decoration-underline\">extend your license.</a>"
+    "LicenseBanner:ExpiredInfoText": "Your ABP license has expired!",
+    "LicenseBanner:ExpiredInfoTextWithCampaign": "Your ABP license has expired! Renew in <b>2 days</b> to save <b>20%</b> and keep your access uninterrupted.",
+    "LicenseBanner:OwnerCallToActionExtend": "Please <a href=\"/my-organizations/{0}\" class=\"text-decoration-underline\">extend your license.</a>",
+    "LicenseBanner:CallToActionExtend": "Please <a href=\"/my-organizations\" class=\"text-decoration-underline\">extend your license.</a>",
+    "LicenseBanner:OwnerCallToActionRenew": "<a href=\"/my-organizations/{0}\" class=\"text-decoration-underline\">Click here to renew.</a>",
+    "LicenseBanner:CallToActionRenew": "<a href=\"/my-organizations\" class=\"text-decoration-underline\">Click here to renew.</a>"
   }
 }
