@@ -220,9 +220,7 @@ jobs:
             echo "No changes to commit"
             echo "has_commits=false" >> $GITHUB_ENV
           else
-            git commit -m "docs: Add SEO descriptions to modified documentation files
-
-Related to PR #${{ github.event.pull_request.number }}"
+            git commit -m "docs: Add SEO descriptions to modified documentation files" -m "Related to PR #${{ github.event.pull_request.number }}"
             git push origin ${{ env.BRANCH_NAME }}
             echo "has_commits=true" >> $GITHUB_ENV
           fi
