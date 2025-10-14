@@ -4,11 +4,16 @@ on:
   pull_request:
     paths:
       - 'docs/en/**/*.md'
+    branches:
+      - 'rel-*'
+      - 'dev'
     types: [closed]
 
 jobs:
   add-seo-descriptions:
-    if: github.event.pull_request.merged == true
+    if: |
+      github.event.pull_request.merged == true &&
+      !startsWith(github.event.pull_request.head.ref, 'auto-seo/')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -298,5 +303,24 @@ jobs:
               });
               
               console.log(`✅ Created PR: ${pr.html_url}`);
+              
+              // Add reviewers to the PR
+              const reviewers = ['salihozkara']; //GitHub usernames
+              if (reviewers.length === 0) {
+                console.log('⚠️ No reviewers specified.');
+                return;
+              }
+              try {
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  reviewers: reviewers,
+                  team_reviewers: []
+                });
+                console.log(`✅ Added reviewers to PR ${pr.number}`);
+              } catch (error) {
+                console.log(`⚠️ Could not add reviewers: ${error.message}`);
+              }
             }
 
