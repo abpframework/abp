@@ -7,4 +7,12 @@
     [placeholder]="placeholder()"
     formControlName="value"
   />
+  @if (errors.length > 0) {
+    <div class="invalid-feedback d-block">
+      @for (error of errors; track error) {
+        <div>{{ error }}</div>
+      }
+    </div>
+  }
+  <div></div>
 </div>

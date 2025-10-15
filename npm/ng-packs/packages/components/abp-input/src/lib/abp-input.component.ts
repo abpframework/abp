@@ -6,14 +6,19 @@ import {
   forwardRef,
   inject,
   OnInit,
-  input
+  input,
+  Injector
 } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
   FormBuilder,
+  FormControl,
+  FormControlName,
   FormGroup,
+  FormGroupDirective,
   NG_VALUE_ACCESSOR,
+  NgControl,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -32,30 +37,36 @@ const ABP_INPUT_CONTROL_VALUE_ACCESSOR = {
   imports: [ReactiveFormsModule, LocalizationPipe],
   exportAs: 'abpInput',
   host: {
-    class: 'abp-input'
+    class: 'abp-input',
   },
-  providers: [
-    ABP_INPUT_CONTROL_VALUE_ACCESSOR
-  ]
+  providers: [ABP_INPUT_CONTROL_VALUE_ACCESSOR],
 })
 export class AbpInputComponent implements OnInit, ControlValueAccessor {
   label = input.required<string>();
   type = input<'text' | 'number' | 'password'>('text');
   id = input<string>('');
   placeholder = input<string>('');
+  control: FormControl;
   readonly formBuilder = inject(FormBuilder);
   readonly changeDetectorRef = inject(ChangeDetectorRef);
   readonly destroyRef = inject(DestroyRef);
+  readonly injector = inject(Injector);
   abpInputFormGroup: FormGroup;
 
   ngOnInit() {
+
+    const ngControl = this.injector.get(NgControl, null);
+    if (ngControl) {
+      this.control = this.injector.get(FormGroupDirective).getControl(ngControl as FormControlName);
+    }
+
     this.abpInputFormGroup = this.formBuilder.group({
-      value: ['']
-    })
+      value: [''],
+    });
 
     this.value.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(val => {
       this.onChange(val);
-    })
+    });
   }
 
   writeValue(value: any[]): void {
@@ -77,6 +88,13 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
     } else {
       this.value.enable();
     }
+  }
+
+  get errors(): string[] {
+    if (this.control && this.control.errors) {
+      return []
+    }
+    return []
   }
 
   get value(): AbstractControl<any> {
