@@ -41,6 +41,8 @@ const ABP_INPUT_CONTROL_VALUE_ACCESSOR = {
 export class AbpInputComponent implements OnInit, ControlValueAccessor {
   label = input.required<string>();
   type = input<'text' | 'number' | 'password'>('text');
+  id = input<string>('');
+  placeholder = input<string>('');
   readonly formBuilder = inject(FormBuilder);
   readonly changeDetectorRef = inject(ChangeDetectorRef);
   readonly destroyRef = inject(DestroyRef);
@@ -67,6 +69,14 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.value.disable();
+    } else {
+      this.value.enable();
+    }
   }
 
   get value(): AbstractControl<any> {

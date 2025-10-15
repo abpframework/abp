@@ -1,9 +1,10 @@
 <div class="form-group" [formGroup]="abpInputFormGroup">
-  <label for="name">{{ label() | abpLocalization }}</label>
+  <label [for]="id()">{{ label() | abpLocalization }}</label>
   <input
     [type]="type()"
-    id="name"
+    [id]="id()"
     class="form-control"
+    [placeholder]="placeholder()"
     formControlName="value"
   />
 </div>
