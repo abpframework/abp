@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively deploy your ABP application in a clustered environment, ensuring smooth operation across multiple instances."
+}
+```
+
 # Deploying to a Clustered Environment
 
 This document explains the topics that you should consider when deploying your application to a clustered environment where multiple instances of your application run concurrently. 

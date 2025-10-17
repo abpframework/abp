@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to effortlessly integrate the ABP Chart component into your Angular app using lazy loading for optimal performance."
+}
+```
+
 # Chart Component
 
 ABP Chart component exposed by `@abp/ng.components/chart.js` is based on [`charts.js`](https://www.chartjs.org/) v3+. You don't need to install the `chart.js` package. Since the `@abp/ng.components` is dependent on the `chart.js`, the package is already installed in your project.

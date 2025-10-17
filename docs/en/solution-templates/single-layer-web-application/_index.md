@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Single Layer Application Solution Template to learn how to create a straightforward .NET solution structure with ease."
+}
+```
+
 # Single Layer Application Solution Template
 
 This template provides a simple solution structure with a single project. This document explains that solution structure in details.

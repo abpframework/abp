@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to quickly set up a minimalist WPF application using the ABP Framework with this easy-to-follow template guide."
+}
+```
+
 # WPF Application Startup Template
 
 This template is used to create a minimalist WPF application project.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about entities in DDD, their structure, and best practices for using GUID keys in the ABP Framework for effective data modeling."
+}
+```
+
 # Entities
 
 Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describes  it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".

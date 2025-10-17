@@ -1,5 +1,5 @@
 import { makeEnvironmentProviders, inject, provideAppInitializer } from '@angular/core';
-import { noop } from '@abp/ng.core';
+
 import {
   VALIDATION_ERROR_TEMPLATE,
   VALIDATION_TARGET_SELECTOR,

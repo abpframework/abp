@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Studio's Solution Explorer for managing projects and understanding your solution structure with clarity."
+}
+```
+
 # ABP Studio: Solution Explorer
 
 ````json

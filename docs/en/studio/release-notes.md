@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the latest features and enhancements in ABP Studio with release notes detailing major updates and improvements for developers."
+}
+```
+
 # ABP Studio Release Notes
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 

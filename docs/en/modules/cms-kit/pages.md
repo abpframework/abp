@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable and manage dynamic pages in the CMS Kit, enhancing your ABP Framework applications with customizable content features."
+}
+```
+
 # CMS Kit: Pages
 
 CMS Kit Page system allows you to create dynamic pages by specifying URLs, which is the fundamental feature of a CMS.

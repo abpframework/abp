@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP's object extension system lets you add properties to existing objects effortlessly without altering the original class."
+}
+```
+
 # Object Extensions
 
 ABP provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](../../modules), especially when you want to [extend entities](../architecture/modularity/extending/customizing-application-modules-extending-entities.md) and [DTOs](../architecture/modularity/extending/customizing-application-modules-overriding-services.md) defined by the module.

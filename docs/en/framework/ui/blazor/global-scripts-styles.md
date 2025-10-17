@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage global scripts and styles in Blazor apps using ABP, simplifying references and dependency management effortlessly."
+}
+```
+
 # Blazor UI: Managing Global Scripts & Styles
 
 You can add your JavaScript and CSS files from your modules or applications to the Blazor global assets system. All the JavaScript and CSS files will be added to the `global.js` and `global.css` files. You can access these files via the following URL in a Blazor WASM project:

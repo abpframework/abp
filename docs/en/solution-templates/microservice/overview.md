@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Microservice solution template for ABP Framework, featuring pre-installed libraries and services for seamless development and production."
+}
+```
+
 # Microservice Solution: Overview
 
 ````json

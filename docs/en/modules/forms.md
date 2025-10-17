@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "The Forms Module (Pro) enables easy creation and management of questionnaires, allowing data collection, export to CSV, and sharing via unique links."
+}
+```
+
 # Forms Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

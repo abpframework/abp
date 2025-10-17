@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Layered Solution template in ABP Framework, featuring pre-installed libraries and services for seamless development and production."
+}
+```
+
 # Layered Solution: Overview
 
 ````json

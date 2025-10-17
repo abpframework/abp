@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create the initial Ordering microservice using ABP Framework, building on the Catalog service from the previous tutorial."
+}
+```
+
 # Microservice Tutorial Part 04: Creating the initial Ordering service
 
 ````json

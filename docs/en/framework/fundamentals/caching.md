@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed caching in ABP Framework for efficient memory management and improved application performance."
+}
+```
+
 # Distributed Caching
 
 ABP extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to provide a more comfortable and easy-to-use cache service.

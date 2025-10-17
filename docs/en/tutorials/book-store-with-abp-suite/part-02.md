@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a `Book` entity and generate CRUD pages effortlessly using ABP Suite in this web app development tutorial."
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite) - Part 2: Creating the Books
 
 ````json

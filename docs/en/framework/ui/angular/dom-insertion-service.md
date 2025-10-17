@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily insert scripts and styles into the DOM using the `DomInsertionService` from @abp/ng.core, enhancing your Angular applications seamlessly."
+}
+```
+
 # Inserting Scripts & Styles to DOM
 
 You can use the `DomInsertionService` in @abp/ng.core package in order to insert scripts and styles in an easy and explicit way.

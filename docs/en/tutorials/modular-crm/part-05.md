@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to build the Ordering Module by creating an Order entity and adding functionality to manage orders in your ABP Framework application."
+}
+```
+
 # Building the Ordering Module
 
 ````json

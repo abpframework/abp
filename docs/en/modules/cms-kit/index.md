@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the CMS Kit Module, offering essential tools for building dynamic websites with page management, blogging, and tagging features."
+}
+```
+
 # CMS Kit Module
 
 This module provides CMS (Content Management System) capabilities for your application. It provides **core building blocks** and fully working **sub-systems** to create your own website with CMS features enabled, or use the building blocks in your web sites with any purpose.

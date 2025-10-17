@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement the LeptonX Lite Blazor UI for your ABP applications, featuring easy installation and professional design."
+}
+```
+
 # LeptonX Lite Blazor UI
 
 ````json

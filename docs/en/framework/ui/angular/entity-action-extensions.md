@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Angular UI with custom entity actions, enabling dynamic functionality like modals and API calls in ABP Framework."
+}
+```
+
 # Entity Action Extensions for Angular UI
 
 ## Introduction

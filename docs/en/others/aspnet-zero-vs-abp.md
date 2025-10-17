@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Compare ABP Framework and ASP.NET Zero features to make informed decisions for your next project with this insightful guide."
+}
+```
+
 # ABP vs ASP.NET Zero
 
 [ASP.NET Zero](https://aspnetzero.com/) is a startup project template which is also developed by [Volosoft](https://volosoft.com/). Here you can see the feature differences between ASP.NET Zero and ABP Platform (with commercial licenses).

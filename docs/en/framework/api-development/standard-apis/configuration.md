@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use ABP's Application Configuration Endpoint to access user permissions, settings, and tenant info for your application."
+}
+```
+
 # Application Configuration Endpoint
 
 ABP provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, is the list of some fundamental information at this endpoint:

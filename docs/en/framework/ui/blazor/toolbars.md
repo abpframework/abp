@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and customize toolbars in Blazor UI, enhancing your app's interface with user-friendly features."
+}
+```
+
 # Blazor UI: Toolbars
 
 The Toolbar system is used to define **toolbars** on the user interface. Modules (or your application) can add **items** to a toolbar, then the [theme](theming.md) renders the toolbar on the **layout**.

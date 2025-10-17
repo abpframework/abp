@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.AI.Abstractions/Volo.Abp.AI.Abstractions.csproj" />
+    <Project Path="src/Volo.Abp.AI/Volo.Abp.AI.csproj" />
     <Project Path="src/Volo.Abp.ApiVersioning.Abstractions/Volo.Abp.ApiVersioning.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Abstractions/Volo.Abp.AspNetCore.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Authentication.JwtBearer/Volo.Abp.AspNetCore.Authentication.JwtBearer.csproj" />
@@ -164,8 +166,6 @@
     <Project Path="src/Volo.Abp.Validation/Volo.Abp.Validation.csproj" />
     <Project Path="src/Volo.Abp.VirtualFileSystem/Volo.Abp.VirtualFileSystem.csproj" />
     <Project Path="src/Volo.Abp/Volo.Abp.csproj" />
-    <Project Path="src/Volo.Abp.AI.Abstractions/Volo.Abp.AI.Abstractions.csproj" />
-    <Project Path="src/Volo.Abp.AI/Volo.Abp.AI.csproj" />
     <Project Path="src/Volo.Abp.TickerQ/Volo.Abp.TickerQ.csproj" />
     <Project Path="src/Volo.Abp.BackgroundJobs.TickerQ/Volo.Abp.BackgroundJobs.TickerQ.csproj" />
     <Project Path="src/Volo.Abp.BackgroundWorkers.TickerQ/Volo.Abp.BackgroundWorkers.TickerQ.csproj" />
@@ -173,6 +173,7 @@
   <Folder Name="/test/">
     <Project Path="test/AbpTestBase/AbpTestBase.csproj" />
     <Project Path="test/SimpleConsoleDemo/SimpleConsoleDemo.csproj" />
+    <Project Path="test/Volo.Abp.AI.Tests/Volo.Abp.AI.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Authentication.OAuth.Tests/Volo.Abp.AspNetCore.Authentication.OAuth.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.MultiTenancy.Tests/Volo.Abp.AspNetCore.MultiTenancy.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.PlugIn/Volo.Abp.AspNetCore.Mvc.PlugIn.csproj" />

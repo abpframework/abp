@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Studio Microservice Solution Template to quickly build robust, integrated microservices with best practices and ready-to-use components."
+}
+```
+
 # ABP Studio: Microservice Solution Template
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage permissions in ABP's microservice solution, ensuring efficient access control across your applications."
+}
+```
+
 # Microservice Solution: Permission Management
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Layered Solution for Web Applications, including MVC/Razor Pages, to enhance user interaction with your ABP Framework projects."
+}
+```
+
 # Layered Solution: Web Applications
 
 ````json

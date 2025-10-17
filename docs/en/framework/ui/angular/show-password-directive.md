@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Easily enhance password inputs with the Show Password Directive from ABP Framework, allowing users to toggle visibility for better usability."
+}
+```
+
 # Show Password Directive
 
 In password input, text can be shown easily via changing input type attribute to `text`. To make this even easier, you can use the `ShowPasswordDirective` which has been exposed by the `@abp/ng.core` package.

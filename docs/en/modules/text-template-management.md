@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Manage and edit text templates effortlessly with the ABP Framework's Text Template Management Module, enhancing your application's communication features."
+}
+```
+
 # Text Template Management Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to sort navigation elements in ABP Framework, customize sorting behavior, and understand the default algorithm effectively."
+}
+```
+
 # Sorting Navigation Elements
 
 This documentation describes how the navigation elements are sorted and how to change this default behaviour.

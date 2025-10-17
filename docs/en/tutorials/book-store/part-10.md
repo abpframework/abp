@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to establish a 1 to N relationship between Book and Author entities in your ABP Framework application with this step-by-step tutorial."
+}
+```
+
 # Web Application Development Tutorial - Part 10: Book to Author Relation
 ````json
 //[doc-params]

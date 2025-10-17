@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to automatically create API controllers in ABP Framework, simplifying your application's REST API setup with minimal configuration."
+}
+```
+
 # Auto API Controllers
 
 Once you create an [application service](../architecture/domain-driven-design/application-services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.

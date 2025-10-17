@@ -47,6 +47,16 @@ public class MinioBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.CreateBucketIfNotExists, value);
     }
 
+    /// <summary>
+    /// Default value: 7 * 24 * 3600.
+    /// </summary>
+    public int PresignedGetExpirySeconds {
+        get => _containerConfiguration.GetConfigurationOrDefault(MinioBlobProviderConfigurationNames.PresignedGetExpirySeconds, _defaultExpirySeconds);
+        set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.PresignedGetExpirySeconds, value);
+    }
+
+    private int _defaultExpirySeconds = 7 * 24 * 3600;
+
     private readonly BlobContainerConfiguration _containerConfiguration;
 
     public MinioBlobProviderConfiguration(BlobContainerConfiguration containerConfiguration)

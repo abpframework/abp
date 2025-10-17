@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and use a doubly linked list with the @abp/utils package in Angular and MVC, enhancing your data structure skills!"
+}
+```
+
 # Linked List (Doubly)
 
 

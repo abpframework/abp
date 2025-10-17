@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement a common authentication structure using OpenIddict in your ABP microservice solution."
+}
+```
+
 # Microservice Solution: Authentication
 
 ````json

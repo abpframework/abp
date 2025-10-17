@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Basic Theme for Blazor UI— a minimalist base to customize and build your own themes with ease!"
+}
+```
+
 # Blazor UI: Basic Theme
 
 ````json

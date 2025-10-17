@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Angular UI with custom page toolbar actions, allowing seamless integration of functionalities like modals and API calls."
+}
+```
+
 # Page Toolbar Extensions for Angular UI
 
 ## Introduction

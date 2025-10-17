@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize popovers in your ABP Framework applications with the `abp-popover` tag, enhancing user interaction effortlessly."
+}
+```
+
 # Popovers
 
 ## Introduction

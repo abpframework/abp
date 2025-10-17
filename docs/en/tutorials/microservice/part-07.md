@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate microservices using distributed events with ABP Framework for efficient inter-process communication."
+}
+```
+
 # Microservice Tutorial Part 07: Integrating the services: Using Distributed Events
 
 ````json

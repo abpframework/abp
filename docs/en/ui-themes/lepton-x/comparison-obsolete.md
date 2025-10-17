@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the feature set of LeptonX, comparing standalone and ABP options for HTML, Angular, and Blazor frameworks."
+}
+```
+
 # Feature Set
 
 ### Frontend Choices 

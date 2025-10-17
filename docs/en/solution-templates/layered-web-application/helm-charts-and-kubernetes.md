@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP layered solution to a Kubernetes cluster using Helm charts, complete with folder structure guidance."
+}
+```
+
 # Layered Solution: Helm Charts and Kubernetes
 
 ````json

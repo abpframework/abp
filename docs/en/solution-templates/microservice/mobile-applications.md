@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore how to integrate mobile applications with ABP's microservice solution, featuring options like MAUI and React Native for seamless development."
+}
+```
+
 # Microservice Solution: Mobile Applications
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore essential concepts and terms used in ABP Studio to enhance your understanding and streamline your development experience."
+}
+```
+
 # ABP Studio Concepts
 
 ````json

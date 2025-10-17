@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the ConfigStateService.getGlobalFeatures API in Angular to access enabled global features for your ABP Framework applications."
+}
+```
+
 # Angular: Global Features API
 
 The `ConfigStateService.getGlobalFeatures` API allows you to get the enabled features of the [Global Features](../../infrastructure/global-features.md) on the client side.

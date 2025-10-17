@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's guide to selecting the right startup template for your project, covering architectures like Microservices, N-Layered, and more."
+}
+```
+
 # Solution Templates: A Guide to Select the Right One For You
 
 ABP provides several [startup templates](index.md) to you. It is important to start with the right startup template that is suitable for your **project** and **team**. This guide aims to lead you to select the most proper startup template for your requirements.

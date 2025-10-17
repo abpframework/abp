@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily convert your Angular application into a Progressive Web App (PWA) and leverage native features for enhanced user experience."
+}
+```
+
 # PWA Configuration
 
 [Progressive Web Apps](https://web.dev/progressive-web-apps/) are web applications which, although not as integrated to the OS as a native app, can take advantage of native features. They can be discovered via search engines, installed on devices with a single tap or click, and shared via a regular link. They also can work offline and get updates when new content is available.

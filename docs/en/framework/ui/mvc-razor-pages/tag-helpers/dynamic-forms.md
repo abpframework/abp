@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create dynamic forms using `abp-dynamic-form` with a C# model, enhancing your ABP Framework applications effortlessly."
+}
+```
+
 # Dynamic Forms
 
 ## Introduction

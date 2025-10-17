@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily create and customize modals using the `abp-modal` Tag Helper in ABP Framework, enhancing your web application's user experience."
+}
+```
+
 # Modals
 
 > This document explains the details of the `abp-modal` Tag Helper, which simplifies to build the HTML markup for a modal dialog. Read [that documentation](../modals.md) to learn how to work with modals.

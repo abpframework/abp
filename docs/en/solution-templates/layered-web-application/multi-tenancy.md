@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore multi-tenancy in the ABP Framework's layered solution, enabling isolated data and configurations for multiple tenants."
+}
+```
+
 # Layered Solution: Multi-Tenancy
 
 ```json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create, update, and delete books in your web application using MVC, Blazor, or Angular with ABP Framework in this tutorial."
+}
+```
+
 # Web Application Development Tutorial - Part 3: Creating, Updating and Deleting Books
 ````json
 //[doc-params]

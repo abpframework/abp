@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework simplifies exception handling with automatic formatting, localization, and HTTP status code mapping for seamless API responses."
+}
+```
+
 # Exception Handling
 
 ABP provides a built-in infrastructure and offers a standard model for handling exceptions.

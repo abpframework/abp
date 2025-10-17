@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement structured logging in ABP Framework using Serilog, with common configuration for easy integration."
+}
+```
+
 # Single Layer Solution: Logging
 
 ```json

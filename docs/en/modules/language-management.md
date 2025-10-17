@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to manage languages, translate UI texts, and set defaults effortlessly with the ABP Framework's Language Management Module (Pro)."
+}
+```
+
 # Language Management Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

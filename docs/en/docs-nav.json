@@ -2344,6 +2344,10 @@
           ]
         },
         {
+          "text": "AI Management (Pro)",
+          "path": "modules/ai-management/index.md"
+        },
+        {
           "text": "Audit Logging",
           "path": "modules/audit-logging.md"
         },
@@ -2641,6 +2645,10 @@
         {
           "text": "Optimizing for Production",
           "path": "deployment/optimizing-production.md"
+        },
+        {
+          "text": "Configuring Forwarded Headers for Reverse Proxies",
+          "path": "deployment/forwarded-headers.md"
         }
       ]
     },

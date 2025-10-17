@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Page Progress feature in Blazor UI to enhance user experience with automated and customizable loading indicators."
+}
+```
+
 # Blazor UI: Page Progress
 
 Page Progress is used to show a progress bar indicator on top of the page and to show to the user that currently a long running process is in the work.

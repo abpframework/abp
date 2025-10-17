@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to import external users into the ABP Framework using LDAP or OAuth providers with our step-by-step guide."
+}
+```
+
 # Import External Users
 
 ## Introduction

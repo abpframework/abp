@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your ABP application to use the EF Core Oracle provider, ensuring compatibility with Oracle version 12.2 and above."
+}
+```
+
 # Switch to EF Core Oracle Provider
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](../../../solution-templates/layered-web-application)** which comes with SQL Server provider pre-configured.

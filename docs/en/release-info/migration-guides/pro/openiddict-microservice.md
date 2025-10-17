@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate your microservice application to OpenIddict with this comprehensive guide, ensuring a smooth transition with ABP Framework."
+}
+```
+
 # Migrating Microservice Application to OpenIddict Guide
 
 This guide provides guidance for migrating your existing microservice application to OpenIddict. Since OpenIddict is only available with ABP v6.0, you will need to update your existing application in order to apply OpenIddict changes.

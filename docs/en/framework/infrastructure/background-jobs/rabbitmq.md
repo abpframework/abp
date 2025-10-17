@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to install and configure RabbitMQ for background job execution in your ABP Framework projects effectively."
+}
+```
+
 # RabbitMQ Background Job Manager
 
 RabbitMQ is an industry standard message broker. While it is typically used for inter-process communication (messaging / distributed events), it is pretty useful to store and execute background jobs in FIFO (First In First Out) order.

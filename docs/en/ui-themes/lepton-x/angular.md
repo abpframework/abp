@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate the LeptonX Angular UI into your project with step-by-step instructions and essential configuration tips."
+}
+```
+
 # LeptonX Angular UI
 
 To add `LeptonX` into your existing projects, follow the steps below.

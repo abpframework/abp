@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's database-agnostic data access, featuring repositories and unit of work for Entity Framework Core, MongoDB, and Dapper."
+}
+```
+
 # Data Access
 
 ABP was designed as database agnostic. It can work any type of data source by the help of the [repository](../architecture/domain-driven-design/repositories.md) and [unit of work](../architecture/domain-driven-design/unit-of-work.md) abstractions. Currently, the following providers are implemented as official:

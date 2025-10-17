@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable OAuth Resource Owner Password authentication for external logins in the ABP Framework's Identity PRO module."
+}
+```
+
 # OAuth Resource Owner Password (ROP) External login Provider
 
 ## Introduction

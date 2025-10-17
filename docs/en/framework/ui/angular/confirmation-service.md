@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily implement confirmation popups in your Angular project using the `ConfirmationService` from ABP Framework."
+}
+```
+
 # Confirmation Popup
 
 You can use the `ConfirmationService` in @abp/ng.theme.shared package to display a confirmation popup by placing at the root level in your project.

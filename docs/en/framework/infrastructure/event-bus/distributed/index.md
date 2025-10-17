@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Distributed Event Bus in ABP Framework for seamless communication between microservices with various provider options."
+}
+```
+
 # Distributed Event Bus
 
 Distributed Event bus system allows to **publish** and **subscribe** to events that can be **transferred across application/service boundaries**. You can use the distributed event bus to asynchronously send and receive messages between **microservices** or **applications**.

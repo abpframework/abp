@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the ABP Card Component with Bootstrap, featuring customizable CardHeader, CardBody, and CardFooter components."
+}
+```
+
 # Card Component
 
 The ABP Card Component is a wrapper component for the Bootstrap card class.

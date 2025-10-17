@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's Blazor UI integration, simplifying your development with various hosting models for building interactive web applications."
+}
+```
+
 # Blazor UI: Overall
 
 [Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/) is a framework for building interactive client-side web UI with .NET. It enables .NET developers to create Single-Page Web Applications using C# and the Razor syntax.

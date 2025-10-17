@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure HTTP error handling in ABP Framework, including custom error screens and handling specific error codes."
+}
+```
+
 # HTTP Error Handling
 
 ## Error Configurations

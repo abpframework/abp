@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to establish a one-to-many relationship between Book and Author entities in your ABP Suite application with this step-by-step tutorial."
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite) - Part 4: Book to Author Relation
 
 ````json

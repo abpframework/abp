@@ -1,13 +1,20 @@
+```json
+//[doc-seo]
+{
+  "Description": "Learn how to effectively implement localization in your ABP Framework project using the Localization Pipe and Service for seamless multilingual support."
+}
+```
+
 # Localization
 
-Before you read about _the Localization Pipe_ and _the Localization Service_, you should know about localization keys.
+Before exploring _the localization pipe_ and _the localization service_, you should go over the localization keys.
 
-The Localization key format consists of 2 sections which are **Resource Name** and **Key**.
+The localization key format consists of two sections which are **Resource Name** and **Key**.
 `ResourceName::Key`
 
-> If you do not specify the resource name, it will be `defaultResourceName` which is declared in `environment.ts`
+> If you do not specify the resource name, the `defaultResourceName` which is declared in `environment.ts` will be considered as default.
 
-```js
+```ts
 const environment = {
   // ...
   localization: {
@@ -16,7 +23,7 @@ const environment = {
 };
 ```
 
-So these two are the same:
+So, these two will give the same results:
 
 ```html
 <h1>{%{{{ '::Key' | abpLocalization }}}%}</h1>
@@ -32,7 +39,7 @@ You can use the `abpLocalization` pipe to get localized text as in this example:
 <h1>{%{{{ 'Resource::Key' | abpLocalization }}}%}</h1>
 ```
 
-The pipe will replace the key with the localized text.
+This pipe will replace the key with the localized text.
 
 You can also specify a default value as shown below:
 
@@ -43,11 +50,11 @@ You can also specify a default value as shown below:
 </h1>
 ```
 
-To use interpolation, you must give the values for interpolation as pipe parameters, for example:
+In order to use the interpolation, you must give the parameters for the pipe, as an example:
 
 Localization data is stored in key-value pairs:
 
-```js
+```ts
 {
   // ...
   AbpAccount: { // AbpAccount is the resource name
@@ -57,7 +64,7 @@ Localization data is stored in key-value pairs:
 }
 ```
 
-So we can use this key like this:
+Then, we can use this key like this:
 
 ```html
 <h1>{%{{{ 'AbpAccount::PagerInfo' | abpLocalization:'20':'30':'50' }}}%}</h1>
@@ -67,7 +74,7 @@ So we can use this key like this:
 
 ### Using the Localization Service
 
-First of all you should import the `LocalizationService` from **@abp/ng.core**
+First of all, you should import the `LocalizationService` from **@abp/ng.core**
 
 ```js
 import { LocalizationService } from '@abp/ng.core';
@@ -78,11 +85,11 @@ class MyClass {
 }
 ```
 
-After that, you are able to use localization service.
+After that, you will be able to use the localization service.
 
 > You can add interpolation parameters as arguments to `instant()` and `get()` methods.
 
-```js
+```ts
 this.localizationService.instant(
   "AbpIdentity::UserDeletionConfirmation",
   "John"
@@ -103,7 +110,7 @@ this.localizationService.instant(
 
 To get a localized text as [_Observable_](https://rxjs.dev/guide/observable) use `get` method instead of `instant`:
 
-```js
+```ts
 this.localizationService.get("Resource::Key");
 
 // with fallback value
@@ -115,12 +122,12 @@ this.localizationService.get({
 
 ## UI Localizations
 
-Localizations can be determined on backend side. Angular UI gets the localization resources from the `application-localization` API's response and merges these resources with `configuration state` in [`ConfigStateService`](config-state-service.md). You can also determine localizations on the UI side.
+Localizations can be determined on the backend side. Therefore, Angular UI gets the localization resources from the `application-localization` API's response then merges these resources with `configuration state` in [`ConfigStateService`](config-state-service.md). You can also determine localizations on the UI side.
 
 See an example:
 
 ```ts
-import { provideAbpCore, withOptions } from '@abp/ng.core';
+import { provideAbpCore, withOptions } from "@abp/ng.core";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -130,70 +137,70 @@ export const appConfig: ApplicationConfig = {
         // ...,
         localizations: [
           {
-            culture: 'en',
+            culture: "en",
             resources: [
               {
-                resourceName: 'MyProjectName',
+                resourceName: "MyProjectName",
                 texts: {
-                  Administration: 'Administration',
-                  HomePage: 'Home',
+                  Administration: "Administration",
+                  HomePage: "Home",
                 },
               },
             ],
           },
           {
-            culture: 'de',
+            culture: "de",
             resources: [
               {
-                resourceName: 'MyProjectName',
+                resourceName: "MyProjectName",
                 texts: {
-                  Administration: 'Verwaltung',
-                  HomePage: 'Startseite',
+                  Administration: "Verwaltung",
+                  HomePage: "Startseite",
                 },
               },
             ],
           },
         ],
-      }),
+      })
     ),
   ],
 };
 ```
 
-...or, you can determine the localizations in a feature provider configuration:
+You can also declare the localizations in a feature provider configuration:
 
 ```ts
 // your feature configuration
 
-export function provideFeatureConfiguration(): EnvironmentProviders{
+export function provideFeatureConfiguration(): EnvironmentProviders {
   return provideAbpCoreChild({
     localizations: [
-        {
-          culture: 'en',
-          resources: [
-            {
-              resourceName: 'MyProjectName',
-              texts: {
-                Administration: 'Administration',
-                HomePage: 'Home',
-              },
+      {
+        culture: "en",
+        resources: [
+          {
+            resourceName: "MyProjectName",
+            texts: {
+              Administration: "Administration",
+              HomePage: "Home",
             },
-          ],
-        },
-        {
-          culture: 'de-DE',
-          resources: [
-            {
-              resourceName: 'MyProjectName',
-              texts: {
-                Administration: 'Verwaltung',
-                HomePage: 'Startseite',
-              },
+          },
+        ],
+      },
+      {
+        culture: "de-DE",
+        resources: [
+          {
+            resourceName: "MyProjectName",
+            texts: {
+              Administration: "Verwaltung",
+              HomePage: "Startseite",
             },
-          ],
-        },
-      ],
-  })
+          },
+        ],
+      },
+    ],
+  });
 }
 ```
 
@@ -209,7 +216,7 @@ The localizations above can be used like this:
 
 ## RTL Support
 
-As of v2.9 ABP has RTL support. If you are generating a new project with v2.9 and above, everything is set, you do not need to do any changes. If you are migrating your project from an earlier version, please follow the 2 steps below:
+As of v2.9 ABP supports RTL. If you are generating a new project with v2.9 and above, everything is set, there is no need to make any changes. If you are migrating your project from an earlier version, please follow the 2 steps below:
 
 ### Step 1. Create Chunks for Bootstrap LTR and RTL
 
@@ -257,7 +264,7 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
 
 If you have created and injected chunks for Fontawesome as seen above, you no longer need the lazy loading in the `AppComponent` which was implemented before v2.9. Simply remove them. The `AppComponent` in the template of the new version looks like this:
 
-```js
+```ts
 import { Component } from "@angular/core";
 
 @Component({
@@ -272,15 +279,24 @@ export class AppComponent {}
 
 ## Registering a New Locale
 
-Since ABP has more than one language, Angular locale files loads lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and register to Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `provideAbpCore(withOptions({...}))`.
+Since ABP has more than one language, Angular locale files load lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and to register the Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `provideAbpCore(withOptions({...}))`.
 
 ### registerLocaleFn
 
-`registerLocale` function that exported from `@abp/ng.core/locale` package is a higher order function that accepts `cultureNameLocaleFileMap` object and `errorHandlerFn` function as params and returns Webpack `import` function. A `registerLocale` function must be passed to the `withOptions` of the `provideAbpCore` as shown below:
+The `registerLocale` function, exported from the `@abp/ng.core/locale` package, is a **higher-order function**.
+
+It accepts the following parameters:
+
+- **`cultureNameLocaleFileMap`** – an object that maps culture names to their corresponding locale files.
+- **`errorHandlerFn`** – a function that handles any errors that occur during locale loading.
+
+It returns a **Webpack `import` function**.
+
+You should use `registerLocale` within the `withOptions` function of `provideAbpCore`, as shown in the example below:
 
 ```ts
-import { provideAbpCore, withOptions } from '@abp/ng.core';
-import { registerLocale } from '@abp/ng.core/locale';
+import { provideAbpCore, withOptions } from "@abp/ng.core";
+import { registerLocale } from "@abp/ng.core/locale";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -291,13 +307,13 @@ export const appConfig: ApplicationConfig = {
         registerLocaleFn: registerLocale(
           // you can pass the cultureNameLocaleFileMap and errorHandlerFn as optionally
           {
-            cultureNameLocaleFileMap: { 'pt-BR': 'pt' },
+            cultureNameLocaleFileMap: { "pt-BR": "pt" },
             errorHandlerFn: ({ resolve, reject, locale, error }) => {
               // the error can be handled here
             },
-          },
+          }
         ),
-      }),
+      })
     ),
     // ...
   ],
@@ -312,10 +328,10 @@ Some of the culture names defined in .NET do not match Angular locales. In such 
 
 If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to the `registerLocale` function.
 
-```js
+```ts
 // app.config.ts
 
-import { registerLocale } from '@abp/ng.core/locale';
+import { registerLocale } from "@abp/ng.core/locale";
 // if you have commercial license and the language management module, add the below import
 // import { registerLocale } from '@volo/abp.ng.language-management/locale';
 
@@ -325,15 +341,13 @@ export const appConfig: ApplicationConfig = {
     provideAbpCore(
       withOptions({
         // ...,
-        registerLocaleFn: registerLocale(
-          {
-            cultureNameLocaleFileMap: {
-              "DotnetCultureName": "AngularLocaleFileName",
-              "pt-BR": "pt"  // example
-            },
+        registerLocaleFn: registerLocale({
+          cultureNameLocaleFileMap: {
+            DotnetCultureName: "AngularLocaleFileName",
+            "pt-BR": "pt", // example
           },
-        )
-      }),
+        }),
+      })
     ),
   ],
 };
@@ -343,9 +357,9 @@ See [all locale files in Angular](https://github.com/angular/angular/tree/master
 
 ### Adding a New Culture
 
-Add the below code to the `app.config.ts` by replacing `your-locale` placeholder with a correct locale name.
+If you want to register a new language, you can add the code below to the `app.config.ts` by replacing `your-locale` placeholder with a correct locale name.
 
-```js
+```ts
 //app.config.ts
 
 import { storeLocaleData } from "@abp/ng.core/locale";
@@ -356,46 +370,47 @@ import(
 ).then((m) => storeLocaleData(m.default, "your-locale"));
 ```
 
-...or a custom `registerLocale` function can be passed to the abp core provider configuration options:
+You can also configure a custom `registerLocale` function that can be passed to the abp core provider configuration options:
 
-```js
+```ts
 // register-locale.ts
 
-import { differentLocales } from '@abp/ng.core';
+import { differentLocales } from "@abp/ng.core";
 export function registerLocale(locale: string) {
   return import(
     /* webpackChunkName: "_locale-[request]"*/
     /* webpackInclude: /[/\\](en|fr).js/ */
     /* webpackExclude: /[/\\]global|extra/ */
     `@angular/common/locales/${differentLocales[locale] || locale}.js`
-  )
+  );
 }
 
 // app.config.ts
 
-import { registerLocale } from './register-locale';
+import { registerLocale } from "./register-locale";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-     // ...
+    // ...
     provideAbpCore(
       withOptions({
         // ...,
         registerLocaleFn: registerLocale,
-      }),
+      })
     ),
     //...
   ],
 };
 ```
 
-After this custom `registerLocale` function, since the en and fr added to the `webpackInclude`, only en and fr locale files will be created as chunks:
+After adding a custom `registerLocale` function, only the **`en`** and **`fr`** locale files will be created as separate chunks.  
+This happens because only these locales are included in the **`webpackInclude`** configuration.
 
 ![locale chunks](https://user-images.githubusercontent.com/34455572/98203212-acaa2100-1f44-11eb-85af-4eb66d296326.png)
 
-Which locale files you add to `webpackInclude` magic comment, they will be included in the bundle
+The locale files that you added to the `webpackInclude` magic comment will be included in the bundle.
 
 ## See Also
 
-* [Localization in ASP.NET Core](../../fundamentals/localization.md)
-* [Video tutorial](https://abp.io/video-courses/essentials/localization)
+- [Localization in ASP.NET Core](../../fundamentals/localization.md)
+- [Video tutorial](https://abp.io/video-courses/essentials/localization)

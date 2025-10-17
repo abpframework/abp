@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize and reuse ABP's pre-built application modules for efficient and modular application development."
+}
+```
+
 # Customizing the Existing Modules
 
 ABP has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules) those are **ready to use** in any kind of application.

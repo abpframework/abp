@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Studio Single Layer Solution Template for building monolithic systems efficiently, following DDD principles and best practices."
+}
+```
+
 # ABP Studio: Single Layer Solution Template
 
 ````json

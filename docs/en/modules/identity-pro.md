@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Identity Module (Pro) for ABP Framework, enabling robust user and role management, permissions, and authentication features."
+}
+```
+
 # Identity Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.
@@ -432,3 +439,4 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Periodic Password Change (Password Aging)](./identity/periodic-password-change.md)
 * [Two Factor Authentication](./identity/two-factor-authentication.md)
 * [Session Management](./identity/session-management.md)
+* [Password History](./identity/password-history.md)

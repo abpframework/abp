@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Tag Helpers for ASP.NET Core to simplify UI development with type-safe Bootstrap components and enhance your coding efficiency."
+}
+```
+
 # ABP Tag Helpers
 
 ABP defines a set of **tag helper components** to simply the user interface development for ASP.NET Core (MVC / Razor Pages) applications.

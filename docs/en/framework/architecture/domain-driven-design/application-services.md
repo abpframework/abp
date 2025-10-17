@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement application services in the ABP Framework to expose domain logic and streamline presentation layer interactions."
+}
+```
+
 # Application Services
 
 Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**.

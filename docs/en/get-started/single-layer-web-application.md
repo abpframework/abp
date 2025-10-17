@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a single layer web application with ABP Framework in this quick start guide. Set up your environment and get coding!"
+}
+```
+
 # Get Started with ABP: Creating a Single Layer Web Application
 
 ````json

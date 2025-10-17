@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to optimize your ABP application for production with essential configurations and caching strategies for better performance."
+}
+```
+
 # Configuring Your Application for Production Environments
 
 ABP predefines the configurations for the best performance for common deployment scenarios. 

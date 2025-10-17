@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Studio's centralized monitoring solution to effectively oversee your applications, track performance, and collect telemetry data seamlessly."
+}
+```
+
 # ABP Studio: Monitoring Applications
 
 ````json

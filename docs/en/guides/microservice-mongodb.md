@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your ABP Microservice project to MongoDB, replacing EF Core references and updating dependencies for seamless integration."
+}
+```
+
 # Change Microservice project to use MongoDB Provider
 
 This guide explains how to change the Microservice project to use MongoDB as the database provider.

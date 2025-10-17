@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate your Blazor Server UI to OpenIddict with this comprehensive guide, ensuring a smooth transition for your application."
+}
+```
+
 # OpenIddict Blazor-Server UI Migration Guide
 
 ## Blazor Project (Non-Tiered Solution)

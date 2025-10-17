@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently upgrade your ABP-based solutions with the ABP CLI, ensuring smooth updates and database management."
+}
+```
+
 # Upgrading ABP Based Solutions
 
 This document explains how to upgrade your existing solution when a new ABP version is published.

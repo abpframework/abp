@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp-border` Tag Helper for versatile border styling in your ABP applications with clear examples and a demo."
+}
+```
+
 # Borders
 
 ## Introduction

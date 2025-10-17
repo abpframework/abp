@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize ABP's application localization endpoint to fetch localization resources and enhance your UI application effectively."
+}
+```
+
 # Application Localization Endpoint
 
 ABP provides a pre-built and standard endpoint that returns all the [localization](../../fundamentals/localization.md) resources and texts defined in the server.

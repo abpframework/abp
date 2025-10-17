@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp.globalFeatures` JavaScript API to access enabled global features in your ABP Framework applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Global Features API
 
 `abp.globalFeatures` API allows you to get the enabled features of the [Global Features](../../../infrastructure/global-features.md) in the client side.

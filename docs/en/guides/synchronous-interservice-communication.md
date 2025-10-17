@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement synchronous HTTP communication between microservices, enhancing service interaction and efficiency in your applications."
+}
+```
+
 # Synchronous Communication between Microservices
 
 ````json

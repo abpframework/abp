@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize the Lepton Theme in your ABP application with custom CSS, enhancing your website's appearance effortlessly."
+}
+```
+
 # Customize Lepton Theme with Custom CSS
 
 ````json

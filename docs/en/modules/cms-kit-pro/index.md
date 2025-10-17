@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Enhance your application with the CMS Kit Module (Pro) for advanced content management, including dynamic pages, blogging, and user interactions."
+}
+```
+
 # CMS Kit Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

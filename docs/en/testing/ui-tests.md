@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to implement UI Tests with ABP Framework, covering Non Visual and Visual Tests for various UI technologies like MVC, Angular, and Blazor."
+}
+```
+
 # UI Tests
 
 ````json

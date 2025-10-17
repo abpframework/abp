@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the `TrackCapsLockDirective` for password inputs in Angular, enhancing user experience with Caps Lock warnings."
+}
+```
+
 # Caps Lock Directive
 
 In password inputs, You may want to show if Caps Lock is on. To make this even easier, you can use the `TrackCapsLockDirective` which has been exposed by the `@abp/ng.core` package.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Manage tenants and editions in your multi-tenant applications with the ABP SaaS Module, enhancing your app's scalability and flexibility."
+}
+```
+
 # SaaS Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

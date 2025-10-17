@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a simple todo application using the ABP Framework in this quick-start tutorial, featuring multiple UI and database options."
+}
+```
+
 # TODO Application Tutorial with Single-Layer Solution
 
 ````json

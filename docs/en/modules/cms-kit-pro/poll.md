@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement and manage a poll system in CMS Kit Pro, enabling user engagement with easy setup and customization features."
+}
+```
+
 # CMS Kit Pro: Poll System
 
 > You must have an ABP Team or a higher license to use CMS Kit Pro module's features.

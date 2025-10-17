@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Framework's microservice solution template, featuring integrated web applications and API gateways for seamless development."
+}
+```
+
 # Microservice Solution: Web Applications
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently implement entity caching in ABP, enhancing performance by reducing database calls and ensuring data consistency."
+}
+```
+
 # Entity Cache
 
 ABP provides an entity caching system that works on top of the [distributed caching](../fundamentals/caching.md) system. It does the following operations on behalf of you:

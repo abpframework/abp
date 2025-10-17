@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create reusable widgets in ABP Framework, enhancing your ASP.NET Core applications with modular, scriptable components for dynamic dashboards."
+}
+```
+
 # Widgets
 
 ABP provides a model and infrastructure to create **reusable widgets**. Widget system is an extension to [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgets are especially useful when you want to;

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a web application with ABP Suite, automating code generation for your Acme.BookStore project. Perfect for ABP Team members!"
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite)
 
 ````json

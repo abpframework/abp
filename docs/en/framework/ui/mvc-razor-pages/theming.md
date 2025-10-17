@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement flexible UI theming in ABP Framework, enabling theme-independent modules and easy customization for your applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: UI Theming
 
 ## Introduction

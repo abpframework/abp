@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the latest ABP Framework release notes, highlighting major features and enhancements for each version, including migration guidance."
+}
+```
+
 # Release Notes
 
 This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to handle common issues with reverse proxies in ASP.NET Core using forwarded headers middleware for your ABP applications."
+}
+```
+
 # Forwarded Headers
 
 Reverse proxies and load balancers play a crucial role in modern web application architectures. When an application is deployed behind these proxies and load balancers, several specific issues can arise. This document will discuss these issues in detail, explain how ASP.NET Core's forwarded headers middleware can address them, and provide a code example for configuring forwarded headers in an ABP application.

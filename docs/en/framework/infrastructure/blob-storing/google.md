@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure BLOB storage in Google Cloud with ABP Framework, enhancing your project's cloud capabilities effortlessly."
+}
+```
+
 # BLOB Storing Google Provider
 
 BLOB Storing Google Provider can store BLOBs in [Google Cloud Storage](https://cloud.google.com/storage).

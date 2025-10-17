@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement authorization in Blazor UI with ABP Framework, utilizing role-based and policy-based access control for enhanced security."
+}
+```
+
 # Blazor UI: Authorization
 
 Blazor applications can use the same authorization system and permissions defined in the server side.

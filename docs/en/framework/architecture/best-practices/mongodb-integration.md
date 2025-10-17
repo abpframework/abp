@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn best practices for integrating MongoDB in your ABP Framework applications with clear guidelines on defining MongoDbContext."
+}
+```
+
 # MongoDB Integration
 
 > This document offers best practices for implementing MongoDB integration in your modules and applications.

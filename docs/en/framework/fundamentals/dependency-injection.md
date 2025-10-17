@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to leverage ABP's Dependency Injection system for modular service registration and dynamic proxying with best practices and tips."
+}
+```
+
 # Dependency Injection
 
 ABP's Dependency Injection system is developed based on Microsoft's [dependency injection extension](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96) library (Microsoft.Extensions.DependencyInjection nuget package). So, its documentation is valid in ABP too.

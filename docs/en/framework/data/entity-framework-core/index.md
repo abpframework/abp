@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Entity Framework Core with ABP applications, including installation and configuration for seamless database management."
+}
+```
+
 # Entity Framework Core Integration
 
 This document explains how to integrate EF Core as an ORM provider to ABP based applications and how to configure it.

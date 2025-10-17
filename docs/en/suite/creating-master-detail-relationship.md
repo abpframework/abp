@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to establish Master-Detail relationships in your applications, enhancing data organization and management with ABP Framework."
+}
+```
+
 # Master-Detail Relationship
 
 ````json

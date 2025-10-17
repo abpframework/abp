@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's UI Theming system for Blazor, enabling customizable, theme-independent applications with reusable modules and easy upgrades."
+}
+```
+
 # Blazor UI: Theming
 
 ````json

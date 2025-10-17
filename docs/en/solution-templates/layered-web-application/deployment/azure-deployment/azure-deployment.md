@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP application on Azure using GitHub Actions, tailored for your chosen UI and database options."
+}
+```
+
 # Azure Deployment using Application Service
 
 ````json

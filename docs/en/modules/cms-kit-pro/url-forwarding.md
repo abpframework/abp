@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable and use the URL forwarding system in CMS Kit Pro for seamless redirection of pages and external links."
+}
+```
+
 # CMS Kit Pro: URL Forwarding System
 
 > You must have an ABP Team or a higher license to use CMS Kit Pro module's features.

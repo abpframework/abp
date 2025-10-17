@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Twilio SMS into your ABP application effortlessly with our Pro module. Learn installation and best practices for seamless messaging!"
+}
+```
+
 # Twilio SMS Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

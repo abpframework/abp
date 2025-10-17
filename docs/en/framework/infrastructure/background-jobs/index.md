@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement background jobs in ABP Framework for efficient task execution, ensuring persistence and reliability in your applications."
+}
+```
+
 # Background Jobs
 
 ## Introduction

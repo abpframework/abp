@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Local Event Bus in ABP Framework for efficient in-process event publishing and subscribing between services."
+}
+```
+
 # Local Event Bus
 
 The Local Event Bus allows services to publish and subscribe to **in-process events**. That means it is suitable if two services (publisher and subscriber) are running in the same process.

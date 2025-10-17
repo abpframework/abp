@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to install and use the LeptonX Lite Angular UI theme for ABP Framework, enhancing your project's professional look effortlessly."
+}
+```
+
 # LeptonX Lite Angular UI
 
 LeptonX Lite has implementation for the ABP Angular Client. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).

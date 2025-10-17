@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement ABP Commercial's lookup components in your Angular project for efficient relational data retrieval."
+}
+```
+
 # Lookup Components
 
 The Angular UI of ABP Commercial introduces some components with `abp-lookup-...` selector prefix. These components are used for retrieving relational entity data.

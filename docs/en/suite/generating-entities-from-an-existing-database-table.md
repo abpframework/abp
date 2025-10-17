@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to generate CRUD pages from existing database tables using ABP Suite, streamlining your development process with ease."
+}
+```
+
 # Generating CRUD Pages From an Existing Database Table
 
 ````json

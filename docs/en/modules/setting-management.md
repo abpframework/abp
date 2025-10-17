@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage application settings effortlessly with the ABP Framework's Setting Management Module and ISettingManager."
+}
+```
+
 # Setting Management Module
 
 Setting Management Module implements the `ISettingStore` (see [the setting system](../framework/infrastructure/settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.

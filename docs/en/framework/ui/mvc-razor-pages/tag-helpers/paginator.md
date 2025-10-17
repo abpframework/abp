@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the `abp-paginator` tag in your ABP Framework project for seamless pagination with customizable options."
+}
+```
+
 # Paginator
 
 ## Introduction

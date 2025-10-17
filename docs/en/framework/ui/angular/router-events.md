@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to simplify router event handling in Angular with `RouterEvents`, making your code cleaner and more efficient."
+}
+```
+
 # Router Events Simplified
 
 `RouterEvents` is a utility service for filtering specific router events and reacting to them. Please see [this page in Angular docs](https://angular.io/api/router/Event) for available router events.

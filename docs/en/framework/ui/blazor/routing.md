@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance Blazor's routing in ABP Framework by adding assemblies for modular development with the AbpRouterOptions configuration."
+}
+```
+
 # Blazor UI: Routing
 
 Blazor has its own [routing system](https://docs.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing) and you can use it in your applications. ABP doesn't add any new feature to it, except one small improvement for the [modular development](../../architecture/modularity/basics.md).

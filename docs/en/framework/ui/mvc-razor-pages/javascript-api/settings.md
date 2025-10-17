@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the JavaScript Setting API in ABP Framework to access client-side settings efficiently and enhance your ASP.NET Core applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Setting API
 
 Localization API allows you to get the values of the settings on the client side. You can read the current value of a setting in the client side only if it is allowed by the setting definition (on the server side).

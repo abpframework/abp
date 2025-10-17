@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to easily implement the LeptonX Blazor UI theme in your ABP applications with straightforward installation steps."
+}
+```
+
 # LeptonX Blazor UI
 
 ````json

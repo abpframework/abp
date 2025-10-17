@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP v6.x solutions to v7.0 with this comprehensive migration guide, covering essential changes and .NET 7.0 requirements."
+}
+```
+
 # ABP Version 7.0 Migration Guide
 
 This document is a guide for upgrading ABP v6.x solutions to ABP v7.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.

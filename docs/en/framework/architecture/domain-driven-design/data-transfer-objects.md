@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how Data Transfer Objects (DTOs) enhance data handling between application and presentation layers, ensuring clean architecture and abstraction."
+}
+```
+
 # Data Transfer Objects
 
 **Data Transfer Objects** (DTO) are used to transfer data between the **Application Layer** and the **Presentation Layer** or other type of clients.

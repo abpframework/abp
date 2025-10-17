@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy distributed and microservice solutions with ABP, ensuring seamless communication and effective application management."
+}
+```
+
 # Deploying Distributed / Microservice Solutions
 
 ABP is designed for distributed and microservice systems, where multiple applications and/or services communicate internally. All of its features are compatible with distributed scenarios. This document highlights some points you should consider when deploying your distributed or microservice solution.

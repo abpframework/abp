@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 9.1, launching January 2025."
+}
+```
+
 # ABP Platform Road Map
 
 This document provides a road map, release schedule, and planned features for the ABP Platform.

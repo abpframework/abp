@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and manage background workers in your application using the ABP Framework for efficient task automation."
+}
+```
+
 # Background Workers
 
 ## Introduction

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and implement custom layouts using Lepton X components in Angular applications for enhanced UI flexibility."
+}
+```
+
 # Custom layout usage with Lepton X components
 
 

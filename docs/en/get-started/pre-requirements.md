@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Prepare your development environment for ABP applications with essential prerequisites and IDE recommendations for .NET development."
+}
+```
+
 # Prerequisites for Developing ABP Applications
 
 This document will guide you through preparing your development environment for ABP based application development.

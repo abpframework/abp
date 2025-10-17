@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy OpenIddict with ABP Framework, including CORS configuration for gateways and microservices in your applications."
+}
+```
+
 # OpenIddict Deployment
 
 [OpenIddict](https://github.com/openiddict/openiddict-core) is the default OpenId Provider library used by ABP templates through the [OpenIddict Module](https://docs.abp.io/en/abp/latest/Modules/OpenIddict). It is hosted by the **AuthServer** project in the tiered/seperate-authserver application templates. For non-tiered applications, it is hosted by the Web (MVC/Razor), BlazorServer or the **HttpApi.Host** project for Blazor and Angular applications.

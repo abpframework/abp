@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement a robust authorization system in your web applications using ABP Framework, including managing permissions for roles and users."
+}
+```
+
 # Web Application Development Tutorial - Part 5: Authorization
 ````json
 //[doc-params]

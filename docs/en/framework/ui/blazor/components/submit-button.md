@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the `SubmitButton` component in Blazor UI, designed for easy form submissions with localization support and loading indicators."
+}
+```
+
 # Blazor UI: SubmitButton Component
 
 `SubmitButton` is a simple wrapper around `Button` component. It is used to be placed inside of page Form or Modal dialogs where it can response to user actions and to be activated as a default button by pressing an ENTER key. Once clicked it will go into the `disabled` state and also it will show a small loading indicator until clicked event is finished.

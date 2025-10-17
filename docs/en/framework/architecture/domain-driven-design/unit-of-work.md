@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP's Unit of Work simplifies database transactions, ensuring consistency across operations in any application type."
+}
+```
+
 # Unit of Work
 
 ABP's Unit Of Work (UOW) implementation provides an abstraction and control on a **database connection and transaction** scope in an application.

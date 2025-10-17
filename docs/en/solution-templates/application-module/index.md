@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Create reusable application modules or microservices with the ABP Framework's module solution template. Start building with ease!"
+}
+```
+
 # ABP Application Module Template
 
 This document explains how to create a **reusable [application module](../../modules)** based on the [module development best practices & conventions](../../framework/architecture/best-practices).

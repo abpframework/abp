@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to customize layouts in the Angular version of LeptonX, including pre-defined layouts and component replacement for your UI."
+}
+```
+
 # Customization
 
 ### Layouts

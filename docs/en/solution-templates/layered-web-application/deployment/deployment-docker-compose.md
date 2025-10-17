@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to deploy your ABP application using Docker Compose, including building images and modifying configurations for production environments."
+}
+```
+
 # Docker Deployment using Docker Compose
 
 ````json

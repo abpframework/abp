@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to retrieve current user information in Angular using ConfigStateService methods for efficient state management."
+}
+```
+
 # Angular UI: Current User
 
 The current user information stored in Config State.

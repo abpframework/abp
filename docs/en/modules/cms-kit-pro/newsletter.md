@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to enable and manage the newsletter system in CMS Kit Pro, enhancing user engagement with subscription features."
+}
+```
+
 # CMS Kit Pro: Newsletter System
 
 > You must have an ABP Team or a higher license to use CMS Kit Pro module's features.

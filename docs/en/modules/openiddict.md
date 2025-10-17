@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP OpenIddict Module for seamless authentication, including SSO and API access control. Easily integrate and customize for your needs."
+}
+```
+
 # ABP OpenIddict Module
 
 OpenIddict module provides an integration with the [OpenIddict](https://github.com/openiddict/openiddict-core) which provides advanced authentication features like single sign-on, single log-out, and API access control. This module persists applications, scopes, and other OpenIddict-related objects to the database.

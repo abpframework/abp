@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP OAuth Package to learn about authentication integration in your app, including essential classes and functions for seamless user management."
+}
+```
+
 # ABP OAuth Package
 
 The authentication functionality has been moved from @abp/ng.core to @abp/ng.ouath since v7.0.

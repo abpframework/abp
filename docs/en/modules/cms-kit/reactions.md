@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize a reaction system in CMS Kit for engaging user interactions on your resources."
+}
+```
+
 # CMS Kit: Reaction System
 
 CMS Kit provides a **reaction** system to add reactions feature to any kind of resource, like blog posts or comments.

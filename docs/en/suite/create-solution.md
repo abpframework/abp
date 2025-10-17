@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create a new ABP solution using ABP Studio or ABP CLI, and discover how to generate CRUD pages seamlessly."
+}
+```
+
 # Creating a new ABP solution
 
 ````json

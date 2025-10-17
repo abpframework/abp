@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the differences between the old and new ABP CLI, including features and commands, to enhance your ABP development experience."
+}
+```
+
 # Old ABP CLI vs New ABP CLI
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features. With **v8.2+**, the old/legacy ABP CLI has been replaced with a new [CLI](index.md) system to align with the new templating system and [ABP Studio](../studio/index.md). Also, some superior features/commands have been introduced with the new CLI, such as `kube-connect` and `kube-intercept` commands.

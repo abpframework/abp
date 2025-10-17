@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and configure mobile applications using ABP Studio for your layered solution, enhancing user accessibility and experience."
+}
+```
+
 # Layered Solution: Mobile Applications
 
 ```json

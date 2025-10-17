@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the folder structure of ABP Studio's single-layer solution template, essential for organizing your web application efficiently."
+}
+```
+
 # Single Layer Solution: The Structure
 
 ````json

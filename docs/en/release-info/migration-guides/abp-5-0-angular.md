@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the essential migration steps and breaking changes for upgrading your Angular UI from v4.x to v5.0 in the ABP Framework."
+}
+```
+
 # Angular UI v4.x to v5.0 Migration Guide
 
 > This document is for the Angular UI. See also [the main migration guide](abp-5-0.md).

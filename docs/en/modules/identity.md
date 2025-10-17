@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Identity Management Module for the ABP Framework to efficiently manage user roles, permissions, and authentication with customizable UI options."
+}
+```
+
 # Identity Management Module
 
 Identity module is used to manage roles, users and their permissions, based on the [Microsoft Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity).

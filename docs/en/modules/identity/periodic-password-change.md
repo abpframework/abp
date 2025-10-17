@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure periodic password changes with the ABP Identity PRO module, ensuring enhanced security for your users."
+}
+```
+
 # Periodic Password Change (Password Aging)
 
 ## Introduction

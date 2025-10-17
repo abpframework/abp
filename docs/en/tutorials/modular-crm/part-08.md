@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to perform database-level JOINs on multiple modules in ABP Framework, enhancing data integration and modularity."
+}
+```
+
 # Integrating the Modules: Joining the Products and Orders Data
 
 ````json

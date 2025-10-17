@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage client-side packages with ABP Framework, including using NPM/Yarn for optimal compatibility and stability."
+}
+```
+
 
 # ASP.NET Core MVC Client Side Package Management
 

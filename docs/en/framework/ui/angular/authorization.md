@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement OAuth in your Angular apps with ABP Framework, ensuring secure authorization right from project setup."
+}
+```
+
 # Authorization in Angular UI
 
 OAuth is preconfigured in Angular application templates. So, when you start a project using the CLI (or Suite, for that matter), authorization already works. ABP Angular UI packages are using [angular-oauth2-oidc library](https://github.com/manfredsteyer/angular-oauth2-oidc#logging-in) for managing OAuth in the Angular client.

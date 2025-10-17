@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create an empty ASP.NET Core MVC/Razor Pages application with ABP, minimizing dependencies for a fresh start."
+}
+```
+
 # Getting Started with an Empty ASP.NET Core MVC / Razor Pages Application
 
 This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](../get-started/layered-web-application.md)**.

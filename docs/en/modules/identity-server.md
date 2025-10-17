@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the IdentityServer module for ABP Framework, enabling advanced authentication features with seamless integration and database support."
+}
+```
+
 # IdentityServer Module
 
 IdentityServer module provides a full integration with the [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to database. **This module is replaced by** [OpenIddict module](./openiddict.md) after ABP v6.0 in the startup templates.

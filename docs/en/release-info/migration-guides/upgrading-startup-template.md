@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to upgrade your startup template in ABP Framework by comparing existing and new solutions using WinMerge for seamless updates."
+}
+```
+
 # Upgrading the Startup Template
 
 Sometimes we introduce new features/changes that requires to **make changes in the startup template**. We already implement the changes in the startup template for new applications. However, in some cases you need to manually make some minor changes in your existing solution.

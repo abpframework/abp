@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize replaceable components with extensions in ABP Framework to customize entity actions, table columns, and page toolbars effectively."
+}
+```
+
 # How Replaceable Components Work with Extensions
 
 Additional UI extensibility points ([Entity action extensions](../angular/entity-action-extensions.md), [data table column extensions](../angular/data-table-column-extensions.md), [page toolbar extensions](../angular/page-toolbar-extensions.md) and others) are used in ABP pages to allow to control entity actions, table columns and page toolbar of a page. If you replace a page, you need to apply some configurations to be able to work extension components in your component. Let's see how to do this by replacing the roles page.

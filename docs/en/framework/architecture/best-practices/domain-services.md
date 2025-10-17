@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn best practices for implementing Domain Services in your applications, guided by Domain-Driven Design principles."
+}
+```
+
 # Domain Services Best Practices & Conventions
 
 > This document offers best practices for implementing Domain Service classes in your modules and applications based on Domain-Driven-Design principles.

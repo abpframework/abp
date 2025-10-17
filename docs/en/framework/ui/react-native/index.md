@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to set up your development environment for React Native with ABP Framework, enabling seamless mobile app integration!"
+}
+```
+
 ````json
 //[doc-params]
 {

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Blazor `PageHeader` component to customize page titles, breadcrumbs, and toolbars for your ABP Framework applications."
+}
+```
+
 # Blazor UI: Page Header
 
 You can use the`PageHeader` component to set the page title, the breadcrumb items and the toolbar items for a page. Before using the `PageHeader` component, you need to add a using statement for the `Volo.Abp.AspNetCore.Components.Web.Theming.Layout` namespace.

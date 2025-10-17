@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and integrate a Catalog service into your microservice solution with this step-by-step tutorial."
+}
+```
+
 # Microservice Tutorial Part 02: Creating the initial Catalog service
 
 ````json

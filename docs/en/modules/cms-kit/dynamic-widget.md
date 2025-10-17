@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the CMS Kit's dynamic widget feature to seamlessly integrate custom components into your pages and blog posts."
+}
+```
+
 # CMS Kit: Dynamic Widget
 
 CMS Kit provides a dynamic [widget](../../framework/ui/mvc-razor-pages/widgets.md) used to render the components previously developed by the software in the content of the pages and blog posts. Its means, that in static content you can use dynamic content. We will mention how you can do it. You have two choices to define the widget in the system: Writing and UI.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about the common authentication structure in the Layered solution template, utilizing OpenIddict for seamless integration."
+}
+```
+
 # Layered Solution: Authentication
 
 ```json

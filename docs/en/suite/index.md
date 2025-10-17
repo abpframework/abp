@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP Suite, a powerful .NET Core tool for quickly building web pages and generating CRUD applications with ease."
+}
+```
+
 # ABP Suite
 
 ````json

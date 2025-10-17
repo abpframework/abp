@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to install and use the new ABP CLI for streamlined operations in ABP-based solutions, enhancing your development experience!"
+}
+```
+
 # ABP CLI
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.

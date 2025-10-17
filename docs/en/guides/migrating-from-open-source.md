@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly upgrade your ABP Framework projects from open-source templates to Pro modules using ABP Studio for enhanced features."
+}
+```
+
 # Migrating from Open Source Templates
 
 [ABP Studio](https://abp.io/studio) provides a way for the users who already started the development before purchasing a license to auto-upgrade their solutions with Pro modules. You can use this functionality through ABP Studio UI or ABP Studio CLI:

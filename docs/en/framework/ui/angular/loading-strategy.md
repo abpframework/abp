@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement loading strategies for lazy loading in your ABP applications with the `LoadingStrategy` class and its extensions."
+}
+```
+
 # LoadingStrategy
 
 `LoadingStrategy` is an abstract class exposed by @abp/ng.core package. There are two loading strategies extending it: `ScriptLoadingStrategy` and `StyleLoadingStrategy`. Implementing the same methods and properties, both of these strategies help you define how your lazy loading will work.

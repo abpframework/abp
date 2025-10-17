@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily integrate SignalR into your ABP Framework application using the ABP CLI for seamless real-time communication."
+}
+```
+
 # SignalR Integration
 
 > It is already possible to follow [the standard Microsoft tutorial](https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr) to add [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) to your application. However, ABP provides SignalR integration packages those simplify the integration and usage.

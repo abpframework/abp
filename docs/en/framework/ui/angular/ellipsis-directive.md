@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily truncate text with ellipsis using the `EllipsisDirective` in ABP Framework, enhancing your Angular templates effortlessly."
+}
+```
+
 # Ellipsis
 
 Text inside an HTML element can be truncated easily with an ellipsis by using CSS. To make this even easier, you can use the `EllipsisDirective` which has been exposed by the `@abp/ng.theme.shared` package.

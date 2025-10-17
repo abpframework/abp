@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the Audit Logging Module in ABP Framework to efficiently save and manage audit logs in your database."
+}
+```
+
 # Audit Logging Module
 
 The Audit Logging Module basically implements the `IAuditingStore` to save the audit log objects to a database.

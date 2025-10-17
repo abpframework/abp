@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the outdated eShopOnAbp project and transition to the recommended ABP Microservice Solution Template for modern microservices development."
+}
+```
+
 # eShopOnAbp
 
 > ⚠️ **Important Notice**  

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Studio's key features like Solution Explorer and Kubernetes Integration to optimize your ABP application development and management."
+}
+```
+
 # ABP Studio: Overview
 
 ````json

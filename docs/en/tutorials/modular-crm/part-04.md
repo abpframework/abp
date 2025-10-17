@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and integrate an Ordering module in your CRM application using ABP Framework’s Standard Module template."
+}
+```
+
 # Creating the Initial Ordering Module
 
 ````json

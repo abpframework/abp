@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Framework's solution structure, detailing project organization, dependencies, and shared domain elements for efficient development."
+}
+```
+
 # Solution structure
 
 You will get a slightly different solution structure, based on the options you have specified.

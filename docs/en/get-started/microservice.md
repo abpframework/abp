@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a microservice solution with ABP Framework using ABP Studio. Set up your development environment and get started quickly!"
+}
+```
+
 # Get Started with ABP: Creating a Microservice Solution
 
 > You must have an ABP Business or a higher license to use this startup template.

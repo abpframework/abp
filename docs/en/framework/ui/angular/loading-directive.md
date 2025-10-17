@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the `LoadingDirective` in your ABP Framework app to enhance user experience with loading spinners in your UI."
+}
+```
+
 # Loading Directive
 
 

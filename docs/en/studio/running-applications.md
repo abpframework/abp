@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the ABP Studio's Solution Runner to efficiently run applications and organize projects with customizable profiles."
+}
+```
+
 # ABP Studio: Running Applications
 
 ````json

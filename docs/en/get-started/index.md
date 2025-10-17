@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's startup templates for .NET applications, offering tailored solutions for single-layer, layered, and microservice architectures."
+}
+```
+
 # Get Started
 
 Great that you've decided to create a new application with ABP. ABP provides multiple startup templates for different needs. Each startup template is a fine-tuned and production-ready .NET solution that you can immediately start to develop your application based on it.

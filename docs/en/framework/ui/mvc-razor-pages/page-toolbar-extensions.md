@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your ASP.NET Core UI with custom page toolbar extensions, adding buttons and functionality to improve user experience."
+}
+```
+
 # Page Toolbar Extensions for ASP.NET Core UI
 
 Page toolbar system allows you to add components to the toolbar of any page. The page toolbar is the area right to the header of a page. A button ("Import users from excel") was added to the user management page below:
