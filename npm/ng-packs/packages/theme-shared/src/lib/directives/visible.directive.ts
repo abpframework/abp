@@ -15,6 +15,7 @@ export class AbpVisibleDirective implements OnDestroy, OnInit {
     value: boolean | Promise<boolean> | Observable<boolean> | undefined | null,
   ) {
     this.condition$ = checkType(value);
+    this.conditionSubscription?.unsubscribe();
     this.subscribeToCondition();
   }
 
