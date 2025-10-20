@@ -46,6 +46,7 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
   type = input<'text' | 'number' | 'password'>('text');
   id = input<string>('');
   placeholder = input<string>('');
+  hint = input<string>('');
   control: FormControl;
   readonly formBuilder = inject(FormBuilder);
   readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -70,6 +71,7 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value: any[]): void {
+    console.log(value);
     this.value.setValue(value);
     this.changeDetectorRef.markForCheck();
   }
