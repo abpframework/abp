@@ -1,1 +1,1 @@
-export * from './lib/abp-input.component';
+export * from './abp-input.component';
