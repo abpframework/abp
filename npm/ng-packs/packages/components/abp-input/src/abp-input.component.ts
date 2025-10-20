@@ -23,6 +23,7 @@ import {
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LocalizationPipe } from '@abp/ng.core';
+import { CommonModule } from '@angular/common';
 
 const ABP_INPUT_CONTROL_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -34,7 +35,7 @@ const ABP_INPUT_CONTROL_VALUE_ACCESSOR = {
   selector: 'abp-input',
   templateUrl: './abp-input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, LocalizationPipe],
+  imports: [ReactiveFormsModule, CommonModule, LocalizationPipe],
   exportAs: 'abpInput',
   host: {
     class: 'abp-input',
@@ -47,6 +48,7 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
   id = input<string>('');
   placeholder = input<string>('');
   hint = input<string>('');
+  containerClass = input<string>('mb-3');
   control: FormControl;
   readonly formBuilder = inject(FormBuilder);
   readonly changeDetectorRef = inject(ChangeDetectorRef);
@@ -71,7 +73,6 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value: any[]): void {
-    console.log(value);
     this.value.setValue(value);
     this.changeDetectorRef.markForCheck();
   }
