@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement and manage AI capabilities in your ABP Framework application with the AI Management module."
+}
+```
+
 # AI Management (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

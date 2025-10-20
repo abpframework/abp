@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enforce password reuse policies with ABP's Identity PRO module, ensuring unique passwords for enhanced security."
+}
+```
+
 # Password History
 
 ## Introduction
