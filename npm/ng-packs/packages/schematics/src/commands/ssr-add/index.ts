@@ -160,7 +160,6 @@ function updateApplicationBuilderTsConfigRule(options: SSROptions): Rule {
 
     const json = new JSONFile(host, tsConfigPath);
 
-    // Skip adding the files entry if the server entry would already be included
     const include = json.get(['include']);
     if (Array.isArray(include) && include.includes('src/**/*.ts')) {
       return;
@@ -170,6 +169,45 @@ function updateApplicationBuilderTsConfigRule(options: SSROptions): Rule {
     const files = new Set((json.get(filesPath) as string[] | undefined) ?? []);
     files.add('src/server.ts');
     json.modify(filesPath, [...files]);
+  };
+}
+
+function updateRootTsConfigRule(options: SSROptions): Rule {
+  return async (host: Tree) => {
+    const workspace = await readWorkspace(host);
+    const project = workspace.projects.get(options.project);
+
+    let tsConfigPath: string | undefined = options.tsconfigPath;
+
+    if (!tsConfigPath && project) {
+      const projRoot = normalize(project.root || '');
+      const candidate = projRoot ? join(projRoot, 'tsconfig.json') : 'tsconfig.json';
+      if (host.exists(candidate)) {
+        tsConfigPath = candidate;
+      }
+    }
+
+    if (!tsConfigPath && host.exists('tsconfig.json')) {
+      tsConfigPath = 'tsconfig.json';
+    }
+
+    if (!tsConfigPath || !host.exists(tsConfigPath)) {
+      return;
+    }
+
+    const json = new JSONFile(host, tsConfigPath);
+
+    const moduleResolutionPath = ['compilerOptions', 'moduleResolution'];
+    const modulePath = ['compilerOptions', 'module'];
+
+    const currentModuleResolution = json.get(moduleResolutionPath);
+    if (currentModuleResolution !== 'bundler') {
+      json.modify(moduleResolutionPath, 'bundler');
+    }
+    const currentModule = json.get(modulePath);
+    if (currentModule !== 'preserve') {
+      json.modify(modulePath, 'preserve');
+    }
   };
 }
 
@@ -392,6 +430,7 @@ export default function (options: SSROptions): Rule {
         ? [
             updateApplicationBuilderWorkspaceConfigRule(sourceRoot, options, context),
             updateApplicationBuilderTsConfigRule(options),
+            updateRootTsConfigRule(options)
           ]
         : [
             updateWebpackBuilderServerTsConfigRule(options),
