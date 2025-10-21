@@ -1,5 +1,4 @@
-<div class="form-group" [formGroup]="abpInputFormGroup">
-  <label [for]="id()" class="form-label">{{ label() | abpLocalization }}</label>
+@if(abpFormField) {
   <input
     [type]="type()"
     [id]="id()"
@@ -7,15 +6,28 @@
     [placeholder]="placeholder()"
     formControlName="value"
   />
-  @if (hint()) {
-    <small class="form-text text-muted">{{ hint() | abpLocalization }}</small>
-  }
-  @if (errors.length > 0) {
-    <div class="invalid-feedback d-block">
-      @for (error of errors; track error) {
-        <div>{{ error }}</div>
-      }
-    </div>
-  }
-  <div></div>
-</div>
+} @else {
+  <div class="form-group" [formGroup]="abpInputFormGroup">
+    @if (label()) {
+      <label [for]="id()" class="form-label">{{ label() | abpLocalization }}</label>
+    }
+    <input
+      [type]="type()"
+      [id]="id()"
+      class="form-control"
+      [placeholder]="placeholder()"
+      formControlName="value"
+    />
+    @if (hint()) {
+      <small class="form-text text-muted">{{ hint() | abpLocalization }}</small>
+    }
+    @if (errors.length > 0) {
+      <div class="invalid-feedback d-block">
+        @for (error of errors; track error) {
+          <div>{{ error }}</div>
+        }
+      </div>
+    }
+    <div></div>
+  </div>
+}

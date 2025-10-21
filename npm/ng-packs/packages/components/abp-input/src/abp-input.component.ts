@@ -23,6 +23,7 @@ import {
 } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LocalizationPipe } from '@abp/ng.core';
+import { ABP_FORM_FIELD } from '@abp/ng.components/abp-form-field';
 
 const ABP_INPUT_CONTROL_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -42,7 +43,7 @@ const ABP_INPUT_CONTROL_VALUE_ACCESSOR = {
   providers: [ABP_INPUT_CONTROL_VALUE_ACCESSOR],
 })
 export class AbpInputComponent implements OnInit, ControlValueAccessor {
-  label = input.required<string>();
+  label = input<string>();
   type = input<'text' | 'number' | 'password'>('text');
   id = input<string>('');
   placeholder = input<string>('');
@@ -52,6 +53,7 @@ export class AbpInputComponent implements OnInit, ControlValueAccessor {
   readonly changeDetectorRef = inject(ChangeDetectorRef);
   readonly destroyRef = inject(DestroyRef);
   readonly injector = inject(Injector);
+  readonly abpFormField = inject(ABP_FORM_FIELD, { optional: true });
   abpInputFormGroup: FormGroup;
 
   ngOnInit() {

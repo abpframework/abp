@@ -1,4 +1,7 @@
-<div>
+<div class="form-group">
+  <label class="form-label" [for]="labelComponent()?.for()">
+    <ng-content select="abp-form-field-label" />
+  </label>
   <ng-content select="abp-input" />
   <ng-content select="abp-form-field-hint" />
 </div>
