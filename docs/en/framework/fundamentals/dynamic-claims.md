@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement dynamic claims in ABP Framework to ensure real-time updates of claims in user sessions for enhanced security."
+}
+```
+
 # Dynamic Claims
 
 When a client authenticates and obtains an access token or an authentication cookie, the claims in that token or cookie are not changed unless it re-authenticates. That is not a problem for most claims since the claim values do not frequently change. However, for some claims, it may be required to immediately see the impact after the claim values change in the current session. For example, if a role is revoked from a user, you want to see its effect in the next request. Otherwise, the user will continue to use that role's permissions until re-login to the application.

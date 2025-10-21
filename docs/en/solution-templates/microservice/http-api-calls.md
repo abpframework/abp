@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable HTTP API calls in your ABP microservice solution for seamless communication between services using Integration Services."
+}
+```
+
 # Microservice Solution: HTTP API Calls
 
 ````json

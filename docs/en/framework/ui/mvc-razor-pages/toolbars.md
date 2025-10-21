@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to define and customize toolbars in your ASP.NET Core MVC/Razor Pages UI, enhancing user experience with flexible UI components."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: Toolbars
 
 The Toolbar system is used to define **toolbars** on the user interface. Modules (or your application) can add **items** to a toolbar, then the [theme](theming.md) renders the toolbar on the **layout**.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize the user interface in ASP.NET Core MVC/Razor Pages by overriding page models and Razor pages for enhanced functionality and design."
+}
+```
+
 # ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide
 
 This document explains how to override the user interface of a depended [application module](../../../modules) or [theme](theming.md) for ASP.NET Core MVC / Razor Page applications.

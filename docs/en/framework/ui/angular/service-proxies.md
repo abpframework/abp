@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently create service proxies for Angular applications using ABP Framework, avoiding manual transformations and improving code clarity."
+}
+```
+
 # Service Proxies
 
 Calling a REST endpoint from Angular applications is common. We usually create **services** matching server-side controllers and **interfaces** matching [DTOs](../../architecture/domain-driven-design/data-transfer-objects.md) to interact with the server. This often results in manually transforming C# code into TypeScript equivalents and that is unfortunate, if not intolerable.

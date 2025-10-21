@@ -4,34 +4,31 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification;
 
 public class SolutionFileModifier : ITransientDependency
 {
-    public static Encoding DefaultEncoding = Encoding.UTF8;
+    private readonly ICmdHelper _cmdHelper;
 
+    public SolutionFileModifier(ICmdHelper cmdHelper)
+    {
+        _cmdHelper = cmdHelper;
+    }
+    
     public async Task RemoveProjectFromSolutionFileAsync(string solutionFile, string projectName)
     {
-        using (var fileStream = File.Open(solutionFile, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        var list = _cmdHelper.RunCmdAndGetOutput($"dotnet sln \"{solutionFile}\" list");
+
+        foreach (var line in list.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None))
         {
-            using (var sr = new StreamReader(fileStream, Encoding.Default, true))
+            if (Path.GetFileNameWithoutExtension(line.Trim()).Equals(projectName, StringComparison.InvariantCultureIgnoreCase))
             {
-                var solutionFileContent = await sr.ReadToEndAsync();
-                solutionFileContent.NormalizeLineEndings();
-
-                var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
-                var updatedContent = RemoveProject(lines.ToList(), projectName).JoinAsString(Environment.NewLine);
-
-                fileStream.Seek(0, SeekOrigin.Begin);
-                fileStream.SetLength(0);
-
-                using (var sw = new StreamWriter(fileStream, DefaultEncoding))
-                {
-                    await sw.WriteAsync(updatedContent);
-                    await sw.FlushAsync();
-                }
+                _cmdHelper.RunCmd($"dotnet sln \"{solutionFile}\" remove \"{line.Trim()}\"");
+                break;
             }
         }
     }
@@ -48,105 +45,16 @@ public class SolutionFileModifier : ITransientDependency
 
     private async Task AddPackageAsync(NugetPackageInfo package, string solutionFile)
     {
-        var srcFolderId = await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, "src");
-
-        var solutionFileContent = File.ReadAllText(solutionFile);
-        var lines = solutionFileContent.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
-
-        if (lines.Any(l => l.Contains($"\"{package.Name}\"")))
-        {
-            return;
-        }
-
-        var projectGuid = Guid.NewGuid().ToString();
-
-        var newProjectLine = "Project(\"{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\") = \"" + package.Name + "\"," +
-                             " \"packages\\" + package.Name + "\\" +
-                             "\\" + package.Name + ".csproj\", \"{" + projectGuid + "}\""
-                             + Environment.NewLine + "EndProject";
-
-        lines.InsertAfter(l => l.Trim().Equals("EndProject"), newProjectLine);
-
-        var newPostSolutionLine =
-            "		{" + projectGuid + "}.Debug|Any CPU.ActiveCfg = Debug|Any CPU" + Environment.NewLine +
-            "		{" + projectGuid + "}.Debug|Any CPU.Build.0 = Debug|Any CPU" + Environment.NewLine +
-            "		{" + projectGuid + "}.Release|Any CPU.ActiveCfg = Release|Any CPU" + Environment.NewLine +
-            "		{" + projectGuid + "}.Release|Any CPU.Build.0 = Release|Any CPU";
-
-        lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("ProjectConfigurationPlatforms"),
-            newPostSolutionLine);
-
-        var newPreSolutionLine =
-            "		{" + projectGuid + "} = {" + srcFolderId + "}";
-
-        lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
-
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), DefaultEncoding);
-    }
-
-    private List<string> RemoveProject(List<string> solutionFileLines, string projectName)
-    {
-        var projectKey = FindProjectKey(solutionFileLines, projectName);
-
-        if (projectKey == null)
-        {
-            return solutionFileLines;
-        }
-
-        var newSolutionFileLines = new List<string>();
-        var firstOccurence = true;
-
-        for (var i = 0; i < solutionFileLines.Count; ++i)
-        {
-            if (solutionFileLines[i].Contains(projectKey))
-            {
-                if (firstOccurence)
-                {
-                    firstOccurence = false;
-                    ++i; //Skip "EndProject" line too.
-                }
-
-                continue;
-            }
-
-            newSolutionFileLines.Add(solutionFileLines[i]);
-        }
-
-        return newSolutionFileLines;
-    }
-
-    private string FindProjectKey(List<string> solutionFileLines, string projectName)
-    {
-        var projectNameWithQuotes = $"\"{projectName}\"";
-        foreach (var solutionFileLine in solutionFileLines)
-        {
-            if (solutionFileLine.Contains(projectNameWithQuotes))
-            {
-                var curlyBracketStartIndex = solutionFileLine.LastIndexOf("{", StringComparison.OrdinalIgnoreCase);
-                var curlyBracketEndIndex = solutionFileLine.LastIndexOf("}", StringComparison.OrdinalIgnoreCase);
-                return solutionFileLine.Substring(curlyBracketStartIndex + 1,
-                    curlyBracketEndIndex - curlyBracketStartIndex - 1);
-            }
-        }
-
-        return null;
+        _cmdHelper.RunCmd($"dotnet sln \"{solutionFile}\" add \"packages\\{package.Name}\\{package.Name}.csproj\" --solution-folder src");
     }
 
     private async Task AddModuleAsync(ModuleWithMastersInfo module, string solutionFile)
     {
-        var srcModuleFolderId = await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, module.Name,
-            await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, "modules"));
-        var testModuleFolderId = await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, module.Name + ".Tests",
-            await AddNewFolderAndGetIdOrGetExistingIdAsync(solutionFile, "test"));
-
-        var file = File.ReadAllText(solutionFile);
-        var lines = file.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
-
         var projectsUnderModule = Directory.GetFiles(
             Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name),
             "*.csproj",
             SearchOption.AllDirectories);
-
+        
         var projectsUnderTest = new List<string>();
         if (Directory.Exists(Path.Combine(Path.GetDirectoryName(solutionFile), "modules", module.Name, "test")))
         {
@@ -158,41 +66,14 @@ public class SolutionFileModifier : ITransientDependency
 
         foreach (var projectPath in projectsUnderModule)
         {
-            var parentFolderId = projectsUnderTest.Contains(projectPath) ? testModuleFolderId : srcModuleFolderId;
+            var folder = projectsUnderTest.Contains(projectPath) ? "test" : "src";
+
             var projectId = Path.GetFileName(projectPath).Replace(".csproj", "");
-            var projectParentFolderInModule = projectsUnderTest.Contains(projectPath) ? "test" : "src";
-
-            if (lines.Any(l => l.Contains($"\"{projectId}\"")))
-            {
-                continue;
-            }
-
-            var projectGuid = Guid.NewGuid().ToString();
-
-            var newProjectLine = "Project(\"{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\") = \"" + projectId + "\"," +
-                                 " \"modules\\" + module.Name + "\\" + projectParentFolderInModule + "\\" +
-                                 projectId + "\\" + projectId + ".csproj\", \"{" + projectGuid + "}\""
-                                 + Environment.NewLine + "EndProject";
-
-            lines.InsertAfter(l => l.Trim().Equals("EndProject"), newProjectLine);
-
-            var newPostSolutionLine =
-                "		{" + projectGuid + "}.Debug|Any CPU.ActiveCfg = Debug|Any CPU" + Environment.NewLine +
-                "		{" + projectGuid + "}.Debug|Any CPU.Build.0 = Debug|Any CPU" + Environment.NewLine +
-                "		{" + projectGuid + "}.Release|Any CPU.ActiveCfg = Release|Any CPU" + Environment.NewLine +
-                "		{" + projectGuid + "}.Release|Any CPU.Build.0 = Release|Any CPU";
-
-            lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("ProjectConfigurationPlatforms"),
-                newPostSolutionLine);
-
-            var newPreSolutionLine =
-                "		{" + projectGuid + "} = {" + parentFolderId + "}";
-
-            lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"), newPreSolutionLine);
+            var package = @$"modules\{module.Name}\{folder}\{projectId}\{projectId}.csproj";
+            
+            _cmdHelper.RunCmd($"dotnet sln \"{solutionFile}\" add \"{package}\" --solution-folder {folder}");
         }
-
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
-
+        
         if (module.MasterModuleInfos != null)
         {
             foreach (var masterModule in module.MasterModuleInfos)
@@ -200,44 +81,5 @@ public class SolutionFileModifier : ITransientDependency
                 await AddModuleAsync(masterModule, solutionFile);
             }
         }
-    }
-
-    private async Task<string> AddNewFolderAndGetIdOrGetExistingIdAsync(string solutionFile, string folderName,
-        string parentFolderId = null)
-    {
-        var file = File.ReadAllText(solutionFile);
-        var lines = file.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None).ToList();
-        string folderId;
-
-        var folderLineIndex = lines.FindIndex(l =>
-            l.Contains("2150E333-8FDC-42A3-9474-1A3956D46DE8") && l.Contains("\"" + folderName + "\""));
-
-        if (folderLineIndex < 0)
-        {
-            folderId = Guid.NewGuid().ToString();
-            var newFolderLine = "Project(\"{2150E333-8FDC-42A3-9474-1A3956D46DE8}\") = \"" + folderName + "\", \"" +
-                                folderName + "\", \"{" + folderId + "}\""
-                                + Environment.NewLine + "EndProject";
-
-            lines.InsertAfter(l => l.Trim().Equals("EndProject"), newFolderLine);
-
-            if (parentFolderId != null)
-            {
-                var newPreSolutionLine =
-                    "		{" + folderId + "} = {" + parentFolderId + "}";
-
-                lines.InsertAfter(l => l.Contains("GlobalSection") && l.Contains("NestedProjects"),
-                    newPreSolutionLine);
-            }
-        }
-        else
-        {
-            folderId = lines[folderLineIndex].Replace("\"", " ").Replace("{", " ").Replace("}", " ").TrimEnd()
-                .Split(" ").Last();
-        }
-
-        File.WriteAllText(solutionFile, string.Join(Environment.NewLine, lines), Encoding.UTF8);
-
-        return folderId;
     }
 }

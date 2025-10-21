@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp.event` API to publish, subscribe, and manage JavaScript events in your ASP.NET Core MVC/Razor Pages UI for better component communication."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Events API
 
 `abp.event` object is a simple service that is used to publish and subscribe to global events **in the browser**.

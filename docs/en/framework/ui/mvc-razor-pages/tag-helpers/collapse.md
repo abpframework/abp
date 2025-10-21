@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use `abp-collapse-body` and `abp-collapse-id` to create dynamic content visibility in your ABP Framework projects."
+}
+```
+
 # Collapse
 
 ## Introduction

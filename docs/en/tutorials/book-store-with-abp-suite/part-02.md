@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a `Book` entity and generate CRUD pages effortlessly using ABP Suite in this web app development tutorial."
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite) - Part 2: Creating the Books
 
 ````json
@@ -38,7 +45,7 @@ After clicking the related command, pre-integrated browser of ABP Studio should 
 
 ## Creating the Book Entity
 
-Before creating the `Book` entity, first we can create a `BookType` enum in the `Acme.BookStore.Domain.Shared` project under the **Books** folder as follows:
+Before creating the `Book` entity, we need to create a `BookType` enum. This enum will be used as a property type in ABP Suite while defining the entity. So, open your code editor, create a new file named `BookType.cs` in the `Acme.BookStore.Domain.Shared\Books` folder and add the following content:
 
 ```csharp
 namespace Acme.BookStore.Books;
@@ -57,7 +64,7 @@ public enum BookType
 }
 ```
 
-After creating an _enum_ file in your project, you can define it as a property while creating the entity. ABP Suite asks for an enum path to read the enum file, and set the namespace, and enum name in the generated code accordingly. Then, you can create the `Book` entity with some properties. 
+After creating the _enum_ file in your project, you can use it as a property type when creating entities in ABP Suite. When you specify an enum property, ABP Suite will prompt you to provide the path to the enum file. It then reads the file and automatically sets the namespace and enum name in the generated code. Now, let's create the `Book` entity with its properties.
 
 Type `Book` for the *Name* field and leave the other options as is. ABP Suite automatically calculates proper values for the rest of the inputs for you:
 

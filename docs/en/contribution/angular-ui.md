@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to set up and contribute to Angular UI in the ABP Framework with essential tools, commands, and guidelines for developers."
+}
+```
+
 # Contribution Guide for the Angular UI
 
 ## Pre-requirements

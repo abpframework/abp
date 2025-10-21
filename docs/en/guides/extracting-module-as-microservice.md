@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to extract the Audit-Logging Management module into a standalone microservice with this comprehensive guide."
+}
+```
+
 # Extracting a Module as a Microservice
 
 ````json

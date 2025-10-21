@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement a simple state checking system in your applications to dynamically enable or disable objects based on conditions."
+}
+```
+
 # Simple State Checker
 
 The simple state checking system can be used to enable/disable an object based on some dynamic conditions. For example, you can disable a menu item on the user interface, if the current user has not granted for a given permission. The simple state checking system provides a generic way to define and check such conditions.

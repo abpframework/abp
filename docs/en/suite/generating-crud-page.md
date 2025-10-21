@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently generate a CRUD page in ABP Framework, enhancing your development process with streamlined entity management."
+}
+```
+
 # Generating a CRUD page
 
 ````json

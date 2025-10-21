@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to start ABP Suite seamlessly with ABP Studio or via command line, enhancing your development experience with ease."
+}
+```
+
 # How to start ABP Suite?
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `CrossOriginStrategy` class in the @abp/ng.core package to manage resource retrieval in your applications effectively."
+}
+```
+
 # CrossOriginStrategy
 
 `CrossOriginStrategy` is a class exposed by @abp/ng.core package. Its instances define how a source referenced by an element will be retrieved by the browser and are consumed by other classes such as `LoadingStrategy`.

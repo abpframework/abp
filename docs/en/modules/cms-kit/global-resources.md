@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to dynamically manage global styles and scripts in CMS Kit, enabling features for seamless development with ABP Framework."
+}
+```
+
 # CMS Kit: Global Resources
 
 CMS Kit Global Resources system allows to add global styles and scripts dynamically.

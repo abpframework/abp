@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and organize a product management module within your CRM application using ABP Framework in this step-by-step guide."
+}
+```
+
 # Setting Up the Catalog Module
 
 ````json

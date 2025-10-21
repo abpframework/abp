@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily integrate SMS sending in your ABP applications with flexible options for changing SMS providers and creating reusable modules."
+}
+```
+
 # SMS Sending
 
 The ABP provides an abstraction to sending SMS. Having such an abstraction has some benefits;

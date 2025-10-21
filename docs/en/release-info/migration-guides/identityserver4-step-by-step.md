@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Step-by-step guide for migrating from OpenIddict to IdentityServer4 in ABP Framework applications, ensuring a smooth transition for developers."
+}
+```
+
 # Migrating from OpenIddict to IdentityServer4 Step by Step Guide
 
 ABP startup templates use `OpenIddict` OpenID provider from v6.0.0 by default and `IdentityServer` projects are renamed to `AuthServer` in tiered/separated solutions. Since OpenIddict is the default OpenID provider library for ABP templates since v6.0, you may want to keep using [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) library, even it is **archived and no longer maintained by the owners**. ABP doesn't provide support for newer versions of IdentityServer. This guide provides layer-by-layer guidance for migrating your existing [OpenIddict](https://github.com/openiddict/openiddict-core) application to IdentityServer4. 

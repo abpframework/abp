@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for implementing Data Transfer Objects in your applications, guided by Domain-Driven Design principles."
+}
+```
+
 # Data Transfer Objects Best Practices & Conventions
 
 > This document offers best practices for implementing Data Transfer Object classes in your modules and applications based on Domain-Driven-Design principles.

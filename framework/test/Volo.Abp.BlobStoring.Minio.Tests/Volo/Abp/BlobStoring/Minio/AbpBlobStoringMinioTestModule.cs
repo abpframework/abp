@@ -57,6 +57,7 @@ public class AbpBlobStoringMinioTestModule : AbpModule
                     minio.WithSSL = false;
                     minio.BucketName = _randomContainerName;
                     minio.CreateBucketIfNotExists = true;
+                    minio.PresignedGetExpirySeconds = 3600;
                 });
             });
         });

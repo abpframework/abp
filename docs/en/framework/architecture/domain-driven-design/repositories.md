@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use repositories in ABP Framework for effective data access and CRUD operations on domain objects."
+}
+```
+
 # Repositories
 
 "*Mediates between the domain and data mapping layers using a collection-like interface for accessing domain objects*" (Martin Fowler).

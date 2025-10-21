@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to quickly set up a minimalist console application using the ABP CLI with this straightforward guide. Perfect for developers!"
+}
+```
+
 # Console Application Startup Template
 
 This template is used to create a minimalist console application project.

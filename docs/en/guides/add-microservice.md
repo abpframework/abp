@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create new microservices in your ABP solution with step-by-step guidance, enhancing your understanding of microservice architecture."
+}
+```
+
 # Add new Microservices to the Solution
 
 ````json

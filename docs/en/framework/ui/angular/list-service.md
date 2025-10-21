@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement pagination, sorting, and search with the ListService in ABP Framework for enhanced data management."
+}
+```
+
 # Working with Lists
 
 `ListService` is a utility service to provide easy pagination, sorting, and search implementation.

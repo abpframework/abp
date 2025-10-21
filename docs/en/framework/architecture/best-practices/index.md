@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for developing ABP Framework modules, focusing on Domain Driven Design, DBMS independence, and microservice compatibility."
+}
+```
+
 # Module Development Best Practices & Conventions
 
 This document describes the **best practices** and **conventions** for those who want to develop **modules** that satisfy the following specifications:

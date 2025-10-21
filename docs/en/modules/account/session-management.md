@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage user sessions and prevent concurrent logins with the ABP Framework's Session Management feature."
+}
+```
+
 # Session Management
 
 Session Management feature allows you to prevent concurrent login and manage user sessions.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Join the ABP community! This guide outlines how to contribute code and articles to enhance the ABP Framework."
+}
+```
+
 # Contribution Guide
 
 ABP is an [open source](https://github.com/abpframework) and community driven project. This guide is aims to help anyone wants to contribute to the project.

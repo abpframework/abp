@@ -131,4 +131,4 @@ After that, Elsa Studio will redirect to your ABP application's login page, then
 
 ### Elsa Workflows - Sample Workflow Demo
 
-ABP provides a complete demo application that shows how to use the Elsa module in your ABP application. You can download the demo application and see the integration points, if you stuck at any point. Please see the [Elsa Workflows - Sample Workflow Demo](../samples/elsa-workflows.md) page for more information.
+ABP provides a complete demo application that shows how to use the Elsa module in your ABP application. You can download the demo application and see the integration points, if you stuck at any point. Please see the [Elsa Workflows - Sample Workflow Demo](../samples/elsa-workflows-demo.md) page for more information.

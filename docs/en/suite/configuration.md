@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize ABP Suite's directory and file paths through the configuration file for optimal project management."
+}
+```
+
 # ABP Suite configuration
 
 ABP Suite automatically finds your project directories, but when you customize your solution, you can change the directories and file paths from the Suite configuration file. The configuration file is located

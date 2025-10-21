@@ -1,33 +1,51 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTagHelper>
 {
     private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
+    private readonly IHtmlGenerator _generator;
+    private readonly HtmlEncoder _encoder;
+    private readonly IStringLocalizerFactory _stringLocalizerFactory;
+    private readonly IAbpEnumLocalizer _abpEnumLocalizer;
 
-    public AbpRadioInputTagHelperService(IAbpTagHelperLocalizer tagHelperLocalizer)
+    public AbpRadioInputTagHelperService(
+        IAbpTagHelperLocalizer tagHelperLocalizer,
+        IHtmlGenerator generator,
+        HtmlEncoder encoder,
+        IStringLocalizerFactory stringLocalizerFactory,
+        IAbpEnumLocalizer abpEnumLocalizer)
     {
         _tagHelperLocalizer = tagHelperLocalizer;
+        _generator = generator;
+        _encoder = encoder;
+        _stringLocalizerFactory = stringLocalizerFactory;
+        _abpEnumLocalizer = abpEnumLocalizer;
     }
 
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var selectItems = GetSelectItems(context, output);
         SetSelectedValue(context, output, selectItems);
 
         var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
-        var html = GetHtml(context, output, selectItems);
+        var html = await GetRadioInputGroupAsHtmlAsync(context, output, selectItems);
 
         AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order, out var suppress);
 
@@ -42,6 +60,21 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.SetHtmlContent(html);
         }
+    }
+
+    protected virtual async Task<string> GetRadioInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
+    {
+        var radioGroupHtml = GetHtml(context, output, selectItems);
+        var label = await GetLabelAsHtmlAsync(context, output);
+        var infoText = GetInfoAsHtml(context, output);
+
+        var tagBuilder = new TagBuilder("div");
+        tagBuilder.AddCssClass("mb-3");
+        tagBuilder.InnerHtml.AppendHtml(label);
+        tagBuilder.InnerHtml.AppendHtml(radioGroupHtml);
+        tagBuilder.InnerHtml.AppendHtml(infoText);
+
+        return tagBuilder.ToHtmlString();
     }
 
     protected virtual string GetHtml(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
@@ -77,14 +110,92 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
             label.InnerHtml.AppendHtml(selectItem.Text);
 
             var wrapper = new TagBuilder("div");
-            wrapper.AddCssClass("form-check" + inlineClass);
+            wrapper.AddCssClass("form-check mb-1" + inlineClass);
             wrapper.InnerHtml.AppendHtml(input);
             wrapper.InnerHtml.AppendHtml(label);
 
             html.AppendLine(wrapper.ToHtmlString());
         }
 
-        return html.ToString();
+        var div = new TagBuilder("div");
+        div.AddCssClass("mb-1");
+        div.InnerHtml.AppendHtml(html.ToString());
+
+        return div.ToHtmlString();
+    }
+
+    protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        if (TagHelper.SuppressLabel)
+        {
+            return string.Empty;
+        }
+
+        if (string.IsNullOrEmpty(TagHelper.Label))
+        {
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output);
+        }
+
+        var label = new TagBuilder("label");
+        label.AddCssClass("form-label");
+        label.InnerHtml.AppendHtml(TagHelper.Label);
+        label.InnerHtml.AppendHtml(GetRequiredSymbol(context, output));
+
+        return label.ToHtmlString();
+    }
+
+    protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var labelTagHelper = new LabelTagHelper(_generator)
+        {
+            For = TagHelper.AspFor,
+            ViewContext = TagHelper.ViewContext,
+        };
+
+        var innerOutput = await labelTagHelper.ProcessAndGetOutputAsync(
+            new TagHelperAttributeList { { "class", "form-label" } },
+            context,
+            "label",
+            TagMode.StartTagAndEndTag);
+
+        innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
+
+        return innerOutput.Render(_encoder);
+    }
+
+    protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
+    {
+        var isHaveRequiredAttribute = context.AllAttributes.Any(a => a.Name == "required");
+
+        return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null || isHaveRequiredAttribute
+            ? "<span> * </span>"
+            : "";
+    }
+
+    protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output)
+    {
+        var text = string.Empty;
+        var infoAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<InputInfoText>();
+
+        if (!string.IsNullOrEmpty(TagHelper.InfoText))
+        {
+            text = TagHelper.InfoText!;
+        }
+        else if (infoAttribute != null)
+        {
+            text = _tagHelperLocalizer.GetLocalizedText(infoAttribute.Text, TagHelper.AspFor.ModelExplorer);
+        }
+        else
+        {
+            return "";
+        }
+
+        var small = new TagBuilder("small");
+        small.Attributes.Add("id", TagHelper.AspFor.Name.Replace('.', '_') + "InfoText");
+        small.AddCssClass("form-text");
+        small.InnerHtml.Append(text);
+
+        return small.ToHtmlString();
     }
 
     protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
@@ -110,10 +221,32 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
 
     protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
     {
-        var localizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer);
+        var selectItems = new List<SelectListItem>();
+        var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
+        var enumType = explorer.ModelType;
 
-        var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-            .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : new List<SelectListItem>();
+        if (isNullableType)
+        {
+            enumType = Nullable.GetUnderlyingType(explorer.ModelType)!;
+            selectItems.Add(new SelectListItem());
+        }
+
+        var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
+
+        foreach (var enumValue in enumType.GetEnumValuesAsUnderlyingType())
+        {
+            var localizedMemberName = _abpEnumLocalizer.GetString(enumType, enumValue,
+                new[]
+                {
+                    containerLocalizer,
+                    _stringLocalizerFactory.CreateDefaultOrNull()
+                }!);
+            selectItems.Add(new SelectListItem
+            {
+                Value = enumValue.ToString(),
+                Text = localizedMemberName
+            });
+        }
 
         return selectItems;
     }

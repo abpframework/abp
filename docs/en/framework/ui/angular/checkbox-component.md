@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement the ABP Checkbox Component for reusable form input, enhancing your applications with ease and efficiency."
+}
+```
+
 # Checkbox Component
 
 The ABP Checkbox Component is a reusable form input component for the checkbox type.

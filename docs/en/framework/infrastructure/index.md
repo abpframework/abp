@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's comprehensive infrastructure features for building robust .NET applications, including audit logging, background jobs, and more."
+}
+```
+
 # ABP Infrastructure
 
 ABP provides a complete infrastructure for creating real world software solutions with modern architectures based on the .NET platform. Each of the following documents explains an infrastructure feature:

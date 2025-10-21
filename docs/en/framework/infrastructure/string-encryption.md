@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to securely encrypt and decrypt strings in your ABP applications with easy installation and usage guides."
+}
+```
+
 # String Encryption
 
 ABP provides string encryption feature that allows to **Encrypt** and **Decrypt** strings.

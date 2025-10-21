@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the flexible `ModalComponent` from ABP Framework for customizable modals with seamless integration and user-friendly features."
+}
+```
+
 # Modal
 
 `ModalComponent` is a pre-built component exposed by `@abp/ng.theme.shared` package to show modals. The component uses the [`ng-bootstrap`](https://ng-bootstrap.github.io/)'s modal service inside to render a modal. 

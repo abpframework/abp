@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to develop a mobile application using React Native with ABP Framework, focusing on UI for the Acme.BookStore app."
+}
+```
+
 # Mobile Application Development Tutorial - React Native
 
 React Native mobile option is *available for* ***Team*** *or higher licenses*. Therefore, if you don't have a commercial license, it's suggested to follow the article by downloading the source code of the sample application as described in the next chapter.

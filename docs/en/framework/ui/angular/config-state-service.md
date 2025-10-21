@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently use the ConfigStateService in your ABP application to manage and access configuration settings seamlessly."
+}
+```
+
 # Config State Service
 
 `ConfigStateService` is a singleton service, i.e. provided in root level of your application, and keeps the application configuration response in the internal store.

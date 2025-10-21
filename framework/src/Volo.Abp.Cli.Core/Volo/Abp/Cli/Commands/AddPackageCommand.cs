@@ -83,7 +83,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
 
         sb.AppendLine("");
         sb.AppendLine("'add-package' command is used to add an ABP package to a project.");
-        sb.AppendLine("It should be used in a folder containing a .csproj file, .sln file or packages.json.");
+        sb.AppendLine("It should be used in a folder containing a .csproj file, .sln file, .slnx file or packages.json.");
         sb.AppendLine("");
         sb.AppendLine("Usage:");
         sb.AppendLine("");
@@ -146,7 +146,8 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
             return providedSolutionFile;
         }
 
-        return Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").FirstOrDefault();
+        return Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln")
+            .Concat(Directory.GetFiles(Directory.GetCurrentDirectory(), "*.slnx")).FirstOrDefault();
     }
 
     protected virtual string GetAngularDirectory(CommandLineArgs commandLineArgs)

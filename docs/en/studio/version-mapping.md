@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the version mappings between ABP Studio and ABP Solution Templates to streamline your development process and ensure compatibility."
+}
+```
+
 # ABP Studio and ABP Startup Template Version Mappings
 
 This document provides a general overview of the relationship between various versions of ABP Studio and the ABP version of the [ABP Solution Templates](../solution-templates/index.md) used when generating a new solution. Each version of ABP Studio is configured to create solutions with a specific ABP version. However, once a solution is created, you can easily update it to the latest version of ABP via ABP Studio or [ABP CLI](../cli/index.md#update).

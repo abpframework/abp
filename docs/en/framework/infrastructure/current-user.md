@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to access information about the logged-in user in your ABP Framework app using the ICurrentUser service."
+}
+```
+
 # Current User
 
 It is very common to retrieve the information about the logged in user in a web application. The current user is the active user related to the current request in a web application.

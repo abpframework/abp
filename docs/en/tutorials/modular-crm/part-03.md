@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create entities, services, and a basic UI for the products module in ABP Framework, focusing on modularity for effective development."
+}
+```
+
 # Building the Catalog Module
 
 ````json

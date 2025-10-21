@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively store BLOBs in a layered solution using ABP Framework, enhancing your application's file management capabilities."
+}
+```
+
 # Layered Solution: BLOB Storing
 
 ```json

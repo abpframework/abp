@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to integrate modules in ABP Framework by implementing integration services for seamless communication between Products and Orders modules."
+}
+```
+
 # Integrating the Modules: Implementing Integration Services
 
 ````json

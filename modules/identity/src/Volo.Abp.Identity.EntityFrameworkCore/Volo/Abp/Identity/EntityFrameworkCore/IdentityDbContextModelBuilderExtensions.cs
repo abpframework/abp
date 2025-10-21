@@ -46,6 +46,7 @@ public static class IdentityDbContextModelBuilderExtensions
             b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            b.HasMany(u => u.PasswordHistories).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
             b.HasIndex(u => u.NormalizedUserName);
             b.HasIndex(u => u.NormalizedEmail);
@@ -220,6 +221,19 @@ public static class IdentityDbContextModelBuilderExtensions
             b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
 
             b.HasIndex(ou => new { ou.UserId, ou.OrganizationUnitId });
+
+            b.ApplyObjectExtensionMappings();
+        });
+
+        builder.Entity<IdentityUserPasswordHistory>(b =>
+        {
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserPasswordHistories", AbpIdentityDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.HasKey(x => new { x.UserId, x.Password });
+
+            b.Property(x => x.Password).HasMaxLength(IdentityUserPasswordHistoriesConsts.MaxPasswordLength).IsRequired();
 
             b.ApplyObjectExtensionMappings();
         });

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Account Module (Pro) for ABP Framework, featuring user authentication, two-factor setup, and tenant switching functionalities."
+}
+```
+
 # Account Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

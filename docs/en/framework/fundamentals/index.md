@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the essential building blocks of ABP Framework solutions, covering startup, authorization, caching, and more for efficient development."
+}
+```
+
 # ABP Fundamentals: Overview
 
 The following documents explains the fundamental building blocks to create ABP solutions:

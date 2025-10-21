@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's production-ready startup solution templates for Single-Layer, Layered, and Microservice architectures to kickstart your project!"
+}
+```
+
 # Startup Solution Templates
 
 ABP provides pre-architected and production-ready templates to jump start a new solution.

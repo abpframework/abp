@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the single-layer solution for web applications, featuring ASP.NET Core MVC and Angular options for building robust web apps."
+}
+```
+
 # Single Layer Solution: Web Applications
 
 ````json

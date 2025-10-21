@@ -45,6 +45,8 @@ public static class AbpIdentityResultExtensions
             IdentityStrings["InvalidUserName"] = "Username '{0}' is invalid.";
         }
 
+        IdentityStrings["PasswordInHistory"] = "Passwords must not match your last {0} passwords.";
+
         if (!IdentityStrings.Any())
         {
             throw new AbpException("ResourceSet values of Identity is empty.");

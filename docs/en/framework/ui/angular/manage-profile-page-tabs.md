@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to manage profile page tabs in ABP Framework using `ManageProfileTabsService` for adding, removing, or editing tabs effortlessly."
+}
+```
+
 # Manage Profile Page Tabs
 
 ![manage profile page](./images/manage-profile-page.png)
@@ -9,13 +16,12 @@ See the example below, covers all features:
 ```ts
 // manage-profile-tabs.provider.ts
 
-import { provideAppInitializer, Component } from "@angular/core";
+import { Component, inject, provideAppInitializer } from "@angular/core";
 import { TwoFactorTabComponent } from "@volo/abp.ng.account/public";
 import {
   eAccountManageProfileTabNames,
   ManageProfileTabsService,
 } from "@volo/abp.ng.account/public/config";
-import { MyAwesomeTabComponent } from "./my-awesome-tab/my-awesome-tab.component";
 
 @Component({
   selector: "abp-my-awesome-tab",
@@ -23,14 +29,14 @@ import { MyAwesomeTabComponent } from "./my-awesome-tab/my-awesome-tab.component
 })
 class MyAwesomeTabComponent {}
 
-export const MANAGE_PROFILE_TAB_PROVIDER = {
-  provideAppInitializer(()=>{
+export const MANAGE_PROFILE_TAB_PROVIDER = [
+  provideAppInitializer(() => {
     configureManageProfileTabs();
   }),
-};
+];
 
 export function configureManageProfileTabs() {
-  tabs = inject(ManageProfileTabsService);
+  const tabs = inject(ManageProfileTabsService);
   tabs.add([
     {
       name: "::MyAwesomeTab", // supports localization keys
@@ -56,7 +62,7 @@ import { MANAGE_PROFILE_TAB_PROVIDER } from "./manage-profile-tabs.provider";
 export const appConfig: ApplicationConfig = {
   providers: [
     // ...
-    MANAGE_PROFILE_TAB_PROVIDER
+    MANAGE_PROFILE_TAB_PROVIDER,
   ],
 };
 ```

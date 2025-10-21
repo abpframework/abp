@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily format dates in Angular using DateTime format pipes for shortDate, shortTime, and shortDateTime with culture settings."
+}
+```
+
 {%{
 # DateTime Format Pipes
 

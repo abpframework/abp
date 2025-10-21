@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement background jobs in ABP Framework for efficient task execution, ensuring persistence and reliability in your applications."
+}
+```
+
 # Background Jobs
 
 ## Introduction
@@ -318,12 +325,12 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 Set `DefaultQueueNamePrefix` and `DefaultDelayedQueueNamePrefix` properties in `AbpRabbitMqBackgroundJobOptions` to your application's name:
 
 ````csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    PreConfigure<AbpRabbitMqBackgroundJobOptions>(options =>
+    Configure<AbpRabbitMqBackgroundJobOptions>(options =>
     {
-        options.DefaultQueueNamePrefix = context.Services.GetApplicationName()!.EndsWith('.') + options.DefaultQueueNamePrefix;
-        options.DefaultDelayedQueueNamePrefix = context.Services.GetApplicationName()!.EndsWith('.') + options.DefaultDelayedQueueNamePrefix;
+        options.DefaultQueueNamePrefix = context.Services.GetApplicationName()!.EnsureEndsWith('.') + options.DefaultQueueNamePrefix;
+        options.DefaultDelayedQueueNamePrefix = context.Services.GetApplicationName()!.EnsureEndsWith('.') + options.DefaultDelayedQueueNamePrefix;
     });
 }
 ````
@@ -348,6 +355,7 @@ See pre-built job manager alternatives:
 * [Hangfire Background Job Manager](./hangfire.md)
 * [RabbitMQ Background Job Manager](./rabbitmq.md)
 * [Quartz Background Job Manager](./quartz.md)
+* [TickerQ Background Job Manager](./tickerq.md) 
 
 ## See Also
 * [Background Workers](../background-workers)

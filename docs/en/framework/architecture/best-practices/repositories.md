@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover best practices for implementing repository classes in your applications, grounded in Domain-Driven Design principles."
+}
+```
+
 # Repository Best Practices & Conventions
 
 > This document offers best practices for implementing Repository classes in your modules and applications based on Domain-Driven-Design principles.

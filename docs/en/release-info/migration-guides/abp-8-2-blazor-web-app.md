@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate to the ABP v8.2 Blazor Web App template, exploring new features and rendering modes for enhanced web UI development."
+}
+```
+
 # Migrating to Blazor Web App
 
 ASP.NET Blazor in .NET 8 allows you to use a single powerful component model to handle all of your web UI needs, including server-side rendering, client-side rendering, streaming rendering, progressive enhancement, and much more!

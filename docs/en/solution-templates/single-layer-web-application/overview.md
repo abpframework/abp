@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Single Layer solution template in ABP Framework, featuring pre-installed libraries and services for streamlined development and production."
+}
+```
+
 # Single Layer Solution: Overview
 
 ````json

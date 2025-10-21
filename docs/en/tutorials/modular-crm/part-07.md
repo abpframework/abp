@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate modules using messaging in ABP Framework, enabling loose coupling and efficient communication between components."
+}
+```
+
 # Integrating the Modules: Communication via Messages (Events)
 
 ````json

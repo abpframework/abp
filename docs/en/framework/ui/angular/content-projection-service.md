@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to use the ContentProjectionService in @abp/ng.core for easy and dynamic content projection in Angular components."
+}
+```
+
 # Projecting Angular Content
 
 You can use the `ContentProjectionService` in @abp/ng.core package in order to project content in an easy and explicit way.

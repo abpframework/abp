@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage permissions in your application using the ABP Framework's Permission Management Module, including installation and source code access."
+}
+```
+
 # Permission Management Module
 
 This module implements the `IPermissionStore` to store and manage permissions values in a database.

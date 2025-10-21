@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to author unit and integration tests for microservices in ABP Framework, ensuring quality and reliability in your applications."
+}
+```
+
 # Microservice Solution: Authoring Unit and Integration Tests
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.

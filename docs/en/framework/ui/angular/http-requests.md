@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to make efficient HTTP requests in Angular using HttpClient and simplify error handling with HttpInterceptor in your ABP project."
+}
+```
+
 # How to Make HTTP Requests
 
 ## About HttpClient

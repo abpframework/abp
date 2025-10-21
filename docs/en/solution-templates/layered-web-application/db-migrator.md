@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Db Migrator for seamless database migrations and data seeding in your applications with ABP Framework."
+}
+```
+
 # Layered Solution: Db Migrator
 
 ````json

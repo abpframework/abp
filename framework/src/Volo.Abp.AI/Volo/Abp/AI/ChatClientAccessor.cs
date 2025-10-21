@@ -5,9 +5,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AI;
 
-[Dependency(ReplaceServices = true, TryRegister = true)]
+[Dependency(ReplaceServices = true)]
 [ExposeServices(typeof(IChatClientAccessor))]
-public class ChatClientAccessor : IChatClientAccessor
+public class ChatClientAccessor : IChatClientAccessor, ITransientDependency
 {
     public IChatClient? ChatClient { get; }
 
@@ -19,8 +19,6 @@ public class ChatClientAccessor : IChatClientAccessor
     }
 }
 
-[Dependency(ReplaceServices = true, TryRegister = true)]
-[ExposeServices(typeof(IChatClientAccessor))]
 public class ChatClientAccessor<TWorkSpace> : IChatClientAccessor<TWorkSpace>
     where TWorkSpace : class
 {

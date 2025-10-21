@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and manage feature flags in your application using the ABP Framework's Feature Management module, with installation and customization options."
+}
+```
+
 # Feature Management Module
 
 The Feature Management module implements the `IFeatureManagementStore` interface defined by the [Feature System](../framework/infrastructure/features.md).

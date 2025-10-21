@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use ABP's JSON abstraction for flexible, library-independent serialization with predefined converters for seamless integration."
+}
+```
+
 # JSON
 The ABP provides an abstraction to work with JSON. Having such an abstraction has some benefits;
 

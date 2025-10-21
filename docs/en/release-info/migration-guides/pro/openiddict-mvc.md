@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate your MVC/Razor UI to OpenIddict with this step-by-step guide, ensuring a smooth transition for your ABP Framework projects."
+}
+```
+
 # OpenIddict MVC/Razor UI Migration Guide
 
 ## Web Project (Non-Tiered Solution)

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to optimize your ABP applications for production with caching strategies and best practices for maximum performance."
+}
+```
+
 # Optimizing Your Application for Production Environments
 
 ABP and the startup solution templates are configured well to get the maximum performance on production environments.

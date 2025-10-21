@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework enables developers to build powerful multi-tenant applications, optimizing resource sharing for SaaS solutions."
+}
+```
+
 # Multi-Tenancy
 
 Multi-Tenancy is a widely used architecture to create **SaaS applications** where the hardware and software **resources are shared by the customers** (tenants). ABP provides all the base functionalities to create **multi tenant applications**. 

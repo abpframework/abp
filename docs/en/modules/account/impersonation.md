@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable user impersonation in ABP Framework to perform actions on behalf of users securely, enhancing tenant management."
+}
+```
+
 # Tenant impersonation & User impersonation
 
 User impersonation allows you to temporarily sign in as a different user in your tenant's users. This article introduces how to enable impersonation in ABP. Impersonation is enabled by defautl in ABP v5.0 and above.

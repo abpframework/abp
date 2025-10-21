@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Blazor UI Message Service to display user-friendly success messages in your app with ease."
+}
+```
+
 # Blazor UI: Message Service
 
 UI message service is used to show nice-looking messages to the user as a blocking dialog.

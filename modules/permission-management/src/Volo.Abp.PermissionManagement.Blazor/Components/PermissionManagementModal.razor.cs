@@ -36,6 +36,7 @@ public partial class PermissionManagementModal
     protected string _permissionGroupSearchText;
 
     protected bool GrantAll { get; set; }
+    protected bool GrantAny { get; set; }
 
     protected Dictionary<string, int> _permissionDepths = new Dictionary<string, int>();
 
@@ -61,6 +62,7 @@ public partial class PermissionManagementModal
             NormalizePermissionGroup();
 
             GrantAll = _groups.SelectMany(x => x.Permissions).All(p => p.IsGranted);
+            GrantAny = !GrantAll && _groups.SelectMany(x => x.Permissions).Any(p => p.IsGranted);
 
             await InvokeAsync(_modal.Show);
         }
@@ -73,13 +75,14 @@ public partial class PermissionManagementModal
     protected virtual async Task GrantAllAsync(bool grantAll)
     {
         GrantAll = grantAll;
+        GrantAny = false;
 
         if (_allGroups == null)
         {
             return;
         }
 
-        await OnPermissionGroupSearchTextChangedAsync(string.Empty);
+        await ResetSearchTextAsync();
 
         foreach (var permission in _allGroups.SelectMany(x => x.Permissions))
         {
@@ -194,6 +197,7 @@ public partial class PermissionManagementModal
         }
 
         GrantAll = _groups.SelectMany(x => x.Permissions).All(p => p.IsGranted);
+        GrantAny = !GrantAll && _groups.SelectMany(x => x.Permissions).Any(p => p.IsGranted);
         await InvokeAsync(StateHasChanged);
     }
 
@@ -216,6 +220,7 @@ public partial class PermissionManagementModal
         }
 
         GrantAll = _groups.SelectMany(x => x.Permissions).All(p => p.IsGranted);
+        GrantAny = !GrantAll && _groups.SelectMany(x => x.Permissions).Any(p => p.IsGranted);
         await InvokeAsync(StateHasChanged);
     }
 
@@ -307,6 +312,16 @@ public partial class PermissionManagementModal
         return permissions.All(x => x.IsGranted) && grantedProviders.Any(p => p.ProviderName != _providerName);
     }
 
+    protected virtual async Task ResetSearchTextAsync()
+    {
+        _permissionGroupSearchText = string.Empty;
+        _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups.ToList() : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase))).ToList();
+
+        NormalizePermissionGroup(false);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
     protected virtual async Task OnPermissionGroupSearchTextChangedAsync(string value)
     {
         if (value == _permissionGroupSearchText)
@@ -316,6 +331,9 @@ public partial class PermissionManagementModal
 
         _permissionGroupSearchText = value;
         _groups = _permissionGroupSearchText.IsNullOrWhiteSpace() ? _allGroups.ToList() : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText, StringComparison.OrdinalIgnoreCase))).ToList();
+
+        GrantAll = _groups.SelectMany(x => x.Permissions).All(p => p.IsGranted);
+        GrantAny = !GrantAll && _groups.SelectMany(x => x.Permissions).Any(p => p.IsGranted);
 
         NormalizePermissionGroup(false);
 

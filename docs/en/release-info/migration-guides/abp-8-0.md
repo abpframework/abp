@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP solutions to version 8.0 with this comprehensive migration guide, detailing essential changes and dependencies."
+}
+```
+
 # ABP Version 8.0 Migration Guide
 
 This document is a guide for upgrading ABP v7.x solutions to ABP v8.0. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.

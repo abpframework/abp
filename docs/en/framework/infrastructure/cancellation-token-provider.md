@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the `ICancellationTokenProvider` in ABP Framework for efficient cooperative cancellation in your applications."
+}
+```
+
 # Cancellation Token Provider
 
 A [`CancellationToken`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken) enables cooperative cancellation between threads, thread pool work items, or `Task` objects. To handle the possible cancellation of the operation, ABP provides `ICancellationTokenProvider` to obtain the `CancellationToken` itself from the source.

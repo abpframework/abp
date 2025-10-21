@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the `ContentStrategy` abstract class to create inline scripts and styles in your ABP applications efficiently."
+}
+```
+
 # ContentStrategy
 
 `ContentStrategy` is an abstract class exposed by @abp/ng.core package. It helps you create inline scripts or styles.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the `abp-button` element for creating versatile buttons in your projects. Learn about styles, sizes, and attributes to enhance your UI efficiently."
+}
+```
+
 # Buttons
 
 ## Introduction

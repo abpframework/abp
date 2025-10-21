@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Autofac with ABP Framework for advanced dependency injection features, enhancing your .NET applications effortlessly."
+}
+```
+
 # Autofac Integration
 
 [Autofac](https://autofac.org/) is one of the most used dependency injection frameworks for .NET. It provides advanced features compared to .Net Core's standard DI library, like dynamic proxying and property injection.

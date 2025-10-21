@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure the BLOB Storing File System Provider in ABP Framework to efficiently store files locally with ease."
+}
+```
+
 # BLOB Storing File System Provider
 
 File System Storage Provider is used to store BLOBs in the local file system as standard files inside a folder.

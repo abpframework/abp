@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to leverage ABP Framework's enhanced authorization features, including permissions and policies, to secure your applications efficiently."
+}
+```
+
 # Authorization
 
 Authorization is used to check if a user is allowed to perform some specific operations in the application.

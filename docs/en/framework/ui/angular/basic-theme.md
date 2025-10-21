@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the Basic Theme for Angular UI—minimalist styling on Bootstrap, perfect for creating custom themes for your projects."
+}
+```
+
 # Angular UI: Basic Theme
 
 The Basic Theme is a theme implementation for the Angular UI. It is a minimalist theme that doesn't add any styling on top of the plain [Bootstrap](https://getbootstrap.com/). You can take the Basic Theme as the **base theme** and build your own theme or styling on top of it. See the *Customization* section.

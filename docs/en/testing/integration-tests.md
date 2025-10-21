@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively write integration tests using ABP's pre-configured infrastructure, ensuring reliable application performance and database interactions."
+}
+```
+
 # Integration Tests
 
 ````json

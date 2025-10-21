@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Penetration Test Report detailing security findings, false positives, and actionable fixes for the ABP Commercial MVC app."
+}
+```
+
 # ABP Penetration Test Report
 
 The ABP Commercial MVC `v9.1.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 

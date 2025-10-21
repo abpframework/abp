@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement the Page Feedback system in CMS Kit Pro, enabling user feedback collection with ease for enhanced engagement."
+}
+```
+
 # CMS Kit Pro: Page Feedback System
 
 > You must have an ABP Team or a higher license to use CMS Kit Pro module's features.

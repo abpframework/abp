@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how the ABP Framework manages localization in microservice solutions, enhancing resource management across applications seamlessly."
+}
+```
+
 # Microservice Solution: Localization System
 
 ````json

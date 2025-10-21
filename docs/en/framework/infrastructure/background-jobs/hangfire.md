@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Hangfire with the ABP Framework for efficient background job management, ensuring code independence and seamless functionality."
+}
+```
+
 # Hangfire Background Job Manager
 
 [Hangfire](https://www.hangfire.io/) is an advanced background job manager. You can integrate Hangfire with the ABP to use it instead of the [default background job manager](../background-jobs). In this way, you can use the same background job API for Hangfire and your code will be independent of Hangfire. If you like, you can directly use Hangfire's API, too.

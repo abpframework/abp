@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize tables using the `abp-table` component in ABP Framework for responsive and user-friendly designs."
+}
+```
+
 # Tables
 
 ## Introduction

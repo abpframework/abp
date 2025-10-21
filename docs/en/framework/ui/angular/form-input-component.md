@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Form Input Component documentation to learn how to easily implement reusable text input fields in your applications."
+}
+```
+
 # Form Input Component
 
 The ABP FormInput Component is a reusable form input component for the text type.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to define page-specific elements with PageLayout in ABP Framework, enhancing your application's navigation and title management."
+}
+```
+
 # Page Layout
 PageLayout is used to define page-specific elements across application. 
 

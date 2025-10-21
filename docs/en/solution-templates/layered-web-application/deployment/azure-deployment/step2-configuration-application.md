@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize your ABP application’s configuration by modifying ConnectionString values across key appsettings.json files."
+}
+```
+
 ````json
 //[doc-params]
 {

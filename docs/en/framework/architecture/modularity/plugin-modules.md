@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to load modules as plug-ins in your ABP Framework application, enabling flexible module management without direct assembly references."
+}
+```
+
 # Plug-In Modules
 
 [Modules](../modularity/basics.md) can also be loaded as plug-ins. This means that you don’t need to reference a module’s assembly directly in your solution; instead, you can load it during application startup in the same way as any other module.

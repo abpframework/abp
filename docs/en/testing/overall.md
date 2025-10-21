@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Framework's automated testing strategies, including unit, integration, and UI tests, to enhance your application's reliability and performance."
+}
+```
+
 # Automated Testing
 
 ````json

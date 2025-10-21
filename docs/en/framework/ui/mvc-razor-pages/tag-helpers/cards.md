@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp-card` component in ABP Framework to create stylish and functional content containers effortlessly."
+}
+```
+
 # Cards
 
 ## Introduction

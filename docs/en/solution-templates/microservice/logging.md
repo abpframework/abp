@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore how to implement structured logging in your ABP microservice solution using Serilog, ensuring efficient log management across services."
+}
+```
+
 # Microservice Solution: Logging
 
 ````json

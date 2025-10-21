@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the main components of the ABP microservice solution, including applications, API gateways, and services for effective development."
+}
+```
+
 # Microservice Solution: Main Components
 
 ```json

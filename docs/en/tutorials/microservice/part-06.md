@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate microservices using HTTP API calls in ABP Framework, enhancing communication between services for seamless functionality."
+}
+```
+
 # Microservice Tutorial Part 06: Integrating the services: HTTP API Calls
 
 ````json

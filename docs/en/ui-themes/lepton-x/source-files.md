@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the structure of Lepton X SCSS files, designed for efficient theme management and style optimization in your projects."
+}
+```
+
 # Lepton X SCSS Files
 
 The LeptonX scss file structure is divided into different bundles. The purpose of this is to exclude unnecessary styles (for example, the top menu layer styles when using side menu layout) in the project. To reload only relevant files on theme changes.

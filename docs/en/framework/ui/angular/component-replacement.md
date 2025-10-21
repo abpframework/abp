@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to replace ABP components with your custom ones for enhanced flexibility while maintaining system integrity."
+}
+```
+
 # Component Replacement
 
 You can replace some ABP components with your custom components.

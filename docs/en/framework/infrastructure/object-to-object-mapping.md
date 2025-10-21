@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to simplify object-to-object mapping in ABP Framework, reducing repetitive code and enhancing efficiency in your applications."
+}
+```
+
 # Object To Object Mapping
 
 It's common to map an object to another similar object. It's also tedious and repetitive since generally both classes have the same or similar properties mapped to each other. Imagine a typical [application service](../architecture/domain-driven-design/application-services.md) method below:

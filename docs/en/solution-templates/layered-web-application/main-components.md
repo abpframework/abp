@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the main components of a layered solution, including web, mobile applications, and a database migrator, for seamless integration."
+}
+```
+
 # Layered Solution: Main Components
 
 ````json

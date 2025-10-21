@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build the Ordering microservice step-by-step, implementing core functionalities and creating the Order entity without ABP Suite."
+}
+```
+
 # Microservice Tutorial Part 05: Building the Ordering service
 
 ````json

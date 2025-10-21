@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize your ASP.NET Core application's branding with `IBrandingProvider` to display your app name and logo effortlessly."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Branding
 
 ## IBrandingProvider

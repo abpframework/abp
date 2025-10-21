@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to build the Catalog service in a microservice architecture using ABP Suite, streamlining product management with automatic code generation."
+}
+```
+
 # Microservice Tutorial Part 03: Building the Catalog service
 
 ````json

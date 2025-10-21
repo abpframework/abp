@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to extend existing entities in ABP Framework modules by adding new properties seamlessly across the entire system."
+}
+```
+
 # Module Entity Extensions
 
 Module entity extension system is a **high level** extension system that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.

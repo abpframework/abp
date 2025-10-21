@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Knowledge Base for essential insights on common issues and best practices to enhance your development experience."
+}
+```
+
 # ABP Knowledge Base
 
 The following documents provide useful information about several topics you might need to know.

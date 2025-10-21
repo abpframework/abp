@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly migrate from Angular UI 3.3 to 4.0 with this guide, including key updates and breaking changes for ABP Framework users."
+}
+```
+
 # Angular UI 3.3 to 4.0 Migration Guide
 
 ## Angular v11

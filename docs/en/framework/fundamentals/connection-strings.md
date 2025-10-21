@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage connection strings in ABP for modular and multi-tenant applications, enabling flexible database configurations."
+}
+```
+
 # Connection Strings
 
 > Connection string system is especially needed when you want to create or use a modular system. If you have a monolithic application with a single database, you can go with the [ABP startup solution template](../../solution-templates/layered-web-application), which is properly configured for you.

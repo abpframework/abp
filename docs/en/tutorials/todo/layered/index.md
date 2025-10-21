@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a simple todo application using the ABP Framework with this quick-start tutorial, complete with source code and video guide!"
+}
+```
+
 # TODO Application Tutorial with Layered Solution
 
 ````json
@@ -54,11 +61,11 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [Node v20.11+](https://nodejs.org/)
-
+{{if DB=="EF"}}
+* [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
+{{end}}
 {{if DB=="Mongo"}}
-
 * [MongoDB Server 4.0+](https://docs.mongodb.com/manual/administration/install-community/)
-
 {{end}}
 
 ## Install ABP CLI Tool
@@ -115,7 +122,7 @@ abp install-libs
 
 {{if UI=="MVC" || UI=="BlazorServer" || UI=="BlazorWebApp"}}
 
-It is good to run the application before starting the development. Ensure the {{if UI=="BlazorServer"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
+It is good to run the application before starting the development. Ensure the {{if UI=="Blazor" || UI=="BlazorServer" || UI=="BlazorWebApp"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
 
 {{else if UI=="Blazor" || UI=="MAUIBlazor"}}
 
@@ -165,7 +172,7 @@ All ready. We can start coding!
 
 ## Domain Layer
 
-This application has a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
+This application has a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project under the `Entities` folder, as shown below:
 
 ````csharp
 using System;
@@ -578,7 +585,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 {{if UI=="Blazor" || UI=="BlazorWebApp"}}
-namespace TodoApp.Blazor.Client.Pages;
+amespace TodoApp.Blazor.Client.Pages
 {{else if UI=="BlazorServer"}}
 namespace TodoApp.Blazor.Pages;
 {{else if UI=="MAUIBlazor"}}
@@ -756,6 +763,7 @@ import { TodoItemDto, TodoService } from '@proxy';
 
 @Component({
   selector: 'app-home',
+  standalone: false,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

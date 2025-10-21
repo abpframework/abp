@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure OpenIddict in your AuthServer project for both Development and Production environments with this comprehensive guide."
+}
+```
+
 # Configuring OpenIddict
 
 This document introduces how to configure `OpenIddict` in the `AuthServer` project.

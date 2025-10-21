@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize database migrations in EF Core with the ABP Framework, enhancing your application's structure and management."
+}
+```
+
 # EF Core Database Migrations
 
 This document begins by **introducing the default structure** provided by [the application startup template](../../../solution-templates/layered-web-application) and **discusses various scenarios** you may want to implement for your own application.

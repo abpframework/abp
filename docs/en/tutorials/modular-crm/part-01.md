@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create an initial solution for a Modular CRM application using ASP.NET Core MVC and Entity Framework Core with ABP Framework."
+}
+```
+
 # Creating the Initial Solution
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's tag helpers for Bootstrap's grid system, including equal width columns and column breakers, to enhance your web development experience."
+}
+```
+
 # Grids
 
 ## Introduction

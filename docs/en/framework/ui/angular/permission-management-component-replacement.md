@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to replace the PermissionManagementComponent in your ABP Framework application with this step-by-step guide."
+}
+```
+
 # How to Replace PermissionManagementComponent
 
 ![Permission management modal](./images/permission-management-modal.png)

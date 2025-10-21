@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Scriban into your ABP Framework project, including installation steps and defining templates for efficient text templating."
+}
+```
+
 # Scriban Integration
 
 ## Installation

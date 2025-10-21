@@ -335,7 +335,8 @@ public class SolutionModuleAdder : ITransientDependency
     {
         var projectsToRemove = new List<string>();
         var moduleDirectory = Path.Combine(solutionDirectory, "modules", module.Name);
-        var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
+        var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(moduleDirectory, "*.slnx", SearchOption.TopDirectoryOnly)).First();
         var isProjectTiered = await IsProjectTiered(projectFiles);
         var webPackagesWillBeAddedToBlazorServerProject = false;
 
@@ -609,7 +610,8 @@ public class SolutionModuleAdder : ITransientDependency
 
     private async Task DeleteRedundantHostProjects(string targetModuleFolder, string folderName)
     {
-        var moduleSolutionFile = Directory.GetFiles(targetModuleFolder, "*.sln", SearchOption.TopDirectoryOnly).First();
+        var moduleSolutionFile = Directory.GetFiles(targetModuleFolder, "*.sln", SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(targetModuleFolder, "*.slnx", SearchOption.TopDirectoryOnly)).First();
 
         var folder = Path.Combine(targetModuleFolder, folderName);
         if (Directory.Exists(folder))

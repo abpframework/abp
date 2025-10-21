@@ -175,9 +175,10 @@ public abstract class ProjectCreationCommandBase
 
             if (slnPath == null)
             {
-                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln")
+                    .Concat(Directory.GetFiles(outputFolderRoot, "*.slnx")).FirstOrDefault();
             }
-            else if (slnPath.EndsWith(".sln"))
+            else if (slnPath.EndsWith(".sln") || slnPath.EndsWith(".slnx"))
             {
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(slnPath));
                 outputFolderRoot = Path.GetDirectoryName(slnPath);
@@ -190,7 +191,8 @@ public abstract class ProjectCreationCommandBase
             {
                 Directory.SetCurrentDirectory(slnPath);
                 outputFolderRoot = slnPath;
-                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln").FirstOrDefault();
+                slnPath = Directory.GetFiles(outputFolderRoot, "*.sln")
+                    .Concat(Directory.GetFiles(outputFolderRoot, "*.slnx")).FirstOrDefault();
             }
 
             if (slnPath == null)
@@ -198,7 +200,7 @@ public abstract class ProjectCreationCommandBase
                 throw new CliUsageException($"This command should be run inside a folder that contains a microservice solution! Or use -{Options.MainSolution.Short} parameter.");
             }
 
-            var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".sln");
+            var microserviceSolutionName = Path.GetFileName(slnPath).RemovePostFix(".slnx", ".sln");
 
             version ??= SolutionPackageVersionFinder.FindByCsprojVersion(slnPath);
             solutionName = SolutionName.Parse(microserviceSolutionName, projectName);

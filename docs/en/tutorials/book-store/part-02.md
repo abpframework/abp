@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore Part 2 of our Web Application Development Tutorial, focusing on the Book List Page and leveraging dynamic JavaScript proxies in ABP Framework."
+}
+```
+
 # Web Application Development Tutorial - Part 2: The Book List Page
 ````json
 //[doc-params]

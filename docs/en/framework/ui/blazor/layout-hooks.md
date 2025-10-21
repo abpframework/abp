@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize Blazor layouts using Layout Hooks in the ABP Framework, enabling dynamic content integration while maintaining theme updates."
+}
+```
+
 # Blazor UI: Layout Hooks
 
 ABP theming system places the page layout into the [theme](theming.md) NuGet packages. That means the final application doesn't include a layout, so you can't directly change the layout code to customize it.

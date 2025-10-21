@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to develop mobile applications with the ABP Commercial platform using MAUI, integrating seamlessly with your ABP backend."
+}
+```
+
 ````json
 //[doc-params]
 {

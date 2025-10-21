@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to simplify AJAX calls in ASP.NET Core with the `abp.ajax` API, offering error handling, CSRF protection, and customization options."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI JavaScript AJAX API
 
 `abp.ajax` API provides a convenient way of performing AJAX calls to the server. It internally uses JQuery's `$.ajax`, but automates some common tasks for you;

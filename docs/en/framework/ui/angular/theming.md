@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's Angular UI Theming system, enabling customizable, theme-independent modules for seamless application design and upgrades."
+}
+```
+
 # Angular UI: Theming
 
 ## Introduction

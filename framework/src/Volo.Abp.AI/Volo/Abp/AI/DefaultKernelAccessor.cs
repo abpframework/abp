@@ -13,6 +13,8 @@ public class DefaultKernelAccessor : IKernelAccessor, ITransientDependency
     public DefaultKernelAccessor(IServiceProvider serviceProvider)
     {
         Kernel = serviceProvider.GetKeyedService<Kernel>(
-            AbpAIModule.DefaultWorkspaceName);
+            AbpAIWorkspaceOptions.GetKernelServiceKeyName(
+                AbpAIModule.DefaultWorkspaceName
+                ));
     }
 }

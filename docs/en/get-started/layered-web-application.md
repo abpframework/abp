@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a layered web application with ABP Framework using ABP Studio. Set up your environment and start building efficiently!"
+}
+```
+
 # Get Started with ABP: Creating a Layered Web Application
 
 ````json

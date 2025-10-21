@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage non-physical files with the ABP Virtual File System, allowing you to embed assets directly into your assemblies."
+}
+```
+
 # Virtual File System
 
 The Virtual File System makes it possible to manage files that do not physically exist on the file system (disk). It's mainly used to embed (js, css, image..) files into assemblies and use them like physical files at runtime.

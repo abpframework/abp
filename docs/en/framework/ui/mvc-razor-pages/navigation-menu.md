@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively manage navigation menus in your ABP Framework applications, enabling modular menu item integration with ease."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: Navigation Menu
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.

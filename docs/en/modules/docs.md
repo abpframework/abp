@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the ABP Docs Module for easy software documentation management, supporting GitHub integration and versioning for streamlined workflows."
+}
+```
+
 # Docs Module
 
 ## What is Docs Module?

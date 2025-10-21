@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to install ABP Studio, including system requirements and optional tools, to kickstart your development with ABP Framework."
+}
+```
+
 # Installing ABP Studio
 
 This document explains how to install the ABP Studio tool.

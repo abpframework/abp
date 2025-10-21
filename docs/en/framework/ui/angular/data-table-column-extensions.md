@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Angular UI data tables by adding or modifying columns with the Entity Prop Extension system in ABP Framework."
+}
+```
+
 # Data Table Column (or Entity Prop) Extensions for Angular UI
 
 ## Introduction

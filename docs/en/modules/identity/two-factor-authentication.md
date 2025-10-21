@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement two-factor authentication in ABP Framework to enhance security for users and protect against unauthorized access."
+}
+```
+
 # Two Factor Authentication
 
 > You must have an ABP Team or a higher license to use this module & its features.

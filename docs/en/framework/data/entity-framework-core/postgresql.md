@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your ABP Framework application from SQL Server to PostgreSQL with step-by-step guidance for a smooth transition."
+}
+```
+
 # Switch to EF Core PostgreSQL Provider
 
 > [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with PostgreSQL. See [that document](./other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to PostgreSQL after creating the solution.

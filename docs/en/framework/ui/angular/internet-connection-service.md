@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `InternetConnectionService` to easily check and respond to internet connectivity status in your ABP applications."
+}
+```
+
 # Internet Connection Service
 `InternetConnectionService` is a service which is exposed by the `@abp/ng.core` package. **You can use this service in order to check your internet connection**
 

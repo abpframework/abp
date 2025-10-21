@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to install and use the new ABP CLI for streamlined operations in ABP-based solutions, enhancing your development experience!"
+}
+```
+
 # ABP CLI
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
@@ -288,30 +295,39 @@ abp new-package --name Acme.BookStore.Domain --template lib.domain
 * `--template` or `-t`: Specifies the template name. This parameter doesn't have a default value and must be set. Available templates and their sub-options:
 	* `lib.class-library`
 	* `lib.domain-shared`
+		* `--add-localization`: Includes default localization configuration & language files. 
 	* `lib.domain`
+		* `--add-settings`: Includes default settings configuration. 
+		* `--add-db-properties`:  Includes the default Database Properties class. 
+		* `--add-domain-shared`:  Includes an additional Domain Shared package. 
 	* `lib.application-contracts`
 	* `lib.application`
-		* `--with-automapper`:  Adds automapper configuration. 
+		* `--add-mapperly`:  Adds Mapperly configuration. 
+		* `--add-application-contracts`:  Includes an additional contracts package. 
 	* `lib.ef`
 		* `--include-migrations`: Allows migration operations on this package.
 		* `--connection-string-name`: Default value is the last part of the package's namespace (or package name simply).
-		* `--connection-string`: Connection string value. Defaut value is null. You can set it alter. **Note:** When specifying the connection string, make sure to enclose it in double quotes, for example: `--connection-string "Server=localhost;Database=MyProjectName;Trusted_Connection=True"`.
+		* `--connection-string`: Connection string value. The default value is null. You can set it later. **Note:** When specifying the connection string, make sure to enclose it in double quotes, for example: `--connection-string "Server=localhost;Database=MyProjectName;Trusted_Connection=True"`.
 	* `lib.mongodb`
 	* `lib.http-api`
 	* `lib.http-api-client`
 	* `lib.mvc`
+		* `--add-mapperly`:  Adds Mapperly configuration. 
 	* `lib.blazor`
+		* `--add-mapperly`:  Adds Mapperly configuration. 
+		* `--add-menu-contributors`: Includes default menu contributors.
 	* `lib.blazor-wasm`
 	* `lib.blazor-server`
 	* `host.http-api`
-		* `--with-serilog`: Includes Serilog configuration.
-		* `--with-swagger`: Includes Swagger configuration.
+		* `--add-serilog`: Includes Serilog configuration.
+		* `--add-swagger`: Includes Swagger configuration.
 	* `host.mvc`
-		* `--with-serilog`: Includes Serilog configuration.
-		* `--with-swagger`: Includes Swagger configuration.
+		* `--add-serilog`: Includes Serilog configuration.
+		* `--add-swagger`: Includes Swagger configuration.
 	* `host.blazor-wasm`
 		* `--backend`: Name of the backend project in the module (not path).
 	* `host.blazor-server`
+	* `abp.console`
 	* `csharp.console`
 	* `csharp.library`
 * `--module-file` or `-m`: If set, the new package will be added to the given module. Otherwise the new package will added to the closest module in the file system. If no module found, it will throw an error.

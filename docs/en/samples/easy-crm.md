@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Easy CRM sample project built on ABP Framework, featuring source code for ASP.NET Core, Angular, and Blazor UIs, exclusive for ABP customers."
+}
+```
+
 # Easy CRM - Sample ABP Project
 
 This is a sample solution developed on top of ABP.

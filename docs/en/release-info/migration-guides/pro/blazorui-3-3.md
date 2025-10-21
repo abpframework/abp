@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your Blazor UI from v3.2 to v3.3 with essential changes, package updates, and new footer customization for your project."
+}
+```
+
 # Migration Guide for the Blazor UI from the v3.2 to the v3.3
 
 ## Startup Template Changes

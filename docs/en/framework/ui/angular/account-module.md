@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate the Angular UI Account Module into your project for seamless user authentication with login, registration, and account management features."
+}
+```
+
 # Angular UI Account Module
 
 Angular UI account module is available as of v4.3. It contains some pages (login, register, My account, etc.).

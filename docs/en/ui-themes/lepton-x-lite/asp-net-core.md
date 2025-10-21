@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement the LeptonX Lite MVC UI theme in your ABP applications for a sleek, professional look."
+}
+```
+
 # LeptonX Lite MVC UI
 LeptonX Lite has implementation for the ABP Razor Pages. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
 

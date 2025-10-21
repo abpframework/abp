@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement page alerts in Blazor UI using IAlertManager for effective user notifications in your applications."
+}
+```
+
 # Blazor UI: Page Alerts
 
 It is common to show error, warning or information alerts to inform the user. An example *Service Interruption* alert is shown below:

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for implementing Application Services in ABP Framework, ensuring effective use of Domain-Driven Design principles."
+}
+```
+
 # Application Services Best Practices & Conventions
 
 > This document offers best practices for implementing Application Services classes in your modules and applications based on Domain-Driven-Design principles.

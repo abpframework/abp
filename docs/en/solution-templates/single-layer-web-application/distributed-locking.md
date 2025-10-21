@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed locking in single-layer solutions with ABP Framework, ensuring synchronized access to shared resources."
+}
+```
+
 # Single Layer Solution: Distributed Locking
 
 ```json

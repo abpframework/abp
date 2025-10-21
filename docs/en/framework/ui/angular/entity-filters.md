@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement advanced entity filters in your ABP Framework CRUD pages using the `abp-advanced-entity-filters` component."
+}
+```
+
 # Entity Filters
 
 Every CRUD page includes some sort of inputs to filter the listed data. Some of the inputs are common among all of the entities like the `Search` box. In addition, every entity has its own advanced filters depending on its fields. To reduce the amount of code written on every CRUD page, the Angular UI of ABP Commercial introduces a new type of component called `abp-advanced-entity-filters`

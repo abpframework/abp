@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the ToasterService in ABP to display customizable toast messages in your Angular applications effortlessly."
+}
+```
+
 # Toast Overlay
 
 You can use the `ToasterService` in @abp/ng.theme.shared package to display messages in an overlay by placing at the root level in your project.

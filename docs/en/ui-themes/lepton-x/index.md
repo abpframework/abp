@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the LeptonX Theme for ABP: a professional, responsive theme built on Bootstrap 5, offering various styles and easy installation."
+}
+```
+
 # LeptonX Theme Module
 
 > You must have an ABP Team or a higher license to use this theme.

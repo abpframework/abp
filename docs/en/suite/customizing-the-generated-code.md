@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize generated code in ABP Suite, preserve changes, and utilize hook points for seamless CRUD page generation."
+}
+```
+
 # Customizing the Generated Code
 
 ABP Suite allows you to customize the generated code blocks and preserve your custom code changes in the next CRUD Page Generation. It specifies hook points to allow adding custom code blocks. Then, the code written by you to these hook points will be respected and will not be overridden in the next CRUD Page Generation.

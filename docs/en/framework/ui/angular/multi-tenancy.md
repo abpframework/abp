@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement multi-tenancy in ABP Angular UI, including tenant management and switching features for a seamless user experience."
+}
+```
+
 # Multi-Tenancy in Angular UI
 
 ABP Angular UI supports the multi-tenancy. The following features related to multi-tenancy are available in the startup templates.

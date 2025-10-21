@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a CRUD interface for the Author entity in your web app using ABP Framework, featuring MVC, Blazor, and more!"
+}
+```
+
 # Web Application Development Tutorial - Part 9: Authors: User Interface
 ````json
 //[doc-params]

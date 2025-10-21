@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Razor templates in your ABP Framework project, including installation via ABP CLI or manual methods."
+}
+```
+
 # Razor Integration
 
 

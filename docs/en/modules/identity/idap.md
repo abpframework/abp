@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement LDAP authentication with ABP Framework's LdapExternalLoginProvider, enhancing external login capabilities for your applications."
+}
+```
+
 # LDAP External Login Provider
 
 ## Introduction

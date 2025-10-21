@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the File Management Module for ABP Framework, enabling efficient file uploads, downloads, and organization with multi-tenancy support."
+}
+```
+
 # File Management Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

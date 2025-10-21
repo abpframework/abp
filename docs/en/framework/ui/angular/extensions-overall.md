@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to enhance your Angular UI with extensions for actions, data tables, toolbars, and forms in the ABP Framework."
+}
+```
+
 # Angular UI Extensions
 
 Angular UI extensions system allows you to add a new action to the actions menu, a new column to the data table, a new action to the toolbar of a page, and add a new field to the create and/or edit forms.

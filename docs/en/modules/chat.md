@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement real-time messaging in your application with the ABP Chat Module. Installation made easy via ABP Suite or CLI."
+}
+```
+
 # Chat Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

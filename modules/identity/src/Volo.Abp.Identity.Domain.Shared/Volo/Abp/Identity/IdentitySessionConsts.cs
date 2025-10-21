@@ -6,7 +6,7 @@ public class IdentitySessionConsts
 
     public static int MaxDeviceLength { get; set; } = 64;
 
-    public static int MaxDeviceInfoLength { get; set; } = 64;
+    public static int MaxDeviceInfoLength { get; set; } = 256;
 
     public static int MaxClientIdLength { get; set; } = 64;
 

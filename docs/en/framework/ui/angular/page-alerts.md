@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively display important messages to users using the ABP Framework's Page Alert feature with easy-to-follow examples."
+}
+```
+
 # Page Alerts
 
 A page alert is useful for displaying an important message to the user. The ABP provides an easy way to show the following alert to the user.

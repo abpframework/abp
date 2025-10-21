@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a simple todo application using the ABP Framework in this quick-start tutorial, featuring multiple UI and database options."
+}
+```
+
 # TODO Application Tutorial with Single-Layer Solution
 
 ````json
@@ -50,11 +57,11 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 * An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [Node v20.11+](https://nodejs.org/)
-
+{{if DB=="EF"}}
+* [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
+{{end}}
 {{if DB=="Mongo"}}
-
 * [MongoDB Server 4.0+](https://docs.mongodb.com/manual/administration/install-community/)
-
 {{end}}
 
 ## Creating a New Solution

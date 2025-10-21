@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to manage your applications in a Kubernetes cluster using ABP Studio, perfect for both microservices and monolithic projects."
+}
+```
+
 # ABP Studio: Working with Kubernetes
 
 ````json

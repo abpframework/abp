@@ -24,7 +24,7 @@ public class ProjectRenameStep : ProjectBuildPipelineStep
             }
         }
 
-        var files = context.Files.Where(f => f.Name.EndsWith(".sln") || f.Name.EndsWith(".cs"));
+        var files = context.Files.Where(f => f.Name.EndsWith(".sln") || f.Name.EndsWith(".slnx") || f.Name.EndsWith(".cs"));
         foreach (var file in files)
         {
             file.NormalizeLineEndings();

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover why the ABP Platform is the ideal choice for building software solutions efficiently, overcoming common development challenges."
+}
+```
+
 # Why ABP Platform?
 
 This document aims to answer the big question:

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize the menu in ABP Framework, including adding logos and navigation elements for enhanced application layout."
+}
+```
+
 # Modifying the Menu
 
 The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./component-replacement.md) and learn how to replace a layout.

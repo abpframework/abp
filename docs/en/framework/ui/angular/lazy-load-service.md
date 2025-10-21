@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Easily lazy load scripts and styles in your Angular app with ABP's `LazyLoadService`, streamlining resource management and improving performance."
+}
+```
+
 # Lazy Loading Scripts & Styles
 
 You can use the `LazyLoadService` in @abp/ng.core package in order to lazy load scripts and styles in an easy and explicit way.

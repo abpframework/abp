@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance Angular UI forms with dynamic field extensions, enabling customization and validation for improved user management."
+}
+```
+
 # Dynamic Form (or Form Prop) Extensions for Angular UI
 
 

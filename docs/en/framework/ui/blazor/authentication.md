@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement authentication in Blazor applications using OpenId Connect, with features like registration and password recovery."
+}
+```
+
 # Blazor UI: Authentication
 
 ````json

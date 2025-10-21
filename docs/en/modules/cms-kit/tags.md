@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage tags in CMS Kit, enabling you to categorize resources like blog posts and products effectively."
+}
+```
+
 # CMS Kit: Tag Management
 
 CMS Kit provides a **tag** system to tag any kind of resources, like a blog post.

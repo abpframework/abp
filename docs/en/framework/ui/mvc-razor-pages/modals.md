@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework simplifies modal management in ASP.NET Core MVC/Razor Pages, automating tasks for enhanced user experience."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: Modals
 
 While you can continue to use the standard [Bootstrap way](https://getbootstrap.com/docs/4.5/components/modal/) to create, open and manage modals in your applications, ABP provides a **flexible** way to manage modals by **automating common tasks** for you.

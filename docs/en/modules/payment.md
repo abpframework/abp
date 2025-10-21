@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate payment gateways seamlessly with the ABP Payment Module, supporting multiple options like Stripe and PayPal for one-time and recurring payments."
+}
+```
+
 # Payment Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

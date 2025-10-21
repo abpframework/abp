@@ -24,7 +24,7 @@
                 </Column>
                 <Column ColumnSize="ColumnSize.IsAuto">
                     <Field>
-                        <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" CheckedChanged="@GrantAllAsync" Checked="@GrantAll" TValue="bool">
+                        <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" CheckedChanged="@GrantAllAsync" Checked="@GrantAll" TValue="bool" Indeterminate="@GrantAny">
                             @L["SelectAllInAllTabs"]
                         </Check>
                     </Field>

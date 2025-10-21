@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a new web application solution using ABP Suite, with step-by-step guidance tailored for MVC, Blazor, and various databases."
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite) - Part 1: Creating the Solution
 
 ````json

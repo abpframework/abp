@@ -5,6 +5,7 @@
     <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.RabbitMq/Volo.Abp.BackgroundJobs.DemoApp.RabbitMq.csproj" />
     <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.Shared/Volo.Abp.BackgroundJobs.DemoApp.Shared.csproj" />
     <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp/Volo.Abp.BackgroundJobs.DemoApp.csproj" />
+    <Project Path="app/Volo.Abp.BackgroundJobs.DemoApp.TickerQ/Volo.Abp.BackgroundJobs.DemoApp.TickerQ.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Volo.Abp.BackgroundJobs.Domain.Shared/Volo.Abp.BackgroundJobs.Domain.Shared.csproj" />

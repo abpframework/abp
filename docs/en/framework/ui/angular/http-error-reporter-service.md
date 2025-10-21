@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently report HTTP errors in your Angular app using the `HttpErrorReporterService` from the ABP Framework."
+}
+```
+
 # HTTP Error Reporter Service
 
 `HttpErrorReporterService` is a service which is exposed by `@abp/ng.core` package. HTTP errors can be reported by using this service. The service emits an event when an error is reported and keeps the errors as an array. The [`RestService`](./http-requests#restservice) uses the `HttpErrorReporterService` for reporting errors.

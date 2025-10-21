@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create the server side of your web application with ABP Framework, including setting up your solution and installing client-side packages."
+}
+```
+
 # Web Application Development Tutorial - Part 1: Creating the Server Side
 ````json
 //[doc-params]

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build the application layer for the Author entity in this tutorial, enhancing your skills with ABP Framework's structured approach."
+}
+```
+
 # Web Application Development Tutorial - Part 8: Authors: Application Layer
 ````json
 //[doc-params]

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use AbpWindowService in Angular to efficiently download blobs as files with easy-to-follow steps and code examples."
+}
+```
+
 # Abp Window Service
 
 

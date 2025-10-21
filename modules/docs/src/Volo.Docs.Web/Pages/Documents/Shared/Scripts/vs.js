@@ -63,10 +63,13 @@
 
             var $myNav = $('#docs-sticky-index');
 
-            $('body').scrollspy({
-                target: $myNav,
-                offset:100
-            });
+            try {
+                $('body').scrollspy({
+                    target: $myNav,
+                    offset:100
+                });
+            } catch {
+            }
 
             $('#docs-sticky-index a').on('click', function (event) {
                 if (this.hash !== '') {

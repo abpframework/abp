@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to enable, disable, and customize application features at runtime with ABP's flexible feature system for multi-tenant applications."
+}
+```
+
 # Features
 
 ABP Feature system is used to **enable**, **disable** or **change the behavior** of the application features **on runtime**.

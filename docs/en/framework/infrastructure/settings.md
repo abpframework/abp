@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to define and manage application settings in ABP Framework, enhancing configuration and modularity for your projects."
+}
+```
+
 # Settings
 
 [Configuration system](../fundamentals/configuration.md) is a good way to configure the application on startup. In addition to the configurations, ABP provides another way to set and get some application settings.

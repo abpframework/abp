@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the folder structure of ABP Studio's microservice solution template, essential for effective project organization and development."
+}
+```
+
 # Microservice Solution: The Structure
 
 ````json

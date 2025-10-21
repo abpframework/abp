@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Blazor UI by adding custom actions to entity menus with Entity Action Extensions in ABP Framework."
+}
+```
+
 # Entity Action Extensions for Blazor UI
 
 Entity action extension system allows you to add a **new action** to the action menu for an entity. A **Click Me** action was added to the *User Management* page below:

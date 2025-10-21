@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP Studio, a cross-platform tool that simplifies .NET development by automating tasks and providing valuable insights for your projects."
+}
+```
+
 # ABP Studio
 
 ````json

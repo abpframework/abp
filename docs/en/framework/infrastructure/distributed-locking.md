@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed locking in your applications using ABP Framework, ensuring safe access to shared resources without conflicts."
+}
+```
+
 # Distributed Locking
 Distributed locking is a technique to manage many applications that try to access the same resource. The main purpose is to allow only one of many applications to access the same resource at the same time. Otherwise, accessing the same object from various applications may corrupt the value of the resources. 
 

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Azure Service Bus as a distributed event bus provider in your ABP Framework project with this comprehensive guide."
+}
+```
+
 # Distributed Event Bus Azure Integration
 
 > This document explains **how to configure the [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system

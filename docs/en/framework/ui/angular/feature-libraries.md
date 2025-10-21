@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and configure feature libraries in ABP Framework to enhance your Angular applications with modular functionality."
+}
+```
+
 # About Feature Libraries
 
 ABP has an ever-growing number of feature modules and [introducing a new one](../../architecture/modularity/basics.md) is always possible. When the UI is Angular, these features have modular Angular libraries accompanying them.

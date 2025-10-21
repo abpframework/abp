@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build modular web applications with ABP Framework in this tutorial, focusing on creating and communicating application modules."
+}
+```
+
 # Modular Monolith Application Development Tutorial
 
 ````json

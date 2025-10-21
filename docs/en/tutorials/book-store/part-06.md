@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the domain layer for authors in your web app using ABP Framework, enhancing your development efficiency and structure."
+}
+```
+
 # Web Application Development Tutorial - Part 6: Authors: Domain Layer
 ````json
 //[doc-params]

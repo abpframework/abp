@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the ConfigStateService in Angular projects to access server-defined settings effectively with ABP Framework."
+}
+```
+
 # Settings
 
 You can get settings on the client-side using the [config state service](./config-state.md) if they are allowed by their setting definition on the server-side.

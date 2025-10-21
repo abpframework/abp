@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to edit templates in ABP Suite, customize code generation for UI frameworks and database providers to fit your project needs."
+}
+```
+
 # Editing templates
 
 ABP Suite uses templates to generate the code files. You can see the template files by clicking "Edit Templates" menu item.

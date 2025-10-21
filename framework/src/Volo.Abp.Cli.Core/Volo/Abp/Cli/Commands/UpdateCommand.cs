@@ -64,6 +64,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         if (givenSolution.IsNullOrWhiteSpace())
         {
             solutions.AddRange(Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories));
+            solutions.AddRange(Directory.GetFiles(directory, "*.slnx", SearchOption.AllDirectories));
         }
         else
         {
@@ -76,7 +77,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         {
             foreach (var solution in solutions)
             {
-                var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
+                var solutionName = Path.GetFileName(solution).RemovePostFix(".slnx", ".sln");
 
                 await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll, version: version, leptonXVersion: leptonXVersion);
 

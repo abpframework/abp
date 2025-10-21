@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about ABP Framework's Event Bus, its types, and guidance for choosing between local and distributed messaging in your applications."
+}
+```
+
 # Event Bus
 
 An event bus is a mediator that transfers a message from a sender to a receiver. In this way, it provides a loosely coupled communication way between objects, services and applications.

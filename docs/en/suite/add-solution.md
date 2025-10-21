@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add an existing ABP solution to ABP Suite, enabling seamless project management and development integration."
+}
+```
+
 # Adding existing ABP solution
 
 ````json

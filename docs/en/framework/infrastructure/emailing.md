@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently send emails using ABP's IEmailSender service, configure settings, and integrate with background jobs and MailKit."
+}
+```
+
 # Email Sending
 
 ABP provides various services, settings and integrations for sending emails;

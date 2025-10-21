@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate your ABP Blazor UI from v4.x to v5.0, including updates for Blazorise and Bootstrap 5 for seamless integration."
+}
+```
+
 # ABP Blazor UI v4.x to v5.0 Migration Guide
 
 > This document is for the Blazor UI. See also [the main migration guide](abp-5-0.md).

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use `abp-button-group` for creating grouped buttons in your ABP Framework projects, with customizable directions and sizes."
+}
+```
+
 # Button groups
 
 ## Introduction

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Hangfire with ABP Framework to efficiently manage background jobs and leverage advanced scheduling for recurring tasks."
+}
+```
+
 # Hangfire Background Worker Manager
 
 [Hangfire](https://www.hangfire.io/) is an advanced background jobs and worker manager. You can integrate Hangfire with the ABP to use it instead of the [default background worker manager](../background-workers).

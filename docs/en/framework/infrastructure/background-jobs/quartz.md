@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Quartz with ABP Framework for advanced background job management, enhancing your job processing capabilities effortlessly."
+}
+```
+
 # Quartz Background Job Manager
 
 [Quartz](https://www.quartz-scheduler.net/) is an advanced background job manager. You can integrate Quartz with the ABP to use it instead of the [default background job manager](../background-jobs). In this way, you can use the same background job API for Quartz and your code will be independent of Quartz. If you like, you can directly use Quartz's API, too.

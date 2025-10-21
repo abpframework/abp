@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Microservice solution, including core microservices like Administration and Identity, to kickstart your scalable applications."
+}
+```
+
 # Microservice Solution: The Microservices
 
 ````json

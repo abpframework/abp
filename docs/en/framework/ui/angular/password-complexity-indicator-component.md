@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the Password Complexity Indicator in your app with default settings for colors, texts, and requirements to enhance user security."
+}
+```
+
 # Password Complexity Indicator
 
 The `PasswordComplexityIndicatorService` is for calculating the password complexity.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to install ABP Suite easily, ensuring you’re set up for seamless development with the ABP Framework."
+}
+```
+
 # How to install ABP Suite?
 
 ````json

@@ -99,6 +99,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public bool HasDownloadPdf { get; set; }
 
         public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
+        
+        public DocumentSeoDto DocumentSeoDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
         private const int TocLevelCount = 2;
@@ -542,11 +544,6 @@ namespace Volo.Docs.Pages.Documents.Project
                     DocumentNameWithExtension = Document.Name;
                     SetDocumentPageTitle();
 
-                    if (Document != null && !Document.Content.IsNullOrEmpty())
-                    {
-                        TocItems = _tocGeneratorService.GenerateTocItems(Document.Content, TocLevelCount);
-                    }
-
                     await ConvertDocumentContentToHtmlAsync();
 
                     return true;
@@ -592,6 +589,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 var partialTemplates = await GetDocumentPartialTemplatesAsync();
 
                 DocumentNavigationsDto = await _webDocumentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
+                DocumentSeoDto = await _webDocumentSectionRenderer.GetDocumentSeoAsync(Document.Content);
 
                 try
                 {
@@ -605,6 +603,12 @@ namespace Volo.Docs.Pages.Documents.Project
             else
             {
                 DocumentNavigationsDto = new DocumentNavigationsDto();
+                DocumentSeoDto = new DocumentSeoDto();
+            }
+
+            if (Document != null && !Document.Content.IsNullOrEmpty())
+            {
+                TocItems = _tocGeneratorService.GenerateTocItems(Document.Content, TocLevelCount);
             }
 
             var converter = _documentToHtmlConverterFactory.Create<DocumentToHtmlConverterContext>(Document.Format ?? Project.Format);
@@ -886,6 +890,11 @@ namespace Volo.Docs.Pages.Documents.Project
             if (Document == null || Document.Content.IsNullOrWhiteSpace())
             {
                 return null;
+            }
+
+            if (DocumentSeoDto?.Description.IsNullOrWhiteSpace() == false)
+            {
+                return DocumentSeoDto.Description;
             }
 
             var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);

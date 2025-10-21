@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to develop a MAUI mobile app with ABP Framework, focusing on UI and CRUD operations using the MVVM pattern."
+}
+```
+
 # Mobile Application Development Tutorial - MAUI
 
 ## About This Tutorial

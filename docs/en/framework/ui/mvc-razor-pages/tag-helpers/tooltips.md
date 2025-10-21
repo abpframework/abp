@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement tooltips in your ABP Framework applications with easy examples and demos for enhanced user interaction."
+}
+```
+
 # Tooltips
 
 ## Introduction

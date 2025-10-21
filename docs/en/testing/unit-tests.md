@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively write unit tests in ABP Framework, including strategies for testing classes with and without dependencies."
+}
+```
+
 # Unit Tests
 
 ````json

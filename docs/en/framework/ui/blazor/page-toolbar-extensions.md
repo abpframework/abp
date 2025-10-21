@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Blazor UI by adding custom components to the page toolbar, like an \"Import users from Excel\" button."
+}
+```
+
 # Page Toolbar Extensions for Blazor UI
 
 Page toolbar system allows you to add components to the toolbar of any page. The page toolbar is the area right to the header of a page. A button ("Import users from excel") was added to the user management page below:

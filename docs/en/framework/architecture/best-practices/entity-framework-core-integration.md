@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover best practices for integrating Entity Framework Core in your applications, ensuring optimal performance and maintainability."
+}
+```
+
 # Entity Framework Core Integration Best Practices
 
 > This document offers best practices for implementing Entity Framework Core integration in your modules and applications.

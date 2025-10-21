@@ -119,7 +119,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         var solutionFile = args.Options.GetOrNull(Options.Crud.Solution.Short, Options.Crud.Solution.Long);
 
         if (entityFile.IsNullOrEmpty() || !entityFile.EndsWith(".json") || !File.Exists(entityFile) ||
-            solutionFile.IsNullOrEmpty() || !solutionFile.EndsWith(".sln"))
+            solutionFile.IsNullOrEmpty() || !(solutionFile.EndsWith(".sln") || solutionFile.EndsWith(".slnx")))
         {
             throw new UserFriendlyException("Invalid Arguments!");
         }
@@ -476,7 +476,8 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
     private object GetTargetSolutionOrNull(CommandLineArgs commandLineArgs)
     {
         return commandLineArgs.Options.GetOrNull(Options.Crud.Solution.Short, Options.Crud.Solution.Long)
-            ?? Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+            ?? Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.GetFiles(Directory.GetCurrentDirectory(), "*.slnx", SearchOption.TopDirectoryOnly)).FirstOrDefault();
     }
 
     private Process StartSuite()

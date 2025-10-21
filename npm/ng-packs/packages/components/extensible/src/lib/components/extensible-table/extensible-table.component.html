@@ -46,9 +46,9 @@
   @if (actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)) {
     <ngx-datatable-column
       [name]="actionsText | abpLocalization"
-      [maxWidth]="columnWidths[0] ?? undefined"
-      [width]="columnWidths[0] ?? 200"
-      [canAutoResize]="!columnWidths[0]"
+      [maxWidth]="_actionsColumnWidth() ?? undefined"
+      [width]="_actionsColumnWidth() ?? 200"
+      [canAutoResize]="!_actionsColumnWidth()"
       [sortable]="false"
     >
       <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
@@ -66,8 +66,8 @@
   @for (prop of propList; track prop.name; let i = $index) {
     <ngx-datatable-column
       *abpVisible="prop.columnVisible(getInjected)"
-      [width]="columnWidths[i + 1] ?? 200"
-      [canAutoResize]="!columnWidths[i + 1]"
+      [width]="columnWidths[i] ?? 200"
+      [canAutoResize]="!columnWidths[i]"
       [name]="(prop.isExtra ? '::' + prop.displayName : prop.displayName) | abpLocalization"
       [prop]="prop.name"
       [sortable]="prop.sortable"

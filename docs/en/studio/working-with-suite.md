@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly integrate and run ABP Suite within ABP Studio, enhancing your development workflow with unified access and efficiency."
+}
+```
+
 # ABP Studio: Working with ABP Suite
 
 ````json

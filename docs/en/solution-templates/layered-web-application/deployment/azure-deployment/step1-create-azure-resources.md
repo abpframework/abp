@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create an Azure Web App Service using the Azure Portal or Terraform, tailored for different UI and database options."
+}
+```
+
 ````json
 //[doc-params]
 {

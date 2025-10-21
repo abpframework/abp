@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the microservice demo solution, now replaced by eShopOnAbp, and learn about benefits of microservices in software architecture."
+}
+```
+
 # Microservice Demo Solution
 
 > This solution is no longer maintained. See [the eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) for the replacement solution.

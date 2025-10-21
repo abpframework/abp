@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and manage background workers in your application using the ABP Framework for efficient task automation."
+}
+```
+
 # Background Workers
 
 ## Introduction
@@ -41,7 +48,7 @@ Start your worker in the `StartAsync` (which is called when the application begi
 
 Assume that we want to make a user passive, if the user has not logged in to the application in last 30 days. `AsyncPeriodicBackgroundWorkerBase` class simplifies to create periodic workers, so we will use it for the example below:
 
-> You can use `CronExpression` property to set the cron expression for the background worker if you will use the [Hangfire Background Worker Manager](./hangfire.md) or [Quartz Background Worker Manager](./quartz.md).
+> You can use `CronExpression` property to set the cron expression for the background worker if you will use the [Hangfire Background Worker Manager](./hangfire.md), [Quartz Background Worker Manager](./quartz.md), or [TickerQ Background Worker Manager](./tickerq.md).
 
 ````csharp
 public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
@@ -199,12 +206,12 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 Set `DefaultQueueNamePrefix` and `DefaultDelayedQueueNamePrefix` properties in `AbpRabbitMqBackgroundJobOptions` to your application's name:
 
 ````csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    PreConfigure<AbpRabbitMqBackgroundJobOptions>(options =>
+    Configure<AbpRabbitMqBackgroundJobOptions>(options =>
     {
-        options.DefaultQueueNamePrefix = context.Services.GetApplicationName()!.EndsWith('.') + options.DefaultQueueNamePrefix;
-        options.DefaultDelayedQueueNamePrefix = context.Services.GetApplicationName()!.EndsWith('.') + options.DefaultDelayedQueueNamePrefix;
+        options.DefaultQueueNamePrefix = context.Services.GetApplicationName()!.EnsureEndsWith('.') + options.DefaultQueueNamePrefix;
+        options.DefaultDelayedQueueNamePrefix = context.Services.GetApplicationName()!.EnsureEndsWith('.') + options.DefaultDelayedQueueNamePrefix;
     });
 }
 ````
@@ -216,7 +223,8 @@ Background worker system is extensible and you can change the default background
 See pre-built worker manager alternatives:
 
 * [Quartz Background Worker Manager](./quartz.md) 
-* [Hangfire Background Worker Manager](./hangfire.md) 
+* [Hangfire Background Worker Manager](./hangfire.md)
+* [TickerQ Background Worker Manager](./tickerq.md) 
 
 ## See Also
 
