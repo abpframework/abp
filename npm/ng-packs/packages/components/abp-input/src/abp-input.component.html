@@ -1,11 +1,13 @@
 @if(abpFormField) {
-  <input
-    [type]="type()"
-    [id]="id()"
-    class="form-control"
-    [placeholder]="placeholder()"
-    formControlName="value"
+  <div [formGroup]="abpInputFormGroup">
+    <input
+      [type]="type()"
+      [id]="id()"
+      class="form-control"
+      [placeholder]="placeholder()"
+      formControlName="value"
   />
+  </div>
 } @else {
   <div class="form-group" [formGroup]="abpInputFormGroup">
     @if (label()) {
