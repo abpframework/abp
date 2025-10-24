@@ -39,6 +39,11 @@
 						"angular/projects/setting-management/proxy/src/public-api.ts"
 					]
 				}
+			],
+			"replacementPackages":[
+				{
+					"name": "@abp/ng.permission-management"
+				}
 			]
 		}
 	]
