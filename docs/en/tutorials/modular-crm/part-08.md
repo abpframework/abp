@@ -8,6 +8,13 @@
 # Integrating the Modules: Joining the Products and Orders Data
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer","NG"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {

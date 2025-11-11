@@ -8,6 +8,13 @@
 # Creating the Initial Solution
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer","NG"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -28,7 +35,7 @@ In this first part of this tutorial, we will create a new ABP solution with modu
 Follow the *[Get Started](../../get-started/single-layer-web-application.md)* guide to create a single layer web application with the following configuration:
 
 * **Solution name**: `ModularCrm`
-* **UI Framework**: ASP.NET Core MVC / Razor Pages
+* **UI Framework**: {{UI_VALUE}}
 * **Database Provider**: Entity Framework Core
 
 You can select the other options based on your preference but at the **Modularity** step, check the _Setup as a modular solution_ option and add a new **Standard Module** named `ModularCrm.Catalog`:

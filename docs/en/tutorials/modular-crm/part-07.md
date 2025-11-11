@@ -8,6 +8,13 @@
 # Integrating the Modules: Communication via Messages (Events)
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer","NG"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {

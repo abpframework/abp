@@ -8,6 +8,13 @@
 # Creating the Initial Ordering Module
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer","NG"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {

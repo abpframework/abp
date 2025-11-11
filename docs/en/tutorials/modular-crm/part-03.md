@@ -8,6 +8,13 @@
 # Building the Catalog Module
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","Blazor","BlazorServer","NG"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
