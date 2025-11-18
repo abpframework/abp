@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AsyncKeyedLock;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -162,7 +163,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
 
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-    protected SemaphoreSlim SyncSemaphore { get; }
+    protected AsyncKeyedLocker<string> Locker { get; }
 
     protected DistributedCacheEntryOptions DefaultCacheOptions = default!;
 
@@ -186,7 +187,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
         ServiceScopeFactory = serviceScopeFactory;
         UnitOfWorkManager = unitOfWorkManager;
 
-        SyncSemaphore = new SemaphoreSlim(1, 1);
+        Locker = new();
 
         SetDefaultOptions();
     }
@@ -534,7 +535,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             return value;
         }
 
-        using (SyncSemaphore.Lock())
+        using (Locker.Lock(NormalizeKey(key)))
         {
             value = Get(key, hideErrors, considerUow);
             if (value != null)
@@ -589,7 +590,7 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             return value;
         }
 
-        using (await SyncSemaphore.LockAsync(token))
+        using (await Locker.LockAsync(NormalizeKey(key), token))
         {
             value = await GetAsync(key, hideErrors, considerUow, token);
             if (value != null)
