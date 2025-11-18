@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using AsyncKeyedLock;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -85,7 +86,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
 
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-    protected SemaphoreSlim SyncSemaphore { get; }
+    protected AsyncKeyedLocker<string> Locker { get; }
 
     protected HybridCacheEntryOptions DefaultCacheOptions = default!;
 
@@ -112,7 +113,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
         ServiceScopeFactory = serviceScopeFactory;
         UnitOfWorkManager = unitOfWorkManager;
 
-        SyncSemaphore = new SemaphoreSlim(1, 1);
+        Locker = new();
 
         SetDefaultOptions();
     }
@@ -176,13 +177,14 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
         hideErrors ??= DistributedCacheOption.HideErrors;
 
         TCacheItem? value = null;
+        var normalizedKey = NormalizeKey(key);
 
         if (!considerUow)
         {
             try
             {
                 value = await HybridCache.GetOrCreateAsync(
-                    key: NormalizeKey(key),
+                    key: normalizedKey,
                     factory: async cancel => await factory(),
                     options: optionsFactory?.Invoke(),
                     tags: null,
@@ -204,7 +206,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
 
         try
         {
-            using (await SyncSemaphore.LockAsync(token))
+            using (await Locker.LockAsync(normalizedKey, token))
             {
                 if (ShouldConsiderUow(considerUow))
                 {
@@ -215,11 +217,11 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
                     }
                 }
 
-                if (await DistributedCache.GetAsync(NormalizeKey(key), token) != null)
+                if (await DistributedCache.GetAsync(normalizedKey, token) != null)
                 {
                     // Because HybridCache wraps the cache in L2(distributed cache), we can’t unwrap it directly and can only retrieve the value through its API
                     return await HybridCache.GetOrCreateAsync(
-                        key: NormalizeKey(key),
+                        key: normalizedKey,
                         factory: async cancel => await factory(),
                         options: optionsFactory?.Invoke(),
                         tags: null,
