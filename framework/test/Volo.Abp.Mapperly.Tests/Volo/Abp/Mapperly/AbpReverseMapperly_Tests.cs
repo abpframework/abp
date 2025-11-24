@@ -34,12 +34,12 @@ public partial class MyReverseClassMapper : TwoWayMapperBase<MyReverseClass, MyR
 
     public override void BeforeReverseMap(MyReverseClassDto source)
     {
-        destination.Name = "BeforeReverseMap " + destination.Name;
+        source.Name = "BeforeReverseMap " + source.Name;
     }
 
     public override void AfterReverseMap(MyReverseClassDto source, MyReverseClass destination)
     {
-        source.Name = destination.Name + " AfterReverseMap";
+        destination.Name = source.Name + " AfterReverseMap";
     }
 }
 
