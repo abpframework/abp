@@ -19,8 +19,8 @@ public partial class BlogFeatureInputDtoToBlogFeatureViewModelMapper : TwoWayMap
     public override partial FeaturesModalModel.BlogFeatureViewModel Map(BlogFeatureInputDto source);
     public override partial void Map(BlogFeatureInputDto source, FeaturesModalModel.BlogFeatureViewModel destination);
 
-    public override partial BlogFeatureInputDto ReverseMap(FeaturesModalModel.BlogFeatureViewModel destination);
-    public override partial void ReverseMap(FeaturesModalModel.BlogFeatureViewModel destination, BlogFeatureInputDto source);
+    public override partial BlogFeatureInputDto ReverseMap(FeaturesModalModel.BlogFeatureViewModel source);
+    public override partial void ReverseMap(FeaturesModalModel.BlogFeatureViewModel source, BlogFeatureInputDto destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -29,8 +29,8 @@ public partial class BlogFeatureDtoToBlogFeatureViewModelMapper : TwoWayMapperBa
     public override partial FeaturesModalModel.BlogFeatureViewModel Map(BlogFeatureDto source);
     public override partial void Map(BlogFeatureDto source, FeaturesModalModel.BlogFeatureViewModel destination);
 
-    public override partial BlogFeatureDto ReverseMap(FeaturesModalModel.BlogFeatureViewModel destination);
-    public override partial void ReverseMap(FeaturesModalModel.BlogFeatureViewModel destination, BlogFeatureDto source);
+    public override partial BlogFeatureDto ReverseMap(FeaturesModalModel.BlogFeatureViewModel source);
+    public override partial void ReverseMap(FeaturesModalModel.BlogFeatureViewModel source, BlogFeatureDto destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -39,8 +39,8 @@ public partial class CreateBlogPostDtoToCreateBlogPostViewModelMapper : TwoWayMa
     public override partial CreateModel.CreateBlogPostViewModel Map(CreateBlogPostDto source);
     public override partial void Map(CreateBlogPostDto source, CreateModel.CreateBlogPostViewModel destination);
 
-    public override partial CreateBlogPostDto ReverseMap(CreateModel.CreateBlogPostViewModel destination);
-    public override partial void ReverseMap(CreateModel.CreateBlogPostViewModel destination, CreateBlogPostDto source);
+    public override partial CreateBlogPostDto ReverseMap(CreateModel.CreateBlogPostViewModel source);
+    public override partial void ReverseMap(CreateModel.CreateBlogPostViewModel source, CreateBlogPostDto destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -49,8 +49,8 @@ public partial class TagUpdateDtoToTagEditViewModelMapper : TwoWayMapperBase<Tag
     public override partial EditModalModel.TagEditViewModel Map(TagUpdateDto source);
     public override partial void Map(TagUpdateDto source, EditModalModel.TagEditViewModel destination);
 
-    public override partial TagUpdateDto ReverseMap(EditModalModel.TagEditViewModel destination);
-    public override partial void ReverseMap(EditModalModel.TagEditViewModel destination, TagUpdateDto source);
+    public override partial TagUpdateDto ReverseMap(EditModalModel.TagEditViewModel source);
+    public override partial void ReverseMap(EditModalModel.TagEditViewModel source, TagUpdateDto destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -78,9 +78,9 @@ public partial class UpdateBlogPostViewModelToUpdateBlogPostDtoMapper : TwoWayMa
 
     public override partial void Map(UpdateModel.UpdateBlogPostViewModel source, UpdateBlogPostDto destination);
 
-    public override partial UpdateModel.UpdateBlogPostViewModel ReverseMap(UpdateBlogPostDto destination);
+    public override partial UpdateModel.UpdateBlogPostViewModel ReverseMap(UpdateBlogPostDto source);
 
-    public override partial void ReverseMap(UpdateBlogPostDto destination, UpdateModel.UpdateBlogPostViewModel source);
+    public override partial void ReverseMap(UpdateBlogPostDto source, UpdateModel.UpdateBlogPostViewModel destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -126,9 +126,9 @@ public partial class MenuItemUpdateViewModelToMenuItemCreateInputMapper : TwoWay
     public override partial MenuItemCreateInput Map(Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel source);
 
     public override partial void Map(Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel source, MenuItemCreateInput destination);
-    public override partial Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel ReverseMap(MenuItemCreateInput destination);
+    public override partial Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel ReverseMap(MenuItemCreateInput source);
 
-    public override partial void ReverseMap(MenuItemCreateInput destination, Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel source);
+    public override partial void ReverseMap(MenuItemCreateInput source, Pages.CmsKit.Menus.MenuItems.CreateModalModel.MenuItemCreateViewModel destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -165,9 +165,9 @@ public partial class CreatePageViewModelToCreatePageInputDtoMapper : TwoWayMappe
     public override partial CreatePageInputDto Map(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.CreateModel.CreatePageViewModel source);
 
     public override partial void Map(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.CreateModel.CreatePageViewModel source, CreatePageInputDto destination);
-    public override partial Pages.CmsKit.Pages.CreateModel.CreatePageViewModel ReverseMap(CreatePageInputDto destination);
+    public override partial Pages.CmsKit.Pages.CreateModel.CreatePageViewModel ReverseMap(CreatePageInputDto source);
 
-    public override partial void ReverseMap(CreatePageInputDto destination, Pages.CmsKit.Pages.CreateModel.CreatePageViewModel source);
+    public override partial void ReverseMap(CreatePageInputDto source, Pages.CmsKit.Pages.CreateModel.CreatePageViewModel destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -178,9 +178,9 @@ public partial class UpdatePageViewModelToUpdatePageInputDtoMapper : TwoWayMappe
 
     public override partial void Map(Volo.CmsKit.Admin.Web.Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel source, UpdatePageInputDto destination);
 
-    public override partial Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel ReverseMap(UpdatePageInputDto destination);
+    public override partial Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel ReverseMap(UpdatePageInputDto source);
 
-    public override partial void ReverseMap(UpdatePageInputDto destination, Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel source);
+    public override partial void ReverseMap(UpdatePageInputDto source, Pages.CmsKit.Pages.UpdateModel.UpdatePageViewModel destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -190,9 +190,9 @@ public partial class TagCreateViewModelToTagCreateDtoMapper : TwoWayMapperBase<C
     public override partial TagCreateDto Map(CreateModalModel.TagCreateViewModel source);
 
     public override partial void Map(CreateModalModel.TagCreateViewModel source, TagCreateDto destination);
-    public override partial CreateModalModel.TagCreateViewModel ReverseMap(TagCreateDto destination);
+    public override partial CreateModalModel.TagCreateViewModel ReverseMap(TagCreateDto source);
 
-    public override partial void ReverseMap(TagCreateDto destination, CreateModalModel.TagCreateViewModel source);
+    public override partial void ReverseMap(TagCreateDto source, CreateModalModel.TagCreateViewModel destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]

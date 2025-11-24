@@ -18,15 +18,15 @@ public abstract class MapperBase<TSource, TDestination> : IAbpMapperlyMapper<TSo
 
 public abstract class TwoWayMapperBase<TSource, TDestination> : MapperBase<TSource, TDestination>, IAbpReverseMapperlyMapper<TSource, TDestination>
 {
-    public abstract TSource ReverseMap(TDestination destination);
+    public abstract TSource ReverseMap(TDestination source);
 
-    public abstract void ReverseMap(TDestination destination, TSource source);
+    public abstract void ReverseMap(TDestination source, TSource destination);
 
-    public virtual void BeforeReverseMap(TDestination destination)
+    public virtual void BeforeReverseMap(TDestination source)
     {
     }
 
-    public virtual void AfterReverseMap(TDestination destination, TSource source)
+    public virtual void AfterReverseMap(TDestination source, TSource destination)
     {
     }
 }

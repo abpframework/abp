@@ -13,8 +13,8 @@ public partial class PageDtoToPageViewModelMapper : TwoWayMapperBase<PageDto, Pa
     public override partial PageViewModel Map(PageDto source);
     public override partial void Map(PageDto source, PageViewModel destination);
 
-    public override partial PageDto ReverseMap(PageViewModel destination);
-    public override partial void ReverseMap(PageViewModel destination, PageDto source);
+    public override partial PageDto ReverseMap(PageViewModel source);
+    public override partial void ReverseMap(PageViewModel source, PageDto destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -23,8 +23,8 @@ public partial class BlogPostCommonDtoToBlogPostViewModelMapper : TwoWayMapperBa
     public override partial BlogPostViewModel Map(BlogPostCommonDto source);
     public override partial void Map(BlogPostCommonDto source, BlogPostViewModel destination);
 
-    public override partial BlogPostCommonDto ReverseMap(BlogPostViewModel destination);
-    public override partial void ReverseMap(BlogPostViewModel destination, BlogPostCommonDto source);
+    public override partial BlogPostCommonDto ReverseMap(BlogPostViewModel source);
+    public override partial void ReverseMap(BlogPostViewModel source, BlogPostCommonDto destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
