@@ -554,7 +554,21 @@
             },
             {
               "text": "Artificial Intelligence",
-              "path": "framework/infrastructure/artificial-intelligence/index.md"
+              "items":[
+                {
+                  "text": "Overview",
+                  "path": "framework/infrastructure/artificial-intelligence/index.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Microsoft.Extensions.AI",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-extensions-ai.md"
+                },                
+                {
+                  "text": "Semantic Kernel",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
+                }
+              ]
             },
             {
               "text": "Background Jobs",

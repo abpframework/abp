@@ -47,6 +47,11 @@ After installing, I restarted AntiGravity and now I can see the red circle which
 
 ![Add C# Breakpoint](breakpoint.png)
 
+### Another Extension For Debugging .NET Apps on VS Code
+
+Recently I heard about DotRush extension from the folks. As they say DotRush works slightly faster and support Razor pages (.cshtml files). 
+Here's the link for DotRush https://github.com/JaneySprings/DotRush
+
 ### Finding Website Running Port
 
 When you run the web project via C# debugger extension, normally it's not using the `launch.json` therefore the website port is not the one when you start from Visual Studio / Rider... So what's my website's port which I just run now? Normally for ASP.NET Core **the default port is 5000**. You can try navigating to http://localhost:5000/. 

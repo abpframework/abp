@@ -26,6 +26,13 @@ public class ApplicationPartSorter_Tests
             partManager.ApplicationParts.Add(new AssemblyPart(assembly));
             moduleDescriptors.Add(CreateModuleDescriptor(assembly));
         }
+
+        var dumplicateAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName($"ModuleB.dll"), AssemblyBuilderAccess.Run);
+        partManager.ApplicationParts.Add(new AssemblyPart(dumplicateAssembly));
+        partManager.ApplicationParts.Add(new AssemblyPart(dumplicateAssembly));
+        moduleDescriptors.Add(CreateModuleDescriptor(dumplicateAssembly));
+        moduleDescriptors.Add(CreateModuleDescriptor(dumplicateAssembly));
+
         var randomApplicationParts = partManager.ApplicationParts.OrderBy(x => Guid.NewGuid()).ToList(); // Shuffle the parts
 
         // Additional part
@@ -44,7 +51,7 @@ public class ApplicationPartSorter_Tests
         ApplicationPartSorter.Sort(partManager, moduleContainer);
 
         // Act
-        partManager.ApplicationParts.Count.ShouldBe(13); // 10 modules + 3 additional parts
+        partManager.ApplicationParts.Count.ShouldBe(15); // 10 modules + 3 additional parts + 2 duplicate parts
 
         var applicationParts = partManager.ApplicationParts.Reverse().ToList(); // Reverse the order to match the expected output
 
@@ -60,7 +67,9 @@ public class ApplicationPartSorter_Tests
         applicationParts[9].ShouldBeOfType<AssemblyPart>().Assembly.GetName().Name.ShouldStartWith("ModuleA7");
         applicationParts[10].ShouldBeOfType<AssemblyPart>().Assembly.GetName().Name.ShouldStartWith("ModuleA8");
         applicationParts[11].ShouldBeOfType<AssemblyPart>().Assembly.GetName().Name.ShouldStartWith("ModuleA9");
-        applicationParts[12].ShouldBeOfType<CompiledRazorAssemblyPart>().Assembly.ShouldBe(typeof(AbpVirtualFileSystemModule).Assembly);
+        applicationParts[12].ShouldBeOfType<AssemblyPart>().Assembly.GetName().Name.ShouldStartWith("ModuleB");
+        applicationParts[13].ShouldBeOfType<AssemblyPart>().Assembly.GetName().Name.ShouldStartWith("ModuleB");
+        applicationParts[14].ShouldBeOfType<CompiledRazorAssemblyPart>().Assembly.ShouldBe(typeof(AbpVirtualFileSystemModule).Assembly);
     }
 
     private static IModuleContainer CreateFakeModuleContainer(List<IAbpModuleDescriptor> moduleDescriptors)
