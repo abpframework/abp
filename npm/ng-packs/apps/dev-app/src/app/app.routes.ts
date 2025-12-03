@@ -7,6 +7,10 @@ export const appRoutes: Routes = [
     loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
   },
   {
+    path: 'form-field-demo',
+    loadComponent: () => import('./abp-form-field-demo/abp-form-field-demo.component').then(m => m.AbpFormFieldDemoComponent),
+  },
+  {
     path: 'account',
     loadChildren: () => import('@abp/ng.account').then(m => m.createRoutes()),
   },

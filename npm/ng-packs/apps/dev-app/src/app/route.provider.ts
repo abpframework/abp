@@ -16,6 +16,13 @@ function configureRoutes() {
       iconClass: 'fas fa-home',
       order: 1,
       layout: eLayoutType.application,
+    },
+    {
+      path: '/form-field-demo',
+      name: 'Form Field Demo',
+      iconClass: 'fas fa-file-alt',
+      order: 2,
+      layout: eLayoutType.application,
     }
   ]);
 }
