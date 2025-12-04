@@ -186,10 +186,7 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return (
-    prop.typeSimple.endsWith('?') ||
-    ((prop.typeSimple === 'string' || prop.typeSimple.includes('enum')) && !prop.isRequired)
-  );
+  return prop.type.endsWith('?') || prop.typeSimple.endsWith('?');
 }
 
 export function parseBaseTypeWithGenericTypes(type: string): string[] {

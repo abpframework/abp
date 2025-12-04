@@ -32,7 +32,7 @@ public class PropertyApiDescriptionModel
     public static PropertyApiDescriptionModel Create(PropertyInfo propertyInfo)
     {
         var customAttributes = propertyInfo.GetCustomAttributes(true);
-        return new PropertyApiDescriptionModel
+        var model = new PropertyApiDescriptionModel
         {
             Name = propertyInfo.Name,
             JsonName = AbpApiProxyScriptingConfiguration.PropertyNameGenerator.Invoke(propertyInfo),
@@ -45,5 +45,15 @@ public class PropertyApiDescriptionModel
             MaxLength = customAttributes.OfType<MaxLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MaximumLength,
             Regex= customAttributes.OfType<RegularExpressionAttribute>().Select(x => x.Pattern).FirstOrDefault()
         };
+
+#if NET6_0_OR_GREATER
+        if (!model.Type.EndsWith("?") && Volo.Abp.Reflection.ReflectionHelper.IsNullable(propertyInfo))
+        {
+            model.Type += "?";
+            model.TypeSimple += "?";
+        }
+#endif
+        
+        return model;
     }
 }
