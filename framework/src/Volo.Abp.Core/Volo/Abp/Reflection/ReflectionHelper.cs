@@ -8,24 +8,6 @@ namespace Volo.Abp.Reflection;
 //TODO: Consider to make internal
 public static class ReflectionHelper
 {
-#if NET6_0_OR_GREATER
-    /// <summary>
-    /// Checks whether the property is nullable, including nullable reference types (NRT).
-    /// </summary>
-    /// <param name="propertyInfo">Property info to check</param>
-    public static bool IsNullable(PropertyInfo propertyInfo)
-    {
-        if (propertyInfo.PropertyType.IsValueType)
-        {
-            return false;
-        }
-
-        var nullabilityInfoContext = new NullabilityInfoContext();
-        var nullabilityInfo = nullabilityInfoContext.Create(propertyInfo);
-        return nullabilityInfo.ReadState == NullabilityState.Nullable;
-    }
-#endif
-
     //TODO: Ehhance summary
     /// <summary>
     /// Checks whether <paramref name="givenType"/> implements/inherits <paramref name="genericType"/>.
