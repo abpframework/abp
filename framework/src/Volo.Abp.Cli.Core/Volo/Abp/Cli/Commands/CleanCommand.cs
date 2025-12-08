@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -17,6 +19,8 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
 
     public ILogger<CleanCommand> Logger { get; set; }
 
+    public ITelemetryService TelemetryService { get; set; }
+    
     protected ICmdHelper CmdHelper { get; }
 
     public CleanCommand(ICmdHelper cmdHelper)
@@ -25,8 +29,10 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
         Logger = NullLogger<CleanCommand>.Instance;
     }
 
-    public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliCommandsClean);
+
         var binEntries = Directory.EnumerateDirectories(Directory.GetCurrentDirectory(), "bin", SearchOption.AllDirectories);
         var objEntries = Directory.EnumerateDirectories(Directory.GetCurrentDirectory(), "obj", SearchOption.AllDirectories);
 
@@ -49,7 +55,6 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
         Logger.LogInformation($"'bin' and 'obj' folders removed successfully!");
 
         Logger.LogInformation("Solution cleaned successfully!");
-        return Task.CompletedTask;
     }
 
     public string GetUsageInfo()
