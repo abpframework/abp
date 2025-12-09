@@ -59,7 +59,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Pre-Requirements
 
-* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 10.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [Node v20.11+](https://nodejs.org/)
 {{if DB=="EF"}}
 * [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
@@ -139,7 +139,7 @@ Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the a
 
 ![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
-You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
+You can explore and test your HTTP API with this UI. Now, we can set the {{if UI=="Blazor"}}`TodoApp.Blazor`{{else if UI=="MAUIBlazor"}}`TodoApp.MauiBlazor`{{end}} as the startup project and run it to open the actual Blazor application UI:
 
 {{else if UI=="NG"}}
 
@@ -577,7 +577,11 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} `TodoApp.Blazor.Client` {{else if UI=="BlazorServer"}} `TodoApp.Blazor` {{else if UI=="MAUIBlazor"}} `TodoApp.MauiBlazor` {{end}} project and replace the content with the following code block:
+
+{{if UI=="MAUIBlazor"}}
+_(Create this file if it doesn't exist)_
+{{end}}
 
 ```csharp
 using Microsoft.AspNetCore.Components;

@@ -24,6 +24,11 @@
           "declaringAssemblyName": "Volo.Abp.Emailing",
           "namespace": "Volo.Abp.Emailing",
           "name": "AbpEmailingModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         }
       ],
       "implementingInterfaces": [

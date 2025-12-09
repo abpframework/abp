@@ -553,6 +553,24 @@
               "path": "framework/infrastructure/audit-logging.md"
             },
             {
+              "text": "Artificial Intelligence",
+              "items":[
+                {
+                  "text": "Overview",
+                  "path": "framework/infrastructure/artificial-intelligence/index.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Microsoft.Extensions.AI",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-extensions-ai.md"
+                },                
+                {
+                  "text": "Semantic Kernel",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
+                }
+              ]
+            },
+            {
               "text": "Background Jobs",
               "items": [
                 {
@@ -1540,6 +1558,10 @@
                       "path": "framework/ui/angular/service-proxies.md"
                     },
                     {
+                      "text": "SSR Configuration",
+                      "path": "framework/ui/angular/ssr-configuration.md"
+                    },
+                    {
                       "text": "PWA Configuration",
                       "path": "framework/ui/angular/pwa-configuration.md"
                     },
@@ -1623,7 +1645,7 @@
                       "path": "framework/ui/angular/list-service.md"
                     },
                     {
-                      "text": "Easy *ngFor trackBy",
+                      "text": "Easy @for() track",
                       "path": "framework/ui/angular/track-by-service.md"
                     },
                     {

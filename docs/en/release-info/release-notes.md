@@ -14,9 +14,9 @@ Also see the following notes about ABP releases:
 * [ABP Studio release notes](../studio/release-notes.md)
 * [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
-## 10.0 (2025-10-01)
+## 10.0 (2025-11-18)
 
-This is currently a RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-0-release-candidate-86lrnyox)** for the v10.0 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/abp.io-platform-10.0-final-has-been-released-spknn925)** for the v10.0 release.
 
 * Upgraded to .NET 10.0
 * Upgraded to `Blazorise` **v1.8.6**

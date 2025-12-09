@@ -970,7 +970,7 @@ Book list page change is trivial. Open the `/src/app/book/book.component.html` a
   [name]="'::Author' | abpLocalization"
   prop="authorName"
   [sortable]="false"
-></ngx-datatable-column>
+/>
 ````
 
 When you run the application, you can see the *Author* column on the table:
@@ -1098,9 +1098,11 @@ Open the `/src/app/book/book.component.html` and add the following form group ju
   <label for="author-id">Author</label><span> * </span>
   <select class="form-control" id="author-id" formControlName="authorId">
     <option [ngValue]="null">Select author</option>
-    <option [ngValue]="author.id" *ngFor="let author of authors$ | async">
-      {%{{{ author.name }}}%}
-    </option>
+    @for (author of authors$ | async; track author) {
+      <option [ngValue]="author.id">
+        {%{{{ author.name }}}%}
+      </option>
+    }
   </select>
 </div>
 ````

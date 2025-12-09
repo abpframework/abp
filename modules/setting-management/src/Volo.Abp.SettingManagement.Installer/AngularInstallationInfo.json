@@ -2,6 +2,7 @@
 	"packages":[
 		{
 			"name": "@abp/ng.setting-management",
+			"keepPackageInPackageJson": true,
 			"appRoutingModuleConfiguration":{
 				"routes":[
 					"{ path: 'setting-management', loadChildren: () => import('@abp/ng.setting-management').then(c => c.createRoutes()),}"

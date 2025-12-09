@@ -672,6 +672,7 @@
     "SupportQuestionCountPerDeveloperOnRenewLicense": "Support Question Count Per Developer for License Renewal",
     "SupportQuestionCountPerDeveloperOnNewLicense": "Support Question Count Per Developer for New License",
     "IncludedDeveloperCount": "Included Developer Count",
+    "AiTokenCountPerDeveloper":  "AI Token Count Per Developer",
     "CanBuyAdditionalDevelopers": "Can Buy Additional Developers",
     "HasEmailSupport": "Has Email Support",
     "IsSupportPrivateQuestion": "Can Open Private Support Question",

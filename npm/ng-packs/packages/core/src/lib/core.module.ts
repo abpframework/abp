@@ -29,6 +29,7 @@ import { ABP } from './models/common';
 import './utils/date-extensions';
 import { provideAbpCoreChild, provideAbpCore, withOptions } from './providers';
 import {
+  AsyncLocalizationPipe,
   LazyLocalizationPipe,
   UtcToLocalPipe,
   SafeHtmlPipe,
@@ -60,6 +61,7 @@ const CORE_PIPES = [
   ShortDatePipe,
   ToInjectorPipe,
   UtcToLocalPipe,
+  AsyncLocalizationPipe,
   LazyLocalizationPipe,
 ];
 

@@ -101,9 +101,6 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   @Input() isFirstGroup?: boolean;
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
-  private shouldFocus = signal(false);
-  private isViewReady = signal(false);
-
   injectorForCustomComponent?: Injector;
   asterisk = '';
   containerClassName = 'mb-2';
@@ -118,15 +115,6 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   get disabled() {
     return this.disabledFn(this.data);
-  }
-
-  constructor() {
-    // Effect to handle focus when both conditions are met
-    effect(() => {
-      if (this.shouldFocus() && this.isViewReady() && this.fieldRef?.nativeElement) {
-        this.focusElement();
-      }
-    });
   }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {

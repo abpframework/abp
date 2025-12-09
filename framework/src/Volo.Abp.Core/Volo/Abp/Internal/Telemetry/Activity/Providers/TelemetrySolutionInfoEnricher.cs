@@ -114,7 +114,10 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
             }
 
             var moduleJsonFileContent = File.ReadAllText(modulePath);
-            using var moduleDoc = JsonDocument.Parse(moduleJsonFileContent);
+            using var moduleDoc = JsonDocument.Parse(moduleJsonFileContent, new JsonDocumentOptions
+            {
+                AllowTrailingCommas = true
+            });
 
             if (!moduleDoc.RootElement.TryGetProperty("imports", out var imports))
             {

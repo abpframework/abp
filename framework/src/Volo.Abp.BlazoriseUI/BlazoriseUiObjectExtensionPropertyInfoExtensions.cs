@@ -218,6 +218,11 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
                ?? typeof(TextExtensionProperty<,>); //default
     }
 
+    public static bool IsEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
+    }
+
     private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute)
     {
         var hasTextEditSupport = TextEditSupportedAttributeTypes.Any(t => t == attribute.GetType());

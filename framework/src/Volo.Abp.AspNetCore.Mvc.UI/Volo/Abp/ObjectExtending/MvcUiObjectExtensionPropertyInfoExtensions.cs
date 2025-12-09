@@ -88,6 +88,16 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
                ?? "text"; //default
     }
 
+    public static bool IsEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
+    }
+
+    public static bool IsNullableEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return TypeHelper.IsNullableEnum(propertyInfo.Type);
+    }
+
     private static string? GetInputTypeFromAttributeOrNull(Attribute attribute)
     {
         if (attribute is EmailAddressAttribute)

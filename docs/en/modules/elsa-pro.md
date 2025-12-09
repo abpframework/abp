@@ -1,10 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Elsa Workflows into your ABP applications with this Pro module. Learn installation and setup for seamless workflow management."
+}
+```
+
 # Elsa Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.
 
 This module integrates [Elsa Workflows](https://docs.elsaworkflows.io/) into ABP Framework applications and is designed to make it easy for developers to use Elsa's capabilities within their ABP-based projects. For creating, managing, and customizing workflows themselves, please refer to [the official Elsa documentation](https://docs.elsaworkflows.io/).
 
-## How to install
+## How to Install
 
 The Elsa module is not installed in [the startup templates](../solution-templates/layered-web-application) by default and must be installed manually. There are two ways of installing a module into your application and each one of these approaches is explained in the next sections.
 
@@ -37,6 +44,23 @@ After adding the package references, open the module class of the project (e.g.:
 
 > If you are using Blazor Web App, you need to add the `Volo.Elsa.Admin.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and add the `Volo.Elsa.Admin.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
 
+### `AbpElsaAspNetCoreModule` and `AbpElsaIdentityModule`
+
+These two modules generally will be added to your authentication project. Please add `Volo.Elsa.Abp.AspNetCore` and `Volo.Elsa.Abp.Identity` packages to your project and add the `AbpElsaAspNetCoreModule` and `AbpElsaIdentityModule` to the `DependsOn` attribute of your module class based on your project structure:
+
+```xml
+<PackageReference Include="Volo.Abp.Elsa.AspNetCore" Version="x.x.x" />
+<PackageReference Include="Volo.Abp.Elsa.Identity" Version="x.x.x" />
+```
+
+```csharp
+[DependsOn(
+  //...
+  typeof(AbpElsaAspNetCoreModule),
+  typeof(AbpElsaIdentityModule)
+)]
+```
+
 ## The Elsa Module
 
 The Elsa Workflows has its own database provider, and also has a Tenant/Role/User system. They are under active development, so the ABP Elsa module is not yet fully integrated. Below is the current status of each module in the ABP's Elsa Module:
@@ -56,6 +80,49 @@ The rest of the projects/modules are basically empty and will be implemented in 
 - `AbpElsaBlazorWebAssemblyModule(Volo.Elsa.Abp.Blazor.WebAssembly)`
 - `AbpElsaWebModule(Volo.Elsa.Abp.Web)`
 
+## Configure the Elsa Server
+
+You need to configure Elsa in your ABP application to use its features. You can do that in the `ConfigureServices` method of your `YourElsaAppModule` class as shown below:
+
+> For more information about configuring Elsa, please refer to [the official Elsa documentation](https://docs.elsaworkflows.io/).
+
+```cs
+private void ConfigureElsa(ServiceConfigurationContext context, IConfiguration configuration)
+{
+    var connectionString = configuration.GetConnectionString("Default")!;
+    context.Services
+        .AddElsa(elsa => elsa
+            .UseAbpIdentity(identity => // Use UseAbpIdentity instead of UseIdentity to integrate with ABP Identity module
+            {
+                identity.TokenOptions = options => options.SigningKey = "large-signing-key-for-signing-JWT-tokens";
+            })
+            .UseWorkflowManagement(management => management.UseEntityFrameworkCore(ef => ef.UseSqlServer(connectionString)))
+            .UseWorkflowRuntime(runtime => runtime.UseEntityFrameworkCore(ef => ef.UseSqlServer(connectionString)))
+            .UseScheduling()
+            .UseJavaScript()
+            .UseLiquid()
+            .UseCSharp()
+            .UseHttp(http => http.ConfigureHttpOptions = options => configuration.GetSection("Http").Bind(options))
+            .UseWorkflowsApi()
+            .AddActivitiesFrom<YourElsaAppModule>()
+            .AddWorkflowsFrom<YourElsaAppModule>()
+        );
+}
+```
+
+## Elsa Database Migration
+
+Elsa module uses its own database context and migration system, ABP Elsa module doesn't contain any `aggregate root/entity` at the moment. So, **you don't need to create any initial migration for Elsa module**. You just need to configure the Elsa Services as follows:
+
+```cs
+.UseWorkflowManagement(management => management.UseEntityFrameworkCore(ef => ef.UseSqlServer(connectionString)))
+.UseWorkflowRuntime(runtime => runtime.UseEntityFrameworkCore(ef => ef.UseSqlServer(connectionString)))
+```
+
+When you run your application, Elsa will create its own database tables if they do not exist.
+
+> See [how to configure Elsa Workflows to use different database providers for persistence, including SQL Server, PostgreSQL, and MongoDB](https://docs.elsaworkflows.io/getting-started/database-configuration) for more information.
+
 ### Elsa Module Permissions
 
 The Elsa Workflow API endpoints check permissions. Also, it has a `*` wildcard permission to allow all permissions.
@@ -72,14 +139,24 @@ You can also grant parts of the permissions to a role or user. It will add the `
 
 ### Elsa Studio
 
-Elsa Studio is an **independent** web application that allows you to design, manage, and execute workflows. It is built using **Blazor Server/WebAssembly**.
+[Elsa Studio](https://docs.elsaworkflows.io/application-types/elsa-studio) is a **standalone** web application that allows you to design, manage, and execute workflows. It is built using **Blazor Server/WebAssembly**.
+
+`ElsaDemoApp.Studio.WASM` is a sample Blazor WebAssembly project that demonstrates how to use Elsa Studio with ELSA Server with ABP Framework.
+
+> Elsa Studio has its own layout and theme, and you can't integrate it into an ABP Blazor project for now.
+
+![Elsa Studio](../images/elsa-studio-wasm.png)
+
+Please check the [Elsa Workflows - Sample Workflow Demo](../samples/elsa-workflows-demo.md) document to download its source code for review.
+
+#### Elsa Studio Authentication
 
 Elsa Studio requires authentication and there are two ways to authenticate Elsa Studio:
 
 * Password Flow Authentication
 * Code Flow Authentication
 
-#### Elsa Studio - Password Flow Authentication
+##### Elsa Studio - Password Flow Authentication
 
 The `AbpElsaIdentityModule(Volo.Elsa.Abp.Identity)` module is used to integrate with [ABP Identity module](./identity-pro.md) to check Elsa Studio *username* and *password* against ABP Identity. 
 
@@ -109,7 +186,7 @@ Once, you logged in to the application, you can start defining workflows, manage
 
 ![elsa-main](../images/elsa-main-page.png)
 
-#### Elsa Studio - Code Flow Authentication
+##### Elsa Studio - Code Flow Authentication
 
 ABP applications use [OpenIddict](./openiddict-pro.md) for authentication. So, you can use the [Authorization Code Flow](https://oauth.net/2/grant-types/authorization-code/) to authenticate Elsa Studio.
 

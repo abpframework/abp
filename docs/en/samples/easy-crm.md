@@ -30,7 +30,7 @@ When you download and open the zip file, you will see two folders:
 
 ### Server Side / MVC (Razor Pages) Application
 
-* Open the solution (inside the aspnet-core folder) in **Visual Studio 2019** or later (or with another IDE that supports ASP.NET Core).
+* Open the solution (inside the aspnet-core folder) in **Visual Studio 2026** or later (or with another IDE that supports ASP.NET Core).
 * This project use `Sqlite`, the default database folder is located at appsettings (`"SqliteDbFolder": "sqliteDbs"`, this folder is located in the MVC project).
 * Open the `appsettings.json` file in the `Volo.EasyCrm.Web` application and set `"UseDynamicDatabase": "false"`.
     > The MVC project is creating new database for each unique visitor. And the visitor id is stored at cookies. When you set `UseDynamicDatabase` as a `true`, you cannot run Blazor & Angular projects because they have no cookie implementation. Be aware it is set as `false` for running Blazor & Angular applications.

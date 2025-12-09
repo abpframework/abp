@@ -19,6 +19,11 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
     )]
 public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var sqliteConnection = CreateDatabaseAndGetConnection();

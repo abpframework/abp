@@ -49,11 +49,13 @@ static internal class AbpProjectMetadataReader
 
     private static AbpProjectMetaData ReadOrCreateMetadata(string packagePath)
     {
-        
         var fileContent = File.ReadAllText(packagePath);
         var metadata = new AbpProjectMetaData();
 
-        using var document = JsonDocument.Parse(fileContent);
+        using var document = JsonDocument.Parse(fileContent, new JsonDocumentOptions
+        {
+            AllowTrailingCommas = true
+        });
         var root = document.RootElement;
 
         if (TryGetProjectId(root,out var projectId))

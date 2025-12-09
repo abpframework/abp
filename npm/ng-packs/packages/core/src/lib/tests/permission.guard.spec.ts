@@ -39,6 +39,15 @@ describe('authGuard', () => {
       component: DummyComponent,
       canActivate: [permissionGuard],
     },
+    {
+      path: 'redirect-test',
+      component: DummyComponent,
+      canActivate: [permissionGuard],
+      data: {
+        requiredPolicy: 'TestPolicy',
+        redirectUrl: '/zibzib',
+      },
+    },
   ];
 
   beforeEach(() => {
@@ -102,5 +111,13 @@ describe('authGuard', () => {
   it('should return Observable<true> if RoutesService does not have requiredPolicy for given URL', async () => {
     await RouterTestingHarness.create('/zibzib');
     expect(TestBed.inject(Router).url).toEqual('/zibzib');
+  });
+
+  it('should redirect to redirectUrl when the grantedPolicy is false and redirectUrl is provided', async () => {
+    permissionService.getGrantedPolicy$.andReturn(of(false));
+    await RouterTestingHarness.create('/redirect-test');
+
+    expect(TestBed.inject(Router).url).toEqual('/zibzib');
+    expect(httpErrorReporter.reportError).not.toHaveBeenCalled();
   });
 });

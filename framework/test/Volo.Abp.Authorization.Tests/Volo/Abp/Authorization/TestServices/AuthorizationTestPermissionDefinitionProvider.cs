@@ -16,11 +16,11 @@ public class AuthorizationTestPermissionDefinitionProvider : PermissionDefinitio
         var group = context.AddGroup("TestGroup");
 
         group[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName].ShouldBe(typeof(AuthorizationTestPermissionDefinitionProvider).FullName);
-        
+
         var permission1 = group.AddPermission("MyAuthorizedService1");
 
         permission1[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName].ShouldBe(typeof(AuthorizationTestPermissionDefinitionProvider).FullName);
-       
+
         group.AddPermission("MyPermission1").StateCheckers.Add(new TestRequireEditionPermissionSimpleStateChecker());
         group.AddPermission("MyPermission2");
         group.AddPermission("MyPermission3");
@@ -28,6 +28,8 @@ public class AuthorizationTestPermissionDefinitionProvider : PermissionDefinitio
         group.AddPermission("MyPermission5");
         group.AddPermission("MyPermission6").WithProviders(nameof(TestPermissionValueProvider1));
         group.AddPermission("MyPermission7").WithProviders(nameof(TestPermissionValueProvider2));
+        group.AddPermission("MyPermission8");
+        group.AddPermission("MyPermission9");
 
         group.GetPermissionOrNull("MyAuthorizedService1").ShouldNotBeNull();
 

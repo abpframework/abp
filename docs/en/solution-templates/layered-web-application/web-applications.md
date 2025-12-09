@@ -120,7 +120,7 @@ The required style files are added to the `styles` array in `angular.json`. `App
 
 You should create your tests in the same folder as the file you want to test.
 
-See the [testing document](https://angular.io/guide/testing).
+See the [testing document](https://angular.dev/guide/testing).
 
 ### Depended Packages
 

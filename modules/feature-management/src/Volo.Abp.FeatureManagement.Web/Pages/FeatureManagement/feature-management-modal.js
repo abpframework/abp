@@ -13,6 +13,7 @@ var abp = abp || {};
                         let providerName = $('#ProviderName').val();
                         let prodiverKey = $('#ProviderKey').val();
                         volo.abp.featureManagement.features.delete(providerName, prodiverKey).then(function () {
+                            $("#FeatureManagementForm").get(0).reset();
                             abp.notify.success(l('SavedSuccessfully'));
                             $('#featureManagmentModal').modal('hide');
                         });

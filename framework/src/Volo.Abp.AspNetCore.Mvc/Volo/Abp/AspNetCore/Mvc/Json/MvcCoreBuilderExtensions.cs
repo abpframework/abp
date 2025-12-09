@@ -13,7 +13,7 @@ public static class MvcCoreBuilderExtensions
 {
     public static IMvcCoreBuilder AddAbpJson(this IMvcCoreBuilder builder)
     {
-        builder.Services.AddOptions<JsonOptions>()
+        builder.Services.AddAbpOptions<JsonOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;

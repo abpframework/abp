@@ -3,6 +3,7 @@
   "texts": {
     "AddSubMenuItem": "Add Sub Menu Item",
     "AreYouSure": "Are You Sure?",
+    "AverageRating": "Average Rating",
     "BlogDeletionConfirmationMessage": "The blog '{0}' will be deleted. Are you sure?",
     "BlogFeatureNotAvailable": "This feature is not available now. Enable with 'GlobalFeatureManager' to use it.",
     "BlogId": "Blog",
@@ -168,6 +169,7 @@
     "Text": "Text",
     "ThankYou": "Thank you",
     "Title": "Title",
+    "TotalRatings": "Total Ratings",
     "Undo": "Undo",
     "Update": "Update",
     "UpdatePreferenceSuccessMessage": "Your preferences have been saved.",

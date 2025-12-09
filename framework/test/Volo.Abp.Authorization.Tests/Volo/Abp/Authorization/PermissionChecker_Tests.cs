@@ -8,7 +8,7 @@ namespace Volo.Abp.Authorization;
 public class PermissionChecker_Tests: AuthorizationTestBase
 {
     private readonly IPermissionChecker _permissionChecker;
-    
+
     public PermissionChecker_Tests()
     {
         _permissionChecker = GetRequiredService<IPermissionChecker>();
@@ -19,6 +19,13 @@ public class PermissionChecker_Tests: AuthorizationTestBase
     {
         (await _permissionChecker.IsGrantedAsync("MyPermission5")).ShouldBe(true);
         (await _permissionChecker.IsGrantedAsync("UndefinedPermission")).ShouldBe(false);
+    }
+
+    [Fact]
+    public async Task IsGranted_ProhibitedAsync()
+    {
+        (await _permissionChecker.IsGrantedAsync("MyPermission8")).ShouldBe(false);
+        (await _permissionChecker.IsGrantedAsync("MyPermission9")).ShouldBe(false);
     }
 
     [Fact]
@@ -35,7 +42,7 @@ public class PermissionChecker_Tests: AuthorizationTestBase
             "MyPermission6",
             "MyPermission7"
         });
-        
+
         result.Result["MyPermission1"].ShouldBe(PermissionGrantResult.Undefined);
         result.Result["MyPermission2"].ShouldBe(PermissionGrantResult.Prohibited);
         result.Result["UndefinedPermission"].ShouldBe(PermissionGrantResult.Prohibited);
@@ -44,6 +51,18 @@ public class PermissionChecker_Tests: AuthorizationTestBase
         result.Result["MyPermission5"].ShouldBe(PermissionGrantResult.Granted);
         result.Result["MyPermission6"].ShouldBe(PermissionGrantResult.Granted);
         result.Result["MyPermission7"].ShouldBe(PermissionGrantResult.Granted);
-        
+    }
+
+    [Fact]
+    public async Task IsGranted_Multiple_Result_ProhibitedAsync()
+    {
+        var result = await _permissionChecker.IsGrantedAsync(new []
+        {
+            "MyPermission8",
+            "MyPermission9"
+        });
+
+        result.Result["MyPermission8"].ShouldBe(PermissionGrantResult.Prohibited);
+        result.Result["MyPermission9"].ShouldBe(PermissionGrantResult.Prohibited);
     }
 }
