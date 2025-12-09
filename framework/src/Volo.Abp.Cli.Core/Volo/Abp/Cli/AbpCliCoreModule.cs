@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Cli.Commands;
@@ -10,6 +11,7 @@ using Volo.Abp.Cli.ServiceProxying.JavaScript;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Internal.Telemetry.Activity.Providers;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Minify;
@@ -36,6 +38,8 @@ public class AbpCliCoreModule : AbpModule
         {
             client.DefaultRequestHeaders.UserAgent.ParseAdd("MyAgent/1.0");
         });
+        
+        context.Services.RemoveAll(x => x.ImplementationType == typeof(TelemetrySessionInfoEnricher));
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

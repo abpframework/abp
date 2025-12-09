@@ -9,6 +9,8 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -17,6 +19,8 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
     public const string Name = "add-package";
 
     public ILogger<AddPackageCommand> Logger { get; set; }
+    
+    public ITelemetryService TelemetryService { get; set; }
 
     protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
 
@@ -51,14 +55,22 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
 
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         var withSourceCode = commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
-
+        
         if (isNugetPackage)
         {
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
-
+            
+            var slnFile = GetSolutionFile(commandLineArgs);
+            var projectFile = GetProjectFile(commandLineArgs);
+            
+            await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsAddPackage, o =>
+            {
+                o[ActivityPropertyNames.SolutionPath] = slnFile;
+            });
+            
             await ProjectNugetPackageAdder.AddAsync(
-                GetSolutionFile(commandLineArgs),
-                GetProjectFile(commandLineArgs),
+                slnFile,
+                projectFile,
                 commandLineArgs.Target,
                 version,
                 true,
@@ -68,6 +80,8 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         }
         else if (isNpmPackage)
         {
+            await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsAddPackage);
+            
             await ProjectNpmPackageAdder.AddNpmPackageAsync(
                 GetAngularDirectory(commandLineArgs),
                 commandLineArgs.Target,

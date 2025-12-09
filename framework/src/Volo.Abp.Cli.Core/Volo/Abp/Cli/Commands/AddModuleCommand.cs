@@ -11,6 +11,8 @@ using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -21,6 +23,7 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
     
     private AddModuleInfoOutput _lastAddedModuleInfo;
     public ILogger<AddModuleCommand> Logger { get; set; }
+    public ITelemetryService TelemetryService { get; set; }
 
     protected SolutionModuleAdder SolutionModuleAdder { get; }
     public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
@@ -66,13 +69,21 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         }
 
         var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
+        var solutionFile = GetSolutionFile(commandLineArgs);
+
+        await using var _ = TelemetryService.TrackActivityAsync(newTemplate
+            ? ActivityNameConsts.AbpCliCommandsInstallLocalModule
+            : ActivityNameConsts.AbpCliCommandsInstallModule, o =>
+        {
+            o[ActivityPropertyNames.SolutionPath] = solutionFile;
+        });
+        
         var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
         var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
         var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
         var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
         var skipOpeningDocumentation = commandLineArgs.Options.ContainsKey(Options.SkipOpeningDocumentation.Long);
         var skipDbMigrations = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.DbMigrations.Skip);
-        var solutionFile = GetSolutionFile(commandLineArgs);
 
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         if (version == null)

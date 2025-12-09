@@ -31,8 +31,7 @@ public class CleanCommand : IConsoleCommand, ITransientDependency
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliCommandsClean);
-
+        await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsClean);
         var binEntries = Directory.EnumerateDirectories(Directory.GetCurrentDirectory(), "bin", SearchOption.AllDirectories);
         var objEntries = Directory.EnumerateDirectories(Directory.GetCurrentDirectory(), "obj", SearchOption.AllDirectories);
 
