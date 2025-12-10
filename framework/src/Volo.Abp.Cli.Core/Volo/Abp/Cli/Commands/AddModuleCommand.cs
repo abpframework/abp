@@ -69,14 +69,10 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         }
 
         var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
-        var solutionFile = GetSolutionFile(commandLineArgs);
 
         await using var _ = TelemetryService.TrackActivityAsync(newTemplate
             ? ActivityNameConsts.AbpCliCommandsInstallLocalModule
-            : ActivityNameConsts.AbpCliCommandsInstallModule, o =>
-        {
-            o[ActivityPropertyNames.SolutionPath] = solutionFile;
-        });
+            : ActivityNameConsts.AbpCliCommandsInstallModule);
         
         var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
         var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
@@ -84,6 +80,7 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
         var skipOpeningDocumentation = commandLineArgs.Options.ContainsKey(Options.SkipOpeningDocumentation.Long);
         var skipDbMigrations = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.DbMigrations.Skip);
+        var solutionFile = GetSolutionFile(commandLineArgs);
 
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         if (version == null)
