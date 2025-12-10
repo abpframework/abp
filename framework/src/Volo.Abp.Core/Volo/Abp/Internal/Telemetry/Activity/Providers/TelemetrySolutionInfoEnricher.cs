@@ -188,6 +188,15 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
             }
         }
         
+        if (solutionPath.EndsWith(".slnx"))
+        {
+            solutionPath = solutionPath[..^5] + ".abpsln";
+            if (File.Exists(solutionPath))
+            {
+                return solutionPath;
+            }
+        }
+        
         var dir = Path.GetDirectoryName(solutionPath);
         if (dir.IsNullOrEmpty())
         {

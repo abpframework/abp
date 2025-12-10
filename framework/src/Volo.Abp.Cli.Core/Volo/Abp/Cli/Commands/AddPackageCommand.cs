@@ -63,12 +63,9 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         {
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
             
-            var slnFile = GetSolutionFile(commandLineArgs);
-            var projectFile = GetProjectFile(commandLineArgs);
-            
             await ProjectNugetPackageAdder.AddAsync(
-                slnFile,
-                projectFile,
+                GetSolutionFile(commandLineArgs),
+                GetProjectFile(commandLineArgs),
                 commandLineArgs.Target,
                 version,
                 true,

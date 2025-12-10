@@ -12,7 +12,6 @@ using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Events;
 using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
-using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.Cli.Version;
