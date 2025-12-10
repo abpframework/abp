@@ -21,17 +21,12 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
 
     protected override Task<bool> CanExecuteAsync(ActivityContext context)
     {
-        if (context.SolutionPath.IsNullOrEmpty())
-        {
-            return Task.FromResult(false);
-        }
-
-        if (context.SolutionId.HasValue)
+        if (context.SolutionId.HasValue && !context.SolutionPath.IsNullOrEmpty())
         {
             return Task.FromResult(_telemetryActivityStorage.ShouldAddSolutionInformation(context.SolutionId.Value));
         }
 
-        return Task.FromResult(true);
+        return Task.FromResult(false);
     }
 
     protected override Task ExecuteAsync(ActivityContext context)
@@ -42,14 +37,6 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
             {
                 return Task.CompletedTask;
             }
-            
-            var correctSolutionPath = FindCorrectSolutionPath(context.SolutionPath);
-            if (correctSolutionPath.IsNullOrEmpty())
-            {
-                return Task.CompletedTask;
-            }
-            
-            context.SetSolutionPath(correctSolutionPath);
 
             var jsonContent = File.ReadAllText(context.SolutionPath!);
             using var doc = JsonDocument.Parse(jsonContent, new JsonDocumentOptions
@@ -58,15 +45,6 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
             });
 
             var root = doc.RootElement;
-            
-            var solutionId = TelemetryJsonExtensions.GetGuidOrNull(root, "id");
-
-            if (!solutionId.HasValue)
-            {
-                return Task.CompletedTask;
-            }
-            
-            context.Current[ActivityPropertyNames.SolutionId] = solutionId;
 
             if (root.TryGetProperty("versions", out var versions))
             {
@@ -170,35 +148,5 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
 
         var fullPath = Path.Combine(Path.GetDirectoryName(solutionPath)!, path);
         return File.Exists(fullPath) ? fullPath : null;
-    }
-    
-    private static string? FindCorrectSolutionPath(string solutionPath)
-    {
-        if (solutionPath.EndsWith(".abpsln"))
-        {
-            return solutionPath;
-        }
-        
-        var possibleExtensions = new[]
-        {
-            ".sln",
-            ".slnx"
-        };
-
-        foreach (var extension in possibleExtensions)
-        {
-            if (!solutionPath.EndsWith(extension))
-            {
-                continue;
-            }
-
-            var abpSlnPath = solutionPath.Substring(0, solutionPath.Length - extension.Length) + ".abpsln";
-            if (File.Exists(abpSlnPath))
-            {
-                return abpSlnPath;
-            }
-        }
-
-        return null;
     }
 }

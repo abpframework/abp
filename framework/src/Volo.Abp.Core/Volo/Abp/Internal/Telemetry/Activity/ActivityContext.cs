@@ -19,7 +19,7 @@ public class ActivityContext
 
     public string? DeviceId => Current.Get<string?>(ActivityPropertyNames.DeviceId);
     
-    public string? SolutionPath => TryGetValue(ActivityPropertyNames.SolutionPath, out var solutionPath)
+    public string? SolutionPath => ExtraProperties.TryGetValue(ActivityPropertyNames.SolutionPath, out var solutionPath)
         ? solutionPath?.ToString()
         : null;
 
@@ -41,52 +41,6 @@ public class ActivityContext
         }
 
         return new ActivityContext(activity);
-    }
-
-    public bool TryGetValue(string key, out object? value)
-    {
-        if (Current.TryGetValue(key, out value))
-        {
-            return true;
-        }
-        
-        if (ExtraProperties.TryGetValue(key, out value))
-        {
-            return true;
-        }
-        
-        if (Current.TryGetValue(ActivityPropertyNames.AdditionalProperties, out var additionalProperties) &&
-            additionalProperties is Dictionary<string, object> additionalPropertiesDict &&
-            additionalPropertiesDict.TryGetValue(key, out value))
-        {
-            return true;
-        }
-
-        return false;
-    }
-    
-    public void SetSolutionPath(string solutionPath)
-    {
-        if (solutionPath == SolutionPath)
-        {
-            return;
-        }
-        
-        ExtraProperties[ActivityPropertyNames.SolutionPath] = solutionPath;
-        
-        if(Current.ContainsKey(ActivityPropertyNames.SolutionPath))
-        {
-            Current[ActivityPropertyNames.SolutionPath] = solutionPath;
-        }
-        
-        if (Current.TryGetValue(ActivityPropertyNames.AdditionalProperties, out var additionalPropertiesObj) &&
-            additionalPropertiesObj is Dictionary<string, object> additionalPropertiesDict)
-        {
-            if (additionalPropertiesDict.ContainsKey(ActivityPropertyNames.SolutionPath))
-            {
-                additionalPropertiesDict[ActivityPropertyNames.SolutionPath] = solutionPath;
-            }
-        }
     }
     
     public void Terminate()
