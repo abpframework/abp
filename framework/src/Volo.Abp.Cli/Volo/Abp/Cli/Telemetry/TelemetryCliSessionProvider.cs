@@ -18,7 +18,6 @@ public class TelemetryCliSessionProvider : TelemetryActivityEventEnricher
     }
 
     public override int ExecutionOrder { get; set; } = 10;
-    protected override Type? ReplaceParentType { get; set; } = typeof(TelemetrySessionInfoEnricher);
 
     protected override Task ExecuteAsync(ActivityContext context)
     {
