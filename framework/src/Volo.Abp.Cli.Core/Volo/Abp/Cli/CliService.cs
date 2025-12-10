@@ -89,12 +89,13 @@ public class CliService : ITransientDependency
         catch (Exception ex)
         {
             await TelemetryService.AddErrorActivityAsync(ex.Message);
-            await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
             Logger.LogException(ex);
             throw;
         }
-        
-        await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
+        finally
+        {
+            await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
+        }
     }
 
     private async Task RunPromptAsync()
