@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -26,24 +25,6 @@ public class TelemetryCliSessionProvider : TelemetryActivityEventEnricher
         context.Current[ActivityPropertyNames.SessionType] = SessionType.AbpCli;
         context.Current[ActivityPropertyNames.SessionId] = Guid.NewGuid();
         context.Current[ActivityPropertyNames.IsFirstSession] = !File.Exists(TelemetryPaths.ActivityStorage);
-
-        if (context.ExtraProperties.ContainsKey(ActivityPropertyNames.SolutionPath))
-        {
-            return Task.CompletedTask;
-        }
-        
-        if(context.Current.TryGetValue(ActivityPropertyNames.SolutionPath, out var existingSolutionPath) && existingSolutionPath is string)
-        {
-            context.ExtraProperties[ActivityPropertyNames.SolutionPath] = existingSolutionPath;
-            return Task.CompletedTask;
-        }
-
-        if (context.Current.TryGetValue(ActivityPropertyNames.AdditionalProperties, out var additionalProperties) &&
-            additionalProperties is Dictionary<string, object> additionalPropertiesDict &&
-            additionalPropertiesDict.TryGetValue(ActivityPropertyNames.SolutionPath, out var solutionPath))
-        {
-            context.ExtraProperties[ActivityPropertyNames.SolutionPath] = solutionPath;
-        }
         
         return Task.CompletedTask;
     }
