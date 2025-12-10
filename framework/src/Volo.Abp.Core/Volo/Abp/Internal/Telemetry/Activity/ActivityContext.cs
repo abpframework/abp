@@ -65,6 +65,30 @@ public class ActivityContext
         return false;
     }
     
+    public void SetSolutionPath(string solutionPath)
+    {
+        if (solutionPath == SolutionPath)
+        {
+            return;
+        }
+        
+        ExtraProperties[ActivityPropertyNames.SolutionPath] = solutionPath;
+        
+        if(Current.ContainsKey(ActivityPropertyNames.SolutionPath))
+        {
+            Current[ActivityPropertyNames.SolutionPath] = solutionPath;
+        }
+        
+        if (Current.TryGetValue(ActivityPropertyNames.AdditionalProperties, out var additionalPropertiesObj) &&
+            additionalPropertiesObj is Dictionary<string, object> additionalPropertiesDict)
+        {
+            if (additionalPropertiesDict.ContainsKey(ActivityPropertyNames.SolutionPath))
+            {
+                additionalPropertiesDict[ActivityPropertyNames.SolutionPath] = solutionPath;
+            }
+        }
+    }
+    
     public void Terminate()
     {
         IsTerminated = true;

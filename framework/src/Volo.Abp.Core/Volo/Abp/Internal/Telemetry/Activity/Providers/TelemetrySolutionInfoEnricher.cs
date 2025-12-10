@@ -49,7 +49,7 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
                 return Task.CompletedTask;
             }
             
-            context.ExtraProperties[ActivityPropertyNames.SolutionPath] = correctSolutionPath;
+            context.SetSolutionPath(correctSolutionPath);
 
             var jsonContent = File.ReadAllText(context.SolutionPath!);
             using var doc = JsonDocument.Parse(jsonContent, new JsonDocumentOptions
@@ -178,37 +178,27 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
         {
             return solutionPath;
         }
-
-        if (solutionPath.EndsWith(".sln"))
-        {
-            solutionPath = solutionPath.RemovePostFix(".sln") + ".abpsln";
-            if (File.Exists(solutionPath))
-            {
-                return solutionPath;
-            }
-        }
         
-        if (solutionPath.EndsWith(".slnx"))
+        var possibleExtensions = new[]
         {
-            solutionPath = solutionPath.RemovePostFix(".slnx") + ".abpsln";
-            if (File.Exists(solutionPath))
-            {
-                return solutionPath;
-            }
-        }
-        
-        var dir = Path.GetDirectoryName(solutionPath);
-        if (dir.IsNullOrEmpty())
-        {
-            return null;
-        }
-        
-        var abpSolutionFiles = Directory.GetFiles(dir, "*.abpsln", SearchOption.TopDirectoryOnly);
-
-        return abpSolutionFiles.Length switch
-        {
-            1 => abpSolutionFiles[0],
-            _ => null
+            ".sln",
+            ".slnx"
         };
+
+        foreach (var extension in possibleExtensions)
+        {
+            if (!solutionPath.EndsWith(extension))
+            {
+                continue;
+            }
+
+            var abpSlnPath = solutionPath.Substring(0, solutionPath.Length - extension.Length) + ".abpsln";
+            if (File.Exists(abpSlnPath))
+            {
+                return abpSlnPath;
+            }
+        }
+
+        return null;
     }
 }
