@@ -84,7 +84,6 @@ public class CliService : ITransientDependency
         catch (CliUsageException usageException)
         {
             Logger.LogWarning(usageException.Message);
-            await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
             Environment.ExitCode = 1;
         }
         catch (Exception ex)
@@ -94,6 +93,8 @@ public class CliService : ITransientDependency
             Logger.LogException(ex);
             throw;
         }
+        
+        await TelemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
     }
 
     private async Task RunPromptAsync()

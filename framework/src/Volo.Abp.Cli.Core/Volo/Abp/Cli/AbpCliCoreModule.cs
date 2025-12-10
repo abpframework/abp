@@ -38,8 +38,6 @@ public class AbpCliCoreModule : AbpModule
         {
             client.DefaultRequestHeaders.UserAgent.ParseAdd("MyAgent/1.0");
         });
-        
-        context.Services.RemoveAll(x => x.ImplementationType == typeof(TelemetrySessionInfoEnricher));
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

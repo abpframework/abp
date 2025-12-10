@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Autofac;
+﻿using System.Collections.Generic;
+using Volo.Abp.Autofac;
+using Volo.Abp.Internal.Telemetry.Activity.Providers;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Cli;
@@ -9,5 +11,8 @@ namespace Volo.Abp.Cli;
 )]
 public class AbpCliModule : AbpModule
 {
-
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.RemoveAll(x => x.ImplementationType == typeof(TelemetrySessionInfoEnricher));
+    }
 }

@@ -43,6 +43,9 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
                 GetUsageInfo()
             );
         }
+        
+        await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsNewPackage);
+        await using var __ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsAddPackage);
 
         var isNpmPackage = false;
         var isNugetPackage = true;
@@ -63,11 +66,6 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
             var slnFile = GetSolutionFile(commandLineArgs);
             var projectFile = GetProjectFile(commandLineArgs);
             
-            await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsAddPackage, o =>
-            {
-                o[ActivityPropertyNames.SolutionPath] = slnFile;
-            });
-            
             await ProjectNugetPackageAdder.AddAsync(
                 slnFile,
                 projectFile,
@@ -80,8 +78,6 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         }
         else if (isNpmPackage)
         {
-            await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsAddPackage);
-            
             await ProjectNpmPackageAdder.AddNpmPackageAsync(
                 GetAngularDirectory(commandLineArgs),
                 commandLineArgs.Target,

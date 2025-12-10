@@ -112,7 +112,6 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         {
             o[ActivityPropertyNames.CreationTool] = AbpTool.OldCli;
             o[ActivityPropertyNames.Template] = template;
-            o[ActivityPropertyNames.SolutionPath] = projectArgs.OutputFolder;
         });
 
         ExtractProjectZip(result, projectArgs.OutputFolder);

@@ -31,4 +31,14 @@ static internal class TelemetryJsonExtensions
 
         return null;
     }
+    
+    static internal Guid? GetGuidOrNull(JsonElement element, string propertyName)
+    {
+        if (element.TryGetProperty(propertyName, out var guidProperty) && Guid.TryParse(guidProperty.GetString(), out var guidValue))
+        {
+            return guidValue;
+        }
+
+        return null;
+    }
 }
