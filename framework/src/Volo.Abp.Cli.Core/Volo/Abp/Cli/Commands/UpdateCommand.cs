@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -17,6 +19,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
     public const string Name = "update";
     
     public ILogger<UpdateCommand> Logger { get; set; }
+    public ITelemetryService TelemetryService { get; set; }
 
     private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
     private readonly NpmPackagesUpdater _npmPackagesUpdater;
@@ -32,6 +35,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        await using var _ = TelemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsUpdate);
         var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
         var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 

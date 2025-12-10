@@ -11,11 +11,16 @@ using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Events;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Module;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.Cli.Version;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
+using Volo.Abp.Internal.Telemetry.Constants.Enums;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -25,6 +30,7 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
 
     protected TemplateProjectBuilder TemplateProjectBuilder { get; }
     public ITemplateInfoProvider TemplateInfoProvider { get; }
+    public ITelemetryService TelemetryService { get; set; }
 
     public NewCommand(
         ConnectionStringProvider connectionStringProvider,
@@ -94,6 +100,20 @@ public class NewCommand : ProjectCreationCommandBase, IConsoleCommand, ITransien
         var result = await TemplateProjectBuilder.BuildAsync(
             projectArgs
         );
+        
+        var activityName = ActivityNameConsts.AbpCliCommandsNewSolution;
+
+        if (ModuleTemplateBase.IsModuleTemplate(template))
+        {
+            activityName = ActivityNameConsts.AbpCliCommandsNewModule;
+        }
+        
+        await TelemetryService.AddActivityAsync(activityName, o =>
+        {
+            o[ActivityPropertyNames.CreationTool] = AbpTool.OldCli;
+            o[ActivityPropertyNames.Template] = template;
+            o[ActivityPropertyNames.SolutionPath] = projectArgs.OutputFolder;
+        });
 
         ExtractProjectZip(result, projectArgs.OutputFolder);
 
