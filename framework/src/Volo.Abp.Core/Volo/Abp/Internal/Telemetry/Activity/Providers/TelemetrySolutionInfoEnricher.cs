@@ -181,7 +181,7 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
 
         if (solutionPath.EndsWith(".sln"))
         {
-            solutionPath = solutionPath[..^4] + ".abpsln";
+            solutionPath = solutionPath.RemovePostFix(".sln") + ".abpsln";
             if (File.Exists(solutionPath))
             {
                 return solutionPath;
@@ -190,7 +190,7 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
         
         if (solutionPath.EndsWith(".slnx"))
         {
-            solutionPath = solutionPath[..^5] + ".abpsln";
+            solutionPath = solutionPath.RemovePostFix(".slnx") + ".abpsln";
             if (File.Exists(solutionPath))
             {
                 return solutionPath;
