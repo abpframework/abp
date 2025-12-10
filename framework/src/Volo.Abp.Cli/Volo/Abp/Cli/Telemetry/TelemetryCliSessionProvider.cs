@@ -28,5 +28,4 @@ public class TelemetryCliSessionProvider : TelemetryActivityEventEnricher
         
         return Task.CompletedTask;
     }
-
 }
