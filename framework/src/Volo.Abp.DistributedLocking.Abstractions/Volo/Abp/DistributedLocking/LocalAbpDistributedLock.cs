@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AsyncKeyedLock;
@@ -9,11 +8,7 @@ namespace Volo.Abp.DistributedLocking;
 
 public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
 {
-    private readonly AsyncKeyedLocker<string> _localSyncObjects = new(o =>
-    {
-        o.PoolSize = 20;
-        o.PoolInitialFill = 1;
-    });
+    private readonly AsyncKeyedLocker<string> _localSyncObjects = new();
     protected IDistributedLockKeyNormalizer DistributedLockKeyNormalizer { get; }
 
     public LocalAbpDistributedLock(IDistributedLockKeyNormalizer distributedLockKeyNormalizer)
@@ -21,7 +16,6 @@ public class LocalAbpDistributedLock : IAbpDistributedLock, ISingletonDependency
         DistributedLockKeyNormalizer = distributedLockKeyNormalizer;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
