@@ -7,7 +7,7 @@
 
 # SSR Configuration
 
-[Server-Side Rendering (SSR)](https://angular.io/guide/ssr) is a process that involves rendering pages on the server, resulting in initial HTML content that contains the page state. This allows the browser to show the page to the user immediately, before the JavaScript bundles are downloaded and executed.
+[Server-Side Rendering (SSR)](https://angular.dev/guide/ssr) is a process that involves rendering pages on the server, resulting in initial HTML content that contains the page state. This allows the browser to show the page to the user immediately, before the JavaScript bundles are downloaded and executed.
 
 SSR improves the **performance** (First Contentful Paint) and **SEO** (Search Engine Optimization) of your application.
 
@@ -237,13 +237,177 @@ The schematic installs `openid-client` to handle authentication on the server si
 
 > Ensure your OpenID Connect configuration (in `environment.ts` or `app.config.ts`) is compatible with the server environment.
 
-## 5. Deployment
+## 5. Render Modes & Hybrid Rendering
 
-To deploy your Angular SSR application to a production server, follow these steps:
+Angular 20 provides different rendering modes that you can configure per route in the `app.routes.server.ts` file to optimize performance and SEO.
 
-### 5.1. Build the Application
+### 5.1. Available Render Modes
 
-Run the build command to generate the production artifacts:
+```typescript
+import { RenderMode, ServerRoute } from '@angular/ssr';
+
+export const serverRoutes: ServerRoute[] = [
+  // Server-Side Rendering - renders on every request
+  {
+    path: 'dashboard',
+    renderMode: RenderMode.Server
+  },
+
+  // Prerender (SSG) - renders at build time
+  {
+    path: 'about',
+    renderMode: RenderMode.Prerender
+  },
+
+  // Client-Side Rendering - renders only in browser
+  {
+    path: 'admin/**',
+    renderMode: RenderMode.Client
+  },
+
+  // Default fallback
+  {
+    path: '**',
+    renderMode: RenderMode.Server
+  }
+];
+```
+
+#### RenderMode.Server (SSR)
+Renders HTML on every request. Best for dynamic content, personalized pages, and pages requiring authentication.
+
+#### RenderMode.Prerender (SSG)
+Generates static HTML at build time. Best for marketing pages, blog posts, and content that doesn't change frequently.
+
+For dynamic routes, use `getPrerenderParams`:
+
+```typescript
+{
+  path: 'blog/:slug',
+  renderMode: RenderMode.Prerender,
+  getPrerenderParams: async () => {
+    const posts = await fetchBlogPosts();
+    return posts.map(post => ({ slug: post.slug }));
+  }
+}
+```
+
+#### RenderMode.Client (CSR)
+Traditional client-side rendering. Best for highly interactive applications and admin panels that don't need SEO.
+
+### 5.2. Hybrid Rendering
+
+Combine different modes in one application for optimal results:
+
+```typescript
+export const serverRoutes: ServerRoute[] = [
+  // Static pages
+  { path: '', renderMode: RenderMode.Prerender },
+  { path: 'about', renderMode: RenderMode.Prerender },
+
+  // Dynamic pages
+  { path: 'account', renderMode: RenderMode.Server },
+  { path: 'orders', renderMode: RenderMode.Server },
+
+  // Admin area
+  { path: 'admin/**', renderMode: RenderMode.Client },
+];
+```
+
+## 6. Hydration
+
+Hydration is the process where Angular attaches to server-rendered HTML and makes it interactive. The ABP schematic automatically configures hydration for your application.
+
+### 6.1. Common Hydration Issues
+
+**Problem: Browser APIs on Server**
+
+```typescript
+// ❌ Bad - will fail on server
+const width = window.innerWidth;
+
+// ✅ Good - check platform
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID, inject } from '@angular/core';
+
+export class MyComponent {
+  platformId = inject(PLATFORM_ID);
+
+  getWidth() {
+    if (isPlatformBrowser(this.platformId)) {
+      return window.innerWidth;
+    }
+    return 0;
+  }
+}
+```
+
+**Problem: Random or Time-Based Values**
+
+```typescript
+// ❌ Bad - generates different values on server and client
+id = Math.random();
+currentTime = new Date();
+
+// ✅ Good - use TransferState for consistent data
+import { TransferState, makeStateKey } from '@angular/core';
+
+const TIME_KEY = makeStateKey<string>('time');
+
+constructor(private transferState: TransferState) {
+  if (isPlatformServer(this.platformId)) {
+    this.transferState.set(TIME_KEY, new Date().toISOString());
+  } else {
+    this.time = this.transferState.get(TIME_KEY, new Date().toISOString());
+  }
+}
+```
+
+**Enable Debug Tracing:**
+
+```typescript
+// app.config.ts
+import { provideClientHydration, withDebugTracing } from '@angular/platform-browser';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideClientHydration(withDebugTracing()),
+  ]
+};
+```
+
+## 7. Environment Variables
+
+Configure your SSR application using environment variables in `server.ts`:
+
+```typescript
+// server.ts
+const PORT = process.env['PORT'] || 4000;
+const HOST = process.env['HOST'] || 'localhost';
+
+// Start the server
+if (isMainModule(import.meta.url)) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
+  });
+}
+```
+
+For production, set environment variables:
+
+```bash
+# .env file or environment configuration
+NODE_ENV=production
+PORT=4000
+HOST=0.0.0.0
+API_URL=https://api.yourdomain.com
+```
+
+## 8. Deployment
+
+To deploy your Angular SSR application to a production server:
+
+### 8.1. Build the Application
 
 ```shell
 yarn build
@@ -251,30 +415,167 @@ yarn build
 yarn run build:ssr
 ```
 
-### 5.2. Prepare Artifacts
+### 8.2. Prepare Artifacts
 
-After the build is complete, you will find the output in the `dist` folder.
-For the **Application Builder**, the output structure typically looks like this:
+Copy the `dist/MyProjectName` folder to your server:
 
 ```
 dist/MyProjectName/
 ├── browser/       # Client-side bundles
-└── server/        # Server-side bundles and entry point (server.mjs)
+└── server/        # Server-side bundles (server.mjs)
 ```
 
-You need to copy the entire `dist/MyProjectName` folder to your server.
+### 8.3. Install Production Dependencies
 
-### 5.3. Run the Server
+On your server, install only the required dependencies (schematic already added them to package.json):
 
-On your server, navigate to the folder where you copied the artifacts and run the server using Node.js:
+```shell
+npm install --production
+```
 
+Required dependencies:
+- `express`: Web server framework
+- `openid-client`: Authentication support
+
+### 8.4. Run the Server
+
+**Development/Testing:**
 ```shell
 node server/server.mjs
 ```
 
-> [!TIP]
-> It is recommended to use a process manager like [PM2](https://pm2.keymetrics.io/) to keep your application alive and handle restarts.
+**Production (with PM2):**
+
+Use [PM2](https://pm2.keymetrics.io/) to keep your application alive and manage restarts:
 
 ```shell
+npm install -g pm2
 pm2 start server/server.mjs --name "my-app"
+pm2 startup  # Configure PM2 to start on boot
+pm2 save     # Save current process list
 ```
+
+## 9. Troubleshooting
+
+### 9.1. "Window/Document is not defined"
+
+Browser APIs don't exist on the server. Always check the platform:
+
+```typescript
+import { isPlatformBrowser } from '@angular/common';
+
+if (isPlatformBrowser(this.platformId)) {
+  // Safe to use window, document, localStorage, etc.
+}
+```
+
+### 9.2. "LocalStorage is not defined"
+
+ABP Core provides `AbpLocalStorageService` that implements the `Storage` interface and works safely on both server and client:
+
+```typescript
+import { AbpLocalStorageService } from '@abp/ng.core';
+
+@Injectable({ providedIn: 'root' })
+export class MyService {
+  private storage = inject(AbpLocalStorageService);
+
+  saveData(key: string, value: string): void {
+    // Safe on both server and client
+    this.storage.setItem(key, value);
+  }
+
+  getData(key: string): string | null {
+    // Returns null on server, actual value on client
+    return this.storage.getItem(key);
+  }
+}
+```
+
+`AbpLocalStorageService` implements all `Storage` methods:
+- `getItem(key: string): string | null`
+- `setItem(key: string, value: string): void`
+- `removeItem(key: string): void`
+- `clear(): void`
+- `key(index: number): string | null`
+- `length: number`
+
+### 9.3. Hydration Mismatch Errors
+
+If you see "NG0500" errors in the console:
+
+1. Enable debug tracing (see section 6.1)
+2. Check for dynamic content (dates, random IDs)
+3. Ensure server and client render the same HTML
+4. Use `TransferState` for data consistency
+
+### 9.4. API Calls Fail from Server
+
+Server-side requests need absolute URLs:
+
+```typescript
+// ❌ Bad - relative URL
+this.http.get('/api/users')
+
+// ✅ Good - absolute URL
+this.http.get('https://api.yourdomain.com/api/users')
+// or use environment variable
+this.http.get(`${environment.apiUrl}/api/users`)
+```
+
+### 9.5. Avoiding Duplicate API Calls
+
+ABP Core provides a `transferStateInterceptor` that automatically prevents duplicate HTTP GET requests during hydration. When you use `provideAbpCore()`, this interceptor is already active.
+
+**How it works:**
+- Server: Stores HTTP GET responses in `TransferState`
+- Client: Reuses stored responses during hydration
+- Automatically cleans up stored data after use
+
+```typescript
+// app.config.ts
+import { provideAbpCore } from '@abp/ng.core';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAbpCore(),
+    // transferStateInterceptor is automatically included
+  ]
+};
+```
+
+The interceptor works with all HTTP GET requests made through `HttpClient`:
+
+```typescript
+// This service automatically benefits from the interceptor
+@Injectable({ providedIn: 'root' })
+export class UserService {
+  private http = inject(HttpClient);
+
+  getUsers() {
+    // On server: Response is cached in TransferState
+    // On client: Cached response is used (no duplicate request)
+    return this.http.get<User[]>('/api/users');
+  }
+}
+```
+
+> [!NOTE]
+> The interceptor only works with GET requests. POST, PUT, DELETE, and PATCH requests are not cached.
+
+## Additional Resources
+
+- [Angular SSR Official Guide](https://angular.dev/guide/ssr)
+- [Angular Hydration Documentation](https://angular.dev/guide/hydration)
+- [PM2 Process Manager](https://pm2.keymetrics.io/)
+
+## Summary
+
+The ABP Angular SSR schematic provides:
+- ✅ Automatic SSR setup with necessary dependencies
+- ✅ Server-side authentication with OpenID Connect
+- ✅ Multiple render modes (Server, Prerender, Client, Hybrid)
+- ✅ Hydration support for better performance
+- ✅ Production-ready server configuration
+
+Configure render modes based on your needs, handle platform differences properly, and use environment variables for deployment configuration.
