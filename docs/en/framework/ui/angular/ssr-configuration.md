@@ -509,21 +509,7 @@ If you see "NG0500" errors in the console:
 3. Ensure server and client render the same HTML
 4. Use `TransferState` for data consistency
 
-### 9.4. API Calls Fail from Server
-
-Server-side requests need absolute URLs:
-
-```typescript
-// ❌ Bad - relative URL
-this.http.get('/api/users')
-
-// ✅ Good - absolute URL
-this.http.get('https://api.yourdomain.com/api/users')
-// or use environment variable
-this.http.get(`${environment.apiUrl}/api/users`)
-```
-
-### 9.5. Avoiding Duplicate API Calls
+### 9.4. Avoiding Duplicate API Calls
 
 ABP Core provides a `transferStateInterceptor` that automatically prevents duplicate HTTP GET requests during hydration. When you use `provideAbpCore()`, this interceptor is already active.
 
