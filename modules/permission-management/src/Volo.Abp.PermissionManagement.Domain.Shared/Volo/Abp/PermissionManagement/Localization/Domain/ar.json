@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "تحديث الإذن",
     "GrantAllResourcePermissions": "منح الكل",
     "NoResourceProviderKeyLookupServiceFound": "لم يتم العثور على خدمة البحث عن مفتاح المزود",
-    "NoResourcePermissionFound": "لا توجد أي أذونات محددة."
+    "NoResourcePermissionFound": "لا توجد أي أذونات محددة.",
+    "UpdatePermission": "تحديث الإذن",
+    "NoPermissionsAssigned": "لم يتم تعيين أذونات",
+    "SelectProvider": "اختر المزود",
+    "SearchProviderKey": "بحث عن مفتاح المزود",
+    "Provider": "المزود"
   }
 }

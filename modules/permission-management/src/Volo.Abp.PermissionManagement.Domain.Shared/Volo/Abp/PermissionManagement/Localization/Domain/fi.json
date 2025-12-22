@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "Päivitä käyttöoikeus",
     "GrantAllResourcePermissions": "Myönnä kaikki",
     "NoResourceProviderKeyLookupServiceFound": "Palveluntarjoajan avaimen hakupalvelua ei löytynyt",
-    "NoResourcePermissionFound": "Ei käyttöoikeuksia määritetty."
+    "NoResourcePermissionFound": "Ei käyttöoikeuksia määritetty.",
+    "UpdatePermission": "Päivitä lupa",
+    "NoPermissionsAssigned": "Ei osoitettuja oikeuksia",
+    "SelectProvider": "Valitse palveluntarjoaja",
+    "SearchProviderKey": "Hae palveluntarjoajan avainta",
+    "Provider": "Palveluntarjoaja"
   }
 }

@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "Обновить разрешение",
     "GrantAllResourcePermissions": "Предоставить все",
     "NoResourceProviderKeyLookupServiceFound": "Служба поиска ключа поставщика не найдена",
-    "NoResourcePermissionFound": "Не определено ни одного разрешения."
+    "NoResourcePermissionFound": "Не определено ни одного разрешения.",
+    "UpdatePermission": "Обновить разрешение",
+    "NoPermissionsAssigned": "Нет назначенных разрешений",
+    "SelectProvider": "Выбрать провайдера",
+    "SearchProviderKey": "Поиск ключа провайдера",
+    "Provider": "Провайдер"
   }
 }

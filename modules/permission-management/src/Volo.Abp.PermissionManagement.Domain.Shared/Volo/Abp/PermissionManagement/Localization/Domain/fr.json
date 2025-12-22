@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "Mettre à jour l'autorisation",
     "GrantAllResourcePermissions": "Accorder tout",
     "NoResourceProviderKeyLookupServiceFound": "Aucun service de recherche de clé de fournisseur n'a été trouvé",
-    "NoResourcePermissionFound": "Aucune autorisation n'est définie."
+    "NoResourcePermissionFound": "Aucune autorisation n'est définie.",
+    "UpdatePermission": "Mettre à jour l'autorisation",
+    "NoPermissionsAssigned": "Aucune autorisation assignée",
+    "SelectProvider": "Sélectionner le fournisseur",
+    "SearchProviderKey": "Rechercher la clé du fournisseur",
+    "Provider": "Fournisseur"
   }
 }

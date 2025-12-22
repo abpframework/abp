@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "更新权限",
     "GrantAllResourcePermissions": "授予所有",
     "NoResourceProviderKeyLookupServiceFound": "未找到提供者键查找服务",
-    "NoResourcePermissionFound": "未定义任何权限。"
+    "NoResourcePermissionFound": "未定义任何权限。",
+    "UpdatePermission": "更新权限",
+    "NoPermissionsAssigned": "未分配权限",
+    "SelectProvider": "选择提供程序",
+    "SearchProviderKey": "搜索提供程序密钥",
+    "Provider": "提供程序"
   }
 }

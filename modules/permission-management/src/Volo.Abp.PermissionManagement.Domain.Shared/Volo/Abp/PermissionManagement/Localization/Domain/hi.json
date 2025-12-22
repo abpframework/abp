@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "अनुमति अपडेट करें",
     "GrantAllResourcePermissions": "सभी प्रदान करें",
     "NoResourceProviderKeyLookupServiceFound": "कोई प्रदाता कुंजी खोज सेवा नहीं मिली",
-    "NoResourcePermissionFound": "कोई अनुमति परिभाषित नहीं है।"
+    "NoResourcePermissionFound": "कोई अनुमति परिभाषित नहीं है।",
+    "UpdatePermission": "अनुमति अपडेट करें",
+    "NoPermissionsAssigned": "कोई अनुमति असाइन नहीं की गई",
+    "SelectProvider": "प्रदाता चुनें",
+    "SearchProviderKey": "प्रदाता कुंजी खोजें",
+    "Provider": "प्रदाता"
   }
 }

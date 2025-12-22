@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "Engedély frissítése",
     "GrantAllResourcePermissions": "Összes engedély megadása",
     "NoResourceProviderKeyLookupServiceFound": "Nem található szolgáltató kulcs kereső szolgáltatás",
-    "NoResourcePermissionFound": "Nincs meghatározva engedély."
+    "NoResourcePermissionFound": "Nincs meghatározva engedély.",
+    "UpdatePermission": "Jogosultság frissítése",
+    "NoPermissionsAssigned": "Nincsenek jogosultságok hozzárendelve",
+    "SelectProvider": "Szolgáltató kiválasztása",
+    "SearchProviderKey": "Szolgáltatói kulcs keresése",
+    "Provider": "Szolgáltató"
   }
 }

@@ -17,6 +17,11 @@
     "UpdateResourcePermission": "به‌روزرسانی مجوز",
     "GrantAllResourcePermissions": "اعطای همه",
     "NoResourceProviderKeyLookupServiceFound": "هیچ سرویس جستجوی کلید ارائه‌دهنده یافت نشد",
-    "NoResourcePermissionFound": "هیچ مجوزی تعریف نشده است."
+    "NoResourcePermissionFound": "هیچ مجوزی تعریف نشده است.",
+    "UpdatePermission": "به‌روزرسانی مجوز",
+    "NoPermissionsAssigned": "هیچ مجوزی اختصاص داده نشده است",
+    "SelectProvider": "انتخاب کننده‌",
+    "SearchProviderKey": "جستجوی کلید تامین‌کننده",
+    "Provider": "تامین‌کننده"
   }
 }
