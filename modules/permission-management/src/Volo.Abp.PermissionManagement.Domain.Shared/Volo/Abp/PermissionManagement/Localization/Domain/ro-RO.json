@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Nicio permisiune atribuită",
     "SelectProvider": "Selectează furnizor",
     "SearchProviderKey": "Caută cheie furnizor",
-    "Provider": "Furnizor"
+    "Provider": "Furnizor",
+    "ErrorLoadingPermissions": "Eroare la încărcarea permisiunilor",
+    "PleaseSelectProviderAndPermissions": "Vă rugăm să selectați furnizorul și permisiunile"
   }
 }

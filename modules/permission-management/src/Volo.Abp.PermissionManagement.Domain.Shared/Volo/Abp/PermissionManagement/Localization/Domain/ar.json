@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "لم يتم تعيين أذونات",
     "SelectProvider": "اختر المزود",
     "SearchProviderKey": "بحث عن مفتاح المزود",
-    "Provider": "المزود"
+    "Provider": "المزود",
+    "ErrorLoadingPermissions": "خطأ في تحميل الأذونات",
+    "PleaseSelectProviderAndPermissions": "يرجى اختيار المزود والأذونات"
   }
 }

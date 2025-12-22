@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Keine Berechtigungen zugewiesen",
     "SelectProvider": "Anbieter auswählen",
     "SearchProviderKey": "Anbieterschlüssel suchen",
-    "Provider": "Anbieter"
+    "Provider": "Anbieter",
+    "ErrorLoadingPermissions": "Fehler beim Laden der Berechtigungen",
+    "PleaseSelectProviderAndPermissions": "Bitte wählen Sie einen Anbieter und Berechtigungen aus"
   }
 }

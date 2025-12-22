@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Нет назначенных разрешений",
     "SelectProvider": "Выбрать провайдера",
     "SearchProviderKey": "Поиск ключа провайдера",
-    "Provider": "Провайдер"
+    "Provider": "Провайдер",
+    "ErrorLoadingPermissions": "Ошибка при загрузке разрешений",
+    "PleaseSelectProviderAndPermissions": "Пожалуйста, выберите провайдера и разрешения"
   }
 }

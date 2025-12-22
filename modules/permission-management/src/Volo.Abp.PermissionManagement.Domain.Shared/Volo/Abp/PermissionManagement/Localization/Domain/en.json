@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "No permissions assigned",
     "SelectProvider": "Select provider",
     "SearchProviderKey": "Search provider key",
-    "Provider": "Provider"
+    "Provider": "Provider",
+    "ErrorLoadingPermissions": "Error loading permissions",
+    "PleaseSelectProviderAndPermissions": "Please select provider and permissions"
   }
 }

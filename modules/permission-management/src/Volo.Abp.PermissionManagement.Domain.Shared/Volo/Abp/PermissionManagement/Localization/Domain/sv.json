@@ -23,6 +23,8 @@
     "Välj leverantör": "Välj leverantör",
     "SelectProvider": "Välj leverantör",
     "SearchProviderKey": "Sök leverantörsnyckel",
-    "Provider": "Leverantör"
+    "Provider": "Leverantör",
+    "ErrorLoadingPermissions": "Fel vid laddning av behörigheter",
+    "PleaseSelectProviderAndPermissions": "Välj leverantör och behörigheter"
   }
 }

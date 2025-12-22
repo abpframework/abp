@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "未分配权限",
     "SelectProvider": "选择提供程序",
     "SearchProviderKey": "搜索提供程序密钥",
-    "Provider": "提供程序"
+    "Provider": "提供程序",
+    "ErrorLoadingPermissions": "加载权限时出错",
+    "PleaseSelectProviderAndPermissions": "请选择提供程序和权限"
   }
 }

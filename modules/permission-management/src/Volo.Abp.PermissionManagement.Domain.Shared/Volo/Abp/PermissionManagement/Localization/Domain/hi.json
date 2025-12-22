@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "कोई अनुमति असाइन नहीं की गई",
     "SelectProvider": "प्रदाता चुनें",
     "SearchProviderKey": "प्रदाता कुंजी खोजें",
-    "Provider": "प्रदाता"
+    "Provider": "प्रदाता",
+    "ErrorLoadingPermissions": "अनुमतियाँ लोड करने में त्रुटि",
+    "PleaseSelectProviderAndPermissions": "कृपया प्रदाता और अनुमतियाँ चुनें"
   }
 }

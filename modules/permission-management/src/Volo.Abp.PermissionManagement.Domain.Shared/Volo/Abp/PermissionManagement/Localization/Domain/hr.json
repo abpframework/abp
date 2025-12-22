@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Nema dodijeljenih dopuštenja",
     "SelectProvider": "Odaberi pružatelja",
     "SearchProviderKey": "Traži ključ pružatelja",
-    "Provider": "Pružatelj"
+    "Provider": "Pružatelj",
+    "ErrorLoadingPermissions": "Pogreška pri učitavanju dopuštenja",
+    "PleaseSelectProviderAndPermissions": "Molimo odaberite pružatelja i dopuštenja"
   }
 }

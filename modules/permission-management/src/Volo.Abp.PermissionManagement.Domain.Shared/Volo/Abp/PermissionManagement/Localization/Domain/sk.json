@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Nie sú priradené žiadne oprávnenia",
     "SelectProvider": "Vybrat poskytovateľa",
     "SearchProviderKey": "Hľadať kľúč poskytovateľa",
-    "Provider": "Poskytovateľ"
+    "Provider": "Poskytovateľ",
+    "ErrorLoadingPermissions": "Chyba pri načítaní oprávnení",
+    "PleaseSelectProviderAndPermissions": "Vyberte poskytovateľa a oprávnenia"
   }
 }

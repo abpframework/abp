@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Nincsenek jogosultságok hozzárendelve",
     "SelectProvider": "Szolgáltató kiválasztása",
     "SearchProviderKey": "Szolgáltatói kulcs keresése",
-    "Provider": "Szolgáltató"
+    "Provider": "Szolgáltató",
+    "ErrorLoadingPermissions": "Hiba a jogosultságok betöltésekor",
+    "PleaseSelectProviderAndPermissions": "Kérjük, válassza ki a szolgáltatót és a jogosultságokat"
   }
 }

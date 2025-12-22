@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Geen machtigingen toegewezen",
     "SelectProvider": "Selecteer provider",
     "SearchProviderKey": "Zoek provider sleutel",
-    "Provider": "Provider"
+    "Provider": "Provider",
+    "ErrorLoadingPermissions": "Fout bij laden van machtigingen",
+    "PleaseSelectProviderAndPermissions": "Selecteer provider en machtigingen"
   }
 }

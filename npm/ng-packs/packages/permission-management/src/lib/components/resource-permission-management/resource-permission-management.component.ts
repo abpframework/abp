@@ -1,6 +1,8 @@
 import { ListService, LocalizationPipe } from '@abp/ng.core';
 import {
     ButtonComponent,
+    Confirmation,
+    ConfirmationService,
     ModalCloseDirective,
     ModalComponent,
     ToasterService,
@@ -57,6 +59,7 @@ type ViewMode = 'list' | 'add' | 'edit';
 export class ResourcePermissionManagementComponent implements OnInit {
     protected readonly service = inject(PermissionsService);
     protected readonly toasterService = inject(ToasterService);
+    protected readonly confirmationService = inject(ConfirmationService);
     readonly list = inject(ListService);
 
     @Input() resourceName!: string;
@@ -84,13 +87,11 @@ export class ResourcePermissionManagementComponent implements OnInit {
 
     @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-    // State signals
     viewMode = signal<ViewMode>('list');
     modalBusy = signal(false);
     hasResourcePermission = signal(false);
     hasProviderKeyLookupService = signal(false);
 
-    // Data
     allResourcePermissions = signal<ResourcePermissionGrantInfoDto[]>([]); // All data for client-side pagination
     resourcePermissions = signal<ResourcePermissionGrantInfoDto[]>([]); // Paginated data for table
     totalCount = signal(0);
@@ -99,21 +100,19 @@ export class ResourcePermissionManagementComponent implements OnInit {
     searchResults = signal<SearchProviderKeyInfo[]>([]);
     permissionsWithProvider = signal<ResourcePermissionWithProdiverGrantInfoDto[]>([]);
 
-    // Form state for add/edit
     selectedProviderName = signal<string>('');
     selectedProviderKey = signal<string>('');
     searchFilter = signal('');
     selectedPermissions = signal<string[]>([]);
 
-    // Edit mode state
     editProviderName = signal<string>('');
     editProviderKey = signal<string>('');
 
-    // Search subject for debounce
+    showDropdown = signal(false);
+
     private searchSubject = new Subject<string>();
 
     constructor() {
-        // Configure extensions for entity props
         configureResourcePermissionExtensions();
 
         this.searchSubject.pipe(
@@ -125,16 +124,13 @@ export class ResourcePermissionManagementComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Configure list service for pagination
         this.list.maxResultCount = 10;
 
-        // Hook to query for client-side pagination
         this.list.hookToQuery(query => {
             const allData = this.allResourcePermissions();
             const skipCount = query.skipCount || 0;
             const maxResultCount = query.maxResultCount || 10;
 
-            // Client-side pagination
             const paginatedData = allData.slice(skipCount, skipCount + maxResultCount);
 
             return of({
@@ -150,12 +146,10 @@ export class ResourcePermissionManagementComponent implements OnInit {
     openModal() {
         this.modalBusy.set(true);
 
-        // Load resource permissions and providers
         this.service.getResource(this.resourceName, this.resourceKey).pipe(
             switchMap(permRes => {
                 this.allResourcePermissions.set(permRes.permissions || []);
                 this.totalCount.set(permRes.permissions?.length || 0);
-                // Trigger list refresh
                 this.list.get();
                 return this.service.getResourceProviderKeyLookupServices(this.resourceName);
             }),
@@ -191,7 +185,6 @@ export class ResourcePermissionManagementComponent implements OnInit {
         this.searchResults.set([]);
     }
 
-    // View mode navigation
     goToAddMode() {
         this.viewMode.set('add');
         this.selectedPermissions.set([]);
@@ -227,7 +220,6 @@ export class ResourcePermissionManagementComponent implements OnInit {
         this.selectedPermissions.set([]);
     }
 
-    // Provider selection
     onProviderChange(providerName: string) {
         this.selectedProviderName.set(providerName);
         this.selectedProviderKey.set('');
@@ -235,14 +227,25 @@ export class ResourcePermissionManagementComponent implements OnInit {
         this.searchFilter.set('');
     }
 
-    // Search
     onSearchInput(filter: string) {
         this.searchFilter.set(filter);
+        this.showDropdown.set(true);
         this.searchSubject.next(filter);
     }
 
-    private performSearch(filter: string) {
-        if (!filter || !this.selectedProviderName()) return;
+    onSearchFocus() {
+        this.showDropdown.set(true);
+        this.loadProviderKeys(this.searchFilter() || '');
+    }
+
+    onSearchBlur() {
+        setTimeout(() => {
+            this.showDropdown.set(false);
+        }, 200);
+    }
+
+    private loadProviderKeys(filter: string) {
+        if (!this.selectedProviderName()) return;
 
         this.service.searchResourceProviderKey(
             this.resourceName,
@@ -254,13 +257,17 @@ export class ResourcePermissionManagementComponent implements OnInit {
         });
     }
 
+    private performSearch(filter: string) {
+        this.loadProviderKeys(filter);
+    }
+
     selectProviderKey(key: SearchProviderKeyInfo) {
         this.selectedProviderKey.set(key.providerKey || '');
         this.searchFilter.set(key.providerDisplayName || key.providerKey || '');
         this.searchResults.set([]);
+        this.showDropdown.set(false);
     }
 
-    // Permission toggle
     togglePermission(permissionName: string) {
         const current = this.selectedPermissions();
         if (current.includes(permissionName)) {
@@ -298,7 +305,6 @@ export class ResourcePermissionManagementComponent implements OnInit {
             definitions.every(p => this.selectedPermissions().includes(p.name || ''));
     });
 
-    // Save operations
     saveAddPermission() {
         if (!this.selectedProviderKey() || this.selectedPermissions().length === 0) {
             this.toasterService.warn('AbpPermissionManagement::PleaseSelectProviderAndPermissions');
@@ -351,21 +357,33 @@ export class ResourcePermissionManagementComponent implements OnInit {
     }
 
     deletePermission(grant: ResourcePermissionGrantInfoDto) {
-        this.modalBusy.set(true);
-        this.service.deleteResource(
-            this.resourceName,
-            this.resourceKey,
-            grant.providerName || '',
-            grant.providerKey || ''
-        ).pipe(
-            switchMap(() => this.service.getResource(this.resourceName, this.resourceKey)),
-            finalize(() => this.modalBusy.set(false))
-        ).subscribe({
-            next: res => {
-                this.allResourcePermissions.set(res.permissions || []);
-                this.list.get();
-                this.toasterService.success('AbpUi::SuccessfullyDeleted');
-            }
-        });
+        this.confirmationService
+            .warn(
+                'AbpPermissionManagement::PermissionDeletionConfirmationMessage',
+                'AbpPermissionManagement::AreYouSure',
+                {
+                    messageLocalizationParams: [grant.providerKey || ''],
+                }
+            )
+            .subscribe((status: Confirmation.Status) => {
+                if (status === Confirmation.Status.confirm) {
+                    this.modalBusy.set(true);
+                    this.service.deleteResource(
+                        this.resourceName,
+                        this.resourceKey,
+                        grant.providerName || '',
+                        grant.providerKey || ''
+                    ).pipe(
+                        switchMap(() => this.service.getResource(this.resourceName, this.resourceKey)),
+                        finalize(() => this.modalBusy.set(false))
+                    ).subscribe({
+                        next: res => {
+                            this.allResourcePermissions.set(res.permissions || []);
+                            this.list.get();
+                            this.toasterService.success('AbpUi::SuccessfullyDeleted');
+                        }
+                    });
+                }
+            });
     }
 }

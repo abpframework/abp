@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Brak przypisanych uprawnień",
     "SelectProvider": "Wybierz dostawcę",
     "SearchProviderKey": "Szukaj klucza dostawcy",
-    "Provider": "Dostawca"
+    "Provider": "Dostawca",
+    "ErrorLoadingPermissions": "Błąd podczas ładowania uprawnień",
+    "PleaseSelectProviderAndPermissions": "Wybierz dostawcę i uprawnienia"
   }
 }

@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "未分配權限",
     "SelectProvider": "選擇提供者",
     "SearchProviderKey": "搜尋提供者金鑰",
-    "Provider": "提供者"
+    "Provider": "提供者",
+    "ErrorLoadingPermissions": "載入權限時出錯",
+    "PleaseSelectProviderAndPermissions": "請選擇提供者和權限"
   }
 }

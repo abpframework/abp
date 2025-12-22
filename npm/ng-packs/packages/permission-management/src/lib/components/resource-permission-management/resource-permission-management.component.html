@@ -48,7 +48,7 @@
 
         @if (resourcePermissions().length > 0) {
         <abp-extensible-table [data]="resourcePermissions()" [recordsTotal]="totalCount()" [list]="list"
-            [actionsTemplate]="actionsTemplate"></abp-extensible-table>
+            [actionsTemplate]="actionsTemplate" actionsText="AbpUi::Actions"></abp-extensible-table>
         } @else {
         <div class="alert alert-info">
             {{ 'AbpPermissionManagement::NoPermissionsAssigned' | abpLocalization }}
@@ -77,13 +77,14 @@
                 <label class="form-label">{{ 'AbpPermissionManagement::SearchProviderKey' | abpLocalization }}</label>
                 <input type="text" class="form-control"
                     [placeholder]="'AbpPermissionManagement::SearchProviderKey' | abpLocalization"
-                    [ngModel]="searchFilter()" (ngModelChange)="onSearchInput($event)" />
-                @if (searchResults().length > 0) {
+                    [ngModel]="searchFilter()" (ngModelChange)="onSearchInput($event)" (focus)="onSearchFocus()"
+                    (blur)="onSearchBlur()" />
+                @if (searchResults().length > 0 && showDropdown()) {
                 <div class="list-group position-absolute w-100 shadow"
                     style="z-index: 1000; max-height: 200px; overflow-y: auto;">
                     @for (result of searchResults(); track result.providerKey) {
                     <button type="button" class="list-group-item list-group-item-action"
-                        (click)="selectProviderKey(result)">
+                        (mousedown)="selectProviderKey(result)">
                         {{ result.providerDisplayName || result.providerKey }}
                     </button>
                     }

@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Ni dodeljenih dovoljenj",
     "SelectProvider": "Izberi ponudnika",
     "SearchProviderKey": "Išči ključ ponudnika",
-    "Provider": "Ponudnik"
+    "Provider": "Ponudnik",
+    "ErrorLoadingPermissions": "Napaka pri nalaganju dovoljenj",
+    "PleaseSelectProviderAndPermissions": "Izberite ponudnika in dovoljenja"
   }
 }

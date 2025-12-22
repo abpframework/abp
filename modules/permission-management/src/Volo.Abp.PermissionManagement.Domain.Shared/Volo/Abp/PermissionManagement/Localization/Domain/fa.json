@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "هیچ مجوزی اختصاص داده نشده است",
     "SelectProvider": "انتخاب کننده‌",
     "SearchProviderKey": "جستجوی کلید تامین‌کننده",
-    "Provider": "تامین‌کننده"
+    "Provider": "تامین‌کننده",
+    "ErrorLoadingPermissions": "خطا در بارگذاری مجوزها",
+    "PleaseSelectProviderAndPermissions": "لطفاً تامین‌کننده و مجوزها را انتخاب کنید"
   }
 }

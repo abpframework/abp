@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Atanmış izin bulunamadı",
     "SelectProvider": "Sağlayıcı seç",
     "SearchProviderKey": "Sağlayıcı anahtarını ara",
-    "Provider": "Sağlayıcı"
+    "Provider": "Sağlayıcı",
+    "ErrorLoadingPermissions": "İzinler yüklenirken hata oluştu",
+    "PleaseSelectProviderAndPermissions": "Lütfen sağlayıcı ve izinleri seçin"
   }
 }

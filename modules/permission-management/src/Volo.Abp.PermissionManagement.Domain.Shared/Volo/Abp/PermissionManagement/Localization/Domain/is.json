@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Engar heimildir skráðar",
     "SelectProvider": "Velja þjónustuaðila",
     "SearchProviderKey": "Leita að lykli þjónustuaðila",
-    "Provider": "Þjónustuaðili"
+    "Provider": "Þjónustuaðili",
+    "ErrorLoadingPermissions": "Villa við að hlaða leyfum",
+    "PleaseSelectProviderAndPermissions": "Vinsamlegast veldu þjónustuaðila og leyfi"
   }
 }

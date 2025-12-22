@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Nenhuma permissão atribuída",
     "SelectProvider": "Selecionar provedor",
     "SearchProviderKey": "Pesquisar chave do provedor",
-    "Provider": "Provedor"
+    "Provider": "Provedor",
+    "ErrorLoadingPermissions": "Erro ao carregar permissões",
+    "PleaseSelectProviderAndPermissions": "Por favor, selecione o provedor e as permissões"
   }
 }

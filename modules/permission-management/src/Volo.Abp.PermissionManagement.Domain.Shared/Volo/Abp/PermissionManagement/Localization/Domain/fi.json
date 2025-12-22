@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Ei osoitettuja oikeuksia",
     "SelectProvider": "Valitse palveluntarjoaja",
     "SearchProviderKey": "Hae palveluntarjoajan avainta",
-    "Provider": "Palveluntarjoaja"
+    "Provider": "Palveluntarjoaja",
+    "ErrorLoadingPermissions": "Virhe ladataessa oikeuksia",
+    "PleaseSelectProviderAndPermissions": "Valitse palveluntarjoaja ja oikeudet"
   }
 }

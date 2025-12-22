@@ -22,6 +22,8 @@
     "NoPermissionsAssigned": "Δεν έχουν εκχωρηθεί δικαιώματα",
     "SelectProvider": "Επιλέξτε πάροχο",
     "SearchProviderKey": "Αναζήτηση κλειδιού παρόχου",
-    "Provider": "Πάροχος"
+    "Provider": "Πάροχος",
+    "ErrorLoadingPermissions": "Σφάλμα κατά τη φόρτωση δικαιωμάτων",
+    "PleaseSelectProviderAndPermissions": "Επιλέξτε πάροχο και δικαιώματα"
   }
 }
