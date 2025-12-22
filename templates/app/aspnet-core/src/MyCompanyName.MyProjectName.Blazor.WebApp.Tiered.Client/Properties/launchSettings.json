@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:49656;http://localhost:49658"
+    }
+  }
+}

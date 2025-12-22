@@ -1,0 +1,162 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col col-md-6">
+                <h5 class="card-title">
+                    {{ '::Books' | abpLocalization }}
+                </h5>
+            </div>
+            <div class="col col-md-6 text-end">
+                @if (canCreate) {
+                <button class="btn btn-primary btn-sm" type="button" (click)="openCreateModal()">
+                    <i class="fa fa-plus me-1"></i>
+                    {{ '::NewBook' | abpLocalization }}
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        @if (loading()) {
+        <div class="text-center py-4">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        } @else {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>{{ '::Actions' | abpLocalization }}</th>
+                        <th>{{ '::Name' | abpLocalization }}</th>
+                        <th>{{ '::Type' | abpLocalization }}</th>
+                        <th>{{ '::Author' | abpLocalization }}</th>
+                        <th>{{ '::Price' | abpLocalization }}</th>
+                        <th>{{ '::PublishDate' | abpLocalization }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (book of books(); track book.id) {
+                    <tr>
+                        <td>
+                            <div class="btn-group" role="group">
+                                @if (canEdit) {
+                                <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(book)"
+                                    title="{{ '::Edit' | abpLocalization }}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                }
+                                @if (canManagePermissions) {
+                                <button class="btn btn-sm btn-outline-info" (click)="openPermissionModal(book)"
+                                    title="{{ '::Permissions' | abpLocalization }}">
+                                    <i class="fa fa-lock"></i>
+                                </button>
+                                }
+                                @if (canDelete) {
+                                <button class="btn btn-sm btn-outline-danger" (click)="deleteBook(book)"
+                                    title="{{ '::Delete' | abpLocalization }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                }
+                            </div>
+                        </td>
+                        <td>{{ book.name }}</td>
+                        <td>{{ book.bookType }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.price | currency }}</td>
+                        <td>{{ book.publishDate | date }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            {{ '::NoDataAvailable' | abpLocalization }}
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (totalCount() > maxResultCount) {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="currentPage() === 0">
+                    <button class="page-link" (click)="changePage(currentPage() - 1)">
+                        {{ '::Previous' | abpLocalization }}
+                    </button>
+                </li>
+                @for (page of pages(); track page) {
+                <li class="page-item" [class.active]="page === currentPage()">
+                    <button class="page-link" (click)="changePage(page)">{{ page + 1 }}</button>
+                </li>
+                }
+                <li class="page-item" [class.disabled]="currentPage() >= totalPages() - 1">
+                    <button class="page-link" (click)="changePage(currentPage() + 1)">
+                        {{ '::Next' | abpLocalization }}
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        }
+        }
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<abp-modal [(visible)]="isModalOpen" [busy]="modalBusy()">
+    <ng-template #abpHeader>
+        <h5>{{ (isEditMode ? '::EditBook' : '::NewBook') | abpLocalization }}</h5>
+    </ng-template>
+
+    <ng-template #abpBody>
+        <form [formGroup]="form">
+            <div class="mb-3">
+                <label class="form-label" for="book-name">{{ '::Name' | abpLocalization }} *</label>
+                <input type="text" id="book-name" class="form-control" formControlName="name"
+                    [class.is-invalid]="form.get('name')?.invalid && form.get('name')?.touched" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="book-type">{{ '::Type' | abpLocalization }} *</label>
+                <select id="book-type" class="form-select" formControlName="bookType">
+                    <option value="">-- {{ '::SelectType' | abpLocalization }} --</option>
+                    @for (type of bookTypes; track type.value) {
+                    <option [value]="type.value">{{ type.label }}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="book-author">{{ '::Author' | abpLocalization }}</label>
+                <input type="text" id="book-author" class="form-control" formControlName="author" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="book-price">{{ '::Price' | abpLocalization }} *</label>
+                <input type="number" id="book-price" class="form-control" formControlName="price" step="0.01" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="book-date">{{ '::PublishDate' | abpLocalization }} *</label>
+                <input type="date" id="book-date" class="form-control" formControlName="publishDate" />
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template #abpFooter>
+        <button type="button" class="btn btn-secondary" abpClose>
+            {{ '::Cancel' | abpLocalization }}
+        </button>
+        <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form.invalid">
+            {{ '::Save' | abpLocalization }}
+        </abp-button>
+    </ng-template>
+</abp-modal>
+
+<!-- Resource Permission Modal -->
+<abp-resource-permission-management [(visible)]="isPermissionModalOpen" [resourceName]="resourceName"
+    [resourceKey]="selectedBookId" [resourceDisplayName]="selectedBookName">
+</abp-resource-permission-management>
