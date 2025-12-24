@@ -162,7 +162,7 @@ The database management admin tool varies by database type:
 
 ## Get Started Today
 
-Ready to experience the power of .NET Aspire with ABP? Create a new microservice solution in ABP Studio and enable the .NET Aspire integration option. For detailed documentation, visit our [.NET Aspire Integration Guide](https://abp.io/docs/latest/solution-templates/microservice/aspire-integration).
+Ready to experience the power of .NET Aspire with ABP? Create a new microservice solution in ABP Studio and enable the .NET Aspire integration option. For detailed documentation, visit our [.NET Aspire Integration documentation](https://abp.io/docs/latest/solution-templates/microservice/aspire-integration).
 
 To learn more about .NET Aspire, visit: [https://aspire.dev](https://aspire.dev/get-started/what-is-aspire/)
 

@@ -66,7 +66,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 **Key files in AppHost:**
 | File | Purpose |
-|------|---------|
+|--------|------------|
 | `AppHost.cs` | Entry point—creates the distributed application builder and adds all resources |
 | `AppHostExtensions.cs` | Extension methods for adding infrastructures, databases, microservices, gateways, and applications |
 
