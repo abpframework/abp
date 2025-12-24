@@ -1,165 +1,60 @@
-<abp-modal [(visible)]="visible" [busy]="modalBusy()" [options]="{ size: 'xl', scrollable: false }">
+<abp-modal [(visible)]="visible" [busy]="state.modalBusy()" [options]="{ size: 'xl', scrollable: false }">
     <ng-template #abpHeader>
         <h5 class="modal-title">
-            @if (viewMode() === 'edit') {
+            @switch (state.viewMode()) {
+            @case ('edit') {
             {{ 'AbpPermissionManagement::UpdatePermission' | abpLocalization }}
-            } @else if (viewMode() === 'add') {
+            }
+            @case ('add') {
             {{ 'AbpPermissionManagement::AddResourcePermission' | abpLocalization }}
-            } @else {
+            }
+            @default {
             {{ 'AbpPermissionManagement::ResourcePermissions' | abpLocalization }}
-            @if (resourceDisplayName) {
-            - {{ resourceDisplayName }}
+            @if (resourceDisplayName()) {
+            - {{ resourceDisplayName() }}
+            }
             }
             }
         </h5>
     </ng-template>
 
     <ng-template #abpBody>
-        @if (!hasResourcePermission() || !hasProviderKeyLookupService()) {
+        @if (!state.hasResourcePermission() || !state.hasProviderKeyLookupService()) {
         <div class="alert alert-warning" role="alert">
-            @if (!hasResourcePermission()) {
+            @if (!state.hasResourcePermission()) {
             {{ 'AbpPermissionManagement::NoResourcePermissionFound' | abpLocalization }}
             } @else {
             {{ 'AbpPermissionManagement::NoResourceProviderKeyLookupServiceFound' | abpLocalization }}
             }
         </div>
         } @else {
-        <!-- LIST VIEW -->
-        @if (viewMode() === 'list') {
-        <div class="d-grid gap-2 mb-3 d-md-flex justify-content-md-end">
-            <button class="btn btn-sm btn-primary" type="button" (click)="goToAddMode()">
-                <i class="fa fa-plus me-1"></i>
-                {{ 'AbpPermissionManagement::AddResourcePermission' | abpLocalization }}
-            </button>
-        </div>
-
-        <ng-template #actionsTemplate let-row>
-            <div class="btn-group btn-group-sm" role="group">
-                <button class="btn btn-outline-primary" type="button" (click)="goToEditMode(row)"
-                    [title]="'AbpUi::Edit' | abpLocalization">
-                    <i class="fa fa-edit"></i>
-                </button>
-                <button class="btn btn-outline-danger" type="button" (click)="deletePermission(row)"
-                    [title]="'AbpUi::Delete' | abpLocalization">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </div>
-        </ng-template>
-
-        @if (resourcePermissions().length > 0) {
-        <abp-extensible-table [data]="resourcePermissions()" [recordsTotal]="totalCount()" [list]="list"
-            [actionsTemplate]="actionsTemplate" actionsText="AbpUi::Actions"></abp-extensible-table>
-        } @else {
-        <div class="alert alert-info">
-            {{ 'AbpPermissionManagement::NoPermissionsAssigned' | abpLocalization }}
-        </div>
+        @switch (state.viewMode()) {
+        @case ('list') {
+        <abp-resource-permission-list (addClicked)="onAddClicked()" (editClicked)="onEditClicked($event)"
+            (deleteClicked)="onDeleteClicked($event)" />
         }
+        @case ('add') {
+        <abp-resource-permission-form mode="add" [resourceName]="resourceName()" />
         }
-
-        <!-- ADD VIEW -->
-        @if (viewMode() === 'add') {
-        <div class="mb-3">
-            <label class="form-label fw-bold">{{ 'AbpPermissionManagement::SelectProvider' | abpLocalization }}</label>
-            <div class="mb-2">
-                @for (provider of providers(); track provider.name; let i = $index) {
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" [id]="'provider-' + i" [value]="provider.name"
-                        [checked]="selectedProviderName() === provider.name"
-                        (change)="onProviderChange(provider.name || '')" />
-                    <label class="form-check-label" [for]="'provider-' + i">
-                        {{ provider.displayName }}
-                    </label>
-                </div>
-                }
-            </div>
-
-            <div class="position-relative mb-3">
-                <label class="form-label">{{ 'AbpPermissionManagement::SearchProviderKey' | abpLocalization }}</label>
-                <input type="text" class="form-control"
-                    [placeholder]="'AbpPermissionManagement::SearchProviderKey' | abpLocalization"
-                    [ngModel]="searchFilter()" (ngModelChange)="onSearchInput($event)" (focus)="onSearchFocus()"
-                    (blur)="onSearchBlur()" />
-                @if (searchResults().length > 0 && showDropdown()) {
-                <div class="list-group position-absolute w-100 shadow"
-                    style="z-index: 1000; max-height: 200px; overflow-y: auto;">
-                    @for (result of searchResults(); track result.providerKey) {
-                    <button type="button" class="list-group-item list-group-item-action"
-                        (mousedown)="selectProviderKey(result)">
-                        {{ result.providerDisplayName || result.providerKey }}
-                    </button>
-                    }
-                </div>
-                }
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <h5>{{ 'AbpPermissionManagement::ResourcePermissionPermissions' | abpLocalization }}</h5>
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="grantAllAdd" [checked]="allPermissionsSelected()"
-                    (change)="toggleAllPermissions(!allPermissionsSelected())" />
-                <label class="form-check-label" for="grantAllAdd">
-                    {{ 'AbpPermissionManagement::GrantAllResourcePermissions' | abpLocalization }}
-                </label>
-            </div>
-            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
-                @for (perm of permissionDefinitions(); track perm.name) {
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [id]="'perm-add-' + perm.name"
-                        [checked]="isPermissionSelected(perm.name || '')"
-                        (change)="togglePermission(perm.name || '')" />
-                    <label class="form-check-label" [for]="'perm-add-' + perm.name">
-                        {{ perm.displayName }}
-                    </label>
-                </div>
-                }
-            </div>
-        </div>
+        @case ('edit') {
+        <abp-resource-permission-form mode="edit" [resourceName]="resourceName()" />
         }
-
-        <!-- EDIT VIEW -->
-        @if (viewMode() === 'edit') {
-        <div class="mb-3" id="permissionList">
-            <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }}</h4>
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="grantAllEdit" [checked]="allPermissionsSelected()"
-                    (change)="toggleAllPermissions(!allPermissionsSelected())" />
-                <label class="form-check-label" for="grantAllEdit">
-                    {{ 'AbpPermissionManagement::GrantAllResourcePermissions' | abpLocalization }}
-                </label>
-            </div>
-            @for (perm of permissionsWithProvider(); track perm.name) {
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" [id]="'perm-edit-' + perm.name"
-                    [checked]="isPermissionSelected(perm.name || '')" (change)="togglePermission(perm.name || '')" />
-                <label class="form-check-label" [for]="'perm-edit-' + perm.name">
-                    {{ perm.displayName }}
-                </label>
-            </div>
-            }
-        </div>
         }
         }
     </ng-template>
 
     <ng-template #abpFooter>
-        @if (viewMode() === 'list') {
+        @if (state.isListMode()) {
         <button type="button" class="btn btn-outline-primary" abpClose>
             {{ 'AbpUi::Close' | abpLocalization }}
         </button>
         } @else {
-        <button type="button" class="btn btn-outline-secondary" (click)="goToListMode()">
+        <button type="button" class="btn btn-outline-secondary" (click)="state.goToListMode()">
             {{ 'AbpUi::Cancel' | abpLocalization }}
         </button>
-        @if (viewMode() === 'add') {
-        <abp-button iconClass="fa fa-check" (click)="saveAddPermission()">
+        <abp-button iconClass="fa fa-check" (click)="savePermission()">
             {{ 'AbpUi::Save' | abpLocalization }}
         </abp-button>
-        } @else {
-        <abp-button iconClass="fa fa-check" (click)="saveEditPermission()">
-            {{ 'AbpUi::Save' | abpLocalization }}
-        </abp-button>
-        }
         }
     </ng-template>
 </abp-modal>
