@@ -17,9 +17,11 @@
 }
 ````
 
+> You must have an ABP Business or a higher license to be able to create a microservice solution.
+
 ## .NET Aspire Overview
 
-Aspire streamlines building, running, debugging, and deploying distributed apps. Picture your app as a set of services, databases, and frontends—when they’re deployed, they all work together seamlessly, but every time you develop them they need to be individually started and connected. With Aspire, you get a unified toolchain that eliminates complex configs and makes local debugging effortless. Instantly launch and debug your entire app with a single command. Ready to deploy? Aspire lets you publish anywhere—Kubernetes, the cloud, or your own servers. It’s also fully extensible, so you can integrate your favorite tools and services with ease. It provides:
+[Aspire](https://aspire.dev/get-started/what-is-aspire/) streamlines building, running, debugging, and deploying distributed apps. Picture your app as a set of services, databases, and frontends—when they’re deployed, they all work together seamlessly, but every time you develop them they need to be individually started and connected. With Aspire, you get a unified toolchain that eliminates complex configs and makes local debugging effortless. Instantly launch and debug your entire app with a single command. Ready to deploy? Aspire lets you publish anywhere—Kubernetes, the cloud, or your own servers. It’s also fully extensible, so you can integrate your favorite tools and services with ease. It provides:
 
 - **Orchestration**: A code-first approach to defining and running distributed applications, managing dependencies, and launch order.
 - **Integrations**: Pre-built components for common services (databases, caches, message brokers) with automatic configuration.
@@ -53,7 +55,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 ### AppHost (Orchestrator)
 
-`AppHost` is the .NET Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. All services, gateways, and applications in the solution have their project references added to `AppHost`.
+[`AppHost`](https://aspire.dev/get-started/app-host/) is the .NET Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. All services, gateways, and applications in the solution have their project references added to `AppHost`.
 
 **Why is it added?**
 
@@ -84,7 +86,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 ### ServiceDefaults
 
-`ServiceDefaults` is a shared library that provides common cloud-native configuration for all projects in the solution. The `ServiceDefaults` project reference is added to all services, gateways, and applications in the solution.
+[`ServiceDefaults`](https://aspire.dev/fundamentals/service-defaults/) is a shared library that provides common cloud-native configuration for all projects in the solution. The `ServiceDefaults` project reference is added to all services, gateways, and applications in the solution.
 
 **Why is it added?**
 
