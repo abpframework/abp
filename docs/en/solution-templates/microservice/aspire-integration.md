@@ -309,7 +309,7 @@ var myResource = builder
     .AddProject<Projects.MySolutionName_MyProjectName_ServiceName>("myresource", "MySolutionName.MyProjectName.MyResource")
     .WaitFor(databases.AdministrationDb)
     .WaitFor(databases.IdentityDb)
-    .WaitFor(databases.MyServiceDb)
+    .WaitFor(databases.MyResourceDb)
     .WaitFor(databases.AuditLoggingDb)
     .WaitFor(databases.SaasDb)
     .WaitFor(databases.LanguageManagementDb)
@@ -318,7 +318,7 @@ var myResource = builder
     .WithReference(databases.AdministrationDb)
     .WithReference(databases.IdentityDb)
     .WithReference(databases.BlobStoringDb)
-    .WithReference(databases.MyServiceDb)
+    .WithReference(databases.MyResourceDb)
     .WithReference(databases.AuditLoggingDb)
     .WithReference(databases.SaasDb)
     .WithReference(databases.LanguageManagementDb)
@@ -349,7 +349,7 @@ if (webgateway != null)
 If your resource needs to be added to `CORS` and `RedirectAllowedUrls` configuration for the authentication server, update the `allowedUrls` variable in the `ConfigureAuthServer` method:
 
 ```csharp
-var allowedUrls = ReferenceExpression.Create($"{applicationResources["MyService"].GetEndpoint("http")},...");
+var allowedUrls = ReferenceExpression.Create($"{applicationResources["MyResource"].GetEndpoint("http")},...");
 ```
 
 ### 7. Add Database (if needed)
@@ -357,7 +357,7 @@ var allowedUrls = ReferenceExpression.Create($"{applicationResources["MyService"
 If your resource requires a dedicated database, add it in the `AddDatabases` method:
 
 ```csharp
-var myServiceDb = databaseServers.Postgres.AddDatabase("MyService", "MySolutionName.MyProjectName_MyService");
+var myResourceDb = databaseServers.Postgres.AddDatabase("MyResource", "MySolutionName.MyProjectName_MyResource");
 ```
 > Adjust the database management system as necessary.
 

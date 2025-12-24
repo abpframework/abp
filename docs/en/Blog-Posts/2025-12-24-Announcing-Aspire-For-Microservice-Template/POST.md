@@ -1,10 +1,10 @@
 # Announcing .NET Aspire Integration for ABP Microservice Template
 
-We are excited to announce the integration of **.NET Aspire** into the ABP Microservice solution. This integration brings a unified development experience for building, running, debugging, and deploying distributed applications. With Aspire, you can now orchestrate your entire microservice ecosystem with a single command, eliminating complex configurations and making local development effortless.
+We are excited to announce the integration of **.NET Aspire** into the ABP microservice solution. This integration brings a unified development experience for building, running, debugging, and deploying distributed applications. With Aspire, you can now orchestrate your entire microservice ecosystem with a single command, eliminating complex configurations and making local development effortless.
 
 ## What is .NET Aspire?
 
-.NET Aspire is a cloud-ready stack designed to streamline the development of distributed applications. It provides:
+[Aspire](https://aspire.dev/get-started/what-is-aspire/) is a cloud-ready stack designed to streamline the development of distributed applications. It provides:
 
 - **Orchestration**: A code-first approach to defining and running distributed applications, managing dependencies, and launch order.
 - **Integrations**: Pre-built components for common services (databases, caches, message brokers) with automatic configuration.
@@ -38,7 +38,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 ### AppHost (Orchestrator)
 
-`AppHost` is the .NET Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. It provides:
+[`AppHost`](https://aspire.dev/get-started/app-host/) is the .NET Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. It provides:
 
 - **Centralized orchestration**: Start your entire microservice ecosystem with a single command.
 - **Code-first infrastructure**: Databases, Redis, RabbitMQ, Elasticsearch, and observability tools are defined programmatically.
@@ -47,7 +47,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 ### ServiceDefaults
 
-`ServiceDefaults` is a shared library that provides common cloud-native configuration for all projects in the solution. Every service uses the same observability, health check, and resilience patterns.
+[`ServiceDefaults`](https://aspire.dev/fundamentals/service-defaults/) is a shared library that provides common cloud-native configuration for all projects in the solution. Every service uses the same observability, health check, and resilience patterns.
 
 | Feature | Description |
 |---------|-------------|
