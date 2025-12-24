@@ -30,7 +30,7 @@ export type LookupSearchFn<T = LookupItem> = (filter: string) => Observable<T[]>
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LookupSearchComponent<T extends LookupItem = LookupItem> implements OnInit, OnDestroy {
-    // Inputs
+
     readonly label = input<string>();
     readonly placeholder = input<string>('');
     readonly debounceTime = input<number>(300);
@@ -39,22 +39,17 @@ export class LookupSearchComponent<T extends LookupItem = LookupItem> implements
     readonly valueKey = input<keyof T>('key' as keyof T);
     readonly disabled = input<boolean>(false);
 
-    // Search function - should be provided by parent
     readonly searchFn = input<LookupSearchFn<T>>(() => of([]));
 
-    // Two-way binding for selected value
     readonly selectedValue = model<string>('');
     readonly displayValue = model<string>('');
 
-    // Outputs
     readonly itemSelected = output<T>();
     readonly searchChanged = output<string>();
 
-    // Custom templates
     readonly itemTemplate = contentChild<TemplateRef<{ $implicit: T }>>('itemTemplate');
     readonly noResultsTemplate = contentChild<TemplateRef<void>>('noResultsTemplate');
 
-    // Internal state
     readonly searchResults = signal<T[]>([]);
     readonly showDropdown = signal(false);
     readonly isLoading = signal(false);

@@ -24,6 +24,8 @@ import { ResourcePermissionStateService } from '../../services/resource-permissi
 import { ResourcePermissionListComponent } from './resource-permission-list/resource-permission-list.component';
 import { ResourcePermissionFormComponent } from './resource-permission-form/resource-permission-form.component';
 
+import { eResourcePermissionViewModes } from '../../enums/view-modes';
+
 @Component({
     selector: 'abp-resource-permission-management',
     templateUrl: './resource-permission-management.component.html',
@@ -39,6 +41,8 @@ import { ResourcePermissionFormComponent } from './resource-permission-form/reso
     ],
 })
 export class ResourcePermissionManagementComponent implements OnInit {
+    readonly eResourcePermissionViewModes = eResourcePermissionViewModes;
+
     protected readonly service = inject(PermissionsService);
     protected readonly toasterService = inject(ToasterService);
     protected readonly confirmationService = inject(ConfirmationService);
@@ -54,14 +58,12 @@ export class ResourcePermissionManagementComponent implements OnInit {
     private previousVisible = false;
 
     constructor() {
-        // Sync input values to state
         effect(() => {
             this.state.resourceName.set(this.resourceName());
             this.state.resourceKey.set(this.resourceKey());
             this.state.resourceDisplayName.set(this.resourceDisplayName());
         });
 
-        // Handle visibility changes
         effect(() => {
             const isVisible = this.visible();
             if (isVisible && !this.previousVisible) {

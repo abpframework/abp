@@ -6,13 +6,12 @@ import {
     SearchProviderKeyInfo,
     ResourcePermissionWithProdiverGrantInfoDto,
 } from '@abp/ng.permission-management/proxy';
-
-export type ViewMode = 'list' | 'add' | 'edit';
+import { eResourcePermissionViewModes } from '../enums/view-modes';
 
 @Injectable()
 export class ResourcePermissionStateService {
     // View state
-    readonly viewMode = signal<ViewMode>('list');
+    readonly viewMode = signal<eResourcePermissionViewModes>(eResourcePermissionViewModes.List);
     readonly modalBusy = signal(false);
     readonly hasResourcePermission = signal(false);
     readonly hasProviderKeyLookupService = signal(false);
@@ -45,9 +44,9 @@ export class ResourcePermissionStateService {
     readonly showDropdown = signal(false);
 
     // Computed properties
-    readonly isAddMode = computed(() => this.viewMode() === 'add');
-    readonly isEditMode = computed(() => this.viewMode() === 'edit');
-    readonly isListMode = computed(() => this.viewMode() === 'list');
+    readonly isAddMode = computed(() => this.viewMode() === eResourcePermissionViewModes.Add);
+    readonly isEditMode = computed(() => this.viewMode() === eResourcePermissionViewModes.Edit);
+    readonly isListMode = computed(() => this.viewMode() === eResourcePermissionViewModes.List);
 
     readonly currentPermissionsList = computed(() =>
         this.isAddMode() ? this.permissionDefinitions() : this.permissionsWithProvider()
@@ -68,12 +67,12 @@ export class ResourcePermissionStateService {
 
     // State transition methods
     goToListMode() {
-        this.viewMode.set('list');
+        this.viewMode.set(eResourcePermissionViewModes.List);
         this.selectedPermissions.set([]);
     }
 
     goToAddMode() {
-        this.viewMode.set('add');
+        this.viewMode.set(eResourcePermissionViewModes.Add);
         this.selectedPermissions.set([]);
         this.selectedProviderKey.set('');
         this.searchResults.set([]);
@@ -90,7 +89,7 @@ export class ResourcePermissionStateService {
         this.selectedPermissions.set(
             permissions.filter(p => p.isGranted).map(p => p.name || '')
         );
-        this.viewMode.set('edit');
+        this.viewMode.set(eResourcePermissionViewModes.Edit);
     }
 
     // Permission selection methods
@@ -131,7 +130,7 @@ export class ResourcePermissionStateService {
 
     // Reset all state
     reset() {
-        this.viewMode.set('list');
+        this.viewMode.set(eResourcePermissionViewModes.List);
         this.allResourcePermissions.set([]);
         this.resourcePermissions.set([]);
         this.totalCount.set(0);

@@ -2,10 +2,10 @@
     <ng-template #abpHeader>
         <h5 class="modal-title">
             @switch (state.viewMode()) {
-            @case ('edit') {
+            @case (eResourcePermissionViewModes.Edit) {
             {{ 'AbpPermissionManagement::UpdatePermission' | abpLocalization }}
             }
-            @case ('add') {
+            @case (eResourcePermissionViewModes.Add) {
             {{ 'AbpPermissionManagement::AddResourcePermission' | abpLocalization }}
             }
             @default {
@@ -29,14 +29,14 @@
         </div>
         } @else {
         @switch (state.viewMode()) {
-        @case ('list') {
+        @case (eResourcePermissionViewModes.List) {
         <abp-resource-permission-list (addClicked)="onAddClicked()" (editClicked)="onEditClicked($event)"
             (deleteClicked)="onDeleteClicked($event)" />
         }
-        @case ('add') {
+        @case (eResourcePermissionViewModes.Add) {
         <abp-resource-permission-form mode="add" [resourceName]="resourceName()" />
         }
-        @case ('edit') {
+        @case (eResourcePermissionViewModes.Edit) {
         <abp-resource-permission-form mode="edit" [resourceName]="resourceName()" />
         }
         }

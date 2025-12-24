@@ -5,7 +5,7 @@ import { ResourcePermissionStateService } from '../../../services/resource-permi
 import { ProviderKeySearchComponent } from '../provider-key-search/provider-key-search.component';
 import { PermissionCheckboxListComponent } from '../permission-checkbox-list/permission-checkbox-list.component';
 
-export type FormMode = 'add' | 'edit';
+import { eResourcePermissionViewModes } from '../../../enums/view-modes';
 
 @Component({
     selector: 'abp-resource-permission-form',
@@ -20,10 +20,12 @@ export type FormMode = 'add' | 'edit';
 })
 export class ResourcePermissionFormComponent {
     readonly state = inject(ResourcePermissionStateService);
+    readonly eResourcePermissionViewModes = eResourcePermissionViewModes;
 
-    readonly mode = input.required<FormMode>();
+    readonly mode = input.required<eResourcePermissionViewModes>();
     readonly resourceName = input.required<string>();
 
     readonly save = output<void>();
     readonly cancel = output<void>();
 }
+
