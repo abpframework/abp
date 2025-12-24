@@ -1,6 +1,5 @@
 import { Component, input, inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { LocalizationPipe } from '@abp/ng.core';
-import { PermissionsService, SearchProviderKeyInfo } from '@abp/ng.permission-management/proxy';
+import { PermissionsService } from '@abp/ng.permission-management/proxy';
 import { LookupSearchComponent, LookupItem } from '@abp/ng.components/lookup';
 import { Observable, map, Subject, takeUntil } from 'rxjs';
 import { ResourcePermissionStateService } from '../../../services/resource-permission-state.service';
@@ -13,7 +12,7 @@ interface ProviderKeyLookupItem extends LookupItem {
 @Component({
     selector: 'abp-provider-key-search',
     templateUrl: './provider-key-search.component.html',
-    imports: [LocalizationPipe, LookupSearchComponent],
+    imports: [LookupSearchComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProviderKeySearchComponent implements OnInit, OnDestroy {
