@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Domain\Volo.Abp.Users.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Mapperly\Volo.Abp.Mapperly.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.LowCode.Domain.Abstractions\Volo.Abp.LowCode.Domain.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

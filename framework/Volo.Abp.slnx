@@ -130,6 +130,7 @@
     <Project Path="src/Volo.Abp.Ldap/Volo.Abp.Ldap.csproj" />
     <Project Path="src/Volo.Abp.Localization.Abstractions/Volo.Abp.Localization.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.Localization/Volo.Abp.Localization.csproj" />
+    <Project Path="src/Volo.Abp.LowCode.Domain.Abstractions/Volo.Abp.LowCode.Domain.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.MailKit/Volo.Abp.MailKit.csproj" />
     <Project Path="src/Volo.Abp.Mapperly/Volo.Abp.Mapperly.csproj" />
     <Project Path="src/Volo.Abp.Maui.Client/Volo.Abp.Maui.Client.csproj" />

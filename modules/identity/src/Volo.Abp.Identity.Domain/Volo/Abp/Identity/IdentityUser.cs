@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
+using Volo.Abp.LowCode;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
 
+[ReferenceEntity(nameof(UserName), nameof(Name), nameof(Surname))]
 public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
