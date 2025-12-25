@@ -1,7 +1,8 @@
-import { Component, input, inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, inject, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PermissionsService } from '@abp/ng.permission-management/proxy';
 import { LookupSearchComponent, LookupItem } from '@abp/ng.components/lookup';
-import { Observable, map, Subject, takeUntil } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ResourcePermissionStateService } from '../../../services/resource-permission-state.service';
 
 interface ProviderKeyLookupItem extends LookupItem {
@@ -15,23 +16,17 @@ interface ProviderKeyLookupItem extends LookupItem {
     imports: [LookupSearchComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProviderKeySearchComponent implements OnInit, OnDestroy {
+export class ProviderKeySearchComponent implements OnInit {
     readonly state = inject(ResourcePermissionStateService);
     private readonly service = inject(PermissionsService);
+    private readonly destroyRef = inject(DestroyRef);
 
     readonly resourceName = input.required<string>();
-
-    private readonly destroy$ = new Subject<void>();
 
     searchFn: (filter: string) => Observable<ProviderKeyLookupItem[]> = () => new Observable();
 
     ngOnInit() {
         this.searchFn = (filter: string) => this.loadProviderKeys(filter);
-    }
-
-    ngOnDestroy() {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
     onItemSelected(item: ProviderKeyLookupItem) {
@@ -60,7 +55,7 @@ export class ProviderKeySearchComponent implements OnInit, OnDestroy {
                 providerKey: k.providerKey || '',
                 providerDisplayName: k.providerDisplayName || undefined,
             }))),
-            takeUntil(this.destroy$)
+            takeUntilDestroyed(this.destroyRef)
         );
     }
 }

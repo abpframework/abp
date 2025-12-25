@@ -10,6 +10,7 @@ interface PermissionItem {
 @Component({
     selector: 'abp-permission-checkbox-list',
     templateUrl: './permission-checkbox-list.component.html',
+    styleUrl: './permission-checkbox-list.component.scss',
     imports: [LocalizationPipe],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

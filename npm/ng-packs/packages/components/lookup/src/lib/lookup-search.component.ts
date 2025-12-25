@@ -5,15 +5,17 @@ import {
     model,
     signal,
     OnInit,
-    OnDestroy,
     ChangeDetectionStrategy,
     TemplateRef,
     contentChild,
+    DestroyRef,
+    inject,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LocalizationPipe } from '@abp/ng.core';
-import { Subject, Observable, debounceTime, distinctUntilChanged, takeUntil, of } from 'rxjs';
+import { Subject, Observable, debounceTime, distinctUntilChanged, of, finalize } from 'rxjs';
 
 export interface LookupItem {
     key: string;
@@ -26,10 +28,12 @@ export type LookupSearchFn<T = LookupItem> = (filter: string) => Observable<T[]>
 @Component({
     selector: 'abp-lookup-search',
     templateUrl: './lookup-search.component.html',
+    styleUrl: './lookup-search.component.scss',
     imports: [CommonModule, FormsModule, LocalizationPipe],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LookupSearchComponent<T extends LookupItem = LookupItem> implements OnInit, OnDestroy {
+export class LookupSearchComponent<T extends LookupItem = LookupItem> implements OnInit {
+    private readonly destroyRef = inject(DestroyRef);
 
     readonly label = input<string>();
     readonly placeholder = input<string>('');
@@ -55,21 +59,15 @@ export class LookupSearchComponent<T extends LookupItem = LookupItem> implements
     readonly isLoading = signal(false);
 
     private readonly searchSubject = new Subject<string>();
-    private readonly destroy$ = new Subject<void>();
 
     ngOnInit() {
         this.searchSubject.pipe(
             debounceTime(this.debounceTime()),
             distinctUntilChanged(),
-            takeUntil(this.destroy$)
+            takeUntilDestroyed(this.destroyRef)
         ).subscribe(filter => {
             this.performSearch(filter);
         });
-    }
-
-    ngOnDestroy() {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
     onSearchInput(filter: string) {
@@ -120,15 +118,14 @@ export class LookupSearchComponent<T extends LookupItem = LookupItem> implements
         this.isLoading.set(true);
 
         this.searchFn()(filter).pipe(
-            takeUntil(this.destroy$)
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => this.isLoading.set(false))
         ).subscribe({
             next: results => {
                 this.searchResults.set(results);
-                this.isLoading.set(false);
             },
             error: () => {
                 this.searchResults.set([]);
-                this.isLoading.set(false);
             }
         });
     }

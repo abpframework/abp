@@ -18,6 +18,8 @@ import {
     model,
     OnInit,
     effect,
+    untracked,
+    signal,
 } from '@angular/core';
 import { finalize, switchMap, of } from 'rxjs';
 import { ResourcePermissionStateService } from '../../services/resource-permission-state.service';
@@ -25,6 +27,8 @@ import { ResourcePermissionListComponent } from './resource-permission-list/reso
 import { ResourcePermissionFormComponent } from './resource-permission-form/resource-permission-form.component';
 
 import { eResourcePermissionViewModes } from '../../enums/view-modes';
+
+const DEFAULT_MAX_RESULT_COUNT = 10;
 
 @Component({
     selector: 'abp-resource-permission-management',
@@ -55,33 +59,40 @@ export class ResourcePermissionManagementComponent implements OnInit {
 
     readonly visible = model<boolean>(false);
 
-    private previousVisible = false;
+    private readonly previousVisible = signal(false);
 
     constructor() {
         effect(() => {
-            this.state.resourceName.set(this.resourceName());
-            this.state.resourceKey.set(this.resourceKey());
-            this.state.resourceDisplayName.set(this.resourceDisplayName());
+            const resourceName = this.resourceName();
+            const resourceKey = this.resourceKey();
+            const resourceDisplayName = this.resourceDisplayName();
+
+            untracked(() => {
+                this.state.resourceName.set(resourceName);
+                this.state.resourceKey.set(resourceKey);
+                this.state.resourceDisplayName.set(resourceDisplayName);
+            });
         });
 
         effect(() => {
             const isVisible = this.visible();
-            if (isVisible && !this.previousVisible) {
+            const wasVisible = this.previousVisible();
+            if (isVisible && !wasVisible) {
                 this.openModal();
-            } else if (!isVisible && this.previousVisible) {
+            } else if (!isVisible && wasVisible) {
                 this.state.reset();
             }
-            this.previousVisible = isVisible;
+            untracked(() => this.previousVisible.set(isVisible));
         });
     }
 
     ngOnInit() {
-        this.list.maxResultCount = 10;
+        this.list.maxResultCount = DEFAULT_MAX_RESULT_COUNT;
 
         this.list.hookToQuery(query => {
             const allData = this.state.allResourcePermissions();
             const skipCount = query.skipCount || 0;
-            const maxResultCount = query.maxResultCount || 10;
+            const maxResultCount = query.maxResultCount || DEFAULT_MAX_RESULT_COUNT;
 
             const paginatedData = allData.slice(skipCount, skipCount + maxResultCount);
 
