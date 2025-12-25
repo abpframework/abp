@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "Przypisz posty na blogu do innego bloga",
     "SelectAnBlogToAssign": "Wybierz blog, do którego chcesz przypisać posty na blogu",
     "DeleteAllBlogPostsOfThisBlog": "Usuń wszystkie posty na blogu tego bloga",
-    "RequiredPermissionName": "Wymagana nazwa uprawnienia"
+    "RequiredPermissionName": "Wymagana nazwa uprawnienia",
+    "AllPosts": "Wszystkie posty",
+    "IsReadOnly": "Tylko do odczytu"
   }
 }

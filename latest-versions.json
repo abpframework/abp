@@ -1,5 +1,50 @@
 [
   {
+    "version": "9.3.7",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.3.7"
+    }
+  },
+  {
+    "version": "10.0.1",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "5.0.1"
+    }
+  },
+  {
+    "version": "10.0.0",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "5.0.0"
+    }
+  },
+  {
+    "version": "9.3.6",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.3.6"
+    }
+  },
+  {
+    "version": "9.3.5",
+    "releaseDate": "",
+    "type": "stable",
+    "message": "",
+    "leptonx": {
+      "version": "4.3.5"
+    }
+  },
+  {
     "version": "9.3.4",
     "releaseDate": "",
     "type": "stable",

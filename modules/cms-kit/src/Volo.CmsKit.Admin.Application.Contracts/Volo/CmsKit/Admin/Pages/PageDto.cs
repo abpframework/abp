@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
+using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Admin.Pages;
 
@@ -20,6 +21,8 @@ public class PageDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
     public string Style { get; set; }
 
     public bool IsHomePage { get; set; }
+
+    public PageStatus Status { get; set; }
 
     public string ConcurrencyStamp { get; set; }
 }

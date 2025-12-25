@@ -262,5 +262,7 @@
     "SelectAnBlogToAssign": "حدد مدونة لتعيين مشاركات المدونة إليها",
     "DeleteAllBlogPostsOfThisBlog": "حذف جميع مشاركات المدونة",
     "RequiredPermissionName": "اسم الإذن المطلوب",
+    "AllPosts": "جميع المشاركات",
+    "IsReadOnly": "للقراءة فقط"
   }
 }

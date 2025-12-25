@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Lösenord måste innehålla minst en versal ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Lösenord måste innehålla minst {0} tecken.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Lösenord måste innehålla minst {0} olika tecken.",
+    "Volo.Abp.Identity:PasswordInHistory": "Lösenord får inte matcha dina senaste {0} lösenord.",
     "Volo.Abp.Identity:RoleNotFound": "Roll {0} finns inte.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Användaren har redan ett lösenord inställt.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Användaren har redan rollen '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Nödvändig siffra",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Tvinga användare att regelbundet byta lösenord",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Period för byte av lösenord (dagar)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Aktivera förhindring av återanvändning av lösenord",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Antal förhindring av återanvändning av lösenord",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Aktiverad för nya användare",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Varaktighet för låsning (sekunder)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max misslyckade åtkomstförsök",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Om lösenorden måste innehålla en siffra.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Om användare tvingas byta lösenord med jämna mellanrum.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Antal dagar som en användares lösenord är giltigt.",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Om användare ska förhindras från att återanvända sina tidigare lösenord.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "Antalet tidigare lösenord som inte kan återanvändas.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Om en ny användare kan låsas ute.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Den tid som en användare är utelåst när en utelåsning inträffar.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Det antal misslyckade åtkomstförsök som tillåts innan en användare låses ut, förutsatt att låsning är aktiverad.",
@@ -130,6 +135,8 @@
     "ModificationTime": "Tid för modifiering",
     "PasswordUpdateTime": "Uppdateringstid för lösenord",
     "LockoutEndTime": "Sluttid för låsning",
-    "FailedAccessCount": "Antal misslyckade åtkomster"
+    "FailedAccessCount": "Antal misslyckade åtkomster",
+    "UserResourcePermissionProviderKeyLookupService": "Användare",
+    "RoleResourcePermissionProviderKeyLookupService": "Roll"
   }
 }

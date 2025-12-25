@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "تحديد الكل",
     "SaveWithoutAnyPermissionsWarningMessage": "هل أنت متأكد أنك تريد الحفظ بدون أي أذونات؟",
     "PermissionGroup": "مجموعة الأذونات",
-    "Filter": "تصفية"
+    "Filter": "تصفية",
+    "ResourcePermissions": "الأذونات",
+    "ResourcePermissionTarget": "الهدف",
+    "ResourcePermissionPermissions": "الأذونات",
+    "AddResourcePermission": "إضافة إذن",
+    "ResourcePermissionDeletionConfirmationMessage": "هل أنت متأكد أنك تريد حذف جميع الأذونات؟",
+    "UpdateResourcePermission": "تحديث الإذن",
+    "GrantAllResourcePermissions": "منح الكل",
+    "NoResourceProviderKeyLookupServiceFound": "لم يتم العثور على خدمة البحث عن مفتاح المزود",
+    "NoResourcePermissionFound": "لا توجد أي أذونات محددة."
   }
 }

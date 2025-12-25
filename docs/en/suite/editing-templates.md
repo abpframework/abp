@@ -27,7 +27,7 @@ There's a search box on the templates page. To find the related template, pick a
 There's a naming convention for the template files. 
 
 * If the template name has `Server` prefix, it's used for backend code like repositories, application services, localizations, controllers, permissions, mappings, unit tests.
-* If the template name has `Frontend.Angular` prefix, it's used for Angular code generation. The Angular code is being generated via [Angular Schematics](https://angular.io/guide/schematics).
+* If the template name has `Frontend.Angular` prefix, it's used for Angular code generation. The Angular code is being generated via [Angular Schematics](https://angular.dev/tools/cli/schematics).
 * If the template name has `Frontend.Mvc`  prefix, it's used for razor pages, menus, JavaScript, CSS files.
 * If the template name has `Frontend.Blazor` prefix, it's used for razor components.
 

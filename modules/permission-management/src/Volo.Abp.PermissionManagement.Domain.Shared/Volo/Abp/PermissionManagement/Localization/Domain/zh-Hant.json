@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "全選",
     "SaveWithoutAnyPermissionsWarningMessage": "您確定要在沒有任何權限的情況下保存嗎？",
     "PermissionGroup": "權限組",
-    "Filter": "過濾"
+    "Filter": "過濾",
+    "ResourcePermissions": "權限",
+    "ResourcePermissionTarget": "目標",
+    "ResourcePermissionPermissions": "權限",
+    "AddResourcePermission": "添加權限",
+    "ResourcePermissionDeletionConfirmationMessage": "您確定要刪除所有權限嗎？",
+    "UpdateResourcePermission": "更新權限",
+    "GrantAllResourcePermissions": "授予所有",
+    "NoResourceProviderKeyLookupServiceFound": "未找到提供者鍵查找服務",
+    "NoResourcePermissionFound": "未定義任何權限。"
   }
 }

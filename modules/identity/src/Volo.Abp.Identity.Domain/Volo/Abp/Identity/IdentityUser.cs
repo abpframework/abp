@@ -127,6 +127,11 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// </summary>
     public virtual DateTimeOffset? LastPasswordChangeTime { get; protected set; }
 
+    /// <summary>
+    /// Gets or sets the last sign-in time for the user.
+    /// </summary>
+    public virtual DateTimeOffset? LastSignInTime { get; protected set; }
+
     //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
     /// <summary>
@@ -153,6 +158,16 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// Navigation property for this organization units.
     /// </summary>
     public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
+
+    /// <summary>
+    /// Navigation property for this users password history.
+    /// </summary>
+    public virtual ICollection<IdentityUserPasswordHistory> PasswordHistories { get; protected set; }
+
+    /// <summary>
+    /// Navigation property for this users passkeys.
+    /// </summary>
+    public virtual ICollection<IdentityUserPasskey> Passkeys { get; protected set; }
 
     protected IdentityUser()
     {
@@ -182,6 +197,8 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
         Logins = new Collection<IdentityUserLogin>();
         Tokens = new Collection<IdentityUserToken>();
         OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
+        PasswordHistories = new Collection<IdentityUserPasswordHistory>();
+        Passkeys = new Collection<IdentityUserPasskey>();
     }
 
     public virtual void AddRole(Guid roleId)
@@ -345,6 +362,15 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
         );
     }
 
+    public virtual void AddPasswordHistory(string password)
+    {
+        PasswordHistories.Add(new IdentityUserPasswordHistory(
+            Id,
+            password,
+            TenantId)
+        );
+    }
+
     /// <summary>
     /// Use <see cref="IdentityUserManager.ConfirmEmailAsync"/> for regular email confirmation.
     /// Using this skips the confirmation process and directly sets the <see cref="EmailConfirmed"/>.
@@ -386,6 +412,27 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual void SetLastPasswordChangeTime(DateTimeOffset? lastPasswordChangeTime)
     {
         LastPasswordChangeTime = lastPasswordChangeTime;
+    }
+
+    public virtual void SetLastSignInTime(DateTimeOffset? lastSignInTime)
+    {
+        LastSignInTime = lastSignInTime;
+    }
+
+    [CanBeNull]
+    public virtual IdentityUserPasskey FindPasskey(byte[] credentialId)
+    {
+        return Passkeys.FirstOrDefault(x => x.UserId == Id && x.CredentialId.SequenceEqual(credentialId));
+    }
+
+    public virtual void AddPasskey(byte[] credentialId, IdentityPasskeyData passkeyData)
+    {
+        Passkeys.Add(new IdentityUserPasskey(Id, credentialId, passkeyData, TenantId));
+    }
+
+    public virtual void RemovePasskey(byte[] credentialId)
+    {
+        Passkeys.RemoveAll(x => x.CredentialId.SequenceEqual(credentialId));
     }
 
     public override string ToString()

@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "सभी का चयन करे",
     "SaveWithoutAnyPermissionsWarningMessage": "क्या आप वाकई बिना किसी अनुमति के सहेजना चाहते हैं?",
     "PermissionGroup": "अनुमति समूह",
-    "Filter": "फ़िल्टर"
+    "Filter": "फ़िल्टर",
+    "ResourcePermissions": "अनुमतियाँ",
+    "ResourcePermissionTarget": "लक्ष्य",
+    "ResourcePermissionPermissions": "अनुमतियाँ",
+    "AddResourcePermission": "अनुमति जोड़ें",
+    "ResourcePermissionDeletionConfirmationMessage": "क्या आप वाकई सभी अनुमतियां हटाना चाहते हैं?",
+    "UpdateResourcePermission": "अनुमति अपडेट करें",
+    "GrantAllResourcePermissions": "सभी प्रदान करें",
+    "NoResourceProviderKeyLookupServiceFound": "कोई प्रदाता कुंजी खोज सेवा नहीं मिली",
+    "NoResourcePermissionFound": "कोई अनुमति परिभाषित नहीं है।"
   }
 }

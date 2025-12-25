@@ -94,6 +94,15 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames { Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray() }).ToList();
     }
 
+    public virtual async Task<IdentityUser> FindByPasskeyIdAsync(byte[] credentialId, bool includeDetails = true, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(u => u.Passkeys.Any(x => x.CredentialId.SequenceEqual(credentialId)))
+            .OrderBy(x => x.Id)
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -468,11 +477,11 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     {
         var upperFilter = filter?.ToUpperInvariant();
         var query = await GetQueryableAsync();
-        
+
         if (id.HasValue)
         {
             return query.Where(x => x.Id == id);
-        }        
+        }
 
         if (roleId.HasValue)
         {

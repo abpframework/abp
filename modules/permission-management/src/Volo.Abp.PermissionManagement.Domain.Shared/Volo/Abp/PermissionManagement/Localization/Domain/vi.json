@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Chọn tất cả",
     "SaveWithoutAnyPermissionsWarningMessage": "Bạn có chắc chắn muốn lưu mà không có bất kỳ quyền nào không?",
     "PermissionGroup": "Nhóm quyền",
-    "Filter": "Lọc"
+    "Filter": "Lọc",
+    "ResourcePermissions": "Quyền",
+    "ResourcePermissionTarget": "Mục tiêu",
+    "ResourcePermissionPermissions": "Quyền",
+    "AddResourcePermission": "Thêm quyền",
+    "ResourcePermissionDeletionConfirmationMessage": "Bạn có chắc chắn muốn xóa tất cả quyền không?",
+    "UpdateResourcePermission": "Cập nhật quyền",
+    "GrantAllResourcePermissions": "Cấp tất cả",
+    "NoResourceProviderKeyLookupServiceFound": "Không tìm thấy dịch vụ tra cứu khóa nhà cung cấp",
+    "NoResourcePermissionFound": "Không có quyền nào được định nghĩa."
   }
 }

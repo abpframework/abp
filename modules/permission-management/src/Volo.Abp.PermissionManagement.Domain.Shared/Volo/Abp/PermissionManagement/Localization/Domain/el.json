@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Επιλογή όλων",
     "SaveWithoutAnyPermissionsWarningMessage": "Είστε βέβαιοι ότι θέλετε να αποθηκεύσετε χωρίς δικαιώματα;",
     "PermissionGroup": "Ομάδα δικαιωμάτων",
-    "Filter": "Φίλτρο"
+    "Filter": "Φίλτρο",
+    "ResourcePermissions": "Δικαιώματα",
+    "ResourcePermissionTarget": "Στόχος",
+    "ResourcePermissionPermissions": "Δικαιώματα",
+    "AddResourcePermission": "Προσθήκη δικαιώματος",
+    "ResourcePermissionDeletionConfirmationMessage": "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλα τα δικαιώματα;",
+    "UpdateResourcePermission": "Ενημέρωση δικαιώματος",
+    "GrantAllResourcePermissions": "Παραχώρηση όλων",
+    "NoResourceProviderKeyLookupServiceFound": "Δεν βρέθηκε υπηρεσία αναζήτησης κλειδιού παρόχου",
+    "NoResourcePermissionFound": "Δεν έχει οριστεί καμία άδεια."
   }
 }

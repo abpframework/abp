@@ -628,7 +628,7 @@ export const APP_ROUTES: Routes = [
   // ...
   {
     path: 'order-service',
-    children: ORDER_SERVICE_ROUTES,
+    loadChildren: () => import('ordering-service').then(c =>c.ORDER_SERVICE_ROUTES),
   },
 ];
 ```
@@ -636,12 +636,8 @@ export const APP_ROUTES: Routes = [
 ```typescript
 // order-service.routes.ts
 export const ORDER_SERVICE_ROUTES: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    component: RouterOutletComponent,
-  },
-  { path: 'orders', children: ORDER_ROUTES },
+  { path: 'orders', loadComponent: () => import('./order/order.component').then(c => c.OrderComponent) },
+  { path: '**', redirectTo: 'orders' }
 ];
 ```
 
@@ -657,17 +653,16 @@ import { OrderDto, OrderService } from './proxy/ordering-service/services';
 @Component({
   selector: 'lib-order',
   templateUrl: './order.component.html',
-  styleUrl: './order.component.css'
+  styleUrl: './order.component.css',
   imports: [CommonModule]
 })
 export class OrderComponent {
 
   items: OrderDto[] = [];
-
-  private readonly proxy = inject(OrderService);
+  private readonly orderService = inject(OrderService);
 
   constructor() {
-    this.proxy.getList().subscribe((res) => {
+    this.orderService.getList().subscribe((res) => {
       this.items = res;
     });
   }
@@ -686,11 +681,13 @@ export class OrderComponent {
                     <th>Product Id</th>
                     <th>Customer Name</th>
                 </tr>
-                <tr *ngFor="let item of items">
-                    <td>{%{{{item.id}}}%}</td>
-                    <td>{%{{{item.productId}}}%}</td>
-                    <td>{%{{{item.customerName}}}%}</td>
-                </tr>
+                @for (item of items; track item.id) {
+                    <tr>
+                        <td>{%{{{item.id}}}%}</td>
+                        <td>{%{{{item.productId}}}%}</td>
+                        <td>{%{{{item.customerName}}}%}</td>
+                    </tr>
+                }
             </thead>
         </table>
     </div>

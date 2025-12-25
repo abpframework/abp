@@ -159,7 +159,7 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
                 StringComparison.OrdinalIgnoreCase
             ).ShouldBeGreaterThan(0);
         }
-        
+
         users = await UserRepository.GetListAsync(null, 5, 0, null, roleId: TestData.RoleManagerId);
         users.ShouldContain(x => x.UserName == "john.nash");
         users.ShouldContain(x => x.UserName == "neo");
@@ -293,5 +293,24 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         ou112Users.Count.ShouldBe(2);
         ou112Users.ShouldContain(x => x.UserName == "john.nash");
         ou112Users.ShouldContain(x => x.UserName == "neo");
+    }
+
+
+    [Fact]
+    public async Task FindByPasskeyIdAsync()
+    {
+        var user = await UserRepository.FindByPasskeyIdAsync(TestData.PasskeyCredentialId1);
+        user.ShouldNotBeNull();
+        user.Id.ShouldBe(TestData.UserJohnId);
+
+        user = await UserRepository.FindByPasskeyIdAsync(TestData.PasskeyCredentialId2);
+        user.ShouldNotBeNull();
+        user.Id.ShouldBe(TestData.UserJohnId);
+
+        user = await UserRepository.FindByPasskeyIdAsync(TestData.PasskeyCredentialId3);
+        user.ShouldNotBeNull();
+        user.Id.ShouldBe(TestData.UserNeoId);
+
+        (await UserRepository.FindByPasskeyIdAsync((byte[])[1, 2, 3])).ShouldBeNull();
     }
 }

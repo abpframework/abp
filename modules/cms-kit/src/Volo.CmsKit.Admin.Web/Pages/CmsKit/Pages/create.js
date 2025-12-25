@@ -4,7 +4,8 @@ $(function () {
     var $createForm = $('#form-page-create');
     var $title = $('#ViewModel_Title');
     var $slug = $('#ViewModel_Slug');
-    var $buttonSubmit = $('#button-page-create');
+    var $buttonSaveDraft = $('#button-page-save-draft');
+    var $buttonPublish = $('#button-page-publish');
 
     var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
@@ -49,8 +50,15 @@ $(function () {
         }
     });
 
-    $buttonSubmit.click(function (e) {
+    $buttonSaveDraft.click(function (e) {
         e.preventDefault();
+        $('#ViewModel_Status').val(0); // Draft = 0
+        $createForm.submit();
+    });
+
+    $buttonPublish.click(function (e) {
+        e.preventDefault();
+        $('#ViewModel_Status').val(1); // Published = 1
         $createForm.submit();
     });
 

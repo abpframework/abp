@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -10,6 +11,10 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     public string GroupName { get; set; }
 
     public string Name { get; set; }
+
+    public string ResourceName { get; set; }
+
+    public string ManagementPermissionName { get; set; }
 
     public string ParentName { get; set; }
 
@@ -41,6 +46,8 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         Guid id,
         string groupName,
         string name,
+        string resourceName,
+        string managementPermissionName,
         string parentName,
         string displayName,
         bool isEnabled = true,
@@ -49,8 +56,14 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         string stateCheckers = null)
         : base(id)
     {
-        GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), PermissionGroupDefinitionRecordConsts.MaxNameLength);
+        GroupName = groupName;
+        if (resourceName == null)
+        {
+            GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), PermissionGroupDefinitionRecordConsts.MaxNameLength);
+        }
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionDefinitionRecordConsts.MaxNameLength);
+        ResourceName = resourceName;
+        ManagementPermissionName = managementPermissionName;
         ParentName = Check.Length(parentName, nameof(parentName), PermissionDefinitionRecordConsts.MaxNameLength);
         DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionDefinitionRecordConsts.MaxDisplayNameLength);
         IsEnabled = isEnabled;
@@ -65,6 +78,16 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
     public bool HasSameData(PermissionDefinitionRecord otherRecord)
     {
         if (Name != otherRecord.Name)
+        {
+            return false;
+        }
+
+        if (ResourceName != otherRecord.ResourceName)
+        {
+            return false;
+        }
+
+        if (ManagementPermissionName != otherRecord.ManagementPermissionName)
         {
             return false;
         }
@@ -117,6 +140,16 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         if (Name != otherRecord.Name)
         {
             Name = otherRecord.Name;
+        }
+
+        if (ResourceName != otherRecord.ResourceName)
+        {
+            ResourceName = otherRecord.ResourceName;
+        }
+
+        if (ManagementPermissionName != otherRecord.ManagementPermissionName)
+        {
+            ManagementPermissionName = otherRecord.ManagementPermissionName;
         }
 
         if (GroupName != otherRecord.GroupName)

@@ -258,6 +258,18 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "FilterOnFavorites",
+                  "jsonName": null,
+                  "type": "System.Boolean?",
+                  "typeSimple": "boolean?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "Sorting",
                   "jsonName": null,
                   "type": "System.String",

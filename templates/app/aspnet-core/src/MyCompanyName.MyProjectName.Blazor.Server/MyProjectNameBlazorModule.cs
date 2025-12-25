@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Blazor.Server.Components;
 using MyCompanyName.MyProjectName.Blazor.Server.Menus;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;

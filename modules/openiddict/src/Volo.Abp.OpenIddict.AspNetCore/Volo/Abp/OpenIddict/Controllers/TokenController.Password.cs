@@ -405,6 +405,9 @@ public partial class TokenController
             }
         );
 
+        user.SetLastSignInTime(DateTimeOffset.UtcNow);
+        await UserManager.UpdateAsync(user);
+
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 

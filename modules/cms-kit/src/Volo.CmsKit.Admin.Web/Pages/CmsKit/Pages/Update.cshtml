@@ -69,6 +69,8 @@
 
             <abp-select id="Layout" asp-for="ViewModel.LayoutName" asp-items="@LayoutConstants.GetLayoutsSelectList()" label="@L["SelectLayout"]"></abp-select>
 
+            <abp-input asp-for="@Model.ViewModel.Status" />
+
             <abp-input asp-for="@Model.ViewModel.Content" />
 
             <abp-tabs tab-style="Tab">
@@ -126,7 +128,8 @@
         </form>
     </abp-card-body>
     <abp-card-footer>
-        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" id="button-page-update" />
+        <abp-button button-type="Secondary" type="button" text="@L["SaveAsDraft"].Value" id="button-page-save-draft" />
+        <abp-button button-type="Primary" type="button" text="@L["Publish"].Value" id="button-page-publish" />
     </abp-card-footer>
 </abp-card>
 <input hidden id="GeneratedWidgetText" />

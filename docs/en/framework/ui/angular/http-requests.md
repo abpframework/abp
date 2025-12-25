@@ -9,7 +9,7 @@
 
 ## About HttpClient
 
-Angular has the amazing [HttpClient](https://angular.io/guide/http) for communication with backend services. It is a layer on top and a simplified representation of [XMLHttpRequest Web API](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest). It also is the recommended agent by Angular for any HTTP request. There is nothing wrong with using the `HttpClient` in your ABP project.
+Angular has the amazing [HttpClient](https://angular.dev/guide/http/making-requests) for communication with backend services. It is a layer on top and a simplified representation of [XMLHttpRequest Web API](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest). It also is the recommended agent by Angular for any HTTP request. There is nothing wrong with using the `HttpClient` in your ABP project.
 
 However, `HttpClient` leaves error handling to the caller (method). In other words, HTTP errors are handled manually and by hooking into the observer of the `Observable` returned.
 
@@ -93,7 +93,7 @@ postFoo(body: Foo) {
 }
 ```
 
-You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.io/api/common/http/HttpRequest) class in Angular.
+You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.dev/api/common/http/HttpRequest) class in Angular.
 
 ### How to Disable Default Error Handler of RestService
 

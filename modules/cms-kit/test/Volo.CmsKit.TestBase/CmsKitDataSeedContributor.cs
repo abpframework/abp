@@ -358,7 +358,7 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
     private async Task SeedPagesAsync()
     {
-        var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Content_1);
+        var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Content_1, status:_cmsKitTestData.Page_1_Status);
         await _pageRepository.InsertAsync(page1);
 
         var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug, _cmsKitTestData.Content_2);

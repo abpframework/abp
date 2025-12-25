@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Passwords must have at least one uppercase ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Passwords must be at least {0} characters.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Passwords must use at least {0} different characters.",
+    "Volo.Abp.Identity:PasswordInHistory": "Passwords must not match your last {0} passwords.",
     "Volo.Abp.Identity:RoleNotFound": "Role {0} does not exist.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "User already has a password set.",
     "Volo.Abp.Identity:UserAlreadyInRole": "User already in role '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Required digit",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Force users to periodically change password",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Password change period(days)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Enable prevent password reuse",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Prevent password reuse count",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Enabled for new users",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Lockout duration(seconds)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max failed access attempts",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "If passwords must contain a digit.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Whether users are forced to periodically change their password.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "The number of days a user's password is valid for.",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Whether to prevent users from reusing their previous passwords.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "The number of previous passwords that cannot be reused.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Whether a new user can be locked out.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "The duration a user is locked out for when a lockout occurs.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "The number of failed access attempts allowed before a user is locked out, assuming lock out is enabled.",
@@ -130,6 +135,8 @@
     "ModificationTime": "Modification time",
     "PasswordUpdateTime": "Password update time",
     "LockoutEndTime": "Lockout end time",
-    "FailedAccessCount": "Failed access count"
+    "FailedAccessCount": "Failed access count",
+    "UserResourcePermissionProviderKeyLookupService": "User",
+    "RoleResourcePermissionProviderKeyLookupService": "Role"
   }
 }

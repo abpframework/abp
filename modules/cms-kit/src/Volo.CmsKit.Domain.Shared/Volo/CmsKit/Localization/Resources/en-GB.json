@@ -33,6 +33,8 @@
     "AssignBlogPostsToOtherBlog": "Assign blog posts to another blog",
     "SelectAnBlogToAssign": "Select a blog to assign",
     "DeleteAllBlogPostsOfThisBlog": "Delete all blog posts of this blog",
-    "RequiredPermissionName": "Required permission name"
+    "RequiredPermissionName": "Required permission name",
+    "AllPosts": "All posts",
+    "IsReadOnly": "Readonly"
   }
 }

@@ -37,7 +37,7 @@
                     },
                     {
                       "name": "assignToBlogId",
-                      "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
                       "type": "System.Guid?",
                       "typeSimple": "string?",
                       "isOptional": true,
@@ -419,7 +419,7 @@
                 },
                 {
                   "name": "assignToBlogId",
-                  "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
                   "type": "System.Guid?",
                   "typeSimple": "string?",
                   "isOptional": false,
@@ -1011,8 +1011,8 @@
                   "nameOnMethod": "input",
                   "name": "Status",
                   "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
+                  "type": "Volo.CmsKit.Blogs.BlogPostStatus?",
+                  "typeSimple": "enum?",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1532,8 +1532,8 @@
                   "nameOnMethod": "input",
                   "name": "CommentApproveState",
                   "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
+                  "type": "Volo.CmsKit.Comments.CommentApproveState",
+                  "typeSimple": "enum",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -2190,7 +2190,7 @@
                   "parametersOnMethod": [
                     {
                       "name": "parentId",
-                      "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                      "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
                       "type": "System.Guid?",
                       "typeSimple": "string?",
                       "isOptional": true,
@@ -2477,6 +2477,18 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "Status",
+                  "jsonName": null,
+                  "type": "Volo.CmsKit.Pages.PageStatus?",
+                  "typeSimple": "enum?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "Sorting",
                   "jsonName": null,
                   "type": "System.String",
@@ -2565,7 +2577,7 @@
               "parametersOnMethod": [
                 {
                   "name": "parentId",
-                  "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
+                  "typeAsString": "System.Nullable`1[[System.Guid, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib",
                   "type": "System.Guid?",
                   "typeSimple": "string?",
                   "isOptional": true,
@@ -2781,6 +2793,18 @@
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Status",
+                  "jsonName": null,
+                  "type": "Volo.CmsKit.Pages.PageStatus?",
+                  "typeSimple": "enum?",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,

@@ -31,6 +31,9 @@ public class FeaturesModalModel : CmsKitAdminPageModel
     {
         var blogFeatureDtos = await BlogFeatureAdminAppService.GetListAsync(BlogId);
 
+        //Sort by localized feature name
+        blogFeatureDtos.Sort((x, y) => string.Compare(L[x.FeatureName].Value, L[y.FeatureName].Value, StringComparison.CurrentCultureIgnoreCase));
+
         Items = ObjectMapper.Map<List<BlogFeatureDto>, List<BlogFeatureViewModel>>(blogFeatureDtos);
     }
 

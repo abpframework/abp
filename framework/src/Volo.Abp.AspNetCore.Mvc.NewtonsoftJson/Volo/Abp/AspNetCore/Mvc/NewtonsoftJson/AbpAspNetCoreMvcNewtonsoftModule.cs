@@ -13,7 +13,7 @@ public class AbpAspNetCoreMvcNewtonsoftModule : AbpModule
     {
         context.Services.AddMvcCore().AddNewtonsoftJson();
 
-        context.Services.AddOptions<MvcNewtonsoftJsonOptions>()
+        context.Services.AddAbpOptions<MvcNewtonsoftJsonOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.SerializerSettings.ContractResolver =

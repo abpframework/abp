@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Valitse kaikki",
     "SaveWithoutAnyPermissionsWarningMessage": "Haluatko varmasti tallentaa ilman käyttöoikeuksia?",
     "PermissionGroup": "Käyttöoikeus",
-    "Filter": "Suodatus"
+    "Filter": "Suodatus",
+    "ResourcePermissions": "Käyttöoikeudet",
+    "ResourcePermissionTarget": "Kohde",
+    "ResourcePermissionPermissions": "Käyttöoikeudet",
+    "AddResourcePermission": "Lisää käyttöoikeus",
+    "ResourcePermissionDeletionConfirmationMessage": "Haluatko varmasti poistaa kaikki käyttöoikeudet?",
+    "UpdateResourcePermission": "Päivitä käyttöoikeus",
+    "GrantAllResourcePermissions": "Myönnä kaikki",
+    "NoResourceProviderKeyLookupServiceFound": "Palveluntarjoajan avaimen hakupalvelua ei löytynyt",
+    "NoResourcePermissionFound": "Ei käyttöoikeuksia määritetty."
   }
 }

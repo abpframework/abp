@@ -19,6 +19,7 @@ namespace Volo.Docs.Markdown
               .UseGridTables()
               .UsePipeTables()
               .UseHighlightedCodeBlocks()
+              .UseAlertBlocks()
               .Build();
         }
 

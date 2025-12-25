@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "Blogbejegyzések hozzárendelése egy másik bloghoz",
     "SelectAnBlogToAssign": "Válasszon egy blogot a hozzárendeléshez",
     "DeleteAllBlogPostsOfThisBlog": "Ez a művelet törli az összes blogbejegyzést ebből a blogból. Biztos vagy benne?",
-    "RequiredPermissionName": "Szükséges engedély neve"
+    "RequiredPermissionName": "Szükséges engedély neve",
+    "AllPosts": "Minden bejegyzés",
+    "IsReadOnly": "Csak olvasható"
   }
 }

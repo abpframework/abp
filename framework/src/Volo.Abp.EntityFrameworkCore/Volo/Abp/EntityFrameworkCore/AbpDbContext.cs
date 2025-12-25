@@ -686,6 +686,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
+        string? concurrencyStamp = null;
+        if (entry.Entity is IHasConcurrencyStamp hasConcurrencyStamp)
+        {
+            concurrencyStamp = hasConcurrencyStamp.ConcurrencyStamp;
+        }
+
         ExtraPropertyDictionary? originalExtraProperties = null;
         if (entry.Entity is IHasExtraProperties)
         {
@@ -693,6 +699,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         entry.Reload();
+
+        if (concurrencyStamp != null && entry.Entity is IHasConcurrencyStamp)
+        {
+            ObjectHelper.TrySetProperty(entry.Entity.As<IHasConcurrencyStamp>(), x => x.ConcurrencyStamp, () => concurrencyStamp);
+        }
 
         if (entry.Entity is IHasExtraProperties)
         {

@@ -70,6 +70,9 @@ public class UpdateModel : CmsKitAdminPageModel
         public string Style { get; set; }
 
         [HiddenInput]
+        public PageStatus Status { get; set; }
+
+        [HiddenInput]
         public string ConcurrencyStamp { get; set; }
     }
 }

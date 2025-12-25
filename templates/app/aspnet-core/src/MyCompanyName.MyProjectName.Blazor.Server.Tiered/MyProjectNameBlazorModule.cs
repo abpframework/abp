@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Blazor.Server.Tiered.Components;
 using MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus;
 using MyCompanyName.MyProjectName.Localization;

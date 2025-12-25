@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Parolele trebuie să conţină cel puţin o majusculă ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Parolele trebuie să aibă cel puţin {0} caractere.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Parolele trebuie să conţină cel puţin {0} caractere diferite.",
+    "Volo.Abp.Identity:PasswordInHistory": "Parolele nu trebuie să se potrivească cu ultimele {0} parole ale dvs.",
     "Volo.Abp.Identity:RoleNotFound": "Rolul {0} nu există does not exist.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Utilizatorul şi-a setat deja o parolă.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Utilizatorul are deja rolul '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Numărul de cifre",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Forţează utilizatorii să schimbe parola periodic",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Perioada de schimbare a parolei (zile)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Activează prevenirea reutilizării parolei",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Număr de prevenire a reutilizării parolei",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Activat pentru noi utilizatori",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Durata blocării (secunde)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Numărul maxim de încercări de acces eşuate",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Dacă parolele trebuie să conţină o cifră.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Dacă utilizatorii trebuie să schimbe parola periodic.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Perioada de schimbare a parolei (zile).",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Dacă să împiedice utilizatorii să își reutilizeze parolele anterioare.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "Numărul de parole anterioare care nu pot fi reutilizate.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Dacă un utilizator nou poate fi blocat.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Durata blocării unui utilizator când intervine blocarea.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Numărul de accesări eşuate permise înainte de a bloca un utilizator, presupunând că blocarea este activată.",
@@ -130,6 +135,8 @@
     "ModificationTime": "Timp de modificare",
     "PasswordUpdateTime": "Ora actualizării parolei",
     "LockoutEndTime": "Ora de încheiere a blocării",
-    "FailedAccessCount": "Număr de acces eșuat"
+    "FailedAccessCount": "Număr de acces eșuat",
+    "UserResourcePermissionProviderKeyLookupService": "Utilizator",
+    "RoleResourcePermissionProviderKeyLookupService": "Rol"
   }
 }

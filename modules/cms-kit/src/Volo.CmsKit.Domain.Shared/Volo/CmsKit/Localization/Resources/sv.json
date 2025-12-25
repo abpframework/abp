@@ -261,6 +261,8 @@
     "AssignBlogPostsToOtherBlog": "Tilldela blogginlägg till en annan blogg",
     "SelectAnBlogToAssign": "Välj en blogg att tilldela",
     "DeleteAllBlogPostsOfThisBlog": "Radera alla blogginlägg i denna blogg",
-    "RequiredPermissionName": "Nödvändigt behörighetsnamn"
+    "RequiredPermissionName": "Nödvändigt behörighetsnamn",
+    "AllPosts": "Alla inlägg",
+    "IsReadOnly": "Skrivskyddad"
   }
 }

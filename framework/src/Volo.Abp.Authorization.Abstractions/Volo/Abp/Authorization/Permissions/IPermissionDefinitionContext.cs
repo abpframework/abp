@@ -1,5 +1,7 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
@@ -46,4 +48,16 @@ public interface IPermissionDefinitionContext
     /// <param name="name">Name of the permission</param>
     /// </summary>
     PermissionDefinition? GetPermissionOrNull(string name);
+
+    PermissionDefinition AddResourcePermission(
+        string name,
+        string resourceName,
+        string managementPermissionName,
+        ILocalizableString? displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true);
+
+    PermissionDefinition? GetResourcePermissionOrNull([NotNull] string resourceName, [NotNull] string name);
+
+    void RemoveResourcePermission([NotNull] string resourceName, [NotNull] string name);
 }

@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Heslá musia obsahovať aspoň jedno veľké písmeno ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Heslá musia mať aspoň {0} znakov.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Heslá nesmú obsahovať viac ako {0} opakujúcich sa znakov.",
+    "Volo.Abp.Identity:PasswordInHistory": "Heslá sa nesmú zhodovať s vašimi poslednými {0} heslami.",
     "Volo.Abp.Identity:RoleNotFound": "Rola {0} neexistuje.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Používateľ už má nastavené heslo.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Používateľ už má rolu '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Požadovaná číslica",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Vynútiť používateľom pravidelne meniť heslo",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Doba platnosti hesla (v dňoch)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Povoliť zabránenie opätovnému použitiu hesla",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Počet zabránenia opätovnému použitiu hesla",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Povolené pre nových používateľov",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Trvanie uzamknutia (v sekundách)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Maximálny počet neúspešných pokusov o prístup",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Či heslá musia obsahovať číslicu.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Či sa používateľom musí pravidelne meniť heslo.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Doba platnosti hesla (v dňoch).",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Či zabrániť používateľom v opätovnom použití ich predchádzajúcich hesiel.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "Počet predchádzajúcich hesiel, ktoré nemožno znova použiť.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Či môže byť nový používateľ uzamknutý.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Doba, počas ktorej je používateľ uzamknutý, keď dôjde k uzamknutiu.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Počet neúspešných pokusov o prístup pred tým, ako bol používateľ uzamknutý za predpokladu, že je uzamknutie povolené.",
@@ -130,6 +135,8 @@
     "ModificationTime": "Čas úpravy",
     "PasswordUpdateTime": "Čas aktualizácie hesla",
     "LockoutEndTime": "Čas ukončenia uzamknutia",
-    "FailedAccessCount": "Počet neúspešných prístupov"
+    "FailedAccessCount": "Počet neúspešných prístupov",
+    "UserResourcePermissionProviderKeyLookupService": "Používateľ",
+    "RoleResourcePermissionProviderKeyLookupService": "Rola"
   }
 }

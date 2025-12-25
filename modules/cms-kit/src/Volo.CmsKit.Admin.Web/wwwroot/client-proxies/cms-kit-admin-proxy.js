@@ -340,7 +340,7 @@
 
     volo.cmsKit.admin.menus.menuItemAdmin.getPageLookup = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/menu-items/lookup/pages' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-admin/menu-items/lookup/pages' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'status', value: input.status }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };
@@ -376,7 +376,7 @@
 
     volo.cmsKit.admin.pages.pageAdmin.getList = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-admin/pages' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-admin/pages' + abp.utils.buildQueryString([{ name: 'filter', value: input.filter }, { name: 'status', value: input.status }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };

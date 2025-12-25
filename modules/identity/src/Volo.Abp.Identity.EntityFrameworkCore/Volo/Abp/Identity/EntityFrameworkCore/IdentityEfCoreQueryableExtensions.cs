@@ -17,7 +17,9 @@ public static class IdentityEfCoreQueryableExtensions
             .Include(x => x.Logins)
             .Include(x => x.Claims)
             .Include(x => x.Tokens)
-            .Include(x => x.OrganizationUnits);
+            .Include(x => x.OrganizationUnits)
+            .Include(x => x.PasswordHistories)
+            .Include(x => x.Passkeys);
     }
 
     public static IQueryable<IdentityRole> IncludeDetails(this IQueryable<IdentityRole> queryable, bool include = true)

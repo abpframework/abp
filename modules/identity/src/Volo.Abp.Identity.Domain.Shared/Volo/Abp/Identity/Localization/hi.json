@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "पासवर्ड में कम से कम एक अपरकेस ('ए' - 'जेड') होना चाहिए।",
     "Volo.Abp.Identity:PasswordTooShort": "पासवर्ड कम से कम {0} वर्ण का होना चाहिए।",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "पासवर्ड में कम से कम {0} अद्वितीय वर्ण होना चाहिए।",
+    "Volo.Abp.Identity:PasswordInHistory": "पासवर्ड आपके अंतिम {0} पासवर्ड से मेल नहीं खाना चाहिए।",
     "Volo.Abp.Identity:RoleNotFound": "भूमिका {0} मौजूद नहीं है।",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "उपयोगकर्ता के पास पहले से ही एक पासवर्ड सेट है।",
     "Volo.Abp.Identity:UserAlreadyInRole": "उपयोगकर्ता पहले से ही '{0}' की भूमिका में है।",
@@ -76,7 +77,7 @@
     "Volo.Abp.Identity:010007": "आप अपनी दो कारक सेटिंग नहीं बदल सकते।",
     "Volo.Abp.Identity:010008": "इसे दो कारक सेटिंग बदलने की अनुमति नहीं है।",
     "Volo.Abp.Identity:010009": "आप अपने आप को अधिकृत नहीं कर सकते हैं!",
-    "Volo.Abp.Identity:010021" : "नाम '{0}' पहले से ही लिया गया है।",
+    "Volo.Abp.Identity:010021": "नाम '{0}' पहले से ही लिया गया है।",
     "Volo.Abp.Identity:010022": "स्थैतिक भूमिकाओं का नाम नहीं बदला जा सकता है।",
     "Volo.Abp.Identity:010023": "स्थैतिक भूमिकाओं को हटाया नहीं जा सकता।",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "उपयोगकर्ता के लिए अधिकतम अनुमत संगठन इकाई सदस्यता गणना",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "आवश्यक अंक",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "उपयोगकर्ताओं को अपने पासवर्ड को अक्षम करने के लिए बाधित करने की आवश्यकता है",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "पासवर्ड बदलने की अवधि (दिन)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "पासवर्ड पुनः उपयोग रोकथाम सक्षम करें",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "पासवर्ड पुनः उपयोग रोकथाम गणना",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "नए उपयोगकर्ताओं के लिए सक्षम है",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "तालाबंदी अवधि (सेकंड)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "अधिकतम पहुँच प्रयास विफल",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "यदि पासवर्ड में एक अंक होना चाहिए।",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "यदि उपयोगकर्ताओं को अपने पासवर्ड को अक्षम करने के लिए बाधित करने की आवश्यकता है।",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "उपयोगकर्ता के पासवर्ड को बदलने की अनुमति देने के लिए अवधि (दिन)।",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "क्या उपयोगकर्ताओं को उनके पिछले पासवर्ड का पुनः उपयोग करने से रोकना है।",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "पिछले पासवर्ड की संख्या जिन्हें पुनः उपयोग नहीं किया जा सकता।",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "क्या कोई नया उपयोगकर्ता लॉक किया जा सकता है।",
     "Description:Abp.Identity.Lockout.LockoutDuration": "जब लॉकआउट होता है, तो उपयोगकर्ता की अवधि लॉक हो जाती है।",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "उपयोगकर्ता द्वारा लॉक किए जाने से पहले अनुमति प्राप्त विफल प्रयासों की संख्या, यह मानकर कि लॉक आउट सक्षम है।",
@@ -130,6 +135,8 @@
     "ModificationTime": "संशोधन का समय",
     "PasswordUpdateTime": "पासवर्ड अद्यतन समय",
     "LockoutEndTime": "तालाबंदी समाप्ति समय",
-    "FailedAccessCount": "विफल पहुंच गणना"
+    "FailedAccessCount": "विफल पहुंच गणना",
+    "UserResourcePermissionProviderKeyLookupService": "उपयोगकर्ता",
+    "RoleResourcePermissionProviderKeyLookupService": "भूमिका"
   }
 }

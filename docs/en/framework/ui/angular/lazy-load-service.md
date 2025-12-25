@@ -44,10 +44,13 @@ The first parameter of `load` method expects a `LoadingStrategy`. If you pass a 
 ```js
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="libraryLoaded$ | async"></some-component>
+  @if (libraryLoaded$ | async) {
+    <some-component/>
+  }
   `
 })
 class DemoComponent {
@@ -59,7 +62,7 @@ class DemoComponent {
 }
 ```
 
-The `load` method returns an observable to which you can subscibe in your component or with an `async` pipe. In the example above, the `NgIf` directive will render `<some-component>` only **if the script gets successfully loaded or is already loaded before**.
+The `load` method returns an observable to which you can subscibe in your component or with an `async` pipe. In the example above, the `@if(...)` directive will render `<some-component>` only **if the script gets successfully loaded or is already loaded before**.
 
 > You can subscribe multiple times in your template with `async` pipe. The Scripts will only be loaded once.
 
@@ -74,10 +77,13 @@ If you pass a `StyleLoadingStrategy` instance as the first parameter of `load` m
 ```js
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="stylesLoaded$ | async"></some-component>
+    @if (stylesLoaded$ | async) {
+      <some-component/>
+    }
   `
 })
 class DemoComponent {
@@ -89,7 +95,7 @@ class DemoComponent {
 }
 ```
 
-The `load` method returns an observable to which you can subscibe in your component or with an `AsyncPipe`. In the example above, the `NgIf` directive will render `<some-component>` only **if the style gets successfully loaded or is already loaded before**.
+The `load` method returns an observable to which you can subscibe in your component or with an `AsyncPipe`. In the example above, the `@if(...)` directive will render `<some-component>` only **if the style gets successfully loaded or is already loaded before**.
 
 > You can subscribe multiple times in your template with `async` pipe. The styles will only be loaded once.
 
@@ -126,10 +132,13 @@ A common usecase is **loading multiple scripts and/or styles before using a feat
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { forkJoin } from 'rxjs';
 import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="scriptsAndStylesLoaded$ | async"></some-component>
+    @if (scriptsAndStylesLoaded$ | async) {
+      <some-component />
+    }
   `
 })
 class DemoComponent {
@@ -168,10 +177,13 @@ Another frequent usecase is **loading dependent scripts in order**:
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { concat } from 'rxjs';
 import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="scriptsLoaded$ | async"></some-component>
+    @if (scriptsLoaded$ | async) {
+      <some-component />
+    }
   `
 })
 class DemoComponent {

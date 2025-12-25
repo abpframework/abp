@@ -728,43 +728,43 @@ Then, we can use the `TodoService` to use the server-side HTTP APIs, as we'll do
 Open the `/angular/src/app/home/home.component.ts` file and replace its content with the following code block:
 
 ```ts
-import { ToasterService } from "@abp/ng.theme.shared";
-import { Component, OnInit, inject } from '@angular/core';
-import { TodoItemDto } from "@proxy/services/dtos";
-import { TodoService } from "@proxy/services";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import { ToasterService } from '@abp/ng.theme.shared';
+import { TodoItemDto, TodoService } from '@proxy';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [FormsModule]
 })
 export class HomeComponent implements OnInit {
 
-  todoItems: TodoItemDto[];
-  newTodoText: string;
+    todoItems: TodoItemDto[];
+    newTodoText: string;
+    readonly todoService = inject(TodoService);
+    readonly toasterService = inject(ToasterService);
 
-  private readonly todoService = inject(TodoService);
-  private readonly toasterService = inject(ToasterService);
+    ngOnInit(): void {
+        this.todoService.getList().subscribe(response => {
+            this.todoItems = response;
+        });
+    }
 
-  ngOnInit(): void {
-    this.todoService.getList().subscribe(response => {
-      this.todoItems = response;
-    });
-  }
-  
-  create(): void {
-    this.todoService.create(this.newTodoText).subscribe((result) => {
-      this.todoItems = this.todoItems.concat(result);
-      this.newTodoText = null;
-    });
-  }
+    create(): void{
+        this.todoService.create(this.newTodoText).subscribe((result) => {
+            this.todoItems = this.todoItems.concat(result);
+            this.newTodoText = null;
+        });
+    }
 
-  delete(id: string): void {
-    this.todoService.delete(id).subscribe(() => {
-      this.todoItems = this.todoItems.filter(item => item.id !== id);
-      this.toasterService.info('Deleted the todo item.');
-    });
-  }  
+    delete(id: string): void {
+        this.todoService.delete(id).subscribe(() => {
+            this.todoItems = this.todoItems.filter(item => item.id !== id);
+            this.toasterService.info('Deleted the todo item.');
+        });
+    }
 }
 ```
 
@@ -776,30 +776,33 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 
 ````html
 <div class="container">
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">TODO LIST</div>
-    </div>
-    <div class="card-body">
-      <!-- FORM FOR NEW TODO ITEMS -->
-      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
-        <div class="col-12">
-          <div class="input-group">
-            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
-          </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">TODO LIST</div>
         </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="card-body">
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+            <!-- TODO ITEMS LIST -->
+            <ul id="TodoList">
+                @for (todoItem of todoItems; track todoItem.id) {
+                <li>
+                    <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
+                </li>
+                }
+            </ul>
         </div>
-      </form>
-      <!-- TODO ITEMS LIST -->
-      <ul id="TodoList">
-        <li *ngFor="let todoItem of todoItems">
-          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
-        </li>
-      </ul>
     </div>
-  </div>
 </div>
 ````
 

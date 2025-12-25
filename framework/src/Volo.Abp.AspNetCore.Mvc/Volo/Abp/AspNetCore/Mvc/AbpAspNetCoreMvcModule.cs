@@ -165,7 +165,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
         context.Services.AddSingleton<ValidationAttributeAdapterProvider>();
 
         context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IActionDescriptorProvider, AbpMvcActionDescriptorProvider>());
-        context.Services.AddOptions<MvcOptions>()
+        context.Services.AddAbpOptions<MvcOptions>()
             .Configure<IServiceProvider>((mvcOptions, serviceProvider) =>
             {
                 mvcOptions.AddAbp(context.Services);

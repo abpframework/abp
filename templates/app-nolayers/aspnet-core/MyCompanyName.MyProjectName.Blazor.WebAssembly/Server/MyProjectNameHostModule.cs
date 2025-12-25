@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Components;

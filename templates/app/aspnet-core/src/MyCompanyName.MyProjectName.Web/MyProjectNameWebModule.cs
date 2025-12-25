@@ -10,7 +10,7 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account.Web;

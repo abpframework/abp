@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Vybrat vše",
     "SaveWithoutAnyPermissionsWarningMessage": "Opravdu chcete ukládat bez jakýchkoli oprávnění?",
     "PermissionGroup": "Skupina oprávnění",
-    "Filter": "Filtr"
+    "Filter": "Filtr",
+    "ResourcePermissions": "Oprávnění",
+    "ResourcePermissionTarget": "Cíl",
+    "ResourcePermissionPermissions": "Oprávnění",
+    "AddResourcePermission": "Přidat oprávnění",
+    "ResourcePermissionDeletionConfirmationMessage": "Opravdu chcete smazat všechna oprávnění?",
+    "UpdateResourcePermission": "Aktualizovat oprávnění",
+    "GrantAllResourcePermissions": "Udělit vše",
+    "NoResourceProviderKeyLookupServiceFound": "Nebyla nalezena služba pro vyhledávání klíče poskytovatele zdrojů",
+    "NoResourcePermissionFound": "Pro aktuální prostředek není definováno žádné oprávnění."
   }
 }

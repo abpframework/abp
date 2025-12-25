@@ -61,6 +61,7 @@
     "ProfilePicture": "个人资料图片",
     "Theme": "主题",
     "NotAssigned": "未分配",
-    "EntityActionsDisabledTooltip": "您没有权限执行任何操作。"
+    "EntityActionsDisabledTooltip": "您没有权限执行任何操作。",
+    "ResourcePermissions": "权限"
   }
 }

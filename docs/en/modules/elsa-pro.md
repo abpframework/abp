@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Elsa Workflows into your ABP applications with this Pro module. Learn installation and setup for seamless workflow management."
+}
+```
+
 # Elsa Module (Pro)
 
 > You must have an ABP Team or a higher license to use this module.

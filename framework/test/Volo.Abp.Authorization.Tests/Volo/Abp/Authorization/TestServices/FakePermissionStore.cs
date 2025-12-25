@@ -8,7 +8,7 @@ public class FakePermissionStore : IPermissionStore, ITransientDependency
 {
     public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
     {
-        return Task.FromResult(name == "MyPermission3" || name == "MyPermission5");
+        return Task.FromResult(name == "MyPermission3" || name == "MyPermission5" || name == "TestEntityManagementPermission");
     }
 
     public Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
@@ -16,7 +16,7 @@ public class FakePermissionStore : IPermissionStore, ITransientDependency
         var result = new MultiplePermissionGrantResult();
         foreach (var name in names)
         {
-            result.Result.Add(name, name == "MyPermission3" || name == "MyPermission5"
+            result.Result.Add(name, name == "MyPermission3" || name == "MyPermission5" || name == "TestEntityManagementPermission"
                 ? PermissionGrantResult.Granted
                 : PermissionGrantResult.Prohibited);
         }

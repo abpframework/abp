@@ -1,0 +1,179 @@
+﻿@using Blazorise.Components
+@using Volo.Abp.BlazoriseUI.Components
+@using Volo.Abp.PermissionManagement.Localization
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+@inject AbpBlazorMessageLocalizerHelper<AbpPermissionManagementResource> LH
+
+<Modal @ref="Modal" Closing="@ClosingModal">
+    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@L["ResourcePermissions"] - @ResourceDisplayName</ModalTitle>
+            <CloseButton Clicked="CloseModal" />
+        </ModalHeader>
+        <ModalBody Overflow="Overflow.Hidden">
+            @if(HasAnyResourcePermission && HasAnyResourceProviderKeyLookupService)
+            {
+                <div class="d-grid gap-2 mb-2 d-md-flex justify-content-md-end">
+                    <Button Color="Color.Primary" size="Size.Small" Clicked="OpenCreateModalAsync">@L["AddResourcePermission"]</Button>
+                </div>
+                <DataGrid TItem="ResourcePermissionGrantInfoDto"
+                          Data="ResourcePermissionList.Permissions"
+                          TotalItems="ResourcePermissionList.Permissions.Count"
+                          ShowPager="true"
+                          PageSize="PageSize">
+                    <DataGridColumns>
+                        <DataGridColumn
+                            Width="150px"
+                            Sortable="false"
+                            TItem="ResourcePermissionGrantInfoDto"
+                            Field="@nameof(ResourcePermissionGrantInfoDto.ProviderName)"
+                            Caption="@L["Actions"]">
+                            <DisplayTemplate>
+                                <Dropdown>
+                                    <DropdownToggle Color="Color.Primary">
+                                        @L["Actions"]
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <DropdownItem Clicked="() => OpenEditModalAsync(context)">
+                                            @L["Edit"]
+                                        </DropdownItem>
+                                        <DropdownItem Clicked="() => DeleteResourcePermissionAsync(context)">
+                                            @L["Delete"]
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ResourcePermissionGrantInfoDto" Field="@nameof(ResourcePermissionGrantInfoDto.ProviderName)" Caption="@L["ResourcePermissionTarget"]" Sortable="false">
+                            <DisplayTemplate>
+                                @{
+                                    <Tooltip Text="@context.ProviderNameDisplayName" Placement="TooltipPlacement.Right" Style="float: left;">
+                                        <span class="d-inline-block bg-light rounded-pill px-2 me-1 ms-1 mb-1">@context.ProviderName</span>
+                                    </Tooltip>
+                                    @context.ProviderDisplayName
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ResourcePermissionGrantInfoDto" Field="@nameof(ResourcePermissionGrantInfoDto.Permissions)" Caption="@L["ResourcePermissionPermissions"]" Sortable="false">
+                            <DisplayTemplate>
+                                @{
+                                    foreach (var permission in context.Permissions)
+                                    {
+                                        <span class="d-inline-block bg-light rounded-pill px-2 me-1 mb-1">@permission.DisplayName</span>
+                                    }
+                                }
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                    </DataGridColumns>
+                    <EmptyTemplate>
+                        @L["NoDataAvailableInDatatable"]
+                    </EmptyTemplate>
+                </DataGrid>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    @if (!HasAnyResourcePermission)
+                    {
+                        @L["NoResourcePermissionFound"]
+                    }
+                    else if(!HasAnyResourceProviderKeyLookupService)
+                    {
+                        @L["NoResourceProviderKeyLookupServiceFound"]
+                    }
+                </div>
+            }
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Outline Clicked="CloseModal">@L["Close"]</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="CreateModal" Closing="@ClosingCreateModal">
+    <ModalContent Centered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["AddResourcePermission"]</ModalTitle>
+                <CloseButton Clicked="CloseCreateModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@CreateValidationsRef" Model="@CreateEntity" ValidateOnLoad="false">
+                    <div class="mb-3">
+                        <RadioGroup TValue="string"
+                                    CheckedValue="@CurrentLookupService"
+                                    CheckedValueChanged="@OnLookupServiceCheckedValueChanged">
+                            @foreach(var keyLookupService in ResourceProviderKeyLookupServices)
+                            {
+                                <Radio Value="@(keyLookupService.Name)">@keyLookupService.DisplayName</Radio>
+                            }
+                        </RadioGroup>
+                        <Autocomplete @ref="ProviderKeyAutocompleteRef"
+                                      TItem="SearchProviderKeyInfo"
+                                      TValue="string"
+                                      Data="@ProviderKeys"
+                                      ReadData="@SearchProviderKeyAsync"
+                                      TotalItems="ProviderKeys.Count"
+                                      TextField="@((item) => item.ProviderDisplayName)"
+                                      ValueField="@((item) => item.ProviderKey)"
+                                      SelectedValue="@ProviderKey"
+                                      SelectedText="@ProviderDisplayName"
+                                      SelectedValueChanged="SelectedProviderKeyAsync"
+                                      class="mt-1">
+                        </Autocomplete>
+                        <Validation @ref="ProviderKeyValidationRef" Validator="ValidateProviderKey">
+                            <TextEdit Style="display: none;">
+                                <Feedback>
+                                    <ValidationError></ValidationError>
+                                </Feedback>
+                            </TextEdit>
+                        </Validation>
+                    </div>
+                    <div class="mb-3">
+                        <h4>@L["ResourcePermissionPermissions"]</h4>
+                        <Switch TValue="bool" Checked="CreateEntity.Permissions.All(x => x.IsGranted)" CheckedChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
+                        <div class="mt-2">
+                            @foreach (var permission in CreateEntity.Permissions)
+                            {
+                                <Check TValue="bool" Checked="@permission.IsGranted" CheckedChanged="@((c) => OnPermissionCheckedChanged(permission, c))">@permission.DisplayName</Check>
+                            }
+                        </div>
+                    </div>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Primary" Outline Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                <SubmitButton Clicked="@CreateResourcePermissionAsync" />
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditModal" Closing="@ClosingEditModal">
+    <ModalContent Centered="true">
+        <Form>
+            <ModalHeader>
+                <ModalTitle>@L["UpdateResourcePermission"]</ModalTitle>
+                <CloseButton Clicked="CloseEditModalAsync" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="@EditValidationsRef" Model="@EditEntity" ValidateOnLoad="false">
+                    <div class="mb-3">
+                        <h4>@L["ResourcePermissionPermissions"]</h4>
+                        <Switch TValue="bool" Checked="EditEntity.Permissions.All(x => x.IsGranted)" CheckedChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
+                        <div class="mt-2">
+                            @foreach (var permission in EditEntity.Permissions)
+                            {
+                                <Check TValue="bool" Checked="@permission.IsGranted" CheckedChanged="@((c) => OnPermissionCheckedChanged(permission, c))">@permission.DisplayName</Check>
+                            }
+                        </div>
+                    </div>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Primary" Outline Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                <SubmitButton Clicked="@UpdateResourcePermissionAsync" />
+            </ModalFooter>
+        </Form>
+    </ModalContent>
+</Modal>

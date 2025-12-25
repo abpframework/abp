@@ -1,13 +1,22 @@
 {
-    "culture": "hr",
-    "texts": {
-        "Permissions": "Dozvole",
-        "OnlyProviderPermissons": "Samo ovaj pružatelj usluga",
-        "All": "Svi",
-        "SelectAllInAllTabs": "Dodijelite sva dopuštenja",
-        "SelectAllInThisTab": "Odaberi sve",
-        "SaveWithoutAnyPermissionsWarningMessage": "Jeste li sigurni da želite spremiti bez ikakvih dopuštenja?",
-        "PermissionGroup": "Grupa dozvola",
-        "Filter": "Filtriraj"
-    }
+  "culture": "hr",
+  "texts": {
+    "Permissions": "Dozvole",
+    "OnlyProviderPermissons": "Samo ovaj pružatelj usluga",
+    "All": "Svi",
+    "SelectAllInAllTabs": "Dodijelite sva dopuštenja",
+    "SelectAllInThisTab": "Odaberi sve",
+    "SaveWithoutAnyPermissionsWarningMessage": "Jeste li sigurni da želite spremiti bez ikakvih dopuštenja?",
+    "PermissionGroup": "Grupa dozvola",
+    "Filter": "Filtriraj",
+    "ResourcePermissions": "Dozvole",
+    "ResourcePermissionTarget": "Cilj",
+    "ResourcePermissionPermissions": "Dozvole",
+    "AddResourcePermission": "Dodaj dozvolu",
+    "ResourcePermissionDeletionConfirmationMessage": "Jeste li sigurni da želite izbrisati sve dozvole?",
+    "UpdateResourcePermission": "Ažuriraj dozvolu",
+    "GrantAllResourcePermissions": "Dodijeli sve",
+    "NoResourceProviderKeyLookupServiceFound": "Nije pronađena usluga za pronalaženje ključa pružatelja",
+    "NoResourcePermissionFound": "Nijedna dozvola nije definirana."
+  }
 }

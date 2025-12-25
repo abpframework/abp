@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "密码至少包含一位大写字母 ('A'-'Z')。",
     "Volo.Abp.Identity:PasswordTooShort": "密码至少为{0}个字符。",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "密码至少包含{0}个唯一字符。",
+    "Volo.Abp.Identity:PasswordInHistory": "密码不能与最近{0}次使用的密码相同。",
     "Volo.Abp.Identity:RoleNotFound": "角色 {0} 不存在。",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "用户已设置密码。",
     "Volo.Abp.Identity:UserAlreadyInRole": "用户已具有角色 '{0}'。",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "要求数字",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "强制用户定期更改密码",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "密码更改周期(天)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "启用防止密码重用",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "防止密码重用数量",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "允许新用户",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "锁定时间(秒)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "最大失败访问尝试次数",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "密码是否必须包含数字。",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "是否强制用户定期更改密码。",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "用户必须更改密码的周期(天)。",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "是否防止用户重用以前的密码。",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "不能重用的以前密码的数量。",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "允许新用户被锁定。",
     "Description:Abp.Identity.Lockout.LockoutDuration": "当锁定发生时用户被的锁定的时间(秒)。",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "如果启用锁定, 当用户被锁定前失败的访问尝试次数。",
@@ -130,6 +135,8 @@
     "ModificationTime": "修改时间",
     "PasswordUpdateTime": "密码更新时间",
     "LockoutEndTime": "锁定结束时间",
-    "FailedAccessCount": "访问失败次数"
+    "FailedAccessCount": "访问失败次数",
+    "UserResourcePermissionProviderKeyLookupService": "用户",
+    "RoleResourcePermissionProviderKeyLookupService": "角色"
   }
 }

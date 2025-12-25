@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500">
+  <defs>
+    <style>
+      .scope-box { fill: #f8f9fa; stroke: #1890ff; stroke-width: 2; }
+      .global-box { fill: #fff7e6; stroke: #fa8c16; stroke-width: 2; }
+      .user-box { fill: #e6f7ff; stroke: #1890ff; stroke-width: 2; }
+      .auth-box { fill: #f6ffed; stroke: #52c41a; stroke-width: 2; }
+      .entity-box { fill: #f9f0ff; stroke: #722ed1; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #333; }
+      .title { font-family: Arial, sans-serif; font-size: 18px; fill: #1890ff; font-weight: bold; }
+      .section-title { font-family: Arial, sans-serif; font-size: 15px; fill: #1890ff; font-weight: bold; }
+      .small-text { font-family: Arial, sans-serif; font-size: 11px; fill: #666; }
+      .code-text { font-family: 'Courier New', monospace; font-size: 11px; fill: #333; }
+      .badge { font-family: Arial, sans-serif; font-size: 10px; fill: white; font-weight: bold; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="title" x="500" y="35" text-anchor="middle">Cache Scoping Strategies</text>
+
+  <!-- Global Scope -->
+  <rect class="global-box" x="50" y="70" width="200" height="180" rx="5" />
+  <text class="section-title" x="150" y="95" text-anchor="middle">Global</text>
+  
+  <circle cx="150" cy="130" r="30" fill="#fa8c16" opacity="0.2" stroke="#fa8c16" stroke-width="2"/>
+  <text class="text" x="150" y="137" text-anchor="middle" font-size="24">🌍</text>
+  
+  <text class="small-text" x="65" y="175">Shared by all users</text>
+  <text class="small-text" x="65" y="190">Ideal for public data</text>
+  
+  <rect x="65" y="200" width="170" height="35" fill="#fff" opacity="0.7" rx="3"/>
+  <text class="code-text" x="75" y="215">[Cache(typeof(Book),</text>
+  <text class="code-text" x="75" y="228">Scope = Global)]</text>
+
+  <!-- Current User Scope -->
+  <rect class="user-box" x="280" y="70" width="200" height="180" rx="5" />
+  <text class="section-title" x="380" y="95" text-anchor="middle">CurrentUser</text>
+  
+  <circle cx="350" cy="130" r="25" fill="#1890ff" opacity="0.3" stroke="#1890ff" stroke-width="2"/>
+  <text class="text" x="350" y="137" text-anchor="middle" font-size="20">👤</text>
+  <circle cx="410" cy="130" r="25" fill="#1890ff" opacity="0.3" stroke="#1890ff" stroke-width="2"/>
+  <text class="text" x="410" y="137" text-anchor="middle" font-size="20">👤</text>
+  
+  <text class="small-text" x="295" y="175">Per user (by ID)</text>
+  <text class="small-text" x="295" y="190">User-specific data</text>
+  
+  <rect x="295" y="200" width="170" height="35" fill="#fff" opacity="0.7" rx="3"/>
+  <text class="code-text" x="305" y="215">[Cache(typeof(Order),</text>
+  <text class="code-text" x="305" y="228">Scope = CurrentUser)]</text>
+
+  <!-- Authenticated User Scope -->
+  <rect class="auth-box" x="510" y="70" width="200" height="180" rx="5" />
+  <text class="section-title" x="610" y="95" text-anchor="middle">AuthenticatedUser</text>
+  
+  <rect x="565" y="110" width="90" height="40" fill="#52c41a" opacity="0.2" rx="3" stroke="#52c41a" stroke-width="2"/>
+  <text class="text" x="610" y="133" text-anchor="middle" font-size="16">🔐 Auth</text>
+  
+  <rect x="565" y="155" width="90" height="30" fill="#ddd" opacity="0.4" rx="3" stroke="#999" stroke-width="1"/>
+  <text class="text" x="610" y="173" text-anchor="middle" font-size="12">Anonymous</text>
+  
+  <text class="small-text" x="525" y="200">Auth vs Anonymous</text>
+  
+  <rect x="525" y="210" width="170" height="35" fill="#fff" opacity="0.7" rx="3"/>
+  <text class="code-text" x="535" y="225">Scope =</text>
+  <text class="code-text" x="535" y="238">AuthenticatedUser</text>
+
+  <!-- Entity Scope -->
+  <rect class="entity-box" x="740" y="70" width="200" height="180" rx="5" />
+  <text class="section-title" x="840" y="95" text-anchor="middle">Entity</text>
+  
+  <rect x="775" y="115" width="50" height="35" fill="#722ed1" opacity="0.2" rx="3" stroke="#722ed1" stroke-width="1"/>
+  <text class="text" x="800" y="135" text-anchor="middle" font-size="11">ID: 1</text>
+  
+  <rect x="835" y="115" width="50" height="35" fill="#722ed1" opacity="0.2" rx="3" stroke="#722ed1" stroke-width="1"/>
+  <text class="text" x="860" y="135" text-anchor="middle" font-size="11">ID: 2</text>
+  
+  <rect x="895" y="115" width="50" height="35" fill="#722ed1" opacity="0.2" rx="3" stroke="#722ed1" stroke-width="1"/>
+  <text class="text" x="920" y="135" text-anchor="middle" font-size="11">ID: 3</text>
+  
+  <text class="small-text" x="755" y="170">Per entity instance</text>
+  <text class="small-text" x="755" y="185">By primary key</text>
+  
+  <rect x="755" y="200" width="170" height="35" fill="#fff" opacity="0.7" rx="3"/>
+  <text class="code-text" x="765" y="215">[Cache(typeof(Book),</text>
+  <text class="code-text" x="765" y="228">Scope = Entity)]</text>
+
+  <!-- Examples Section -->
+  <line x1="50" y1="280" x2="950" y2="280" stroke="#ddd" stroke-width="2" />
+  <text class="section-title" x="50" y="310" fill="#1890ff">Common Use Cases</text>
+
+  <!-- Global Example -->
+  <rect class="global-box" x="50" y="325" width="220" height="70" rx="3" />
+  <text class="small-text" x="60" y="343" font-weight="bold" fill="#fa8c16">Global Scope</text>
+  <text class="small-text" x="60" y="360">✓ Product catalog</text>
+  <text class="small-text" x="60" y="375">✓ Configuration settings</text>
+  <text class="small-text" x="60" y="390">✓ Public announcements</text>
+
+  <!-- CurrentUser Example -->
+  <rect class="user-box" x="290" y="325" width="220" height="70" rx="3" />
+  <text class="small-text" x="300" y="343" font-weight="bold" fill="#1890ff">CurrentUser Scope</text>
+  <text class="small-text" x="300" y="360">✓ User profile</text>
+  <text class="small-text" x="300" y="375">✓ Shopping cart</text>
+  <text class="small-text" x="300" y="390">✓ User's order history</text>
+
+  <!-- AuthenticatedUser Example -->
+  <rect class="auth-box" x="530" y="325" width="200" height="70" rx="3" />
+  <text class="small-text" x="540" y="343" font-weight="bold" fill="#52c41a">Auth Scope</text>
+  <text class="small-text" x="540" y="360">✓ Member-only content</text>
+  <text class="small-text" x="540" y="375">✓ Navigation menus</text>
+  <text class="small-text" x="540" y="390">✓ Feature availability</text>
+
+  <!-- Entity Example -->
+  <rect class="entity-box" x="750" y="325" width="200" height="70" rx="3" />
+  <text class="small-text" x="760" y="343" font-weight="bold" fill="#722ed1">Entity Scope</text>
+  <text class="small-text" x="760" y="360">✓ Book details by ID</text>
+  <text class="small-text" x="760" y="375">✓ Product info by SKU</text>
+  <text class="small-text" x="760" y="390">✓ Invoice by number</text>
+
+  <!-- Cache Key Examples -->
+  <text class="section-title" x="50" y="435" fill="#1890ff">Cache Key Structure</text>
+
+  <rect x="50" y="445" width="900" height="40" fill="#f5f5f5" rx="3" stroke="#ddd" stroke-width="1"/>
+  
+  <text class="code-text" x="60" y="462" fill="#fa8c16" font-weight="bold">Global:</text>
+  <text class="code-text" x="135" y="462">BookService:GetList:page1:size10</text>
+  
+  <text class="code-text" x="60" y="477" fill="#1890ff" font-weight="bold">CurrentUser:</text>
+  <text class="code-text" x="135" y="477">OrderService:GetMyOrders:user:12345</text>
+
+  <text class="code-text" x="520" y="462" fill="#52c41a" font-weight="bold">Auth:</text>
+  <text class="code-text" x="570" y="462">MenuService:GetNav:auth:true</text>
+  
+  <text class="code-text" x="520" y="477" fill="#722ed1" font-weight="bold">Entity:</text>
+  <text class="code-text" x="570" y="477">BookService:Get:entity:book-guid-123</text>
+</svg>

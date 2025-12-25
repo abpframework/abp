@@ -61,6 +61,7 @@
     "ProfilePicture": "الصوره الشخصيه",
     "Theme": "سمة",
     "NotAssigned": "غيرمعتمد",
-    "EntityActionsDisabledTooltip": "ليس لديك إذن لتنفيذ أي إجراء."
+    "EntityActionsDisabledTooltip": "ليس لديك إذن لتنفيذ أي إجراء.",
+    "ResourcePermissions": "أذونات"
   }
 }

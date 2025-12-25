@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Volo.Abp;
 using Volo.Abp.Authorization;
@@ -23,6 +24,10 @@ public class CmsKitTestBaseModule : AbpModule
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        // Set culture to InvariantCulture to avoid Turkish-I problem and other culture-specific issues in tests
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+        
         OneTimeRunner.Run(() =>
         {
             GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();

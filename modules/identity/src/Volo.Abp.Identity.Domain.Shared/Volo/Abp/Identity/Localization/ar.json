@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "يجب أن تحتوي كلمات المرور على حرف كبير واحد على الأقل ('A' - 'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "يجب أن تتكون كلمات المرور من {0} حرف على الأقل.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "يجب أن تحتوي كلمات المرور على {0} حرف فريد على الأقل.",
+    "Volo.Abp.Identity:PasswordInHistory": "يجب ألا تتطابق كلمات المرور مع آخر {0} كلمات مرور.",
     "Volo.Abp.Identity:RoleNotFound": "الدور {0} غير موجود.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "لدى المستخدم بالفعل مجموعة كلمات مرور.",
     "Volo.Abp.Identity:UserAlreadyInRole": "المستخدم بالفعل في الدور '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "الرقم المطلوب",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "إجبار المستخدمين على تغيير كلمة المرور بشكل دوري",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "تغيير كلمة المرور بشكل دوري",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "تمكين منع إعادة استخدام كلمة المرور",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "عدد مرات منع إعادة استخدام كلمة المرور",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "ممكّن للمستخدمين الجدد",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "مدة التأمين (بالثواني)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "محاولات الوصول الفاشلة",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "إذا كانت كلمات المرور يجب أن تحتوي على رقم.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "إذا كان يجب أن يتغير كلمة المرور بشكل دوري.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "عدد الأيام التي يجب أن تتراوح بين تغيير كلمة المرور.",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "ما إذا كان يجب منع المستخدمين من إعادة استخدام كلمات المرور السابقة.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "عدد كلمات المرور السابقة التي لا يمكن إعادة استخدامها.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "ما إذا كان يمكن قفل مستخدم جديد.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "المدة التي يتم فيها حظر المستخدم عند حدوث قفل.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "عدد محاولات الوصول الفاشلة المسموح بها قبل قفل المستخدم ، بافتراض تمكين التأمين.",
@@ -130,6 +135,8 @@
     "ModificationTime": "وقت التعديل",
     "PasswordUpdateTime": "وقت تحديث كلمة المرور",
     "LockoutEndTime": "وقت انتهاء القفل",
-    "FailedAccessCount": "فشل عدد الوصول"
+    "FailedAccessCount": "فشل عدد الوصول",
+    "UserResourcePermissionProviderKeyLookupService": "المستخدم",
+    "RoleResourcePermissionProviderKeyLookupService": "الدور"
   }
 }

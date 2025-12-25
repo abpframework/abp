@@ -16,24 +16,22 @@
             $widget.find(".my-rating").each(function () {
                     var authenticated = $(this).attr("data-authenticated");
                     var readonly = $(this).attr("data-readonly");
+                    var currentRating = parseInt($(this).attr("data-rating")) || 0;
+                    var $liveRating = $widget.find(".live-rating");
+                    var averageRating = $liveRating.text();
 
                     $(this).starRating({
-                        initialRating: 0,
+                        initialRating: currentRating,
                         starSize: 16,
                         emptyColor: '#eee',
                         hoverColor: '#ffc107',
                         activeColor: '#ffc107',
                         useGradient: false,
                         strokeWidth: 0,
-                        disableAfterRate: true,
+                        disableAfterRate: false,
                         useFullStars: true,
                         readOnly: authenticated === "True" || readonly === "True",
-                        onHover: function (currentIndex, currentRating, $el) {
-                            $widget.find(".live-rating").text(currentIndex);
-                        },
-                        onLeave: function (currentIndex, currentRating, $el) {
-                            $widget.find(".live-rating").text(currentRating);
-                        },
+
                         callback: function (currentRating, $el) {
                             volo.cmsKit.public.ratings.ratingPublic.create(
                                 $ratingArea.attr("data-entity-type"),
@@ -50,28 +48,8 @@
             );
         }
 
-        function registerUndoLink() {
-            $widget.find(".rating-undo-link").each(function () {
-                $(this).on('click', '', function (e) {
-                    e.preventDefault();
-
-                    abp.message.confirm(l("RatingUndoMessage"), function (ok) {
-                        if (ok) {
-                            volo.cmsKit.public.ratings.ratingPublic.delete(
-                                $ratingArea.attr("data-entity-type"),
-                                $ratingArea.attr("data-entity-id")
-                            ).then(function () {
-                                widgetManager.refresh($widget);
-                            });
-                        }
-                    })
-                });
-            });
-        }
-
         function init() {
             registerCreateOfNewRating();
-            registerUndoLink();
         }
 
         return {

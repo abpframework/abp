@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Izberi vse",
     "SaveWithoutAnyPermissionsWarningMessage": "Ali ste prepričani, da želite shraniti brez kakršnih koli dovoljenj?",
     "PermissionGroup": "Skupina dovoljenj",
-    "Filter": "Filtriraj"
+    "Filter": "Filtriraj",
+    "ResourcePermissions": "Dovoljenja",
+    "ResourcePermissionTarget": "Cilj",
+    "ResourcePermissionPermissions": "Dovoljenja",
+    "AddResourcePermission": "Dodaj dovoljenje",
+    "ResourcePermissionDeletionConfirmationMessage": "Ali ste prepričani, da želite izbrisati vsa dovoljenja?",
+    "UpdateResourcePermission": "Posodobi dovoljenje",
+    "GrantAllResourcePermissions": "Dodeli vse",
+    "NoResourceProviderKeyLookupServiceFound": "Ni bilo mogoče najti storitve za iskanje ključa ponudnika",
+    "NoResourcePermissionFound": "Nobeno dovoljenje ni določeno."
   }
 }

@@ -678,6 +678,27 @@ namespace Migrations
                     b.ToTable("AbpUserOrganizationUnits", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasswordHistory", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("UserId", "Password");
+
+                    b.ToTable("AbpUserPasswordHistories", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -1271,6 +1292,15 @@ namespace Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityUserPasswordHistory", b =>
+                {
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany("PasswordHistories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
                     b.HasOne("Volo.Abp.Identity.IdentityRole", null)
@@ -1347,6 +1377,8 @@ namespace Migrations
                     b.Navigation("Logins");
 
                     b.Navigation("OrganizationUnits");
+
+                    b.Navigation("PasswordHistories");
 
                     b.Navigation("Roles");
 

@@ -1,0 +1,6 @@
+﻿namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
+
+public class ResourcePermissionGrantRepository_Tests : ResourcePermissionGrantRepository_Tests<AbpPermissionManagementEntityFrameworkCoreTestModule>
+{
+
+}

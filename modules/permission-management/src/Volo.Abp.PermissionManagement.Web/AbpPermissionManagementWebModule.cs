@@ -20,7 +20,7 @@ public class AbpPermissionManagementWebModule : AbpModule
         {
             options.AddAssemblyResource(
                 typeof(AbpPermissionManagementResource),
-                typeof(AbpPermissionManagementWebModule).Assembly, 
+                typeof(AbpPermissionManagementWebModule).Assembly,
                 typeof(AbpPermissionManagementApplicationContractsModule).Assembly
             );
         });

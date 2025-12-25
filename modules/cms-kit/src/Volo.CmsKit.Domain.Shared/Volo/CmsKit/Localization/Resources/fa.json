@@ -190,6 +190,8 @@
     "AssignBlogPostsToOtherBlog": "پست های وبلاگ را به وبلاگ دیگری اختصاص دهید",
     "SelectAnBlogToAssign": "یک وبلاگ برای اختصاص دادن انتخاب کنید",
     "DeleteAllBlogPostsOfThisBlog": "تمام پست های وبلاگ این وبلاگ را حذف کنید",
-    "RequiredPermissionName": "نام مجوز مورد نیاز"
+    "RequiredPermissionName": "نام مجوز مورد نیاز",
+    "AllPosts": "همه پست ها",
+    "IsReadOnly": "فقط خواندنی"
   }
 }

@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Alle auswählen",
     "SaveWithoutAnyPermissionsWarningMessage": "Sind Sie sicher, dass Sie ohne Berechtigungen speichern möchten?",
     "PermissionGroup": "Berechtigungsgruppe",
-    "Filter": "Filtern"
+    "Filter": "Filtern",
+    "ResourcePermissions": "Berechtigungen",
+    "ResourcePermissionTarget": "Ziel",
+    "ResourcePermissionPermissions": "Berechtigungen",
+    "AddResourcePermission": "Berechtigung hinzufügen",
+    "ResourcePermissionDeletionConfirmationMessage": "Sind Sie sicher, dass Sie alle Berechtigungen löschen möchten?",
+    "UpdateResourcePermission": "Berechtigung aktualisieren",
+    "GrantAllResourcePermissions": "Alle gewähren",
+    "NoResourceProviderKeyLookupServiceFound": "Es wurde kein Dienst zum Nachschlagen des Anbieterschlüssels gefunden",
+    "NoResourcePermissionFound": "Es ist keine Berechtigung definiert."
   }
 }

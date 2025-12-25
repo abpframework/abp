@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "انتخاب همه",
     "SaveWithoutAnyPermissionsWarningMessage": "آیا مطمئن هستید که می خواهید بدون هیچ دسترسی ذخیره کنید؟",
     "PermissionGroup": "گروه دسترسی",
-    "Filter": "فیلتر"
+    "Filter": "فیلتر",
+    "ResourcePermissions": "دسترسی‌ها",
+    "ResourcePermissionTarget": "هدف",
+    "ResourcePermissionPermissions": "دسترسی‌ها",
+    "AddResourcePermission": "افزودن مجوز",
+    "ResourcePermissionDeletionConfirmationMessage": "آیا مطمئن هستید که می‌خواهید همه مجوزها را حذف کنید؟",
+    "UpdateResourcePermission": "به‌روزرسانی مجوز",
+    "GrantAllResourcePermissions": "اعطای همه",
+    "NoResourceProviderKeyLookupServiceFound": "هیچ سرویس جستجوی کلید ارائه‌دهنده یافت نشد",
+    "NoResourcePermissionFound": "هیچ مجوزی تعریف نشده است."
   }
 }

@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Mindet kiválaszt",
     "SaveWithoutAnyPermissionsWarningMessage": "Biztos, hogy engedélyek nélkül akar menteni?",
     "PermissionGroup": "Engedélycsoport",
-    "Filter": "Szűrő"
+    "Filter": "Szűrő",
+    "ResourcePermissions": "Engedélyek",
+    "ResourcePermissionTarget": "Cél",
+    "ResourcePermissionPermissions": "Engedélyek",
+    "AddResourcePermission": "Engedély hozzáadása",
+    "ResourcePermissionDeletionConfirmationMessage": "Biztosan törölni szeretné az összes engedélyt?",
+    "UpdateResourcePermission": "Engedély frissítése",
+    "GrantAllResourcePermissions": "Összes engedély megadása",
+    "NoResourceProviderKeyLookupServiceFound": "Nem található szolgáltató kulcs kereső szolgáltatás",
+    "NoResourcePermissionFound": "Nincs meghatározva engedély."
   }
 }

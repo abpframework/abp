@@ -5,9 +5,9 @@
 }
 ```
 
-# Easy *ngFor trackBy
+# Easy @for() track
 
-`TrackByService` is a utility service to provide an easy implementation for one of the most frequent needs in Angular templates: `TrackByFunction`. Please see [this page in Angular docs](https://angular.io/guide/template-syntax#ngfor-with-trackby) for its purpose.
+`TrackByService` is a utility service to provide an easy implementation for one of the most frequent needs in Angular templates: `TrackByFunction`. Please see [this page in Angular docs](https://angular.dev/guide/templates/control-flow) for its purpose.
 
 
 
@@ -54,8 +54,9 @@ You can use `by` to get a `TrackByFunction` that tracks the iterated object base
 
 ```html
 <!-- template of DemoComponent -->
-
-<div *ngFor="let item of list; trackBy: track.by('id')">{%{{{ item.name }}}%}</div>
+@for (item of list; track: track.by('id')) {
+  <div>{%{{{ item.name }}}%}</div>
+}
 ```
 
 
@@ -67,11 +68,11 @@ import { trackBy } from "@abp/ng.core";
 
 @Component({
   template: `
-    <div
-      *ngFor="let item of list; trackBy: trackById"
-    >
-      {%{{{ item.name }}}%}
-    </div>
+  @for (item of list; track: trackById) {
+    <div>
+        {%{{{ item.name }}}%}
+      </div>
+    }
   `,
 })
 class DemoComponent {
@@ -89,12 +90,11 @@ You can use `byDeep` to get a `TrackByFunction` that tracks the iterated object 
 
 ```html
 <!-- template of DemoComponent -->
-
-<div
-  *ngFor="let item of list; trackBy: track.byDeep('tenant', 'account', 'id')"
->
-  {%{{{ item.tenant.name }}}%}
-</div>
+@for (item of list; track: track.byDeep('tenant', 'account', 'id')) {
+  <div >
+    {%{{{ item.tenant.name }}}%}
+  </div>
+}
 ```
 
 
@@ -106,11 +106,11 @@ import { trackByDeep } from "@abp/ng.core";
 
 @Component({
   template: `
-    <div
-      *ngFor="let item of list; trackBy: trackByTenantAccountId"
-    >
-      {%{{{ item.name }}}%}
+  @for (item of list; track: trackByTenantAccountId) {
+    <div>
+        {%{{{ item.name }}}%}
     </div>
+  }
   `,
 })
 class DemoComponent {

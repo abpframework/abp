@@ -17,6 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Identity" />
         <PackageReference Include="Azure.Messaging.ServiceBus" />
         <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
         <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />

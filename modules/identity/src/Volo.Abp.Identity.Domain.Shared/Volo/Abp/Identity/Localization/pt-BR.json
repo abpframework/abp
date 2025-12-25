@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Senhas devem possuir pelo menos uma letra maiúscula ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Senhas devem possuir pelo menos {0} caracteres.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Senhas devem possuir pelo menos {0} caracteres únicos.",
+    "Volo.Abp.Identity:PasswordInHistory": "As senhas não devem coincidir com suas últimas {0} senhas.",
     "Volo.Abp.Identity:RoleNotFound": "Perfil {0} não existe.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "O usuário já possui uma senha.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Usuário já possui o perfil '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Dígito requerido",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Forçar usuários a alterar a senha periodicamente",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Período de alteração de senha (dias)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Habilitar prevenção de reutilização de senha",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Número de reutilizações de senha a prevenir",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Habilitado para novos usuários",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Duração do bloqueio (segundos)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Máximo de tentativas de acesso malsucedidas",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Se as senhas devem conter um dígito.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Se os usuários devem alterar sua senha periodicamente.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "O período de dias que um usuário deve esperar antes de alterar sua senha novamente.",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Se deve impedir que os usuários reutilizem suas senhas anteriores.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "O número de senhas anteriores que não podem ser reutilizadas.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Se um novo usuário pode ser bloqueado.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "A duração que um usuário fica bloqueado quando ocorre um bloqueio.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "O número de tentativas de acesso malsucedidas permitidas antes que um usuário seja bloqueado, assumindo que o bloqueio esteja habilitado.",
@@ -130,6 +135,8 @@
     "ModificationTime": "Hora da modificação",
     "PasswordUpdateTime": "Hora de atualização da senha",
     "LockoutEndTime": "Hora de término do bloqueio",
-    "FailedAccessCount": "Contagem de acessos com falha"
+    "FailedAccessCount": "Contagem de acessos com falha",
+    "UserResourcePermissionProviderKeyLookupService": "Usuário",
+    "RoleResourcePermissionProviderKeyLookupService": "Perfil"
   }
 }

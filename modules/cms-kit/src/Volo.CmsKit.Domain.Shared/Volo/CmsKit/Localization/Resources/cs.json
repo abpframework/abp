@@ -280,6 +280,8 @@
     "AssignBlogPostsToOtherBlog": "Přiřaďte blogové příspěvky k jinému blogu",
     "SelectAnBlogToAssign": "Vyberte blog, ke kterému chcete přiřadit blogové příspěvky",
     "DeleteAllBlogPostsOfThisBlog": "Smazat všechny blogové příspěvky tohoto blogu",
-    "RequiredPermissionName": "Je vyžadováno oprávnění"
+    "RequiredPermissionName": "Je vyžadováno oprávnění",
+    "AllPosts": "Všechny příspěvky",
+    "IsReadOnly": "Pouze pro čtení"
   }
 }

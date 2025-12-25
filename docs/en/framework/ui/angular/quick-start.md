@@ -84,10 +84,10 @@ Now let us take a look at the contents of the source folder.
 - **app.config.ts** is the [root configuration](https://angular.dev/api/platform-browser/bootstrapApplication) that includes information about how parts of your application are related and what to run at the initiation of your application.
 - **route.provider.ts** is used for [modifying the menu](../angular/modifying-the-menu.md).
 - **assets** is for static files. A file (e.g. an image) placed in this folder will be available as is when the application is served.
-- **environments** includes one file per environment configuration. There are two configurations by default, but you may always introduce another one. These files are directly referred to in _angular.json_ and help you have different builds and application variables. Please refer to [configuring Angular application environments](https://angular.io/guide/build#configuring-application-environments) for details.
+- **environments** includes one file per environment configuration. There are two configurations by default, but you may always introduce another one. These files are directly referred to in _angular.json_ and help you have different builds and application variables. Please refer to [configuring Angular application environments](https://angular.dev/tools/cli/environments) for details.
 - **index.html** is the HTML page served to visitors and will contain everything required to run your application. Servers should be configured to redirect every request to this page so that the Angular router can take over. Do not worry about how to add JavaScript and CSS files to it, because Angular CLI will do it automatically.
 - **main.ts** bootstraps and configures Angular application to run in the browser. It is production-ready, so forget about it.
-- **polyfill.ts** is where you can add polyfills if you want to [support legacy browsers](https://angular.io/guide/browser-support).
+- **polyfill.ts** is where you can add polyfills if you want to [support legacy browsers](https://angular.dev/reference/versions).
 - **style.scss** is the default entry point for application styles. You can change this or add new entry points in _angular.json_.
 - **test.ts** helps the unit test runner discover and bootstrap spec files.
 
@@ -106,11 +106,11 @@ Now that you know about the files and folders, we can get the application up and
 
 <img alt="New ABP Angular project home page" src="./images/quick-start---new-project-home-page.png" width="744px" style="max-width:100%">
 
-You may modify the behavior of the **start script** (in the package.json file) by changing the parameters passed to the `ng serve` command. For instance, if you do not want a browser window to open next time you run the script, remove `--open` from the end of it. Please check [ng serve documentation](https://angular.io/cli/serve) for all available options.
+You may modify the behavior of the **start script** (in the package.json file) by changing the parameters passed to the `ng serve` command. For instance, if you do not want a browser window to open next time you run the script, remove `--open` from the end of it. Please check [ng serve documentation](https://angular.dev/cli/serve) for all available options.
 
 ### Angular Live Development Server
 
-The development server of Angular is based on [Webpack DevServer](https://webpack.js.org/configuration/dev-server/). It tracks changes to source files and syncs the browser window after an incremental re-compilation every time <sup id="a-dev-server">[2](#f-dev-server)</sup> you make one. Your experience will be like this:
+The development server runs via Angular's Application Builder and uses a fast, modern dev server under the hood. It tracks changes to source files and refreshes the browser after an incremental compilation every time <sup id="a-dev-server">[2](#f-dev-server)</sup> you make one. Your experience will be like this:
 
 <img alt="Angular Live Development Server compiles again on template change and removes a button from the page displayed by the browser." src="./images/quick-start---angular-live-development-server.gif" width="818px" style="max-width:100%">
 
@@ -122,13 +122,13 @@ Please keep in mind that you should not use this server in production. To provid
 
 <sup id="f-certificate-error"><b>1</b></sup> _If you see the error above when you run the Angular app, your browser might be blocking access to the API because of the self-signed certificate. Visit that address and allow access to it (once). When you see the Swagger interface, you are good to go._ <sup>[↩](#a-certificate-error)</sup>
 
-<sup id="f-dev-server"><b>2</b></sup> _Sometimes, depending on the file changed, Webpack may miss the change and cannot reflect it in the browser. For example, tsconfig files are not being tracked. In such a case, please restart the development server._ <sup>[↩](#a-dev-server)</sup>
+<sup id="f-dev-server"><b>2</b></sup> _Sometimes, depending on the file changed, the development server may not pick up the change (for example, certain configuration files like tsconfig are not watched). In such a case, please restart the development server._ <sup>[↩](#a-dev-server)</sup>
 
 ---
 
 ## How to Build the Angular Application
 
-An Angular application can have multiple [build targets](https://angular.io/guide/glossary#target), i.e. **configurations in angular.json** which define how [Architect](https://angular.io/guide/glossary#architect) will build applications and libraries. Usually, each build configuration has a separate environment variable file. Currently, the project has two: One for development and one for production.
+An Angular application can have multiple build targets, i.e. **configurations in angular.json** which define how [Architect](https://angular.dev/reference/configs/workspace-config) will build applications and libraries. Usually, each build configuration has a separate environment variable file. Currently, the project has two: One for development and one for production.
 
 ```js
 // this is what environment variables look like
@@ -161,7 +161,7 @@ export const environment = {
 } as Config.Environment;
 ```
 
-When you run the development server, variables defined in _environment.ts_ take effect. Similarly, in production mode, the default environment is replaced by _environment.prod.ts_ and completely different variables become effective. You may even [create a new build configuration](https://angular.dev/reference/configs/workspace-config#alternate-build-configurations) and set [file replacements](https://angular.io/guide/build#configure-target-specific-file-replacements) to use a completely new environment. For now, we will start a production build:
+When you run the development server, variables defined in _environment.ts_ take effect. Similarly, in production mode, the default environment is replaced by _environment.prod.ts_ and completely different variables become effective. You may even [create a new build configuration](https://angular.dev/reference/configs/workspace-config#alternate-build-configurations) and set [file replacements](https://angular.dev/tools/cli/environments) to use a completely new environment. For now, we will start a production build:
 
 1. Open your terminal and navigate to the root Angular folder.
 2. Run `yarn` or `npm install` if you have not installed dependencies already.
@@ -180,18 +180,18 @@ Angular web applications run on the browser and require no server except for a [
 ```shell
 # please replace MyProjectName with your project name
 
-npx servor dist/MyProjectName index.html 4200 --browse
+npx servor dist/MyProjectName/browser index.html 4200 --browse
 ```
 
 This command will download and start a simple static server, a browser window at `http://localhost:4200` will open, and the compiled output of your project will be served.
 
 Of course, you need your application to run on an optimized web server and become available to everyone. This is quite straight-forward:
 
-1. Create a new static web server instance. You can use a service like [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/web/), [Firebase](https://firebase.google.com/docs/hosting), [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), or even [GitHub Pages](https://angular.io/guide/deployment#deploy-to-github-pages). Another option is maintaining own web server with [NGINX](https://www.nginx.com/), [IIS](https://www.iis.net/), [Apache HTTP Server](https://httpd.apache.org/), or equivalent.
+1. Create a new static web server instance. You can use a service like [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/web/), [Firebase](https://firebase.google.com/docs/hosting), [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), or even [GitHub Pages](https://angular.dev/tools/cli/deployment). Another option is maintaining own web server with [NGINX](https://www.nginx.com/), [IIS](https://www.iis.net/), [Apache HTTP Server](https://httpd.apache.org/), or equivalent.
 2. Copy the files from `dist/MyProjectName` <sup id="a-dist-folder-name">[1](#f-dist-folder-name)</sup> to a publicly served destination on the server via CLI of the service provider, SSH, or FTP (whichever is available). This step would be defined as a job if you have a CI/CD flow.
-3. [Configure the server](https://angular.io/guide/deployment#server-configuration) to redirect all requests to the _index.html_ file. Some services do that automatically. Others require you [to add a file to the bundle via assets](https://angular.io/guide/workspace-config#assets-configuration) which describes the server how to do the redirections. Occasionally, you may need to do manual configuration.
+3. [Configure the server](https://angular.dev/tools/cli/deployment#server-configuration) to redirect all requests to the _index.html_ file. Some services do that automatically. Others require you [to add a file to the bundle via assets](https://angular.dev/reference/configs/workspace-config) which describes the server how to do the redirections. Occasionally, you may need to do manual configuration.
 
-In addition, you can [deploy your application to certain targets using the Angular CLI](https://angular.io/guide/deployment#automatic-deployment-with-the-cli). Here are some deploy targets:
+In addition, you can [deploy your application to certain targets using the Angular CLI](https://angular.dev/tools/cli/deployment#automatic-deployment-with-the-cli). Here are some deploy targets:
 
 - [Azure](https://github.com/Azure/ng-deploy-azure#readme)
 - [Firebase](https://github.com/angular/angularfire#readme)

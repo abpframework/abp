@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Selecionar todos",
     "SaveWithoutAnyPermissionsWarningMessage": "Tem certeza que deseja salvar sem nenhuma permissão?",
     "PermissionGroup": "Grupo de permissão",
-    "Filter": "Filtrar"
+    "Filter": "Filtrar",
+    "ResourcePermissions": "Permissões",
+    "ResourcePermissionTarget": "Alvo",
+    "ResourcePermissionPermissions": "Permissões",
+    "AddResourcePermission": "Adicionar permissão",
+    "ResourcePermissionDeletionConfirmationMessage": "Tem certeza de que deseja excluir todas as permissões?",
+    "UpdateResourcePermission": "Atualizar permissão",
+    "GrantAllResourcePermissions": "Conceder tudo",
+    "NoResourceProviderKeyLookupServiceFound": "Nenhum serviço de pesquisa de chave do provedor foi encontrado",
+    "NoResourcePermissionFound": "Nenhuma permissão foi definida."
   }
 }

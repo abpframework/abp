@@ -8,6 +8,15 @@
     "SelectAllInThisTab": "Velja allt",
     "SaveWithoutAnyPermissionsWarningMessage": "Ertu viss um að þú viljir vista án nokkurra heimilda?",
     "PermissionGroup": "Heimildahópur",
-    "Filter": "Sía"
+    "Filter": "Sía",
+    "ResourcePermissions": "Heimildir",
+    "ResourcePermissionTarget": "Markmið",
+    "ResourcePermissionPermissions": "Heimildir",
+    "AddResourcePermission": "Bæta við heimild",
+    "ResourcePermissionDeletionConfirmationMessage": "Ertu viss um að þú viljir eyða öllum heimildum?",
+    "UpdateResourcePermission": "Uppfæra heimild",
+    "GrantAllResourcePermissions": "Veita allt",
+    "NoResourceProviderKeyLookupServiceFound": "Engin þjónusta fannst til að leita að lykli veitanda",
+    "NoResourcePermissionFound": "Engin heimild er skilgreind."
   }
 }

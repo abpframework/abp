@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Volo.Abp.Content;
@@ -21,7 +21,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
             {
                 Func<OpenApiSchema> remoteStreamContentSchemaFactory = () => new OpenApiSchema()
                 {
-                    Type = "string",
+                    Type = JsonSchemaType.String,
                     Format = "binary"
                 };
 
@@ -42,7 +42,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
     {
         var authorizationUrl = new Uri($"{authority.TrimEnd('/')}{authorizationEndpoint.EnsureStartsWith('/')}");
         var tokenUrl = new Uri($"{authority.TrimEnd('/')}{tokenEndpoint.EnsureStartsWith('/')}");
-        
+
         return services
             .AddAbpSwaggerGen()
             .AddSwaggerGen(
@@ -62,19 +62,9 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                         }
                     });
 
-                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement()
                     {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "oauth2"
-                                }
-                            },
-                            Array.Empty<string>()
-                        }
+                        [new OpenApiSecuritySchemeReference("oauth2", document)] = []
                     });
 
                     setupAction?.Invoke(options);
@@ -100,7 +90,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcSupportedScopes"] = scopes;
             swaggerUiOptions.ConfigObject.AdditionalItems["oidcDiscoveryEndpoint"] = discoveryUrl;
         });
-        
+
         return services
             .AddAbpSwaggerGen()
             .AddSwaggerGen(
@@ -112,24 +102,15 @@ public static class AbpSwaggerGenServiceCollectionExtensions
                         OpenIdConnectUrl = new Uri(RemoveTenantPlaceholders(discoveryUrl))
                     });
 
-                    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement()
                     {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "oidc"
-                                }
-                            },
-                            Array.Empty<string>()
-                        }
+                        [new OpenApiSecuritySchemeReference("oauth2", document)] = []
                     });
+
                     setupAction?.Invoke(options);
                 });
     }
-    
+
     private static string RemoveTenantPlaceholders(string url)
     {
         return url

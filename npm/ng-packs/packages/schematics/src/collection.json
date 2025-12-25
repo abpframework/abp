@@ -35,6 +35,11 @@
       "factory": "./commands/change-theme",
       "schema": "./commands/change-theme/schema.json"
     },
+    "ai-config": {
+      "description": "Generates AI configuration files for Angular projects",
+      "factory": "./commands/ai-config",
+      "schema": "./commands/ai-config/schema.json"
+    },
     "server": {
       "factory": "./commands/ssr-add/server",
       "description": "Create an Angular server app.",

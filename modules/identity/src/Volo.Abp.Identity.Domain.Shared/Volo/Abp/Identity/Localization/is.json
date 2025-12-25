@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Lykilorð verða að hafa að minnsta kosti eina hástafi ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Lykilorð verða að vera að minnsta kosti {0} stafir.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Lykilorð verða að innihalda að minnsta kosti {0} einstaka stafi.",
+    "Volo.Abp.Identity:PasswordInHistory": "Lykilorð mega ekki passa við síðustu {0} lykilorðin þín.",
     "Volo.Abp.Identity:RoleNotFound": "Hlutverk {0} er ekki til.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Notandi hefur þegar stillt lykilorð.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Notandi þegar í hlutverkinu '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Nauðsynlegt að hafa tölustaf",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Þvinga notendur til að breyta lykilorði á ákveðnum tímabilum",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Tímabil á milli lykilorðabreytinga (dagar)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Virkja að koma í veg fyrir endurnotkun lykilorðs",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Fjöldi sem kemur í veg fyrir endurnotkun lykilorðs",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Virkt fyrir nýja notendur",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Lengd lokunar (sekúndur)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Hámarks misheppnaðra aðgangsstilrauna",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Ef lykilorð verða að innihalda tölustaf.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Hvort notendur verði að breyta lykilorði á ákveðnum tímabilum.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Tímabil á milli lykilorðabreytinga (dagar).",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Hvort á að koma í veg fyrir að notendur endurnoti fyrri lykilorð sín.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "Fjöldi fyrri lykilorða sem ekki er hægt að endurnota.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Hvort hægt sé að læsa nýjum notanda.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Tímalengd þess að notandi er læstur úti þegar lokun á sér stað.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Fjöldi misheppnaðra aðgangstilrauna sem leyfður er áður en notandi er læstur út, að því gefnu að útilokun sé virk.",
@@ -130,6 +135,8 @@
     "ModificationTime": "Breytingartími",
     "PasswordUpdateTime": "Uppfærslutími lykilorðs",
     "LockoutEndTime": "Lokatími lokunar",
-    "FailedAccessCount": "Misheppnuð fjöldi aðgangs"
+    "FailedAccessCount": "Misheppnuð fjöldi aðgangs",
+    "UserResourcePermissionProviderKeyLookupService": "Notandi",
+    "RoleResourcePermissionProviderKeyLookupService": "Hlutverk"
   }
 }

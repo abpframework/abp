@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account;

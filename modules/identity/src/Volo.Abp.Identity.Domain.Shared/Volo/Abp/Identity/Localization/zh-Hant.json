@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "密碼至少包含一位大寫字母 ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "密碼至少為{0}個字元.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "密碼至少包含{0}個不同的字元.",
+    "Volo.Abp.Identity:PasswordInHistory": "密碼不能與最近{0}次使用的密碼相同.",
     "Volo.Abp.Identity:RoleNotFound": "角色 {0} 不存在.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "使用者已設置密碼.",
     "Volo.Abp.Identity:UserAlreadyInRole": "使用者已具有角色 '{0}'.",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "需要數字",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "強制使用者定期更改密碼",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "密碼更改週期(天)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "啟用防止密碼重用",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "防止密碼重用數量",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "允許新的使用者",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "被鎖定期間(秒)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "最大登入次數嘗試",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "密碼必須包含數字.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "強制使用者定期更改密碼.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "密碼更改週期(天).",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "是否防止使用者重用以前的密碼。",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "不能重用的以前密碼的數量。",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "使用者是否會被鎖定.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "使用者被鎖定後的時間.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "當啟用鎖定功能，設定最大嘗試輸入次數，超過後就被鎖定.",
@@ -130,6 +135,8 @@
     "LockoutEndTime": "鎖定結束時間",
     "FailedAccessCount": "訪問失敗次數",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "強制要求驗證電子郵件才能註冊",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "除非驗證他們的電子郵件地址，否則不會創建用戶帳戶。"
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "除非驗證他們的電子郵件地址，否則不會創建用戶帳戶。",
+    "UserResourcePermissionProviderKeyLookupService": "使用者",
+    "RoleResourcePermissionProviderKeyLookupService": "角色"
   }
 }

@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Les mots de passe doivent avoir au moins une majuscule ('A'-'Z').",
     "Volo.Abp.Identity:PasswordTooShort": "Les mots de passe doivent être au moins {0} caractères.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Les mots de passe doivent utiliser au moins {0} caractères différents.",
+    "Volo.Abp.Identity:PasswordInHistory": "Les mots de passe ne doivent pas correspondre à vos {0} derniers mots de passe.",
     "Volo.Abp.Identity:RoleNotFound": "La {0} de rôle n’existe pas.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "L’utilisateur dispose déjà d’un jeu de mots de passe.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Utilisateur déjà dans le rôle '{0}'.",
@@ -76,7 +77,7 @@
     "Volo.Abp.Identity:010007": "Vous ne pouvez pas modifier votre paramètre à deux facteurs.",
     "Volo.Abp.Identity:010008": "Il n’est pas permis de changer deux facteurs de réglage.",
     "Volo.Abp.Identity:010009": "Vous ne pouvez pas vous déléguer vous-même.",
-    "Volo.Abp.Identity:010021" : "Le nom '{0}' existe déjà.",
+    "Volo.Abp.Identity:010021": "Le nom '{0}' existe déjà.",
     "Volo.Abp.Identity:010022": "Vous ne pouvez pas modifier un type de revendication statique.",
     "Volo.Abp.Identity:010023": "Vous ne pouvez pas supprimer un type de revendication statique.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Nombre maximal d’adhésions autorisées à l’unité d’organisation pour un utilisateur",
@@ -98,6 +99,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Chiffre requis",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Forcer les utilisateurs à changer leur mot de passe périodiquement",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Période de changement de mot de passe (jours)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Activer la prévention de la réutilisation du mot de passe",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Nombre de réutilisations de mot de passe à empêcher",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Activé pour les nouveaux utilisateurs",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Durée(secondes) du lock-out",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max a échoué tentatives d’accès",
@@ -114,6 +117,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Si les mots de passe doivent contenir un chiffre.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Si les utilisateurs doivent changer leur mot de passe périodiquement.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Période de changement de mot de passe (jours).",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "S'il faut empêcher les utilisateurs de réutiliser leurs mots de passe précédents.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "Le nombre de mots de passe précédents qui ne peuvent pas être réutilisés.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Si un nouvel utilisateur peut être verrouillé.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Durée pendant laquelle un utilisateur est verrouillé lorsqu’un lock-out se produit.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Nombre de tentatives d’accès échouées avant qu’un utilisateur ne soit verrouillé, en supposant que le verrouillage est activé.",
@@ -130,6 +135,8 @@
     "LockoutEndTime": "Heure de fin du verrouillage",
     "FailedAccessCount": "Nombre d&#39;accès ayant échoué",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Exiger la vérification de l'e-mail pour s'inscrire",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Les comptes d’utilisateurs ne seront pas créés à moins qu’ils ne vérifient leurs adresses e-mail."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Les comptes d’utilisateurs ne seront pas créés à moins qu’ils ne vérifient leurs adresses e-mail.",
+    "UserResourcePermissionProviderKeyLookupService": "Utilisateur",
+    "RoleResourcePermissionProviderKeyLookupService": "Rôle"
   }
 }

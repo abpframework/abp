@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
     <PackageReference Include="Minio" />
+	<PackageReference Include="Microsoft.Extensions.Http" />
   </ItemGroup>
 
 </Project>
