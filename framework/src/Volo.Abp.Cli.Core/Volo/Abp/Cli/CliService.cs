@@ -55,10 +55,14 @@ public class CliService : ITransientDependency
 
     public async Task RunAsync(string[] args)
     {
-        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
-        Logger.LogInformation($"ABP CLI {currentCliVersion}");
-
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
+        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
+        
+        // Don't print banner for MCP command to avoid corrupting stdout JSON-RPC stream
+        if (!commandLineArgs.IsCommand("mcp"))
+        {
+            Logger.LogInformation($"ABP CLI {currentCliVersion}");
+        }
 
 #if !DEBUG
         if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
