@@ -46,7 +46,7 @@ public class AbpBreadcrumbItemTagHelperService : AbpTagHelperService<AbpBreadcru
 
         var link = new TagBuilder("a");
         link.Attributes.Add("href", TagHelper.Href);
-        link.InnerHtml.AppendHtml(TagHelper.Title);
+        link.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Title));
         return link.ToHtmlString();
     }
 }

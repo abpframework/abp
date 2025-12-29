@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -8,6 +9,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab;
 
 public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelper>
 {
+    protected HtmlEncoder Encoder { get; }
+
+    public AbpTabLinkTagHelperService(HtmlEncoder encoder)
+    {
+        Encoder = encoder;
+    }
+
     public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         SetPlaceholderForNameIfNotProvided();
@@ -35,7 +43,7 @@ public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelpe
             anchor.AddCssClass("dropdown-item");
             anchor.Attributes.Add("id", id);
             anchor.Attributes.Add("href", href);
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.AppendHtml(Encoder.Encode(title));
 
             return anchor.ToHtmlString();
         }
@@ -45,7 +53,7 @@ public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelpe
             anchor.AddCssClass("nav-link " + AbpTabItemActivePlaceholder);
             anchor.Attributes.Add("id", id);
             anchor.Attributes.Add("href", href);
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.AppendHtml(Encoder.Encode(title));
 
             var listItem = new TagBuilder("li");
             listItem.AddCssClass("nav-item");

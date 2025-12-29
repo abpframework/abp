@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -9,6 +10,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab;
 
 public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
 {
+    protected HtmlEncoder Encoder { get; }
+
+    public AbpTabTagHelperService(HtmlEncoder encoder)
+    {
+        Encoder = encoder;
+    }
+
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         SetPlaceholderForNameIfNotProvided();
@@ -53,7 +61,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
                 anchor.Attributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.AppendHtml(Encoder.Encode(title));
 
             return anchor.ToHtmlString();
         }
@@ -73,7 +81,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
                 anchor.Attributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.AppendHtml(Encoder.Encode(title));
 
             var listItem = new TagBuilder("li");
             listItem.AddCssClass("nav-item");

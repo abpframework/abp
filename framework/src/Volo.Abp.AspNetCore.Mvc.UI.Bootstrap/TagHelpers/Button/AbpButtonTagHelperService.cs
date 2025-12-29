@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Text.Encodings.Web;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 
@@ -12,7 +13,8 @@ public class AbpButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpButton
 
     protected IStringLocalizer<AbpUiResource> L { get; }
 
-    public AbpButtonTagHelperService(IStringLocalizer<AbpUiResource> localizer)
+    public AbpButtonTagHelperService(HtmlEncoder encoder, IStringLocalizer<AbpUiResource> localizer)
+        : base(encoder)
     {
         L = localizer;
     }

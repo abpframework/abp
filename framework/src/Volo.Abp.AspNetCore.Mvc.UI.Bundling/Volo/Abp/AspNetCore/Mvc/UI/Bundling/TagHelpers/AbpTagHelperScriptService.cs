@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,9 +20,9 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
         IBundleManager bundleManager,
         IOptions<AbpBundlingOptions> options,
         IWebHostEnvironment hostingEnvironment) : base(
-            bundleManager,
-            options,
-            hostingEnvironment)
+        bundleManager,
+        options,
+        hostingEnvironment)
     {
     }
 
