@@ -31,6 +31,7 @@
     <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="Dapr.AspNetCore" Version="1.16.0" />
     <PackageVersion Include="Dapr.Client" Version="1.16.0" />
+    <PackageVersion Include="ModelContextProtocol" Version="0.5.0-preview.1" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser" Version="3.0.28" />
     <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="10.4.290.9" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
