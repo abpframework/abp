@@ -1,10 +1,12 @@
 ﻿using Blazorise;
+using Blazorise.Utilities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Application;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.Authorization;
+using Volo.Abp.BlazoriseUI.Utilities;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
@@ -34,6 +36,7 @@ public class AbpBlazoriseUIModule : AbpModule
         });
 
         context.Services.Replace(ServiceDescriptor.Scoped<IComponentActivator, ComponentActivator>());
+        context.Services.Replace(ServiceDescriptor.Singleton<IValidationMessageLocalizerAttributeFinder, AbpValidationMessageLocalizerAttributeFinder>());
         context.Services.AddSingleton(typeof(AbpBlazorMessageLocalizerHelper<>));
     }
 }
