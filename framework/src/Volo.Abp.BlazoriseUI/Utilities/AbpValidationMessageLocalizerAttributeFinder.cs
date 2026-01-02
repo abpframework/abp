@@ -31,7 +31,7 @@ public class AbpValidationMessageLocalizerAttributeFinder : IValidationMessageLo
         }
 
         var placeholderIndices = new List<string>();
-        foreach (var match in matches)
+        foreach (Match match in matches)
         {
             placeholderIndices.Add(match.Groups[1].Value);
         }
