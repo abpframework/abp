@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using Volo.Abp.DependencyInjection;
@@ -13,17 +14,11 @@ namespace Volo.Abp.Cli.Commands.Services;
 public class McpServerService : ITransientDependency
 {
     private readonly McpHttpClientService _mcpHttpClient;
-    private readonly ILogger<McpServerService> _logger;
-    private readonly ILoggerFactory _loggerFactory;
 
     public McpServerService(
-        McpHttpClientService mcpHttpClient,
-        ILogger<McpServerService> logger,
-        ILoggerFactory loggerFactory)
+        McpHttpClientService mcpHttpClient)
     {
         _mcpHttpClient = mcpHttpClient;
-        _logger = logger;
-        _loggerFactory = loggerFactory;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken = default)
@@ -35,8 +30,10 @@ public class McpServerService : ITransientDependency
 
         RegisterAllTools(options);
 
+        // Use NullLoggerFactory to prevent ModelContextProtocol library from logging to stdout
+        // All our logging goes to stderr via Console.Error
         var server = McpServer.Create(
-            new StdioServerTransport("abp-mcp-server", _loggerFactory),
+            new StdioServerTransport("abp-mcp-server", NullLoggerFactory.Instance),
             options
         );
 
