@@ -32,6 +32,14 @@ public class HelpCommand : IConsoleCommand, ITransientDependency
 
     public Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        // Don't output help text for MCP command to avoid corrupting stdout JSON-RPC stream
+        // If MCP command is being used, it should have been handled directly, not through HelpCommand
+        if (commandLineArgs.IsCommand("mcp"))
+        {
+            // Silently return - MCP server should handle its own errors
+            return Task.CompletedTask;
+        }
+
         if (string.IsNullOrWhiteSpace(commandLineArgs.Target))
         {
             Logger.LogInformation(GetUsageInfo());

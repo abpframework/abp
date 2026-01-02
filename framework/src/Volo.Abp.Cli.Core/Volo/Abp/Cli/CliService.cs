@@ -58,14 +58,17 @@ public class CliService : ITransientDependency
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
         var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
         
+        var isMcpCommand = commandLineArgs.IsCommand("mcp");
+        
         // Don't print banner for MCP command to avoid corrupting stdout JSON-RPC stream
-        if (!commandLineArgs.IsCommand("mcp"))
+        if (!isMcpCommand)
         {
             Logger.LogInformation($"ABP CLI {currentCliVersion}");
         }
 
 #if !DEBUG
-        if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
+        // Skip version check for MCP command to avoid corrupting stdout JSON-RPC stream
+        if (!isMcpCommand && !commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
         {
             await CheckCliVersionAsync(currentCliVersion);
         }
@@ -89,13 +92,29 @@ public class CliService : ITransientDependency
         }
         catch (CliUsageException usageException)
         {
-            Logger.LogWarning(usageException.Message);
+            // For MCP command, write errors to stderr to avoid corrupting stdout JSON-RPC stream
+            if (commandLineArgs.IsCommand("mcp"))
+            {
+                await Console.Error.WriteLineAsync($"[MCP] Error: {usageException.Message}");
+            }
+            else
+            {
+                Logger.LogWarning(usageException.Message);
+            }
             Environment.ExitCode = 1;
         }
         catch (Exception ex)
         {
             await _telemetryService.AddErrorActivityAsync(ex.Message);
-            Logger.LogException(ex);
+            // For MCP command, write errors to stderr to avoid corrupting stdout JSON-RPC stream
+            if (commandLineArgs.IsCommand("mcp"))
+            {
+                await Console.Error.WriteLineAsync($"[MCP] Fatal error: {ex.Message}");
+            }
+            else
+            {
+                Logger.LogException(ex);
+            }
             throw;
         }
         finally

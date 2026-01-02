@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using ModelContextProtocol.Protocol;
+using ModelContextProtocol.Server;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands.Services;
@@ -14,352 +14,256 @@ public class McpServerService : ITransientDependency
 {
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly ILogger<McpServerService> _logger;
+    private readonly ILoggerFactory _loggerFactory;
 
     public McpServerService(
         McpHttpClientService mcpHttpClient,
-        ILogger<McpServerService> logger)
+        ILogger<McpServerService> logger,
+        ILoggerFactory loggerFactory)
     {
         _mcpHttpClient = mcpHttpClient;
         _logger = logger;
+        _loggerFactory = loggerFactory;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            // Write to stderr to avoid corrupting stdout JSON-RPC stream
-            await Console.Error.WriteLineAsync("[MCP] ABP MCP Server started successfully");
+        // Log to stderr to avoid corrupting stdout JSON-RPC stream
+        await Console.Error.WriteLineAsync("[MCP] Starting ABP MCP Server (stdio)");
 
-            await ProcessStdioAsync(cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            await Console.Error.WriteLineAsync("[MCP] ABP MCP Server stopped");
-        }
-        catch (Exception ex)
-        {
-            await Console.Error.WriteLineAsync($"[MCP] Error running ABP MCP Server: {ex.Message}");
-            throw;
-        }
+        var options = new McpServerOptions();
+
+        RegisterAllTools(options);
+
+        var server = McpServer.Create(
+            new StdioServerTransport("abp-mcp-server", _loggerFactory),
+            options
+        );
+
+        await server.RunAsync(cancellationToken);
+
+        await Console.Error.WriteLineAsync("[MCP] ABP MCP Server stopped");
     }
 
-    private async Task ProcessStdioAsync(CancellationToken cancellationToken)
+    private void RegisterAllTools(McpServerOptions options)
     {
-        using var reader = new StreamReader(Console.OpenStandardInput());
-        using var writer = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
-
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            string line;
-            try
+        RegisterTool(
+            options,
+            "get_relevant_abp_documentation",
+            "Search ABP framework technical documentation including official guides, API references, and framework documentation.",
+            new
             {
-                var readTask = reader.ReadLineAsync();
-                var completedTask = await Task.WhenAny(readTask, Task.Delay(Timeout.Infinite, cancellationToken));
-                
-                if (completedTask != readTask)
+                type = "object",
+                properties = new
                 {
-                    // Cancellation requested
-                    break;
-                }
-                
-                line = await readTask;
-            }
-            catch (OperationCanceledException)
-            {
-                break;
-            }
-            
-            if (line == null)
-            {
-                // EOF reached
-                break;
-            }
-
-            // Skip empty lines or lines that are not JSON
-            if (string.IsNullOrWhiteSpace(line))
-            {
-                continue;
-            }
-            
-            // Check if line looks like JSON (starts with '{')
-            if (!line.TrimStart().StartsWith("{"))
-            {
-                // Not JSON, probably build output or other noise - log to stderr and skip
-                await Console.Error.WriteLineAsync($"[MCP] Skipping non-JSON line: {line.Substring(0, Math.Min(50, line.Length))}...");
-                continue;
-            }
-
-            try
-            {
-                var request = JsonSerializer.Deserialize<McpRequest>(line, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-                
-                var response = await HandleRequestAsync(request, cancellationToken);
-                
-                var responseJson = JsonSerializer.Serialize(response, new JsonSerializerOptions
-                {
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-                
-                await writer.WriteLineAsync(responseJson);
-            }
-            catch (JsonException jsonEx)
-            {
-                // JSON parse error - log to stderr but don't send error response
-                // (the line might be build output or other noise)
-                await Console.Error.WriteLineAsync($"[MCP] JSON parse error: {jsonEx.Message} | Line: {line.Substring(0, Math.Min(100, line.Length))}");
-            }
-            catch (Exception ex)
-            {
-                // Other errors during request handling - send error response to client
-                await Console.Error.WriteLineAsync($"[MCP] Error processing request: {ex.Message}");
-                
-                var errorResponse = new McpResponse
-                {
-                    Jsonrpc = "2.0",
-                    Id = null,
-                    Error = new McpError
+                    query = new
                     {
-                        Code = -32603,
-                        Message = ex.Message
+                        type = "string",
+                        description = "The search query to find relevant documentation"
                     }
-                };
-                
-                var errorJson = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
-                {
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-                
-                await writer.WriteLineAsync(errorJson);
+                },
+                required = new[] { "query" }
             }
-        }
-        
-        await Console.Error.WriteLineAsync("[MCP] Stdio processing loop ended");
-    }
+        );
 
-    private async Task<McpResponse> HandleRequestAsync(McpRequest request, CancellationToken cancellationToken)
-    {
-        if (request.Method == "initialize")
-        {
-            return new McpResponse
+        RegisterTool(
+            options,
+            "get_relevant_abp_articles",
+            "Search ABP blog posts, tutorials, and community-contributed content.",
+            new
             {
-                Jsonrpc = "2.0",
-                Id = request.Id,
-                Result = new
+                type = "object",
+                properties = new
                 {
-                    protocolVersion = "2024-11-05",
-                    capabilities = new
+                    query = new
                     {
-                        tools = new { }
-                    },
-                    serverInfo = new
-                    {
-                        name = "abp-mcp-server",
-                        version = "1.0.0"
+                        type = "string",
+                        description = "The search query to find relevant articles"
                     }
-                }
-            };
-        }
-
-        if (request.Method == "tools/list")
-        {
-            return new McpResponse
-            {
-                Jsonrpc = "2.0",
-                Id = request.Id,
-                Result = new
-                {
-                    tools = GetToolDefinitions()
-                }
-            };
-        }
-
-        if (request.Method == "tools/call")
-        {
-            var toolName = request.Params.GetProperty("name").GetString();
-            var arguments = request.Params.GetProperty("arguments");
-            
-            var result = await _mcpHttpClient.CallToolAsync(toolName, arguments);
-            var toolResponse = JsonSerializer.Deserialize<JsonElement>(result);
-            
-            return new McpResponse
-            {
-                Jsonrpc = "2.0",
-                Id = request.Id,
-                Result = toolResponse
-            };
-        }
-
-        return new McpResponse
-        {
-            Jsonrpc = "2.0",
-            Id = request.Id,
-            Error = new McpError
-            {
-                Code = -32601,
-                Message = $"Method not found: {request.Method}"
+                },
+                required = new[] { "query" }
             }
-        };
+        );
+
+        RegisterTool(
+            options,
+            "get_relevant_abp_support_questions",
+            "Search support ticket history containing real-world problems and their solutions.",
+            new
+            {
+                type = "object",
+                properties = new
+                {
+                    query = new
+                    {
+                        type = "string",
+                        description = "The search query to find relevant support questions"
+                    }
+                },
+                required = new[] { "query" }
+            }
+        );
+
+        RegisterTool(
+            options,
+            "search_code",
+            "Search for code across ABP repositories using regex patterns.",
+            new
+            {
+                type = "object",
+                properties = new
+                {
+                    query = new
+                    {
+                        type = "string",
+                        description = "The regex pattern or search query to find code"
+                    },
+                    repo_filter = new
+                    {
+                        type = "string",
+                        description = "Optional repository filter to limit search scope"
+                    }
+                },
+                required = new[] { "query" }
+            }
+        );
+
+        RegisterTool(
+            options,
+            "list_repos",
+            "List all available ABP repositories in SourceBot.",
+            new
+            {
+                type = "object",
+                properties = new { }
+            }
+        );
+
+        RegisterTool(
+            options,
+            "get_file_source",
+            "Retrieve the complete source code of a specific file from an ABP repository.",
+            new
+            {
+                type = "object",
+                properties = new
+                {
+                    repoId = new
+                    {
+                        type = "string",
+                        description = "The repository identifier containing the file"
+                    },
+                    fileName = new
+                    {
+                        type = "string",
+                        description = "The file path or name to retrieve"
+                    }
+                },
+                required = new[] { "repoId", "fileName" }
+            }
+        );
     }
 
-    private object[] GetToolDefinitions()
+    private void RegisterTool(
+        McpServerOptions options,
+        string name,
+        string description,
+        object inputSchema)
     {
-        return new object[]
+        if (options.ToolCollection == null)
         {
-            new
+            options.ToolCollection = new McpServerPrimitiveCollection<McpServerTool>();
+        }
+
+        var tool = new AbpMcpServerTool(
+            name,
+            description,
+            JsonSerializer.SerializeToElement(inputSchema),
+            async (context, cancellationToken) =>
             {
-                name = "get_relevant_abp_documentation",
-                description = "Search ABP framework technical documentation including official guides, API references, and framework documentation.",
-                inputSchema = new
+                // Log to stderr to avoid corrupting stdout JSON-RPC stream
+                await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' called with arguments: {context.Params.Arguments}");
+
+                try
                 {
-                    type = "object",
-                    properties = new
+                    var argumentsDict = context.Params.Arguments;
+                    var argumentsJson = JsonSerializer.SerializeToElement(argumentsDict);
+                    var resultJson = await _mcpHttpClient.CallToolAsync(
+                        name,
+                        argumentsJson
+                    );
+
+                    await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' executed successfully");
+
+                    // Try to deserialize the response as CallToolResult
+                    // The HTTP client should return JSON in the format expected by MCP
+                    try
                     {
-                        query = new
+                        var callToolResult = JsonSerializer.Deserialize<CallToolResult>(resultJson);
+                        if (callToolResult != null)
                         {
-                            type = "string",
-                            description = "The search query to find relevant documentation"
+                            return callToolResult;
                         }
-                    },
-                    required = new[] { "query" }
-                }
-            },
-            new
-            {
-                name = "get_relevant_abp_articles",
-                description = "Search ABP blog posts, tutorials, and community-contributed content.",
-                inputSchema = new
-                {
-                    type = "object",
-                    properties = new
+                    }
+                    catch (Exception deserializeEx)
                     {
-                        query = new
-                        {
-                            type = "string",
-                            description = "The search query to find relevant articles"
-                        }
-                    },
-                    required = new[] { "query" }
-                }
-            },
-            new
-            {
-                name = "get_relevant_abp_support_questions",
-                description = "Search support ticket history containing real-world problems and their solutions.",
-                inputSchema = new
-                {
-                    type = "object",
-                    properties = new
+                        await Console.Error.WriteLineAsync($"[MCP] Failed to deserialize response as CallToolResult: {deserializeEx.Message}");
+                        await Console.Error.WriteLineAsync($"[MCP] Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
+                    }
+
+                    // Fallback: return empty result if deserialization fails
+                    return new CallToolResult
                     {
-                        query = new
-                        {
-                            type = "string",
-                            description = "The search query to find relevant support questions"
-                        }
-                    },
-                    required = new[] { "query" }
+                        Content = new List<ContentBlock>()
+                    };
                 }
-            },
-            new
-            {
-                name = "search_code",
-                description = "Search for code across ABP repositories using regex patterns.",
-                inputSchema = new
+                catch (Exception ex)
                 {
-                    type = "object",
-                    properties = new
+                    await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' execution failed: {ex.Message}");
+                    return new CallToolResult
                     {
-                        query = new
-                        {
-                            type = "string",
-                            description = "The regex pattern or search query to find code"
-                        },
-                        repo_filter = new
-                        {
-                            type = "string",
-                            description = "Optional repository filter to limit search scope"
-                        }
-                    },
-                    required = new[] { "query" }
-                }
-            },
-            new
-            {
-                name = "list_repos",
-                description = "List all available ABP repositories in SourceBot.",
-                inputSchema = new
-                {
-                    type = "object",
-                    properties = new { }
-                }
-            },
-            new
-            {
-                name = "get_file_source",
-                description = "Retrieve the complete source code of a specific file from an ABP repository.",
-                inputSchema = new
-                {
-                    type = "object",
-                    properties = new
-                    {
-                        repoId = new
-                        {
-                            type = "string",
-                            description = "The repository identifier containing the file"
-                        },
-                        fileName = new
-                        {
-                            type = "string",
-                            description = "The file path or name to retrieve"
-                        }
-                    },
-                    required = new[] { "repoId", "fileName" }
+                        Content = new List<ContentBlock>(),
+                        IsError = true
+                    };
                 }
             }
-        };
+        );
+
+        options.ToolCollection.Add(tool);
     }
-}
 
-internal class McpRequest
-{
-    [System.Text.Json.Serialization.JsonPropertyName("jsonrpc")]
-    public string Jsonrpc { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("id")]
-    public object Id { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("method")]
-    public string Method { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("params")]
-    public JsonElement Params { get; set; }
-}
+    private class AbpMcpServerTool : McpServerTool
+    {
+        private readonly string _name;
+        private readonly string _description;
+        private readonly JsonElement _inputSchema;
+        private readonly Func<RequestContext<CallToolRequestParams>, CancellationToken, ValueTask<CallToolResult>> _handler;
 
-internal class McpResponse
-{
-    [System.Text.Json.Serialization.JsonPropertyName("jsonrpc")]
-    public string Jsonrpc { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("id")]
-    public object Id { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("result")]
-    public object Result { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("error")]
-    public McpError Error { get; set; }
-}
+        public AbpMcpServerTool(
+            string name,
+            string description,
+            JsonElement inputSchema,
+            Func<RequestContext<CallToolRequestParams>, CancellationToken, ValueTask<CallToolResult>> handler)
+        {
+            _name = name;
+            _description = description;
+            _inputSchema = inputSchema;
+            _handler = handler;
+        }
 
-internal class McpError
-{
-    [System.Text.Json.Serialization.JsonPropertyName("code")]
-    public int Code { get; set; }
-    
-    [System.Text.Json.Serialization.JsonPropertyName("message")]
-    public string Message { get; set; }
-}
+        public override Tool ProtocolTool => new Tool
+        {
+            Name = _name,
+            Description = _description,
+            InputSchema = _inputSchema
+        };
 
+        public override IReadOnlyList<object> Metadata => Array.Empty<object>();
+
+        public override ValueTask<CallToolResult> InvokeAsync(RequestContext<CallToolRequestParams> context, CancellationToken cancellationToken)
+        {
+            return _handler(context, cancellationToken);
+        }
+    }
+
+}

@@ -99,7 +99,7 @@ public class McpHttpClientService : ITransientDependency
             var response = await httpClient.GetAsync(baseUrl);
             return response.IsSuccessStatusCode;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Silently fail health check - it's optional
             return false;
