@@ -1,5 +1,8 @@
+using System;
+using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Internal;
 using Volo.Abp.Cli.Http;
@@ -7,9 +10,12 @@ using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.Cli.ServiceProxying.Angular;
 using Volo.Abp.Cli.ServiceProxying.CSharp;
 using Volo.Abp.Cli.ServiceProxying.JavaScript;
+using Volo.Abp.Cli.Telemetry;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Activity.Providers;
 using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Minify;
@@ -27,6 +33,8 @@ namespace Volo.Abp.Cli;
 )]
 public class AbpCliCoreModule : AbpModule
 {
+    private const string EnableTelemetryVariableName = "ABP_STUDIO_ENABLE_TELEMETRY";
+    
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClient(CliConsts.HttpClientName)
@@ -82,5 +90,23 @@ public class AbpCliCoreModule : AbpModule
             options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
             options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
         });
+        
+        ConfigureTelemetry(context.Services);
+    }
+    
+    private static void ConfigureTelemetry(IServiceCollection services)
+    {
+        var enableTelemetryEnvironmentVariable = Environment.GetEnvironmentVariable(EnableTelemetryVariableName , EnvironmentVariableTarget.Machine) 
+                                                 ?? Environment.GetEnvironmentVariable(EnableTelemetryVariableName , EnvironmentVariableTarget.User) 
+                                                 ?? Environment.GetEnvironmentVariable(EnableTelemetryVariableName , EnvironmentVariableTarget.Process);
+
+        if (enableTelemetryEnvironmentVariable.IsNullOrEmpty() || !enableTelemetryEnvironmentVariable.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+        { 
+            services.Remove(services.First(p => p.ImplementationType == typeof(TelemetrySessionInfoEnricher)));
+        }
+        else
+        { 
+            services.Replace(ServiceDescriptor.Singleton<ITelemetryService, NullTelemetryService>());
+        }
     }
 }

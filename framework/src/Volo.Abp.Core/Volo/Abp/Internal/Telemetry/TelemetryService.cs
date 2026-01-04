@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal.Telemetry.Activity.Contracts;
 using Volo.Abp.Internal.Telemetry.Constants;
@@ -11,17 +12,11 @@ namespace Volo.Abp.Internal.Telemetry;
 
 public class TelemetryService : ITelemetryService, IScopedDependency
 {
-    private readonly ITelemetryActivitySender _telemetryActivitySender;
-    private readonly ITelemetryActivityEventBuilder _telemetryActivityEventBuilder;
-    private readonly ITelemetryActivityStorage _telemetryActivityStorage;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public TelemetryService(ITelemetryActivitySender telemetryActivitySender,
-        ITelemetryActivityEventBuilder telemetryActivityEventBuilder,
-        ITelemetryActivityStorage telemetryActivityStorage)
+    public TelemetryService(IServiceScopeFactory serviceScopeFactory)
     {
-        _telemetryActivitySender = telemetryActivitySender;
-        _telemetryActivityEventBuilder = telemetryActivityEventBuilder;
-        _telemetryActivityStorage = telemetryActivityStorage;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
 
@@ -72,26 +67,63 @@ public class TelemetryService : ITelemetryService, IScopedDependency
 
     private Task AddActivityAsync(ActivityContext context)
     {
-        _ = Task.Run(async () =>
+        var telemetryTask = Task.Run(async () =>
         {
-            await BuildAndSendActivityAsync(context);
+            using var scope = _serviceScopeFactory.CreateScope();
+
+            var telemetryActivityEventBuilder = scope.ServiceProvider.GetRequiredService<ITelemetryActivityEventBuilder>();
+            var telemetryActivityStorage = scope.ServiceProvider.GetRequiredService<ITelemetryActivityStorage>();
+            var telemetryActivitySender = scope.ServiceProvider.GetRequiredService<ITelemetryActivitySender>();
+
+            await BuildAndSendActivityAsync(context,
+                telemetryActivityEventBuilder,
+                telemetryActivityStorage,
+                telemetryActivitySender);
         });
+
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+        {
+            try
+            {
+                telemetryTask.Wait(TimeSpan.FromSeconds(10));
+            }
+            catch
+            {
+                // ignored
+            }
+        };
+        
+        Console.CancelKeyPress += (_, _) =>
+        {
+            try
+            {
+                telemetryTask.Wait(TimeSpan.FromSeconds(10));
+            }
+            catch
+            {
+                // ignored
+            }
+        };
 
         return Task.CompletedTask;
     }
 
-    private async Task BuildAndSendActivityAsync(ActivityContext context)
+    private static async Task BuildAndSendActivityAsync(
+        ActivityContext context,
+        ITelemetryActivityEventBuilder telemetryActivityEventBuilder,
+        ITelemetryActivityStorage telemetryActivityStorage,
+        ITelemetryActivitySender telemetryActivitySender)
     {
         try
         {
-            var activityEvent = await _telemetryActivityEventBuilder.BuildAsync(context);
+            var activityEvent = await telemetryActivityEventBuilder.BuildAsync(context);
             if (activityEvent is null)
             {
                 return;
             }
 
-            _telemetryActivityStorage.SaveActivity(activityEvent);
-            await _telemetryActivitySender.TrySendQueuedActivitiesAsync();
+            telemetryActivityStorage.SaveActivity(activityEvent);
+            await telemetryActivitySender.TrySendQueuedActivitiesAsync();
         }
         catch
         {

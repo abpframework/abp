@@ -19,7 +19,7 @@ public class AbpJsonSystemTextJsonTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<AbpSystemTextJsonSerializerOptions>()
+        context.Services.AddAbpOptions<AbpSystemTextJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 if (options.JsonSerializerOptions.TypeInfoResolver != null)
@@ -43,7 +43,7 @@ public class AbpJsonNewtonsoftTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<AbpNewtonsoftJsonSerializerOptions>()
+        context.Services.AddAbpOptions<AbpNewtonsoftJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerSettings.ContractResolver = new AbpCamelCasePropertyNamesContractResolver(

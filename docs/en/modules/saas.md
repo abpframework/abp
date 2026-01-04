@@ -40,7 +40,7 @@ Firstly, Payment module must be configured properly:
   ```bash
   abp add-module Volo.Payment
   ```
-  _Or you can install via using ABP Suite._
+  _Or you can install via using ABP Studio._
 
 - Configure Saas module to use Payment.
   

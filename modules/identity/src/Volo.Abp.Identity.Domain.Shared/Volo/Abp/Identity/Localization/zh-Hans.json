@@ -135,6 +135,8 @@
     "ModificationTime": "修改时间",
     "PasswordUpdateTime": "密码更新时间",
     "LockoutEndTime": "锁定结束时间",
-    "FailedAccessCount": "访问失败次数"
+    "FailedAccessCount": "访问失败次数",
+    "UserResourcePermissionProviderKeyLookupService": "用户",
+    "RoleResourcePermissionProviderKeyLookupService": "角色"
   }
 }

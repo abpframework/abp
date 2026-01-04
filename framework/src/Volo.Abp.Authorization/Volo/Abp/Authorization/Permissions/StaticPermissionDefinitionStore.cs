@@ -6,74 +6,72 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.StaticDefinitions;
 
 namespace Volo.Abp.Authorization.Permissions;
 
 public class StaticPermissionDefinitionStore : IStaticPermissionDefinitionStore, ISingletonDependency
 {
-    protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions => _lazyPermissionGroupDefinitions.Value;
-    private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyPermissionGroupDefinitions;
-
-    protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
-    private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
-
+    protected IServiceProvider ServiceProvider { get; }
     protected AbpPermissionOptions Options { get; }
-
-    private readonly IServiceProvider _serviceProvider;
+    protected IStaticDefinitionCache<PermissionGroupDefinition, (Dictionary<string, PermissionGroupDefinition>, List<PermissionDefinition>)> GroupCache { get; }
+    protected IStaticDefinitionCache<PermissionDefinition, Dictionary<string, PermissionDefinition>> DefinitionCache { get; }
 
     public StaticPermissionDefinitionStore(
         IServiceProvider serviceProvider,
-        IOptions<AbpPermissionOptions> options)
+        IOptions<AbpPermissionOptions> options,
+        IStaticDefinitionCache<PermissionGroupDefinition, (Dictionary<string, PermissionGroupDefinition>, List<PermissionDefinition>)> groupCache,
+        IStaticDefinitionCache<PermissionDefinition, Dictionary<string, PermissionDefinition>> definitionCache)
     {
-        _serviceProvider = serviceProvider;
+        ServiceProvider = serviceProvider;
         Options = options.Value;
-
-        _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(
-            CreatePermissionDefinitions,
-            isThreadSafe: true
-        );
-
-        _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(
-            CreatePermissionGroupDefinitions,
-            isThreadSafe: true
-        );
-    }
-    
-    protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
-    {
-        var permissions = new Dictionary<string, PermissionDefinition>();
-
-        foreach (var groupDefinition in PermissionGroupDefinitions.Values)
-        {
-            foreach (var permission in groupDefinition.Permissions)
-            {
-                AddPermissionToDictionaryRecursively(permissions, permission);
-            }
-        }
-
-        return permissions;
+        GroupCache = groupCache;
+        DefinitionCache = definitionCache;
     }
 
-    protected virtual void AddPermissionToDictionaryRecursively(
-        Dictionary<string, PermissionDefinition> permissions,
-        PermissionDefinition permission)
+    public async Task<PermissionDefinition?> GetOrNullAsync(string name)
     {
-        if (permissions.ContainsKey(permission.Name))
-        {
-            throw new AbpException("Duplicate permission name: " + permission.Name);
-        }
-
-        permissions[permission.Name] = permission;
-
-        foreach (var child in permission.Children)
-        {
-            AddPermissionToDictionaryRecursively(permissions, child);
-        }
+        var defs = await GetPermissionDefinitionsAsync();
+        return defs.GetOrDefault(name);
     }
 
-    protected virtual Dictionary<string, PermissionGroupDefinition> CreatePermissionGroupDefinitions()
+    public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
-        using (var scope = _serviceProvider.CreateScope())
+        var defs = await GetPermissionDefinitionsAsync();
+        return defs.Values.ToImmutableList();
+    }
+
+    public virtual async Task<PermissionDefinition?> GetResourcePermissionOrNullAsync(string resourceName, string name)
+    {
+        var (_, resourcePermissions) = await GetPermissionGroupDefinitionsAsync();
+        return resourcePermissions.FirstOrDefault(p => p.ResourceName == resourceName && p.Name == name);
+    }
+
+    public virtual async Task<IReadOnlyList<PermissionDefinition>> GetResourcePermissionsAsync()
+    {
+        var (_, resourcePermissions) = await GetPermissionGroupDefinitionsAsync();
+        return resourcePermissions.ToImmutableList();
+    }
+
+    public async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
+    {
+        var (groups, _) = await GetPermissionGroupDefinitionsAsync();
+        return groups.Values.ToImmutableList();
+    }
+
+    protected virtual async Task<(Dictionary<string, PermissionGroupDefinition>, List<PermissionDefinition>)> GetPermissionGroupDefinitionsAsync()
+    {
+        return await GroupCache.GetOrCreateAsync(CreatePermissionGroupDefinitionsAsync);
+    }
+
+    protected virtual async Task<Dictionary<string, PermissionDefinition>> GetPermissionDefinitionsAsync()
+    {
+        return await DefinitionCache.GetOrCreateAsync(CreatePermissionDefinitionsAsync);
+    }
+
+    protected virtual Task<(Dictionary<string, PermissionGroupDefinition>, List<PermissionDefinition>)> CreatePermissionGroupDefinitionsAsync()
+    {
+        using (var scope = ServiceProvider.CreateScope())
         {
             var context = new PermissionDefinitionContext(scope.ServiceProvider);
 
@@ -99,29 +97,43 @@ public class StaticPermissionDefinitionStore : IStaticPermissionDefinitionStore,
                 context.CurrentProvider = provider;
                 provider.PostDefine(context);
             }
-            
+
             context.CurrentProvider = null;
 
-            return context.Groups;
+            return Task.FromResult((context.Groups, context.ResourcePermissions));
         }
     }
 
-    public Task<PermissionDefinition?> GetOrNullAsync(string name)
+    protected virtual async Task<Dictionary<string, PermissionDefinition>> CreatePermissionDefinitionsAsync()
     {
-        return Task.FromResult(PermissionDefinitions.GetOrDefault(name));
-    }
-    
-    public virtual Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
-    {
-        return Task.FromResult<IReadOnlyList<PermissionDefinition>>(
-            PermissionDefinitions.Values.ToImmutableList()
-        );
+        var permissions = new Dictionary<string, PermissionDefinition>();
+
+        var (groups, _) = await GetPermissionGroupDefinitionsAsync();
+        foreach (var groupDefinition in groups.Values)
+        {
+            foreach (var permission in groupDefinition.Permissions)
+            {
+                AddPermissionToDictionaryRecursively(permissions, permission);
+            }
+        }
+
+        return permissions;
     }
 
-    public Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
+    protected virtual void AddPermissionToDictionaryRecursively(
+        Dictionary<string, PermissionDefinition> permissions,
+        PermissionDefinition permission)
     {
-        return Task.FromResult<IReadOnlyList<PermissionGroupDefinition>>(
-            PermissionGroupDefinitions.Values.ToImmutableList()
-        );
+        if (permissions.ContainsKey(permission.Name))
+        {
+            throw new AbpException("Duplicate permission name: " + permission.Name);
+        }
+
+        permissions[permission.Name] = permission;
+
+        foreach (var child in permission.Children)
+        {
+            AddPermissionToDictionaryRecursively(permissions, child);
+        }
     }
 }

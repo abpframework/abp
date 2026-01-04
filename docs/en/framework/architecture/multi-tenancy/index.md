@@ -47,7 +47,7 @@ ABP supports all the following approaches to store the tenant data in the databa
 - **Database per Tenant**: Every tenant has a separate, dedicated database to store the data related to that tenant.
 - **Hybrid**: Some tenants share a single database while some tenants may have their own databases.
 
-[Saas module (PRO)](../../../modules/saas.md) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
+[SaaS module (PRO)](../../../modules/saas.md) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
 
 > You can see the community article *[Multi-Tenancy with Separate Databases in .NET and ABP Framework](https://abp.io/community/articles/multitenancy-with-separate-databases-in-dotnet-and-abp-51nvl4u9)* for more details about different database architectures with practical implementation details.
 
@@ -466,7 +466,7 @@ The [Tenant Management module](../../../modules/tenant-management.md) provides a
 
 ### A note about separate database per tenant approach in open source version
 
-While ABP fully supports this option, managing connection strings of tenants from the UI is not available in open source version. You need to have [Saas module (PRO)](../../../modules/saas.md).
+While ABP fully supports this option, managing connection strings of tenants from the UI is not available in open source version. You need to have [SaaS module (PRO)](../../../modules/saas.md).
 Alternatively, you can implement this feature yourself by customizing the tenant management module and tenant application service to create and migrate the database on the fly.
 
 ## See Also

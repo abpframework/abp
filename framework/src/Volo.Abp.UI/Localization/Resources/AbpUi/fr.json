@@ -61,6 +61,7 @@
     "ProfilePicture": "Image de profil",
     "Theme": "Thème",
     "NotAssigned": "Non attribué",
-    "EntityActionsDisabledTooltip": "Vous n&#39;avez pas les permissions pour effectuer une action."
+    "EntityActionsDisabledTooltip": "Vous n&#39;avez pas les permissions pour effectuer une action.",
+    "ResourcePermissions": "Autorisations"
   }
 }

@@ -107,7 +107,7 @@ Extra properties defined on an existing entity will be included in the create an
 
 It has the following properties:
 
-- **getInjected** is the equivalent of [Injector.get](https://angular.io/api/core/Injector#get). You can use it to reach injected dependencies of `ExtensibleFormPropComponent`, including, but not limited to, its parent components.
+- **getInjected** is the equivalent of [Injector.get](https://angular.dev/api/core/Injector). You can use it to reach injected dependencies of `ExtensibleFormPropComponent`, including, but not limited to, its parent components.
 
   ```js
   {

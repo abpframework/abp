@@ -88,7 +88,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 }
 ````
 
-`AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't need to deal with validation errors unless you have higly customised validation logic.
+`AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't need to deal with validation errors unless you have highly customized validation logic.
 
 ### Logging
 
@@ -289,7 +289,7 @@ The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP
 
 ### Custom Mappings
 
-Automatic HTTP status code determination can be overrided by custom mappings. For example:
+Automatic HTTP status code determination can be overridden by custom mappings. For example:
 
 ````C#
 services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>

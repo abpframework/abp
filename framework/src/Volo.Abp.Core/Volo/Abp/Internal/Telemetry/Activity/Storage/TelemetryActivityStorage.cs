@@ -25,6 +25,8 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
     public TelemetryActivityStorage()
     {
         CreateDirectoryIfNotExist();
+        
+        DeleteExistingOldInformation();
 
         State = LoadState();
     }
@@ -159,6 +161,22 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
             var json = JsonSerializer.Serialize(State, JsonSerializerOptions);
             var encryptedJson = Cryptography.Encrypt(json);
             File.WriteAllText(TelemetryPaths.ActivityStorage, encryptedJson, Encoding.UTF8);
+        }
+        catch
+        {
+            // Ignored 
+        }
+    }
+
+    private static void DeleteExistingOldInformation()
+    {
+        try
+        {
+            var file = new FileInfo(TelemetryPaths.ActivityStorage);
+            if (file.Exists && file.CreationTime < new DateTime(2025, 12, 01))
+            {
+                file.Delete();
+            }
         }
         catch
         {

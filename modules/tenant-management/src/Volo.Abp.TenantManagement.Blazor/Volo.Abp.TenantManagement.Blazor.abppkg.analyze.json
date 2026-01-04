@@ -6,9 +6,9 @@
       "namespace": "Volo.Abp.TenantManagement.Blazor",
       "dependsOnModules": [
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.TenantManagement.Application.Contracts",

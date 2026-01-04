@@ -12,6 +12,7 @@ using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
@@ -169,7 +170,9 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     private bool IsEnum()
     {
         var value = TagHelper.AspFor.Model;
-        return (value != null && value.GetType().IsEnum) || TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
+        return (value != null && value.GetType().IsEnum) ||
+               TagHelper.AspFor.ModelExplorer.Metadata.IsEnum ||
+               (TagHelper.EnumType != null && TypeHelper.IsNullableEnum(TagHelper.EnumType));
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
@@ -258,19 +261,20 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
     protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
     {
+        var enumType = TagHelper.EnumType ?? explorer.ModelType;
+
         var selectItems = new List<SelectListItem>();
-        var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
-        var enumType = explorer.ModelType;
+        var isNullableType = Nullable.GetUnderlyingType(enumType!) != null;
 
         if (isNullableType)
         {
-            enumType = Nullable.GetUnderlyingType(explorer.ModelType)!;
+            enumType = Nullable.GetUnderlyingType(enumType!)!;
             selectItems.Add(new SelectListItem());
         }
 
         var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
 
-        foreach (var enumValue in enumType.GetEnumValuesAsUnderlyingType())
+        foreach (var enumValue in enumType!.GetEnumValuesAsUnderlyingType())
         {
             var localizedMemberName = _abpEnumLocalizer.GetString(enumType, enumValue,
                 new[]
@@ -306,7 +310,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         };
 
         var innerOutput = await labelTagHelper.ProcessAndGetOutputAsync(new TagHelperAttributeList { { "class", "form-label" } }, context, "label", TagMode.StartTagAndEndTag);
-        
+
         innerOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
 
         return innerOutput.Render(_encoder);

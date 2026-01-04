@@ -135,6 +135,8 @@
     "LockoutEndTime": "Kilitlenme bitiş zamanı",
     "FailedAccessCount": "Başarısız giriş denemesi sayısı",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Kayıt için e-posta doğrulaması zorunlu kıl",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Kullanıcı hesapları, e-posta adreslerini doğrulamadıkça oluşturulmayacaktır."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Kullanıcı hesapları, e-posta adreslerini doğrulamadıkça oluşturulmayacaktır.",
+    "UserResourcePermissionProviderKeyLookupService": "Kullanıcı",
+    "RoleResourcePermissionProviderKeyLookupService": "Rol"
   }
 }

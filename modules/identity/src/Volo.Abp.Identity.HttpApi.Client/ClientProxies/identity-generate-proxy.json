@@ -200,6 +200,18 @@
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
                   "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ExtraProperties",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+                  "typeSimple": "{string:object}",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
                 }
               ],
               "returnValue": {
@@ -668,6 +680,18 @@
                   "jsonName": null,
                   "type": "System.Int32",
                   "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ExtraProperties",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+                  "typeSimple": "{string:object}",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1220,6 +1244,18 @@
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
                   "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ExtraProperties",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+                  "typeSimple": "{string:object}",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
                 }
               ],
               "returnValue": {
@@ -1349,6 +1385,23 @@
                   }
                 },
                 {
+                  "name": "SearchByIdsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "ids",
+                      "typeAsString": "System.Guid[], System.Private.CoreLib",
+                      "type": "System.Guid[]",
+                      "typeSimple": "[string]",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.UserData>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.UserData>"
+                  }
+                },
+                {
                   "name": "GetCountAsync",
                   "parametersOnMethod": [
                     {
@@ -1356,6 +1409,57 @@
                       "typeAsString": "Volo.Abp.Identity.UserLookupCountInputDto, Volo.Abp.Identity.Application.Contracts",
                       "type": "Volo.Abp.Identity.UserLookupCountInputDto",
                       "typeSimple": "Volo.Abp.Identity.UserLookupCountInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Int64",
+                    "typeSimple": "number"
+                  }
+                },
+                {
+                  "name": "SearchRoleAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Identity.RoleLookupSearchInputDto, Volo.Abp.Identity.Application.Contracts",
+                      "type": "Volo.Abp.Identity.RoleLookupSearchInputDto",
+                      "typeSimple": "Volo.Abp.Identity.RoleLookupSearchInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>"
+                  }
+                },
+                {
+                  "name": "SearchRoleByNamesAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "ids",
+                      "typeAsString": "System.String[], System.Private.CoreLib",
+                      "type": "System.String[]",
+                      "typeSimple": "[string]",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>"
+                  }
+                },
+                {
+                  "name": "GetRoleCountAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Identity.RoleLookupCountInputDto, Volo.Abp.Identity.Application.Contracts",
+                      "type": "Volo.Abp.Identity.RoleLookupCountInputDto",
+                      "typeSimple": "Volo.Abp.Identity.RoleLookupCountInputDto",
                       "isOptional": false,
                       "defaultValue": null
                     }
@@ -1544,6 +1648,55 @@
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
                   "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ExtraProperties",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+                  "typeSimple": "{string:object}",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.UserData>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.UserData>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Identity.Integration.IIdentityUserIntegrationService"
+            },
+            "SearchByIdsAsyncByIds": {
+              "uniqueName": "SearchByIdsAsyncByIds",
+              "name": "SearchByIdsAsync",
+              "httpMethod": "GET",
+              "url": "integration-api/identity/users/search/by-ids",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "ids",
+                  "typeAsString": "System.Guid[], System.Private.CoreLib",
+                  "type": "System.Guid[]",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "ids",
+                  "name": "ids",
+                  "jsonName": null,
+                  "type": "System.Guid[]",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
                 }
               ],
               "returnValue": {
@@ -1565,6 +1718,165 @@
                   "typeAsString": "Volo.Abp.Identity.UserLookupCountInputDto, Volo.Abp.Identity.Application.Contracts",
                   "type": "Volo.Abp.Identity.UserLookupCountInputDto",
                   "typeSimple": "Volo.Abp.Identity.UserLookupCountInputDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Int64",
+                "typeSimple": "number"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Identity.Integration.IIdentityUserIntegrationService"
+            },
+            "SearchRoleAsyncByInput": {
+              "uniqueName": "SearchRoleAsyncByInput",
+              "name": "SearchRoleAsync",
+              "httpMethod": "GET",
+              "url": "integration-api/identity/users/search/roles",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Identity.RoleLookupSearchInputDto, Volo.Abp.Identity.Application.Contracts",
+                  "type": "Volo.Abp.Identity.RoleLookupSearchInputDto",
+                  "typeSimple": "Volo.Abp.Identity.RoleLookupSearchInputDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "ExtraProperties",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Data.ExtraPropertyDictionary",
+                  "typeSimple": "{string:object}",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Identity.Integration.IIdentityUserIntegrationService"
+            },
+            "SearchRoleByNamesAsyncByNames": {
+              "uniqueName": "SearchRoleByNamesAsyncByNames",
+              "name": "SearchRoleByNamesAsync",
+              "httpMethod": "GET",
+              "url": "integration-api/identity/users/search/roles/by-names",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "names",
+                  "typeAsString": "System.String[], System.Private.CoreLib",
+                  "type": "System.String[]",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "names",
+                  "name": "names",
+                  "jsonName": null,
+                  "type": "System.String[]",
+                  "typeSimple": "[string]",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>",
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.Users.RoleData>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Identity.Integration.IIdentityUserIntegrationService"
+            },
+            "GetRoleCountAsyncByInput": {
+              "uniqueName": "GetRoleCountAsyncByInput",
+              "name": "GetRoleCountAsync",
+              "httpMethod": "GET",
+              "url": "integration-api/identity/users/count/roles",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Identity.RoleLookupCountInputDto, Volo.Abp.Identity.Application.Contracts",
+                  "type": "Volo.Abp.Identity.RoleLookupCountInputDto",
+                  "typeSimple": "Volo.Abp.Identity.RoleLookupCountInputDto",
                   "isOptional": false,
                   "defaultValue": null
                 }

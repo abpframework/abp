@@ -92,13 +92,14 @@
             {
                 if (!propertyInfo.Name.EndsWith("_Text"))
                 {
-                    if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    if (propertyInfo.IsEnum() || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                     {
-                        if (propertyInfo.Type.IsEnum)
+                        if (propertyInfo.IsEnum())
                         {
                             Model.ViewModel.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                         }
                         <abp-select asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                    enum-type="@propertyInfo.IsEnum() ? propertyInfo.Type : null"
                                     label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                     autocomplete-api-url="@propertyInfo.Lookup.Url"
                                     autocomplete-selected-item-name="@Model.ViewModel.GetProperty(propertyInfo.Name+"_Text")"

@@ -137,6 +137,8 @@
     "Description:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Enforce email verification to register",
     "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "User accounts will not be created unless they verify their email addresses.",
-    "Details": "Details"
+    "Details": "Details",
+    "UserResourcePermissionProviderKeyLookupService": "User",
+    "RoleResourcePermissionProviderKeyLookupService": "Role"
   }
 }

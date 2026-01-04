@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelperService<TTagHelper>
     where TTagHelper : AbpDatePickerBaseTagHelper<TTagHelper>
 {
-    protected readonly Dictionary<Type, Func<object, string>> SupportedInputTypes;
+    protected readonly FrozenDictionary<Type, Func<object, string>> SupportedInputTypes;
 
     protected readonly IJsonSerializer JsonSerializer;
     protected readonly IHtmlGenerator Generator;
@@ -103,7 +104,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
                     return string.Empty;
                 }
             }
-        };
+        }.ToFrozenDictionary();
     }
 
     protected virtual T? GetAttribute<T>() where T : Attribute
@@ -136,7 +137,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             ? await ProcessButtonAndGetContentAsync(context, output, "calendar", "open")
             : "";
         var clearButtonContent = TagHelper.ClearButton == true || (!TagHelper.ClearButton.HasValue && TagHelper.AutoUpdateInput != true)
-            ? await ProcessButtonAndGetContentAsync(context, output, "times", "clear", visible:!TagHelper.SingleOpenAndClearButton)
+            ? await ProcessButtonAndGetContentAsync(context, output, "times", "clear", visible: !TagHelper.SingleOpenAndClearButton)
             : "";
 
         var labelContent = await GetLabelAsHtmlAsync(context, output, TagHelperOutput);
@@ -269,7 +270,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
     {
         var attrList = new TagHelperAttributeList();
 
-        if(options == null)
+        if (options == null)
         {
             return attrList;
         }
@@ -401,29 +402,29 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add("data-visible-date-format", options.VisibleDateFormat);
         }
 
-        if(!options.InputDateFormat.IsNullOrEmpty())
+        if (!options.InputDateFormat.IsNullOrEmpty())
         {
             attrList.Add("data-input-date-format", options.InputDateFormat);
         }
 
-        if(options.Ranges != null && options.Ranges.Any())
+        if (options.Ranges != null && options.Ranges.Any())
         {
             var ranges = options.Ranges.ToDictionary(r => r.Label, r => r.Dates);
 
             attrList.Add("data-ranges", JsonSerializer.Serialize(ranges));
         }
 
-        if(options.AlwaysShowCalendars != null)
+        if (options.AlwaysShowCalendars != null)
         {
             attrList.Add("data-always-show-calendars", options.AlwaysShowCalendars.ToString()!.ToLowerInvariant());
         }
 
-        if(options.ShowCustomRangeLabel == false)
+        if (options.ShowCustomRangeLabel == false)
         {
             attrList.Add("data-show-custom-range-label", options.ShowCustomRangeLabel.ToString()!.ToLowerInvariant());
         }
 
-        if(options.Options != null)
+        if (options.Options != null)
         {
             attrList.Add("data-options", JsonSerializer.Serialize(options.Options));
         }
@@ -443,7 +444,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             attrList.Add("id", options.PickerId);
         }
 
-        if(!options.SingleOpenAndClearButton)
+        if (!options.SingleOpenAndClearButton)
         {
             attrList.Add("data-single-open-and-clear-button", options.SingleOpenAndClearButton.ToString().ToLowerInvariant());
         }
@@ -614,7 +615,8 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         {
             return string.Empty;
         }
-        var labelTagHelper = new LabelTagHelper(Generator) {
+        var labelTagHelper = new LabelTagHelper(Generator)
+        {
             ViewContext = TagHelper.ViewContext,
             For = modelExpression
         };
@@ -764,7 +766,8 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             TagHelper.Size = attribute.Size;
         }
 
-        return TagHelper.Size switch {
+        return TagHelper.Size switch
+        {
             AbpFormControlSize.Small => "form-control-sm",
             AbpFormControlSize.Medium => "form-control-md",
             AbpFormControlSize.Large => "form-control-lg",
@@ -785,14 +788,14 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
 
     protected virtual async Task<string> GetValidationAsHtmlByInputAsync(TagHelperContext context,
         TagHelperOutput output,
-        [NotNull]ModelExpression @for)
+        [NotNull] ModelExpression @for)
     {
         var validationMessageTagHelper =
             new ValidationMessageTagHelper(Generator) { For = @for, ViewContext = TagHelper.ViewContext };
 
         var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-        if(!output.Attributes.TryGetAttribute("name", out var nameAttribute) || nameAttribute == null || nameAttribute.Value == null)
+        if (!output.Attributes.TryGetAttribute("name", out var nameAttribute) || nameAttribute == null || nameAttribute.Value == null)
         {
             if (nameAttribute != null)
             {

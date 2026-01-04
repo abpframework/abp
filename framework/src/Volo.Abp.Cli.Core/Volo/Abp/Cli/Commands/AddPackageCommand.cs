@@ -9,6 +9,8 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -16,16 +18,19 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "add-package";
 
+    private readonly ITelemetryService _telemetryService;
+    
     public ILogger<AddPackageCommand> Logger { get; set; }
 
     protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
 
     public ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
 
-    public AddPackageCommand(ProjectNugetPackageAdder projectNugetPackageAdder, ProjectNpmPackageAdder projectNpmPackageAdder)
+    public AddPackageCommand(ProjectNugetPackageAdder projectNugetPackageAdder, ProjectNpmPackageAdder projectNpmPackageAdder, ITelemetryService telemetryService)
     {
         ProjectNugetPackageAdder = projectNugetPackageAdder;
         ProjectNpmPackageAdder = projectNpmPackageAdder;
+        _telemetryService = telemetryService;
         Logger = NullLogger<AddPackageCommand>.Instance;
     }
 
@@ -39,6 +44,9 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
                 GetUsageInfo()
             );
         }
+        
+        await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsNewPackage);
+        await using var __ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsAddPackage);
 
         var isNpmPackage = false;
         var isNugetPackage = true;
@@ -51,11 +59,11 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
 
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
         var withSourceCode = commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);
-
+        
         if (isNugetPackage)
         {
             var addSourceCodeToSolutionFile = withSourceCode && commandLineArgs.Options.ContainsKey("add-to-solution-file");
-
+            
             await ProjectNugetPackageAdder.AddAsync(
                 GetSolutionFile(commandLineArgs),
                 GetProjectFile(commandLineArgs),

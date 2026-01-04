@@ -955,10 +955,10 @@
     {
       "namespace": "Volo.CmsKit.Admin.GlobalResources",
       "baseClass": {
-        "name": "ApplicationService",
-        "namespace": "Volo.Abp.Application.Services",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Application",
-        "fullName": "Volo.Abp.Application.Services.ApplicationService"
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application",
+        "fullName": "Volo.CmsKit.Admin.CmsKitAdminAppServiceBase"
       },
       "implementingInterfaces": [
         {

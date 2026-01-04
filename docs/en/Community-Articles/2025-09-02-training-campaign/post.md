@@ -1,6 +1,6 @@
 # IMPROVE YOUR ABP SKILLS WITH 33% OFF LIVE TRAININGS!
 
-We have exciting news to share\! As you know, we offer live training packages to help you improve your skills and knowledge of ABP. From September 8th to 19th, we are giving you 33% OFF our live trainings, so you can learn more about the product at a discounted price\!
+We have exciting news to share\! As you know, we offer live training packages to help you improve your skills and knowledge of ABP. For a limited time, we are giving you 33% OFF our live trainings, so you can learn more about the product at a discounted price\!
 
 #### Why Join ABP.IO Training?
 

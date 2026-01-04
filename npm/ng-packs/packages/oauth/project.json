@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "packages/oauth/src",
   "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core"],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -31,7 +33,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": [],
-  "implicitDependencies": ["core"]
+  }
 }

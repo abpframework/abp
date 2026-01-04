@@ -11,6 +11,8 @@ using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -20,6 +22,8 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
     public const string Name = "add-module";
     
     private AddModuleInfoOutput _lastAddedModuleInfo;
+    private readonly ITelemetryService _telemetryService;
+    
     public ILogger<AddModuleCommand> Logger { get; set; }
 
     protected SolutionModuleAdder SolutionModuleAdder { get; }
@@ -39,11 +43,13 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
     public AddModuleCommand(
         SolutionModuleAdder solutionModuleAdder,
         SolutionPackageVersionFinder solutionPackageVersionFinder,
-        IOptions<AbpCliOptions> options)
+        IOptions<AbpCliOptions> options,
+        ITelemetryService telemetryService)
     {
         _options = options.Value;
         SolutionModuleAdder = solutionModuleAdder;
         SolutionPackageVersionFinder = solutionPackageVersionFinder;
+        _telemetryService = telemetryService;
         Logger = NullLogger<AddModuleCommand>.Instance;
     }
 
@@ -66,6 +72,11 @@ public class AddModuleCommand : IConsoleCommand, ITransientDependency
         }
 
         var newTemplate = commandLineArgs.Options.ContainsKey(Options.NewTemplate.Long);
+
+        await using var _ = _telemetryService.TrackActivityAsync(newTemplate
+            ? ActivityNameConsts.AbpCliCommandsInstallLocalModule
+            : ActivityNameConsts.AbpCliCommandsInstallModule);
+        
         var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
         var newProTemplate = !string.IsNullOrEmpty(template) && template == ModuleProTemplate.TemplateName;
         var withSourceCode = newTemplate || newProTemplate || commandLineArgs.Options.ContainsKey(Options.SourceCode.Long);

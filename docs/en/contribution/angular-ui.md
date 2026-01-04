@@ -12,7 +12,7 @@
 - Dotnet core SDK https://dotnet.microsoft.com/en-us/download
 - Nodejs LTS https://nodejs.org/en/
 - Docker https://docs.docker.com/engine/install
-- Angular CLI. https://angular.io/guide/what-is-angular#angular-cli
+- Angular CLI. https://angular.dev/tools/cli
 - Abp CLI https://docs.abp.io/en/abp/latest/cli
 - A code editor
 

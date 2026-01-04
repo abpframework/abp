@@ -34,4 +34,50 @@ public class PermissionsController : AbpControllerBase, IPermissionAppService
     {
         return PermissionAppService.UpdateAsync(providerName, providerKey, input);
     }
+
+    [HttpGet("resource-provider-key-lookup-services")]
+    public virtual Task<GetResourceProviderListResultDto> GetResourceProviderKeyLookupServicesAsync(string resourceName)
+    {
+        return PermissionAppService.GetResourceProviderKeyLookupServicesAsync(resourceName);
+    }
+
+    [HttpGet("search-resource-provider-keys")]
+    public virtual Task<SearchProviderKeyListResultDto> SearchResourceProviderKeyAsync(string resourceName, string serviceName, string filter, int page)
+    {
+        return PermissionAppService.SearchResourceProviderKeyAsync(resourceName, serviceName, filter, page);
+    }
+
+    [HttpGet("resource-definitions")]
+    public virtual Task<GetResourcePermissionDefinitionListResultDto> GetResourceDefinitionsAsync(string resourceName)
+    {
+        return PermissionAppService.GetResourceDefinitionsAsync(resourceName);
+    }
+
+    [HttpGet]
+    [Route("resource")]
+    public virtual Task<GetResourcePermissionListResultDto> GetResourceAsync(string resourceName, string resourceKey)
+    {
+        return PermissionAppService.GetResourceAsync(resourceName, resourceKey);
+    }
+
+    [HttpGet]
+    [Route("resource/by-provider")]
+    public virtual Task<GetResourcePermissionWithProviderListResultDto> GetResourceByProviderAsync(string resourceName, string resourceKey, string providerName, string providerKey)
+    {
+        return PermissionAppService.GetResourceByProviderAsync(resourceName, resourceKey, providerName, providerKey);
+    }
+
+    [HttpPut]
+    [Route("resource")]
+    public virtual Task UpdateResourceAsync(string resourceName, string resourceKey, UpdateResourcePermissionsDto input)
+    {
+        return PermissionAppService.UpdateResourceAsync(resourceName, resourceKey, input);
+    }
+
+    [HttpDelete]
+    [Route("resource")]
+    public virtual Task DeleteResourceAsync(string resourceName, string resourceKey, string providerName, string providerKey)
+    {
+        return PermissionAppService.DeleteResourceAsync(resourceName, resourceKey, providerName, providerKey);
+    }
 }

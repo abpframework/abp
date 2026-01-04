@@ -19,7 +19,7 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     [Fact]
     public async Task DateTimeKind_Test()
     {
-        var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind?input=2010-01-01T00:00:00Z");
+        var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind?input=2020-01-01T00:00:00Z");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();
@@ -27,14 +27,59 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     }
 
     [Fact]
+    public async Task DateTimeKind_WithTimezone_Test()
+    {
+        var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind_WithResult?input=2020-01-01T00:00:00&__timezone=Europe/Istanbul");
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+
+        var dateTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
+        switch (Kind)
+        {
+            case DateTimeKind.Utc:
+                dateTime = new DateTime(2019, 12, 31, 21, 0, 0, DateTimeKind.Utc); //Turkey is UTC+3
+                break;
+            case DateTimeKind.Local:
+                dateTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Local);
+                break;
+        }
+
+        resultAsString.ShouldBe($"{Kind.ToString().ToLower()}_{dateTime.ToString("O").ToLower()}");
+    }
+
+    [Fact]
     public async Task NullableDateTimeKind_Test()
     {
         var response =
-            await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind?input=2010-01-01T00:00:00Z");
+            await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind?input=2020-01-01T00:00:00Z");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldBe(Kind.ToString().ToLower());
+    }
+
+    [Fact]
+    public async Task NullableDateTimeKind_WithTimezone_Test()
+    {
+        var response =
+            await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind_WithResult?input=2020-01-01T00:00:00&__timezone=Europe/Istanbul");
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+
+        var dateTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
+        switch (Kind)
+        {
+            case DateTimeKind.Utc:
+                dateTime = new DateTime(2019, 12, 31, 21, 0, 0, DateTimeKind.Utc); //Turkey is UTC+3
+                break;
+            case DateTimeKind.Local:
+                dateTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Local);
+                break;
+        }
+
+        resultAsString.ShouldBe($"{Kind.ToString().ToLower()}_{dateTime.ToString("O").ToLower()}");
     }
 
     [Fact]
@@ -42,11 +87,11 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     {
         var response =
             await Client.GetAsync(
-                "/api/model-Binding-test/DisableDateTimeNormalizationDateTimeKind?input=2010-01-01T00:00:00Z");
+                "/api/model-Binding-test/DisableDateTimeNormalizationDateTimeKind?input=2020-01-01T00:00:00Z");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();
-        //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+        //Time parameter(2020-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
         //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
         resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
     }
@@ -56,11 +101,11 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     {
         var response =
             await Client.GetAsync(
-                "/api/model-Binding-test/DisableDateTimeNormalizationNullableDateTimeKind?input=2010-01-01T00:00:00Z");
+                "/api/model-Binding-test/DisableDateTimeNormalizationNullableDateTimeKind?input=2020-01-01T00:00:00Z");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();
-        //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+        //Time parameter(2020-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
         //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
         resultAsString.ShouldBe(DateTimeKind.Utc.ToString().ToLower());
     }
@@ -69,14 +114,14 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     public async Task ComplexTypeDateTimeKind_Test()
     {
         var response = await Client.GetAsync("/api/model-Binding-test/ComplexTypeDateTimeKind?" +
-                                             "Time1=2010-01-01T00:00:00Z&" +
-                                             "Time2=2010-01-01T00:00:00Z&" +
-                                             "Time3=2010-01-01T00:00:00Z&" +
-                                             "InnerModel.Time4=2010-01-01T00:00:00Z");
+                                             "Time1=2020-01-01T00:00:00Z&" +
+                                             "Time2=2020-01-01T00:00:00Z&" +
+                                             "Time3=2020-01-01T00:00:00Z&" +
+                                             "InnerModel.Time4=2020-01-01T00:00:00Z");
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();
-        //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
+        //Time parameter(2020-01-01T00:00:00Z) with time zone information, so the default Kind is UTC
         //https://docs.microsoft.com/en-us/aspnet/core/migration/31-to-50?view=aspnetcore-3.1&tabs=visual-studio#datetime-values-are-model-bound-as-utc-times
         resultAsString.ShouldBe($"utc_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_utc");
     }
@@ -84,7 +129,7 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
     [Fact]
     public async Task ComplexTypeDateTimeKind_JSON_Test()
     {
-        var time = DateTime.Parse("2010-01-01T00:00:00Z");
+        var time = DateTime.Parse("2020-01-01T00:00:00Z");
         var response = await Client.PostAsync("/api/model-Binding-test/ComplexTypeDateTimeKind_JSON",
             new StringContent(JsonSerializer.Serialize(
                 new GetDateTimeKindModel
@@ -102,6 +147,41 @@ public abstract class ModelBindingController_Tests : AspNetCoreMvcTestBase
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var resultAsString = await response.Content.ReadAsStringAsync();
         resultAsString.ShouldBe($"local_{Kind.ToString().ToLower()}_{Kind.ToString().ToLower()}_local");
+    }
+
+    [Fact]
+    public async Task ComplexTypeDateTimeKind_JSON_WithTimezone_Test()
+    {
+        var time = DateTime.Parse("2020-01-01T00:00:00");
+        var response = await Client.PostAsync("/api/model-Binding-test/ComplexTypeDateTimeKind_JSON_WithResult?__timezone=Europe/Istanbul",
+            new StringContent(JsonSerializer.Serialize(
+                new GetDateTimeKindModel
+                {
+                    Time1 = time,
+                    Time2 = time,
+                    Time3 = time,
+                    InnerModel = new GetDateTimeKindModel.GetDateTimeKindInnerModel
+                    {
+                        Time4 = time
+                    }
+                }
+            ), Encoding.UTF8, MimeTypes.Application.Json));
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var resultAsString = await response.Content.ReadAsStringAsync();
+
+        var dateTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
+        switch (Kind)
+        {
+            case DateTimeKind.Utc:
+                dateTime = new DateTime(2019, 12, 31, 21, 0, 0, DateTimeKind.Utc); //Turkey is UTC+3
+                break;
+            case DateTimeKind.Local:
+                dateTime = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Local);
+                break;
+        }
+
+        resultAsString.ShouldBe($"unspecified_{time.ToString("O").ToLower()}_{Kind.ToString().ToLower()}_{dateTime.ToString("O").ToLower()}_{Kind.ToString().ToLower()}_{dateTime.ToString("O").ToLower()}_unspecified_{time.ToString("O").ToLower()}");
     }
 
     [Fact]

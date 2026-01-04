@@ -27,6 +27,11 @@ public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<T
     {
         return $"[DTO: {GetType().Name}] Id = {Id}";
     }
+
+    public virtual string? GetObjectKey()
+    {
+        return Id?.ToString();
+    }
 }
 
 [Serializable]

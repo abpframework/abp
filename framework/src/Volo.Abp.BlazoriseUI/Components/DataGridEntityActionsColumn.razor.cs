@@ -23,7 +23,16 @@ public partial class DataGridEntityActionsColumn<TItem> : DataGridColumn<TItem>
         Caption = UiLocalizer["Actions"];
         Width = "150px";
         Sortable = false;
-        Field = typeof(TItem).GetProperties().First().Name;
+        Field = ResolveFieldName();
+        
         return ValueTask.CompletedTask;
+    }
+    
+    protected virtual string ResolveFieldName()
+    {
+        var props = typeof(TItem).GetProperties();
+        return props.Length > 0
+            ? props[0].Name
+            : "Id";
     }
 }

@@ -135,6 +135,8 @@
     "ModificationTime": "Timp de modificare",
     "PasswordUpdateTime": "Ora actualizării parolei",
     "LockoutEndTime": "Ora de încheiere a blocării",
-    "FailedAccessCount": "Număr de acces eșuat"
+    "FailedAccessCount": "Număr de acces eșuat",
+    "UserResourcePermissionProviderKeyLookupService": "Utilizator",
+    "RoleResourcePermissionProviderKeyLookupService": "Rol"
   }
 }

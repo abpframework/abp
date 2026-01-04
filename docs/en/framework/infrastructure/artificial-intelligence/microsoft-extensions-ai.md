@@ -172,5 +172,6 @@ public class MyProjectModule : AbpModule
 
 ## See Also
 
+- [Usage of Agent Framework](./microsoft-agent-framework.md)
 - [Usage of Semantic Kernel](./microsoft-semantic-kernel.md)
 - [AI Samples for .NET](https://learn.microsoft.com/en-us/samples/dotnet/ai-samples/ai-samples/)

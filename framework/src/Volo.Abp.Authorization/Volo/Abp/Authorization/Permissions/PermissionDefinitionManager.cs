@@ -34,8 +34,27 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
     {
         Check.NotNull(name, nameof(name));
 
-        return await _staticStore.GetOrNullAsync(name) ?? 
+        return await _staticStore.GetOrNullAsync(name) ??
                await _dynamicStore.GetOrNullAsync(name);
+    }
+
+    public virtual async Task<PermissionDefinition> GetResourcePermissionAsync(string resourceName, string name)
+    {
+        var permission = await GetResourcePermissionOrNullAsync(resourceName, name);
+        if (permission == null)
+        {
+            throw new AbpException($"Undefined resource permission: {name} for resource: {resourceName}");
+        }
+
+        return permission;
+    }
+
+    public virtual async Task<PermissionDefinition?> GetResourcePermissionOrNullAsync(string resourceName, string name)
+    {
+        Check.NotNull(name, nameof(name));
+
+        return await _staticStore.GetResourcePermissionOrNullAsync(resourceName, name) ??
+               await _dynamicStore.GetResourcePermissionOrNullAsync(resourceName, name);
     }
 
     public virtual async Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
@@ -44,7 +63,7 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
         var staticPermissionNames = staticPermissions
             .Select(p => p.Name)
             .ToImmutableHashSet();
-        
+
         var dynamicPermissions = await _dynamicStore.GetPermissionsAsync();
 
         /* We prefer static permissions over dynamics */
@@ -53,13 +72,28 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
         ).ToImmutableList();
     }
 
-    public async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
+    public virtual async Task<IReadOnlyList<PermissionDefinition>> GetResourcePermissionsAsync()
+    {
+        var staticResourcePermissions = await _staticStore.GetResourcePermissionsAsync();
+        var staticResourcePermissionNames = staticResourcePermissions
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
+
+        var dynamicResourcePermissions = await _dynamicStore.GetResourcePermissionsAsync();
+
+        /* We prefer static permissions over dynamics */
+        return staticResourcePermissions.Concat(
+            dynamicResourcePermissions.Where(d => !staticResourcePermissionNames.Contains(d.Name))
+        ).ToImmutableList();
+    }
+
+    public virtual async Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()
     {
         var staticGroups = await _staticStore.GetGroupsAsync();
         var staticGroupNames = staticGroups
             .Select(p => p.Name)
             .ToImmutableHashSet();
-        
+
         var dynamicGroups = await _dynamicStore.GetGroupsAsync();
 
         /* We prefer static groups over dynamics */

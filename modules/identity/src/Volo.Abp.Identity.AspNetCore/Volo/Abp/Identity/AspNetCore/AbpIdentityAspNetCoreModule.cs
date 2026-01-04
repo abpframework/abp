@@ -47,7 +47,7 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<SecurityStampValidatorOptions>()
+        context.Services.AddAbpOptions<SecurityStampValidatorOptions>()
             .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
             {
                 var abpRefreshingPrincipalOptions = serviceProvider.GetRequiredService<IOptions<AbpRefreshingPrincipalOptions>>().Value;

@@ -135,6 +135,8 @@
     "ModificationTime": "संशोधन का समय",
     "PasswordUpdateTime": "पासवर्ड अद्यतन समय",
     "LockoutEndTime": "तालाबंदी समाप्ति समय",
-    "FailedAccessCount": "विफल पहुंच गणना"
+    "FailedAccessCount": "विफल पहुंच गणना",
+    "UserResourcePermissionProviderKeyLookupService": "उपयोगकर्ता",
+    "RoleResourcePermissionProviderKeyLookupService": "भूमिका"
   }
 }

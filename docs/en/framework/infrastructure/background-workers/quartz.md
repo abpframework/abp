@@ -43,7 +43,7 @@ public class YourModule : AbpModule
 }
 ````
 
-> Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still fllow the [background workers document](../background-workers) to define the background worker.
+> Quartz background worker integration provided `QuartzPeriodicBackgroundWorkerAdapter` to adapt `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived class. So, you can still follow the [background workers document](../background-workers) to define the background worker.
 
 ## Configuration
 

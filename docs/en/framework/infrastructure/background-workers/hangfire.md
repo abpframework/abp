@@ -61,7 +61,7 @@ After you have installed these NuGet packages, you need to configure your projec
       var configuration = context.Services.GetConfiguration();
       var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-      //... other configarations.
+      //... other configurations.
 
       ConfigureHangfire(context, configuration);
   }

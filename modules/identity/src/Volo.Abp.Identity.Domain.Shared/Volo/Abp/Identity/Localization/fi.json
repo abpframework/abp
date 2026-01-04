@@ -135,6 +135,8 @@
     "ModificationTime": "Muutosaika",
     "PasswordUpdateTime": "Salasanan päivityksen aika",
     "LockoutEndTime": "Lukituksen päättymisaika",
-    "FailedAccessCount": "Epäonnistuneet käyttöoikeudet"
+    "FailedAccessCount": "Epäonnistuneet käyttöoikeudet",
+    "UserResourcePermissionProviderKeyLookupService": "Käyttäjä",
+    "RoleResourcePermissionProviderKeyLookupService": "Rooli"
   }
 }

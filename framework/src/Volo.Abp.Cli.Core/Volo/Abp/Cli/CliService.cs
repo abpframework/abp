@@ -14,12 +14,15 @@ using Volo.Abp.Cli.Memory;
 using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli;
 
 public class CliService : ITransientDependency
 {
     private readonly MemoryService _memoryService;
+    private readonly ITelemetryService _telemetryService;
     public ILogger<CliService> Logger { get; set; }
     protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
     protected ICommandSelector CommandSelector { get; }
@@ -35,7 +38,8 @@ public class CliService : ITransientDependency
         PackageVersionCheckerService nugetService,
         ICmdHelper cmdHelper,
         MemoryService memoryService,
-        CliVersionService cliVersionService)
+        CliVersionService cliVersionService, 
+        ITelemetryService telemetryService)
     {
         _memoryService = memoryService;
         CommandLineArgumentParser = commandLineArgumentParser;
@@ -44,6 +48,7 @@ public class CliService : ITransientDependency
         PackageVersionCheckerService = nugetService;
         CmdHelper = cmdHelper;
         CliVersionService = cliVersionService;
+        _telemetryService = telemetryService;
 
         Logger = NullLogger<CliService>.Instance;
     }
@@ -64,6 +69,7 @@ public class CliService : ITransientDependency
 
         try
         {
+            await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliRun);
             if (commandLineArgs.IsCommand("prompt"))
             {
                 await RunPromptAsync();
@@ -84,8 +90,13 @@ public class CliService : ITransientDependency
         }
         catch (Exception ex)
         {
+            await _telemetryService.AddErrorActivityAsync(ex.Message);
             Logger.LogException(ex);
             throw;
+        }
+        finally
+        {
+            await _telemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
         }
     }
 

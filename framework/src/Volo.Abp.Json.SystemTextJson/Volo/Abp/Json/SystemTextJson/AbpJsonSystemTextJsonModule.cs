@@ -15,7 +15,7 @@ public class AbpJsonSystemTextJsonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<AbpSystemTextJsonSerializerOptions>()
+        context.Services.AddAbpOptions<AbpSystemTextJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.

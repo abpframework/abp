@@ -61,6 +61,7 @@
     "ProfilePicture": "Forsíðumynd",
     "Theme": "Þema",
     "NotAssigned": "Ekki skráður",
-    "EntityActionsDisabledTooltip": "Þú hefur ekki aðgang að þessum aðgerðum."
+    "EntityActionsDisabledTooltip": "Þú hefur ekki aðgang að þessum aðgerðum.",
+    "ResourcePermissions": "Aðgangsheimildir"
   }
 }

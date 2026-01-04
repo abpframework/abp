@@ -135,6 +135,8 @@
     "LockoutEndTime": "Время окончания блокировки",
     "FailedAccessCount": "Количество неудачных попыток доступа",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Требовать подтверждение электронной почты для регистрации",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Учетные записи пользователей не будут созданы, пока они не подтвердят свои адреса электронной почты."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Учетные записи пользователей не будут созданы, пока они не подтвердят свои адреса электронной почты.",
+    "UserResourcePermissionProviderKeyLookupService": "Пользователь",
+    "RoleResourcePermissionProviderKeyLookupService": "Роль"
   }
 }

@@ -176,9 +176,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/dev-app"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
       "options": {
         "jestConfig": "apps/dev-app/jest.config.ts"
       }

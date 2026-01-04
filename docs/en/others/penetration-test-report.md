@@ -7,7 +7,7 @@
 
 # ABP Penetration Test Report
 
-The ABP Commercial MVC `v9.1.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
+The ABP Commercial MVC `v10.0.1` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
 
 Many of these alerts are **false-positive**, meaning the vulnerability scanner detected these issues, but they are not exploitable. It's clearly explained for each false-positive alert why this alert is a false-positive. 
 
@@ -17,53 +17,75 @@ In the next sections, you will find the affected URLs, attack parameters (reques
 
 There are high _(red flag)_, medium _(orange flag)_, low _(yellow flag)_, and informational _(blue flag)_ alerts. 
 
-![penetration-test-9.1.0](../images/pen-test-alert-list-9.1.png)
+![penetration-test-10.0.1](../images/pen-test-alert-list-10.1.png)
 
-> The informational alerts are not mentioned in this document. These alerts are not raising any risks on your application and they are optional.
+> The informational alerts are not mentioned in this document. These alerts don't raise any risks for your application and they are optional.
 
-### Spring4Shell [Risk: High] - False Positive
+### Cross Site Scripting (Reflected) [Risk: High] - Positive
 
-- *[POST] - https://localhost:44349/Account/ForgotPassword* (attack: **class.module.classLoader.DefaultAssertionStatus=nonsense**)
-- *[POST] - https://localhost:44349/Account/Login* (attack: **class.module.classLoader.DefaultAssertionStatus=nonsense**)
-- *[POST] - https://localhost:44349/Account/Login?ReturnUrl=%2FSettingManagement* (attack: **class.module.classLoader.DefaultAssertionStatus=nonsense**)
+- *[GET] - https://localhost:44349/Identity/OrganizationUnits/AddMemberModal?title=SelectAUser&organizationUnitId=...&OrganizationUnitName=%3C%2Fh5%3E%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E%3Ch5%3E*
+- *[GET] - https://localhost:44349/Identity/OrganizationUnits/AddRoleModal?organizationUnitId=...&OrganizationUnitName=%3C%2Fh5%3E%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E%3Ch5%3E*
+- *[GET] - https://localhost:44349/Saas/Host/Tenants/ImpersonateTenantModal?tenantId=...&tenantName=%3C%2Fh5%3E%3CscrIpt%3Ealert%281%29%3B%3C%2FscRipt%3E%3Ch5%3E*
 
 **Description**:
 
-The application appears to be vulnerable to CVE-2022-22965 (otherwise known as Spring4Shell) - remote code execution (RCE) via data binding.
+Cross-site Scripting (XSS) is an attack technique that involves echoing attacker-supplied code into a user's browser instance.
 
 **Explanation**:
 
-ABP Framework is built on top of ASP.NET Core and does not use the Spring Framework. This application does not rely on Java-based technologies, making it immune to vulnerabilities like Spring4Shell. The detection is a false positive as there are no Spring dependencies in the project.
+This is a **Positive** alert. The application reflects the `OrganizationUnitName` and `tenantName` parameters without proper encoding in the modal headers, allowing for the execution of arbitrary JavaScript. We have created an **internal issue** to track this vulnerability, and it will be fixed in the next release.
 
-### Absence of Anti-CSRF Tokens [Risk: Medium] — False Positive
+### PII Disclosure [Risk: High] - False Positive
 
-* *[GET] - https://localhost:44349/Account/LinkUsers/LinkUsersModal?returnUrl=/SettingManagement*
-* *[GET] — https://localhost:44349/Account/Manage* (same URL with different query parameters)
-* *[GET] - https://localhost:44349/HostDashboard*
-* *[GET] - https://localhost:44349/SettingManagement?handler=RenderView&id=Volo.Abp.Account* (other several URLs)
+- *[GET] - https://localhost:44349/* (Evidence: 639002492030480000)
+- *[GET] - https://localhost:44349/?page=...*
 
-**Description**: 
+**Description**:
 
-No Anti-CSRF tokens were found in an HTML submission form.
-A cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a website has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has in a website. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.
-
-**Explanation:**
-
-This is a **false-positive** alert because ABP provides the Anti-CSRF token via a cookie as seen on the following screenshot:
-
-![Absence of Anti-CSRF Token](../images/pen-test-alert-remote-os-command-injection.png)
-
-### Application Error Disclosure [Risk: Medium] - False Positive
-
-- *[GET] — https://localhost:44349/AuditLogs*
-
-**Description**: 
-
-This page contains an error/warning message that may disclose sensitive information like the location of the file that produced the unhandled exception. This information can be used to launch further attacks against the web application. The alert could be a false positive if the error message is found inside a documentation page.
+The response contains Personally Identifiable Information, such as CC number, SSN and similar sensitive data.
 
 **Explanation**:
 
-There are only one URL that is reported as exposing error messages. This is a **false-positive** alert. The [Audit Logging Module](../modules/audit-logging.md), shows request & response details and exception information, these are not sensitive information and only can be seen by the users whose related permissions are granted.
+This is a **false-positive** alert. The detected numbers (e.g., `639002492030480000`) are cache-busting timestamps (`_v` parameter) generated by the framework for static assets. They coincidentally match the pattern of Credit Card numbers (pattern matching) but are not sensitive data.
+
+### Path Traversal [Risk: High] - False Positive
+
+- *[GET] - https://localhost:44349/Account/Login?returnUrl=Login*
+- *[GET] - https://localhost:44349/api/account/security-logs?action=\security-logs*
+
+**Description**:
+
+The Path Traversal attack technique allows an attacker access to files, directories, and commands that potentially reside outside the web document root directory.
+
+**Explanation**:
+
+This is a **false-positive** alert. ABP Framework automatically validates `returnUrl` parameters and ensures they are local to the application or within a whitelist. The application does not return file contents based on these parameters.
+
+### SQL Injection [Risk: High] - False Positive
+
+- *[GET] - https://localhost:44349/AbpPermissionManagement/PermissionManagementModal?providerKey=AbpSolution16711_Swagger+AND+1%3D1+--+*
+- *[GET] - https://localhost:44349/Account/Manage?CurrentPassword=ZAP%27+AND+%271%27%3D%271%27+--+*
+
+**Description**:
+
+SQL injection may be possible.
+
+**Explanation**:
+
+This is a **false-positive** alert. ABP Framework uses Entity Framework Core, which inherently uses parameterized queries, preventing standard SQL injection attacks. Manual verification showed that injecting SQL syntax into parameters like `providerKey` results in the input being treated as a literal string (resulting in no match or default behavior) rather than altering the query structure.
+
+### SQL Injection - SQLite [Risk: High] - False Positive
+
+- *[POST] - https://localhost:44349/Account/ForgotPassword?returnUrl=%2FAccount%2FManage* (Attack: `case randomblob(100000) ...`)
+- *[POST] - https://localhost:44349/FeatureManagement/FeatureManagementModal*
+
+**Description**:
+
+SQL injection may be possible.
+
+**Explanation**:
+
+This is a **false-positive** alert. Similar to the standard SQL Injection alert, the application uses parameterized queries. The detected delays are likely due to application processing variations or network latency rather than successful SQL injection.
 
 ### Content Security Policy (CSP) Header Not Set [Risk: Medium] — Positive (Fixed)
 
@@ -238,23 +260,7 @@ A cookie has been set with its `SameSite` attribute set to `none`, which means t
 
 Ensure that the `SameSite` attribute is set to either `lax` or ideally `strict` for all cookies. We discussed setting the **SameSite** attribute to `strict` in the following issue [github.com/abpframework/abp/issues/14215](https://github.com/abpframework/abp/issues/14215) and decided to leave this change to the final developer.
 
-### Information Disclosure - Debug Error Messages [Risk: Low] — False Positive
 
-* *[GET] - https://localhost:44349/AuditLogs*
-
-**Description:**  
-
-The response appeared to contain common error messages returned by platforms such as ASP.NET, and Web-servers such as IIS and Apache. You can configure the list of common debug messages.
-
-**Solution:**  
-
-Disable debugging messages before pushing them to production.
-
-**Explanation:** 
-
-The response of the endpoints above return localization texts which are not real error messages. As there is no real error in the backend side, this vulnerability is a **false-positive** alert.
-
-![Information Disclosure - Debug Error Messages](../images/pen-test-information-disclosure.png)
 
 ### Strict-Transport-Security Header Not Set [Risk: Low] - False Positive
 

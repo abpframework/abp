@@ -722,6 +722,104 @@ public class Auditing_Tests : AbpAuditingTestBase
 
 #pragma warning restore 4014
     }
+
+    [Fact]
+    public async Task Should_Write_AuditLog_For_Json_Property_Changes()
+    {
+        var entityId = Guid.NewGuid();
+        var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithJsonProperty, Guid>>();
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = new AppEntityWithJsonProperty(entityId, "Test Entity")
+                {
+                    Data = new JsonPropertyObject()
+                    {
+                        { "Name", "String Name" },
+                        { "Value", "String Value"}
+                    },
+                    Count = 10
+                };
+
+                await repository.InsertAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithJsonProperty).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 4 &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[0].OriginalValue == null &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].NewValue == "10" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithJsonProperty.Count) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(int).FullName &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[1].OriginalValue == null &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].NewValue == "\"Test Entity\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].PropertyName == nameof(AppEntityWithJsonProperty.Name) &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].PropertyTypeFullName == typeof(string).FullName &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[2].OriginalValue == null &&
+                                                                     x.EntityChanges[0].PropertyChanges[2].NewValue == "\"String Name\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[2].PropertyName == "Data.Name" &&
+                                                                     x.EntityChanges[0].PropertyChanges[2].PropertyTypeFullName == typeof(string).FullName &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[3].OriginalValue == null &&
+                                                                     x.EntityChanges[0].PropertyChanges[3].NewValue == "\"String Value\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[3].PropertyName == "Data.Value" &&
+                                                                     x.EntityChanges[0].PropertyChanges[3].PropertyTypeFullName == typeof(string).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.Name = "Updated Test Entity";
+
+                entity.Data["Name"] = "Updated String Name";
+                entity.Data["Value"] = "Updated String Value";
+
+                await repository.UpdateAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithJsonProperty).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 3 &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[0].OriginalValue == "\"Test Entity\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].NewValue == "\"Updated Test Entity\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithJsonProperty.Name) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(string).FullName &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[1].OriginalValue == "\"String Name\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].NewValue == "\"Updated String Name\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].PropertyName == "Data.Name" &&
+                                                                     x.EntityChanges[0].PropertyChanges[1].PropertyTypeFullName == typeof(string).FullName &&
+
+                                                                     x.EntityChanges[0].PropertyChanges[2].OriginalValue == "\"String Value\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[2].NewValue == "\"Updated String Value\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[2].PropertyName == "Data.Value" &&
+                                                                     x.EntityChanges[0].PropertyChanges[2].PropertyTypeFullName == typeof(string).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+    }
 }
 
 public class Auditing_DisableLogActionInfo_Tests : Auditing_Tests
@@ -1023,6 +1121,40 @@ public class Auditing_SaveEntityHistoryWhenNavigationChanges_Tests : AbpAuditing
                                                                      x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationChildManyToMany).FullName &&
                                                                      x.EntityChanges[0].PropertyChanges.Count == 1 &&
                                                                      x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationChildManyToMany.ChildName) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(string).FullName));
+
+#pragma warning restore 4014
+    }
+
+    [Fact]
+    public virtual async Task Should_Not_Write_AuditLog_For_Navigation_Changes_With_DisableAuditing()
+    {
+        using (var scope = _auditingManager.BeginScope())
+        {
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithNavigationsAndDisableAuditing, Guid>>();
+            var entity = new AppEntityWithNavigationsAndDisableAuditing(Guid.NewGuid(), "test name");
+            entity.OneToMany = new List<AppEntityWithNavigationsAndDisableAuditingChildOneToMany>
+            {
+                new AppEntityWithNavigationsAndDisableAuditingChildOneToMany
+                {
+                    AppEntityWithNavigationsAndDisableAuditingId = entity.Id,
+                    ChildName = "ChildName1"
+                }
+            };
+            await repository.InsertAsync(entity);
+            await scope.SaveAsync();
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+#pragma warning restore 4014
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationsAndDisableAuditing).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationsAndDisableAuditing.Name) &&
                                                                      x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(string).FullName));
 
 #pragma warning restore 4014

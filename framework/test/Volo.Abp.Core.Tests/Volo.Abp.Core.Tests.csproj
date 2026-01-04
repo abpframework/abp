@@ -5,6 +5,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace />
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

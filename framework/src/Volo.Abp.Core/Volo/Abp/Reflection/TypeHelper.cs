@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
@@ -13,14 +14,14 @@ namespace Volo.Abp.Reflection;
 
 public static class TypeHelper
 {
-    private static readonly HashSet<Type> FloatingTypes = new HashSet<Type>
+    private static readonly FrozenSet<Type> FloatingTypes = new HashSet<Type>
         {
             typeof(float),
             typeof(double),
             typeof(decimal)
-        };
+        }.ToFrozenSet();
 
-    private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
+    private static readonly FrozenSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
         {
             typeof(byte),
             typeof(short),
@@ -37,7 +38,7 @@ public static class TypeHelper
             typeof(DateTimeOffset),
             typeof(TimeSpan),
             typeof(Guid)
-        };
+        }.ToFrozenSet();
 
     public static bool IsNonNullablePrimitiveType(Type type)
     {
@@ -86,7 +87,7 @@ public static class TypeHelper
         {
             return default;
         }
-        
+
         if (IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
         {
             var conversionType = typeof(TProperty);

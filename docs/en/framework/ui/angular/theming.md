@@ -81,8 +81,8 @@ You can run the following command in **Angular** project directory to copy the s
 
 ### Global/Component Styles
 
-Angular can bundle global style files and component styles with components. 
-See the [component styles](https://angular.io/guide/component-styles) guide on Angular documentation for more information. 
+Angular can bundle global style files and component styles with components.
+See the [component styles](https://angular.dev/guide/components/styling) guide on Angular documentation for more information. 
 
 ### Layout Parts
 
@@ -238,8 +238,10 @@ import { Router } from '@angular/router';
   selector: 'abp-current-user-test',
   template: `
     <a class="dropdown-item pointer" (click)="data.action()">
-      <i *ngIf="data.textTemplate.icon" [class]="data.textTemplate.icon"></i>
+    @if (data.textTemplate.icon){
+      <i [class]="data.textTemplate.icon"></i>
       {%{{{ data.textTemplate.text | abpLocalization }}}%}
+    }
     </a>
   `,
 })

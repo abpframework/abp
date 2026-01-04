@@ -113,26 +113,42 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
                 continue;
             }
 
-            var moduleJsonFileContent = File.ReadAllText(modulePath);
-            using var moduleDoc = JsonDocument.Parse(moduleJsonFileContent);
-
-            if (!moduleDoc.RootElement.TryGetProperty("imports", out var imports))
-            {
-                continue;
-            }
-
-            foreach (var import in imports.EnumerateObject())
-            {
-                modules.Add(new Dictionary<string, object?>
-                {
-                    { ActivityPropertyNames.ModuleName, import.Name },
-                    { ActivityPropertyNames.ModuleVersion, TelemetryJsonExtensions.GetStringOrNull(import.Value, "version") },
-                    { ActivityPropertyNames.ModuleInstallationTime, TelemetryJsonExtensions.GetDateTimeOffsetOrNull(import.Value, "creationTime") }
-                });
-            }
+            ExtractModuleImportsInfo(modulePath, modules);
         }
 
         context.Current[ActivityPropertyNames.InstalledModules] = modules;
+    }
+
+    private static void ExtractModuleImportsInfo(string modulePath, List<Dictionary<string, object?>> modules)
+    {
+        var moduleJsonFileContent = File.ReadAllText(modulePath);
+        using var moduleDoc = JsonDocument.Parse(moduleJsonFileContent, new JsonDocumentOptions
+        {
+            AllowTrailingCommas = true
+        });
+
+        if (!moduleDoc.RootElement.TryGetProperty("imports", out var imports))
+        {
+            return;
+        }
+
+        foreach (var import in imports.EnumerateObject())
+        {
+            var importPath = GetModuleFilePath(modulePath, import);
+                
+            if (!importPath.IsNullOrEmpty())
+            {
+                ExtractModuleImportsInfo(importPath, modules);
+                continue;
+            }
+                
+            modules.Add(new Dictionary<string, object?>
+            {
+                { ActivityPropertyNames.ModuleName, import.Name },
+                { ActivityPropertyNames.ModuleVersion, TelemetryJsonExtensions.GetStringOrNull(import.Value, "version") },
+                { ActivityPropertyNames.ModuleInstallationTime, TelemetryJsonExtensions.GetDateTimeOffsetOrNull(import.Value, "creationTime") }
+            });
+        }
     }
 
     private static string? GetModuleFilePath(string solutionPath, JsonProperty module)

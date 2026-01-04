@@ -135,6 +135,8 @@
     "ModificationTime": "Tid för modifiering",
     "PasswordUpdateTime": "Uppdateringstid för lösenord",
     "LockoutEndTime": "Sluttid för låsning",
-    "FailedAccessCount": "Antal misslyckade åtkomster"
+    "FailedAccessCount": "Antal misslyckade åtkomster",
+    "UserResourcePermissionProviderKeyLookupService": "Användare",
+    "RoleResourcePermissionProviderKeyLookupService": "Roll"
   }
 }

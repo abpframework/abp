@@ -60,6 +60,7 @@
     "ProfilePicture": "Profilbild",
     "Theme": "Tema",
     "NotAssigned": "Ej tilldelad",
-    "EntityActionsDisabledTooltip": "Du har inte tillgång till dessa åtgärder."
+    "EntityActionsDisabledTooltip": "Du har inte tillgång till dessa åtgärder.",
+    "ResourcePermissions": "Behörigheter"
   }
 }

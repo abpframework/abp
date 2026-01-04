@@ -395,7 +395,30 @@ There are three pre-defined value providers, executed by the given order:
 
 * `TenantFeatureValueProvider` tries to get if the feature value is explicitly set for the **current tenant**.
 * `EditionFeatureValueProvider` tries to get the feature value for the current edition. Edition Id is obtained from the current principal identity (`ICurrentPrincipalAccessor`) with the claim name `editionid` (a constant defined as`AbpClaimTypes.EditionId`). Editions are not implemented for the [tenant management](../../modules/tenant-management.md) module. You can implement it yourself or consider to use the [SaaS module](https://abp.io/modules/Volo.Saas) of the ABP Commercial.
+* `ConfigurationFeatureValueProvider`: Gets the value from the [IConfiguration service](../fundamentals/configuration.md).
 * `DefaultValueFeatureValueProvider` gets the default value of the feature.
+
+#### Feature Values in the Application Configuration
+
+The `ConfigurationFeatureValueProvider` reads the feature values from the `IConfiguration` service, which can read values from the `appsettings.json` by default. So, the easiest way to configure feature values is to define them in the `appsettings.json` file.
+
+For example, you can configure feature values as shown below:
+
+````json
+{
+  "Features": {
+    "MyApp.Reporting": "true",
+    "MyApp.PdfReporting": "true",
+    "MyApp.MaxProductCount": "50"
+  }
+}
+````
+
+Feature values should be configured under the `Features` section as like in this example.
+
+> `IConfiguration`  is an .NET Core service and it can read values not only from the `appsettings.json`, but also from the environment, user secrets... etc. See [Microsoft's documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) for more.
+
+#### Custom Feature Value Providers
 
 You can write your own provider by inheriting the `FeatureValueProvider`.
 

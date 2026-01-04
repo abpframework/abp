@@ -294,7 +294,7 @@ There are some adjustments you may need to make before generating CRUD pages for
 
 - Check if your environment variables have `rootNamespace` defined as explained [here](../framework/ui/angular/service-proxies.md#angular-project-configuration).
 
-- Check if your [workspace configuration](https://angular.io/guide/workspace-config) satisfies one of the following. Examples assume your solution namespace is `BookStore`, `Acme.BookStore`, or `Acme.Retail.BookStore`.
+- Check if your [workspace configuration](https://angular.dev/reference/configs/workspace-config) satisfies one of the following. Examples assume your solution namespace is `BookStore`, `Acme.BookStore`, or `Acme.Retail.BookStore`.
   - Project key is in pascal case. E.g. `BookStore`.
   - Project key is in camel case. E.g. `bookStore`.
   - Project key is in kebab case. E.g. `book-store`.

@@ -204,6 +204,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             case "Npgsql.EntityFrameworkCore.PostgreSQL":
                 return EfCoreDatabaseProvider.PostgreSql;
             case "Pomelo.EntityFrameworkCore.MySql":
+            case "MySql.Data.MySqlClient":
                 return EfCoreDatabaseProvider.MySql;
             case "Oracle.EntityFrameworkCore":
             case "Devart.Data.Oracle.Entity.EFCore":
@@ -685,6 +686,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
+        string? concurrencyStamp = null;
+        if (entry.Entity is IHasConcurrencyStamp hasConcurrencyStamp)
+        {
+            concurrencyStamp = hasConcurrencyStamp.ConcurrencyStamp;
+        }
+
         ExtraPropertyDictionary? originalExtraProperties = null;
         if (entry.Entity is IHasExtraProperties)
         {
@@ -692,6 +699,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         entry.Reload();
+
+        if (concurrencyStamp != null && entry.Entity is IHasConcurrencyStamp)
+        {
+            ObjectHelper.TrySetProperty(entry.Entity.As<IHasConcurrencyStamp>(), x => x.ConcurrencyStamp, () => concurrencyStamp);
+        }
 
         if (entry.Entity is IHasExtraProperties)
         {

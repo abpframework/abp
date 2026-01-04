@@ -47,6 +47,7 @@ public static class IdentityDbContextModelBuilderExtensions
             b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             b.HasMany(u => u.PasswordHistories).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            b.HasMany(u => u.Passkeys).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
             b.HasIndex(u => u.NormalizedUserName);
             b.HasIndex(u => u.NormalizedEmail);
@@ -175,6 +176,20 @@ public static class IdentityDbContextModelBuilderExtensions
                 b.ApplyObjectExtensionMappings();
             });
         }
+
+        builder.Entity<IdentityUserPasskey>(b =>
+        {
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserPasskeys", AbpIdentityDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.HasKey(p => p.CredentialId);
+
+            b.Property(p => p.CredentialId).HasMaxLength(IdentityUserPasskeyConsts.MaxCredentialIdLength); // Defined in WebAuthn spec to be no longer than 1023 bytes
+            b.OwnsOne(p => p.Data).ToJson();
+
+            b.ApplyObjectExtensionMappings();
+        });
 
         builder.Entity<OrganizationUnit>(b =>
         {

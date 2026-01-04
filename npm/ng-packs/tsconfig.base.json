@@ -4,12 +4,12 @@
     "strict": false,
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2020",
-    "module": "esnext",
+    "target": "ES2020",
+    "module": "ES2022",
     "lib": ["es2020", "dom"],
     "esModuleInterop": true,
     "baseUrl": "./",
@@ -22,6 +22,7 @@
       "@abp/ng.components": ["packages/components/src/public-api.ts"],
       "@abp/ng.components/chart.js": ["packages/components/chart.js/src/public-api.ts"],
       "@abp/ng.components/extensible": ["packages/components/extensible/src/public-api.ts"],
+      "@abp/ng.components/lookup": ["packages/components/lookup/src/public-api.ts"],
       "@abp/ng.components/page": ["packages/components/page/src/public-api.ts"],
       "@abp/ng.components/tree": ["packages/components/tree/src/public-api.ts"],
       "@abp/ng.core": ["packages/core/src/public-api.ts"],
@@ -47,7 +48,10 @@
       "@abp/ng.theme.basic/testing": ["packages/theme-basic/testing/src/public-api.ts"],
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"],
-      "@abp/nx.generators": ["packages/generators/src/index.ts"]
+      "@abp/nx.generators": ["packages/generators/src/index.ts"],
+      "ng-zorro-antd/core/no-animation": [
+        "node_modules/ng-zorro-antd/core/no-animation"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

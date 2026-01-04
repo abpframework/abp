@@ -269,7 +269,7 @@
     "Referral.CannotDeleteUsedLink": "You cannot delete a referral link that has already been used.",
     "Referral.CannotReferYourself": "You cannot create a referral link for your own email address.",
     "Referral:TargetEmail": "Target Email",
-    "Referral.CannotReferSameOrganizationMember": "You cannot create a referral link for a user who is already a member of your organization.",
+    "Referral.CannotReferSameOrganizationMember": "Referral links cannot be used for existing organization members.",
     "LinkCopiedToClipboard": "Link copied to clipboard",
     "AreYouSureToDeleteReferralLink": "Are you sure you want to delete this referral link?",
     "DefaultErrorMessage": "An error occurred."

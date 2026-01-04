@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
@@ -48,7 +49,7 @@ namespace VoloDocs.Web.Pages
 
         #region Error Messages
         /*For more ASCII arts http://patorjk.com/software/taag/#p=display&h=0&f=Big&t=400*/
-        private readonly Dictionary<int, string> _errorMessages = new Dictionary<int, string>
+        private readonly FrozenDictionary<int, string> _errorMessages = new Dictionary<int, string>
         {
             {
                 400, @"
@@ -131,7 +132,7 @@ Ooops! Our server is experiencing a mild case of the hiccups."
 
 Looks like we're having some server issues."
             }
-        };
+        }.ToFrozenDictionary();
         #endregion
     }
 }

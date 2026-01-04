@@ -15,8 +15,8 @@ In this quick start guide, you will learn how to create and run a microservice s
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or another IDE that supports .NET development
-* [.NET 9.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
+* [Visual Studio 2026](https://visualstudio.microsoft.com/vs/) or another IDE that supports .NET development
+* [.NET 10.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
 * [Node v22.11+](https://nodejs.org/)
 * [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node), **This is required for the Angular applications.**
 * [Docker Desktop (with Kubernetes enabled)](https://www.docker.com/products/docker-desktop/)
@@ -94,6 +94,25 @@ Once you select the desired modules, click the *Next* button for the *UI Theme* 
 
 LeptonX is the suggested UI theme that is proper for production usage. Select one of the themes and configure the additional options if you want.
 
+Click the Next button to see *Language Selection* selection:
+
+![abp-studio-new-solution-dialog-languages](images/abp-studio-new-solution-dialog-languages-microservice.png)
+
+In this step, you can choose which languages your application will support.
+
+* Default Language: Select the main language for your app.
+
+* Localizable User Interface: Turn this on to support multiple languages.
+
+* Available Languages: Check the languages you want to include.
+
+* Click Add Custom Language if you want to add a language that is not listed.
+
+Click the Next button to see *.NET Aspire* configuration selection:
+
+![abp-studio-new-solution-dialog-aspire-configuration](images/abp-studio-new-solution-dialog-aspire-configuration-microservice.png)
+
+In this step, you can enable or disable the .NET Aspire integration for your solution. If you enable it, the solution will be pre-configured to work with .NET Aspire for easier microservice development and deployment. See the [Aspire Integration](../solution-templates/microservice/aspire-integration.md) document for more information about this feature.
 
 Click the Next button to see *Additional Options* selection:
 

@@ -783,7 +783,7 @@
     "Enum:SourceChannel:1": "Studio",
     "Enum:SourceChannel:2": "Support Site",
     "Enum:SourceChannel:3": "Suite",
-    "Menu:OrganizationTokenUsage": "Organization Token Usage",
+    "Menu:AITokens": "AI Tokens",
     "Permission:OrganizationTokenUsage": "Organization Token Usage"
   }
 }

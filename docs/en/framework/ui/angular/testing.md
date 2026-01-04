@@ -7,7 +7,7 @@
 
 # Unit Testing Angular UI
 
-ABP Angular UI is tested like any other Angular application. So, [the guide here](https://angular.io/guide/testing) applies to ABP too. That said, we would like to point out some **unit testing topics specific to ABP Angular applications**.
+ABP Angular UI is tested like any other Angular application. So, [the guide here](https://angular.dev/guide/testing) applies to ABP too. That said, we would like to point out some **unit testing topics specific to ABP Angular applications**.
 
 ## Setup
 

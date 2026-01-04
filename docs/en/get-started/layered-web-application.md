@@ -22,8 +22,8 @@ In this quick start guide, you will learn how to create and run a layered (and p
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/) or another IDE that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
-* [.NET 9.0+](https://dotnet.microsoft.com/en-us/download/dotnet){{ if UI != "Blazor" }}
+* [Visual Studio 2026](https://visualstudio.microsoft.com/) or another IDE that supports [.NET 10.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* [.NET 10.0+](https://dotnet.microsoft.com/en-us/download/dotnet){{ if UI != "Blazor" }}
 * [Node v22.11+](https://nodejs.org/){{ end }}{{ if UI == "NG" }}
 * [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node){{ end }}
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
@@ -277,3 +277,8 @@ You can start the following application(s):
 > For example in non-tiered MVC with public website application: 
 
 ![solution-runner-public-website](images/solution-runner-public-website.png)
+
+## What's next?
+
+- [TODO Application Tutorial with Layered Solution](../tutorials/todo/layered/index.md)
+- [Web Application Development Tutorial](../tutorials/book-store/index.md)

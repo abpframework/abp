@@ -135,6 +135,8 @@
     "ModificationTime": "Čas spreminjanja",
     "PasswordUpdateTime": "Čas posodobitve gesla",
     "LockoutEndTime": "Končni čas zaklepanja",
-    "FailedAccessCount": "Število neuspešnih dostopov"
+    "FailedAccessCount": "Število neuspešnih dostopov",
+    "UserResourcePermissionProviderKeyLookupService": "Uporabnik",
+    "RoleResourcePermissionProviderKeyLookupService": "Vloga"
   }
 }

@@ -1,7 +1,7 @@
 import { registerLocaleData } from '@angular/common';
 import { inject, Injector } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
-import { lastValueFrom, throwError } from 'rxjs';
+import { firstValueFrom, lastValueFrom, of, throwError, timeout } from 'rxjs';
 import { ABP } from '../models/common';
 import { Environment } from '../models/environment';
 import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
@@ -10,10 +10,11 @@ import { EnvironmentService } from '../services/environment.service';
 import { SessionStateService } from '../services/session-state.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { APP_INIT_ERROR_HANDLERS } from '../tokens/app-config.token';
+import { CHECK_AUTHENTICATION_STATE_FN_KEY } from '../tokens/check-authentication-state';
+import { APP_STARTED_WITH_SSR } from '../tokens/ssr-state.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
 import { AuthService } from '../abstracts';
-import { CHECK_AUTHENTICATION_STATE_FN_KEY } from '../tokens/check-authentication-state';
 import { noop } from './common-utils';
 
 export async function getInitialData() {
@@ -21,6 +22,7 @@ export async function getInitialData() {
   const environmentService = injector.get(EnvironmentService);
   const configState = injector.get(ConfigStateService);
   const options = injector.get(CORE_OPTIONS) as ABP.Root;
+  const appStartedWithSSR = injector.get(APP_STARTED_WITH_SSR);
 
   environmentService.setState(options.environment as Environment);
   await getRemoteEnv(injector, options.environment);
@@ -49,8 +51,18 @@ export async function getInitialData() {
       return throwError(() => error);
     }),
   );
-  // TODO: Not working with SSR
-  // await lastValueFrom(result$);
+
+  if (appStartedWithSSR) {
+    await firstValueFrom(
+      result$.pipe(
+        timeout(0),
+        catchError(() => of(null)),
+      ),
+    );
+  } else {
+    await lastValueFrom(result$);
+  }
+
   await localeInitializer(injector);
 }
 

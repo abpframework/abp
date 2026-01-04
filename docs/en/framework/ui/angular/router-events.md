@@ -7,7 +7,7 @@
 
 # Router Events Simplified
 
-`RouterEvents` is a utility service for filtering specific router events and reacting to them. Please see [this page in Angular docs](https://angular.io/api/router/Event) for available router events.
+`RouterEvents` is a utility service for filtering specific router events and reacting to them. Please see [this page in Angular docs](https://angular.dev/api/router/Event) for available router events.
 
 ## Benefit
 

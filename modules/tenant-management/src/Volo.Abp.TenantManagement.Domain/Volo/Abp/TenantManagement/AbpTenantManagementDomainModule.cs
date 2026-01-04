@@ -28,7 +28,7 @@ public class AbpTenantManagementDomainModule : AbpModule
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<Tenant, TenantEto>();
+            options.EtoMappings.Add<Tenant, TenantEto>(typeof(AbpTenantManagementDomainModule));
         });
     }
 

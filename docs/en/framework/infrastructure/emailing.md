@@ -235,7 +235,7 @@ The final rendered message was shown above.
 
 You typically want to replace the standard templates with your own ones, so you can prepare a branded email messages. To do that, you can use the power of the [virtual file system](../infrastructure/virtual-file-system.md) (VFS) or replace them in your own template definition provider.
 
-Pathes of the templates in the virtual file system are shown below:
+Paths of the templates in the virtual file system are shown below:
 
 * `/Volo/Abp/Emailing/Templates/Layout.tpl`
 * `/Volo/Abp/Emailing/Templates/Message.tpl`
@@ -250,7 +250,7 @@ See the [text templating system](./text-templating) document for details.
 
 ## NullEmailSender
 
-`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](../fundamentals/logging.md), rathen than actually sending the emails.
+`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](../fundamentals/logging.md), rather than actually sending the emails.
 
 This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](../../solution-templates/layered-web-application) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
 

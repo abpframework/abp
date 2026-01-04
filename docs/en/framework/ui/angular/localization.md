@@ -220,7 +220,7 @@ As of v2.9 ABP supports RTL. If you are generating a new project with v2.9 and a
 
 ### Step 1. Create Chunks for Bootstrap LTR and RTL
 
-Find [styles configuration in angular.json](https://angular.io/guide/workspace-config#style-script-config) and make sure the chunks in your project has `bootstrap-rtl.min` and `bootstrap-ltr.min` as shown below.
+Find [styles configuration in angular.json](https://angular.dev/reference/configs/workspace-config) and make sure the chunks in your project has `bootstrap-rtl.min` and `bootstrap-ltr.min` as shown below.
 
 ```json
 {
@@ -279,7 +279,7 @@ export class AppComponent {}
 
 ## Registering a New Locale
 
-Since ABP has more than one language, Angular locale files load lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and to register the Angular core using the [`registerLocaleData`](https://angular.io/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `provideAbpCore(withOptions({...}))`.
+Since ABP has more than one language, Angular locale files load lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and to register the Angular core using the [`registerLocaleData`](https://angular.dev/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `provideAbpCore(withOptions({...}))`.
 
 ### registerLocaleFn
 

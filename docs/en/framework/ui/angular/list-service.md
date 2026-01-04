@@ -126,7 +126,7 @@ Then you can place inputs to the HTML:
 
 ## Usage with Observables
 
-You may use observables in combination with [AsyncPipe](https://angular.io/guide/observables-in-angular#async-pipe) of Angular instead. Here are some possibilities:
+You may use observables in combination with [AsyncPipe](https://angular.dev/ecosystem/rxjs-interop) of Angular instead. Here are some possibilities:
 
 ```js
   book$ = this.list.hookToQuery(query => this.bookService.getListByInput(query));

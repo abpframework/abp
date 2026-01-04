@@ -18,12 +18,18 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
 {
     protected PermissionManagementOptions Options { get; }
     protected IPermissionManager PermissionManager { get; }
+    protected IPermissionChecker PermissionChecker { get; }
+    protected IResourcePermissionManager ResourcePermissionManager { get; }
+    protected IResourcePermissionGrantRepository ResourcePermissionGrantRepository { get; }
     protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
     protected ISimpleStateCheckerManager<PermissionDefinition> SimpleStateCheckerManager { get; }
 
     public PermissionAppService(
         IPermissionManager permissionManager,
+        IPermissionChecker permissionChecker,
         IPermissionDefinitionManager permissionDefinitionManager,
+        IResourcePermissionManager resourcePermissionManager,
+        IResourcePermissionGrantRepository resourcePermissionGrantRepository,
         IOptions<PermissionManagementOptions> options,
         ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
     {
@@ -32,6 +38,9 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
 
         Options = options.Value;
         PermissionManager = permissionManager;
+        PermissionChecker = permissionChecker;
+        ResourcePermissionManager = resourcePermissionManager;
+        ResourcePermissionGrantRepository = resourcePermissionGrantRepository;
         PermissionDefinitionManager = permissionDefinitionManager;
         SimpleStateCheckerManager = simpleStateCheckerManager;
     }
@@ -157,6 +166,206 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         foreach (var permissionDto in input.Permissions)
         {
             await PermissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
+        }
+    }
+
+    public virtual async Task<GetResourceProviderListResultDto> GetResourceProviderKeyLookupServicesAsync(string resourceName)
+    {
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        if (!resourcePermissions.Any() ||
+            !await AuthorizationService.IsGrantedAnyAsync(resourcePermissions.Select(p => p.ManagementPermissionName!).ToArray()))
+        {
+            return new GetResourceProviderListResultDto
+            {
+                Providers = new List<ResourceProviderDto>()
+            };
+        }
+
+        var lookupServices = await ResourcePermissionManager.GetProviderKeyLookupServicesAsync();
+        return new GetResourceProviderListResultDto
+        {
+            Providers = lookupServices.Select(s => new ResourceProviderDto
+            {
+                Name = s.Name,
+                DisplayName = s.DisplayName.Localize(StringLocalizerFactory),
+            }).ToList()
+        };
+    }
+
+    public virtual async Task<SearchProviderKeyListResultDto> SearchResourceProviderKeyAsync(string resourceName, string serviceName, string filter, int page)
+    {
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        if (resourcePermissions.IsNullOrEmpty() ||
+            !await AuthorizationService.IsGrantedAnyAsync(resourcePermissions.Select(p => p.ManagementPermissionName!).ToArray()))
+        {
+            return new SearchProviderKeyListResultDto();
+        }
+
+        var lookupService = await ResourcePermissionManager.GetProviderKeyLookupServiceAsync(serviceName);
+        var keys = await lookupService.SearchAsync(filter, page);
+        return new SearchProviderKeyListResultDto
+        {
+            Keys = keys.Select(x => new SearchProviderKeyInfo
+            {
+                ProviderKey =  x.ProviderKey,
+                ProviderDisplayName =  x.ProviderDisplayName,
+            }).ToList()
+        };
+    }
+
+    public virtual async Task<GetResourcePermissionDefinitionListResultDto> GetResourceDefinitionsAsync(string resourceName)
+    {
+        var result = new GetResourcePermissionDefinitionListResultDto
+        {
+            Permissions = new List<ResourcePermissionDefinitionDto>()
+        };
+
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        var permissionGrants = (await PermissionChecker.IsGrantedAsync(resourcePermissions
+                .Select(rp => rp.ManagementPermissionName!)
+                .Distinct().ToArray())).Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key)
+            .ToHashSet();
+        foreach (var resourcePermission in resourcePermissions)
+        {
+            if (!permissionGrants.Contains(resourcePermission.ManagementPermissionName))
+            {
+                continue;
+            }
+
+            result.Permissions.Add(new ResourcePermissionDefinitionDto
+            {
+                Name = resourcePermission.Name,
+                DisplayName = resourcePermission.DisplayName?.Localize(StringLocalizerFactory),
+            });
+        }
+
+        return result;
+    }
+
+    public virtual async Task<GetResourcePermissionListResultDto> GetResourceAsync(string resourceName, string resourceKey)
+    {
+        var result = new GetResourcePermissionListResultDto
+        {
+            Permissions = new List<ResourcePermissionGrantInfoDto>()
+        };
+
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        var resourcePermissionGrants = await ResourcePermissionManager.GetAllGroupAsync(resourceName, resourceKey);
+        var permissionGrants = (await PermissionChecker.IsGrantedAsync(resourcePermissions
+                .Select(rp => rp.ManagementPermissionName!)
+                .Distinct().ToArray())).Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key)
+            .ToHashSet();
+        foreach (var resourcePermissionGrant in resourcePermissionGrants)
+        {
+            var resourcePermissionGrantInfoDto = new ResourcePermissionGrantInfoDto
+            {
+                ProviderName = resourcePermissionGrant.ProviderName,
+                ProviderKey = resourcePermissionGrant.ProviderKey,
+                ProviderDisplayName = resourcePermissionGrant.ProviderDisplayName,
+                ProviderNameDisplayName  = resourcePermissionGrant.ProviderNameDisplayName?.Localize(StringLocalizerFactory),
+                Permissions = new List<GrantedResourcePermissionDto>()
+            };
+            foreach (var permission in resourcePermissionGrant.Permissions)
+            {
+                var resourcePermission = resourcePermissions.FirstOrDefault(x => x.Name == permission);
+                if (resourcePermission == null)
+                {
+                    continue;
+                }
+
+                if (!permissionGrants.Contains(resourcePermission.ManagementPermissionName))
+                {
+                    continue;
+                }
+
+                resourcePermissionGrantInfoDto.Permissions.Add(new GrantedResourcePermissionDto()
+                {
+                    Name = permission,
+                    DisplayName = resourcePermission?.DisplayName.Localize(StringLocalizerFactory),
+                });
+            }
+
+            if(resourcePermissionGrantInfoDto.Permissions.Any())
+            {
+                result.Permissions.Add(resourcePermissionGrantInfoDto);
+            }
+        }
+
+        return result;
+    }
+
+    public virtual async Task<GetResourcePermissionWithProviderListResultDto> GetResourceByProviderAsync(string resourceName, string resourceKey, string providerName, string providerKey)
+    {
+        var result = new GetResourcePermissionWithProviderListResultDto
+        {
+            Permissions = new List<ResourcePermissionWithProdiverGrantInfoDto>()
+        };
+
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        var resourcePermissionGrants = await ResourcePermissionManager.GetAllAsync(resourceName, resourceKey, providerName, providerKey);
+        var permissionGrants = (await PermissionChecker.IsGrantedAsync(resourcePermissions
+                .Select(rp => rp.ManagementPermissionName!)
+                .Distinct().ToArray())).Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key)
+            .ToHashSet();
+        foreach (var resourcePermissionGrant in resourcePermissionGrants)
+        {
+            var resourcePermission = resourcePermissions.FirstOrDefault(x => x.Name == resourcePermissionGrant.Name);
+            if (resourcePermission == null)
+            {
+                continue;
+            }
+
+            if (!permissionGrants.Contains(resourcePermission.ManagementPermissionName))
+            {
+                continue;
+            }
+
+            result.Permissions.Add(new ResourcePermissionWithProdiverGrantInfoDto
+            {
+                Name = resourcePermissionGrant.Name,
+                DisplayName = resourcePermission?.DisplayName.Localize(StringLocalizerFactory),
+                Providers = resourcePermissionGrant.Providers.Select(x => x.Name).ToList(),
+                IsGranted = resourcePermissionGrant.IsGranted
+            });
+        }
+
+        return result;
+    }
+
+    public virtual async Task UpdateResourceAsync(string resourceName, string resourceKey, UpdateResourcePermissionsDto input)
+    {
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        var permissionGrants = (await PermissionChecker.IsGrantedAsync(resourcePermissions
+                .Select(rp => rp.ManagementPermissionName!)
+                .Distinct().ToArray())).Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key)
+            .ToHashSet();
+        foreach (var resourcePermission in resourcePermissions)
+        {
+            if (!permissionGrants.Contains(resourcePermission.ManagementPermissionName))
+            {
+                continue;
+            }
+
+            var isGranted = !input.Permissions.IsNullOrEmpty() && input.Permissions.Any(p => p == resourcePermission.Name);
+            await ResourcePermissionManager.SetAsync(resourcePermission.Name, resourceName, resourceKey, input.ProviderName, input.ProviderKey, isGranted);
+        }
+    }
+
+    public virtual async Task DeleteResourceAsync(string resourceName, string resourceKey, string providerName, string providerKey)
+    {
+        var resourcePermissions = await ResourcePermissionManager.GetAvailablePermissionsAsync(resourceName);
+        var permissionGrants = (await PermissionChecker.IsGrantedAsync(resourcePermissions
+                .Select(rp => rp.ManagementPermissionName!)
+                .Distinct().ToArray())).Result.Where(x => x.Value == PermissionGrantResult.Granted).Select(x => x.Key)
+            .ToHashSet();
+        foreach (var resourcePermission in resourcePermissions)
+        {
+            if (!permissionGrants.Contains(resourcePermission.ManagementPermissionName))
+            {
+                continue;
+            }
+
+            await ResourcePermissionManager.DeleteAsync(resourcePermission.Name, resourceName, resourceKey, providerName, providerKey);
         }
     }
 

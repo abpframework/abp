@@ -26,11 +26,11 @@ public class AbpDbContextOptions
     internal Dictionary<Type, List<object>> ConventionActions { get; }
 
     internal Action<DbContext, ModelBuilder>? DefaultOnModelCreatingAction { get; set; }
-    
-    internal Action<DbContext, DbContextOptionsBuilder>? DefaultOnConfiguringAction { get; set; }
 
     internal Dictionary<Type, List<object>> OnModelCreatingActions { get; }
-    
+
+    internal Action<DbContext, DbContextOptionsBuilder>? DefaultOnConfiguringAction { get; set; }
+
     internal Dictionary<Type, List<object>> OnConfiguringActions { get; }
 
     public AbpDbContextOptions()
@@ -58,11 +58,18 @@ public class AbpDbContextOptions
         DefaultConfigureAction = action;
     }
 
-    public void ConfigureDefaultConvention([NotNull] Action<DbContext, ModelConfigurationBuilder> action)
+    public void ConfigureDefaultConvention([NotNull] Action<DbContext, ModelConfigurationBuilder> action, bool overrideExisting = false)
     {
         Check.NotNull(action, nameof(action));
 
-        DefaultConventionAction = action;
+        if (overrideExisting)
+        {
+            DefaultConventionAction = action;
+        }
+        else
+        {
+            DefaultConventionAction += action;
+        }
     }
 
     public void ConfigureConventions<TDbContext>([NotNull] Action<TDbContext, ModelConfigurationBuilder> action)
@@ -83,18 +90,18 @@ public class AbpDbContextOptions
         actions.Add(action);
     }
 
-    public void ConfigureDefaultOnModelCreating([NotNull] Action<DbContext, ModelBuilder> action)
+    public void ConfigureDefaultOnModelCreating([NotNull] Action<DbContext, ModelBuilder> action, bool overrideExisting = false)
     {
         Check.NotNull(action, nameof(action));
 
-        DefaultOnModelCreatingAction = action;
-    }
-    
-    public void ConfigureDefaultOnConfiguring([NotNull] Action<DbContext, DbContextOptionsBuilder> action)
-    {
-        Check.NotNull(action, nameof(action));
-
-        DefaultOnConfiguringAction = action;
+        if (overrideExisting)
+        {
+            DefaultOnModelCreatingAction = action;
+        }
+        else
+        {
+            DefaultOnModelCreatingAction += action;
+        }
     }
 
     public void ConfigureOnModelCreating<TDbContext>([NotNull] Action<TDbContext, ModelBuilder> action)
@@ -114,7 +121,21 @@ public class AbpDbContextOptions
 
         actions.Add(action);
     }
-    
+
+    public void ConfigureDefaultOnConfiguring([NotNull] Action<DbContext, DbContextOptionsBuilder> action, bool overrideExisting = false)
+    {
+        Check.NotNull(action, nameof(action));
+
+        if (overrideExisting)
+        {
+            DefaultOnConfiguringAction = action;
+        }
+        else
+        {
+            DefaultOnConfiguringAction += action;
+        }
+    }
+
     public void ConfigureOnConfiguring<TDbContext>([NotNull] Action<TDbContext, DbContextOptionsBuilder> action)
         where TDbContext : AbpDbContext<TDbContext>
     {
