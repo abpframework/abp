@@ -20,7 +20,7 @@ public class IdentityUserIntegrationController : AbpControllerBase, IIdentityUse
     {
         UserIntegrationService = userIntegrationService;
     }
-    
+
     [HttpGet]
     [Route("{id}/role-names")]
     public virtual Task<string[]> GetRoleNamesAsync(Guid id)
@@ -50,9 +50,37 @@ public class IdentityUserIntegrationController : AbpControllerBase, IIdentityUse
     }
 
     [HttpGet]
+    [Route("search/by-ids")]
+    public virtual Task<ListResultDto<UserData>> SearchByIdsAsync(Guid[] ids)
+    {
+        return UserIntegrationService.SearchByIdsAsync(ids);
+    }
+
+    [HttpGet]
     [Route("count")]
     public Task<long> GetCountAsync(UserLookupCountInputDto input)
     {
         return UserIntegrationService.GetCountAsync(input);
+    }
+
+    [HttpGet]
+    [Route("search/roles")]
+    public virtual Task<ListResultDto<RoleData>> SearchRoleAsync(RoleLookupSearchInputDto input)
+    {
+        return UserIntegrationService.SearchRoleAsync(input);
+    }
+
+    [HttpGet]
+    [Route("search/roles/by-names")]
+    public virtual Task<ListResultDto<RoleData>> SearchRoleByNamesAsync(string[] names)
+    {
+        return UserIntegrationService.SearchRoleByNamesAsync(names);
+    }
+
+    [HttpGet]
+    [Route("count/roles")]
+    public virtual Task<long> GetRoleCountAsync(RoleLookupCountInputDto input)
+    {
+        return UserIntegrationService.GetRoleCountAsync(input);
     }
 }

@@ -8,7 +8,7 @@ using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Internal.Telemetry.Activity.Providers;
 
-public class TelemetryActivityEventBuilder : ITelemetryActivityEventBuilder, ISingletonDependency
+public class TelemetryActivityEventBuilder : ITelemetryActivityEventBuilder, ITransientDependency
 {
     private readonly List<ITelemetryActivityEventEnricher> _activityEnrichers;
 
@@ -31,7 +31,7 @@ public class TelemetryActivityEventBuilder : ITelemetryActivityEventBuilder, ISi
             {
                //ignored
             }
-            
+
             if (context.IsTerminated)
             {
                 return null;
@@ -40,10 +40,10 @@ public class TelemetryActivityEventBuilder : ITelemetryActivityEventBuilder, ISi
 
         return context.Current;
     }
-    
+
     private static bool FilterEnricher(ITelemetryActivityEventEnricher enricher)
     {
-        return ProxyHelper.GetUnProxiedType(enricher).Assembly.FullName!.StartsWith(TelemetryConsts.VoloNameSpaceFilter) && 
+        return ProxyHelper.GetUnProxiedType(enricher).Assembly.FullName!.StartsWith(TelemetryConsts.VoloNameSpaceFilter) &&
                enricher is not IHasParentTelemetryActivityEventEnricher<TelemetryActivityEventEnricher>;
     }
 }

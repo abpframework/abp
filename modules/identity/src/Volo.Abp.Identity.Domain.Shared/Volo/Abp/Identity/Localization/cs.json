@@ -135,6 +135,8 @@
     "ModificationTime": "Doba úpravy",
     "PasswordUpdateTime": "Čas aktualizace hesla",
     "LockoutEndTime": "Čas konce uzamčení",
-    "FailedAccessCount": "Počet neúspěšných přístupů"
+    "FailedAccessCount": "Počet neúspěšných přístupů",
+    "UserResourcePermissionProviderKeyLookupService": "Uživatel",
+    "RoleResourcePermissionProviderKeyLookupService": "Role"
   }
 }

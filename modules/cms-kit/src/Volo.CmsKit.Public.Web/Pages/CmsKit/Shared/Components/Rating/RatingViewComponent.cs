@@ -35,6 +35,7 @@ public class RatingViewComponent : AbpViewComponent
     {
         var ratings = await RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
         var totalRating = ratings.Sum(x => x.Count);
+        var averageRating = totalRating > 0 ? (double)ratings.Sum(x => x.StarCount * x.Count) / totalRating : 0;
 
         short? currentUserRating = null;
         if (CurrentUser.IsAuthenticated)
@@ -53,6 +54,7 @@ public class RatingViewComponent : AbpViewComponent
             Ratings = ratings,
             CurrentRating = currentUserRating,
             TotalRating = totalRating,
+            AverageRating = averageRating,
             IsReadOnly = isReadOnly
         };
 
@@ -73,6 +75,8 @@ public class RatingViewModel
     public short? CurrentRating { get; set; }
 
     public int TotalRating { get; set; }
+
+    public double AverageRating { get; set; }
 
     public bool IsReadOnly { get; set; }
 }

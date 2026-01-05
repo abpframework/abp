@@ -670,7 +670,7 @@ You can open your browser and click the **New book** button to see the new modal
 
 ### Create a Reactive Form
 
-[Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
+[Reactive forms](https://angular.dev/guide/forms/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
 
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
@@ -742,8 +742,8 @@ export class BookComponent implements OnInit {
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
 * Added a `form: FormGroup` property.
 * Added a `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
-* Injected with the `FormBuilder` inject function.. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
-* Added a `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
+* Injected the `FormBuilder` with the inject function. [FormBuilder](https://angular.dev/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate that is needed to build complex forms.
+* Added a `buildForm` method at the end of the file and executed  the `buildForm()` in the `createBook` method.
 * Added a `save` method.
 
 Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
@@ -765,7 +765,11 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ '::Enum:BookType.' + type.value | abpLocalization }}}%}</option>
+        @for (type of bookTypes; track type) {
+          <option [ngValue]="type.value"> 
+            {%{{{ '::Enum:BookType.' + type.value | abpLocalization }}}%}
+          </option>
+        }
       </select>
     </div>
 
@@ -804,46 +808,24 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 
 We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component. So, we need to arrange the dependencies related to this component.
 
-Open `/src/app/book/book.module.ts` and replace the content as below:
-
-```js
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { BookRoutingModule } from './book-routing.module';
-import { BookComponent } from './book.component';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; // add this line
-
-@NgModule({
-  declarations: [BookComponent],
-  imports: [
-    BookRoutingModule,
-    SharedModule,
-    NgbDatepickerModule, // add this line
-  ]
-})
-export class BookModule { }
-```
-
-* We imported `NgbDatepickerModule`  to be able to use the date picker.
-
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
-// added this line
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgbDateNativeAdapter, NgbDateAdapter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [ThemeSharedModule, ReactiveFormsModule, NgbDatepickerModule],
   providers: [
     ListService,
-    { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter } // add this line
+    { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }
   ],
 })
 export class BookComponent implements OnInit {

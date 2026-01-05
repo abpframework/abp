@@ -47,7 +47,22 @@ program.parse(process.argv);
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
 
-    await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
+    const parallel = process.env.NX_PARALLEL || '2';
+    await execa(
+      'yarn',
+      [
+        'nx',
+        'run-many',
+        '--target=build',
+        '--all',
+        '--exclude=dev-app,schematics',
+        '--prod',
+        '--parallel',
+        String(parallel),
+      ],
+      { stdout: 'inherit', cwd: '../' },
+    );
+
     await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
   } catch (error) {
     console.error(error.stderr);

@@ -67,7 +67,6 @@ public class TelemetryActivitySender : ITelemetryActivitySender, IScopedDependen
         }
     }
 
-
     private async Task<bool> TrySendBatchWithRetriesAsync(HttpClient httpClient, ActivityEvent[] activities)
     {
         var currentAttempt = 0;

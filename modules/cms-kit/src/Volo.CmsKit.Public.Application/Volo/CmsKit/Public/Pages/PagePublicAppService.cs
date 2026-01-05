@@ -54,6 +54,12 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
                 return null;
             }
 
+            // Only return published home page
+            if (page.Status != PageStatus.Publish)
+            {
+                return null;
+            }
+
             pageCacheItem = ObjectMapper.Map<Page, PageCacheItem>(page);
 
             await PageCache.SetAsync(PageCacheItem.GetKey(PageConsts.DefaultHomePageCacheKey), pageCacheItem,
@@ -77,6 +83,12 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
             var page = await PageRepository.FindBySlugAsync(slug);
             // If page is not found, cache it as null to prevent further queries.
             if (page is null)
+            {
+                return null;
+            }
+
+            // Only return published pages
+            if (page.Status != PageStatus.Publish)
             {
                 return null;
             }

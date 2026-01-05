@@ -22,6 +22,8 @@
 
     <ItemGroup>
         <PackageReference Include="Devart.Data.Oracle.EFCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="10.0.0-rc.2.25502.107" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="10.0.0-rc.2.25502.107" />
     </ItemGroup>
 
 </Project>

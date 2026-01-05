@@ -9,9 +9,9 @@ namespace Volo.Abp.PermissionManagement;
 public interface IDynamicPermissionDefinitionStoreInMemoryCache
 {
     string CacheStamp { get; set; }
-    
+
     SemaphoreSlim SyncSemaphore { get; }
-    
+
     DateTime? LastCheckTime { get; set; }
 
     Task FillAsync(
@@ -19,8 +19,12 @@ public interface IDynamicPermissionDefinitionStoreInMemoryCache
         List<PermissionDefinitionRecord> permissionRecords);
 
     PermissionDefinition GetPermissionOrNull(string name);
-    
+
     IReadOnlyList<PermissionDefinition> GetPermissions();
-    
+
     IReadOnlyList<PermissionGroupDefinition> GetGroups();
+
+    PermissionDefinition GetResourcePermissionOrNull(string resourceName, string name);
+
+    IReadOnlyList<PermissionDefinition> GetResourcePermissions();
 }

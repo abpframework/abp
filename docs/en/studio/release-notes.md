@@ -9,6 +9,112 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
+## 2.1.3 (2025-12-15) Latest
+
+* Updated `createCommand` and CLI help for multi-tenancy.
+* Fixed `BookController` templating problem.
+
+## 2.1.2 (2025-12-11)
+
+* Fixed `SLNX` files in templates for macOS.
+* Fixed `DbMigrator` problem on nolayers template.
+
+## 2.1.1 (2025-12-11)
+
+* Fixed duplicate workspace seeding issue.
+* Fixed books sample problems when solution is tiered.
+* Added AI Management module to `abpmdl` file.
+* Improved skip running initial tasks text.
+* Fixed unit test failures.
+* Added `LanguageManagementDbContext` table creation in tests.
+* Removed `ConfigureHttpClientProxies` method.
+* Fixed issue with adding new services to existing Microservices.
+* Fixed AI Management template issues.
+* Reverted browser notification overlay fix.
+
+## 2.1.0 (2025-12-08)
+
+* Enhanced Module Installation UI with improved user experience.
+* Added `AI Management` option to Startup Templates (app-nolayers, app).
+* Added support for new `SLNX` solution file format.
+* Enhanced modularity step in solution creation process.
+* Fixed Swagger authorization issues when projects run via .NET Aspire.
+* Fixed browser notification overlay problems.
+* Added missing `Unit of Work` namespace in solution templates.
+* Fixed JSON file formatting issues.
+* Updated ABP Framework to `10.0.1` and LeptonX to `5.0.1`.
+* Added MySQL compatibility warnings.
+* Fixed initial tasks problems.
+* Improved AI Assistant control UI with better margins and borders.
+
+## 2.0.2 (2025-11-26)
+
+* Fixed `.NET 10` installation problems.
+* Added custom styles for code blocks in **Markdown** view.
+* Fixed `OpenIddictCoreOptions` injection to use `IOptions`.
+* Added IdentityModel package after KubernetesClient.
+
+## 2.0.1 (2025-11-21)
+
+* Added build step before adding EF Core migration.
+* Updated `KubernetesClient` to version `18.0.5`.
+
+## 2.0.0 (2025-11-20)
+
+* Major upgrade to `.NET 10.0` and `ABP Framework 10.0`
+* Replaced `IdentityModel` with `Duende.IdentityModel`.
+* Added "Open on Start in Browser" option for .NET applications in Solution Runner.
+* Added `Mapperly` configuration.
+* Enabled user and tenant impersonation in Blazor client modules.
+* Enhanced notification system to allow text copying.
+* Added environment variable support for DesignTime DbContext.
+* Used C# instead of JSON for Aspire AppHost project configuration.
+* Fixed MongoDB image pulling problems.
+* Improved AI Assistant with better code block visibility across themes.
+* Added different cache paths for each browser instance.
+* Fixed various UI issues including mouse pointer problems in trees and horizontal scrolling.
+* Added `FileManagement` download URL configuration for tiered projects.
+* Added chat SignalR configuration to Microservice Blazor apps.
+* Updated `Blazorise` packages to version `1.8.6`.
+* Fixed `BackToImpersonator` button in Microservice Template.
+* Added log recording while crashing for better debugging.
+* Enhanced tab headers for **Solution Runner** and **Kubernetes**.
+
+## 1.4.2 (2025-10-30)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.6`)
+* AI Assistant is now enabled for all customers.
+* Fixed CLI default language problem during solution creation.
+* Improved task auto-start logic and notification handling.
+* Fixed Angular localization function inputs.
+* Set default mobile frameworks to **None** in the UI.
+* Disallowed dots (.) in module names of microservice sub-templates.
+* Solution Runner: show vertical scrollbar when needed and disable the Properties window while the app is running.
+
+## 1.4.1 (2025-10-16)
+
+* Fixed AI Assistant chat problems.
+* Added custom steps if built with CLI.
+* Fixed Release configuration builds.   
+
+## 1.4.0 (2025-10-15)
+
+* The **Task Panel** has been introduced, providing a centralized place to manage and monitor background operations.
+* Added **CLI application properties** window, making it easier to configure and manage command-line tool settings directly within the Studio UI.
+* Added suggestion modal for building after creating service/web/gateway module.
+* Fixed mismatching hosts file record namespace problem.
+* Allow selecting `Default Profile` in Solution Runner.
+* Refactored Angular scripts.
+* Fixed: tools not browsable in Solution Runner with Aspire after Kubernetes deployment.
+
+## 1.3.3 (2025-10-06)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.5`)
+* Fixed welcome page tutorial links.
+* Improved error handling during Helm chart installation and custom command execution.
+* Fixed microservice problems.
+* Fixed connection string problems.
+
 ## 1.3.2 (2025-09-25)
 
 * Enhanced AI Assistant with bug fixes and improvements.

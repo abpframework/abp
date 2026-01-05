@@ -13,11 +13,19 @@ public static class AbpDbContextConfigurationContextMySQLExtensions
     {
         if (context.ExistingConnection != null)
         {
-            return context.DbContextOptions.UseMySQL(context.ExistingConnection, mySQLOptionsAction);
+            return context.DbContextOptions.UseMySQL(context.ExistingConnection, optionsBuilder =>
+            {
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                mySQLOptionsAction?.Invoke(optionsBuilder);
+            });
         }
         else
         {
-            return context.DbContextOptions.UseMySQL(context.ConnectionString, mySQLOptionsAction);
+            return context.DbContextOptions.UseMySQL(context.ConnectionString, optionsBuilder =>
+            {
+                optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                mySQLOptionsAction?.Invoke(optionsBuilder);
+            });
         }
     }
 }

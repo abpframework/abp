@@ -1,17 +1,17 @@
 /* eslint-disable @angular-eslint/no-output-native */
-import { 
-  Component, 
-  ElementRef, 
-  EventEmitter, 
-  Input, 
-  OnInit, 
-  Output, 
-  Renderer2, 
-  ViewChild, 
-  inject 
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild,
+  inject,
 } from '@angular/core';
-import { NgClass } from '@angular/common';
-import { ABP } from '@abp/ng.core';
+import { CommonModule } from '@angular/common';
+import { ABP, StopPropagationDirective } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-button',
@@ -30,7 +30,7 @@ import { ABP } from '@abp/ng.core';
       <i [ngClass]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
     </button>
   `,
-  imports: [NgClass],
+  imports: [CommonModule, StopPropagationDirective],
 })
 export class ButtonComponent implements OnInit {
   private renderer = inject(Renderer2);

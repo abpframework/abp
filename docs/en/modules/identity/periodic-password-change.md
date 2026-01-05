@@ -9,7 +9,7 @@
 
 ## Introduction
 
-> You must have an ABP Team or a higher license to use this module & its features.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module & its features.
 
 The Identity PRO module has a built-in password aging function.
 

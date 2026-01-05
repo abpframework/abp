@@ -443,6 +443,14 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         return result;
     }
 
+    public virtual async Task<IdentityUser> FindByPasskeyIdAsync(byte[] credentialId, bool includeDetails = true, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .Where(u => u.Passkeys.Any(x => x.CredentialId == credentialId))
+            .OrderBy(x => x.Id)
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+    }
+
     protected virtual async Task<IQueryable<IdentityUser>> GetFilteredQueryableAsync(
         string filter = null,
         Guid? roleId = null,

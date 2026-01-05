@@ -102,7 +102,7 @@ public class AutoMapperExpressionExtensions_Tests
 
     private static IMapper CreateMapper(Action<IMapperConfigurationExpression> configure)
     {
-        var configuration = new MapperConfiguration(configure, NullLoggerFactory.Instance);
+        var configuration = new MapperConfiguration(configure);
         configuration.AssertConfigurationIsValid();
         return configuration.CreateMapper();
     }

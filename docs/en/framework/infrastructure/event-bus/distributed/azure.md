@@ -137,4 +137,14 @@ Configure<AbpAzureServiceBusOptions>(options =>
 });
 ````
 
+Use `TokenCredential` instead of `ConnectionString` if you want to use custom credential.
+
+````csharp
+Configure<AbpAzureServiceBusOptions>(options =>
+{
+    options.Connections.Default.FullyQualifiedNamespace = "sb-my-app.servicebus.windows.net";
+    options.Connections.Default.TokenCredential = new DefaultAzureCredential();
+});
+````
+
 Using these options classes can be combined with the `appsettings.json` way. Configuring an option property in the code overrides the value in the configuration file.

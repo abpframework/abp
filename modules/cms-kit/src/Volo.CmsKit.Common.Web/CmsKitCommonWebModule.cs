@@ -7,6 +7,8 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Web.Icons;
 using Markdig;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Web.Contents;
 
 namespace Volo.CmsKit.Web;
 
@@ -53,6 +55,11 @@ public class CmsKitCommonWebModule : AbpModule
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(CmsKitCommonRemoteServiceConsts.ModuleName);
+        });
+
+        Configure<CmsKitContentWidgetOptions>(options =>
+        {
+            options.AddWidgetIfFeatureEnabled(typeof(CommentsFeature), "Comment", "CmsCommenting", "CmsKitCommentConfiguration");
         });
     }
 }

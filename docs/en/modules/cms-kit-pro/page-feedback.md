@@ -7,7 +7,7 @@
 
 # CMS Kit Pro: Page Feedback System
 
-> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use CMS Kit Pro module's features.
 
 The CMS Kit Pro module provides a comprehensive **Page Feedback** system that enables you to collect valuable user feedback about your website pages. This system allows visitors to quickly rate their experience and provide comments, helping you understand user satisfaction and identify areas for improvement.
 

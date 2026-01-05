@@ -11,7 +11,7 @@ This document explains how to install the ABP Studio tool.
 
 ## Pre-requirements
 
-ABP Studio automatically instals most of the required dependencies. When you first launch the application, it will check for and install the following components if missed:
+ABP Studio automatically installs most of the required dependencies. When you first launch the application, it will check for and install the following components if missed:
 
 * .NET SDK
 * Node.js
@@ -19,7 +19,7 @@ ABP Studio automatically instals most of the required dependencies. When you fir
 * mkcert (for HTTPS development)
 * WireGuard (for Kubernetes operations)
 
-However, the followings should be manually installed:
+However, the following should be manually installed:
 
 ### Docker (Required for Kubernetes Operations)
 
@@ -55,7 +55,7 @@ ABP Studio allows you to customize the user interface theme according to your pr
 
 ## Upgrading
 ABP Studio periodically checks for updates in the background, and when a new version of ABP Studio is available, you will be notified through a modal. 
-The modal will prompt you to update to the latest version as below:
+The modal will prompt you to update to the latest version as follows:
 
 ![new-version-available-window](./images/new-version-available-window.png)
 
@@ -65,3 +65,7 @@ When you see the "New Version Available" window, follow these steps to upgrade A
 2. A progress indicator will display the download status.
 3. Once the download is complete, a new modal will appear with the "Install and Relaunch" buttons.
 4. Click on the "Install and Relaunch" button to complete the installation process.
+
+## Installing a Specific Version
+
+There is no official support for installing an older version of ABP Studio yet. But, if you want to install an older version of ABP Studio, you can use approach explanined here [https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version](https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version)

@@ -9,7 +9,7 @@
 
 ## About This Tutorial
 
-> You must have an ABP Team or a higher license to be able to create a mobile application.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to be able to create a mobile application.
 
 This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [MAUI](../../../get-started/maui.md) as the mobile option. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial. 
 

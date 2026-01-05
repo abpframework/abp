@@ -32,11 +32,22 @@ Find `UseSqlServer()` calls in your solution. Check the following files:
 
 Alternatively, you can use the [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql) provider. Replace the [Volo.Abp.EntityFrameworkCore.MySQL](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.MySQL) package with the [Volo.Abp.EntityFrameworkCore.MySQL.Pomelo](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.MySQL.Pomelo) package in your `.EntityFrameworkCore` project.
 
-Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, replace `typeof(AbpEntityFrameworkCoreMySQLModule)` with `typeof(AbpEntityFrameworkCoreMySQLPomeloModule)` in the `DependsOn` attribute.
+To complete the switch to the Pomelo Provider, you'll need to update your module dependencies. To do that, find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, replace `typeof(AbpEntityFrameworkCoreMySQLModule)` with `typeof(AbpEntityFrameworkCoreMySQLPomeloModule)` in the `DependsOn` attribute.
+
+Also, if you are switching from a provider other than ABP's MySQL provider, you need to call the `UseMySQL` method in the relevant places, as described in the next section.
+
+### UseMySQL()
+
+Find `UseSqlServer()` calls in your solution. Check the following files:
+
+* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project. Replace `UseSqlServer()` with `UseMySql()`.
+* *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project. Replace `UseSqlServer()` with `UseMySql()`.
+
+You also need to specify the `ServerVersion`. See https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/wiki/Configuration-Options#server-version for more details.
+
+`UseMySql(configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(configuration.GetConnectionString("Default")));` or `UseMySql(configuration.GetConnectionString("Default"), new MySqlServerVersion(new Version(8, 4, 6)));`
 
 > Depending on your solution structure, you may find more code files need to be changed.
-
-The `UseMySQL()` method calls remain the same, no changes needed.
 
 ## Change the Connection Strings
 

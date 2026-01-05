@@ -11,11 +11,6 @@
           "name": "AbpAspNetCoreComponentsWebThemingModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
-        },
-        {
           "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application.Contracts",
           "namespace": "Volo.Abp.PermissionManagement",
           "name": "AbpPermissionManagementApplicationContractsModule"

@@ -28,4 +28,6 @@ public class CreatePageInputDto: ExtensibleObject
 
     [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
     public string Style { get; set; }
+
+    public PageStatus Status { get; set; } = PageStatus.Draft;
 }

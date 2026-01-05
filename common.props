@@ -18,11 +18,6 @@
   <ItemGroup>
     <None Include="..\..\NuGet.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
-  <Target Name="_PreserveFileProvidersEmbeddedPackageReference" AfterTargets="AddPrunePackageReferences">
-    <ItemGroup>
-      <PrunePackageReference Remove="Microsoft.Extensions.FileProviders.Embedded" />
-    </ItemGroup>
-  </Target>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub">
       <PrivateAssets>all</PrivateAssets>

@@ -98,7 +98,7 @@
       "summary": null
     },
     {
-      "displayName": "Manage features",
+      "displayName": "Features",
       "isEnabled": true,
       "contentType": "permission",
       "name": "AbpTenantManagement.Tenants.ManageFeatures",

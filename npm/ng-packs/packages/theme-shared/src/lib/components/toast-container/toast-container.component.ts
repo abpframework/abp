@@ -46,7 +46,7 @@ export class ToastContainerComponent implements OnInit {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onWindowResize() {
     this.setDefaultRight();
   }

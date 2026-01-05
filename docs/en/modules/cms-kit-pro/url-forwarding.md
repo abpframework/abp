@@ -7,7 +7,7 @@
 
 # CMS Kit Pro: URL Forwarding System
 
-> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use CMS Kit Pro module's features.
 
 CMS Kit provides a **URL forwarding** system to create URLs that redirect to other pages or external websites.
 

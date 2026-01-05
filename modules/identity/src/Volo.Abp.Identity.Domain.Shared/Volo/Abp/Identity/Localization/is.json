@@ -135,6 +135,8 @@
     "ModificationTime": "Breytingartími",
     "PasswordUpdateTime": "Uppfærslutími lykilorðs",
     "LockoutEndTime": "Lokatími lokunar",
-    "FailedAccessCount": "Misheppnuð fjöldi aðgangs"
+    "FailedAccessCount": "Misheppnuð fjöldi aðgangs",
+    "UserResourcePermissionProviderKeyLookupService": "Notandi",
+    "RoleResourcePermissionProviderKeyLookupService": "Hlutverk"
   }
 }

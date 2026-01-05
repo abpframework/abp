@@ -135,6 +135,8 @@
     "ModificationTime": "Modification time",
     "PasswordUpdateTime": "Password update time",
     "LockoutEndTime": "Lockout end time",
-    "FailedAccessCount": "Failed access count"
+    "FailedAccessCount": "Failed access count",
+    "UserResourcePermissionProviderKeyLookupService": "User",
+    "RoleResourcePermissionProviderKeyLookupService": "Role"
   }
 }

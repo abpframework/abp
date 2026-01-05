@@ -264,7 +264,7 @@ public class TaxAppService : ApplicationService
 
 ``TaxAppService`` gets ``ITaxCalculator`` in its constructor. The dependency injection system automatically provides the requested service at runtime.
 
-Constructor injection is preffered way of injecting dependencies to a class. In that way, the class can not be constructed unless all constructor-injected dependencies are provided. Thus, the class explicitly declares it's required services.
+Constructor injection is preferred way of injecting dependencies to a class. In that way, the class can not be constructed unless all constructor-injected dependencies are provided. Thus, the class explicitly declares it's required services.
 
 ### Property Injection
 

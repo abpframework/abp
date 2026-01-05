@@ -11,36 +11,39 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v10.0
+### v10.1
 
-The next version will be 10.0 and planned to release the stable 10.0 version in December 2025. We will be mostly working on the following topics:
+The next version will be 10.1 and planned to release the stable 10.1 version in January 2026. We will be mostly working on the following topics:
 
 * Framework
-  * Upgrading to .NET 10
-  * Upgrading 3rd-party dependencies
-  * Enhancements in the core points
+  * OpenTelemetry Protocol Support for 3rd-party Integrations
+  * Resource Based Authorization Integration
+  * Upgrading 3rd-party Dependencies
+  * Enhancements in the Core Points
 
 * ABP Suite
-  * Define navigation properties without target string property dependency
-  * Improvements one-to-many scenarios
-  * File Upload Modal enhancements
-
+  * Define Navigation Properties Without Target String Property Dependency
+  * Improvements on Master-Detail Page Desing (making it more compact)
+  * Improvements One-To-Many Scenarios
+  * File Upload Modal Enhancements
 
 * ABP Studio
-  * Allow to directly create new solutions with ABP's RC (Release Candidate) versions
-  * Automate more details on new service creation for a microservice solution
-  * Support multiple concurrent Kubernetes deployment/integration scenarios
-  * Improve the module installation experience / installation guides
-  * Improve client proxy generation experience
-  * Modular Monolith Application Startup Template
+  * Allow to Directly Create New Solutions with ABP's RC (Release Candidate) Versions
+  * Automate More Details on New Service Creation for a Microservice Solution
+  * Allow to Download ABP Samples from ABP Studio
+  * Task Panel Enhancements (and Documentation)
+  * Support Multiple Concurrent Kubernetes Deployment/Integration Scenarios
+  * Improve the Module Installation Experience / Installation Guides
 
-* Application modules
-  * Account module: Support mixed social/local login scenarios & adding security related features
-  * UI/UX improvements on existing application modules
+* Application Modules
+  * Payment Module: Public Page Implementation (for Blazor & Angular UIs)
+  * AI Management Module: UI Implementation for Blazor & Angular UIs
+  * CMS Kit: Enhancements for Some Features (Rating, Dynamic Widgets, FAQ and more...)
+  * UI/UX Improvements on Existing Application Modules
 
-* Updating existing tutorials & documents (with other UI & DB options)
-  * Microservice development
-  * Modular monolith development
+* Updating Existing Tutorials & Documents (with Other UI & DB Options)
+  * Microservice Development
+  * Modular Monolith Development
 
 ## Backlog Items
 
@@ -50,7 +53,6 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 
 The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here, are some of the important features you can expect from next versions:
 
-* [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules/index.md))
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
 * [#58](https://github.com/abpframework/abp/issues/58) / Content localization system (multilingual entities)
@@ -85,12 +87,9 @@ Here, are some of the important planned features for next ABP Studio versions:
 * Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects.
 * Swagger authentication support for the built-in browser
 * Show related requests/events (traces) together in the solution runner panel
-* Integrate common tool dashboards into ABP Studio (such a Garana, Redis, RabbitMQ, Kibana, etc)
 * Built-in command terminal
 * Automate all steps of new service creation for microservice solutions
-* Container application type support for Solution Runner (to individually control docker dependencies)
 * More options while creating new solutions
-* Downloading samples in ABP studio
 * Built-in ABP documentation experience
 * Auto-execute terminal commands in markdown files
 * Compare changes on the startup templates when a new ABP version is published

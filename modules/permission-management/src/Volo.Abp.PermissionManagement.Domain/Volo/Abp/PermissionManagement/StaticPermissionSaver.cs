@@ -85,6 +85,12 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             await StaticStore.GetGroupsAsync()
         );
 
+        var resourcePermissions = await PermissionSerializer.SerializeAsync(
+            await StaticStore.GetResourcePermissionsAsync()
+        );
+
+        permissionRecords = permissionRecords.Union(resourcePermissions).ToArray();
+
         var currentHash = CalculateHash(
             permissionGroupRecords,
             permissionRecords,

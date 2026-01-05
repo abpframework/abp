@@ -25,6 +25,8 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
     public TelemetryActivityStorage()
     {
         CreateDirectoryIfNotExist();
+        
+        DeleteExistingOldInformation();
 
         State = LoadState();
     }
@@ -35,7 +37,7 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
 
         var activityName = activityEvent.Get<string>(ActivityPropertyNames.ActivityName);
         
-        if (activityName == ActivityNameConsts.AbpStudioClose)
+        if (activityName == ActivityNameConsts.AbpStudioClose || activityName == ActivityNameConsts.AbpStudioCloseWithoutLogin)
         {
             State.SessionId = null;
         }
@@ -47,14 +49,20 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
 
         if (activityEvent.HasSolutionInfo())
         {
-            var solutionId = activityEvent.Get<Guid>(ActivityPropertyNames.SolutionId);
-            State.Solutions[solutionId] = DateTimeOffset.UtcNow;
+            var solutionId = activityEvent.Get<Guid?>(ActivityPropertyNames.SolutionId);
+            if (solutionId.HasValue && solutionId.Value != Guid.Empty)
+            {
+                State.Solutions[solutionId.Value] = DateTimeOffset.UtcNow;
+            }
         }
 
         if (activityEvent.HasProjectInfo())
         {
-            var projectId = activityEvent.Get<Guid>(ActivityPropertyNames.ProjectId);
-            State.Projects[projectId] = DateTimeOffset.UtcNow;
+            var projectId = activityEvent.Get<Guid?>(ActivityPropertyNames.ProjectId);
+            if (projectId.HasValue && projectId.Value != Guid.Empty)
+            {
+                State.Projects[projectId.Value] = DateTimeOffset.UtcNow;
+            }
         }
 
         SaveState();
@@ -62,7 +70,7 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
 
     public List<ActivityEvent> GetActivities()
     {
-        return State.Activities;
+        return new List<ActivityEvent>(State.Activities);
     }
 
     public Guid InitializeOrGetSession()
@@ -153,6 +161,22 @@ public class TelemetryActivityStorage : ITelemetryActivityStorage, ISingletonDep
             var json = JsonSerializer.Serialize(State, JsonSerializerOptions);
             var encryptedJson = Cryptography.Encrypt(json);
             File.WriteAllText(TelemetryPaths.ActivityStorage, encryptedJson, Encoding.UTF8);
+        }
+        catch
+        {
+            // Ignored 
+        }
+    }
+
+    private static void DeleteExistingOldInformation()
+    {
+        try
+        {
+            var file = new FileInfo(TelemetryPaths.ActivityStorage);
+            if (file.Exists && file.CreationTime < new DateTime(2025, 12, 01))
+            {
+                file.Delete();
+            }
         }
         catch
         {

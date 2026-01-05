@@ -117,6 +117,17 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     {
         optionsBuilder.ConfigureWarnings(c => c.Ignore(RelationalEventId.PendingModelChangesWarning));
         base.OnConfiguring(optionsBuilder);
+
+        if (LazyServiceProvider == null || Options == null)
+        {
+            return;
+        }
+
+        Options.Value.DefaultOnConfiguringAction?.Invoke(this, optionsBuilder);
+        foreach (var onConfiguringAction in Options.Value.OnConfiguringActions.GetOrDefault(typeof(TDbContext)) ?? [])
+        {
+            onConfiguringAction.As<Action<DbContext, DbContextOptionsBuilder>>().Invoke(this, optionsBuilder);
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -193,6 +204,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             case "Npgsql.EntityFrameworkCore.PostgreSQL":
                 return EfCoreDatabaseProvider.PostgreSql;
             case "Pomelo.EntityFrameworkCore.MySql":
+            case "MySql.Data.MySqlClient":
                 return EfCoreDatabaseProvider.MySql;
             case "Oracle.EntityFrameworkCore":
             case "Devart.Data.Oracle.Entity.EFCore":
@@ -276,7 +288,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges)
             {
                 var ignoredEntity = EntityChangeOptions.Value.IgnoredNavigationEntitySelectors.Any(selector => selector.Predicate(entityEntry.Entity.GetType()));
-                var onlyForeignKeyModifiedEntity = entityEntry.State == EntityState.Modified && entityEntry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey());
+                var onlyForeignKeyModifiedEntity = entityEntry.State == EntityState.Modified && IsOnlyForeignKeysModified(entityEntry);
                 if ((entityEntry.State == EntityState.Unchanged && ignoredEntity) || onlyForeignKeyModifiedEntity && ignoredEntity)
                 {
                     continue;
@@ -300,7 +312,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             }
             else if (entityEntry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
             {
-                if (entityEntry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey()))
+                if (IsOnlyForeignKeysModified(entityEntry))
                 {
                     // Skip `PublishEntityDeletedEvent/PublishEntityUpdatedEvent` if only foreign keys have changed.
                     break;
@@ -436,13 +448,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             case EntityState.Modified:
                 if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
-                    var modifiedProperties = entry.Properties.Where(x => x.IsModified).ToList();
-                    if (modifiedProperties.All(x => x.Metadata.IsForeignKey()))
+                    if (IsOnlyForeignKeysModified(entry))
                     {
                         // Skip `PublishEntityDeletedEvent/PublishEntityUpdatedEvent` if only foreign keys have changed.
                         break;
                     }
 
+                    var modifiedProperties = entry.Properties.Where(x => x.IsModified).ToList();
                     var disableAuditingAttributes = modifiedProperties.Select(x => x.Metadata.PropertyInfo?.GetCustomAttribute<DisableAuditingAttribute>()).ToList();
                     if (disableAuditingAttributes.Any(x => x == null || x.UpdateModificationProps))
                     {
@@ -487,6 +499,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 EntityChangeEventHelper.PublishEntityDeletedEvent(entry.Entity);
                 break;
         }
+    }
+
+    protected virtual bool IsOnlyForeignKeysModified(EntityEntry entry)
+    {
+        return entry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey() &&
+                                         (x.CurrentValue == null || x.OriginalValue?.ToString() == x.CurrentValue?.ToString()));
     }
 
     protected virtual void HandlePropertiesBeforeSave()
@@ -668,6 +686,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             return;
         }
 
+        string? concurrencyStamp = null;
+        if (entry.Entity is IHasConcurrencyStamp hasConcurrencyStamp)
+        {
+            concurrencyStamp = hasConcurrencyStamp.ConcurrencyStamp;
+        }
+
         ExtraPropertyDictionary? originalExtraProperties = null;
         if (entry.Entity is IHasExtraProperties)
         {
@@ -675,6 +699,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         entry.Reload();
+
+        if (concurrencyStamp != null && entry.Entity is IHasConcurrencyStamp)
+        {
+            ObjectHelper.TrySetProperty(entry.Entity.As<IHasConcurrencyStamp>(), x => x.ConcurrencyStamp, () => concurrencyStamp);
+        }
 
         if (entry.Entity is IHasExtraProperties)
         {
@@ -798,7 +827,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
             modelBuilder,
             mutableEntityType
         );
-        
+
         entityTypeBuilder.ConfigureByConvention();
 
         ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType, entityTypeBuilder);
@@ -815,7 +844,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual void ConfigureGlobalFilters<TEntity>(
         ModelBuilder modelBuilder,
-        IMutableEntityType mutableEntityType, 
+        IMutableEntityType mutableEntityType,
         EntityTypeBuilder<TEntity> entityTypeBuilder)
         where TEntity : class
     {
@@ -846,7 +875,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         {
             return;
         }
-        
+
 
         foreach (var property in mutableEntityType.GetProperties().
                      Where(property => property.PropertyInfo != null &&
@@ -858,7 +887,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 modelBuilder,
                 mutableEntityType
             );
-            
+
             entityTypeBuilder
                 .Property(property.Name)
                 .HasConversion(property.ClrType == typeof(DateTime)
@@ -868,7 +897,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     }
 
     protected virtual void ConfigureValueGenerated<TEntity>(
-        ModelBuilder modelBuilder, 
+        ModelBuilder modelBuilder,
         IMutableEntityType mutableEntityType)
         where TEntity : class
     {

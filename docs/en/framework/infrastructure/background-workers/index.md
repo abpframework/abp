@@ -206,12 +206,12 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 Set `DefaultQueueNamePrefix` and `DefaultDelayedQueueNamePrefix` properties in `AbpRabbitMqBackgroundJobOptions` to your application's name:
 
 ````csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    PreConfigure<AbpRabbitMqBackgroundJobOptions>(options =>
+    Configure<AbpRabbitMqBackgroundJobOptions>(options =>
     {
-        options.DefaultQueueNamePrefix = context.Services.GetApplicationName()!.EndsWith('.') + options.DefaultQueueNamePrefix;
-        options.DefaultDelayedQueueNamePrefix = context.Services.GetApplicationName()!.EndsWith('.') + options.DefaultDelayedQueueNamePrefix;
+        options.DefaultQueueNamePrefix = context.Services.GetApplicationName()!.EnsureEndsWith('.') + options.DefaultQueueNamePrefix;
+        options.DefaultDelayedQueueNamePrefix = context.Services.GetApplicationName()!.EnsureEndsWith('.') + options.DefaultDelayedQueueNamePrefix;
     });
 }
 ````

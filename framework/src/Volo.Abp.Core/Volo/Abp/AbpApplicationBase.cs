@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
@@ -185,8 +186,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         {
             try
             {
-                using var scope = ServiceProvider.CreateScope();
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<AbpApplicationBase>>();
+                var logger = Services.GetInitLogger<AbpApplicationBase>();
                 logger.LogException(ex, LogLevel.Trace);
             }
             catch
@@ -201,7 +201,13 @@ public abstract class AbpApplicationBase : IAbpApplication
         using var scope = ServiceProvider.CreateScope();
         var abpHostEnvironment = scope.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
         var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-        return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") == true;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") != false;
+        }
+
+        return false;
     }
 
     //TODO: We can extract a new class for this

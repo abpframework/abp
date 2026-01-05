@@ -135,6 +135,8 @@
     "ModificationTime": "Hora da modificação",
     "PasswordUpdateTime": "Hora de atualização da senha",
     "LockoutEndTime": "Hora de término do bloqueio",
-    "FailedAccessCount": "Contagem de acessos com falha"
+    "FailedAccessCount": "Contagem de acessos com falha",
+    "UserResourcePermissionProviderKeyLookupService": "Usuário",
+    "RoleResourcePermissionProviderKeyLookupService": "Perfil"
   }
 }

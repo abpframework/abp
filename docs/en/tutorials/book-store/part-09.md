@@ -477,49 +477,43 @@ That's all! You can run the application and try to edit an author.
 
 ## The Author Management Page
 
-Run the following command line to create a new module, named `AuthorModule` in the root folder of the angular application:
+Run the following command line to create a new component, named `AuthorComponent` in the root folder of the angular application:
 
 ```bash
-yarn ng generate module author --module app --routing --route authors
+yarn ng generate component author
 ```
 
 This command should produce the following output:
 
 ```bash
-> yarn ng generate module author --module app --routing --route authors
+> yarn ng generate component author
 
 yarn run v1.19.1
-$ ng generate module author --module app --routing --route authors
-CREATE src/app/author/author-routing.module.ts (344 bytes)
-CREATE src/app/author/author.module.ts (349 bytes)
+$ yarn ng generate component author
 CREATE src/app/author/author.component.html (21 bytes)
 CREATE src/app/author/author.component.spec.ts (628 bytes)
 CREATE src/app/author/author.component.ts (276 bytes)
 CREATE src/app/author/author.component.scss (0 bytes)
-UPDATE src/app/app-routing.module.ts (1396 bytes)
 Done in 2.22s.
 ```
 
-### AuthorModule
+### Author Component
 
-Open the `/src/app/author/author.module.ts` and replace the content as shown below:
+Open the `/src/app/author/author.component.ts` and replace the content as shown below:
 
 ```js
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { AuthorRoutingModule } from './author-routing.module';
-import { AuthorComponent } from './author.component';
+import { Component } from '@angular/core';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
-@NgModule({
-  declarations: [AuthorComponent],
-  imports: [SharedModule, AuthorRoutingModule, NgbDatepickerModule],
+@Component({
+  selector: 'app-author',
+  templateUrl: './author.component.html',
+  styleUrls: ['./author.component.scss'],
+  imports: [NgbDatepickerModule],
 })
-export class AuthorModule {}
+export class AuthorComponent {}
 ```
 
-- Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
-- `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
 - Added `NgbDatepickerModule` that will be used later on the author create and edit forms.
 
 ### Menu Definition
@@ -753,13 +747,13 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
           </div>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name" />
       <ngx-datatable-column [name]="'::BirthDate' | abpLocalization">
         <ng-template let-row="row" ngx-datatable-cell-template>
           {%{{{ row.birthDate | date }}}%}
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::ShortBio' | abpLocalization" prop="shortBio"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::ShortBio' | abpLocalization" prop="shortBio" />
     </ngx-datatable>
   </div>
 </div>

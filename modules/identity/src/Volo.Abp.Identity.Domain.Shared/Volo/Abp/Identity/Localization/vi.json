@@ -135,6 +135,8 @@
     "LockoutEndTime": "Thời gian kết thúc khóa",
     "FailedAccessCount": "Số lượt truy cập không thành công",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Yêu cầu xác minh email để đăng ký",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Tài khoản người dùng sẽ không được tạo ra trừ khi họ xác minh địa chỉ email của mình."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Tài khoản người dùng sẽ không được tạo ra trừ khi họ xác minh địa chỉ email của mình.",
+    "UserResourcePermissionProviderKeyLookupService": "Người dùng",
+    "RoleResourcePermissionProviderKeyLookupService": "Vai trò"
   }
 }

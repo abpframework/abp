@@ -21,6 +21,7 @@
     <ItemGroup>
       <PackageReference Include="BunnyCDN.Net.Storage" />
       <PackageReference Include="Microsoft.Extensions.Http" />
+      <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
 </Project>

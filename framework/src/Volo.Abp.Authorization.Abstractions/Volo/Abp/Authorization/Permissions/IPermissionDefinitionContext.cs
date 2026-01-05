@@ -1,13 +1,12 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions;
 
 public interface IPermissionDefinitionContext
 {
-    //TODO: Add Get methods to find and modify a permission or group.
-
     IServiceProvider ServiceProvider { get; }
 
     /// <summary>
@@ -16,11 +15,11 @@ public interface IPermissionDefinitionContext
     /// </summary>
     /// <param name="name">Name of the group</param>
     /// <returns></returns>
-    PermissionGroupDefinition GetGroup([NotNull] string name);
+    PermissionGroupDefinition GetGroup(string name);
 
     /// <summary>
     /// Tries to get a pre-defined permission group.
-    /// Returns null if can not find the given group.
+    /// Returns null if it cannot find the given group.
     /// </summary>
     /// <param name="name">Name of the group</param>
     /// <returns></returns>
@@ -33,7 +32,7 @@ public interface IPermissionDefinitionContext
     /// <param name="displayName">Localized display name of the group</param>
     /// </summary>
     PermissionGroupDefinition AddGroup(
-        [NotNull] string name,
+        string name,
         ILocalizableString? displayName = null);
 
     /// <summary>
@@ -44,9 +43,21 @@ public interface IPermissionDefinitionContext
     void RemoveGroup(string name);
 
     /// <summary>
-    /// Tries to get a pre-defined permission group.
-    /// Returns null if can not find the given group.
-    /// <param name="name">Name of the group</param>
+    /// Tries to get a pre-defined permission from all defined groups.
+    /// Returns null if it cannot find the given permission.
+    /// <param name="name">Name of the permission</param>
     /// </summary>
-    PermissionDefinition? GetPermissionOrNull([NotNull] string name);
+    PermissionDefinition? GetPermissionOrNull(string name);
+
+    PermissionDefinition AddResourcePermission(
+        string name,
+        string resourceName,
+        string managementPermissionName,
+        ILocalizableString? displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true);
+
+    PermissionDefinition? GetResourcePermissionOrNull([NotNull] string resourceName, [NotNull] string name);
+
+    void RemoveResourcePermission([NotNull] string resourceName, [NotNull] string name);
 }

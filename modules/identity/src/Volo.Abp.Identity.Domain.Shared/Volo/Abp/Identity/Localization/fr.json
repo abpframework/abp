@@ -135,6 +135,8 @@
     "LockoutEndTime": "Heure de fin du verrouillage",
     "FailedAccessCount": "Nombre d&#39;accès ayant échoué",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Exiger la vérification de l'e-mail pour s'inscrire",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Les comptes d’utilisateurs ne seront pas créés à moins qu’ils ne vérifient leurs adresses e-mail."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Les comptes d’utilisateurs ne seront pas créés à moins qu’ils ne vérifient leurs adresses e-mail.",
+    "UserResourcePermissionProviderKeyLookupService": "Utilisateur",
+    "RoleResourcePermissionProviderKeyLookupService": "Rôle"
   }
 }

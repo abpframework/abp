@@ -49,10 +49,11 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
     {
-        var count = await PageRepository.GetCountAsync(input.Filter);
+        var count = await PageRepository.GetCountAsync(input.Filter, input.Status);
 
         var pages = await PageRepository.GetListAsync(
             input.Filter,
+            input.Status,
             input.MaxResultCount,
             input.SkipCount,
             input.Sorting
@@ -67,7 +68,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     [Authorize(CmsKitAdminPermissions.Pages.Create)]
     public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
     {
-        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style, input.LayoutName);
+        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style, input.LayoutName, input.Status);
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
@@ -94,6 +95,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         page.SetScript(input.Script);
         page.SetStyle(input.Style);
         page.SetLayoutName(input.LayoutName);
+        await PageManager.SetStatusAsync(page, input.Status);
         page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(page);
 

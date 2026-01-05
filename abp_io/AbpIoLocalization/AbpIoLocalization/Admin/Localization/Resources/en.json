@@ -672,6 +672,7 @@
     "SupportQuestionCountPerDeveloperOnRenewLicense": "Support Question Count Per Developer for License Renewal",
     "SupportQuestionCountPerDeveloperOnNewLicense": "Support Question Count Per Developer for New License",
     "IncludedDeveloperCount": "Included Developer Count",
+    "AiTokenCountPerDeveloper":  "AI Token Count Per Developer",
     "CanBuyAdditionalDevelopers": "Can Buy Additional Developers",
     "HasEmailSupport": "Has Email Support",
     "IsSupportPrivateQuestion": "Can Open Private Support Question",
@@ -782,7 +783,7 @@
     "Enum:SourceChannel:1": "Studio",
     "Enum:SourceChannel:2": "Support Site",
     "Enum:SourceChannel:3": "Suite",
-    "Menu:OrganizationTokenUsage": "Organization Token Usage",
+    "Menu:AITokens": "AI Tokens",
     "Permission:OrganizationTokenUsage": "Organization Token Usage"
   }
 }

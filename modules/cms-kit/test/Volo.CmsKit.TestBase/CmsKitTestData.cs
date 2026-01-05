@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit;
 
@@ -47,6 +48,8 @@ public class CmsKitTestData : ISingletonDependency
     public string Page_1_Title { get; } = "Imagine Dragons - Believer Lyrics";
 
     public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
+    
+    public PageStatus Page_1_Status { get; } = PageStatus.Publish;
 
     public Guid Page_1_Id { get; } = Guid.NewGuid();
 

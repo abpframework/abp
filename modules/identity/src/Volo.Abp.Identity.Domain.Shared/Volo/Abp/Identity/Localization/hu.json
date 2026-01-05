@@ -135,6 +135,8 @@
     "ModificationTime": "Módosítási idő",
     "PasswordUpdateTime": "A jelszó frissítési ideje",
     "LockoutEndTime": "A zárolás befejezési ideje",
-    "FailedAccessCount": "Sikertelen hozzáférések száma"
+    "FailedAccessCount": "Sikertelen hozzáférések száma",
+    "UserResourcePermissionProviderKeyLookupService": "Felhasználó",
+    "RoleResourcePermissionProviderKeyLookupService": "Szerep"
   }
 }

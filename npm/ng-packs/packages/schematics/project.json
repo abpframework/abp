@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "packages/schematics/src",
   "prefix": "abp",
+  "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -16,6 +17,5 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": []
+  }
 }

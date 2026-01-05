@@ -1027,4 +1027,38 @@ public class Auditing_SaveEntityHistoryWhenNavigationChanges_Tests : AbpAuditing
 
 #pragma warning restore 4014
     }
+
+    [Fact]
+    public virtual async Task Should_Not_Write_AuditLog_For_Navigation_Changes_With_DisableAuditing()
+    {
+        using (var scope = _auditingManager.BeginScope())
+        {
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithNavigationsAndDisableAuditing, Guid>>();
+            var entity = new AppEntityWithNavigationsAndDisableAuditing(Guid.NewGuid(), "test name");
+            entity.OneToMany = new List<AppEntityWithNavigationsAndDisableAuditingChildOneToMany>
+            {
+                new AppEntityWithNavigationsAndDisableAuditingChildOneToMany
+                {
+                    AppEntityWithNavigationsAndDisableAuditingId = entity.Id,
+                    ChildName = "ChildName1"
+                }
+            };
+            await repository.InsertAsync(entity);
+            await scope.SaveAsync();
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+#pragma warning restore 4014
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithNavigationsAndDisableAuditing).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithNavigationsAndDisableAuditing.Name) &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(string).FullName));
+
+#pragma warning restore 4014
+    }
 }

@@ -140,6 +140,8 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         john.AddLogin(new UserLoginInfo("twitter", "johnx", "John Nash"));
         john.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
         john.SetToken("test-provider", "test-name", "test-value");
+        john.AddPasskey(_testData.PasskeyCredentialId1, new IdentityPasskeyData());
+        john.AddPasskey(_testData.PasskeyCredentialId2, new IdentityPasskeyData());
         await _userRepository.InsertAsync(john);
 
         var david = new IdentityUser(_testData.UserDavidId, "david", "david@abp.io");
@@ -152,6 +154,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         neo.AddRole(_supporterRole.Id);
         neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
         neo.AddOrganizationUnit(_ou111.Id);
+        neo.AddPasskey(_testData.PasskeyCredentialId3, new IdentityPasskeyData());
         await _userRepository.InsertAsync(neo);
 
         var bob = new IdentityUser(_testData.UserBobId, "bob", "bob@abp.io");

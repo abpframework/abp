@@ -27,6 +27,23 @@ public static class AbpPermissionManagementDbContextModelBuilderExtensions
             b.ApplyObjectExtensionMappings();
         });
 
+        builder.Entity<ResourcePermissionGrant>(b =>
+        {
+            b.ToTable(AbpPermissionManagementDbProperties.DbTablePrefix + "ResourcePermissionGrants", AbpPermissionManagementDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.ResourceName).HasMaxLength(PermissionGrantConsts.MaxResourceNameLength).IsRequired();
+            b.Property(x => x.ResourceKey).HasMaxLength(PermissionGrantConsts.MaxResourceKeyLength).IsRequired();
+            b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
+            b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
+
+            b.HasIndex(x => new { x.TenantId, x.Name, x.ResourceName, x.ResourceKey, x.ProviderName, x.ProviderKey }).IsUnique();
+
+            b.ApplyObjectExtensionMappings();
+        });
+
         if (builder.IsHostDatabase())
         {
             builder.Entity<PermissionGroupDefinitionRecord>(b =>
@@ -52,16 +69,16 @@ public static class AbpPermissionManagementDbContextModelBuilderExtensions
 
                 b.ConfigureByConvention();
 
-                b.Property(x => x.GroupName).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxNameLength)
-                    .IsRequired();
+                b.Property(x => x.GroupName).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxNameLength);
                 b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
+                b.Property(x => x.ResourceName).HasMaxLength(PermissionDefinitionRecordConsts.MaxResourceNameLength);
+                b.Property(x => x.ManagementPermissionName).HasMaxLength(PermissionDefinitionRecordConsts.MaxManagementPermissionNameLength);
                 b.Property(x => x.ParentName).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength);
-                b.Property(x => x.DisplayName).HasMaxLength(PermissionDefinitionRecordConsts.MaxDisplayNameLength)
-                    .IsRequired();
+                b.Property(x => x.DisplayName).HasMaxLength(PermissionDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
                 b.Property(x => x.Providers).HasMaxLength(PermissionDefinitionRecordConsts.MaxProvidersLength);
                 b.Property(x => x.StateCheckers).HasMaxLength(PermissionDefinitionRecordConsts.MaxStateCheckersLength);
 
-                b.HasIndex(x => new { x.Name }).IsUnique();
+                b.HasIndex(x => new { x.ResourceName, x.Name }).IsUnique();
                 b.HasIndex(x => new { x.GroupName });
 
                 b.ApplyObjectExtensionMappings();

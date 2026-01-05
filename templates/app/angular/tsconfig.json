@@ -10,13 +10,9 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "esnext",
+    "module": "ES2022",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ],
     "paths": {
       "@proxy": [
         "src/app/proxy/index.ts"

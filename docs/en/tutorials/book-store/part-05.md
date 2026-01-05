@@ -311,23 +311,19 @@ We've only added the `.RequirePermissions(BookStorePermissions.Books.Default)` e
 
 First step of the UI is to prevent unauthorized users to see the "Books" menu item and enter to the book management page.
 
-Open the `/src/app/book/book-routing.module.ts` and replace with the following content:
+Open the `/src/app/app.routes.ts` and replace with the following content:
 
 ````js
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
 import { authGuard, permissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
+{ 
+    path: 'books', 
+    loadComponent: () => import('./book/book.component').then(c => BookComponent),
+    canActivate: [authGuard, permissionGuard],
+},
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class BookRoutingModule {}
 ````
 
 * Imported `authGuard` and `permissionGuard` from the `@abp/ng.core`.

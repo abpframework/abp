@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "packages/core/src",
   "prefix": "abp",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -32,6 +33,5 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": []
+  }
 }

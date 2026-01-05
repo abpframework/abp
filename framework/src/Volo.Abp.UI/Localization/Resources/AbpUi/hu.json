@@ -61,6 +61,7 @@
     "ProfilePicture": "Profil kép",
     "Theme": "Téma",
     "NotAssigned": "Nem kijelölt",
-    "EntityActionsDisabledTooltip": "Nincs jogosultsága bármely művelethez."
+    "EntityActionsDisabledTooltip": "Nincs jogosultsága bármely művelethez.",
+    "ResourcePermissions": "Engedélyek"
   }
 }

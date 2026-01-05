@@ -61,6 +61,7 @@
     "ProfilePicture": "Изображение профиля",
     "Theme": "Тема",
     "NotAssigned": "Не назначен",
-    "EntityActionsDisabledTooltip": "У вас нет прав на выполнение каких-либо действий."
+    "EntityActionsDisabledTooltip": "У вас нет прав на выполнение каких-либо действий.",
+    "ResourcePermissions": "Разрешения"
   }
 }

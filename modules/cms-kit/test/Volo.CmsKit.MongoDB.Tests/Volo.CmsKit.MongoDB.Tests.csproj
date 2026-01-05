@@ -11,6 +11,7 @@
     <PackageReference Include="MongoSandbox8.runtime.linux-x64" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
     <PackageReference Include="MongoSandbox8.runtime.osx-arm64" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
     <PackageReference Include="MongoSandbox8.runtime.win-x64" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.MongoDB/Volo.Abp.SettingManagement.MongoDB.csproj" />
     <ProjectReference Include="..\..\src\Volo.CmsKit.MongoDB\Volo.CmsKit.MongoDB.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.TestBase\Volo.CmsKit.TestBase.csproj" />
   </ItemGroup>

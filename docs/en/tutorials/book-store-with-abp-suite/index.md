@@ -46,4 +46,4 @@ This tutorial is organized as the following parts:
 
 ### Download the Source Code
 
-After logging in to the ABP website, you can download the source code from [here](https://abp.io/api/download/samples/suite-bookstore-mvc-ef).
+After logging in to the ABP website, you can download the source code from [here](https://abp.io/api/download/samples/bookstore-mvc-ef).

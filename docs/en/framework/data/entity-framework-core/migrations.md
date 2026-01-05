@@ -80,15 +80,15 @@ Every module uses its **own databases tables**. For example, the [Identity Modul
 
 Since it is allowed to share a single database by all modules (it is the default configuration), a module typically uses a **table name prefix** to group its own tables.
 
-The fundamental modules, like [Identity](../../../modules/identity.md), [Tenant Management](../../../modules/tenant-management.md) and [Audit Logs](../../../modules/audit-logging.md), use the `Abp` prefix, while some other modules use their own prefixes. [Identity Server](../../../modules/identity-server.md) module uses the `IdentityServer` prefix for example.
+The fundamental modules, like [Identity](../../../modules/identity.md), [Tenant Management](../../../modules/tenant-management.md) and [Audit Logs](../../../modules/audit-logging.md), use the `Abp` prefix, while some other modules use their own prefixes. [OpenIddict](../../../modules/openiddict.md) module uses the `OpenIddict` prefix for example.
 
 If you want, you can **change the database table name prefix** for a module for your application. Example:
 
 ````csharp
-Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = "Ids";
+Volo.Abp.OpenIddict.AbpOpenIddictDbProperties.DbTablePrefix = "Auth";
 ````
 
-This code changes the prefix of the [Identity Server](../../../modules/identity-server.md) module. Write this code **at the very beginning** in your application.
+This code changes the prefix of the [OpenIddict](../../../modules/openiddict.md) module. Write this code **at the very beginning** in your application.
 
 > Every module also defines `DbSchema` property (near to `DbTablePrefix`), so you can set it for the databases support the schema usage.
 

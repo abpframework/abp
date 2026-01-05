@@ -160,4 +160,9 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
     Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
         IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default);
+
+    Task<IdentityUser> FindByPasskeyIdAsync(
+        byte[] credentialId,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default);
 }

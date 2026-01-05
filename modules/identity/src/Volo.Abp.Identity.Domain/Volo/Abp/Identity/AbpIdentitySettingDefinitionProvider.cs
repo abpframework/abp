@@ -118,7 +118,7 @@ public class AbpIdentitySettingDefinitionProvider : SettingDefinitionProvider
                 false.ToString(),
                 L("DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister"),
                 L("Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister"),
-                false),
+                true),
             new SettingDefinition(
                 IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber,
                 false.ToString(),

@@ -46,11 +46,6 @@ public abstract class BasicRepositoryBase<TEntity> :
 
     public string? EntityName { get; set; }
 
-    public void SetEntityName(string? name)
-    {
-        EntityName = name;
-    }
-
     public string ProviderName { get; }
 
     protected BasicRepositoryBase(string providerName)

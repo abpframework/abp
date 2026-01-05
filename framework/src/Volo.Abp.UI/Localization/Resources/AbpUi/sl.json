@@ -61,6 +61,7 @@
     "ProfilePicture": "Profilna slika",
     "Theme": "Tema",
     "NotAssigned": "Ni dodeljena",
-    "EntityActionsDisabledTooltip": "Nimate pravic za izvajanje kakršne koli dejanje."
+    "EntityActionsDisabledTooltip": "Nimate pravic za izvajanje kakršne koli dejanje.",
+    "ResourcePermissions": "Dovoljenja"
   }
 }

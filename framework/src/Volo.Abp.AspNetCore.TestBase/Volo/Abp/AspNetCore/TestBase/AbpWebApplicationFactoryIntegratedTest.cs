@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,15 @@ public abstract class AbpWebApplicationFactoryIntegratedTest<TProgram> : WebAppl
             .AddAppSettingsSecretsJson()
             .ConfigureServices(ConfigureServices);
         return base.CreateHost(builder);
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.ConfigureAppConfiguration((hostingContext, config) =>
+        {
+            hostingContext.HostingEnvironment.EnvironmentName = "Production";
+        });
+        base.ConfigureWebHost(builder);
     }
 
     protected virtual T? GetService<T>()

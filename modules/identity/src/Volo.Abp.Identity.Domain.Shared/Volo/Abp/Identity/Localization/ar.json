@@ -135,6 +135,8 @@
     "ModificationTime": "وقت التعديل",
     "PasswordUpdateTime": "وقت تحديث كلمة المرور",
     "LockoutEndTime": "وقت انتهاء القفل",
-    "FailedAccessCount": "فشل عدد الوصول"
+    "FailedAccessCount": "فشل عدد الوصول",
+    "UserResourcePermissionProviderKeyLookupService": "المستخدم",
+    "RoleResourcePermissionProviderKeyLookupService": "الدور"
   }
 }

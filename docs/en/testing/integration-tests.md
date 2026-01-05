@@ -350,7 +350,7 @@ There are multiple overloads of the `WithUnitOfWorkAsync` method that you can us
 
 ## Working with DbContext
 
-In some cases, you may want to directory work with the [Entity Framework's `DbContext` object](https://learn.microsoft.com/en-us/dotnet/api/system.data.entity.dbcontext) to perform database operations in your test methods. In this case, you can use `IDbContextProvider<T>`service to obtain a `DbContext` instance inside a unit of work.
+In some cases, you may want to directly work with the [Entity Framework's `DbContext` object](https://learn.microsoft.com/en-us/dotnet/api/system.data.entity.dbcontext) to perform database operations in your test methods. In this case, you can use `IDbContextProvider<T>`service to obtain a `DbContext` instance inside a unit of work.
 
 The following example shows how you can create a `DbContext` object in a test method:
 

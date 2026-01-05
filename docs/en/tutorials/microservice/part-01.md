@@ -25,7 +25,7 @@
 }
 ````
 
-Follow the *[Get Started](../../get-started/microservice.md)* guide to create a new layered web application with the following configurations:
+Follow the *[Get Started](../../get-started/microservice.md)* guide to create a new microservice solution with the following configurations:
 
 * **Solution name**: `CloudCrm`
 {{if DB == "EF"}}

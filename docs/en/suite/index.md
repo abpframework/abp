@@ -17,7 +17,7 @@
 }
 ````
 
-> You must have an ABP Team or a higher license to use the ABP Suite.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use the ABP Suite.
 
 ABP Suite is a complementary tool to the ABP Platform. ABP Suite allows you to build web pages in a matter of minutes. 
 

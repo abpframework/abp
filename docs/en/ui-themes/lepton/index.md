@@ -7,7 +7,7 @@
 
 # Lepton Theme Module
 
-> You must have an ABP Team or a higher license to use this theme.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this theme.
 
 The Lepton Theme is a professional theme for the ABP.
 

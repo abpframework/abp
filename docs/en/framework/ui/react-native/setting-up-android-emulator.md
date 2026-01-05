@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to set up an Android emulator without Android Studio using command line tools on Windows, macOS, and Linux."
+}
+```
+
 # Setting Up Android Emulator Without Android Studio (Windows, macOS, Linux)
 
 This guide explains how to install and run an Android emulator **without Android Studio**, using only **Command Line Tools**.

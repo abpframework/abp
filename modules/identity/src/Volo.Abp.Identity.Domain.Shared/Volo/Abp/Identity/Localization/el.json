@@ -128,6 +128,8 @@
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Εάν το email μπορεί να ενημερωθεί από τον χρήστη.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Επιβολή επαλήθευσης email για εγγραφή",
     "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Οι λογαριασμοί χρηστών δεν θα δημιουργηθούν εκτός αν επαληθεύσουν τις διευθύνσεις email τους.",
-    "Details": "Λεπτομέρειες"
+    "Details": "Λεπτομέρειες",
+    "UserResourcePermissionProviderKeyLookupService": "Χρήστης",
+    "RoleResourcePermissionProviderKeyLookupService": "Ρόλος"
   }
 }

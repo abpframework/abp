@@ -7,7 +7,7 @@
 
 # Chat Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module implements real time messaging between users for an application.
 

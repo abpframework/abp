@@ -51,6 +51,28 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<IIdentityDbCont
         return await query.ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<IdentityLinkUser>> GetListAsync(int batchSize, CancellationToken cancellationToken = default)
+    {
+        var result = new List<IdentityLinkUser>();
+
+        var total = await (await GetDbSetAsync()).LongCountAsync(cancellationToken);
+        var pages = (int)Math.Ceiling(total / (double)batchSize);
+
+        for (var page = 0; page < pages; page++)
+        {
+            var batch = await (await GetDbSetAsync())
+                .AsNoTracking()
+                .OrderBy(x => x.Id)
+                .Skip(page * batchSize)
+                .Take(batchSize)
+                .ToListAsync(cancellationToken);
+
+            result.AddRange(batch);
+        }
+
+        return result;
+    }
+
     public virtual async Task DeleteAsync(IdentityLinkUserInfo linkUserInfo, CancellationToken cancellationToken = default)
     {
         var linkUsers = await (await GetDbSetAsync()).AsNoTracking().Where(x =>

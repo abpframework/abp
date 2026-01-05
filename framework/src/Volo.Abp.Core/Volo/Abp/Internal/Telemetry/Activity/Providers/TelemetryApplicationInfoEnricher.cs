@@ -43,26 +43,25 @@ public sealed class TelemetryApplicationInfoEnricher : TelemetryActivityEventEnr
                 context.Terminate();
                 return Task.CompletedTask;
             }
-
-            if (!_telemetryActivityStorage.ShouldAddProjectInfo(projectMetaData.ProjectId.Value))
-            {
-                IgnoreChildren = true;
-                return Task.CompletedTask;
-            }
-
+            
             var solutionId = ReadSolutionIdFromSolutionPath(projectMetaData.AbpSlnPath);
-
             if (!solutionId.HasValue)
             {
                 IgnoreChildren = true;
                 context.Terminate();
                 return Task.CompletedTask;
             }
+            context.Current[ActivityPropertyNames.SolutionId] = solutionId;
+
+            if (!_telemetryActivityStorage.ShouldAddProjectInfo(projectMetaData.ProjectId.Value))
+            {
+                IgnoreChildren = true;
+                return Task.CompletedTask;
+            }
             
             context.ExtraProperties[ActivityPropertyNames.SolutionPath] = projectMetaData.AbpSlnPath;
             context.Current[ActivityPropertyNames.ProjectType] = projectMetaData.Role ?? string.Empty;
             context.Current[ActivityPropertyNames.ProjectId] = projectMetaData.ProjectId.Value;
-            context.Current[ActivityPropertyNames.SolutionId] = solutionId;
             context.Current[ActivityPropertyNames.HasProjectInfo] = true;
         }
         catch

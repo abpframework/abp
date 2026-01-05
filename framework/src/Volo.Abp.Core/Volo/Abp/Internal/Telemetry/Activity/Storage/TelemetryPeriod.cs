@@ -12,7 +12,7 @@ static internal class TelemetryPeriod
 
         InformationSendPeriod = isTestMode
             ? TimeSpan.FromSeconds(15)
-            : TimeSpan.FromDays(7);
+            : TimeSpan.FromDays(2);
 
         ActivitySendPeriod = isTestMode
             ? TimeSpan.FromSeconds(5)

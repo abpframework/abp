@@ -6,6 +6,7 @@ using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Localization;
 
@@ -153,7 +154,13 @@ public partial class PermissionManagementModal
 
             await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
 
-            await CurrentApplicationConfigurationCacheResetService.ResetAsync();
+            Guid? userId = null;
+            if (_providerName == UserPermissionValueProvider.ProviderName && Guid.TryParse(_providerKey, out var parsedUserId))
+            {
+                userId = parsedUserId;
+            }
+
+            await CurrentApplicationConfigurationCacheResetService.ResetAsync(userId);
 
             await InvokeAsync(_modal.Hide);
             await Notify.Success(L["SavedSuccessfully"]);

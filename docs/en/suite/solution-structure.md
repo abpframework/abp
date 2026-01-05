@@ -303,7 +303,7 @@ Lepton theme uses two logos for each style. You can change these logos with your
 
 You should create your tests in the same folder as the file file you want to test.
 
-See the [testing document](https://angular.io/guide/testing).
+See the [testing document](https://angular.dev/guide/testing).
 
 ### Depended Packages
 

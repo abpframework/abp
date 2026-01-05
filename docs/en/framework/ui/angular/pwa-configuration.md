@@ -37,7 +37,7 @@ Here is the output of the command:
 
 So, Angular CLI updates some files and add a few others:
 
-- **ngsw-config.json** is where the [service worker configuration](https://angular.io/guide/service-worker-config) is placed. Not all PWAs have this file. It is specific to Angular.
+- **ngsw-config.json** is where the [service worker configuration](https://angular.dev/ecosystem/service-workers/config) is placed. Not all PWAs have this file. It is specific to Angular.
 - **manifest.webmanifest** is a [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) and provides information about your app in JSON format.
 - **icons** are placeholder icons that are referred to in your web app manifest. We will replace these in a minute.
 - **angular.json** has following modifications:
@@ -45,7 +45,7 @@ So, Angular CLI updates some files and add a few others:
   - `serviceWorker` is `true` in production build.
   - `ngswConfigPath` refers to _ngsw-config.json_.
 - **package.json** has _@angular/service-worker_ as a new dependency.
-- **app.config.ts** imports `ServiceWorkerModule` and registers a service worker filename.
+- **app.config.ts** The `provideServiceWorker` provider is imported to register the service worker script.
 - **index.html** has following modifications:
   - A `<link>` element that refers to _manifest.webmanifest_.
   - A `<meta>` tag that sets a theme color.
@@ -342,8 +342,8 @@ Open _ngsw-config.json_ file and replace its content with this:
 }
 ```
 
-In case you want to cache other static files, please refer to the [service worker configuration document](https://angular.io/guide/service-worker-config#assetgroups) on Angular.io.
+In case you want to cache other static files, please refer to the [service worker configuration document](https://angular.dev/ecosystem/service-workers/config) on Angular.dev.
 
 ### 3.2 Set Data Groups
 
-This part is unique to your project. We recommend being very careful about which endpoints to cache. Please refer to [service worker configuration document](https://angular.io/guide/service-worker-config#datagroups) on Angular.io for details.
+This part is unique to your project. We recommend being very careful about which endpoints to cache. Please refer to [service worker configuration document](https://angular.dev/ecosystem/service-workers/config) on Angular.dev for details.

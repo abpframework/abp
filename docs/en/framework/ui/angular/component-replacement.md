@@ -584,8 +584,8 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
     class="bg-transparent border-0 text-white"
   />
   <li class="nav-item d-flex align-items-center">
+  @if ((dropdownLanguages$ | async)?.length > 0) {
     <div
-      *ngIf="(dropdownLanguages$ | async)?.length > 0"
       class="dropdown"
       ngbDropdown
       #languageDropdown="ngbDropdown"
@@ -608,24 +608,21 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         aria-labelledby="dropdownMenuLink"
         [class.d-block]="smallScreen && languageDropdown.isOpen()"
       >
-        <a
-          *ngFor="let lang of dropdownLanguages$ | async"
-          href="javascript:void(0)"
-          class="dropdown-item"
-          (click)="onChangeLang(lang.cultureName)"
-          >{%{{{ lang?.displayName }}}%}</a
-        >
+        @for (lang of dropdownLanguages$ | async; track lang.cultureName) {
+          <a
+            href="javascript:void(0)"
+            class="dropdown-item"
+            (click)="onChangeLang(lang.cultureName)"
+            >{%{{{ lang?.displayName }}}%}</a
+          >
+        }
       </div>
     </div>
+  }
   </li>
   <li class="nav-item d-flex align-items-center">
-    <ng-template #loginBtn>
-      <a role="button" class="nav-link pointer" (click)="navigateToLogin()"
-        >{%{{{ 'AbpAccount::Login' | abpLocalization }}}%}</a
-      >
-    </ng-template>
+    @if ((currentUser$ | async)?.isAuthenticated) {
     <div
-      *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn"
       ngbDropdown
       class="dropdown"
       #currentUserDropdown="ngbDropdown"
@@ -641,9 +638,9 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         aria-haspopup="true"
         aria-expanded="false"
       >
-        <small *ngIf="(selectedTenant$ | async)?.name as tenantName"
-          ><i>{%{{{ tenantName }}}%}</i>\</small
-        >
+        @if ((selectedTenant$ | async)?.name as tenantName) {
+          <small><i>{%{{{ tenantName }}}%}</i>\</small>
+        }
         <strong>{%{{{ (currentUser$ | async)?.userName }}}%}</strong>
       </a>
       <div
@@ -661,6 +658,13 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         >
       </div>
     </div>
+    } @else {
+    <ng-template #loginBtn>
+      <a role="button" class="nav-link pointer" (click)="navigateToLogin()">
+        {%{{{ 'AbpAccount::Login' | abpLocalization }}}%}
+      </a>
+    </ng-template>
+    }
   </li>
 </ul>
 ```

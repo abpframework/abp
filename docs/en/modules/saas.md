@@ -7,7 +7,7 @@
 
 # SaaS Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module is used to manage your tenants and editions in multi-tenant applications;
 
@@ -40,7 +40,7 @@ Firstly, Payment module must be configured properly:
   ```bash
   abp add-module Volo.Payment
   ```
-  _Or you can install via using ABP Suite._
+  _Or you can install via using ABP Studio._
 
 - Configure Saas module to use Payment.
   

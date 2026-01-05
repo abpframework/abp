@@ -8,7 +8,7 @@ import {
   inject,
   PLATFORM_ID,
 } from '@angular/core';
-import { ColumnMode, DatatableComponent, ScrollerComponent } from '@swimlane/ngx-datatable';
+import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -41,7 +41,7 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
     this.table.virtualization = false;
   }
 
-  private fixHorizontalGap(scroller: ScrollerComponent) {
+  private fixHorizontalGap(scroller: any) {
     const { body, documentElement } = this.document;
     if (isPlatformBrowser(this.platformId)) {
       if (documentElement.scrollHeight !== documentElement.clientHeight) {

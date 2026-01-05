@@ -21,7 +21,7 @@
 }
 ```
 
-> You must have an ABP Team or a higher license to be able to create a mobile application project with ABP Studio.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to be able to create a mobile application project with ABP Studio.
 
 Mobile applications are an essential part of modern software solutions. They provide a user-friendly interface to the end-users and allow them to access the system from anywhere. ABP Studio allows you to create mobile applications for your layered solution. You can create a new mobile application project, configure it, and run it on your device.
 

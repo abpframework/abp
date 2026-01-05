@@ -347,14 +347,30 @@ public abstract class AbpEntityChangeOptions_DomainEvents_Tests<TStartupModule> 
 
         var entityWithNavigationForeignId = Guid.NewGuid();
         var entityWithNavigationForeignId2 = Guid.NewGuid();
+        var entityWithNavigationForeignId3 = Guid.NewGuid();
         await AppEntityWithNavigationForeignRepository.InsertAsync(new AppEntityWithNavigationsForeign(entityWithNavigationForeignId, "TestEntityWithNavigationForeign"));
         await AppEntityWithNavigationForeignRepository.InsertAsync(new AppEntityWithNavigationsForeign(entityWithNavigationForeignId2, "TestEntityWithNavigationForeign2"));
+        await AppEntityWithNavigationForeignRepository.InsertAsync(new AppEntityWithNavigationsForeign(entityWithNavigationForeignId3, "TestEntityWithNavigationForeign3")
+        {
+            OneToMany = new List<AppEntityWithNavigations>()
+            {
+                new AppEntityWithNavigations(Guid.NewGuid(), "TestEntity2"),
+                new AppEntityWithNavigations(Guid.NewGuid(), "TestEntity3")
+            }
+        });
 
         var entityUpdatedEventTriggered = false;
+        var entityWithNavigationsForeignUpdatedEventTriggered = false;
 
         LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(data =>
         {
             entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
+            return Task.CompletedTask;
+        });
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationsForeign>>(data =>
+        {
+            entityWithNavigationsForeignUpdatedEventTriggered = !entityWithNavigationsForeignUpdatedEventTriggered;
             return Task.CompletedTask;
         });
 
@@ -368,17 +384,39 @@ public abstract class AbpEntityChangeOptions_DomainEvents_Tests<TStartupModule> 
         });
         entityUpdatedEventTriggered.ShouldBeTrue();
 
-        // Test only foreign key changed
+        // Test only foreign key change to null
         entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
-            entity.AppEntityWithNavigationForeignId = entityWithNavigationForeignId2;
+            entity.AppEntityWithNavigationForeignId = null;
             await AppEntityWithNavigationsRepository.UpdateAsync(entity);
         });
         entityUpdatedEventTriggered.ShouldBeFalse();
 
+        // Test only foreign key change to new id
+        entityUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.AppEntityWithNavigationForeignId = entityWithNavigationForeignId;
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+        entityUpdatedEventTriggered.ShouldBeTrue();
+
+        // Test only foreign key changed
+        entityWithNavigationsForeignUpdatedEventTriggered = false;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationForeignRepository.GetAsync(entityWithNavigationForeignId3);
+            entity.OneToMany.ShouldNotBeEmpty();
+            entity.OneToMany.Clear();
+            await AppEntityWithNavigationForeignRepository.UpdateAsync(entity);
+        });
+        entityWithNavigationsForeignUpdatedEventTriggered.ShouldBeFalse();
+
         // Test with simple property with value object
+        entityUpdatedEventTriggered = false;
         await WithUnitOfWorkAsync(async () =>
         {
             var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);

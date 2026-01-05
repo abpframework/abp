@@ -34,6 +34,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
     public DbSet<Category> Categories { get; set; }
 
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
+    public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
 
     public DbSet<AppEntityWithNavigationsForeign> AppEntityWithNavigationsForeign { get; set; }
 
@@ -127,7 +128,12 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
             b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
             b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
-            b.HasOne<AppEntityWithNavigationsForeign>().WithMany().HasForeignKey(x => x.AppEntityWithNavigationForeignId).IsRequired(false);
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigationsForeign>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationForeignId);
         });
 
         modelBuilder.Entity<AppEntityWithNavigationChildOneToOne>(b =>

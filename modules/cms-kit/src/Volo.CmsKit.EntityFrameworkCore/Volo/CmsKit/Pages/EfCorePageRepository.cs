@@ -20,17 +20,20 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
     }
 
     public virtual async Task<int> GetCountAsync(string filter = null,
+        PageStatus? status = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).WhereIf(
             !filter.IsNullOrWhiteSpace(),
             x =>
-                x.Title.ToLower().Contains(filter.ToLower()) || x.Slug.Contains(filter)
-        ).CountAsync(GetCancellationToken(cancellationToken));
+                x.Title.ToLower().Contains(filter.ToLower()) || x.Slug.ToLower().Contains(filter.ToLower())
+        ).WhereIf(status.HasValue, x => x.Status == status)
+        .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<Page>> GetListAsync(
         string filter = null,
+        PageStatus? status = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
@@ -39,7 +42,8 @@ public class EfCorePageRepository : EfCoreRepository<ICmsKitDbContext, Page, Gui
         return await (await GetDbSetAsync()).WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 x =>
-                    x.Title.ToLower().Contains(filter.ToLower()) || x.Slug.Contains(filter))
+                    x.Title.ToLower().Contains(filter.ToLower()) || x.Slug.ToLower().Contains(filter.ToLower()))
+            .WhereIf(status.HasValue, x => x.Status == status)
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

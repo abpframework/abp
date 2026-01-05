@@ -40,7 +40,10 @@ internal sealed class AbpStudioDetector : SoftwareDetector
             return null;
         }
         using var fs = new FileStream(ideStateJsonPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        using var doc = JsonDocument.Parse(fs);
+        using var doc = JsonDocument.Parse(fs, new JsonDocumentOptions
+        {
+            AllowTrailingCommas = true
+        });
 
         return doc.RootElement.TryGetProperty("theme", out var themeElement) ? themeElement.GetString() : null;
     }
@@ -55,7 +58,10 @@ internal sealed class AbpStudioDetector : SoftwareDetector
         }
 
         using var fs = new FileStream(extensionsFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        using var doc = JsonDocument.Parse(fs);
+        using var doc = JsonDocument.Parse(fs, new JsonDocumentOptions
+        {
+            AllowTrailingCommas = true
+        });
 
         if (doc.RootElement.TryGetProperty("Extensions", out var extensionsElement) &&
             extensionsElement.ValueKind == JsonValueKind.Array)

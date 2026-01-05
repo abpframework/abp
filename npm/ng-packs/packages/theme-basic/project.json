@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "packages/theme-basic/src",
   "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "account-core"],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -32,7 +34,5 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     }
-  },
-  "tags": [],
-  "implicitDependencies": ["core", "theme-shared", "account-core"]
+  }
 }

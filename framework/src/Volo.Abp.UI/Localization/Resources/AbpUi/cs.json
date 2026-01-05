@@ -61,6 +61,7 @@
     "ProfilePicture": "Profilový obrázek",
     "Theme": "Téma",
     "NotAssigned": "Nepřiřazena",
-    "EntityActionsDisabledTooltip": "Nemáte oprávnění provést žádnou akci."
+    "EntityActionsDisabledTooltip": "Nemáte oprávnění provést žádnou akci.",
+    "ResourcePermissions": "Oprávnění"
   }
 }

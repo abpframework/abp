@@ -40,7 +40,7 @@ public class AbpTabDropdownTagHelperService : AbpTagHelperService<AbpTabDropdown
         anchor.Attributes.Add("role", "button");
         anchor.Attributes.Add("aria-haspopup", "true");
         anchor.Attributes.Add("aria-expanded", "false");
-        anchor.InnerHtml.AppendHtml(title);
+        anchor.InnerHtml.Append(title);
 
         var menu = new TagBuilder("div");
         menu.AddCssClass("dropdown-menu");

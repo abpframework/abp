@@ -110,7 +110,12 @@ export class AbpOAuthService implements IAuthService {
       this.document.defaultView?.location.replace('/authorize');
       return Promise.resolve();
     }
-    return this.oAuthService.refreshToken();
+    try {
+      return this.oAuthService.refreshToken();
+    } catch (error) {
+      console.log("Error while refreshing token: ", error);
+      return Promise.reject();
+    }
   }
 
   getAccessTokenExpiration(): number {

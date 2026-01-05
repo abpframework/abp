@@ -215,7 +215,7 @@ public class MyUser : Entity<Guid>
         
     public string Email { get; set; }
 
-    [DisableAuditing] //Ignore the Passoword on audit logging
+    [DisableAuditing] //Ignore the Password on audit logging
     public string Password { get; set; }
 }
 ````

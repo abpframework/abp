@@ -59,7 +59,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Pre-Requirements
 
-* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 10.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [Node v20.11+](https://nodejs.org/)
 {{if DB=="EF"}}
 * [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
@@ -139,7 +139,7 @@ Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the a
 
 ![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
-You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
+You can explore and test your HTTP API with this UI. Now, we can set the {{if UI=="Blazor"}}`TodoApp.Blazor`{{else if UI=="MAUIBlazor"}}`TodoApp.MauiBlazor`{{end}} as the startup project and run it to open the actual Blazor application UI:
 
 {{else if UI=="NG"}}
 
@@ -577,7 +577,11 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} `TodoApp.Blazor.Client` {{else if UI=="BlazorServer"}} `TodoApp.Blazor` {{else if UI=="MAUIBlazor"}} `TodoApp.MauiBlazor` {{end}} project and replace the content with the following code block:
+
+{{if UI=="MAUIBlazor"}}
+_(Create this file if it doesn't exist)_
+{{end}}
 
 ```csharp
 using Microsoft.AspNetCore.Components;
@@ -756,45 +760,46 @@ We can then use `todoService` to use the server-side HTTP APIs, as we'll do in t
 
 Open the `/angular/src/app/home/home.component.ts` file and replace its content with the following code block:
 
-```js
+```ts
+import {Component, inject, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit, inject } from '@angular/core';
 import { TodoItemDto, TodoService } from '@proxy';
 
 @Component({
-  selector: 'app-home',
-  standalone: false,
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [FormsModule]
 })
 export class HomeComponent implements OnInit {
 
-  todoItems: TodoItemDto[];
-  newTodoText: string;
+    todoItems: TodoItemDto[];
+    newTodoText: string;
+    readonly todoService = inject(TodoService);
+    readonly toasterService = inject(ToasterService);
 
-  private readonly todoService = inject(TodoService);
-  private readonly toasterService = inject(ToasterService);
+    ngOnInit(): void {
+        this.todoService.getList().subscribe(response => {
+            this.todoItems = response;
+        });
+    }
 
-  ngOnInit(): void {
-    this.todoService.getList().subscribe(response => {
-      this.todoItems = response;
-    });
-  }
-  
-  create(): void {
-    this.todoService.create(this.newTodoText).subscribe((result) => {
-      this.todoItems = this.todoItems.concat(result);
-      this.newTodoText = null;
-    });
-  }
+    create(): void{
+        this.todoService.create(this.newTodoText).subscribe((result) => {
+            this.todoItems = this.todoItems.concat(result);
+            this.newTodoText = null;
+        });
+    }
 
-  delete(id: string): void {
-    this.todoService.delete(id).subscribe(() => {
-      this.todoItems = this.todoItems.filter(item => item.id !== id);
-      this.toasterService.info('Deleted the todo item.');
-    });
-  }  
+    delete(id: string): void {
+        this.todoService.delete(id).subscribe(() => {
+            this.todoItems = this.todoItems.filter(item => item.id !== id);
+            this.toasterService.info('Deleted the todo item.');
+        });
+    }
 }
+
 ```
 
 We've used `todoService` to get the list of todo items and assigned the returning value to the `todoItems` array. We've also added `create` and `delete` methods. These methods will be used on the view side.
@@ -805,31 +810,35 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 
 ```html
 <div class="container">
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">TODO LIST</div>
-    </div>
-    <div class="card-body">
-      <!-- FORM FOR NEW TODO ITEMS -->
-      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
-        <div class="col-12">
-          <div class="input-group">
-            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
-          </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">TODO LIST</div>
         </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="card-body">
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+            <!-- TODO ITEMS LIST -->
+            <ul id="TodoList">
+                @for (todoItem of todoItems; track todoItem.id) {
+                <li>
+                    <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
+                </li>
+                }
+            </ul>
         </div>
-      </form>
-      <!-- TODO ITEMS LIST -->
-      <ul id="TodoList">
-        <li *ngFor="let todoItem of todoItems">
-          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
-        </li>
-      </ul>
     </div>
-  </div>
 </div>
+
 ```
 
 ### home.component.scss

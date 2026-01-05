@@ -86,7 +86,7 @@ public static class TypeHelper
         {
             return default;
         }
-        
+
         if (IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
         {
             var conversionType = typeof(TProperty);

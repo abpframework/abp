@@ -1,13 +1,16 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { inject, Inject, Injectable, Optional } from '@angular/core';
 import { OAuthStorage } from 'angular-oauth2-oidc';
 import { REQUEST } from '@angular/core';
+import { COOKIES } from '../tokens';
 
 @Injectable({ providedIn: null })
 export class ServerTokenStorageService implements OAuthStorage {
   private cookies = new Map<string, string>();
+  // For server builders where REQUEST injection is not possible, cookies can be provided via COOKIES token
+  private cookiesStr = inject<string>(COOKIES, { optional: true });
 
   constructor(@Optional() @Inject(REQUEST) private req: Request | null) {
-    const cookieHeader = this.req?.headers.get('cookie') ?? '';
+    const cookieHeader = this.req?.headers.get('cookie') ?? this.cookiesStr ?? '';
     for (const part of cookieHeader.split(';')) {
       const i = part.indexOf('=');
       if (i > -1) {

@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "Dodijelite postove na blogu drugom blogu",
     "SelectAnBlogToAssign": "Odaberite blog za dodjelu",
     "DeleteAllBlogPostsOfThisBlog": "Izbrišite sve postove na blogu",
-    "RequiredPermissionName": "Potrebno ime dozvole"
+    "RequiredPermissionName": "Potrebno ime dozvole",
+    "AllPosts": "Sve objave",
+    "IsReadOnly": "Samo za čitanje"
   }
 }

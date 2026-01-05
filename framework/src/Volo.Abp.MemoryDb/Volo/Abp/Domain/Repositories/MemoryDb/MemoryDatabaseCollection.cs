@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb;
@@ -37,10 +38,21 @@ public class MemoryDatabaseCollection<TEntity> : IMemoryDatabaseCollection<TEnti
 
     public void Update(TEntity entity)
     {
-        if (_dictionary.ContainsKey(GetEntityKey(entity)))
+        if (!_dictionary.ContainsKey(GetEntityKey(entity)))
         {
-            _dictionary[GetEntityKey(entity)] = _memoryDbSerializer.Serialize(entity);
+            return;
         }
+
+        var originalEntity = _memoryDbSerializer.Deserialize(_dictionary[GetEntityKey(entity)], typeof(TEntity)).As<TEntity>();
+        if (entity is IHasConcurrencyStamp hasConcurrencyStamp && originalEntity is IHasConcurrencyStamp originalHasConcurrencyStamp)
+        {
+            if (hasConcurrencyStamp.ConcurrencyStamp != originalHasConcurrencyStamp.ConcurrencyStamp)
+            {
+                throw new AbpDbConcurrencyException("Database operation expected to affect 1 row but actually affected 0 row. Data may have been modified or deleted since entities were loaded. This exception has been thrown on optimistic concurrency check.");
+            }
+        }
+
+        _dictionary[GetEntityKey(entity)] = _memoryDbSerializer.Serialize(entity);
     }
 
     public void Remove(TEntity entity)

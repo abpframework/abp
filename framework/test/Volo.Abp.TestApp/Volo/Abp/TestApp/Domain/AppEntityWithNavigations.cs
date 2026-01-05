@@ -65,6 +65,17 @@ public class AppEntityWithNavigationChildOneToOneAndOneToOne : Entity<Guid>
 
 public class AppEntityWithNavigationChildOneToMany : Entity<Guid>
 {
+    public AppEntityWithNavigationChildOneToMany()
+    {
+
+    }
+
+    public AppEntityWithNavigationChildOneToMany(Guid id)
+        : base(id)
+    {
+
+    }
+
     public Guid AppEntityWithNavigationId { get; set; }
 
     public string ChildName { get; set; }
@@ -107,4 +118,6 @@ public class AppEntityWithNavigationsForeign : AggregateRoot<Guid>
     }
 
     public string Name { get; set; }
+
+    public virtual List<AppEntityWithNavigations> OneToMany { get; set; }
 }

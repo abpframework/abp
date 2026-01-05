@@ -198,6 +198,13 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         {
             foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
             {
+                var propertyInfo = navigationEntry.Metadata.PropertyInfo;
+                if (propertyInfo != null &&
+                    propertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
+                {
+                    continue;
+                }
+
                 if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
                 {
                     var abpNavigationEntry = AbpEfCoreNavigationHelper.GetNavigationEntry(entityEntry, index);

@@ -139,6 +139,8 @@
     "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "کاربران می‌توانند حساب ایجاد کنند اما تا زمانی که آدرس ایمیل خود را تایید نکنند نمی‌توانند وارد شوند.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "کاربران می‌توانند حساب ایجاد کنند اما تا زمانی که شماره تلفن خود را تایید نکنند نمی‌توانند وارد شوند.",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "اجباری کردن تایید ایمیل برای ثبت‌نام",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "حساب‌های کاربری ایجاد نخواهند شد مگر اینکه آدرس ایمیل خود را تایید کنند."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "حساب‌های کاربری ایجاد نخواهند شد مگر اینکه آدرس ایمیل خود را تایید کنند.",
+    "UserResourcePermissionProviderKeyLookupService": "کاربر",
+    "RoleResourcePermissionProviderKeyLookupService": "نقش"
   }
 }

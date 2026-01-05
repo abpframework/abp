@@ -7,11 +7,7 @@
 
 # ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
-
-> With **v8.2+**, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and [ABP Studio](../studio/index.md). The new ABP CLI commands are explained in this documentation. However, if you want to learn more about the differences between the old and new CLIs, want to learn the reason for the change, or need guidance to use the old ABP CLI, please refer to the [Old vs New CLI](differences-between-old-and-new-cli.md) documentation.
->
-> You may need to remove the Old CLI before installing the New CLI, by running the following command: `dotnet tool uninstall -g Volo.Abp.Cli`
+ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or [ABP Studio](../studio/index.md) features.
 
 ## Installation
 
@@ -29,16 +25,16 @@ dotnet tool update -g Volo.Abp.Studio.Cli
 
 ## Global Options
 
-While each command may have a set of options, there are some global options that can be used with any command;
+While each command may have a set of options, there are some global options that can be used with any command:
 
-* `--skip-cli-version-check` or `-scvc`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
-- `--skip-extension-version-check` or `-sevc`: Skips to check the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
+* `--skip-cli-version-check` or `-scvc`: Skips checking the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+- `--skip-extension-version-check` or `-sevc`: Skips checking the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
 * `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features/templates are added to the `Volo.Abp.Studio.Cli`. But if you want to use the old version, you can use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
 * `--help` or `-h`: Shows help for the specified command.
 
 ## Commands
 
-Here, is the list of all available commands before explaining their details:
+Here is the list of all available commands before explaining their details:
 
 * **[`help`](../cli#help)**: Shows help on the usage of the ABP CLI.
 * **[`cli`](../cli#cli)**: Update or remove ABP CLI.
@@ -358,7 +354,7 @@ Note that this command can upgrade your solution from a previous version, and al
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
 * `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
-* * `--leptonx-version` or `-lv`: Specifies the LeptonX version to use for update. If not specified, latest version or the version that is compatible with `--version` argument  is used.
+* `--leptonx-version` or `-lv`: Specifies the LeptonX version to use for update. If not specified, latest version or the version that is compatible with `--version` argument  is used.
 
 ### clean
 

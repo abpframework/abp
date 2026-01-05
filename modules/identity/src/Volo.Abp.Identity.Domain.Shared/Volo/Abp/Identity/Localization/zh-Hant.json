@@ -135,6 +135,8 @@
     "LockoutEndTime": "鎖定結束時間",
     "FailedAccessCount": "訪問失敗次數",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "強制要求驗證電子郵件才能註冊",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "除非驗證他們的電子郵件地址，否則不會創建用戶帳戶。"
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "除非驗證他們的電子郵件地址，否則不會創建用戶帳戶。",
+    "UserResourcePermissionProviderKeyLookupService": "使用者",
+    "RoleResourcePermissionProviderKeyLookupService": "角色"
   }
 }

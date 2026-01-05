@@ -7,7 +7,7 @@
 
 # Identity Server Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module provides integration and management functionality for Identity Server;
 

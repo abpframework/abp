@@ -101,9 +101,6 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   @Input() isFirstGroup?: boolean;
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
-  private shouldFocus = signal(false);
-  private isViewReady = signal(false);
-
   injectorForCustomComponent?: Injector;
   asterisk = '';
   containerClassName = 'mb-2';
@@ -118,15 +115,6 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   get disabled() {
     return this.disabledFn(this.data);
-  }
-
-  constructor() {
-    // Effect to handle focus when both conditions are met
-    effect(() => {
-      if (this.shouldFocus() && this.isViewReady() && this.fieldRef?.nativeElement) {
-        this.focusElement();
-      }
-    });
   }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
@@ -170,20 +158,11 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
     this.asterisk = this.service.calcAsterisks(this.validators);
   }
 
-  private focusElement() {
-    try {
-      this.fieldRef.nativeElement.focus();
-      this.shouldFocus.set(false);
-    } catch (error) {
-      console.error('Error focusing field:', error);
-    }
-  }
-
   ngAfterViewInit() {
-    this.isViewReady.set(true);
-
-    if (this.isFirstGroup && this.first) {
-      this.shouldFocus.set(true);
+    if (this.isFirstGroup && this.first && this.fieldRef) {
+      requestAnimationFrame(() => {
+        this.fieldRef.nativeElement.focus();
+      });
     }
   }
 

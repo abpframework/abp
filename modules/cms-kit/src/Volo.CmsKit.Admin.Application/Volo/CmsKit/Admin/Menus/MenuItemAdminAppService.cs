@@ -135,6 +135,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
 
         var pages = await PageRepository.GetListAsync(
             input.Filter,
+            input.Status,
             input.MaxResultCount,
             input.SkipCount,
             input.Sorting

@@ -52,7 +52,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-When a [validator](https://angular.io/guide/form-validation#defining-custom-validators) or an [async validator](https://angular.io/guide/form-validation#creating-asynchronous-validators) returns an error with the key given to the error blueprints (`uniqueUsername` here), the validation library will be able to display an error message after localizing according to the given key and interpolation params. The result will look like this:
+When a [validator](https://angular.dev/guide/forms/form-validation) or an [async validator](https://angular.dev/guide/forms/form-validation) returns an error with the key given to the error blueprints (`uniqueUsername` here), the validation library will be able to display an error message after localizing according to the given key and interpolation params. The result will look like this:
 
 <img alt="An already taken username is entered while creating new user and a custom error message appears under the input after validation." src="./images/form-validation---new-error-message.gif" width="990px" style="max-width:100%">
 
@@ -146,12 +146,13 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   selector: "app-validation-error",
   imports:[CommonModule, LocalizationPipe],
   template: `
-    <div
-      class="font-weight-bold font-italic px-1 invalid-feedback"
-      *ngFor="let error of abpErrors; trackBy: trackByFn"
-    >
-      {%{{{ error.message | abpLocalization: error.interpoliteParams }}}%}
-    </div>
+    @for (error of abpErrors; track $index){
+      <div
+        class="font-weight-bold font-italic px-1 invalid-feedback"
+      >
+        {%{{{ error.message | abpLocalization: error.interpoliteParams }}}%}
+      </div>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -250,7 +251,7 @@ buildForm() {
             <a ngbNavLink>{%{{ 'AbpIdentity::UserInformations' | abpLocalization }}%}</a>
             <ng-template ngbNavContent>
               <!-- Automatically displays all entity fields and their validation -->
-              <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+              <abp-extensible-form [selectedRecord]="selected" />
             </ng-template>
           </li>
 
@@ -263,7 +264,7 @@ buildForm() {
                   <abp-checkbox
                     [formControl]="roleGroup.controls[roles[i].name]"
                     [label]="roles[i].name"
-                  ></abp-checkbox>
+                  />
                 </div>
               }
             </ng-template>
