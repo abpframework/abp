@@ -270,7 +270,7 @@ public class ResourcePermissionManager : IResourcePermissionManager, ISingletonD
         }
 
         var currentGrantInfo = await GetInternalAsync(permission, resourceName, resourceKey, providerName, providerKey);
-        if (currentGrantInfo.IsGranted == isGranted)
+        if (currentGrantInfo.IsGranted == isGranted && currentGrantInfo.Providers.Any(x => x.Name == providerName && x.Key == providerKey))
         {
             return;
         }

@@ -225,6 +225,6 @@ public class AbpTabsTagHelperService : AbpTagHelperService<AbpTabsTagHelper>
 
     protected virtual string SetTabItemNameIfNotProvided(string content, int index)
     {
-        return content.Replace(TabItemNamePlaceHolder, HtmlGenerator.Encode(TagHelper.Name) + "_" + index);
+        return content.Replace(TabItemNamePlaceHolder, HtmlGenerator.Encode(TagHelper.Name ?? string.Empty) + "_" + index);
     }
 }

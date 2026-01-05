@@ -22,7 +22,7 @@ public class AbpCardBodyTagHelperService : AbpTagHelperService<AbpCardBodyTagHel
         {
             var cardTitle = new TagBuilder(AbpCardTitleTagHelper.DefaultHeading.ToHtmlTag());
             cardTitle.AddCssClass("card-title");
-            cardTitle.InnerHtml.AppendHtml(TagHelper.Title!);
+            cardTitle.InnerHtml.Append(TagHelper.Title!);
             output.PreContent.AppendHtml(cardTitle);
         }
     }
@@ -33,7 +33,7 @@ public class AbpCardBodyTagHelperService : AbpTagHelperService<AbpCardBodyTagHel
         {
             var cardSubtitle = new TagBuilder(AbpCardSubtitleTagHelper.DefaultHeading.ToHtmlTag());
             cardSubtitle.AddCssClass("card-subtitle mb-2");
-            cardSubtitle.InnerHtml.AppendHtml(TagHelper.Subtitle!);
+            cardSubtitle.InnerHtml.Append(TagHelper.Subtitle!);
             output.PreContent.AppendHtml(cardSubtitle);
         }
     }

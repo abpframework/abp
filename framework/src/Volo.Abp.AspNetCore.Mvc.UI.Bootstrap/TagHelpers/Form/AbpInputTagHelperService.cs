@@ -287,7 +287,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         var label = new TagBuilder("label");
         label.Attributes.Add("for", GetIdAttributeValue(inputTag));
-        label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
+        label.InnerHtml.Append(TagHelper.Label);
 
         label.AddCssClass(isCheckbox ? "form-check-label" : "form-label");
 
