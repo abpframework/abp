@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 
 public class AbpLinkButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpLinkButtonTagHelper>
 {
-    public AbpLinkButtonTagHelperService(HtmlEncoder encoder)
-        : base(encoder)
-    {
-
-    }
-
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         base.Process(context, output);

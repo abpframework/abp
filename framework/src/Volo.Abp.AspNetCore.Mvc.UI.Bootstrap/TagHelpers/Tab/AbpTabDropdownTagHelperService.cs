@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -10,13 +9,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab;
 
 public class AbpTabDropdownTagHelperService : AbpTagHelperService<AbpTabDropdownTagHelper>
 {
-    protected HtmlEncoder Encoder { get; }
-
-    public AbpTabDropdownTagHelperService(HtmlEncoder encoder)
-    {
-        Encoder = encoder;
-    }
-
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (string.IsNullOrWhiteSpace(TagHelper.Name))
@@ -48,7 +40,7 @@ public class AbpTabDropdownTagHelperService : AbpTagHelperService<AbpTabDropdown
         anchor.Attributes.Add("role", "button");
         anchor.Attributes.Add("aria-haspopup", "true");
         anchor.Attributes.Add("aria-expanded", "false");
-        anchor.InnerHtml.AppendHtml(Encoder.Encode(title));
+        anchor.InnerHtml.Append(title);
 
         var menu = new TagBuilder("div");
         menu.AddCssClass("dropdown-menu");

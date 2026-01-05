@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
-using System.Text.Encodings.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
@@ -9,13 +8,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 public abstract class AbpButtonTagHelperServiceBase<TTagHelper> : AbpTagHelperService<TTagHelper>
     where TTagHelper : TagHelper, IButtonTagHelperBase
 {
-    protected HtmlEncoder Encoder { get; }
-
-    protected AbpButtonTagHelperServiceBase(HtmlEncoder encoder)
-    {
-        Encoder = encoder;
-    }
-
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         NormalizeTagMode(context, output);
@@ -77,7 +69,7 @@ public abstract class AbpButtonTagHelperServiceBase<TTagHelper> : AbpTagHelperSe
         }
 
         var span = new TagBuilder("span");
-        span.InnerHtml.AppendHtml(Encoder.Encode(TagHelper.Text!));
+        span.InnerHtml.Append(TagHelper.Text!);
         output.Content.AppendHtml(span);
     }
 

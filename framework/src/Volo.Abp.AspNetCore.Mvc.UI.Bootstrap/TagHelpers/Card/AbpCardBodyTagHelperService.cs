@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
@@ -8,13 +7,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card;
 
 public class AbpCardBodyTagHelperService : AbpTagHelperService<AbpCardBodyTagHelper>
 {
-    protected HtmlEncoder Encoder { get; }
-
-    public AbpCardBodyTagHelperService(HtmlEncoder encoder)
-    {
-        Encoder = encoder;
-    }
-
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "div";
@@ -30,7 +22,7 @@ public class AbpCardBodyTagHelperService : AbpTagHelperService<AbpCardBodyTagHel
         {
             var cardTitle = new TagBuilder(AbpCardTitleTagHelper.DefaultHeading.ToHtmlTag());
             cardTitle.AddCssClass("card-title");
-            cardTitle.InnerHtml.AppendHtml(Encoder.Encode(TagHelper.Title!));
+            cardTitle.InnerHtml.Append(TagHelper.Title!);
             output.PreContent.AppendHtml(cardTitle);
         }
     }
@@ -41,7 +33,7 @@ public class AbpCardBodyTagHelperService : AbpTagHelperService<AbpCardBodyTagHel
         {
             var cardSubtitle = new TagBuilder(AbpCardSubtitleTagHelper.DefaultHeading.ToHtmlTag());
             cardSubtitle.AddCssClass("card-subtitle mb-2");
-            cardSubtitle.InnerHtml.AppendHtml(Encoder.Encode(TagHelper.Subtitle!));
+            cardSubtitle.InnerHtml.Append(TagHelper.Subtitle!);
             output.PreContent.AppendHtml(cardSubtitle);
         }
     }

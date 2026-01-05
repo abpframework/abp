@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -10,13 +9,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse;
 
 public class AbpAccordionItemTagHelperService : AbpTagHelperService<AbpAccordionItemTagHelper>
 {
-    protected HtmlEncoder Encoder { get; }
-
-    public AbpAccordionItemTagHelperService(HtmlEncoder encoder)
-    {
-        Encoder = encoder;
-    }
-
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         SetRandomIdIfNotProvided();
@@ -40,7 +32,7 @@ public class AbpAccordionItemTagHelperService : AbpTagHelperService<AbpAccordion
         button.Attributes.Add("data-bs-target", "#" + GetContentId());
         button.Attributes.Add("aria-expanded", "true");
         button.Attributes.Add("aria-controls", GetContentId());
-        button.InnerHtml.AppendHtml(Encoder.Encode(TagHelper.Title));
+        button.InnerHtml.Append(TagHelper.Title);
 
         var h5 = new TagBuilder("h5");
         h5.AddCssClass("mb-0");

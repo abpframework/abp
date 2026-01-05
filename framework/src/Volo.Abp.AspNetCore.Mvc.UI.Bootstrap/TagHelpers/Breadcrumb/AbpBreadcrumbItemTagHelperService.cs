@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
@@ -41,12 +42,12 @@ public class AbpBreadcrumbItemTagHelperService : AbpTagHelperService<AbpBreadcru
         if (string.IsNullOrWhiteSpace(TagHelper.Href))
         {
             output.Attributes.Add("aria-current", "page");
-            return _encoder.Encode(TagHelper.Title);
+            return _encoder.Encode(TagHelper.Title  ?? string.Empty);
         }
 
         var link = new TagBuilder("a");
         link.Attributes.Add("href", TagHelper.Href);
-        link.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Title));
+        link.InnerHtml.Append(TagHelper.Title);
         return link.ToHtmlString();
     }
 }

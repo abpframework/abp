@@ -13,8 +13,7 @@ public class AbpButtonTagHelperService : AbpButtonTagHelperServiceBase<AbpButton
 
     protected IStringLocalizer<AbpUiResource> L { get; }
 
-    public AbpButtonTagHelperService(HtmlEncoder encoder, IStringLocalizer<AbpUiResource> localizer)
-        : base(encoder)
+    public AbpButtonTagHelperService(IStringLocalizer<AbpUiResource> localizer)
     {
         L = localizer;
     }

@@ -1,5 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using Localization.Resources.AbpUi;
+﻿using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
@@ -10,12 +9,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal;
 public class AbpModalHeaderTagHelperService : AbpTagHelperService<AbpModalHeaderTagHelper>
 {
     protected IStringLocalizer<AbpUiResource> L { get; }
-    protected HtmlEncoder Encoder { get; }
 
-    public AbpModalHeaderTagHelperService(IStringLocalizer<AbpUiResource> localizer, HtmlEncoder encoder)
+    public AbpModalHeaderTagHelperService(IStringLocalizer<AbpUiResource> localizer)
     {
         L = localizer;
-        Encoder = encoder;
     }
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -30,7 +27,7 @@ public class AbpModalHeaderTagHelperService : AbpTagHelperService<AbpModalHeader
     {
         var title = new TagBuilder("h5");
         title.AddCssClass("modal-title");
-        title.InnerHtml.AppendHtml(Encoder.Encode(TagHelper.Title));
+        title.InnerHtml.Append(TagHelper.Title);
 
         return title.ToHtmlString();
     }

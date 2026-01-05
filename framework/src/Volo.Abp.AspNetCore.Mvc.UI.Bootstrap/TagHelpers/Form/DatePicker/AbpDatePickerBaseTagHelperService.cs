@@ -557,7 +557,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
 
         var label = new TagBuilder("label");
         label.Attributes.Add("for", GetIdAttributeValue(inputTag));
-        label.InnerHtml.AppendHtml(Encoder.Encode(TagHelper.Label));
+        label.InnerHtml.Append(TagHelper.Label);
 
         label.AddCssClass("form-label");
 
