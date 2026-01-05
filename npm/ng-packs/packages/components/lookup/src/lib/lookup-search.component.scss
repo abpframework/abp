@@ -1,5 +1,8 @@
 .abp-lookup-dropdown {
-    z-index: 1050;
-    max-height: 200px;
-    overflow-y: auto;
+  z-index: 1060;
+  max-height: 200px;
+  overflow-y: auto;
+  top: 100%;
+  margin-top: 0.25rem;
+  background-color: var(--lpx-content-bg);
 }

@@ -5,11 +5,11 @@ namespace Volo.Abp.BackgroundWorkers.TickerQ;
 
 public class AbpBackgroundWorkersTickerQOptions
 {
-    private readonly Dictionary<Type, AbpBackgroundWorkersCronTickerConfiguration> _onfigurations;
+    private readonly Dictionary<Type, AbpBackgroundWorkersCronTickerConfiguration> _configurations;
 
     public AbpBackgroundWorkersTickerQOptions()
     {
-        _onfigurations = new Dictionary<Type, AbpBackgroundWorkersCronTickerConfiguration>();
+        _configurations = new Dictionary<Type, AbpBackgroundWorkersCronTickerConfiguration>();
     }
 
     public void AddConfiguration<TWorker>(AbpBackgroundWorkersCronTickerConfiguration configuration)
@@ -19,7 +19,7 @@ public class AbpBackgroundWorkersTickerQOptions
 
     public void AddConfiguration(Type workerType, AbpBackgroundWorkersCronTickerConfiguration configuration)
     {
-        _onfigurations[workerType] = configuration;
+        _configurations[workerType] = configuration;
     }
 
     public AbpBackgroundWorkersCronTickerConfiguration? GetConfigurationOrNull<TJob>()
@@ -29,6 +29,6 @@ public class AbpBackgroundWorkersTickerQOptions
 
     public AbpBackgroundWorkersCronTickerConfiguration? GetConfigurationOrNull(Type workerType)
     {
-        return _onfigurations.GetValueOrDefault(workerType);
+        return _configurations.GetValueOrDefault(workerType);
     }
 }

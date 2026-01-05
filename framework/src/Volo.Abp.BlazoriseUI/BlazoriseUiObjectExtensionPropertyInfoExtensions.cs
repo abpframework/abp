@@ -1,5 +1,6 @@
 ﻿using Blazorise;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Volo.Abp.BlazoriseUI;
 
 public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
 {
-    private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> NumberTypes = new HashSet<Type>
+        {
             typeof(int),
             typeof(long),
             typeof(byte),
@@ -36,13 +38,14 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             typeof(float?),
             typeof(double?),
             typeof(decimal?)
-        };
+        }.ToFrozenSet();
 
-    private static readonly HashSet<Type> TextEditSupportedAttributeTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> TextEditSupportedAttributeTypes = new HashSet<Type>
+        {
             typeof(EmailAddressAttribute),
             typeof(UrlAttribute),
             typeof(PhoneAttribute)
-        };
+        }.ToFrozenSet();
 
     public static string? GetDateEditInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
     {

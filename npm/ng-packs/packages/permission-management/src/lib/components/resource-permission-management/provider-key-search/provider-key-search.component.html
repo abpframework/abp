@@ -1,4 +1,10 @@
-<abp-lookup-search label="AbpPermissionManagement::SearchProviderKey"
-    placeholder="AbpPermissionManagement::SearchProviderKey" [searchFn]="searchFn" [displayValue]="state.searchFilter()"
-    (displayValueChange)="state.searchFilter.set($event)" [selectedValue]="state.selectedProviderKey()"
-    (selectedValueChange)="state.selectedProviderKey.set($event)" (itemSelected)="onItemSelected($event)" />
+<abp-lookup-search
+  label="AbpPermissionManagement::SearchProviderKey"
+  placeholder="AbpPermissionManagement::SearchProviderKey"
+  [searchFn]="searchFn"
+  [displayValue]="state.searchFilter()"
+  (displayValueChange)="state.searchFilter.set($event)"
+  [selectedValue]="state.selectedProviderKey()"
+  (selectedValueChange)="state.selectedProviderKey.set($event)"
+  (itemSelected)="onItemSelected($event)"
+/>

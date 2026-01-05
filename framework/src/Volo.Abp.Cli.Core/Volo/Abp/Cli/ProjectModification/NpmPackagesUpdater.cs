@@ -3,14 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
-using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -28,14 +26,12 @@ public class NpmPackagesUpdater : ITransientDependency
 
     private readonly PackageJsonFileFinder _packageJsonFileFinder;
     private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
-    private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
+    private readonly Dictionary<string, string> _fileVersionStorage = [];
 
     public NpmPackagesUpdater(
         PackageJsonFileFinder packageJsonFileFinder,
         NpmGlobalPackagesChecker npmGlobalPackagesChecker,
         ICancellationTokenProvider cancellationTokenProvider,
-        CliHttpClientFactory cliHttpClientFactory,
         IInstallLibsService installLibsService,
         ICmdHelper cmdHelper)
     {
@@ -44,7 +40,6 @@ public class NpmPackagesUpdater : ITransientDependency
         CancellationTokenProvider = cancellationTokenProvider;
         InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
-        _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<NpmPackagesUpdater>.Instance;
     }
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
@@ -53,15 +54,8 @@ public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var task = context.ServiceProvider.GetRequiredService<AbpFeatureManagementDomainModule>().GetInitializeDynamicFeaturesTask();
-        if (!task.IsCompleted)
-        {
-            AsyncHelper.RunSync(() => Awaited(task));
-        }
-    }
-
-    private async static Task Awaited(Task task)
-    {
-        await task;
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<FeatureDynamicInitializer>();
+        AsyncHelper.RunSync(() => initializer.InitializeAsync(false));
     }
 }

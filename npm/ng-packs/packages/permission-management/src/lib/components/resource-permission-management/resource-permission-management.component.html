@@ -1,60 +1,67 @@
-<abp-modal [(visible)]="visible" [busy]="state.modalBusy()" [options]="{ size: 'xl', scrollable: false }">
-    <ng-template #abpHeader>
-        <h5 class="modal-title">
-            @switch (state.viewMode()) {
-            @case (eResourcePermissionViewModes.Edit) {
-            {{ 'AbpPermissionManagement::UpdatePermission' | abpLocalization }}
-            }
-            @case (eResourcePermissionViewModes.Add) {
-            {{ 'AbpPermissionManagement::AddResourcePermission' | abpLocalization }}
-            }
-            @default {
-            {{ 'AbpPermissionManagement::ResourcePermissions' | abpLocalization }}
-            @if (resourceDisplayName()) {
-            - {{ resourceDisplayName() }}
-            }
-            }
-            }
-        </h5>
-    </ng-template>
-
-    <ng-template #abpBody>
-        @if (!state.hasResourcePermission() || !state.hasProviderKeyLookupService()) {
-        <div class="alert alert-warning" role="alert">
-            @if (!state.hasResourcePermission()) {
-            {{ 'AbpPermissionManagement::NoResourcePermissionFound' | abpLocalization }}
-            } @else {
-            {{ 'AbpPermissionManagement::NoResourceProviderKeyLookupServiceFound' | abpLocalization }}
-            }
-        </div>
-        } @else {
-        @switch (state.viewMode()) {
-        @case (eResourcePermissionViewModes.List) {
-        <abp-resource-permission-list (addClicked)="onAddClicked()" (editClicked)="onEditClicked($event)"
-            (deleteClicked)="onDeleteClicked($event)" />
+<abp-modal
+  [(visible)]="visible"
+  [busy]="state.modalBusy()"
+  [options]="{ size: 'xl', scrollable: false }"
+>
+  <ng-template #abpHeader>
+    <h5 class="modal-title">
+      @switch (state.viewMode()) {
+        @case (eResourcePermissionViewModes.Edit) {
+          {{ 'AbpPermissionManagement::UpdatePermission' | abpLocalization }}
         }
         @case (eResourcePermissionViewModes.Add) {
-        <abp-resource-permission-form mode="add" [resourceName]="resourceName()" />
+          {{ 'AbpPermissionManagement::AddResourcePermission' | abpLocalization }}
+        }
+        @default {
+          {{ 'AbpPermissionManagement::ResourcePermissions' | abpLocalization }}
+          @if (resourceDisplayName()) {
+            - {{ resourceDisplayName() }}
+          }
+        }
+      }
+    </h5>
+  </ng-template>
+
+  <ng-template #abpBody>
+    @if (!state.hasResourcePermission() || !state.hasProviderKeyLookupService()) {
+      <div class="alert alert-warning" role="alert">
+        @if (!state.hasResourcePermission()) {
+          {{ 'AbpPermissionManagement::NoResourcePermissionFound' | abpLocalization }}
+        } @else {
+          {{ 'AbpPermissionManagement::NoResourceProviderKeyLookupServiceFound' | abpLocalization }}
+        }
+      </div>
+    } @else {
+      @switch (state.viewMode()) {
+        @case (eResourcePermissionViewModes.List) {
+          <abp-resource-permission-list
+            (addClicked)="onAddClicked()"
+            (editClicked)="onEditClicked($event)"
+            (deleteClicked)="onDeleteClicked($event)"
+          />
+        }
+        @case (eResourcePermissionViewModes.Add) {
+          <abp-resource-permission-form mode="add" [resourceName]="resourceName()" />
         }
         @case (eResourcePermissionViewModes.Edit) {
-        <abp-resource-permission-form mode="edit" [resourceName]="resourceName()" />
+          <abp-resource-permission-form mode="edit" [resourceName]="resourceName()" />
         }
-        }
-        }
-    </ng-template>
+      }
+    }
+  </ng-template>
 
-    <ng-template #abpFooter>
-        @if (state.isListMode()) {
-        <button type="button" class="btn btn-outline-primary" abpClose>
-            {{ 'AbpUi::Close' | abpLocalization }}
-        </button>
-        } @else {
-        <button type="button" class="btn btn-outline-secondary" (click)="state.goToListMode()">
-            {{ 'AbpUi::Cancel' | abpLocalization }}
-        </button>
-        <abp-button iconClass="fa fa-check" (click)="savePermission()">
-            {{ 'AbpUi::Save' | abpLocalization }}
-        </abp-button>
-        }
-    </ng-template>
+  <ng-template #abpFooter>
+    @if (state.isListMode()) {
+      <button type="button" class="btn btn-outline-primary" abpClose>
+        {{ 'AbpUi::Close' | abpLocalization }}
+      </button>
+    } @else {
+      <button type="button" class="btn btn-outline-secondary" (click)="state.goToListMode()">
+        {{ 'AbpUi::Cancel' | abpLocalization }}
+      </button>
+      <abp-button iconClass="fa fa-check" (click)="savePermission()">
+        {{ 'AbpUi::Save' | abpLocalization }}
+      </abp-button>
+    }
+  </ng-template>
 </abp-modal>

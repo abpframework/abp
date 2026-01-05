@@ -36,12 +36,9 @@ export class MemoryTokenStorageService implements OAuthStorage {
   }
 
   private initializeStorage(): void {
-    console.log('Initialize Storage -->>', typeof SharedWorker !== 'undefined');
     // @ts-ignore
     if (typeof SharedWorker !== 'undefined') {
       try {
-        console.log('Shared worker is loaded');
-        console.log('refresh view');
         // Create worker from data URL to avoid path resolution issues in consuming apps
         // Data URLs are deterministic - same content produces same URL across all tabs
         if (!MemoryTokenStorageService.workerUrl) {
@@ -51,7 +48,6 @@ export class MemoryTokenStorageService implements OAuthStorage {
         this.worker = new SharedWorker(MemoryTokenStorageService.workerUrl, {
           name: 'oauth-token-storage',
         });
-        console.log('loaded worker -->>', this.worker);
         this.port = this.worker.port;
         this.port.start();
         this.useSharedWorker = true;
@@ -85,7 +81,6 @@ export class MemoryTokenStorageService implements OAuthStorage {
           this.port?.postMessage({ action: 'get', key });
         });
       } catch (error) {
-        console.log(error);
         this.useSharedWorker = false;
       }
     } else {
@@ -140,7 +135,7 @@ export class MemoryTokenStorageService implements OAuthStorage {
       try {
         this.port.postMessage({ action: 'disconnect' });
       } catch (error) {
-        console.log('Error disconnecting port:', error);
+        //
       }
     }
   }
@@ -181,28 +176,22 @@ function broadcastToOtherPorts(senderPort, message) {
       try {
         p.postMessage(message);
       } catch (error) {
-        console.log('Dead port detected during broadcast, removing...');
         deadPorts.push(p);
       }
     }
   });
   deadPorts.forEach(p => ports.delete(p));
-  if (deadPorts.length > 0) {
-    console.log('Cleaned up', deadPorts.length, 'dead ports. Total ports:', ports.size);
-  }
 }
 
 function removePort(port) {
   if (ports.has(port)) {
     ports.delete(port);
-    console.log('Port disconnected. Total ports:', ports.size);
   }
 }
 
 self.onconnect = (event) => {
   const port = event.ports[0];
   ports.add(port);
-  console.log('Port connected. Total ports:', ports.size);
 
   port.addEventListener('messageerror', () => {
     removePort(port);
@@ -239,12 +228,11 @@ self.onconnect = (event) => {
         break;
 
       case 'disconnect':
-        console.log('Port requested disconnect');
         removePort(port);
         break;
 
       default:
-        console.warn('Unknown action:', action);
+        //
     }
   };
 

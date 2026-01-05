@@ -1,45 +1,61 @@
 <div class="abp-lookup-container position-relative">
   @if (label()) {
-  <label class="form-label">{{ label() | abpLocalization }}</label>
+    <label class="form-label">{{ label() | abpLocalization }}</label>
   }
 
   <div class="input-group">
-    <input type="text" class="form-control" [placeholder]="placeholder() | abpLocalization" [ngModel]="displayValue()"
-      (ngModelChange)="onSearchInput($event)" (focus)="onSearchFocus()" (blur)="onSearchBlur($event)"
-      [disabled]="disabled()" />
+    <input
+      type="text"
+      class="form-control"
+      [placeholder]="placeholder() | abpLocalization"
+      [ngModel]="displayValue()"
+      (ngModelChange)="onSearchInput($event)"
+      (focus)="onSearchFocus()"
+      (blur)="onSearchBlur($event)"
+      [disabled]="disabled()"
+    />
     @if (displayValue() && !disabled()) {
-    <button type="button" class="btn btn-outline-secondary" (mousedown)="clearSelection()" tabindex="-1">
-      <i class="fa fa-times"></i>
-    </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (mousedown)="clearSelection()"
+        tabindex="-1"
+      >
+        <i class="fa fa-times"></i>
+      </button>
     }
   </div>
 
   @if (showDropdown() && !disabled()) {
-  <div class="abp-lookup-dropdown list-group position-absolute w-100 shadow">
-    @if (isLoading()) {
-    <div class="list-group-item text-center py-3">
-      <i class="fa fa-spinner fa-spin me-2"></i>
-      {{ 'AbpUi::Loading' | abpLocalization }}
-    </div>
-    } @else if (searchResults().length > 0) {
-    @for (item of searchResults(); track item.key) {
-    <button type="button" class="list-group-item list-group-item-action" (mousedown)="selectItem(item)">
-      @if (itemTemplate()) {
-      <ng-container *ngTemplateOutlet="itemTemplate()!; context: { $implicit: item }" />
-      } @else {
-      {{ getDisplayValue(item) }}
+    <div class="abp-lookup-dropdown list-group position-absolute w-100">
+      @if (isLoading()) {
+        <div class="list-group-item text-center py-3">
+          <i class="fa fa-spinner fa-spin me-2"></i>
+          {{ 'AbpUi::Loading' | abpLocalization }}
+        </div>
+      } @else if (searchResults().length > 0) {
+        @for (item of searchResults(); track item.key) {
+          <button
+            type="button"
+            class="list-group-item list-group-item-action"
+            (mousedown)="selectItem(item)"
+          >
+            @if (itemTemplate()) {
+              <ng-container *ngTemplateOutlet="itemTemplate()!; context: { $implicit: item }" />
+            } @else {
+              {{ getDisplayValue(item) }}
+            }
+          </button>
+        }
+      } @else if (displayValue()) {
+        @if (noResultsTemplate()) {
+          <ng-container *ngTemplateOutlet="noResultsTemplate()!" />
+        } @else {
+          <div class="list-group-item text-muted">
+            {{ 'AbpUi::NoDataAvailableInDatatable' | abpLocalization }}
+          </div>
+        }
       }
-    </button>
-    }
-    } @else if (displayValue()) {
-    @if (noResultsTemplate()) {
-    <ng-container *ngTemplateOutlet="noResultsTemplate()!" />
-    } @else {
-    <div class="list-group-item text-muted">
-      {{ 'AbpUi::NoRecordsFound' | abpLocalization }}
     </div>
-    }
-    }
-  </div>
   }
 </div>

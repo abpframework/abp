@@ -1,28 +1,37 @@
 @if (mode() === eResourcePermissionViewModes.Add) {
-<div class="mb-3">
+  <div class="mb-3">
     <label class="form-label fw-bold">
-        {{ 'AbpPermissionManagement::SelectProvider' | abpLocalization }}
+      {{ 'AbpPermissionManagement::SelectProvider' | abpLocalization }}
     </label>
     <div class="mb-2">
-        @for (provider of state.providers(); track provider.name; let i = $index) {
+      @for (provider of state.providers(); track provider.name; let i = $index) {
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" [id]="'provider-' + i" [value]="provider.name"
-                [checked]="state.selectedProviderName() === provider.name"
-                (change)="state.onProviderChange(provider.name || '')" />
-            <label class="form-check-label" [for]="'provider-' + i">
-                {{ provider.displayName }}
-            </label>
+          <input
+            class="form-check-input"
+            type="radio"
+            [id]="'provider-' + i"
+            [value]="provider.name"
+            [checked]="state.selectedProviderName() === provider.name"
+            (change)="state.onProviderChange(provider.name || '')"
+          />
+          <label class="form-check-label" [for]="'provider-' + i">
+            {{ provider.displayName }}
+          </label>
         </div>
-        }
+      }
     </div>
 
     <abp-provider-key-search [resourceName]="resourceName()" />
-</div>
+  </div>
 
-<abp-permission-checkbox-list [permissions]="state.permissionDefinitions()" idPrefix="add" />
+  <abp-permission-checkbox-list [permissions]="state.permissionDefinitions()" idPrefix="add" />
 } @else {
-<div class="mb-3" id="permissionList">
+  <div class="mb-3" id="permissionList">
     <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }}</h4>
-    <abp-permission-checkbox-list [permissions]="state.permissionsWithProvider()" idPrefix="edit" [showTitle]="false" />
-</div>
+    <abp-permission-checkbox-list
+      [permissions]="state.permissionsWithProvider()"
+      idPrefix="edit"
+      [showTitle]="false"
+    />
+  </div>
 }

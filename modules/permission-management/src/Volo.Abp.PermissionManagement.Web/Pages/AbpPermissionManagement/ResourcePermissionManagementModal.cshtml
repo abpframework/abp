@@ -34,7 +34,7 @@
 else
 {
     <abp-modal size="Large">
-        <abp-modal-header title="@(L["ResourcePermissions"].Value) - Model.ResourceDisplayName"></abp-modal-header>
+        <abp-modal-header title="@(L["ResourcePermissions"].Value) - @Model.ResourceDisplayName"></abp-modal-header>
         <abp-modal-body>
             <div class="alert alert-warning" role="alert">
                 @if (!Model.HasAnyResourcePermission)
