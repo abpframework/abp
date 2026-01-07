@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity.Localization;
-using Volo.Abp.Localization;
 
 namespace Volo.Abp.Identity;
 
@@ -21,13 +20,10 @@ public class AbpIdentityErrorDescriber : IdentityErrorDescriber
 
     public override IdentityError InvalidUserName([CanBeNull] string userName)
     {
-        using (CultureHelper.Use("en"))
+        return new IdentityError
         {
-            return new IdentityError
-            {
-                Code = nameof(InvalidUserName),
-                Description = Localizer["Volo.Abp.Identity:InvalidUserName", userName ?? ""]
-            };
-        }
+            Code = nameof(InvalidUserName),
+            Description = Localizer["Volo.Abp.Identity:InvalidUserName", userName ?? ""]
+        };
     }
 }
