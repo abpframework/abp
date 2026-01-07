@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Cli.Commands.Models;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.Memory;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands.Services;
@@ -15,21 +16,51 @@ public class McpHttpClientService : ITransientDependency
 {
     private readonly CliHttpClientFactory _httpClientFactory;
     private readonly ILogger<McpHttpClientService> _logger;
-    
-    private const string DefaultMcpServerUrl = "https://mcp.abp.io";
-    private const string LocalMcpServerUrl = "http://localhost:5100";
+    private readonly MemoryService _memoryService;
+    private string _cachedServerUrl;
 
     public McpHttpClientService(
         CliHttpClientFactory httpClientFactory,
-        ILogger<McpHttpClientService> logger)
+        ILogger<McpHttpClientService> logger,
+        MemoryService memoryService)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;
+        _memoryService = memoryService;
     }
 
-    public async Task<string> CallToolAsync(string toolName, JsonElement arguments, bool useLocalServer = false)
+    private async Task<string> GetMcpServerUrlAsync()
     {
-        var baseUrl = LocalMcpServerUrl;//useLocalServer ? LocalMcpServerUrl : DefaultMcpServerUrl;
+        // Return cached URL if already resolved
+        if (_cachedServerUrl != null)
+        {
+            return _cachedServerUrl;
+        }
+
+        // 1. Check environment variable (highest priority)
+        var envUrl = Environment.GetEnvironmentVariable(CliConsts.McpServerUrlEnvironmentVariable);
+        if (!string.IsNullOrWhiteSpace(envUrl))
+        {
+            _cachedServerUrl = envUrl.TrimEnd('/');
+            return _cachedServerUrl;
+        }
+
+        // 2. Check persisted setting
+        var persistedUrl = await _memoryService.GetAsync(CliConsts.MemoryKeys.McpServerUrl);
+        if (!string.IsNullOrWhiteSpace(persistedUrl))
+        {
+            _cachedServerUrl = persistedUrl.TrimEnd('/');
+            return _cachedServerUrl;
+        }
+
+        // 3. Return default
+        _cachedServerUrl = CliConsts.DefaultMcpServerUrl;
+        return _cachedServerUrl;
+    }
+
+    public async Task<string> CallToolAsync(string toolName, JsonElement arguments)
+    {
+        var baseUrl = "http://localhost:5100";//await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools/call";
 
         try
@@ -53,9 +84,8 @@ public class McpHttpClientService : ITransientDependency
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                // Log to stderr to avoid corrupting stdout
-                await Console.Error.WriteLineAsync($"[MCP] API call failed: {response.StatusCode} - {errorContent}");
+                // Log to stderr to avoid corrupting stdout - sanitize error message
+                await Console.Error.WriteLineAsync($"[MCP] API call failed with status: {response.StatusCode}");
                 
                 return JsonSerializer.Serialize(new
                 {
@@ -64,7 +94,7 @@ public class McpHttpClientService : ITransientDependency
                         new
                         {
                             type = "text",
-                            text = $"Error: {response.StatusCode} - {errorContent}"
+                            text = $"Error: API call failed with status {response.StatusCode}"
                         }
                     }
                 });
@@ -91,9 +121,9 @@ public class McpHttpClientService : ITransientDependency
         }
     }
 
-    public async Task<bool> CheckServerHealthAsync(bool useLocalServer = false)
+    public async Task<bool> CheckServerHealthAsync()
     {
-        var baseUrl = useLocalServer ? LocalMcpServerUrl : DefaultMcpServerUrl;
+        var baseUrl = "http://localhost:5100";//await GetMcpServerUrlAsync();
 
         try
         {
@@ -108,9 +138,9 @@ public class McpHttpClientService : ITransientDependency
         }
     }
 
-    public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync(bool useLocalServer = false)
+    public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync()
     {
-        var baseUrl = LocalMcpServerUrl; //useLocalServer ? LocalMcpServerUrl : DefaultMcpServerUrl;
+        var baseUrl = "http://localhost:5100";//await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools";
 
         try
@@ -120,9 +150,9 @@ public class McpHttpClientService : ITransientDependency
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                await Console.Error.WriteLineAsync($"[MCP] Failed to fetch tool definitions: {response.StatusCode} - {errorContent}");
-                throw new Exception($"Failed to fetch tool definitions: {response.StatusCode}");
+                // Sanitize error message - don't expose server details
+                await Console.Error.WriteLineAsync($"[MCP] Failed to fetch tool definitions with status: {response.StatusCode}");
+                throw new Exception($"Failed to fetch tool definitions with status: {response.StatusCode}");
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();

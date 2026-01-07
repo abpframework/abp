@@ -16,15 +16,18 @@ public class McpToolsCacheService : ITransientDependency
 {
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly MemoryService _memoryService;
+    private readonly McpToolDefinitionValidator _validator;
     private readonly ILogger<McpToolsCacheService> _logger;
 
     public McpToolsCacheService(
         McpHttpClientService mcpHttpClient,
         MemoryService memoryService,
+        McpToolDefinitionValidator validator,
         ILogger<McpToolsCacheService> logger)
     {
         _mcpHttpClient = mcpHttpClient;
         _memoryService = memoryService;
+        _validator = validator;
         _logger = logger;
     }
 
@@ -46,16 +49,27 @@ public class McpToolsCacheService : ITransientDependency
             await Console.Error.WriteLineAsync("[MCP] Fetching tool definitions from server...");
             var tools = await _mcpHttpClient.GetToolDefinitionsAsync();
             
-            // Save to cache
-            await SaveToCacheAsync(tools);
+            // Validate and filter tool definitions
+            var validTools = _validator.ValidateAndFilter(tools);
+            
+            if (validTools.Count == 0)
+            {
+                _logger.LogWarning("No valid tool definitions received from server");
+                await Console.Error.WriteLineAsync("[MCP] Warning: No valid tool definitions received from server");
+                return new List<McpToolDefinition>();
+            }
+            
+            // Save validated tools to cache
+            await SaveToCacheAsync(validTools);
             await _memoryService.SetAsync(CliConsts.MemoryKeys.McpToolsLastFetchDate, DateTime.Now.ToString(CultureInfo.InvariantCulture));
             
-            await Console.Error.WriteLineAsync($"[MCP] Successfully fetched and cached {tools.Count} tool definitions");
-            return tools;
+            await Console.Error.WriteLineAsync($"[MCP] Successfully fetched and cached {validTools.Count} tool definitions");
+            return validTools;
         }
         catch (Exception ex)
         {
-            _logger.LogWarning($"Failed to fetch tool definitions from server: {ex.Message}");
+            // Sanitize error message - use generic message for logger
+            _logger.LogWarning("Failed to fetch tool definitions from server");
             await Console.Error.WriteLineAsync($"[MCP] Failed to fetch from server, attempting to use cached data...");
             
             // Fall back to cache even if expired
@@ -148,6 +162,9 @@ public class McpToolsCacheService : ITransientDependency
             });
 
             File.WriteAllText(CliPaths.McpToolsCache, json);
+            
+            // Set restrictive file permissions (user read/write only)
+            SetRestrictiveFilePermissions(CliPaths.McpToolsCache);
         }
         catch (Exception ex)
         {
@@ -155,6 +172,24 @@ public class McpToolsCacheService : ITransientDependency
         }
 
         return Task.CompletedTask;
+    }
+
+    private void SetRestrictiveFilePermissions(string filePath)
+    {
+        try
+        {
+            // On Unix systems, set permissions to 600 (user read/write only)
+            if (!OperatingSystem.IsWindows())
+            {
+                File.SetUnixFileMode(filePath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
+            // On Windows, the file inherits permissions from the user profile directory,
+            // which is already restrictive to the current user
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning($"Error setting file permissions: {ex.Message}");
+        }
     }
 }
 
