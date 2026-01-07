@@ -9,7 +9,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb;
 public class MemoryDatabaseCollection<TEntity> : IMemoryDatabaseCollection<TEntity>
     where TEntity : class, IEntity
 {
-    private readonly Dictionary<string, byte[]> _dictionary = new Dictionary<string, byte[]>();
+    private readonly Dictionary<string, byte[]> _dictionary = [];
 
     private readonly IMemoryDbSerializer _memoryDbSerializer;
 

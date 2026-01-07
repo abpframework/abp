@@ -1566,6 +1566,10 @@
                       "path": "framework/ui/angular/ssr-configuration.md"
                     },
                     {
+                      "text": "AI Tools Configuration",
+                      "path": "framework/ui/angular/ai-config.md"
+                    },
+                    {
                       "text": "PWA Configuration",
                       "path": "framework/ui/angular/pwa-configuration.md"
                     },
@@ -1864,6 +1868,10 @@
                 {
                   "text": "Overriding the User Interface",
                   "path": "framework/architecture/modularity/extending/overriding-user-interface.md"
+                },
+                {
+                  "text": "How to Override LeptonX CSS Variables",
+                  "path": "framework/ui/common/leptonx-css-variables.md"
                 },
                 {
                   "text": "Utilities",

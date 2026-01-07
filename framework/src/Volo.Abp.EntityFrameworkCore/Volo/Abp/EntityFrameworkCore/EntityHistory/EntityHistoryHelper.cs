@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -108,12 +109,17 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         }
 
         var entityType = entity.GetType();
+        var entityFullName = entityType.FullName!;
+        if (entityEntry.Metadata.HasSharedClrType && !entityEntry.Metadata.IsOwned())
+        {
+            entityFullName = entityEntry.Metadata.Name;
+        }
         var entityChange = new EntityChangeInfo
         {
             ChangeType = changeType,
             EntityEntry = entityEntry,
             EntityId = entityId,
-            EntityTypeFullName = entityType.FullName,
+            EntityTypeFullName = entityFullName,
             PropertyChanges = GetPropertyChanges(entityEntry),
             EntityTenantId = GetTenantId(entity)
         };
@@ -181,46 +187,100 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
 
         foreach (var property in properties)
         {
+            if (entityEntry.Metadata.IsMappedToJson() && property.GetJsonPropertyName() == null)
+            {
+                continue;
+            }
+
             var propertyEntry = entityEntry.Property(property.Name);
             if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !IsSoftDeleted(entityEntry))
             {
+                var propertyType = DeterminePropertyTypeFromEntry(property, propertyEntry);
+
                 propertyChanges.Add(new EntityPropertyChangeInfo
                 {
                     NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                     OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                     PropertyName = property.Name,
-                    PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName!
+                    PropertyTypeFullName = propertyType.FullName!
                 });
             }
         }
 
-        if (AbpEfCoreNavigationHelper != null)
+        if (AbpEfCoreNavigationHelper == null)
         {
-            foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
+            return propertyChanges;
+        }
+
+        foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
+        {
+            var propertyInfo = navigationEntry.Metadata.PropertyInfo;
+            if (propertyInfo != null &&
+                propertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
             {
-                var propertyInfo = navigationEntry.Metadata.PropertyInfo;
-                if (propertyInfo != null &&
-                    propertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
+                continue;
+            }
+
+            if (navigationEntry.Metadata.TargetEntityType.IsMappedToJson() && navigationEntry is ReferenceEntry referenceEntry && referenceEntry.TargetEntry != null)
+            {
+                foreach (var propertyChange in GetPropertyChanges(referenceEntry.TargetEntry))
                 {
-                    continue;
+                    propertyChange.PropertyName = $"{referenceEntry.Metadata.Name}.{propertyChange.PropertyName}";
+                    propertyChanges.Add(propertyChange);
                 }
 
-                if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
+                continue;
+            }
+
+            if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
+            {
+                var abpNavigationEntry = AbpEfCoreNavigationHelper.GetNavigationEntry(entityEntry, index);
+
+                var isCollection = navigationEntry.Metadata.IsCollection;
+                propertyChanges.Add(new EntityPropertyChangeInfo
                 {
-                    var abpNavigationEntry = AbpEfCoreNavigationHelper.GetNavigationEntry(entityEntry, index);
-                    var isCollection = navigationEntry.Metadata.IsCollection;
-                    propertyChanges.Add(new EntityPropertyChangeInfo
-                    {
-                        PropertyName = navigationEntry.Metadata.Name,
-                        PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!,
-                        OriginalValue = GetNavigationPropertyValue(abpNavigationEntry?.OriginalValue, isCollection),
-                        NewValue = GetNavigationPropertyValue(abpNavigationEntry?.CurrentValue, isCollection)
-                    });
-                }
+                    PropertyName = navigationEntry.Metadata.Name,
+                    PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!,
+                    OriginalValue = GetNavigationPropertyValue(abpNavigationEntry?.OriginalValue, isCollection),
+                    NewValue = GetNavigationPropertyValue(abpNavigationEntry?.CurrentValue, isCollection)
+                });
             }
         }
 
         return propertyChanges;
+    }
+
+    /// <summary>
+    /// Determines the CLR type of a property based on its EF Core metadata and the values in the given <see cref="PropertyEntry"/>.
+    /// </summary>
+    /// <param name="property">The EF Core property metadata that provides the declared CLR type.</param>
+    /// <param name="propertyEntry">The property entry that contains the current and original values for the property.</param>
+    /// <returns>
+    /// The most specific CLR type inferred for the property. This is normally the property's declared CLR type (with
+    /// nullable wrappers removed). If the declared type is <see cref="object"/>, the type is inferred from the
+    /// runtime type of <see cref="PropertyEntry.CurrentValue"/> or, if that is <c>null</c>, from
+    /// <see cref="PropertyEntry.OriginalValue"/>. If both values are <c>null</c>, the declared CLR type
+    /// (which may remain <see cref="object"/>) is returned.
+    /// </returns>
+    protected virtual Type DeterminePropertyTypeFromEntry(IProperty property, PropertyEntry propertyEntry)
+    {
+        var propertyType = property.ClrType.GetFirstGenericArgumentIfNullable();
+
+        if (propertyType != typeof(object))
+        {
+            return propertyType;
+        }
+
+        if (propertyEntry.CurrentValue != null)
+        {
+            propertyType = propertyEntry.CurrentValue.GetType().GetFirstGenericArgumentIfNullable();
+        }
+        else if (propertyEntry.OriginalValue != null)
+        {
+            propertyType = propertyEntry.OriginalValue.GetType().GetFirstGenericArgumentIfNullable();
+        }
+
+        return propertyType;
     }
 
     protected virtual string? GetNavigationPropertyValue(object? entity, bool isCollection)

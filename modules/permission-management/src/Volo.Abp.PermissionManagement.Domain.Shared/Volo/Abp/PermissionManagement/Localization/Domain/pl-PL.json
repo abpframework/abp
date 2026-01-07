@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Zaktualizuj uprawnienie",
     "GrantAllResourcePermissions": "Przyznaj wszystko",
     "NoResourceProviderKeyLookupServiceFound": "Nie znaleziono usługi wyszukiwania klucza dostawcy",
-    "NoResourcePermissionFound": "Nie zdefiniowano żadnych uprawnień."
+    "NoResourcePermissionFound": "Nie zdefiniowano żadnych uprawnień.",
+    "UpdatePermission": "Aktualizuj uprawnienie",
+    "NoPermissionsAssigned": "Brak przypisanych uprawnień",
+    "SelectProvider": "Wybierz dostawcę",
+    "SearchProviderKey": "Szukaj klucza dostawcy",
+    "Provider": "Dostawca",
+    "ErrorLoadingPermissions": "Błąd podczas ładowania uprawnień",
+    "PleaseSelectProviderAndPermissions": "Wybierz dostawcę i uprawnienia"
   }
 }

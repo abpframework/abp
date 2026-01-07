@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Berechtigung aktualisieren",
     "GrantAllResourcePermissions": "Alle gewähren",
     "NoResourceProviderKeyLookupServiceFound": "Es wurde kein Dienst zum Nachschlagen des Anbieterschlüssels gefunden",
-    "NoResourcePermissionFound": "Es ist keine Berechtigung definiert."
+    "NoResourcePermissionFound": "Es ist keine Berechtigung definiert.",
+    "UpdatePermission": "Berechtigung aktualisieren",
+    "NoPermissionsAssigned": "Keine Berechtigungen zugewiesen",
+    "SelectProvider": "Anbieter auswählen",
+    "SearchProviderKey": "Anbieterschlüssel suchen",
+    "Provider": "Anbieter",
+    "ErrorLoadingPermissions": "Fehler beim Laden der Berechtigungen",
+    "PleaseSelectProviderAndPermissions": "Bitte wählen Sie einen Anbieter und Berechtigungen aus"
   }
 }

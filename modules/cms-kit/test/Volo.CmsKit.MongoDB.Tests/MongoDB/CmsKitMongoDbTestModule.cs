@@ -1,13 +1,15 @@
 ﻿using System;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
+using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.Uow;
 
 namespace Volo.CmsKit.MongoDB;
 
 [DependsOn(
     typeof(CmsKitTestBaseModule),
-    typeof(CmsKitMongoDbModule)
+    typeof(CmsKitMongoDbModule),
+    typeof(AbpSettingManagementMongoDbModule)
 )]
 public class CmsKitMongoDbTestModule : AbpModule
 {

@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Actualizați permisiunea",
     "GrantAllResourcePermissions": "Acordați toate",
     "NoResourceProviderKeyLookupServiceFound": "Nu a fost găsit niciun serviciu de căutare a cheii furnizorului",
-    "NoResourcePermissionFound": "Nu există nicio permisiune definită."
+    "NoResourcePermissionFound": "Nu există nicio permisiune definită.",
+    "UpdatePermission": "Actualizează permisiunea",
+    "NoPermissionsAssigned": "Nicio permisiune atribuită",
+    "SelectProvider": "Selectează furnizor",
+    "SearchProviderKey": "Caută cheie furnizor",
+    "Provider": "Furnizor",
+    "ErrorLoadingPermissions": "Eroare la încărcarea permisiunilor",
+    "PleaseSelectProviderAndPermissions": "Vă rugăm să selectați furnizorul și permisiunile"
   }
 }

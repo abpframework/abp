@@ -103,6 +103,7 @@
     "Exporting": "Viedään",
     "ExportCompleted": "Vienti suoritettu onnistuneesti",
     "ExportFailed": "Vienti epäonnistui",
+    "ThereWereNoRecordsToExport": "Ei ollut vietäviä tietueita.",
     "ExportJobQueued": "Vientityö on asetettu jonoon {0} tietueelle. Saat sähköpostin, kun vienti on valmis.",
     "ExportReady": "Vienti valmis {0} tietueelle ja valmis ladattavaksi.",
     "FileName": "Tiedostonimi",

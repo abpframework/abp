@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Uppfæra heimild",
     "GrantAllResourcePermissions": "Veita allt",
     "NoResourceProviderKeyLookupServiceFound": "Engin þjónusta fannst til að leita að lykli veitanda",
-    "NoResourcePermissionFound": "Engin heimild er skilgreind."
+    "NoResourcePermissionFound": "Engin heimild er skilgreind.",
+    "UpdatePermission": "Uppfæra leyfi",
+    "NoPermissionsAssigned": "Engar heimildir skráðar",
+    "SelectProvider": "Velja þjónustuaðila",
+    "SearchProviderKey": "Leita að lykli þjónustuaðila",
+    "Provider": "Þjónustuaðili",
+    "ErrorLoadingPermissions": "Villa við að hlaða leyfum",
+    "PleaseSelectProviderAndPermissions": "Vinsamlegast veldu þjónustuaðila og leyfi"
   }
 }

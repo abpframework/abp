@@ -96,7 +96,7 @@ Here is the all details for the `Book` entity:
 * `Name` is **required**, it's a **string** property and maximum length is **128**.
 * `Type` is an **enum** and the enum file path is *\Acme.BookStore.Domain.Shared\Books\BookType.cs*.
 * `PublishDate` is a **DateTime** property and **not nullable**.
-* `Price` is a **float** property and **required**.
+* `Price` is a **float** property.
 
 You can leave the other configurations as default.
 

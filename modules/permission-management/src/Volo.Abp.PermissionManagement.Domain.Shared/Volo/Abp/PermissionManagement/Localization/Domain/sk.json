@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Aktualizovať oprávnenie",
     "GrantAllResourcePermissions": "Udeľ všetko",
     "NoResourceProviderKeyLookupServiceFound": "Nebola nájdená služba na vyhľadávanie kľúča poskytovateľa",
-    "NoResourcePermissionFound": "Nie je definované žiadne povolenie."
+    "NoResourcePermissionFound": "Nie je definované žiadne povolenie.",
+    "UpdatePermission": "Aktualizovať oprávnenie",
+    "NoPermissionsAssigned": "Nie sú priradené žiadne oprávnenia",
+    "SelectProvider": "Vybrat poskytovateľa",
+    "SearchProviderKey": "Hľadať kľúč poskytovateľa",
+    "Provider": "Poskytovateľ",
+    "ErrorLoadingPermissions": "Chyba pri načítaní oprávnení",
+    "PleaseSelectProviderAndPermissions": "Vyberte poskytovateľa a oprávnenia"
   }
 }

@@ -18,11 +18,10 @@ public class SettingManager_Basic_Tests : SettingsTestBase
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_When_Try_To_Get_An_Undefined_Setting()
+    public async Task Should_Return_Null_When_Try_To_Get_An_Undefined_Setting()
     {
-        await Assert.ThrowsAsync<AbpException>(
-            async () => await _settingProvider.GetOrNullAsync("UndefinedSetting")
-        );
+        var value = await _settingProvider.GetOrNullAsync("UndefinedSetting");
+        value.ShouldBeNull();
     }
 
     [Fact]
@@ -64,7 +63,7 @@ public class SettingManager_Basic_Tests : SettingsTestBase
         (await _settingManager.GetOrNullGlobalAsync("MySetting1")).ShouldBe("43");
         (await _settingProvider.GetOrNullAsync("MySetting1")).ShouldBe("43");
     }
-    
+
     [Fact]
     public async Task Set_Should_Throw_Exception_If_Provider_Not_Found()
     {
@@ -72,7 +71,7 @@ public class SettingManager_Basic_Tests : SettingsTestBase
         {
             await _settingManager.SetAsync("MySetting1", "43", "UndefinedProvider", "Test");
         });
-        
+
         exception.Message.ShouldBe("Unknown setting value provider: UndefinedProvider");
     }
 }

@@ -187,7 +187,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             var label = new TagBuilder("label");
             label.AddCssClass("form-label");
             label.Attributes.Add("for", GetIdAttributeValue(selectTag));
-            label.InnerHtml.AppendHtml(_encoder.Encode(TagHelper.Label));
+            label.InnerHtml.Append(TagHelper.Label);
             label.InnerHtml.AppendHtml(GetRequiredSymbol(context, output));
 
             return label.ToHtmlString();

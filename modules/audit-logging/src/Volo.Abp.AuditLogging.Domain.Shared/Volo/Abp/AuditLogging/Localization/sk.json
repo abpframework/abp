@@ -103,6 +103,7 @@
     "Exporting": "Exportovanie",
     "ExportCompleted": "Export úspešne dokončený",
     "ExportFailed": "Export sa nepodaril",
+    "ThereWereNoRecordsToExport": "Neboli žiadne záznamy na export.",
     "ExportJobQueued": "Úloha exportu bola zaradená do fronty pre {0} záznamov. Dostanete e-mail, keď bude export dokončený.",
     "ExportReady": "Export dokončený pre {0} záznamov a pripravený na stiahnutie.",
     "FileName": "Názov súboru",

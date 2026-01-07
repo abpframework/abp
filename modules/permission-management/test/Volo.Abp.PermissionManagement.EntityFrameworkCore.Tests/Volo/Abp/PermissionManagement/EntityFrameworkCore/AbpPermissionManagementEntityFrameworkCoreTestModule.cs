@@ -9,6 +9,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Microsoft.Data.Sqlite;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
 
@@ -56,18 +57,10 @@ public class AbpPermissionManagementEntityFrameworkCoreTestModule : AbpModule
         return connection;
     }
 
-
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var task = context.ServiceProvider.GetRequiredService<AbpPermissionManagementDomainModule>().GetInitializeDynamicPermissionsTask();
-        if (!task.IsCompleted)
-        {
-            AsyncHelper.RunSync(() => Awaited(task));
-        }
-    }
-
-    private async static Task Awaited(Task task)
-    {
-        await task;
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<PermissionDynamicInitializer>();
+        AsyncHelper.RunSync(() => initializer.InitializeAsync(false));
     }
 }

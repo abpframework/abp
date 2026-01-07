@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Ažuriraj dozvolu",
     "GrantAllResourcePermissions": "Dodijeli sve",
     "NoResourceProviderKeyLookupServiceFound": "Nije pronađena usluga za pronalaženje ključa pružatelja",
-    "NoResourcePermissionFound": "Nijedna dozvola nije definirana."
+    "NoResourcePermissionFound": "Nijedna dozvola nije definirana.",
+    "UpdatePermission": "Ažuriraj dopuštenje",
+    "NoPermissionsAssigned": "Nema dodijeljenih dopuštenja",
+    "SelectProvider": "Odaberi pružatelja",
+    "SearchProviderKey": "Traži ključ pružatelja",
+    "Provider": "Pružatelj",
+    "ErrorLoadingPermissions": "Pogreška pri učitavanju dopuštenja",
+    "PleaseSelectProviderAndPermissions": "Molimo odaberite pružatelja i dopuštenja"
   }
 }

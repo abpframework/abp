@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Cập nhật quyền",
     "GrantAllResourcePermissions": "Cấp tất cả",
     "NoResourceProviderKeyLookupServiceFound": "Không tìm thấy dịch vụ tra cứu khóa nhà cung cấp",
-    "NoResourcePermissionFound": "Không có quyền nào được định nghĩa."
+    "NoResourcePermissionFound": "Không có quyền nào được định nghĩa.",
+    "UpdatePermission": "Cập nhật quyền",
+    "NoPermissionsAssigned": "Chưa được cấp quyền",
+    "SelectProvider": "Chọn nhà cung cấp",
+    "SearchProviderKey": "Tìm kiếm khóa nhà cung cấp",
+    "Provider": "Nhà cung cấp",
+    "ErrorLoadingPermissions": "Lỗi khi tải quyền",
+    "PleaseSelectProviderAndPermissions": "Vui lòng chọn nhà cung cấp và quyền"
   }
 }

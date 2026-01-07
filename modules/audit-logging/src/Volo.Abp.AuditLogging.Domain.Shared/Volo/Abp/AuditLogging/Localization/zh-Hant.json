@@ -103,6 +103,7 @@
     "Exporting": "匯出中",
     "ExportCompleted": "匯出成功完成",
     "ExportFailed": "匯出失敗",
+    "ThereWereNoRecordsToExport": "沒有可匯出的記錄。",
     "ExportJobQueued": "匯出作業已為{0}條記錄排隊。匯出完成後您將收到電子郵件。",
     "ExportReady": "{0}條記錄的匯出已完成，可以下載。",
     "FileName": "檔案名稱",

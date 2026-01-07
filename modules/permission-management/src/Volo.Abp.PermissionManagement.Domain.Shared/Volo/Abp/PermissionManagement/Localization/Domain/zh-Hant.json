@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "更新權限",
     "GrantAllResourcePermissions": "授予所有",
     "NoResourceProviderKeyLookupServiceFound": "未找到提供者鍵查找服務",
-    "NoResourcePermissionFound": "未定義任何權限。"
+    "NoResourcePermissionFound": "未定義任何權限。",
+    "UpdatePermission": "更新權限",
+    "NoPermissionsAssigned": "未分配權限",
+    "SelectProvider": "選擇提供者",
+    "SearchProviderKey": "搜尋提供者金鑰",
+    "Provider": "提供者",
+    "ErrorLoadingPermissions": "載入權限時出錯",
+    "PleaseSelectProviderAndPermissions": "請選擇提供者和權限"
   }
 }

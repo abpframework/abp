@@ -29,7 +29,7 @@ import { DISABLE_TREE_STYLE_LOADING_TOKEN } from '../disable-tree-style-loading.
 import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 import { ExpandedIconTemplateDirective } from '../templates/expanded-icon-template.directive';
 import { NgTemplateOutlet } from '@angular/common';
-import { NzNoAnimationDirective } from 'ng-zorro-antd/core/no-animation';
+import { NzNoAnimationDirective } from 'ng-zorro-antd/core/animation';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 

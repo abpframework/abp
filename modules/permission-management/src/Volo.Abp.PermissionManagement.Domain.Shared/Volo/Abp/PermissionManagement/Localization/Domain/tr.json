@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "İzni güncelle",
     "GrantAllResourcePermissions": "Tümünü ver",
     "NoResourceProviderKeyLookupServiceFound": "Herhangi bir sağlayıcı anahtar arama hizmeti bulunamadı",
-    "NoResourcePermissionFound": "Herhangi bir izin tanımlı değil."
+    "NoResourcePermissionFound": "Herhangi bir izin tanımlı değil.",
+    "UpdatePermission": "İzni güncelle",
+    "NoPermissionsAssigned": "Atanmış izin bulunamadı",
+    "SelectProvider": "Sağlayıcı seç",
+    "SearchProviderKey": "Sağlayıcı anahtarını ara",
+    "Provider": "Sağlayıcı",
+    "ErrorLoadingPermissions": "İzinler yüklenirken hata oluştu",
+    "PleaseSelectProviderAndPermissions": "Lütfen sağlayıcı ve izinleri seçin"
   }
 }

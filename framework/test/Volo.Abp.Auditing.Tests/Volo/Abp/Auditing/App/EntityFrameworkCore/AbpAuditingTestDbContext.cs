@@ -30,6 +30,7 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
     public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
     public DbSet<AppEntityWithNavigationsAndDisableAuditing> AppEntityWithNavigationsAndDisableAuditing { get; set; }
+    public DbSet<AppEntityWithJsonProperty> EntitiesWithObjectProperty { get; set; }
 
     public AbpAuditingTestDbContext(DbContextOptions<AbpAuditingTestDbContext> options)
         : base(options)
@@ -56,5 +57,25 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
             b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
         });
 
+        modelBuilder.Entity<AppEntityWithJsonProperty>(b =>
+        {
+            b.ConfigureByConvention();
+            b.OwnsOne(x => x.Data, b2 =>
+            {
+                b2.ToJson();
+
+                b2.Property<object>("Name")
+                    .HasConversion<string>(
+                        v => v.ToString(),
+                        v => v
+                    );
+
+                b2.Property<object>("Value")
+                    .HasConversion<string>(
+                        v => v.ToString(),
+                        v => v
+                    );
+            });
+        });
     }
 }

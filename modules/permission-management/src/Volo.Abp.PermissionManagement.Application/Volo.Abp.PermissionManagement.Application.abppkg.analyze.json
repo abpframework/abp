@@ -209,6 +209,185 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "GetResourceProviderListResultDto",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "GetResourceProviderKeyLookupServicesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "SearchProviderKeyListResultDto",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "SearchResourceProviderKeyAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "serviceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "filter",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "page",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "GetResourcePermissionDefinitionListResultDto",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "GetResourceDefinitionsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "GetResourcePermissionListResultDto",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "GetResourceAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "resourceKey",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "GetResourcePermissionWithProviderListResultDto",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "GetResourceByProviderAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "resourceKey",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "UpdateResourceAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "resourceKey",
+              "isOptional": false
+            },
+            {
+              "type": "UpdateResourcePermissionsDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.PermissionManagement",
+          "name": "DeleteResourceAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "resourceName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "resourceKey",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "providerKey",
+              "isOptional": false
+            }
+          ]
         }
       ],
       "contentType": "applicationService",

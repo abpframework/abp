@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Aktualizovat oprávnění",
     "GrantAllResourcePermissions": "Udělit vše",
     "NoResourceProviderKeyLookupServiceFound": "Nebyla nalezena služba pro vyhledávání klíče poskytovatele zdrojů",
-    "NoResourcePermissionFound": "Pro aktuální prostředek není definováno žádné oprávnění."
+    "NoResourcePermissionFound": "Pro aktuální prostředek není definováno žádné oprávnění.",
+    "UpdatePermission": "Aktualizovat oprávnění",
+    "NoPermissionsAssigned": "Nejsou přiřazena žádná oprávnění",
+    "SelectProvider": "Vybrat poskytovatele",
+    "SearchProviderKey": "Hledat klíč poskytovatele",
+    "Provider": "Poskytovatel",
+    "ErrorLoadingPermissions": "Chyba při načítání oprávnění",
+    "PleaseSelectProviderAndPermissions": "Vyberte prosím poskytovatele a oprávnění"
   }
 }

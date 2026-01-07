@@ -5,6 +5,7 @@ using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.StaticDefinitions;
 
 namespace Volo.Abp.Internal;
 
@@ -42,7 +43,7 @@ internal static class InternalServiceCollectionExtensions
         services.AddAssemblyOf<IAbpApplication>();
 
         services.AddTransient(typeof(ISimpleStateCheckerManager<>), typeof(SimpleStateCheckerManager<>));
-
+        services.AddSingleton(typeof(IStaticDefinitionCache<,>), typeof(StaticDefinitionCache<,>));
         services.Configure<AbpModuleLifecycleOptions>(options =>
         {
             options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();

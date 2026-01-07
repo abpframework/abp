@@ -37,7 +37,7 @@ public class AbpAccordionTagHelperService : AbpTagHelperService<AbpAccordionTagH
     {
         foreach (var item in items)
         {
-            var content = item.Replace(AbpAccordionParentIdPlaceholder, HtmlGenerator.Encode(TagHelper.Id));
+            var content = item.Replace(AbpAccordionParentIdPlaceholder, HtmlGenerator.Encode(TagHelper.Id ?? string.Empty));
 
             var wrapper = new TagBuilder("div");
             wrapper.AddCssClass("card");

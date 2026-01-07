@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Posodobi dovoljenje",
     "GrantAllResourcePermissions": "Dodeli vse",
     "NoResourceProviderKeyLookupServiceFound": "Ni bilo mogoče najti storitve za iskanje ključa ponudnika",
-    "NoResourcePermissionFound": "Nobeno dovoljenje ni določeno."
+    "NoResourcePermissionFound": "Nobeno dovoljenje ni določeno.",
+    "UpdatePermission": "Posodobi dovoljenje",
+    "NoPermissionsAssigned": "Ni dodeljenih dovoljenj",
+    "SelectProvider": "Izberi ponudnika",
+    "SearchProviderKey": "Išči ključ ponudnika",
+    "Provider": "Ponudnik",
+    "ErrorLoadingPermissions": "Napaka pri nalaganju dovoljenj",
+    "PleaseSelectProviderAndPermissions": "Izberite ponudnika in dovoljenja"
   }
 }

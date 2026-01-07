@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.DependencyInjection;
@@ -19,10 +20,8 @@ public class BlazorServerCurrentApplicationConfigurationCacheResetService :
         _localEventBus = localEventBus;
     }
 
-    public async Task ResetAsync()
+    public async Task ResetAsync(Guid? userId = null)
     {
-        await _localEventBus.PublishAsync(
-            new CurrentApplicationConfigurationCacheResetEventData()
-        );
+        await _localEventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData(userId));
     }
 }

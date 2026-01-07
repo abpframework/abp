@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Web.Utils;
@@ -105,9 +107,13 @@ public class PermissionManagementModal : AbpPageModel
             }
         );
 
-        await LocalEventBus.PublishAsync(
-            new CurrentApplicationConfigurationCacheResetEventData()
-        );
+        Guid? userId = null;
+        if (ProviderName == UserPermissionValueProvider.ProviderName && Guid.TryParse(ProviderKey, out var parsedUserId))
+        {
+            userId = parsedUserId;
+        }
+
+        await LocalEventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData(userId));
 
         return NoContent();
     }
@@ -130,7 +136,7 @@ public class PermissionManagementModal : AbpPageModel
         public bool IsDisabled(string currentProviderName)
         {
             var grantedProviders = Permissions.SelectMany(x => x.GrantedProviders);
-         
+
             return Permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != currentProviderName);
         }
     }

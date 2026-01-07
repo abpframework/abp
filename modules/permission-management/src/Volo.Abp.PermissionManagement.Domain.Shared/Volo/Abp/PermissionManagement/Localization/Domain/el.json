@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Ενημέρωση δικαιώματος",
     "GrantAllResourcePermissions": "Παραχώρηση όλων",
     "NoResourceProviderKeyLookupServiceFound": "Δεν βρέθηκε υπηρεσία αναζήτησης κλειδιού παρόχου",
-    "NoResourcePermissionFound": "Δεν έχει οριστεί καμία άδεια."
+    "NoResourcePermissionFound": "Δεν έχει οριστεί καμία άδεια.",
+    "UpdatePermission": "Ενημέρωση δικαιώματος",
+    "NoPermissionsAssigned": "Δεν έχουν εκχωρηθεί δικαιώματα",
+    "SelectProvider": "Επιλέξτε πάροχο",
+    "SearchProviderKey": "Αναζήτηση κλειδιού παρόχου",
+    "Provider": "Πάροχος",
+    "ErrorLoadingPermissions": "Σφάλμα κατά τη φόρτωση δικαιωμάτων",
+    "PleaseSelectProviderAndPermissions": "Επιλέξτε πάροχο και δικαιώματα"
   }
 }

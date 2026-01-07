@@ -17,6 +17,13 @@
     "UpdateResourcePermission": "Uppdatera behörighet",
     "GrantAllResourcePermissions": "Bevilja alla",
     "NoResourceProviderKeyLookupServiceFound": "Ingen tjänst för att söka efter leverantörsnyckel hittades",
-    "NoResourcePermissionFound": "Ingen behörighet är definierad."
+    "NoResourcePermissionFound": "Ingen behörighet är definierad.",
+    "UpdatePermission": "Uppdatera behörighet",
+    "NoPermissionsAssigned": "Inga behörigheter tilldelade",
+    "SelectProvider": "Välj leverantör",
+    "SearchProviderKey": "Sök leverantörsnyckel",
+    "Provider": "Leverantör",
+    "ErrorLoadingPermissions": "Fel vid laddning av behörigheter",
+    "PleaseSelectProviderAndPermissions": "Välj leverantör och behörigheter"
   }
 }

@@ -103,6 +103,7 @@
     "Exporting": "Exportando",
     "ExportCompleted": "Exportação concluída com sucesso",
     "ExportFailed": "Exportação falhou",
+    "ThereWereNoRecordsToExport": "Não havia registros para exportar.",
     "ExportJobQueued": "O trabalho de exportação foi enfileirado para {0} registros. Você receberá um email quando a exportação for concluída.",
     "ExportReady": "Exportação concluída para {0} registros e pronta para download.",
     "FileName": "Nome do arquivo",

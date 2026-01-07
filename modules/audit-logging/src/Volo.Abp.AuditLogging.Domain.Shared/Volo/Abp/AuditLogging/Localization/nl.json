@@ -103,6 +103,7 @@
     "Exporting": "Exporteren",
     "ExportCompleted": "Export succesvol voltooid",
     "ExportFailed": "Export mislukt",
+    "ThereWereNoRecordsToExport": "Er waren geen records om te exporteren.",
     "ExportJobQueued": "Exporttaak is in de wachtrij geplaatst voor {0} records. U ontvangt een e-mail wanneer de export is voltooid.",
     "ExportReady": "Export voltooid voor {0} records en klaar voor download.",
     "FileName": "Bestandsnaam",

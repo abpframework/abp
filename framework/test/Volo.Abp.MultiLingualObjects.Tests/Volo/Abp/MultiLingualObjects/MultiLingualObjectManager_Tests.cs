@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,12 +19,12 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
     private readonly MultiLingualBook _book;
     private readonly List<MultiLingualBook> _books;
     private readonly IMapperAccessor _mapperAccessor;
-    private readonly Dictionary<string, string> _testTranslations = new()
-    {
-        ["ar"] = "C# التعمق في",
-        ["zh-Hans"] = "深入理解C#",
-        ["en"] = "C# in Depth"
-    };
+    private readonly FrozenDictionary<string, string> _testTranslations = new Dictionary<string, string>
+        {
+            ["ar"] = "C# التعمق في",
+            ["zh-Hans"] = "深入理解C#",
+            ["en"] = "C# in Depth"
+        }.ToFrozenDictionary();
 
     public MultiLingualObjectManager_Tests()
     {

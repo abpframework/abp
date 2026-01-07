@@ -65,3 +65,7 @@ When you see the "New Version Available" window, follow these steps to upgrade A
 2. A progress indicator will display the download status.
 3. Once the download is complete, a new modal will appear with the "Install and Relaunch" buttons.
 4. Click on the "Install and Relaunch" button to complete the installation process.
+
+## Installing a Specific Version
+
+There is no official support for installing an older version of ABP Studio yet. But, if you want to install an older version of ABP Studio, you can use approach explanined here [https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version](https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version)
