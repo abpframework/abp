@@ -1,3 +1,4 @@
+import { permissionGuard } from '@abp/ng.core';
 import { Routes } from '@angular/router';
 
 export const appRoutes: Routes = [
@@ -21,5 +22,19 @@ export const appRoutes: Routes = [
   {
     path: 'setting-management',
     loadChildren: () => import('@abp/ng.setting-management').then(m => m.createRoutes()),
+    data: {
+      requiredPolicy: 'MyProjectName.SettingManagement',
+    },
   },
+
+
+  {
+    path: 'test',
+    loadComponent: () => import('./test/test.component').then(m => m.TestComponent),
+    canActivate: [permissionGuard],
+    data: {
+      requiredPolicy: 'MyProjectName.Test',
+    },
+  },
+
 ];

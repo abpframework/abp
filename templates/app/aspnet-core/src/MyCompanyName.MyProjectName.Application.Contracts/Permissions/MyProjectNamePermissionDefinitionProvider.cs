@@ -9,6 +9,7 @@ public class MyProjectNamePermissionDefinitionProvider : PermissionDefinitionPro
     public override void Define(IPermissionDefinitionContext context)
     {
         var myGroup = context.AddGroup(MyProjectNamePermissions.GroupName);
+        myGroup.AddPermission(MyProjectNamePermissions.Test, L("Permission:Test"));
         //Define your own permissions here. Example:
         //myGroup.AddPermission(MyProjectNamePermissions.MyPermission1, L("Permission:MyPermission1"));
     }

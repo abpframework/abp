@@ -6,4 +6,6 @@ public static class MyProjectNamePermissions
 
     //Add your own permission names. Example:
     //public const string MyPermission1 = GroupName + ".MyPermission1";
+
+    public const string Test = GroupName + ".Test";
 }
