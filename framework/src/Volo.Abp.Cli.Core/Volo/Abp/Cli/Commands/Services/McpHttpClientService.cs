@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Cli.Commands.Models;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
 
@@ -104,6 +106,45 @@ public class McpHttpClientService : ITransientDependency
             // Silently fail health check - it's optional
             return false;
         }
+    }
+
+    public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync(bool useLocalServer = false)
+    {
+        var baseUrl = LocalMcpServerUrl; //useLocalServer ? LocalMcpServerUrl : DefaultMcpServerUrl;
+        var url = $"{baseUrl}/tools";
+
+        try
+        {
+            using var httpClient = _httpClientFactory.CreateClient(needsAuthentication: true);
+            var response = await httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                await Console.Error.WriteLineAsync($"[MCP] Failed to fetch tool definitions: {response.StatusCode} - {errorContent}");
+                throw new Exception($"Failed to fetch tool definitions: {response.StatusCode}");
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            
+            // The API returns { tools: [...] } format
+            var result = JsonSerializer.Deserialize<McpToolsResponse>(responseContent, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return result?.Tools ?? new List<McpToolDefinition>();
+        }
+        catch (Exception ex)
+        {
+            await Console.Error.WriteLineAsync($"[MCP] Error fetching tool definitions: {ex.Message}");
+            throw;
+        }
+    }
+
+    private class McpToolsResponse
+    {
+        public List<McpToolDefinition> Tools { get; set; }
     }
 }
 

@@ -23,5 +23,6 @@ public static class CliConsts
     public static class MemoryKeys
     {
         public const string LatestCliVersionCheckDate = "LatestCliVersionCheckDate";
+        public const string McpToolsLastFetchDate = "McpToolsLastFetchDate";
     }
 }

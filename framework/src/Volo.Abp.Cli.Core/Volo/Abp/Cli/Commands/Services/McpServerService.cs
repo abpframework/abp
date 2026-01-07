@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
+using Volo.Abp.Cli.Commands.Models;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands.Services;
@@ -14,11 +16,14 @@ namespace Volo.Abp.Cli.Commands.Services;
 public class McpServerService : ITransientDependency
 {
     private readonly McpHttpClientService _mcpHttpClient;
+    private readonly McpToolsCacheService _toolsCacheService;
 
     public McpServerService(
-        McpHttpClientService mcpHttpClient)
+        McpHttpClientService mcpHttpClient,
+        McpToolsCacheService toolsCacheService)
     {
         _mcpHttpClient = mcpHttpClient;
+        _toolsCacheService = toolsCacheService;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken = default)
@@ -28,7 +33,7 @@ public class McpServerService : ITransientDependency
 
         var options = new McpServerOptions();
 
-        RegisterAllTools(options);
+        await RegisterAllToolsAsync(options);
 
         // Use NullLoggerFactory to prevent ModelContextProtocol library from logging to stdout
         // All our logging goes to stderr via Console.Error
@@ -42,121 +47,46 @@ public class McpServerService : ITransientDependency
         await Console.Error.WriteLineAsync("[MCP] ABP MCP Server stopped");
     }
 
-    private void RegisterAllTools(McpServerOptions options)
+    private async Task RegisterAllToolsAsync(McpServerOptions options)
     {
-        RegisterTool(
-            options,
-            "get_relevant_abp_documentation",
-            "Search ABP framework technical documentation including official guides, API references, and framework documentation.",
-            new
-            {
-                type = "object",
-                properties = new
-                {
-                    query = new
-                    {
-                        type = "string",
-                        description = "The search query to find relevant documentation"
-                    }
-                },
-                required = new[] { "query" }
-            }
-        );
+        // Get tool definitions from cache (or fetch from server)
+        var toolDefinitions = await _toolsCacheService.GetToolDefinitionsAsync();
 
-        RegisterTool(
-            options,
-            "get_relevant_abp_articles",
-            "Search ABP blog posts, tutorials, and community-contributed content.",
-            new
-            {
-                type = "object",
-                properties = new
-                {
-                    query = new
-                    {
-                        type = "string",
-                        description = "The search query to find relevant articles"
-                    }
-                },
-                required = new[] { "query" }
-            }
-        );
+        await Console.Error.WriteLineAsync($"[MCP] Registering {toolDefinitions.Count} tools");
 
-        RegisterTool(
-            options,
-            "get_relevant_abp_support_questions",
-            "Search support ticket history containing real-world problems and their solutions.",
-            new
-            {
-                type = "object",
-                properties = new
-                {
-                    query = new
-                    {
-                        type = "string",
-                        description = "The search query to find relevant support questions"
-                    }
-                },
-                required = new[] { "query" }
-            }
-        );
+        // Register each tool dynamically
+        foreach (var toolDef in toolDefinitions)
+        {
+            RegisterToolFromDefinition(options, toolDef);
+        }
+    }
 
-        RegisterTool(
-            options,
-            "search_code",
-            "Search for code across ABP repositories using regex patterns.",
-            new
-            {
-                type = "object",
-                properties = new
-                {
-                    query = new
-                    {
-                        type = "string",
-                        description = "The regex pattern or search query to find code"
-                    },
-                    repo_filter = new
-                    {
-                        type = "string",
-                        description = "Optional repository filter to limit search scope"
-                    }
-                },
-                required = new[] { "query" }
-            }
-        );
+    private void RegisterToolFromDefinition(McpServerOptions options, McpToolDefinition toolDef)
+    {
+        // Convert McpToolDefinition to the input schema format expected by MCP
+        var inputSchemaObject = new Dictionary<string, object>
+        {
+            ["type"] = "object",
+            ["properties"] = ConvertProperties(toolDef.InputSchema?.Properties),
+            ["required"] = toolDef.InputSchema?.Required ?? new List<string>()
+        };
 
-        RegisterTool(
-            options,
-            "list_repos",
-            "List all available ABP repositories in SourceBot.",
-            new
-            {
-                type = "object",
-                properties = new { }
-            }
-        );
+        RegisterTool(options, toolDef.Name, toolDef.Description, inputSchemaObject);
+    }
 
-        RegisterTool(
-            options,
-            "get_file_source",
-            "Retrieve the complete source code of a specific file from an ABP repository.",
-            new
+    private Dictionary<string, object> ConvertProperties(Dictionary<string, McpToolProperty> properties)
+    {
+        if (properties == null)
+        {
+            return new Dictionary<string, object>();
+        }
+
+        return properties.ToDictionary(
+            kvp => kvp.Key,
+            kvp => (object)new Dictionary<string, object>
             {
-                type = "object",
-                properties = new
-                {
-                    repoId = new
-                    {
-                        type = "string",
-                        description = "The repository identifier containing the file"
-                    },
-                    fileName = new
-                    {
-                        type = "string",
-                        description = "The file path or name to retrieve"
-                    }
-                },
-                required = new[] { "repoId", "fileName" }
+                ["type"] = kvp.Value.Type,
+                ["description"] = kvp.Value.Description
             }
         );
     }
