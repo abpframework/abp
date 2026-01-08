@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -15,6 +14,8 @@ namespace Volo.Abp.Cli.Commands.Services;
 
 public class McpServerService : ITransientDependency
 {
+    private const string LogSource = nameof(McpServerService);
+    
     private static class ToolErrorMessages
     {
         public const string InvalidResponseFormat = "The tool execution completed but returned an invalid response format. Please try again.";
@@ -23,26 +24,28 @@ public class McpServerService : ITransientDependency
     
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly McpToolsCacheService _toolsCacheService;
+    private readonly IMcpLogger _mcpLogger;
 
     public McpServerService(
         McpHttpClientService mcpHttpClient,
-        McpToolsCacheService toolsCacheService)
+        McpToolsCacheService toolsCacheService,
+        IMcpLogger mcpLogger)
     {
         _mcpHttpClient = mcpHttpClient;
         _toolsCacheService = toolsCacheService;
+        _mcpLogger = mcpLogger;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
-        // Log to stderr to avoid corrupting stdout JSON-RPC stream
-        await Console.Error.WriteLineAsync("[MCP] Starting ABP MCP Server (stdio)");
+        _mcpLogger.Info(LogSource, "Starting ABP MCP Server (stdio)");
 
         var options = new McpServerOptions();
 
         await RegisterAllToolsAsync(options);
 
         // Use NullLoggerFactory to prevent ModelContextProtocol library from logging to stdout
-        // All our logging goes to stderr via Console.Error
+        // All our logging goes to file and stderr via IMcpLogger
         var server = McpServer.Create(
             new StdioServerTransport("abp-mcp-server", NullLoggerFactory.Instance),
             options
@@ -50,7 +53,7 @@ public class McpServerService : ITransientDependency
 
         await server.RunAsync(cancellationToken);
 
-        await Console.Error.WriteLineAsync("[MCP] ABP MCP Server stopped");
+        _mcpLogger.Info(LogSource, "ABP MCP Server stopped");
     }
 
     private async Task RegisterAllToolsAsync(McpServerOptions options)
@@ -58,7 +61,7 @@ public class McpServerService : ITransientDependency
         // Get tool definitions from cache (or fetch from server)
         var toolDefinitions = await _toolsCacheService.GetToolDefinitionsAsync();
 
-        await Console.Error.WriteLineAsync($"[MCP] Registering {toolDefinitions.Count} tools");
+        _mcpLogger.Info(LogSource, $"Registering {toolDefinitions.Count} tools");
 
         // Register each tool dynamically
         foreach (var toolDef in toolDefinitions)
@@ -129,8 +132,7 @@ public class McpServerService : ITransientDependency
             JsonSerializer.SerializeToElement(inputSchema),
             async (context, cancellationToken) =>
             {
-                // Log to stderr to avoid corrupting stdout JSON-RPC stream
-                await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' called with arguments: {context.Params.Arguments}");
+                _mcpLogger.Debug(LogSource, $"Tool '{name}' called with arguments: {context.Params.Arguments}");
 
                 try
                 {
@@ -151,11 +153,11 @@ public class McpServerService : ITransientDependency
                             // Check if the HTTP client returned an error
                             if (callToolResult.IsError == true)
                             {
-                                await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' returned an error");
+                                _mcpLogger.Warning(LogSource, $"Tool '{name}' returned an error");
                             }
                             else
                             {
-                                await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' executed successfully");
+                                _mcpLogger.Debug(LogSource, $"Tool '{name}' executed successfully");
                             }
                             
                             return callToolResult;
@@ -163,8 +165,8 @@ public class McpServerService : ITransientDependency
                     }
                     catch (Exception deserializeEx)
                     {
-                        await Console.Error.WriteLineAsync($"[MCP] Failed to deserialize response as CallToolResult: {deserializeEx.Message}");
-                        await Console.Error.WriteLineAsync($"[MCP] Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
+                        _mcpLogger.Error(LogSource, $"Failed to deserialize response as CallToolResult: {deserializeEx.Message}");
+                        _mcpLogger.Debug(LogSource, $"Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
                     }
 
                     // Fallback: return error result if deserialization fails
@@ -173,7 +175,7 @@ public class McpServerService : ITransientDependency
                 catch (Exception ex)
                 {
                     // Log detailed error for debugging
-                    await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' execution failed with exception: {ex.Message}");
+                    _mcpLogger.Error(LogSource, $"Tool '{name}' execution failed", ex);
                     
                     // Return sanitized error to client
                     return CreateErrorResult(ToolErrorMessages.UnexpectedError);

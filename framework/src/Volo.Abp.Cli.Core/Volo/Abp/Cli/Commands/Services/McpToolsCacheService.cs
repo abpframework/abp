@@ -15,21 +15,26 @@ namespace Volo.Abp.Cli.Commands.Services;
 
 public class McpToolsCacheService : ITransientDependency
 {
+    private const string LogSource = nameof(McpToolsCacheService);
+    
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly MemoryService _memoryService;
     private readonly McpToolDefinitionValidator _validator;
     private readonly ILogger<McpToolsCacheService> _logger;
+    private readonly IMcpLogger _mcpLogger;
 
     public McpToolsCacheService(
         McpHttpClientService mcpHttpClient,
         MemoryService memoryService,
         McpToolDefinitionValidator validator,
-        ILogger<McpToolsCacheService> logger)
+        ILogger<McpToolsCacheService> logger,
+        IMcpLogger mcpLogger)
     {
         _mcpHttpClient = mcpHttpClient;
         _memoryService = memoryService;
         _validator = validator;
         _logger = logger;
+        _mcpLogger = mcpLogger;
     }
 
     public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync()
@@ -39,7 +44,7 @@ public class McpToolsCacheService : ITransientDependency
             var cachedTools = await LoadFromCacheAsync();
             if (cachedTools != null)
             {
-                await Console.Error.WriteLineAsync("[MCP] Using cached tool definitions");
+                _mcpLogger.Debug(LogSource, "Using cached tool definitions");
                 return cachedTools;
             }
         }
@@ -47,7 +52,7 @@ public class McpToolsCacheService : ITransientDependency
         // Cache is invalid or missing, fetch from server
         try
         {
-            await Console.Error.WriteLineAsync("[MCP] Fetching tool definitions from server...");
+            _mcpLogger.Info(LogSource, "Fetching tool definitions from server...");
             var tools = await _mcpHttpClient.GetToolDefinitionsAsync();
             
             // Validate and filter tool definitions
@@ -56,7 +61,7 @@ public class McpToolsCacheService : ITransientDependency
             if (validTools.Count == 0)
             {
                 _logger.LogWarning("No valid tool definitions received from server");
-                await Console.Error.WriteLineAsync("[MCP] Warning: No valid tool definitions received from server");
+                _mcpLogger.Warning(LogSource, "No valid tool definitions received from server");
                 return new List<McpToolDefinition>();
             }
             
@@ -64,24 +69,24 @@ public class McpToolsCacheService : ITransientDependency
             await SaveToCacheAsync(validTools);
             await _memoryService.SetAsync(CliConsts.MemoryKeys.McpToolsLastFetchDate, DateTime.Now.ToString(CultureInfo.InvariantCulture));
             
-            await Console.Error.WriteLineAsync($"[MCP] Successfully fetched and cached {validTools.Count} tool definitions");
+            _mcpLogger.Info(LogSource, $"Successfully fetched and cached {validTools.Count} tool definitions");
             return validTools;
         }
         catch (Exception ex)
         {
             // Sanitize error message - use generic message for logger
             _logger.LogWarning("Failed to fetch tool definitions from server");
-            await Console.Error.WriteLineAsync($"[MCP] Failed to fetch from server, attempting to use cached data...");
+            _mcpLogger.Warning(LogSource, "Failed to fetch from server, attempting to use cached data...");
             
             // Fall back to cache even if expired
             var cachedTools = await LoadFromCacheAsync();
             if (cachedTools != null)
             {
-                await Console.Error.WriteLineAsync("[MCP] Using expired cache as fallback");
+                _mcpLogger.Info(LogSource, "Using expired cache as fallback");
                 return cachedTools;
             }
 
-            await Console.Error.WriteLineAsync("[MCP] No cached data available, using empty tool list");
+            _mcpLogger.Warning(LogSource, "No cached data available, using empty tool list");
             return new List<McpToolDefinition>();
         }
     }

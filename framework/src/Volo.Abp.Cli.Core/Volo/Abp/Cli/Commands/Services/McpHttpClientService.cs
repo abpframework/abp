@@ -15,6 +15,7 @@ namespace Volo.Abp.Cli.Commands.Services;
 
 public class McpHttpClientService : ITransientDependency
 {
+    private const string LogSource = nameof(McpHttpClientService);
     private static readonly JsonSerializerOptions JsonSerializerOptionsWeb = new(JsonSerializerDefaults.Web);
     
     private static class ErrorMessages
@@ -26,16 +27,19 @@ public class McpHttpClientService : ITransientDependency
     
     private readonly CliHttpClientFactory _httpClientFactory;
     private readonly ILogger<McpHttpClientService> _logger;
+    private readonly IMcpLogger _mcpLogger;
     private readonly MemoryService _memoryService;
     private string _cachedServerUrl;
 
     public McpHttpClientService(
         CliHttpClientFactory httpClientFactory,
         ILogger<McpHttpClientService> logger,
+        IMcpLogger mcpLogger,
         MemoryService memoryService)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;
+        _mcpLogger = mcpLogger;
         _memoryService = memoryService;
     }
 
@@ -87,8 +91,7 @@ public class McpHttpClientService : ITransientDependency
 
             if (!response.IsSuccessStatusCode)
             {
-                // Log detailed error to stderr for debugging
-                await Console.Error.WriteLineAsync($"[MCP] API call failed with status: {response.StatusCode}");
+                _mcpLogger.Error(LogSource, $"API call failed with status: {response.StatusCode}");
                 
                 // Return sanitized error message to client
                 var errorMessage = GetSanitizedHttpErrorMessage(response.StatusCode);
@@ -99,24 +102,21 @@ public class McpHttpClientService : ITransientDependency
         }
         catch (HttpRequestException ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] Network error calling tool '{toolName}': {ex.Message}");
+            _mcpLogger.Error(LogSource, $"Network error calling tool '{toolName}'", ex);
             
             // Return sanitized error to client
             return CreateErrorResponse(ErrorMessages.NetworkConnectivity);
         }
         catch (TaskCanceledException ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] Timeout calling tool '{toolName}': {ex.Message}");
+            _mcpLogger.Error(LogSource, $"Timeout calling tool '{toolName}'", ex);
             
             // Return sanitized error to client
             return CreateErrorResponse(ErrorMessages.Timeout);
         }
         catch (Exception ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] Unexpected error calling tool '{toolName}': {ex.Message}");
+            _mcpLogger.Error(LogSource, $"Unexpected error calling tool '{toolName}'", ex);
             
             // Return generic sanitized error to client
             return CreateErrorResponse(ErrorMessages.Unexpected);
@@ -152,7 +152,7 @@ public class McpHttpClientService : ITransientDependency
             HttpStatusCode.Forbidden => "Access denied. You do not have permission to use this tool.",
             HttpStatusCode.NotFound => "The requested tool could not be found. It may have been removed or is temporarily unavailable.",
             HttpStatusCode.BadRequest => "The tool request was invalid. Please check your input parameters and try again.",
-            HttpStatusCode.TooManyRequests => "Rate limit exceeded. Please wait a moment before trying again.",
+            (HttpStatusCode)429 => "Rate limit exceeded. Please wait a moment before trying again.", // TooManyRequests not available in .NET Standard 2.0
             HttpStatusCode.ServiceUnavailable => "The service is temporarily unavailable. Please try again later.",
             HttpStatusCode.InternalServerError => "The tool execution encountered an internal error. Please try again later.",
             _ => "The tool execution failed. Please try again later."
@@ -188,8 +188,7 @@ public class McpHttpClientService : ITransientDependency
 
             if (!response.IsSuccessStatusCode)
             {
-                // Log detailed error to stderr for debugging
-                await Console.Error.WriteLineAsync($"[MCP] Failed to fetch tool definitions with status: {response.StatusCode}");
+                _mcpLogger.Error(LogSource, $"Failed to fetch tool definitions with status: {response.StatusCode}");
                 
                 // Throw sanitized exception
                 var errorMessage = GetSanitizedHttpErrorMessage(response.StatusCode);
@@ -205,24 +204,21 @@ public class McpHttpClientService : ITransientDependency
         }
         catch (HttpRequestException ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] Network error fetching tool definitions: {ex.Message}");
+            _mcpLogger.Error(LogSource, "Network error fetching tool definitions", ex);
             
             // Throw sanitized exception
             throw CreateToolDefinitionException("Network connectivity issue. Please check your internet connection and try again.");
         }
         catch (TaskCanceledException ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] Timeout fetching tool definitions: {ex.Message}");
+            _mcpLogger.Error(LogSource, "Timeout fetching tool definitions", ex);
             
             // Throw sanitized exception
             throw CreateToolDefinitionException("Request timed out. Please try again.");
         }
         catch (JsonException ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] JSON parsing error: {ex.Message}");
+            _mcpLogger.Error(LogSource, "JSON parsing error", ex);
             
             // Throw sanitized exception
             throw CreateToolDefinitionException("Invalid response format received.");
@@ -234,8 +230,7 @@ public class McpHttpClientService : ITransientDependency
         }
         catch (Exception ex)
         {
-            // Log detailed error to stderr for debugging
-            await Console.Error.WriteLineAsync($"[MCP] Unexpected error fetching tool definitions: {ex.Message}");
+            _mcpLogger.Error(LogSource, "Unexpected error fetching tool definitions", ex);
             
             // Throw sanitized exception
             throw CreateToolDefinitionException("An unexpected error occurred. Please try again later.");

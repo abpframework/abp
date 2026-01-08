@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 
@@ -15,6 +15,7 @@ public static class CliPaths
     public static string Build => Path.Combine(AbpRootPath, "build");
     public static string Lic => Path.Combine(Path.GetTempPath(), Encoding.ASCII.GetString(new byte[] { 65, 98, 112, 76, 105, 99, 101, 110, 115, 101, 46, 98, 105, 110 }));
     public static string McpToolsCache => Path.Combine(Root, "mcp-tools.json");
+    public static string McpLog => Path.Combine(Log, "mcp.log");
 
     public static readonly string AbpRootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".abp");
 }

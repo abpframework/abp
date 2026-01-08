@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Memory;
 using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
@@ -21,8 +22,11 @@ namespace Volo.Abp.Cli;
 
 public class CliService : ITransientDependency
 {
+    private const string McpLogSource = nameof(CliService);
+    
     private readonly MemoryService _memoryService;
     private readonly ITelemetryService _telemetryService;
+    private readonly IMcpLogger _mcpLogger;
     public ILogger<CliService> Logger { get; set; }
     protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
     protected ICommandSelector CommandSelector { get; }
@@ -39,7 +43,8 @@ public class CliService : ITransientDependency
         ICmdHelper cmdHelper,
         MemoryService memoryService,
         CliVersionService cliVersionService, 
-        ITelemetryService telemetryService)
+        ITelemetryService telemetryService,
+        IMcpLogger mcpLogger)
     {
         _memoryService = memoryService;
         CommandLineArgumentParser = commandLineArgumentParser;
@@ -49,6 +54,7 @@ public class CliService : ITransientDependency
         CmdHelper = cmdHelper;
         CliVersionService = cliVersionService;
         _telemetryService = telemetryService;
+        _mcpLogger = mcpLogger;
 
         Logger = NullLogger<CliService>.Instance;
     }
@@ -92,10 +98,10 @@ public class CliService : ITransientDependency
         }
         catch (CliUsageException usageException)
         {
-            // For MCP command, write errors to stderr to avoid corrupting stdout JSON-RPC stream
+            // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
             if (commandLineArgs.IsCommand("mcp"))
             {
-                await Console.Error.WriteLineAsync($"[MCP] Error: {usageException.Message}");
+                _mcpLogger.Error(McpLogSource, usageException.Message);
             }
             else
             {
@@ -106,10 +112,10 @@ public class CliService : ITransientDependency
         catch (Exception ex)
         {
             await _telemetryService.AddErrorActivityAsync(ex.Message);
-            // For MCP command, write errors to stderr to avoid corrupting stdout JSON-RPC stream
+            // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
             if (commandLineArgs.IsCommand("mcp"))
             {
-                await Console.Error.WriteLineAsync($"[MCP] Fatal error: {ex.Message}");
+                _mcpLogger.Error(McpLogSource, "Fatal error", ex);
             }
             else
             {

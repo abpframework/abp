@@ -20,12 +20,14 @@ namespace Volo.Abp.Cli.Commands;
 
 public class McpCommand : IConsoleCommand, ITransientDependency
 {
+    private const string LogSource = nameof(McpCommand);
     public const string Name = "mcp";
     
     private readonly AuthService _authService;
     private readonly IApiKeyService _apiKeyService;
     private readonly McpServerService _mcpServerService;
     private readonly McpHttpClientService _mcpHttpClient;
+    private readonly IMcpLogger _mcpLogger;
     
     public ILogger<McpCommand> Logger { get; set; }
 
@@ -33,12 +35,14 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         IApiKeyService apiKeyService,
         AuthService authService,
         McpServerService mcpServerService,
-        McpHttpClientService mcpHttpClient)
+        McpHttpClientService mcpHttpClient,
+        IMcpLogger mcpLogger)
     {
         _apiKeyService = apiKeyService;
         _authService = authService;
         _mcpServerService = mcpServerService;
         _mcpHttpClient = mcpHttpClient;
+        _mcpLogger = mcpLogger;
         Logger = NullLogger<McpCommand>.Instance;
     }
 
@@ -72,17 +76,17 @@ public class McpCommand : IConsoleCommand, ITransientDependency
             return;
         }
 
-        // Check server health before starting (log to stderr)
-        await Console.Error.WriteLineAsync("[MCP] Checking ABP.IO MCP Server connection...");
+        // Check server health before starting
+        _mcpLogger.Info(LogSource, "Checking ABP.IO MCP Server connection...");
         var isHealthy = await _mcpHttpClient.CheckServerHealthAsync();
         
         if (!isHealthy)
         {
-            await Console.Error.WriteLineAsync("[MCP] Warning: Could not connect to ABP.IO MCP Server. The server might be offline.");
-            await Console.Error.WriteLineAsync("[MCP] Continuing to start local MCP server...");
+            _mcpLogger.Warning(LogSource, "Could not connect to ABP.IO MCP Server. The server might be offline.");
+            _mcpLogger.Info(LogSource, "Continuing to start local MCP server...");
         }
 
-        await Console.Error.WriteLineAsync("[MCP] Starting ABP MCP Server...");
+        _mcpLogger.Info(LogSource, "Starting ABP MCP Server...");
         
         var cts = new CancellationTokenSource();
         ConsoleCancelEventHandler cancelHandler = null;
@@ -90,7 +94,7 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         cancelHandler = (sender, e) =>
         {
             e.Cancel = true;
-            Console.Error.WriteLine("[MCP] Shutting down ABP MCP Server...");
+            _mcpLogger.Info(LogSource, "Shutting down ABP MCP Server...");
             
             try
             {
@@ -114,7 +118,7 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         }
         catch (Exception ex)
         {
-            await Console.Error.WriteLineAsync($"[MCP] Error running MCP server: {ex.Message}");
+            _mcpLogger.Error(LogSource, "Error running MCP server", ex);
             throw;
         }
         finally
