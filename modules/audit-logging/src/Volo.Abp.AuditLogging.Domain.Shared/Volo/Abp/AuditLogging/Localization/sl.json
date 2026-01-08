@@ -103,6 +103,7 @@
     "Exporting": "Izvažanje",
     "ExportCompleted": "Izvoz uspešno dokončan",
     "ExportFailed": "Izvoz neuspešen",
+    "ThereWereNoRecordsToExport": "Ni bilo zapisov za izvoz.",
     "ExportJobQueued": "Naloga izvoza je bila postavljena v vrsto za {0} zapisov. Prejeli boste e-pošto, ko bo izvoz dokončan.",
     "ExportReady": "Izvoz dokončan za {0} zapisov in pripravljen za prenos.",
     "FileName": "Ime datoteke",

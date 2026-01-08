@@ -69,6 +69,12 @@
       "contentType": "webPage",
       "name": "PermissionManagementModal",
       "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.Blazor.Components",
+      "contentType": "webPage",
+      "name": "ResourcePermissionManagementModal",
+      "summary": null
     }
   ]
 }

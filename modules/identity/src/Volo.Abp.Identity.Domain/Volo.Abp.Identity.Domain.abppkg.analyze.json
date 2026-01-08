@@ -172,6 +172,64 @@
         {
           "type": "System.Guid",
           "name": "UserId",
+          "summary": "Gets or sets the primary key of the user that owns this passkey."
+        },
+        {
+          "type": "System.Byte[]",
+          "name": "CredentialId",
+          "summary": "Gets or sets the credential ID for this passkey."
+        },
+        {
+          "type": "Volo.Abp.Identity.IdentityPasskeyData",
+          "name": "Data",
+          "summary": "Gets or sets additional data associated with this passkey."
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserPasskey",
+      "summary": "Represents a passkey credential for a user in the identity system."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
+          "summary": "Gets or sets the primary key of the user associated with this password history entry."
+        },
+        {
+          "type": "System.String",
+          "name": "Password",
+          "summary": "Gets or sets the password."
+        },
+        {
+          "type": "System.DateTimeOffset",
+          "name": "CreatedAt",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "IdentityUserPasswordHistory",
+      "summary": "Represents a password history entry for a user."
+    },
+    {
+      "namespace": "Volo.Abp.Identity",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.Guid",
+          "name": "UserId",
           "summary": "Gets or sets the primary key of the user that is linked to a role."
         },
         {
@@ -255,6 +313,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -383,6 +447,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -451,6 +521,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -692,6 +768,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -818,6 +900,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -1010,6 +1098,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -1459,6 +1553,23 @@
         {
           "returnType": "Void",
           "namespace": "Volo.Abp.Identity",
+          "name": "AddPasswordHistory",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "password",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
           "name": "SetEmailConfirmed",
           "summary": null,
           "isAsync": false,
@@ -1564,6 +1675,79 @@
           ]
         },
         {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "SetLastSignInTime",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<DateTimeOffset>",
+              "name": "lastSignInTime",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "IdentityUserPasskey",
+          "namespace": "Volo.Abp.Identity",
+          "name": "FindPasskey",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Byte[]",
+              "name": "credentialId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "AddPasskey",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Byte[]",
+              "name": "credentialId",
+              "isOptional": false
+            },
+            {
+              "type": "IdentityPasskeyData",
+              "name": "passkeyData",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity",
+          "name": "RemovePasskey",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Byte[]",
+              "name": "credentialId",
+              "isOptional": false
+            }
+          ]
+        },
+        {
           "returnType": "String",
           "namespace": "Volo.Abp.Identity",
           "name": "ToString",
@@ -1605,6 +1789,18 @@
           "namespace": "Volo.Abp.Identity",
           "declaringAssemblyName": "Volo.Abp.Identity.Domain",
           "fullName": "Volo.Abp.Identity.IdentityUserOrganizationUnit"
+        },
+        "passwordHistories": {
+          "name": "IdentityUserPasswordHistory",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserPasswordHistory"
+        },
+        "passkeys": {
+          "name": "IdentityUserPasskey",
+          "namespace": "Volo.Abp.Identity",
+          "declaringAssemblyName": "Volo.Abp.Identity.Domain",
+          "fullName": "Volo.Abp.Identity.IdentityUserPasskey"
         }
       },
       "navigationProperties": {},
@@ -1717,6 +1913,11 @@
           "summary": "Gets or sets the last password change time for the user."
         },
         {
+          "type": "System.Nullable`1[System.DateTimeOffset]",
+          "name": "LastSignInTime",
+          "summary": "Gets or sets the last sign-in time for the user."
+        },
+        {
           "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserRole]",
           "name": "Roles",
           "summary": "Navigation property for the roles this user belongs to."
@@ -1740,6 +1941,16 @@
           "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserOrganizationUnit]",
           "name": "OrganizationUnits",
           "summary": "Navigation property for this organization units."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserPasswordHistory]",
+          "name": "PasswordHistories",
+          "summary": "Navigation property for this users password history."
+        },
+        {
+          "type": "System.Collections.Generic.ICollection`1[Volo.Abp.Identity.IdentityUserPasskey]",
+          "name": "Passkeys",
+          "summary": "Navigation property for this users passkeys."
         }
       ],
       "contentType": "aggregateRoot",
@@ -1759,6 +1970,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -1840,6 +2057,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -4052,6 +4275,28 @@
         {
           "returnType": "List<IdentityRole>",
           "namespace": "Volo.Abp.Identity",
+          "name": "GetListAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "IEnumerable<String>",
+              "name": "names",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "List<IdentityRole>",
+          "namespace": "Volo.Abp.Identity",
           "name": "GetDefaultOnesAsync",
           "summary": null,
           "isAsync": true,
@@ -5528,6 +5773,33 @@
               "isOptional": true
             }
           ]
+        },
+        {
+          "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
+          "name": "FindByPasskeyIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Byte[]",
+              "name": "credentialId",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
         }
       ],
       "contentType": "repositoryInterface",
@@ -6343,6 +6615,28 @@
       "summary": null
     },
     {
+      "defaultValue": "False",
+      "displayName": "Enable prevent password reuse",
+      "description": "Whether to prevent users from reusing their previous passwords.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.EnablePreventPasswordReuse",
+      "summary": null
+    },
+    {
+      "defaultValue": "6",
+      "displayName": "Prevent password reuse count",
+      "description": "The number of previous passwords that cannot be reused.",
+      "isVisibleToClient": true,
+      "isInherited": true,
+      "isEncrypted": false,
+      "contentType": "setting",
+      "name": "Abp.Identity.Password.PreventPasswordReuseCount",
+      "summary": null
+    },
+    {
       "defaultValue": "True",
       "displayName": "Enabled for new users",
       "description": "Whether a new user can be locked out.",
@@ -6401,7 +6695,7 @@
       "defaultValue": "False",
       "displayName": "Enforce email verification to register",
       "description": "User accounts will not be created unless they verify their email addresses.",
-      "isVisibleToClient": false,
+      "isVisibleToClient": true,
       "isInherited": true,
       "isEncrypted": false,
       "contentType": "setting",

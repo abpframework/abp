@@ -73,13 +73,6 @@
       "contentType": "abpModule",
       "name": "AbpFeatureManagementApplicationContractsModule",
       "summary": null
-    },
-    {
-      "displayName": "Manage host features",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "FeatureManagement.ManageHostFeatures",
-      "summary": null
     }
   ]
 }

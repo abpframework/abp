@@ -103,6 +103,7 @@
     "Exporting": "Exporting",
     "ExportCompleted": "Export completed successfully",
     "ExportFailed": "Export failed",
+    "ThereWereNoRecordsToExport": "There were no records to export.",
     "ExportJobQueued": "Export job has been queued for {0} records. You will receive an email when the export is completed.",
     "ExportReady": "Export completed for {0} records and is ready for download.",
     "FileName": "File name",

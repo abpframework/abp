@@ -144,13 +144,99 @@ The *Logs* tab allows you to view all logs for both CLI and C# applications. To 
 
 ## Tools
 
-The *Tools* tab allows you to easily access to the user interfaces of the tools you are using. A *tool* may be related with a docker container, or independent. If it is related with a container (ex: *grafana*), the tool is opened when the container is up. If the tool is independent, it will be always opened.
+The *Tools* tab provides quick access to web-based management interfaces for infrastructure services like Grafana, RabbitMQ, pgAdmin, and Redis Commander. Each tool opens in a dedicated browser tab within ABP Studio, eliminating the need to switch between external browser windows.
 
 ![tools](./images/monitoring-applications/tools-overview.png)
 
-The microservice template comes with pre-defined tools to display related container user interfaces. You can edit existing tools, add new tools or delete existing tools.
+The microservice template includes pre-configured tools for common infrastructure services. You can customize these tools or add new ones based on your project requirements.
 
-In the example below, a new tool named `My Application Status` will be added to the tools and it will display the URL in the input:
+### Adding a New Tool
+
+To add a new tool, click the *+* button in the *Tools* tab. This opens the *Create Tool* dialog where you can configure the tool properties.
 
 ![tools-create](./images/monitoring-applications/tools-create.png)
 
+### Tool Properties
+
+Each tool has the following configurable properties:
+
+| Property | Required | Description |
+|----------|----------|-------------|
+| **Name** | Yes | A unique identifier displayed as the tab header. |
+| **URL** | Yes | The web interface URL (e.g., `http://localhost:3000`). |
+| **Related Container** | No | Docker container name. When set, the tool activates only when this container is running. |
+| **Related Kubernetes Service** | No | A regex pattern to match Kubernetes service names for automatic URL switching. |
+| **Related Kubernetes Service Port** | No | The port to use when connecting via Kubernetes service. |
+
+### Editing and Removing Tools
+
+- **Edit**: Right-click on a tool tab and select *Edit* to modify its properties.
+- **Remove**: Right-click on a tool tab and select *Close* to remove it from the profile.
+- **Clear Cookies**: Right-click on a tool tab and select *Clear Cookies* to reset the browser session for that tool.
+
+### Tool Activation States
+
+Tools can be in different activation states depending on their configuration:
+
+| State | Condition | Behavior |
+|-------|-----------|----------|
+| **Always Active** | No *Related Container* specified | Tool is always accessible regardless of container state. |
+| **Container-Dependent** | *Related Container* specified | Tool activates only when the specified Docker container is running. |
+| **Kubernetes-Aware** | *Related Kubernetes Service* specified | Tool URL switches between local and Kubernetes endpoints automatically. |
+
+### Kubernetes Integration
+
+When you specify a *Related Kubernetes Service*, the tool gains the ability to seamlessly switch between local and Kubernetes environments. This is particularly useful for microservice development where you run some services locally while others remain in a Kubernetes cluster.
+
+**Automatic URL Switching:**
+
+1. **Local Mode**: When the *Related Container* is running, the tool uses the configured *URL* (e.g., `http://localhost:3000`).
+2. **Kubernetes Mode**: When the container stops and you're [connected to a Kubernetes cluster](./kubernetes.md#connecting-to-a-kubernetes-cluster), the tool automatically redirects to the matching Kubernetes service.
+3. **Pattern Matching**: The *Related Kubernetes Service* accepts regex patterns. For example, `.*-grafana` matches any service name ending with `-grafana`.
+
+> This automatic switching eliminates the need to manually update URLs when transitioning between local development and Kubernetes-based testing.
+
+### Run Profile Configuration
+
+Tools are persisted in the Run Profile file (`.abprun.json`). Below is an example configuration with common infrastructure tools:
+
+```json
+{
+  "tools": {
+    "grafana": {
+      "url": "http://localhost:3000",
+      "relatedContainer": "grafana",
+      "relatedKubernetesService": ".*-grafana",
+      "relatedKubernetesServicePort": 3000
+    },
+    "rabbitmq": {
+      "url": "http://localhost:15672",
+      "relatedContainer": "rabbitmq",
+      "relatedKubernetesService": ".*-rabbitmq",
+      "relatedKubernetesServicePort": 15672
+    },
+    "redis-commander": {
+      "url": "http://localhost:8081",
+      "relatedContainer": "redis-commander"
+    },
+    "pgadmin": {
+      "url": "http://localhost:5050",
+      "relatedContainer": "pgadmin"
+    },
+    "seq": {
+      "url": "http://localhost:5341"
+    }
+  }
+}
+```
+
+### Default Credentials
+
+Some tools display a notification bar with default credentials when opened for the first time:
+
+| Tool | Username | Password |
+|------|----------|----------|
+| Grafana | `admin` | `admin` |
+| RabbitMQ | `guest` | `guest` |
+
+> You can dismiss this notification permanently by clicking the *Don't show again* option.
