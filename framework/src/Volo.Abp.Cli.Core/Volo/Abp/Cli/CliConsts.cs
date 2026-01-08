@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Cli;
+namespace Volo.Abp.Cli;
 
 public static class CliConsts
 {

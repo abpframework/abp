@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,6 +15,15 @@ namespace Volo.Abp.Cli.Commands.Services;
 
 public class McpHttpClientService : ITransientDependency
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptionsWeb = new(JsonSerializerDefaults.Web);
+    
+    private static class ErrorMessages
+    {
+        public const string NetworkConnectivity = "The tool execution failed due to a network connectivity issue. Please check your internet connection and try again.";
+        public const string Timeout = "The tool execution timed out. The operation took too long to complete. Please try again.";
+        public const string Unexpected = "The tool execution failed due to an unexpected error. Please try again later.";
+    }
+    
     private readonly CliHttpClientFactory _httpClientFactory;
     private readonly ILogger<McpHttpClientService> _logger;
     private readonly MemoryService _memoryService;
@@ -67,16 +77,9 @@ public class McpHttpClientService : ITransientDependency
         {
             using var httpClient = _httpClientFactory.CreateClient(needsAuthentication: true);
 
-            var requestBody = new
-            {
-                name = toolName,
-                arguments = arguments
-            };
-
-            var jsonContent = JsonSerializer.Serialize(requestBody, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var jsonContent = JsonSerializer.Serialize(
+                new { name = toolName, arguments },
+                JsonSerializerOptionsWeb);
 
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -84,41 +87,76 @@ public class McpHttpClientService : ITransientDependency
 
             if (!response.IsSuccessStatusCode)
             {
-                // Log to stderr to avoid corrupting stdout - sanitize error message
+                // Log detailed error to stderr for debugging
                 await Console.Error.WriteLineAsync($"[MCP] API call failed with status: {response.StatusCode}");
                 
-                return JsonSerializer.Serialize(new
-                {
-                    content = new[]
-                    {
-                        new
-                        {
-                            type = "text",
-                            text = $"Error: API call failed with status {response.StatusCode}"
-                        }
-                    }
-                });
+                // Return sanitized error message to client
+                var errorMessage = GetSanitizedHttpErrorMessage(response.StatusCode);
+                return CreateErrorResponse(errorMessage);
             }
 
             return await response.Content.ReadAsStringAsync();
         }
+        catch (HttpRequestException ex)
+        {
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] Network error calling tool '{toolName}': {ex.Message}");
+            
+            // Return sanitized error to client
+            return CreateErrorResponse(ErrorMessages.NetworkConnectivity);
+        }
+        catch (TaskCanceledException ex)
+        {
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] Timeout calling tool '{toolName}': {ex.Message}");
+            
+            // Return sanitized error to client
+            return CreateErrorResponse(ErrorMessages.Timeout);
+        }
         catch (Exception ex)
         {
-            // Log to stderr to avoid corrupting stdout
-            await Console.Error.WriteLineAsync($"[MCP] Error calling MCP tool '{toolName}': {ex.Message}");
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] Unexpected error calling tool '{toolName}': {ex.Message}");
             
-            return JsonSerializer.Serialize(new
-            {
-                content = new[]
-                {
-                    new
-                    {
-                        type = "text",
-                        text = $"Error: {ex.Message}"
-                    }
-                }
-            });
+            // Return generic sanitized error to client
+            return CreateErrorResponse(ErrorMessages.Unexpected);
         }
+    }
+
+    private string CreateErrorResponse(string errorMessage)
+    {
+        return JsonSerializer.Serialize(new
+        {
+            content = new[]
+            {
+                new
+                {
+                    type = "text",
+                    text = errorMessage
+                }
+            },
+            isError = true
+        }, JsonSerializerOptionsWeb);
+    }
+
+    private Exception CreateToolDefinitionException(string userMessage)
+    {
+        return new Exception($"Failed to fetch tool definitions: {userMessage}");
+    }
+
+    private string GetSanitizedHttpErrorMessage(HttpStatusCode statusCode)
+    {
+        return statusCode switch
+        {
+            HttpStatusCode.Unauthorized => "Authentication failed. Please ensure you are logged in with a valid account.",
+            HttpStatusCode.Forbidden => "Access denied. You do not have permission to use this tool.",
+            HttpStatusCode.NotFound => "The requested tool could not be found. It may have been removed or is temporarily unavailable.",
+            HttpStatusCode.BadRequest => "The tool request was invalid. Please check your input parameters and try again.",
+            HttpStatusCode.TooManyRequests => "Rate limit exceeded. Please wait a moment before trying again.",
+            HttpStatusCode.ServiceUnavailable => "The service is temporarily unavailable. Please try again later.",
+            HttpStatusCode.InternalServerError => "The tool execution encountered an internal error. Please try again later.",
+            _ => "The tool execution failed. Please try again later."
+        };
     }
 
     public async Task<bool> CheckServerHealthAsync()
@@ -150,25 +188,57 @@ public class McpHttpClientService : ITransientDependency
 
             if (!response.IsSuccessStatusCode)
             {
-                // Sanitize error message - don't expose server details
+                // Log detailed error to stderr for debugging
                 await Console.Error.WriteLineAsync($"[MCP] Failed to fetch tool definitions with status: {response.StatusCode}");
-                throw new Exception($"Failed to fetch tool definitions with status: {response.StatusCode}");
+                
+                // Throw sanitized exception
+                var errorMessage = GetSanitizedHttpErrorMessage(response.StatusCode);
+                throw CreateToolDefinitionException(errorMessage);
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
             
             // The API returns { tools: [...] } format
-            var result = JsonSerializer.Deserialize<McpToolsResponse>(responseContent, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            var result = JsonSerializer.Deserialize<McpToolsResponse>(responseContent, JsonSerializerOptionsWeb);
 
             return result?.Tools ?? new List<McpToolDefinition>();
         }
+        catch (HttpRequestException ex)
+        {
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] Network error fetching tool definitions: {ex.Message}");
+            
+            // Throw sanitized exception
+            throw CreateToolDefinitionException("Network connectivity issue. Please check your internet connection and try again.");
+        }
+        catch (TaskCanceledException ex)
+        {
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] Timeout fetching tool definitions: {ex.Message}");
+            
+            // Throw sanitized exception
+            throw CreateToolDefinitionException("Request timed out. Please try again.");
+        }
+        catch (JsonException ex)
+        {
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] JSON parsing error: {ex.Message}");
+            
+            // Throw sanitized exception
+            throw CreateToolDefinitionException("Invalid response format received.");
+        }
+        catch (Exception ex) when (ex.Message.StartsWith("Failed to fetch tool definitions:"))
+        {
+            // Already sanitized, rethrow as-is
+            throw;
+        }
         catch (Exception ex)
         {
-            await Console.Error.WriteLineAsync($"[MCP] Error fetching tool definitions: {ex.Message}");
-            throw;
+            // Log detailed error to stderr for debugging
+            await Console.Error.WriteLineAsync($"[MCP] Unexpected error fetching tool definitions: {ex.Message}");
+            
+            // Throw sanitized exception
+            throw CreateToolDefinitionException("An unexpected error occurred. Please try again later.");
         }
     }
 

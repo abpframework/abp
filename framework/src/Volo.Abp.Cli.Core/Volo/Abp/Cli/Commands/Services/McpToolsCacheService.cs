@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -179,9 +180,11 @@ public class McpToolsCacheService : ITransientDependency
         try
         {
             // On Unix systems, set permissions to 600 (user read/write only)
-            if (!OperatingSystem.IsWindows())
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+#if NET6_0_OR_GREATER
                 File.SetUnixFileMode(filePath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+#endif
             }
             // On Windows, the file inherits permissions from the user profile directory,
             // which is already restrictive to the current user

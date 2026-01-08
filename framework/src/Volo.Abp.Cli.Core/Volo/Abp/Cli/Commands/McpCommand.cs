@@ -13,6 +13,7 @@ using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Commands.Models;
 using Volo.Abp.Cli.Commands.Services;
+using Volo.Abp.Cli.Licensing;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
@@ -22,19 +23,19 @@ public class McpCommand : IConsoleCommand, ITransientDependency
     public const string Name = "mcp";
     
     private readonly AuthService _authService;
-    private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
+    private readonly IApiKeyService _apiKeyService;
     private readonly McpServerService _mcpServerService;
     private readonly McpHttpClientService _mcpHttpClient;
     
     public ILogger<McpCommand> Logger { get; set; }
 
     public McpCommand(
-        AbpNuGetIndexUrlService nuGetIndexUrlService,
+        IApiKeyService apiKeyService,
         AuthService authService,
         McpServerService mcpServerService,
         McpHttpClientService mcpHttpClient)
     {
-        _nuGetIndexUrlService = nuGetIndexUrlService;
+        _apiKeyService = apiKeyService;
         _authService = authService;
         _mcpServerService = mcpServerService;
         _mcpHttpClient = mcpHttpClient;
@@ -50,11 +51,17 @@ public class McpCommand : IConsoleCommand, ITransientDependency
             throw new CliUsageException("Please log in with your account!");
         }
         
-        var nugetIndexUrl = await _nuGetIndexUrlService.GetAsync();
-        
-        if (nugetIndexUrl == null)
+        var licenseResult = await _apiKeyService.GetApiKeyOrNullAsync();
+
+        if (licenseResult == null || !licenseResult.HasActiveLicense)
         {
-            throw new CliUsageException("Could not find Nuget Index Url!");
+            var errorMessage = licenseResult?.ErrorMessage ?? "No active license found.";
+            throw new CliUsageException(errorMessage);
+        }
+
+        if (licenseResult.LicenseEndTime.HasValue && licenseResult.LicenseEndTime.Value < DateTime.UtcNow)
+        {
+            throw new CliUsageException("Your license has expired. Please renew your license to use the MCP server.");
         }
 
         var option = commandLineArgs.Target;

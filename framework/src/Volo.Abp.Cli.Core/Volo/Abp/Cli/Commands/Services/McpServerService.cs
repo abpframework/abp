@@ -15,6 +15,12 @@ namespace Volo.Abp.Cli.Commands.Services;
 
 public class McpServerService : ITransientDependency
 {
+    private static class ToolErrorMessages
+    {
+        public const string InvalidResponseFormat = "The tool execution completed but returned an invalid response format. Please try again.";
+        public const string UnexpectedError = "The tool execution failed due to an unexpected error. Please try again later.";
+    }
+    
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly McpToolsCacheService _toolsCacheService;
 
@@ -91,6 +97,21 @@ public class McpServerService : ITransientDependency
         );
     }
 
+    private static CallToolResult CreateErrorResult(string errorMessage)
+    {
+        return new CallToolResult
+        {
+            Content = new List<ContentBlock>
+            {
+                new TextContentBlock
+                {
+                    Text = errorMessage
+                }
+            },
+            IsError = true
+        };
+    }
+
     private void RegisterTool(
         McpServerOptions options,
         string name,
@@ -120,8 +141,6 @@ public class McpServerService : ITransientDependency
                         argumentsJson
                     );
 
-                    await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' executed successfully");
-
                     // Try to deserialize the response as CallToolResult
                     // The HTTP client should return JSON in the format expected by MCP
                     try
@@ -129,6 +148,16 @@ public class McpServerService : ITransientDependency
                         var callToolResult = JsonSerializer.Deserialize<CallToolResult>(resultJson);
                         if (callToolResult != null)
                         {
+                            // Check if the HTTP client returned an error
+                            if (callToolResult.IsError == true)
+                            {
+                                await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' returned an error");
+                            }
+                            else
+                            {
+                                await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' executed successfully");
+                            }
+                            
                             return callToolResult;
                         }
                     }
@@ -138,20 +167,16 @@ public class McpServerService : ITransientDependency
                         await Console.Error.WriteLineAsync($"[MCP] Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
                     }
 
-                    // Fallback: return empty result if deserialization fails
-                    return new CallToolResult
-                    {
-                        Content = new List<ContentBlock>()
-                    };
+                    // Fallback: return error result if deserialization fails
+                    return CreateErrorResult(ToolErrorMessages.InvalidResponseFormat);
                 }
                 catch (Exception ex)
                 {
-                    await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' execution failed: {ex.Message}");
-                    return new CallToolResult
-                    {
-                        Content = new List<ContentBlock>(),
-                        IsError = true
-                    };
+                    // Log detailed error for debugging
+                    await Console.Error.WriteLineAsync($"[MCP] Tool '{name}' execution failed with exception: {ex.Message}");
+                    
+                    // Return sanitized error to client
+                    return CreateErrorResult(ToolErrorMessages.UnexpectedError);
                 }
             }
         );
