@@ -157,43 +157,39 @@ public class McpLogger : IMcpLogger, ISingletonDependency
 
     private static McpLogLevel GetConfiguredLogLevel()
     {
+        var envValue = Environment.GetEnvironmentVariable(CliConsts.McpLogLevelEnvironmentVariable);
+        var isEmpty = string.IsNullOrWhiteSpace(envValue);
+
 #if DEBUG
         // In development builds, allow full control via environment variable
-        var envValue = Environment.GetEnvironmentVariable(CliConsts.McpLogLevelEnvironmentVariable);
-        
-        if (string.IsNullOrWhiteSpace(envValue))
+        if (isEmpty)
         {
             return McpLogLevel.Info; // Default level
         }
-
-        return envValue.ToLowerInvariant() switch
-        {
-            "debug" => McpLogLevel.Debug,
-            "info" => McpLogLevel.Info,
-            "warning" => McpLogLevel.Warning,
-            "error" => McpLogLevel.Error,
-            "none" => McpLogLevel.None,
-            _ => McpLogLevel.Info
-        };
+        
+        return ParseLogLevel(envValue, allowDebug: true);
 #else
         // In release builds, restrict to Warning or higher (ignore env variable for Debug/Info)
-        var envValue = Environment.GetEnvironmentVariable(CliConsts.McpLogLevelEnvironmentVariable);
-        
-        if (string.IsNullOrWhiteSpace(envValue))
+        if (isEmpty)
         {
             return McpLogLevel.Info; // Default level
         }
 
-        return envValue.ToLowerInvariant() switch
+        return ParseLogLevel(envValue, allowDebug: false);
+#endif
+    }
+
+    private static McpLogLevel ParseLogLevel(string value, bool allowDebug)
+    {
+        return value.ToLowerInvariant() switch
         {
-            "debug" => McpLogLevel.Info,     // Cap Debug to Info
+            "debug" => allowDebug ? McpLogLevel.Debug : McpLogLevel.Info,
             "info" => McpLogLevel.Info,
             "warning" => McpLogLevel.Warning,
             "error" => McpLogLevel.Error,
             "none" => McpLogLevel.None,
             _ => McpLogLevel.Info
         };
-#endif
     }
 }
 

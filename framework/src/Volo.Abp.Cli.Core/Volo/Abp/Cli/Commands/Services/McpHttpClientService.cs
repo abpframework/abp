@@ -16,6 +16,8 @@ namespace Volo.Abp.Cli.Commands.Services;
 public class McpHttpClientService : ITransientDependency
 {
     private const string LogSource = nameof(McpHttpClientService);
+    // TODO: Remove hardcoded URL after testing
+    private const string TestServerUrl = "http://localhost:5100";
     private static readonly JsonSerializerOptions JsonSerializerOptionsWeb = new(JsonSerializerDefaults.Web);
     
     private static class ErrorMessages
@@ -74,7 +76,7 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<string> CallToolAsync(string toolName, JsonElement arguments)
     {
-        var baseUrl = "http://localhost:5100";//await GetMcpServerUrlAsync();
+        var baseUrl = TestServerUrl;//await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools/call";
 
         try
@@ -161,7 +163,7 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<bool> CheckServerHealthAsync()
     {
-        var baseUrl = "http://localhost:5100";//await GetMcpServerUrlAsync();
+        var baseUrl = TestServerUrl;//await GetMcpServerUrlAsync();
 
         try
         {
@@ -178,7 +180,7 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync()
     {
-        var baseUrl = "http://localhost:5100";//await GetMcpServerUrlAsync();
+        var baseUrl = TestServerUrl;//await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools";
 
         try
@@ -204,24 +206,15 @@ public class McpHttpClientService : ITransientDependency
         }
         catch (HttpRequestException ex)
         {
-            _mcpLogger.Error(LogSource, "Network error fetching tool definitions", ex);
-            
-            // Throw sanitized exception
-            throw CreateToolDefinitionException("Network connectivity issue. Please check your internet connection and try again.");
+            throw CreateHttpException(ex, "Network error fetching tool definitions");
         }
         catch (TaskCanceledException ex)
         {
-            _mcpLogger.Error(LogSource, "Timeout fetching tool definitions", ex);
-            
-            // Throw sanitized exception
-            throw CreateToolDefinitionException("Request timed out. Please try again.");
+            throw CreateHttpException(ex, "Timeout fetching tool definitions");
         }
         catch (JsonException ex)
         {
-            _mcpLogger.Error(LogSource, "JSON parsing error", ex);
-            
-            // Throw sanitized exception
-            throw CreateToolDefinitionException("Invalid response format received.");
+            throw CreateHttpException(ex, "JSON parsing error");
         }
         catch (Exception ex) when (ex.Message.StartsWith("Failed to fetch tool definitions:"))
         {
@@ -230,11 +223,23 @@ public class McpHttpClientService : ITransientDependency
         }
         catch (Exception ex)
         {
-            _mcpLogger.Error(LogSource, "Unexpected error fetching tool definitions", ex);
-            
-            // Throw sanitized exception
-            throw CreateToolDefinitionException("An unexpected error occurred. Please try again later.");
+            throw CreateHttpException(ex, "Unexpected error fetching tool definitions");
         }
+    }
+
+    private Exception CreateHttpException(Exception ex, string context)
+    {
+        _mcpLogger.Error(LogSource, context, ex);
+        
+        var userMessage = ex switch
+        {
+            HttpRequestException => "Network connectivity issue. Please check your internet connection and try again.",
+            TaskCanceledException => "Request timed out. Please try again.",
+            JsonException => "Invalid response format received.",
+            _ => "An unexpected error occurred. Please try again later."
+        };
+        
+        return CreateToolDefinitionException(userMessage);
     }
 
     private class McpToolsResponse

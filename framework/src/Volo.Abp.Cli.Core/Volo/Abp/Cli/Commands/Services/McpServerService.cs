@@ -130,60 +130,64 @@ public class McpServerService : ITransientDependency
             name,
             description,
             JsonSerializer.SerializeToElement(inputSchema),
-            async (context, cancellationToken) =>
-            {
-                _mcpLogger.Debug(LogSource, $"Tool '{name}' called with arguments: {context.Params.Arguments}");
-
-                try
-                {
-                    var argumentsDict = context.Params.Arguments;
-                    var argumentsJson = JsonSerializer.SerializeToElement(argumentsDict);
-                    var resultJson = await _mcpHttpClient.CallToolAsync(
-                        name,
-                        argumentsJson
-                    );
-
-                    // Try to deserialize the response as CallToolResult
-                    // The HTTP client should return JSON in the format expected by MCP
-                    try
-                    {
-                        var callToolResult = JsonSerializer.Deserialize<CallToolResult>(resultJson);
-                        if (callToolResult != null)
-                        {
-                            // Check if the HTTP client returned an error
-                            if (callToolResult.IsError == true)
-                            {
-                                _mcpLogger.Warning(LogSource, $"Tool '{name}' returned an error");
-                            }
-                            else
-                            {
-                                _mcpLogger.Debug(LogSource, $"Tool '{name}' executed successfully");
-                            }
-                            
-                            return callToolResult;
-                        }
-                    }
-                    catch (Exception deserializeEx)
-                    {
-                        _mcpLogger.Error(LogSource, $"Failed to deserialize response as CallToolResult: {deserializeEx.Message}");
-                        _mcpLogger.Debug(LogSource, $"Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
-                    }
-
-                    // Fallback: return error result if deserialization fails
-                    return CreateErrorResult(ToolErrorMessages.InvalidResponseFormat);
-                }
-                catch (Exception ex)
-                {
-                    // Log detailed error for debugging
-                    _mcpLogger.Error(LogSource, $"Tool '{name}' execution failed", ex);
-                    
-                    // Return sanitized error to client
-                    return CreateErrorResult(ToolErrorMessages.UnexpectedError);
-                }
-            }
+            (context, cancellationToken) => HandleToolInvocationAsync(name, context, cancellationToken)
         );
 
         options.ToolCollection.Add(tool);
+    }
+
+    private async ValueTask<CallToolResult> HandleToolInvocationAsync(
+        string toolName,
+        RequestContext<CallToolRequestParams> context,
+        CancellationToken cancellationToken)
+    {
+        _mcpLogger.Debug(LogSource, $"Tool '{toolName}' called with arguments: {context.Params.Arguments}");
+
+        try
+        {
+            var argumentsJson = JsonSerializer.SerializeToElement(context.Params.Arguments);
+            var resultJson = await _mcpHttpClient.CallToolAsync(toolName, argumentsJson);
+
+            var callToolResult = TryDeserializeResult(resultJson, toolName);
+            if (callToolResult != null)
+            {
+                LogToolResult(toolName, callToolResult);
+                return callToolResult;
+            }
+
+            return CreateErrorResult(ToolErrorMessages.InvalidResponseFormat);
+        }
+        catch (Exception ex)
+        {
+            _mcpLogger.Error(LogSource, $"Tool '{toolName}' execution failed", ex);
+            return CreateErrorResult(ToolErrorMessages.UnexpectedError);
+        }
+    }
+
+    private CallToolResult TryDeserializeResult(string resultJson, string toolName)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<CallToolResult>(resultJson);
+        }
+        catch (Exception ex)
+        {
+            _mcpLogger.Error(LogSource, $"Failed to deserialize response as CallToolResult: {ex.Message}");
+            _mcpLogger.Debug(LogSource, $"Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
+            return null;
+        }
+    }
+
+    private void LogToolResult(string toolName, CallToolResult result)
+    {
+        if (result.IsError == true)
+        {
+            _mcpLogger.Warning(LogSource, $"Tool '{toolName}' returned an error");
+        }
+        else
+        {
+            _mcpLogger.Debug(LogSource, $"Tool '{toolName}' executed successfully");
+        }
     }
 
     private class AbpMcpServerTool : McpServerTool

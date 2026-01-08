@@ -48,25 +48,7 @@ public class McpCommand : IConsoleCommand, ITransientDependency
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        var loginInfo = await _authService.GetLoginInfoAsync();
-
-        if (string.IsNullOrEmpty(loginInfo?.Organization))
-        {
-            throw new CliUsageException("Please log in with your account!");
-        }
-        
-        var licenseResult = await _apiKeyService.GetApiKeyOrNullAsync();
-
-        if (licenseResult == null || !licenseResult.HasActiveLicense)
-        {
-            var errorMessage = licenseResult?.ErrorMessage ?? "No active license found.";
-            throw new CliUsageException(errorMessage);
-        }
-
-        if (licenseResult.LicenseEndTime.HasValue && licenseResult.LicenseEndTime.Value < DateTime.UtcNow)
-        {
-            throw new CliUsageException("Your license has expired. Please renew your license to use the MCP server.");
-        }
+        await ValidateLicenseAsync();
 
         var option = commandLineArgs.Target;
 
@@ -89,9 +71,8 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         _mcpLogger.Info(LogSource, "Starting ABP MCP Server...");
         
         var cts = new CancellationTokenSource();
-        ConsoleCancelEventHandler cancelHandler = null;
         
-        cancelHandler = (sender, e) =>
+        ConsoleCancelEventHandler cancelHandler = (sender, e) =>
         {
             e.Cancel = true;
             _mcpLogger.Info(LogSource, "Shutting down ABP MCP Server...");
@@ -128,6 +109,29 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         }
     }
 
+    private async Task ValidateLicenseAsync()
+    {
+        var loginInfo = await _authService.GetLoginInfoAsync();
+
+        if (string.IsNullOrEmpty(loginInfo?.Organization))
+        {
+            throw new CliUsageException("Please log in with your account!");
+        }
+        
+        var licenseResult = await _apiKeyService.GetApiKeyOrNullAsync();
+
+        if (licenseResult == null || !licenseResult.HasActiveLicense)
+        {
+            var errorMessage = licenseResult?.ErrorMessage ?? "No active license found.";
+            throw new CliUsageException(errorMessage);
+        }
+
+        if (licenseResult.LicenseEndTime.HasValue && licenseResult.LicenseEndTime.Value < DateTime.UtcNow)
+        {
+            throw new CliUsageException("Your license has expired. Please renew your license to use the MCP server.");
+        }
+    }
+
     private Task PrintConfigurationAsync()
     {
         var abpCliPath = GetAbpCliExecutablePath();
@@ -158,20 +162,34 @@ public class McpCommand : IConsoleCommand, ITransientDependency
 
     private string GetAbpCliExecutablePath()
     {
-        // Try to find the abp CLI executable
+        var processPath = TryGetExecutablePathFromCurrentProcess();
+        if (processPath != null)
+        {
+            return processPath;
+        }
+
+        var environmentPath = TryGetExecutablePathFromEnvironmentPath();
+        if (environmentPath != null)
+        {
+            return environmentPath;
+        }
+
+        // Default to "abp" and let the system resolve it
+        return "abp";
+    }
+
+    private string TryGetExecutablePathFromCurrentProcess()
+    {
         try
         {
             using (var process = Process.GetCurrentProcess())
             {
                 var processPath = process.MainModule?.FileName;
                 
-                if (!string.IsNullOrEmpty(processPath))
+                if (!string.IsNullOrEmpty(processPath) && 
+                    Path.GetFileName(processPath).StartsWith("abp", StringComparison.OrdinalIgnoreCase))
                 {
-                    // If running as a published executable
-                    if (Path.GetFileName(processPath).StartsWith("abp", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return processPath;
-                    }
+                    return processPath;
                 }
             }
         }
@@ -180,29 +198,34 @@ public class McpCommand : IConsoleCommand, ITransientDependency
             // Ignore errors getting process path
         }
 
-        // Check if abp is in PATH
+        return null;
+    }
+
+    private string TryGetExecutablePathFromEnvironmentPath()
+    {
         var pathEnv = Environment.GetEnvironmentVariable("PATH");
-        if (!string.IsNullOrEmpty(pathEnv))
+        if (string.IsNullOrEmpty(pathEnv))
         {
-            var paths = pathEnv.Split(Path.PathSeparator);
-            foreach (var path in paths)
+            return null;
+        }
+
+        var paths = pathEnv.Split(Path.PathSeparator);
+        foreach (var path in paths)
+        {
+            var abpPath = Path.Combine(path, "abp.exe");
+            if (File.Exists(abpPath))
             {
-                var abpPath = Path.Combine(path, "abp.exe");
-                if (File.Exists(abpPath))
-                {
-                    return abpPath;
-                }
-                
-                abpPath = Path.Combine(path, "abp");
-                if (File.Exists(abpPath))
-                {
-                    return abpPath;
-                }
+                return abpPath;
+            }
+            
+            abpPath = Path.Combine(path, "abp");
+            if (File.Exists(abpPath))
+            {
+                return abpPath;
             }
         }
 
-        // Default to "abp" and let the system resolve it
-        return "abp";
+        return null;
     }
 
     public string GetUsageInfo()
