@@ -52,7 +52,7 @@ public class McpCommand : IConsoleCommand, ITransientDependency
 
         var option = commandLineArgs.Target;
 
-        if (!string.IsNullOrEmpty(option) && option.Equals("getconfig", StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(option) && option.Equals("get-config", StringComparison.OrdinalIgnoreCase))
         {
             await PrintConfigurationAsync();
             return;
@@ -240,12 +240,12 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("Options:");
         sb.AppendLine("");
         sb.AppendLine("<no argument>                          (start the local MCP server)");
-        sb.AppendLine("getconfig                              (print MCP client configuration as JSON)");
+        sb.AppendLine("get-config                             (print MCP client configuration as JSON)");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
         sb.AppendLine("  abp mcp");
-        sb.AppendLine("  abp mcp getconfig");
+        sb.AppendLine("  abp mcp get-config");
         sb.AppendLine("");
 
         return sb.ToString();
