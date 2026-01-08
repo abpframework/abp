@@ -15,6 +15,8 @@ using Volo.Abp.Cli.Commands.Models;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -28,6 +30,7 @@ public class McpCommand : IConsoleCommand, ITransientDependency
     private readonly McpServerService _mcpServerService;
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly IMcpLogger _mcpLogger;
+    private readonly ITelemetryService _telemetryService;
     
     public ILogger<McpCommand> Logger { get; set; }
 
@@ -36,13 +39,15 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         AuthService authService,
         McpServerService mcpServerService,
         McpHttpClientService mcpHttpClient,
-        IMcpLogger mcpLogger)
+        IMcpLogger mcpLogger,
+        ITelemetryService telemetryService)
     {
         _apiKeyService = apiKeyService;
         _authService = authService;
         _mcpServerService = mcpServerService;
         _mcpHttpClient = mcpHttpClient;
         _mcpLogger = mcpLogger;
+        _telemetryService = telemetryService;
         Logger = NullLogger<McpCommand>.Instance;
     }
 
@@ -57,6 +62,8 @@ public class McpCommand : IConsoleCommand, ITransientDependency
             await PrintConfigurationAsync();
             return;
         }
+
+        await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsMcp);
 
         // Check server health before starting
         _mcpLogger.Info(LogSource, "Checking ABP.IO MCP Server connection...");
