@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -31,7 +32,8 @@ public class McpHttpClientService : ITransientDependency
     private readonly ILogger<McpHttpClientService> _logger;
     private readonly IMcpLogger _mcpLogger;
     private readonly MemoryService _memoryService;
-    private string _cachedServerUrl;
+    private readonly Lazy<Task<string>> _cachedServerUrlLazy;
+    private List<string> _validToolNames;
 
     public McpHttpClientService(
         CliHttpClientFactory httpClientFactory,
@@ -43,39 +45,43 @@ public class McpHttpClientService : ITransientDependency
         _logger = logger;
         _mcpLogger = mcpLogger;
         _memoryService = memoryService;
+        _cachedServerUrlLazy = new Lazy<Task<string>>(GetMcpServerUrlInternalAsync);
     }
 
     private async Task<string> GetMcpServerUrlAsync()
     {
-        // Return cached URL if already resolved
-        if (_cachedServerUrl != null)
-        {
-            return _cachedServerUrl;
-        }
+        return await _cachedServerUrlLazy.Value;
+    }
 
+    private async Task<string> GetMcpServerUrlInternalAsync()
+    {
         // 1. Check environment variable (highest priority)
         var envUrl = Environment.GetEnvironmentVariable(CliConsts.McpServerUrlEnvironmentVariable);
         if (!string.IsNullOrWhiteSpace(envUrl))
         {
-            _cachedServerUrl = envUrl.TrimEnd('/');
-            return _cachedServerUrl;
+            return envUrl.TrimEnd('/');
         }
 
         // 2. Check persisted setting
         var persistedUrl = await _memoryService.GetAsync(CliConsts.MemoryKeys.McpServerUrl);
         if (!string.IsNullOrWhiteSpace(persistedUrl))
         {
-            _cachedServerUrl = persistedUrl.TrimEnd('/');
-            return _cachedServerUrl;
+            return persistedUrl.TrimEnd('/');
         }
 
         // 3. Return default
-        _cachedServerUrl = CliConsts.DefaultMcpServerUrl;
-        return _cachedServerUrl;
+        return CliConsts.DefaultMcpServerUrl;
     }
 
     public async Task<string> CallToolAsync(string toolName, JsonElement arguments)
     {
+        // Validate toolName against whitelist to prevent malicious input
+        if (_validToolNames != null && !_validToolNames.Contains(toolName))
+        {
+            _mcpLogger.Warning(LogSource, $"Attempted to call unknown tool: {toolName}");
+            return CreateErrorResponse($"Unknown tool: {toolName}");
+        }
+
         var baseUrl = await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools/call";
 
@@ -141,9 +147,14 @@ public class McpHttpClientService : ITransientDependency
         }, JsonSerializerOptionsWeb);
     }
 
-    private Exception CreateToolDefinitionException(string userMessage)
+    private CliUsageException CreateToolDefinitionException(string userMessage)
     {
-        return new Exception($"Failed to fetch tool definitions: {userMessage}");
+        return new CliUsageException($"Failed to fetch tool definitions: {userMessage}");
+    }
+    
+    private CliUsageException CreateToolDefinitionException(string userMessage, Exception innerException)
+    {
+        return new CliUsageException($"Failed to fetch tool definitions: {userMessage}", innerException);
     }
 
     private string GetSanitizedHttpErrorMessage(HttpStatusCode statusCode)
@@ -201,33 +212,37 @@ public class McpHttpClientService : ITransientDependency
             
             // The API returns { tools: [...] } format
             var result = JsonSerializer.Deserialize<McpToolsResponse>(responseContent, JsonSerializerOptionsWeb);
-
-            return result?.Tools ?? new List<McpToolDefinition>();
+            var tools = result?.Tools ?? new List<McpToolDefinition>();
+            
+            // Cache tool names for validation
+            _validToolNames = tools.Select(t => t.Name).ToList();
+            
+            return tools;
         }
         catch (HttpRequestException ex)
         {
-            throw CreateHttpException(ex, "Network error fetching tool definitions");
+            throw CreateHttpExceptionWithInner(ex, "Network error fetching tool definitions");
         }
         catch (TaskCanceledException ex)
         {
-            throw CreateHttpException(ex, "Timeout fetching tool definitions");
+            throw CreateHttpExceptionWithInner(ex, "Timeout fetching tool definitions");
         }
         catch (JsonException ex)
         {
-            throw CreateHttpException(ex, "JSON parsing error");
+            throw CreateHttpExceptionWithInner(ex, "JSON parsing error");
         }
-        catch (Exception ex) when (ex.Message.StartsWith("Failed to fetch tool definitions:"))
+        catch (CliUsageException)
         {
             // Already sanitized, rethrow as-is
             throw;
         }
         catch (Exception ex)
         {
-            throw CreateHttpException(ex, "Unexpected error fetching tool definitions");
+            throw CreateHttpExceptionWithInner(ex, "Unexpected error fetching tool definitions");
         }
     }
 
-    private Exception CreateHttpException(Exception ex, string context)
+    private CliUsageException CreateHttpExceptionWithInner(Exception ex, string context)
     {
         _mcpLogger.Error(LogSource, context, ex);
         
@@ -239,7 +254,7 @@ public class McpHttpClientService : ITransientDependency
             _ => "An unexpected error occurred. Please try again later."
         };
         
-        return CreateToolDefinitionException(userMessage);
+        return CreateToolDefinitionException(userMessage, ex);
     }
 
     private class McpToolsResponse

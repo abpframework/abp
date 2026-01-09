@@ -16,6 +16,7 @@ namespace Volo.Abp.Cli.Commands.Services;
 public class McpToolsCacheService : ITransientDependency
 {
     private const string LogSource = nameof(McpToolsCacheService);
+    private const int CacheValidityHours = 24;
     
     private readonly McpHttpClientService _mcpHttpClient;
     private readonly MemoryService _memoryService;
@@ -110,8 +111,8 @@ public class McpToolsCacheService : ITransientDependency
 
             if (DateTime.TryParse(lastFetchTimeString, CultureInfo.InvariantCulture, DateTimeStyles.None, out var lastFetchTime))
             {
-                // Check if less than 24 hours old
-                if (DateTime.Now.Subtract(lastFetchTime).TotalHours < 24)
+                // Check if less than configured hours old
+                if (DateTime.Now.Subtract(lastFetchTime).TotalHours < CacheValidityHours)
                 {
                     return true;
                 }
@@ -167,6 +168,8 @@ public class McpToolsCacheService : ITransientDependency
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
 
+            // Using synchronous File.WriteAllText is acceptable here since cache writes are not on the critical path
+            // and we need to support multiple target frameworks
             File.WriteAllText(CliPaths.McpToolsCache, json);
             
             // Set restrictive file permissions (user read/write only)

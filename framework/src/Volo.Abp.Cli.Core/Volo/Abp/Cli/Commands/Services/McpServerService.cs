@@ -15,6 +15,7 @@ namespace Volo.Abp.Cli.Commands.Services;
 public class McpServerService : ITransientDependency
 {
     private const string LogSource = nameof(McpServerService);
+    private const int MaxLogResponseLength = 500;
     
     private static class ToolErrorMessages
     {
@@ -173,7 +174,12 @@ public class McpServerService : ITransientDependency
         catch (Exception ex)
         {
             _mcpLogger.Error(LogSource, $"Failed to deserialize response as CallToolResult: {ex.Message}");
-            _mcpLogger.Debug(LogSource, $"Response was: {resultJson.Substring(0, Math.Min(500, resultJson.Length))}");
+            
+            var logResponse = resultJson.Length <= MaxLogResponseLength 
+                ? resultJson 
+                : resultJson.Substring(0, MaxLogResponseLength);
+            _mcpLogger.Debug(LogSource, $"Response was: {logResponse}");
+            
             return null;
         }
     }
@@ -189,39 +195,4 @@ public class McpServerService : ITransientDependency
             _mcpLogger.Debug(LogSource, $"Tool '{toolName}' executed successfully");
         }
     }
-
-    private class AbpMcpServerTool : McpServerTool
-    {
-        private readonly string _name;
-        private readonly string _description;
-        private readonly JsonElement _inputSchema;
-        private readonly Func<RequestContext<CallToolRequestParams>, CancellationToken, ValueTask<CallToolResult>> _handler;
-
-        public AbpMcpServerTool(
-            string name,
-            string description,
-            JsonElement inputSchema,
-            Func<RequestContext<CallToolRequestParams>, CancellationToken, ValueTask<CallToolResult>> handler)
-        {
-            _name = name;
-            _description = description;
-            _inputSchema = inputSchema;
-            _handler = handler;
-        }
-
-        public override Tool ProtocolTool => new Tool
-        {
-            Name = _name,
-            Description = _description,
-            InputSchema = _inputSchema
-        };
-
-        public override IReadOnlyList<object> Metadata => Array.Empty<object>();
-
-        public override ValueTask<CallToolResult> InvokeAsync(RequestContext<CallToolRequestParams> context, CancellationToken cancellationToken)
-        {
-            return _handler(context, cancellationToken);
-        }
-    }
-
 }
