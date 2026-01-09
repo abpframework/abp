@@ -303,7 +303,6 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 @Component({
   selector: 'app-nested-form',
   templateUrl: './nested-form.component.html',
-  standalone: true,
   imports: [NgxValidateCoreModule],
 })
 export class NestedFormComponent implements OnInit {

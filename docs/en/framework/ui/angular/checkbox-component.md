@@ -25,26 +25,21 @@ The ABP Checkbox Component is a reusable form input component for the checkbox t
 
 # Usage
 
-The ABP Checkbox component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, there's no need to import it again. If not, then first import it as shown below:
+The ABP Checkbox component (`AbpCheckboxComponent`) is a standalone component. You can import it directly in your component:
 
 ```ts
-// my-feature.module.ts
+import { Component } from "@angular/core";
+import { AbpCheckboxComponent } from "@abp/ng.theme.shared";
 
-import { ThemeSharedModule } from "@abp/ng.theme.shared";
-import { CheckboxDemoComponent } from "./CheckboxDemoComponent.component";
-
-@NgModule({
-  imports: [
-    ThemeSharedModule,
-    // ...
-  ],
-  declarations: [CheckboxDemoComponent],
-  // ...
+@Component({
+  selector: 'app-checkbox-demo',
+  imports: [AbpCheckboxComponent],
+  templateUrl: './checkbox-demo.component.html',
 })
-export class MyFeatureModule {}
+export class CheckboxDemoComponent {}
 ```
 
-Then, the `abp-checkbox` component can be used. See the example below:
+Then, the `abp-checkbox` component can be used in your template. See the example below:
 
 ```html
 <div class="form-check">

@@ -43,7 +43,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         CorrelationIdProvider = correlationIdProvider;
     }
 
-    public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+    public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
     {
         return Subscribe(typeof(TEvent), handler);
     }
@@ -53,7 +53,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
     }
 
-    public Task PublishAsync<TEvent>(
+    public virtual Task PublishAsync<TEvent>(
         TEvent eventData,
         bool onUnitOfWorkComplete = true,
         bool useOutbox = true)
@@ -154,7 +154,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return Task.CompletedTask;
     }
 
-    protected async Task<bool> AddToInboxAsync(
+    protected virtual async Task<bool> AddToInboxAsync(
         string? messageId,
         string eventName,
         Type eventType,
@@ -181,6 +181,9 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     {
                         if (await eventInbox.ExistsByMessageIdAsync(messageId!))
                         {
+                            // Message already exists in the inbox, no need to add again.
+                            // This can happen in case of retries from the sender side.
+                            addToInbox = true;
                             continue;
                         }
                     }
