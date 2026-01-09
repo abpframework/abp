@@ -17,8 +17,7 @@ namespace Volo.Abp.Cli.Commands.Services;
 public class McpHttpClientService : ITransientDependency
 {
     private const string LogSource = nameof(McpHttpClientService);
-    // TODO: Remove hardcoded URL after testing
-    private const string TestServerUrl = "http://localhost:5100";
+    
     private static readonly JsonSerializerOptions JsonSerializerOptionsWeb = new(JsonSerializerDefaults.Web);
     
     private static class ErrorMessages
