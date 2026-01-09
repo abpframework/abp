@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore ABP Studio's key features like Solution Explorer and Kubernetes Integration to optimize your ABP application development and management."
+    "Description": "Explore ABP Studio's key features like Solution Explorer, Kubernetes Integration, and AI Assistant to optimize your ABP application development and management."
 }
 ```
 
@@ -19,7 +19,7 @@
 
 ## Introduction
 
-ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.
+ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, AI Assistant, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.
 
 ![overview-intro](./images/overview/overview-intro.png)
 
@@ -69,7 +69,7 @@ The Welcome Screen is the initial user interface users encounter upon starting A
 
 ## Sidebar
 
-Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), and Kubernetes Integration. Now let's examine each item.
+Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), Kubernetes Integration, and AI Assistant. Now let's examine each item.
 
 ### Solution Explorer
 
@@ -98,6 +98,21 @@ This pane is dedicated to managing [Helm](https://helm.sh/) charts, which are pa
 This pane is dedicated to managing Kubernetes services. It simplifies the process of redeploying and intercepting application service.
 
 ![kubernetes-integration-kubernetes-pane](./images/overview/kubernetes-integration-kubernetes.png)
+
+### AI Assistant
+
+The AI Assistant is an integrated chat interface within ABP Studio that provides intelligent assistance for ABP-related questions. You can access it from the left sidebar by clicking the AI icon.
+
+![ai-assistant](./images/overview/ai-assistant.png)
+
+Key features of the AI Assistant include:
+
+- **Chat Interface**: Ask anything about ABP Framework, and get instant, context-aware responses to help with your development workflow.
+- **File Attachments**: Attach files to your conversations to get more specific assistance with your code or configuration.
+- **Recent Chats**: Access your conversation history to continue previous discussions or reference past solutions.
+- **Credits System**: The AI Assistant uses a credits-based system, with usage tracked and displayed in the interface.
+
+> **Note**: Review the Privacy Notice available in the AI Assistant panel to understand how your data is handled.
 
 ## Application Monitoring Area
 
