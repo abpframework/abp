@@ -329,3 +329,4 @@ deploy/_run_all_log.txt
 templates/**/yarn.lock
 templates/app-nolayers/aspnet-core/MyCompanyName.MyProjectName.Mvc/Logs/logs.txt
 templates/module/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json
+/framework/.cursor
