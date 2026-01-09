@@ -76,7 +76,7 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<string> CallToolAsync(string toolName, JsonElement arguments)
     {
-        var baseUrl = TestServerUrl;//await GetMcpServerUrlAsync();
+        var baseUrl = await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools/call";
 
         try
@@ -163,7 +163,7 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<bool> CheckServerHealthAsync()
     {
-        var baseUrl = TestServerUrl;//await GetMcpServerUrlAsync();
+        var baseUrl = await GetMcpServerUrlAsync();
 
         try
         {
@@ -180,7 +180,7 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync()
     {
-        var baseUrl = TestServerUrl;//await GetMcpServerUrlAsync();
+        var baseUrl = await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools";
 
         try
