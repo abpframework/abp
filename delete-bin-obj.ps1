@@ -5,8 +5,9 @@ Get-ChildItem -Path . -Include bin,obj -Recurse -Directory | ForEach-Object {
         Write-Host "Deleting:" $_.FullName -ForegroundColor Yellow
         Remove-Item $_.FullName -Recurse -Force
     } else {
-        Write-Host "Skipping:" $_.FullName -ForegroundColor Magenta
+        Write-Host Skipping:" $_.FullName -ForegroundColor Magenta
     }
 }
 
 Write-Host "BIN and OBJ folders have been successfully deleted." -ForegroundColor Green
+
