@@ -48,7 +48,7 @@ public class McpHttpClientService : ITransientDependency
 
     private async Task<string> GetMcpServerUrlAsync()
     {
-        return "http://localhost:5100";//await _cachedServerUrlLazy.Value;
+        return await _cachedServerUrlLazy.Value;
     }
 
     private async Task<string> GetMcpServerUrlInternalAsync()
