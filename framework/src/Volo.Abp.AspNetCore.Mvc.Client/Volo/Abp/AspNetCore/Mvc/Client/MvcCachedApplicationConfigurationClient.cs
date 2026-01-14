@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
@@ -77,6 +78,10 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         if (httpContext != null)
         {
             httpContext.Items[cacheKey] = configuration;
+            if (!configuration.CurrentUser.IsAuthenticated && CurrentUser.IsAuthenticated)
+            {
+                await httpContext.SignOutAsync();
+            }
         }
 
         return configuration;
