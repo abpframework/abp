@@ -118,7 +118,7 @@ Click the Next button to see *Additional Options* selection:
 
 ![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options-microservice.png)
 
-If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which include the Helm charts and other Kubernetes related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include the test projects in the solution.
+If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which includes the Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include the test projects in the solution.
 
 Click the Next button to see *Additional Services* screen:
 
@@ -297,7 +297,7 @@ Clicking the *Connect* button will start a process that establishes the VPN conn
 
 ![abp-studio-microservice-kubernetes-services](images/abp-studio-microservice-kubernetes-services.png)
 
-Now, you can access all the services inside the Kubernetes cluster, including the services those are not exposed out of the cluster. You can use the service name as DNS. For example, you can directly visit `http://cloudcrm-local-identity` in your Browser. You can also right-click to a service or application and select the Browse command to open it's UI in the built-in browser of ABP Studio:
+Now, you can access all the services inside the Kubernetes cluster, including the services those are not exposed out of the cluster. You can use the service name as DNS. For example, you can directly visit `http://cloudcrm-local-identity` in your Browser. You can also right-click to a service or application and select the Browse command to open its UI in the built-in browser of ABP Studio:
 
 ![abp-studio-microservice-kubernetes-services-browse](images/abp-studio-microservice-kubernetes-services-browse.png)
 

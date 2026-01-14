@@ -9,7 +9,14 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.3 (2025-12-15) Latest
+## 2.1.4 (2025-12-30) Latest
+
+* Fixed books sample for blazor-webapp tiered solution.
+* Fixed K8s cluster deployment issues for microservices.
+* Fixed docker build problem on microservice template.
+* Showed logs of the executed tasks.
+
+## 2.1.3 (2025-12-15)
 
 * Updated `createCommand` and CLI help for multi-tenancy.
 * Fixed `BookController` templating problem.

@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 9.1, launching January 2025."
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.1, launching January 2026."
 }
 ```
 
@@ -11,33 +11,35 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v10.1
+### v10.2
 
-The next version will be 10.1 and planned to release the stable 10.1 version in January 2026. We will be mostly working on the following topics:
+The next version will be 10.2 and planned to release the stable 10.2 version in April 2026. We will be mostly working on the following topics:
 
 * Framework
-  * OpenTelemetry Protocol Support for 3rd-party Integrations
-  * Resource Based Authorization Integration
+  * Resource-Based Authorization Improvements
+  * Handle datetime/timezon in `AbpExtensibleDataGrid` Component
   * Upgrading 3rd-party Dependencies
   * Enhancements in the Core Points
 
 * ABP Suite
-  * Define Navigation Properties Without Target String Property Dependency
+  * Creating enums on-the-fly (without needing to create manually on the code side)
+  * Improvements on the generated codes for nullability
   * Improvements on Master-Detail Page Desing (making it more compact)
   * Improvements One-To-Many Scenarios
   * File Upload Modal Enhancements
 
 * ABP Studio
   * Allow to Directly Create New Solutions with ABP's RC (Release Candidate) Versions
+  * Integrate AI Management Module with all solution templates and UIs
   * Automate More Details on New Service Creation for a Microservice Solution
   * Allow to Download ABP Samples from ABP Studio
-  * Task Panel Enhancements (and Documentation)
+  * Task Panel Documentation
   * Support Multiple Concurrent Kubernetes Deployment/Integration Scenarios
   * Improve the Module Installation Experience / Installation Guides
 
 * Application Modules
-  * Payment Module: Public Page Implementation (for Blazor & Angular UIs)
-  * AI Management Module: UI Implementation for Blazor & Angular UIs
+  * AI Management: MCP & RAG Supports
+  * File Management: Using Resource-Based Permission (on file-sharing and more...)
   * CMS Kit: Enhancements for Some Features (Rating, Dynamic Widgets, FAQ and more...)
   * UI/UX Improvements on Existing Application Modules
 

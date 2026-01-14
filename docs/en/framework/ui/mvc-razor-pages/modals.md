@@ -207,7 +207,7 @@ namespace MyProject.Web.Pages.Products
     public class ProductCreateModalModel : AbpPageModel
     {
         [BindProperty]
-        public PoductCreationDto Product { get; set; }
+        public ProductCreationDto Product { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -227,9 +227,9 @@ namespace MyProject.Web.Pages.Products
 * This is a simple `PageModal` class. The `[BindProperty]` make the form binding to the model when you post (submit) the form; The standard ASP.NET Core system.
 * `OnPostAsync` returns `NoContent` (this method is defined by the base `AbpPageModel` class). Because we don't need to a return value in the client side, after the form post operation.
 
-**PoductCreationDto:**
+**ProductCreationDto:**
 
-`ProductCreateModalModel` uses a `PoductCreationDto` class defined as shown below:
+`ProductCreateModalModel` uses a `ProductCreationDto` class defined as shown below:
 
 ````csharp
 using System;
@@ -238,7 +238,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
 namespace MyProject.Web.Pages.Products
 {
-    public class PoductCreationDto
+    public class ProductCreationDto
     {
         [Required]
         [StringLength(128)]

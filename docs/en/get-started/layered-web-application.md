@@ -142,11 +142,11 @@ In this step, you can choose which languages your application will support.
 
 * Click Add Custom Language if you want to add a language that is not listed.
 
-You can change these settings later if needed. Thenk click the *Next* button for the *Additional Options* page:
+You can change these settings later if needed. Then click the *Next* button for the *Additional Options* page:
 
 ![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options_dark.png)
 
-If you uncheck the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files, such as Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include or exclude the test projects from the solution.
+If you uncheck the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files, which includes the Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include or exclude the test projects from the solution.
 
 On the next screen, you can configure the modularity options for your solution:
 

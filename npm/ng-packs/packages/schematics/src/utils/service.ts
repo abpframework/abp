@@ -14,6 +14,8 @@ import {
 import { sortImports } from './import';
 import { parseNamespace } from './namespace';
 import { parseGenerics } from './tree';
+import { extractGenerics } from './generics';
+import { isCollectionType } from './methods';
 import {
   createTypeAdapter,
   createTypeParser,
@@ -144,7 +146,21 @@ export function isRemoteStreamContent(type: string) {
 }
 
 export function isRemoteStreamContentArray(type: string) {
-  return VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type);
+  // Check for array types like Volo.Abp.Content.IRemoteStreamContent[]
+  if (VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type)) {
+    return true;
+  }
+
+  // Check for collection types like List<T>, IEnumerable<T>, ICollection<T>, Collection<T>, IList<T>
+  // This matches any generic type from System.Collections.Generic that implements IEnumerable<T>
+  if (isCollectionType(type)) {
+    const { generics } = extractGenerics(type);
+    if (generics.length > 0 && VOLO_REMOTE_STREAM_CONTENT.includes(generics[0])) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function getMethodNameFromAction(action: Action): string {

@@ -34,7 +34,7 @@ var abp = abp || {};
                         },
                         action: function (data) {
                             volo.abp.permissionManagement.permissions.deleteResource($("#ResourceName").val(), $("#ResourceKey").val(), data.record.providerName, data.record.providerKey).then(function () {
-                                abp.notify.info(l('DeletedSuccessfully'));
+                                abp.notify.success(l('DeletedSuccessfully'));
                                 _dataTable.ajax.reloadEx(function (json) {
                                     _dataTable.columns.adjust();
                                 });

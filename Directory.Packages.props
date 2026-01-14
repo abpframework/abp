@@ -182,7 +182,7 @@
     <PackageVersion Include="System.Text.Json" Version="10.0.0" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
     <PackageVersion Include="TencentCloudSDK.Sms" Version="3.0.1273" />
-    <PackageVersion Include="TimeZoneConverter" Version="7.0.0" />
+    <PackageVersion Include="TimeZoneConverter" Version="7.2.0" />
     <PackageVersion Include="TickerQ" Version="2.5.3" />
     <PackageVersion Include="TickerQ.Dashboard" Version="2.5.3" />
     <PackageVersion Include="TickerQ.Utilities" Version="2.5.3" />

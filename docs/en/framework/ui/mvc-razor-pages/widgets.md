@@ -42,7 +42,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 Inheriting from `AbpViewComponent` is not required. You could inherit from ASP.NET Core's standard `ViewComponent`. `AbpViewComponent` only defines some base useful properties.
 
-You can inject a service and use in the `Invoke` method to get some data from the service. You may need to make Invoke method async, like `public async Task<IViewComponentResult> InvokeAsync()`. See [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components) document fore all different usages. 
+You can inject a service and use in the `Invoke` method to get some data from the service. You may need to make Invoke method async, like `public async Task<IViewComponentResult> InvokeAsync()`. See [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components) document for all different usages. 
 
 **Default.cshtml**:
 

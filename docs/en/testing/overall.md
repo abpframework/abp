@@ -69,7 +69,7 @@ The startup solution has the following libraries already installed;
 * [NSubstitute](https://nsubstitute.github.io/) as the mocking library.
 * [Shouldly](https://github.com/shouldly/shouldly) as the assertion library.
 
-While you are free to replace them with your favorite tools, this document and examples will be base on these tooling.
+While you are free to replace them with your favorite tools, this document and examples will be based on these tooling.
 
 ## The Test Explorer
 
