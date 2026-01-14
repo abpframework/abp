@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,15 +10,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Cli.Commands.Models;
 using Volo.Abp.Cli.Http;
-using Volo.Abp.Cli.Memory;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
 
 namespace Volo.Abp.Cli.Commands.Services;
 
 public class McpHttpClientService : ITransientDependency
 {
-    private const string LogSource = nameof(McpHttpClientService);
-    
     private static readonly JsonSerializerOptions JsonSerializerOptionsWeb = new(JsonSerializerDefaults.Web);
     
     private static class ErrorMessages
@@ -27,53 +26,67 @@ public class McpHttpClientService : ITransientDependency
         public const string Unexpected = "The tool execution failed due to an unexpected error. Please try again later.";
     }
     
+    private const string LogSource = nameof(McpHttpClientService);
+    
     private readonly CliHttpClientFactory _httpClientFactory;
     private readonly ILogger<McpHttpClientService> _logger;
     private readonly IMcpLogger _mcpLogger;
-    private readonly MemoryService _memoryService;
     private readonly Lazy<Task<string>> _cachedServerUrlLazy;
     private List<string> _validToolNames;
+    private bool _toolDefinitionsLoaded;
 
     public McpHttpClientService(
         CliHttpClientFactory httpClientFactory,
         ILogger<McpHttpClientService> logger,
-        IMcpLogger mcpLogger,
-        MemoryService memoryService)
+        IMcpLogger mcpLogger)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;
         _mcpLogger = mcpLogger;
-        _memoryService = memoryService;
         _cachedServerUrlLazy = new Lazy<Task<string>>(GetMcpServerUrlInternalAsync);
     }
 
     private async Task<string> GetMcpServerUrlAsync()
     {
-        return await _cachedServerUrlLazy.Value;
+        return "http://localhost:5100";//await _cachedServerUrlLazy.Value;
     }
 
     private async Task<string> GetMcpServerUrlInternalAsync()
     {
-        // 1. Check environment variable (highest priority)
-        var envUrl = Environment.GetEnvironmentVariable(CliConsts.McpServerUrlEnvironmentVariable);
-        if (!string.IsNullOrWhiteSpace(envUrl))
+        // Check config file
+        if (File.Exists(CliPaths.McpConfig))
         {
-            return envUrl.TrimEnd('/');
+            try
+            {
+                var json = await FileHelper.ReadAllTextAsync(CliPaths.McpConfig);
+                var config = JsonSerializer.Deserialize<McpConfig>(json, JsonSerializerOptionsWeb);
+                if (!string.IsNullOrWhiteSpace(config?.ServerUrl))
+                {
+                    return config.ServerUrl.TrimEnd('/');
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to read MCP config file");
+            }
         }
 
-        // 2. Check persisted setting
-        var persistedUrl = await _memoryService.GetAsync(CliConsts.MemoryKeys.McpServerUrl);
-        if (!string.IsNullOrWhiteSpace(persistedUrl))
-        {
-            return persistedUrl.TrimEnd('/');
-        }
-
-        // 3. Return default
+        // Return default
         return CliConsts.DefaultMcpServerUrl;
+    }
+
+    private class McpConfig
+    {
+        public string ServerUrl { get; set; }
     }
 
     public async Task<string> CallToolAsync(string toolName, JsonElement arguments)
     {
+        if (!_toolDefinitionsLoaded)
+        {
+            throw new CliUsageException("Tool definitions have not been loaded yet. This is an internal error.");
+        }
+        
         // Validate toolName against whitelist to prevent malicious input
         if (_validToolNames != null && !_validToolNames.Contains(toolName))
         {
@@ -146,16 +159,6 @@ public class McpHttpClientService : ITransientDependency
         }, JsonSerializerOptionsWeb);
     }
 
-    private CliUsageException CreateToolDefinitionException(string userMessage)
-    {
-        return new CliUsageException($"Failed to fetch tool definitions: {userMessage}");
-    }
-    
-    private CliUsageException CreateToolDefinitionException(string userMessage, Exception innerException)
-    {
-        return new CliUsageException($"Failed to fetch tool definitions: {userMessage}", innerException);
-    }
-
     private string GetSanitizedHttpErrorMessage(HttpStatusCode statusCode)
     {
         return statusCode switch
@@ -204,7 +207,7 @@ public class McpHttpClientService : ITransientDependency
                 
                 // Throw sanitized exception
                 var errorMessage = GetSanitizedHttpErrorMessage(response.StatusCode);
-                throw CreateToolDefinitionException(errorMessage);
+                throw new CliUsageException($"Failed to fetch tool definitions: {errorMessage}");
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -215,6 +218,7 @@ public class McpHttpClientService : ITransientDependency
             
             // Cache tool names for validation
             _validToolNames = tools.Select(t => t.Name).ToList();
+            _toolDefinitionsLoaded = true;
             
             return tools;
         }
@@ -253,7 +257,7 @@ public class McpHttpClientService : ITransientDependency
             _ => "An unexpected error occurred. Please try again later."
         };
         
-        return CreateToolDefinitionException(userMessage, ex);
+        return new CliUsageException($"Failed to fetch tool definitions: {userMessage}", ex);
     }
 
     private class McpToolsResponse

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +34,7 @@ public class HelpCommand : IConsoleCommand, ITransientDependency
     {
         // Don't output help text for MCP command to avoid corrupting stdout JSON-RPC stream
         // If MCP command is being used, it should have been handled directly, not through HelpCommand
-        if (commandLineArgs.IsCommand("mcp"))
+        if (commandLineArgs.IsMcpCommand())
         {
             // Silently return - MCP server should handle its own errors
             return Task.CompletedTask;

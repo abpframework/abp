@@ -65,14 +65,16 @@ public class McpCommand : IConsoleCommand, ITransientDependency
 
         await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsMcp);
 
-        // Check server health before starting
+        // Check server health before starting - fail if not reachable
         _mcpLogger.Info(LogSource, "Checking ABP.IO MCP Server connection...");
         var isHealthy = await _mcpHttpClient.CheckServerHealthAsync();
         
         if (!isHealthy)
         {
-            _mcpLogger.Warning(LogSource, "Could not connect to ABP.IO MCP Server. The server might be offline.");
-            _mcpLogger.Info(LogSource, "Continuing to start local MCP server...");
+            throw new CliUsageException(
+                "Could not connect to ABP.IO MCP Server. " +
+                "The MCP server requires a connection to fetch tool definitions. " +
+                "Please check your internet connection and try again.");
         }
 
         _mcpLogger.Info(LogSource, "Starting ABP MCP Server...");
@@ -141,15 +143,13 @@ public class McpCommand : IConsoleCommand, ITransientDependency
 
     private Task PrintConfigurationAsync()
     {
-        var abpCliPath = GetAbpCliExecutablePath();
-        
         var config = new McpClientConfiguration
         {
             McpServers = new Dictionary<string, McpServerConfig>
             {
                 ["abp"] = new McpServerConfig
                 {
-                    Command = abpCliPath,
+                    Command = "abp",
                     Args = new List<string> { "mcp" },
                     Env = new Dictionary<string, string>()
                 }
@@ -165,74 +165,6 @@ public class McpCommand : IConsoleCommand, ITransientDependency
         Console.WriteLine(json);
         
         return Task.CompletedTask;
-    }
-
-    private string GetAbpCliExecutablePath()
-    {
-        var processPath = TryGetExecutablePathFromCurrentProcess();
-        if (processPath != null)
-        {
-            return processPath;
-        }
-
-        var environmentPath = TryGetExecutablePathFromEnvironmentPath();
-        if (environmentPath != null)
-        {
-            return environmentPath;
-        }
-
-        // Default to "abp" and let the system resolve it
-        return "abp";
-    }
-
-    private string TryGetExecutablePathFromCurrentProcess()
-    {
-        try
-        {
-            using (var process = Process.GetCurrentProcess())
-            {
-                var processPath = process.MainModule?.FileName;
-                
-                if (!string.IsNullOrEmpty(processPath) && 
-                    Path.GetFileName(processPath).StartsWith("abp", StringComparison.OrdinalIgnoreCase))
-                {
-                    return processPath;
-                }
-            }
-        }
-        catch
-        {
-            // Ignore errors getting process path
-        }
-
-        return null;
-    }
-
-    private string TryGetExecutablePathFromEnvironmentPath()
-    {
-        var pathEnv = Environment.GetEnvironmentVariable("PATH");
-        if (string.IsNullOrEmpty(pathEnv))
-        {
-            return null;
-        }
-
-        var paths = pathEnv.Split(Path.PathSeparator);
-        foreach (var path in paths)
-        {
-            var abpPath = Path.Combine(path, "abp.exe");
-            if (File.Exists(abpPath))
-            {
-                return abpPath;
-            }
-            
-            abpPath = Path.Combine(path, "abp");
-            if (File.Exists(abpPath))
-            {
-                return abpPath;
-            }
-        }
-
-        return null;
     }
 
     public string GetUsageInfo()

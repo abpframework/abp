@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Cli.Args;
@@ -18,7 +18,7 @@ public class CommandSelector : ICommandSelector, ITransientDependency
     public Type Select(CommandLineArgs commandLineArgs)
     {
         // Don't fall back to HelpCommand for MCP command to avoid corrupting stdout JSON-RPC stream
-        if (commandLineArgs.IsCommand("mcp"))
+        if (commandLineArgs.IsMcpCommand())
         {
             return Options.Commands.GetOrDefault("mcp") ?? typeof(HelpCommand);
         }

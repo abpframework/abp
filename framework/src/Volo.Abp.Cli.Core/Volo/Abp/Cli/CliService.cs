@@ -64,7 +64,7 @@ public class CliService : ITransientDependency
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
         var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
         
-        var isMcpCommand = commandLineArgs.IsCommand("mcp");
+        var isMcpCommand = commandLineArgs.IsMcpCommand();
         
         // Don't print banner for MCP command to avoid corrupting stdout JSON-RPC stream
         if (!isMcpCommand)
@@ -99,7 +99,7 @@ public class CliService : ITransientDependency
         catch (CliUsageException usageException)
         {
             // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
-            if (commandLineArgs.IsCommand("mcp"))
+            if (commandLineArgs.IsMcpCommand())
             {
                 _mcpLogger.Error(McpLogSource, usageException.Message);
             }
@@ -113,7 +113,7 @@ public class CliService : ITransientDependency
         {
             await _telemetryService.AddErrorActivityAsync(ex.Message);
             // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
-            if (commandLineArgs.IsCommand("mcp"))
+            if (commandLineArgs.IsMcpCommand())
             {
                 _mcpLogger.Error(McpLogSource, "Fatal error", ex);
             }

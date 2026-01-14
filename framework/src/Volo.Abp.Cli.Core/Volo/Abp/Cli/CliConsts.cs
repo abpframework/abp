@@ -20,7 +20,6 @@ public static class CliConsts
 
     public static string AppSettingsSecretJsonFileName = "appsettings.secrets.json";
 
-    public const string McpServerUrlEnvironmentVariable = "ABP_MCP_SERVER_URL";
     public const string McpLogLevelEnvironmentVariable = "ABP_MCP_LOG_LEVEL";
     public const string DefaultMcpServerUrl = "https://mcp.abp.io";
 
@@ -28,6 +27,5 @@ public static class CliConsts
     {
         public const string LatestCliVersionCheckDate = "LatestCliVersionCheckDate";
         public const string McpToolsLastFetchDate = "McpToolsLastFetchDate";
-        public const string McpServerUrl = "McpServerUrl";
     }
 }
