@@ -7,8 +7,9 @@
 
 # ABP Infrastructure
 
-ABP provides a complete infrastructure for creating real world software solutions with modern architectures based on the .NET platform. Each of the following documents explains an infrastructure feature:
+ABP provides a complete infrastructure for creating real world software solutions with modern architectures based on .NET platform. Each of the following documents explains an infrastructure feature:
 
+* [Advanced Features & Integration Guide](./advanced-features.md)
 * [Audit Logging](./audit-logging.md)
 * [Artificial Intelligence](./artificial-intelligence/index.md)
 * [Background Jobs](./background-jobs/index.md)
