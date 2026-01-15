@@ -500,6 +500,13 @@ public abstract class AbpMudCrudPageBase<
         try
         {
             await CheckDeletePolicyAsync();
+            
+            var confirmed = await ConfirmDeleteAsync(entity);
+            if (!confirmed)
+            {
+                return;
+            }
+
             await OnDeletingEntityAsync();
             await AppService.DeleteAsync(entity.Id);
             await OnDeletedEntityAsync();
