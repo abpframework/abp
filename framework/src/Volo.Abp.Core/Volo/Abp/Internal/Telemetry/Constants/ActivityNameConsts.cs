@@ -58,7 +58,7 @@ public static class ActivityNameConsts
     public const string AbpStudioSuiteOpen = "AbpStudio.Suite.Open";
     public const string AbpStudioGlobalSecretsManage = "AbpStudio.GlobalSecrets.Manage";
     public const string AbpStudioGlobalMetadataManage = "AbpStudio.GlobalMetadata.Manage";
-     public const string AbpCliCommandsNewSolution = "AbpCli.Comands.NewSolution";
+    public const string AbpCliCommandsNewSolution = "AbpCli.Comands.NewSolution";
     public const string AbpCliCommandsNewModule = "AbpCli.Comands.NewModule";
     public const string AbpCliCommandsNewPackage = "AbpCli.Comands.NewPackage";
     public const string AbpCliCommandsUpdate = "AbpCli.Comands.Update";
