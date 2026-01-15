@@ -1,0 +1,189 @@
+@page "/identity/users"
+@attribute [Authorize(IdentityPermissions.Users.Default)]
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.PermissionManagement.Blazor.MudBlazor.Components
+@using Volo.Abp.MudBlazorUI.Components.ObjectExtending
+@using Volo.Abp.Identity.Localization
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
+@using Volo.Abp.BlazoriseUI
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.UI.Navigation.Localization.Resource
+@inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
+
+@inherits AbpMudCrudPageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+
+<PageHeader Title="@L["Users"]"
+            BreadcrumbItems="@BreadcrumbItems"
+            Toolbar="@Toolbar" />
+
+<MudCard>
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12" sm="8"></MudItem>
+            <MudItem xs="12" sm="4">
+                <MudTextField @bind-Value="GetListInput.Filter"
+                             Label="@L["Search"]"
+                             Variant="Variant.Outlined"
+                             Adornment="Adornment.Start"
+                             AdornmentIcon="@Icons.Material.Filled.Search"
+                             Immediate="true"
+                             OnKeyUp="@OnSearchKeyUp" />
+            </MudItem>
+        </MudGrid>
+
+        <AbpMudExtensibleDataGrid TItem="IdentityUserDto"
+                                 Data="@Entities"
+                                 ServerData="@OnDataGridReadAsync"
+                                 Loading="@(TotalCount == null)"
+                                 ShowPager="true"
+                                 PageSize="@PageSize"
+                                 CurrentPage="@CurrentPage"
+                                 Columns="@UserManagementTableColumns" />
+    </MudCardContent>
+</MudCard>
+
+@* ************************* CREATE DIALOG ************************* *@
+@if (HasCreatePermission && CreateDialogVisible)
+{
+    <MudDialog @bind-IsVisible="@CreateDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+        <TitleContent>
+            <MudText Typo="Typo.h6">@L["NewUser"]</MudText>
+        </TitleContent>
+        <DialogContent>
+            <MudForm @ref="@CreateFormRef" Model="@NewEntity">
+                <MudTabs @bind-ActivePanelIndex="@_createTabIndex" PanelClass="pa-4">
+                    <MudTabPanel Text="@L["UserInformations"]">
+                        <MudTextField @bind-Value="@NewEntity.UserName"
+                                     Label="@L["DisplayName:UserName"]"
+                                     Variant="Variant.Outlined"
+                                     Required="true"
+                                     RequiredError="@L["FieldIsRequired", L["DisplayName:UserName"]]" />
+                        <MudTextField @bind-Value="@NewEntity.Name"
+                                     Label="@L["DisplayName:Name"]"
+                                     Variant="Variant.Outlined" />
+                        <MudTextField @bind-Value="@NewEntity.Surname"
+                                     Label="@L["DisplayName:Surname"]"
+                                     Variant="Variant.Outlined" />
+                        <MudTextField @bind-Value="@NewEntity.Password"
+                                     Label="@L["DisplayName:Password"]"
+                                     InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                     Variant="Variant.Outlined"
+                                     Required="true"
+                                     RequiredError="@L["FieldIsRequired", L["DisplayName:Password"]]"
+                                     Adornment="Adornment.End"
+                                     AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
+                                     OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
+                        <MudTextField @bind-Value="@NewEntity.Email"
+                                     Label="@L["DisplayName:Email"]"
+                                     Variant="Variant.Outlined"
+                                     Required="true"
+                                     RequiredError="@L["FieldIsRequired", L["DisplayName:Email"]]" />
+                        <MudTextField @bind-Value="@NewEntity.PhoneNumber"
+                                     Label="@L["DisplayName:PhoneNumber"]"
+                                     Variant="Variant.Outlined" />
+                        <MudCheckBox @bind-Checked="@NewEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
+                        <MudTooltip Text="@L["Description:LockoutEnabled"]">
+                            <MudCheckBox @bind-Checked="@NewEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
+                                <ChildContent>
+                                    <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="ms-1" />
+                                </ChildContent>
+                            </MudCheckBox>
+                        </MudTooltip>
+                        <MudExtensionProperties TEntityType="IdentityUserCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.CreateModal" />
+                    </MudTabPanel>
+                    <MudTabPanel Text="@L["Roles"]">
+                        @if (NewUserRoles != null)
+                        {
+                            @foreach (var role in NewUserRoles)
+                            {
+                                <MudCheckBox @bind-Checked="@role.IsAssigned" Label="@role.Name" />
+                                <input type="hidden" @bind-value="@role.Name" />
+                            }
+                        }
+                    </MudTabPanel>
+                </MudTabs>
+            </MudForm>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="@CloseCreateDialogAsync">@L["Cancel"]</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@CreateEntityAsync">@L["Save"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+}
+
+
+@* ************************* EDIT DIALOG ************************* *@
+@if (HasUpdatePermission && EditDialogVisible)
+{
+    <MudDialog @bind-IsVisible="@EditDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+        <TitleContent>
+            <MudText Typo="Typo.h6">@L["Edit"]</MudText>
+        </TitleContent>
+        <DialogContent>
+            <MudForm @ref="@EditFormRef" Model="@EditingEntity">
+                <input type="hidden" @bind-value="@EditingEntity.ConcurrencyStamp" />
+                <MudTabs @bind-ActivePanelIndex="@_editTabIndex" PanelClass="pa-4">
+                    <MudTabPanel Text="@L["UserInformations"]">
+                        <MudTextField @bind-Value="@EditingEntity.UserName"
+                                     Label="@L["DisplayName:UserName"]"
+                                     Variant="Variant.Outlined"
+                                     Required="true"
+                                     RequiredError="@L["FieldIsRequired", L["DisplayName:UserName"]]" />
+                        <MudTextField @bind-Value="@EditingEntity.Name"
+                                     Label="@L["DisplayName:Name"]"
+                                     Variant="Variant.Outlined" />
+                        <MudTextField @bind-Value="@EditingEntity.Surname"
+                                     Label="@L["DisplayName:Surname"]"
+                                     Variant="Variant.Outlined" />
+                        <MudTextField @bind-Value="@EditingEntity.Password"
+                                     Label="@L["DisplayName:Password"]"
+                                     InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                     Variant="Variant.Outlined"
+                                     Adornment="Adornment.End"
+                                     AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
+                                     OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
+                        <MudTextField @bind-Value="@EditingEntity.Email"
+                                     Label="@L["DisplayName:Email"]"
+                                     Variant="Variant.Outlined"
+                                     Required="true"
+                                     RequiredError="@L["FieldIsRequired", L["DisplayName:Email"]]" />
+                        <MudTextField @bind-Value="@EditingEntity.PhoneNumber"
+                                     Label="@L["DisplayName:PhoneNumber"]"
+                                     Variant="Variant.Outlined" />
+                        @if (!IsEditCurrentUser)
+                        {
+                            <MudCheckBox @bind-Checked="@EditingEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
+                        }
+                        <MudTooltip Text="@L["Description:LockoutEnabled"]">
+                            <MudCheckBox @bind-Checked="@EditingEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
+                                <ChildContent>
+                                    <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="ms-1" />
+                                </ChildContent>
+                            </MudCheckBox>
+                        </MudTooltip>
+                        <MudExtensionProperties TEntityType="IdentityUserUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.EditModal" />
+                    </MudTabPanel>
+                    @if (EditUserRoles != null && EditUserRoles.Any())
+                    {
+                        <MudTabPanel Text="@L["Roles"]">
+                            @foreach (var role in EditUserRoles)
+                            {
+                                <MudCheckBox @bind-Checked="@role.IsAssigned" Label="@role.Name" />
+                                <input type="hidden" @bind-value="@role.Name" />
+                            }
+                        </MudTabPanel>
+                    }
+                </MudTabs>
+            </MudForm>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="@CloseEditDialogAsync">@L["Cancel"]</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@UpdateEntityAsync">@L["Save"]</MudButton>
+        </DialogActions>
+    </MudDialog>
+}
+
+@if (HasManagePermissionsPermission)
+{
+    <PermissionManagementModal @ref="PermissionManagementModal" />
+}
