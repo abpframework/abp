@@ -1,9 +1,6 @@
 @using Microsoft.AspNetCore.Components.Web
-@using Microsoft.Extensions.Options
 @using Volo.Abp.Ui.Branding
-@inject IOptions<PageHeaderOptions> Options
 @inject IBrandingProvider BrandingProvider
-@inject PageLayout PageLayout
 
 <MudGrid Class="entry-row">
     @if (PageLayout.Title.IsNullOrEmpty())
@@ -64,19 +61,4 @@
     }
 </MudGrid>
 
-@code {
-    [Parameter]
-    public bool BreadcrumbShowHome { get; set; } = true;
-
-    [Parameter]
-    public bool BreadcrumbShowCurrent { get; set; } = true;
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-
-    [Parameter]
-    public PageToolbar? Toolbar { get; set; }
-
-    protected List<RenderFragment> ToolbarItemRenders { get; } = new();
-}
 
