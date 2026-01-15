@@ -1,0 +1,21 @@
+@typeparam TItem
+@using MudBlazor
+
+<CascadingValue Value="this" IsFixed="true">
+    @if (Type == MudActionType.Dropdown || DisabledOrNoActions())
+    {
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+                 AnchorOrigin="Origin.BottomRight"
+                 TransformOrigin="Origin.TopRight"
+                 Dense="true"
+                 Disabled="@DisabledOrNoActions()">
+            @ChildContent
+        </MudMenu>
+    }
+    else
+    {
+        <MudButtonGroup OverrideStyles="false">
+            @ChildContent
+        </MudButtonGroup>
+    }
+</CascadingValue>
