@@ -1,0 +1,19 @@
+@using MudBlazor
+@using Volo.Abp.FeatureManagement.Localization
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+
+@if (Settings != null && Settings.HasManageHostFeaturesPermission)
+{
+    <MudForm>
+        <MudText Typo="Typo.body1" Class="mb-3">@L["ManageHostFeaturesText"]</MudText>
+        <MudButton Size="Size.Small" 
+                  Color="Color.Primary" 
+                  Variant="Variant.Filled"
+                  StartIcon="@Icons.Material.Filled.Settings"
+                  OnClick="@OnManageHostFeaturesClicked">
+            @L["ManageHostFeatures"]
+        </MudButton>
+    </MudForm>
+    
+    <FeatureManagementModal @ref="FeatureManagementModal"/>
+}
