@@ -11,6 +11,14 @@ namespace Volo.Abp.MudBlazorUI;
 
 public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
 {
+    private static readonly Type[] DateTimeTypes =
+    {
+        typeof(DateTime),
+        typeof(DateTime?),
+        typeof(DateTimeOffset),
+        typeof(DateTimeOffset?)
+    };
+
     internal static readonly FrozenSet<Type> NumberTypes = new HashSet<Type>
     {
         typeof(int),
@@ -45,6 +53,47 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
         typeof(UrlAttribute),
         typeof(PhoneAttribute)
     }.ToFrozenSet();
+
+    public static bool IsDate(this IBasicObjectExtensionPropertyInfo property)
+    {
+        return DateTimeTypes.Contains(property.Type) &&
+               property.GetDataTypeOrNull() == DataType.Date;
+    }
+
+    public static bool IsDateTime(this IBasicObjectExtensionPropertyInfo property)
+    {
+        return DateTimeTypes.Contains(property.Type) &&
+               !property.IsDate();
+    }
+
+    public static DataType? GetDataTypeOrNull(this IBasicObjectExtensionPropertyInfo property)
+    {
+        return property
+            .Attributes
+            .OfType<DataTypeAttribute>()
+            .FirstOrDefault()?.DataType;
+    }
+
+    public static string? GetDateEditInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
+    {
+        var dataFormatString = property.GetDataFormatStringOrNull();
+        if (dataFormatString != null)
+        {
+            return dataFormatString;
+        }
+
+        if (property.IsDate())
+        {
+            return "{0:yyyy-MM-dd}";
+        }
+
+        if (property.IsDateTime())
+        {
+            return "{0:yyyy-MM-ddTHH:mm}";
+        }
+
+        return null;
+    }
 
     public static string? GetDataFormatStringOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
