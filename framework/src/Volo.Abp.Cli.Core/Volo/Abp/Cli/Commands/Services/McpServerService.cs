@@ -161,7 +161,7 @@ public class McpServerService : ITransientDependency
         }
         catch (Exception ex)
         {
-            _mcpLogger.Error(LogSource, $"Tool '{toolName}' execution failed", ex);
+            _mcpLogger.Error(LogSource, $"Tool '{toolName}' execution failed '{ex.Message}'", ex);
             return CreateErrorResult(ToolErrorMessages.UnexpectedError);
         }
     }

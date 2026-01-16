@@ -15,7 +15,7 @@ using Volo.Abp.IO;
 
 namespace Volo.Abp.Cli.Commands.Services;
 
-public class McpHttpClientService : ITransientDependency
+public class McpHttpClientService : ISingletonDependency
 {
     private static readonly JsonSerializerOptions JsonSerializerOptionsWeb = new(JsonSerializerDefaults.Web);
     
@@ -80,8 +80,17 @@ public class McpHttpClientService : ITransientDependency
         public string ServerUrl { get; set; }
     }
 
+    public void InitializeToolNames(List<McpToolDefinition> tools)
+    {
+        _validToolNames = tools.Select(t => t.Name).ToList();
+        _toolDefinitionsLoaded = true;
+        _mcpLogger.Debug(LogSource, $"Initialized tool names from cache. Count={tools.Count}, Instance={GetHashCode()}");
+    }
+
     public async Task<string> CallToolAsync(string toolName, JsonElement arguments)
     {
+        _mcpLogger.Debug(LogSource, $"CallToolAsync called for '{toolName}'. _toolDefinitionsLoaded={_toolDefinitionsLoaded}, Instance={GetHashCode()}");
+        
         if (!_toolDefinitionsLoaded)
         {
             throw new CliUsageException("Tool definitions have not been loaded yet. This is an internal error.");
@@ -193,6 +202,8 @@ public class McpHttpClientService : ITransientDependency
 
     public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync()
     {
+        _mcpLogger.Debug(LogSource, $"GetToolDefinitionsAsync called. Instance={GetHashCode()}");
+        
         var baseUrl = await GetMcpServerUrlAsync();
         var url = $"{baseUrl}/tools";
 
@@ -219,6 +230,8 @@ public class McpHttpClientService : ITransientDependency
             // Cache tool names for validation
             _validToolNames = tools.Select(t => t.Name).ToList();
             _toolDefinitionsLoaded = true;
+            
+            _mcpLogger.Debug(LogSource, $"Tool definitions loaded successfully. _toolDefinitionsLoaded={_toolDefinitionsLoaded}, Tool count={tools.Count}, Instance={GetHashCode()}");
             
             return tools;
         }

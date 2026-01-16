@@ -43,6 +43,8 @@ public class McpToolsCacheService : ITransientDependency
             if (cachedTools != null)
             {
                 _mcpLogger.Debug(LogSource, "Using cached tool definitions");
+                // Initialize the HTTP client's tool names list from cache
+                _mcpHttpClient.InitializeToolNames(cachedTools);
                 return cachedTools;
             }
         }

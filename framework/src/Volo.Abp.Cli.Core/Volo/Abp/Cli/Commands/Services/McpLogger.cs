@@ -1,26 +1,25 @@
 using System;
-using System.IO;
-using System.Text;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands.Services;
 
 /// <summary>
-/// MCP logger implementation that writes to both file and stderr.
-/// - All logs at or above the configured level are written to file
+/// MCP logger implementation that writes to both file (via Serilog) and stderr.
+/// - All logs at or above the configured level are written to file via ILogger
 /// - Warning and Error logs are also written to stderr
 /// - Log level is controlled via ABP_MCP_LOG_LEVEL environment variable
 /// </summary>
 public class McpLogger : IMcpLogger, ISingletonDependency
 {
-    private const long MaxLogFileSizeBytes = 5 * 1024 * 1024; // 5MB
     private const string LogPrefix = "[MCP]";
     
-    private readonly object _fileLock = new();
+    private readonly ILogger<McpLogger> _logger;
     private readonly McpLogLevel _configuredLogLevel;
 
-    public McpLogger()
+    public McpLogger(ILogger<McpLogger> logger)
     {
+        _logger = logger;
         _configuredLogLevel = GetConfiguredLogLevel();
     }
 
@@ -56,48 +55,34 @@ public class McpLogger : IMcpLogger, ISingletonDependency
 
     private void Log(McpLogLevel level, string source, string message)
     {
-        if (_configuredLogLevel == McpLogLevel.None)
+        if (_configuredLogLevel == McpLogLevel.None || level < _configuredLogLevel)
         {
             return;
         }
 
-        if (level < _configuredLogLevel)
+        var mcpFormattedMessage = $"{LogPrefix}[{source}] {message}";
+
+        // File logging via Serilog
+        switch (level)
         {
-            return;
+            case McpLogLevel.Debug:
+                _logger.LogDebug(mcpFormattedMessage);
+                break;
+            case McpLogLevel.Info:
+                _logger.LogInformation(mcpFormattedMessage);
+                break;
+            case McpLogLevel.Warning:
+                _logger.LogWarning(mcpFormattedMessage);
+                break;
+            case McpLogLevel.Error:
+                _logger.LogError(mcpFormattedMessage);
+                break;
         }
 
-        var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        var levelStr = level.ToString().ToUpperInvariant();
-        var formattedMessage = $"[{timestamp}][{levelStr}][{source}] {message}";
-
-        // Write to file (all levels at or above configured level)
-        WriteToFile(formattedMessage);
-
-        // Write to stderr for Warning and Error levels
+        // Stderr output for MCP protocol (Warning/Error only)
         if (level >= McpLogLevel.Warning)
         {
-            WriteToStderr(levelStr, message);
-        }
-    }
-
-    private void WriteToFile(string formattedMessage)
-    {
-        try
-        {
-            lock (_fileLock)
-            {
-                EnsureLogDirectoryExists();
-                RotateLogFileIfNeeded();
-
-                File.AppendAllText(
-                    CliPaths.McpLog,
-                    formattedMessage + Environment.NewLine,
-                    Encoding.UTF8);
-            }
-        }
-        catch
-        {
-            // Silently ignore file write errors to not disrupt MCP operations
+            WriteToStderr(level.ToString().ToUpperInvariant(), message);
         }
     }
 
@@ -111,47 +96,6 @@ public class McpLogger : IMcpLogger, ISingletonDependency
         catch
         {
             // Silently ignore stderr write errors
-        }
-    }
-
-    private void EnsureLogDirectoryExists()
-    {
-        var directory = Path.GetDirectoryName(CliPaths.McpLog);
-        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-    }
-
-    private void RotateLogFileIfNeeded()
-    {
-        try
-        {
-            if (!File.Exists(CliPaths.McpLog))
-            {
-                return;
-            }
-
-            var fileInfo = new FileInfo(CliPaths.McpLog);
-            if (fileInfo.Length < MaxLogFileSizeBytes)
-            {
-                return;
-            }
-
-            var backupPath = CliPaths.McpLog + ".1";
-            
-            // Delete old backup if exists
-            if (File.Exists(backupPath))
-            {
-                File.Delete(backupPath);
-            }
-
-            // Rename current log to backup
-            File.Move(CliPaths.McpLog, backupPath);
-        }
-        catch
-        {
-            // Silently ignore rotation errors
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
@@ -15,7 +15,7 @@ public class Program
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
         var loggerOutputTemplate = "{Message:lj}{NewLine}{Exception}";
-        Log.Logger = new LoggerConfiguration()
+        var config = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
@@ -26,10 +26,21 @@ public class Program
 #else
             .MinimumLevel.Override("Volo.Abp.Cli", LogEventLevel.Information)
 #endif
-            .Enrich.FromLogContext()
-            .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-logs.txt"), outputTemplate: loggerOutputTemplate)
-            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen, outputTemplate: loggerOutputTemplate)
-            .CreateLogger();
+            .Enrich.FromLogContext();
+
+        if (args.Length > 0 && args[0] == "mcp")
+        {
+            Log.Logger = config
+                .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-mcp-logs.txt"), outputTemplate: loggerOutputTemplate)
+                .CreateLogger();
+        }
+        else
+        {
+            Log.Logger = config
+                .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-logs.txt"), outputTemplate: loggerOutputTemplate)
+                .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen, outputTemplate: loggerOutputTemplate)
+                .CreateLogger();
+        }
 
         using (var application = AbpApplicationFactory.Create<AbpCliModule>(
             options =>
