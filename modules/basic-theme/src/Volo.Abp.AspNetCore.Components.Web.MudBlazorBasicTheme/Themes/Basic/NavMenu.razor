@@ -1,0 +1,33 @@
+@using Volo.Abp.UI.Navigation
+@inject IMenuManager MenuManager
+
+<MudNavMenu>
+    @foreach (var menuItem in MenuItems.Items)
+    {
+        @if (menuItem.Items.IsNullOrEmpty())
+        {
+            <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                @if (!string.IsNullOrEmpty(menuItem.Icon))
+                {
+                    <MudIcon Icon="@menuItem.Icon" Class="me-2" />
+                }
+                @menuItem.DisplayName
+            </MudNavLink>
+        }
+        else
+        {
+            <MudNavGroup Title="@menuItem.DisplayName" Icon="@menuItem.Icon">
+                @foreach (var childItem in menuItem.Items)
+                {
+                    <MudNavLink Href="@childItem.Url" Match="@(childItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                        @if (!string.IsNullOrEmpty(childItem.Icon))
+                        {
+                            <MudIcon Icon="@childItem.Icon" Class="me-2" />
+                        }
+                        @childItem.DisplayName
+                    </MudNavLink>
+                }
+            </MudNavGroup>
+        }
+    }
+</MudNavMenu>

@@ -1,0 +1,52 @@
+@using Volo.Abp.Ui.LayoutHooks
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components.LayoutHooks
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Inherit"
+                       Edge="Edge.Start"
+                       OnClick="@ToggleDrawer" />
+        <Branding />
+        <MudSpacer />
+        <NavToolbar />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@_drawerOpen"
+               Elevation="1"
+               Variant="@DrawerVariant.Mini">
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4">
+            <PageAlert />
+            <LayoutHook Name="@LayoutHooks.Body.First" Layout="@StandardLayouts.Application" />
+            @Body
+            <LayoutHook Name="@LayoutHooks.Body.Last" Layout="@StandardLayouts.Application" />
+            <DynamicLayoutComponent />
+            <UiMessageAlert />
+            <UiNotificationAlert />
+            <UiPageProgress />
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}
+
+@implements IDisposable

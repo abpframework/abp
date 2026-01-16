@@ -1,0 +1,27 @@
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+
+@if (CurrentUser.IsAuthenticated)
+{
+    <MudMenu Icon="@Icons.Material.Filled.AccountCircle">
+        <MudMenuItem Href="/Account/Manage">@L["MyAccount"]</MudMenuItem>
+        <MudDivider />
+        <MudMenuItem OnClick="@Logout">@L["Logout"]</MudMenuItem>
+    </MudMenu>
+}
+else
+{
+    <MudButton Variant="Variant.Text" Href="/Account/Login">@L["Login"]</MudButton>
+}
+
+@code {
+    [Inject] protected NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] protected IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
+
+    protected async Task Logout()
+    {
+        // TODO: Implement logout logic
+        NavigationManager.NavigateTo("/Account/Logout", forceLoad: true);
+    }
+}
