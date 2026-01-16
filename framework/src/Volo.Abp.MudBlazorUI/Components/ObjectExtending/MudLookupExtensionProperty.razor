@@ -1,3 +1,4 @@
+#nullable enable
 @typeparam TEntity
 @typeparam TResourceType
 @using Volo.Abp.Localization
@@ -5,7 +6,7 @@
 
 @if (PropertyInfo != null && Entity != null)
 {
-    <MudAutocomplete T="MudSelectItem<object>?"
+    <MudAutocomplete T="MudSelectItem<object>"
                      Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                      Value="@SelectedItem"
                      ValueChanged="@SelectedItemChanged"

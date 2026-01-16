@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
@@ -47,8 +48,8 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
     {
         return (builder) =>
         {
-            builder.OpenComponent(type);
-            builder.AddAttribute(0, DataFieldAttributeName, data);
+            builder.OpenComponent(0, type);
+            builder.AddAttribute(1, DataFieldAttributeName, data);
             builder.CloseComponent();
         };
     }

@@ -19,7 +19,12 @@ public partial class MudLookupExtensionProperty<TEntity, TResourceType>
 
     public string TextPropertyName => PropertyInfo.Name + "_Text";
 
-    public MudSelectItem<object>? SelectedItem { get; set; }
+    private MudSelectItem<object>? _selectedItem;
+
+    public MudSelectItem<object> SelectedItem {
+        get => _selectedItem!;
+        set => _selectedItem = value;
+    }
 
     public object? SelectedValue
     {
@@ -68,7 +73,7 @@ public partial class MudLookupExtensionProperty<TEntity, TResourceType>
         var selectItems = new List<MudSelectItem<object>>();
 
         var url = PropertyInfo.Lookup.Url;
-        if (!filter.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(filter))
         {
             url += $"?{PropertyInfo.Lookup.FilterParamName}={filter.Trim()}";
         }
@@ -89,7 +94,7 @@ public partial class MudLookupExtensionProperty<TEntity, TResourceType>
         return selectItems;
     }
 
-    protected virtual Task SelectedItemChanged(MudSelectItem<object>? item)
+    protected virtual Task SelectedItemChanged(MudSelectItem<object> item)
     {
         SelectedItem = item;
         SelectedValue = item?.Value;
