@@ -9,6 +9,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.TenantManagement.Blazor.MudBlazor.Navigation;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
 using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;

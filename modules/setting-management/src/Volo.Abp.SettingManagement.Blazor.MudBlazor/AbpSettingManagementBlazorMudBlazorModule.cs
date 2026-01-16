@@ -7,6 +7,7 @@ using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Blazor.MudBlazor.Menus;
 using Volo.Abp.SettingManagement.Blazor.MudBlazor.Settings;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.UI.Navigation;
 
