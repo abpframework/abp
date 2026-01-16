@@ -5,6 +5,7 @@ using Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
+using BlazorStandardBundles = Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.Bundling.BlazorStandardBundles;
 
 namespace Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme;
 
@@ -28,7 +29,7 @@ public class AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule : AbpModule
                 .Add(BlazorMudBlazorBasicThemeBundles.Styles.Global, bundle =>
                 {
                     bundle
-                        .AddBaseBundles(BlazorServerStandardBundles.Styles.Global)
+                        .AddBaseBundles(BlazorStandardBundles.Styles.Global)
                         .AddContributors(typeof(BlazorServerMudBlazorBasicThemeStyleContributor));
                 });
 
@@ -37,7 +38,7 @@ public class AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule : AbpModule
                 .Add(BlazorMudBlazorBasicThemeBundles.Scripts.Global, bundle =>
                 {
                     bundle
-                        .AddBaseBundles(BlazorServerStandardBundles.Scripts.Global)
+                        .AddBaseBundles(BlazorStandardBundles.Scripts.Global)
                         .AddContributors(typeof(BlazorServerMudBlazorBasicThemeScriptContributor));
                 });
         });

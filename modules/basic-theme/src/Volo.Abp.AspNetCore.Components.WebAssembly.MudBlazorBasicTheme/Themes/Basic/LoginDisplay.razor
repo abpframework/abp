@@ -52,6 +52,9 @@
     {
         ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
     }
+}
+
+@implements IDisposable
 
     private async Task NavigateToAsync(string? uri, string? target = null)
     {

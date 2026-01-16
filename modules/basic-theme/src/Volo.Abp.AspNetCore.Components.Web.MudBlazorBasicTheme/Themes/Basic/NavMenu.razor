@@ -1,4 +1,6 @@
 @using Volo.Abp.UI.Navigation
+@using MudBlazor
+@using Microsoft.AspNetCore.Components.Routing
 @inject IMenuManager MenuManager
 
 <MudNavMenu>
@@ -9,25 +11,33 @@
             <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
                 @if (!string.IsNullOrEmpty(menuItem.Icon))
                 {
-                    <MudIcon Icon="@menuItem.Icon" Class="me-2" />
+                    <MudIcon Icon="@GetIcon(menuItem.Icon)" Class="me-2" />
                 }
                 @menuItem.DisplayName
             </MudNavLink>
         }
         else
         {
-            <MudNavGroup Title="@menuItem.DisplayName" Icon="@menuItem.Icon">
-                @foreach (var childItem in menuItem.Items)
-                {
-                    <MudNavLink Href="@childItem.Url" Match="@(childItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
-                        @if (!string.IsNullOrEmpty(childItem.Icon))
-                        {
-                            <MudIcon Icon="@childItem.Icon" Class="me-2" />
-                        }
-                        @childItem.DisplayName
-                    </MudNavLink>
-                }
-            </MudNavGroup>
+            <FirstLevelNavMenuItem MenuItem="menuItem" />
         }
     }
 </MudNavMenu>
+
+@code {
+    private string? GetIcon(string? icon)
+    {
+        if (string.IsNullOrEmpty(icon))
+        {
+            return null;
+        }
+
+        // Convert FontAwesome icons to Material icons if needed
+        if (icon.StartsWith("fa"))
+        {
+            // Map common FontAwesome icons to Material icons
+            return icon.Replace("fa-", "").Replace("-", "_");
+        }
+
+        return icon;
+    }
+}

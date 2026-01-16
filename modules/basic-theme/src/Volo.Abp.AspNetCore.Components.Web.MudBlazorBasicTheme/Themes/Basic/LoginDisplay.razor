@@ -1,6 +1,10 @@
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
 @using Volo.Abp.Users
+@using MudBlazor
+@using Microsoft.Extensions.Localization
+@using global::Localization.Resources.AbpUi
 @inject ICurrentUser CurrentUser
+@inject IStringLocalizer<AbpUiResource> L
 
 @if (CurrentUser.IsAuthenticated)
 {
@@ -19,9 +23,8 @@ else
     [Inject] protected NavigationManager NavigationManager { get; set; } = default!;
     [Inject] protected IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    protected async Task Logout()
+    protected void Logout()
     {
-        // TODO: Implement logout logic
         NavigationManager.NavigateTo("/Account/Logout", forceLoad: true);
     }
 }
