@@ -90,7 +90,7 @@
         <DialogContent>
             <MudForm @ref="@_createFormRef" Model="@CreateEntity">
                 <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionTarget"]</MudText>
-                <MudRadioGroup SelectedOption="@CurrentLookupService" SelectedOptionChanged="@OnLookupServiceCheckedValueChanged">
+                <MudRadioGroup T="string" SelectedOption="@CurrentLookupService" SelectedOptionChanged="@OnLookupServiceCheckedValueChanged">
                     @foreach (var keyLookupService in ResourceProviderKeyLookupServices)
                     {
                         <MudRadio Option="@keyLookupService.Name">@keyLookupService.DisplayName</MudRadio>

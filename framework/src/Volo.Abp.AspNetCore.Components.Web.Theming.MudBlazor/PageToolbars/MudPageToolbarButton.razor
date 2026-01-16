@@ -1,35 +1,13 @@
-@using MudBlazor
+@using global::MudBlazor
 
-<MudButton Variant="Variant.Filled"
-           Color="Color.Primary"
+<MudButton Variant="@Variant.Filled"
+           Color="@Color.Primary"
            Disabled="Disabled"
-           OnClick="@OnClickAsync">
+           OnClick="@OnClickCallback">
     @if (Icon is string iconString && !string.IsNullOrWhiteSpace(iconString))
     {
         <MudIcon Icon="@iconString" Class="me-1" />
     }
     @Text
 </MudButton>
-
-@code {
-    [Parameter]
-    public string Text { get; set; } = string.Empty;
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public object? Icon { get; set; }
-
-    [Parameter]
-    public Func<Task>? Clicked { get; set; }
-
-    private async Task OnClickAsync()
-    {
-        if (Clicked != null && !Disabled)
-        {
-            await Clicked.Invoke();
-        }
-    }
-}
 

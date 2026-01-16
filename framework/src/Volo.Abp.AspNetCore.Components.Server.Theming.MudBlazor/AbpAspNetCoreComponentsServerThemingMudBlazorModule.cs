@@ -2,6 +2,7 @@ using Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 
 namespace Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor;
 

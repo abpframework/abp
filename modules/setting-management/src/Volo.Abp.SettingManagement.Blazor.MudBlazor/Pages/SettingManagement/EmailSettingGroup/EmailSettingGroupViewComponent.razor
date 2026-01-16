@@ -1,6 +1,7 @@
 @using Volo.Abp.SettingManagement.Localization
 @using MudBlazor
 @inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+@using global::MudBlazor
 
 @if (EmailSettings != null)
 {
@@ -27,16 +28,16 @@
                                  Variant="Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudNumericField<int> @bind-Value="@EmailSettings.SmtpPort"
+                    <MudNumericField @bind-Value="@EmailSettings.SmtpPort"
                                          Label="@L["SmtpPort"]"
                                          Variant="Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox @bind-Checked="@EmailSettings.SmtpEnableSsl"
+                    <MudCheckBox T="bool" @bind-Checked="@EmailSettings.SmtpEnableSsl"
                                 Label="@L["SmtpEnableSsl"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials"
+                    <MudCheckBox T="bool" @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials"
                                 Label="@L["SmtpUseDefaultCredentials"]" />
                 </MudItem>
                 @if (!EmailSettings.SmtpUseDefaultCredentials)
