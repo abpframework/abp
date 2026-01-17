@@ -191,6 +191,7 @@ public abstract class AbpMudCrudPageBase<
     protected bool EditDialogVisible;
     protected MudForm? CreateFormRef;
     protected MudForm? EditFormRef;
+    protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
     protected MudDataGridEntityActionsColumn<TListViewModel> EntityActionsColumn = default!;
     protected EntityActionDictionary EntityActions { get; set; }
     protected TableColumnDictionary TableColumns { get; set; }

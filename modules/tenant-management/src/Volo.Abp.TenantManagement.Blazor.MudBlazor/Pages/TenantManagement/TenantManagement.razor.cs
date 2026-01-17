@@ -6,11 +6,9 @@ using MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.PageToolbars;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.FeatureManagement.Blazor.MudBlazor.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement.Localization;
-using Volo.Abp.MudBlazorUI;
 
 namespace Volo.Abp.TenantManagement.Blazor.MudBlazor.Pages.TenantManagement;
 
@@ -46,9 +44,9 @@ public partial class TenantManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:TenantManagement"].Value));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Tenants"].Value));
+        BreadcrumbItems.Add(new MudBlazorUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
+        BreadcrumbItems.Add(new MudBlazorUI.BreadcrumbItem(L["Menu:TenantManagement"].Value));
+        BreadcrumbItems.Add(new MudBlazorUI.BreadcrumbItem(L["Tenants"].Value));
         return base.SetBreadcrumbItemsAsync();
     }
 
@@ -66,9 +64,9 @@ public partial class TenantManagement
 
     protected override ValueTask SetToolbarItemsAsync()
     {
-        Toolbar.AddMudButton(L["NewTenant"],
+        Toolbar.AddButton(L["NewTenant"],
             OpenCreateDialogAsync,
-            icon: Icons.Material.Filled.Add.ToString(),
+            icon: Icons.Material.Filled.Add,
             requiredPolicyName: CreatePolicyName);
 
         return base.SetToolbarItemsAsync();
@@ -159,10 +157,17 @@ public partial class TenantManagement
 
     protected override async Task UpdateEntityAsync()
     {
-        if (_editFormRef != null && !await _editFormRef.Validate())
+        if (_editFormRef == null)
         {
             return;
         }
+
+        await _editFormRef.Validate();
+        if (!_editFormRef.IsValid)
+        {
+            return;
+        }
+        
         await base.UpdateEntityAsync();
     }
 }
