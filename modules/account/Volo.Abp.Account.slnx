@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/Volo.Abp.Account.Application.Contracts/Volo.Abp.Account.Application.Contracts.csproj" />
     <Project Path="src/Volo.Abp.Account.Application/Volo.Abp.Account.Application.csproj" />
+    <Project Path="src/Volo.Abp.Account.Blazor.MudBlazor/Volo.Abp.Account.Blazor.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.Account.Blazor/Volo.Abp.Account.Blazor.csproj" />
     <Project Path="src/Volo.Abp.Account.HttpApi.Client/Volo.Abp.Account.HttpApi.Client.csproj" />
     <Project Path="src/Volo.Abp.Account.HttpApi/Volo.Abp.Account.HttpApi.csproj" />

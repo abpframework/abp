@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
+using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.Identity;
 using Volo.Abp.MudBlazorUI;
@@ -50,7 +51,13 @@ public partial class AccountManage
 
     protected async Task ChangePasswordAsync()
     {
-        if (_changePasswordForm == null || !await _changePasswordForm.Validate())
+        if (_changePasswordForm == null)
+        {
+            return;
+        }
+
+        await _changePasswordForm.Validate();
+        if (!_changePasswordForm.IsValid)
         {
             return;
         }
@@ -85,11 +92,18 @@ public partial class AccountManage
 
     protected virtual async Task UpdatePersonalInfoAsync()
     {
-        if (_personalInfoForm == null || !await _personalInfoForm.Validate())
+        if (_personalInfoForm == null)
         {
             return;
         }
 
+        await _personalInfoForm.Validate();
+        
+        if (!_personalInfoForm.IsValid)
+        {
+            return;
+        }
+        
         if (PersonalInfoModel == null)
         {
             return;
