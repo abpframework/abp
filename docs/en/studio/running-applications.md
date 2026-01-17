@@ -77,7 +77,9 @@ We can use common [dotnet](https://learn.microsoft.com/en-us/dotnet/core/tools) 
 
 ### Add
 
-We can add 3 different item type to *Profile* for defining the tree structure. Those options are `C# Application`, `CLI Application` and `Folder`.
+We can add 4 different item types to *Profile* for defining the tree structure. Those options are `C# Application`, `CLI Application`, `Docker Container`, and `Folder`.
+
+> Note: The `Docker Container` option is only available when right-clicking the profile root. When right-clicking a folder, only `C# Application`, `CLI Application`, and `Folder` options are available.
 
 ![profile-root-context-menu-add](images/solution-runner/profile-root-context-menu-add.png)
 
@@ -181,13 +183,15 @@ You can see the context menu by right-clicking *Folder*. It will start/stop all 
 
 ## C# Application
 
-The .NET icon indicates that the application is a C# project. After we [add](#c-application) the C# applications to the root of the tree or folder, we can go to any C# application and right-click to view the context menu; `Start`, `Build`, `Browse`, `Requests`, `Exceptions`, `Logs`, `Copy URL`, `Properties`, `Remove`.
+The .NET icon indicates that the application is a C# project. After we [add](#c-application) the C# applications to the root of the tree or folder, we can go to any C# application and right-click to view the context menu; `Start`, `Stop`, `Restart`, `Build`, `Browse`, `Health Status`, `Requests`, `Exceptions`, `Logs`, `Copy URL`, `Properties`, `Remove`, and `Open with`.
 
 ![csharp-application-context-menu](images/solution-runner/csharp-application-context-menu.png)
 
-### Start
+### Start / Stop / Restart
 
-Starts the selected application. Once it is started, *Stop* and *Restart* options will be available.
+- **Start**: Starts the selected application.
+- **Stop**: Stops the running application.
+- **Restart**: Restarts the running application. This option is only available when the application is started.
 
 > When you start the C# application, you should see a *chain* icon next to the application name, that means the started application connected to ABP Studio. C# applications can connect to ABP Studio even when running from outside the ABP Studio environment, for example debugging with Visual Studio. If the application is run from outside the ABP Studio environment, it will display *(external)* information next to the chain icon.
 
@@ -199,14 +203,17 @@ It's the [similar](#build) options like root of the tree options. The only diffe
 
 ### Monitoring
 
-When the C# application is connected to ABP Studio, it starts sending telemetry information to see in one place. We can easily click these options to see the detail; `Browse`, `Requests`, `Exceptions` and `Logs`.
+When the C# application is connected to ABP Studio, it starts sending telemetry information to see in one place. We can easily click these options to see the detail; `Browse`, `Health Status`, `Requests`, `Exceptions`, `Events` and `Logs`.
 
 ![csharp-application-context-menu-monitor](images/solution-runner/csharp-application-context-menu-monitor.png)
 
 - `Browse`: ABP Studio includes a browser tool for accessing websites and running applications. You can click this option to view the application in the ABP Studio browser. However, this option is only accessible if the application is started.
-- Health Status : If Health Check endpoints are defined, it allows you to browse Health UI and see the latest health check response.
+- `Health Status`: A submenu that provides health monitoring options when Health Check endpoints are defined:
+  - **Browse Health UI**: Opens the Health UI page of the application in the built-in browser.
+  - **Show Latest Health Check Response**: Displays the latest health check response in JSON format.
 - `Requests`: It opens the *HTTP Requests* tab with adding the selected application filter. You can view all *HTTP Requests* received by your applications.
 - `Exceptions`: We can display all exceptions on this tab. It opens the *Exceptions* tab with selected application.
+- `Events`: Opens the *Events* tab filtered by this application. You can view all [Distributed Events](../framework/infrastructure/event-bus/distributed) sent or received by this application.
 - `Logs`: Clicking this option opens the *Logs* tab with adding the selected application filter.
 
 ### Properties
@@ -215,16 +222,31 @@ We can open the *Application Properties* window to change *Launch url*, *Health 
 
 ![solutioın-runner-properties](images/solution-runner/solutioın-runner-properties.png)
 
-- **Health check endpoint**: Endpoint for controlling the health status of the application periodically. If the application doesn't have a endpoint for health check, you can enter `/` to use the home page of the application as health check endpoint.
+- **Launch URL**: The URL used when browsing the application. This is the address where the application is accessible.
+- **Kubernetes service**: A regex pattern to match Kubernetes service names. When connected to a Kubernetes cluster, ABP Studio uses this pattern to find the corresponding Kubernetes service and uses its URL instead of the Launch URL. This applies to *Browse*, *Copy URL*, and *Health UI* features. For example, if your Helm chart creates a service named `bookstore-identity-service`, you can use `.*-identity-service` or `bookstore-identity.*` as the pattern. For [microservice](../get-started/microservice.md) templates, this is pre-configured.
+- **Health check endpoint**: Endpoint for controlling the health status of the application periodically. If the application doesn't have an endpoint for health check, you can enter `/` to use the home page of the application as health check endpoint.
 - **Health UI endpoint**: Endpoint of the Health UI page of the application.
-- **Skip build before starting**: When enabled, application is started without build and it makes starting faster. This is useful when you are working on a single application out of multiple, so you don't need to build others everytime they start.
-- **Watch changes while running**: When enabled, you should see an *eye* icon next to the application name.
+- **Skip build before starting**: When enabled, the application is started without building, making startup faster. This is useful when you are working on a single application out of multiple, so you don't need to build others every time they start.
+- **Watch changes while running**: When enabled, changes in your code are watched and dotnet hot-reloads the application or restarts it if needed. You should see an *eye* icon next to the application name when this is enabled.
+- **Open browser on start**: When enabled, the application is automatically opened in the Browse tab when it starts.
+- **Auto refresh browser on restart**: When enabled, browser tabs showing this application are automatically refreshed when the application restarts.
+- **Runnable**: Controls whether the application can be started from Solution Runner. When disabled, the application will not be included in batch start operations.
 
 ![csharp-application-context-menu-run-connection](images/solution-runner/csharp-application-context-menu-run-connection.png)
 
+### Open with
+
+The *Open with* submenu provides options to open the application project in external tools:
+
+- **Visual Studio**: Opens the project in Visual Studio (available if installed).
+- **Visual Studio Code**: Opens the project folder in Visual Studio Code (available if installed).
+- **JetBrains Rider**: Opens the project in JetBrains Rider (available if installed).
+- **Terminal**: Opens a terminal window in the project directory.
+- **Explorer / Finder**: Opens the project folder in the system file explorer.
+
 ### Miscellaneous
 
-- We can copy the selected application *Browse* URL with *Copy URL*. It copies the *Browse* URL instead *Launch URL* since we could connected to *Kubernetes* service. 
+- We can copy the selected application *Browse* URL with *Copy URL*. It copies the *Browse* URL instead of *Launch URL* since we could be connected to a *Kubernetes* service. 
 - You can change the target framework by right-click the selected application and change the *Target Framework* option. This option visible if the project has multiple target framework such as MAUI applications.
 - To remove an application from the tree, open the context menu by right-clicking the application and selecting *Remove*.
 

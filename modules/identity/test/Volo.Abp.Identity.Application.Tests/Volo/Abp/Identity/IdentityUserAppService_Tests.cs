@@ -162,7 +162,7 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
         (await Assert.ThrowsAsync<AbpIdentityResultException>(async () =>
         {
             await _userAppService.UpdateAsync(johnNash.Id, input);
-        })).Message.ShouldContain("Optimistic concurrency failure");
+        })).Message.ShouldContain("Optimistic concurrency check has been failed. The entity you're working on has modified by another user. Please discard your changes and try again.");
     }
 
     [Fact]

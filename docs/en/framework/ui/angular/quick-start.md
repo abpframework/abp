@@ -1,13 +1,13 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to set up your development environment for ABP Angular 17.3.x with this quick start guide, ensuring a smooth development experience."
+    "Description": "Learn how to set up your development environment for ABP Angular 21.x with this quick start guide, ensuring a smooth development experience."
 }
 ```
 
 # ABP Angular Quick Start
 
-**In this version ABP uses Angular [20.0.x](https://github.com/angular/angular/tree/20.0.x) version. You don't have to install Angular CLI globally**
+**In this version ABP uses Angular [21.0.x](https://github.com/angular/angular/tree/21.0.x) version. You don't have to install Angular CLI globally**
 
 ## How to Prepare Development Environment
 
@@ -18,13 +18,13 @@ Please follow the steps below to prepare your development environment for Angula
 3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE which works seamlessly with TypeScript. Although you can use any IDE including Visual Studio or Rider, VS Code will most likely deliver the best developer experience when it comes to Angular projects. ABP project templates even contain plugin recommendations for VS Code users, which VS Code will ask you to install when you open the Angular project folder. Here is a list of recommended extensions:
    - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=angular.ng-template)
    - [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-   - [TSLint](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-tslint-plugin)
+   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
    - [Visual Studio IntelliCode](https://marketplace.visualstudio.com/items?itemName=visualstudioexptteam.vscodeintellicode)
    - [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
    - [npm Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.npm-intellisense)
    - [Angular 10 Snippets - TypeScript, Html, Angular Material, ngRx, RxJS & Flex Layout](https://marketplace.visualstudio.com/items?itemName=Mikael.Angular-BeastCode)
    - [JavaScript (ES6) code snippets](https://marketplace.visualstudio.com/items?itemName=xabikos.JavaScriptSnippets)
-   - [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome)
+   - [JavaScript Debugger](https://marketplace.visualstudio.com/items?itemName=ms-vscode.js-debug) (built-in, usually pre-installed)
    - [Git History](https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory)
    - [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
 

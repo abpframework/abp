@@ -437,7 +437,7 @@ In this way, applications or modules can have selectors based on the current lay
 
 ### RTL
 
-To support Right-To-Left languages, the Layout should check the current culture and add `dir="rtl"` to the `html` tag and `rtl` CSS class the the `body` tag.
+To support Right-To-Left languages, the Layout should check the current culture and add `dir="rtl"` to the `html` tag and `rtl` CSS class to the `body` tag.
 
 You can check `CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft` to understand if the current language is a RTL language.
 

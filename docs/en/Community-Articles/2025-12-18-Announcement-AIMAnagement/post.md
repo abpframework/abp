@@ -76,7 +76,7 @@ Installation is straightforward using the [ABP Studio](https://abp.io/studio). Y
 - Client Components
 - Integration to Startup Templates
 
-### v10.1
+### v10.1 ✅
 - Blazor UI
 - Angular UI
 - Resource based authorization on Workspaces

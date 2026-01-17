@@ -100,7 +100,7 @@ It is the root of all subcharts. When you add a new main chart to the root, it i
   - `Install Chart(s)`: Installs the selected chart to the current profile.
   - `Uninstall Chart(s)`: Uninstalls the selected chart from the current profile.
 - `Properties`: It opens the *Chart Properties* window. You can see the chart information in the *Chart Info* tab. In the *Metadata* tab, you can add metadata for the selected main chart. It overrides the metadata in the profile. In the *Kubernetes Services* tab, you can relate a Kubernetes service with the main chart; however, since the main chart usually doesn't create kubernetes service, we can leave it empty.
-- `Refrest Sub Charts`: Refreshes the subcharts of the selected main chart.
+- `Refresh Sub Charts`: Refreshes the subcharts of the selected main chart.
 - `Open With`: You can open the selected chart with *Visual Studio Code* or *File Explorer*.
 - `Remove`: Removes the selected main chart from the solution.
 
@@ -136,6 +136,11 @@ After we *Build Docker Image(s)* and *Install Chart(s)*, we can connect to the K
 While connected, changing the current profile is not possible. Existing application services in the *Kubernetes* tab become visible when connected. To *Disconnect* you can click the *Chain* icon.
 
 ![connected](./images/kubernetes/connected.png)
+
+When connected, you can right-click on a Kubernetes service to see the following context menu options:
+
+- `Browse`: Opens the [browser](./monitoring-applications.md#browse) and navigates to the Kubernetes service URL. This option is only visible if the service has a related Helm chart with matching *Kubernetes Services* regex pattern.
+- `Enable Interception` / `Disable Interception`: Enables or disables traffic interception for the selected service. See the [Intercept a Service](#intercept-a-service) section for more details.
 
 When you are connecting to a Kubernetes cluster, it automatically installs the WireGuard VPN to the Kubernetes cluster for a safe connection. You can specify the *wireGuardPassword* in the *Kubernetes Profile* -> *Secrets* tab or at a higher level such as *Solution Secrets* or *Global Secrets*. If you don't provide a password, it generates a random password and stores it in the *Kubernetes Profile* -> *Secrets*. However, if you try to connect to a cluster that already installed WireGuard VPN, then you should give the same password; otherwise, it won't connect. To see the random password, you can click the *eye* icon in the *Kubernetes Profile* -> *Secrets* tab.
 

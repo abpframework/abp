@@ -14,7 +14,22 @@ Also see the following notes about ABP releases:
 * [ABP Studio release notes](../studio/release-notes.md)
 * [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.1 (2026-01-06)
+
+> This is currently a RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-1-release-candidate-cyqui19d)** for the v10.1 release.
+
+* Resource-Based Authorization
+* Introducing the [TickerQ Background Worker Provider](../framework/infrastructure/background-workers/tickerq.md)
+* Angular UI: Version Upgrade to **v21**
+* [File Management Module](../modules/file-management.md): Public File Sharing Support
+* [Payment Module](../modules/payment.md): Public Page Implementation for Blazor & Angular UIs
+* [AI Management Module](../modules/ai-management/index.md) for Blazor & Angular UIs
+* [Identity PRO Module](../modules/identity-pro.md): Password History Support
+* [Account PRO Module](../modules/account-pro.md): Introducing WebAuthn Passkeys
+
 ## 10.0 (2025-11-18)
+
+> **Note**: ABP has upgraded to .NET 10.0, so if you plan to use ABP 10.0, you’ll need to migrate your solutions to .NET 10.0. You can refer to the [Migrate from ASP.NET Core 9.0 to 10.0](https://learn.microsoft.com/en-us/aspnet/core/migration/90-to-100) documentation for guidance. However, ABP’s NuGet packages are compatible with both .NET 9 and .NET 10, allowing developers to continue using .NET 9 while still enjoying the latest features and improvements of the ABP Framework without upgrading their SDK.
 
 See the detailed **[blog post / announcement](https://abp.io/community/announcements/abp.io-platform-10.0-final-has-been-released-spknn925)** for the v10.0 release.
 

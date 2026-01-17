@@ -34,13 +34,13 @@ The startup template is configured to use **in-memory SQLite** database for the 
 Using in-memory SQLite database has two main advantages;
 
 * It is faster compared to an external DBMS.
-* It create a **new fresh database** for each test case, so tests doesn't affect each other.
+* It creates a **new fresh database** for each test case, so tests don't affect each other.
 
 > **Tip**: Do not use EF Core's In-Memory database for advanced integration tests. It is not a real DBMS and has many differences in details. For example, it doesn't support transaction and rollback scenarios, so you can't truly test the failing scenarios. On the other hand, In-Memory SQLite is a real DBMS and supports the fundamental SQL database features.
 
 ## The Seed Data
 
-Writing tests against an empty database is not practical. In most cases, you need to some initial data in the database. For example, if you write a test class that query, update and delete the products, it would be helpful to have a few products in the database before executing the test case.
+Writing tests against an empty database is not practical. In most cases, you need some initial data in the database. For example, if you write a test class that queries, updates and deletes the products, it would be helpful to have a few products in the database before executing the test case.
 
 ABP's [Data Seeding](../framework/infrastructure/data-seeding.md) system is a powerful way to seed the initial data. The application startup template has a *YourProject*TestDataSeedContributor class in the `.TestBase` project. You can fill it to have an initial data that you can use for each test method.
 
@@ -401,7 +401,7 @@ public class EfCoreIssueAppService_Tests : IssueAppService_Tests<MyProjectEntity
 }
 ````
 
-> By deriving from the related abstract classes, now we can see the all tests in the test explorers and run them.
+> By deriving from the related abstract classes, now we can see all the tests in the test explorers and run them.
 
 ![unitest-efcore-mongodb](../images/unitest-efcore-mongodb.png)
 

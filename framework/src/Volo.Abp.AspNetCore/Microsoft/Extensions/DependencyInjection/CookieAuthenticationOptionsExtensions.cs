@@ -61,11 +61,13 @@ public static class CookieAuthenticationOptionsExtensions
                         return;
                     }
 
+                    var clientId = principalContext.Properties.GetString("client_id");
+                    var clientSecret = principalContext.Properties.GetString("client_secret");
                     var response = await openIdConnectOptions.Backchannel.IntrospectTokenAsync(new TokenIntrospectionRequest
                     {
                         Address = introspectionEndpoint,
-                        ClientId = openIdConnectOptions.ClientId!,
-                        ClientSecret = openIdConnectOptions.ClientSecret,
+                        ClientId = clientId ?? openIdConnectOptions.ClientId!,
+                        ClientSecret = clientSecret ?? openIdConnectOptions.ClientSecret,
                         Token = accessToken
                     });
 

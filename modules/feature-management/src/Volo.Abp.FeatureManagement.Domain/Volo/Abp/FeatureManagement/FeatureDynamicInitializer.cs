@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,33 +18,19 @@ public class FeatureDynamicInitializer : ITransientDependency
     public ILogger<FeatureDynamicInitializer> Logger { get; set; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<FeatureManagementOptions> Options { get; }
-    [CanBeNull]
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected IDynamicFeatureDefinitionStore DynamicFeatureDefinitionStore { get; }
-    protected IStaticFeatureSaver StaticFeatureSaver { get; }
 
-    public FeatureDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<FeatureManagementOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IDynamicFeatureDefinitionStore dynamicFeatureDefinitionStore,
-        IStaticFeatureSaver staticFeatureSaver)
+    public FeatureDynamicInitializer(IServiceProvider serviceProvider)
     {
         Logger = NullLogger<FeatureDynamicInitializer>.Instance;
 
         ServiceProvider = serviceProvider;
-        Options = options;
-        ApplicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
-        CancellationTokenProvider = cancellationTokenProvider;
-        DynamicFeatureDefinitionStore = dynamicFeatureDefinitionStore;
-        StaticFeatureSaver = staticFeatureSaver;
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        var options = Options.Value;
+        var options = ServiceProvider
+            .GetRequiredService<IOptions<FeatureManagementOptions>>()
+            .Value;
 
         if (!options.SaveStaticFeaturesToDatabase && !options.IsDynamicFeatureStoreEnabled)
         {
@@ -54,11 +39,12 @@ public class FeatureDynamicInitializer : ITransientDependency
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
                 await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
@@ -68,20 +54,23 @@ public class FeatureDynamicInitializer : ITransientDependency
         return ExecuteInitializationAsync(options, cancellationToken);
     }
 
-    protected virtual async Task ExecuteInitializationAsync(FeatureManagementOptions options, CancellationToken cancellationToken)
+    protected virtual async Task ExecuteInitializationAsync(
+        FeatureManagementOptions options,
+        CancellationToken cancellationToken)
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
                 await SaveStaticFeaturesToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -104,6 +93,8 @@ public class FeatureDynamicInitializer : ITransientDependency
             return;
         }
 
+        var staticFeatureSaver = ServiceProvider.GetRequiredService<IStaticFeatureSaver>();
+
         await Policy
             .Handle<Exception>()
             .WaitAndRetryAsync(
@@ -118,7 +109,7 @@ public class FeatureDynamicInitializer : ITransientDependency
             {
                 try
                 {
-                    await StaticFeatureSaver.SaveAsync();
+                    await staticFeatureSaver.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -128,17 +119,20 @@ public class FeatureDynamicInitializer : ITransientDependency
             }, cancellationToken);
     }
 
-    protected virtual async Task PreCacheDynamicFeaturesAsync(FeatureManagementOptions options)
+    protected virtual async Task PreCacheDynamicFeaturesAsync(
+        FeatureManagementOptions options)
     {
         if (!options.IsDynamicFeatureStoreEnabled)
         {
             return;
         }
 
+        var dynamicFeatureDefinitionStore = ServiceProvider.GetRequiredService<IDynamicFeatureDefinitionStore>();
+
         try
         {
             // Pre-cache features, so first request doesn't wait
-            await DynamicFeatureDefinitionStore.GetGroupsAsync();
+            await dynamicFeatureDefinitionStore.GetGroupsAsync();
         }
         catch (Exception ex)
         {

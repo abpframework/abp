@@ -66,33 +66,71 @@ In this tab, you can view comprehensive overall information. You have the option
 
 ![overall](./images/monitoring-applications/overall.png)
 
-In the data grid, details for each application are displayed. It's possible to sort rows by columns. When selecting a row, you can right-click to access the context menu, offering various actions. This menu allows for opening related tabs that are filtered by the selected application.
+In the data grid, details for each application are displayed. It's possible to sort rows by columns.
 
 - `Name`: The name of the application.
-- `State`: The state of the application. It can take on several values such as *Scheduled*, *Starting*, *Started*, *Stopping* and *Stopped*. In the event of an application crash during its starting, the state is mark as *Scheduled*, we can cancel the starting process at that stage.
-- `Health` : The health state of the application. Clicking on the icon shows the latest health check response. Displays `N/A` if the application is not running or health check is not configured for the application.
-- `Instances`: Indicates the count of running instances for the application. This value is particularly helpful when scaling the application within a Kubernetes, providing visibility into the number of currently active instances.
+- `State`: The state of the application. It can take on several values such as *Scheduled*, *Starting*, *Started*, *Stopping* and *Stopped*. The *Scheduled* state indicates the application is waiting for an automatic restart (e.g., after a crash or when watch mode detects changes). You can cancel the scheduled restart at this stage.
+- `Health`: The health state of the application. The icon indicates the current health status: *Healthy* (green), *Unhealthy* (red), *Degraded* (yellow), or *Unknown* (gray). Clicking on the icon shows the latest health check response in JSON format. Displays `N/A` if the application is not running or health check is not configured for the application.
+- `Instances`: Indicates the count of running instances for the application. This value is particularly helpful when scaling the application within a Kubernetes cluster, providing visibility into the number of currently active pods.
 - `Uptime`: The time elapsed since the application started.
 - `Requests`: The number of HTTP requests received by the application.
-- `Events (R/S)`: The number of [Distributed Event](../framework/infrastructure/event-bus/distributed) received or sent by the application.
+- `Events (R/S)`: The number of [Distributed Events](../framework/infrastructure/event-bus/distributed) received or sent by the application.
 - `Exceptions`: The number of exceptions thrown by the application.
 - `Actions`: The actions that can be performed on the application. You can start and stop the application.
 
-> For the events system, you can exclusively view the [Distributed Events](../framework/infrastructure/event-bus/distributed). Generally, the [Local Events](../framework/infrastructure/event-bus/distributed) is not included.
+### Context Menu Actions
+
+When selecting a row, you can right-click to access the context menu with the following actions:
+
+| Action | Description |
+|--------|-------------|
+| **Start / Stop** | Start or stop the selected application. |
+| **Restart** | Restart the application (available when the application is running). |
+| **Build** | Build options including *Build*, *Graph Build*, *Restore*, and *Clean* (available for C# applications when stopped). |
+| **Browse** | Open the application in the [Browse](#browse) tab (available when a Launch URL is configured). |
+| **Health Status** | Submenu with *Browse Health UI* and *Show Latest Health Check Response* options. |
+| **Requests** | Open the [HTTP Requests](#http-requests) tab filtered by this application. |
+| **Exceptions** | Open the [Exceptions](#exceptions) tab filtered by this application. |
+| **Logs** | Open the [Logs](#logs) tab with this application selected. |
+| **Copy Url** | Copy the application's URL to the clipboard. |
+| **Properties** | Open the application properties dialog. |
+
+> For the events system, you can exclusively view the [Distributed Events](../framework/infrastructure/event-bus/distributed). Generally, the [Local Events](../framework/infrastructure/event-bus/local) are not included.
 
 ## Browse
 
-ABP Studio includes a browser tool that allows access to websites and running applications. You can open new tabs to browse different websites or view active applications. It's a convenient utility to access websites and applications without leaving ABP Studio. Clicking the *Browse* tab displays the running applications and an *Open new tab* button.
+ABP Studio includes a built-in browser that allows access to websites and running applications. You can open new tabs to browse different websites or view active applications. It's a convenient utility to access websites and applications without leaving ABP Studio. Clicking the *Browse* tab displays the running applications and an *Open new tab* button.
 
 ![browse](./images/monitoring-applications/browse.png)
 
-You can open the *Browse* tabs as many times as you want. It's possible to open the same application in several tabs simultaneously. To open an application, navigate through *Solution Runner* -> *C# or CLI Application* -> *Browse*. This option is only visible when there is a [Launch URL](./running-applications.md#properties). Additionally, you can access any URL by entering it into the address bar.
+You can open the *Browse* tabs as many times as you want. It's possible to open the same application in several tabs simultaneously. To open an application, you can:
+
+- Double-click on an application in the *Solution Runner* tree.
+- Right-click on an application and select *Browse* from the context menu.
+- Click on a running application in the application list shown in the *Browse* tab.
+
+These options are only available when the application has a [Launch URL](./running-applications.md#properties) configured. Additionally, you can access any URL by entering it into the address bar.
 
 ![browse-2](./images/monitoring-applications/browse-2.png)
 
-When you click the *Dev Tools* button it opens the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) for the selected tab.
+### Browser Toolbar
+
+The browser toolbar provides the following controls:
+
+| Control | Description |
+|---------|-------------|
+| **Back / Forward** | Navigate through your browsing history within the tab. |
+| **Refresh** | Reload the current page. |
+| **Address Bar** | Enter any URL to navigate directly. The address bar shows the current URL and allows you to navigate to any website. |
+| **Dev Tools** | Opens the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools) for the selected tab, allowing you to inspect elements, debug JavaScript, and analyze network requests. |
+| **Clear Cookies** | Clears all cookies for the currently selected tab, useful for testing authentication flows or resetting session state. |
+| **Open in External Browser** | Opens the current URL in your system's default web browser. |
 
 ![dev-tools](./images/monitoring-applications/dev-tools.png)
+
+### Default Credentials Notification
+
+When browsing certain applications (such as AppHost dashboards), ABP Studio displays a notification bar with default credentials. This helps you quickly log in during development. You can dismiss this notification permanently by clicking the *Don't show again* option.
 
 ## HTTP Requests
 
@@ -100,47 +138,150 @@ Within this tab, you can view all *HTTP Requests* received by your C# applicatio
 
 ![http-requests](./images/monitoring-applications/http-requests.png)
 
-Clicking on a row enables you to view the details of each HTTP request; `URL`, `Method`, `Status Code`, `Timestamp`, `Headers (Request, Response)`, `Request (Payload)` and `Response`.
+### Request List Columns
+
+The request list displays the following information:
+
+| Column | Description |
+|--------|-------------|
+| **Timestamp** | When the request was received (displayed as HH:mm:ss). |
+| **Application** | The name of the application that received the request. |
+| **Path** | The request URL path and query string. |
+| **Method** | The HTTP method (GET, POST, PUT, DELETE, etc.). |
+| **Status Code** | The HTTP response status code. |
+| **Duration** | The time taken to process the request in milliseconds. |
+| **Request Body Size** | The size of the request payload. |
+| **Response Body Size** | The size of the response payload. |
+
+### Request Details
+
+Clicking on a row enables you to view the details of each HTTP request:
+
+- **URL**: The full request URL.
+- **Method**: The HTTP method used.
+- **Status Code**: The response status code.
+- **Duration**: Request processing time in milliseconds.
+- **Timestamp**: When the request was received.
+- **Headers (Request)**: All request headers sent by the client.
+- **Headers (Response)**: All response headers returned by the server.
+- **Request (Payload)**: The request body with size information.
+- **Response**: The response body with size information.
 
 ![http-requests-details](./images/monitoring-applications/http-requests-details.png)
 
-You can format the JSON content by clicking the *Format* button.
+### Formatting JSON Content
+
+Both request and response payloads have a *Format* button that formats JSON content for better readability. This is available when the content type is `application/json`.
 
 ![http-requests-details-json](./images/monitoring-applications/http-requests-details-json.png)
 
-Furthermore, by clicking the gear icon in the *HTTP Requests* tab, you can access the *Solution Runner HTTP Requests Options* window. Within the *Ignored URLs* tab, you have the ability to exclude particular URLs by applying a regex pattern. Excluded URLs won't be visible in the *HTTP Requests* tab. By default, the metrics URL is already ignored. You can add or remove items as needed.
+### Quick URL Filter
+
+When viewing request details, you can right-click and select *Filter Selected URL* to quickly apply the current URL as a filter. This is useful when you want to see all requests to a specific endpoint.
+
+### Configuring Ignored URLs
+
+By clicking the gear icon in the *HTTP Requests* tab, you can access the *Solution Runner HTTP Requests Options* window. Within the *Ignored URLs* tab, you have the ability to exclude particular URLs by applying a regex pattern. Excluded URLs won't be visible in the *HTTP Requests* tab. By default, the metrics URL is already ignored. You can add or remove items as needed.
 
 ![http-requests-options](./images/monitoring-applications/http-requests-options.png)
 
-> After adding a new URL, it will only affect subsequent requests.
+> After adding a new URL pattern, it will only affect subsequent requests. Existing requests will remain visible.
 
 ## Events
 
-In this tab, you can view all [Distributed Events](../framework/infrastructure/event-bus/distributed) sent or received by your C# applications. You can filter them by [Event Name](../framework/infrastructure/event-bus/distributed#event-name) using the search textbox or by selecting a specific application. Additionally, you can choose the *Direction* (Received/Send) and *Source* (Direct/Inbox/Outbox) of events. The *Clear Events* button removes all events.
+In this tab, you can view all [Distributed Events](../framework/infrastructure/event-bus/distributed) sent or received by your C# applications. You can filter them by [Event Name](../framework/infrastructure/event-bus/distributed#event-name) using the search textbox or by selecting a specific application. Additionally, you can choose the *Direction* (Received/Sent) and *Source* (Direct/Inbox/Outbox) of events. The *Clear Events* button removes all events.
 
 ![events](./images/monitoring-applications/events.png)
 
-> In the *Direction* section, there are two options: *Received*, indicating events received by the application, and *Sent*, indicating events sent by the application. Within the *Source* section, three options are available, and their significance comes into play when utilizing the [Inbox/Outbox pattern](../framework/infrastructure/event-bus/distributed#outbox-inbox-for-transactional-events). *Inbox* refers to events received by the application, *Outbox* refers to events sent by the application and *Direct* signifies events sent or received by the application without involving Inbox/Outbox pattern.
+### Direction and Source Filters
 
-Clicking on a row enables you to view the details of each event; `Application`, `Event Name`, `Direction`, `Source`, `Timestamp` and `Event Data`.
+| Filter | Options | Description |
+|--------|---------|-------------|
+| **Direction** | *Received*, *Sent* | Filter by whether events were received or sent by the application. |
+| **Source** | *Direct*, *Inbox*, *Outbox* | Filter by event source. Relevant when using the [Inbox/Outbox pattern](../framework/infrastructure/event-bus/distributed#outbox-inbox-for-transactional-events). |
+
+- **Direct**: Events sent or received without using the Inbox/Outbox pattern.
+- **Inbox**: Events received through the transactional inbox.
+- **Outbox**: Events sent through the transactional outbox.
+
+### Event Details
+
+Clicking on a row enables you to view the details of each event:
+
+- **Application**: The application that sent or received the event.
+- **Event Name**: The full event type name.
+- **Direction**: Whether the event was received or sent.
+- **Source**: The event source (Direct, Inbox, or Outbox).
+- **Timestamp**: When the event was processed.
+- **Event Data**: The event payload in JSON format.
 
 ![event-details](./images/monitoring-applications/event-details.png)
 
+### Formatting Event Data
+
+The *Event Data* section includes a *Format* button that formats the JSON content for better readability. This makes it easier to inspect complex event payloads.
+
+> ABP Studio automatically decodes Base64-encoded event data. If your event bus uses Base64 encoding for message transport, the data will be displayed in its decoded, readable form.
+
 ## Exceptions
 
-This tab displays all exceptions by your C# applications. You can apply filters using the search textbox based on *Message*, *Source*, *ExceptionType*, and *StackTrace* or by choosing a specific application. Additionally, you have the option to select the [Log Level](../framework/fundamentals/exception-handling.md#log-level) for adding a filter. To clear all exceptions, use the *Clear Exceptions* button.
+This tab displays all exceptions thrown by your C# applications. You can apply filters using the search textbox based on *Message*, *Source*, *ExceptionType*, and *StackTrace* or by choosing a specific application. Additionally, you have the option to select the [Log Level](../framework/fundamentals/exception-handling.md#log-level) for filtering. To clear all exceptions, use the *Clear Exceptions* button.
 
 ![exceptions](./images/monitoring-applications/exceptions.png)
 
-Click on a row to inspect the details of each exception; `Application`, `Exception Type`, `Source`, `Timestamp`, `Level`, `Message` and `StackTrace`.
+### Exception List
+
+The exception list shows a summary of each exception:
+
+- **Exception Type**: The short exception type name (e.g., `NullReferenceException` instead of `System.NullReferenceException`).
+- **Message**: A truncated version of the exception message.
+- **Timestamp**: When the exception occurred.
+- **Level**: The log level (Error, Warning, etc.).
+
+### Exception Details
+
+Click on a row to inspect the full details of each exception:
+
+- **Application**: The application where the exception occurred.
+- **Exception Type**: The full exception type name including namespace.
+- **Source**: The source file or component where the exception originated.
+- **Timestamp**: When the exception was thrown.
+- **Level**: The log level associated with this exception.
+- **Message**: The complete exception message.
+- **StackTrace**: The full stack trace showing the call hierarchy.
 
 ![exception-details](./images/monitoring-applications/exception-details.png)
 
+### Inner Exceptions
+
+If an exception contains inner exceptions, they are displayed hierarchically in the details panel. This allows you to trace the root cause of wrapped exceptions, which is common in scenarios like database errors wrapped in application-level exceptions.
+
 ## Logs
 
-The *Logs* tab allows you to view all logs for both CLI and C# applications. To access logs, simply select an application. You can also apply filters using the search textbox by log text or by selecting a specific *Log Level*. When you select a *Log Level* it shows selected log level and higher log levels. For example, if you select *Warning* it shows *Warning*, *Error* and *Critical* logs. To clear selected application logs, use the *Clear Logs* button. If *Auto Scroll* is checked, the display automatically scrolls when new logs are received.
+The *Logs* tab allows you to view all logs for both CLI and C# applications. To access logs, simply select an application from the dropdown. You can also apply filters using the search textbox by log text or by selecting a specific *Log Level*.
 
 ![logs](./images/monitoring-applications/logs.png)
+
+### Log Level Filtering
+
+When you select a *Log Level*, it shows the selected level and all higher severity levels:
+
+| Selected Level | Shows |
+|---------------|-------|
+| **Trace** | Trace, Debug, Information, Warning, Error, Critical |
+| **Debug** | Debug, Information, Warning, Error, Critical |
+| **Information** | Information, Warning, Error, Critical |
+| **Warning** | Warning, Error, Critical |
+| **Error** | Error, Critical |
+| **Critical** | Critical only |
+| **None** | All logs (no filtering) |
+
+### Log Display Features
+
+- **Color Coding**: Log entries are color-coded by level for quick visual identification. Errors and critical logs stand out with distinct colors.
+- **Auto Scroll**: When enabled, the display automatically scrolls to show new logs as they arrive. This is useful for real-time monitoring.
+- **Clear Logs**: Clears the logs for the currently selected application only. Other applications' logs remain intact.
+- **Text Filter**: Search within log messages using the search textbox. The filter is applied in real-time with a slight delay for performance.
 
 ## Tools
 

@@ -10,6 +10,7 @@ import {
 } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/models';
 import { INCUDE_LOCALIZATION_RESOURCES_TOKEN } from '../tokens/include-localization-resources.token';
 import { InternalStore } from '../utils/internal-store-utils';
+import { EnvironmentService } from './environment.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ import { InternalStore } from '../utils/internal-store-utils';
 export class ConfigStateService {
   private abpConfigService = inject(AbpApplicationConfigurationService);
   private abpApplicationLocalizationService = inject(AbpApplicationLocalizationService);
+  private environmentService = inject(EnvironmentService);
   private readonly includeLocalizationResources = inject(INCUDE_LOCALIZATION_RESOURCES_TOKEN, { optional: true });
 
   private updateSubject = new Subject<void>();
@@ -59,7 +61,18 @@ export class ConfigStateService {
       this.uiCultureFromAuthCodeFlow ?? appState.localization.currentCulture.cultureName;
 
     return this.getlocalizationResource(cultureName).pipe(
-      map(result => ({ ...appState, localization: { ...appState.localization, ...result } })),
+      map(result => {
+        const envLocalization = this.environmentService.getEnvironment()?.localization;
+        return {
+          ...appState,
+          localization: {
+            ...appState.localization,
+            ...result,
+            defaultResourceName:
+              appState.localization?.defaultResourceName ?? envLocalization?.defaultResourceName,
+          },
+        };
+      }),
       tap(() => (this.uiCultureFromAuthCodeFlow = undefined)),
     );
   }
@@ -83,9 +96,18 @@ export class ConfigStateService {
 
     return this.getlocalizationResource(lang)
       .pipe(
-        tap(result =>
-          this.store.patch({ localization: { ...this.store.state.localization, ...result } }),
-        ),
+        tap(result => {
+          const envLocalization = this.environmentService.getEnvironment()?.localization;
+          this.store.patch({
+            localization: {
+              ...this.store.state.localization,
+              ...result,
+              defaultResourceName:
+                this.store.state.localization?.defaultResourceName ??
+                envLocalization?.defaultResourceName,
+            },
+          });
+        }),
       )
       .pipe(map(() => null));
   }

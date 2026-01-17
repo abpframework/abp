@@ -1,6 +1,6 @@
 import {
   ABP,
-  LazyLocalizationPipe,
+  AsyncLocalizationPipe,
   LocalizationPipe,
   PermissionDirective,
   RoutesService,
@@ -30,7 +30,7 @@ import { EllipsisDirective } from '@abp/ng.theme.shared';
     AsyncPipe,
     RouterLink,
     NgbDropdownModule,
-    LazyLocalizationPipe,
+    AsyncLocalizationPipe,
     PermissionDirective,
     EllipsisDirective,
     LocalizationPipe,

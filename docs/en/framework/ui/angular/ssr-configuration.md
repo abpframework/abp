@@ -239,7 +239,7 @@ The schematic installs `openid-client` to handle authentication on the server si
 
 ## 5. Render Modes & Hybrid Rendering
 
-Angular 20 provides different rendering modes that you can configure per route in the `app.routes.server.ts` file to optimize performance and SEO.
+Angular 21 provides different rendering modes that you can configure per route in the `app.routes.server.ts` file to optimize performance and SEO.
 
 ### 5.1. Available Render Modes
 
@@ -352,13 +352,17 @@ currentTime = new Date();
 // ✅ Good - use TransferState for consistent data
 import { TransferState, makeStateKey } from '@angular/core';
 
-const TIME_KEY = makeStateKey<string>('time');
+TIME_KEY = makeStateKey<string>('time');
+transferState = inject<TransferState>(TransferState);
+time: string;
 
-constructor(private transferState: TransferState) {
+constructor() {
     if (isPlatformServer(this.platformId)) {
-        this.transferState.set(TIME_KEY, new Date().toISOString());
+        this.time = new Date().toISOString();
+        this.transferState.set(this.TIME_KEY, this.time);
     } else {
-        this.time = this.transferState.get(TIME_KEY, new Date().toISOString());
+        const timeFromCache = this.transferState.get(this.TIME_KEY, new Date().toISOString());
+        this.time = timeFromCache;
     }
 }
 ```

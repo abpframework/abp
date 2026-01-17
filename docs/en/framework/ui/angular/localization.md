@@ -12,7 +12,7 @@ Before exploring _the localization pipe_ and _the localization service_, you sho
 The localization key format consists of two sections which are **Resource Name** and **Key**.
 `ResourceName::Key`
 
-> If you do not specify the resource name, the `defaultResourceName` which is declared in `environment.ts` will be considered as default.
+> If you do not specify the resource name, the `defaultResourceName` will be used. The value is first retrieved from the backend API response. If the backend does not provide a `defaultResourceName`, the value declared in `environment.ts` will be used as a fallback.
 
 ```ts
 const environment = {

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore how to integrate AI services into your ABP Framework applications using the Microsoft.Extensions.AI library for seamless functionality."
+}
+```
+
 # Microsoft.Extensions.AI
 [Microsoft.Extensions.AI](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai) is a library that provides a unified API for integrating AI services. It is a part of the Microsoft AI Extensions Library. It is used to integrate AI services into your application. This documentation is about the usage of this library with ABP Framework. Make sure you have read the [Artificial Intelligence](./index.md) documentation before reading this documentation.
 
@@ -92,7 +99,7 @@ Example of resolving a typed chat client accessor:
 public class MyService
 {
     private readonly IChatClientAccessor<CommentSummarization> _chatClientAccessor;
-}
+
     public async Task<string> GetResponseAsync(string prompt)
     {
         var chatClient = _chatClientAccessor.ChatClient;

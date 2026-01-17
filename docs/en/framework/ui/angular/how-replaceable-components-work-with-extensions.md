@@ -9,38 +9,45 @@
 
 Additional UI extensibility points ([Entity action extensions](../angular/entity-action-extensions.md), [data table column extensions](../angular/data-table-column-extensions.md), [page toolbar extensions](../angular/page-toolbar-extensions.md) and others) are used in ABP pages to allow to control entity actions, table columns and page toolbar of a page. If you replace a page, you need to apply some configurations to be able to work extension components in your component. Let's see how to do this by replacing the roles page.
 
-Create a new module called `MyRolesModule`:
-
-```bash
-yarn ng generate module my-roles --module app
-```
-
 Create a new component called `MyRolesComponent`:
 
 ```bash
-yarn ng generate component my-roles/my-roles --flat --export
+yarn ng generate component my-roles/my-roles --flat
 ```
 
 Open the generated `src/app/my-roles/my-roles.component.ts` file and replace its content with the following:
 
 ```js
 import { Component, Injector, inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 
-import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { ListService, PagedAndSortedResultRequestDto, PagedResultDto, LocalizationPipe } from '@abp/ng.core';
 import { eIdentityComponents, RolesComponent } from '@abp/ng.identity';
 import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
+import { ePermissionManagementComponents, PermissionManagementComponent } from '@abp/ng.permission-management';
+import { Confirmation, ConfirmationService, ModalComponent, ButtonComponent } from '@abp/ng.theme.shared';
 import {
   EXTENSIONS_IDENTIFIER,
   FormPropData,
-  generateFormFromProps
+  generateFormFromProps,
+  PageToolbarComponent,
+  ExtensibleTableComponent,
+  ExtensibleFormComponent
 } from '@abp/ng.components/extensible';
 
 @Component({
   selector: 'app-my-roles',
+  imports: [
+    ReactiveFormsModule,
+    LocalizationPipe,
+    ModalComponent,
+    ButtonComponent,
+    PageToolbarComponent,
+    ExtensibleTableComponent,
+    ExtensibleFormComponent,
+    PermissionManagementComponent
+  ],
   templateUrl: './my-roles.component.html',
   providers: [
     ListService,
@@ -236,25 +243,12 @@ Open the generated `src/app/my-role/my-role.component.html` file and replace its
 
 We have added the `abp-page-toolbar`, `abp-extensible-table`, and `abp-extensible-form` extension components to template of the `MyRolesComponent`.
 
-You should import the required modules for the `MyRolesComponent` to `MyRolesModule`. Open the `src/my-roles/my-roles.module.ts` file and replace the content with the following:
-
-```js
-import { ExtensibleModule } from '@abp/ng.components/extensible';
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { MyRolesComponent } from './my-roles.component';
-import { PermissionManagementModule } from '@abp/ng.permission-management';
-
-@NgModule({
-  declarations: [MyRolesComponent],
-  imports: [SharedModule, ExtensibleModule, PermissionManagementModule],
-  exports: [MyRolesComponent],
-})
-export class MyRolesModule {}
-```
-
-- `ExtensionsModule` imported to be able to use the extension components in your component.
-- `PermissionManagementModule` imported to be able to use the `abp-permission-*management` in your component.
+Since we are using standalone components, all required imports are already defined in the component's `imports` array:
+- `PageToolbarComponent`, `ExtensibleTableComponent`, `ExtensibleFormComponent` - Extension components
+- `PermissionManagementComponent` - Permission management component
+- `ModalComponent`, `ButtonComponent` - Theme shared components
+- `LocalizationPipe` - For localization
+- `ReactiveFormsModule` - For form handling
 
 As the last step, it is needs to be replaced the `RolesComponent` with the `MyRolesComponent`. Open the `app.component.ts` and modify its content as shown below:
 

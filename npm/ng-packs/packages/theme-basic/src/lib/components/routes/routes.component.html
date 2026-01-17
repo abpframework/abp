@@ -12,7 +12,7 @@
         @if (route.iconClass) {
           <i [ngClass]="route.iconClass"></i>
         }
-        {{ route.name | abpLazyLocalization | async }}
+        {{ route.name | abpAsyncLocalization | async }}
       </a>
     </li>
   </ng-template>
@@ -39,7 +39,7 @@
           @if (route.iconClass) {
             <i [ngClass]="route.iconClass"></i>
           }
-          {{ route.name | abpLazyLocalization | async }}
+          {{ route.name | abpAsyncLocalization | async }}
         </a>
         <div
           #routeContainer

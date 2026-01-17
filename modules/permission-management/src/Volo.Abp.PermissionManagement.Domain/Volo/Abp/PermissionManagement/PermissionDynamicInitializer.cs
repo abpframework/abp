@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,33 +18,19 @@ public class PermissionDynamicInitializer : ITransientDependency
     public ILogger<PermissionDynamicInitializer> Logger { get; set; }
 
     protected IServiceProvider ServiceProvider { get; }
-    protected IOptions<PermissionManagementOptions> Options { get; }
-    [CanBeNull]
-    protected IHostApplicationLifetime ApplicationLifetime { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    protected IDynamicPermissionDefinitionStore DynamicPermissionDefinitionStore { get; }
-    protected IStaticPermissionSaver StaticPermissionSaver { get; }
 
-    public PermissionDynamicInitializer(
-        IServiceProvider serviceProvider,
-        IOptions<PermissionManagementOptions> options,
-        ICancellationTokenProvider cancellationTokenProvider,
-        IDynamicPermissionDefinitionStore dynamicPermissionDefinitionStore,
-        IStaticPermissionSaver staticPermissionSaver)
+    public PermissionDynamicInitializer(IServiceProvider serviceProvider)
     {
         Logger = NullLogger<PermissionDynamicInitializer>.Instance;
 
         ServiceProvider = serviceProvider;
-        Options = options;
-        ApplicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
-        CancellationTokenProvider = cancellationTokenProvider;
-        DynamicPermissionDefinitionStore = dynamicPermissionDefinitionStore;
-        StaticPermissionSaver = staticPermissionSaver;
     }
 
     public virtual Task InitializeAsync(bool runInBackground, CancellationToken cancellationToken = default)
     {
-        var options = Options.Value;
+        var options = ServiceProvider
+            .GetRequiredService<IOptions<PermissionManagementOptions>>()
+            .Value;
 
         if (!options.SaveStaticPermissionsToDatabase && !options.IsDynamicPermissionStoreEnabled)
         {
@@ -54,11 +39,12 @@ public class PermissionDynamicInitializer : ITransientDependency
 
         if (runInBackground)
         {
+            var applicationLifetime = ServiceProvider.GetService<IHostApplicationLifetime>();
             Task.Run(async () =>
             {
-                if (cancellationToken == default && ApplicationLifetime?.ApplicationStopping != null)
+                if (cancellationToken == default && applicationLifetime?.ApplicationStopping != null)
                 {
-                    cancellationToken = ApplicationLifetime.ApplicationStopping;
+                    cancellationToken = applicationLifetime.ApplicationStopping;
                 }
                 await ExecuteInitializationAsync(options, cancellationToken);
             }, cancellationToken);
@@ -68,20 +54,23 @@ public class PermissionDynamicInitializer : ITransientDependency
         return ExecuteInitializationAsync(options, cancellationToken);
     }
 
-    protected virtual async Task ExecuteInitializationAsync(PermissionManagementOptions options, CancellationToken cancellationToken)
+    protected virtual async Task ExecuteInitializationAsync(
+        PermissionManagementOptions options,
+        CancellationToken cancellationToken)
     {
         try
         {
-            using (CancellationTokenProvider.Use(cancellationToken))
+            var cancellationTokenProvider = ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
+            using (cancellationTokenProvider.Use(cancellationToken))
             {
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
 
                 await SaveStaticPermissionsToDatabaseAsync(options, cancellationToken);
 
-                if (CancellationTokenProvider.Token.IsCancellationRequested)
+                if (cancellationTokenProvider.Token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -104,6 +93,8 @@ public class PermissionDynamicInitializer : ITransientDependency
             return;
         }
 
+        var staticPermissionSaver = ServiceProvider.GetRequiredService<IStaticPermissionSaver>();
+
         await Policy
             .Handle<Exception>()
             .WaitAndRetryAsync(
@@ -118,7 +109,7 @@ public class PermissionDynamicInitializer : ITransientDependency
             {
                 try
                 {
-                    await StaticPermissionSaver.SaveAsync();
+                    await staticPermissionSaver.SaveAsync();
                 }
                 catch (Exception ex)
                 {
@@ -129,17 +120,20 @@ public class PermissionDynamicInitializer : ITransientDependency
             }, cancellationToken);
     }
 
-    protected virtual async Task PreCacheDynamicPermissionsAsync(PermissionManagementOptions options)
+    protected virtual async Task PreCacheDynamicPermissionsAsync(
+        PermissionManagementOptions options)
     {
         if (!options.IsDynamicPermissionStoreEnabled)
         {
             return;
         }
 
+        var dynamicPermissionDefinitionStore = ServiceProvider.GetRequiredService<IDynamicPermissionDefinitionStore>();
+
         try
         {
             // Pre-cache permissions, so first request doesn't wait
-            await DynamicPermissionDefinitionStore.GetGroupsAsync();
+            await dynamicPermissionDefinitionStore.GetGroupsAsync();
         }
         catch (Exception ex)
         {
