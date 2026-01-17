@@ -57,26 +57,26 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
             case AsyncPeriodicBackgroundWorkerBase or PeriodicBackgroundWorkerBase:
             {
                 int? period = null;
-                string? CronExpression = null;
+                string? cronExpression = null;
 
                 if (worker is AsyncPeriodicBackgroundWorkerBase asyncPeriodicBackgroundWorkerBase)
                 {
                     period = asyncPeriodicBackgroundWorkerBase.Period;
-                    CronExpression = asyncPeriodicBackgroundWorkerBase.CronExpression;
+                    cronExpression = asyncPeriodicBackgroundWorkerBase.CronExpression;
                 }
                 else if (worker is PeriodicBackgroundWorkerBase periodicBackgroundWorkerBase)
                 {
                     period = periodicBackgroundWorkerBase.Period;
-                    CronExpression = periodicBackgroundWorkerBase.CronExpression;
+                    cronExpression = periodicBackgroundWorkerBase.CronExpression;
                 }
 
-                if (period == null && CronExpression.IsNullOrWhiteSpace())
+                if (period == null && cronExpression.IsNullOrWhiteSpace())
                 {
                     return;
                 }
 
                 var adapterType = typeof(HangfirePeriodicBackgroundWorkerAdapter<>).MakeGenericType(ProxyHelper.GetUnProxiedType(worker));
-                var workerAdapter = (Activator.CreateInstance(adapterType) as IHangfireBackgroundWorker)!;
+                var workerAdapter = (ServiceProvider.GetRequiredService(adapterType) as IHangfireBackgroundWorker)!;
 
                 Expression<Func<Task>> methodCall = () => workerAdapter.DoWorkAsync(cancellationToken);
                 var recurringJobId = !workerAdapter.RecurringJobId.IsNullOrWhiteSpace() ? workerAdapter.RecurringJobId : GetRecurringJobId(worker, methodCall);
@@ -85,7 +85,7 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                     recurringJobId,
                     workerAdapter.Queue.IsNullOrWhiteSpace() ? defaultQueue : defaultQueuePrefix + workerAdapter.Queue,
                     methodCall,
-                    CronExpression ?? GetCron(period!.Value),
+                    cronExpression ?? GetCron(period!.Value),
                     new RecurringJobOptions
                     {
                         TimeZone = workerAdapter.TimeZone
