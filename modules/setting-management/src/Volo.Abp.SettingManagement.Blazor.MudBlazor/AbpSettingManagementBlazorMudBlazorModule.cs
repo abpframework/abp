@@ -1,13 +1,12 @@
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.Localization;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Blazor.MudBlazor.Menus;
 using Volo.Abp.SettingManagement.Blazor.MudBlazor.Settings;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.UI.Navigation;
 

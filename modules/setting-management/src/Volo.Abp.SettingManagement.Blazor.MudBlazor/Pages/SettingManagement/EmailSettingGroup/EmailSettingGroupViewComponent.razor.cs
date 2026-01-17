@@ -63,7 +63,13 @@ public partial class EmailSettingGroupViewComponent
     {
         try
         {
-            if (_emailFormRef != null && !await _emailFormRef.Validate())
+            if (_emailFormRef == null)
+            {
+                return;
+            }
+            
+            await _emailFormRef.Validate();
+            if (!_emailFormRef.IsValid)
             {
                 return;
             }
@@ -121,7 +127,13 @@ public partial class EmailSettingGroupViewComponent
     {
         try
         {
-            if (_testEmailFormRef != null && !await _testEmailFormRef.Validate())
+            if (_testEmailFormRef == null)
+            {
+                return;
+            }
+
+            await _testEmailFormRef.Validate();
+            if (!_testEmailFormRef.IsValid)
             {
                 return;
             }

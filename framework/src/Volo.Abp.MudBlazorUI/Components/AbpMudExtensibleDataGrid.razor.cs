@@ -71,30 +71,20 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         return convertedValue;
     }
 
-    protected virtual object? GetPropertyValue(TItem? item, string propertyPath)
+    protected virtual object GetPropertyValue(TItem item, string propertyPath)
     {
-        if (item == null)
-        {
-            return null;
-        }
+        ArgumentNullException.ThrowIfNull(item);
 
         var properties = propertyPath.Split('.');
-        object? value = item;
+        object value = item;
 
         foreach (var prop in properties)
         {
-            if (value == null)
-            {
-                return null;
-            }
+            var propertyInfo = value.GetType().GetProperty(prop, BindingFlags.Public | BindingFlags.Instance)
+                               ?? throw new ArgumentException($"Property '{prop}' not found on type '{value.GetType().Name}'", nameof(propertyPath));
 
-            var propertyInfo = value.GetType().GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
-            if (propertyInfo == null)
-            {
-                return null;
-            }
-
-            value = propertyInfo.GetValue(value);
+            value = propertyInfo.GetValue(value)
+                    ?? throw new InvalidOperationException($"Property '{prop}' returned null");
         }
 
         return value;

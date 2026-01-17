@@ -1,3 +1,5 @@
+@using global::MudBlazor
+@using JetBrains.Annotations
 @using Volo.Abp.Validation.StringValues
 @using Microsoft.Extensions.Localization
 @using MudBlazor
@@ -33,7 +35,7 @@
                                     <MudTextField Label="@GetShownName(feature)"
                                                 Disabled="@disabled"
                                                 Value="@feature.Value"
-                                                ValueChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))"
+                                                ValueChanged="@(async ([CanBeNull] string v) => await OnFeatureValueChangedAsync(v, feature))"
                                                 Variant="Variant.Outlined" />
                                     @if (feature.Description != null)
                                     {
@@ -66,9 +68,8 @@
 
                                 @if (feature.ValueType is ToggleStringValueType)
                                 {
-                                    <MudCheckBox Disabled="@disabled"
-                                                Checked="@ToggleValues[feature.Name]"
-                                                CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))"
+                                    <MudCheckBox Disabled="@disabled" Value="@ToggleValues[feature.Name]"
+                                                 ValueChanged="@(async (bool v) => await OnSelectedValueChangedAsync(v, feature))"
                                                 Label="@GetShownName(feature)" />
                                     @if (feature.Description != null)
                                     {

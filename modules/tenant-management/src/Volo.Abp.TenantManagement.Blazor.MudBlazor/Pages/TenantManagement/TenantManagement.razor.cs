@@ -143,10 +143,17 @@ public partial class TenantManagement
 
     protected override async Task CreateEntityAsync()
     {
-        if (_createFormRef != null && !await _createFormRef.Validate())
+        if (_createFormRef == null)
         {
             return;
         }
+
+        await _createFormRef.Validate();
+        if (!_createFormRef.IsValid)
+        {
+            return;
+        }
+
         await base.CreateEntityAsync();
     }
 
