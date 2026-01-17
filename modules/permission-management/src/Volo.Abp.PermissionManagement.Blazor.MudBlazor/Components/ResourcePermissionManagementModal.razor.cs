@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -225,7 +226,13 @@ public partial class ResourcePermissionManagementModal
 
     protected virtual async Task CreateResourcePermissionAsync()
     {
-        if (_createFormRef != null && !await _createFormRef.Validate())
+        if (_createFormRef == null)
+        {
+            return;
+        }
+
+        await _createFormRef.Validate();
+        if (!_createFormRef.IsValid)
         {
             return;
         }
@@ -254,11 +261,17 @@ public partial class ResourcePermissionManagementModal
 
     protected virtual async Task UpdateResourcePermissionAsync()
     {
-        if (_editFormRef != null && !await _editFormRef.Validate())
+        if (_editFormRef == null)
         {
             return;
         }
 
+        await _editFormRef.Validate();
+        if (!_editFormRef.IsValid)
+        {
+            return;
+        }
+        
         await PermissionAppService.UpdateResourceAsync(
             ResourceName!,
             ResourceKey!,
