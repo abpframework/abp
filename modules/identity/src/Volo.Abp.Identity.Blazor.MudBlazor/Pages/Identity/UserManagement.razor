@@ -5,7 +5,6 @@
 @using Volo.Abp.MudBlazorUI.Components.ObjectExtending
 @using Volo.Abp.Identity.Localization
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
-@using Volo.Abp.BlazoriseUI
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.UI.Navigation.Localization.Resource
 @inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
@@ -81,9 +80,9 @@
                         <MudTextField @bind-Value="@NewEntity.PhoneNumber"
                                      Label="@L["DisplayName:PhoneNumber"]"
                                      Variant="Variant.Outlined" />
-                        <MudCheckBox @bind-Checked="@NewEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
+                        <MudCheckBox T="bool" @bind-Checked="@NewEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
                         <MudTooltip Text="@L["Description:LockoutEnabled"]">
-                            <MudCheckBox @bind-Checked="@NewEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
+                            <MudCheckBox T="bool" @bind-Checked="@NewEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
                                 <ChildContent>
                                     <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="ms-1" />
                                 </ChildContent>
@@ -96,7 +95,7 @@
                         {
                             @foreach (var role in NewUserRoles)
                             {
-                                <MudCheckBox @bind-Checked="@role.IsAssigned" Label="@role.Name" />
+                                <MudCheckBox T="bool" @bind-Checked="@role.IsAssigned" Label="@role.Name" />
                                 <input type="hidden" @bind-value="@role.Name" />
                             }
                         }
@@ -152,10 +151,10 @@
                                      Variant="Variant.Outlined" />
                         @if (!IsEditCurrentUser)
                         {
-                            <MudCheckBox @bind-Checked="@EditingEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
+                            <MudCheckBox T="bool" @bind-Checked="@EditingEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
                         }
                         <MudTooltip Text="@L["Description:LockoutEnabled"]">
-                            <MudCheckBox @bind-Checked="@EditingEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
+                            <MudCheckBox T="bool" @bind-Checked="@EditingEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
                                 <ChildContent>
                                     <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="ms-1" />
                                 </ChildContent>
@@ -168,7 +167,7 @@
                         <MudTabPanel Text="@L["Roles"]">
                             @foreach (var role in EditUserRoles)
                             {
-                                <MudCheckBox @bind-Checked="@role.IsAssigned" Label="@role.Name" />
+                                <MudCheckBox T="bool" @bind-Checked="@role.IsAssigned" Label="@role.Name" />
                                 <input type="hidden" @bind-value="@role.Name" />
                             }
                         </MudTabPanel>

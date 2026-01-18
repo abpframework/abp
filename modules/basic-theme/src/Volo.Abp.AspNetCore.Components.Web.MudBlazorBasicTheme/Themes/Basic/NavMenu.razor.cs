@@ -1,14 +1,35 @@
+using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme.Themes.Basic;
 
-public partial class NavMenu
+public partial class NavMenu : IDisposable
 {
-    protected ApplicationMenu MenuItems { get; set; } = new();
+    [Inject]
+    protected IMenuManager MenuManager { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    [Inject]
+    protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; set; }
+
+    protected ApplicationMenu Menu { get; set; }
+
+    protected async override Task OnInitializedAsync()
     {
-        MenuItems = await MenuManager.GetMainMenuAsync();
+        Menu = await MenuManager.GetMainMenuAsync();
+        ApplicationConfigurationChangedService.Changed += ApplicationConfigurationChanged;
+    }
+
+    private async void ApplicationConfigurationChanged()
+    {
+        Menu = await MenuManager.GetMainMenuAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
     }
 }

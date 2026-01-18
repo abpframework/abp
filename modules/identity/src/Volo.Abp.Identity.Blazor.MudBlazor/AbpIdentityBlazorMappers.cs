@@ -1,3 +1,4 @@
+using Riok.Mapperly.Abstractions;
 using Volo.Abp.Mapperly;
 
 namespace Volo.Abp.Identity.Blazor.MudBlazor;

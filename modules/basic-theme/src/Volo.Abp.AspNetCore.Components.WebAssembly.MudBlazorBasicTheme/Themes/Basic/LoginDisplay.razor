@@ -1,9 +1,11 @@
 @using Microsoft.Extensions.Localization
 @using global::Localization.Resources.AbpUi
 @using Microsoft.Extensions.Options
+@using Microsoft.JSInterop
 @using Volo.Abp.AspNetCore.Components.Web
 @using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme
-@using MudBlazor
+@using Volo.Abp.AspNetCore.Components.Web.Security
+@using Volo.Abp.UI.Navigation
 @inherits AbpComponentBase
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
@@ -18,11 +20,11 @@
             {
                 @foreach (var menuItem in Menu.Items)
                 {
-                    <MudMenuItem OnClick="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</MudMenuItem>
+                    <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
                 }
             }
             <MudDivider />
-            <MudMenuItem OnClick="BeginSignOut">@UiLocalizer["Logout"]</MudMenuItem>
+            <MudMenuItem OnClick="Logout">@UiLocalizer["Logout"]</MudMenuItem>
         </MudMenu>
     </Authorized>
     <NotAuthorized>
@@ -52,31 +54,9 @@
     {
         ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
     }
-}
-
-@implements IDisposable
-
-    private async Task NavigateToAsync(string? uri, string? target = null)
+    
+    protected void Logout()
     {
-        if (target == "_blank")
-        {
-            await JsRuntime.InvokeVoidAsync("open", uri, target);
-        }
-        else
-        {
-            Navigation.NavigateTo(uri);
-        }
-    }
-
-    private void BeginSignOut()
-    {
-        if (AbpAspNetCoreComponentsWebOptions.Value.IsBlazorWebApp)
-        {
-            Navigation.NavigateTo(AuthenticationOptions.Value.LogoutUrl, forceLoad: true);
-        }
-        else
-        {
-            Navigation.NavigateToLogout(AuthenticationOptions.Value.LogoutUrl);
-        }
+        Navigation.NavigateTo("/Account/Logout", forceLoad: true);
     }
 }

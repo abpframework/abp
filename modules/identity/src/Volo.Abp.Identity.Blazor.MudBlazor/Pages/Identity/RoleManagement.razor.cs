@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.PageToolbars;
@@ -10,7 +12,6 @@ using Volo.Abp.Identity.Localization;
 using Volo.Abp.MudBlazorUI;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.MudBlazor.Components;
-using Volo.Abp.BlazoriseUI;
 
 namespace Volo.Abp.Identity.Blazor.MudBlazor.Pages.Identity;
 
@@ -52,9 +53,9 @@ public partial class RoleManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Roles"].Value));
+        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
+        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
+        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(L["Roles"].Value));
         return base.SetBreadcrumbItemsAsync();
     }
 

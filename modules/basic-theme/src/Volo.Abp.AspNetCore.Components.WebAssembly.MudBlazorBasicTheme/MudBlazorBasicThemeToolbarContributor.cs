@@ -1,11 +1,9 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Toolbars;
 using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Themes.Basic;
-using Volo.Abp.DependencyInjection;
+using LoginDisplay = Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Themes.Basic.LoginDisplay;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme;
 

@@ -314,7 +314,7 @@ public abstract class AbpMudCrudPageBase<
         await InvokeAsync(StateHasChanged);
     }
 
-    protected virtual async Task OnDataGridReadAsync(GridState<TListViewModel> state)
+    protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state)
     {
         CurrentSorting = state.SortDefinitions
             .Select(s => s.SortBy + (s.Descending ? " DESC" : ""))
@@ -323,6 +323,12 @@ public abstract class AbpMudCrudPageBase<
 
         await GetEntitiesAsync();
         await InvokeAsync(StateHasChanged);
+
+        return new GridData<TListViewModel>
+        {
+            Items = Entities,
+            TotalItems = TotalCount ?? 0
+        };
     }
 
     protected virtual async Task OpenCreateDialogAsync()

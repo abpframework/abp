@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MudBlazor;
@@ -50,20 +50,32 @@ public static class PageToolbarExtensions
         int order = 0,
         string? requiredPolicyName = null)
     {
-        // TODO@MudBlazor: Implement ToolbarButton contributor
-        // toolbar.AddComponent<ToolbarButton>(
-        //     new Dictionary<string, object?>
-        //     {
-        //             { nameof(ToolbarButton.Color), color ?? Color.Primary},
-        //             { nameof(ToolbarButton.Text), text},
-        //             { nameof(ToolbarButton.Disabled), disabled},
-        //             { nameof(ToolbarButton.Icon), icon},
-        //             { nameof(ToolbarButton.Clicked),clicked},
-        //     },
-        //     order,
-        //     requiredPolicyName
-        // );
+        toolbar.AddComponent<MudPageToolbarButton>(
+            new Dictionary<string, object?>
+            {
+                { nameof(MudPageToolbarButton.Color), color ?? Color.Primary },
+                { nameof(MudPageToolbarButton.Text), text },
+                { nameof(MudPageToolbarButton.Disabled), disabled },
+                { nameof(MudPageToolbarButton.Icon), icon },
+                { nameof(MudPageToolbarButton.OnClickAsync), clicked },
+            },
+            order,
+            requiredPolicyName
+        );
 
         return toolbar;
+    }
+
+    public static PageToolbar AddMudButton(
+        this PageToolbar toolbar,
+        string text,
+        Func<Task> clicked,
+        string? icon = null,
+        Color? color = null,
+        bool disabled = false,
+        int order = 0,
+        string? requiredPolicyName = null)
+    {
+        return toolbar.AddButton(text, clicked, icon, color, disabled, order, requiredPolicyName);
     }
 }

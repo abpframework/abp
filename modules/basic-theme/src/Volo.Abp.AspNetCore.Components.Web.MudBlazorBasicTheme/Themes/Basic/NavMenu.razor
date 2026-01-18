@@ -1,10 +1,7 @@
-@using Volo.Abp.UI.Navigation
-@using MudBlazor
 @using Microsoft.AspNetCore.Components.Routing
-@inject IMenuManager MenuManager
 
 <MudNavMenu>
-    @foreach (var menuItem in MenuItems.Items)
+    @foreach (var menuItem in Menu.Items)
     {
         @if (menuItem.Items.IsNullOrEmpty())
         {

@@ -1,5 +1,5 @@
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Theming;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Theming;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme;

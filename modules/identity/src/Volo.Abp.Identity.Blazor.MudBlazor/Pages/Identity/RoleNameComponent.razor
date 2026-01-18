@@ -8,9 +8,9 @@
 @(Data.As<IdentityRoleDto>().Name)
 @if (Data.As<IdentityRoleDto>().IsDefault)
 {
-    <MudChip Color="Color.Success" Size="Size.Small" Class="ms-2">@L["DisplayName:IsDefault"]</MudChip>
+    <MudChip T="string" Color="Color.Success" Size="Size.Small" Class="ms-2">@L["DisplayName:IsDefault"]</MudChip>
 }
 @if (Data.As<IdentityRoleDto>().IsPublic)
 {
-    <MudChip Color="Color.Info" Size="Size.Small" Class="ms-2">@L["DisplayName:IsPublic"]</MudChip>
+    <MudChip T="string" Color="Color.Info" Size="Size.Small" Class="ms-2">@L["DisplayName:IsPublic"]</MudChip>
 }

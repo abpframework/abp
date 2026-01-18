@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 
