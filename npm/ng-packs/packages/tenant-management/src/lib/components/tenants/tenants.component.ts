@@ -20,6 +20,7 @@ import {
 import {
   ExtensibleFormComponent,
   ExtensibleTableComponent,
+  ExtensibleTableRowDetailComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
@@ -52,6 +53,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     PageComponent,
     LocalizationPipe,
     ExtensibleTableComponent,
+    ExtensibleTableRowDetailComponent,
     ModalComponent,
     FeatureManagementComponent,
     ButtonComponent,

@@ -1,4 +1,4 @@
-<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data.items">
+a<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data.items">
   <div id="wrapper" class="card">
     <div class="card-body">
       <div id="data-tables-table-filter" class="data-tables-filter mb-3">
@@ -16,7 +16,20 @@
         [data]="data.items || []"
         [recordsTotal]="data.totalCount || 0"
         [list]="list"
-      ></abp-extensible-table>
+      >
+        <abp-extensible-table-row-detail [rowHeight]="'auto'">
+          <ng-template let-row="row" let-expanded="expanded">
+            <div class="p-3">
+              <dl class="row mb-0">
+                <dt class="col-sm-3">{{ 'AbpTenantManagement::TenantId' | abpLocalization }}</dt>
+                <dd class="col-sm-9"><code>{{ row.id }}</code></dd>
+                <dt class="col-sm-3">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</dt>
+                <dd class="col-sm-9">{{ row.name }}</dd>
+              </dl>
+            </div>
+          </ng-template>
+        </abp-extensible-table-row-detail>
+      </abp-extensible-table>
     </div>
   </div>
 
