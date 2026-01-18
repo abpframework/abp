@@ -1,24 +1,26 @@
 @using Microsoft.AspNetCore.Components.Routing
-
-<MudNavMenu>
-    @foreach (var menuItem in Menu.Items)
-    {
-        @if (menuItem.Items.IsNullOrEmpty())
+@if (Menu != null)
+{
+    <MudNavMenu>
+        @foreach (var menuItem in Menu.Items)
         {
-            <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
-                @if (!string.IsNullOrEmpty(menuItem.Icon))
-                {
-                    <MudIcon Icon="@GetIcon(menuItem.Icon)" Class="me-2" />
-                }
-                @menuItem.DisplayName
-            </MudNavLink>
+            @if (menuItem.Items.IsNullOrEmpty())
+            {
+                <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                    @if (!string.IsNullOrEmpty(menuItem.Icon))
+                    {
+                        <MudIcon Icon="@GetIcon(menuItem.Icon)" Class="me-2" />
+                    }
+                    @menuItem.DisplayName
+                </MudNavLink>
+            }
+            else
+            {
+                <FirstLevelNavMenuItem MenuItem="menuItem" />
+            }
         }
-        else
-        {
-            <FirstLevelNavMenuItem MenuItem="menuItem" />
-        }
-    }
-</MudNavMenu>
+    </MudNavMenu>   
+}
 
 @code {
     private string? GetIcon(string? icon)

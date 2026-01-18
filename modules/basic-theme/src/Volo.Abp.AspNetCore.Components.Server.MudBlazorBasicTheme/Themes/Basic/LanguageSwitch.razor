@@ -1,12 +1,10 @@
 @using Volo.Abp.Localization
 @using System.Globalization
 @using System.Collections.Immutable
-@using Microsoft.JSInterop
-@using MudBlazor
-@using Volo.Abp.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.RequestLocalization
 @inject ILanguageProvider LanguageProvider
-@inject IJSRuntime JsRuntime
-@inject ICookieService CookieService
+@inject NavigationManager NavigationManager
+@inject IAbpRequestLocalizationOptionsProvider RequestLocalizationOptionsProvider
 
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
@@ -15,7 +13,7 @@
         <MudDivider />
         @foreach (var language in _otherLanguages)
         {
-            <MudMenuItem OnClick="@(() => ChangeLanguageAsync(language))">@language.DisplayName</MudMenuItem>
+            <MudMenuItem OnClick="@(() => ChangeLanguage(language))">@language.DisplayName</MudMenuItem>
         }
     </MudMenu>
 }
@@ -26,60 +24,42 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var selectedLanguageName = await JsRuntime.InvokeAsync<string>(
-            "localStorage.getItem",
-            "Abp.SelectedLanguage"
-            );
+        var languages = await LanguageProvider.GetLanguagesAsync();
+        var currentLanguage = languages.FindByCulture(
+            CultureInfo.CurrentCulture.Name,
+            CultureInfo.CurrentUICulture.Name
+        );
 
-        var allLanguages = await LanguageProvider.GetLanguagesAsync();
-        _otherLanguages = allLanguages;
-
-        if (!_otherLanguages.Any())
+        if (currentLanguage == null)
         {
-            return;
+            var localizationOptions = await RequestLocalizationOptionsProvider.GetLocalizationOptionsAsync();
+            if (localizationOptions.DefaultRequestCulture != null)
+            {
+                currentLanguage = new LanguageInfo(
+                    localizationOptions.DefaultRequestCulture.Culture.Name,
+                    localizationOptions.DefaultRequestCulture.UICulture.Name,
+                    localizationOptions.DefaultRequestCulture.UICulture.DisplayName);
+            }
+            else
+            {
+                currentLanguage = new LanguageInfo(
+                    CultureInfo.CurrentCulture.Name,
+                    CultureInfo.CurrentUICulture.Name,
+                    CultureInfo.CurrentUICulture.DisplayName);
+            }
         }
 
-        if (!selectedLanguageName.IsNullOrWhiteSpace())
-        {
-            _currentLanguage = _otherLanguages.FirstOrDefault(l => l.UiCultureName == selectedLanguageName);
-        }
-
-        if (_currentLanguage == null)
-        {
-            _currentLanguage = _otherLanguages.FirstOrDefault(l => l.UiCultureName == CultureInfo.CurrentUICulture.Name);
-        }
-
-        if (_currentLanguage == null)
-        {
-            _currentLanguage = _otherLanguages.FirstOrDefault();
-        }
-
-        _otherLanguages = _otherLanguages.Where(l => l != _currentLanguage).ToImmutableList();
+        _currentLanguage = currentLanguage;
+        _otherLanguages = languages.Where(l => l != _currentLanguage).ToImmutableList();
     }
 
-    private async Task ChangeLanguageAsync(LanguageInfo language)
+    private void ChangeLanguage(LanguageInfo language)
     {
-        await JsRuntime.InvokeVoidAsync(
-            "localStorage.setItem",
-            "Abp.SelectedLanguage",
-            language.UiCultureName
-        );
+        var relativeUrl = NavigationManager.Uri.RemovePreFix(NavigationManager.BaseUri).EnsureStartsWith('/').EnsureStartsWith('~');
 
-        await JsRuntime.InvokeVoidAsync(
-            "localStorage.setItem",
-            "Abp.IsRtl",
-            CultureInfo.GetCultureInfo(language.UiCultureName).TextInfo.IsRightToLeft
+        NavigationManager.NavigateTo(
+            $"Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={relativeUrl}",
+            forceLoad: true
         );
-
-        await CookieService.SetAsync(
-            ".AspNetCore.Culture",
-            $"c={language.CultureName}|uic={language.UiCultureName}",
-            new CookieOptions
-            {
-                Path = "/"
-            }
-        );
-
-        await JsRuntime.InvokeVoidAsync("location.reload");
     }
 }
