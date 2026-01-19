@@ -52,6 +52,8 @@ Here is the list of all available commands before explaining their details:
 * **[`get-source`](../cli#get-source)**: Downloads the source code of a module.
 * **[`add-source-code`](../cli#add-source-code)**: Downloads the source code and replaces package references with project references.
 * **[`init-solution`](../cli#init-solution)**: Creates ABP Studio configuration files for a given solution.
+* **[`run`](../cli#run)**: Runs the solution using the specified run profile.
+* **[`watch`](../cli#watch)**: Runs the solution with hot reload enabled (dotnet watch).
 * **[`kube-connect`](../cli#kube-connect)**: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
 * **[`kube-intercept`](../cli#kube-intercept)**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
 * **[`list-module-sources`](../cli#list-module-sources)**: Lists the remote module sources.
@@ -549,6 +551,66 @@ abp init-solution --name Acme.BookStore
 #### Options
 
 * `--name` or `-n`: Name for the solution. If not set,  it will be the same as the name of closest c# solution in the file system.
+
+### run
+
+Runs the solution using the specified run profile. This command starts all applications and Docker containers defined in the run profile, respecting the configured execution order.
+
+Usage:
+
+````bash
+abp run [options]
+````
+
+Examples:
+
+````bash
+abp run
+abp run -p Default
+abp run -p MyProfile -b
+abp run -wd C:\Projects\MyApp
+````
+
+#### Options
+
+* `--profile` or `-p`: Profile name to run. Uses `defaultRunProfile` from the solution file if not specified. If there's only one profile in the solution, it will be used automatically.
+* `--build` or `-b`: Build applications before running. By default, applications run with `--no-build` flag. If `bin` or `obj` folders don't exist, the application will be built regardless of this flag.
+* `--working-directory` or `-wd`: Working directory containing the `.abpsln` file. Defaults to current directory.
+
+The command will:
+
+1. Start Docker containers first (if any defined in the profile)
+2. Build applications if needed (when `-b` flag is used or `bin`/`obj` folders are missing)
+3. Start applications in the order defined in the profile
+4. Display a list of running applications with their URLs
+5. Wait for Ctrl+C to stop all applications
+
+If any application fails to build, all running applications will be stopped and the command will abort.
+
+### watch
+
+Runs the solution with hot reload enabled using `dotnet watch`. Code changes will automatically trigger a rebuild and restart of the affected applications.
+
+Usage:
+
+````bash
+abp watch [options]
+````
+
+Examples:
+
+````bash
+abp watch
+abp watch -p Default
+abp watch -wd C:\Projects\MyApp
+````
+
+#### Options
+
+* `--profile` or `-p`: Profile name to run. Uses `defaultRunProfile` from the solution file if not specified. If there's only one profile in the solution, it will be used automatically.
+* `--working-directory` or `-wd`: Working directory containing the `.abpsln` file. Defaults to current directory.
+
+The command works similarly to the `run` command but uses `dotnet watch run` instead of `dotnet run` for .NET applications, enabling hot reload functionality. Build is handled by `dotnet watch` itself.
 
 ### kube-connect
 
