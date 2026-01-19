@@ -3,7 +3,7 @@
 @using Volo.Abp.MultiTenancy
 @using Microsoft.Extensions.Localization
 @using global::Localization.Resources.AbpUi
-@using MudBlazor
+@using Microsoft.AspNetCore.Components.Authorization
 @using Volo.Abp.UI.Navigation
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
@@ -12,6 +12,16 @@
 <AuthorizeView>
     <Authorized>
         <MudMenu Icon="@Icons.Material.Filled.AccountCircle">
+            <MudMenuItem>
+                @if (CurrentTenant.Name != null)
+                {
+                    <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
+                }
+                else
+                {
+                    <span>@CurrentUser.UserName</span>
+                }
+            </MudMenuItem>
             @if (Menu != null)
             {
                 @foreach (var menuItem in Menu.Items)
@@ -19,7 +29,7 @@
                     <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
                 }
             }
-            <MudDivider />
+            <MudDivider/>
             <MudMenuItem OnClick="@Logout">@L["Logout"]</MudMenuItem>
         </MudMenu>
     </Authorized>
