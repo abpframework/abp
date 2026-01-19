@@ -1,0 +1,40 @@
+---
+description: "ABP Autofac integration for advanced DI features"
+globs: "**/Program.cs,**/*Module*.cs"
+alwaysApply: false
+---
+
+# ABP Autofac Integration
+
+## Setup
+ABP startup templates come with Autofac pre-configured.
+
+### ASP.NET Core
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseAutofac();
+```
+
+### Console Application
+```csharp
+using var application = await AbpApplicationFactory.CreateAsync<MyModule>(options =>
+{
+    options.UseAutofac();
+});
+```
+
+## Using Autofac API
+Access `ContainerBuilder` in your module:
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    var containerBuilder = context.Services.GetContainerBuilder();
+    containerBuilder.RegisterType<MyService>().As<IMyService>();
+}
+```
+
+## Why Autofac?
+- Property injection support
+- Dynamic proxying for interceptors
+- Advanced registration features

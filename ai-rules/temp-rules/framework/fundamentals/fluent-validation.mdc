@@ -1,0 +1,30 @@
+---
+description: "ABP FluentValidation integration"
+globs: "**/*Validator*.cs"
+alwaysApply: false
+---
+
+# ABP FluentValidation Integration
+
+## Setup
+Install `Volo.Abp.FluentValidation` package and add module dependency:
+
+```csharp
+[DependsOn(typeof(AbpFluentValidationModule))]
+public class MyModule : AbpModule { }
+```
+
+## Creating Validators
+```csharp
+public class CreateBookDtoValidator : AbstractValidator<CreateBookDto>
+{
+    public CreateBookDtoValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().Length(3, 100);
+        RuleFor(x => x.Price).GreaterThan(0).LessThan(1000);
+        RuleFor(x => x.PublishDate).LessThanOrEqualTo(DateTime.Now);
+    }
+}
+```
+
+ABP automatically discovers and applies validators to DTOs during validation.

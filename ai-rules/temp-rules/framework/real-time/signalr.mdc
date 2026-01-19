@@ -1,0 +1,46 @@
+---
+description: "ABP SignalR integration"
+globs: "**/*Hub*.cs"
+alwaysApply: false
+---
+
+# ABP SignalR Integration
+
+## Creating a Hub
+```csharp
+public class ChatHub : AbpHub
+{
+    public async Task SendMessage(string user, string message)
+    {
+        await Clients.All.SendAsync("ReceiveMessage", user, message);
+    }
+}
+```
+
+## AbpHub Features
+- `CurrentUser` - Access current user
+- `CurrentTenant` - Access current tenant
+- Built-in authorization support
+
+## Module Configuration
+```csharp
+[DependsOn(typeof(AbpAspNetCoreSignalRModule))]
+public class MyModule : AbpModule
+{
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHub<ChatHub>("/signalr-hubs/chat");
+        });
+    }
+}
+```
+
+## Client Connection
+```javascript
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/signalr-hubs/chat")
+    .build();
+```

@@ -1,0 +1,56 @@
+---
+description: "ABP options pattern and configuration"
+globs: "**/*Options*.cs,**/*Module*.cs"
+alwaysApply: false
+---
+
+# ABP Options Pattern
+
+## Configuring Options
+Configure options in your module's `ConfigureServices`:
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<MyOptions>(options =>
+    {
+        options.Value1 = 42;
+        options.EnableFeature = true;
+    });
+}
+```
+
+## Getting Option Values
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly MyOptions _options;
+
+    public MyService(IOptions<MyOptions> options)
+    {
+        _options = options.Value;
+    }
+}
+```
+
+## Pre-Configuration
+For options needed during DI registration, use `PreConfigure`:
+
+```csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<MyPreOptions>(options =>
+    {
+        options.MyValue = true;
+    });
+}
+
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    var options = context.Services.ExecutePreConfiguredActions<MyPreOptions>();
+    if (options.MyValue)
+    {
+        // Configure services based on pre-configured value
+    }
+}
+```

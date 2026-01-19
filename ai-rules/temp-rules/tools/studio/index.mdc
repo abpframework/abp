@@ -1,0 +1,33 @@
+---
+description: "ABP Studio IDE for ABP development"
+globs: 
+alwaysApply: false
+---
+
+# ABP Studio
+
+ABP Studio is the integrated development environment for ABP.
+
+## Features
+- Solution creation and management
+- Module installation
+- Package management
+- Database migrations
+- Running applications
+- Kubernetes deployment
+- Application monitoring
+
+## Solution Explorer
+- View and manage ABP modules
+- Configure module dependencies
+- Browse solution structure
+
+## Running Applications
+- Start/stop applications
+- View logs
+- Monitor performance
+
+## Kubernetes Integration
+- Deploy to Kubernetes
+- Manage Helm charts
+- Configure services

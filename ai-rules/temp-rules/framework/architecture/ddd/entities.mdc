@@ -1,0 +1,48 @@
+---
+description: "ABP entity and aggregate root patterns"
+globs: "**/*Entity*.cs,**/Entities/**/*.cs"
+alwaysApply: false
+---
+
+# ABP Entities & Aggregate Roots
+
+## Entity Base Class
+```csharp
+public class Book : Entity<Guid>
+{
+    public string Name { get; set; }
+}
+```
+
+## Aggregate Root
+```csharp
+public class Order : AggregateRoot<Guid>
+{
+    public string OrderNumber { get; private set; }
+    public List<OrderLine> Lines { get; private set; }
+
+    protected Order() { } // For ORM
+
+    public Order(Guid id, string orderNumber) : base(id)
+    {
+        OrderNumber = Check.NotNullOrWhiteSpace(orderNumber, nameof(orderNumber));
+        Lines = new List<OrderLine>();
+    }
+
+    public void AddLine(Guid productId, int count)
+    {
+        Lines.Add(new OrderLine(productId, count));
+    }
+}
+```
+
+## Best Practices
+- **Primary constructor**: Enforce invariants, accept `id` parameter
+- **Protected parameterless constructor**: Required for ORM
+- **Initialize collections**: In primary constructor
+- **Don't generate GUID in constructor**: Use `IGuidGenerator` externally
+- **Virtual members**: For ORM proxy compatibility
+- **Non-public setters**: Protect state consistency
+- **Single Id property**: Never use composite keys for aggregate roots
+- **Prefer Guid keys**: For aggregate roots
+- **Reference by Id**: Don't add navigation properties to other aggregates

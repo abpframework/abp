@@ -1,0 +1,35 @@
+---
+description: "ABP string encryption service"
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# ABP String Encryption
+
+## Using IStringEncryptionService
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly IStringEncryptionService _encryptionService;
+
+    public string EncryptData(string plainText)
+    {
+        return _encryptionService.Encrypt(plainText);
+    }
+
+    public string DecryptData(string cipherText)
+    {
+        return _encryptionService.Decrypt(cipherText);
+    }
+}
+```
+
+## Configuration
+```csharp
+Configure<AbpStringEncryptionOptions>(options =>
+{
+    options.DefaultPassPhrase = "YourSecretPassPhrase";
+});
+```
+
+Used by settings system for encrypted settings (`isEncrypted: true`).

@@ -1,0 +1,77 @@
+---
+description: "ABP integration testing patterns"
+globs: "**/*Tests*.cs,**/*.EntityFrameworkCore.Tests/**"
+alwaysApply: false
+---
+
+# ABP Integration Tests
+
+## Application Service Test
+```csharp
+public class BookAppService_Tests : BookStoreApplicationTestBase
+{
+    private readonly IBookAppService _bookAppService;
+
+    public BookAppService_Tests()
+    {
+        _bookAppService = GetRequiredService<IBookAppService>();
+    }
+
+    [Fact]
+    public async Task Should_Get_List_Of_Books()
+    {
+        var result = await _bookAppService.GetListAsync(new GetBookListDto());
+        
+        result.TotalCount.ShouldBeGreaterThan(0);
+        result.Items.ShouldContain(b => b.Name == "Test Book");
+    }
+
+    [Fact]
+    public async Task Should_Create_Book()
+    {
+        var result = await _bookAppService.CreateAsync(new CreateBookDto
+        {
+            Name = "New Book",
+            Price = 19.99m
+        });
+
+        result.Id.ShouldNotBe(Guid.Empty);
+        result.Name.ShouldBe("New Book");
+    }
+}
+```
+
+## Repository Test (EF Core)
+```csharp
+public class BookRepository_Tests : BookStoreEntityFrameworkCoreTestBase
+{
+    private readonly IBookRepository _bookRepository;
+
+    [Fact]
+    public async Task Should_Find_Book_By_Name()
+    {
+        var book = await _bookRepository.FindByNameAsync("Test Book");
+        book.ShouldNotBeNull();
+    }
+}
+```
+
+## Test Module
+```csharp
+[DependsOn(
+    typeof(BookStoreApplicationModule),
+    typeof(AbpTestBaseModule)
+)]
+public class BookStoreApplicationTestModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        // Test-specific configuration
+    }
+}
+```
+
+## Disabling Authorization in Tests
+```csharp
+context.Services.AddAlwaysAllowAuthorization();
+```

@@ -1,0 +1,44 @@
+---
+description: "ABP permission system and authorization patterns"
+globs: "**/*Permissions*.cs,**/*AppService*.cs"
+alwaysApply: false
+---
+
+# ABP Authorization
+
+## Permission Definition
+Define permissions in a `PermissionDefinitionProvider` class in `*.Application.Contracts` project:
+
+```csharp
+public class MyPermissionDefinitionProvider : PermissionDefinitionProvider
+{
+    public override void Define(IPermissionDefinitionContext context)
+    {
+        var myGroup = context.AddGroup("MyModule");
+        var permission = myGroup.AddPermission("MyModule.MyEntity.Create");
+        permission.AddChild("MyModule.MyEntity.Edit");
+    }
+}
+```
+
+## Permission Naming Convention
+- Use format: `ModuleName.EntityName.Action`
+- Define as constants: `MyModulePermissions.MyEntity.Create`
+- Localize using `LocalizableString.Create<MyResource>("Permission:MyModule.MyEntity.Create")`
+
+## Using Permissions
+- Use `[Authorize("PermissionName")]` attribute on application services/controllers
+- Use `[AllowAnonymous]` to allow unauthenticated access
+- Use `AuthorizationService.CheckAsync("PermissionName")` for programmatic checks
+- Use `AuthorizationService.IsGrantedAsync("PermissionName")` for conditional logic
+
+## Permission Management
+- Inject `IPermissionManager` to grant/revoke permissions programmatically
+- Use `SetForUserAsync`, `SetForRoleAsync`, `SetForClientAsync` methods
+
+## Multi-Tenancy
+- Set `multiTenancySide` parameter: `MultiTenancySides.Host`, `Tenant`, or `Both`
+
+## Feature/Global Feature Dependencies
+- Use `.RequireFeatures("FeatureName")` to depend on features
+- Use `.RequireGlobalFeatures("GlobalFeatureName")` to depend on global features

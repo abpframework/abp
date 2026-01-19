@@ -1,0 +1,42 @@
+---
+description: "ABP layered web application template"
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# ABP Layered Web Application Template
+
+## Solution Structure
+```
+MyProject/
+├── src/
+│   ├── MyProject.Domain.Shared      # Constants, enums, DTOs
+│   ├── MyProject.Domain             # Entities, repositories, domain services
+│   ├── MyProject.Application.Contracts  # App service interfaces, DTOs
+│   ├── MyProject.Application        # App service implementations
+│   ├── MyProject.EntityFrameworkCore   # EF Core, migrations
+│   ├── MyProject.HttpApi            # REST controllers
+│   ├── MyProject.HttpApi.Client     # HTTP client proxies
+│   ├── MyProject.Web                # MVC/Razor/Blazor UI
+│   └── MyProject.DbMigrator         # Migration console app
+└── test/
+    ├── MyProject.Domain.Tests
+    ├── MyProject.Application.Tests
+    └── MyProject.EntityFrameworkCore.Tests
+```
+
+## Layer Dependencies
+- Domain.Shared: No ABP dependencies
+- Domain: Depends on Domain.Shared
+- Application.Contracts: Depends on Domain.Shared
+- Application: Depends on Domain + Application.Contracts
+- EF Core: Depends on Domain
+- HttpApi: Depends on Application.Contracts only
+- Web: Depends on HttpApi
+
+## Key Configurations
+- Connection strings in appsettings.json
+- Module dependencies via [DependsOn]
+- DbContext configuration
+- AutoMapper profiles
+- Permission definitions

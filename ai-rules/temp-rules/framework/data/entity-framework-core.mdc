@@ -1,0 +1,65 @@
+---
+description: "ABP Entity Framework Core integration"
+globs: "**/*DbContext*.cs,**/*Repository*.cs,**/*EntityFrameworkCore*"
+alwaysApply: false
+---
+
+# ABP Entity Framework Core
+
+## DbContext
+```csharp
+[ConnectionStringName("Default")]
+public class MyDbContext : AbpDbContext<MyDbContext>
+{
+    public DbSet<Book> Books { get; set; }
+
+    public MyDbContext(DbContextOptions<MyDbContext> options)
+        : base(options)
+    {
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.ConfigureMyModule();
+    }
+}
+```
+
+## Model Configuration
+```csharp
+public static void ConfigureMyModule(this ModelBuilder builder)
+{
+    builder.Entity<Book>(b =>
+    {
+        b.ToTable("Books");
+        b.ConfigureByConvention(); // ABP conventions
+        b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+    });
+}
+```
+
+## Repository Implementation
+```csharp
+public class BookRepository : EfCoreRepository<MyDbContext, Book, Guid>, IBookRepository
+{
+    public BookRepository(IDbContextProvider<MyDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<List<Book>> GetPublishedBooksAsync()
+    {
+        var dbContext = await GetDbContextAsync();
+        return await dbContext.Books
+            .Where(b => b.IsPublished)
+            .ToListAsync();
+    }
+}
+```
+
+## Best Practices
+- Always call `ConfigureByConvention()` for entities
+- Use `IDbContextProvider` for accessing DbContext
+- Pass cancellation token: `GetCancellationToken(cancellationToken)`
+- Use module-specific table prefix

@@ -1,0 +1,65 @@
+---
+description: "ABP exception handling and business exception patterns"
+globs: "**/*Exception*.cs,**/*AppService*.cs"
+alwaysApply: false
+---
+
+# ABP Exception Handling
+
+## Business Exceptions
+Use `BusinessException` for domain/business rule violations:
+
+```csharp
+throw new BusinessException("MyModule:010001")
+    .WithData("UserName", userName);
+```
+
+## Error Code Format
+Use namespaced error codes: `ModuleName:ErrorCode`
+- Example: `Volo.Qa:010002`
+
+## Exception Localization
+Map error codes to localization resources:
+
+```csharp
+Configure<AbpExceptionLocalizationOptions>(options =>
+{
+    options.MapCodeNamespace("MyModule", typeof(MyModuleResource));
+});
+```
+
+In localization JSON:
+```json
+{
+  "MyModule:010001": "User '{UserName}' already exists!"
+}
+```
+
+## User-Friendly Exceptions
+Use `UserFriendlyException` for messages shown directly to users:
+
+```csharp
+throw new UserFriendlyException(
+    L["UserNameAlreadyExists"],
+    code: "MyModule:010001"
+);
+```
+
+## HTTP Status Code Mapping
+ABP automatically maps exceptions to HTTP status codes:
+- `AbpAuthorizationException` → 401/403
+- `AbpValidationException` → 400
+- `EntityNotFoundException` → 404
+- `IBusinessException` → 403
+- Other exceptions → 500
+
+## Custom Status Code Mapping
+```csharp
+Configure<AbpExceptionHttpStatusCodeOptions>(options =>
+{
+    options.Map("MyModule:010001", HttpStatusCode.Conflict);
+});
+```
+
+## Exception Subscriber
+Create `ExceptionSubscriber` to handle exceptions globally for logging, notifications, etc.

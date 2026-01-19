@@ -1,0 +1,37 @@
+---
+description: "ABP dynamic claims for real-time claim updates"
+globs: "**/Program.cs,**/*Module*.cs"
+alwaysApply: false
+---
+
+# ABP Dynamic Claims
+
+Dynamic claims override token/cookie claims with latest values from database.
+
+## Enabling
+```csharp
+Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+{
+    options.IsDynamicClaimsEnabled = true;
+});
+```
+
+## Middleware
+```csharp
+app.UseDynamicClaims(); // Before UseAuthorization
+app.UseAuthorization();
+```
+
+## Tiered Applications
+Configure remote refresh URL in UI application:
+
+```csharp
+Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+{
+    options.IsDynamicClaimsEnabled = true;
+    options.RemoteRefreshUrl = configuration["AuthServerUrl"] + "/api/account/dynamic-claims/refresh";
+});
+```
+
+## Custom Dynamic Claims
+Implement `IAbpDynamicClaimsPrincipalContributor` for custom claim logic.

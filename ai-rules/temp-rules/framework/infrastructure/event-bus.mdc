@@ -1,0 +1,61 @@
+---
+description: "ABP event bus for local and distributed events"
+globs: "**/*Event*.cs,**/*Eto*.cs,**/*Handler*.cs"
+alwaysApply: false
+---
+
+# ABP Event Bus
+
+## Event Bus Types
+- **Local Event Bus**: In-process messaging (`ILocalEventBus`)
+- **Distributed Event Bus**: Inter-process/microservice messaging (`IDistributedEventBus`)
+
+## When to Use Which
+- **Microservices**: Use distributed for inter-service, local for internal
+- **Modular Monolith**: Use distributed for inter-module (migrates easily to microservices)
+- **Simple Monolith**: Use local event bus
+
+## Local Events
+```csharp
+// Event class
+public class ProductCreatedEvent
+{
+    public Product Product { get; set; }
+}
+
+// Handler
+public class ProductCreatedEventHandler : ILocalEventHandler<ProductCreatedEvent>, ITransientDependency
+{
+    public async Task HandleEventAsync(ProductCreatedEvent eventData)
+    {
+        // Handle event
+    }
+}
+
+// Publish
+await _localEventBus.PublishAsync(new ProductCreatedEvent { Product = product });
+```
+
+## Distributed Events (ETO)
+```csharp
+// Event Transfer Object (in Domain.Shared)
+[EventName("MyApp.Product.Created")]
+public class ProductCreatedEto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+}
+
+// Handler
+public class ProductCreatedEtoHandler : IDistributedEventHandler<ProductCreatedEto>, ITransientDependency
+{
+    public async Task HandleEventAsync(ProductCreatedEto eventData)
+    {
+        // Handle distributed event
+    }
+}
+```
+
+## Key Differences
+- Local: Can send non-serializable objects (entities)
+- Distributed: Must use serializable ETOs, supports outbox/inbox pattern

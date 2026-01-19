@@ -1,0 +1,29 @@
+---
+description: "ABP API development overview"
+globs: "**/*Controller*.cs,**/*AppService*.cs"
+alwaysApply: false
+---
+
+# ABP API Development
+
+## Auto API Controllers
+- Application services automatically become REST APIs
+- HTTP method determined by naming convention
+- Routes follow ABP conventions
+
+## Key Features
+- Automatic input validation
+- Exception handling and error formatting
+- Authorization integration
+- Content negotiation
+- API versioning support
+
+## Client Proxies
+- Generate C# clients: `abp generate-proxy -t csharp`
+- Generate Angular proxies: `abp generate-proxy -t ng`
+- Type-safe API consumption
+
+## Standard APIs
+- Application Configuration API
+- Audit Logging API
+- Permission Management API

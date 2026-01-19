@@ -1,0 +1,35 @@
+---
+description: "ABP single-layer web application template"
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# ABP Single-Layer Web Application Template
+
+Simplified structure for smaller applications.
+
+## Solution Structure
+```
+MyProject/
+├── src/
+│   └── MyProject/
+│       ├── Data/           # DbContext, migrations
+│       ├── Entities/       # Domain entities
+│       ├── Services/       # Application services
+│       ├── Pages/          # Razor pages / Blazor components
+│       └── wwwroot/        # Static files
+└── test/
+    └── MyProject.Tests
+```
+
+## When to Use
+- Small to medium applications
+- Rapid prototyping
+- Applications without complex domain logic
+- When DDD layering is overkill
+
+## Key Differences from Layered
+- All code in single project
+- No separate Domain/Application layers
+- Simpler but less scalable
+- Easier to get started

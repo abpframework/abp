@@ -1,0 +1,45 @@
+---
+description: "ABP email sending system"
+globs: "**/*Email*.cs,**/*Mail*.cs"
+alwaysApply: false
+---
+
+# ABP Emailing
+
+## Sending Emails
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly IEmailSender _emailSender;
+
+    public async Task SendWelcomeEmailAsync(string to)
+    {
+        await _emailSender.SendAsync(
+            to,
+            "Welcome!",
+            "Welcome to our application..."
+        );
+    }
+}
+```
+
+## Email Configuration
+```json
+{
+  "Settings": {
+    "Abp.Mailing.DefaultFromAddress": "noreply@mydomain.com",
+    "Abp.Mailing.DefaultFromDisplayName": "My Application",
+    "Abp.Mailing.Smtp.Host": "smtp.mydomain.com",
+    "Abp.Mailing.Smtp.Port": "587",
+    "Abp.Mailing.Smtp.UserName": "username",
+    "Abp.Mailing.Smtp.Password": "password",
+    "Abp.Mailing.Smtp.EnableSsl": "true"
+  }
+}
+```
+
+## MailKit Integration
+Install `Volo.Abp.MailKit` for MailKit-based implementation (recommended for production).
+
+## Background Email Sending
+Use `IBackgroundEmailSender` to queue emails for background processing.

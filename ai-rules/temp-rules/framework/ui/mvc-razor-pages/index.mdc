@@ -1,0 +1,62 @@
+---
+description: "ABP MVC/Razor Pages UI development"
+globs: "**/*.cshtml,**/Pages/**/*.cs"
+alwaysApply: false
+---
+
+# ABP MVC / Razor Pages UI
+
+## Page Model
+```csharp
+public class IndexModel : AbpPageModel
+{
+    private readonly IBookAppService _bookAppService;
+
+    public List<BookDto> Books { get; set; }
+
+    public IndexModel(IBookAppService bookAppService)
+    {
+        _bookAppService = bookAppService;
+    }
+
+    public async Task OnGetAsync()
+    {
+        var result = await _bookAppService.GetListAsync(new GetBookListDto());
+        Books = result.Items.ToList();
+    }
+}
+```
+
+## Razor View
+```html
+@page
+@model IndexModel
+
+<abp-card>
+    <abp-card-header>
+        <h2>@L["Books"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true">
+            @foreach (var book in Model.Books)
+            {
+                <tr>
+                    <td>@book.Name</td>
+                    <td>@book.Price</td>
+                </tr>
+            }
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+```
+
+## Tag Helpers
+- `abp-card`, `abp-table`, `abp-button`
+- `abp-modal`, `abp-form`
+- `abp-script`, `abp-style`
+
+## JavaScript API
+```javascript
+abp.localization.getResource('BookStore')('Books');
+abp.auth.isGranted('BookStore.Books.Create');
+```

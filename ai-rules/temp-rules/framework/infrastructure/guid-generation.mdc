@@ -1,0 +1,42 @@
+---
+description: "ABP GUID generation for entities"
+globs: "**/*Entity*.cs,**/*Manager*.cs"
+alwaysApply: false
+---
+
+# ABP GUID Generation
+
+## Using IGuidGenerator
+```csharp
+public class BookManager : DomainService
+{
+    public Book CreateBook(string name)
+    {
+        var id = GuidGenerator.Create(); // Use inherited GuidGenerator
+        return new Book(id, name);
+    }
+}
+```
+
+## Why Use IGuidGenerator?
+- Generates sequential GUIDs for better database performance
+- Especially important for clustered indexes
+- Don't use `Guid.NewGuid()` in entity constructors
+
+## Entity Constructor Pattern
+```csharp
+public class Book : AggregateRoot<Guid>
+{
+    public string Name { get; private set; }
+
+    protected Book() { } // For ORM
+
+    public Book(Guid id, string name) : base(id)
+    {
+        Name = name;
+    }
+}
+
+// Creating entity
+var book = new Book(GuidGenerator.Create(), "My Book");
+```

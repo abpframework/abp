@@ -1,0 +1,64 @@
+---
+description: "ABP module architecture and patterns"
+globs: "**/*Module*.cs"
+alwaysApply: false
+---
+
+# ABP Modularity
+
+## Module Class
+```csharp
+[DependsOn(
+    typeof(AbpDddDomainModule),
+    typeof(AbpEntityFrameworkCoreModule)
+)]
+public class BookStoreApplicationModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        // Pre-configuration (before other modules)
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        // Service registration and configuration
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            options.AddMaps<BookStoreApplicationModule>();
+        });
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        // Application startup logic
+        var app = context.GetApplicationBuilder();
+        app.UseRouting();
+    }
+}
+```
+
+## Module Layering
+```
+MyModule.Domain.Shared    → Constants, enums, shared types
+MyModule.Domain           → Entities, repository interfaces, domain services
+MyModule.Application.Contracts → App service interfaces, DTOs
+MyModule.Application      → App service implementations
+MyModule.EntityFrameworkCore → EF Core DbContext, repository implementations
+MyModule.HttpApi          → REST controllers (depends on Application.Contracts only)
+MyModule.HttpApi.Client   → Remote client proxies
+MyModule.Web              → UI (depends on HttpApi only)
+```
+
+## Dependency Direction
+```
+Web → HttpApi → Application.Contracts
+Application → Domain + Application.Contracts
+Domain → Domain.Shared
+EF Core → Domain
+```
+
+## Best Practices
+- Use `[DependsOn]` for explicit module dependencies
+- Each module must be usable standalone
+- Don't leak web concerns into domain/application
+- Every package has exactly one `AbpModule` class

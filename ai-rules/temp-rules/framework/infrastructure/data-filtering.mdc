@@ -1,0 +1,48 @@
+---
+description: "ABP automatic data filtering (soft delete, multi-tenancy)"
+globs: "**/*Entity*.cs,**/*Repository*.cs"
+alwaysApply: false
+---
+
+# ABP Data Filtering
+
+## Built-in Filters
+- `ISoftDelete` - Filters deleted entities (`IsDeleted = true`)
+- `IMultiTenant` - Filters by current tenant (`TenantId`)
+
+## Entities with Soft Delete
+```csharp
+public class Book : AggregateRoot<Guid>, ISoftDelete
+{
+    public bool IsDeleted { get; set; }
+    public string Name { get; set; }
+}
+```
+
+## Disabling Filters
+```csharp
+using (_dataFilter.Disable<ISoftDelete>())
+{
+    // Deleted entities are included
+    var allBooks = await _bookRepository.GetListAsync();
+}
+```
+
+## Custom Filters
+```csharp
+// 1. Define filter interface
+public interface IIsActive
+{
+    bool IsActive { get; }
+}
+
+// 2. Configure in DbContext
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
+{
+    if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
+    {
+        return true;
+    }
+    return base.ShouldFilterEntity<TEntity>(entityType);
+}
+```

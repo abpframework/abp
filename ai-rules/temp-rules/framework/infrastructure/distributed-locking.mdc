@@ -1,0 +1,45 @@
+---
+description: "ABP distributed locking for concurrent operations"
+globs: "**/*Lock*.cs,**/*Service*.cs"
+alwaysApply: false
+---
+
+# ABP Distributed Locking
+
+## Using Distributed Lock
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly IAbpDistributedLock _distributedLock;
+
+    public async Task ProcessAsync(string resourceId)
+    {
+        await using var handle = await _distributedLock.TryAcquireAsync(
+            $"MyResource:{resourceId}",
+            timeout: TimeSpan.FromSeconds(30)
+        );
+
+        if (handle != null)
+        {
+            // Lock acquired, do work
+        }
+        else
+        {
+            // Lock not acquired, handle accordingly
+        }
+    }
+}
+```
+
+## Configuration
+Configure Redis or another provider for distributed scenarios:
+```csharp
+Configure<AbpDistributedLockOptions>(options =>
+{
+    options.KeyPrefix = "MyApp";
+});
+```
+
+## Default Behavior
+- Works in-process by default
+- Configure a distributed provider (Redis) for clustered deployments

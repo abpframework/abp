@@ -1,0 +1,38 @@
+---
+description: "ABP data seeding system"
+globs: "**/*DataSeeder*.cs,**/*Contributor*.cs"
+alwaysApply: false
+---
+
+# ABP Data Seeding
+
+## Creating a Data Seeder
+```csharp
+public class MyDataSeedContributor : IDataSeedContributor, ITransientDependency
+{
+    private readonly IRepository<Book, Guid> _bookRepository;
+    private readonly IGuidGenerator _guidGenerator;
+
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _bookRepository.GetCountAsync() > 0)
+        {
+            return;
+        }
+
+        await _bookRepository.InsertAsync(
+            new Book(_guidGenerator.Create(), "Sample Book")
+        );
+    }
+}
+```
+
+## Running Data Seeder
+```csharp
+await _dataSeeder.SeedAsync();
+```
+
+## Seeding with Tenant Context
+```csharp
+await _dataSeeder.SeedAsync(new DataSeedContext(tenantId));
+```

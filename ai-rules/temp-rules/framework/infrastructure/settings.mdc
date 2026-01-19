@@ -1,0 +1,60 @@
+---
+description: "ABP setting system for dynamic application settings"
+globs: "**/*Setting*.cs,**/appsettings*.json"
+alwaysApply: false
+---
+
+# ABP Settings
+
+## Defining Settings
+```csharp
+public class MySettingDefinitionProvider : SettingDefinitionProvider
+{
+    public override void Define(ISettingDefinitionContext context)
+    {
+        context.Add(
+            new SettingDefinition("MyApp.MaxItemCount", "10"),
+            new SettingDefinition("MyApp.EnableFeature", "false"),
+            new SettingDefinition("MyApp.SecretKey", isEncrypted: true)
+        );
+    }
+}
+```
+
+## Reading Settings
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly ISettingProvider _settingProvider;
+
+    public async Task DoSomethingAsync()
+    {
+        var maxCount = await _settingProvider.GetAsync<int>("MyApp.MaxItemCount");
+        var isEnabled = await _settingProvider.IsTrueAsync("MyApp.EnableFeature");
+    }
+}
+```
+
+## Setting Value Providers (Order)
+1. `DefaultValueSettingValueProvider` - Default from definition
+2. `ConfigurationSettingValueProvider` - From appsettings.json
+3. `GlobalSettingValueProvider` - System-wide
+4. `TenantSettingValueProvider` - Per tenant
+5. `UserSettingValueProvider` - Per user
+
+## Configuration in appsettings.json
+```json
+{
+  "Settings": {
+    "MyApp.MaxItemCount": "20",
+    "MyApp.EnableFeature": "true"
+  }
+}
+```
+
+## Setting Properties
+- `Name`: Unique identifier
+- `DefaultValue`: Fallback value
+- `DisplayName`: Localizable name for UI
+- `IsVisibleToClients`: Expose to client-side
+- `IsEncrypted`: Encrypt in database

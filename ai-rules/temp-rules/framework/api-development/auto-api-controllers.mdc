@@ -1,0 +1,46 @@
+---
+description: "ABP auto API controller generation"
+globs: "**/*AppService*.cs"
+alwaysApply: false
+---
+
+# ABP Auto API Controllers
+
+ABP automatically generates REST API controllers from application services.
+
+## How It Works
+Application services implementing `IRemoteService` interface automatically become API endpoints:
+- `IApplicationService` extends `IRemoteService`
+- Each method becomes an API endpoint
+- HTTP methods determined by naming convention
+
+## HTTP Method Conventions
+| Method Prefix | HTTP Method |
+|--------------|-------------|
+| Get, Find    | GET         |
+| Create, Add, Insert | POST |
+| Update, Put  | PUT         |
+| Delete, Remove | DELETE    |
+| Patch        | PATCH       |
+| Other        | POST        |
+
+## Route Convention
+- `/api/app/{service-name}/{method-name}`
+- Example: `BookAppService.GetListAsync` → `GET /api/app/book`
+
+## Customizing Routes
+```csharp
+[Route("api/my-books")]
+public class BookAppService : ApplicationService, IBookAppService
+{
+    [HttpGet]
+    [Route("{id}")]
+    public Task<BookDto> GetAsync(Guid id) { }
+}
+```
+
+## Disabling Auto API
+```csharp
+[RemoteService(IsEnabled = false)]
+public class InternalAppService : ApplicationService { }
+```

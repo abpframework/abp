@@ -1,0 +1,63 @@
+---
+description: "ABP automatic validation and FluentValidation integration"
+globs: "**/*Dto*.cs,**/*Validator*.cs"
+alwaysApply: false
+---
+
+# ABP Validation
+
+## Automatic Validation
+ABP automatically validates:
+- Application service method inputs
+- Controller action inputs
+- Any class implementing `IValidationEnabled`
+
+## Data Annotations
+Use standard data annotations on DTOs:
+
+```csharp
+public class CreateBookDto
+{
+    [Required]
+    [StringLength(100)]
+    public string Name { get; set; }
+
+    [Range(0, 999.99)]
+    public decimal Price { get; set; }
+}
+```
+
+## Custom Validation with IValidatableObject
+```csharp
+public class CreateBookDto : IValidatableObject
+{
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Name == Description)
+        {
+            yield return new ValidationResult(
+                "Name and Description cannot be the same!",
+                new[] { "Name", "Description" }
+            );
+        }
+    }
+}
+```
+
+## FluentValidation Integration
+Install `Volo.Abp.FluentValidation` and create validators:
+
+```csharp
+public class CreateBookDtoValidator : AbstractValidator<CreateBookDto>
+{
+    public CreateBookDtoValidator()
+    {
+        RuleFor(x => x.Name).Length(3, 100);
+        RuleFor(x => x.Price).GreaterThan(0);
+    }
+}
+```
+
+## Disabling Validation
+- Use `[DisableValidation]` attribute on method, class, or property
+- Validation errors throw `AbpValidationException` with HTTP 400 status

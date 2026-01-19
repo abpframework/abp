@@ -1,0 +1,47 @@
+---
+description: "ABP object extension system for adding extra properties"
+globs: "**/*Extensions*.cs,**/*Dto*.cs"
+alwaysApply: false
+---
+
+# ABP Object Extensions
+
+## IHasExtraProperties
+Implemented by `AggregateRoot`, `ExtensibleEntityDto`, and related base classes.
+
+## Setting/Getting Extra Properties
+```csharp
+user.SetProperty("Title", "My Title");
+var title = user.GetProperty<string>("Title");
+```
+
+## Best Practice - Extension Methods
+```csharp
+public static class IdentityUserExtensions
+{
+    private const string TitlePropertyName = "Title";
+
+    public static void SetTitle(this IdentityUser user, string title)
+        => user.SetProperty(TitlePropertyName, title);
+
+    public static string GetTitle(this IdentityUser user)
+        => user.GetProperty<string>(TitlePropertyName);
+}
+```
+
+## ObjectExtensionManager
+Define extra properties explicitly for validation, mapping, and EF Core:
+
+```csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.Attributes.Add(new RequiredAttribute());
+            options.MapEfCore(b => b.HasMaxLength(32));
+        });
+```
+
+## Object Mapping
+Use `MapExtraPropertiesTo()` or AutoMapper's `MapExtraProperties()` extension.

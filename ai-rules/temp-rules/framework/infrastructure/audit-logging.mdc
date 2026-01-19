@@ -1,0 +1,54 @@
+---
+description: "ABP audit logging system for tracking changes and requests"
+globs: "**/*Entity*.cs,**/*AppService*.cs"
+alwaysApply: false
+---
+
+# ABP Audit Logging
+
+## Configuration
+```csharp
+Configure<AbpAuditingOptions>(options =>
+{
+    options.IsEnabled = true;
+    options.IsEnabledForAnonymousUsers = false;
+    options.IsEnabledForGetRequests = false;
+});
+```
+
+## Entity Audit
+Enable entity change tracking:
+```csharp
+Configure<AbpAuditingOptions>(options =>
+{
+    options.EntityHistorySelectors.AddAllEntities();
+    // Or selective:
+    options.EntityHistorySelectors.Add(
+        new NamedTypeSelector("MyEntities", type => typeof(IEntity).IsAssignableFrom(type))
+    );
+});
+```
+
+## Attributes
+- `[Audited]` - Enable audit logging for entity/service/method
+- `[DisableAuditing]` - Disable audit logging
+- Use on properties to exclude sensitive data (like passwords)
+
+## Example Entity
+```csharp
+[Audited]
+public class MyEntity : AggregateRoot<Guid>
+{
+    public string Name { get; set; }
+    
+    [DisableAuditing]
+    public string SensitiveData { get; set; }
+}
+```
+
+## Accessing Audit Log
+```csharp
+var currentAuditLogScope = _auditingManager.Current;
+currentAuditLogScope?.Log.Comments.Add("Custom comment");
+currentAuditLogScope?.Log.SetProperty("CustomProperty", value);
+```

@@ -1,0 +1,35 @@
+---
+description: "ABP entity caching system"
+globs: "**/*Cache*.cs,**/*Entity*.cs"
+alwaysApply: false
+---
+
+# ABP Entity Cache
+
+## Enabling Entity Cache
+```csharp
+public interface IBookCache : IEntityCache<BookCacheItem, Guid>
+{
+}
+
+public class BookCache : EntityCache<Book, BookCacheItem, Guid>, IBookCache
+{
+    public BookCache(
+        IDistributedCache<BookCacheItem, Guid> cache,
+        IRepository<Book, Guid> repository,
+        IObjectMapper objectMapper)
+        : base(cache, repository, objectMapper)
+    {
+    }
+}
+```
+
+## Using Entity Cache
+```csharp
+var book = await _bookCache.GetAsync(bookId);
+```
+
+## Features
+- Read-only cache
+- Auto-invalidation on entity update/delete
+- Uses distributed cache

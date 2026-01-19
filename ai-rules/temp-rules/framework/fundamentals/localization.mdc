@@ -1,0 +1,61 @@
+---
+description: "ABP localization resource definition and usage patterns"
+globs: "**/Localization/**/*.json,**/*Resource*.cs"
+alwaysApply: false
+---
+
+# ABP Localization
+
+## Creating Localization Resource
+Define a localization resource class in `*.Domain.Shared`:
+
+```csharp
+[LocalizationResourceName("MyModule")]
+public class MyModuleResource
+{
+}
+```
+
+Configure in module:
+```csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.Resources
+        .Add<MyModuleResource>("en")
+        .AddVirtualJson("/Localization/MyModule");
+});
+```
+
+## JSON File Structure
+Place JSON files in `/Localization/MyModule/` folder:
+
+```json
+{
+  "culture": "en",
+  "texts": {
+    "HelloWorld": "Hello World!",
+    "Menu:Home": "Home"
+  }
+}
+```
+
+## Using Localization
+- Inject `IStringLocalizer<MyResource>` in services
+- Use `L["Key"]` in classes inheriting from `ApplicationService`, `AbpController`, etc.
+- Set `LocalizationResource = typeof(MyResource)` in constructor or use base class that sets it
+
+## Inheriting Resources
+```csharp
+[InheritResource(typeof(AbpValidationResource))]
+public class MyResource { }
+```
+
+## Extending Existing Resources
+```csharp
+options.Resources
+    .Get<ExistingResource>()
+    .AddVirtualJson("/Localization/Extensions");
+```
+
+## Nested Keys
+Use double underscore for nested keys: `L["Parent__Child"]`

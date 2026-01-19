@@ -1,0 +1,23 @@
+---
+description: "ABP SMS sending abstraction"
+globs: "**/*Sms*.cs"
+alwaysApply: false
+---
+
+# ABP SMS Sending
+
+## Using ISmsSender
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly ISmsSender _smsSender;
+
+    public async Task SendOtpAsync(string phoneNumber, string code)
+    {
+        await _smsSender.SendAsync(new SmsMessage(phoneNumber, $"Your code: {code}"));
+    }
+}
+```
+
+## Implementation
+ABP provides abstraction only. Implement `ISmsSender` for your SMS provider (Twilio, etc.).

@@ -1,0 +1,55 @@
+---
+description: "ABP microservice solution template"
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# ABP Microservice Solution Template
+
+## Solution Structure
+```
+MyMicroservice/
+├── apps/
+│   ├── web/                    # Web application
+│   └── auth-server/            # Authentication server
+├── gateways/
+│   └── web-gateway/            # API gateway
+├── services/
+│   ├── administration/         # Admin service
+│   ├── identity/              # Identity service
+│   └── product/               # Business service
+├── shared/
+│   └── MyMicroservice.Shared/ # Shared contracts
+└── etc/
+    ├── docker/                # Docker files
+    └── k8s/                   # Kubernetes manifests
+```
+
+## Key Concepts
+
+### Service Communication
+- **Synchronous**: HTTP calls, gRPC
+- **Asynchronous**: Distributed events (RabbitMQ, Kafka)
+
+### API Gateway
+- Routes requests to services
+- Handles authentication
+- Rate limiting
+
+### Distributed Events
+```csharp
+// Publishing
+await _distributedEventBus.PublishAsync(new OrderCreatedEto { ... });
+
+// Handling
+public class OrderCreatedHandler : IDistributedEventHandler<OrderCreatedEto>
+{
+    public async Task HandleEventAsync(OrderCreatedEto eventData) { }
+}
+```
+
+### Shared Module
+Contains shared:
+- Event Transfer Objects (ETOs)
+- Integration service interfaces
+- Constants

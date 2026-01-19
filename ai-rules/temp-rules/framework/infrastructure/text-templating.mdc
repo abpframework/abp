@@ -1,0 +1,40 @@
+---
+description: "ABP text templating system"
+globs: "**/*Template*.cs"
+alwaysApply: false
+---
+
+# ABP Text Templating
+
+## Defining Templates
+```csharp
+public class MyTemplateDefinitionProvider : TemplateDefinitionProvider
+{
+    public override void Define(ITemplateDefinitionContext context)
+    {
+        context.Add(
+            new TemplateDefinition("WelcomeEmail")
+                .WithVirtualFilePath("/Templates/WelcomeEmail.tpl", isInlineLocalized: false)
+        );
+    }
+}
+```
+
+## Template File (Scriban)
+```
+Hello {{model.name}},
+
+Welcome to our application!
+```
+
+## Rendering Templates
+```csharp
+var result = await _templateRenderer.RenderAsync(
+    "WelcomeEmail",
+    new { Name = "John" }
+);
+```
+
+## Template Engines
+- Scriban (default): `Volo.Abp.TextTemplating.Scriban`
+- Razor: `Volo.Abp.TextTemplating.Razor`

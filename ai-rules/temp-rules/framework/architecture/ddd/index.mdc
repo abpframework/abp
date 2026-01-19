@@ -1,0 +1,27 @@
+---
+description: "ABP DDD implementation overview"
+globs: 
+alwaysApply: false
+---
+
+# ABP Domain-Driven Design
+
+## Core Concepts
+- **Entities**: Objects with identity and lifecycle
+- **Aggregate Roots**: Consistency boundaries
+- **Value Objects**: Immutable objects defined by attributes
+- **Domain Services**: Cross-aggregate business logic
+- **Repositories**: Aggregate persistence abstraction
+- **Domain Events**: Notify domain changes
+
+## Application Layer
+- **Application Services**: Orchestrate use cases
+- **DTOs**: Transfer data between layers
+- **Validation**: Input validation
+
+## Best Practices
+- Keep entities behavior-rich
+- Protect invariants in aggregates
+- Reference aggregates by ID only
+- One repository per aggregate root
+- Application services coordinate, domain services implement

@@ -1,0 +1,62 @@
+---
+description: "ABP distributed caching with IDistributedCache<T>"
+globs: "**/*Cache*.cs,**/*Service*.cs"
+alwaysApply: false
+---
+
+# ABP Distributed Caching
+
+## Using Typed Cache
+Inject `IDistributedCache<TCacheItem>` for type-safe caching:
+
+```csharp
+public class BookService : ITransientDependency
+{
+    private readonly IDistributedCache<BookCacheItem> _cache;
+
+    public async Task<BookCacheItem> GetAsync(Guid bookId)
+    {
+        return await _cache.GetOrAddAsync(
+            bookId.ToString(),
+            async () => await GetBookFromDatabaseAsync(bookId),
+            () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(1)
+            }
+        );
+    }
+}
+```
+
+## Cache Item Class
+```csharp
+[CacheName("Books")]
+public class BookCacheItem
+{
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+```
+
+## Using Custom Key Types
+Use `IDistributedCache<TCacheItem, TCacheKey>` for non-string keys:
+- Override `ToString()` in custom key classes
+
+## Multi-Tenancy
+- Cache keys automatically include tenant ID
+- Use `[IgnoreMultiTenancy]` on cache item to share across tenants
+
+## Configuration
+```csharp
+Configure<AbpDistributedCacheOptions>(options =>
+{
+    options.KeyPrefix = "MyApp";
+    options.HideErrors = true;
+});
+```
+
+## Batch Operations
+Use `GetManyAsync`, `SetManyAsync`, `RemoveManyAsync` for better performance
+
+## Unit of Work Integration
+Pass `considerUow: true` to sync cache changes with database transaction

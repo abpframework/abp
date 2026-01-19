@@ -1,0 +1,36 @@
+---
+description: "ABP UI frameworks overview"
+globs: 
+alwaysApply: false
+---
+
+# ABP UI Frameworks
+
+## Supported UI Frameworks
+- **Blazor** (Server & WebAssembly)
+- **Angular**
+- **MVC / Razor Pages**
+- **MAUI** (Mobile)
+- **React Native** (Mobile)
+
+## Common Features Across UIs
+- Localization integration
+- Authorization (permission checking)
+- Theming support
+- Dynamic menu system
+- Modal dialogs
+- Form validation
+- Notification system
+
+## Theming
+- Basic Theme (included)
+- LeptonX Theme (commercial)
+- Custom themes via CSS variables
+
+## JavaScript Interop (Blazor/MVC)
+ABP provides JavaScript APIs for:
+- Localization
+- Authorization
+- Settings
+- Features
+- Current user

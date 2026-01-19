@@ -1,0 +1,47 @@
+---
+description: "ABP connection string management for modular and multi-tenant applications"
+globs: "**/appsettings*.json,**/*DbContext*.cs"
+alwaysApply: false
+---
+
+# ABP Connection Strings
+
+## Configuration
+```json
+{
+  "ConnectionStrings": {
+    "Default": "Server=localhost;Database=MyMainDb;...",
+    "AbpIdentity": "Server=localhost;Database=MyIdentityDb;..."
+  }
+}
+```
+
+## Module Connection String
+ABP looks for module-specific connection string, falls back to `Default`:
+
+```csharp
+[ConnectionStringName("AbpIdentity")]
+public class IdentityDbContext : AbpDbContext<IdentityDbContext>
+{
+}
+```
+
+## Grouping Modules to Databases
+```csharp
+Configure<AbpDbConnectionOptions>(options =>
+{
+    options.Databases.Configure("MySecondaryDb", db =>
+    {
+        db.MappedConnections.Add("AbpIdentity");
+        db.MappedConnections.Add("AbpPermissionManagement");
+    });
+});
+```
+
+## Resolution Order
+1. Module-specific connection string
+2. Database mapping
+3. Default connection string
+
+## Multi-Tenancy
+Tenants can have separate connection strings configured via `ITenantStore`.
