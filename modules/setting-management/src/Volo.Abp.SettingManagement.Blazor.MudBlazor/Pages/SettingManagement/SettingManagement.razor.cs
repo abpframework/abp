@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using MudBlazor;
 using Volo.Abp.MudBlazorUI;
 using Volo.Abp.SettingManagement.Localization;
 
@@ -34,8 +35,8 @@ public partial class SettingManagement
 
     protected async override Task OnInitializedAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:Settings"].Value));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:Settings"].Value, "#"));
 
         SettingComponentCreationContext = new SettingComponentCreationContext(ServiceProvider);
 
