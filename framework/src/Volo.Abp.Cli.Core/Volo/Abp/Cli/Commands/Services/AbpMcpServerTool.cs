@@ -13,17 +13,20 @@ internal class AbpMcpServerTool : McpServerTool
     private readonly string _name;
     private readonly string _description;
     private readonly JsonElement _inputSchema;
+    private readonly JsonElement? _outputSchema;
     private readonly Func<RequestContext<CallToolRequestParams>, CancellationToken, ValueTask<CallToolResult>> _handler;
 
     public AbpMcpServerTool(
         string name,
         string description,
         JsonElement inputSchema,
+        JsonElement? outputSchema,
         Func<RequestContext<CallToolRequestParams>, CancellationToken, ValueTask<CallToolResult>> handler)
     {
         _name = name;
         _description = description;
         _inputSchema = inputSchema;
+        _outputSchema = outputSchema;
         _handler = handler;
     }
 
@@ -31,7 +34,8 @@ internal class AbpMcpServerTool : McpServerTool
     {
         Name = _name,
         Description = _description,
-        InputSchema = _inputSchema
+        InputSchema = _inputSchema,
+        OutputSchema = _outputSchema
     };
 
     public override IReadOnlyList<object> Metadata => Array.Empty<object>();

@@ -82,7 +82,7 @@ public class McpServerService : ITransientDependency
             ["required"] = toolDef.InputSchema?.Required ?? new List<string>()
         };
 
-        RegisterTool(options, toolDef.Name, toolDef.Description, inputSchemaObject);
+        RegisterTool(options, toolDef.Name, toolDef.Description, inputSchemaObject, toolDef.OutputSchema);
     }
 
     private Dictionary<string, object> ConvertProperties(Dictionary<string, McpToolProperty> properties)
@@ -121,7 +121,8 @@ public class McpServerService : ITransientDependency
         McpServerOptions options,
         string name,
         string description,
-        object inputSchema)
+        object inputSchema,
+        JsonElement? outputSchema)
     {
         if (options.ToolCollection == null)
         {
@@ -132,6 +133,7 @@ public class McpServerService : ITransientDependency
             name,
             description,
             JsonSerializer.SerializeToElement(inputSchema),
+            outputSchema,
             (context, cancellationToken) => HandleToolInvocationAsync(name, context, cancellationToken)
         );
 

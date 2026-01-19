@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Volo.Abp.Cli.Commands.Models;
 
@@ -7,6 +8,7 @@ public class McpToolDefinition
     public string Name { get; set; }
     public string Description { get; set; }
     public McpToolInputSchema InputSchema { get; set; }
+    public JsonElement? OutputSchema { get; set; }
 }
 
 public class McpToolInputSchema
