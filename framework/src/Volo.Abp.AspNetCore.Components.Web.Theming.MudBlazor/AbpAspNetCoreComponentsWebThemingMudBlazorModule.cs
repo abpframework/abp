@@ -9,13 +9,15 @@ using Volo.Abp.UI.Navigation;
 namespace Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
 
 [DependsOn(
-        typeof(AbpAspNetCoreComponentsWebModule),
+        //typeof(AbpAspNetCoreComponentsWebModule),
+        //typeof(AbpMudBlazorUIModule),
+        //typeof(AbpUiNavigationModule),
+        //typeof(AbpDddApplicationContractsModule),
+        //typeof(AbpAuthorizationModule),
+        //typeof(AbpGlobalFeaturesModule),
+        //typeof(AbpFeaturesModule)
         typeof(AbpMudBlazorUIModule),
-        typeof(AbpUiNavigationModule),
-        typeof(AbpDddApplicationContractsModule),
-        typeof(AbpAuthorizationModule),
-        typeof(AbpGlobalFeaturesModule),
-        typeof(AbpFeaturesModule)
+        typeof(AbpUiNavigationModule)
 )]
 public class AbpAspNetCoreComponentsWebThemingMudBlazorModule : AbpModule
 {
