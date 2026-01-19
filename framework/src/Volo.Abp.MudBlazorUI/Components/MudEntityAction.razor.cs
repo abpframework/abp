@@ -40,7 +40,7 @@ public partial class MudEntityAction<TItem> : ComponentBase
     public string? Icon { get; set; }
 
     [CascadingParameter]
-    public MudEntityActions<TItem> ParentActions { get; set; } = default!;
+    public MudEntityActions<TItem>? ParentActions { get; set; } = default!;
 
     [Inject]
     protected IAuthorizationService AuthorizationService { get; set; } = default!;
@@ -60,7 +60,10 @@ public partial class MudEntityAction<TItem> : ComponentBase
         }
 #pragma warning restore CS0618
 
-        ParentActions.AddAction(this);
+        if (ParentActions != null)
+        {
+            ParentActions.AddAction(this);
+        }
     }
 
     protected internal virtual async Task ActionClickedAsync()
