@@ -53,9 +53,9 @@ public partial class RoleManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
-        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
-        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(L["Roles"].Value));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Roles"].Value, "#"));
         return base.SetBreadcrumbItemsAsync();
     }
 

@@ -81,9 +81,9 @@ public partial class UserManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
-        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
-        BreadcrumbItems.Add(new Volo.Abp.MudBlazorUI.BreadcrumbItem(L["Users"].Value));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Users"].Value, "#"));
         return base.SetBreadcrumbItemsAsync();
     }
 
