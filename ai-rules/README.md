@@ -18,19 +18,32 @@ When applied, rule contents are included at the start of the model context. This
 
 ## File Structure
 
-Rules are markdown files with `.mdc` extension. Each rule uses frontmatter metadata to control when it's applied:
-
 ```
 ai-rules/
 ├── README.md
-├── common/                    # Rules for all templates
-│   └── module-architecture.mdc
-├── app/                       # Layered app template rules
-│   ├── domain-layer.mdc
-│   ├── application-layer.mdc
-│   └── infrastructure-layer.mdc
-└── module/                    # Module template rules
-    └── module-development.mdc
+├── common/                       # Rules for all ABP projects
+│   ├── abp-core.mdc             # Core ABP conventions (alwaysApply: true)
+│   ├── ddd-patterns.mdc         # DDD patterns (Entity, AggregateRoot, Repository)
+│   ├── application-layer.mdc    # Application services, DTOs, validation
+│   ├── authorization.mdc        # Permissions and authorization
+│   ├── multi-tenancy.mdc        # Multi-tenant entities and data isolation
+│   ├── infrastructure.mdc       # Settings, Features, Caching, Events, Jobs
+│   ├── dependency-rules.mdc     # Layer dependencies and guardrails
+│   ├── development-flow.mdc     # Development workflow
+│   └── cli-commands.mdc         # ABP CLI commands reference
+├── ui/                          # UI-specific rules (applied by globs)
+│   ├── blazor.mdc              # Blazor UI patterns
+│   ├── angular.mdc             # Angular UI patterns
+│   └── mvc.mdc                 # MVC/Razor Pages patterns
+├── data/                        # Data layer rules (applied by globs)
+│   ├── ef-core.mdc             # Entity Framework Core patterns
+│   └── mongodb.mdc             # MongoDB patterns
+├── testing/                     # Testing rules
+│   └── patterns.mdc            # Unit and integration test patterns
+└── template-specific/           # Template-specific rules
+    ├── app-nolayers.mdc        # Single-layer app template
+    ├── module.mdc              # Module template
+    └── microservice.mdc        # Microservice template
 ```
 
 ### Rule Format
@@ -54,7 +67,7 @@ Your rule content here...
 | Property | Description |
 |----------|-------------|
 | `description` | Brief description of what the rule covers. Used by AI to determine relevance. |
-| `globs` | File patterns that trigger this rule (e.g., `src/**/*.cs`, `*.Domain/**`). |
+| `globs` | File patterns that trigger this rule (e.g., `**/*.cs`, `*.Domain/**`). |
 | `alwaysApply` | If `true`, rule is always included. If `false`, AI decides based on context. |
 
 ### Rule Types
@@ -65,6 +78,32 @@ Your rule content here...
 | **Apply Intelligently** | When AI decides it's relevant based on `description` |
 | **Apply to Specific Files** | When file matches `globs` pattern |
 | **Apply Manually** | When @-mentioned in chat (e.g., `@my-rule`) |
+
+## Rule Categories
+
+### Common Rules
+Core ABP patterns that apply to all DDD-based templates (app, module, microservice):
+- `abp-core.mdc` - Always applied, covers module system, DI conventions, base classes
+- `ddd-patterns.mdc` - Entity, AggregateRoot, Repository, Domain Services
+- `application-layer.mdc` - Application services, DTOs, validation, error handling
+- `authorization.mdc` - Permission system and authorization
+- `infrastructure.mdc` - Settings, Features, Caching, Events, Background Jobs
+- `dependency-rules.mdc` - Layer dependencies and project structure
+- `development-flow.mdc` - Development workflow for adding features
+
+### UI Rules (Applied by Globs)
+- `blazor.mdc` - Applied to `**/*.razor`, `**/Blazor/**/*.cs`
+- `angular.mdc` - Applied to `**/angular/**/*.ts`
+- `mvc.mdc` - Applied to `**/*.cshtml`, `**/Pages/**/*.cs`
+
+### Data Rules (Applied by Globs)
+- `ef-core.mdc` - Applied to `**/*.EntityFrameworkCore/**/*.cs`
+- `mongodb.mdc` - Applied to `**/*.MongoDB/**/*.cs`
+
+### Template-Specific Rules
+- `app-nolayers.mdc` - For single-layer web application template
+- `module.mdc` - For reusable module template
+- `microservice.mdc` - For microservice template
 
 ## Best Practices
 
@@ -79,7 +118,7 @@ Good rules are focused, actionable, and scoped:
 ## What to Avoid
 
 - **Copying entire style guides**: Use a linter instead. AI already knows common style conventions.
-- **Documenting every possible command**: AI knows common tools like `dotnet`, and `npm`.
+- **Documenting every possible command**: AI knows common tools like `dotnet` and `npm`.
 - **Adding instructions for edge cases that rarely apply**: Keep rules focused on patterns you use frequently.
 - **Duplicating what's already in your codebase**: Point to canonical examples instead of copying code.
 - **Including non-ABP patterns**: Don't add generic .NET/ASP.NET Core guidance—focus on ABP-specific conventions.
@@ -102,4 +141,3 @@ Please review our [Contribution Guide](../CONTRIBUTING.md) and [Code of Conduct]
 
 - [Cursor Rules Documentation](https://cursor.com/docs/context/rules)
 - [ABP Framework Documentation](https://abp.io/docs)
--
