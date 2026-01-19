@@ -20,6 +20,7 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme;
 using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc;
@@ -56,7 +57,7 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule),
+    typeof(AbpAspNetCoreComponentsServerThemingMudBlazorModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpIdentityBlazorMudBlazorServerModule),
     typeof(AbpTenantManagementBlazorMudBlazorServerModule),
