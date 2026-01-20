@@ -1,6 +1,6 @@
 ---
 description: "ABP development workflow - adding features, entities, and migrations"
-globs: "**/*.cs"
+globs: "**/*AppService*.cs,**/*Application*/**/*.cs,**/*Application.Contracts*/**/*.cs,**/*Dto*.cs,**/*DbContext*.cs,**/*.EntityFrameworkCore/**/*.cs,**/*.MongoDB/**/*.cs,**/*Permission*.cs"
 alwaysApply: false
 ---
 
@@ -122,6 +122,7 @@ public class BookDto : EntityDto<Guid>
 {
     public string Name { get; set; }
     public decimal Price { get; set; }
+    public Guid AuthorId { get; set; }
 }
 
 public class CreateBookDto
@@ -132,6 +133,9 @@ public class CreateBookDto
     
     [Range(0, 9999)]
     public decimal Price { get; set; }
+
+    [Required]
+    public Guid AuthorId { get; set; }
 }
 
 // Service Interface
@@ -143,8 +147,10 @@ public interface IBookAppService : IApplicationService
 }
 ```
 
-### 7. Mapperly Configuration
-Create mapper in Application project:
+### 7. Object Mapping (Mapperly / AutoMapper)
+ABP supports both Mapperly and AutoMapper. Prefer the provider already used in the solution.
+
+If the solution uses **Mapperly**, create a mapper in the Application project:
 
 ```csharp
 [Mapper]
@@ -190,7 +196,7 @@ public class BookAppService : ApplicationService, IBookAppService
             GuidGenerator.Create(),
             input.Name,
             input.Price,
-            CurrentUser.Id.Value
+            input.AuthorId
         );
         
         await _bookRepository.InsertAsync(book);

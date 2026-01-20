@@ -16,6 +16,14 @@ Large language models don't retain memory between completions. Rules provide per
 
 When applied, rule contents are included at the start of the model context. This gives the AI consistent guidance for generating code, interpreting edits, or helping with workflows.
 
+## Mini Glossary (ABP Terms)
+
+- **Application service**: Use-case orchestration (ABP’s primary “business API” surface). Usually exposed remotely via Auto API Controllers or explicit controllers.
+- **Auto API Controllers**: ABP can auto-generate HTTP endpoints from `IApplicationService` contracts.
+- **Client proxy**: Generated client-side code (Angular/JS/C#) to call remote application services.
+- **Integration service (microservices)**: Application-service-like contract intended for **service-to-service** communication; typically exposed separately and consumed via generated C# proxies.
+- **Domain vs Application**: Domain holds business rules/invariants; Application coordinates domain + infrastructure and returns DTOs.
+
 ## File Structure
 
 ```

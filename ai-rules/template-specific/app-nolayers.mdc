@@ -1,6 +1,6 @@
 ---
 description: "ABP Single-Layer (No-Layers) application template specific patterns"
-globs: "**/*.cs"
+globs: "**/src/*/*Module.cs,**/src/*/Entities/**/*.cs,**/src/*/Services/**/*.cs,**/src/*/Data/**/*.cs"
 alwaysApply: false
 ---
 
@@ -50,14 +50,17 @@ Services/
     └── ...
 ```
 
-## Simplified Entity (No DDD Complexity)
+## Simplified Entity (Still keep invariants)
 
-Entities can use public setters since there's no strict DDD layer separation:
+Single-layer templates are structurally simpler, but you may still have real business invariants.
+
+- For **trivial CRUD** entities, public setters can be acceptable.
+- For **non-trivial business rules**, still prefer encapsulation (private setters + methods) to prevent invalid states.
 
 ```csharp
 public class Book : AuditedAggregateRoot<Guid>
 {
-    public string Name { get; set; }  // Public setter OK in single-layer
+    public string Name { get; set; }  // OK for trivial CRUD only
     public decimal Price { get; set; }
 }
 ```

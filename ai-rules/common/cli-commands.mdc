@@ -12,17 +12,19 @@ alwaysApply: false
 ## Generate Client Proxies
 
 ```bash
+# URL flag: `-u` (short) or `--url` (long). Use whichever your team prefers, but keep it consistent.
+#
 # Angular (host must be running)
 abp generate-proxy -t ng
 
 # C# client proxies
-abp generate-proxy -t csharp -url https://localhost:44300
+abp generate-proxy -t csharp -u https://localhost:44300
 
 # Integration services only (microservices)
-abp generate-proxy -t csharp -url https://localhost:44300 -st integration
+abp generate-proxy -t csharp -u https://localhost:44300 -st integration
 
 # JavaScript
-abp generate-proxy -t js -url https://localhost:44300
+abp generate-proxy -t js -u https://localhost:44300
 ```
 
 ## Install Client-Side Libraries
@@ -77,7 +79,7 @@ abp suite generate --entity .suite/entities/Book.json --solution ./Acme.BookStor
 | Task | Command |
 |------|---------|
 | Angular proxies | `abp generate-proxy -t ng` |
-| C# proxies | `abp generate-proxy -t csharp -url URL` |
+| C# proxies | `abp generate-proxy -t csharp -u URL` |
 | Install JS libs | `abp install-libs` |
 | Add reference | `abp add-package-ref PackageName` |
 | Create module | `abp new-module ModuleName` |

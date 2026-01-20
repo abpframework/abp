@@ -1,6 +1,5 @@
 ---
 description: "ABP Module solution template specific patterns"
-globs: "**/*.cs"
 alwaysApply: false
 ---
 

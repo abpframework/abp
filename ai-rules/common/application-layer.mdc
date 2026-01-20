@@ -167,12 +167,14 @@ throw new UserFriendlyException(L["BookNotAvailable"]);
 ```
 
 ### HTTP Status Code Mapping
-| Exception | HTTP Status |
+Status code mapping is **configurable** in ABP (do not rely on a fixed mapping in business logic).
+
+| Exception | Typical HTTP Status |
 |-----------|-------------|
 | `AbpValidationException` | 400 |
 | `AbpAuthorizationException` | 401/403 |
 | `EntityNotFoundException` | 404 |
-| `BusinessException` | 403 |
+| `BusinessException` | 403 (but configurable) |
 | Other exceptions | 500 |
 
 ## Auto API Controllers
@@ -181,8 +183,13 @@ ABP automatically generates API controllers for application services:
 - HTTP methods determined by method name prefix (Get, Create, Update, Delete)
 - Use `[RemoteService(false)]` to disable auto API generation for specific methods
 
-## Object Mapping (Mapperly)
-ABP uses Mapperly for compile-time object mapping. Define mappers as partial classes:
+## Object Mapping (Mapperly / AutoMapper)
+ABP supports **both Mapperly and AutoMapper** integrations. But the default mapping library is Mapperly. You need to first check the project's active mapping library.
+- Prefer the mapping provider already used in the solution (check existing mapping files / loaded modules).
+- In mixed solutions, explicitly setting the default provider may be required (see `docs/en/release-info/migration-guides/AutoMapper-To-Mapperly.md`).
+
+### Mapperly (compile-time)
+Define mappers as partial classes:
 
 ```csharp
 [Mapper]
@@ -220,3 +227,6 @@ public class BookAppService : ApplicationService
 ```
 
 > **Note**: Mapperly generates mapping code at compile-time, providing better performance than runtime mappers.
+
+### AutoMapper (runtime)
+If the solution uses AutoMapper, mappings are typically defined in `Profile` classes and registered via ABP's AutoMapper integration.

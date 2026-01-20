@@ -1,6 +1,5 @@
 ---
 description: "ABP Microservice solution template specific patterns"
-globs: "**/*.cs"
 alwaysApply: false
 ---
 
