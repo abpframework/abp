@@ -93,7 +93,7 @@ public partial class UserManagement
         {
             GetListInput.Filter = GetListInput.Filter;
             CurrentPage = 1;
-            await GetEntitiesAsync();
+            await _dataGrid.ReloadServerDataAsync();
         }
     }
 

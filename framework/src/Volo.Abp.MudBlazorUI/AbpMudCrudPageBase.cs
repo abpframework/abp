@@ -181,9 +181,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected int CurrentPage = 1;
     protected string CurrentSorting = default!;
-    protected int? TotalCount;
     protected TGetListInput GetListInput = new TGetListInput();
-    protected IReadOnlyList<TListViewModel> Entities = Array.Empty<TListViewModel>();
     protected TCreateViewModel NewEntity;
     protected TKey EditingEntityId = default!;
     protected TUpdateViewModel EditingEntity;
@@ -204,6 +202,8 @@ public abstract class AbpMudCrudPageBase<
 
     protected MudDialog? _createDialog;
     protected MudDialog? _editDialog;
+
+    protected AbpMudExtensibleDataGrid<TListViewModel> _dataGrid = default!;
 
     protected AbpMudCrudPageBase()
     {
@@ -259,21 +259,6 @@ public abstract class AbpMudCrudPageBase<
         }
     }
 
-    protected virtual async Task GetEntitiesAsync()
-    {
-        try
-        {
-            await UpdateGetListInputAsync();
-            var result = await AppService.GetListAsync(GetListInput);
-            Entities = MapToListViewModel(result.Items);
-            TotalCount = (int?)result.TotalCount;
-        }
-        catch (Exception ex)
-        {
-            await HandleErrorAsync(ex);
-        }
-    }
-
     private IReadOnlyList<TListViewModel> MapToListViewModel(IReadOnlyList<TGetListOutputDto> dtos)
     {
         if (typeof(TGetListOutputDto) == typeof(TListViewModel))
@@ -310,9 +295,12 @@ public abstract class AbpMudCrudPageBase<
         CurrentPage = 1;
         if (currentPage == 1)
         {
-            await GetEntitiesAsync();
+            await _dataGrid.ReloadServerDataAsync();
         }
-        await InvokeAsync(StateHasChanged);
+        else
+        {
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state)
@@ -322,14 +310,29 @@ public abstract class AbpMudCrudPageBase<
             .JoinAsString(",");
         CurrentPage = state.Page + 1;
 
-        await GetEntitiesAsync();
-        await InvokeAsync(StateHasChanged);
-
-        return new GridData<TListViewModel>
+        try
         {
-            Items = Entities,
-            TotalItems = TotalCount ?? 0
-        };
+            await UpdateGetListInputAsync();
+            var result = await AppService.GetListAsync(GetListInput);
+            var items = MapToListViewModel(result.Items);
+
+            await InvokeAsync(StateHasChanged);
+
+            return new GridData<TListViewModel>
+            {
+                Items = items,
+                TotalItems = (int)result.TotalCount
+            };
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+            return new GridData<TListViewModel>
+            {
+                Items = Array.Empty<TListViewModel>(),
+                TotalItems = 0
+            };
+        }
     }
 
     protected virtual async Task OpenCreateDialogAsync()
@@ -450,7 +453,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task OnCreatedEntityAsync()
     {
-        await GetEntitiesAsync();
+        await _dataGrid.ReloadServerDataAsync();
         await CloseCreateDialogAsync();
         Snackbar.Add(GetCreateMessage(), Severity.Success);
     }
@@ -495,7 +498,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task OnUpdatedEntityAsync()
     {
-        await GetEntitiesAsync();
+        await _dataGrid.ReloadServerDataAsync();
         await CloseEditDialogAsync();
         Snackbar.Add(GetUpdateMessage(), Severity.Success);
     }
@@ -534,13 +537,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task OnDeletedEntityAsync()
     {
-        if (Entities.Count == 1 && CurrentPage > 1)
-        {
-            CurrentPage -= 1;
-        }
-
-        await GetEntitiesAsync();
-        await InvokeAsync(StateHasChanged);
+        await _dataGrid.ReloadServerDataAsync();
         Snackbar.Add(GetDeleteMessage(), Severity.Success);
     }
 

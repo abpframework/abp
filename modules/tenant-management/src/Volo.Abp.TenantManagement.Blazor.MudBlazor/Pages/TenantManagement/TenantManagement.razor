@@ -3,6 +3,7 @@
 @using global::MudBlazor
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.FeatureManagement.Blazor.MudBlazor.Components
+@using Volo.Abp.MudBlazorUI.Components
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.UI.Navigation.Localization.Resource
 @inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
@@ -14,10 +15,10 @@
 
 <MudCard>
     <MudCardContent>
-        <AbpMudExtensibleDataGrid TItem="TenantDto"
-                                  Items="@Entities"
-                                  ReadData="@OnDataGridReadAsync"
-                                  TotalItems="@TotalCount"
+        <AbpMudExtensibleDataGrid @ref="_dataGrid"
+                                  TItem="TenantDto"
+                                  ServerData="@OnDataGridReadAsync"
+                                  ShowPager="true"
                                   PageSize="@PageSize"
                                   CurrentPage="@CurrentPage"
                                   Columns="@TenantManagementTableColumns" />

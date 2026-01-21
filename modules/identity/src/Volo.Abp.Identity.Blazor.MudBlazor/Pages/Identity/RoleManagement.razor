@@ -19,14 +19,13 @@
 
 <MudCard>
     <MudCardContent>
-        <AbpMudExtensibleDataGrid TItem="IdentityRoleDto"
-                                 Data="@Entities"
-                                 ServerData="@OnDataGridReadAsync"
-                                 Loading="@(TotalCount == null)"
-                                 ShowPager="true"
-                                 PageSize="@PageSize"
-                                 CurrentPage="@CurrentPage"
-                                 Columns="@RoleManagementTableColumns" />
+        <AbpMudExtensibleDataGrid @ref="_dataGrid"
+                                  TItem="IdentityRoleDto"
+                                  ServerData="@OnDataGridReadAsync"
+                                  ShowPager="true"
+                                  PageSize="@PageSize"
+                                  CurrentPage="@CurrentPage"
+                                  Columns="@RoleManagementTableColumns" />
     </MudCardContent>
 </MudCard>
 

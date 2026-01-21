@@ -18,9 +18,9 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 {
     protected const string DataFieldAttributeName = "Data";
 
-    protected Regex ExtensionPropertiesRegex = new Regex(@"ExtraProperties\[(.*?)\]");
+    private MudDataGrid<TItem>? _dataGrid;
 
-    [Parameter] public IEnumerable<TItem>? Data { get; set; }
+    protected Regex ExtensionPropertiesRegex = new Regex(@"ExtraProperties\[(.*?)\]");
 
     [Parameter] public Func<GridState<TItem>, Task<GridData<TItem>>>? ServerData { get; set; }
 
@@ -43,6 +43,14 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
     [Inject]
     public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
+
+    public virtual async Task ReloadServerDataAsync()
+    {
+        if (_dataGrid != null && ServerData != null)
+        {
+            await _dataGrid.ReloadServerData();
+        }
+    }
 
     protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
     {

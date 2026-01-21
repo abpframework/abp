@@ -31,14 +31,13 @@
             </MudItem>
         </MudGrid>
 
-        <AbpMudExtensibleDataGrid TItem="IdentityUserDto"
-                                 Data="@Entities"
-                                 ServerData="@OnDataGridReadAsync"
-                                 Loading="@(TotalCount == null)"
-                                 ShowPager="true"
-                                 PageSize="@PageSize"
-                                 CurrentPage="@CurrentPage"
-                                 Columns="@UserManagementTableColumns" />
+        <AbpMudExtensibleDataGrid @ref="_dataGrid"
+                                  TItem="IdentityUserDto"
+                                  ServerData="@OnDataGridReadAsync"
+                                  ShowPager="true"
+                                  PageSize="@PageSize"
+                                  CurrentPage="@CurrentPage"
+                                  Columns="@UserManagementTableColumns" />
     </MudCardContent>
 </MudCard>
 
