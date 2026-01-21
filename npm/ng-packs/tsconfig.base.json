@@ -20,6 +20,8 @@
       "@abp/ng.account.core/proxy": ["packages/account-core/proxy/src/public-api.ts"],
       "@abp/ng.account/config": ["packages/account/config/src/public-api.ts"],
       "@abp/ng.components": ["packages/components/src/public-api.ts"],
+      "@abp/ng.components/abp-form-field": ["packages/components/abp-form-field/src/public-api.ts"],
+      "@abp/ng.components/abp-input": ["packages/components/abp-input/src/public-api.ts"],
       "@abp/ng.components/chart.js": ["packages/components/chart.js/src/public-api.ts"],
       "@abp/ng.components/extensible": ["packages/components/extensible/src/public-api.ts"],
       "@abp/ng.components/lookup": ["packages/components/lookup/src/public-api.ts"],

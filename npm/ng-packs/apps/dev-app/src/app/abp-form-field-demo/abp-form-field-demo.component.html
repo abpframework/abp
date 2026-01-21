@@ -1,0 +1,30 @@
+<abp-card>
+    <abp-card-header>
+        <h3>Abp Form Field Demo</h3>
+    </abp-card-header>
+    <abp-card-body>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <abp-form-field>
+              <abp-form-field-label>Name</abp-form-field-label>
+                <abp-input formControlName="name" />
+            </abp-form-field>
+
+            <abp-form-field>
+              <abp-form-field-label>Email</abp-form-field-label>
+              <abp-input formControlName="email" />
+            </abp-form-field>
+
+            <abp-form-field>
+              <abp-form-field-label>Password</abp-form-field-label>
+              <abp-input formControlName="password" />
+            </abp-form-field>
+
+            <abp-form-field>
+              <abp-form-field-label>Age</abp-form-field-label>
+              <abp-input formControlName="age" />
+            </abp-form-field>
+
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Submit</button>
+        </form>
+    </abp-card-body>
+</abp-card>
