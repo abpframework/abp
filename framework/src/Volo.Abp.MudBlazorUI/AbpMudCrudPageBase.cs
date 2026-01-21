@@ -187,8 +187,6 @@ public abstract class AbpMudCrudPageBase<
     protected TCreateViewModel NewEntity;
     protected TKey EditingEntityId = default!;
     protected TUpdateViewModel EditingEntity;
-    protected bool CreateDialogVisible;
-    protected bool EditDialogVisible;
     protected MudForm? CreateFormRef;
     protected MudForm? EditFormRef;
     protected List<BreadcrumbItem> BreadcrumbItems = new List<BreadcrumbItem>(2);
@@ -203,6 +201,9 @@ public abstract class AbpMudCrudPageBase<
     public bool HasCreatePermission { get; set; }
     public bool HasUpdatePermission { get; set; }
     public bool HasDeletePermission { get; set; }
+
+    protected MudDialog? _createDialog;
+    protected MudDialog? _editDialog;
 
     protected AbpMudCrudPageBase()
     {
@@ -339,11 +340,10 @@ public abstract class AbpMudCrudPageBase<
 
             NewEntity = new TCreateViewModel();
 
-            await InvokeAsync(() =>
+            if (_createDialog != null)
             {
-                CreateDialogVisible = true;
-                StateHasChanged();
-            });
+                await _createDialog.ShowAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -351,11 +351,13 @@ public abstract class AbpMudCrudPageBase<
         }
     }
 
-    protected virtual Task CloseCreateDialogAsync()
+    protected virtual async Task CloseCreateDialogAsync()
     {
-        CreateDialogVisible = false;
         NewEntity = new TCreateViewModel();
-        return InvokeAsync(StateHasChanged);
+        if (_createDialog != null)
+        {
+            await _createDialog.CloseAsync();
+        }
     }
 
     protected virtual async Task OpenEditDialogAsync(TListViewModel entity)
@@ -369,11 +371,10 @@ public abstract class AbpMudCrudPageBase<
             EditingEntityId = entity.Id;
             EditingEntity = MapToEditingEntity(entityDto);
 
-            await InvokeAsync(() =>
+            if (_editDialog != null)
             {
-                EditDialogVisible = true;
-                StateHasChanged();
-            });
+                await _editDialog.ShowAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -406,10 +407,12 @@ public abstract class AbpMudCrudPageBase<
         return ObjectMapper.Map<TUpdateViewModel, TUpdateInput>(updateViewModel);
     }
 
-    protected virtual Task CloseEditDialogAsync()
+    protected virtual async Task CloseEditDialogAsync()
     {
-        EditDialogVisible = false;
-        return InvokeAsync(StateHasChanged);
+        if (_editDialog != null)
+        {
+            await _editDialog.CloseAsync();
+        }
     }
 
     protected virtual async Task CreateEntityAsync()

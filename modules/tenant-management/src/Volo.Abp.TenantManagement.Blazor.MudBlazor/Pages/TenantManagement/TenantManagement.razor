@@ -27,7 +27,7 @@
 @* ************************* CREATE MODAL ************************* *@
 @if (HasCreatePermission)
 {
-    <MudDialog @bind-IsVisible="@CreateDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+    <MudDialog ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["NewTenant"]</MudText>
         </TitleContent>
@@ -67,7 +67,8 @@
 @* ************************* EDIT MODAL ************************* *@
 @if (HasUpdatePermission)
 {
-    <MudDialog @bind-IsVisible="@EditDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+    <MudDialog ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })"
+        CloseOnEscapeKey="true">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["Edit"]</MudText>
         </TitleContent>

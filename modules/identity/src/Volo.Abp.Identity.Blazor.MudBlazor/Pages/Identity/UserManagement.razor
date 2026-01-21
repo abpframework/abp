@@ -43,9 +43,9 @@
 </MudCard>
 
 @* ************************* CREATE DIALOG ************************* *@
-@if (HasCreatePermission && CreateDialogVisible)
+@if (HasCreatePermission)
 {
-    <MudDialog @bind-Visible="@CreateDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+    <MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["NewUser"]</MudText>
         </TitleContent>
@@ -113,9 +113,9 @@
 
 
 @* ************************* EDIT DIALOG ************************* *@
-@if (HasUpdatePermission && EditDialogVisible)
+@if (HasUpdatePermission)
 {
-    <MudDialog @bind-Visible="@EditDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+    <MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["Edit"]</MudText>
         </TitleContent>
