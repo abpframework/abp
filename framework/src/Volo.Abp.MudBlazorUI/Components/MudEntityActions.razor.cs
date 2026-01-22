@@ -8,7 +8,17 @@ using MudBlazor;
 
 namespace Volo.Abp.MudBlazorUI.Components;
 
-public partial class MudEntityActions<TItem> : ComponentBase
+/// <summary>
+/// Non-generic interface for MudEntityActions to allow cascading parameter matching
+/// regardless of the generic type argument.
+/// </summary>
+public interface IMudEntityActions
+{
+    MudActionType Type { get; }
+    void AddAction(object action);
+}
+
+public partial class MudEntityActions<TItem> : ComponentBase, IMudEntityActions
 {
     protected readonly List<MudEntityAction<TItem>> Actions = new List<MudEntityAction<TItem>>();
     protected bool HasPrimaryAction => Actions.Any(t => t.Primary);
@@ -41,6 +51,14 @@ public partial class MudEntityActions<TItem> : ComponentBase
     internal void AddAction(MudEntityAction<TItem> action)
     {
         Actions.Add(action);
+    }
+
+    void IMudEntityActions.AddAction(object action)
+    {
+        if (action is MudEntityAction<TItem> typedAction)
+        {
+            AddAction(typedAction);
+        }
     }
 
     protected virtual bool DisabledOrNoActions()

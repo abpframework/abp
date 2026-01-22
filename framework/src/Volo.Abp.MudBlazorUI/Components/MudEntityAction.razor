@@ -1,32 +1,29 @@
 @typeparam TItem
 @using MudBlazor
 
-@if (Visible && HasPermission)
+@if (ParentActions != null && Visible && HasPermission)
 {
-    if (ParentActions != null)
+    if (ParentActions.Type == MudActionType.Dropdown)
     {
-        if (ParentActions.Type == MudActionType.Dropdown)
+        if (Primary == false)
         {
-            if (Primary == false)
-            {
-                <MudMenuItem OnClick="@ActionClickedAsync" Disabled="@Disabled">
-                    @if (!string.IsNullOrEmpty(Icon))
-                    {
-                        <MudIcon Icon="@Icon" Class="me-2" Size="Size.Small" />
-                    }
-                    @Text
-                </MudMenuItem>
-            }
-        }
-        else
-        {
-            <MudButton Color="@Color" Variant="Variant.Text" OnClick="@ActionClickedAsync" Disabled="@Disabled" Size="Size.Small">
+            <MudMenuItem OnClick="@ActionClickedAsync" Disabled="@Disabled">
                 @if (!string.IsNullOrEmpty(Icon))
                 {
-                    <MudIcon Icon="@Icon" Class="@(Text.IsNullOrEmpty() ? "" : "me-1")" Size="Size.Small" />
+                    <MudIcon Icon="@Icon" Class="me-2" Size="Size.Small" />
                 }
                 @Text
-            </MudButton>
+            </MudMenuItem>
         }
+    }
+    else
+    {
+        <MudButton Color="@Color" Variant="Variant.Text" OnClick="@ActionClickedAsync" Disabled="@Disabled" Size="Size.Small">
+            @if (!string.IsNullOrEmpty(Icon))
+            {
+                <MudIcon Icon="@Icon" Class="@(Text.IsNullOrEmpty() ? "" : "me-1")" Size="Size.Small" />
+            }
+            @Text
+        </MudButton>
     }
 }
