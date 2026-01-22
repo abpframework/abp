@@ -88,8 +88,7 @@ public partial class RoleManagement
                     {
                         Text = L["Delete"],
                         Visible = (data) => HasDeletePermission && !data.As<IdentityRoleDto>().IsStatic,
-                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>()),
-                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityRoleDto>())
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>())
                     }
             });
 
