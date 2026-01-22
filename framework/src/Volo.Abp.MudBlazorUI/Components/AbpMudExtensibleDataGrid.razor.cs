@@ -108,6 +108,56 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         return string.Empty;
     }
 
+    protected virtual Func<TItem, object>? GetSortByFunc(TableColumn column)
+    {
+        if (!column.Sortable)
+        {
+            return null;
+        }
+
+        // Return PropertyName if available, otherwise use Data
+        // PropertyName is preferred as it's explicitly set for sorting
+        string? propertyPath = null;
+        if (!string.IsNullOrEmpty(column.PropertyName))
+        {
+            propertyPath = column.PropertyName;
+        }
+        else if (!string.IsNullOrEmpty(column.Data) && !ExtensionPropertiesRegex.IsMatch(column.Data))
+        {
+            propertyPath = column.Data;
+        }
+
+        if (string.IsNullOrEmpty(propertyPath))
+        {
+            return null;
+        }
+
+        // Create a property accessor lambda that MudBlazor can understand
+        // This uses the property name from propertyPath to build a proper expression
+        var properties = propertyPath.Split('.');
+        
+        // Build a lambda expression that directly accesses the property
+        // This allows MudBlazor to extract the property name for sorting
+        var parameter = System.Linq.Expressions.Expression.Parameter(typeof(TItem), "x");
+        System.Linq.Expressions.Expression expression = parameter;
+        
+        foreach (var prop in properties)
+        {
+            var propertyInfo = expression.Type.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
+            if (propertyInfo == null)
+            {
+                // Fallback to GetPropertyValue if property not found
+                return item => GetPropertyValue(item, propertyPath);
+            }
+            expression = System.Linq.Expressions.Expression.Property(expression, propertyInfo);
+        }
+        
+        // Convert to object and create lambda
+        var convertExpression = System.Linq.Expressions.Expression.Convert(expression, typeof(object));
+        var lambda = System.Linq.Expressions.Expression.Lambda<Func<TItem, object>>(convertExpression, parameter);
+        return lambda.Compile();
+    }
+
     protected virtual Func<TItem, object>? GetExtensionPropertySortFunc(TableColumn column)
     {
         if (!column.Sortable)

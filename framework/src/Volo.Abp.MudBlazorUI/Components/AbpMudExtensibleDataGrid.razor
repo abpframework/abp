@@ -51,7 +51,8 @@
                 {
                     @if (column.Component != null)
                     {
-                        <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" Hidden="@(!column.Visible)"
+                        <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" 
+                            SortBy="@GetSortByFunc(column)" Hidden="@(!column.Visible)"
                             CellStyle="@GetColumnStyle(column)">
                             <CellTemplate>
                                 @RenderCustomTableColumnComponent(column.Component, context.Item!)
