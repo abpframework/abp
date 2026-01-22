@@ -40,6 +40,7 @@ Here, is the list of all available commands before explaining their details:
 * **`new-package`**: Generates a new package based on the given template.
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
+* **`clean-logs`**: Delete all `*logs.txt` files in the current folder and its subfolders.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-package-ref`**: Adds package to given project.
 * **`install-module`**: Adds a [multi-package application module](../modules/index.md) to a given module.
@@ -352,6 +353,15 @@ Usage:
 
 ````bash
 abp clean
+````
+### clean-logs
+
+Delete all `*logs.txt` files in the current folder and its subfolders.
+
+Usage:
+
+````bash
+abp clean-logs
 ````
 
 

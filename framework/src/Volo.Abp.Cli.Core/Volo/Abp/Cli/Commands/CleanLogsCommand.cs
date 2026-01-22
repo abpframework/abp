@@ -33,8 +33,6 @@ public class CleanLogsCommand : IConsoleCommand, ITransientDependency
                 File.Delete(file);
             }
         }
-        Logger.LogInformation($"'Logs' files removed successfully!");
-
         Logger.LogInformation("Logs cleaned successfully!");
         return Task.CompletedTask;
     }
@@ -54,6 +52,6 @@ public class CleanLogsCommand : IConsoleCommand, ITransientDependency
 
     public static string GetShortDescription()
     {
-        return "Delete all *logs.txt files in current folder.";
+        return "Delete all *logs.txt files in the current folder and its subfolders.";
     }
 }
