@@ -33,11 +33,11 @@
                                          Variant="Variant.Outlined" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox T="bool" @bind-Checked="@EmailSettings.SmtpEnableSsl"
+                    <MudCheckBox T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
                                 Label="@L["SmtpEnableSsl"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox T="bool" @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials"
+                    <MudCheckBox T="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials"
                                 Label="@L["SmtpUseDefaultCredentials"]" />
                 </MudItem>
                 @if (!EmailSettings.SmtpUseDefaultCredentials)

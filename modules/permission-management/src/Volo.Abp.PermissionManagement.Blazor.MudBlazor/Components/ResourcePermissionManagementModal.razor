@@ -112,7 +112,7 @@
                 <div class="mt-2">
                     @foreach (var permission in CreateEntity.Permissions)
                     {
-                        <MudCheckBox T="bool" @bind-Checked="@permission.IsGranted" 
+                        <MudCheckBox T="bool" @bind-Value="@permission.IsGranted" 
                                     Label="@permission.DisplayName" />
                     }
                 </div>
@@ -141,7 +141,7 @@
                 <div class="mt-2">
                     @foreach (var permission in EditEntity.Permissions)
                     {
-                        <MudCheckBox T="bool" @bind-Checked="@permission.IsGranted" 
+                        <MudCheckBox T="bool" @bind-Value="@permission.IsGranted" 
                                     Label="@permission.DisplayName" />
                     }
                 </div>
