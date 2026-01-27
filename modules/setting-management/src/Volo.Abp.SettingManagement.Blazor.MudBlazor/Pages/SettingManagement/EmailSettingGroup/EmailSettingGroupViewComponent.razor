@@ -85,7 +85,7 @@
 
     @if (HasSendTestEmailPermission)
     {
-        <MudDialog @bind-IsVisible="@_sendTestEmailDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+        <MudDialog @bind-Visible="@_sendTestEmailDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
             <TitleContent>
                 <MudText Typo="Typo.h6">@L["SendTestEmail"]</MudText>
             </TitleContent>

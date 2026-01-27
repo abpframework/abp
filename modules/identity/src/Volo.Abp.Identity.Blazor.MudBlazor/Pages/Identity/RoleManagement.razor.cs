@@ -79,8 +79,11 @@ public partial class RoleManagement
                         {
                             if (PermissionManagementModal != null)
                             {
-                                await PermissionManagementModal.OpenAsync(PermissionProviderName,
-                                    data.As<IdentityRoleDto>().Name);
+                                var role = data.As<IdentityRoleDto>();
+                                await PermissionManagementModal.OpenAsync(
+                                    PermissionProviderName,
+                                    role.Id.ToString(),
+                                    role.Name);
                             }
                         }
                     },
