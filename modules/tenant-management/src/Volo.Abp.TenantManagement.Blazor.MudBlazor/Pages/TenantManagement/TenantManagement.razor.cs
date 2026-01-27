@@ -101,8 +101,7 @@ public partial class TenantManagement
                     {
                         Text = L["Delete"],
                         Visible = (data) => HasDeletePermission,
-                        Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>()),
-                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<TenantDto>())
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>())
                     }
             });
 
