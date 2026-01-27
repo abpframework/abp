@@ -91,8 +91,15 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             var propertyInfo = value.GetType().GetProperty(prop, BindingFlags.Public | BindingFlags.Instance)
                                ?? throw new ArgumentException($"Property '{prop}' not found on type '{value.GetType().Name}'", nameof(propertyPath));
 
-            value = propertyInfo.GetValue(value)
-                    ?? throw new InvalidOperationException($"Property '{prop}' returned null");
+            var propertyValue = propertyInfo.GetValue(value);
+
+            // Allow null property values and treat them as empty for display/sorting purposes
+            if (propertyValue == null)
+            {
+                return string.Empty;
+            }
+
+            value = propertyValue;
         }
 
         return value;
