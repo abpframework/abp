@@ -23,7 +23,6 @@
             <MudItem xs="12" sm="4">
                 <MudTextField @bind-Value="GetListInput.Filter"
                              Label="@L["Search"]"
-                             Variant="Variant.Outlined"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
                              Immediate="true"
@@ -54,19 +53,15 @@
                     <MudTabPanel Text="@L["UserInformations"]">
                         <MudTextField @bind-Value="@NewEntity.UserName"
                                      Label="@L["DisplayName:UserName"]"
-                                     Variant="Variant.Outlined"
                                      Required="true"
                                      RequiredError="@L["FieldIsRequired", L["DisplayName:UserName"]]" />
                         <MudTextField @bind-Value="@NewEntity.Name"
-                                     Label="@L["DisplayName:Name"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:Name"]" />
                         <MudTextField @bind-Value="@NewEntity.Surname"
-                                     Label="@L["DisplayName:Surname"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:Surname"]" />
                         <MudTextField @bind-Value="@NewEntity.Password"
                                      Label="@L["DisplayName:Password"]"
                                      InputType="@(_showPassword ? InputType.Text : InputType.Password)"
-                                     Variant="Variant.Outlined"
                                      Required="true"
                                      RequiredError="@L["FieldIsRequired", L["DisplayName:Password"]]"
                                      Adornment="Adornment.End"
@@ -74,12 +69,10 @@
                                      OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
                         <MudTextField @bind-Value="@NewEntity.Email"
                                      Label="@L["DisplayName:Email"]"
-                                     Variant="Variant.Outlined"
                                      Required="true"
                                      RequiredError="@L["FieldIsRequired", L["DisplayName:Email"]]" />
                         <MudTextField @bind-Value="@NewEntity.PhoneNumber"
-                                     Label="@L["DisplayName:PhoneNumber"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:PhoneNumber"]" />
                         <MudCheckBox T="bool" @bind-Value="@NewEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
                         <MudTooltip Text="@L["Description:LockoutEnabled"]">
                             <MudCheckBox T="bool" @bind-Value="@NewEntity.LockoutEnabled" Label="@L["DisplayName:LockoutEnabled"]">
@@ -125,30 +118,24 @@
                     <MudTabPanel Text="@L["UserInformations"]">
                         <MudTextField @bind-Value="@EditingEntity.UserName"
                                      Label="@L["DisplayName:UserName"]"
-                                     Variant="Variant.Outlined"
                                      Required="true"
                                      RequiredError="@L["FieldIsRequired", L["DisplayName:UserName"]]" />
                         <MudTextField @bind-Value="@EditingEntity.Name"
-                                     Label="@L["DisplayName:Name"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:Name"]" />
                         <MudTextField @bind-Value="@EditingEntity.Surname"
-                                     Label="@L["DisplayName:Surname"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:Surname"]" />
                         <MudTextField @bind-Value="@EditingEntity.Password"
                                      Label="@L["DisplayName:Password"]"
                                      InputType="@(_showPassword ? InputType.Text : InputType.Password)"
-                                     Variant="Variant.Outlined"
                                      Adornment="Adornment.End"
                                      AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
                                      OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
                         <MudTextField @bind-Value="@EditingEntity.Email"
                                      Label="@L["DisplayName:Email"]"
-                                     Variant="Variant.Outlined"
                                      Required="true"
                                      RequiredError="@L["FieldIsRequired", L["DisplayName:Email"]]" />
                         <MudTextField @bind-Value="@EditingEntity.PhoneNumber"
-                                     Label="@L["DisplayName:PhoneNumber"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:PhoneNumber"]" />
                         @if (!IsEditCurrentUser)
                         {
                             <MudCheckBox T="bool" @bind-Value="@EditingEntity.IsActive" Label="@L["DisplayName:IsActive"]" />

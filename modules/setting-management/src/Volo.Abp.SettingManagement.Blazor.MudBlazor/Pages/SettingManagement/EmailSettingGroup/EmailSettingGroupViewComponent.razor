@@ -12,25 +12,21 @@
                     <MudTextField @bind-Value="@EmailSettings.DefaultFromDisplayName"
                                  Label="@L["DefaultFromDisplayName"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]"
-                                 Variant="Variant.Outlined" />
+                                 RequiredError="@L["ThisFieldIsRequired"]" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField @bind-Value="@EmailSettings.DefaultFromAddress"
                                  Label="@L["DefaultFromAddress"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]"
-                                 Variant="Variant.Outlined" />
+                                 RequiredError="@L["ThisFieldIsRequired"]" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField @bind-Value="@EmailSettings.SmtpHost"
-                                 Label="@L["SmtpHost"]"
-                                 Variant="Variant.Outlined" />
+                                 Label="@L["SmtpHost"]" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudNumericField @bind-Value="@EmailSettings.SmtpPort"
-                                         Label="@L["SmtpPort"]"
-                                         Variant="Variant.Outlined" />
+                                         Label="@L["SmtpPort"]" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudCheckBox T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
@@ -44,20 +40,17 @@
                 {
                     <MudItem xs="12">
                         <MudTextField @bind-Value="@EmailSettings.SmtpDomain"
-                                     Label="@L["SmtpDomain"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["SmtpDomain"]" />
                     </MudItem>
                     <MudItem xs="12">
                         <MudTextField @bind-Value="@EmailSettings.SmtpUserName"
-                                     Label="@L["SmtpUserName"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["SmtpUserName"]" />
                     </MudItem>
                     <MudItem xs="12">
                         <MudTextField @bind-Value="@EmailSettings.SmtpPassword"
                                      Label="@L["SmtpPassword"]"
                                      InputType="InputType.Password"
-                                     Placeholder="@L["SmtpPasswordPlaceholder"]"
-                                     Variant="Variant.Outlined" />
+                                     Placeholder="@L["SmtpPasswordPlaceholder"]" />
                     </MudItem>
                 }
             </MudGrid>
@@ -68,7 +61,6 @@
                 @if (HasSendTestEmailPermission)
                 {
                     <MudButton Color="Color.Primary"
-                              Variant="Variant.Outlined"
                               OnClick="@OpenSendTestEmailDialogAsync"
                               Class="me-2">
                         @L["SendTestEmail"]
@@ -95,22 +87,18 @@
                                  Label="@L["SenderEmailAddress"]"
                                  Required="true"
                                  RequiredError="@L["ThisFieldIsRequired"]"
-                                 Variant="Variant.Outlined"
                                  AutoFocus="true" />
                     <MudTextField @bind-Value="@SendTestEmailInput.TargetEmailAddress"
                                  Label="@L["TargetEmailAddress"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]"
-                                 Variant="Variant.Outlined" />
+                                 RequiredError="@L["ThisFieldIsRequired"]" />
                     <MudTextField @bind-Value="@SendTestEmailInput.Subject"
                                  Label="@L["Subject"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]"
-                                 Variant="Variant.Outlined" />
+                                 RequiredError="@L["ThisFieldIsRequired"]" />
                     <MudTextField @bind-Value="@SendTestEmailInput.Body"
                                  Label="@L["Body"]"
-                                 Lines="5"
-                                 Variant="Variant.Outlined" />
+                                 Lines="5" />
                 </MudForm>
             </DialogContent>
             <DialogActions>

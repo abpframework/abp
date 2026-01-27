@@ -15,16 +15,13 @@
                     <MudForm @ref="@_changePasswordForm" Model="@ChangePasswordModel">
                         <MudTextField @bind-Value="@ChangePasswordModel.CurrentPassword"
                                      Label="@L["DisplayName:CurrentPassword"]"
-                                     InputType="InputType.Password"
-                                     Variant="Variant.Outlined" />
+                                     InputType="InputType.Password" />
                         <MudTextField @bind-Value="@ChangePasswordModel.NewPassword"
                                      Label="@L["DisplayName:NewPassword"]"
-                                     InputType="InputType.Password"
-                                     Variant="Variant.Outlined" />
+                                     InputType="InputType.Password" />
                         <MudTextField @bind-Value="@ChangePasswordModel.NewPasswordConfirm"
                                      Label="@L["DisplayName:NewPasswordConfirm"]"
-                                     InputType="InputType.Password"
-                                     Variant="Variant.Outlined" />
+                                     InputType="InputType.Password" />
                         <MudButton ButtonType="ButtonType.Submit"
                                   Variant="Variant.Filled"
                                   Color="Color.Primary"
@@ -40,26 +37,21 @@
                     <MudForm @ref="@_personalInfoForm" Model="@PersonalInfoModel">
                         <MudTextField @bind-Value="@PersonalInfoModel.UserName"
                                      Label="@L["DisplayName:UserName"]"
-                                     Variant="Variant.Outlined"
                                      Disabled="true" />
                         <MudGrid>
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="@PersonalInfoModel.Name"
-                                             Label="@L["DisplayName:Name"]"
-                                             Variant="Variant.Outlined" />
+                                             Label="@L["DisplayName:Name"]" />
                             </MudItem>
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="@PersonalInfoModel.Surname"
-                                             Label="@L["DisplayName:Surname"]"
-                                             Variant="Variant.Outlined" />
+                                             Label="@L["DisplayName:Surname"]" />
                             </MudItem>
                         </MudGrid>
                         <MudTextField @bind-Value="@PersonalInfoModel.Email"
-                                     Label="@L["DisplayName:Email"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:Email"]" />
                         <MudTextField @bind-Value="@PersonalInfoModel.PhoneNumber"
-                                     Label="@L["DisplayName:PhoneNumber"]"
-                                     Variant="Variant.Outlined" />
+                                     Label="@L["DisplayName:PhoneNumber"]" />
 
                         @* Extension Properties *@
                         @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<PersonalInfoModel>())

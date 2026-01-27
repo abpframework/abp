@@ -13,8 +13,7 @@
                           Required="true"
                           RequiredError="@L["ThisFieldIsRequired"]"
                           Value="@TimezoneSettings.Timezone"
-                          ValueChanged="@OnSelectedValueChangedAsync"
-                          Variant="Variant.Outlined">
+                          ValueChanged="@OnSelectedValueChangedAsync">
                     @foreach (var item in TimezoneSettings.TimeZoneItems)
                     {
                         <MudSelectItem Value="@item.Value">@item.Name</MudSelectItem>

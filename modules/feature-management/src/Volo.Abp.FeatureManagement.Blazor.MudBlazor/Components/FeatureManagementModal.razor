@@ -35,8 +35,7 @@
                                     <MudTextField Label="@GetShownName(feature)"
                                                 Disabled="@disabled"
                                                 Value="@feature.Value"
-                                                ValueChanged="@(async ([CanBeNull] string v) => await OnFeatureValueChangedAsync(v, feature))"
-                                                Variant="Variant.Outlined" />
+                                                ValueChanged="@(async ([CanBeNull] string v) => await OnFeatureValueChangedAsync(v, feature))" />
                                     @if (feature.Description != null)
                                     {
                                         <MudText Typo="Typo.caption" Class="mt-1">@feature.Description</MudText>
@@ -51,8 +50,7 @@
                                             Label="@GetShownName(feature)"
                                             Disabled="@disabled"
                                             Value="@selectedValue"
-                                            ValueChanged="@(s => SelectionStringValues[feature.Name] = s)"
-                                            Variant="Variant.Outlined">
+                                            ValueChanged="@(s => SelectionStringValues[feature.Name] = s)">
                                         @foreach (var item in items)
                                         {
                                             <MudSelectItem Value="@item.Value">

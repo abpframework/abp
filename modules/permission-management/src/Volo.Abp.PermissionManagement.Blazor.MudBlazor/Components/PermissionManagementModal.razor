@@ -14,7 +14,6 @@
                 <MudTextField Value="@_permissionGroupSearchText"
                              ValueChanged="@(async ([CanBeNull] string b) => await OnPermissionGroupSearchTextChangedAsync(b))"
                              Label="@L["Search"]"
-                             Variant="Variant.Outlined"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
                              Immediate="true" />
