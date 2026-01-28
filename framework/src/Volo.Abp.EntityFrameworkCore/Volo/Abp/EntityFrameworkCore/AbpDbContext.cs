@@ -310,7 +310,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                     EntityChangeEventHelper.PublishEntityUpdatedEvent(entityEntry.Entity);
                 }
             }
-            else if (entityEntry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
+            else if (GetEntryProperties(entityEntry).Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
             {
                 if (IsOnlyForeignKeysModified(entityEntry))
                 {
@@ -446,7 +446,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 break;
 
             case EntityState.Modified:
-                if (entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
+                if (GetEntryProperties(entry).Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
                 {
                     if (IsOnlyForeignKeysModified(entry))
                     {
@@ -454,7 +454,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                         break;
                     }
 
-                    var modifiedProperties = entry.Properties.Where(x => x.IsModified).ToList();
+                    var modifiedProperties = GetEntryProperties(entry).Where(x => x.IsModified).ToList();
                     var disableAuditingAttributes = modifiedProperties.Select(x => x.Metadata.PropertyInfo?.GetCustomAttribute<DisableAuditingAttribute>()).ToList();
                     if (disableAuditingAttributes.Any(x => x == null || x.UpdateModificationProps))
                     {
@@ -503,7 +503,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual bool IsOnlyForeignKeysModified(EntityEntry entry)
     {
-        return entry.Properties.Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey() &&
+        return GetEntryProperties(entry).Where(x => x.IsModified).All(x => x.Metadata.IsForeignKey() &&
                                          (x.CurrentValue == null || x.OriginalValue?.ToString() == x.CurrentValue?.ToString()));
     }
 
@@ -531,6 +531,11 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 UpdateConcurrencyStamp(entry);
             }
         }
+    }
+    
+    protected virtual IEnumerable<PropertyEntry> GetEntryProperties(EntityEntry entry)
+    {
+        return entry.Properties.Concat(entry.ComplexProperties.SelectMany(x => x.Properties));
     }
 
     protected virtual EntityEventReport CreateEventReport()
@@ -662,7 +667,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
     protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, bool forceApply = false)
     {
         if (forceApply ||
-            entry.Properties.Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
+            GetEntryProperties(entry).Any(x => x.IsModified && (x.Metadata.ValueGenerated == ValueGenerated.Never || x.Metadata.ValueGenerated == ValueGenerated.OnAdd)))
         {
             IncrementEntityVersionProperty(entry);
             SetModificationAuditProperties(entry);
