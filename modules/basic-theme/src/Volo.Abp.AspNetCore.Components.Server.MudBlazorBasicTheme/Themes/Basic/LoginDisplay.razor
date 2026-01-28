@@ -29,8 +29,6 @@
                     <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
                 }
             }
-            <MudDivider/>
-            <MudMenuItem OnClick="@Logout">@L["Logout"]</MudMenuItem>
         </MudMenu>
     </Authorized>
     <NotAuthorized>
