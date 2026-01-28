@@ -19,10 +19,15 @@
             {
                 if (column.Actions.Any())
                 {
-                    var entityActionType = column.Actions.Count == 1 ? MudActionType.Button : MudActionType.Dropdown;
                     <TemplateColumn T="TItem" Title="@column.Title" Sortable="false" CellStyle="@($"width: {ActionColumnWidth}")">
                         <CellTemplate>
-                            <MudEntityActions Type="entityActionType" TItem="TItem">
+                            @{
+                                var effectiveActions = column.Actions
+                                .Where(a => a.Visible?.Invoke(context.Item!) != false)
+                                .ToList();
+                                var entityActionType = effectiveActions.Count == 1 ? MudActionType.Button : MudActionType.Dropdown;
+                            }
+                            <MudEntityActions Type="@entityActionType" TItem="TItem">
                                 @foreach (var action in column.Actions)
                                 {
                                     if (action.ConfirmationMessage != null)
@@ -51,9 +56,8 @@
                 {
                     @if (column.Component != null)
                     {
-                        <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" 
-                            SortBy="@GetSortByFunc(column)" Hidden="@(!column.Visible)"
-                            CellStyle="@GetColumnStyle(column)">
+                        <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" SortBy="@GetSortByFunc(column)"
+                            Hidden="@(!column.Visible)" CellStyle="@GetColumnStyle(column)">
                             <CellTemplate>
                                 @RenderCustomTableColumnComponent(column.Component, context.Item!)
                             </CellTemplate>
