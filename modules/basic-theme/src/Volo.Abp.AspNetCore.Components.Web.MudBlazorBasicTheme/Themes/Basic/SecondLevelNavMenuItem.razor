@@ -13,14 +13,10 @@
 }
 else
 {
-    <MudNavGroup Title="@MenuItem.DisplayName" Icon="@GetIcon(MenuItem.Icon)">
+    <MudNavGroup Title="@MenuItem.DisplayName" Icon="@MenuItem.Icon">
         @foreach (var item in MenuItem.Items)
         {
-            <MudNavLink Href="@(item.Url?.TrimStart('/', '~') ?? "#")" Match="@(item.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
-                @if (!string.IsNullOrEmpty(item.Icon))
-                {
-                    <MudIcon Icon="@GetIcon(item.Icon)" Class="me-2" />
-                }
+            <MudNavLink Href="@(item.Url?.TrimStart('/', '~') ?? "#")" Icon="@item.Icon" Match="@(item.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
                 @item.DisplayName
             </MudNavLink>
         }
@@ -47,23 +43,6 @@ else
     public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
-    }
-
-    private string? GetIcon(string? icon)
-    {
-        if (string.IsNullOrEmpty(icon))
-        {
-            return null;
-        }
-
-        // Convert FontAwesome icons to Material icons if needed
-        if (icon.StartsWith("fa"))
-        {
-            // Map common FontAwesome icons to Material icons
-            return icon.Replace("fa-", "").Replace("-", "_");
-        }
-
-        return icon;
     }
 }
 

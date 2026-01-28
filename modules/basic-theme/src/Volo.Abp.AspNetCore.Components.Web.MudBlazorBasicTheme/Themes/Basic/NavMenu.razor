@@ -6,11 +6,7 @@
         {
             @if (menuItem.Items.IsNullOrEmpty())
             {
-                <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
-                    @if (!string.IsNullOrEmpty(menuItem.Icon))
-                    {
-                        <MudIcon Icon="@GetIcon(menuItem.Icon)" Class="me-2" />
-                    }
+                <MudNavLink Href="@menuItem.Url" Icon="@menuItem.Icon" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
                     @menuItem.DisplayName
                 </MudNavLink>
             }
@@ -19,24 +15,5 @@
                 <FirstLevelNavMenuItem MenuItem="menuItem" />
             }
         }
-    </MudNavMenu>   
-}
-
-@code {
-    private string? GetIcon(string? icon)
-    {
-        if (string.IsNullOrEmpty(icon))
-        {
-            return null;
-        }
-
-        // Convert FontAwesome icons to Material icons if needed
-        if (icon.StartsWith("fa"))
-        {
-            // Map common FontAwesome icons to Material icons
-            return icon.Replace("fa-", "").Replace("-", "_");
-        }
-
-        return icon;
-    }
+    </MudNavMenu>
 }
