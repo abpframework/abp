@@ -4,7 +4,7 @@
     @if (action.visible(data)) {
     <ng-container *abpPermission="action.permission; runChangeDetection: false">
       @if (action.component; as component) {
-      <ng-container *ngComponentOutlet="component; injector: record | createInjector: action:this"></ng-container>
+      <ng-container *ngComponentOutlet="component; injector: record() | createInjector: action:this"></ng-container>
 
       }@else {
       @if (asToolbarAction(action).value; as toolbarAction ) {

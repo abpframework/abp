@@ -3,12 +3,12 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
   OnInit,
   Output,
   Renderer2,
   ViewChild,
   inject,
+  input
 } from '@angular/core';
 import { ABP, StopPropagationDirective } from '@abp/ng.core';
 
@@ -17,11 +17,11 @@ import { ABP, StopPropagationDirective } from '@abp/ng.core';
   template: `
     <button
       #button
-      [id]="buttonId"
-      [attr.type]="buttonType"
-      [attr.form]="formName"
-      [class]="buttonClass"
-      [disabled]="loading || disabled"
+      [id]="buttonId()"
+      [attr.type]="buttonType()"
+      [attr.form]="formName()"
+      [class]="buttonClass()"
+      [disabled]="loading() || disabled()"
       (click.stop)="click.next($event); abpClick.next($event)"
       (focus)="focus.next($event); abpFocus.next($event)"
       (blur)="blur.next($event); abpBlur.next($event)"
@@ -34,29 +34,21 @@ import { ABP, StopPropagationDirective } from '@abp/ng.core';
 export class ButtonComponent implements OnInit {
   private renderer = inject(Renderer2);
 
-  @Input()
-  buttonId = '';
+  readonly buttonId = input('');
 
-  @Input()
-  buttonClass = 'btn btn-primary';
+  readonly buttonClass = input('btn btn-primary');
 
-  @Input()
-  buttonType = 'button';
+  readonly buttonType = input('button');
 
-  @Input()
-  formName?: string = undefined;
+  readonly formName = input<string>(undefined);
 
-  @Input()
-  iconClass?: string;
+  readonly iconClass = input<string>(undefined);
 
-  @Input()
-  loading = false;
+  readonly loading = input(false);
 
-  @Input()
-  disabled: boolean | undefined = false;
+  readonly disabled = input<boolean | undefined>(false);
 
-  @Input()
-  attributes?: ABP.Dictionary<string>;
+  readonly attributes = input<ABP.Dictionary<string>>(undefined);
 
   @Output() readonly click = new EventEmitter<MouseEvent>();
 
@@ -74,14 +66,16 @@ export class ButtonComponent implements OnInit {
   buttonRef!: ElementRef<HTMLButtonElement>;
 
   get icon(): string {
-    return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
+    return `${this.loading() ? 'fa fa-spinner fa-spin' : this.iconClass() || 'd-none'}`;
   }
 
   ngOnInit() {
-    if (this.attributes) {
-      Object.keys(this.attributes).forEach(key => {
-        if (this.attributes?.[key]) {
-          this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
+    const attributes = this.attributes();
+    if (attributes) {
+      Object.keys(attributes).forEach(key => {
+        const attributesValue = this.attributes();
+        if (attributesValue?.[key]) {
+          this.renderer.setAttribute(this.buttonRef.nativeElement, key, attributesValue[key]);
         }
       });
     }

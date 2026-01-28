@@ -1,14 +1,14 @@
-import { 
-  Directive, 
-  Injector, 
-  Input, 
-  OnChanges, 
-  OnInit, 
-  SimpleChanges, 
-  TemplateRef, 
-  Type, 
-  ViewContainerRef, 
-  inject 
+import {
+  Directive,
+  Injector,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+  Type,
+  ViewContainerRef,
+  inject,
+  input
 } from '@angular/core';
 import compare from 'just-compare';
 import { Subscription } from 'rxjs';
@@ -29,8 +29,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   private replaceableComponents = inject(ReplaceableComponentsService);
   private subscription = inject(SubscriptionService);
 
-  @Input('abpReplaceableTemplate')
-  data!: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
+  readonly data = input.required<ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>>({ alias: "abpReplaceableTemplate" });
 
   providedData = {
     inputs: {},
@@ -59,7 +58,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
 
   ngOnInit() {
     const component$ = this.replaceableComponents
-      .get$(this.data.componentKey)
+      .get$(this.data().componentKey)
       .pipe(
         filter(
           (res = {} as ReplaceableComponents.ReplaceableComponent) =>
@@ -102,25 +101,26 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   setDefaultComponentInputs() {
-    if (!this.defaultComponentRef || (!this.data.inputs && !this.data.outputs)) return;
+    const data = this.data();
+    if (!this.defaultComponentRef || (!data.inputs && !data.outputs)) return;
 
-    if (this.data.inputs) {
-      for (const key in this.data.inputs) {
-        if (Object.prototype.hasOwnProperty.call(this.data.inputs, key)) {
-          if (!compare(this.defaultComponentRef[key], this.data.inputs[key].value)) {
-            this.defaultComponentRef[key] = this.data.inputs[key].value;
+    if (data.inputs) {
+      for (const key in data.inputs) {
+        if (Object.prototype.hasOwnProperty.call(data.inputs, key)) {
+          if (!compare(this.defaultComponentRef[key], data.inputs[key].value)) {
+            this.defaultComponentRef[key] = data.inputs[key].value;
           }
         }
       }
     }
 
-    if (this.data.outputs) {
-      for (const key in this.data.outputs) {
-        if (Object.prototype.hasOwnProperty.call(this.data.outputs, key)) {
+    if (data.outputs) {
+      for (const key in data.outputs) {
+        if (Object.prototype.hasOwnProperty.call(data.outputs, key)) {
           if (!this.defaultComponentSubscriptions[key]) {
             this.defaultComponentSubscriptions[key] = this.defaultComponentRef[key].subscribe(
               (value: any) => {
-                this.data.outputs?.[key](value);
+                this.data().outputs?.[key](value);
               },
             );
           }
@@ -130,24 +130,26 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   }
 
   setProvidedData() {
-    this.providedData = { outputs: {}, ...this.data, inputs: {} };
+    this.providedData = { outputs: {}, ...this.data(), inputs: {} };
 
-    if (!this.data.inputs) return;
+    const data = this.data();
+    if (!data.inputs) return;
     Object.defineProperties(this.providedData.inputs, {
-      ...Object.keys(this.data.inputs).reduce(
+      ...Object.keys(data.inputs).reduce(
         (acc, key) => ({
           ...acc,
           [key]: {
             enumerable: true,
             configurable: true,
-            get: () => this.data.inputs?.[key]?.value,
-            ...(this.data.inputs?.[key]?.twoWay && {
+            get: () => this.data().inputs?.[key]?.value,
+            ...(this.data().inputs?.[key]?.twoWay && {
               set: (newValue: any) => {
-                if (this.data.inputs?.[key]) {
-                  this.data.inputs[key].value = newValue;
+                const dataValue = this.data();
+                if (dataValue.inputs?.[key]) {
+                  dataValue.inputs[key].value = newValue;
                 }
-                if (this.data.outputs?.[`${key}Change`]) {
-                  this.data.outputs[`${key}Change`](newValue);
+                if (dataValue.outputs?.[`${key}Change`]) {
+                  dataValue.outputs[`${key}Change`](newValue);
                 }
               },
             }),

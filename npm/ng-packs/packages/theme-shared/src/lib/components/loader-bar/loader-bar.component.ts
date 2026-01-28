@@ -1,17 +1,17 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject, input } from '@angular/core';
 import { combineLatest, Subscription, timer } from 'rxjs';
 import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-loader-bar',
   template: `
-    <div id="abp-loader-bar" [class]="containerClass" [class.is-loading]="isLoading">
+    <div id="abp-loader-bar" [class]="containerClass()" [class.is-loading]="isLoading">
       <div
         class="abp-progress"
         [class.progressing]="progressLevel"
         [style.width.vw]="progressLevel"
         [style]="{
-          'background-color': color,
+          'background-color': color(),
           'box-shadow': boxShadow,
         }"
       ></div>
@@ -38,11 +38,9 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     return this._isLoading;
   }
 
-  @Input()
-  containerClass = 'abp-loader-bar';
+  readonly containerClass = input('abp-loader-bar');
 
-  @Input()
-  color = '#77b6ff';
+  readonly color = input('#77b6ff');
 
   progressLevel = 0;
 
@@ -73,7 +71,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   };
 
   get boxShadow(): string {
-    return `0 0 10px rgba(${this.color}, 0.5)`;
+    return `0 0 10px rgba(${this.color()}, 0.5)`;
   }
 
   ngOnInit() {

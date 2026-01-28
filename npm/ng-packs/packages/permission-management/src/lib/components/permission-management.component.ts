@@ -27,6 +27,7 @@ import {
   signal,
   TrackByFunction,
   ViewChildren,
+  input
 } from '@angular/core';
 import { concat, of } from 'rxjs';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
@@ -118,19 +119,15 @@ export class PermissionManagementComponent
   protected readonly toasterService = inject(ToasterService);
   private document = inject(DOCUMENT);
 
-  @Input()
-  readonly providerName!: string;
+  readonly providerName = input.required<string>();
 
-  @Input()
-  readonly providerKey!: string;
+  readonly providerKey = input.required<string>();
 
-  @Input()
-  readonly hideBadges = false;
+  readonly hideBadges = input(false);
 
   protected _visible = false;
 
-  @Input()
-  entityDisplayName: string | undefined;
+  readonly entityDisplayName = input<string | undefined>(undefined);
 
   @Input()
   get visible(): boolean {
@@ -249,7 +246,7 @@ export class PermissionManagementComponent
       this.disableSelectAllTab = permissions.every(
         permission =>
           permission.isGranted &&
-          permission.grantedProviders?.every(p => p.providerName !== this.providerName),
+          permission.grantedProviders?.every(p => p.providerName !== this.providerName()),
       );
     } else {
       this.disableSelectAllTab = false;
@@ -258,7 +255,7 @@ export class PermissionManagementComponent
 
   isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
     if (grantedProviders.length) {
-      return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
+      return grantedProviders.findIndex(p => p.providerName !== this.providerName()) > -1;
     }
     return false;
   }
@@ -348,7 +345,7 @@ export class PermissionManagementComponent
 
   setTabCheckboxState() {
     const selectablePermissions = this.selectedGroupPermissions.filter(per =>
-      per.grantedProviders.every(p => p.providerName === this.providerName),
+      per.grantedProviders.every(p => p.providerName === this.providerName()),
     );
 
     const selectedPermissions = selectablePermissions.filter(per => per.isGranted);
@@ -370,7 +367,7 @@ export class PermissionManagementComponent
 
   setGrantCheckboxState() {
     const selectablePermissions = this.permissions.filter(per =>
-      per.grantedProviders.every(p => p.providerName === this.providerName),
+      per.grantedProviders.every(p => p.providerName === this.providerName()),
     );
     const selectedAllPermissions = selectablePermissions.filter(per => per.isGranted);
     const checkboxElement = this.document.querySelector('#select-all-in-all-tabs') as any;
@@ -456,7 +453,7 @@ export class PermissionManagementComponent
 
     this.modalBusy = true;
     this.service
-      .update(this.providerName, this.providerKey, { permissions: changedPermissions })
+      .update(this.providerName(), this.providerKey(), { permissions: changedPermissions })
       .pipe(
         switchMap(() =>
           this.shouldFetchAppConfig() ? this.configState.refreshAppState() : of(null),
@@ -470,11 +467,13 @@ export class PermissionManagementComponent
   }
 
   openModal() {
-    if (!this.providerKey || !this.providerName) {
+    const providerName = this.providerName();
+    const providerKey = this.providerKey();
+    if (!providerKey || !providerName) {
       throw new Error('Provider Key and Provider Name are required.');
     }
 
-    return this.service.get(this.providerName, this.providerKey).pipe(
+    return this.service.get(providerName, providerKey).pipe(
       tap((permissionRes: GetPermissionListResultDto) => {
         const { groups } = permissionRes || {};
 
@@ -486,7 +485,7 @@ export class PermissionManagementComponent
         this.disabledSelectAllInAllTabs = this.permissions.every(
           per =>
             per.isGranted &&
-            per.grantedProviders.every(provider => provider.providerName !== this.providerName),
+            per.grantedProviders.every(provider => provider.providerName !== this.providerName()),
         );
       }),
     );
@@ -511,9 +510,10 @@ export class PermissionManagementComponent
   shouldFetchAppConfig() {
     const currentUser = this.configState.getOne('currentUser') as CurrentUserDto;
 
-    if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);
+    const providerName = this.providerName();
+    if (providerName === 'R') return currentUser.roles.some(role => role === this.providerKey());
 
-    if (this.providerName === 'U') return currentUser.id === this.providerKey;
+    if (providerName === 'U') return currentUser.id === this.providerKey();
 
     return false;
   }

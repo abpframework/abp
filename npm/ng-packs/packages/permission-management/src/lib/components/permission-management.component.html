@@ -1,9 +1,9 @@
 <abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg', scrollable: false }">
-  @if (data.entityDisplayName || entityDisplayName) {
+  @if (data.entityDisplayName || entityDisplayName()) {
     <ng-template #abpHeader>
       <h4>
         {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} -
-        {{ entityDisplayName || data.entityDisplayName }}
+        {{ entityDisplayName() || data.entityDisplayName }}
       </h4>
     </ng-template>
     <ng-template #abpBody>
@@ -115,7 +115,7 @@
                           />
                           <label class="form-check-label" [attr.for]="permission.name"
                             >{{ permission.displayName }}
-                            @if (!hideBadges) {
+                            @if (!hideBadges()) {
                               @for (provider of permission.grantedProviders; track $index) {
                                 <span class="badge bg-primary text-dark"
                                   >{{ provider.providerName }}: {{ provider.providerKey }}</span

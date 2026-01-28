@@ -1,16 +1,17 @@
-import { 
-  ComponentFactoryResolver, 
-  ComponentRef, 
-  Directive, 
-  ElementRef, 
-  EmbeddedViewRef, 
-  HostBinding, 
-  Injector, 
-  Input, 
-  OnDestroy, 
-  OnInit, 
-  Renderer2, 
-  inject 
+import {
+  ComponentFactoryResolver,
+  ComponentRef,
+  Directive,
+  ElementRef,
+  EmbeddedViewRef,
+  HostBinding,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  inject,
+  input
 } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -26,6 +27,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
   private renderer = inject(Renderer2);
 
   private _loading!: boolean;
+  private _targetElement?: HTMLElement;
 
   @HostBinding('style.position')
   position = 'relative';
@@ -49,7 +51,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
         return;
       }
 
-      this.timerSubscription = timer(this.delay)
+      this.timerSubscription = timer(this.delay())
         .pipe(take(1))
         .subscribe(() => {
           if (!this.componentRef) {
@@ -60,7 +62,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
 
           if (newValue && !this.rootNode) {
             this.rootNode = (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0];
-            this.targetElement?.appendChild(this.rootNode as HTMLDivElement);
+            this._targetElement?.appendChild(this.rootNode as HTMLDivElement);
           } else if (this.rootNode) {
             this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
             this.rootNode = null;
@@ -72,23 +74,23 @@ export class LoadingDirective implements OnInit, OnDestroy {
     }, 0);
   }
 
-  @Input('abpLoadingTargetElement')
-  targetElement: HTMLElement | undefined;
+  readonly targetElement = input<HTMLElement | undefined>(undefined, { alias: "abpLoadingTargetElement" });
 
-  @Input('abpLoadingDelay')
-  delay = 0;
+  readonly delay = input(0, { alias: "abpLoadingDelay" });
 
   componentRef!: ComponentRef<LoadingComponent>;
   rootNode: HTMLDivElement | null = null;
   timerSubscription: Subscription | null = null;
 
   ngOnInit() {
-    if (!this.targetElement) {
+    // Use input value if provided, otherwise determine from element
+    this._targetElement = this.targetElement();
+    if (!this._targetElement) {
       const { offsetHeight, offsetWidth } = this.elRef.nativeElement;
       if (!offsetHeight && !offsetWidth && this.elRef.nativeElement.children?.length) {
-        this.targetElement = this.elRef.nativeElement.children[0] as HTMLElement;
+        this._targetElement = this.elRef.nativeElement.children[0] as HTMLElement;
       } else {
-        this.targetElement = this.elRef.nativeElement;
+        this._targetElement = this.elRef.nativeElement;
       }
     }
   }

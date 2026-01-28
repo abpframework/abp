@@ -14,7 +14,6 @@ import {
   ElementRef,
   inject,
   Injector,
-  Input,
   OnChanges,
   Optional,
   SimpleChanges,
@@ -22,6 +21,7 @@ import {
   ViewChild,
   signal,
   effect,
+  input
 } from '@angular/core';
 import {
   ControlContainer,
@@ -94,10 +94,10 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   private injector = inject(Injector);
   private readonly form = this.#groupDirective.form;
 
-  @Input() data!: PropData;
-  @Input() prop!: FormProp;
-  @Input() first?: boolean;
-  @Input() isFirstGroup?: boolean;
+  readonly data = input.required<PropData>();
+  readonly prop = input.required<FormProp>();
+  readonly first = input<boolean>(undefined);
+  readonly isFirstGroup = input<boolean>(undefined);
   @ViewChild('field') private fieldRef!: ElementRef<HTMLElement>;
 
   injectorForCustomComponent?: Injector;
@@ -113,7 +113,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   disabledFn = (data: PropData) => false;
 
   get disabled() {
-    return this.disabledFn(this.data);
+    return this.disabledFn(this.data());
   }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
@@ -130,7 +130,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       ? text$.pipe(
           debounceTime(300),
           distinctUntilChanged(),
-          switchMap(text => this.prop?.options?.(this.data, text) || of([])),
+          switchMap(text => this.prop()?.options?.(this.data(), text) || of([])),
         )
       : of([]);
 
@@ -139,12 +139,12 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   meridian$ = this.service.meridian$;
 
   get isInvalid() {
-    const control = this.form.get(this.prop.name);
+    const control = this.form.get(this.prop().name);
     return control?.touched && control.invalid;
   }
 
   private getTypeaheadControls() {
-    const { name } = this.prop;
+    const { name } = this.prop();
     const extraPropName = `${EXTRA_PROPERTIES_KEY}.${name}`;
     const keyControl =
       this.form.get(addTypeaheadTextSuffix(extraPropName)) ||
@@ -158,7 +158,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.isFirstGroup && this.first && this.fieldRef) {
+    if (this.isFirstGroup() && this.first() && this.fieldRef) {
       requestAnimationFrame(() => {
         this.fieldRef.nativeElement.focus();
       });
@@ -193,14 +193,14 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       });
     }
 
-    if (options) this.options$ = options(this.data);
-    if (readonly) this.readonly = readonly(this.data);
+    if (options) this.options$ = options(this.data());
+    if (readonly) this.readonly = readonly(this.data());
 
     if (disabled) {
       this.disabledFn = disabled;
     }
     if (validators) {
-      this.validators = validators(this.data);
+      this.validators = validators(this.data());
       this.setAsterisk();
     }
     if (className !== undefined) {

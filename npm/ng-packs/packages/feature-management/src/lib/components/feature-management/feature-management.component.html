@@ -3,8 +3,8 @@
   <ng-template #abpHeader>
     <h3>
       {{ 'AbpFeatureManagement::Features' | abpLocalization }}
-      @if (providerTitle) {
-      - {{ providerTitle }}
+      @if (providerTitle()) {
+      - {{ providerTitle() }}
       }
     </h3>
   </ng-template>

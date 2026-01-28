@@ -1,9 +1,9 @@
 @if (isBrowser) {
-<ngx-datatable #table default [rows]="data" [count]="recordsTotal" [list]="list"
-  [selectionType]="selectable ? _selectionType : undefined" (activate)="tableActivate.emit($event)"
-  (select)="onSelect($event)" [selected]="selected" (scroll)="onScroll($event)" [scrollbarV]="infiniteScroll"
-  [style.height]="getTableHeight()" [loadingIndicator]="infiniteScroll && isLoading"
-  [footerHeight]="infiniteScroll ? false : 50">
+<ngx-datatable #table default [rows]="data()" [count]="recordsTotal()" [list]="list()"
+  [selectionType]="selectable() ? _selectionType : undefined" (activate)="tableActivate.emit($event)"
+  (select)="onSelect($event)" [selected]="selected()" (scroll)="onScroll($event)" [scrollbarV]="infiniteScroll()"
+  [style.height]="getTableHeight()" [loadingIndicator]="infiniteScroll() && isLoading()"
+  [footerHeight]="infiniteScroll() ? false : 50">
   @if (effectiveRowDetailTemplate) {
   <ngx-datatable-row-detail [rowHeight]="effectiveRowDetailHeight">
     <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
@@ -22,7 +22,7 @@
     </ng-template>
   </ngx-datatable-column>
   }
-  @if(selectable) {
+  @if(selectable()) {
   <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
     [resizeable]="false">
 
@@ -52,12 +52,12 @@
 
   </ngx-datatable-column>
   }
-  @if (actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)) {
+  @if (actionsTemplate() || (actionList.length && hasAtLeastOnePermittedAction)) {
   <ngx-datatable-column [name]="actionsText | abpLocalization" [maxWidth]="_actionsColumnWidth() ?? undefined"
     [width]="_actionsColumnWidth() ?? 200" [canAutoResize]="!_actionsColumnWidth()" [sortable]="false">
     <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
       <ng-container
-        *ngTemplateOutlet="actionsTemplate || gridActions; context: { $implicit: row, index: i }"></ng-container>
+        *ngTemplateOutlet="actionsTemplate() || gridActions; context: { $implicit: row, index: i }"></ng-container>
       <ng-template #gridActions>
         @if (isVisibleActions(row)) {
         <abp-grid-actions [index]="i" [record]="row" text="AbpUi::Actions"></abp-grid-actions>

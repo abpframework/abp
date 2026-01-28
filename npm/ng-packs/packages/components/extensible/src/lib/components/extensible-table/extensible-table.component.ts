@@ -19,6 +19,7 @@ import {
   TemplateRef,
   TrackByFunction,
   ViewChild,
+  input
 } from '@angular/core';
 import { AsyncPipe, isPlatformBrowser, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 
@@ -108,37 +109,37 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
     return this._actionsText ?? (this.actionList.length >= 1 ? 'AbpUi::Actions' : '');
   }
 
-  @Input() data!: R[];
-  @Input() list!: ListService;
-  @Input() recordsTotal!: number;
+  readonly data = input.required<R[]>();
+  readonly list = input.required<ListService>();
+  readonly recordsTotal = input.required<number>();
 
   @Input() set actionsColumnWidth(width: number) {
     this._actionsColumnWidth.set(width ? Number(width) : undefined);
   }
 
-  @Input() actionsTemplate?: TemplateRef<any>;
+  readonly actionsTemplate = input<TemplateRef<any>>(undefined);
 
   @Output() tableActivate = new EventEmitter();
 
-  @Input() selectable = false;
+  readonly selectable = input(false);
 
   @Input() set selectionType(value: SelectionType | string) {
     this._selectionType = typeof value === 'string' ? SelectionType[value] : value;
   }
   _selectionType: SelectionType = SelectionType.multiClick;
 
-  @Input() selected: any[] = [];
+  readonly selected = input<any[]>([]);
   @Output() selectionChange = new EventEmitter<any[]>();
 
   // Infinite scroll configuration
-  @Input() infiniteScroll = false;
-  @Input() isLoading = false;
-  @Input() scrollThreshold = 10;
+  readonly infiniteScroll = input(false);
+  readonly isLoading = input(false);
+  readonly scrollThreshold = input(10);
   @Output() loadMore = new EventEmitter<void>();
-  @Input() tableHeight: number;
+  readonly tableHeight = input<number>(undefined);
 
-  @Input() rowDetailTemplate?: TemplateRef<RowDetailContext<R>>;
-  @Input() rowDetailHeight: string | number = '100%';
+  readonly rowDetailTemplate = input<TemplateRef<RowDetailContext<R>>>(undefined);
+  readonly rowDetailHeight = input<string | number>('100%');
   @Output() rowDetailToggle = new EventEmitter<R>();
 
   @ContentChild(ExtensibleTableRowDetailComponent)
@@ -147,11 +148,11 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
   @ViewChild('table', { static: false }) table!: DatatableComponent;
 
   protected get effectiveRowDetailTemplate(): TemplateRef<RowDetailContext<R>> | undefined {
-    return this.rowDetailComponent?.template() ?? this.rowDetailTemplate;
+    return this.rowDetailComponent?.template() ?? this.rowDetailTemplate();
   }
 
   protected get effectiveRowDetailHeight(): string | number {
-    return this.rowDetailComponent?.rowHeight() ?? this.rowDetailHeight;
+    return this.rowDetailComponent?.rowHeight() ?? this.rowDetailHeight();
   }
 
   hasAtLeastOnePermittedAction: boolean;
@@ -220,7 +221,7 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
     if (!data?.currentValue) return;
 
     if (data.currentValue.length < 1) {
-      this.list.totalCount = this.recordsTotal;
+      this.list().totalCount = this.recordsTotal();
     }
 
     this.data = data.currentValue.map((record: any, index: number) => {
@@ -278,8 +279,9 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
   }
 
   onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
+    const selectedValue = this.selected();
+    this.selected().splice(0, selectedValue.length);
+    selectedValue.push(...selected);
     this.selectionChange.emit(selected);
   }
 
@@ -299,12 +301,12 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
   }
 
   private shouldHandleScroll(): boolean {
-    return this.infiniteScroll && !this.isLoading;
+    return this.infiniteScroll() && !this.isLoading();
   }
 
   private isNearScrollBottom(element: HTMLElement): boolean {
     const { offsetHeight, scrollTop, scrollHeight } = element;
-    return offsetHeight + scrollTop >= scrollHeight - this.scrollThreshold;
+    return offsetHeight + scrollTop >= scrollHeight - this.scrollThreshold();
   }
 
   private triggerLoadMore(): void {
@@ -312,9 +314,10 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
   }
 
   getTableHeight() {
-    if (!this.infiniteScroll) return 'auto';
+    if (!this.infiniteScroll()) return 'auto';
 
-    return this.tableHeight ? `${this.tableHeight}px` : 'auto';
+    const tableHeight = this.tableHeight();
+    return tableHeight ? `${tableHeight}px` : 'auto';
   }
 
   toggleExpandRow(row: R): void {
@@ -325,8 +328,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    if (!this.infiniteScroll) {
-      this.list?.requestStatus$?.pipe(filter(status => status === 'loading')).subscribe(() => {
+    if (!this.infiniteScroll()) {
+      this.list()?.requestStatus$?.pipe(filter(status => status === 'loading')).subscribe(() => {
         this.data = [];
         this.cdr.markForCheck();
       });

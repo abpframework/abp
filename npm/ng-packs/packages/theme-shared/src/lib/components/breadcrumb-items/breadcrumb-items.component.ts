@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ABP, LocalizationPipe } from '@abp/ng.core';
@@ -9,5 +9,5 @@ import { ABP, LocalizationPipe } from '@abp/ng.core';
   imports: [NgTemplateOutlet, RouterLink, LocalizationPipe],
 })
 export class BreadcrumbItemsComponent {
-  @Input() items: Partial<ABP.Route>[] = [];
+  readonly items = input<Partial<ABP.Route>[]>([]);
 }

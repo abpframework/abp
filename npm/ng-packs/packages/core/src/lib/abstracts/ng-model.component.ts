@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, input } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 // Not an abstract class on purpose. Do not change!
@@ -11,23 +11,19 @@ export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAcc
   onChange?: (value: T) => void;
   onTouched?: () => void;
 
-  @Input()
-  disabled?: boolean;
+  readonly disabled = input<boolean>(undefined);
 
-  @Input()
-  readonly?: boolean;
+  readonly readonly = input<boolean>(undefined);
 
-  @Input()
-  valueFn: (value: U, previousValue?: T) => T = value => value as any as T;
+  readonly valueFn = input<(value: U, previousValue?: T) => T>(value => value as any as T);
 
-  @Input()
-  valueLimitFn: (value: T, previousValue?: T) => any = value => false;
+  readonly valueLimitFn = input<(value: T, previousValue?: T) => any>(value => false);
 
   @Input()
   set value(value: T) {
-    value = this.valueFn(value as any as U, this._value);
+    value = this.valueFn()(value as any as U, this._value);
 
-    if (this.valueLimitFn(value, this._value) !== false || this.readonly) return;
+    if (this.valueLimitFn()(value, this._value) !== false || this.readonly()) return;
 
     this._value = value;
     this.notifyValueChange();
@@ -48,7 +44,7 @@ export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAcc
   }
 
   writeValue(value: T): void {
-    this._value = this.valueLimitFn(value, this._value) || value;
+    this._value = this.valueLimitFn()(value, this._value) || value;
     this.cdRef.markForCheck();
   }
 

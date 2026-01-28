@@ -1,7 +1,6 @@
 import {
   Directive,
   EmbeddedViewRef,
-  Input,
   IterableChangeRecord,
   IterableChanges,
   IterableDiffer,
@@ -11,6 +10,7 @@ import {
   TrackByFunction,
   ViewContainerRef,
   inject,
+  input
 } from '@angular/core';
 import clone from 'just-clone';
 import compare from 'just-compare';
@@ -42,29 +42,21 @@ export class ForDirective implements OnChanges {
   private differs = inject(IterableDiffers);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  @Input('abpForOf')
-  items!: any[];
+  readonly items = input.required<any[]>({ alias: "abpForOf" });
 
-  @Input('abpForOrderBy')
-  orderBy?: string;
+  readonly orderBy = input<string>(undefined, { alias: "abpForOrderBy" });
 
-  @Input('abpForOrderDir')
-  orderDir?: 'ASC' | 'DESC';
+  readonly orderDir = input<'ASC' | 'DESC'>(undefined, { alias: "abpForOrderDir" });
 
-  @Input('abpForFilterBy')
-  filterBy?: string;
+  readonly filterBy = input<string>(undefined, { alias: "abpForFilterBy" });
 
-  @Input('abpForFilterVal')
-  filterVal: any;
+  readonly filterVal = input<any>(undefined, { alias: "abpForFilterVal" });
 
-  @Input('abpForTrackBy')
-  trackBy?: TrackByFunction<any>;
+  readonly trackBy = input<TrackByFunction<any>>(undefined, { alias: "abpForTrackBy" });
 
-  @Input('abpForCompareBy')
-  compareBy?: CompareFn;
+  readonly compareBy = input<CompareFn>(undefined, { alias: "abpForCompareBy" });
 
-  @Input('abpForEmptyRef')
-  emptyRef?: TemplateRef<any>;
+  readonly emptyRef = input<TemplateRef<any>>(undefined, { alias: "abpForEmptyRef" });
 
   private differ!: IterableDiffer<any> | null;
   private lastItemsRef: any[] | null = null;
@@ -72,11 +64,11 @@ export class ForDirective implements OnChanges {
   private isShowEmptyRef!: boolean;
 
   get compareFn(): CompareFn {
-    return this.compareBy || compare;
+    return this.compareBy() || compare;
   }
 
   get trackByFn(): TrackByFunction<any> {
-    return this.trackBy || ((index: number, item: any) => (item as any).id || index);
+    return this.trackBy() || ((index: number, item: any) => (item as any).id || index);
   }
 
   private iterateOverAppliedOperations(changes: IterableChanges<any>) {
@@ -91,7 +83,7 @@ export class ForDirective implements OnChanges {
         if (record.previousIndex == null) {
           const view = this.vcRef.createEmbeddedView(
             this.tempRef,
-            new AbpForContext(null, -1, -1, this.items),
+            new AbpForContext(null, -1, -1, this.items()),
             currentIndex || 0,
           );
 
@@ -120,7 +112,7 @@ export class ForDirective implements OnChanges {
       const viewRef = this.vcRef.get(i) as EmbeddedViewRef<AbpForContext>;
       viewRef.context.index = i;
       viewRef.context.count = l;
-      viewRef.context.list = this.items;
+      viewRef.context.list = this.items();
     }
 
     changes.forEachIdentityChange((record: IterableChangeRecord<any>) => {
@@ -132,9 +124,10 @@ export class ForDirective implements OnChanges {
   }
 
   private projectItems(items: any[]): void {
-    if (!items.length && this.emptyRef) {
+    const emptyRef = this.emptyRef();
+    if (!items.length && emptyRef) {
       this.vcRef.clear();
-      this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
+      this.vcRef.createEmbeddedView(emptyRef).rootNodes;
       this.isShowEmptyRef = true;
       this.differ = null;
       this.lastItemsRef = null;
@@ -142,7 +135,7 @@ export class ForDirective implements OnChanges {
       return;
     }
 
-    if (this.emptyRef && this.isShowEmptyRef) {
+    if (emptyRef && this.isShowEmptyRef) {
       this.vcRef.clear();
       this.isShowEmptyRef = false;
     }
@@ -162,7 +155,7 @@ export class ForDirective implements OnChanges {
   }
 
   private sortItems(items: any[]) {
-    const orderBy = this.orderBy;
+    const orderBy = this.orderBy();
     if (orderBy) {
       items.sort((a, b) => (a[orderBy] > b[orderBy] ? 1 : a[orderBy] < b[orderBy] ? -1 : 0));
     } else {
@@ -171,28 +164,30 @@ export class ForDirective implements OnChanges {
   }
 
   ngOnChanges() {
-    if (!this.items) return;
+    const itemsValue = this.items();
+    if (!itemsValue) return;
 
     // Recreate differ if items array reference changed
-    if (this.lastItemsRef !== this.items) {
+    if (this.lastItemsRef !== itemsValue) {
       this.differ = null;
-      this.lastItemsRef = this.items;
+      this.lastItemsRef = itemsValue;
     }
 
-    let items = clone(this.items) as any[];
+    let items = clone(itemsValue) as any[];
     if (!Array.isArray(items)) return;
 
     const compareFn = this.compareFn;
-    const filterBy = this.filterBy;
+    const filterBy = this.filterBy();
+    const filterVal = this.filterVal();
     if (
       typeof filterBy !== 'undefined' &&
-      typeof this.filterVal !== 'undefined' &&
-      this.filterVal !== ''
+      typeof filterVal !== 'undefined' &&
+      filterVal !== ''
     ) {
-      items = items.filter(item => compareFn(item[filterBy], this.filterVal));
+      items = items.filter(item => compareFn(item[filterBy], this.filterVal()));
     }
 
-    switch (this.orderDir) {
+    switch (this.orderDir()) {
       case 'ASC':
         this.sortItems(items);
         this.projectItems(items);

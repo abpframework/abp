@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, DOCUMENT } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, DOCUMENT, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfigStateService, LocalizationPipe, TrackByService } from '@abp/ng.core';
@@ -61,14 +61,11 @@ export class FeatureManagementComponent
   protected readonly confirmationService = inject(ConfirmationService);
   private document = inject(DOCUMENT);
 
-  @Input()
-  providerKey: string;
+  readonly providerKey = input<string>(undefined);
 
-  @Input()
-  providerName: string;
+  readonly providerName = input<string>(undefined);
 
-  @Input({ required: false })
-  providerTitle: string;
+  readonly providerTitle = input<string>(undefined);
 
   selectedGroupDisplayName: string;
 
@@ -108,7 +105,7 @@ export class FeatureManagementComponent
   modalBusy = false;
 
   openModal() {
-    if (!this.providerName) {
+    if (!this.providerName()) {
       throw new Error('providerName is required.');
     }
 
@@ -116,7 +113,7 @@ export class FeatureManagementComponent
   }
 
   getFeatures() {
-    this.service.get(this.providerName, this.providerKey).subscribe(res => {
+    this.service.get(this.providerName(), this.providerKey()).subscribe(res => {
       if (!res.groups?.length) return;
       this.groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
       this.selectedGroupDisplayName = this.groups[0].displayName;
@@ -149,13 +146,13 @@ export class FeatureManagementComponent
 
     this.modalBusy = true;
     this.service
-      .update(this.providerName, this.providerKey, { features: changedFeatures })
+      .update(this.providerName(), this.providerKey(), { features: changedFeatures })
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.visible = false;
 
         this.toasterService.success('AbpUi::SavedSuccessfully');
-        if (!this.providerKey) {
+        if (!this.providerKey()) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();
         }
@@ -167,11 +164,11 @@ export class FeatureManagementComponent
       .warn('AbpFeatureManagement::AreYouSureToResetToDefault', 'AbpFeatureManagement::AreYouSure')
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.service.delete(this.providerName, this.providerKey).subscribe(() => {
+          this.service.delete(this.providerName(), this.providerKey()).subscribe(() => {
             this.toasterService.success('AbpFeatureManagement::ResetedToDefault');
             this.visible = false;
 
-            if (!this.providerKey) {
+            if (!this.providerKey()) {
               // to refresh host's features
               this.configState.refreshAppState().subscribe();
             }
@@ -194,13 +191,14 @@ export class FeatureManagementComponent
     if (children?.length) {
       return children.some(child => {
         const childProvider = child.provider?.name;
+        const providerName = this.providerName();
         return (
-          (childProvider !== this.providerName && childProvider !== this.defaultProviderName) ||
-          (provider !== this.providerName && provider !== this.defaultProviderName)
+          (childProvider !== providerName && childProvider !== this.defaultProviderName) ||
+          (provider !== providerName && provider !== this.defaultProviderName)
         );
       });
     } else {
-      return provider !== this.providerName && provider !== this.defaultProviderName;
+      return provider !== this.providerName() && provider !== this.defaultProviderName;
     }
   }
 

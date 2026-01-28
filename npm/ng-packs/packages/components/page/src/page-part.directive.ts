@@ -1,17 +1,18 @@
-import { 
-  Directive, 
-  TemplateRef, 
-  ViewContainerRef, 
-  Input, 
-  InjectionToken, 
-  OnInit, 
-  OnDestroy, 
-  Injector, 
-  OnChanges, 
-  SimpleChanges, 
-  SimpleChange, 
-  inject
- } from '@angular/core';
+import {
+  Directive,
+  TemplateRef,
+  ViewContainerRef,
+  Input,
+  InjectionToken,
+  OnInit,
+  OnDestroy,
+  Injector,
+  OnChanges,
+  SimpleChanges,
+  SimpleChange,
+  inject,
+  input
+} from '@angular/core';
 import { Observable, Subscription, of } from 'rxjs';
 
 export interface PageRenderStrategy {
@@ -36,7 +37,7 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
   type!: string;
   subscription!: Subscription;
 
-  @Input('abpPagePartContext') context: any;
+  readonly context = input<any>(undefined, { alias: "abpPagePartContext" });
   @Input() set abpPagePart(type: string) {
     this.type = type;
     this.createRenderStream(type);
@@ -60,7 +61,7 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     if (this.renderLogic?.onInit) {
-      this.renderLogic.onInit(this.type, this.injector, this.context);
+      this.renderLogic.onInit(this.type, this.injector, this.context());
     }
   }
 
@@ -68,7 +69,7 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
     this.clearSubscription();
 
     if (this.renderLogic?.onDestroy) {
-      this.renderLogic.onDestroy(this.type, this.injector, this.context);
+      this.renderLogic.onDestroy(this.type, this.injector, this.context());
     }
   }
 

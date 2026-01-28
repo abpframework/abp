@@ -10,11 +10,11 @@ import {
   Component,
   ElementRef,
   inject,
-  Input,
   QueryList,
   Renderer2,
   TrackByFunction,
   ViewChildren,
+  input
 } from '@angular/core';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -39,7 +39,7 @@ export class RoutesComponent {
   public readonly routesService = inject(RoutesService);
   protected renderer = inject(Renderer2);
 
-  @Input() smallScreen?: boolean;
+  readonly smallScreen = input<boolean>(undefined);
 
   @ViewChildren('childrenContainer') childrenContainers!: QueryList<ElementRef<HTMLDivElement>>;
 

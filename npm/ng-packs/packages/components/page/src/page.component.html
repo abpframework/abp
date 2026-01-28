@@ -3,10 +3,10 @@
     @if (customTitle) {
       <ng-content select="abp-page-title-container"></ng-content>
     } @else {
-      @if (title) {
+      @if (title()) {
         <div class="col-auto" *abpPagePart="pageParts.title">
           <h1 class="content-header-title">
-            {{ title }}
+            {{ title() }}
           </h1>
         </div>
       }
@@ -15,7 +15,7 @@
     @if (customBreadcrumb) {
       <ng-content select="abp-page-breadcrumb-container"></ng-content>
     } @else {
-      @if (breadcrumb) {
+      @if (breadcrumb()) {
         <div class="col-lg-auto ps-lg-0" *abpPagePart="pageParts.breadcrumb">
           <abp-breadcrumb></abp-breadcrumb>
         </div>
