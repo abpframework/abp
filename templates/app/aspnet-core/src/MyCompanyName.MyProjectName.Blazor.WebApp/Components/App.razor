@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Hosting
 @using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Bundling
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Bundling
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling
 @inject IHostEnvironment Env
 @{
     var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
@@ -17,6 +18,7 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
+    <AbpStyles BundleName="@LeptonXLiteThemeBundles.Styles.Global" />
     <AbpStyles BundleName="@BlazorMudBlazorBasicThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" />
 
     <HeadOutlet @rendermode="InteractiveAuto" />
