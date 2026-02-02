@@ -38,6 +38,8 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
     [Parameter] public string ActionColumnWidth { get; set; } = "150px";
 
+    protected int ZeroBasedCurrentPage => CurrentPage > 0 ? CurrentPage - 1 : 0;
+
     [Inject]
     public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
 
@@ -167,12 +169,18 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
     protected virtual Func<TItem, object>? GetExtensionPropertySortFunc(TableColumn column)
     {
-        if (!column.Sortable)
+        if (!column.Sortable || string.IsNullOrWhiteSpace(column.Data))
         {
             return null;
         }
 
-        var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
+        var match = ExtensionPropertiesRegex.Match(column.Data);
+        if (!match.Success)
+        {
+            return null;
+        }
+
+        var propertyName = match.Groups[1].Value;
         return item =>
         {
             var entity = item as IHasExtraProperties;

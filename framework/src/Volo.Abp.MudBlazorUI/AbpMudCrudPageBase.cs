@@ -177,7 +177,7 @@ public abstract class AbpMudCrudPageBase<
     [Inject] protected ISnackbar Snackbar { get; set; } = default!;
     [Inject] protected ExtensionPropertyPolicyChecker ExtensionPropertyPolicyChecker { get; set; } = default!;
 
-    protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
+    protected virtual int PageSize { get; set; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
     protected int CurrentPage = 1;
     protected string CurrentSorting = default!;
@@ -362,6 +362,10 @@ public abstract class AbpMudCrudPageBase<
             .Select(s => MapSortFieldToPropertyName(s.SortBy, columns) + (s.Descending ? " DESC" : ""))
             .JoinAsString(",");
         CurrentPage = state.Page + 1;
+        if (state.PageSize > 0)
+        {
+            PageSize = state.PageSize;
+        }
 
         try
         {

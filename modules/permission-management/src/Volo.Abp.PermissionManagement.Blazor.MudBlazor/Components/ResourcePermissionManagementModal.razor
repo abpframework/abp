@@ -105,8 +105,8 @@
                                RequiredError="@L["ThisFieldIsRequired"]"
                                Class="mt-2" />
                 <MudText Typo="Typo.subtitle1" Class="mb-2 mt-4">@L["ResourcePermissionPermissions"]</MudText>
-                <MudSwitch T="bool" Checked="@_grantAllCreate" 
-                          CheckedChanged="@(async (bool b) => await GrantAllCreateAsync(b))"
+                <MudSwitch T="bool" Value="@_grantAllCreate" 
+                          ValueChanged="@(async (bool b) => await GrantAllCreateAsync(b))"
                           Label="@L["GrantAllResourcePermissions"]" />
                 <div class="mt-2">
                     @foreach (var permission in CreateEntity.Permissions)
@@ -134,8 +134,8 @@
         <DialogContent>
             <MudForm @ref="@_editFormRef" Model="@EditEntity">
                 <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionPermissions"]</MudText>
-                <MudSwitch T="bool" Checked="@_grantAllEdit" 
-                          CheckedChanged="@(async (bool b) => await GrantAllEditAsync(b))"
+                <MudSwitch T="bool" Value="@_grantAllEdit" 
+                          ValueChanged="@(async (bool b) => await GrantAllEditAsync(b))"
                           Label="@L["GrantAllResourcePermissions"]" />
                 <div class="mt-2">
                     @foreach (var permission in EditEntity.Permissions)
