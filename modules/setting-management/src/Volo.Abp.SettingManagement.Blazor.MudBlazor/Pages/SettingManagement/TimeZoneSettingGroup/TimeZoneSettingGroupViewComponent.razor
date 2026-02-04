@@ -11,7 +11,7 @@
                 <MudSelect T="string"
                           Label="@L["DisplayName:Timezone"]"
                           Required="true"
-                          RequiredError="@L["ThisFieldIsRequired"]"
+                          RequiredError="@L["ThisFieldIsRequired."]"
                           Value="@TimezoneSettings.Timezone"
                           ValueChanged="@OnSelectedValueChangedAsync">
                     @foreach (var item in TimezoneSettings.TimeZoneItems)

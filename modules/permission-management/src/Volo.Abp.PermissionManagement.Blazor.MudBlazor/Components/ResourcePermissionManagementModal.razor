@@ -102,7 +102,7 @@
                                ToStringFunc="@(item => item?.ProviderDisplayName ?? string.Empty)"
                                Label="@L["ProviderKey"]"
                                Required="true"
-                               RequiredError="@L["ThisFieldIsRequired"]"
+                               RequiredError="@L["ThisFieldIsRequired."]"
                                Class="mt-2" />
                 <MudText Typo="Typo.subtitle1" Class="mb-2 mt-4">@L["ResourcePermissionPermissions"]</MudText>
                 <MudSwitch T="bool" Value="@_grantAllCreate" 

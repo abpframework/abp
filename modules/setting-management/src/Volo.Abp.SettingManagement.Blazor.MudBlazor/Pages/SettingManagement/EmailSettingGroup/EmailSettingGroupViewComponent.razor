@@ -12,13 +12,13 @@
                     <MudTextField @bind-Value="@EmailSettings.DefaultFromDisplayName"
                                  Label="@L["DefaultFromDisplayName"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]" />
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField @bind-Value="@EmailSettings.DefaultFromAddress"
                                  Label="@L["DefaultFromAddress"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]" />
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
                 </MudItem>
                 <MudItem xs="12">
                     <MudTextField @bind-Value="@EmailSettings.SmtpHost"
@@ -86,16 +86,16 @@
                     <MudTextField @bind-Value="@SendTestEmailInput.SenderEmailAddress"
                                  Label="@L["SenderEmailAddress"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]"
+                                 RequiredError="@L["ThisFieldIsRequired."]"
                                  AutoFocus="true" />
                     <MudTextField @bind-Value="@SendTestEmailInput.TargetEmailAddress"
                                  Label="@L["TargetEmailAddress"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]" />
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
                     <MudTextField @bind-Value="@SendTestEmailInput.Subject"
                                  Label="@L["Subject"]"
                                  Required="true"
-                                 RequiredError="@L["ThisFieldIsRequired"]" />
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
                     <MudTextField @bind-Value="@SendTestEmailInput.Body"
                                  Label="@L["Body"]"
                                  Lines="5" />

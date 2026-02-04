@@ -38,17 +38,17 @@
                 <MudTextField @bind-Value="@NewEntity.Name"
                              Label="@L["TenantName"]"
                              Required="true"
-                             RequiredError="@L["ThisFieldIsRequired"]"
+                             RequiredError="@L["ThisFieldIsRequired."]"
                              AutoFocus="true" />
                 <MudTextField @bind-Value="@NewEntity.AdminEmailAddress"
                              Label="@L["DisplayName:AdminEmailAddress"]"
                              Required="true"
-                             RequiredError="@L["ThisFieldIsRequired"]"
+                             RequiredError="@L["ThisFieldIsRequired."]"
                              InputType="InputType.Email" />
                 <MudTextField @bind-Value="@NewEntity.AdminPassword"
                              Label="@L["DisplayName:AdminPassword"]"
                              Required="true"
-                             RequiredError="@L["ThisFieldIsRequired"]"
+                             RequiredError="@L["ThisFieldIsRequired."]"
                              InputType="@(ShowPassword ? InputType.Text : InputType.Password)"
                              Adornment="Adornment.End"
                              AdornmentIcon="@(ShowPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
@@ -76,7 +76,7 @@
                 <MudTextField @bind-Value="@EditingEntity.Name"
                              Label="@L["TenantName"]"
                              Required="true"
-                             RequiredError="@L["ThisFieldIsRequired"]"
+                             RequiredError="@L["ThisFieldIsRequired."]"
                              AutoFocus="true" />
                 <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" ModalType="ExtensionPropertyModalType.EditModal" />
             </MudForm>
