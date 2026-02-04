@@ -2,14 +2,14 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { provideRouter, Route, Router } from '@angular/router';
-import { createSpyObject, SpyObject } from '@ngneat/spectator/jest';
+import { RouterTestingHarness } from '@angular/router/testing';
+import { TestBed } from '@angular/core/testing';
+import { createSpyObject, SpyObject } from '@ngneat/spectator/vitest';
 import { of } from 'rxjs';
 import { permissionGuard } from '../guards/permission.guard';
 import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { PermissionService } from '../services/permission.service';
 import { provideAbpCore, withOptions } from '../providers';
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingHarness } from '@angular/router/testing';
 import { AuthService } from '../abstracts';
 
 @Component({ template: '' })
@@ -62,26 +62,35 @@ describe('authGuard', () => {
         { provide: PermissionService, useValue: permissionService },
         { provide: HttpErrorReporterService, useValue: httpErrorReporter },
         provideRouter(routes),
-        provideAbpCore(withOptions({
-          environment: {
-            apis: {
-              default: {
+        provideAbpCore(
+          withOptions({
+            environment: {
+              apis: {
+                default: {
+                  url: 'http://localhost:4200',
+                },
+              },
+              application: {
+                baseUrl: 'http://localhost:4200',
+                name: 'TestApp',
+              },
+              remoteEnv: {
                 url: 'http://localhost:4200',
+                mergeStrategy: 'deepmerge',
               },
             },
-            application: {
-              baseUrl: 'http://localhost:4200',
-              name: 'TestApp',
-            },
-            remoteEnv: {
-              url: 'http://localhost:4200',
-              mergeStrategy: 'deepmerge',
-            },
-          },
-          registerLocaleFn: () => Promise.resolve(),
-        })),
+            registerLocaleFn: () => Promise.resolve(),
+            skipGetAppConfiguration: true,
+          }),
+        ),
       ],
     });
+  });
+
+  afterEach(async () => {
+    // Wait for any pending async operations to complete before teardown
+    await new Promise(resolve => setTimeout(resolve, 0));
+    TestBed.resetTestingModule();
   });
 
   it('should return true when the grantedPolicy is true', async () => {

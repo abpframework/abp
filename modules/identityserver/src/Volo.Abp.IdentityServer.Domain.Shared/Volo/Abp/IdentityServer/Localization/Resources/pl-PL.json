@@ -11,6 +11,7 @@
     "InvalidUsername": "Nieprawidłowa nazwa użytkownika lub hasło!",
     "InvalidAuthenticatorCode": "Nieprawidłowy kod uwierzytelniający!",
     "InvalidRecoveryCode": "Nieprawidłowy kod odzyskiwania!",
-    "TheTargetUserIsNotLinkedToYou": "Docelowy użytkownik nie jest z Tobą powiązany!"
+    "TheTargetUserIsNotLinkedToYou": "Docelowy użytkownik nie jest z Tobą powiązany!",
+    "ClientResourcePermissionProviderKeyLookupService": "Klient"
   }
 }

@@ -11,8 +11,8 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Working with ABP Suite",
-    "Path": "studio/working-with-suite"
+    "Name": "Custom Commands",
+    "Path": "studio/custom-commands"
   }
 }
 ````
@@ -210,46 +210,12 @@ When you connect to a Kubernetes cluster, it uses the selected profile for Kuber
 
 ## Advanced Topics
 
-### Adding a Custom Command
+### Custom Commands
 
-Custom commands can be added to both the *Helm* and *Kubernetes* tabs within the *Kubernetes* panel. For instance, when [redeploy](#redeploy-a-chart) a chart, it involves building the Docker image and reinstalling it. However, if you are working with a different Kubernetes cluster than Docker Desktop, you'll need to push the Docker image to the registry before the installation process. This can be achieved by incorporating a custom command into the *Kubernetes services*. Custom commands can be added to the *Chart Root*, *Main Chart*, and *Subchart* in the *Helm* tab, as well as to the *Service* in the *Kubernetes* tab.
+You can add custom commands to context menus in both the *Helm* and *Kubernetes* tabs. This is useful for automating workflows like pushing Docker images to a registry before installation, or running custom deployment scripts.
 
-To do that, open the ABP Solution (*.abpsln*) file with *Visual Studio Code* it's a JSON file and you'll see the existing commands in the `commands` section. Before adding a new command, create a powershell script in the `abp-solution-path/etc/helm` folder. For example, we create a `push-image.ps1` script to push the docker image to the registry. Then, add the following command to the `commands` section.
-
-```JSON
-    "kubernetesRedeployWithPushImage": { 
-      "triggerTargets": [
-        "KUBERNETES_SERVICE"
-      ],
-      "executionTargets": [
-        "KUBERNETES_SERVICE"
-      ],
-      "displayName": " Redeploy with Push Image",
-      "workingDirectory": "etc/helm",
-      "terminalCommand": "./build-image.ps1 -ProjectPath {%{{{chart.metadata.projectPath}}}%} -ImageName {%{{{chart.metadata.imageName}}}%} -ProjectType {%{{{chart.metadata.projectType}}}%} &&& ./push-image.ps1 -ImageName {%{{{chart.metadata.imageName}}}%} &&& ./install.ps1 -ChartName {%{{{mainChart.name}}}%} -Namespace {%{{{profile.namespace}}}%} -ReleaseName {%{{{mainChart.name}}}%}-{%{{{profile.name}}}%} -DotnetEnvironment {%{{{mainChart.metadata.dotnetEnvironment}}}%}",
-      "requireConfirmation": "true",
-      "confirmationText": "Are you sure to redeploy with push image the related chart '{%{{{chart.name}}}%}' for the service '{%{{{name}}}%}'?",
-      "condition": "{%{{{chart != null && chart.metadata.projectPath != null && chart.metadata.imageName != null && chart.metadata.projectType != null}}}%}"
-    }
-```
-
-Once the command is added, reload the solution from *File* -> *Reload Solution* in the toolbar. After reloading, you will find the *Redeploy with Push Image* command in the context-menu of the service.
+Custom commands can be added to the *Chart Root*, *Main Chart*, and *Sub Chart* in the *Helm* tab, as well as to the *Service* in the *Kubernetes* tab.
 
 ![redeploy-push-image](./images/kubernetes/redeploy-push-image.png)
 
-The JSON object has the following properties:
-
-- `triggerTargets`: Specifies the trigger targets for the command. The added command will appear in these targets. You can add one or more trigger targets, accepting values such as *HELM_CHARTS_ROOT*, *HELM_MAIN_CHART*, *HELM_SUB_CHART* and *KUBERNETES_SERVICE*.
-- `executionTargets`: Specifies the execution targets for the command. When executing the command on a root item, it will recursively execute the command for all children. Acceptable values include *HELM_CHARTS_ROOT*, *HELM_MAIN_CHART*, *HELM_SUB_CHART*, and *KUBERNETES_SERVICE*.
-- `displayName`: Specifies the display name of the command.
-- `workingDirectory`: Specifies the working directory of the command. It's relative to the solution path.
-- `terminalCommand`: Specifies the terminal command for the custom command. The `&&&` operator can be used to run multiple commands in the terminal. Utilize the [Scriban](https://github.com/scriban/scriban/blob/master/doc/language.md) syntax to access input data, which varies based on the execution target.
-- `requireConfirmation`: Specifies whether the command requires confirmation message before execution. Acceptable values include *true* and *false*.
-- `confirmationText`: Specifies the confirmation text for the command. Utilize the [Scriban](https://github.com/scriban/scriban/blob/master/doc/language.md) syntax to access input data, which varies based on the execution target.
-- `condition`: Specifies the condition for the command. If the condition returns *false*, it skips the current item and attempts to execute the command for the next item or child item. Utilize the [Scriban](https://github.com/scriban/scriban/blob/master/doc/language.md) syntax to access input data, which varies based on the execution target.
-
-You can use the following variables in the scriban syntax based on the execution target:
-  - `HELM_CHARTS_ROOT`: *profile*, *metadata*, *secrets*
-  - `HELM_MAIN_CHART`: *profile*, *chart*, *metadata*, *secret*
-  - `HELM_SUB_CHART`: *profile*, *chart*, *metadata*, *secret*
-  - `KUBERNETES_SERVICE`: *name*, *profile*, *mainChart*, *chart*, *metadata*, *secret*
+For detailed information on creating and managing custom commands, see the [Custom Commands](custom-commands.md) documentation.

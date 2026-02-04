@@ -113,6 +113,6 @@ ABP uses .NET's standard [Logging services](../framework/fundamentals/logging.md
 
 ABP's startup solution templates come with [Swagger UI](https://swagger.io/) pre-installed. Swagger is a pretty standard and useful tool to discover and test your HTTP APIs on a built-in UI that is embedded into your application or service. It is typically used in development environment, but you may want to enable it on staging or production environments too.
 
-While you will always secure your HTTP APIs with other techniques (like the [Authorization](../framework/fundamentals/authorization.md) system), allowing malicious software and people to easily discover your HTTP API endpoint details can be considered as a security problem for some systems. So, be careful while taking the decision of enabling or disabling Swagger for the production environment.
+While you will always secure your HTTP APIs with other techniques (like the [Authorization](../framework/fundamentals/authorization/index.md) system), allowing malicious software and people to easily discover your HTTP API endpoint details can be considered as a security problem for some systems. So, be careful while taking the decision of enabling or disabling Swagger for the production environment.
 
 > You may also want to see the [ABP Swagger integration](../framework/api-development/swagger.md) document.

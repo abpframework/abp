@@ -1,6 +1,9 @@
-﻿using Volo.Abp.Authorization.Permissions;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
+using Volo.Abp.OpenIddict.Applications;
 
 namespace Volo.Abp.PermissionManagement.OpenIddict;
 
@@ -16,6 +19,18 @@ public class AbpPermissionManagementDomainOpenIddictModule : AbpModule
         {
             options.ManagementProviders.Add<ApplicationPermissionManagementProvider>();
             options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "OpenIddictPro.Application.ManagePermissions";
+        });
+
+        context.Services.AddAbpOptions<PermissionManagementOptions>().PostConfigure<IServiceProvider>((options, serviceProvider) =>
+        {
+            // The IApplicationFinder implementation in OpenIddict Pro module for tiered application.
+            if (serviceProvider.GetService<IApplicationFinder>() == null)
+            {
+                return;
+            }
+
+            options.ResourceManagementProviders.Add<ApplicationResourcePermissionManagementProvider>();
+            options.ResourcePermissionProviderKeyLookupServices.Add<ApplicationResourcePermissionProviderKeyLookupService>();
         });
     }
 }

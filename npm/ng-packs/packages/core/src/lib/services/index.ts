@@ -8,6 +8,7 @@ export * from './http-wait.service';
 export * from './lazy-load.service';
 export * from './list.service';
 export * from './localization.service';
+export * from './ui-localization.service';
 export * from './multi-tenancy.service';
 export * from './permission.service';
 export * from './replaceable-components.service';

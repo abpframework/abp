@@ -9,7 +9,7 @@
 
 Blazor applications can use the same authorization system and permissions defined in the server side.
 
-> This document is only for authorizing on the Blazor UI. See the [Server Side Authorization](../../fundamentals/authorization.md) to learn how to define permissions and control the authorization system.
+> This document is only for authorizing on the Blazor UI. See the [Server Side Authorization](../../fundamentals/authorization/index.md) to learn how to define permissions and control the authorization system.
 
 ## Basic Usage
 
@@ -76,7 +76,7 @@ There are some useful extension methods for the `IAuthorizationService`:
 
 ## See Also
 
-* [Authorization](../../fundamentals/authorization.md) (server side)
+* [Authorization](../../fundamentals/authorization/index.md) (server side)
 * [Blazor Security](https://docs.microsoft.com/en-us/aspnet/core/blazor/security/) (Microsoft documentation)
 * [ICurrentUser Service](../../infrastructure/current-user.md)
 * [Video tutorial](https://abp.io/video-courses/essentials/authorization)

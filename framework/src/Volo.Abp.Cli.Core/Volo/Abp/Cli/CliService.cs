@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Memory;
 using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
@@ -21,8 +22,11 @@ namespace Volo.Abp.Cli;
 
 public class CliService : ITransientDependency
 {
+    private const string McpLogSource = nameof(CliService);
+    
     private readonly MemoryService _memoryService;
     private readonly ITelemetryService _telemetryService;
+    private readonly IMcpLogger _mcpLogger;
     public ILogger<CliService> Logger { get; set; }
     protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
     protected ICommandSelector CommandSelector { get; }
@@ -39,7 +43,8 @@ public class CliService : ITransientDependency
         ICmdHelper cmdHelper,
         MemoryService memoryService,
         CliVersionService cliVersionService, 
-        ITelemetryService telemetryService)
+        ITelemetryService telemetryService,
+        IMcpLogger mcpLogger)
     {
         _memoryService = memoryService;
         CommandLineArgumentParser = commandLineArgumentParser;
@@ -49,19 +54,27 @@ public class CliService : ITransientDependency
         CmdHelper = cmdHelper;
         CliVersionService = cliVersionService;
         _telemetryService = telemetryService;
+        _mcpLogger = mcpLogger;
 
         Logger = NullLogger<CliService>.Instance;
     }
 
     public async Task RunAsync(string[] args)
     {
-        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
-        Logger.LogInformation($"ABP CLI {currentCliVersion}");
-
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
+        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
+        
+        var isMcpCommand = commandLineArgs.IsMcpCommand();
+        
+        // Don't print banner for MCP command to avoid corrupting stdout JSON-RPC stream
+        if (!isMcpCommand)
+        {
+            Logger.LogInformation($"ABP CLI {currentCliVersion}");
+        }
 
 #if !DEBUG
-        if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
+        // Skip version check for MCP command to avoid corrupting stdout JSON-RPC stream
+        if (!isMcpCommand && !commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
         {
             await CheckCliVersionAsync(currentCliVersion);
         }
@@ -85,13 +98,29 @@ public class CliService : ITransientDependency
         }
         catch (CliUsageException usageException)
         {
-            Logger.LogWarning(usageException.Message);
+            // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
+            if (commandLineArgs.IsMcpCommand())
+            {
+                _mcpLogger.Error(McpLogSource, usageException.Message);
+            }
+            else
+            {
+                Logger.LogWarning(usageException.Message);
+            }
             Environment.ExitCode = 1;
         }
         catch (Exception ex)
         {
             await _telemetryService.AddErrorActivityAsync(ex.Message);
-            Logger.LogException(ex);
+            // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
+            if (commandLineArgs.IsMcpCommand())
+            {
+                _mcpLogger.Error(McpLogSource, "Fatal error", ex);
+            }
+            else
+            {
+                Logger.LogException(ex);
+            }
             throw;
         }
         finally

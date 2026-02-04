@@ -31,6 +31,7 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
     public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
     public DbSet<AppEntityWithNavigationsAndDisableAuditing> AppEntityWithNavigationsAndDisableAuditing { get; set; }
     public DbSet<AppEntityWithJsonProperty> EntitiesWithObjectProperty { get; set; }
+    public DbSet<AppEntityWithComplexProperty> AppEntitiesWithComplexProperty { get; set; }
 
     public AbpAuditingTestDbContext(DbContextOptions<AbpAuditingTestDbContext> options)
         : base(options)
@@ -75,6 +76,28 @@ public class AbpAuditingTestDbContext : AbpDbContext<AbpAuditingTestDbContext>
                         v => v.ToString(),
                         v => v
                     );
+            });
+        });
+
+        modelBuilder.Entity<AppEntityWithComplexProperty>(b =>
+        {
+            b.ConfigureByConvention();
+            b.ComplexProperty(x => x.ContactInformation, cb =>
+            {
+                cb.Property(x => x.Street).IsRequired();
+                cb.ComplexProperty(x => x.Location, lb =>
+                {
+                    lb.Property(x => x.City).IsRequired();
+                });
+            });
+
+            b.ComplexProperty(x => x.DisabledContactInformation, cb =>
+            {
+                cb.Property(x => x.Street).IsRequired();
+                cb.ComplexProperty(x => x.Location, lb =>
+                {
+                    lb.Property(x => x.City).IsRequired();
+                });
             });
         });
     }

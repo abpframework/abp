@@ -1,5 +1,5 @@
 import { RoutesService } from '../services/routes.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { HttpClient } from '@angular/common/http';
 import { ConfigStateService } from '../services/config-state.service';
@@ -33,51 +33,51 @@ describe('Routes Service', () => {
       {
         provide: HttpClient,
         useValue: {
-          get: jest.fn(),
-          post: jest.fn(),
-          put: jest.fn(),
-          delete: jest.fn(),
+          get: vi.fn(),
+          post: vi.fn(),
+          put: vi.fn(),
+          delete: vi.fn(),
         },
       },
       {
         provide: ConfigStateService,
         useValue: {
-          getOne: jest.fn(),
-          getDeep: jest.fn(),
-          getDeep$: jest.fn(() => ({ subscribe: jest.fn() })),
-          createOnUpdateStream: jest.fn(() => ({ 
-            subscribe: jest.fn(() => ({ unsubscribe: jest.fn() })) 
+          getOne: vi.fn(),
+          getDeep: vi.fn(),
+          getDeep$: vi.fn(() => ({ subscribe: vi.fn() })),
+          createOnUpdateStream: vi.fn(() => ({ 
+            subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) 
           })),
         },
       },
       {
         provide: AbpApplicationConfigurationService,
         useValue: {
-          get: jest.fn(),
+          get: vi.fn(),
         },
       },
       {
         provide: RestService,
         useValue: {
-          request: jest.fn(),
+          request: vi.fn(),
         },
       },
       {
         provide: EnvironmentService,
         useValue: {
-          getEnvironment: jest.fn(),
+          getEnvironment: vi.fn(),
         },
       },
       {
         provide: HttpErrorReporterService,
         useValue: {
-          reportError: jest.fn(),
+          reportError: vi.fn(),
         },
       },
       {
         provide: ExternalHttpClient,
         useValue: {
-          request: jest.fn(),
+          request: vi.fn(),
         },
       },
       {

@@ -1,10 +1,11 @@
 import { ConfirmationService } from '@abp/ng.theme.shared';
 import { CoreTestingModule } from '@abp/ng.core/testing';
 import { Component, EventEmitter, Input } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { Confirmation } from '@abp/ng.theme.shared';
-import { Subject, timer } from 'rxjs';
+import { firstValueFrom, Subject, timer } from 'rxjs';
 import { ModalComponent } from '../components/modal/modal.component';
+import { setupComponentResources } from './utils';
 
 @Component({
   template: `
@@ -27,25 +28,34 @@ class TestHostComponent {
 }
 
 const mockConfirmation$ = new Subject<Confirmation.Status>();
-const disappearFn = jest.fn();
+const disappearFn = vi.fn();
 
 describe('ModalComponent', () => {
   let spectator: Spectator<TestHostComponent>;
+  let createComponent: ReturnType<typeof createComponentFactory<TestHostComponent>>;
 
-  const createComponent = createComponentFactory({
-    component: TestHostComponent,
-    imports: [CoreTestingModule.withConfig()],
-    providers: [
-      {
-        provide: ConfirmationService,
-        useValue: {
-          warn: jest.fn(() => mockConfirmation$),
-        },
-      },
-    ],
-  });
+  beforeAll(() => setupComponentResources('../components/modal', import.meta.url));
 
   beforeEach(() => {
+    // Create component factory in beforeEach to ensure beforeAll has run
+    if (!createComponent) {
+      createComponent = createComponentFactory({
+        component: TestHostComponent,
+        imports: [
+          CoreTestingModule.withConfig(),
+          ModalComponent,
+        ],
+        providers: [
+          {
+            provide: ConfirmationService,
+            useValue: {
+              warn: vi.fn(() => mockConfirmation$),
+            },
+          },
+        ],
+      });
+    }
+
     spectator = createComponent();
     disappearFn.mockClear();
   });
@@ -71,10 +81,10 @@ describe('ModalComponent', () => {
   });
 });
 
-async function wait0ms() {
-  await timer(0).toPromise();
+async function wait0ms() {  
+  await firstValueFrom(timer(0));
 }
 
-async function wait300ms() {
-  await timer(300).toPromise();
+async function wait300ms() {  
+  await firstValueFrom(timer(300));
 }

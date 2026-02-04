@@ -1,6 +1,5 @@
 import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgClass, NgStyle } from '@angular/common';
 import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
 
 @Component({
@@ -8,7 +7,7 @@ import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
   template: `
     <div class="mb-3">
       @if (label) {
-        <label [ngClass]="labelClass" [for]="inputId">
+        <label [class]="labelClass" [for]="inputId">
           {{ label | abpLocalization }}
         </label>
       }
@@ -17,8 +16,8 @@ import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
         [id]="inputId"
         [placeholder]="inputPlaceholder"
         [readonly]="inputReadonly"
-        [ngClass]="inputClass"
-        [ngStyle]="inputStyle"
+        [class]="inputClass"
+        [style]="inputStyle"
         (blur)="formBlur.next()"
         (focus)="formFocus.next()"
         [(ngModel)]="value"
@@ -32,7 +31,7 @@ import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
       multi: true,
     },
   ],
-  imports: [NgClass, NgStyle, LocalizationPipe, FormsModule],
+  imports: [LocalizationPipe, FormsModule],
 })
 export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
@@ -42,8 +41,8 @@ export class FormInputComponent extends AbstractNgModelComponent {
   @Input() inputPlaceholder = '';
   @Input() inputStyle:
     | {
-        [klass: string]: any;
-      }
+      [klass: string]: any;
+    }
     | null
     | undefined;
   @Input() inputClass = 'form-control';

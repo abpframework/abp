@@ -1,0 +1,210 @@
+---
+description: "ABP Blazor UI patterns and components"
+globs:
+  - "**/*.razor"
+  - "**/Blazor/**/*.cs"
+  - "**/*.Blazor*/**/*.cs"
+alwaysApply: false
+---
+
+# ABP Blazor UI
+
+> **Docs**: https://abp.io/docs/latest/framework/ui/blazor/overall
+
+## Component Base Classes
+
+### Basic Component
+```razor
+@inherits AbpComponentBase
+
+<h1>@L["Books"]</h1>
+```
+
+### CRUD Page
+```razor
+@page "/books"
+@inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<Card>
+    <CardHeader>
+        <Row>
+            <Column>
+                <h2>@L["Books"]</h2>
+            </Column>
+            <Column TextAlignment="TextAlignment.End">
+                @if (HasCreatePermission)
+                {
+                    <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">
+                        @L["NewBook"]
+                    </Button>
+                }
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        <DataGrid TItem="BookDto" 
+                  Data="Entities" 
+                  ReadData="OnDataGridReadAsync"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize">
+            <DataGridColumns>
+                <DataGridColumn Field="@nameof(BookDto.Name)" Caption="@L["Name"]" />
+                <DataGridColumn Field="@nameof(BookDto.Price)" Caption="@L["Price"]" />
+                <DataGridEntityActionsColumn TItem="BookDto">
+                    <DisplayTemplate>
+                        <EntityActions TItem="BookDto">
+                            <EntityAction TItem="BookDto"
+                                          Text="@L["Edit"]"
+                                          Visible="HasUpdatePermission"
+                                          Clicked="() => OpenEditModalAsync(context)" />
+                            <EntityAction TItem="BookDto"
+                                          Text="@L["Delete"]"
+                                          Visible="HasDeletePermission"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="() => GetDeleteConfirmationMessage(context)" />
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
+```
+
+## Localization
+```razor
+@* Using L property from base class *@
+<h1>@L["PageTitle"]</h1>
+
+@* With parameters *@
+<p>@L["WelcomeMessage", CurrentUser.UserName]</p>
+```
+
+## Authorization
+```razor
+@* Check permission before rendering *@
+@if (await AuthorizationService.IsGrantedAsync("MyPermission"))
+{
+    <Button>Admin Action</Button>
+}
+
+@* Using policy-based authorization *@
+<AuthorizeView Policy="MyPolicy">
+    <Authorized>
+        <p>You have access!</p>
+    </Authorized>
+</AuthorizeView>
+```
+
+## Navigation & Menu
+Configure in `*MenuContributor.cs`:
+
+```csharp
+public class MyMenuContributor : IMenuContributor
+{
+    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        if (context.Menu.Name == StandardMenus.Main)
+        {
+            var bookMenu = new ApplicationMenuItem(
+                "Books",
+                l["Menu:Books"],
+                "/books",
+                icon: "fa fa-book"
+            );
+
+            if (await context.IsGrantedAsync(MyPermissions.Books.Default))
+            {
+                context.Menu.AddItem(bookMenu);
+            }
+        }
+    }
+}
+```
+
+## Notifications & Messages
+```csharp
+// Success message
+await Message.Success(L["BookCreatedSuccessfully"]);
+
+// Confirmation dialog
+if (await Message.Confirm(L["AreYouSure"]))
+{
+    // User confirmed
+}
+
+// Toast notification
+await Notify.Success(L["OperationCompleted"]);
+```
+
+## Forms & Validation
+```razor
+<Form @ref="CreateForm">
+    <Validations @ref="CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+        <Validation MessageLocalizer="@LH.Localize">
+            <Field>
+                <FieldLabel>@L["Name"]</FieldLabel>
+                <TextEdit @bind-Text="@NewEntity.Name">
+                    <Feedback>
+                        <ValidationError />
+                    </Feedback>
+                </TextEdit>
+            </Field>
+        </Validation>
+    </Validations>
+</Form>
+```
+
+## JavaScript Interop
+```csharp
+@inject IJSRuntime JsRuntime
+
+@code {
+    private async Task CallJavaScript()
+    {
+        await JsRuntime.InvokeVoidAsync("myFunction", arg1, arg2);
+        var result = await JsRuntime.InvokeAsync<string>("myFunctionWithReturn");
+    }
+}
+```
+
+## State Management
+```csharp
+// Inject service proxy from HttpApi.Client
+@inject IBookAppService BookAppService
+
+@code {
+    private List<BookDto> Books { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await BookAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+        Books = result.Items.ToList();
+    }
+}
+```
+
+## Code-Behind Pattern
+**Books.razor:**
+```razor
+@page "/books"
+@inherits BooksBase
+```
+
+**Books.razor.cs:**
+```csharp
+public partial class Books : BooksBase
+{
+    // Component logic here
+}
+```
+
+**BooksBase.cs:**
+```csharp
+public abstract class BooksBase : AbpComponentBase
+{
+    [Inject]
+    protected IBookAppService BookAppService { get; set; }
+}
+```

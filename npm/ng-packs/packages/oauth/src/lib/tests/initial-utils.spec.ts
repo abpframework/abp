@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
+import { OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 
 import {
   CORE_OPTIONS,
@@ -42,6 +42,15 @@ describe('InitialUtils', () => {
           skipGetAppConfiguration: false,
         },
       },
+      {
+        provide: OAuthStorage,
+        useValue: {
+          getItem: vi.fn(),
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          clear: vi.fn(),
+        },
+      },
     ],
   });
 
@@ -53,8 +62,8 @@ describe('InitialUtils', () => {
     let clearOAuthStorageSpy;
     beforeEach(() => {
       injector = spectator.inject(Injector);
-      injectorSpy = jest.spyOn(injector, 'get');
-      clearOAuthStorageSpy = jest.spyOn(clearOAuthStorageDefault, 'clearOAuthStorage');
+      injectorSpy = vi.spyOn(injector, 'get');
+      clearOAuthStorageSpy = vi.spyOn(clearOAuthStorageDefault, 'clearOAuthStorage');
       clearOAuthStorageSpy.mockReset();
     });
 

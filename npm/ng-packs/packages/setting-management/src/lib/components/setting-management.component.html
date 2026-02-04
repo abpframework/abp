@@ -2,37 +2,25 @@
   <div id="SettingManagementWrapper">
     <div class="card">
       <div class="card-body">
-        <div class="row">
+        <div class="row" ngTabs>
           <div class="col-12 col-md-3 mb-2 mb-md-0">
-            <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
+            <div class="nav flex-column nav-pills" id="nav-tab" ngTabList orientation="vertical"
+              [selectedTab]="selected?.name">
               <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
-                <li
-                  (click)="selected = setting"
-                  class="nav-item pointer"
-                  *abpPermission="setting.requiredPolicy"
-                >
-                  <a
-                    class="nav-link"
-                    [id]="setting.name + '-tab'"
-                    role="tab"
-                    [class.active]="setting.name === selected.name"
-                    >{{ setting.name | abpLocalization }}</a
-                  >
-                </li>
+                <button ngTab #tab="ngTab" [value]="setting.name" (click)="selected = setting"
+                  class="nav-link text-start" [class.active]="tab.selected()" *abpPermission="setting.requiredPolicy">
+                  {{ setting.name | abpLocalization }}
+                </button>
               </ng-container>
-            </ul>
+            </div>
           </div>
           <div class="col-12 col-md-9">
             @if (settings.length) {
-              <div class="tab-content pt-0">
-                <div
-                  class="tab-pane fade show active"
-                  [id]="selected.name + '-tab'"
-                  role="tabpanel"
-                >
-                  <ng-container *ngComponentOutlet="selected.component" />
-                </div>
+            <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
+              <div ngTabPanel [value]="setting.name" class="tab-pane" *abpPermission="setting.requiredPolicy">
+                <ng-container *ngComponentOutlet="setting.component" />
               </div>
+            </ng-container>
             }
           </div>
         </div>

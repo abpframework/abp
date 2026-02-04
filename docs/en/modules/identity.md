@@ -31,7 +31,7 @@ The menu items and the related pages are authorized. That means the current user
 
 ![identity-module-permissions](../images/identity-module-permissions.png)
 
-See the [Authorization document](../framework/fundamentals/authorization.md) to understand the permission system.
+See the [Authorization document](../framework/fundamentals/authorization/index.md) to understand the permission system.
 
 ### Pages
 

@@ -17,7 +17,7 @@ import {
   ModalComponent,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { Tabs, TabList, Tab, TabPanel, TabContent } from '@angular/aria/tabs';
 import { finalize } from 'rxjs/operators';
 import { FreeTextInputDirective } from '../../directives';
 import { FeatureManagement } from '../../models';
@@ -40,7 +40,11 @@ const DEFAULT_PROVIDER_NAME = 'D';
     ModalComponent,
     LocalizationPipe,
     FormsModule,
-    NgbNavModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    TabContent,
     FreeTextInputDirective,
     ModalCloseDirective,
   ],

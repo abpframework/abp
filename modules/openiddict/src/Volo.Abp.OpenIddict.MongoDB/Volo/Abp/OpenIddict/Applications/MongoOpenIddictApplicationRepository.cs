@@ -17,7 +17,7 @@ public class MongoOpenIddictApplicationRepository : MongoDbRepository<OpenIddict
     public MongoOpenIddictApplicationRepository(IMongoDbContextProvider<OpenIddictMongoDbContext> dbContextProvider) : base(dbContextProvider)
     {
     }
-    
+
     public virtual async Task<List<OpenIddictApplication>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
         CancellationToken cancellationToken = default)
     {

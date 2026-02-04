@@ -31,14 +31,24 @@ public class ChatClientAccessor_Tests : AbpIntegratedTest<AbpAITestModule>
     }
 
     [Fact]
-    public void Should_Resolve_ChatClientAccessor_For_NonConfigured_Workspace()
+    public void Should_Resolve_Default_ChatClient_From_NonConfigured_Workspace_Accessor()
     {
         // Arrange & Act
         var chatClientAccessor = GetRequiredService<IChatClientAccessor<NonConfiguredWorkspace>>();
 
         // Assert
         chatClientAccessor.ShouldNotBeNull();
-        chatClientAccessor.ChatClient.ShouldBeNull();
+        chatClientAccessor.ChatClient.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public void Should_Resolve_Default_ChatClient_For_NonConfigured_Workspace()
+    {
+        // Arrange & Act
+        var chatClient = GetRequiredService<IChatClient<NonConfiguredWorkspace>>();
+
+        // Assert
+        chatClient.ShouldNotBeNull();
     }
 
     public class NonConfiguredWorkspace

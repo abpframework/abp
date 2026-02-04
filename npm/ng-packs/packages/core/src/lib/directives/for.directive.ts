@@ -1,16 +1,16 @@
-import { 
-  Directive, 
-  EmbeddedViewRef, 
-  Input, 
-  IterableChangeRecord, 
-  IterableChanges, 
-  IterableDiffer, 
-  IterableDiffers, 
-  OnChanges, 
-  TemplateRef, 
-  TrackByFunction, 
-  ViewContainerRef, 
-  inject 
+import {
+  Directive,
+  EmbeddedViewRef,
+  Input,
+  IterableChangeRecord,
+  IterableChanges,
+  IterableDiffer,
+  IterableDiffers,
+  OnChanges,
+  TemplateRef,
+  TrackByFunction,
+  ViewContainerRef,
+  inject,
 } from '@angular/core';
 import clone from 'just-clone';
 import compare from 'just-compare';
@@ -67,6 +67,7 @@ export class ForDirective implements OnChanges {
   emptyRef?: TemplateRef<any>;
 
   private differ!: IterableDiffer<any> | null;
+  private lastItemsRef: any[] | null = null;
 
   private isShowEmptyRef!: boolean;
 
@@ -136,6 +137,7 @@ export class ForDirective implements OnChanges {
       this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
       this.isShowEmptyRef = true;
       this.differ = null;
+      this.lastItemsRef = null;
 
       return;
     }
@@ -169,6 +171,14 @@ export class ForDirective implements OnChanges {
   }
 
   ngOnChanges() {
+    if (!this.items) return;
+
+    // Recreate differ if items array reference changed
+    if (this.lastItemsRef !== this.items) {
+      this.differ = null;
+      this.lastItemsRef = this.items;
+    }
+
     let items = clone(this.items) as any[];
     if (!Array.isArray(items)) return;
 

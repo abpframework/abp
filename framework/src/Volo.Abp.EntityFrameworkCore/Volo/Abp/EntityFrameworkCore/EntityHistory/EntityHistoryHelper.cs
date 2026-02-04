@@ -184,6 +184,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         var properties = entityEntry.Metadata.GetProperties();
         var isCreated = IsCreated(entityEntry);
         var isDeleted = IsDeleted(entityEntry);
+        var isSoftDeleted = IsSoftDeleted(entityEntry);
 
         foreach (var property in properties)
         {
@@ -193,7 +194,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
             }
 
             var propertyEntry = entityEntry.Property(property.Name);
-            if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !IsSoftDeleted(entityEntry))
+            if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !isSoftDeleted)
             {
                 var propertyType = DeterminePropertyTypeFromEntry(property, propertyEntry);
 
@@ -205,6 +206,17 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
                     PropertyTypeFullName = propertyType.FullName!
                 });
             }
+        }
+
+        foreach (var complexPropertyEntry in entityEntry.ComplexProperties)
+        {
+            AddComplexPropertyChanges(
+                complexPropertyEntry,
+                propertyChanges,
+                isCreated,
+                isDeleted,
+                isSoftDeleted,
+                parentPath: null);
         }
 
         if (AbpEfCoreNavigationHelper == null)
@@ -250,6 +262,52 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         return propertyChanges;
     }
 
+    protected virtual void AddComplexPropertyChanges(
+        ComplexPropertyEntry complexPropertyEntry,
+        List<EntityPropertyChangeInfo> propertyChanges,
+        bool isCreated,
+        bool isDeleted,
+        bool isSoftDeleted,
+        string? parentPath)
+    {
+        var complexPropertyInfo = complexPropertyEntry.Metadata.PropertyInfo;
+        if (complexPropertyInfo != null && complexPropertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
+        {
+            return;
+        }
+
+        var complexPropertyPath = parentPath == null
+            ? complexPropertyEntry.Metadata.Name
+            : $"{parentPath}.{complexPropertyEntry.Metadata.Name}";
+
+        foreach (var propertyEntry in complexPropertyEntry.Properties)
+        {
+            if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !isSoftDeleted)
+            {
+                var propertyType = DeterminePropertyTypeFromEntry(propertyEntry.Metadata, propertyEntry);
+
+                propertyChanges.Add(new EntityPropertyChangeInfo
+                {
+                    NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
+                    OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
+                    PropertyName = $"{complexPropertyPath}.{propertyEntry.Metadata.Name}",
+                    PropertyTypeFullName = propertyType.FullName!
+                });
+            }
+        }
+
+        foreach (var nestedComplexPropertyEntry in complexPropertyEntry.ComplexProperties)
+        {
+            AddComplexPropertyChanges(
+                nestedComplexPropertyEntry,
+                propertyChanges,
+                isCreated,
+                isDeleted,
+                isSoftDeleted,
+                complexPropertyPath);
+        }
+    }
+
     /// <summary>
     /// Determines the CLR type of a property based on its EF Core metadata and the values in the given <see cref="PropertyEntry"/>.
     /// </summary>
@@ -262,7 +320,7 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
     /// <see cref="PropertyEntry.OriginalValue"/>. If both values are <c>null</c>, the declared CLR type
     /// (which may remain <see cref="object"/>) is returned.
     /// </returns>
-    protected virtual Type DeterminePropertyTypeFromEntry(IProperty property, PropertyEntry propertyEntry)
+    protected virtual Type DeterminePropertyTypeFromEntry(IReadOnlyPropertyBase property, PropertyEntry propertyEntry)
     {
         var propertyType = property.ClrType.GetFirstGenericArgumentIfNullable();
 

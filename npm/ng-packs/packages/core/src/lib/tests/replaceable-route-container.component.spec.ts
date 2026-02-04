@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/vitest';
 import { BehaviorSubject } from 'rxjs';
 import { ReplaceableRouteContainerComponent } from '../components/replaceable-route-container.component';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';

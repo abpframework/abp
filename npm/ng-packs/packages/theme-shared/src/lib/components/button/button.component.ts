@@ -10,7 +10,6 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ABP, StopPropagationDirective } from '@abp/ng.core';
 
 @Component({
@@ -21,16 +20,16 @@ import { ABP, StopPropagationDirective } from '@abp/ng.core';
       [id]="buttonId"
       [attr.type]="buttonType"
       [attr.form]="formName"
-      [ngClass]="buttonClass"
+      [class]="buttonClass"
       [disabled]="loading || disabled"
       (click.stop)="click.next($event); abpClick.next($event)"
       (focus)="focus.next($event); abpFocus.next($event)"
       (blur)="blur.next($event); abpBlur.next($event)"
     >
-      <i [ngClass]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
+      <i [class]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
     </button>
   `,
-  imports: [CommonModule, StopPropagationDirective],
+  imports: [StopPropagationDirective],
 })
 export class ButtonComponent implements OnInit {
   private renderer = inject(Renderer2);

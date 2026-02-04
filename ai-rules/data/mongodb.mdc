@@ -1,0 +1,206 @@
+---
+description: "ABP MongoDB patterns - MongoDbContext and repositories"
+globs:
+  - "**/*.MongoDB/**/*.cs"
+  - "**/MongoDB/**/*.cs"
+  - "**/*MongoDb*.cs"
+alwaysApply: false
+---
+
+# ABP MongoDB
+
+> **Docs**: https://abp.io/docs/latest/framework/data/mongodb
+
+## MongoDbContext Configuration
+
+```csharp
+[ConnectionStringName("Default")]
+public class MyProjectMongoDbContext : AbpMongoDbContext
+{
+    public IMongoCollection<Book> Books => Collection<Book>();
+    public IMongoCollection<Author> Authors => Collection<Author>();
+
+    protected override void CreateModel(IMongoModelBuilder modelBuilder)
+    {
+        base.CreateModel(modelBuilder);
+
+        modelBuilder.ConfigureMyProject();
+    }
+}
+```
+
+## Entity Configuration
+
+```csharp
+public static class MyProjectMongoDbContextExtensions
+{
+    public static void ConfigureMyProject(this IMongoModelBuilder builder)
+    {
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<Book>(b =>
+        {
+            b.CollectionName = MyProjectConsts.DbTablePrefix + "Books";
+        });
+
+        builder.Entity<Author>(b =>
+        {
+            b.CollectionName = MyProjectConsts.DbTablePrefix + "Authors";
+        });
+    }
+}
+```
+
+## Repository Implementation
+
+```csharp
+public class BookRepository : MongoDbRepository<MyProjectMongoDbContext, Book, Guid>, IBookRepository
+{
+    public BookRepository(IMongoDbContextProvider<MyProjectMongoDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<Book> FindByNameAsync(
+        string name,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync())
+            .FirstOrDefaultAsync(
+                b => b.Name == name,
+                GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<List<Book>> GetListByAuthorAsync(
+        Guid authorId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync())
+            .Where(b => b.AuthorId == authorId)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+}
+```
+
+## Module Configuration
+
+```csharp
+[DependsOn(typeof(AbpMongoDbModule))]
+public class MyProjectMongoDbModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddMongoDbContext<MyProjectMongoDbContext>(options =>
+        {
+            // Add default repositories for aggregate roots only (DDD best practice)
+            options.AddDefaultRepositories();
+            // ⚠️ Avoid includeAllEntities: true - breaks DDD data consistency
+        });
+    }
+}
+```
+
+## Connection String
+
+In `appsettings.json`:
+```json
+{
+  "ConnectionStrings": {
+    "Default": "mongodb://localhost:27017/MyProjectDb"
+  }
+}
+```
+
+## Key Differences from EF Core
+
+### No Migrations
+MongoDB is schema-less; no migrations needed. Changes to entity structure are handled automatically.
+
+### includeDetails Parameter
+Often ignored in MongoDB because documents typically embed related data:
+
+```csharp
+public async Task<List<Book>> GetListAsync(
+    bool includeDetails = false, // Usually ignored
+    CancellationToken cancellationToken = default)
+{
+    // MongoDB documents already include nested data
+    return await (await GetQueryableAsync())
+        .ToListAsync(GetCancellationToken(cancellationToken));
+}
+```
+
+### Embedded Documents vs References
+```csharp
+// Embedded (stored in same document)
+public class Order : AggregateRoot<Guid>
+{
+    public List<OrderLine> Lines { get; set; } // Embedded
+}
+
+// Reference (separate collection, store ID only)
+public class Order : AggregateRoot<Guid>
+{
+    public Guid CustomerId { get; set; } // Reference by ID
+}
+```
+
+### No Change Tracking
+MongoDB doesn't track entity changes automatically:
+
+```csharp
+public async Task UpdateBookAsync(Guid id, string newName)
+{
+    var book = await _bookRepository.GetAsync(id);
+    book.SetName(newName);
+    
+    // Must explicitly update
+    await _bookRepository.UpdateAsync(book);
+}
+```
+
+## Direct Collection Access
+
+```csharp
+public async Task CustomOperationAsync()
+{
+    var collection = await GetCollectionAsync();
+    
+    // Use MongoDB driver directly
+    var filter = Builders<Book>.Filter.Eq(b => b.AuthorId, authorId);
+    var update = Builders<Book>.Update.Set(b => b.IsPublished, true);
+    
+    await collection.UpdateManyAsync(filter, update);
+}
+```
+
+## Indexing
+
+Configure indexes in repository or via MongoDB driver:
+
+```csharp
+public class BookRepository : MongoDbRepository<MyProjectMongoDbContext, Book, Guid>, IBookRepository
+{
+    public override async Task<IQueryable<Book>> GetQueryableAsync()
+    {
+        var collection = await GetCollectionAsync();
+        
+        // Ensure index exists
+        var indexKeys = Builders<Book>.IndexKeys.Ascending(b => b.Name);
+        await collection.Indexes.CreateOneAsync(new CreateIndexModel<Book>(indexKeys));
+        
+        return await base.GetQueryableAsync();
+    }
+}
+```
+
+## Best Practices
+
+- Design documents for query patterns (denormalize when needed)
+- Use references for frequently changing data
+- Use embedding for data that's always accessed together
+- Add indexes for frequently queried fields
+- Use `GetCancellationToken(cancellationToken)` for proper cancellation
+- Remember: ABP data filters (soft-delete, multi-tenancy) work with MongoDB too

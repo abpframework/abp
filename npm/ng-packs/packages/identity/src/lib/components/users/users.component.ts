@@ -52,7 +52,8 @@ import {
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
 import { PageComponent } from '@abp/ng.components/page';
-import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { Tabs, TabList, Tab, TabPanel, TabContent } from '@angular/aria/tabs';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
@@ -70,7 +71,11 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     FormsModule,
     PermissionManagementComponent,
     PageComponent,
-    NgbNavModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    TabContent,
     NgbDropdownModule,
     NgxValidateCoreModule,
     LocalizationPipe,
@@ -100,6 +105,8 @@ export class UsersComponent implements OnInit {
   form!: UntypedFormGroup;
 
   selected?: IdentityUserDto;
+
+  selectedTab = 'user-info';
 
   selectedUserRoles?: IdentityRoleDto[];
 
@@ -159,6 +166,7 @@ export class UsersComponent implements OnInit {
   }
 
   openModal() {
+    this.selectedTab = 'user-info';
     this.buildForm();
     this.isModalVisible = true;
   }

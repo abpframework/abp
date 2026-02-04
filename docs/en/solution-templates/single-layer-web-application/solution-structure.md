@@ -56,7 +56,7 @@ This template uses a single-project structure, with concerns separated into fold
 * **Migrations**: Contains the database migration files. It is created automatically by EF Core.
 * **ObjectMapping**: Define your [object-to-object mapping](../../framework/infrastructure/object-to-object-mapping.md) classes in this folder.
 * **Pages**: Define your UI pages (Razor Pages) in this folder (create `Controllers` and `Views` folders yourself if you prefer the MVC pattern).
-* **Permissions**: Define your [permissions](../../framework/fundamentals/authorization.md) in this folder.
+* **Permissions**: Define your [permissions](../../framework/fundamentals/authorization/index.md) in this folder.
 * **Services**: Define your [application services](../../framework/architecture/domain-driven-design/application-services.md) in this folder.
 
 ### How to Run?

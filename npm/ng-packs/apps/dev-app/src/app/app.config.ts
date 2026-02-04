@@ -31,6 +31,10 @@ export const appConfig: ApplicationConfig = {
         registerLocaleFn: registerLocaleForEsBuild(),
         sendNullsAsQueryParam: false,
         skipGetAppConfiguration: false,
+        uiLocalization: {
+          enabled: true,
+          basePath: '/assets/localization',
+        },
       }),
     ),
     provideAbpOAuth(),

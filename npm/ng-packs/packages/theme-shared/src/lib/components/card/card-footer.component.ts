@@ -1,15 +1,14 @@
 import { Component, HostBinding, Input } from '@angular/core';
-import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'abp-card-footer',
   template: `
-    <div [ngStyle]="cardFooterStyle" [ngClass]="cardFooterClass">
+    <div [style]="cardFooterStyle" [class]="cardFooterClass">
       <ng-content></ng-content>
     </div>
   `,
   styles: [],
-  imports: [NgClass, NgStyle],
+  imports: [],
 })
 export class CardFooterComponent {
   @HostBinding('class') componentClass = 'card-footer';

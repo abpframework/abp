@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { Toaster } from '../../models/toaster';
 import { LocalizationPipe } from '@abp/ng.core';
 
@@ -7,7 +6,7 @@ import { LocalizationPipe } from '@abp/ng.core';
   selector: 'abp-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
-  imports: [NgClass, LocalizationPipe],
+  imports: [LocalizationPipe],
 })
 export class ToastComponent implements OnInit {
   @Input()

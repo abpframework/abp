@@ -1,27 +1,24 @@
 import { CoreTestingModule } from '@abp/ng.core/testing';
-import { NgModule } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { timer } from 'rxjs';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
+import { firstValueFrom, timer } from 'rxjs';
 import { ConfirmationComponent } from '../components';
 import { Confirmation } from '../models';
 import { ConfirmationService } from '../services';
 import { CONFIRMATION_ICONS, DEFAULT_CONFIRMATION_ICONS } from '../tokens/confirmation-icons.token';
-
-@NgModule({
-  exports: [ConfirmationComponent],
-  declarations: [],
-  imports: [CoreTestingModule.withConfig(), ConfirmationComponent],
-  providers: [{ provide: CONFIRMATION_ICONS, useValue: DEFAULT_CONFIRMATION_ICONS }],
-})
-export class MockModule {}
+import { setupComponentResources } from './utils';
 
 describe('ConfirmationService', () => {
   let spectator: SpectatorService<ConfirmationService>;
   let service: ConfirmationService;
+  
   const createService = createServiceFactory({
     service: ConfirmationService,
-    imports: [CoreTestingModule.withConfig(), MockModule],
+    imports: [CoreTestingModule.withConfig(), ConfirmationComponent],
+    providers: [{ provide: CONFIRMATION_ICONS, useValue: DEFAULT_CONFIRMATION_ICONS }],
+  });
+
+  beforeAll(async () => {
+    await setupComponentResources('../components/confirmation', import.meta.url);
   });
 
   beforeEach(() => {
@@ -33,16 +30,16 @@ describe('ConfirmationService', () => {
     clearElements();
   });
 
-  test('should display a confirmation popup', fakeAsync(() => {
+  test('should display a confirmation popup', async () => {
     service.show('_::MESSAGE', '_::TITLE');
 
-    tick();
+    await firstValueFrom(timer(10));
 
     expect(selectConfirmationContent('.title')).toBe('TITLE');
     expect(selectConfirmationContent('.message')).toBe('MESSAGE');
-  }));
+  });
 
-  test('should display HTML string in title, message, and buttons', fakeAsync(() => {
+  test('should display HTML string in title, message, and buttons', async () => {
     service.show(
       '_::<span class="custom-message">MESSAGE<span>',
       '_::<span class="custom-title">TITLE<span>',
@@ -53,24 +50,24 @@ describe('ConfirmationService', () => {
       },
     );
 
-    tick();
+    await firstValueFrom(timer(10));
 
     expect(selectConfirmationContent('.custom-title')).toBe('TITLE');
     expect(selectConfirmationContent('.custom-message')).toBe('MESSAGE');
     expect(selectConfirmationContent('.custom-cancel')).toBe('CANCEL');
     expect(selectConfirmationContent('.custom-yes')).toBe('YES');
-  }));
+  });
 
-  test('should display custom FA icon', fakeAsync(() => {
+  test('should display custom FA icon', async () => {
     service.show('_::MESSAGE', '_::TITLE', undefined, {
       icon: 'fa fa-info',
     });
 
-    tick();
+    await firstValueFrom(timer(10));
     expect(selectConfirmationElement('.icon').className).toBe('icon fa fa-info');
-  }));
+  });
 
-  test('should display custom icon as html element', fakeAsync(() => {
+  test('should display custom icon as html element', async () => {
     const className = 'custom-icon';
     const selector = '.' + className;
 
@@ -78,12 +75,14 @@ describe('ConfirmationService', () => {
       iconTemplate: `<span class="${className}">I am icon</span>`,
     });
 
-    tick();
+    await firstValueFrom(timer(10));
 
     const element = selectConfirmationElement(selector);
     expect(element).toBeTruthy();
     expect(element.innerHTML).toBe('I am icon');
-  }));
+  });
+
+
   test.each`
     type         | selector      | icon
     ${'info'}    | ${'.info'}    | ${'.fa-info-circle'}
@@ -93,7 +92,7 @@ describe('ConfirmationService', () => {
   `('should display $type confirmation popup', async ({ type, selector, icon }) => {
     service[type]('_::MESSAGE', '_::TITLE');
 
-    await timer(0).toPromise();
+    await firstValueFrom(timer(10));
 
     expect(selectConfirmationContent('.title')).toBe('TITLE');
     expect(selectConfirmationContent('.message')).toBe('MESSAGE');
@@ -101,31 +100,18 @@ describe('ConfirmationService', () => {
     expect(selectConfirmationElement(icon)).toBeTruthy();
   });
 
-  // test('should close with ESC key', (done) => {
-  //   service
-  //     .info('', '')
-  //     .pipe(take(1))
-  //     .subscribe((status) => {
-  //       expect(status).toBe(Confirmation.Status.dismiss);
-  //       done();
-  //     });
 
-  //   const escape = new KeyboardEvent('keyup', { key: 'Escape' });
-  //   document.dispatchEvent(escape);
-  // });
-
-  test('should close when click cancel button', done => {
+  test('should close when click cancel button', async () => {
     service.info('_::', '_::', { yesText: '_::Sure', cancelText: '_::Exit' }).subscribe(status => {
       expect(status).toBe(Confirmation.Status.reject);
-      done();
     });
 
-    timer(0).subscribe(() => {
-      expect(selectConfirmationContent('button#cancel')).toBe('Exit');
-      expect(selectConfirmationContent('button#confirm')).toBe('Sure');
+    await firstValueFrom(timer(10));
 
-      (document.querySelector('button#cancel') as HTMLButtonElement).click();
-    });
+    expect(selectConfirmationContent('button#cancel')).toBe('Exit');
+    expect(selectConfirmationContent('button#confirm')).toBe('Sure');
+
+    (document.querySelector('button#cancel') as HTMLButtonElement).click();
   });
 
   test.each`
@@ -135,9 +121,9 @@ describe('ConfirmationService', () => {
   `(
     'should call the listenToEscape method $count times when dismissible is $dismissible',
     ({ dismissible, count }) => {
-      const spy = jest.spyOn(service as any, 'listenToEscape');
+      const spy = vi.spyOn(service as any, 'listenToEscape');
 
-  service.info('_::', '_::', { dismissible });
+      service.info('_::', '_::', { dismissible });
 
       expect(spy).toHaveBeenCalledTimes(count);
     },

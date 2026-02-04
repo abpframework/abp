@@ -1,0 +1,236 @@
+---
+description: "ABP Application Services, DTOs, validation, and error handling patterns"
+globs:
+  - "**/*.Application/**/*.cs"
+  - "**/Application/**/*.cs"
+  - "**/*AppService*.cs"
+  - "**/*Dto*.cs"
+alwaysApply: false
+---
+
+# ABP Application Layer Patterns
+
+> **Docs**: https://abp.io/docs/latest/framework/architecture/domain-driven-design/application-services
+
+## Application Service Structure
+
+### Interface (Application.Contracts)
+```csharp
+public interface IBookAppService : IApplicationService
+{
+    Task<BookDto> GetAsync(Guid id);
+    Task<PagedResultDto<BookListItemDto>> GetListAsync(GetBookListInput input);
+    Task<BookDto> CreateAsync(CreateBookDto input);
+    Task<BookDto> UpdateAsync(Guid id, UpdateBookDto input);
+    Task DeleteAsync(Guid id);
+}
+```
+
+### Implementation (Application)
+```csharp
+public class BookAppService : ApplicationService, IBookAppService
+{
+    private readonly IBookRepository _bookRepository;
+    private readonly BookManager _bookManager;
+    private readonly BookMapper _bookMapper;
+
+    public BookAppService(
+        IBookRepository bookRepository, 
+        BookManager bookManager,
+        BookMapper bookMapper)
+    {
+        _bookRepository = bookRepository;
+        _bookManager = bookManager;
+        _bookMapper = bookMapper;
+    }
+
+    public async Task<BookDto> GetAsync(Guid id)
+    {
+        var book = await _bookRepository.GetAsync(id);
+        return _bookMapper.MapToDto(book);
+    }
+
+    [Authorize(BookStorePermissions.Books.Create)]
+    public async Task<BookDto> CreateAsync(CreateBookDto input)
+    {
+        var book = await _bookManager.CreateAsync(input.Name, input.Price);
+        await _bookRepository.InsertAsync(book);
+        return _bookMapper.MapToDto(book);
+    }
+
+    [Authorize(BookStorePermissions.Books.Edit)]
+    public async Task<BookDto> UpdateAsync(Guid id, UpdateBookDto input)
+    {
+        var book = await _bookRepository.GetAsync(id);
+        await _bookManager.ChangeNameAsync(book, input.Name);
+        book.SetPrice(input.Price);
+        await _bookRepository.UpdateAsync(book);
+        return _bookMapper.MapToDto(book);
+    }
+}
+```
+
+## Application Service Best Practices
+- Don't repeat entity name in method names (`GetAsync` not `GetBookAsync`)
+- Accept/return DTOs only, never entities
+- ID not inside UpdateDto - pass separately
+- Use custom repositories when you need custom queries, generic repository is fine for simple CRUD
+- Call `UpdateAsync` explicitly (don't assume change tracking)
+- Don't call other app services in same module
+- Don't use `IFormFile`/`Stream` - pass `byte[]` from controllers
+- Use base class properties (`Clock`, `CurrentUser`, `GuidGenerator`, `L`) instead of injecting these services
+
+## DTO Naming Conventions
+
+| Purpose | Convention | Example |
+|---------|------------|---------|
+| Query input | `Get{Entity}Input` | `GetBookInput` |
+| List query input | `Get{Entity}ListInput` | `GetBookListInput` |
+| Create input | `Create{Entity}Dto` | `CreateBookDto` |
+| Update input | `Update{Entity}Dto` | `UpdateBookDto` |
+| Single entity output | `{Entity}Dto` | `BookDto` |
+| List item output | `{Entity}ListItemDto` | `BookListItemDto` |
+
+## DTO Location
+- Define DTOs in `*.Application.Contracts` project
+- This allows sharing with clients (Blazor, HttpApi.Client)
+
+## Validation
+
+### Data Annotations
+```csharp
+public class CreateBookDto
+{
+    [Required]
+    [StringLength(100, MinimumLength = 3)]
+    public string Name { get; set; }
+
+    [Range(0, 999.99)]
+    public decimal Price { get; set; }
+}
+```
+
+### Custom Validation with IValidatableObject
+Before adding custom validation, decide if it's a **domain rule** or **application rule**:
+- **Domain rule**: Put validation in entity constructor or domain service (enforces business invariants)
+- **Application rule**: Use DTO validation (input format, required fields)
+
+Only use `IValidatableObject` for application-level validation that can't be expressed with data annotations:
+
+```csharp
+public class CreateBookDto : IValidatableObject
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Name == Description)
+        {
+            yield return new ValidationResult(
+                "Name and Description cannot be the same!",
+                new[] { nameof(Name), nameof(Description) }
+            );
+        }
+    }
+}
+```
+
+### FluentValidation
+```csharp
+public class CreateBookDtoValidator : AbstractValidator<CreateBookDto>
+{
+    public CreateBookDtoValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().Length(3, 100);
+        RuleFor(x => x.Price).GreaterThan(0);
+    }
+}
+```
+
+## Error Handling
+
+### Business Exceptions
+```csharp
+throw new BusinessException("BookStore:010001")
+    .WithData("BookName", name);
+```
+
+### Entity Not Found
+```csharp
+var book = await _bookRepository.FindAsync(id);
+if (book == null)
+{
+    throw new EntityNotFoundException(typeof(Book), id);
+}
+```
+
+### User-Friendly Exceptions
+```csharp
+throw new UserFriendlyException(L["BookNotAvailable"]);
+```
+
+### HTTP Status Code Mapping
+Status code mapping is **configurable** in ABP (do not rely on a fixed mapping in business logic).
+
+| Exception | Typical HTTP Status |
+|-----------|-------------|
+| `AbpValidationException` | 400 |
+| `AbpAuthorizationException` | 401/403 |
+| `EntityNotFoundException` | 404 |
+| `BusinessException` | 403 (but configurable) |
+| Other exceptions | 500 |
+
+## Auto API Controllers
+ABP automatically generates API controllers for application services:
+- Interface must inherit `IApplicationService` (which already has `[RemoteService]` attribute)
+- HTTP methods determined by method name prefix (Get, Create, Update, Delete)
+- Use `[RemoteService(false)]` to disable auto API generation for specific methods
+
+## Object Mapping (Mapperly / AutoMapper)
+ABP supports **both Mapperly and AutoMapper** integrations. But the default mapping library is Mapperly. You need to first check the project's active mapping library.
+- Prefer the mapping provider already used in the solution (check existing mapping files / loaded modules).
+- In mixed solutions, explicitly setting the default provider may be required (see `docs/en/release-info/migration-guides/AutoMapper-To-Mapperly.md`).
+
+### Mapperly (compile-time)
+Define mappers as partial classes:
+
+```csharp
+[Mapper]
+public partial class BookMapper
+{
+    public partial BookDto MapToDto(Book book);
+    public partial List<BookDto> MapToDtoList(List<Book> books);
+}
+```
+
+Register in module:
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddSingleton<BookMapper>();
+}
+```
+
+Usage in application service:
+```csharp
+public class BookAppService : ApplicationService
+{
+    private readonly BookMapper _bookMapper;
+    
+    public BookAppService(BookMapper bookMapper)
+    {
+        _bookMapper = bookMapper;
+    }
+    
+    public BookDto GetBook(Book book)
+    {
+        return _bookMapper.MapToDto(book);
+    }
+}
+```
+
+> **Note**: Mapperly generates mapping code at compile-time, providing better performance than runtime mappers.
+
+### AutoMapper (runtime)
+If the solution uses AutoMapper, mappings are typically defined in `Profile` classes and registered via ABP's AutoMapper integration.

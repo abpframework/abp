@@ -11,6 +11,7 @@
     "InvalidUsername": "Nesprávne používateľské meno alebo heslo!",
     "InvalidAuthenticatorCode": "Neplatný overovací kód!",
     "InvalidRecoveryCode": "Neplatný kód na obnovenie!",
-    "TheTargetUserIsNotLinkedToYou": "Cieľový používateľ nie je s vami prepojený!"
+    "TheTargetUserIsNotLinkedToYou": "Cieľový používateľ nie je s vami prepojený!",
+    "ClientResourcePermissionProviderKeyLookupService": "Klient"
   }
 }

@@ -6,10 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.LIbs;
+
+public enum JavaScriptFrameworkType
+{
+    None,
+    ReactNative,
+    React,
+    Vue,
+    NextJs
+}
 
 public class InstallLibsService : IInstallLibsService, ITransientDependency
 {
@@ -78,36 +88,155 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
                 await CleanAndCopyResources(projectDirectory);
             }
+
+            // JavaScript frameworks (React Native, React, Vue, Next.js)
+            if (projectPath.EndsWith("package.json"))
+            {
+                var frameworkType = DetectFrameworkTypeFromPackageJson(projectPath);
+
+                if (frameworkType != JavaScriptFrameworkType.None)
+                {
+                    var frameworkName = frameworkType switch
+                    {
+                        JavaScriptFrameworkType.ReactNative => "React Native",
+                        JavaScriptFrameworkType.React => "React",
+                        JavaScriptFrameworkType.Vue => "Vue.js",
+                        JavaScriptFrameworkType.NextJs => "Next.js",
+                        _ => "JavaScript"
+                    };
+
+                    Logger.LogInformation($"Installing dependencies for {frameworkName} project: {projectDirectory}");
+                    NpmHelper.RunYarn(projectDirectory);
+                }
+            }
+        }
+    }
+
+    private JavaScriptFrameworkType DetectFrameworkTypeFromPackageJson(string packageJsonFilePath)
+    {
+        if (!File.Exists(packageJsonFilePath))
+        {
+            return JavaScriptFrameworkType.None;
+        }
+
+        try
+        {
+            var packageJsonContent = File.ReadAllText(packageJsonFilePath);
+            var packageJson = JObject.Parse(packageJsonContent);
+
+            var dependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            
+            // Check dependencies
+            if (packageJson["dependencies"] is JObject deps)
+            {
+                foreach (var prop in deps.Properties())
+                {
+                    dependencies.Add(prop.Name);
+                }
+            }
+
+            // Check devDependencies
+            if (packageJson["devDependencies"] is JObject devDeps)
+            {
+                foreach (var prop in devDeps.Properties())
+                {
+                    dependencies.Add(prop.Name);
+                }
+            }
+
+            // Check for React Native first (has priority over React)
+            if (dependencies.Contains("react-native"))
+            {
+                return JavaScriptFrameworkType.ReactNative;
+            }
+
+            // Check for other frameworks
+            if (dependencies.Contains("next"))
+            {
+                return JavaScriptFrameworkType.NextJs;
+            }
+
+            if (dependencies.Contains("vue"))
+            {
+                return JavaScriptFrameworkType.Vue;
+            }
+
+            if (dependencies.Contains("react"))
+            {
+                return JavaScriptFrameworkType.React;
+            }
+
+            return JavaScriptFrameworkType.None;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Failed to parse package.json at {PackageJsonFilePath}", packageJsonFilePath);
+            return JavaScriptFrameworkType.None;
         }
     }
 
     private List<string> FindAllProjects(string directory)
     {
-        return Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories)
-            .Union(Directory.GetFiles(directory, "angular.json", SearchOption.AllDirectories))
+        var projects = new List<string>();
+
+        // Find .csproj files (existing logic)
+        var csprojFiles = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories)
             .Where(file => ExcludeDirectory.All(x => file.IndexOf(x + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) == -1))
             .Where(file =>
             {
-                if (file.EndsWith(".csproj"))
+                var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(file), "package.json");
+                if (!File.Exists(packageJsonFilePath))
                 {
-                    var packageJsonFilePath = Path.Combine(Path.GetDirectoryName(file), "package.json");
-                    if (!File.Exists(packageJsonFilePath))
-                    {
-                        return false;
-                    }
-
-                    using (var reader = File.OpenText(file))
-                    {
-                        var fileTexts = reader.ReadToEnd();
-                        return fileTexts.Contains("Microsoft.NET.Sdk.Web") ||
-                               fileTexts.Contains("Microsoft.NET.Sdk.Razor") ||
-                               fileTexts.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
-                    }
+                    return false;
                 }
-                return true;
-            })
-            .OrderBy(x => x)
-            .ToList();
+
+                using (var reader = File.OpenText(file))
+                {
+                    var fileTexts = reader.ReadToEnd();
+                    return fileTexts.Contains("Microsoft.NET.Sdk.Web") ||
+                           fileTexts.Contains("Microsoft.NET.Sdk.Razor") ||
+                           fileTexts.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
+                }
+            });
+
+        projects.AddRange(csprojFiles);
+
+        // Find angular.json files (existing logic)
+        var angularFiles = Directory.GetFiles(directory, "angular.json", SearchOption.AllDirectories)
+            .Where(file => ExcludeDirectory.All(x => file.IndexOf(x + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) == -1));
+
+        projects.AddRange(angularFiles);
+
+        // Find package.json files for JavaScript frameworks
+        var packageJsonFiles = Directory.GetFiles(directory, "package.json", SearchOption.AllDirectories)
+            .Where(file => ExcludeDirectory.All(x => file.IndexOf(x + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) == -1))
+            .Where(packageJsonFile =>
+            {
+                var packageJsonDirectory = Path.GetDirectoryName(packageJsonFile);
+                if (packageJsonDirectory == null)
+                {
+                    return false;
+                }
+
+                // Skip if already handled by Angular or .NET detection
+                if (File.Exists(Path.Combine(packageJsonDirectory, "angular.json")))
+                {
+                    return false;
+                }
+
+                if (Directory.GetFiles(packageJsonDirectory, "*.csproj", SearchOption.TopDirectoryOnly).Any())
+                {
+                    return false;
+                }
+
+                // Check if it's a JavaScript framework project
+                var frameworkType = DetectFrameworkTypeFromPackageJson(packageJsonFile);
+                return frameworkType != JavaScriptFrameworkType.None;
+            });
+
+        projects.AddRange(packageJsonFiles);
+
+        return projects.OrderBy(x => x).ToList();
     }
 
     private async Task CleanAndCopyResources(string fileDirectory)

@@ -1,3 +1,4 @@
+import { Injector, runInInjectionContext } from '@angular/core';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 import { DomInsertionService } from '../services';
 import { CONTENT_STRATEGY } from '../strategies';
@@ -14,28 +15,30 @@ describe('DomInsertionService', () => {
 
   describe('#insertContent', () => {
     it('should be able to insert given content', () => {
-      spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content));
+      const injector = spectator.inject(Injector);
+      runInInjectionContext(injector, () => spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content)));
       styleElements = document.head.querySelectorAll('style');
       expect(styleElements.length).toBe(1);
       expect(styleElements[0].textContent).toBe(content);
     });
 
     it('should set a hash for the inserted content', () => {
-      spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content));
+      const injector = spectator.inject(Injector);
+      runInInjectionContext(injector, () => spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content)));
       expect(spectator.service.has(content)).toBe(true);
     });
 
     it('should insert only once', () => {
       expect(spectator.service.has(content)).toBe(false);
-
-      spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content));
+      const injector = spectator.inject(Injector);
+      runInInjectionContext(injector, () => spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content)));
       styleElements = document.head.querySelectorAll('style');
 
       expect(styleElements.length).toBe(1);
       expect(styleElements[0].textContent).toBe(content);
       expect(spectator.service.has(content)).toBe(true);
 
-      spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content));
+      runInInjectionContext(injector, () => spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content)));
       styleElements = document.head.querySelectorAll('style');
 
       expect(styleElements.length).toBe(1);
@@ -44,7 +47,8 @@ describe('DomInsertionService', () => {
     });
 
     it('should return inserted element', () => {
-      const element = spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content));
+      const injector = spectator.inject(Injector);
+      const element = runInInjectionContext(injector, () => spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content)));
       expect(element.tagName).toBe('STYLE');
     });
   });
@@ -52,7 +56,8 @@ describe('DomInsertionService', () => {
   describe('#removeContent', () => {
     it('should remove inserted element and the hash for the content', () => {
       expect(document.head.querySelector('style')).toBeNull();
-      const element = spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content));
+      const injector = spectator.inject(Injector);
+      const element = runInInjectionContext(injector, () => spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead(content)));
       expect(spectator.service.has(content)).toBe(true);
 
       spectator.service.removeContent(element);

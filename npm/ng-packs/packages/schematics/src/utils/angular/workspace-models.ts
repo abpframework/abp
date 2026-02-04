@@ -36,6 +36,7 @@ export enum Builders {
   BuildExtractI18n = '@angular/build:extract-i18n',
   Protractor = '@angular-devkit/build-angular:private-protractor',
   BuildApplication = '@angular/build:application',
+  UnitTest = '@angular/build:unit-test',
 }
 
 export interface FileReplacements {

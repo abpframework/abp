@@ -10,7 +10,7 @@ import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
 import { LocalizationPipe, PermissionDirective } from '@abp/ng.core';
-import { NgClass, NgComponentOutlet } from '@angular/common';
+import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   exportAs: 'abpPageToolbar',
@@ -19,7 +19,6 @@ import { NgClass, NgComponentOutlet } from '@angular/common';
     CreateInjectorPipe,
     PermissionDirective,
     LocalizationPipe,
-    NgClass,
     NgComponentOutlet,
   ],
   templateUrl: './page-toolbar.component.html',
@@ -33,8 +32,7 @@ import { NgClass, NgComponentOutlet } from '@angular/common';
 })
 export class PageToolbarComponent<R = any>
   extends AbstractActionsComponent<ToolbarActionList<R>>
-  implements HasCreateInjectorPipe<R>
-{
+  implements HasCreateInjectorPipe<R> {
   readonly injector: Injector;
 
   defaultBtnClass = 'btn btn-sm btn-primary';
@@ -48,7 +46,7 @@ export class PageToolbarComponent<R = any>
     const injector = inject(Injector);
 
     super();
-  
+
     this.injector = injector;
   }
 

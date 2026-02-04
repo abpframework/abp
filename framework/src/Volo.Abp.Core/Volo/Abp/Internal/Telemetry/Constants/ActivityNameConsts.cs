@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Internal.Telemetry.Constants;
+namespace Volo.Abp.Internal.Telemetry.Constants;
 
 public static class ActivityNameConsts
 {
@@ -68,6 +68,7 @@ public static class ActivityNameConsts
     public const string AbpCliCommandsInstallModule = "AbpCli.Comands.InstallModule";
     public const string AbpCliCommandsInstallLocalModule = "AbpCli.Comands.InstallLocalModule";
     public const string AbpCliCommandsListModules = "AbpCli.Comands.ListModules";
+    public const string AbpCliCommandsMcp = "AbpCli.Commands.Mcp";
     public const string AbpCliRun = "AbpCli.Run";
     public const string AbpCliExit = "AbpCli.Exit";
     public const string ApplicationRun = "Application.Run";

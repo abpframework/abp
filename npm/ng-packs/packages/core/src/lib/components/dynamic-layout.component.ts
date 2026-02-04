@@ -3,9 +3,6 @@ import {
   inject,
   input,
   isDevMode,
-  OnInit,
-  Optional,
-  SkipSelf,
   Type,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';

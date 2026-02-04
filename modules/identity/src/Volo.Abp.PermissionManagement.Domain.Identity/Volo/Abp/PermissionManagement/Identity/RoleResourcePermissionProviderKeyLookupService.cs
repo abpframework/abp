@@ -30,9 +30,9 @@ public class RoleResourcePermissionProviderKeyLookupService : IResourcePermissio
         return roles.Select(r => new ResourcePermissionProviderKeyInfo(r.RoleName, r.RoleName)).ToList();
     }
 
-    public virtual async Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string[] keys, CancellationToken cancellationToken = default)
+    public virtual Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string[] keys, CancellationToken cancellationToken = default)
     {
-        var roles = await UserRoleFinder.SearchRoleByNamesAsync(keys.Distinct().ToArray());
-        return roles.Select(r => new ResourcePermissionProviderKeyInfo(r.RoleName, r.RoleName)).ToList();
+        // Keys are role names
+        return Task.FromResult(keys.Select(x => new ResourcePermissionProviderKeyInfo(x, x)).ToList());
     }
 }

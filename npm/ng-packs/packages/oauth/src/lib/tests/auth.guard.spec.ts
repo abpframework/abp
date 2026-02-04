@@ -1,4 +1,4 @@
-import { createServiceFactory, SpectatorService, createSpyObject } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService, createSpyObject } from '@ngneat/spectator/vitest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AbpOAuthGuard, abpOAuthGuard } from '../guards/oauth.guard';
 import { AuthService } from '@abp/ng.core';
@@ -40,7 +40,7 @@ describe('AuthGuard', () => {
   it('should execute the navigateToLogin method of the authService', () => {
     const authService = spectator.inject(AuthService);
     spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
-    const navigateToLoginSpy = jest.spyOn(authService, 'navigateToLogin');
+    const navigateToLoginSpy = vi.spyOn(authService, 'navigateToLogin');
 
     expect(guard.canActivate(route, state)).toBe(false);
     expect(navigateToLoginSpy).toHaveBeenCalled();

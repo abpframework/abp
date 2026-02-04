@@ -1,119 +1,106 @@
 @if (visible) {
-  <abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
-    <ng-template #abpHeader>
-      <h3>
-        {{ 'AbpFeatureManagement::Features' | abpLocalization }}
-        @if (providerTitle) {
-          - {{ providerTitle }}
-        }
-      </h3>
-    </ng-template>
+<abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg' }">
+  <ng-template #abpHeader>
+    <h3>
+      {{ 'AbpFeatureManagement::Features' | abpLocalization }}
+      @if (providerTitle) {
+      - {{ providerTitle }}
+      }
+    </h3>
+  </ng-template>
 
     <ng-template #abpBody>
       <div class="row">
         @if (groups.length) {
-          <div class="col-md-4">
-            <ul
-              ngbNav
-              #nav="ngbNav"
-              [(activeId)]="selectedGroupDisplayName"
-              class="nav-pills"
-              orientation="vertical"
-            >
+          <div ngTabs orientation="vertical" class="row">
+            <div class="col-md-4">
+              <div ngTabList orientation="vertical" selectionMode="follow" [(selectedTab)]="selectedGroupDisplayName" class="nav nav-pills flex-column">
+                @for (group of groups; track group.name) {
+                  <button ngTab #tab="ngTab" type="button" [value]="group.displayName" class="nav-link text-start" [class.active]="tab.selected()">
+                    {{ group.displayName }}
+                  </button>
+                }
+              </div>
+            </div>
+            <ng-template #descTmp let-description>
+              @if (description) {
+                <small class="d-block form-text text-muted">{{ description }}</small>
+              }
+            </ng-template>
+
+            <div class="col-md-8">
               @for (group of groups; track group.name) {
-                <li [ngbNavItem]="group.displayName">
-                  <a ngbNavLink>{{ group.displayName }}</a>
-                  <ng-template ngbNavContent>
+                <div ngTabPanel [value]="group.displayName">
+                  <ng-template ngTabContent>
                     <h4>{{ selectedGroupDisplayName }}</h4>
                     <hr class="mt-2 mb-3" />
 
-                    @for (feature of features[group.name]; track feature.id || i; let i = $index) {
-                      @let provider = feature.provider.name;
-                      @let isFeatureDisabled = !feature.parentName ? isParentDisabled(feature.name, group.name, provider) :
-                        (provider !== providerName && provider !== defaultProviderName);
+              @for (feature of features[group.name]; track feature.id || i; let i = $index) {
+              @let provider = feature.provider.name;
+              @let isFeatureDisabled = !feature.parentName ? isParentDisabled(feature.name, group.name, provider) :
+              (provider !== providerName && provider !== defaultProviderName);
 
-                      <div class="mt-2" [ngStyle]="feature.style" (keyup.enter)="save()">
-                        @switch (feature.valueType?.name) {
-                          @case (valueTypes.ToggleStringValueType) {
-                            <div class="form-check" [class.px-4]="!!feature.parentName">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                [id]="feature.name"
-                                [(ngModel)]="feature.value"
-                                (ngModelChange)="onCheckboxClick($event, feature)"
-                                [disabled]="isFeatureDisabled"
-                              />
+              <div class="mt-2" [style]="feature.style" (keyup.enter)="save()">
+                @switch (feature.valueType?.name) {
+                @case (valueTypes.ToggleStringValueType) {
+                <div class="form-check" [class.px-4]="!!feature.parentName">
+                  <input class="form-check-input" type="checkbox" [id]="feature.name" [(ngModel)]="feature.value"
+                    (ngModelChange)="onCheckboxClick($event, feature)" [disabled]="isFeatureDisabled" />
 
-                              <label class="form-check-label" [htmlFor]="feature.name">
-                                {{ feature.displayName }}
-                                @if (isFeatureDisabled) {
-                                  <span>({{ provider }})</span>
-                                }
-                              </label>
-                              <ng-container
-                                *ngTemplateOutlet="
+                  <label class="form-check-label" [htmlFor]="feature.name">
+                    {{ feature.displayName }}
+                    @if (isFeatureDisabled) {
+                    <span>({{ provider }})</span>
+                    }
+                  </label>
+                  <ng-container *ngTemplateOutlet="
                                   descTmp;
                                   context: { $implicit: feature.description }
-                                "
-                              ></ng-container>
-                            </div>
-                          }
-                          @case (valueTypes.FreeTextStringValueType) {
-                            <div class="mb-3 form-group" [class.px-2]="!!feature.parentName">
-                              <label [htmlFor]="feature.name" class="form-label">
-                                {{ feature.displayName }}
-                                @if (isFeatureDisabled) {
-                                  <span>({{ provider }})</span>
-                                }
-                              </label>
-                              <input
-                                class="form-control"
-                                type="text"
-                                [id]="feature.name"
-                                [(ngModel)]="feature.value"
-                                [abpFeatureManagementFreeText]="feature"
-                                [disabled]="isFeatureDisabled"
-                              />
+                                "></ng-container>
+                </div>
+                }
+                @case (valueTypes.FreeTextStringValueType) {
+                <div class="mb-3 form-group" [class.px-2]="!!feature.parentName">
+                  <label [htmlFor]="feature.name" class="form-label">
+                    {{ feature.displayName }}
+                    @if (isFeatureDisabled) {
+                    <span>({{ provider }})</span>
+                    }
+                  </label>
+                  <input class="form-control" type="text" [id]="feature.name" [(ngModel)]="feature.value"
+                    [abpFeatureManagementFreeText]="feature" [disabled]="isFeatureDisabled" />
 
-                              <ng-container
-                                *ngTemplateOutlet="
+                  <ng-container *ngTemplateOutlet="
                                   descTmp;
                                   context: { $implicit: feature.description }
-                                "
-                              ></ng-container>
-                            </div>
-                          }
-                          @case (valueTypes.SelectionStringValueType) {
-                            @if (feature.valueType.itemSource?.items?.length) {
-                              <div class="mb-3 form-group" [class.px-2]="!!feature.parentName">
-                                <label [htmlFor]="feature.name" class="form-label">
-                                  {{ feature.displayName }}
-                                  @if (isFeatureDisabled) {
-                                    <span>({{ provider }})</span>
-                                  }
-                                </label>
-                                <select
-                                  class="form-select"
-                                  [id]="feature.name"
-                                  [(ngModel)]="feature.value"
-                                  [disabled]="isFeatureDisabled"
-                                >
-                                  @for (
-                                    item of feature.valueType.itemSource?.items;
-                                    track item.value
-                                  ) {
-                                    <option [ngValue]="item.value">
-                                      {{
-                                        item.displayText?.resourceName +
-                                          '::' +
-                                          item.displayText?.name | abpLocalization
-                                      }}
-                                    </option>
-                                  }
-                                </select>
-                                <ng-container
-                                  *ngTemplateOutlet="
+                                "></ng-container>
+                </div>
+                }
+                @case (valueTypes.SelectionStringValueType) {
+                @if (feature.valueType.itemSource?.items?.length) {
+                <div class="mb-3 form-group" [class.px-2]="!!feature.parentName">
+                  <label [htmlFor]="feature.name" class="form-label">
+                    {{ feature.displayName }}
+                    @if (isFeatureDisabled) {
+                    <span>({{ provider }})</span>
+                    }
+                  </label>
+                  <select class="form-select" [id]="feature.name" [(ngModel)]="feature.value"
+                    [disabled]="isFeatureDisabled">
+                    @for (
+                    item of feature.valueType.itemSource?.items;
+                    track item.value
+                    ) {
+                    <option [ngValue]="item.value">
+                      {{
+                      item.displayText?.resourceName +
+                      '::' +
+                      item.displayText?.name | abpLocalization
+                      }}
+                    </option>
+                    }
+                  </select>
+                  <ng-container *ngTemplateOutlet="
                                     descTmp;
                                     context: { $implicit: feature.description }
                                   "
@@ -128,18 +115,10 @@
                       </div>
                     }
                   </ng-template>
-                </li>
+                </div>
               }
-            </ul>
+            </div>
           </div>
-
-          <ng-template #descTmp let-description>
-            @if (description) {
-              <small class="d-block form-text text-muted">{{ description }}</small>
-            }
-          </ng-template>
-
-          <div class="col-md-8"><div class="py-0" [ngbNavOutlet]="nav"></div></div>
         }
 
         @if (!groups.length) {
@@ -150,32 +129,23 @@
       </div>
     </ng-template>
 
-    <ng-template #abpFooter>
-      <button abpClose type="button" class="btn btn-link">
-        {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
-      </button>
+  <ng-template #abpFooter>
+    <button abpClose type="button" class="btn btn-link">
+      {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
+    </button>
 
-      @if (groups.length) {
-        <abp-button
-          buttonClass="btn btn-outline-primary"
-          [disabled]="modalBusy"
-          (click)="resetToDefault()"
-          aria-hidden="true"
-        >
-          {{ 'AbpFeatureManagement::ResetToDefault' | abpLocalization }}
-        </abp-button>
-      }
+    @if (groups.length) {
+    <abp-button buttonClass="btn btn-outline-primary" [disabled]="modalBusy" (click)="resetToDefault()"
+      aria-hidden="true">
+      {{ 'AbpFeatureManagement::ResetToDefault' | abpLocalization }}
+    </abp-button>
+    }
 
-      @if (groups.length) {
-        <abp-button
-          iconClass="fa fa-check"
-          [disabled]="modalBusy"
-          (click)="save()"
-          aria-hidden="true"
-        >
-          {{ 'AbpFeatureManagement::Save' | abpLocalization }}
-        </abp-button>
-      }
-    </ng-template>
-  </abp-modal>
+    @if (groups.length) {
+    <abp-button iconClass="fa fa-check" [disabled]="modalBusy" (click)="save()" aria-hidden="true">
+      {{ 'AbpFeatureManagement::Save' | abpLocalization }}
+    </abp-button>
+    }
+  </ng-template>
+</abp-modal>
 }

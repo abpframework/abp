@@ -14,8 +14,8 @@ describe('SubscriptionService', () => {
 
   describe('#addOne', () => {
     it('should subscribe to given observable with next and error functions and return the Subscription instance', () => {
-      const next = jest.fn();
-      const error = jest.fn();
+      const next = vi.fn();
+      const error = vi.fn();
       const subscription = service.addOne(of(null), next, error);
       expect(subscription).toBeInstanceOf(Subscription);
       expect(next).toHaveBeenCalledWith(null);
@@ -24,7 +24,7 @@ describe('SubscriptionService', () => {
     });
 
     it('should subscribe to given observable with observer and return the Subscription instance', () => {
-      const observer = { next: jest.fn(), complete: jest.fn() };
+      const observer = { next: vi.fn(), complete: vi.fn() };
       const subscription = service.addOne(of(null), observer);
       expect(subscription).toBeInstanceOf(Subscription);
       expect(observer.next).toHaveBeenCalledWith(null);

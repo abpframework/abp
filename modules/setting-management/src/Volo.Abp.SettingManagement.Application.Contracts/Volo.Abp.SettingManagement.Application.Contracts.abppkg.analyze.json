@@ -68,6 +68,27 @@
       "contentType": "abpModule",
       "name": "AbpSettingManagementApplicationContractsModule",
       "summary": null
+    },
+    {
+      "displayName": "Emailing",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "SettingManagement.Emailing",
+      "summary": null
+    },
+    {
+      "displayName": "Emailing test",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "SettingManagement.Emailing.Test",
+      "summary": null
+    },
+    {
+      "displayName": "Time zone",
+      "isEnabled": true,
+      "contentType": "permission",
+      "name": "SettingManagement.TimeZone",
+      "summary": null
     }
   ]
 }

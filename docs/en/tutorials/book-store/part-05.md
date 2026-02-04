@@ -30,7 +30,7 @@
 
 ## Permissions
 
-ABP provides an [authorization system](../../framework/fundamentals/authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+ABP provides an [authorization system](../../framework/fundamentals/authorization/index.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
 
 ### Permission Names
 

@@ -20,7 +20,7 @@ public static class EntityCacheServiceCollectionExtensions
 
         services.Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.ConfigureCache<TEntity>(cacheOptions ?? GetDefaultCacheOptions());
+            options.ConfigureCache<EntityCacheItemWrapper<TEntity>>(cacheOptions ?? GetDefaultCacheOptions());
         });
 
         services.Configure<AbpSystemTextJsonSerializerModifiersOptions>(options =>
@@ -42,7 +42,7 @@ public static class EntityCacheServiceCollectionExtensions
 
         services.Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.ConfigureCache<TEntityCacheItem>(cacheOptions ?? GetDefaultCacheOptions());
+            options.ConfigureCache<EntityCacheItemWrapper<TEntityCacheItem>>(cacheOptions ?? GetDefaultCacheOptions());
         });
 
         return services;
@@ -59,7 +59,7 @@ public static class EntityCacheServiceCollectionExtensions
 
         services.Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.ConfigureCache<TEntityCacheItem>(cacheOptions ?? GetDefaultCacheOptions());
+            options.ConfigureCache<EntityCacheItemWrapper<TEntityCacheItem>>(cacheOptions ?? GetDefaultCacheOptions());
         });
 
         return services;

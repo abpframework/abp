@@ -1,4 +1,4 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { Subject } from 'rxjs';
 import { LocalizationService } from '../services/localization.service';
 import { SessionStateService } from '../services/session-state.service';
@@ -18,26 +18,26 @@ describe('LocalizationService', () => {
       {
         provide: SessionStateService,
         useValue: {
-          getLanguage: jest.fn(() => 'en'),
-          setLanguage: jest.fn(),
-          getLanguage$: jest.fn(() => new Subject()),
-          onLanguageChange$: jest.fn(() => new Subject()),
+          getLanguage: vi.fn(() => 'en'),
+          setLanguage: vi.fn(),
+          getLanguage$: vi.fn(() => new Subject()),
+          onLanguageChange$: vi.fn(() => new Subject()),
         },
       },
       {
         provide: ConfigStateService,
         useValue: {
-          getOne: jest.fn(),
-          refreshAppState: jest.fn(),
-          getDeep: jest.fn(),
-          getDeep$: jest.fn(() => new Subject()),
-          getOne$: jest.fn(() => new Subject()),
+          getOne: vi.fn(),
+          refreshAppState: vi.fn(),
+          getDeep: vi.fn(),
+          getDeep$: vi.fn(() => new Subject()),
+          getOne$: vi.fn(() => new Subject()),
         },
       },
       {
         provide: Injector,
         useValue: {
-          get: jest.fn(),
+          get: vi.fn(),
         },
       },
     ],

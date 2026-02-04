@@ -10,6 +10,7 @@
     "DoYouWantToGrantAccessToYourData": "Vill du ge {0} tillgång till dina data?",
     "ScopesRequested": "Begärda omfattningar",
     "Accept": "Acceptera",
-    "Deny": "Förneka"
+    "Deny": "Förneka",
+    "ApplicationResourcePermissionProviderKeyLookupService": "Klient"
   }
 }

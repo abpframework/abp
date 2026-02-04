@@ -333,7 +333,7 @@
                   "path": "studio/solution-explorer.md"
                 },
                 {
-                  "text": "Running Applications",
+                  "text": "Solution Runner",
                   "path": "studio/running-applications.md"
                 },
                 {
@@ -347,6 +347,10 @@
                 {
                   "text": "Working with ABP Suite",
                   "path": "studio/working-with-suite.md"
+                },
+                {
+                  "text": "Custom Commands",
+                  "path": "studio/custom-commands.md"
                 }
               ]
             },
@@ -458,12 +462,16 @@
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/fundamentals/authorization.md",
+                  "path": "framework/fundamentals/authorization/index.md",
                   "isIndex": true
                 },
                 {
                   "text": "Dynamic Claims",
                   "path": "framework/fundamentals/dynamic-claims.md"
+                },
+                {
+                  "text": "Resource Based Authorization",
+                  "path": "framework/fundamentals/authorization/resource-based-authorization.md"
                 }
               ]
             },
@@ -1284,7 +1292,7 @@
                     },
                     {
                       "text": "LeptonX Lite",
-                      "path": "ui-themes/lepton-x-lite/mvc.md"
+                      "path": "ui-themes/lepton-x-lite/asp-net-core.md"
                     },
                     {
                       "text": "LeptonX",

@@ -1,21 +1,30 @@
 @if (isBrowser) {
-  <ngx-datatable
-  default
-  [rows]="data"
-  [count]="recordsTotal"
-  [list]="list"
-  [selectionType]="selectable ? _selectionType : undefined"
-  (activate)="tableActivate.emit($event)"
-  (select)="onSelect($event)"
-  [selected]="selected"
-  (scroll)="onScroll($event)"
-  [scrollbarV]="infiniteScroll"
-  [style.height]="getTableHeight()"
-  [loadingIndicator]="infiniteScroll && isLoading"
-  [footerHeight]="infiniteScroll ? false : 50"
->
-@if(selectable) {
-  <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+<ngx-datatable #table default [rows]="data" [count]="recordsTotal" [list]="list"
+  [selectionType]="selectable ? _selectionType : undefined" (activate)="tableActivate.emit($event)"
+  (select)="onSelect($event)" [selected]="selected" (scroll)="onScroll($event)" [scrollbarV]="infiniteScroll"
+  [style.height]="getTableHeight()" [loadingIndicator]="infiniteScroll && isLoading"
+  [footerHeight]="infiniteScroll ? false : 50">
+  @if (effectiveRowDetailTemplate) {
+  <ngx-datatable-row-detail [rowHeight]="effectiveRowDetailHeight">
+    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+      <ng-container
+        *ngTemplateOutlet="effectiveRowDetailTemplate; context: { row: row, expanded: expanded }" />
+    </ng-template>
+  </ngx-datatable-row-detail>
+
+  <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false"
+    [canAutoResize]="false">
+    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+      <button type="button" class="btn btn-link text-decoration-none text-muted p-0"
+        [attr.aria-label]="expanded ? 'Collapse' : 'Expand'" (click)="toggleExpandRow(row)">
+        <i class="fa" [class.fa-chevron-down]="!expanded" [class.fa-chevron-up]="expanded"></i>
+      </button>
+    </ng-template>
+  </ngx-datatable-column>
+  }
+  @if(selectable) {
+  <ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+    [resizeable]="false">
 
     <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
       let-selectFn="selectFn">
@@ -44,97 +53,67 @@
   </ngx-datatable-column>
   }
   @if (actionsTemplate || (actionList.length && hasAtLeastOnePermittedAction)) {
-    <ngx-datatable-column
-      [name]="actionsText | abpLocalization"
-      [maxWidth]="_actionsColumnWidth() ?? undefined"
-      [width]="_actionsColumnWidth() ?? 200"
-      [canAutoResize]="!_actionsColumnWidth()"
-      [sortable]="false"
-    >
-      <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
-        <ng-container
-          *ngTemplateOutlet="actionsTemplate || gridActions; context: { $implicit: row, index: i }"
-        ></ng-container>
-        <ng-template #gridActions>
-          @if (isVisibleActions(row)) {
-            <abp-grid-actions [index]="i" [record]="row" text="AbpUi::Actions"></abp-grid-actions>
-          }
-        </ng-template>
-      </ng-template>
-    </ngx-datatable-column>
-  }
-  @for (prop of propList; track prop.name; let i = $index) {
-    <ngx-datatable-column
-      *abpVisible="prop.columnVisible(getInjected)"
-      [width]="columnWidths[i] ?? 200"
-      [canAutoResize]="!columnWidths[i]"
-      [name]="(prop.isExtra ? '::' + prop.displayName : prop.displayName) | abpLocalization"
-      [prop]="prop.name"
-      [sortable]="prop.sortable"
-    >
-      <ng-template ngx-datatable-header-template let-column="column" let-sortFn="sortFn">
-        @if (prop.tooltip) {
-          <span
-            [ngbTooltip]="prop.tooltip.text | abpLocalization"
-            [placement]="prop.tooltip.placement || 'auto'"
-            container="body"
-            [class.pointer]="prop.sortable"
-            (click)="prop.sortable && sortFn(column)"
-          >
-            {{ column.name }} <i class="fa fa-info-circle" aria-hidden="true"></i>
-          </span>
-        } @else {
-          <span
-            [class.pointer]="prop.sortable"
-            (click)="prop.sortable && sortFn(column)"
-          >
-            {{ column.name }}
-          </span>
+  <ngx-datatable-column [name]="actionsText | abpLocalization" [maxWidth]="_actionsColumnWidth() ?? undefined"
+    [width]="_actionsColumnWidth() ?? 200" [canAutoResize]="!_actionsColumnWidth()" [sortable]="false">
+    <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
+      <ng-container
+        *ngTemplateOutlet="actionsTemplate || gridActions; context: { $implicit: row, index: i }"></ng-container>
+      <ng-template #gridActions>
+        @if (isVisibleActions(row)) {
+        <abp-grid-actions [index]="i" [record]="row" text="AbpUi::Actions"></abp-grid-actions>
         }
       </ng-template>
-      <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
-        <ng-container *abpPermission="prop.permission; runChangeDetection: false">
-          <ng-container *abpVisible="row['_' + prop.name]?.visible">
-            @if (!row['_' + prop.name].component) {
-              @if (prop.type === 'datetime' || prop.type === 'date' || prop.type === 'time') {
-                <div
-                  [innerHTML]="
+    </ng-template>
+  </ngx-datatable-column>
+  }
+  @for (prop of propList; track prop.name; let i = $index) {
+  <ngx-datatable-column *abpVisible="prop.columnVisible(getInjected)" [width]="columnWidths[i] ?? 200"
+    [canAutoResize]="!columnWidths[i]"
+    [name]="(prop.isExtra ? '::' + prop.displayName : prop.displayName) | abpLocalization" [prop]="prop.name"
+    [sortable]="prop.sortable">
+    <ng-template ngx-datatable-header-template let-column="column" let-sortFn="sortFn">
+      @if (prop.tooltip) {
+      <span [ngbTooltip]="prop.tooltip.text | abpLocalization" [placement]="prop.tooltip.placement || 'auto'"
+        container="body" [class.pointer]="prop.sortable" (click)="prop.sortable && sortFn(column)">
+        {{ column.name }} <i class="fa fa-info-circle" aria-hidden="true"></i>
+      </span>
+      } @else {
+      <span [class.pointer]="prop.sortable" (click)="prop.sortable && sortFn(column)">
+        {{ column.name }}
+      </span>
+      }
+    </ng-template>
+    <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
+      <ng-container *abpPermission="prop.permission; runChangeDetection: false">
+        <ng-container *abpVisible="row['_' + prop.name]?.visible">
+          @if (!row['_' + prop.name].component) {
+          @if (prop.type === 'datetime' || prop.type === 'date' || prop.type === 'time') {
+          <div [innerHTML]="
                   !prop.isExtra
                     ? (row['_' + prop.name]?.value | async | abpUtcToLocal:prop.type)
                     : ('::' + (row['_' + prop.name]?.value | async | abpUtcToLocal:prop.type) | abpLocalization)
-                "
-                  (click)="
+                " (click)="
                   prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
-                "
-                  [ngClass]="entityPropTypeClasses[prop.type]"
-                  [class.pointer]="prop.action"
-                ></div>
-              } @else {
-                <div
-                  [innerHTML]="
+                " [class]="entityPropTypeClasses[prop.type]" [class.pointer]="prop.action"></div>
+          } @else {
+          <div [innerHTML]="
                   !prop.isExtra
                     ? (row['_' + prop.name]?.value | async)
                     : ('::' + (row['_' + prop.name]?.value | async) | abpLocalization)
-                "
-                  (click)="
+                " (click)="
                   prop.action && prop.action({ getInjected: getInjected, record: row, index: i })
-                "
-                  [ngClass]="entityPropTypeClasses[prop.type]"
-                  [class.pointer]="prop.action"
-                ></div>
-              }
-            } @else {
-              <ng-container
-                *ngComponentOutlet="
+                " [class]="entityPropTypeClasses[prop.type]" [class.pointer]="prop.action"></div>
+          }
+          } @else {
+          <ng-container *ngComponentOutlet="
                   row['_' + prop.name].component;
                   injector: row['_' + prop.name].injector
-                "
-              ></ng-container>
-            }
-          </ng-container>
+                "></ng-container>
+          }
         </ng-container>
-      </ng-template>
-    </ngx-datatable-column>
+      </ng-container>
+    </ng-template>
+  </ngx-datatable-column>
   }
 </ngx-datatable>
 }

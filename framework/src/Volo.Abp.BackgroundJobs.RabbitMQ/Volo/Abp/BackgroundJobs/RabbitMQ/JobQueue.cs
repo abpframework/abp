@@ -12,6 +12,7 @@ using RabbitMQ.Client.Events;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.RabbitMQ;
 using Volo.Abp.Threading;
+using Volo.Abp.Tracing;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ;
 
@@ -33,6 +34,7 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
     protected IBackgroundJobExecuter JobExecuter { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected IExceptionNotifier ExceptionNotifier { get; }
+    protected ICorrelationIdProvider CorrelationIdProvider { get; }
 
     protected SemaphoreSlim SyncObj = new SemaphoreSlim(1, 1);
     protected bool IsDiposed { get; private set; }
@@ -44,7 +46,8 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
         IRabbitMqSerializer serializer,
         IBackgroundJobExecuter jobExecuter,
         IServiceScopeFactory serviceScopeFactory,
-        IExceptionNotifier exceptionNotifier)
+        IExceptionNotifier exceptionNotifier,
+        ICorrelationIdProvider correlationIdProvider)
     {
         AbpBackgroundJobOptions = backgroundJobOptions.Value;
         AbpRabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
@@ -52,6 +55,7 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
         JobExecuter = jobExecuter;
         ServiceScopeFactory = serviceScopeFactory;
         ExceptionNotifier = exceptionNotifier;
+        CorrelationIdProvider = correlationIdProvider;
         ChannelPool = channelPool;
 
         JobConfiguration = AbpBackgroundJobOptions.GetJob(typeof(TArgs));
@@ -168,7 +172,8 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
         var routingKey = QueueConfiguration.QueueName;
         var basicProperties = new BasicProperties
         {
-            Persistent = true
+            Persistent = true,
+            CorrelationId = CorrelationIdProvider.Get()
         };
 
         if (delay.HasValue)
@@ -201,7 +206,10 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
 
             try
             {
-                await JobExecuter.ExecuteAsync(context);
+                using (CorrelationIdProvider.Change(ea.BasicProperties.CorrelationId))
+                {
+                    await JobExecuter.ExecuteAsync(context);
+                }
                 await ChannelAccessor!.Channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
             }
             catch (BackgroundJobExecutionException)

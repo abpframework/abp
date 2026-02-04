@@ -1,12 +1,12 @@
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { timer , firstValueFrom } from 'rxjs';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { InputEventDebounceDirective } from '../directives/debounce.directive';
-import { timer } from 'rxjs';
 
 describe('InputEventDebounceDirective', () => {
   let spectator: SpectatorDirective<InputEventDebounceDirective>;
   let directive: InputEventDebounceDirective;
   let input: HTMLInputElement;
-  const inputEventFn = jest.fn(() => {});
+  const inputEventFn = vi.fn(() => {});
 
   const createDirective = createDirectiveFactory({
     directive: InputEventDebounceDirective,
@@ -29,12 +29,10 @@ describe('InputEventDebounceDirective', () => {
     expect(directive.debounce).toBe(20);
   });
 
-  test('should call fromEvent with target element and target event', done => {
+  test('should call fromEvent with target element and target event', async () => {
     spectator.dispatchFakeEvent('input', 'input', true);
     timer(0).subscribe(() => expect(inputEventFn).not.toHaveBeenCalled());
-    timer(21).subscribe(() => {
-      expect(inputEventFn).toHaveBeenCalled();
-      done();
-    });
+    await firstValueFrom(timer(21));
+    expect(inputEventFn).toHaveBeenCalled();
   });
 });

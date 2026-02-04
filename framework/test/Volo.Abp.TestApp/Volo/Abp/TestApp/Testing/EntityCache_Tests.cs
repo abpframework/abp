@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Shouldly;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
@@ -116,6 +118,49 @@ public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStart
         productCacheItem.Name.ShouldBe("Product2");
         productCacheItem.Price.ShouldBe(decimal.Zero);
     }
+
+    [Fact]
+    public void EntityCache_Default_Options_Should_Be_2_Minutes()
+    {
+        var productCache = GetRequiredService<IDistributedCache<EntityCacheItemWrapper<ProductCacheItem2>, Guid>>();
+
+        var productOptions = GetDefaultCachingOptions(productCache);
+        productOptions.AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(2));
+        productOptions.SlidingExpiration.ShouldBeNull();
+    }
+
+    [Fact]
+    public void EntityCache_Configured_Options_Should_Be_Applied()
+    {
+        var productCache = GetRequiredService<IDistributedCache<EntityCacheItemWrapper<Product>, Guid>>();
+        var productCacheItemCache = GetRequiredService<IDistributedCache<EntityCacheItemWrapper<ProductCacheItem>, Guid>>();
+
+        var productOptions = GetDefaultCachingOptions(productCache);
+        productOptions.AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(7));
+        productOptions.SlidingExpiration.ShouldBeNull();
+
+        var productCacheItemOptions = GetDefaultCachingOptions(productCacheItemCache);
+        productCacheItemOptions.AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(9));
+        productCacheItemOptions.SlidingExpiration.ShouldBeNull();
+    }
+
+    private static DistributedCacheEntryOptions GetDefaultCachingOptions(object instance)
+    {
+        var internalCacheProperty = instance
+            .GetType()
+            .GetProperty("InternalCache", BindingFlags.Instance | BindingFlags.Public);
+
+        if (internalCacheProperty != null)
+        {
+            instance = internalCacheProperty.GetValue(instance);
+        }
+
+        var defaultOptionsField = instance
+            .GetType()
+            .GetField("DefaultCacheOptions", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        return (DistributedCacheEntryOptions)defaultOptionsField.GetValue(instance);
+    }
 }
 
 [Serializable]
@@ -141,6 +186,17 @@ public class Product : FullAuditedAggregateRoot<Guid>
 [Serializable]
 [CacheName("ProductCacheItem")]
 public class ProductCacheItem
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; }
+
+    public decimal Price { get; set; }
+}
+
+[Serializable]
+[CacheName("ProductCacheItem2")]
+public class ProductCacheItem2
 {
     public Guid Id { get; set; }
 

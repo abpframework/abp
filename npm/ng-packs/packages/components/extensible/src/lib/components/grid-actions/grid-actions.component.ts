@@ -1,8 +1,8 @@
-import { 
-  ChangeDetectionStrategy, 
-  Component, 
-  Input, 
-  TrackByFunction, 
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  TrackByFunction,
 } from '@angular/core';
 import { EntityAction, EntityActionList } from '../../models/entity-actions';
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
@@ -10,7 +10,7 @@ import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.c
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { LocalizationPipe, PermissionDirective } from '@abp/ng.core';
 import { EllipsisDirective } from '@abp/ng.theme.shared';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   exportAs: 'abpGridActions',
@@ -18,7 +18,6 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
     NgbDropdownModule,
     EllipsisDirective,
     PermissionDirective,
-    NgClass,
     LocalizationPipe,
     NgTemplateOutlet,
     NgbTooltipModule,

@@ -14,7 +14,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
@@ -25,7 +25,7 @@ import { ErrorScreenErrorCodes } from '../../models';
   selector: 'abp-http-error-wrapper',
   templateUrl: './http-error-wrapper.component.html',
   styleUrls: ['http-error-wrapper.component.scss'],
-  imports: [CommonModule, LocalizationPipe],
+  imports: [LocalizationPipe],
 })
 export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly destroyRef = inject(DestroyRef);

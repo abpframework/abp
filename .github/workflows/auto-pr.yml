@@ -26,7 +26,6 @@ jobs:
           branch: auto-merge/rel-10-1/${{github.run_number}}
           title: Merge branch dev with rel-10.1
           body: This PR generated automatically to merge dev with rel-10.1. Please review the changed files before merging to prevent any errors that may occur.
-          reviewers: maliming
           draft: true
           token: ${{ github.token }}
       - name: Merge Pull Request
