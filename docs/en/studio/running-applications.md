@@ -156,9 +156,14 @@ This command will open a dialog where you can set start actions and start orders
 
 You can order the applications by dragging the icon in the first column. In the screenshot above, applications & folders are ordered like this: *Applications under infrastructure* > *Applications under services* > *Applications under gateways* > *AuthServer* > *Angular*. You can also set starting order and other actions for each folder by performing `right click > Manage Start Actions` on them.
 
-- **Action**: There are two options: `Start` and `Don't start`. This is usefull if you want to exclude applications from batch start.
+- **Action**: There are three options for controlling how applications start during batch operations:
+  - **Start**: The application will be started during batch start, and the next application will start immediately without waiting.
+  - **Start and Wait for Ready**: The application will be started, and the batch start process will wait for this application to fully start and be ready before proceeding to the next application. This is useful when you have applications with dependencies. For example, if Service B depends on Service A, you can mark Service A as "Start and Wait for Ready" to ensure it's fully started before Service B begins starting. ABP Studio monitors the application state and waits until it reaches the "Started" state before continuing with the next application in the sequence.
+  - **Don't Start**: The application will be excluded from batch start operations. This is useful if you want to manually start certain applications or don't need them for your current work.
 - **Build**: This option allows to disable/enable build before starting the application. If you are working on a single application, you can exclude the other applications from build to save time. This option can also be set by performing `right click > properties` on applications.
 - **Watch**: When enabled, changes in your code are watched and dotnet hot-reloads the application or restarts it if needed. This option also can be set by performing `right click > properties` on applications.
+
+> **Note**: When using "Start and Wait for Ready", the batch start process ensures sequential startup, which is particularly useful in microservice architectures where services have dependencies on each other. The wait mechanism monitors the application's health check endpoint to determine when it's ready.
 
 ### Folder Context Menu
 
