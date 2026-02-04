@@ -15,6 +15,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.2" />
+    <PackageReference Include="Blazorise.Bootstrap5" Version="1.8.8" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.8.8" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
   </ItemGroup>
@@ -28,6 +30,7 @@
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor\Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.csproj" />
     <!-- </TEMPLATE-REMOVE> -->
     <ProjectReference Include="..\..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme\Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.csproj" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme" Version="5.0.0" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.0.0" />
   </ItemGroup>
 
