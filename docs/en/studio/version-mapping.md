@@ -47,3 +47,4 @@ This document provides a general overview of the relationship between various ve
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
 
 ![](images/abp-studio-switch-to-preview.png)
+| 2.1.5 | dev |
