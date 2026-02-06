@@ -1,5 +1,6 @@
 ```json
 //[doc-seo]
+| 2.1.5 | 10.0.3 |
 {
     "Description": "Explore the version mappings between ABP Studio and ABP Solution Templates to streamline your development process and ensure compatibility."
 }
