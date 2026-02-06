@@ -9,7 +9,25 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.4 (2025-12-30) Latest
+## 2.1.5 (2026-02-06) Latest
+
+- ## What's Changed
+-  Cli: Added version command by yekalkan
+-  Disable AbpStudio link in production environments by maliming
+-  Refactor `Install into main application` process by yekalkan
+-  Redesign "purchase license" button in license information window by yekalkan
+-  Remove remembering the old solution name logic from connection string window by yekalkan
+-  Community License: Show disabled items visually by yekalkan
+-  Solution Runner: Don't try to re-run the app if there is a build error by yekalkan
+-  Angular - Fixing the missing authentication guard for the ddd template by sumeyyeKurtulus
+-  Update abp and LeptonX version to 10.0.2 and 5.0.2. by maliming
+-  Fix unknown application while collecting data from client by berkansasmaz
+-  Fixed microservice solution build errors for Blazor Server and Angular by berkansasmaz
+-  Allow minimizing some windows without minimizing the main window by yekalkan
+-  Change "Clear Cookies" functionality with "Clear site data" by yekalkan
+-  Update version to release 2.1.5 with 10.0.2 by skoc10
+
+## 2.1.4 (2025-12-30)
 
 * Fixed books sample for blazor-webapp tiered solution.
 * Fixed K8s cluster deployment issues for microservices.
