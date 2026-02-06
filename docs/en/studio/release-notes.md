@@ -9,7 +9,28 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.4 (2025-12-30) Latest
+## 2.1.5 (2026-02-06) Latest
+
+- ## What's Changed
+- * Cli: Added version command by @yekalkan in https://github.com/volosoft/abp-studio/pull/4216
+- * Disable AbpStudio link in production environments by @maliming in https://github.com/volosoft/abp-studio/pull/4245
+- * Refactor `Install into main application` process by @yekalkan in https://github.com/volosoft/abp-studio/pull/4199
+- * Redesign "purchase license" button in license information window by @yekalkan in https://github.com/volosoft/abp-studio/pull/4251
+- * Remove remembering the old solution name logic from connection string window by @yekalkan in https://github.com/volosoft/abp-studio/pull/4253
+- * Community License: Show disabled items visually by @yekalkan in https://github.com/volosoft/abp-studio/pull/4268
+- * Solution Runner: Don't try to re-run the app if there is a build error by @yekalkan in https://github.com/volosoft/abp-studio/pull/4254
+- * Angular - Fixing the missing authentication guard for the ddd template by @sumeyyeKurtulus in https://github.com/volosoft/abp-studio/pull/4262
+- * Update abp and LeptonX version to 10.0.2 and 5.0.2. by @maliming in https://github.com/volosoft/abp-studio/pull/4255
+- * Fix unknown application while collecting data from client by @berkansasmaz in https://github.com/volosoft/abp-studio/pull/4213
+- * Fixed microservice solution build errors for Blazor Server and Angular by @berkansasmaz in https://github.com/volosoft/abp-studio/pull/4287
+- * Allow minimizing some windows without minimizing the main window by @yekalkan in https://github.com/volosoft/abp-studio/pull/4283
+- * Change "Clear Cookies" functionality with "Clear site data" by @yekalkan in https://github.com/volosoft/abp-studio/pull/4293
+- * Update version to release 2.1.5 with 10.0.2 by @skoc10 in https://github.com/volosoft/abp-studio/pull/4301
+- 
+- 
+- **Full Changelog**: https://github.com/volosoft/abp-studio/compare/2.1.4...2.1.5
+
+## 2.1.4 (2025-12-30)
 
 * Fixed books sample for blazor-webapp tiered solution.
 * Fixed K8s cluster deployment issues for microservices.
