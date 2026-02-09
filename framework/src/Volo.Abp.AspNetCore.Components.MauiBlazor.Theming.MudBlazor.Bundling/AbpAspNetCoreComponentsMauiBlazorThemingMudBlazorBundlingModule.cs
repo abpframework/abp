@@ -1,22 +1,21 @@
-using Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling;
-using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
-using Volo.Abp.AspNetCore.Components.MauiBlazor;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor;
+namespace Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling;
 
 [DependsOn(
-    typeof(AbpAspNetCoreComponentsMauiBlazorThemingMudBlazorBundlingModule),
-    typeof(AbpAspNetCoreComponentsWebThemingMudBlazorModule),
-    typeof(AbpAspNetCoreComponentsMauiBlazorModule)
+    typeof(AbpAspNetCoreMvcUiBundlingAbstractionsModule)
 )]
-public class AbpAspNetCoreComponentsMauiBlazorThemingMudBlazorModule : AbpModule
+public class AbpAspNetCoreComponentsMauiBlazorThemingMudBlazorBundlingModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpBundlingOptions>(options =>
         {
+            options.GlobalAssets.Enabled = true;
+            options.GlobalAssets.GlobalStyleBundleName = MauiBlazorMudBlazorStandardBundles.Styles.Global;
+            options.GlobalAssets.GlobalScriptBundleName = MauiBlazorMudBlazorStandardBundles.Scripts.Global;
+
             options
                 .StyleBundles
                 .Add(MauiBlazorMudBlazorStandardBundles.Styles.Global, bundle =>

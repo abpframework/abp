@@ -1,13 +1,11 @@
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
-using BlazorWebAssemblyStandardBundles = Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.BlazorWebAssemblyStandardBundles;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Bundling;
 
 [DependsOn(
-    typeof(AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorModule)
+    typeof(AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorBundlingModule)
 )]
 public class AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule : AbpModule
 {
@@ -15,7 +13,7 @@ public class AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
-            var globalStyles = options.StyleBundles.Get(BlazorWebAssemblyStandardBundles.Styles.Global);
+            var globalStyles = options.StyleBundles.Get(BlazorWebAssemblyMudBlazorStandardBundles.Styles.Global);
             globalStyles.AddContributors(typeof(WebAssemblyMudBlazorBasicThemeBundleStyleContributor));
         });
     }

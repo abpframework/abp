@@ -1,22 +1,22 @@
-using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
-using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling;
-using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor;
+namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling;
 
 [DependsOn(
-    typeof(AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorBundlingModule),
-    typeof(AbpAspNetCoreComponentsWebThemingMudBlazorModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyModule)
+    typeof(AbpAspNetCoreMvcUiBundlingAbstractionsModule)
 )]
-public class AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorModule : AbpModule
+public class AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorBundlingModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpBundlingOptions>(options =>
         {
+            options.GlobalAssets.Enabled = true;
+            options.GlobalAssets.GlobalStyleBundleName = BlazorWebAssemblyMudBlazorStandardBundles.Styles.Global;
+            options.GlobalAssets.GlobalScriptBundleName = BlazorWebAssemblyMudBlazorStandardBundles.Scripts.Global;
+
             options
                 .StyleBundles
                 .Add(BlazorWebAssemblyMudBlazorStandardBundles.Styles.Global, bundle =>
@@ -30,6 +30,8 @@ public class AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorModule : AbpModul
                 {
                     bundle.AddContributors(typeof(BlazorWebAssemblyMudBlazorScriptContributor));
                 });
+
+            options.MinificationIgnoredFiles.Add("_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js");
         });
     }
 }

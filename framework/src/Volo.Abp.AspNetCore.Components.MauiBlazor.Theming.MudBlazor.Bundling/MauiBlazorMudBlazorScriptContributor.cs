@@ -7,7 +7,6 @@ public class MauiBlazorMudBlazorScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        //TODO@MudBlazor: Do we need this script, check ?
         context.Files.AddIfNotContains("_content/MudBlazor/MudBlazor.min.js");
         context.Files.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js");
         context.Files.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/lang-utils.js");
