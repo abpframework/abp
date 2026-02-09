@@ -15,8 +15,6 @@ namespace MyCompanyName.MyProjectName.Blazor;
 [DependsOn(
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMvcUiBundlingModule),
-    //TODO@MudBlazor: Enable When LeptonXLite Theme Support MudBlazor is ready
-    // typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule)
     typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule)
 )]
 public class MyProjectNameBlazorModule : AbpModule

@@ -1,4 +1,3 @@
-using Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling;
 using Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
 using Volo.Abp.AspNetCore.Components.MauiBlazor;
@@ -8,7 +7,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor;
 
 [DependsOn(
-    typeof(AbpAspNetCoreComponentsMauiBlazorThemingBundlingModule),
+    typeof(AbpAspNetCoreComponentsMauiBlazorThemingMudBlazorBundlingModule),
     typeof(AbpAspNetCoreComponentsWebThemingMudBlazorModule),
     typeof(AbpAspNetCoreComponentsMauiBlazorModule)
 )]
@@ -20,14 +19,14 @@ public class AbpAspNetCoreComponentsMauiBlazorThemingMudBlazorModule : AbpModule
         {
             options
                 .StyleBundles
-                .Add(MauiBlazorStandardBundles.Styles.Global, bundle =>
+                .Add(MauiBlazorMudBlazorStandardBundles.Styles.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(MauiBlazorMudBlazorStyleContributor));
                 });
 
             options
                 .ScriptBundles
-                .Add(MauiBlazorStandardBundles.Scripts.Global, bundle =>
+                .Add(MauiBlazorMudBlazorStandardBundles.Scripts.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(MauiBlazorMudBlazorScriptContributor));
                 });

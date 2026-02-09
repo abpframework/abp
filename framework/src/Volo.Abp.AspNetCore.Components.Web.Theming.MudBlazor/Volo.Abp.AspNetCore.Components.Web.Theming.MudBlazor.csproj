@@ -19,9 +19,4 @@
     <ProjectReference Include="..\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="Layout\PageHeader.razor" />
-  </ItemGroup>
-
 </Project>
-

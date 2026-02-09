@@ -1,5 +1,6 @@
 @using Microsoft.Extensions.Localization
 @using global::Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.Options
 @using Microsoft.JSInterop
 @using Volo.Abp.AspNetCore.Components.Web
@@ -54,7 +55,7 @@
     {
         ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
     }
-    
+
     protected void Logout()
     {
         Navigation.NavigateTo("/Account/Logout", forceLoad: true);

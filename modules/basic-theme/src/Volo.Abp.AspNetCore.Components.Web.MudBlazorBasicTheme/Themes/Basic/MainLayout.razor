@@ -15,14 +15,13 @@
                        Color="Color.Inherit"
                        Edge="Edge.Start"
                        OnClick="@ToggleDrawer" />
-        <Branding />
         <MudSpacer />
         <NavToolbar />
     </MudAppBar>
 
     <MudDrawer @bind-Open="@_drawerOpen"
                Elevation="1"
-               Variant="@DrawerVariant.Mini">
+               Width="280px">
         <NavMenu />
     </MudDrawer>
 

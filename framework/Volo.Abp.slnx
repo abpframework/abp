@@ -10,6 +10,7 @@
     <Project Path="src/Volo.Abp.AspNetCore.Bundling/Volo.Abp.AspNetCore.Bundling.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Bundling/Volo.Abp.AspNetCore.Components.MauiBlazor.Bundling.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor/Volo.Abp.AspNetCore.Components.MauiBlazor.csproj" />
@@ -20,6 +21,7 @@
     <Project Path="src/Volo.Abp.AspNetCore.Components.Web.Theming/Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.Web/Volo.Abp.AspNetCore.Components.Web.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly/Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
