@@ -1,10 +1,14 @@
-@using Microsoft.AspNetCore.Components.Routing
-@if (Menu != null)
-{
-    <MudNavMenu>
-        @foreach (var menuItem in Menu.Items)
+@using Volo.Abp.Ui.Branding
+@inject IBrandingProvider BrandingProvider
+
+<MudNavMenu>
+    <MudText Typo="Typo.h6" Class="px-4 pt-2">@BrandingProvider.AppName</MudText>
+    <MudDivider Class="my-1"/>
+    @if(Menu != null && !Menu.Items.IsNullOrEmpty())
+    {
+        foreach (var menuItem in Menu.Items)
         {
-            @if (menuItem.Items.IsNullOrEmpty())
+            if (menuItem.Items.IsNullOrEmpty())
             {
                 <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
                     <MudIcon Icon="@menuItem.Icon" Size="Size.Small" />
@@ -13,8 +17,8 @@
             }
             else
             {
-                <FirstLevelNavMenuItem MenuItem="menuItem" />
+                <NavMenuItem MenuItem="menuItem" />
             }
         }
-    </MudNavMenu>
-}
+    }
+</MudNavMenu>

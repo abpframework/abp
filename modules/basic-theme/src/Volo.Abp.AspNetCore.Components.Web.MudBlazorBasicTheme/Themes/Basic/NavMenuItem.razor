@@ -13,7 +13,7 @@
 }
 else
 {
-    <MudNavGroup>
+    <MudNavGroup Expanded="@MenuItem.Items.Any(IsExpanded)">
         <TitleContent>
             <MudIcon Icon="@MenuItem.Icon" Title="@MenuItem.DisplayName" Size="Size.Small" />
             <MudText Class="ms-1" Inline="true">@MenuItem.DisplayName</MudText>
@@ -23,7 +23,7 @@ else
         {
             @if (item.Items.Any())
             {
-                <SecondLevelNavMenuItem MenuItem="item"/>
+                <NavMenuItem MenuItem="item"/>
             }
             else
             {
@@ -52,6 +52,22 @@ else
     protected virtual void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         // Menu will close automatically on navigation
+    }
+
+    protected virtual bool IsExpanded(ApplicationMenuItem item)
+    {
+        if (!item.Url.IsNullOrEmpty())
+        {
+            var menuItemPath = item.Url.Replace("~/", string.Empty).Trim('/');
+            var currentPagePath = new Uri(NavigationManager.Uri.TrimEnd('/')).AbsolutePath.Trim('/');
+
+            if (menuItemPath.TrimEnd('/').Equals(currentPagePath, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return item.Items.Any(IsExpanded);
     }
 
     public void Dispose()
