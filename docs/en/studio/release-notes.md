@@ -9,7 +9,11 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.4 (2025-12-30) Latest
+## 2.1.5 (2026-02-09) Latest
+
+- Test AI formatting
+
+## 2.1.4 (2025-12-30)
 
 * Fixed books sample for blazor-webapp tiered solution.
 * Fixed K8s cluster deployment issues for microservices.
