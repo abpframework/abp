@@ -13,20 +13,27 @@
 }
 else
 {
-    <MudNavGroup Title="@MenuItem.DisplayName" Icon="@MenuItem.Icon">
+    <MudNavGroup>
+        <TitleContent>
+            <MudIcon Icon="@MenuItem.Icon" Title="@MenuItem.DisplayName" Size="Size.Small" />
+            <MudText Class="ms-1" Inline="true">@MenuItem.DisplayName</MudText>
+        </TitleContent>
+        <ChildContent>
         @foreach (var item in MenuItem.Items)
         {
             @if (item.Items.Any())
             {
-                <SecondLevelNavMenuItem MenuItem="item" />
+                <SecondLevelNavMenuItem MenuItem="item"/>
             }
             else
             {
-                <MudNavLink Href="@(item.Url?.TrimStart('/', '~') ?? "#")" Icon="@item.Icon" Match="@(item.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
-                    @item.DisplayName
+                <MudNavLink Href="@(item.Url?.TrimStart('/', '~') ?? "#")" Match="@(item.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                    <MudIcon Icon="@item.Icon" Size="Size.Small"/>
+                    <MudText Class="ms-1" Inline="true">@item.DisplayName</MudText>
                 </MudNavLink>
             }
         }
+        </ChildContent>
     </MudNavGroup>
 }
 
