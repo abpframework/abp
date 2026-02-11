@@ -1,6 +1,8 @@
 {
   "culture": "hu",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP SSL-n keresztül",
+    "Description:Abp.Ldap.Ldaps": "LDAP SSL-n keresztül",
     "DisplayName:Abp.Ldap.ServerHost": "Szerver host",
     "Description:Abp.Ldap.ServerHost": "Az LDAP ksizolgáló szerver hostneve vagy IP címe",
     "DisplayName:Abp.Ldap.ServerPort": "Szerver port",

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Connections;
@@ -23,7 +24,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
 {
     private static readonly MethodInfo MapHubGenericMethodInfo =
         typeof(AbpAspNetCoreSignalRModule)
-            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic);
+            .GetMethod("MapHub", BindingFlags.Static | BindingFlags.NonPublic)!;
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -37,6 +38,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
         var routePatterns = new List<string> { "/signalr-hubs" };
         var signalRServerBuilder = context.Services.AddSignalR(options =>
         {
+            options.DisableImplicitFromServicesParameters = true;
             options.AddFilter<AbpHubContextAccessorHubFilter>();
             options.AddFilter<AbpAuthenticationHubFilter>();
             options.AddFilter<AbpAuditHubFilter>();
@@ -53,10 +55,17 @@ public class AbpAspNetCoreSignalRModule : AbpModule
                     .GetRequiredService<IOptions<AbpSignalROptions>>()
                     .Value;
 
+                var hubWithRoutePatterns = new List<KeyValuePair<Type, string>>();
                 foreach (var hubConfig in signalROptions.Hubs)
                 {
                     routePatterns.AddIfNotContains(hubConfig.RoutePattern);
 
+                    if (hubWithRoutePatterns.Any(x => x.Key == hubConfig.HubType && x.Value == hubConfig.RoutePattern))
+                    {
+                        throw new AbpException($"The hub type {hubConfig.HubType.FullName} is already registered with route pattern {hubConfig.RoutePattern}");
+                    }
+
+                    hubWithRoutePatterns.Add(new KeyValuePair<Type, string>(hubConfig.HubType, hubConfig.RoutePattern));
                     MapHubType(
                         hubConfig.HubType,
                         endpointContext.Endpoints,
@@ -77,7 +86,7 @@ public class AbpAspNetCoreSignalRModule : AbpModule
         {
             foreach (var routePattern in routePatterns)
             {
-                options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x), () => routePattern);
+                options.IgnoredUrls.AddIfNotContains(x => routePattern.StartsWith(x, StringComparison.OrdinalIgnoreCase), () => routePattern);
             }
         });
 

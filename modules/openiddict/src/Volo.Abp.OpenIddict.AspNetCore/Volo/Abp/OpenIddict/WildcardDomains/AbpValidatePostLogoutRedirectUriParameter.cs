@@ -4,21 +4,21 @@ using OpenIddict.Server;
 
 namespace Volo.Abp.OpenIddict.WildcardDomains;
 
-public class AbpValidatePostLogoutRedirectUriParameter : AbpOpenIddictWildcardDomainBase<OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter, OpenIddictServerEvents.ValidateLogoutRequestContext>
+public class AbpValidatePostLogoutRedirectUriParameter : AbpOpenIddictWildcardDomainBase<AbpValidatePostLogoutRedirectUriParameter, OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter, OpenIddictServerEvents.ValidateEndSessionRequestContext>
 {
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
-        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateLogoutRequestContext>()
+        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateEndSessionRequestContext>()
             .UseSingletonHandler<AbpValidatePostLogoutRedirectUriParameter>()
             .SetOrder(int.MinValue + 100_000)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 
     public AbpValidatePostLogoutRedirectUriParameter(IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions)
-       : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter())
+        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter())
     {
     }
 
-    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateEndSessionRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 
@@ -27,6 +27,6 @@ public class AbpValidatePostLogoutRedirectUriParameter : AbpOpenIddictWildcardDo
             return;
         }
 
-        await Handler.HandleAsync(context);
+        await OriginalHandler.HandleAsync(context);
     }
 }

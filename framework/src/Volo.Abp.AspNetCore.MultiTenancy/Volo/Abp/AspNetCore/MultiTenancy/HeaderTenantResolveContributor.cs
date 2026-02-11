@@ -14,11 +14,11 @@ public class HeaderTenantResolveContributor : HttpTenantResolveContributorBase
 
     public override string Name => ContributorName;
 
-    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    protected override Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
     {
         if (httpContext.Request.Headers.IsNullOrEmpty())
         {
-            return Task.FromResult((string)null);
+            return Task.FromResult((string?)null);
         }
 
         var tenantIdKey = context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey;
@@ -26,7 +26,7 @@ public class HeaderTenantResolveContributor : HttpTenantResolveContributorBase
         var tenantIdHeader = httpContext.Request.Headers[tenantIdKey];
         if (tenantIdHeader == string.Empty || tenantIdHeader.Count < 1)
         {
-            return Task.FromResult((string)null);
+            return Task.FromResult((string?)null);
         }
 
         if (tenantIdHeader.Count > 1)

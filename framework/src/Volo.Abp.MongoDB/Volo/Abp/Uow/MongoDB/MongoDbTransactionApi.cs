@@ -19,9 +19,9 @@ public class MongoDbTransactionApi : ITransactionApi, ISupportsRollback
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
-    public async Task CommitAsync()
+    public async Task CommitAsync(CancellationToken cancellationToken)
     {
-        await SessionHandle.CommitTransactionAsync(CancellationTokenProvider.Token);
+        await SessionHandle.CommitTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
     }
 
     public void Dispose()

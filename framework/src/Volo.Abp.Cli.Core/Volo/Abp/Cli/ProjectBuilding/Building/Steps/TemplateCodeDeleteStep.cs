@@ -19,7 +19,9 @@ public class TemplateCodeDeleteStep : ProjectBuildPipelineStep
                 file.Name.EndsWith(".ps1") ||
                 file.Name.EndsWith(".html") || 
                 file.Name.EndsWith(".ts") ||
-                file.Name.EndsWith(".css"))
+                file.Name.EndsWith(".css") ||
+                file.Name.Contains("Dockerfile") ||
+                file.Name.Contains(".razor"))
             {
                 file.RemoveTemplateCode(context.Symbols);
                 file.RemoveTemplateCodeMarkers();

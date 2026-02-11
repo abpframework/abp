@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
@@ -20,6 +21,11 @@ public class AbpUserClaimsPrincipalFactory_Tests : AbpIdentityDomainTestBase
         _identityUserManager = GetRequiredService<IdentityUserManager>();
         _abpUserClaimsPrincipalFactory = GetRequiredService<AbpUserClaimsPrincipalFactory>();
         _testData = GetRequiredService<IdentityTestData>();
+    }
+
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        services.AddTransient<TestAbpClaimsPrincipalContributor>();
     }
 
     [Fact]
@@ -42,7 +48,7 @@ public class AbpUserClaimsPrincipalFactory_Tests : AbpIdentityDomainTestBase
         });
     }
 
-    class TestAbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+    class TestAbpClaimsPrincipalContributor : IAbpClaimsPrincipalContributor
     {
         //https://github.com/dotnet/aspnetcore/blob/v5.0.0/src/Identity/Extensions.Core/src/UserClaimsPrincipalFactory.cs#L79
         private static string IdentityAuthenticationType => "Identity.Application";

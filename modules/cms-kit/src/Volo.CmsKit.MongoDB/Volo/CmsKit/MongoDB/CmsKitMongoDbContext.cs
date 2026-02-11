@@ -4,6 +4,7 @@ using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -43,6 +44,8 @@ public class CmsKitMongoDbContext : AbpMongoDbContext, ICmsKitMongoDbContext
     public IMongoCollection<MenuItem> MenuItems => Collection<MenuItem>();
 
     public IMongoCollection<GlobalResource> GlobalResources => Collection<GlobalResource>();
+
+    public IMongoCollection<UserMarkedItem> UserMarkedItems => Collection<UserMarkedItem>();
 
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {

@@ -17,7 +17,7 @@ public class TenantFeatureValueProvider : FeatureValueProvider
         CurrentTenant = currentTenant;
     }
 
-    public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
+    public override async Task<string?> GetOrNullAsync(FeatureDefinition feature)
     {
         return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentTenant.Id?.ToString());
     }

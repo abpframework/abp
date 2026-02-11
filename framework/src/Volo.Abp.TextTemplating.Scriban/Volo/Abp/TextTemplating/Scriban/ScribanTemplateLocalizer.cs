@@ -44,7 +44,7 @@ public class ScribanTemplateLocalizer : IScriptCustomFunction
         }
 
         var args = arguments.Skip(1).Where(x => x != null && !x.ToString().IsNullOrWhiteSpace()).ToArray();
-        return args.Any() ? _localizer[name.ToString(), args] : _localizer[name.ToString()];
+        return args.Any() ? _localizer[name.ToString()!, args] : _localizer[name.ToString()!];
     }
 
     public int RequiredParameterCount => 1;

@@ -9,7 +9,7 @@ public class NullLocalizedTemplateContentReader : ILocalizedTemplateContentReade
 
     }
 
-    public string GetContentOrNull(string culture)
+    public string? GetContentOrNull(string? culture)
     {
         return null;
     }

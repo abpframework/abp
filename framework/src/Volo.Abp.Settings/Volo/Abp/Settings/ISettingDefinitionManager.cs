@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Settings;
 
 public interface ISettingDefinitionManager
 {
-    [NotNull]
-    SettingDefinition Get([NotNull] string name);
+    [ItemNotNull]
+    Task<SettingDefinition> GetAsync([NotNull] string name);
 
-    IReadOnlyList<SettingDefinition> GetAll();
+    [ItemNotNull]
+    Task<IReadOnlyList<SettingDefinition>> GetAllAsync();
 
-    SettingDefinition GetOrNull(string name);
+    [ItemCanBeNull]
+    Task<SettingDefinition?> GetOrNullAsync([NotNull] string name);
 }

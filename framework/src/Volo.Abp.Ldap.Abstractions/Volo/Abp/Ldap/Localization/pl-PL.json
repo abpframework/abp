@@ -1,6 +1,8 @@
 {
   "culture": "pl-PL",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP przez SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP przez SSL",
     "DisplayName:Abp.Ldap.ServerHost": "Host serwera",
     "Description:Abp.Ldap.ServerHost": "Host serwera",
     "DisplayName:Abp.Ldap.ServerPort": "Port serwera",

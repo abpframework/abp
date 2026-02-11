@@ -1,0 +1,9 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Buy": "megvesz",
+    "SeeBookDetails": "Lásd a könyv részleteit",
+    "MasteringAbpFrameworkEBookDescription": "Ez a könyv segít a keretrendszer és a modern webalkalmazás-fejlesztési technikák teljes megértésében.",
+    "Feedback": "Visszacsatolás"
+  }
+}

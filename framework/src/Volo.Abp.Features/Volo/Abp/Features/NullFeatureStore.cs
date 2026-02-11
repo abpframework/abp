@@ -15,8 +15,8 @@ public class NullFeatureStore : IFeatureStore, ISingletonDependency
         Logger = NullLogger<NullFeatureStore>.Instance;
     }
 
-    public Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+    public Task<string?> GetOrNullAsync(string name, string? providerName, string? providerKey)
     {
-        return Task.FromResult((string)null);
+        return Task.FromResult((string?)null);
     }
 }

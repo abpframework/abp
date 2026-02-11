@@ -12,16 +12,16 @@ public class SqlServerConnectionStringChecker : IConnectionStringChecker, ITrans
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {
         var result = new AbpConnectionStringCheckResult();
-        var connString = new SqlConnectionStringBuilder(connectionString)
-        {
-            ConnectTimeout = 1
-        };
-
-        var oldDatabaseName = connString.InitialCatalog;
-        connString.InitialCatalog = "master";
-
         try
         {
+            var connString = new SqlConnectionStringBuilder(connectionString)
+            {
+                ConnectTimeout = 1
+            };
+
+            var oldDatabaseName = connString.InitialCatalog;
+            connString.InitialCatalog = "master";
+
             await using var conn = new SqlConnection(connString.ConnectionString);
             await conn.OpenAsync();
             result.Connected = true;
@@ -32,7 +32,7 @@ public class SqlServerConnectionStringChecker : IConnectionStringChecker, ITrans
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

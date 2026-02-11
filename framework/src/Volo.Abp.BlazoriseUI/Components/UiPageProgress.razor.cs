@@ -7,31 +7,37 @@ namespace Volo.Abp.BlazoriseUI.Components;
 
 public partial class UiPageProgress : ComponentBase, IDisposable
 {
-    protected PageProgress PageProgressRef { get; set; }
+    protected PageProgress? PageProgressRef { get; set; }
 
     protected int? Percentage { get; set; }
 
     protected bool Visible { get; set; }
 
-    protected Color Color { get; set; }
+    protected Color Color { get; set; } = default!;
 
-    [Inject] protected IUiPageProgressService UiPageProgressService { get; set; }
+    [Inject] protected IUiPageProgressService? UiPageProgressService { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        UiPageProgressService.ProgressChanged += OnProgressChanged;
+        if (UiPageProgressService != null)
+        {
+            UiPageProgressService.ProgressChanged += OnProgressChanged;
+        }
     }
 
-    private async void OnProgressChanged(object sender, UiPageProgressEventArgs e)
+    private async void OnProgressChanged(object? sender, UiPageProgressEventArgs e)
     {
         Percentage = e.Percentage;
         Visible = e.Percentage == null || (e.Percentage >= 0 && e.Percentage <= 100);
         Color = GetColor(e.Options.Type);
 
-        await PageProgressRef.SetValueAsync(e.Percentage);
-
+        if(PageProgressRef != null)
+        {
+            await PageProgressRef.SetValueAsync(e.Percentage); 
+        }
+        
         await InvokeAsync(StateHasChanged);
     }
 

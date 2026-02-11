@@ -19,10 +19,10 @@ public class AbpBackgroundJobsQuartzModule : AbpModule
 
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
     {
-        var options = context.ServiceProvider.GetService<IOptions<AbpBackgroundJobOptions>>().Value;
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
         if (!options.IsJobExecutionEnabled)
         {
-            var quartzOptions = context.ServiceProvider.GetService<IOptions<AbpQuartzOptions>>().Value;
+            var quartzOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpQuartzOptions>>().Value;
             quartzOptions.StartSchedulerFactory = scheduler => Task.CompletedTask;
         }
     }

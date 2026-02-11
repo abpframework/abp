@@ -42,8 +42,8 @@ $(function () {
                                 pagesService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        _dataTable.ajax.reload();
-                                        abp.notify.success(l('SuccessfullyDeleted'));
+                                        _dataTable.ajax.reloadEx();
+                                        abp.notify.success(l('DeletedSuccessfully'));
                                     });
                             }
                         },
@@ -55,7 +55,7 @@ $(function () {
                                     .setAsHomePage(data.record.id)
                                     .then(function () {
 
-                                        _dataTable.ajax.reload();
+                                        _dataTable.ajax.reloadEx();
                                         data.record.isHomePage ?
                                             abp.notify.warn(l('RemovedSettingAsHomePage'))
                                             : abp.notify.success(l('CompletedSettingAsHomePage'));
@@ -74,6 +74,14 @@ $(function () {
                 title: l("Slug"),
                 orderable: true,
                 data: "slug"
+            },
+            {
+                title: l("Status"),
+                orderable: true,
+                data: "status",
+                render: function (data) {
+                    return l('Enum:PageStatus:' + data);
+                }
             },
             {
                 title: l("IsHomePage"),
@@ -97,7 +105,7 @@ $(function () {
 
     $('#CmsKitPagesWrapper form.page-search-form').submit(function (e) {
         e.preventDefault();
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 
     $('#AbpContentToolbar button[name=CreatePage]').on('click', function (e) {

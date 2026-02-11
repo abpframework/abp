@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -12,14 +14,14 @@ namespace Volo.Abp.Reflection;
 
 public static class TypeHelper
 {
-    private static readonly HashSet<Type> FloatingTypes = new HashSet<Type>
+    private static readonly FrozenSet<Type> FloatingTypes = new HashSet<Type>
         {
             typeof(float),
             typeof(double),
             typeof(decimal)
-        };
+        }.ToFrozenSet();
 
-    private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
+    private static readonly FrozenSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
         {
             typeof(byte),
             typeof(short),
@@ -36,14 +38,14 @@ public static class TypeHelper
             typeof(DateTimeOffset),
             typeof(TimeSpan),
             typeof(Guid)
-        };
+        }.ToFrozenSet();
 
     public static bool IsNonNullablePrimitiveType(Type type)
     {
         return NonNullablePrimitiveTypes.Contains(type);
     }
 
-    public static bool IsFunc(object obj)
+    public static bool IsFunc(object? obj)
     {
         if (obj == null)
         {
@@ -59,7 +61,7 @@ public static class TypeHelper
         return type.GetGenericTypeDefinition() == typeof(Func<>);
     }
 
-    public static bool IsFunc<TReturn>(object obj)
+    public static bool IsFunc<TReturn>(object? obj)
     {
         return obj != null && obj.GetType() == typeof(Func<TReturn>);
     }
@@ -79,22 +81,61 @@ public static class TypeHelper
         return false;
     }
 
+    public static TProperty? ChangeTypePrimitiveExtended<TProperty>(object? value)
+    {
+        if (value == null)
+        {
+            return default;
+        }
+
+        if (IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
+        {
+            var conversionType = typeof(TProperty);
+            if (IsNullable(conversionType))
+            {
+                conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+            }
+
+            if (conversionType == typeof(Guid))
+            {
+                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString()!)!;
+            }
+
+            if (conversionType.IsEnum)
+            {
+                return (TProperty)Enum.Parse(conversionType, value.ToString()!);
+            }
+
+            return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+        }
+
+        throw new AbpException("ChangeTypePrimitiveExtended<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
+    }
+
     public static bool IsNullable(Type type)
     {
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+    }
+
+    public static bool IsNullableEnum(Type type)
+    {
+        return type.IsGenericType &&
+               type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
+               type.GenericTypeArguments.Length == 1 &&
+               type.GenericTypeArguments[0].IsEnum;
     }
 
     public static Type GetFirstGenericArgumentIfNullable(this Type t)
     {
         if (t.GetGenericArguments().Length > 0 && t.GetGenericTypeDefinition() == typeof(Nullable<>))
         {
-            return t.GetGenericArguments().FirstOrDefault();
+            return t.GetGenericArguments().First();
         }
 
         return t;
     }
 
-    public static bool IsEnumerable(Type type, out Type itemType, bool includePrimitives = true)
+    public static bool IsEnumerable(Type type, out Type? itemType, bool includePrimitives = true)
     {
         if (!includePrimitives && IsPrimitiveExtended(type))
         {
@@ -119,19 +160,24 @@ public static class TypeHelper
         return false;
     }
 
-    public static bool IsDictionary(Type type, out Type keyType, out Type valueType)
+    public static bool IsDictionary(Type type, out Type? keyType, out Type? valueType)
     {
-        var dictionaryTypes = ReflectionHelper
-            .GetImplementedGenericTypes(
-                type,
-                typeof(IDictionary<,>)
-            );
-
-        if (dictionaryTypes.Count == 1)
+        var knownDictionaryInterfaces = new Type[]
         {
-            keyType = dictionaryTypes[0].GenericTypeArguments[0];
-            valueType = dictionaryTypes[0].GenericTypeArguments[1];
-            return true;
+            typeof(IDictionary<,>),
+            typeof(IReadOnlyDictionary<,>),
+            typeof(IImmutableDictionary<,>)
+        };
+
+        foreach (var dictInterface in knownDictionaryInterfaces)
+        {
+            var dictionaryTypes = ReflectionHelper.GetImplementedGenericTypes(type, dictInterface);
+            if (dictionaryTypes.Count == 1)
+            {
+                keyType = dictionaryTypes[0].GenericTypeArguments[0];
+                valueType = dictionaryTypes[0].GenericTypeArguments[1];
+                return true;
+            }
         }
 
         if (typeof(IDictionary).IsAssignableFrom(type))
@@ -143,7 +189,6 @@ public static class TypeHelper
 
         keyType = null;
         valueType = null;
-
         return false;
     }
 
@@ -163,16 +208,20 @@ public static class TypeHelper
                type == typeof(decimal) ||
                type == typeof(DateTime) ||
                type == typeof(DateTimeOffset) ||
+#if NETCOREAPP
+               type == typeof(DateOnly) ||
+               type == typeof(TimeOnly) ||
+#endif
                type == typeof(TimeSpan) ||
                type == typeof(Guid);
     }
 
-    public static T GetDefaultValue<T>()
+    public static T? GetDefaultValue<T>()
     {
         return default;
     }
 
-    public static object GetDefaultValue(Type type)
+    public static object? GetDefaultValue(Type type)
     {
         if (type.IsValueType)
         {
@@ -194,7 +243,8 @@ public static class TypeHelper
         if (type.IsGenericType)
         {
             var genericType = type.GetGenericTypeDefinition();
-            return $"{genericType.FullName.Left(genericType.FullName.IndexOf('`'))}<{type.GenericTypeArguments.Select(GetFullNameHandlingNullableAndGenerics).JoinAsString(",")}>";
+            var genericTypeFullName = genericType.FullName!;
+            return $"{genericTypeFullName.Left(genericTypeFullName.IndexOf('`'))}<{type.GenericTypeArguments.Select(GetFullNameHandlingNullableAndGenerics).JoinAsString(",")}>";
         }
 
         return type.FullName ?? type.Name;
@@ -212,7 +262,8 @@ public static class TypeHelper
         if (type.IsGenericType)
         {
             var genericType = type.GetGenericTypeDefinition();
-            return $"{genericType.FullName.Left(genericType.FullName.IndexOf('`'))}<{type.GenericTypeArguments.Select(GetSimplifiedName).JoinAsString(",")}>";
+            var genericTypeFullName = genericType.FullName!;
+            return $"{genericTypeFullName.Left(genericTypeFullName.IndexOf('`'))}<{type.GenericTypeArguments.Select(GetSimplifiedName).JoinAsString(",")}>";
         }
 
         if (type == typeof(string))
@@ -252,6 +303,14 @@ public static class TypeHelper
             return "string";
         }
         else if (type == typeof(DateTimeOffset))
+        {
+            return "string";
+        }
+        else if (type.FullName == "System.DateOnly")
+        {
+            return "string";
+        }
+        else if (type.FullName == "System.TimeOnly")
         {
             return "string";
         }
@@ -299,16 +358,20 @@ public static class TypeHelper
         {
             return "object";
         }
+        else if (type.IsEnum)
+        {
+            return "enum";
+        }
 
         return type.FullName ?? type.Name;
     }
 
-    public static object ConvertFromString<TTargetType>(string value)
+    public static object? ConvertFromString<TTargetType>(string value)
     {
         return ConvertFromString(typeof(TTargetType), value);
     }
 
-    public static object ConvertFromString(Type targetType, string value)
+    public static object? ConvertFromString(Type targetType, string? value)
     {
         if (value == null)
         {
@@ -354,7 +417,7 @@ public static class TypeHelper
     {
         return TypeDescriptor
             .GetConverter(targetType)
-            .ConvertFrom(value);
+            .ConvertFrom(value)!;
     }
 
     public static Type StripNullable(Type type)
@@ -364,7 +427,7 @@ public static class TypeHelper
             : type;
     }
 
-    public static bool IsDefaultValue([CanBeNull] object obj)
+    public static bool IsDefaultValue(object? obj)
     {
         if (obj == null)
         {

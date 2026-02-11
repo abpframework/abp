@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Domain.Repositories;
@@ -17,10 +19,11 @@ namespace Volo.Abp.TestApp.Application;
 
 public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeopleAppService
 {
-    public PeopleAppService(IRepository<Person, Guid> repository)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public PeopleAppService(IRepository<Person, Guid> repository, IHttpContextAccessor httpContextAccessor)
         : base(repository)
     {
-
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter)
@@ -129,17 +132,24 @@ public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeople
 
     public Task<string> GetParamsFromQueryAsync([FromQuery] GetParamsInput input)
     {
-        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
-                               input.NameValues?.FirstOrDefault()?.Value + ":" +
+        if (_httpContextAccessor.HttpContext != null)
+        {
+            _httpContextAccessor.HttpContext.Request.QueryString.ToString().ShouldNotContain("ExtraProperties=Volo.Abp.Data.ExtraPropertyDictionary");
+        }
+
+        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" + input.NameValues?.FirstOrDefault()?.Value + ":" +
+                               input.NameValues?.FirstOrDefault()?.ExtraProperties["TestPropertyInList"] + ":" +
                                input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value + ":" +
-                               input.NameValue?.Name + "-" + input.NameValue?.Value);
+                               input.NameValue?.Name + "-" + input.NameValue?.Value + ":" +
+                               input.ExtraProperties["TestProperty"]);
     }
 
     public Task<string> GetParamsFromFormAsync([FromForm] GetParamsInput input)
     {
-        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" +
-                               input.NameValues?.FirstOrDefault()?.Value + ":" +
+        return Task.FromResult(input.NameValues?.FirstOrDefault()?.Name + "-" + input.NameValues?.FirstOrDefault()?.Value + ":" +
+                               input.NameValues?.FirstOrDefault()?.ExtraProperties["TestPropertyInList"] + ":" +
                                input.NameValues?.LastOrDefault()?.Name + "-" + input.NameValues?.LastOrDefault()?.Value + ":" +
-                               input.NameValue?.Name + "-" + input.NameValue?.Value);
+                               input.NameValue?.Name + "-" + input.NameValue?.Value + ":" +
+                               input.ExtraProperties["TestProperty"]);
     }
 }

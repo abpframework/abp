@@ -1,0 +1,339 @@
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  EventEmitter,
+  inject,
+  Injector,
+  Input,
+  LOCALE_ID,
+  OnChanges,
+  OnDestroy,
+  PLATFORM_ID,
+  signal,
+  SimpleChanges,
+  TemplateRef,
+  TrackByFunction,
+  output,
+  contentChild,
+  viewChild
+} from '@angular/core';
+import { AsyncPipe, isPlatformBrowser, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
+
+import { Observable, filter, map, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableModule, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
+
+import {
+  ABP,
+  ConfigStateService,
+  ListService,
+  LocalizationPipe,
+  PermissionDirective,
+  PermissionService,
+  TimezoneService,
+  UtcToLocalPipe,
+} from '@abp/ng.core';
+import {
+  AbpVisibleDirective,
+  NgxDatatableDefaultDirective,
+  NgxDatatableListDirective,
+} from '@abp/ng.theme.shared';
+
+import { ePropType } from '../../enums/props.enum';
+import { EntityActionList } from '../../models/entity-actions';
+import { EntityProp, EntityPropList } from '../../models/entity-props';
+import { PropData } from '../../models/props';
+import { ExtensionsService } from '../../services/extensions.service';
+import {
+  ENTITY_PROP_TYPE_CLASSES,
+  EXTENSIONS_IDENTIFIER,
+  PROP_DATA_STREAM,
+  ROW_RECORD,
+} from '../../tokens/extensions.token';
+import { GridActionsComponent } from '../grid-actions/grid-actions.component';
+import { ExtensibleTableRowDetailComponent } from './extensible-table-row-detail';
+import { RowDetailContext } from '../../models/row-detail';
+
+const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
+
+@Component({
+  exportAs: 'abpExtensibleTable',
+  selector: 'abp-extensible-table',
+  imports: [
+    AbpVisibleDirective,
+    NgxDatatableModule,
+    GridActionsComponent,
+    NgbTooltip,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
+    PermissionDirective,
+    LocalizationPipe,
+    UtcToLocalPipe,
+    AsyncPipe,
+    NgTemplateOutlet,
+    NgComponentOutlet,
+  ],
+  templateUrl: './extensible-table.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    :host ::ng-deep .ngx-datatable.material .datatable-body .datatable-row-detail {
+      background: none;
+      padding: 0;
+    }
+  `],
+})
+export class ExtensibleTableComponent<R = any> implements OnChanges, AfterViewInit, OnDestroy {
+  readonly #injector = inject(Injector);
+  readonly getInjected = this.#injector.get.bind(this.#injector);
+  protected readonly cdr = inject(ChangeDetectorRef);
+  protected readonly locale = inject(LOCALE_ID);
+  protected readonly config = inject(ConfigStateService);
+  protected readonly timeZoneService = inject(TimezoneService);
+  protected readonly entityPropTypeClasses = inject(ENTITY_PROP_TYPE_CLASSES);
+  protected readonly permissionService = inject(PermissionService);
+  private platformId = inject(PLATFORM_ID);
+  protected isBrowser = isPlatformBrowser(this.platformId);
+
+  protected _actionsText!: string;
+  @Input()
+  set actionsText(value: string) {
+    this._actionsText = value;
+  }
+
+  get actionsText(): string {
+    return this._actionsText ?? (this.actionList.length >= 1 ? 'AbpUi::Actions' : '');
+  }
+
+  @Input() data!: R[];
+  @Input() list!: ListService;
+  @Input() recordsTotal!: number;
+
+  @Input() set actionsColumnWidth(width: number) {
+    this._actionsColumnWidth.set(width ? Number(width) : undefined);
+  }
+
+  @Input() actionsTemplate?: TemplateRef<any>;
+
+  readonly tableActivate = output();
+
+  @Input() selectable = false;
+
+  @Input() set selectionType(value: SelectionType | string) {
+    this._selectionType = typeof value === 'string' ? SelectionType[value] : value;
+  }
+  _selectionType: SelectionType = SelectionType.multiClick;
+
+  @Input() selected: any[] = [];
+  readonly selectionChange = output<any[]>();
+
+  // Infinite scroll configuration
+  @Input() infiniteScroll = false;
+  @Input() isLoading = false;
+  @Input() scrollThreshold = 10;
+  readonly loadMore = output<void>();
+  @Input() tableHeight: number;
+
+  @Input() rowDetailTemplate?: TemplateRef<RowDetailContext<R>>;
+  @Input() rowDetailHeight: string | number = '100%';
+  readonly rowDetailToggle = output<R>();
+
+  readonly rowDetailComponent = contentChild(ExtensibleTableRowDetailComponent);
+
+  readonly table = viewChild.required<DatatableComponent>('table');
+
+  protected get effectiveRowDetailTemplate(): TemplateRef<RowDetailContext<R>> | undefined {
+    return this.rowDetailComponent()?.template() ?? this.rowDetailTemplate;
+  }
+
+  protected get effectiveRowDetailHeight(): string | number {
+    return this.rowDetailComponent()?.rowHeight() ?? this.rowDetailHeight;
+  }
+
+  hasAtLeastOnePermittedAction: boolean;
+
+  readonly propList: EntityPropList<R>;
+
+  readonly actionList: EntityActionList<R>;
+
+  readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
+
+  // Signal for actions column width
+  private readonly _actionsColumnWidth = signal<number | undefined>(DEFAULT_ACTIONS_COLUMN_WIDTH);
+
+  // Infinite scroll: debounced load more subject
+  private readonly loadMoreSubject = new Subject<void>();
+  private readonly loadMoreSubscription = this.loadMoreSubject
+    .pipe(debounceTime(100), distinctUntilChanged())
+    .subscribe(() => this.triggerLoadMore());
+
+  readonly columnWidths = computed(() => {
+    return this.propList.toArray().map(prop => prop.columnWidth);
+  });
+
+  constructor() {
+    const extensions = this.#injector.get(ExtensionsService);
+    const name = this.#injector.get(EXTENSIONS_IDENTIFIER);
+    this.propList = extensions.entityProps.get(name).props;
+    this.actionList = extensions['entityActions'].get(name)
+      .actions as unknown as EntityActionList<R>;
+
+    this.hasAtLeastOnePermittedAction =
+      this.permissionService.filterItemsByPolicy(
+        this.actionList.toArray().map(action => ({ requiredPolicy: action.permission })),
+      ).length > 0;
+  }
+
+  private getIcon(value: boolean) {
+    return value
+      ? '<div class="text-success"><i class="fa fa-check" aria-hidden="true"></i></div>'
+      : '<div class="text-danger"><i class="fa fa-times" aria-hidden="true"></i></div>';
+  }
+
+  private getEnum(rowValue: any, list: Array<ABP.Option<any>>) {
+    if (!list || list.length < 1) return rowValue;
+    const { key } = list.find(({ value }) => value === rowValue) || {};
+    return key;
+  }
+
+  getContent(prop: EntityProp<R>, data: PropData): Observable<string> {
+    return prop.valueResolver(data).pipe(
+      map(value => {
+        switch (prop.type) {
+          case ePropType.Boolean:
+            return this.getIcon(value);
+          case ePropType.Enum:
+            return this.getEnum(value, prop.enumList || []);
+          default:
+            return value;
+          // More types can be handled in the future
+        }
+      }),
+    );
+  }
+
+  ngOnChanges({ data }: SimpleChanges) {
+    if (!data?.currentValue) return;
+
+    if (data.currentValue.length < 1) {
+      this.list.totalCount = this.recordsTotal;
+    }
+
+    this.data = data.currentValue.map((record: any, index: number) => {
+      this.propList.forEach(prop => {
+        const propData = { getInjected: this.getInjected, record, index } as any;
+        const value = this.getContent(prop.value, propData);
+
+        const propKey = `_${prop.value.name}`;
+        record[propKey] = {
+          visible: prop.value.visible(propData),
+          value,
+        };
+        if (prop.value.component) {
+          record[propKey].injector = Injector.create({
+            providers: [
+              {
+                provide: PROP_DATA_STREAM,
+                useValue: value,
+              },
+              {
+                provide: ROW_RECORD,
+                useValue: record,
+              },
+            ],
+            parent: this.#injector,
+          });
+          record[propKey].component = prop.value.component;
+        }
+      });
+
+      return record;
+    });
+  }
+
+  isVisibleActions(rowData: any): boolean {
+    const actions = this.actionList.toArray();
+    const visibleActions = actions.filter(action => {
+      const { visible, permission } = action;
+
+      let isVisible = true;
+      let hasPermission = true;
+
+      if (visible) {
+        isVisible = visible({ record: rowData, getInjected: this.getInjected });
+      }
+
+      if (permission) {
+        hasPermission = this.permissionService.getGrantedPolicy(permission);
+      }
+
+      return isVisible && hasPermission;
+    });
+
+    return visibleActions.length > 0;
+  }
+
+  onSelect({ selected }) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+    this.selectionChange.emit(selected);
+  }
+
+  onScroll(scrollEvent: Event): void {
+    if (!this.shouldHandleScroll()) {
+      return;
+    }
+
+    const target = scrollEvent.target as HTMLElement;
+    if (!target) {
+      return;
+    }
+
+    if (this.isNearScrollBottom(target)) {
+      this.loadMoreSubject.next();
+    }
+  }
+
+  private shouldHandleScroll(): boolean {
+    return this.infiniteScroll && !this.isLoading;
+  }
+
+  private isNearScrollBottom(element: HTMLElement): boolean {
+    const { offsetHeight, scrollTop, scrollHeight } = element;
+    return offsetHeight + scrollTop >= scrollHeight - this.scrollThreshold;
+  }
+
+  private triggerLoadMore(): void {
+    this.loadMore.emit();
+  }
+
+  getTableHeight() {
+    if (!this.infiniteScroll) return 'auto';
+
+    return this.tableHeight ? `${this.tableHeight}px` : 'auto';
+  }
+
+  toggleExpandRow(row: R): void {
+    const table = this.table();
+    if (table && table.rowDetail) {
+      table.rowDetail.toggleExpandRow(row);
+    }
+    this.rowDetailToggle.emit(row);
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.infiniteScroll) {
+      this.list?.requestStatus$?.pipe(filter(status => status === 'loading')).subscribe(() => {
+        this.data = [];
+        this.cdr.markForCheck();
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.loadMoreSubscription.unsubscribe();
+  }
+}

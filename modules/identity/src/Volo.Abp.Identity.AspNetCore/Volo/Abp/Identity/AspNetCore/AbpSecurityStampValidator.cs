@@ -18,14 +18,12 @@ public class AbpSecurityStampValidator : SecurityStampValidator<IdentityUser>
     public AbpSecurityStampValidator(
         IOptions<SecurityStampValidatorOptions> options,
         SignInManager<IdentityUser> signInManager,
-        ISystemClock systemClock,
         ILoggerFactory loggerFactory,
         ITenantConfigurationProvider tenantConfigurationProvider,
         ICurrentTenant currentTenant)
         : base(
             options,
             signInManager,
-            systemClock,
             loggerFactory)
     {
         TenantConfigurationProvider = tenantConfigurationProvider;
@@ -33,7 +31,7 @@ public class AbpSecurityStampValidator : SecurityStampValidator<IdentityUser>
     }
 
     [UnitOfWork]
-    public override async Task ValidateAsync(CookieValidatePrincipalContext context)
+    public async override Task ValidateAsync(CookieValidatePrincipalContext context)
     {
         TenantConfiguration tenant = null;
         try

@@ -14,6 +14,15 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
         CancellationToken cancellationToken = default
     );
 
+    Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        string filter = null,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
     Task<List<IdentityRole>> GetListAsync(
         string sorting = null,
         int maxResultCount = int.MaxValue,
@@ -22,8 +31,14 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
+
     Task<List<IdentityRole>> GetListAsync(
         IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityRole>> GetListAsync(
+        IEnumerable<string> names,
         CancellationToken cancellationToken = default
     );
 
@@ -34,6 +49,12 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
 
     Task<long> GetCountAsync(
         string filter = null,
+        CancellationToken cancellationToken = default
+    );
+
+    Task RemoveClaimFromAllRolesAsync(
+        string claimType,
+        bool autoSave = false,
         CancellationToken cancellationToken = default
     );
 }

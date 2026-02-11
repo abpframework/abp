@@ -10,23 +10,22 @@ namespace Volo.Abp.AspNetCore.Components.Web.Theming.Components.LayoutHooks;
 public partial class LayoutHook : ComponentBase
 {
     [Parameter]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     
     [Parameter]
-    public string Layout { get; set; }
+    public string? Layout { get; set; }
 
     [Inject]
-    protected IOptions<AbpLayoutHookOptions> LayoutHookOptions { get; set; }
+    protected IOptions<AbpLayoutHookOptions> LayoutHookOptions { get; set; } = default!;
 
-    protected LayoutHookViewModel LayoutHookViewModel { get; private set; }
+    protected LayoutHookViewModel LayoutHookViewModel { get; private set; } = default!;
 
     protected override Task OnInitializedAsync()
     {
         if (LayoutHookOptions.Value.Hooks.TryGetValue(Name, out var layoutHooks))
         {
             layoutHooks = layoutHooks
-                .Where(IsComponentBase)
-                .WhereIf(string.IsNullOrWhiteSpace(Layout), x => x.Layout == Layout)
+                .Where(x => IsComponentBase(x) && (string.IsNullOrWhiteSpace(x.Layout) || x.Layout == Layout))
                 .ToList();
         }
 

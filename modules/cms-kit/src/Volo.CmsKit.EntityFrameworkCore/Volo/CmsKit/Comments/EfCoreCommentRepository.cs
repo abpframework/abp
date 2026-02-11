@@ -22,7 +22,8 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
     {
     }
 
-    public async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(Guid id,
+    public virtual async Task<CommentWithAuthorQueryResultItem> GetWithAuthorAsync(
+        Guid id,
         CancellationToken cancellationToken = default)
     {
         var query = from comment in (await GetDbSetAsync())
@@ -44,7 +45,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         return commentWithAuthor;
     }
 
-    public async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
+    public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListAsync(
         string filter = null,
         string entityType = null,
         Guid? repliedCommentId = null,
@@ -54,6 +55,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     )
     {
@@ -65,7 +67,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             authorUsername,
             creationStartDate,
             creationEndDate,
-            token);
+            commentApproveState);
 
         if (!sorting.IsNullOrEmpty())
         {
@@ -78,13 +80,14 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         return await query.ToListAsync(token);
     }
 
-    public async Task<long> GetCountAsync(
+    public virtual async Task<long> GetCountAsync(
         string text = null,
         string entityType = null,
         Guid? repliedCommentId = null,
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default
     )
     {
@@ -96,14 +99,15 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             authorUsername,
             creationStartDate,
             creationEndDate,
-            token);
+            commentApproveState);
 
         return await query.LongCountAsync(token);
     }
 
-    public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
+    public virtual async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
         string entityType,
         string entityId,
+        CommentApproveState commentApproveState = CommentApproveState.All,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -119,10 +123,13 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
                         Author = user
                     };
 
+        query = query.WhereIf(commentApproveState == CommentApproveState.Approved, c => c.Comment.IsApproved == true);
+        query = query.WhereIf(commentApproveState == (CommentApproveState.Approved | CommentApproveState.Waiting), c => c.Comment.IsApproved == true || c.Comment.IsApproved == null);
+
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task DeleteWithRepliesAsync(
+    public virtual async Task DeleteWithRepliesAsync(
         Comment comment,
         CancellationToken cancellationToken = default)
     {
@@ -141,6 +148,13 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         await DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<bool> ExistsAsync(
+        string idempotencyToken,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync()).AnyAsync(x => x.IdempotencyToken == idempotencyToken, GetCancellationToken(cancellationToken));
+    }
+
     protected virtual async Task<IQueryable<CommentWithAuthorQueryResultItem>> GetListQueryAsync(
         string filter = null,
         string entityType = null,
@@ -148,8 +162,7 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
         string authorUsername = null,
         DateTime? creationStartDate = null,
         DateTime? creationEndDate = null,
-        CancellationToken cancellationToken = default
-    )
+        CommentApproveState commentApproveState = CommentApproveState.All)
     {
         var commentDbSet = await GetDbSetAsync();
         var cmsUserSet = (await GetDbContextAsync()).Set<CmsUser>();
@@ -168,6 +181,14 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             .WhereIf(repliedCommentId.HasValue, c => c.Comment.RepliedCommentId == repliedCommentId)
             .WhereIf(!authorUsername.IsNullOrWhiteSpace(), c => c.Author.UserName.Contains(authorUsername))
             .WhereIf(creationStartDate.HasValue, c => c.Comment.CreationTime >= creationStartDate)
-            .WhereIf(creationEndDate.HasValue, c => c.Comment.CreationTime <= creationEndDate);
+            .WhereIf(creationEndDate.HasValue, c => c.Comment.CreationTime <= creationEndDate)
+            .WhereIf(CommentApproveState.Approved == commentApproveState, c => c.Comment.IsApproved == true)
+            .WhereIf(CommentApproveState.Disapproved == commentApproveState, c => c.Comment.IsApproved == false)
+            .WhereIf(CommentApproveState.Waiting == commentApproveState, c => c.Comment.IsApproved == null);
+    }
+    
+    public async Task DeleteByEntityTypeAndIdAsync(string entityType, string entityId, CancellationToken cancellationToken = default)
+    {
+         await (await GetDbSetAsync()).Where(x => x.EntityType == entityType && x.EntityId == entityId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
     }
 }

@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Validation;
 
 public static class ValidationAttributeHelper
 {
-    private static readonly PropertyInfo ValidationAttributeErrorMessageStringProperty = typeof(ValidationAttribute)
-        .GetProperty("ErrorMessageString", BindingFlags.Instance | BindingFlags.NonPublic);
+    private readonly static PropertyInfo ValidationAttributeErrorMessageStringProperty = typeof(ValidationAttribute)
+        .GetProperty("ErrorMessageString", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
-    private static readonly PropertyInfo ValidationAttributeCustomErrorMessageSetProperty = typeof(ValidationAttribute)
-        .GetProperty("CustomErrorMessageSet", BindingFlags.Instance | BindingFlags.NonPublic);
+    private readonly static PropertyInfo ValidationAttributeCustomErrorMessageSetProperty = typeof(ValidationAttribute)
+        .GetProperty("CustomErrorMessageSet", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
     public static void SetDefaultErrorMessage(ValidationAttribute validationAttribute)
     {
@@ -24,7 +25,14 @@ public static class ValidationAttributeHelper
             }
         }
 
-        validationAttribute.ErrorMessage =
-            ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
+        try
+        {
+            var errorMessageString = ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
+            validationAttribute.ErrorMessage = errorMessageString;
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }

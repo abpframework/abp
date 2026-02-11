@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Build;

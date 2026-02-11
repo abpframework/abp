@@ -1,5 +1,5 @@
-import { ConfigStateService, featuresFactory, noop } from '@abp/ng.core';
-import { APP_INITIALIZER, inject, InjectionToken } from '@angular/core';
+import { ConfigStateService, featuresFactory } from '@abp/ng.core';
+import { inject, InjectionToken, provideAppInitializer } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -30,10 +30,7 @@ export const SETTING_MANAGEMENT_ROUTE_VISIBILITY = new InjectionToken<Observable
 );
 
 export const SETTING_MANAGEMENT_FEATURES_PROVIDERS = [
-  {
-    provide: APP_INITIALIZER,
-    useFactory: noop,
-    deps: [SETTING_MANAGEMENT_ROUTE_VISIBILITY],
-    multi: true,
-  },
+  provideAppInitializer(() => {
+    inject(SETTING_MANAGEMENT_ROUTE_VISIBILITY);
+  }),
 ];

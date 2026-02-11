@@ -5,10 +5,12 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.CmsKit.Admin.Blogs;
 
 [Serializable]
-public class BlogDto : EntityDto<Guid>, IHasConcurrencyStamp
+public class BlogDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string Name { get; set; }
 
     public string Slug { get; set; }
     public string ConcurrencyStamp { get; set; }
+    
+    public int BlogPostCount { get; set; }
 }

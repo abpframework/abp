@@ -1,30 +1,14 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.GridsModel
 @{
     ViewData["Title"] = "Grids";
 }
 
-@section styles {
-    <abp-style-bundle>
-        <abp-style src="/css/demo.css" />
-    </abp-style-bundle>
-}
-
-@section scripts {
-    <abp-script-bundle>
-        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
-            <abp-script src="/Pages/Components/highlightCode.js" />*@
-    </abp-script-bundle>
-}
-
-<link rel="stylesheet"
-      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-
 <h2>Grids</h2>
 
-<p>Based on <a href="http://getbootstrap.com/docs/4.1/layout/grid/" target="_blank"> Bootstrap grid</a>.</p>
+<p>Based on <a href="@BootstrapUrlHelper.GetDocUrl("layout/grid")" target="_blank"> Bootstrap grid</a>.</p>
 
 <h4>Equal-width</h4>
 
@@ -846,5 +830,39 @@
 </div>
 
 <hr />
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-container</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpContainerTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-row</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpRowTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-column</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpColumnTagHelper))
+    </abp-card-body>
+</abp-card>
 
 <a asp-page="../">&lt; back</a>

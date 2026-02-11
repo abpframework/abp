@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Authorization.TestServices;
+using Volo.Abp.Authorization.TestServices.Resources;
 using Volo.Abp.Autofac;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.ExceptionHandling;
@@ -21,6 +23,20 @@ public class AbpAuthorizationTestModule : AbpModule
             {
                 onServiceRegistredContext.Interceptors.TryAdd<AuthorizationInterceptor>();
             }
+        });
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpPermissionOptions>(options =>
+        {
+            options.ValueProviders.Add<TestPermissionValueProvider1>();
+            options.ValueProviders.Add<TestPermissionValueProvider2>();
+            options.ValueProviders.Add<TestProhibitedPermissionValueProvider1>();
+            options.ValueProviders.Add<TestProhibitedPermissionValueProvider2>();
+
+            options.ResourceValueProviders.Add<TestResourcePermissionValueProvider1>();
+            options.ResourceValueProviders.Add<TestResourcePermissionValueProvider2>();
         });
     }
 }

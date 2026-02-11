@@ -1,5 +1,87 @@
+var doc = doc || {};
+
 (function ($) {
     $(function () {        
+        
+        doc.lazyExpandableNavigation = {
+            isAllLoaded: false,
+            findNode : function(text, href, node){
+                if(node.text === text && node.path === href && node.isLazyExpandable){
+                    return node;
+                }
+                if(node.items){
+                    for (let i = 0; i < node.items.length; i++) {
+                        var result = doc.lazyExpandableNavigation.findNode(text, href, node.items[i]);
+                        if(result){
+                            return result;
+                        }
+                    }
+                }
+                return null;
+            },
+            renderNodeAsHtml : function($lazyLiElement, node, isRootLazyNode){
+                if(node.isEmpty){
+                    return;
+                }
+
+                var textCss = node.path === "javascript:;" ? "tree-toggle" : "";
+                var uiCss = isRootLazyNode ? "" : "style='display: none;'";
+                var $ul =  $(`<ul class="nav nav-list tree" ${uiCss}></ul>`);
+                var $li = $(`<li class="${node.hasChildItems ? 'nav-header' : 'last-link'}"></li>`);
+                
+                var dataKeywords =  node.keywords ? `data-keywords="${node.keywords}"` : "";
+                $li.append(`<span class="plus-icon"> <i class="fa fa-${node.hasChildItems ? 'chevron-right' : node.path === "javascript:;" ? 'has-link' : 'no-link'}"></i></span><a href="${node.path}" ${dataKeywords} class="${textCss}">${node.text}</a>`)
+
+                if(node.isLazyExpandable){
+                    $li.addClass("lazy-expand");
+                }else if(node.hasChildItems){
+                    node.items.forEach(function(item){
+                        doc.lazyExpandableNavigation.renderNodeAsHtml($li, item, false);
+                    });
+                }
+
+                $ul.append($li);
+                $lazyLiElement.append($ul)
+            },
+            loadAll : function(lazyLiElements){
+                if(doc.lazyExpandableNavigation.isAllLoaded){
+                    return;
+                }
+                for(var i = 0; i < lazyLiElements.length; i++){
+
+                    doc.lazyExpandableNavigation.load(lazyLiElements[i]);
+
+                    var $li = $(lazyLiElements[i]);
+                    var childLazyLiElements = $li.find("li.lazy-expand");
+                    if(childLazyLiElements.length > 0){
+                        doc.lazyExpandableNavigation.isAllLoaded = false;
+                        doc.lazyExpandableNavigation.loadAll(childLazyLiElements);
+                    }
+                }
+                
+                doc.lazyExpandableNavigation.isAllLoaded = true;
+            },
+            load : function(lazyLiEment){
+                var $li = $(lazyLiEment);
+
+                if($li.has("ul").length > 0){
+                    return;
+                }
+                
+                var $a = $li.find("a");
+                var text = $a.contents().filter(function() { return this.nodeType === 3 }).text();
+                var node = doc.lazyExpandableNavigation.findNode(text, $a.attr("href") , doc.project.navigation);
+                if(!node || !node.items){
+                    return;
+                }
+                node.items.forEach(item => {
+                    doc.lazyExpandableNavigation.renderNodeAsHtml($li, item, true);
+                })
+
+                initLazyExpandNavigation();
+            }
+        }
+        
         var initNavigationFilter = function (navigationContainerId) {
             var $navigation = $('#' + navigationContainerId);
 
@@ -23,15 +105,22 @@
                     return;
                 }
 
+                doc.lazyExpandableNavigation.loadAll($navigation.find("li.lazy-expand"));
+                
                 var filteredItems = $navigation
                     .find('li > a')
                     .filter(function () {
-                        return (
-                            $(this)
-                                .text()
-                                .toUpperCase()
-                                .indexOf(filterText.toUpperCase()) > -1
-                        );
+                        var keywords = ($(this).data('keywords') || "").split(",");
+                        var text = $(this).text();
+                        
+                        if(text.toUpperCase().indexOf(filterText.toUpperCase()) > -1)
+                        {
+                            return true;
+                        }
+                        
+                        return keywords.some(function(keyword){
+                            return keyword.toUpperCase().indexOf(filterText.toUpperCase()) > -1;
+                        });
                     });
 
                 filteredItems.each(function () {
@@ -74,7 +163,10 @@
             });
             
             function fullSearch(filterText){
-                window.open($('#fullsearch').data('fullsearch-url') + "?keyword=" + encodeURIComponent(filterText));
+                var url = $('#fullsearch').data('fullsearch-url');
+                if(url){
+                    window.open(url + "?keyword=" + encodeURIComponent(filterText));
+                }
             }
 
             $('#fullsearch').keyup(function (e) {
@@ -94,6 +186,23 @@
                 anchors.add(container + ' ' + tag);
             });
         };
+
+        var initDocProject = function(){
+            abp.ajax({
+                type :"GET",
+                url: '/docs/document-navigation',
+                data: {
+                    projectId: doc.project.id,
+                    version: doc.project.version,
+                    routeVersion: doc.project.routeVersion,
+                    languageCode: doc.project.languageCode,
+                    projectName: doc.project.name,
+                    projectFormat: doc.project.format
+                }
+            }).done(data => {
+                doc.project.navigation = data;
+            })
+        }
 
         var initSocialShareLinks = function () {
             var pageHeader = $('.docs-body').find('h1, h2').first().text();
@@ -269,6 +378,21 @@
             }
         };
         
+        var initLazyExpandNavigation = function(){
+            $("li .lazy-expand").off('click');
+            $("li .lazy-expand").children("a").off('click');
+            $("li .lazy-expand").children("a").on('click', function(e){
+                if($(this).attr("href") !== "javascript:;"){
+                    e.stopPropagation();
+                }
+            });
+            $("li .lazy-expand").on('click', function(){
+                doc.lazyExpandableNavigation.load(this);
+            });
+        }
+
+        initDocProject();
+        
         initNavigationFilter('sidebar-scroll');
 
         initAnchorTags('.docs-page .docs-body');
@@ -277,6 +401,30 @@
 
         initSections();
 
-        initDocumentNodeBreadcrumb();
+        initLazyExpandNavigation();
+        
+        Element.prototype.querySelector = function (selector) {
+            var result = $(this).find(decodeURI(selector));
+            if(result.length > 0){
+                return result[0];
+            }
+            return null;
+        };
+        
+        var originalSet = Map.prototype.set;
+        Map.prototype.set = function (key, value) {
+            if(typeof key === 'string'){
+                key = decodeURI(key);
+            }
+            return originalSet.call(this, key, value);
+        };
+        
+        $('#DownloadPdfBtn').click(function () {
+            var url = $(this).data('url');
+            if (url) {
+                window.open(url, '_blank');
+            }
+        });
+        
     });
 })(jQuery);

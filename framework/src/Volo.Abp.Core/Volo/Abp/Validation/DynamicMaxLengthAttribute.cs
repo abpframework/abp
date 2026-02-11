@@ -8,7 +8,7 @@ namespace Volo.Abp.Validation;
 
 public class DynamicMaxLengthAttribute : MaxLengthAttribute
 {
-    private static readonly FieldInfo MaximumLengthField;
+    private static readonly FieldInfo? MaximumLengthField;
 
     static DynamicMaxLengthAttribute()
     {
@@ -21,7 +21,7 @@ public class DynamicMaxLengthAttribute : MaxLengthAttribute
 
     public DynamicMaxLengthAttribute(
         [NotNull] Type sourceType,
-        [CanBeNull] string maximumLengthPropertyName)
+        string? maximumLengthPropertyName)
     {
         Check.NotNull(sourceType, nameof(sourceType));
 
@@ -32,7 +32,7 @@ public class DynamicMaxLengthAttribute : MaxLengthAttribute
                 BindingFlags.Static | BindingFlags.Public
             );
             Debug.Assert(maximumLengthProperty != null, nameof(maximumLengthProperty) + " != null");
-            MaximumLengthField.SetValue(this, (int)maximumLengthProperty.GetValue(null));
+            MaximumLengthField?.SetValue(this, (int)maximumLengthProperty?.GetValue(null)!);
         }
     }
 }

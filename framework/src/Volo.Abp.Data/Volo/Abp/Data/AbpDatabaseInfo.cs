@@ -24,4 +24,16 @@ public class AbpDatabaseInfo
         DatabaseName = databaseName;
         MappedConnections = new HashSet<string>();
     }
+    
+    /// <summary>
+    /// Shortcut method to add one or multiple connections to the <see cref="MappedConnections"/> collection.
+    /// </summary>
+    /// <param name="connectionNames"></param>
+    public void MapConnection(params string[] connectionNames)
+    {
+        foreach (var connectionName in connectionNames)
+        {
+            MappedConnections.AddIfNotContains(connectionName);
+        }
+    }
 }

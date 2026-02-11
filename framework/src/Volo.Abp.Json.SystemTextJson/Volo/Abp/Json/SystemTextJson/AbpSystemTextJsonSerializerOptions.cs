@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Volo.Abp.Collections;
 
 namespace Volo.Abp.Json.SystemTextJson;
 

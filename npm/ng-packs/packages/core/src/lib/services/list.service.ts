@@ -1,9 +1,10 @@
-import { Injectable, Injector, OnDestroy } from '@angular/core';
+import { Injectable, Injector, OnDestroy, inject } from '@angular/core';
 import {
+  EMPTY,
   BehaviorSubject,
+  defer,
   MonoTypeOperatorFunction,
   Observable,
-  of,
   ReplaySubject,
   Subject,
 } from 'rxjs';
@@ -11,6 +12,7 @@ import {
   catchError,
   debounceTime,
   filter,
+  finalize,
   shareReplay,
   switchMap,
   takeUntil,
@@ -19,6 +21,8 @@ import {
 import { ABP } from '../models/common';
 import { PagedResultDto } from '../models/dtos';
 import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
+
+export type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
 
 @Injectable()
 export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements OnDestroy {
@@ -40,7 +44,6 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this._maxResultCount;
   }
 
-  private _skipCount = 0;
   private _page = 0;
   set page(value: number) {
     if (value === this._page) return;
@@ -52,12 +55,23 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this._page;
   }
 
-  private _sortKey = '';
-  set sortKey(value: string) {
+  private _totalCount = 0;
+  set totalCount(value: number) {
+    if (value === this._totalCount) return;
+
+    this._totalCount = value;
+    this.get();
+  }
+  get totalCount(): number {
+    return this._totalCount;
+  }
+
+  private _sortKey: string | number = '';
+  set sortKey(value: string | number) {
     this._sortKey = value;
     this.get();
   }
-  get sortKey(): string {
+  get sortKey(): string | number {
     return this._sortKey;
   }
 
@@ -80,12 +94,21 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
 
   private _isLoading$ = new BehaviorSubject(false);
 
+  private _requestStatus = new BehaviorSubject<RequestStatus>('idle');
+
   private destroy$ = new Subject<void>();
 
   private delay: MonoTypeOperatorFunction<QueryParamsType>;
 
+  /**
+   * @deprecated Use `requestStatus$` instead.
+   */
   get isLoading$(): Observable<boolean> {
-    return this._isLoading$.asObservable();
+    return this._isLoading$.asObservable().pipe(takeUntil(this.destroy$));
+  }
+
+  get requestStatus$(): Observable<RequestStatus> {
+    return this._requestStatus.asObservable().pipe(takeUntil(this.destroy$));
   }
 
   get = () => {
@@ -97,7 +120,9 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     this.next();
   };
 
-  constructor(injector: Injector) {
+  constructor() {
+    const injector = inject(Injector);
+
     const delay = injector.get(LIST_QUERY_DEBOUNCE_TIME, 300);
     this.delay = delay ? debounceTime(delay) : tap();
     this.get();
@@ -108,9 +133,21 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
   ): Observable<PagedResultDto<T>> {
     return this.query$.pipe(
       tap(() => this._isLoading$.next(true)),
-      switchMap(query => streamCreatorCallback(query).pipe(catchError(() => of(null)))),
+      tap(() => this._requestStatus.next('loading')),
+      switchMap(query =>
+        defer(() => streamCreatorCallback(query)).pipe(
+          catchError(() => {
+            this._requestStatus.next('error');
+            return EMPTY;
+          }),
+          tap(() => this._requestStatus.next('success')),
+          finalize(() => {
+            this._isLoading$.next(false);
+            this._requestStatus.next('idle');
+          }),
+        ),
+      ),
       filter(Boolean),
-      tap(() => this._isLoading$.next(false)),
       shareReplay<any>({ bufferSize: 1, refCount: true }),
       takeUntil(this.destroy$),
     );
@@ -119,14 +156,17 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
   ngOnDestroy() {
     this.destroy$.next();
   }
-
   private resetPageWhenUnchanged() {
+    const maxPage = Number(Number(this.totalCount / this._maxResultCount).toFixed());
     const skipCount = this._page * this._maxResultCount;
 
-    if (skipCount === this._skipCount) {
-      this._page = 0;
-      this._skipCount = 0;
-    } else this._skipCount = skipCount;
+    if (skipCount !== this._totalCount) {
+      return;
+    }
+
+    if (this.page === maxPage && this.page > 0) {
+      this.page = this.page - 1;
+    }
   }
 
   private next() {

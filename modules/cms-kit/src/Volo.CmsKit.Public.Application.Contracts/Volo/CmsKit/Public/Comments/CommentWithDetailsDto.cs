@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Public.Comments;
 
 [Serializable]
-public class CommentWithDetailsDto : IHasConcurrencyStamp
+public class CommentWithDetailsDto : ExtensibleObject, IHasConcurrencyStamp
 {
     public Guid Id { get; set; }
 

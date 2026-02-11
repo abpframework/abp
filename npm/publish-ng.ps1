@@ -1,6 +1,7 @@
 param(
   [string]$Version,
-  [string]$Registry
+  [string]$Registry,
+  [string]$LeptonXVersion
 )
 
 yarn install
@@ -16,10 +17,10 @@ if (-Not $Registry) {
   $Registry = "https://registry.npmjs.org";
 }
 
-$UpdateNgPacksCommand = "yarn update ./ng-packs abp --registry $Registry"
+$UpdateNgPacksCommand = "yarn update-version $Version"
 $NgPacksPublishCommand = "npm run publish-packages -- --nextVersion $Version --skipGit --registry $Registry --skipVersionValidation"
 $UpdateGulpCommand = "yarn update-gulp --registry $Registry"
-
+$UpdateLeptonXCommand = "yarn update-lepton-x-versions -v $LeptonXVersion";
 
 $IsPrerelease = $(node publish-utils.js --prerelease --customVersion $Version) -eq "true";
 
@@ -29,15 +30,19 @@ if ($IsPrerelease) {
 }
 
 $commands = (
+  "cd ng-packs",
+  "yarn install",
   $UpdateNgPacksCommand,
-  "cd ng-packs\scripts",
+  "cd scripts",
   "yarn install",
   $NgPacksPublishCommand,
   "cd ../../",
   "cd scripts",
   "yarn remove-lock-files",
   "cd ..",
-  $UpdateGulpCommand
+  $UpdateGulpCommand,
+  "cd scripts",
+  $UpdateLeptonXCommand
 )
 
 foreach ($command in $commands) { 

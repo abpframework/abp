@@ -1,6 +1,5 @@
 {
-  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/<%= kebab(target) %>/<%= kebab(libraryName) %>",
+  "$schema": "../../../node_modules/ng-packagr/ng-entrypoint.schema.json",
   "lib": {
     "entryFile": "src/public-api.ts"
   }

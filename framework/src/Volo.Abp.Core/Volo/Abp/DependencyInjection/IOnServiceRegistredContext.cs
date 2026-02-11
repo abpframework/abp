@@ -9,4 +9,6 @@ public interface IOnServiceRegistredContext
     ITypeList<IAbpInterceptor> Interceptors { get; }
 
     Type ImplementationType { get; }
+
+    object? ServiceKey { get; }
 }

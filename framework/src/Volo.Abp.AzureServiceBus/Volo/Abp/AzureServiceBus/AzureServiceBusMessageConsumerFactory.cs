@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -14,7 +13,7 @@ public class AzureServiceBusMessageConsumerFactory : IAzureServiceBusMessageCons
         ServiceScope = serviceScopeFactory.CreateScope();
     }
 
-    public IAzureServiceBusMessageConsumer CreateMessageConsumer(string topicName, string subscriptionName, string connectionName)
+    public IAzureServiceBusMessageConsumer CreateMessageConsumer(string topicName, string subscriptionName, string? connectionName)
     {
         var processor = ServiceScope.ServiceProvider.GetRequiredService<AzureServiceBusMessageConsumer>();
         processor.Initialize(topicName, subscriptionName, connectionName);

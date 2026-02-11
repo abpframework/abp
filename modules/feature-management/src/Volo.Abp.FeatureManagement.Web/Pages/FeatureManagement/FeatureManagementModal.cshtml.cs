@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
@@ -24,6 +25,10 @@ public class FeatureManagementModal : AbpPageModel
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ProviderKey { get; set; }
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public string ProviderKeyDisplayName { get; set; }
 
     [BindProperty]
     public List<FeatureGroupViewModel> FeatureGroups { get; set; }
@@ -51,7 +56,10 @@ public class FeatureManagementModal : AbpPageModel
     public virtual async Task<IActionResult> OnGetAsync()
     {
         ValidateModel();
-
+        if (!ProviderKeyDisplayName.IsNullOrWhiteSpace())
+        {
+            ProviderKeyDisplayName = " - " + HttpUtility.HtmlEncode(ProviderKeyDisplayName);
+        }
         FeatureListResultDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
         return Page();
@@ -61,7 +69,7 @@ public class FeatureManagementModal : AbpPageModel
     {
         var features = new UpdateFeaturesDto
         {
-            Features = FeatureGroups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
+            Features = FeatureGroups.SelectMany(g => g.Features).Where(x => !x.IsDisabled).Select(f => new UpdateFeatureDto
             {
                 Name = f.Name,
                 Value = f.Type == nameof(ToggleStringValueType) ? f.BoolValue.ToString() : f.Value
@@ -77,9 +85,19 @@ public class FeatureManagementModal : AbpPageModel
         return NoContent();
     }
 
-    public virtual bool IsDisabled(string providerName)
+    public virtual bool IsDisabled(FeatureDto feature)
     {
-        return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+        return feature.Value != null &&
+               feature.Provider.Name != null &&
+               feature.Provider.Name != ProviderName &&
+               feature.Provider.Name != DefaultValueFeatureValueProvider.ProviderName;
+    }
+
+    public virtual string GetShownName(FeatureDto featureDto)
+    {
+        return !IsDisabled(featureDto)
+            ? featureDto.DisplayName
+            : $"{featureDto.DisplayName} ({featureDto.Provider.Name})";
     }
 
     public class FeatureGroupViewModel
@@ -89,6 +107,8 @@ public class FeatureManagementModal : AbpPageModel
 
     public class FeatureViewModel
     {
+        public bool IsDisabled { get; set; }
+
         public string Name { get; set; }
 
         public string Value { get; set; }

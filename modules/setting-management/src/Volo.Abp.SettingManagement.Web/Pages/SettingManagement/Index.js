@@ -7,7 +7,8 @@
             return;
         }
 
-        var id = _this.data("id")
+        var id = _this.data("id");
+        var tabId = id.replace(/\./g, '-');
         abp.ui.block({
           elm: '#tab-content',
           busy: true,
@@ -19,14 +20,14 @@
                processData: false
            }).done(function (response) {
                $('#tab-content').children('.tab-pane').removeClass('show').removeClass('active');
-               _this.attr('data-bs-target', '#' + $.escapeSelector($.escapeSelector(id)));
-               $('#tab-content').append('<div id=' + $.escapeSelector(id) + ' class="tab-pane fade active show">' + response + '</div>');
+               _this.attr('data-bs-target', '#' + tabId);
+               $('#tab-content').append('<div id=' + tabId + ' class="tab-pane fade active show abp-md-form">' + response + '</div>');
            })
         });
     }).first().click();
 
     $(document).on('AbpSettingSaved', function () {
-        abp.notify.success(l('SuccessfullySaved'));
+        abp.notify.success(l('SavedSuccessfully'));
 
         abp.ajax({
            url: abp.appPath + 'SettingManagement?handler=RefreshConfiguration'

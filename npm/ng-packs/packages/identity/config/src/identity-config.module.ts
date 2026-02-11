@@ -1,12 +1,15 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { IDENTITY_ROUTE_PROVIDERS } from './providers/route.provider';
+import { provideIdentityConfig } from './providers';
 
+/**
+ * @deprecated IdentityConfigModule is deprecated use `provideIdentityConfig` *function* instead.
+ */
 @NgModule()
 export class IdentityConfigModule {
   static forRoot(): ModuleWithProviders<IdentityConfigModule> {
     return {
       ngModule: IdentityConfigModule,
-      providers: [IDENTITY_ROUTE_PROVIDERS],
+      providers: [provideIdentityConfig()],
     };
   }
 }

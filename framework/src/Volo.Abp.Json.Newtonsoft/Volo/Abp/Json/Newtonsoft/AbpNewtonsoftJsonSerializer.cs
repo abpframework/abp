@@ -26,12 +26,12 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
 
     public T Deserialize<T>(string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase));
+        return JsonConvert.DeserializeObject<T>(jsonString, CreateJsonSerializerOptions(camelCase))!;
     }
 
     public object Deserialize(Type type, string jsonString, bool camelCase = true)
     {
-        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase));
+        return JsonConvert.DeserializeObject(jsonString, type, CreateJsonSerializerOptions(camelCase))!;
     }
 
     private readonly static ConcurrentDictionary<object, JsonSerializerSettings> JsonSerializerOptionsCache =
@@ -45,6 +45,7 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
             indented
         }, _ =>
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             var settings = new JsonSerializerSettings
             {
                 Binder = Options.Value.JsonSerializerSettings.Binder,
@@ -80,11 +81,13 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
                 TypeNameHandling = Options.Value.JsonSerializerSettings.TypeNameHandling,
                 TypeNameAssemblyFormatHandling = Options.Value.JsonSerializerSettings.TypeNameAssemblyFormatHandling
             };
+#pragma warning restore CS0618 // Type or member is obsolete
 
             if (!camelCase)
             {
                 //Default contract resolver is AbpCamelCasePropertyNamesContractResolver}
-                settings.ContractResolver = new AbpDefaultContractResolver(RootServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+                settings.ContractResolver = new AbpDefaultContractResolver(RootServiceProvider
+                    .GetRequiredService<AbpDateTimeConverter>().SkipDateTimeNormalization());
             }
 
             if (indented)

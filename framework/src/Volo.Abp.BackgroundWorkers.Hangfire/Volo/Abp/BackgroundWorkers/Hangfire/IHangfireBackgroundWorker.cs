@@ -6,11 +6,11 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
 public interface IHangfireBackgroundWorker : IBackgroundWorker
 {
-    string RecurringJobId { get; set; }
+    string? RecurringJobId { get; set; }
 
     string CronExpression { get; set; }
 
-    TimeZoneInfo TimeZone  { get; set; }
+    TimeZoneInfo? TimeZone  { get; set; }
 
     string Queue  { get; set; }
 

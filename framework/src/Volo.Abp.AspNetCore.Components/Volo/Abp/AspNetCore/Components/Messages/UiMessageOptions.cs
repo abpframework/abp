@@ -18,35 +18,40 @@ public class UiMessageOptions
     /// <summary>
     /// Overrides the build-in message icon.
     /// </summary>
-    public object MessageIcon { get; set; }
+    public object? MessageIcon { get; set; }
 
     /// <summary>
     /// Custom text for the Ok button.
     /// </summary>
-    public string OkButtonText { get; set; }
+    public string? OkButtonText { get; set; }
 
     /// <summary>
     /// Custom icon for the Ok button.
     /// </summary>
-    public object OkButtonIcon { get; set; }
+    public object? OkButtonIcon { get; set; }
 
     /// <summary>
     /// Custom text for the Confirmation button.
     /// </summary>
-    public string ConfirmButtonText { get; set; }
+    public string? ConfirmButtonText { get; set; }
 
     /// <summary>
     /// Custom icon for the Confirmation button.
     /// </summary>
-    public object ConfirmButtonIcon { get; set; }
+    public object? ConfirmButtonIcon { get; set; }
 
     /// <summary>
     /// Custom text for the Cancel button.
     /// </summary>
-    public string CancelButtonText { get; set; }
+    public string? CancelButtonText { get; set; }
 
     /// <summary>
     /// Custom icon for the Cancel button.
     /// </summary>
-    public object CancelButtonIcon { get; set; }
+    public object? CancelButtonIcon { get; set; }
+
+    /// <summary>
+    /// Whether the message is html (true) or plain text (false)
+    /// </summary>
+    public bool IsMessageHtmlMarkup { get; set; }
 }

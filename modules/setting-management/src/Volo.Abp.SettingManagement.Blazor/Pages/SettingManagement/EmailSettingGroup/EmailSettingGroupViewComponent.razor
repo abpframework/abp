@@ -79,7 +79,7 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["SmtpPassword"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword">
+                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword" Placeholder="@L["SmtpPasswordPlaceholder"].Value">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
@@ -90,15 +90,16 @@
                 </Column>
             </Row>
         </Validations>
+        <hr />
         <Row>
             <Column>
-                <SubmitButton Clicked="@UpdateSettingsAsync"/>
                 @if (HasSendTestEmailPermission)
                 {
-                    <Button style="margin: 0.25rem" Color="Color.Primary" Clicked="OpenSendTestEmailModalAsync">@L["SendTestEmail"]</Button>
+                    <Button style="margin: 0.25rem" Color="Color.Primary" Outline Clicked="OpenSendTestEmailModalAsync">@L["SendTestEmail"]</Button>
                 }
+                <SubmitButton Clicked="@UpdateSettingsAsync"/>
             </Column>
-            
+
         </Row>
     </Form>
 
@@ -106,7 +107,7 @@
     {
         <Modal @ref="SendTestEmailModal">
             <ModalContent Centered="true">
-                <Form>
+                <Form id="SendTestEmailForm">
                     <ModalHeader>
                         <ModalTitle>@L["SendTestEmail"]</ModalTitle>
                         <CloseButton Clicked="CloseSendTestEmailModalAsync"/>
@@ -157,7 +158,7 @@
                     </ModalBody>
                     <ModalFooter>
                         <Button Color="Color.Secondary" Clicked="CloseSendTestEmailModalAsync">@L["Cancel"]</Button>
-                        <Button Color="Color.Primary" Clicked="SendTestEmailAsync">@L["Send"]</Button>
+                        <SubmitButton Form="SendTestEmailForm" Clicked="SendTestEmailAsync">@L["Send"]</SubmitButton>
                     </ModalFooter>
                 </Form>
             </ModalContent>

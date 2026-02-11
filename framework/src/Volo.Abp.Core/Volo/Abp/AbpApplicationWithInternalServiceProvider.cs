@@ -7,11 +7,11 @@ namespace Volo.Abp;
 
 internal class AbpApplicationWithInternalServiceProvider : AbpApplicationBase, IAbpApplicationWithInternalServiceProvider
 {
-    public IServiceScope ServiceScope { get; private set; }
+    public IServiceScope? ServiceScope { get; private set; }
 
     public AbpApplicationWithInternalServiceProvider(
         [NotNull] Type startupModuleType,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction
+        Action<AbpApplicationCreationOptions>? optionsAction
         ) : this(
         startupModuleType,
         new ServiceCollection(),
@@ -23,7 +23,7 @@ internal class AbpApplicationWithInternalServiceProvider : AbpApplicationBase, I
     private AbpApplicationWithInternalServiceProvider(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction
+        Action<AbpApplicationCreationOptions>? optionsAction
         ) : base(
             startupModuleType,
             services,
@@ -34,6 +34,7 @@ internal class AbpApplicationWithInternalServiceProvider : AbpApplicationBase, I
 
     public IServiceProvider CreateServiceProvider()
     {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (ServiceProvider != null)
         {
             return ServiceProvider;
@@ -42,19 +43,22 @@ internal class AbpApplicationWithInternalServiceProvider : AbpApplicationBase, I
         ServiceScope = Services.BuildServiceProviderFromFactory().CreateScope();
         SetServiceProvider(ServiceScope.ServiceProvider);
 
-        return ServiceProvider;
+        return ServiceProvider!;
     }
 
     public async Task InitializeAsync()
     {
         CreateServiceProvider();
         await InitializeModulesAsync();
+        await SetupTelemetryTrackingAsync();
+        
     }
 
     public void Initialize()
     {
         CreateServiceProvider();
         InitializeModules();
+        SetupTelemetryTracking();
     }
 
     public override void Dispose()

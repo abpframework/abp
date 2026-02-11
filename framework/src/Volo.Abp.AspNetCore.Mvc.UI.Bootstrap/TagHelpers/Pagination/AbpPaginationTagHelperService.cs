@@ -106,11 +106,11 @@ public class AbpPaginationTagHelperService : AbpTagHelperService<AbpPaginationTa
     protected virtual async Task<string> GetPreviousButtonAsync(TagHelperContext context, TagHelperOutput output)
     {
         var localizationKey = "PagerPrevious";
-        var currentPage = TagHelper.Model.CurrentPage == 1
-            ? TagHelper.Model.CurrentPage.ToString()
-            : (TagHelper.Model.CurrentPage - 1).ToString();
+        var currentPage = TagHelper.Model.CurrentPage > 1
+            ? (TagHelper.Model.CurrentPage - 1).ToString()
+            : "1";
         return
-            "<li class=\"page-item " + (TagHelper.Model.CurrentPage == 1 ? "disabled" : "") + "\">\r\n" +
+            "<li class=\"page-item " + (TagHelper.Model.CurrentPage <= 1 ? "disabled" : "") + "\">\r\n" +
             (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey)) + "                </li>";
     }
 

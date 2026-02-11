@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "商業版支援網站",
     "CommunityWebSite": "ABP社區網站",
     "ManageAccount": "我的帳戶 | ABP.IO",
-    "ManageYourAccount": "管理您的帳戶"
+    "ManageYourProfile": "管理您的個人資料",
+    "ReturnToApplication": "返回申請"
   }
 }

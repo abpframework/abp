@@ -6,6 +6,11 @@
     "CarPlural": "कारों",
     "MaxLenghtErrorMessage": "इस क्षेत्र की लंबाई अधिकतम '{0}' वर्ण हो सकती है",
     "Universe": "ब्रम्हांड",
-    "FortyTwo": "बयालीस"
+    "FortyTwo": "बयालीस",
+    "Enum:BookType.Undefined": "अपरिभाषित",
+    "Enum:BookType.0": "मान 0 के साथ अपरिभाषित",
+    "BookType.Adventure": "साहसिक काम",
+    "BookType.1": "मूल्य 1 के साथ साहसिक कार्य",
+    "Biography": "जीवनी"
   }
 }

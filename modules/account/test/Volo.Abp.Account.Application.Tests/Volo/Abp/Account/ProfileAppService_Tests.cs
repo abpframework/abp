@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
 using Volo.Abp.Users;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Volo.Abp.Account;
@@ -70,6 +71,57 @@ public class ProfileAppService_Tests : AbpAccountApplicationTestBase
         result.PhoneNumber.ShouldBe(input.PhoneNumber);
         result.Surname.ShouldBe(input.Surname);
         result.Name.ShouldBe(input.Name);
+    }
+
+    [Fact]
+    public async Task Should_Not_UpdatePhoneNumber_If_Input_PhoneNumber_IsNullOrWhiteSpace_Test()
+    {
+        //Arrange
+        _currentUser.Id.Returns(_testData.UserJohnId);
+        _currentUser.IsAuthenticated.Returns(true);
+
+        //Act
+        var result = await _profileAppService.UpdateAsync(new UpdateProfileDto
+        {
+            UserName = CreateRandomString(),
+            Email = CreateRandomEmail(),
+            PhoneNumber = ""
+        });
+
+        //Assert
+        result.PhoneNumber.ShouldBe(null);
+
+        //Act
+        result = await _profileAppService.UpdateAsync(new UpdateProfileDto
+        {
+            UserName = CreateRandomString(),
+            Email = CreateRandomEmail(),
+            PhoneNumber = "123"
+        });
+
+        //Assert
+        result.PhoneNumber.ShouldBe("123");
+    }
+
+    [Fact]
+    public async Task ChangePasswordAsync_FailsForSamePassword()
+    {
+        //Arrange
+        _currentUser.Id.Returns(_testData.UserJohnId);
+        _currentUser.IsAuthenticated.Returns(true);
+
+        //Act
+        var ex = await _profileAppService.ChangePasswordAsync(new()
+        {
+            CurrentPassword = "SomePassword123!",
+            NewPassword = "SomePassword123!"
+        }).ShouldThrowAsync<AbpValidationException>();
+
+        //Assert
+        ex.ValidationErrors.ShouldNotBeEmpty();
+        var firstError = ex.ValidationErrors[0];
+        firstError.MemberNames.ShouldContain(nameof(ChangePasswordInput.CurrentPassword));
+        firstError.MemberNames.ShouldContain(nameof(ChangePasswordInput.NewPassword));
     }
 
     private static string CreateRandomEmail()

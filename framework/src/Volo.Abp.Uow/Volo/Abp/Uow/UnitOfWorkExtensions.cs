@@ -19,14 +19,7 @@ public static class UnitOfWorkExtensions
     {
         Check.NotNull(unitOfWork, nameof(unitOfWork));
 
-        if (!unitOfWork.Items.ContainsKey(key))
-        {
-            unitOfWork.Items[key] = value;
-        }
-        else
-        {
-            unitOfWork.Items.Add(key, value);
-        }
+        unitOfWork.Items[key] = value;
     }
 
     public static TValue GetItemOrDefault<TValue>([NotNull] this IUnitOfWork unitOfWork, string key)

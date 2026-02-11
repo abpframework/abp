@@ -2,7 +2,7 @@
 
 public class AbpCollapseBodyTagHelper : AbpTagHelper<AbpCollapseBodyTagHelper, AbpCollapseBodyTagHelperService>
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     public bool? Multi { get; set; }
 

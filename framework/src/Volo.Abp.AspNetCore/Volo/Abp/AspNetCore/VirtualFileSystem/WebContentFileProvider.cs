@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -11,6 +10,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem;
 
+[Dependency(ReplaceServices = true)]
 public class WebContentFileProvider : IWebContentFileProvider, ISingletonDependency
 {
     private readonly IVirtualFileProvider _virtualFileProvider;
@@ -34,7 +34,10 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
 
     public virtual IFileInfo GetFileInfo(string subpath)
     {
-        Check.NotNullOrEmpty(subpath, nameof(subpath));
+        if (string.IsNullOrEmpty(subpath))
+        {
+            return new NotFoundFileInfo(subpath);
+        }
 
         if (PathUtils.PathNavigatesAboveRoot(subpath))
         {
@@ -53,11 +56,9 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
         return _fileProvider.GetFileInfo(_rootPath + subpath);
     }
 
-    public virtual IDirectoryContents GetDirectoryContents([NotNull] string subpath)
+    public virtual IDirectoryContents GetDirectoryContents(string subpath)
     {
-        Check.NotNullOrEmpty(subpath, nameof(subpath));
-
-        if (PathUtils.PathNavigatesAboveRoot(subpath))
+        if (subpath == null || PathUtils.PathNavigatesAboveRoot(subpath))
         {
             return NotFoundDirectoryContents.Singleton;
         }
@@ -84,23 +85,22 @@ public class WebContentFileProvider : IWebContentFileProvider, ISingletonDepende
         return new CompositeChangeToken(
             new[]
             {
-                    _fileProvider.Watch(_rootPath + filter),
-                    _fileProvider.Watch(filter)
+                _fileProvider.Watch(_rootPath + filter),
+                _fileProvider.Watch(filter)
             }
         );
     }
 
     protected virtual IFileProvider CreateFileProvider()
     {
-        var fileProviders = new List<IFileProvider>
-            {
-                new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
-                _virtualFileProvider
-            };
+        var fileProviders = new List<IFileProvider>();
+        if (!_hostingEnvironment.ContentRootPath.IsNullOrEmpty())
+        {
+            fileProviders.Add(new PhysicalFileProvider(_hostingEnvironment.ContentRootPath));
+        }
 
-        return new CompositeFileProvider(
-            fileProviders
-        );
+        fileProviders.Add(_virtualFileProvider);
+        return new CompositeFileProvider(fileProviders);
     }
 
     protected virtual bool ExtraAllowedFolder(string path)

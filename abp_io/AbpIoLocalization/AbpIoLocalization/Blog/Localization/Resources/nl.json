@@ -1,0 +1,8 @@
+{
+  "culture": "nl",
+  "texts": {
+    "AbpTitle": "Lees alle blogberichten",
+    "AbpDescription": "ABP is een open source applicatieframework gericht op de ontwikkeling van op AspNet Core gebaseerde webapplicaties. Herhaal uzelf niet, maar concentreer u op uw eigen bedrijfscode.",
+    "AbpDefinition": "ABP-blog voor .NET-ontwikkeling, platformonafhankelijk, ASP.NET-toepassingssjablonen, ABP-gerelateerd nieuws en meer..."
+  }
+}

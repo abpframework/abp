@@ -7,6 +7,4 @@ public interface ILanguageInfo
     string UiCultureName { get; }
 
     string DisplayName { get; }
-
-    string FlagIcon { get; }
 }

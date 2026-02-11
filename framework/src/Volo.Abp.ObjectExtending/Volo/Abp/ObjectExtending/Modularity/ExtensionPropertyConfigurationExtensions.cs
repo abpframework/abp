@@ -5,7 +5,7 @@ namespace Volo.Abp.ObjectExtending.Modularity;
 
 public static class ExtensionPropertyConfigurationExtensions
 {
-    public static string GetLocalizationResourceNameOrNull(
+    public static string? GetLocalizationResourceNameOrNull(
         this ExtensionPropertyConfiguration property)
     {
         if (property.DisplayName is LocalizableString localizableString)
@@ -16,7 +16,7 @@ public static class ExtensionPropertyConfigurationExtensions
         return null;
     }
 
-    public static Type GetLocalizationResourceTypeOrNull(
+    public static Type? GetLocalizationResourceTypeOrNull(
         this ExtensionPropertyConfiguration property)
     {
         if (property.DisplayName is LocalizableString localizableString)

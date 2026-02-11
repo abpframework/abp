@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
@@ -9,10 +10,16 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 
 [DependsOn(
     typeof(BlobStoringDatabaseTestBaseModule),
-    typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
+    typeof(BlobStoringDatabaseEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreSqliteModule)
     )]
 public class BlobStoringDatabaseEntityFrameworkCoreTestModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var sqliteConnection = CreateDatabaseAndGetConnection();
@@ -28,7 +35,7 @@ public class BlobStoringDatabaseEntityFrameworkCoreTestModule : AbpModule
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
     {
-        var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
         connection.Open();
 
         new BlobStoringDbContext(

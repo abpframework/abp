@@ -1,6 +1,8 @@
 {
   "culture": "vi",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP qua SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP qua SSL",
     "DisplayName:Abp.Ldap.ServerHost": "Máy chủ lưu trữ",
     "Description:Abp.Ldap.ServerHost": "Máy chủ lưu trữ",
     "DisplayName:Abp.Ldap.ServerPort": "Cổng máy chủ",

@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.Uow;
@@ -21,13 +22,17 @@ public abstract class AbpOpenIddictStoreBase<TRepository>
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected AbpOpenIddictIdentifierConverter IdentifierConverter { get; }
+    protected IOpenIddictDbConcurrencyExceptionHandler ConcurrencyExceptionHandler { get; }
+    protected IOptions<AbpOpenIddictStoreOptions> StoreOptions { get; }
 
-    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator, AbpOpenIddictIdentifierConverter identifierConverter)
+    protected AbpOpenIddictStoreBase(TRepository repository, IUnitOfWorkManager unitOfWorkManager, IGuidGenerator guidGenerator, AbpOpenIddictIdentifierConverter identifierConverter, IOpenIddictDbConcurrencyExceptionHandler concurrencyExceptionHandler, IOptions<AbpOpenIddictStoreOptions> storeOptions)
     {
         Repository = repository;
         UnitOfWorkManager = unitOfWorkManager;
         GuidGenerator = guidGenerator;
         IdentifierConverter = identifierConverter;
+        ConcurrencyExceptionHandler = concurrencyExceptionHandler;
+        StoreOptions = storeOptions;
 
         Logger = NullLogger<AbpOpenIddictStoreBase<TRepository>>.Instance;
     }

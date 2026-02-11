@@ -10,8 +10,7 @@ public static class RemoteServiceConfigurationProviderExtensions
         this IRemoteServiceConfigurationProvider provider)
         => provider.GetConfigurationOrDefaultAsync(RemoteServiceConfigurationDictionary.DefaultName);
     
-    [ItemNotNull]
-    public static Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(
+    public static Task<RemoteServiceConfiguration?> GetConfigurationOrDefaultOrNullAsync(
         this IRemoteServiceConfigurationProvider provider)
         => provider.GetConfigurationOrDefaultOrNullAsync(RemoteServiceConfigurationDictionary.DefaultName);
 }

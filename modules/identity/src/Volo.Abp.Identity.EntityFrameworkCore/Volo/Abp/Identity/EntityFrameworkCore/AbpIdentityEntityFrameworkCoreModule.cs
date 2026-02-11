@@ -17,9 +17,10 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
             options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
             options.AddRepository<IdentityClaimType, EfCoreIdentityClaimTypeRepository>();
             options.AddRepository<OrganizationUnit, EfCoreOrganizationUnitRepository>();
-            options.AddRepository<IdentitySecurityLog, EFCoreIdentitySecurityLogRepository>();
+            options.AddRepository<IdentitySecurityLog, EfCoreIdentitySecurityLogRepository>();
             options.AddRepository<IdentityLinkUser, EfCoreIdentityLinkUserRepository>();
             options.AddRepository<IdentityUserDelegation, EfCoreIdentityUserDelegationRepository>();
+            options.AddRepository<IdentitySession, EfCoreIdentitySessionRepository>();
         });
     }
 }

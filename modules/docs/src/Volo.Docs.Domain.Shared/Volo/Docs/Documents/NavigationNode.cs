@@ -15,6 +15,21 @@ namespace Volo.Docs.Documents
 
         [JsonPropertyName("items")]
         public List<NavigationNode> Items { get; set; }
+        
+        [JsonPropertyName("isLazyExpandable")]
+        public bool IsLazyExpandable { get; set; }
+        
+        [JsonPropertyName("isIndex")]
+        public bool IsIndex { get; set; }
+        
+        [JsonPropertyName("keywords")]
+        public string[] Keywords { get; set; }
+        
+        [JsonPropertyName("ignoreOnDownload")]
+        public bool IgnoreOnDownload { get; set; }
+        
+        [JsonPropertyName("isInSeries")]
+        public bool IsInSeries { get; set; }
 
         public bool IsLeaf => !HasChildItems;
 
@@ -30,30 +45,45 @@ namespace Volo.Docs.Documents
 
         public bool IsSelected(string documentName)
         {
+            return FindNavigation(documentName) != null;
+        }
+
+        public NavigationNode FindNavigation(string documentName)
+        {
             if (documentName == null)
             {
-                return false;
+                return null;
             }
+            
+            var path = Path ?? string.Empty;
+            var pathHasExtension = System.IO.Path.HasExtension(path);
 
-            if (string.Equals(documentName, Path, StringComparison.OrdinalIgnoreCase))
+            if (!pathHasExtension)
             {
-                return true;
+                var extension = System.IO.Path.GetExtension(documentName);
+                path = path.EnsureEndsWith('/') + "index" + extension;
+            }
+            
+            if (string.Equals(documentName, path, StringComparison.OrdinalIgnoreCase))
+            {
+                return this;
             }
 
             if (Items == null)
             {
-                return false;
+                return null;
             }
 
             foreach (var childItem in Items)
             {
-                if (childItem.IsSelected(documentName))
+                var node = childItem.FindNavigation(documentName);
+                if (node != null)
                 {
-                    return true;
+                    return node;
                 }
             }
 
-            return false;
+            return null;
         }
     }
 

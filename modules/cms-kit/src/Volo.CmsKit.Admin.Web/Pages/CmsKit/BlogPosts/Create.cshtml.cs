@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -25,6 +25,7 @@ public class CreateModel : CmsKitAdminPageModel
         IBlogPostAdminAppService blogPostAdminAppService)
     {
         BlogPostAdminAppService = blogPostAdminAppService;
+        ViewModel = new CreateBlogPostViewModel();
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -48,8 +49,7 @@ public class CreateModel : CmsKitAdminPageModel
         return new OkObjectResult(createResult);
     }
 
-    [AutoMap(typeof(CreateBlogPostDto), ReverseMap = true)]
-    public class CreateBlogPostViewModel
+    public class CreateBlogPostViewModel : ExtensibleObject
     {
         [Required]
         [DynamicFormIgnore]

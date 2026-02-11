@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Emailing;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Features;
@@ -11,7 +12,7 @@ namespace Volo.Abp.SettingManagement;
 public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSettingsAppService
 {
     protected ISettingManager SettingManager { get; }
-    
+
     protected IEmailSender EmailSender { get; }
 
     public EmailSettingsAppService(ISettingManager settingManager, IEmailSender emailSender)
@@ -29,7 +30,6 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
             SmtpHost = await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Host),
             SmtpPort = Convert.ToInt32(await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Port)),
             SmtpUserName = await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.UserName),
-            SmtpPassword = await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Password),
             SmtpDomain = await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Domain),
             SmtpEnableSsl = Convert.ToBoolean(await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.EnableSsl)),
             SmtpUseDefaultCredentials = Convert.ToBoolean(await SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.UseDefaultCredentials)),
@@ -41,7 +41,6 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
         {
             settingsDto.SmtpHost = await SettingManager.GetOrNullForTenantAsync(EmailSettingNames.Smtp.Host, CurrentTenant.GetId(), false);
             settingsDto.SmtpUserName = await SettingManager.GetOrNullForTenantAsync(EmailSettingNames.Smtp.UserName, CurrentTenant.GetId(), false);
-            settingsDto.SmtpPassword = await SettingManager.GetOrNullForTenantAsync(EmailSettingNames.Smtp.Password, CurrentTenant.GetId(), false);
             settingsDto.SmtpDomain = await SettingManager.GetOrNullForTenantAsync(EmailSettingNames.Smtp.Domain, CurrentTenant.GetId(), false);
         }
 
@@ -55,7 +54,10 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Host, input.SmtpHost);
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Port, input.SmtpPort.ToString());
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.UserName, input.SmtpUserName);
-        await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Password, input.SmtpPassword);
+        if (!input.SmtpPassword.IsNullOrWhiteSpace())
+        {
+            await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Password, input.SmtpPassword);
+        }
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.Domain, input.SmtpDomain);
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.EnableSsl, input.SmtpEnableSsl.ToString());
         await SettingManager.SetForTenantOrGlobalAsync(CurrentTenant.Id, EmailSettingNames.Smtp.UseDefaultCredentials, input.SmtpUseDefaultCredentials.ToString().ToLowerInvariant());
@@ -68,7 +70,15 @@ public class EmailSettingsAppService : SettingManagementAppServiceBase, IEmailSe
     {
         await CheckFeatureAsync();
 
-        await EmailSender.SendAsync(input.SenderEmailAddress, input.TargetEmailAddress, input.Subject, input.Body);
+        try
+        {
+            await EmailSender.SendAsync(input.SenderEmailAddress, input.TargetEmailAddress, input.Subject, input.Body);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError("Error sending test email: " + e);
+            throw new UserFriendlyException(L["MailSendingFailed"]);
+        }
     }
 
     protected virtual async Task CheckFeatureAsync()

@@ -24,8 +24,7 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     [NotNull]
     public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
 
-    [CanBeNull]
-    public ILocalizableString DisplayName { get; set; }
+    public ILocalizableString? DisplayName { get; set; }
 
     /// <summary>
     /// Indicates whether to check the other side of the object mapping
@@ -47,18 +46,20 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     /// <summary>
     /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
     /// </summary>
-    [CanBeNull]
-    public object DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
 
     /// <summary>
     /// Used with the first priority to create the default value for the property.
     /// Uses to the <see cref="DefaultValue"/> if this was not set.
     /// </summary>
-    [CanBeNull]
-    public Func<object> DefaultValueFactory { get; set; }
+    public Func<object>? DefaultValueFactory { get; set; }
 
     [NotNull]
     public ExtensionPropertyLookupConfiguration Lookup { get; set; }
+
+    public ExtensionPropertyUI UI { get; set; }
+
+    public ExtensionPropertyPolicyConfiguration Policy { get; set; }
 
     public ObjectExtensionPropertyInfo(
         [NotNull] ObjectExtensionInfo objectExtension,
@@ -76,10 +77,47 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
         Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
         DefaultValue = TypeHelper.GetDefaultValue(Type);
         Lookup = new ExtensionPropertyLookupConfiguration();
+        UI = new ExtensionPropertyUI();
+        Policy = new ExtensionPropertyPolicyConfiguration();
     }
 
-    public object GetDefaultValue()
+    public object? GetDefaultValue()
     {
         return ExtensionPropertyHelper.GetDefaultValue(Type, DefaultValueFactory, DefaultValue);
+    }
+
+    public class ExtensionPropertyUI
+    {
+        public int Order { get; set; }
+
+        public ExtensionPropertyUICreateModal CreateModal { get; set; }
+
+        public ExtensionPropertyUIEditModal EditModal { get; set; }
+
+        public ExtensionPropertyUI()
+        {
+            CreateModal = new ExtensionPropertyUICreateModal();
+            EditModal = new ExtensionPropertyUIEditModal();
+        }
+    }
+
+    public class ExtensionPropertyUICreateModal
+    {
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsVisible { get; set; } = true;
+
+        public bool IsReadOnly { get; set; }
+    }
+
+    public class ExtensionPropertyUIEditModal
+    {
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsVisible { get; set; } = true;
+
+        public bool IsReadOnly { get; set; }
     }
 }

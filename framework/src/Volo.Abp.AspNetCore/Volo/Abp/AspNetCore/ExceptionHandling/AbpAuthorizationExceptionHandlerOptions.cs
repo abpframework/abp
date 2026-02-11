@@ -2,5 +2,5 @@
 
 public class AbpAuthorizationExceptionHandlerOptions
 {
-    public string AuthenticationScheme { get; set; }
+    public string? AuthenticationScheme { get; set; }
 }

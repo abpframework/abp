@@ -16,8 +16,8 @@ public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransien
 
     public BlobNormalizeNaming NormalizeNaming(
         BlobContainerConfiguration configuration,
-        string containerName,
-        string blobName)
+        string? containerName,
+        string? blobName)
     {
 
         if (!configuration.NamingNormalizers.Any())
@@ -33,8 +33,8 @@ public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransien
                     .GetRequiredService(normalizerType)
                     .As<IBlobNamingNormalizer>();
 
-                containerName = containerName.IsNullOrWhiteSpace() ? containerName : normalizer.NormalizeContainerName(containerName);
-                blobName = blobName.IsNullOrWhiteSpace() ? blobName : normalizer.NormalizeBlobName(blobName);
+                containerName = containerName.IsNullOrWhiteSpace() ? containerName : normalizer.NormalizeContainerName(containerName!);
+                blobName = blobName.IsNullOrWhiteSpace() ? blobName : normalizer.NormalizeBlobName(blobName!);
             }
 
             return new BlobNormalizeNaming(containerName, blobName);
@@ -48,7 +48,7 @@ public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransien
             return containerName;
         }
 
-        return NormalizeNaming(configuration, containerName, null).ContainerName;
+        return NormalizeNaming(configuration, containerName, null).ContainerName!;
     }
 
     public string NormalizeBlobName(BlobContainerConfiguration configuration, string blobName)
@@ -58,6 +58,6 @@ public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransien
             return blobName;
         }
 
-        return NormalizeNaming(configuration, null, blobName).BlobName;
+        return NormalizeNaming(configuration, null, blobName).BlobName!;
     }
 }

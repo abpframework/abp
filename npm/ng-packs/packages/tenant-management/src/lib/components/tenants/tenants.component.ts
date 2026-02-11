@@ -1,16 +1,40 @@
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { eFeatureManagementComponents } from '@abp/ng.feature-management';
-import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
-import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
 import {
+  ListService,
+  LocalizationPipe,
+  PagedResultDto,
+  ReplaceableTemplateDirective,
+} from '@abp/ng.core';
+import {
+  eFeatureManagementComponents,
+  FeatureManagementComponent,
+} from '@abp/ng.feature-management';
+import { GetTenantsInput, TenantDto, TenantService } from '@abp/ng.tenant-management/proxy';
+import {
+  ButtonComponent,
+  Confirmation,
+  ConfirmationService,
+  ModalCloseDirective,
+  ModalComponent,
+  ToasterService,
+} from '@abp/ng.theme.shared';
+import {
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
-import { Component, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+} from '@abp/ng.components/extensible';
+import { Component, DOCUMENT, inject, Injector, makeStateKey, OnInit } from '@angular/core';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eTenantManagementComponents } from '../../enums/components';
+import { PageComponent } from '@abp/ng.components/page';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
   selector: 'abp-tenants',
@@ -22,8 +46,30 @@ import { eTenantManagementComponents } from '../../enums/components';
       useValue: eTenantManagementComponents.Tenants,
     },
   ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    PageComponent,
+    LocalizationPipe,
+    ExtensibleTableComponent,
+    ModalComponent,
+    FeatureManagementComponent,
+    ButtonComponent,
+    ReplaceableTemplateDirective,
+    ExtensibleFormComponent,
+    ModalCloseDirective,
+    NgxValidateCoreModule,
+  ],
 })
 export class TenantsComponent implements OnInit {
+  protected readonly list = inject(ListService<GetTenantsInput>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly service = inject(TenantService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly injector = inject(Injector);
+  private document = inject(DOCUMENT);
+
   data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
 
   selected!: TenantDto;
@@ -39,6 +85,7 @@ export class TenantsComponent implements OnInit {
   modalBusy = false;
 
   featureManagementKey = eFeatureManagementComponents.FeatureManagement;
+  TENANTS_KEY = makeStateKey<PagedResultDto<TenantDto>>('tenants');
 
   get hasSelectedTenant(): boolean {
     return Boolean(this.selected.id);
@@ -47,15 +94,6 @@ export class TenantsComponent implements OnInit {
   onVisibleFeaturesChange = (value: boolean) => {
     this.visibleFeatures = value;
   };
-
-  constructor(
-    public readonly list: ListService<GetTenantsInput>,
-    private injector: Injector,
-    private confirmationService: ConfirmationService,
-    private service: TenantService,
-    private toasterService: ToasterService,
-    private fb: UntypedFormBuilder,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();
@@ -93,6 +131,7 @@ export class TenantsComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
   }
@@ -108,7 +147,7 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.toasterService.success('AbpUi::SuccessfullyDeleted');
+          this.toasterService.success('AbpUi::DeletedSuccessfully');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });
@@ -125,7 +164,7 @@ export class TenantsComponent implements OnInit {
   onSharedDatabaseChange(value: boolean) {
     if (!value) {
       setTimeout(() => {
-        const defaultConnectionString = document.getElementById(
+        const defaultConnectionString = this.document.getElementById(
           'defaultConnectionString',
         ) as HTMLInputElement;
         if (defaultConnectionString) {

@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.Localization;
+using Volo.Abp.Security.Claims;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -24,11 +28,19 @@ public static class AbpOpenIdConnectExtensions
 
     public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<OpenIdConnectOptions> configureOptions)
     {
+        builder.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            var openIdConnectOptions = new OpenIdConnectOptions();
+            configureOptions?.Invoke(openIdConnectOptions);
+            if (!openIdConnectOptions.Authority.IsNullOrEmpty())
+            {
+                options.RemoteRefreshUrl = openIdConnectOptions.Authority.RemovePostFix("/") + options.RemoteRefreshUrl;
+            }
+        });
+
         return builder.AddOpenIdConnect(authenticationScheme, displayName, options =>
         {
             options.ClaimActions.MapAbpClaimTypes();
-
-            configureOptions?.Invoke(options);
 
             options.Events ??= new OpenIdConnectEvents();
             var authorizationCodeReceived = options.Events.OnAuthorizationCodeReceived ?? (_ => Task.CompletedTask);
@@ -39,19 +51,11 @@ public static class AbpOpenIdConnectExtensions
                 return authorizationCodeReceived.Invoke(receivedContext);
             };
 
-            options.Events.OnRemoteFailure = remoteFailureContext =>
-            {
-                if (remoteFailureContext.Failure is OpenIdConnectProtocolException &&
-                    remoteFailureContext.Failure.Message.Contains("access_denied"))
-                {
-                    remoteFailureContext.HandleResponse();
-                    remoteFailureContext.Response.Redirect($"{remoteFailureContext.Request.PathBase}/");
-                }
-                return Task.CompletedTask;
-            };
-            
+            options.AccessDeniedPath = "/";
+
             options.Events.OnTokenValidated = async (context) =>
             {
+                var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<AbpAspNetCoreAuthenticationOpenIdConnectModule>>();
                 var client = context.HttpContext.RequestServices.GetRequiredService<IOpenIdLocalUserCreationClient>();
                 try
                 {
@@ -59,10 +63,35 @@ public static class AbpOpenIdConnectExtensions
                 }
                 catch (Exception ex)
                 {
-                    var logger = context.HttpContext.RequestServices.GetService<ILogger<AbpAspNetCoreAuthenticationOpenIdConnectModule>>();
-                    logger?.LogException(ex);
+                    logger.LogException(ex);
+                }
+
+                var culture = context.ProtocolMessage.GetParameter("culture");
+                var uiCulture = context.ProtocolMessage.GetParameter("ui-culture");
+                if (CultureHelper.IsValidCultureCode(culture) && CultureHelper.IsValidCultureCode(uiCulture))
+                {
+                    context.Response.OnStarting(() =>
+                    {
+                        logger.LogInformation($"Setting culture and ui-culture to the response. culture: {culture}, ui-culture: {uiCulture}");
+
+                        AbpRequestCultureCookieHelper.SetCultureCookie(
+                            context.HttpContext,
+                            new RequestCulture(culture, uiCulture)
+                        );
+
+                        return Task.CompletedTask;
+                    });
+                }
+                else
+                {
+                    logger.LogWarning($"Invalid culture or ui-culture parameter in the OpenIdConnect response. culture: {culture}, ui-culture: {uiCulture}");
                 }
             };
+
+            // The application needs to be granted the `OpenIddictConstants.Permissions.Endpoints.PushedAuthorization` permission to use the PAR endpoint.
+            // You can enable it after you have granted the `PushedAuthorization` permission.
+            options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable;
+            configureOptions?.Invoke(options);
         });
     }
 

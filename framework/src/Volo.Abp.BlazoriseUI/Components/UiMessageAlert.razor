@@ -15,14 +15,21 @@
                     <Icon Name="@MessageIcon" Style="@MessageIconStyle" />                    
                 </DisplayHeading>
             }
-            <Paragraph TextAlignment="TextAlignment.Center" Margin="Margin.Is0.FromBottom">
-                @Message
+            <Paragraph TextAlignment="TextAlignment.Center" Margin="Margin.Is0.FromBottom" Style="white-space: break-spaces;">
+                @if (!IsMessageHtmlMarkup)
+                {
+                    @Message
+                }
+                else
+                {
+                    @((MarkupString)Message)
+                }
             </Paragraph>
         </ModalBody>
         <ModalFooter class="d-flex justify-content-center">
                 @if ( IsConfirmation )
                 {
-                    <Button Color="Color.Danger" Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnCancelClicked">
+                    <Button Color="Color.Primary" Outline Padding="Padding.Is3.OnX" Margin="Margin.Is1.OnX" Clicked="@OnCancelClicked">
                         @if ( Options?.CancelButtonIcon != null )
                         {
                             <Icon Name="@Options.CancelButtonIcon" Margin="Margin.Is2.FromEnd" />

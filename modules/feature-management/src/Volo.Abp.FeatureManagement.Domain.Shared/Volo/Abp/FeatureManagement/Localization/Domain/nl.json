@@ -3,10 +3,15 @@
   "texts": {
     "Features": "Functies",
     "NoFeatureFoundMessage": "Er is geen functie beschikbaar.",
-    "ManageHostFeatures": "Beheer host functies",
+    "ManageHostFeatures": "Beheer Host Functies",
+    "ManageHostFeaturesText": "U kunt de functies aan de hostzijde beheren door op de volgende knop te klikken.",
     "Permission:FeatureManagement": "Functiebeheer",
     "Permission:FeatureManagement.ManageHostFeatures": "Beheer host functies",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} functie-waarde is niet geldig!",
-		"Menu:FeatureManagement": "Functiebeheer"
+    "Menu:FeatureManagement": "Functiebeheer",
+    "ResetToDefault": "Resetten naar standaard",
+    "ResetedToDefault": "Gereset naar standaard",
+    "AreYouSure": "Weet je het zeker?",
+    "AreYouSureToResetToDefault": "Weet je zeker dat je de standaardinstellingen wilt herstellen?"
   }
 }

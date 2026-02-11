@@ -1,0 +1,11 @@
+#FeaturesTabsContent {
+    padding-top: 0 !important;
+}
+
+.custom-scroll-content {
+    max-height: 400px;
+}
+
+.custom-scroll-container > .col-md-4 {
+    max-height: 500px;
+}

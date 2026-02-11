@@ -5,11 +5,11 @@ namespace Volo.Abp.BlobStoring.Aws;
 [Serializable]
 public class AwsTemporaryCredentialsCacheItem
 {
-    public string AccessKeyId { get; set; }
+    public string AccessKeyId { get; set; } = default!;
 
-    public string SecretAccessKey { get; set; }
+    public string SecretAccessKey { get; set; } = default!;
 
-    public string SessionToken { get; set; }
+    public string SessionToken { get; set; } = default!;
 
     public AwsTemporaryCredentialsCacheItem()
     {

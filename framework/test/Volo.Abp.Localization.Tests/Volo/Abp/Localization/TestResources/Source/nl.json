@@ -6,6 +6,11 @@
     "CarPlural": "Auto's",
     "MaxLenghtErrorMessage": "De lengte van dit veld mag maximaal '{0}' tekens zijn",
     "Universe": "Universum",
-    "FortyTwo": "Tweeënveertig"
+    "FortyTwo": "Tweeënveertig",
+    "Enum:BookType.Undefined": "Ongedefinieerd",
+    "Enum:BookType.0": "Ongedefinieerd met waarde 0",
+    "BookType.Adventure": "Avontuur",
+    "BookType.1": "Avontuur met waarde 1",
+    "Biography": "Biografie"
   }
 }

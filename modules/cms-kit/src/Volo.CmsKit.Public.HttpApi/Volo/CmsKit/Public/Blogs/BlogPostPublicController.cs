@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -59,5 +60,12 @@ public class BlogPostPublicController : CmsKitPublicControllerBase, IBlogPostPub
     public virtual Task DeleteAsync(Guid id)
     {
         return BlogPostPublicAppService.DeleteAsync(id);
+    }
+
+    [HttpGet]
+    [Route("tags/{id}")]
+    public Task<string> GetTagNameAsync([NotNull] Guid tagId)
+    {
+        return BlogPostPublicAppService.GetTagNameAsync(tagId);
     }
 }

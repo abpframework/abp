@@ -1,17 +1,18 @@
 import { ProfileService } from '@abp/ng.account.core/proxy';
-import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit } from '@angular/core';
+import { ButtonComponent, getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
+import { Component, Injector, OnInit, inject } from '@angular/core';
 import {
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { comparePasswords, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
-import { Account } from '../../models/account';
-import { ManageProfileStateService } from '../../services/manage-profile.state.service';
-
+import { Account } from '../../models';
+import { ManageProfileStateService } from '../../services';
+import { comparePasswords, NgxValidateCoreModule, Validation } from '@ngx-validate/core';
+import { AutofocusDirective, LocalizationPipe } from '@abp/ng.core';
 const { required } = Validators;
 
 const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
@@ -20,10 +21,23 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
   selector: 'abp-change-password-form',
   templateUrl: './change-password.component.html',
   exportAs: 'abpChangePasswordForm',
+  imports: [
+    ReactiveFormsModule,
+    LocalizationPipe,
+    ButtonComponent,
+    NgxValidateCoreModule,
+    AutofocusDirective,
+  ],
 })
 export class ChangePasswordComponent
   implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs
 {
+  private fb = inject(UntypedFormBuilder);
+  private injector = inject(Injector);
+  private toasterService = inject(ToasterService);
+  private profileService = inject(ProfileService);
+  private manageProfileState = inject(ManageProfileStateService);
+
   form!: UntypedFormGroup;
 
   inProgress?: boolean;
@@ -35,14 +49,6 @@ export class ChangePasswordComponent
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
-
-  constructor(
-    private fb: UntypedFormBuilder,
-    private injector: Injector,
-    private toasterService: ToasterService,
-    private profileService: ProfileService,
-    private manageProfileState: ManageProfileStateService,
-  ) {}
 
   ngOnInit(): void {
     this.hideCurrentPassword = !this.manageProfileState.getProfile()?.hasPassword;

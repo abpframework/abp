@@ -1,10 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   EXTENSIONS_FORM_PROP,
   FormProp,
   EXTENSIBLE_FORM_VIEW_PROVIDER,
-} from '@abp/ng.theme.shared/extensions';
-import { UntypedFormGroup } from '@angular/forms';
+} from '@abp/ng.components/extensible';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-personal-settings-half-row',
@@ -20,14 +21,19 @@ import { UntypedFormGroup } from '@angular/forms';
   </div>`,
   styles: [],
   viewProviders: [EXTENSIBLE_FORM_VIEW_PROVIDER],
+  imports: [ReactiveFormsModule, LocalizationPipe],
 })
 export class PersonalSettingsHalfRowComponent {
+  private propData = inject<FormProp>(EXTENSIONS_FORM_PROP);
+
   public displayName: string;
   public name: string;
   public id: string;
   public formGroup!: UntypedFormGroup;
 
-  constructor(@Inject(EXTENSIONS_FORM_PROP) private propData: FormProp) {
+  constructor() {
+    const propData = this.propData;
+
     this.displayName = propData.displayName;
     this.name = propData.name;
     this.id = propData.id || '';

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Xunit;
@@ -49,7 +50,7 @@ public abstract class ConcurrencyStamp_Tests<TStartupModule> : TestAppTestBase<T
         //And deleting my old entity throws exception!
         await Assert.ThrowsAsync<AbpDbConcurrencyException>(async () =>
         {
-            await CityRepository.DeleteAsync(london1);
+            await CityRepository.HardDeleteAsync(london1);
         });
     }
 }

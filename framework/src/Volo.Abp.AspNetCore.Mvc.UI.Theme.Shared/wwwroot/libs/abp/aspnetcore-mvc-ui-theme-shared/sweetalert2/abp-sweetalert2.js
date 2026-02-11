@@ -29,12 +29,20 @@ var abp = abp || {};
                 title: 'Are you sure?',
                 showCancelButton: true,
                 reverseButtons: true
+            },
+            prompt: {
+                icon: 'question',
+                input: 'text',
+                showCancelButton: true,
+                reverseButtons: true
             }
         }
     };
 
     /* MESSAGE **************************************************/
 
+    abp.utils = abp.utils || {};
+    abp.utils.htmlEscape = abp.utils.htmlEscape || function (str) { return str; };
     var showMessage = function (type, message, title) {
         var opts = $.extend(
             {},
@@ -42,7 +50,7 @@ var abp = abp || {};
             abp.libs.sweetAlert.config[type],
             {
                 title: title,
-                text: message
+                html: abp.utils.htmlEscape(message).replace(/\n/g, '<br>')
             }
         );
 
@@ -90,10 +98,40 @@ var abp = abp || {};
         );
 
         return $.Deferred(function ($dfd) {
-            Swal.fire(opts).then(result  => {
+            Swal.fire(opts).then(result => {
                 callback && callback(result.value);
                 $dfd.resolve(result.value);
             })
+        });
+    };
+
+    abp.message.prompt = function (message, titleOrOptionsOrCallback, callback) {
+
+        var userOpts = {
+            html: abp.utils.htmlEscape(message).replace(/\n/g, '<br>')
+        };
+
+        if ($.isFunction(titleOrOptionsOrCallback)) {
+            callback = titleOrOptionsOrCallback;
+        } else if (typeof titleOrOptionsOrCallback === 'string') {
+            userOpts.title = titleOrOptionsOrCallback;
+        } else if ($.isPlainObject(titleOrOptionsOrCallback)) {
+            userOpts = $.extend(userOpts, titleOrOptionsOrCallback);
+        }
+
+        var opts = $.extend(
+            {},
+            abp.libs.sweetAlert.config['default'],
+            abp.libs.sweetAlert.config.prompt,
+            userOpts
+        );
+
+        return $.Deferred(function ($dfd) {
+            Swal.fire(opts).then(function (result) {
+                var value = result && result.isConfirmed ? result.value : null;
+                callback && callback(value);
+                $dfd.resolve(value);
+            });
         });
     };
 
@@ -103,6 +141,13 @@ var abp = abp || {};
         abp.libs.sweetAlert.config.default.confirmButtonText = l('Ok');
         abp.libs.sweetAlert.config.default.denyButtonText = l('No');
         abp.libs.sweetAlert.config.default.cancelButtonText = l('Cancel');
+        abp.libs.sweetAlert.config.default.buttonsStyling = false;
+        abp.libs.sweetAlert.config.default.customClass = {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-outline-primary mx-2",
+            denyButton: "btn btn-outline-primary mx-2"
+        };
+
         abp.libs.sweetAlert.config.confirm.title = l('AreYouSure');
         abp.libs.sweetAlert.config.confirm.confirmButtonText = l('Yes');
         abp.libs.sweetAlert.config.confirm.showCancelButton = true;

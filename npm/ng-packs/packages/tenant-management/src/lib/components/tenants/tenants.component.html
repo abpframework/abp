@@ -1,6 +1,4 @@
 <abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data.items">
-
-
   <div id="wrapper" class="card">
     <div class="card-body">
       <div id="data-tables-table-filter" class="data-tables-filter mb-3">
@@ -26,8 +24,8 @@
     <ng-template #abpHeader>
       <h3>
         {{
-        (selected?.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant')
-          | abpLocalization
+          (selected?.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant')
+            | abpLocalization
         }}
       </h3>
     </ng-template>
@@ -39,25 +37,25 @@
     </ng-template>
 
     <ng-template #abpFooter>
-      <button abpClose type="button" class="btn btn-secondary">
+      <button abpClose type="button" class="btn btn-outline-primary">
         {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
       </button>
       <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="tenantForm?.invalid">{{
         'AbpTenantManagement::Save' | abpLocalization
-        }}</abp-button>
+      }}</abp-button>
     </ng-template>
   </abp-modal>
 
   <abp-feature-management
     *abpReplaceableTemplate="{
-    inputs: {
-      providerName: { value: 'T' },
-      providerKey: { value: providerKey },
-      visible: { value: visibleFeatures, twoWay: true }
-    },
-    outputs: { visibleChange: $any(onVisibleFeaturesChange) },
-    componentKey: featureManagementKey
-  }"
+      inputs: {
+        providerName: { value: 'T' },
+        providerKey: { value: providerKey },
+        visible: { value: visibleFeatures, twoWay: true }
+      },
+      outputs: { visibleChange: $any(onVisibleFeaturesChange) },
+      componentKey: featureManagementKey
+    }"
     [(visible)]="visibleFeatures"
     providerName="T"
     [providerKey]="providerKey"

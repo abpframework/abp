@@ -3,9 +3,9 @@
 @inherits AbpFeatureManagementComponentBase
 
 <Modal @ref="Modal" Closing="@ClosingModal">
-    <ModalContent Size="ModalSize.Large" Centered="true">
+    <ModalContent Size="ModalSize.Large">
         <ModalHeader>
-            <ModalTitle>@L["Features"]</ModalTitle>
+            <ModalTitle>@L["Features"]@ProviderKeyDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         @if (Groups == null || !Groups.Any())
@@ -14,7 +14,7 @@
         }
         else
         {
-            <ModalBody MaxHeight="50">
+            <ModalBody>
                 <Tabs TabPosition="TabPosition.Start" Pills="true" @bind-SelectedTab="@SelectedTabName">
                     <Items>
                         @foreach (var group in Groups)
@@ -35,12 +35,12 @@
                                 {
                                     <div class="mt-2">
                                         @{
-                                            var disabled = IsDisabled(feature.Provider.Name);
+                                            var disabled = IsDisabled(feature);
 
                                             if (feature.ValueType is FreeTextStringValueType)
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <FieldLabel>@feature.DisplayName</FieldLabel>
+                                                    <FieldLabel>@GetShownName(feature)</FieldLabel>
                                                     <TextEdit Disabled="@disabled"
                                                           Text="@feature.Value"
                                                           TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))" />
@@ -54,11 +54,10 @@
                                             if (feature.ValueType is SelectionStringValueType)
                                             {
                                                 var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
-
+                                                var selectedValue = SelectionStringValues[feature.Name];
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <FieldLabel>@feature.DisplayName</FieldLabel>
-                                                    <Select TValue="string"
-                                                    @bind-SelectedValue="@SelectionStringValues[feature.Name]">
+                                                    <FieldLabel>@GetShownName(feature)</FieldLabel>
+                                                    <Select TValue="string" Disabled="disabled" SelectedValue="selectedValue" SelectedValueChanged="s => SelectionStringValues[feature.Name] = s">
                                                         @foreach (var item in items)
                                                         {
                                                             <SelectItem Value="@item.Value">
@@ -76,8 +75,8 @@
                                             if (feature.ValueType is ToggleStringValueType)
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <Check TValue="bool" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
-                                                        @feature.DisplayName
+                                                    <Check TValue="bool" Disabled="disabled" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
+                                                        @GetShownName(feature)
                                                     </Check>
                                                     @if (feature.Description != null)
                                                     {
@@ -95,8 +94,8 @@
                 </Tabs>
             </ModalBody>
             <ModalFooter>
-                <Button Color="Color.Primary" Clicked="@(async () => await DeleteAsync(ProviderName,ProviderKey))">@L["ResetToDefault"]</Button>
-                <Button Color="Color.Secondary" Clicked="CloseModal">@L["Cancel"]</Button>
+                <Button class="btn btn-link" Clicked="CloseModal">@L["Cancel"]</Button>
+                <Button Color="Color.Primary" Outline Clicked="@(async () => await DeleteAsync(ProviderName,ProviderKey))">@L["ResetToDefault"]</Button>
                 <Button Color="Color.Primary" Clicked="SaveAsync">@L["Save"]</Button>
             </ModalFooter>
         }

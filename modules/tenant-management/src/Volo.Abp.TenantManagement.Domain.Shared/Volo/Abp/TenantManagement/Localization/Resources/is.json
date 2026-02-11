@@ -1,6 +1,7 @@
 {
   "culture": "is",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Nafn leigjanda er þegar til: {Name}",
     "Menu:TenantManagement": "Tenant umsjá",
     "Tenants": "Tenantar",
     "NewTenant": "Nýr tenant",
@@ -15,7 +16,7 @@
     "Permission:Edit": "Breyta",
     "Permission:Delete": "Eyða",
     "Permission:ManageConnectionStrings": "Umsjá tengistrengja",
-    "Permission:ManageFeatures": "Umsjá eiginleika",
+    "Permission:ManageFeatures": "Eiginleikar",
     "DisplayName:AdminEmailAddress": "Netfang stjórnanda (admin)",
     "DisplayName:AdminPassword": "Lykilorð stjórnanda (admin)"
   }

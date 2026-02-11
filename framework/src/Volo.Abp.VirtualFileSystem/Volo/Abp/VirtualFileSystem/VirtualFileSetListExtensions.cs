@@ -13,8 +13,8 @@ public static class VirtualFileSetListExtensions
 {
     public static void AddEmbedded<T>(
         [NotNull] this VirtualFileSetList list,
-        [CanBeNull] string baseNamespace = null,
-        [CanBeNull] string baseFolder = null)
+        string? baseNamespace = null,
+        string? baseFolder = null)
     {
         Check.NotNull(list, nameof(list));
 
@@ -42,8 +42,8 @@ public static class VirtualFileSetListExtensions
 
     private static IFileProvider CreateFileProvider(
         [NotNull] Assembly assembly,
-        [CanBeNull] string baseNamespace = null,
-        [CanBeNull] string baseFolder = null)
+        string? baseNamespace = null,
+        string? baseFolder = null)
     {
         Check.NotNull(assembly, nameof(assembly));
 
@@ -80,7 +80,7 @@ public static class VirtualFileSetListExtensions
 
                 if (!embeddedVirtualFileSet.BaseFolder.IsNullOrEmpty())
                 {
-                    thisPath = Path.Combine(thisPath, embeddedVirtualFileSet.BaseFolder);
+                    thisPath = Path.Combine(thisPath, embeddedVirtualFileSet.BaseFolder!);
                 }
 
                 fileSets[i] = new PhysicalVirtualFileSetInfo(new PhysicalFileProvider(thisPath), thisPath);

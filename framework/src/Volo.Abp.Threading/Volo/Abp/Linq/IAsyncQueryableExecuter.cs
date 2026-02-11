@@ -75,12 +75,12 @@ public interface IAsyncQueryableExecuter
         CancellationToken cancellationToken = default);
 
 
-    Task<T> FirstOrDefaultAsync<T>(
+    Task<T?> FirstOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<T> FirstOrDefaultAsync<T>(
+    Task<T?> FirstOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
@@ -100,12 +100,12 @@ public interface IAsyncQueryableExecuter
         CancellationToken cancellationToken = default);
 
 
-    Task<T> LastOrDefaultAsync<T>(
+    Task<T?> LastOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
 
-    Task<T> LastOrDefaultAsync<T>(
+    Task<T?> LastOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
@@ -124,11 +124,11 @@ public interface IAsyncQueryableExecuter
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);
 
-    Task<T> SingleOrDefaultAsync<T>(
+    Task<T?> SingleOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         CancellationToken cancellationToken = default);
 
-    Task<T> SingleOrDefaultAsync<T>(
+    Task<T?> SingleOrDefaultAsync<T>(
         [NotNull] IQueryable<T> queryable,
         [NotNull] Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default);

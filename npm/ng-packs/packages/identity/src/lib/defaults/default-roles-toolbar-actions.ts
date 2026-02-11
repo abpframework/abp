@@ -1,5 +1,5 @@
 import { IdentityRoleDto } from '@abp/ng.identity/proxy';
-import { ToolbarAction } from '@abp/ng.theme.shared/extensions';
+import { ToolbarAction } from '@abp/ng.components/extensible';
 import { RolesComponent } from '../components/roles/roles.component';
 
 export const DEFAULT_ROLES_TOOLBAR_ACTIONS = ToolbarAction.createMany<IdentityRoleDto[]>([

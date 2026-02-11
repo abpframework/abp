@@ -16,6 +16,14 @@
     Layout = Theme.GetEmptyLayout();
 }
 
+@section styles {
+    <style>
+        body {
+            background-color: white;
+        }
+    </style>
+}
+
 <div class="d-flex align-items-center" style="min-height: 100vh;">
     <div class="container">
         <abp-row>
@@ -30,37 +38,30 @@
                         <h1>@BrandingProvider.AppName</h1>
                     }
                 </div>
+
                 <abp-card>
                     <abp-card-body>
                         <div class="container">
                             <abp-row>
-                                <abp-column size="_9">
-
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-3 p-2">
-                                            <i class="fa fa-user d-block" style="font-size: 10em; color: #12b900"></i>
-                                        </div>
-                                        <div class="p2">
-                                            @if (CurrentUser.IsAuthenticated)
-                                            {
-                                                <span class="fs-16">
-                                                    @L["Welcome"] <span class="fw-7">@CurrentUser.UserName</span>
-                                                </span>
-                                                <span class="fs-14 d-block text-dark-800 opacity-75 mb-1">@CurrentUser.Email</span>
-                                                <div class="d-grid gap-2">
-                                                    <a abp-button="Outline_Primary" asp-controller="Manage" asp-action="Index" asp-area="Account">@L["MyAccount"]</a>
-                                                    <a abp-button="Primary" asp-controller="Logout" asp-action="Index" asp-area="Account">@L["Logout"]</a>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <a abp-button="Primary" asp-controller="Login" asp-action="Index" asp-area="Account">@L["Login"]</a>
-                                            }
-                                        </div>
-
+                                <abp-column size="_6">
+                                    <div class="mr-auto p-2 float-start">
+                                            <div class="">
+                                                @if (CurrentUser.IsAuthenticated)
+                                                {
+                                                    <div class="">
+                                                        <a abp-button="Outline_Primary" asp-controller="Manage" asp-action="Index" asp-area="Account" class="me-2">@L["MyAccount"]</a>
+                                                        <a abp-button="Primary" asp-controller="Logout" asp-action="Index" asp-area="Account" asp-route-returnUrl="/" >@L["Logout"]</a>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <a abp-button="Primary" asp-controller="Login" asp-action="Index" asp-area="Account">@L["Login"]</a>
+                                                }
+                                            </div>
                                     </div>
                                 </abp-column>
-                                <abp-column size="_3">
+
+                                <abp-column size="_6">
                                     <div class="ml-auto p-2 float-end">
                                         <abp-dropdown>
                                             <abp-dropdown-button text="@Model.CurrentLanguage" />
@@ -78,16 +79,21 @@
                                     </div>
                                 </abp-column>
                             </abp-row>
-                            <hr class="m-4" />
-                            <abp-row>
-                                @if (Model.Applications != null)
-                                {
-                                    foreach (var application in Model.Applications)
+
+                            @if (Model.Applications != null)
+                            {
+                                <hr class="m-2" />
+
+                                <abp-row class="mt-3">
+                                    @foreach (var application in Model.Applications)
                                     {
                                         <abp-column size-md="@Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid.ColumnSize._4" class="mb-2">
                                             <abp-card>
                                                 <abp-card-body>
-
+                                                    @{ 
+                                                        var clientUri = application.ClientUri.Contains("Swagger") ? application.ClientUri.EnsureEndsWith('/') + "swagger/index.html" : application.ClientUri; 
+                                                    }
+                                                    
                                                     @if (!application.LogoUri.IsNullOrEmpty())
                                                     {
                                                         <div class="mx-auto">
@@ -96,16 +102,13 @@
                                                     }
 
                                                     <h4>@application.DisplayName</h4>
-                                                    <span class="text-muted">@application.ClientUri</span>
-                                                    <div class="mt-1">
-                                                        <a abp-button="@Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button.AbpButtonType.Outline_Secondary" href="@application.ClientUri">@L["Visit"]</a>
-                                                    </div>
+                                                    <a href="@clientUri" class="text-muted stretched-link">@clientUri</a>
                                                 </abp-card-body>
                                             </abp-card>
                                         </abp-column>
                                     }
-                                }
-                            </abp-row>
+                                </abp-row>
+                            }
                         </div>
                     </abp-card-body>
                 </abp-card>

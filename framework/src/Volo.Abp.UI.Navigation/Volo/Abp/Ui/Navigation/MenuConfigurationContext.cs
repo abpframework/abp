@@ -32,8 +32,7 @@ public class MenuConfigurationContext : IMenuConfigurationContext
         return AuthorizationService.IsGrantedAsync(policyName);
     }
 
-    [CanBeNull]
-    public IStringLocalizer GetDefaultLocalizer()
+    public IStringLocalizer? GetDefaultLocalizer()
     {
         return StringLocalizerFactory.CreateDefaultOrNull();
     }

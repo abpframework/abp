@@ -1,62 +1,67 @@
-﻿@using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Navigation;
 @using Volo.Abp.UI.Navigation
 @{
-    var elementId = MenuItem.ElementId ?? "MenuItem_" + MenuItem.Name.Replace(".", "_");
-    var cssClass = string.IsNullOrEmpty(MenuItem.CssClass) ? string.Empty : MenuItem.CssClass;
-    var disabled = MenuItem.IsDisabled ? "disabled" : string.Empty;
-    var url = MenuItem.Url == null ? "#" : MenuItem.Url.TrimStart('/', '~');
     var customComponentType = MenuItem.GetComponentTypeOrDefault();
 }
-@if (MenuItem.IsLeaf)
+
+@if (customComponentType != null && typeof(ComponentBase).IsAssignableFrom(customComponentType))
 {
-    if (customComponentType != null)
-    {
-        <DynamicComponent Type="@customComponentType" />
-    }
-    else if (MenuItem.Url != null)
-    {
-        <li class="nav-item @cssClass @disabled" id="@elementId">
-            <a class="nav-link" href="@url" target="@MenuItem.Target">
-                @if (MenuItem.Icon != null)
-                {
-                    if (MenuItem.Icon.StartsWith("fa"))
-                    {
-                        <i class="@MenuItem.Icon me-1"></i>
-                    }
-                }
-                @MenuItem.DisplayName
-            </a>
-        </li>
-    }
+    <DynamicComponent Type="@customComponentType" />
 }
 else
 {
-    <li class="nav-item">
-        <div class="dropdown">
-            @if (customComponentType != null)
-            {
-                <DynamicComponent Type="@customComponentType" />
-            }
-            else
-            {
-                <a class="nav-link dropdown-toggle" @onclick="ToggleSubMenu" id="Menu_@(MenuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @if (MenuItem.Icon != null)
-                    {
-                        if (MenuItem.Icon.StartsWith("fa"))
+    <Dropdown @ref="_dropdown"
+              Class="@(string.IsNullOrEmpty(MenuItem.CssClass) ? string.Empty : MenuItem.CssClass)"
+              ElementId="@(MenuItem.ElementId ?? "MenuItem_" + MenuItem.Name.Replace(".", "_"))"
+              Disabled="MenuItem.IsDisabled">
+        <DropdownToggle ToggleIconVisible="false">
+            <ChildContent>
+                @if (MenuItem.Url != null)
+                {
+                    var url = MenuItem.Url == null ? "#" : MenuItem.Url.TrimStart('/', '~');
+                    <a class="text-white text-decoration-none" href="@url" target="@MenuItem.Target">
+                        @if (MenuItem.Icon != null && MenuItem.Icon.StartsWith("fa"))
                         {
                             <i class="@MenuItem.Icon me-1"></i>
                         }
-                    }
-                    @MenuItem.DisplayName
-                </a>
-            }
-
-            <div class="dropdown-menu border-0 shadow-sm @(IsSubMenuOpen ? "show" : "")" aria-labelledby="Menu_@(MenuItem.Name)">
-                @foreach (var childMenuItem in MenuItem.Items)
-                {
-                    <SecondLevelNavMenuItem MenuItem="childMenuItem" />
+                        @MenuItem.DisplayName
+                    </a>
                 }
-            </div>
-        </div>
-    </li>
+                else
+                {
+                    <a class="text-white text-decoration-none dropdown-toggle">
+                        @if (MenuItem.Icon != null)
+                        {
+                            if (MenuItem.Icon.StartsWith("fa"))
+                            {
+                                <i class="@MenuItem.Icon me-1"></i>
+                            }
+                        }
+                        @MenuItem.DisplayName
+                    </a>
+                }
+            </ChildContent>
+        </DropdownToggle>
+        <DropdownMenu>
+            @foreach (var item in MenuItem.Items)
+            {
+                if (item.Items.Any())
+                {
+                    <SecondLevelNavMenuItem MenuItem="item" ParentDropdown="_dropdown" />
+                }
+                else
+                {
+                    var itemUrl = item.Url == null ? "#" : item.Url.TrimStart('/', '~');
+                    <a class="text-black text-decoration-none" href="@itemUrl">
+                        @if (item.Icon != null)
+                        {
+                            <i class="@item.Icon me-1"></i>
+                        }
+                        <span>
+                            @item.DisplayName
+                        </span>
+                    </a>
+                }
+            }
+        </DropdownMenu>
+    </Dropdown>
 }

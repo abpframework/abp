@@ -1,5 +1,5 @@
 import { DatePipe, DATE_PIPE_DEFAULT_TIMEZONE } from '@angular/common';
-import { Inject, LOCALE_ID, Optional, Pipe, PipeTransform } from '@angular/core';
+import { LOCALE_ID, Pipe, PipeTransform, inject } from '@angular/core';
 import { ConfigStateService } from '../services';
 import { getShortDateFormat } from '../utils/date-utils';
 
@@ -8,25 +8,28 @@ import { getShortDateFormat } from '../utils/date-utils';
   pure: true,
 })
 export class ShortDatePipe extends DatePipe implements PipeTransform {
+  private configStateService = inject(ConfigStateService);
 
-  constructor(private configStateService: ConfigStateService,
-    @Inject(LOCALE_ID) locale: string,
-    @Inject(DATE_PIPE_DEFAULT_TIMEZONE) @Optional()  defaultTimezone?: string|null
-    ) {
-    super(locale, defaultTimezone)
+  constructor() {
+    const locale = inject(LOCALE_ID);
+    const defaultTimezone = inject(DATE_PIPE_DEFAULT_TIMEZONE, { optional: true });
+
+    super(locale, defaultTimezone);
   }
 
-  transform(value: Date | string | number, format?: string, timezone?: string, locale?: string): string | null;
+  transform(
+    value: Date | string | number,
+    format?: string,
+    timezone?: string,
+    locale?: string,
+  ): string | null;
   transform(value: null | undefined, format?: string, timezone?: string, locale?: string): null;
   transform(
-    value: string|number|Date|null|undefined, timezone?: string,
-    locale?: string): string|null {
-
-  const format = getShortDateFormat(this.configStateService);
-  return super.transform(value,format,timezone,locale)
+    value: string | number | Date | null | undefined,
+    timezone?: string,
+    locale?: string,
+  ): string | null {
+    const format = getShortDateFormat(this.configStateService);
+    return super.transform(value, format, timezone, locale);
   }
-
-
 }
-
-

@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
@@ -62,11 +61,11 @@ public class AbpRemoteServiceApiDescriptionProvider : IApiDescriptionProvider, I
     {
         foreach (var apiResponse in _options.SupportedResponseTypes)
         {
-            apiResponse.ModelMetadata = _modelMetadataProvider.GetMetadataForType(apiResponse.Type);
+            apiResponse.ModelMetadata = _modelMetadataProvider.GetMetadataForType(apiResponse.Type!);
 
             foreach (var responseTypeMetadataProvider in _mvcOptions.OutputFormatters.OfType<IApiResponseTypeMetadataProvider>())
             {
-                var formatterSupportedContentTypes = responseTypeMetadataProvider.GetSupportedContentTypes(null, apiResponse.Type);
+                var formatterSupportedContentTypes = responseTypeMetadataProvider.GetSupportedContentTypes(null!, apiResponse.Type!);
                 if (formatterSupportedContentTypes == null)
                 {
                     continue;

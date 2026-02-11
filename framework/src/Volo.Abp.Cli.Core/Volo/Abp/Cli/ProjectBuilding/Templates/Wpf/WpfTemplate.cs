@@ -10,6 +10,6 @@ public class WpfTemplate : WpfTemplateBase
     public WpfTemplate()
         : base(TemplateName)
     {
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/WPF";
+        DocumentUrl = CliConsts.DocsLink + "latest/get-started/WPF";
     }
 }

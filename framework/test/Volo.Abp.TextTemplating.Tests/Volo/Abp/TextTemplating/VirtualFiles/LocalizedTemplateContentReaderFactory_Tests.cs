@@ -24,7 +24,7 @@ public abstract class LocalizedTemplateContentReaderFactory_Tests<TStartupModule
     [Fact]
     public async Task Create_Should_Work_With_PhysicalFileProvider()
     {
-        var reader = await LocalizedTemplateContentReaderFactory.CreateAsync(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail));
+        var reader = await LocalizedTemplateContentReaderFactory.CreateAsync(await TemplateDefinitionManager.GetAsync(TestTemplates.WelcomeEmail));
 
         reader.GetContentOrNull("en").ShouldBe(WelcomeEmailEnglishContent);
         reader.GetContentOrNull("tr").ShouldBe(WelcomeEmailTurkishContent);

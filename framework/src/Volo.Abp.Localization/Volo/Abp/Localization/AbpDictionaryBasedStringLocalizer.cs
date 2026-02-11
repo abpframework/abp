@@ -118,7 +118,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
         return value;
     }
 
-    protected virtual LocalizedString GetLocalizedStringOrNull(
+    protected virtual LocalizedString? GetLocalizedStringOrNull(
         string name,
         string cultureName,
         bool tryDefaults = true)
@@ -153,7 +153,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             //Try to get from default language
             if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
-                var strDefault = Resource.Contributors.GetOrNull(Resource.DefaultCultureName, name);
+                var strDefault = Resource.Contributors.GetOrNull(Resource.DefaultCultureName!, name);
                 if (strDefault != null)
                 {
                     return strDefault;
@@ -208,7 +208,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             //Fill all strings from default culture
             if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
-                Resource.Contributors.Fill(Resource.DefaultCultureName, allStrings, includeDynamicContributors);
+                Resource.Contributors.Fill(Resource.DefaultCultureName!, allStrings, includeDynamicContributors);
             }
 
             //Overwrite all strings from the language based on country culture
@@ -268,7 +268,7 @@ public class AbpDictionaryBasedStringLocalizer : IAbpStringLocalizer
             if (!Resource.DefaultCultureName.IsNullOrEmpty())
             {
                 await Resource.Contributors.FillAsync(
-                    Resource.DefaultCultureName,
+                    Resource.DefaultCultureName!,
                     allStrings,
                     includeDynamicContributors
                 );

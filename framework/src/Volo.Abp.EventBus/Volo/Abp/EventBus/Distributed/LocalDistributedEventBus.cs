@@ -1,57 +1,53 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
+using Volo.Abp.Tracing;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EventBus.Distributed;
 
 [Dependency(TryRegister = true)]
 [ExposeServices(typeof(IDistributedEventBus), typeof(LocalDistributedEventBus))]
-public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependency
+public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
-    private readonly ILocalEventBus _localEventBus;
-
-    protected IServiceScopeFactory ServiceScopeFactory { get; }
-
-    protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
+    protected ConcurrentDictionary<string, Type> EventTypes { get; }
 
     public LocalDistributedEventBus(
-        ILocalEventBus localEventBus,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions)
+        ICurrentTenant currentTenant,
+        IUnitOfWorkManager unitOfWorkManager,
+        IOptions<AbpDistributedEventBusOptions> abpDistributedEventBusOptions,
+        IGuidGenerator guidGenerator,
+        IClock clock,
+        IEventHandlerInvoker eventHandlerInvoker,
+        ILocalEventBus localEventBus,
+        ICorrelationIdProvider correlationIdProvider)
+        : base(serviceScopeFactory,
+            currentTenant,
+            unitOfWorkManager,
+            abpDistributedEventBusOptions,
+            guidGenerator,
+            clock,
+            eventHandlerInvoker,
+            localEventBus,
+            correlationIdProvider)
     {
-        _localEventBus = localEventBus;
-        ServiceScopeFactory = serviceScopeFactory;
-        AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
-        Subscribe(distributedEventBusOptions.Value.Handlers);
-
-        // For unit testing
-        if (localEventBus is LocalEventBus eventBus)
-        {
-            eventBus.OnEventHandleInvoking = async (eventType, eventData) =>
-            {
-                await localEventBus.PublishAsync(new DistributedEventReceived()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                    EventData = eventData
-                }, onUnitOfWorkComplete: false);
-            };
-
-            eventBus.OnPublishing = async (eventType, eventData) =>
-            {
-                await localEventBus.PublishAsync(new DistributedEventSent()
-                {
-                    Source = DistributedEventSource.Direct,
-                    EventName = EventNameAttribute.GetNameOrDefault(eventType),
-                    EventData = eventData
-                }, onUnitOfWorkComplete: false);
-            };
-        }
+        EventTypes = new ConcurrentDictionary<string, Type>();
+        Subscribe(abpDistributedEventBusOptions.Value.Handlers);
     }
 
     public virtual void Subscribe(ITypeList<IEventHandler> handlers)
@@ -75,95 +71,156 @@ public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependen
         }
     }
 
-    /// <inheritdoc/>
-    public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+    public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
-        return Subscribe(typeof(TEvent), handler);
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        EventTypes.GetOrAdd(eventName, eventType);
+        return LocalEventBus.Subscribe(eventType, factory);
     }
 
-    public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
     {
-        return _localEventBus.Subscribe(action);
+        LocalEventBus.Unsubscribe(action);
     }
 
-    public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+    public override void Unsubscribe(Type eventType, IEventHandler handler)
     {
-        return _localEventBus.Subscribe(handler);
+        LocalEventBus.Unsubscribe(eventType, handler);
     }
 
-    public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
+    public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
     {
-        return _localEventBus.Subscribe<TEvent, THandler>();
+        LocalEventBus.Unsubscribe(eventType, factory);
     }
 
-    public IDisposable Subscribe(Type eventType, IEventHandler handler)
+    public override void UnsubscribeAll(Type eventType)
     {
-        return _localEventBus.Subscribe(eventType, handler);
+        LocalEventBus.UnsubscribeAll(eventType);
     }
 
-    public IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+    public async override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
-        return _localEventBus.Subscribe<TEvent>(factory);
+        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+        {
+            AddToUnitOfWork(
+                UnitOfWorkManager.Current,
+                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext(), useOutbox)
+            );
+            return;
+        }
+
+        if (useOutbox)
+        {
+            if (await AddToOutboxAsync(eventType, eventData))
+            {
+                return;
+            }
+        }
+
+        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        {
+            Source = DistributedEventSource.Direct,
+            EventName = EventNameAttribute.GetNameOrDefault(eventType),
+            EventData = eventData
+        });
+
+        await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
+        {
+            Source = DistributedEventSource.Direct,
+            EventName = EventNameAttribute.GetNameOrDefault(eventType),
+            EventData = eventData
+        });
+
+        await PublishToEventBusAsync(eventType, eventData);
     }
 
-    public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        return _localEventBus.Subscribe(eventType, factory);
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, null))
+        {
+            return;
+        }
+
+        await LocalEventBus.PublishAsync(eventType, eventData, false);
     }
 
-    public void Unsubscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
+    protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
     {
-        _localEventBus.Unsubscribe(action);
+        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
-    public void Unsubscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
+    public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        _localEventBus.Unsubscribe(handler);
+        await TriggerDistributedEventSentAsync(new DistributedEventSent()
+        {
+            Source = DistributedEventSource.Outbox,
+            EventName = outgoingEvent.EventName,
+            EventData = outgoingEvent.EventData
+        });
+
+        await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
+        {
+            Source = DistributedEventSource.Direct,
+            EventName = outgoingEvent.EventName,
+            EventData = outgoingEvent.EventData
+        });
+
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        if (eventType == null)
+        {
+            return;
+        }
+
+        var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(outgoingEvent.EventData), eventType)!;
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null))
+        {
+            return;
+        }
+
+        await LocalEventBus.PublishAsync(eventType, eventData, false);
     }
 
-    public void Unsubscribe(Type eventType, IEventHandler handler)
+    public async override Task PublishManyFromOutboxAsync(IEnumerable<OutgoingEventInfo> outgoingEvents, OutboxConfig outboxConfig)
     {
-        _localEventBus.Unsubscribe(eventType, handler);
+        foreach (var outgoingEvent in outgoingEvents)
+        {
+            await PublishFromOutboxAsync(outgoingEvent, outboxConfig);
+        }
     }
 
-    public void Unsubscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
+    public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
-        _localEventBus.Unsubscribe<TEvent>(factory);
+        var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
+        if (eventType == null)
+        {
+            return;
+        }
+
+        var eventData = JsonSerializer.Deserialize(incomingEvent.EventData, eventType);
+        var exceptions = new List<Exception>();
+        using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
+        {
+            await TriggerHandlersFromInboxAsync(eventType, eventData!, exceptions, inboxConfig);
+        }
+        if (exceptions.Any())
+        {
+            ThrowOriginalExceptions(eventType, exceptions);
+        }
     }
 
-    public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
+    protected override byte[] Serialize(object eventData)
     {
-        _localEventBus.Unsubscribe(eventType, factory);
+        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(eventData));
     }
 
-    public void UnsubscribeAll<TEvent>() where TEvent : class
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        _localEventBus.UnsubscribeAll<TEvent>();
+        EventTypes.GetOrAdd(eventName, eventType);
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
     }
 
-    public void UnsubscribeAll(Type eventType)
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        _localEventBus.UnsubscribeAll(eventType);
-    }
-
-    public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
-        where TEvent : class
-    {
-        return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
-    }
-
-    public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
-    {
-        return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
-    }
-
-    public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true) where TEvent : class
-    {
-        return _localEventBus.PublishAsync(eventData, onUnitOfWorkComplete);
-    }
-
-    public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
-    {
-        return _localEventBus.PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        return LocalEventBus.GetEventHandlerFactories(eventType);
     }
 }

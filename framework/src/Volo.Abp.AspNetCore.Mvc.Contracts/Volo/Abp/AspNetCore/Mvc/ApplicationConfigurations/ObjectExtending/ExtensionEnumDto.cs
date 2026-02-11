@@ -8,5 +8,10 @@ public class ExtensionEnumDto
 {
     public List<ExtensionEnumFieldDto> Fields { get; set; }
 
-    public string LocalizationResource { get; set; }
+    public string? LocalizationResource { get; set; }
+
+    public ExtensionEnumDto()
+    {
+        Fields = new List<ExtensionEnumFieldDto>();
+    }
 }

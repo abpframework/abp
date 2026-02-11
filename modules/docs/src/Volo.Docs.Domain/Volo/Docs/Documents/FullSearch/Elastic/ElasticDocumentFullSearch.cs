@@ -58,6 +58,26 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         public virtual async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
         {
             var client = _clientProvider.GetClient();
+            
+            // exist by name, project id, language code and version
+            var existResponse = await client.SearchAsync<EsDocument>(s => s
+                .Query(q => q
+                    .Bool(b => b
+                        .Must(m => m
+                            .Term(t => t.ProjectId, NormalizeField(document.ProjectId))
+                            && m.Term(t => t.LanguageCode, NormalizeField(document.LanguageCode))
+                            && m.Term(t => t.Version, NormalizeField(document.Version))
+                            && m.Term(t => t.Name, document.Name)
+                        )
+                    )
+                ), cancellationToken);
+            
+            HandleError(existResponse);
+            
+            if (existResponse.Documents.Count != 0)
+            {
+                HandleError(await client.DeleteManyAsync(existResponse.Documents, _options.IndexName, cancellationToken));
+            }
 
             var esDocument = new EsDocument
             {
@@ -138,11 +158,32 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteByQueryAsync(request, cancellationToken));
         }
 
-        public virtual async Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
+        public virtual async Task<EsDocumentResult> SearchAsync(string context, Guid projectId, string languageCode,
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
+            
+            FieldNameQueryBase query;
+            // if context starts with " or ends with " then we search for exact match
+            if (context.StartsWith("\"") && context.EndsWith("\""))
+            {
+                context = context.Trim('"');
+                
+                query = new MatchPhraseQuery
+                {
+                    Query = context
+                };
+            }
+            else
+            {
+                query = new MatchQuery
+                {
+                    Query = context
+                };
+            }
+
+            query.Field = "content";
 
             var request = new SearchRequest
             {
@@ -152,11 +193,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 {
                     Must = new QueryContainer[]
                     {
-                        new MatchQuery
-                        {
-                            Field = "content",
-                            Query = context
-                        }
+                        query,
                     },
                     Filter = new QueryContainer[]
                     {
@@ -204,15 +241,22 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             foreach (var hit in response.Hits)
             {
                 var doc = hit.Source;
+                if(docs.Any(x => x.Id == doc.Id))
+                {
+                    continue;
+                }
+
+
                 if (hit.Highlight.ContainsKey("content"))
                 {
                     doc.Highlight = new List<string>();
                     doc.Highlight.AddRange(hit.Highlight["content"]);
                 }
+
                 docs.Add(doc);
             }
 
-            return docs;
+            return new EsDocumentResult { EsDocuments = docs, TotalCount = response.Total };
         }
 
         protected virtual void HandleError(IElasticsearchResponse response)
@@ -239,7 +283,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         protected virtual string NormalizeField(string field)
         {
-            return field.Replace("-", "").ToLower();
+            return field?.Replace("-", "").ToLower();
         }
     }
 }

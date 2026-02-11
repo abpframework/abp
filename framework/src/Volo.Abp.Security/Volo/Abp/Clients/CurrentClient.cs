@@ -6,7 +6,7 @@ namespace Volo.Abp.Clients;
 
 public class CurrentClient : ICurrentClient, ITransientDependency
 {
-    public virtual string Id => _principalAccessor.Principal?.FindClientId();
+    public virtual string? Id => _principalAccessor.Principal?.FindClientId();
 
     public virtual bool IsAuthenticated => Id != null;
 

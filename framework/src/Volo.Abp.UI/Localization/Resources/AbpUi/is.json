@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Er að vista...",
     "Actions": "Aðgerðir",
     "Delete": "Eyða",
-    "SuccessfullyDeleted": "Tókst að eyða",
+    "CreatedSuccessfully": "Tókst að búa til",
+    "SavedSuccessfully": "Tókst að vista",
+    "DeletedSuccessfully": "Tókst að eyða",
     "Edit": "Breyta",
     "Refresh": "Endurhlaða",
     "Language": "Tungumál",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Sýnir 0 til 0 af 0 færslum",
     "PagerInfoFiltered": "(síað úr _MAX_ heildar færslum)",
     "NoDataAvailableInDatatable": "Engar upplýsingar fáanlegar",
+    "ErrorLoadingDatatable": "Villa kom upp við beiðni. Athugaðu skilaboðin til að fá frekari upplýsingar.",
     "Total": "Samtals",
     "Selected": "valið",
     "PagerShowMenuEntries": "Sýna færslur _MENU_",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} verður eytt!",
     "ItemWillBeDeletedMessage": "Þessum lið verður eytt!",
     "ManageYourAccount": "Stillingar notandaaðgangs",
-    "OthersGroup": "Annað"
+    "OthersGroup": "Annað",
+    "Today": "Í dag",
+    "Apply": "Sækja um",
+    "InternetConnectionInfo": "Ekki var hægt að framkvæma aðgerðina. Nettengingin þín er ekki tiltæk í augnablikinu.",
+    "CopiedToTheClipboard": "Afritað á klippiborðið",
+    "AddNew": "Bæta við nýju",
+    "ProfilePicture": "Forsíðumynd",
+    "Theme": "Þema",
+    "NotAssigned": "Ekki skráður",
+    "EntityActionsDisabledTooltip": "Þú hefur ekki aðgang að þessum aðgerðum.",
+    "ResourcePermissions": "Aðgangsheimildir"
   }
 }

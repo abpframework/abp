@@ -8,14 +8,13 @@ public class PageToolbarItem
     [NotNull]
     public Type ComponentType { get; }
 
-    [CanBeNull]
-    public object Arguments { get; set; }
+    public object? Arguments { get; set; }
 
     public int Order { get; set; }
 
     public PageToolbarItem(
         [NotNull] Type componentType,
-        [CanBeNull] object arguments = null,
+        object? arguments = null,
         int order = 0)
     {
         ComponentType = Check.NotNull(componentType, nameof(componentType));

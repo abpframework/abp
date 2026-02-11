@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.MultiTenancy;
@@ -16,6 +14,7 @@ public class AspNetCoreMultiTenancy_WithDomainResolver_Tests : AspNetCoreMultiTe
 {
     private readonly Guid _testTenantId = Guid.NewGuid();
     private readonly string _testTenantName = "acme";
+    private readonly string _testTenantNormalizedName = "ACME";
 
     private readonly AbpAspNetCoreMultiTenancyOptions _options;
 
@@ -24,23 +23,22 @@ public class AspNetCoreMultiTenancy_WithDomainResolver_Tests : AspNetCoreMultiTe
         _options = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
     }
 
-    protected override IHostBuilder CreateHostBuilder()
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        return base.CreateHostBuilder().ConfigureServices(services =>
+        services.Configure<AbpDefaultTenantStoreOptions>(options =>
         {
-            services.Configure<AbpDefaultTenantStoreOptions>(options =>
+            options.Tenants = new[]
             {
-                options.Tenants = new[]
-                {
-                        new TenantConfiguration(_testTenantId, _testTenantName)
-                };
-            });
-
-            services.Configure<AbpTenantResolveOptions>(options =>
-            {
-                options.AddDomainTenantResolver("{0}.abp.io:8080");
-            });
+                new TenantConfiguration(_testTenantId, _testTenantName, _testTenantNormalizedName)
+            };
         });
+
+        services.Configure<AbpTenantResolveOptions>(options =>
+        {
+            options.AddDomainTenantResolver("{0}.abp.io:8080");
+        });
+
+        base.ConfigureServices(services);
     }
 
     [Fact]

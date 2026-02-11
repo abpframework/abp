@@ -1,6 +1,6 @@
 {
   "name": "VoloDocs.Web",
-  "hash": "b510ce34d8f9772fc2cbd0235c731ce4",
+  "hash": "",
   "contents": [
     {
       "namespace": "VoloDocs.Web",
@@ -94,6 +94,11 @@
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
           "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
           "name": "AbpAspNetCoreMvcUiBasicThemeModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching.StackExchangeRedis",
+          "namespace": "Volo.Abp.Caching.StackExchangeRedis",
+          "name": "AbpCachingStackExchangeRedisModule"
         }
       ],
       "implementingInterfaces": [

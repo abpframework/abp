@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Web",
-  "hash": "6de1a5d8b7e07b55bd1fc1f98dad11d0",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs",
@@ -11,9 +11,9 @@
           "name": "DocsApplicationContractsModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
@@ -82,6 +82,12 @@
       ],
       "contentType": "abpModule",
       "name": "DocsWebModule",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Pages.Documents.Project",
+      "contentType": "webPage",
+      "name": "IndexModel",
       "summary": null
     }
   ]

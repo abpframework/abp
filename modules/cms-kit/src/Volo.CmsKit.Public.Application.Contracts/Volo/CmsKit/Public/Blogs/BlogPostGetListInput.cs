@@ -8,4 +8,5 @@ public class BlogPostGetListInput : PagedAndSortedResultRequestDto
     public Guid? AuthorId { get; set; } 
     
     public Guid? TagId { get; set; }
+    public bool? FilterOnFavorites { get; set; }
 }

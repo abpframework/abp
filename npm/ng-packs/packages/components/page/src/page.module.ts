@@ -1,7 +1,3 @@
-import { CoreModule } from '@abp/ng.core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { UiExtensionsModule } from '@abp/ng.theme.shared/extensions';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PagePartDirective } from './page-part.directive';
 import {
@@ -11,7 +7,7 @@ import {
 } from './page-parts.component';
 import { PageComponent } from './page.component';
 
-const exportedDeclarations = [
+export const PAGE_EXPORTS = [
   PageComponent,
   PageTitleContainerComponent,
   PageBreadcrumbContainerComponent,
@@ -20,8 +16,8 @@ const exportedDeclarations = [
 ];
 
 @NgModule({
-  declarations: [...exportedDeclarations],
-  imports: [CommonModule, UiExtensionsModule, CoreModule, ThemeSharedModule],
-  exports: [...exportedDeclarations, UiExtensionsModule],
+  declarations: [],
+  imports: [...PAGE_EXPORTS],
+  exports: [...PAGE_EXPORTS],
 })
 export class PageModule {}

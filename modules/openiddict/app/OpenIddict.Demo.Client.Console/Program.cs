@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
 const string email = "admin@abp.io";
@@ -75,6 +75,41 @@ Console.WriteLine("UserInfo: {0}", JsonSerializer.Serialize(JsonDocument.Parse(u
 }));
 Console.WriteLine();
 
+var tokenExchangeResponse = await client.RequestTokenExchangeTokenAsync(new TokenExchangeTokenRequest()
+{
+    Address = configuration.TokenEndpoint,
+    ClientId = clientId,
+    ClientSecret = clientSecret,
+    SubjectToken = refreshTokenResponse.AccessToken!,
+    SubjectTokenType = "urn:ietf:params:oauth:token-type:access_token",
+    Scope = "AbpAPI profile roles email phone offline_access",
+});
+
+if (tokenExchangeResponse.IsError)
+{
+    throw new Exception(tokenExchangeResponse.Error);
+}
+
+Console.WriteLine("Token Exchange token: {0}", tokenExchangeResponse.AccessToken);
+Console.WriteLine();
+Console.WriteLine("Token Exchange token: {0}", tokenExchangeResponse.RefreshToken);
+Console.WriteLine();
+
+userinfo = await client.GetUserInfoAsync(new UserInfoRequest()
+{
+    Address = configuration.UserInfoEndpoint,
+    Token = tokenExchangeResponse.AccessToken
+});
+if (userinfo.IsError)
+{
+    throw new Exception(userinfo.Error);
+}
+
+Console.WriteLine("Token Exchange UserInfo: {0}", JsonSerializer.Serialize(JsonDocument.Parse(userinfo.Raw), new JsonSerializerOptions
+{
+    WriteIndented = true
+}));
+Console.WriteLine();
 
 var introspectionResponse  = await client.IntrospectTokenAsync(new TokenIntrospectionRequest()
 {
@@ -134,7 +169,7 @@ tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCreden
     ClientId = clientId,
     ClientSecret = clientSecret,
 
-    Scope = "AbpAPI profile roles email phone offline_access",
+    Scope = "AbpAPI offline_access",
 });
 
 if (tokenResponse.IsError)

@@ -1,4 +1,7 @@
-import { ConfigStateService, TrackByService } from '@abp/ng.core';
+import { Component, Input, inject, DOCUMENT, output } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ConfigStateService, LocalizationPipe, TrackByService } from '@abp/ng.core';
 import {
   FeatureDto,
   FeatureGroupDto,
@@ -6,14 +9,18 @@ import {
   UpdateFeatureDto,
 } from '@abp/ng.feature-management/proxy';
 import {
+  ButtonComponent,
   Confirmation,
   ConfirmationService,
   LocaleDirection,
+  ModalCloseDirective,
+  ModalComponent,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Tabs, TabList, Tab, TabPanel, TabContent } from '@angular/aria/tabs';
 import { finalize } from 'rxjs/operators';
-import { FeatureManagement } from '../../models/feature-management';
+import { FreeTextInputDirective } from '../../directives';
+import { FeatureManagement } from '../../models';
 
 enum ValueTypes {
   ToggleStringValueType = 'ToggleStringValueType',
@@ -21,21 +28,47 @@ enum ValueTypes {
   SelectionStringValueType = 'SelectionStringValueType',
 }
 
+const DEFAULT_PROVIDER_NAME = 'D';
+
 @Component({
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
   exportAs: 'abpFeatureManagement',
+  imports: [
+    NgTemplateOutlet,
+    ButtonComponent,
+    ModalComponent,
+    LocalizationPipe,
+    FormsModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    TabContent,
+    FreeTextInputDirective,
+    ModalCloseDirective,
+  ],
 })
 export class FeatureManagementComponent
   implements
     FeatureManagement.FeatureManagementComponentInputs,
     FeatureManagement.FeatureManagementComponentOutputs
 {
+  protected readonly track = inject(TrackByService);
+  protected readonly toasterService = inject(ToasterService);
+  protected readonly service = inject(FeaturesService);
+  protected readonly configState = inject(ConfigStateService);
+  protected readonly confirmationService = inject(ConfirmationService);
+  private document = inject(DOCUMENT);
+
   @Input()
   providerKey: string;
 
   @Input()
   providerName: string;
+
+  @Input({ required: false })
+  providerTitle: string;
 
   selectedGroupDisplayName: string;
 
@@ -47,6 +80,8 @@ export class FeatureManagementComponent
 
   valueTypes = ValueTypes;
 
+  defaultProviderName = DEFAULT_PROVIDER_NAME;
+
   protected _visible;
 
   @Input()
@@ -55,24 +90,22 @@ export class FeatureManagementComponent
   }
 
   set visible(value: boolean) {
-    if (this._visible === value) return;
+    if (this._visible === value) {
+      return;
+    }
 
     this._visible = value;
     this.visibleChange.emit(value);
-    if (value) this.openModal();
+
+    if (value) {
+      this.openModal();
+      return;
+    }
   }
 
-  @Output() readonly visibleChange = new EventEmitter<boolean>();
+  readonly visibleChange = output<boolean>();
 
   modalBusy = false;
-
-  constructor(
-    public readonly track: TrackByService,
-    private toasterService: ToasterService,
-    protected service: FeaturesService,
-    protected configState: ConfigStateService,
-    protected confirmationService: ConfirmationService,
-  ) {}
 
   openModal() {
     if (!this.providerName) {
@@ -90,7 +123,7 @@ export class FeatureManagementComponent
       this.features = res.groups.reduce(
         (acc, val) => ({
           ...acc,
-          [val.name]: mapFeatures(val.features, document.body.dir as LocaleDirection),
+          [val.name]: mapFeatures(val.features, this.document.body?.dir as LocaleDirection),
         }),
         {},
       );
@@ -121,6 +154,7 @@ export class FeatureManagementComponent
       .subscribe(() => {
         this.visible = false;
 
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         if (!this.providerKey) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();
@@ -151,6 +185,22 @@ export class FeatureManagementComponent
       this.checkToggleAncestors(feature);
     } else {
       this.uncheckToggleDescendants(feature);
+    }
+  }
+
+  isParentDisabled(parentName: string, groupName: string, provider: string): boolean {
+    const children = this.features[groupName]?.filter(f => f.parentName === parentName);
+
+    if (children?.length) {
+      return children.some(child => {
+        const childProvider = child.provider?.name;
+        return (
+          (childProvider !== this.providerName && childProvider !== this.defaultProviderName) ||
+          (provider !== this.providerName && provider !== this.defaultProviderName)
+        );
+      });
+    } else {
+      return provider !== this.providerName && provider !== this.defaultProviderName;
     }
   }
 

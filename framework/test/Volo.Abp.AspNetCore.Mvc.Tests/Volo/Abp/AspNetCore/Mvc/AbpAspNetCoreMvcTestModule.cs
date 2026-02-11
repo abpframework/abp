@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
 using Volo.Abp.AspNetCore.Security.Claims;
@@ -19,6 +20,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.TestApp.Application;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
@@ -44,6 +46,21 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
                 typeof(AbpAspNetCoreMvcTestModule).Assembly
             );
         });
+
+        context.Services.PreConfigure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
+            {
+                opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
+                    string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
+                        ? "phones"
+                        : urlActionNameNormalizerContext.ActionNameInUrl;
+
+                opts.TypePredicate = type => type != typeof(ConventionalAppService);
+            });
+
+            options.ExposeIntegrationServices = true;
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -57,9 +74,10 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
 
         context.Services.AddAuthentication(options =>
         {
+            options.DefaultAuthenticateScheme = FakeAuthenticationSchemeDefaults.Scheme;
             options.DefaultChallengeScheme = "Bearer";
             options.DefaultForbidScheme = "Cookie";
-        }).AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
+        }).AddFakeAuthentication().AddCookie("Cookie").AddJwtBearer("Bearer", _ => { });
 
         context.Services.AddAuthorization(options =>
         {
@@ -76,17 +94,6 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
             options.AddPolicy("TestPermission1_Or_TestPermission2", policy =>
             {
                 policy.Requirements.Add(new PermissionsRequirement(new []{"TestPermission1", "TestPermission2"}, requiresAll: false));
-            });
-        });
-
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
-            options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
-            {
-                opts.UrlActionNameNormalizer = urlActionNameNormalizerContext =>
-                    string.Equals(urlActionNameNormalizerContext.ActionNameInUrl, "phone", StringComparison.OrdinalIgnoreCase)
-                        ? "phones"
-                        : urlActionNameNormalizerContext.ActionNameInUrl;
             });
         });
 
@@ -132,6 +139,13 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         {
             options.Contributors.Add(new TestApplicationConfigurationContributor());
         });
+
+        context.Services.TransformAbpClaims();
+
+        Configure<AbpMvcLibsOptions>(options =>
+        {
+            options.CheckLibs = false;
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -143,10 +157,9 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         app.UseAbpRequestLocalization();
         app.UseAbpSecurityHeaders();
         app.UseRouting();
-        app.UseMiddleware<FakeAuthenticationMiddleware>();
-        app.UseAbpClaimsMap();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseAbpTimeZone();
         app.UseAuditing();
         app.UseUnitOfWork();
         app.UseConfiguredEndpoints();

@@ -14,6 +14,7 @@ namespace Volo.Docs.Admin
             projects.AddChild(DocsAdminPermissions.Projects.Update, L("Permission:Edit"));
             projects.AddChild(DocsAdminPermissions.Projects.Delete, L("Permission:Delete"));
             projects.AddChild(DocsAdminPermissions.Projects.Create, L("Permission:Create"));
+            projects.AddChild(DocsAdminPermissions.Projects.ManagePdfFiles, L("Permission:ManagePdfFiles"));
 
             group.AddPermission(DocsAdminPermissions.Documents.Default, L("Permission:Documents"));
         }

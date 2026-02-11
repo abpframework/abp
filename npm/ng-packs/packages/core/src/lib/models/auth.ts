@@ -1,5 +1,6 @@
-import { UnaryFunction } from 'rxjs';
 import { Injector } from '@angular/core';
+import { UnaryFunction } from 'rxjs';
+import { AuthErrorEvent } from './auth-events';
 
 export interface LoginParams {
   username: string;
@@ -13,7 +14,13 @@ export type PipeToLoginFn = (
   injector: Injector,
 ) => UnaryFunction<any, any>;
 /**
- * @deprecated The interface should not be used anymore. 
+ * @deprecated The interface should not be used anymore.
  */
 export type SetTokenResponseToStorageFn<T = any> = (tokenRes: T) => void;
 export type CheckAuthenticationStateFn = (injector: Injector) => void;
+
+export interface AuthErrorFilter<T = AuthErrorEvent> {
+  id: string;
+  executable: boolean;
+  execute: (event: T) => boolean;
+}

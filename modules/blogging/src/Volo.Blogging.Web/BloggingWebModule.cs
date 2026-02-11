@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -7,7 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -22,7 +23,7 @@ namespace Volo.Blogging
         typeof(BloggingApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAspNetCoreMvcUiBundlingModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpMapperlyModule)
     )]
     public class BloggingWebModule : AbpModule
     {
@@ -30,7 +31,11 @@ namespace Volo.Blogging
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(BloggingResource), typeof(BloggingWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(BloggingResource), 
+                    typeof(BloggingWebModule).Assembly, 
+                    typeof(BloggingApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>
@@ -41,15 +46,11 @@ namespace Volo.Blogging
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddMapperlyObjectMapper<BloggingWebModule>();
+            
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>();
-            });
-
-            context.Services.AddAutoMapperObjectMapper<BloggingWebModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<AbpBloggingWebAutoMapperProfile>(validate: true);
             });
 
             Configure<AbpBundleContributorOptions>(options =>
@@ -79,7 +80,7 @@ namespace Volo.Blogging
                 options.IgnoredPaths.AddRange(new[] 
                 {
                     "error", "ApplicationConfigurationScript", "ServiceProxyScript", "Languages/Switch",
-                    "ApplicationLocalizationScript"
+                    "ApplicationLocalizationScript", "members"
                 });
             });
 
@@ -91,11 +92,26 @@ namespace Volo.Blogging
 
                 var routePrefix = urlOptions.RoutePrefix;
 
-                options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix + "{blogShortName:blogNameConstraint}");
-                options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{blogShortName:blogNameConstraint}/{postUrl}");
-                options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
-                options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "{blogShortName}/posts/new");
-                options.Conventions.AddPageRoute("/Members/Index", routePrefix + "members/{userName}");
+                if (urlOptions.SingleBlogMode.Enabled)
+                {
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix);
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{postUrl}");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "posts/{postId}/edit");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "posts/new");
+                }
+                else
+                {
+                    if (!routePrefix.IsNullOrWhiteSpace())
+                    {
+                        options.Conventions.AddPageRoute("/Blogs/Index", routePrefix);
+                    }
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix + "{blogShortName:blogNameConstraint}");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{blogShortName:blogNameConstraint}/{postUrl}");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
+                    options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "{blogShortName}/posts/new");
+                }
+                
+                options.Conventions.AddPageRoute("/Blogs/Members/Index", routePrefix + "members/{userName}");
             });
 
             Configure<DynamicJavaScriptProxyOptions>(options =>

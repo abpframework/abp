@@ -1,65 +1,62 @@
-<ng-template #loginBtn>
-  <a role="button" class="nav-link pointer" (click)="navigateToLogin()">{{
-    'AbpAccount::Login' | abpLocalization
-  }}</a>
-</ng-template>
-<div
-  *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn"
-  ngbDropdown
-  class="dropdown"
-  #currentUserDropdown="ngbDropdown"
-  display="static"
->
-  <a
-    ngbDropdownToggle
-    class="nav-link"
-    href="javascript:void(0)"
-    role="button"
-    id="dropdownMenuLink"
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    <small *ngIf="(selectedTenant$ | async)?.name as tenantName"
-      ><i>{{ tenantName }}</i
-      >\</small
-    >
-    <strong>{{ (currentUser$ | async)?.userName }}</strong>
-  </a>
+@if ((currentUser$ | async)?.isAuthenticated) {
   <div
-    class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
-    aria-labelledby="dropdownMenuLink"
-    [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
+    ngbDropdown
+    class="dropdown"
+    #currentUserDropdown="ngbDropdown"
+    display="static"
   >
-    <ng-container *ngFor="let item of userMenu.items$ | async; trackBy: trackByFn">
-      <ng-container *abpVisible="!item.visible || item.visible(item)">
-        <li class="nav-item d-flex align-items-center" *abpPermission="item.requiredPolicy">
-          <ng-container
-            *ngIf="item.component; else htmlTemplate"
-            [ngComponentOutlet]="item.component"
-            [ngComponentOutletInjector]="item | toInjector"
-          ></ng-container>
-
-          <ng-template #htmlTemplate>
-            <div
-              *ngIf="item.html; else textTemplate"
-              [innerHTML]="item.html"
-              (click)="item.action ? item.action() : null"
-            ></div>
-          </ng-template>
-
-          <ng-template #textTemplate>
-            <a
-              *ngIf="item.textTemplate"
-              (click)="item.action ? item.action() : null"
-              class="dropdown-item pointer"
-            >
-              <i *ngIf="item.textTemplate.icon" class="me-1 {{ item.textTemplate.icon }}"></i>
-              {{ item.textTemplate.text | abpLocalization }}</a
-            >
-          </ng-template>
-        </li>
-      </ng-container>
-    </ng-container>
+    <a
+      ngbDropdownToggle
+      class="nav-link"
+      href="javascript:void(0)"
+      role="button"
+      id="dropdownMenuLink"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      @if ((selectedTenant$ | async)?.name; as tenantName) {
+        <small
+          ><i>{{ tenantName }}</i
+          >\</small
+        >
+      }
+      <strong>{{ (currentUser$ | async)?.userName }}</strong>
+    </a>
+    <div
+      class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
+      aria-labelledby="dropdownMenuLink"
+      [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
+    >
+      @for (item of userMenu.items$ | async; track $index) {
+        <ng-container *abpVisible="!item.visible || item.visible(item)">
+          <li class="nav-item d-flex align-items-center" *abpPermission="item.requiredPolicy">
+            @if (item.component) {
+              <ng-container
+                [ngComponentOutlet]="item.component"
+                [ngComponentOutletInjector]="item | toInjector"
+              ></ng-container>
+            } @else {
+              @if (item.html) {
+                <div [innerHTML]="item.html" (click)="item.action ? item.action() : null"></div>
+              } @else {
+                @if (item.textTemplate) {
+                  <a (click)="item.action ? item.action() : null" class="dropdown-item pointer">
+                    @if (item.textTemplate.icon) {
+                      <i class="me-1 {{ item.textTemplate.icon }}"></i>
+                    }
+                    {{ item.textTemplate.text | abpLocalization }}</a
+                  >
+                }
+              }
+            }
+          </li>
+        </ng-container>
+      }
+    </div>
   </div>
-</div>
+} @else {
+    <a role="button" class="nav-link pointer" (click)="navigateToLogin()">
+      {{ 'AbpAccount::Login' | abpLocalization }}
+    </a>
+}

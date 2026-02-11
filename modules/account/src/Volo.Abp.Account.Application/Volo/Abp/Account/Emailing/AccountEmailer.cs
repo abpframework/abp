@@ -101,6 +101,11 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
             }
         }
 
+        if (returnUrl.StartsWith("/connect/authorize?", StringComparison.OrdinalIgnoreCase))
+        {
+            return HttpUtility.UrlEncode(returnUrl);
+        }
+
         return returnUrl;
     }
 }

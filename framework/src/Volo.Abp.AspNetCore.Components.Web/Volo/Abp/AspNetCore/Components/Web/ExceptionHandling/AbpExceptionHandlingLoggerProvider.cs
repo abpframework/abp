@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 
 public class AbpExceptionHandlingLoggerProvider : ILoggerProvider
 {
-    private AbpExceptionHandlingLogger _logger;
+    private AbpExceptionHandlingLogger? _logger;
     private static readonly object SyncObj = new object();
     private readonly IServiceCollection _serviceCollection;
 

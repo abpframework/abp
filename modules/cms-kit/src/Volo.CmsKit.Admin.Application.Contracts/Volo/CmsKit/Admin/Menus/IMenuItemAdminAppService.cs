@@ -10,7 +10,7 @@ public interface IMenuItemAdminAppService : IApplicationService
 {
     Task<ListResultDto<MenuItemDto>> GetListAsync();
 
-    Task<MenuItemDto> GetAsync(Guid id);
+    Task<MenuItemWithDetailsDto> GetAsync(Guid id);
 
     Task<MenuItemDto> CreateAsync(MenuItemCreateInput input);
 
@@ -21,4 +21,8 @@ public interface IMenuItemAdminAppService : IApplicationService
     Task MoveMenuItemAsync(Guid id, MenuItemMoveInput input);
 
     Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input);
+
+    Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto);
+
+    Task<int> GetAvailableMenuOrderAsync(Guid? parentId = null);
 }

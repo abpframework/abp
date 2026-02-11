@@ -1,3 +1,7 @@
+import { Injector } from '@angular/core';
+import { ABP } from '../models';
+import { ConfigStateService } from '../services';
+
 export function uuid(a?: any): string {
   return a
     ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
@@ -16,13 +20,17 @@ export function generateHash(value: string): number {
   return hashed;
 }
 
-export function generatePassword(length = 8) {
+export function generatePassword(injector?: Injector, length = 8) {
+  if (injector) {
+    length = getRequiredPasswordLength(injector);
+  }
+
   length = Math.min(Math.max(4, length), 128);
 
-  const lowers = 'abcdefghijklmnopqrstuvwxyz';
-  const uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const numbers = '0123456789';
-  const specials = '!@#$%&*()_+{}<>?[]./';
+  const lowers = 'abcdefghjkmnpqrstuvwxyz';
+  const uppers = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+  const numbers = '23456789';
+  const specials = '!*_#/+-.';
   const all = lowers + uppers + numbers + specials;
 
   const getRandom = (chrSet: string) => chrSet[Math.floor(Math.random() * chrSet.length)];
@@ -38,4 +46,10 @@ export function generatePassword(length = 8) {
   }
 
   return password.sort(() => 0.5 - Math.random()).join('');
+}
+
+function getRequiredPasswordLength(injector: Injector) {
+  const configState = injector.get(ConfigStateService);
+  const passwordRules: ABP.Dictionary<string> = configState.getSettings('Identity.Password');
+  return Number(passwordRules['Abp.Identity.Password.RequiredLength']) || 8;
 }

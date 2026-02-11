@@ -7,5 +7,5 @@ public interface IFeatureValueProvider
 {
     string Name { get; }
 
-    Task<string> GetOrNullAsync([NotNull] FeatureDefinition feature);
+    Task<string?> GetOrNullAsync([NotNull] FeatureDefinition feature);
 }

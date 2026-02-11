@@ -17,7 +17,7 @@ public class AbpSignalRUserIdProvider : IUserIdProvider, ITransientDependency
         _currentUser = currentUser;
     }
 
-    public virtual string GetUserId(HubConnectionContext connection)
+    public virtual string? GetUserId(HubConnectionContext connection)
     {
         using (_currentPrincipalAccessor.Change(connection.User))
         {

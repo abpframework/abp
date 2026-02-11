@@ -48,7 +48,7 @@ public class DynamicFeatureDefinitionStoreInMemoryCache:
         {
             var featureGroup = context.AddGroup(
                 featureGroupRecord.Name,
-                LocalizableStringSerializer.Deserialize(featureGroupRecord.DisplayName)
+                featureGroupRecord.DisplayName != null ? LocalizableStringSerializer.Deserialize(featureGroupRecord.DisplayName) : null
             );
 
             FeatureGroupDefinitions[featureGroup.Name] = featureGroup;
@@ -92,8 +92,8 @@ public class DynamicFeatureDefinitionStoreInMemoryCache:
         var feature = featureContainer.CreateChildFeature(
             featureRecord.Name,
             featureRecord.DefaultValue,
-            LocalizableStringSerializer.Deserialize(featureRecord.DisplayName),
-            LocalizableStringSerializer.Deserialize(featureRecord.Description),
+            featureRecord.DisplayName != null ? LocalizableStringSerializer.Deserialize(featureRecord.DisplayName) : null,
+            featureRecord.Description != null ? LocalizableStringSerializer.Deserialize(featureRecord.Description) : null,
             StateCheckerSerializer.Deserialize(featureRecord.ValueType),
             featureRecord.IsVisibleToClients,
             featureRecord.IsAvailableToHost

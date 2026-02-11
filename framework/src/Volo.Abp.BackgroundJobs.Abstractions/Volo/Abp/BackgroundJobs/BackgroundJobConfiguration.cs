@@ -10,10 +10,10 @@ public class BackgroundJobConfiguration
 
     public string JobName { get; }
 
-    public BackgroundJobConfiguration(Type jobType)
+    public BackgroundJobConfiguration(Type jobType, string jobName)
     {
         JobType = jobType;
         ArgsType = BackgroundJobArgsHelper.GetJobArgsType(jobType);
-        JobName = BackgroundJobNameAttribute.GetName(ArgsType);
+        JobName = jobName;
     }
 }

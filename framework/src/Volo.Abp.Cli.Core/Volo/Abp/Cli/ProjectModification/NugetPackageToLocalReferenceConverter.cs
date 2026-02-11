@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.Extensions.Logging;
@@ -142,6 +141,11 @@ public class NugetPackageToLocalReferenceConverter : ITransientDependency
 
     private static string[] GetProjectFilesUnder(string path)
     {
+        if (!Directory.Exists(path))
+        {
+            return [];
+        }
+        
         return Directory.GetFiles(path,
             "*.csproj",
             SearchOption.AllDirectories);

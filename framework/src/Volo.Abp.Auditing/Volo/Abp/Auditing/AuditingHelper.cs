@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.Tracing;
 using Volo.Abp.Users;
@@ -26,6 +27,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
     protected IAuditSerializer AuditSerializer;
     protected IServiceProvider ServiceProvider;
     protected ICorrelationIdProvider CorrelationIdProvider { get; }
+    protected IAmbientScopeProvider<AuditingDisabledState> AuditingDisabledState { get; }
 
     public AuditingHelper(
         IAuditSerializer auditSerializer,
@@ -37,7 +39,8 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         IAuditingStore auditingStore,
         ILogger<AuditingHelper> logger,
         IServiceProvider serviceProvider,
-        ICorrelationIdProvider correlationIdProvider)
+        ICorrelationIdProvider correlationIdProvider,
+        IAmbientScopeProvider<AuditingDisabledState> auditingDisabledState)
     {
         Options = options.Value;
         AuditSerializer = auditSerializer;
@@ -50,9 +53,10 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         Logger = logger;
         ServiceProvider = serviceProvider;
         CorrelationIdProvider = correlationIdProvider;
+        AuditingDisabledState = auditingDisabledState;
     }
 
-    public virtual bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false, bool ignoreIntegrationServiceAttribute = false)
+    public virtual bool ShouldSaveAudit(MethodInfo? methodInfo, bool defaultValue = false, bool ignoreIntegrationServiceAttribute = false)
     {
         if (methodInfo == null)
         {
@@ -60,6 +64,11 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         }
 
         if (!methodInfo.IsPublic)
+        {
+            return false;
+        }
+
+        if (!IsAuditingEnabled())
         {
             return false;
         }
@@ -150,23 +159,23 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
 
     public virtual AuditLogActionInfo CreateAuditLogAction(
         AuditLogInfo auditLog,
-        Type type,
+        Type? type,
         MethodInfo method,
-        object[] arguments)
+        object?[] arguments)
     {
         return CreateAuditLogAction(auditLog, type, method, CreateArgumentsDictionary(method, arguments));
     }
 
     public virtual AuditLogActionInfo CreateAuditLogAction(
         AuditLogInfo auditLog,
-        Type type,
+        Type? type,
         MethodInfo method,
-        IDictionary<string, object> arguments)
+        IDictionary<string, object?> arguments)
     {
         var actionInfo = new AuditLogActionInfo
         {
             ServiceName = type != null
-                ? type.FullName
+                ? type.FullName!
                 : "",
             MethodName = method.Name,
             Parameters = SerializeConvertArguments(arguments),
@@ -176,6 +185,19 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         //TODO Execute contributors
 
         return actionInfo;
+    }
+
+    private const string AuditingDisabledScopeKey = "Volo.Abp.Auditing.DisabledScope";
+
+    public virtual IDisposable DisableAuditing()
+    {
+        return AuditingDisabledState.BeginScope(AuditingDisabledScopeKey, new AuditingDisabledState(true));
+    }
+
+    public virtual bool IsAuditingEnabled()
+    {
+        var state = AuditingDisabledState.GetValue(AuditingDisabledScopeKey);
+        return state == null || !state.IsDisabled;
     }
 
     protected virtual void ExecutePreContributors(AuditLogInfo auditLogInfo)
@@ -198,7 +220,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         }
     }
 
-    protected virtual string SerializeConvertArguments(IDictionary<string, object> arguments)
+    protected virtual string SerializeConvertArguments(IDictionary<string, object?> arguments)
     {
         try
         {
@@ -207,7 +229,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
                 return "{}";
             }
 
-            var dictionary = new Dictionary<string, object>();
+            var dictionary = new Dictionary<string, object?>();
 
             foreach (var argument in arguments)
             {
@@ -230,14 +252,14 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
         }
     }
 
-    protected virtual Dictionary<string, object> CreateArgumentsDictionary(MethodInfo method, object[] arguments)
+    protected virtual Dictionary<string, object?> CreateArgumentsDictionary(MethodInfo method, object?[] arguments)
     {
         var parameters = method.GetParameters();
-        var dictionary = new Dictionary<string, object>();
+        var dictionary = new Dictionary<string, object?>();
 
         for (var i = 0; i < parameters.Length; i++)
         {
-            dictionary[parameters[i].Name] = arguments[i];
+            dictionary[parameters[i].Name!] = arguments[i];
         }
 
         return dictionary;

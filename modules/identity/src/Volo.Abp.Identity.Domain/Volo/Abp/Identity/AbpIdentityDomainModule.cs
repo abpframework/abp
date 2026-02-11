@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
@@ -19,20 +19,23 @@ namespace Volo.Abp.Identity;
     typeof(AbpDddDomainModule),
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpUsersDomainModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpMapperlyModule)
     )]
 public class AbpIdentityDomainModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsRemoteRefreshEnabled = false;
+        });
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<IdentityDomainMappingProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpIdentityDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
@@ -90,6 +93,12 @@ public class AbpIdentityDomainModule : AbpModule
                 IdentityModuleExtensionConsts.ModuleName,
                 IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
                 typeof(OrganizationUnit)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.IdentitySession,
+                typeof(IdentitySession)
             );
         });
     }

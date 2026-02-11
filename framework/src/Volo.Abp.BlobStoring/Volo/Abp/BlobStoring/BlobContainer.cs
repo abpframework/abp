@@ -61,7 +61,7 @@ public class BlobContainer<TContainer> : IBlobContainer<TContainer>
         );
     }
 
-    public Task<Stream> GetOrNullAsync(
+    public Task<Stream?> GetOrNullAsync(
         string name,
         CancellationToken cancellationToken = default)
     {
@@ -118,9 +118,9 @@ public class BlobContainer : IBlobContainer
 
             await Provider.SaveAsync(
                 new BlobProviderSaveArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     stream,
                     overrideExisting,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
@@ -140,9 +140,9 @@ public class BlobContainer : IBlobContainer
 
             return await Provider.DeleteAsync(
                 new BlobProviderDeleteArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
                 )
             );
@@ -160,9 +160,9 @@ public class BlobContainer : IBlobContainer
 
             return await Provider.ExistsAsync(
                 new BlobProviderExistsArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
                 )
             );
@@ -179,13 +179,13 @@ public class BlobContainer : IBlobContainer
         {
             //TODO: Consider to throw some type of "not found" exception and handle on the HTTP status side
             throw new AbpException(
-                $"Could not found the requested BLOB '{name}' in the container '{ContainerName}'!");
+                $"Could not find the requested BLOB '{name}' in the container '{ContainerName}'!");
         }
 
         return stream;
     }
 
-    public virtual async Task<Stream> GetOrNullAsync(
+    public virtual async Task<Stream?> GetOrNullAsync(
         string name,
         CancellationToken cancellationToken = default)
     {
@@ -196,9 +196,9 @@ public class BlobContainer : IBlobContainer
 
             return await Provider.GetOrNullAsync(
                 new BlobProviderGetArgs(
-                    blobNormalizeNaming.ContainerName,
+                    blobNormalizeNaming.ContainerName!,
                     Configuration,
-                    blobNormalizeNaming.BlobName,
+                    blobNormalizeNaming.BlobName!,
                     CancellationTokenProvider.FallbackToProvider(cancellationToken)
                 )
             );

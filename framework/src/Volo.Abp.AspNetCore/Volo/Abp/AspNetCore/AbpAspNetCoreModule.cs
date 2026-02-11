@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Auditing;
@@ -25,7 +27,8 @@ namespace Volo.Abp.AspNetCore;
     typeof(AbpHttpModule),
     typeof(AbpAuthorizationModule),
     typeof(AbpValidationModule),
-    typeof(AbpExceptionHandlingModule)
+    typeof(AbpExceptionHandlingModule),
+    typeof(AbpAspNetCoreAbstractionsModule)
     )]
 public class AbpAspNetCoreModule : AbpModule
 {
@@ -55,6 +58,10 @@ public class AbpAspNetCoreModule : AbpModule
         AddAspNetServices(context.Services);
         context.Services.AddObjectAccessor<IApplicationBuilder>();
         context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
+
+        StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());
+
+        context.Services.AddHttpUserAgentCachedParser();
     }
 
     private static void AddAspNetServices(IServiceCollection services)

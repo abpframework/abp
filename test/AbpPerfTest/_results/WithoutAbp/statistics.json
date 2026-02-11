@@ -1,0 +1,50 @@
+{
+  "Create a book" : {
+    "transaction" : "Create a book",
+    "sampleCount" : 80000,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 27.11711250000013,
+    "medianResTime" : 7.0,
+    "minResTime" : 0.0,
+    "maxResTime" : 1662.0,
+    "pct1ResTime" : 13.0,
+    "pct2ResTime" : 17.950000000000728,
+    "pct3ResTime" : 301.0,
+    "throughput" : 4047.35404229485,
+    "receivedKBytesPerSec" : 778.6413538399272,
+    "sentKBytesPerSec" : 967.936527291182
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 160000,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 25.07800624999981,
+    "medianResTime" : 3.0,
+    "minResTime" : 0.0,
+    "maxResTime" : 1662.0,
+    "pct1ResTime" : 10.0,
+    "pct2ResTime" : 11.0,
+    "pct3ResTime" : 16.0,
+    "throughput" : 8094.7080845897,
+    "receivedKBytesPerSec" : 1766.340352040752,
+    "sentKBytesPerSec" : 1746.577881131109
+  },
+  "Get book by id" : {
+    "transaction" : "Get book by id",
+    "sampleCount" : 80000,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 23.038899999999767,
+    "medianResTime" : 5.0,
+    "minResTime" : 0.0,
+    "maxResTime" : 499.0,
+    "pct1ResTime" : 11.0,
+    "pct2ResTime" : 15.0,
+    "pct3ResTime" : 292.0,
+    "throughput" : 4477.027253903409,
+    "receivedKBytesPerSec" : 1092.5546140487716,
+    "sentKBytesPerSec" : 861.3030947450893
+  }
+}

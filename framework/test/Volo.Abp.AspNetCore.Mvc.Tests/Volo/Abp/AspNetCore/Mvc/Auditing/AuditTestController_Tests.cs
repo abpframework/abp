@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Threading.Tasks;
@@ -23,11 +23,11 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
         _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         _auditingStore = Substitute.For<IAuditingStore>();
         services.Replace(ServiceDescriptor.Singleton(_auditingStore));
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]
@@ -41,6 +41,23 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
             x.Actions.Any(a => a.MethodName == nameof(AuditTestController.Get))));
     }
 
+
+    [Fact]
+    public async Task Should_Disable_AuditLog_For_Get_And_Head_Requests()
+    {
+        _options.IsEnabledForGetRequests = false;
+        await GetResponseAsync("api/audit-test/audit-success");
+        await _auditingStore.Received().DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+
+        using (var requestMessage = new HttpRequestMessage(HttpMethod.Head, "api/audit-test/audit-success"))
+        {
+            var response = await Client.SendAsync(requestMessage);
+            response.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+        }
+
+        await _auditingStore.Received().DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+    }
+
     [Fact]
     public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_GetRequests()
     {
@@ -49,7 +66,6 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
         await GetResponseAsync("api/audit-test/audit-success");
         await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
     }
-
 
     [Fact]
     public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_Specified_Requests()

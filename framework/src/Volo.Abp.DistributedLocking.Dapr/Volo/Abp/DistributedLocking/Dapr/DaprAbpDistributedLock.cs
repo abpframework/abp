@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
+#pragma warning disable DAPR_DISTRIBUTEDLOCK
 
 namespace Volo.Abp.DistributedLocking.Dapr;
 
@@ -24,14 +25,14 @@ public class DaprAbpDistributedLock : IAbpDistributedLock, ITransientDependency
         DistributedLockDaprOptions = distributedLockDaprOptions.Value;
     }
 
-    public async Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    public async Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default)
     {
         name = DistributedLockKeyNormalizer.NormalizeKey(name);
 
-        var daprClient = DaprClientFactory.Create();
+        var daprClient = await DaprClientFactory.CreateAsync();
         var lockResponse = await daprClient.Lock(
             DistributedLockDaprOptions.StoreName,
             name,

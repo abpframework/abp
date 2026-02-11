@@ -13,9 +13,9 @@ public class AbpHubContext
 
     public MethodInfo HubMethod { get; }
 
-    public IReadOnlyList<object> HubMethodArguments { get; }
+    public IReadOnlyList<object?> HubMethodArguments { get; }
 
-    public AbpHubContext(IServiceProvider serviceProvider, Hub hub, MethodInfo hubMethod, IReadOnlyList<object> hubMethodArguments)
+    public AbpHubContext(IServiceProvider serviceProvider, Hub hub, MethodInfo hubMethod, IReadOnlyList<object?> hubMethodArguments)
     {
         ServiceProvider = serviceProvider;
         Hub = hub;

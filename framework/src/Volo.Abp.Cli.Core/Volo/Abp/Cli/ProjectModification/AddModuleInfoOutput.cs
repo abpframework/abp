@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Volo.Abp.Cli.ProjectModification;
+﻿namespace Volo.Abp.Cli.ProjectModification;
 
 public class AddModuleInfoOutput
 {

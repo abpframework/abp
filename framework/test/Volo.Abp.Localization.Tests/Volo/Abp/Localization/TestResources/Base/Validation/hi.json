@@ -2,6 +2,11 @@
   "culture": "hi",
   "texts": {
     "ThisFieldIsRequired": "यह फ़ील्ड आवश्यक है",
-    "MaxLenghtErrorMessage": "यह क्षेत्र अधिकतम '{0}' वर्ण का हो सकता है"
+    "MaxLenghtErrorMessage": "यह क्षेत्र अधिकतम '{0}' वर्ण का हो सकता है",
+    "Enum:BookType.Undefined": "ValidationResource से अपरिभाषित",
+    "Enum:BookType.0": "ValidationResource से मान 0 के साथ अपरिभाषित",
+    "BookType.Adventure": "ValidationResource से साहसिक कार्य",
+    "BookType.1": "ValidationResource से मान 1 के साथ साहसिक कार्य",
+    "Biography": "ValidationResource से जीवनी"
   }
 }

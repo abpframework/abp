@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Blogs;
 using Volo.CmsKit.Blogs;
@@ -18,9 +18,10 @@ public class CreateModalModel : CmsKitAdminPageModel
     public CreateModalModel(IBlogAdminAppService blogAdminAppService)
     {
         BlogAdminAppService = blogAdminAppService;
+        ViewModel = new CreateBlogViewModel();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public virtual async Task<IActionResult> OnPostAsync()
     {
         var dto = ObjectMapper.Map<CreateBlogViewModel, CreateBlogDto>(ViewModel);
 
@@ -28,9 +29,8 @@ public class CreateModalModel : CmsKitAdminPageModel
 
         return NoContent();
     }
-
-    [AutoMap(typeof(CreateBlogDto), ReverseMap = true)]
-    public class CreateBlogViewModel
+    
+    public class CreateBlogViewModel : ExtensibleObject
     {
         [Required]
         [DynamicMaxLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]

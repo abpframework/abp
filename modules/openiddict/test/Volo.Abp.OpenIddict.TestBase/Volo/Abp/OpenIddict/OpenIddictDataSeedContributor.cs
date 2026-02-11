@@ -92,7 +92,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
     private async Task CreateApplicationsAsync()
     {
-        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App1Id, new OpenIddictApplicationDescriptor
+        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App1Id, new AbpApplicationDescriptor
         {
             ClientId = _testData.App1ClientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
@@ -109,10 +109,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             {
                 OpenIddictConstants.Permissions.Endpoints.Authorization,
                 OpenIddictConstants.Permissions.Endpoints.Token,
-                OpenIddictConstants.Permissions.Endpoints.Device,
+                OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
                 OpenIddictConstants.Permissions.Endpoints.Introspection,
                 OpenIddictConstants.Permissions.Endpoints.Revocation,
-                OpenIddictConstants.Permissions.Endpoints.Logout,
+                OpenIddictConstants.Permissions.Endpoints.EndSession,
 
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                 OpenIddictConstants.Permissions.GrantTypes.Implicit,
@@ -137,10 +137,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 OpenIddictConstants.Permissions.Scopes.Phone,
 
                 OpenIddictConstants.Permissions.Prefixes.Scope + _testData.Scope1Name
-            }
+            },
+            ClientUri = "https://abp.io/TestApplication",
+            LogoUri = "https://abp.io/TestApplication.png"
         }));
 
-        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App2Id, new OpenIddictApplicationDescriptor
+        await _applicationManager.CreateAsync(await GetOpenIddictApplicationModelAsync(_testData.App2Id, new AbpApplicationDescriptor
         {
             ClientId = _testData.App2ClientId,
             ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
@@ -157,10 +159,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             {
                 OpenIddictConstants.Permissions.Endpoints.Authorization,
                 OpenIddictConstants.Permissions.Endpoints.Token,
-                OpenIddictConstants.Permissions.Endpoints.Device,
+                OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization,
                 OpenIddictConstants.Permissions.Endpoints.Introspection,
                 OpenIddictConstants.Permissions.Endpoints.Revocation,
-                OpenIddictConstants.Permissions.Endpoints.Logout,
+                OpenIddictConstants.Permissions.Endpoints.EndSession,
 
                 OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
                 OpenIddictConstants.Permissions.GrantTypes.Implicit,
@@ -186,7 +188,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
                 OpenIddictConstants.Permissions.Prefixes.Scope + _testData.Scope1Name,
                 OpenIddictConstants.Permissions.Prefixes.Scope + _testData.Scope2Name,
-            }
+            },
+            ClientUri = "https://abp.io/TestApplication2",
+            LogoUri = "https://abp.io/TestApplication2.png"
         }));
     }
 
@@ -203,7 +207,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         {
             ApplicationId = _testData.App1Id.ToString(),
             AuthorizationId = _testData.Authorization1Id.ToString(),
-            Subject = "TestSubject1",
+            Subject = _testData.Subject1,
             Type = "TestType1",
             Status = OpenIddictConstants.Statuses.Redeemed,
             Payload = "TestPayload1",
@@ -216,7 +220,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         {
             ApplicationId = _testData.App2Id.ToString(),
             AuthorizationId = _testData.Authorization1Id.ToString(),
-            Subject = "TestSubject2",
+            Subject = _testData.Subject2,
             Type = "TestType2",
             Status = OpenIddictConstants.Statuses.Valid,
             Payload = "TestPayload2",
@@ -237,17 +241,16 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         {
             ApplicationId = _testData.App1Id.ToString(),
             Status = OpenIddictConstants.Statuses.Valid,
-            Subject = "TestSubject1",
+            Subject = _testData.Subject1,
             Type = OpenIddictConstants.AuthorizationTypes.Permanent,
             CreationDate = _clock.Now
-
         }));
 
         await _authorizationManager.CreateAsync(await GetOpenIddictAuthorizationModelAsync(_testData.Authorization2Id, new OpenIddictAuthorizationDescriptor
         {
             ApplicationId = _testData.App2Id.ToString(),
             Status = OpenIddictConstants.Statuses.Inactive,
-            Subject = "TestSubject2",
+            Subject = _testData.Subject2,
             Type = OpenIddictConstants.AuthorizationTypes.AdHoc,
             CreationDate = _clock.Now.AddDays(-30)
         }));

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using Shouldly;
 using Volo.Abp.Auditing;
 using Xunit;
 
@@ -22,11 +23,11 @@ public class AuditTestPage_Tests : AspNetCoreMvcTestBase
         _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         _auditingStore = Substitute.For<IAuditingStore>();
         services.Replace(ServiceDescriptor.Singleton(_auditingStore));
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]
@@ -38,6 +39,22 @@ public class AuditTestPage_Tests : AspNetCoreMvcTestBase
         await _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
             x.Actions.Any(a => a.ServiceName == typeof(AuditTestPage).FullName) &&
             x.Actions.Any(a => a.MethodName == nameof(AuditTestPage.OnGet))));
+    }
+
+    [Fact]
+    public async Task Should_Disable_AuditLog_For_Get_And_Head_Requests()
+    {
+        _options.IsEnabledForGetRequests = false;
+        await GetResponseAsync("/Auditing/AuditTestPage");
+        await _auditingStore.Received().DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+
+        using (var requestMessage = new HttpRequestMessage(HttpMethod.Head, "/Auditing/AuditTestPage"))
+        {
+            var response = await Client.SendAsync(requestMessage);
+            response.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+        }
+
+        await _auditingStore.Received().DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
     }
 
     [Fact]

@@ -1,3 +1,3 @@
 ## Contribution
 
-See the [contribution guide](docs/en/Contribution/Index.md).
+The contribution guide is available at [contribution guide](docs/en/contribution/index.md).

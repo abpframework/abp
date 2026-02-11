@@ -6,15 +6,15 @@ namespace Volo.Abp.Settings;
 
 public interface ISettingStore
 {
-    Task<string> GetOrNullAsync(
+    Task<string?> GetOrNullAsync(
         [NotNull] string name,
-        [CanBeNull] string providerName,
-        [CanBeNull] string providerKey
+        string? providerName,
+        string? providerKey
     );
 
     Task<List<SettingValue>> GetAllAsync(
         [NotNull] string[] names,
-        [CanBeNull] string providerName,
-        [CanBeNull] string providerKey
+        string? providerName,
+        string? providerKey
     );
 }

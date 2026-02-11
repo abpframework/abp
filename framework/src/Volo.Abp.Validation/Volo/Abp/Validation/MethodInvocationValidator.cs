@@ -91,10 +91,11 @@ public class MethodInvocationValidator : IMethodInvocationValidator, ITransientD
         }
     }
 
-    protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object parameterValue)
+    protected virtual async Task AddMethodParameterValidationErrorsAsync(IAbpValidationResult context, ParameterInfo parameterInfo, object? parameterValue)
     {
         var allowNulls = parameterInfo.IsOptional ||
                          parameterInfo.IsOut ||
+                         TypeHelper.IsNullable(parameterInfo.ParameterType) ||
                          TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
 
         context.Errors.AddRange(

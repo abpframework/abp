@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
@@ -51,7 +51,8 @@ public class AbpAspNetCoreMvcVersioningTestModule : AbpModule
 
             //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
             //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
-
+        }, options =>
+        {
             options.ConfigureAbp(preActions.Configure());
         });
 

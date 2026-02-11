@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Volo.Abp.Data;
-using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.UI.Navigation;
 
@@ -26,7 +23,7 @@ public class ApplicationMenu : IHasMenuItems, IHasMenuGroups
             _displayName = value;
         }
     }
-    private string _displayName;
+    private string _displayName = default!;
 
     /// <inheritdoc cref="IHasMenuItems.Items"/>
     [NotNull]
@@ -44,7 +41,7 @@ public class ApplicationMenu : IHasMenuItems, IHasMenuGroups
 
     public ApplicationMenu(
         [NotNull] string name,
-        string displayName = null)
+        string? displayName = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
 

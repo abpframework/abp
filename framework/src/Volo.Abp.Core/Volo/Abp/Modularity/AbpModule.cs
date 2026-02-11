@@ -29,7 +29,7 @@ public abstract class AbpModule :
         internal set => _serviceConfigurationContext = value;
     }
 
-    private ServiceConfigurationContext _serviceConfigurationContext;
+    private ServiceConfigurationContext? _serviceConfigurationContext;
 
     public virtual Task PreConfigureServicesAsync(ServiceConfigurationContext context)
     {

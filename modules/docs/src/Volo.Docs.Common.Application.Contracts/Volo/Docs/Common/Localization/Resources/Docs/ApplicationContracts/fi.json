@@ -1,0 +1,7 @@
+{
+  "culture": "fi",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Tiedostonhallinta",
+    "Permission:PdfDownload": "PDF-lataaminen"
+  }
+}

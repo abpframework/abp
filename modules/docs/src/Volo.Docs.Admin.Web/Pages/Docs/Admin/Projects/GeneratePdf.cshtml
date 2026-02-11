@@ -1,0 +1,41 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Docs.Admin.Pages.Docs.Admin.Projects;
+@using Volo.Docs.Localization
+@model GeneratePdfModal
+@inject IHtmlLocalizer<DocsResource> L
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/Docs/Admin/Projects/GeneratePdf">
+    <abp-modal>
+        <abp-modal-header title="@(L["GeneratePdf"].Value + " - " + Model.ViewModel.ShortName)"></abp-modal-header>
+        <abp-modal-body>
+            <input id="ProjectId" asp-for="ProjectId" hidden/>
+            <input id="ShortName" name="ShortName" value="@Model.ViewModel.ShortName" hidden/>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Version">@L["Version"]</label>
+                <select asp-for="Version" class="form-select mt-2">
+                    @foreach (var version in Model.ViewModel.Versions)
+                    {
+                        <option value="@version.Value">@version.Value</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Language">@L["Language"]</label>
+                <select asp-for="Language" class="form-select mt-2">
+                    @foreach (var language in Model.ViewModel.Languages)
+                    {
+                        <option value="@language.Value">@language.Value</option>
+                    }
+                </select>
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.None)">
+            <button type="button" class="btn btn-sm btn-link" data-bs-dismiss="modal">@L["Close"]</button>
+            <button type="submit" class="btn btn-sm btn-primary" id="GenerateBtn" data-busy-text="@L["Generating"].Value"><span>@L["GeneratePdf"]</span></button>
+        </abp-modal-footer>
+    </abp-modal>
+</form>

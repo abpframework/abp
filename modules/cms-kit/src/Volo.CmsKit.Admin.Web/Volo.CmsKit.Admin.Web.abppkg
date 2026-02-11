@@ -1,0 +1,19 @@
+{
+  "role": "lib.mvc",
+  "npmDependencies": {
+    "@abp/cms-kit.admin": {
+      "version": ""
+    }
+  },
+  "proxies": {
+    "Javascript": {
+      "Volo.CmsKit.Web.Unified-cms-kit-admin": {
+        "applicationName": "Volo.CmsKit.Web.Unified",
+        "module": "cms-kit-admin",
+        "url": "https://localhost:44349",
+        "output": "wwwroot/client-proxies/",
+        "serviceType": "application"
+      }
+    }
+  }
+}

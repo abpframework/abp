@@ -80,11 +80,14 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         _moderatorRole.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));
         await _roleRepository.InsertAsync(_moderatorRole);
 
-        _supporterRole = new IdentityRole(_guidGenerator.Create(), "supporter");
+        _supporterRole = new IdentityRole(_testData.RoleSupporterId, "supporter");
         await _roleRepository.InsertAsync(_supporterRole);
 
-        _managerRole = new IdentityRole(_guidGenerator.Create(), "manager");
+        _managerRole = new IdentityRole(_testData.RoleManagerId, "manager");
         await _roleRepository.InsertAsync(_managerRole);
+
+        var saleRole = new IdentityRole(_testData.RoleSaleId, "sale");
+        await _roleRepository.InsertAsync(saleRole);
     }
 
     /* Creates OU tree as shown below:
@@ -111,6 +114,12 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         _ou111.AddRole(_moderatorRole.Id);
         _ou111.AddRole(_managerRole.Id);
         await _organizationUnitRepository.InsertAsync(_ou111);
+
+        var _ou222 = new OrganizationUnit(_guidGenerator.Create(), "OU222");
+        _ou222.Code = OrganizationUnit.CreateCode(1, 1, 1);
+        _ou222.AddRole(_moderatorRole.Id);
+        _ou222.AddRole(_managerRole.Id);
+        await _organizationUnitRepository.InsertAsync(_ou222);
     }
 
     private async Task AddUsers()
@@ -131,6 +140,8 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         john.AddLogin(new UserLoginInfo("twitter", "johnx", "John Nash"));
         john.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
         john.SetToken("test-provider", "test-name", "test-value");
+        john.AddPasskey(_testData.PasskeyCredentialId1, new IdentityPasskeyData());
+        john.AddPasskey(_testData.PasskeyCredentialId2, new IdentityPasskeyData());
         await _userRepository.InsertAsync(john);
 
         var david = new IdentityUser(_testData.UserDavidId, "david", "david@abp.io");
@@ -143,10 +154,12 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         neo.AddRole(_supporterRole.Id);
         neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
         neo.AddOrganizationUnit(_ou111.Id);
+        neo.AddPasskey(_testData.PasskeyCredentialId3, new IdentityPasskeyData());
         await _userRepository.InsertAsync(neo);
 
         var bob = new IdentityUser(_testData.UserBobId, "bob", "bob@abp.io");
         bob.SetIsActive(false);
+        bob.AddRole(_managerRole.Id);
         await _userManager.CreateAsync(bob, "1q2w3E*");
     }
 
@@ -205,24 +218,24 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
     private async Task AddUserDelegations()
     {
         await _identityUserDelegationRepository.InsertAsync(
-            new IdentityUserDelegation(_guidGenerator.Create(), 
+            new IdentityUserDelegation(_guidGenerator.Create(),
                 _testData.UserJohnId,
-                _testData.UserDavidId, 
-                DateTime.Now.AddDays(-2), 
+                _testData.UserDavidId,
+                DateTime.Now.AddDays(-2),
                 DateTime.Now.AddDays(-1)));
-        
+
         await _identityUserDelegationRepository.InsertAsync(
-            new IdentityUserDelegation(_guidGenerator.Create(), 
+            new IdentityUserDelegation(_guidGenerator.Create(),
                 _testData.UserJohnId,
-                _testData.UserDavidId, 
-                DateTime.Now.AddDays(-1), 
+                _testData.UserDavidId,
+                DateTime.Now.AddDays(-1),
                 DateTime.Now.AddDays(1)));
-        
+
         await _identityUserDelegationRepository.InsertAsync(
-            new IdentityUserDelegation(_guidGenerator.Create(), 
+            new IdentityUserDelegation(_guidGenerator.Create(),
                 _testData.UserNeoId,
-                _testData.UserDavidId, 
-                DateTime.Now.AddDays(-1), 
+                _testData.UserDavidId,
+                DateTime.Now.AddDays(-1),
                 DateTime.Now.AddDays(1)));
     }
 }

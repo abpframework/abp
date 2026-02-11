@@ -14,7 +14,7 @@ public class MemoryDbRepositoryRegistrar : RepositoryRegistrarBase<AbpMemoryDbCo
 
     protected override IEnumerable<Type> GetEntityTypes(Type dbContextType)
     {
-        var memoryDbContext = (MemoryDbContext)Activator.CreateInstance(dbContextType);
+        var memoryDbContext = (MemoryDbContext)Activator.CreateInstance(dbContextType)!;
         return memoryDbContext.GetEntityTypes();
     }
 

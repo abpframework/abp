@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse;
 
@@ -8,7 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse;
 public class AbpCollapseButtonTagHelper : AbpTagHelper<AbpCollapseButtonTagHelper, AbpCollapseButtonTagHelperService>
 {
     [HtmlAttributeName("abp-collapse-id")]
-    public string BodyId { get; set; }
+    public string BodyId { get; set; } = default!;
 
     public AbpCollapseButtonTagHelper(AbpCollapseButtonTagHelperService tagHelperService)
         : base(tagHelperService)

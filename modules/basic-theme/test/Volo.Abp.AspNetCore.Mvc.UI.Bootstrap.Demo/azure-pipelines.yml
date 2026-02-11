@@ -13,7 +13,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'volosoft-reg'
+  dockerRegistryServiceConnection: 'volosoft-reg1'
   workDir: '$(Build.SourcesDirectory)'
   bootstrapTaghelpersDir: '$(workDir)/abp/modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo'
   # tag: $[replace(variables['Build.SourceBranch'], 'refs/tags/', '')]
@@ -21,7 +21,7 @@ variables:
   DOCKER_BUILDKIT: 1
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: aks-deployer-agent
 
 
 stages:
@@ -31,21 +31,21 @@ stages:
   - job: Build
     displayName: Package Helm Charts and Values
     pool:
-      vmImage: 'ubuntu-latest'
+      name: aks-deployer-agent
     steps:
     - checkout: self
     - checkout: devops
 
-    - script: |
-        cd $(bootstrapTaghelpersDir) && dotnet publish -c Release -o bin/Release/publish
+    # - script: |
+    #     cd $(bootstrapTaghelpersDir) && dotnet publish -c Release -o bin/Release/publish
 
     - task: Docker@2
       displayName: Build Image
       inputs:
         command: build
         repository: demo/bootstrap-taghelpers
-        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile
-        buildContext: $(bootstrapTaghelpersDir)
+        dockerfile: $(bootstrapTaghelpersDir)/Dockerfile.azure
+        buildContext: $(workDir)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)

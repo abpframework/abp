@@ -56,7 +56,7 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(args, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var blobName = AzureBlobNameCalculator.Calculate(args);
 
@@ -66,8 +66,7 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         }
 
         var blobClient = GetBlobClient(args, blobName);
-        var download = await blobClient.DownloadAsync();
-        return await TryCopyToMemoryStreamAsync(download.Value.Content, args.CancellationToken);
+        return await blobClient.OpenReadAsync(cancellationToken: args.CancellationToken);
     }
 
     protected virtual BlobClient GetBlobClient(BlobProviderArgs args, string blobName)
@@ -101,7 +100,7 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         var configuration = args.Configuration.GetAzureConfiguration();
         return configuration.ContainerName.IsNullOrWhiteSpace()
             ? args.ContainerName
-            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName);
+            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.ContainerName!);
     }
 
     protected virtual async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)

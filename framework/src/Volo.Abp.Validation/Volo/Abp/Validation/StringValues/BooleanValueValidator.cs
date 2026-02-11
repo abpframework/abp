@@ -6,7 +6,7 @@ namespace Volo.Abp.Validation.StringValues;
 [ValueValidator("BOOLEAN")]
 public class BooleanValueValidator : ValueValidatorBase
 {
-    public override bool IsValid(object value)
+    public override bool IsValid(object? value)
     {
         if (value == null)
         {

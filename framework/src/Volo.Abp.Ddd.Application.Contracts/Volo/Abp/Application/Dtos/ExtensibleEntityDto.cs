@@ -9,7 +9,7 @@ public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<T
     /// <summary>
     /// Id of the entity.
     /// </summary>
-    public TKey Id { get; set; }
+    public TKey Id { get; set; } = default!;
 
     protected ExtensibleEntityDto()
         : this(true)
@@ -26,6 +26,11 @@ public abstract class ExtensibleEntityDto<TKey> : ExtensibleObject, IEntityDto<T
     public override string ToString()
     {
         return $"[DTO: {GetType().Name}] Id = {Id}";
+    }
+
+    public virtual string? GetObjectKey()
+    {
+        return Id?.ToString();
     }
 }
 

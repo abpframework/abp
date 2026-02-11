@@ -4,6 +4,7 @@ var abp = abp || {};
 
     let l = abp.localization.getResource("AbpFeatureManagement");
     abp.modals.FeatureManagement = function () {
+
         abp.ResourceLoader.loadScript('/client-proxies/featureManagement-proxy.js');
         $('#ResetToDefaults').click(function (e) {
             abp.message.confirm(l('AreYouSureToResetToDefault'))
@@ -12,11 +13,10 @@ var abp = abp || {};
                         let providerName = $('#ProviderName').val();
                         let prodiverKey = $('#ProviderKey').val();
                         volo.abp.featureManagement.features.delete(providerName, prodiverKey).then(function () {
-                            abp.notify.success(l('ResetedToDefault'));
-                        });
-                        setTimeout(function () {
+                            $("#FeatureManagementForm").get(0).reset();
+                            abp.notify.success(l('SavedSuccessfully'));
                             $('#featureManagmentModal').modal('hide');
-                        }, 500);
+                        });
                     }
                 });
         });
@@ -86,7 +86,7 @@ var abp = abp || {};
                 $('.custom-scroll-content').mCustomScrollbar({
                     theme: 'minimal-dark',
                 });
-                $('.custom-scroll-container > .col-4').mCustomScrollbar({
+                $('.custom-scroll-container > .col-md-4').mCustomScrollbar({
                     theme: 'minimal-dark',
                 });
             });

@@ -12,7 +12,7 @@ public interface IDapperRepository
     Task<IDbConnection> GetDbConnectionAsync();
 
     [Obsolete("Use GetDbTransactionAsync method.")]
-    IDbTransaction DbTransaction { get; }
+    IDbTransaction? DbTransaction { get; }
 
-    Task<IDbTransaction> GetDbTransactionAsync();
+    Task<IDbTransaction?> GetDbTransactionAsync();
 }

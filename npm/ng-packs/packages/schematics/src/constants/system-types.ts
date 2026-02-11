@@ -5,6 +5,8 @@ export const SYSTEM_TYPES = new Map([
   ['Collections.Generic.Dictionary', 'Record'],
   ['DateTime', 'string'],
   ['DateTimeOffset', 'string'],
+  ['DateOnly', 'string'],
+  ['TimeOnly', 'string'],
   ['Decimal', 'number'],
   ['Double', 'number'],
   ['Guid', 'string'],

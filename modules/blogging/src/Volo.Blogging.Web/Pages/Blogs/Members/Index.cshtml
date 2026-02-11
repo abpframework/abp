@@ -1,0 +1,254 @@
+@page
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
+@using Volo.Abp.Users
+@using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
+@using Volo.Blogging.Localization
+@model Volo.Blogging.Pages.Blogs.Members.IndexModel
+@inject IStringLocalizer<BloggingResource> L
+@inject ICurrentUser CurrentUser
+@{
+    ViewBag.Title = @Model.User.UserName.ToUpper() + " - " + L["Blogs"].Value;
+}
+
+@section scripts {
+    <abp-script src="/Pages/Blogs/Members/Index.js" />
+}
+
+@section styles {
+    <abp-style src="/Pages/Blogs/Members/Index.css"/>
+}
+
+<main>
+    <div class="container">
+        <div class="row gx-lg-5">
+            <div class="col-md-4 mb-5 mb-md-0">
+                <div class="card h-auto member-profile-info">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="position-relative d-inline-block">
+                                <img gravatar-email="@Model.User.Email" default-image="Identicon" id="profile-photo" class="post-member-img rounded-circle d-block mx-auto" />
+                            </div>
+                        </div>
+                        <div class="d-inline-block align-top text-left ml-3">
+                            @if (Model.User.Name != null && Model.User.Surname != null)
+                            {
+                                <h2 class="m-0 custom-heading">
+                                    @Model.User.Name @Model.User.Surname
+                                </h2>}
+                            @if (Model.User.Company != null)
+                            {
+                                <h4 class="m-0 company-jobtitle">@Model.User.Company</h4>
+                            }
+
+                            @if (Model.User.JobTitle != null)
+                            {
+                                <h4 class="company-jobtitle">@Model.User.JobTitle</h4>
+                            }
+
+                            <small class="d-block custom-small">@L["UserName"].Value.ToUpper()</small>
+                            <h5 class="username-website">@Model.User.UserName</h5>
+
+                            @if (Model.User.WebSite != null)
+                            {
+                                <small class="custom-small">@L["PersonalWebsite"].Value.ToUpper()</small>
+                                <h5 class="username-website">
+                                    <a href="@Model.User.WebSite">@Model.User.WebSite</a>
+                                </h5>
+                            }
+
+
+                            @if (Model.User.Twitter != null || Model.User.Github != null || Model.User.Linkedin != null)
+                            {
+                                <small>@L["Social"].Value.ToUpper()</small>
+                                <ul class="d-flex list-unstyled mb-0">
+                                    @if (Model.User.Twitter != null)
+                                    {
+                                        <li class="mx-3">
+                                            <a href="https://twitter.com/@Model.User.Twitter">
+                                                <div class="icon-twitter-v1"></div>
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (Model.User.Github != null)
+                                    {
+                                        <li class="mx-3">
+                                            <a href="https://github.com/@Model.User.Github">
+                                                <div class="icon-github large bg-dark"></div>
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (Model.User.Linkedin != null)
+                                    {
+                                        <li class="mx-3">
+                                            <a href="@Model.User.Linkedin">
+                                                <div class="icon-linkedin-v1"></div>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                            @if (Model.User.Biography != null)
+                            {
+                                <div class="m-0 mt-4">
+                                    <small>@L["Biography"].Value.ToUpper()</small>
+                                    <p>@Model.User.Biography</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-md-8">
+            @if (CurrentUser.Id == Model.User.Id)
+            {
+                <abp-tabs>
+                    
+                    <abp-tab name="all-posts" title="@L["Posts"]">
+                        @if (Model.Posts is not null && Model.Posts.Any())
+                        {
+                            <div class="mt-4 pt-3">
+                                @foreach (var post in Model.Posts)
+                                {
+                                    <div class="post-item">
+                                        <div class="post-type-cont" style="text-align: center;">
+
+                                            <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
+                                                <img gravatar-email="@Model.User.Email" default-image="Identicon" id="gravatar" class="post-member-img rounded-circle d-block"/>
+                                            </a>
+                                        </div>
+
+                                        <div class="post-detail-cont">
+                                            <div class="post-info fs-12 mb-2">
+                                                <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
+                                                    <span class="text-dark dot">@Model.User.UserName</span>
+                                                </a>
+                                                <span class="text-dark-200 dot">@post.CreationTime.ToString("MMMM yyyy")</span>
+                                                <span class="text-dark-200">@post.ReadCount.ToString() @L["Views"]</span>
+                                            </div>
+                                            <h3 class="post-title mb-3">
+                                                <a href="@Model.GetBlogPostUrl(post)">
+                                                    @post.Title
+                                                </a>
+                                            </h3>
+                                            <p class="post-desc">
+                                                <a href="@Model.GetBlogPostUrl(post)">
+                                                    @post.Description.TruncateWithPostfix(150)
+                                                </a>
+                                                <a href="@Model.GetBlogPostUrl(post)" class="readMore">@L["ReadMore"]</a>
+                                            </p>
+                                        </div>
+                                        <div class="post-img-cont">
+                                            <div class="post-list-span text-center post">
+                                                <img src="@post.CoverImage" class="box-articles">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-8">
+                                <div class="mt-5 pt-6">
+                                    <p>@L["MemberNotPublishedPostYet"]</p>
+                                </div>
+                            </div>
+                        }
+                    </abp-tab>
+                    <abp-tab name="edit-profile" title="Edit Profile">
+                        <div class="mt-4 mb-3 pt-3">
+                            <form method="post">
+                                <abp-row>
+                                    <abp-column size="_12" v-align="Center">
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Name" required-symbol="false" label="@($"{L["Name"].Value}")" value="@Model.User.Name"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Surname" required-symbol="false" label="@($"{L["Surname"].Value}")" value="@Model.User.Surname"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.WebSite" required-symbol="false" label="@($"{L["WebSite"].Value}")" value="@Model.User.WebSite" info="@L["UpdateUserWebSiteInfo"].Value"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Twitter" required-symbol="false" label="Twitter @($"{L["UserName"].Value}")" value="@Model.User.Twitter" info="@L["UpdateUserTwitterInfo"].Value"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Github" required-symbol="false" label="GitHub @($"{L["UserName"].Value}")" value="@Model.User.Github" info="@L["UpdateUserGithubInfo"].Value"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Linkedin" required-symbol="false" label="Linkedin @($"{L["FullURL"].Value}")" value="@Model.User.Linkedin" info="@L["UpdateUserLinkedinInfo"].Value"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.Company" required-symbol="false" label="@($"{L["Company"].Value}")" value="@Model.User.Company" info="@L["UpdateUserCompanyInfo"].Value"></abp-input>
+
+                                        <abp-input class="form-control" asp-for="CustomUserUpdate.JobTitle" required-symbol="false" label="@($"{L["JobTitle"].Value}")" value="@Model.User.JobTitle" info="@L["UpdateUserJobTitleInfo"].Value"></abp-input>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">@L["Biography"]</label>
+                                            <textarea id="CustomUserUpdate_Biography" name="CustomUserUpdate.Biography" class="form-control " rows="7" data-val-length="The field Biography must be a string with a maximum length of 1000." data-val-length-max="1000" maxlength="1000">@Model.User.Biography</textarea>
+                                        </div>
+                                    </abp-column>
+                                </abp-row>
+                                <div class="d-grid gap-2">
+                                    <button id="btnSubmit" type="submit" class="btn btn-primary">@L["Submit"]</button>
+                                </div>
+                            </form>
+                        </div>
+                    </abp-tab>
+                </abp-tabs>
+                }
+                else
+                {
+                    if (Model.Posts is not null && Model.Posts.Any())
+                    {
+                        <h2>@L["BlogPosts"]</h2>
+                        <div class="mt-4 pt-3">
+                            @foreach (var post in Model.Posts)
+                            {
+                                <div class="post-item">
+                                    <div class="post-type-cont">
+
+                                        <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
+                                            <img gravatar-email="@Model.User.Email" default-image="Identicon" class="post-member-img rounded-circle d-block"/>
+                                        </a>
+                                    </div>
+                                    <div class="post-detail-cont">
+                                        <div class="post-info fs-12 mb-2">
+                                            <a href="@Model.GetMemberProfileUrl(Model.User)" class="text-decoration-none">
+                                                <span class="text-dark dot">@Model.User.UserName</span>
+                                            </a>
+                                            <span class="text-dark-200 dot">@post.CreationTime.ToString("MMMM yyyy")</span>
+                                            <span class="text-dark-200">@post.ReadCount.ToString() @L["Views"]</span>
+                                        </div>
+                                        <h3 class="post-title mb-3">
+                                            <a href="@Model.GetBlogPostUrl(post)">
+                                                @post.Title
+                                            </a>
+                                        </h3>
+                                        <p class="post-desc">
+                                            <a href="@Model.GetBlogPostUrl(post)">
+                                                @post.Description.TruncateWithPostfix(150)
+                                            </a>
+                                            <a href="@Model.GetBlogPostUrl(post)" class="readMore">@L["ReadMore"]</a>
+                                        </p>
+                                    </div>
+                                    <div class="post-img-cont">
+                                        <div class="post-list-span text-center post">
+                                            <img src="@post.CoverImage" class="box-articles">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-8">
+                            <div class="mt-5 pt-6">
+                                <p>@L["MemberNotPublishedPostYet"]</p>
+                            </div>
+                        </div>
+                    }
+                }
+                </div>
+        </div>
+    </div>
+</main>

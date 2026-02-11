@@ -19,7 +19,7 @@ public class UserSettingValueProvider : SettingValueProvider
         CurrentUser = currentUser;
     }
 
-    public override async Task<string> GetOrNullAsync(SettingDefinition setting)
+    public override async Task<string?> GetOrNullAsync(SettingDefinition setting)
     {
         if (CurrentUser.Id == null)
         {

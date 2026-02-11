@@ -51,5 +51,5 @@ public interface IReadOnlyBasicRepository<TEntity, TKey> : IReadOnlyBasicReposit
     /// <param name="includeDetails">Set true to include all children of this entity</param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>Entity or null</returns>
-    Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+    Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 }

@@ -18,7 +18,7 @@ public class EfCoreRatingRepository : EfCoreRepository<ICmsKitDbContext, Rating,
     {
     }
 
-    public async Task<Rating> GetCurrentUserRatingAsync(string entityType, string entityId, Guid userId,
+    public virtual async Task<Rating> GetCurrentUserRatingAsync(string entityType, string entityId, Guid userId,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -31,7 +31,7 @@ public class EfCoreRatingRepository : EfCoreRepository<ICmsKitDbContext, Rating,
         return rating;
     }
 
-    public async Task<List<RatingWithStarCountQueryResultItem>> GetGroupedStarCountsAsync(string entityType,
+    public virtual async Task<List<RatingWithStarCountQueryResultItem>> GetGroupedStarCountsAsync(string entityType,
         string entityId, CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));

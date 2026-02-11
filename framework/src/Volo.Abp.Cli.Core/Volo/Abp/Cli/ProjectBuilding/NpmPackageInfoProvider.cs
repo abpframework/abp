@@ -32,7 +32,7 @@ public class NpmPackageInfoProvider : INpmPackageInfoProvider, ITransientDepende
 
     public async Task<NpmPackageInfo> GetAsync(string name)
     {
-        var packageList = await GetPackageListInternalAsync();
+        var packageList = await GetPackageListAsync();
 
         var package = packageList.FirstOrDefault(m => m.Name == name);
 
@@ -44,7 +44,7 @@ public class NpmPackageInfoProvider : INpmPackageInfoProvider, ITransientDepende
         return package;
     }
 
-    private async Task<List<NpmPackageInfo>> GetPackageListInternalAsync()
+    public async Task<List<NpmPackageInfo>> GetPackageListAsync()
     {
         var client = _cliHttpClientFactory.CreateClient();
 

@@ -1,0 +1,1 @@
+> This document is [moved to here](../adding-new-microservices.md).

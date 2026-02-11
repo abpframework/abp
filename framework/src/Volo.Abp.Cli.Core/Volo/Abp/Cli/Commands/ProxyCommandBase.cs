@@ -114,12 +114,10 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         sb.AppendLine("     -p|--prompt                                       Asks the options from the command line prompt (for the missing options)");
         sb.AppendLine("     --target <target-name>                            (default: 'defaultProject') Angular project name to place generated code in.");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
-
-    public abstract string GetShortDescription();
 
     public static class Options
     {

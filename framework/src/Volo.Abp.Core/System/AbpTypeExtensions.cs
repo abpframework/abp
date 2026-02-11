@@ -72,9 +72,9 @@ public static class AbpTypeExtensions
 
     private static void AddTypeAndBaseTypesRecursively(
         [NotNull] List<Type> types,
-        [CanBeNull] Type type,
+        Type? type,
         bool includeObject,
-        [CanBeNull] Type stoppingType = null)
+        Type? stoppingType = null)
     {
         if (type == null || type == stoppingType)
         {

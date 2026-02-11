@@ -28,7 +28,7 @@ public class AbpViewComponentHelper : IViewComponentHelper, IViewContextAware, I
         Options = widgetOptions.Value;
     }
 
-    public virtual async Task<IHtmlContent> InvokeAsync(string name, object arguments)
+    public virtual async Task<IHtmlContent> InvokeAsync(string name, object? arguments)
     {
         var widget = Options.Widgets.Find(name);
         if (widget == null)
@@ -39,7 +39,7 @@ public class AbpViewComponentHelper : IViewComponentHelper, IViewContextAware, I
         return await InvokeWidgetAsync(arguments, widget);
     }
 
-    public virtual async Task<IHtmlContent> InvokeAsync(Type componentType, object arguments)
+    public virtual async Task<IHtmlContent> InvokeAsync(Type componentType, object? arguments)
     {
         var widget = Options.Widgets.Find(componentType);
         if (widget == null)
@@ -55,7 +55,7 @@ public class AbpViewComponentHelper : IViewComponentHelper, IViewContextAware, I
         DefaultViewComponentHelper.Contextualize(viewContext);
     }
 
-    protected virtual async Task<IHtmlContent> InvokeWidgetAsync(object arguments, WidgetDefinition widget)
+    protected virtual async Task<IHtmlContent> InvokeWidgetAsync(object? arguments, WidgetDefinition widget)
     {
         PageWidgetManager.TryAdd(widget);
 

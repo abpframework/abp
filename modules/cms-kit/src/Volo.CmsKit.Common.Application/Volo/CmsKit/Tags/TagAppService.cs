@@ -24,4 +24,14 @@ public class TagAppService : CmsKitAppServiceBase, ITagAppService
 
         return ObjectMapper.Map<List<Tag>, List<TagDto>>(entities);
     }
+
+    public virtual async Task<List<PopularTagDto>> GetPopularTagsAsync(string entityType, int maxCount)
+    {
+        return ObjectMapper.Map<List<PopularTag>, List<PopularTagDto>>(
+            await TagRepository.GetPopularTagsAsync(
+                entityType,
+                maxCount
+            )
+        );
+    }
 }

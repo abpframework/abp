@@ -2,10 +2,11 @@
   "culture": "fi",
   "texts": {
     "Settings": "Asetukset",
-    "SuccessfullySaved": "Tallennettu onnistuneesti",
+    "SavedSuccessfully": "Tallennettu onnistuneesti",
     "Permission:SettingManagement": "Asetusten hallinta",
     "Permission:Emailing": "Sähköpostiviestit",
     "Permission:EmailingTest": "Sähköpostitesti",
+    "Permission:TimeZone": "Aikavyöhyke",
     "SendTestEmail": "Lähetä testisähköposti",
     "SenderEmailAddress": "Lähettäjän sähköpostiosoite",
     "TargetEmailAddress": "Kohdesähköpostiosoite",
@@ -13,9 +14,15 @@
     "Body": "Runko",
     "TestEmailSubject": "Testisähköposti {0}",
     "TestEmailBody": "Testaa sähköpostiviestiä täällä",
-    "SuccessfullySent": "Lähetetty onnistuneesti",
+    "SentSuccessfully": "Lähetetty onnistuneesti",
+    "MailSendingFailed": "Sähköpostin lähetys epäonnistui. Tarkista sähköpostiasetuksesi ja yritä uudelleen.",
     "Send": "Lähetä",
+    "Menu:Settings": "Asetukset",
     "Menu:Emailing": "Sähköpostiviestit",
+    "Menu:TimeZone": "Aikavyöhyke",
+    "DisplayName:Timezone": "Aikavyöhyke",
+    "TimezoneHelpText": "Tämä ominaisuus antaa sinun asettaa oletusaikavyöhykkeen palvelimellesi, kun taas käyttäjät voivat valita oman aikavyöhykkeensä. Jos käyttäjän aikavyöhyke poikkeaa palvelimen aikavyöhykkeestä, kaikki ajat mukautetaan vastaavasti. Esimerkiksi, kun palvelin on asetettu Eurooppa/Lontoo(00:00) ja käyttäjä on Eurooppa/Pariisi(+01:00), ajat mukautetaan tunnilla kyseiselle käyttäjälle. 'Oletusaikavyöhyke' -valinta käyttää automaattisesti palvelimen tai selaimen aikavyöhykettä.",
+    "DefaultTimeZone": "Oletusaikavyöhyke",
     "SmtpHost": "Isäntä",
     "SmtpPort": "Portti",
     "SmtpUserName": "Käyttäjänimi",
@@ -28,7 +35,8 @@
     "Feature:SettingManagementGroup": "Asetusten hallinta",
     "Feature:SettingManagementEnable": "Ota asetusten hallinta käyttöön",
     "Feature:SettingManagementEnableDescription": "Ota asetustenhallintajärjestelmä käyttöön sovelluksessa.",
-    "Feature:AllowChangingEmailSettings": "Salli sähköpostiasetusten muuttaminen.",
-    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen."
+    "Feature:AllowChangingEmailSettings": "Salli sähköpostiasetusten muuttaminen",
+    "Feature:AllowChangingEmailSettingsDescription": "Salli sähköpostiasetusten muuttaminen.",
+    "SmtpPasswordPlaceholder": "Syötä arvo päivittääksesi salasana"
   }
 }

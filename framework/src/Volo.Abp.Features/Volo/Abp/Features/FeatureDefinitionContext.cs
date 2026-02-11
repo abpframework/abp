@@ -12,7 +12,7 @@ public class FeatureDefinitionContext : IFeatureDefinitionContext
         Groups = new Dictionary<string, FeatureGroupDefinition>();
     }
 
-    public FeatureGroupDefinition AddGroup(string name, ILocalizableString displayName = null)
+    public FeatureGroupDefinition AddGroup(string name, ILocalizableString? displayName = null)
     {
         Check.NotNull(name, nameof(name));
 
@@ -24,7 +24,7 @@ public class FeatureDefinitionContext : IFeatureDefinitionContext
         return Groups[name] = new FeatureGroupDefinition(name, displayName);
     }
 
-    public FeatureGroupDefinition GetGroupOrNull(string name)
+    public FeatureGroupDefinition? GetGroupOrNull(string name)
     {
         Check.NotNull(name, nameof(name));
 

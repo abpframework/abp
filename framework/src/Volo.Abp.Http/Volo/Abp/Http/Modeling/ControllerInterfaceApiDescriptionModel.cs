@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Volo.Abp.Http.Modeling;
@@ -8,11 +7,11 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class ControllerInterfaceApiDescriptionModel
 {
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public InterfaceMethodApiDescriptionModel[] Methods { get; set; }
+    public InterfaceMethodApiDescriptionModel[] Methods { get; set; } = default!;
 
     public ControllerInterfaceApiDescriptionModel()
     {
@@ -23,7 +22,7 @@ public class ControllerInterfaceApiDescriptionModel
     {
         var model = new ControllerInterfaceApiDescriptionModel
         {
-            Type = type.FullName,
+            Type = type.FullName!,
             Name = type.Name
         };
 

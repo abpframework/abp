@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -9,10 +8,9 @@ namespace Volo.Abp.AspNetCore.Components.Web.Security;
 
 public class AbpComponentsClaimsCache : IScopedDependency
 {
-    public ClaimsPrincipal Principal { get; private set; }
+    public ClaimsPrincipal Principal { get; private set; } = default!;
 
-    [CanBeNull]
-    private readonly AuthenticationStateProvider _authenticationStateProvider;
+    private readonly AuthenticationStateProvider? _authenticationStateProvider;
 
     public AbpComponentsClaimsCache(
         IClientScopeServiceProviderAccessor serviceProviderAccessor)

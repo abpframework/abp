@@ -21,7 +21,7 @@ public class BreadCrumb
         Items = new List<BreadCrumbItem>();
     }
 
-    public void Add(string text, string url = null, string icon = null)
+    public void Add(string text, string? url = null, string? icon = null)
     {
         Items.Add(new BreadCrumbItem(text, url, icon));
     }

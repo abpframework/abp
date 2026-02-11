@@ -1,0 +1,19 @@
+{
+  "culture": "hr",
+  "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP preko SSL-a",
+    "Description:Abp.Ldap.Ldaps": "LDAP preko SSL-a",
+    "DisplayName:Abp.Ldap.ServerHost": "Domaćin poslužitelja",
+    "Description:Abp.Ldap.ServerHost": "Domaćin poslužitelja",
+    "DisplayName:Abp.Ldap.ServerPort": "Port poslužitelja",
+    "Description:Abp.Ldap.ServerPort": "Port poslužitelja",
+    "DisplayName:Abp.Ldap.BaseDc": "Komponenta osnovne domene",
+    "Description:Abp.Ldap.BaseDc": "Komponenta osnovne domene",
+    "DisplayName:Abp.Ldap.Domain": "Domena",
+    "Description:Abp.Ldap.Domain": "Domena",
+    "DisplayName:Abp.Ldap.UserName": "Korisničko ime",
+    "Description:Abp.Ldap.UserName": "Korisničko ime",
+    "DisplayName:Abp.Ldap.Password": "Lozinka",
+    "Description:Abp.Ldap.Password": "Lozinka"
+  }
+}

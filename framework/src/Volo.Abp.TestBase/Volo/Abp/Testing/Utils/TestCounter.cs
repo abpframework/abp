@@ -39,4 +39,12 @@ public class TestCounter : ITestCounter, ISingletonDependency
             return _values.GetOrDefault(name);
         }
     }
+
+    public void ResetCount(string name)
+    {
+        lock (_values)
+        {
+            _values[name] = 0;
+        }
+    }
 }

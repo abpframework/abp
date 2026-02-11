@@ -27,6 +27,8 @@
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "To polje mora biti vrsta niza ali matrike z najmanjšo dolžino »{0}«.",
     "ThisFieldIsNotAValidPhoneNumber.": "To polje ni veljavna telefonska številka.",
     "ThisFieldMustBeBetween{0}And{1}": "To polje mora biti med {0} in {1}.",
+    "ThisFieldMustBeGreaterThanOrEqual{0}": "To polje mora biti večje ali enako {0}.",
+    "ThisFieldMustBeLessOrEqual{0}": "To polje mora biti manjše ali enako {0}.",
     "ThisFieldMustMatchTheRegularExpression{0}": "To polje se mora ujemati z regularnim izrazom »{0}«.",
     "ThisFieldIsRequired.": "To polje je obvezno.",
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "To polje mora biti niz z največjo dolžino {0}.",

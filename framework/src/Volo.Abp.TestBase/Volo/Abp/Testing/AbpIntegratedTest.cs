@@ -29,6 +29,8 @@ public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithService
 
         application.Initialize(TestServiceScope.ServiceProvider);
         ServiceProvider = Application.ServiceProvider;
+
+        AfterInitialize();
     }
 
     protected virtual IServiceCollection CreateServiceCollection()
@@ -56,10 +58,19 @@ public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithService
         return services.BuildServiceProviderFromFactory();
     }
 
+    protected virtual void AfterInitialize()
+    {
+
+    }
+
     public virtual void Dispose()
     {
         Application.Shutdown();
         TestServiceScope.Dispose();
+        if (RootServiceProvider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
         Application.Dispose();
     }
 }

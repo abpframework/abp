@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection;
 
@@ -8,7 +8,7 @@ namespace Volo.Abp.DependencyInjection;
 /// to release/dispose objects resolved from the root service provider.
 /// So, always create a new scope if you need to resolve any service.
 /// </summary>
-public interface IRootServiceProvider : IServiceProvider
+public interface IRootServiceProvider : IKeyedServiceProvider
 {
-    
+
 }

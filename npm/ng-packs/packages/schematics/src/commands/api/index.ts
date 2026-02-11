@@ -29,6 +29,8 @@ import {
   sanitizeTypeNames,
   sanitizeControllerTypeNames,
   serializeParameters,
+  resolveAbpPackages,
+  resolveSelfGenericProps,
 } from '../../utils';
 import * as cases from '../../utils/text';
 
@@ -48,21 +50,30 @@ export default function (schema: GenerateProxySchema) {
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);
       data.types = sanitizeTypeNames(data.types);
+
+      resolveSelfGenericProps({ solution, types: data.types });
+
       const types = data.types;
       const modules = data.modules;
       const serviceType = schema.serviceType || defaultEServiceType;
-      if (!types || !modules) throw new SchematicsException(Exception.InvalidApiDefinition);
+
+      if (!types || !modules) {
+        throw new SchematicsException(Exception.InvalidApiDefinition);
+      }
 
       const definition = data.modules[moduleName];
-      if (!definition)
+      if (!definition) {
         throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
+      }
 
       const apiName = definition.remoteServiceName;
       data.modules[moduleName].controllers = sanitizeControllerTypeNames(definition.controllers);
+
       const controllers = filterControllersByServiceType(
         serviceType,
         data.modules[moduleName].controllers,
       );
+
       const serviceImports: Record<string, string[]> = {};
       const generateServices = createServiceGenerator({
         targetPath,
@@ -90,8 +101,12 @@ export default function (schema: GenerateProxySchema) {
         modelImports,
       });
 
-      if (!data.generated.includes(moduleName)) data.generated.push(moduleName);
+      if (!data.generated.includes(moduleName)) {
+        data.generated.push(moduleName);
+      }
+
       data.generated.sort();
+
       const json = generateProxyConfigJson(data);
       const overwriteProxyConfig = createProxyConfigWriter('overwrite', json);
 
@@ -129,15 +144,24 @@ function createModelGenerator(params: ModelGeneratorParams) {
   const { targetPath, serviceImports, modelImports } = params;
   const reduceImportRefsToModels = createImportRefsToModelReducer(params);
   const models = Object.values(serviceImports).reduce(reduceImportRefsToModels, []);
+
   models.forEach(({ imports }) =>
     imports.forEach(({ refs, path }) =>
       refs.forEach(ref => {
-        if (path === '@abp/ng.core') return;
-        if (!modelImports[path]) return (modelImports[path] = [ref]);
+        if (path === '@abp/ng.core') {
+          return;
+        }
+
+        if (!modelImports[path]) {
+          return (modelImports[path] = [ref]);
+        }
+
         modelImports[path] = [...new Set([...modelImports[path], ref])];
       }),
     ),
   );
+
+  resolveAbpPackages(models);
 
   return chain(
     models.map(model =>

@@ -18,6 +18,11 @@ namespace Volo.Blogging.EntityFrameworkCore
     {
         private SqliteConnection _sqliteConnection;
 
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             _sqliteConnection = CreateDatabaseAndGetConnection();
@@ -33,7 +38,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 
         private static SqliteConnection CreateDatabaseAndGetConnection()
         {
-            var connection = new SqliteConnection("Data Source=:memory:");
+            var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
             connection.Open();
 
             var options = new DbContextOptionsBuilder<BloggingDbContext>().UseSqlite(connection).Options;

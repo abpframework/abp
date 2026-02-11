@@ -9,7 +9,7 @@ public class HttpContextTenantResolveResultAccessor : ITenantResolveResultAccess
 {
     public const string HttpContextItemName = "__AbpTenantResolveResult";
 
-    public TenantResolveResult Result {
+    public TenantResolveResult? Result {
         get => _httpContextAccessor.HttpContext?.Items[HttpContextItemName] as TenantResolveResult;
         set {
             if (_httpContextAccessor.HttpContext == null)

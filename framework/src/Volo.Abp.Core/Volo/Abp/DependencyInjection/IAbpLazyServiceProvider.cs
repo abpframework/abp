@@ -24,13 +24,13 @@ public interface IAbpLazyServiceProvider : ICachedServiceProviderBase
     /// This method is equivalent of the GetService method.
     /// It does exists for backward compatibility.
     /// </summary>
-    T LazyGetService<T>();
+    T? LazyGetService<T>();
 
     /// <summary>
     /// This method is equivalent of the GetService method.
     /// It does exists for backward compatibility.
     /// </summary>
-    object LazyGetService(Type serviceType);
+    object? LazyGetService(Type serviceType);
 
     /// <summary>
     /// This method is equivalent of the <see cref="ICachedServiceProviderBase.GetService{T}(T)"/> method.

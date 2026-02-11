@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Shouldly;
@@ -17,6 +16,7 @@ public class AspNetCoreMultiTenancy_Without_DomainResolver_Tests : AspNetCoreMul
 {
     private readonly Guid _testTenantId = Guid.NewGuid();
     private readonly string _testTenantName = "acme";
+    private readonly string _testTenantNormalizedName = "ACME";
 
     private readonly AbpAspNetCoreMultiTenancyOptions _options;
 
@@ -25,18 +25,17 @@ public class AspNetCoreMultiTenancy_Without_DomainResolver_Tests : AspNetCoreMul
         _options = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
     }
 
-    protected override IHostBuilder CreateHostBuilder()
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        return base.CreateHostBuilder().ConfigureServices(services =>
+        services.Configure<AbpDefaultTenantStoreOptions>(options =>
         {
-            services.Configure<AbpDefaultTenantStoreOptions>(options =>
+            options.Tenants = new[]
             {
-                options.Tenants = new[]
-                {
-                        new TenantConfiguration(_testTenantId, _testTenantName)
-                };
-            });
+                new TenantConfiguration(_testTenantId, _testTenantName, _testTenantNormalizedName)
+            };
         });
+
+        base.ConfigureServices(services);
     }
 
     [Fact]

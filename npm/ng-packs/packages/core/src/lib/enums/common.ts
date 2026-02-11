@@ -3,3 +3,8 @@ export const enum eLayoutType {
   application = 'application',
   empty = 'empty',
 }
+export const enum eThemeSharedComponents {
+  ApplicationLayoutComponent = 'Theme.ApplicationLayoutComponent',
+  AccountLayoutComponent = 'Theme.AccountLayoutComponent',
+  EmptyLayoutComponent = 'Theme.EmptyLayoutComponent',
+}

@@ -16,5 +16,7 @@ namespace Volo.Docs.EntityFrameworkCore
         DbSet<Document> Documents { get; }
 
         DbSet<DocumentContributor> DocumentContributors { get; }
+        
+        DbSet<ProjectPdfFile> ProjectPdfFiles { get; set; }
     }
 }

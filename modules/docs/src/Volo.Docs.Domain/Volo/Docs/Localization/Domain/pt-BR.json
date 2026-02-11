@@ -36,6 +36,9 @@
     "Volo.Docs.Domain:010002": "Nome curto {ShortName} já existe.",
     "Preview": "Previsualizar",
     "Search": "Procurar",
-    "SearchResults": "Procurar Resultados"
+    "SearchResults": "Procurar Resultados",
+    "SearchInTheAllDocuments": "Pesquise em todos os documentos",
+    "GoogleTranslate": "Traduzir com Google",
+    "DownloadPDF": "Baixar PDF"
   }
 }

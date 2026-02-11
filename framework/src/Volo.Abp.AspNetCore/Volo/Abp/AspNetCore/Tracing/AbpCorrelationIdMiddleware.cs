@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Tracing;
 
 namespace Volo.Abp.AspNetCore.Tracing;
 
-public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
+public class AbpCorrelationIdMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly AbpCorrelationIdOptions _options;
     private readonly ICorrelationIdProvider _correlationIdProvider;
@@ -18,40 +21,41 @@ public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
         _correlationIdProvider = correlationIdProvider;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        var correlationId = _correlationIdProvider.Get();
-
-        try
-        {
-            await next(context);
-        }
-        finally
+        var correlationId = GetCorrelationIdFromRequest(context);
+        using (_correlationIdProvider.Change(correlationId))
         {
             CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
+            await next(context);
         }
+    }
+
+    protected virtual string? GetCorrelationIdFromRequest(HttpContext context)
+    {
+        var correlationId = context.Request.Headers[_options.HttpHeaderName];
+        if (correlationId.IsNullOrEmpty())
+        {
+            correlationId = Guid.NewGuid().ToString("N");
+            context.Request.Headers[_options.HttpHeaderName] = correlationId;
+        }
+
+        return correlationId;
     }
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
         HttpContext httpContext,
         AbpCorrelationIdOptions options,
-        string correlationId)
+        string? correlationId)
     {
-        if (httpContext.Response.HasStarted)
+        httpContext.Response.OnStarting(() =>
         {
-            return;
-        }
+            if (options.SetResponseHeader && !httpContext.Response.Headers.ContainsKey(options.HttpHeaderName) && !string.IsNullOrWhiteSpace(correlationId))
+            {
+                httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            }
 
-        if (!options.SetResponseHeader)
-        {
-            return;
-        }
-
-        if (httpContext.Response.Headers.ContainsKey(options.HttpHeaderName))
-        {
-            return;
-        }
-
-        httpContext.Response.Headers[options.HttpHeaderName] = correlationId;
+            return Task.CompletedTask;
+        });
     }
 }

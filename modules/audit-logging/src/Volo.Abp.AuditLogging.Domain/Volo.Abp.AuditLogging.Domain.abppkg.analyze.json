@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.AuditLogging.Domain",
-  "hash": "fa171768247503b44e7e57d4518d2ef8",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.AuditLogging",
@@ -133,6 +133,25 @@
       "primaryKeyType": "Guid",
       "properties": [
         {
+          "type": "System.Nullable`1[System.Guid]",
+          "name": "TenantId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "FileName",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "AuditLogExcelFile",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "primaryKeyType": "Guid",
+      "properties": [
+        {
           "type": "System.Guid",
           "name": "AuditLogId",
           "summary": null
@@ -236,6 +255,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -274,7 +299,7 @@
         {
           "name": "IMultiTenant",
           "namespace": "Volo.Abp.MultiTenancy",
-          "declaringAssemblyName": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
           "fullName": "Volo.Abp.MultiTenancy.IMultiTenant"
         }
       ],
@@ -424,6 +449,105 @@
         "primaryKeyType": "Guid",
         "properties": [],
         "contentType": "entity",
+        "name": "AuditLogExcelFile",
+        "summary": null
+      },
+      "implementingInterfaces": [
+        {
+          "name": "IRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository<AuditLogExcelFile, Guid>"
+        },
+        {
+          "name": "IRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IReadOnlyRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IRepository",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IRepository"
+        },
+        {
+          "name": "IBasicRepository<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<AuditLogExcelFile>"
+        },
+        {
+          "name": "IReadOnlyRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyRepository<AuditLogExcelFile, Guid>"
+        },
+        {
+          "name": "IReadOnlyBasicRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IReadOnlyBasicRepository<AuditLogExcelFile, Guid>"
+        },
+        {
+          "name": "IBasicRepository<AuditLogExcelFile, Guid>",
+          "namespace": "Volo.Abp.Domain.Repositories",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Repositories.IBasicRepository<AuditLogExcelFile, Guid>"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<AuditLogExcelFile>",
+          "namespace": "Volo.Abp.AuditLogging",
+          "name": "GetListCreationTimeBeforeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "DateTime",
+              "name": "creationTimeBefore",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "repositoryInterface",
+      "name": "IAuditLogExcelFileRepository",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.AuditLogging",
+      "entityAnalyzeModel": {
+        "namespace": "Volo.Abp.AuditLogging",
+        "primaryKeyType": "Guid",
+        "properties": [],
+        "contentType": "entity",
         "name": "AuditLog",
         "summary": null
       },
@@ -486,6 +610,7 @@
       "methods": [
         {
           "returnType": "List<AuditLog>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -526,6 +651,11 @@
             {
               "type": "String",
               "name": "url",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
               "isOptional": true
             },
             {
@@ -587,6 +717,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -612,6 +743,11 @@
             {
               "type": "String",
               "name": "url",
+              "isOptional": true
+            },
+            {
+              "type": "String",
+              "name": "clientId",
               "isOptional": true
             },
             {
@@ -668,6 +804,7 @@
         },
         {
           "returnType": "Dictionary<DateTime, Double>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetAverageExecutionDurationPerDayAsync",
           "summary": null,
           "isAsync": true,
@@ -694,6 +831,7 @@
         },
         {
           "returnType": "EntityChange",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChange",
           "summary": null,
           "isAsync": true,
@@ -715,6 +853,7 @@
         },
         {
           "returnType": "List<EntityChange>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangeListAsync",
           "summary": null,
           "isAsync": true,
@@ -781,6 +920,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangeCountAsync",
           "summary": null,
           "isAsync": true,
@@ -827,6 +967,7 @@
         },
         {
           "returnType": "EntityChangeWithUsername",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangeWithUsernameAsync",
           "summary": null,
           "isAsync": true,
@@ -848,6 +989,7 @@
         },
         {
           "returnType": "List<EntityChangeWithUsername>",
+          "namespace": "Volo.Abp.AuditLogging",
           "name": "GetEntityChangesWithUsernameAsync",
           "summary": null,
           "isAsync": true,

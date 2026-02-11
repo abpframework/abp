@@ -20,7 +20,9 @@ public class PageManager : DomainService
         [NotNull] string slug,
         [CanBeNull] string content = null,
         [CanBeNull] string script = null,
-        [CanBeNull] string style = null)
+        [CanBeNull] string style = null,
+        [CanBeNull] string layoutName = null,
+        PageStatus status = PageStatus.Draft)
     {
         Check.NotNullOrEmpty(title, nameof(title));
         Check.NotNullOrEmpty(slug, nameof(slug));
@@ -34,16 +36,24 @@ public class PageManager : DomainService
             content,
             script,
             style,
-            CurrentTenant.Id);
+            layoutName,
+            CurrentTenant.Id,
+            status);
     }
 
-    public virtual async Task SetSlugAsync(Page page, string newSlug)
+    public virtual async Task SetSlugAsync(Page page, [NotNull] string newSlug)
     {
         if (page.Slug != newSlug)
         {
             await CheckPageSlugAsync(newSlug);
             page.SetSlug(newSlug);
         }
+    }
+
+    public virtual Task SetStatusAsync(Page page, PageStatus status)
+    {
+        page.SetStatus(status);
+        return Task.CompletedTask;
     }
 
     public virtual async Task SetHomePageAsync(Page page)

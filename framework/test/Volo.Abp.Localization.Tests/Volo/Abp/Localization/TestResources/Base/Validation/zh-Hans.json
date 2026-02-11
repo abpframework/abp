@@ -3,10 +3,10 @@
   "texts": {
     "ThisFieldIsRequired": "此字段是必填字段",
     "MaxLenghtErrorMessage": "该字段最多可包含'{0}'个字符",
-    "Enum:BookType.Undefined": "",
-    "Enum:BookType.0": "",
-    "BookType.Adventure": "",
-    "BookType.1": "",
-    "Biography": ""
+    "Enum:BookType.Undefined": "ValidationResource 中未定义",
+    "Enum:BookType.0": "未定义，来自 ValidationResource 的值为 0",
+    "BookType.Adventure": "ValidationResource 的冒险",
+    "BookType.1": "来自 ValidationResource 的值为 1 的 Adventure",
+    "Biography": "ValidationResource 的简介"
   }
 }

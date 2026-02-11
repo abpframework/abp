@@ -1,5 +1,12 @@
 @page
+@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Blockquote
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
+@using Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
@@ -8,19 +15,22 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
+@using Volo.Docs.Areas.Documents.TagHelpers
+@using Volo.Docs.Documents
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @using Volo.Docs.Pages.Documents.Shared.ErrorComponent
-@using Volo.Docs.Pages.Shared.Components.Head
 @inject IThemeManager ThemeManager
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
+@inject IOptions<DocsWebGoogleOptions> DocsWebGoogleOptions
+@inject IOptions<DocsUiOptions> DocsUiOptions
 
 @model IndexModel
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
-    PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
+    PageLayout.Content.Title = Model.DocumentPageTitle;
     ViewBag.Description = Model.GetDescription();
     ViewBag.CanonicalUrl = Model.IsLatestVersion ? null : Model.GetFullUrlOfTheLatestDocument(); //issue #12355
 }
@@ -29,25 +39,84 @@
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style type="@typeof(PrismjsStyleBundleContributor)"/>
         <abp-style type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)"/>
-        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css"/>
         <abp-style src="/Pages/Documents/Shared/Styles/vs.css"/>
         <abp-style src="/Pages/Documents/Project/index.css"/>
+        @if (DocsUiOptions.Value.EnableEnlargeImage)
+        {
+            <abp-style src="/Pages/Documents/Project/enlarge-image.css"/>
+        }
     </abp-style-bundle>
 }
 
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
-        <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
-        <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
-        <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
-        <abp-script src="/client-proxies/docs-proxy.js"/>
-        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
-        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
-        <abp-script src="/Pages/Documents/Project/index.js"/>
-        <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js"/>
-    </abp-script-bundle>
+
+    @if (Model.LoadSuccess)
+    {
+        <script type="text/javascript">
+                var doc = doc || {};
+                doc.project = {
+                    id: '@Model.Project.Id',
+                    name: '@Model.Project.ShortName',
+                    languageCode: '@Model.LanguageCode',
+                    version: '@Model.Version',
+                    format: '@Model.Project.Format',
+                    routeVersion: '@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)'
+                }
+        </script>
+        <abp-script-bundle name="@typeof(IndexModel).FullName">
+            <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
+            <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
+            <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
+            <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
+            <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
+            <abp-script src="/client-proxies/docs-proxy.js"/>
+            <abp-script src="/client-proxies/docs-common-proxy.js"/>
+            <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
+            <abp-script src="/Pages/Documents/Project/index.js"/>
+            @if (DocsUiOptions.Value.EnableEnlargeImage)
+            {
+            <abp-script src="/Pages/Documents/Project/enlarge-image.js"/>
+            }
+        </abp-script-bundle>
+        if (DocsWebGoogleOptions.Value.EnableGoogleTranslate)
+        {
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({
+                        pageLanguage: '@DocsWebGoogleOptions.Value.GetCultureLanguageCode(CultureInfo.CurrentUICulture)',
+                        autoDisplay: false,
+                        disableAutoTranslation: true,
+                        includedLanguages: '@string.Join(",", DocsWebGoogleOptions.Value.IncludedLanguages)',
+                        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+                    }, 'google_translate_element');
+                }
+
+                abp.dom.onNodeAdded(function (args) {
+                    if (args.$el.hasClass('goog-te-combo')) {
+                        args.$el.removeClass('goog-te-combo').addClass('form-select');
+                        $('#google_translate_select').append(args.$el);
+                        var a = $('#google_translate_element').find('a');
+                        var img = $('#google_translate_element').find('img');
+                        if (a.length > 0 && img.length > 0) {
+                            var alt = img.attr('alt');
+                            a.removeClass().css('color', '#666').html(alt);
+                        }
+                    }
+                });
+            </script>
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        }
+        if (DocsWebGoogleOptions.Value.EnableGoogleProgrammableSearchEngine)
+        {
+            <script async src="https://cse.google.com/cse.js?cx=@DocsWebGoogleOptions.Value.GoogleSearchEngineId"></script>
+        }
+    }
+    else
+    {
+        <abp-script-bundle name="@typeof(ErrorViewComponent).FullName">
+            <abp-script src="/Pages/Documents/Shared/ErrorComponent/error.js"/>
+        </abp-script-bundle>
+    }
 }
 
 @if (Model.LoadSuccess)
@@ -92,18 +161,31 @@
                     <div class="col-12 mb-2">
 
                         <div class="docs-version">
-                            <span>Project</span>
+                            @if (Model.ShowProjectsComboboxLabel)
+                            {
+                                <span>@L["Project"]</span>
+                            }
                             <div class="version-select">
-                                <div class="input-group">
-                                    <span class="input-group-text d-none">
-                                        <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
-                                    </span>
+                                @if (Model.ShowProjectsComboboxLabel)
+                                {
+                                    <div class="input-group">
+                                        <span class="input-group-text d-none">
+                                            <i class="fa fa-folder-open" aria-hidden="true" data-toggle="tooltip" title="@L["Project"]"></i>
+                                        </span>
 
+                                        <select asp-items="Model.ProjectSelectItems"
+                                                class="form-select"
+                                                onchange="window.location.pathname = this.value">
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
                                     <select asp-items="Model.ProjectSelectItems"
                                             class="form-select"
                                             onchange="window.location.pathname = this.value">
                                     </select>
-                                </div>
+                                }
                             </div>
                         </div>
 
@@ -156,6 +238,17 @@
                 }
             </div>
 
+            @if (DocsWebGoogleOptions.Value.EnableGoogleTranslate)
+            {
+                <div class="docs-version mt-2 skiptranslate">
+                    <span>@L["GoogleTranslate"]</span>
+                    <div class="version-select">
+                        <div class="input-group" id="google_translate_select"></div>
+                    </div>
+                </div>
+                <div id="google_translate_element" class="mt-1 mb-2"></div>
+            }
+
             <div class="docs-version">
                 <div class="version-select">
                     <div class="input-group align-items-center">
@@ -196,6 +289,14 @@
                     id="sidebar-scroll"
                     class="nav nav-list">
                 </ul>
+                @if (Model.HasDownloadPdf)
+                {
+                    <div class="docs-sidebar-footer">
+                        <button data-url="@Url.Content($"~/api/docs/documents/pdf/download?ProjectId={Model.Project.Id}&Version={(Model.LatestVersionInfo.IsSelected ? Model.LatestVersionInfo.Version : Model.Version)}&LanguageCode={Model.LanguageCode ?? Model.DefaultLanguageCode}")" class="download-pdf-btn" id="DownloadPdfBtn">
+                            <i class="fa fa-download"></i> @L["DownloadPDF"]
+                        </button>
+                    </div>
+                }
             }
         </div>
     </div>
@@ -210,6 +311,73 @@
                             <li class="breadcrumb-item">
                                 <a href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())"><i class="fa fa-home"></i></a>
                             </li>
+                            @if (Model.Navigation != null && Model.Navigation.Items != null)
+                            {
+                                var currentNode = Model.Navigation.Items.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                var navigation = Model.Navigation.FindNavigation(Model.DocumentNameWithExtension);
+                                var documentExtension = System.IO.Path.GetExtension(Model.DocumentNameWithExtension);
+                                NavigationNode previousNode = null;
+                                if (currentNode != null)
+                                {
+                                    while (currentNode != null)
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(currentNode.Path) && previousNode != currentNode)
+                                        {
+                                            previousNode = currentNode;
+                                            PrintNode(currentNode);
+                                        }
+                                        else
+                                        {
+                                            var indexDocument = FindIndexNode(currentNode);
+                                            if (indexDocument != null && indexDocument != previousNode)
+                                            {
+                                                PrintNode(indexDocument, currentNode.Text);
+                                            }
+                                            else if(currentNode != previousNode)
+                                            {
+                                                <li class="breadcrumb-item">
+                                                                <span>
+                                                                    @currentNode.Text
+                                                                </span>
+                                                </li>
+                                            }
+                            
+                                            previousNode = indexDocument;
+                                        }
+                            
+                                        currentNode = currentNode?.Items?.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                    }
+                                }
+                            
+                                void PrintNode(NavigationNode node, string text = null)
+                                {
+                                    var extension = System.IO.Path.GetExtension(node.Path);
+                                    var path = string.IsNullOrWhiteSpace(extension) ? node.Path : node.Path.Substring(0, node.Path.Length - extension.Length);
+                                    <li class="breadcrumb-item @(node == navigation ? "active" : "")">
+                                        <a href="@Model.BuildDocumentUrl(Model.ProjectName, Model.LanguageCode, Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version, path)">
+                                            @(text ?? node.Text)
+                                        </a>
+                                    </li>
+                                }
+                            
+                                NavigationNode FindIndexNode(NavigationNode node)
+                                {
+                                    var nextNode = node.Items?.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                    while (nextNode != null && string.IsNullOrEmpty(nextNode.Path))
+                                    {
+                                        nextNode = nextNode.Items.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                    }
+                            
+                                    if(nextNode == null)
+                                    {
+                                        return node.Items?.FirstOrDefault(n => n.IsIndex);
+                                    }
+                            
+                                    var lastSlashIndex = nextNode.Path.LastIndexOf('/');
+                                    var path = lastSlashIndex < 0 ? nextNode.Path : nextNode.Path.Substring(0, lastSlashIndex);
+                                    return node.Items.FirstOrDefault(n => n.Path != null && (n.IsSelected(path + documentExtension) || n.IsSelected(path + "/index" + documentExtension))) ?? node.Items.FirstOrDefault(n => n.IsIndex);
+                                }
+                            }
                         </ol>
                     </nav>
                     <div class="doc-social-btns">
@@ -240,11 +408,19 @@
                                     <input class="form-control"
                                            id="fullsearch"
                                            type="search"
-                                           data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
+                                           data-fullsearch-url="@Url.Page("/Documents/Search", new Dictionary<string, object> {
+                                                                    { nameof(Model.LanguageCode), Model.LanguageCode },
+                                                                    { nameof(Model.Version), Model.Version },
+                                                                    { nameof(Model.ProjectName), Model.ProjectName }})"
                                            placeholder="@L["FullSearch"].Value"
                                            aria-label="Filter">
                                 </div>
                             </div>
+                        }
+
+                        @if (DocsWebGoogleOptions.Value.EnableGoogleProgrammableSearchEngine)
+                        {
+                            <div class="gcse-search"></div>
                         }
                     </div>
                     @{
@@ -310,28 +486,46 @@
                                     </abp-column>
                                 </abp-row>
                                 <abp-row class="gx-2">
-                                    @foreach (var parameter in Model.DocumentPreferences.Parameters)
-                                    {
-                                        <div class="col">
-                                            <div class="custom-input-group">
-                                                <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
-                                                <select class="doc-section-combobox form-select"
-                                                        aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
-                                                        id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
-                                                    @foreach (var value in parameter.Values)
-                                                    {
-                                                        @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
+                                    @{
+                                        const int maxCellCount = 3;
+                                        var count = Model.DocumentPreferences.Parameters.Count;
+                                        var rowCount = count / maxCellCount + (count % maxCellCount > 0 ? 1 : 0);
+                                        var cellSize = 12 / (count > maxCellCount ? maxCellCount : count);
+                                        var latestCellSize = 12 / count - (rowCount - 1) * maxCellCount;
+
+                                        string BuildParameterDivClass(int index)
+                                        {
+                                            var row = index / maxCellCount;
+                                            var isLastRow = row == rowCount - 1;
+                                            var currentCellSize = isLastRow ? latestCellSize : cellSize;
+                                            return $"col-12 col-lg-{currentCellSize} mb-lg-{(isLastRow ? "0" : "2")} {(index == count - 1 ? "" : "mb-2")}";
+                                        }
+
+                                        for (var i = 0; i < count; ++i)
+                                        {
+                                            var parameter = Model.DocumentPreferences.Parameters[i];
+
+                                            <div class="@BuildParameterDivClass(i)">
+                                                <div class="custom-input-group">
+                                                    <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
+                                                    <select class="doc-section-combobox form-select"
+                                                            aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
+                                                            id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
+                                                        @foreach (var value in parameter.Values.OrderBy(p => p.Value))
                                                         {
-                                                            <option value="@value.Key" selected="selected">@value.Value</option>
+                                                            @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
+                                                            {
+                                                                <option value="@value.Key" selected="selected">@value.Value</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@value.Key">@value.Value</option>
+                                                            }
                                                         }
-                                                        else
-                                                        {
-                                                            <option value="@value.Key">@value.Value</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
                                 </abp-row>
                             </div>
@@ -341,13 +535,47 @@
                     <div data-spy="scroll" data-bs-target="#docs-sticky-index" data-offset="0">
                         <article class="docs-body">
 
-                            @if (Model.DocumentLanguageCode != Model.LanguageCode)
+                            @if (Model.LanguageCode != null && Model.DocumentLanguageCode != Model.LanguageCode)
                             {
                                 <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
                                     @L["DocumentNotFoundInSelectedLanguage"]
                                 </abp-alert>
                             }
                             @Html.Raw(Model.Document.Content)
+
+                            @if (Model.DocumentNavigationsDto.HasValues)
+                            {
+                                <hr class="my-4"/>
+
+                                <div class="row navigation">
+                                    <div class="col-6">
+                                        @if (Model.DocumentNavigationsDto.HasPrevious)
+                                        {
+                                            <a class="prev-link" href="@Model.CreateDocumentLink(Model.DocumentNavigationsDto.Previous.Path)">
+                                                <span class="desc">
+                                                    <i class="fa fa-chevron-left me-1"></i>
+                                                    @L["Previous"]
+                                                </span>
+                                                <br />
+                                                <span class="title">@Model.DocumentNavigationsDto.Previous.Name</span>
+                                            </a>
+                                        }
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        @if (Model.DocumentNavigationsDto.HasNext)
+                                        {
+                                            <a class="next-link" href="@Model.CreateDocumentLink(Model.DocumentNavigationsDto.Next.Path)">
+                                                <span class="desc">
+                                                    @L["Next"]
+                                                    <i class="fa fa-chevron-right ms-1"></i>
+                                                </span>
+                                                <br />
+                                                <span class="title">@Model.DocumentNavigationsDto.Next.Name</span>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
                         </article>
 
                         <div id="crawler_link" style="display:none;">
@@ -370,6 +598,7 @@
 
                         <div id="scroll-index" class="">
                             <nav id="docs-sticky-index" class="navbar index-scroll">
+                                    <partial name="/Pages/Documents/Project/TableOfContents.cshtml" model="Model.TocItems" />
                             </nav>
                             <div class="row">
                                 <div class="col p-0">
@@ -406,7 +635,7 @@ else
         {
             model = new ErrorPageModel
             {
-                RedirectUrl = Model.DocumentsUrlPrefix,
+                RedirectUrl = Url.Page("/Projects/Index"),
                 ErrorCode = "404",
                 ErrorMessage = L.GetString("ProjectNotFound")
             }
@@ -419,8 +648,7 @@ else
         {
             model = new ErrorPageModel
             {
-                RedirectUrl = Model.DocumentsUrlPrefix + Model.LanguageCode + "/" + Model.ProjectName + "/"
-                              + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
+                RedirectUrl = Model.BuildDocumentUrl(Model.ProjectName, Model.LanguageCode, Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version, null),
                 ErrorCode = "404",
                 ErrorMessage = L.GetString("DocumentNotFound"),
                 AutoRedirect = !Model.DocumentName.IsNullOrWhiteSpace()

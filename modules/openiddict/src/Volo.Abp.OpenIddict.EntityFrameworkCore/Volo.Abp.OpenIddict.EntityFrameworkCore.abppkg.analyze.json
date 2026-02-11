@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.OpenIddict.EntityFrameworkCore",
-  "hash": "15ae177e740932706726e9ba9e5e8b3e",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
@@ -71,29 +71,48 @@
         {
           "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
           "contentType": "databaseTable",
-          "name": "OpenIddictApplications",
+          "name": "Applications",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization",
           "contentType": "databaseTable",
-          "name": "OpenIddictAuthorizations",
+          "name": "Authorizations",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
           "contentType": "databaseTable",
-          "name": "OpenIddictScopes",
+          "name": "Scopes",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
           "contentType": "databaseTable",
-          "name": "OpenIddictTokens",
+          "name": "Tokens",
           "summary": null
         }
       ],
       "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
+          "name": "ConfigureOpenIddict",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -148,6 +167,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",

@@ -33,6 +33,6 @@ public class CacheNameAttribute : Attribute
             return cacheNameAttribute.Name;
         }
 
-        return cacheItemType.FullName.RemovePostFix("CacheItem");
+        return cacheItemType.FullName!.RemovePostFix("CacheItem")!;
     }
 }

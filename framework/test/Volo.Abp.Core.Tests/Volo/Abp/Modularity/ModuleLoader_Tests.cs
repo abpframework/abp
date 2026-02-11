@@ -21,9 +21,14 @@ public class ModuleLoader_Tests
         modules.Length.ShouldBe(2);
         modules[0].Type.ShouldBe(typeof(IndependentEmptyModule));
         modules[1].Type.ShouldBe(typeof(MyStartupModule));
+        modules[1].Assembly.ShouldBe(typeof(MyStartupModule).Assembly);
+        modules[1].AllAssemblies.Length.ShouldBe(2);
+        modules[1].AllAssemblies[0].ShouldBe(typeof(IAbpApplication).Assembly);
+        modules[1].AllAssemblies[1].ShouldBe(typeof(MyStartupModule).Assembly);
     }
 
     [DependsOn(typeof(IndependentEmptyModule))]
+    [AdditionalAssembly(typeof(IAbpApplication))]
     public class MyStartupModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

@@ -11,9 +11,9 @@ public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDep
     /// <summary>
     /// An event raised after the notification is received.
     /// </summary>
-    public event EventHandler<UiNotificationEventArgs> NotificationReceived;
+    public event EventHandler<UiNotificationEventArgs>? NotificationReceived;
 
-    public Task Info(string message, string title = null, Action<UiNotificationOptions> options = null)
+    public Task Info(string message, string? title = null, Action<UiNotificationOptions>? options = null)
     {
         var uiNotificationOptions = CreateDefaultOptions();
         options?.Invoke(uiNotificationOptions);
@@ -23,7 +23,7 @@ public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDep
         return Task.CompletedTask;
     }
 
-    public Task Success(string message, string title = null, Action<UiNotificationOptions> options = null)
+    public Task Success(string message, string? title = null, Action<UiNotificationOptions>? options = null)
     {
         var uiNotificationOptions = CreateDefaultOptions();
         options?.Invoke(uiNotificationOptions);
@@ -33,7 +33,7 @@ public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDep
         return Task.CompletedTask;
     }
 
-    public Task Warn(string message, string title = null, Action<UiNotificationOptions> options = null)
+    public Task Warn(string message, string? title = null, Action<UiNotificationOptions>? options = null)
     {
         var uiNotificationOptions = CreateDefaultOptions();
         options?.Invoke(uiNotificationOptions);
@@ -43,7 +43,7 @@ public class BlazoriseUiNotificationService : IUiNotificationService, IScopedDep
         return Task.CompletedTask;
     }
 
-    public Task Error(string message, string title = null, Action<UiNotificationOptions> options = null)
+    public Task Error(string message, string? title = null, Action<UiNotificationOptions>? options = null)
     {
         var uiNotificationOptions = CreateDefaultOptions();
         options?.Invoke(uiNotificationOptions);

@@ -1,7 +1,6 @@
 ﻿using Shouldly;
 using Volo.Abp.BlobStoring.Fakes;
 using Volo.Abp.BlobStoring.TestObjects;
-using Volo.Abp.DynamicProxy;
 using Xunit;
 
 namespace Volo.Abp.BlobStoring;

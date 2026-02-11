@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
-using Volo.Abp.Timing;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
@@ -86,6 +84,16 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
     }
 
+    /// <summary>
+    /// This is to call the protection method PreSignInCheck
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <returns>Null if the user should be allowed to sign in, otherwise the SignInResult why they should be denied.</returns>
+    public virtual async Task<SignInResult> CallPreSignInCheckAsync(IdentityUser user)
+    {
+        return await PreSignInCheck(user);
+    }
+
     protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
@@ -106,5 +114,18 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         }
 
         return await base.PreSignInCheck(user);
+    }
+
+    /// <summary>
+    /// This is to call the protection method SignInOrTwoFactorAsync
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="isPersistent"></param>
+    /// <param name="loginProvider"></param>
+    /// <param name="bypassTwoFactor"></param>
+    /// <returns></returns>
+    public virtual async Task<SignInResult> CallSignInOrTwoFactorAsync(IdentityUser user, bool isPersistent, string loginProvider = null, bool bypassTwoFactor = false)
+    {
+        return await base.SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
     }
 }

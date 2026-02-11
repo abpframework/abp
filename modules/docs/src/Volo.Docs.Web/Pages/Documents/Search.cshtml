@@ -29,7 +29,7 @@
 
 <div class="container mb-5">
 
-    <form method="get" action="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" class="mt-4">
+    <form method="get" action="@Url.Page("/Documents/Search", new Dictionary<string, object> { { nameof(Model.LanguageCode), Model.LanguageCode }, { nameof(Model.Version), Model.Version }, { nameof(Model.ProjectName), Model.ProjectName } })" class="mt-4">
 		<h4 class="text-center my-3">@L["FullSearch"]</h4>
         <div class="card rounded">
             <div class="p-3 bg-white">
@@ -41,45 +41,58 @@
         </div>
     </form>
 
-    <div class="card mt-4 rounded">
-        <div class="card-header">
-            <h5 class="text-center ">@L["SearchResults"]</h5>
-        </div>
-        <div class="p-5 card-body">
-            @foreach (var docs in Model.SearchOutputs)
-            {
-                <div class="row">
-                    <div class="col">
-                        <div class="pb-4 small">
-                            @functions
+    @if (!Model.KeyWord.IsNullOrWhiteSpace())
+    {
+        <div class="card mt-4 rounded">
+            <div class="card-header">
+                <h5 class="text-center ">@L["SearchResults"]</h5>
+            </div>
+            <div class="px-5 pt-5 card-body">
+                @foreach (var docs in Model.SearchOutputs)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <div class="pb-4 small">
+                                @functions
                                 {
-                                string RemoveFileExtensionFromPath(string path)
-                                {
-                                    if (path == null)
+                                    string RemoveFileExtensionFromPath(string path)
                                     {
-                                        return null;
+                                        if (path == null)
+                                        {
+                                            return null;
+                                        }
+        
+                                        return path.EndsWith("." + @Model.Project.Format)
+                                            ? path.Left(path.Length - Model.Project.Format.Length - 1)
+                                            : path;
                                     }
-
-                                    return path.EndsWith("." + @Model.Project.Format)
-                                        ? path.Left(path.Length - Model.Project.Format.Length - 1)
-                                        : path;
                                 }
-                            }
-                            <h5 class="mb-3">
-                                <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
-                                    @RemoveFileExtensionFromPath(docs.Name)
-                                </a>
-                            </h5>
-                            <div class="mb-4">
-                                @foreach (var highlight in docs.Highlight)
-                                {
-                                    <p class="mb-2">@Html.Raw(highlight)</p>
-                                }
-                            </div>
-                        </div> 
+                                <h5 class="mb-3">
+                                    <a href="@Url.Page("/Documents/Project/Index", new Dictionary<string, object> {
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.LanguageCode), Model.LanguageCode },
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.Version), Model.Version },
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.ProjectName), Model.ProjectName },
+                                                 { nameof(Volo.Docs.Pages.Documents.Project.IndexModel.DocumentName), RemoveFileExtensionFromPath(docs.Name) }
+                                             })">
+                                        @RemoveFileExtensionFromPath(docs.Name)
+                                    </a>
+                                </h5>
+                                <div class="mb-4">
+                                    @foreach (var highlight in docs.Highlight)
+                                    {
+                                        <p class="mb-2">@Html.Raw(highlight)</p>
+                                    }
+                                </div>
+                            </div> 
+                        </div>
                     </div>
-                </div>
-            }
+                }
+                @if (Model.PagerModel != null)
+                {
+                    <abp-paginator model="Model.PagerModel" show-info="true" />
+                }
+            </div>
         </div>
-    </div>
+    }
+        
 </div>

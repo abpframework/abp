@@ -4,15 +4,17 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.OwlCarousel
 @using Volo.Blogging
 @inject IAuthorizationService Authorization
-@model Volo.Blogging.Pages.Blog.Posts.IndexModel
+@model IndexModel
 @using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
 @using Volo.Blogging.Localization
-@using Volo.Blogging.Pages.Blog
-@using IndexModel = Volo.Blogging.Pages.Blog.Posts.IndexModel
+@using Volo.Blogging.Pages.Blogs
+@using IndexModel = Volo.Blogging.Pages.Blogs.Posts.IndexModel
 @inject IStringLocalizer<BloggingResource> L
 @inject BloggingPageHelper BloggingPageHelper
 @{
     ViewBag.Title = "Read All Blog Posts";
+    var blogShortNameRouteParam = Model.BlogOptions.SingleBlogMode.Enabled ? null : Model.BlogShortName;
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -27,7 +29,6 @@
         <abp-style src="/Pages/Blogs/Shared/Styles/blog.css" />
     </abp-style-bundle>
 }
-
 <div class="vs-blog blah">
     <div class="container">
         <div class="pb-3">
@@ -39,18 +40,18 @@
                             var post = Model.Posts[index];
                             <div class="hero-articles">
                                 <div class="img-container">
-                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam">
                                         <img src="@post.CoverImage" class="hero-article-img" alt="@post.Title cover image">
                                     </a>
                                 </div>
                                 <div class="hero-content pt-3">
                                     <h2>
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam">@post.Title</a>
                                     </h2>
                                     <p class="article-sum">
                                         @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                     </p>
-                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
 
                                 </div>
                                 @if (post.Writer != null)
@@ -60,16 +61,16 @@
                                             <div class="user-card">
                                                 <div class="row">
                                                     <div class="col-auto pe-1">
-                                                        <a href="/Members/@post.Writer.UserName">
+                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                             <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
                                                         </a>
                                                     </div>
                                                     <div class="col ps-1">
                                                         <h5 class="mt-2 mb-1">
-                                                            <a href="/Members/@post.Writer.UserName">
+                                                            <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                 @post.Writer.UserName
                                                             </a>
-                                                            <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                            <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
                                                         </h5>
                                                         <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                         @*<span class="vs-seperator">|</span>
@@ -84,7 +85,7 @@
                             <p class="tags">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@blogShortNameRouteParam" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                 }
                             </p>
 
@@ -97,7 +98,7 @@
 
                     @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
                     {
-                        <a class="btn btn-primary btn-rounded mb-3 active " asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                        <a class="btn btn-primary btn-rounded mb-3 active " asp-page="./New" asp-route-blogShortName="@blogShortNameRouteParam">@L["CreateANewPost"]</a>
                     }
 
                     <div class="list-group">
@@ -109,14 +110,14 @@
                                     <div class="row  align-middle">
                                         <div class="col-4">
                                             <div class="img-container">
-                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam">
                                                     <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="col-8 ps-0">
                                             <h3 class="font-125">
-                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam">@post.Title</a>
                                             </h3>
 
                                             @if (post.Writer != null)
@@ -127,10 +128,10 @@
                                                             @if (post.Writer != null)
                                                             {
                                                                 <h5 class="mt-2 mb-1">
-                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                    <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                         @post.Writer.UserName
                                                                     </a>    
-                                                                    <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                                    <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
                                                                 </h5>
                                                             }
                                                             <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
@@ -169,19 +170,19 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="img-container">
-                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam">
                                                     <img src="@post.CoverImage" class="box-article-img" alt="@post.Title cover image">
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <h3>
-                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam">@post.Title</a>
                                             </h3>
                                             <p>
                                                 @Html.Raw(BloggingPageHelper.GetShortContent(post.Content))
                                             </p>
-                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
+                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@blogShortNameRouteParam" class="read-more-btn">@L["ContinueReading"] &#8594;</a>
 
                                             @if (post.Writer != null)
                                             {
@@ -190,16 +191,16 @@
                                                         <div class="user-card">
                                                             <div class="row">
                                                                 <div class="col-auto pe-1">
-                                                                    <a href="/Members/@post.Writer.UserName">
+                                                                    <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                         <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" alt="@post.Writer.UserName avatar" />
                                                                     </a>
                                                                 </div>
                                                                 <div class="col ps-1">
                                                                     <h5 class="mt-2 mb-1">
-                                                                        <a href="/Members/@post.Writer.UserName">
+                                                                        <a href="@Url.Page("/Blogs/Members/Index", new {userName = post.Writer.UserName})">
                                                                             @post.Writer.UserName
                                                                         </a>
-                                                                        <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(post.CreationTime)</span>
+                                                                        <span>@BloggingPageHelper.GetLocalizedTimeAgoText(post.CreationTime)</span>
                                                                     </h5>
                                                                     <i class="fa fa-eye"></i> @L["WiewsWithCount", post.ReadCount]
                                                                     @*<span class="vs-seperator">|</span>
@@ -213,7 +214,7 @@
                                             <p class="tags">
                                                 @foreach (var tag in post.Tags)
                                                 {
-                                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@blogShortNameRouteParam" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                                 }
                                             </p>
                                         </div>
@@ -234,7 +235,7 @@
                         <div class="tags">
                             @foreach (var popularTag in Model.PopularTags)
                             {
-                                <a class="tag" asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <small>(@popularTag.UsageCount)</small></a>
+                                <a class="tag" asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@blogShortNameRouteParam" asp-route-tagName="@popularTag.Name">@popularTag.Name <small>(@popularTag.UsageCount)</small></a>
                             }
                         </div>
                     </div>

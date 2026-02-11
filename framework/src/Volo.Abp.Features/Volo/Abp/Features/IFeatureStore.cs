@@ -5,9 +5,9 @@ namespace Volo.Abp.Features;
 
 public interface IFeatureStore
 {
-    Task<string> GetOrNullAsync(
+    Task<string?> GetOrNullAsync(
         [NotNull] string name,
-        [CanBeNull] string providerName,
-        [CanBeNull] string providerKey
+        string? providerName,
+        string? providerKey
     );
 }

@@ -1,0 +1,9 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "Buy": "Kupić",
+    "SeeBookDetails": "Zobacz Szczegóły książki",
+    "MasteringAbpFrameworkEBookDescription": "Ta książka pomoże Ci w pełni zrozumieć framework i nowoczesne techniki tworzenia aplikacji internetowych.",
+    "Feedback": "Informacja zwrotna"
+  }
+}

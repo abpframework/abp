@@ -2,7 +2,7 @@
 
 public interface IAmbientDataContext
 {
-    void SetData(string key, object value);
+    void SetData(string key, object? value);
 
-    object GetData(string key);
+    object? GetData(string key);
 }

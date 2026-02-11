@@ -15,13 +15,13 @@
     </ng-template>
 
     <ng-template #abpBody>
-      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
         <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
       </form>
     </ng-template>
 
     <ng-template #abpFooter>
-      <button type="button" class="btn btn-secondary" abpClose>
+      <button type="button" class="btn btn-outline-primary" abpClose>
         {{ 'AbpIdentity::Cancel' | abpLocalization }}
       </button>
       <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{{

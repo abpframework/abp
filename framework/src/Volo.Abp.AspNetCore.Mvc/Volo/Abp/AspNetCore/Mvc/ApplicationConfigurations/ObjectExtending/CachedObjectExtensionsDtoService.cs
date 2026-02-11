@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoService, ISingletonDependency
 {
     protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
-    protected volatile ObjectExtensionsDto CachedValue;
+    protected volatile ObjectExtensionsDto? CachedValue;
     protected readonly object SyncLock = new object();
 
     public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)
@@ -142,6 +142,24 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
                 {
                     IsVisible = propertyConfig.UI.OnTable.IsVisible
                 }
+            },
+            Policy = new ExtensionPropertyPolicyDto
+            {
+                GlobalFeatures = new ExtensionPropertyGlobalFeaturePolicyDto
+                {
+                    Features = propertyConfig.Policy.Features.Features,
+                    RequiresAll = propertyConfig.Policy.Features.RequiresAll
+                },
+                Features = new ExtensionPropertyFeaturePolicyDto
+                {
+                    Features = propertyConfig.Policy.Features.Features,
+                    RequiresAll = propertyConfig.Policy.Features.RequiresAll
+                },
+                Permissions = new ExtensionPropertyPermissionPolicyDto
+                {
+                    PermissionNames = propertyConfig.Policy.Permissions.PermissionNames,
+                    RequiresAll = propertyConfig.Policy.Permissions.RequiresAll
+                }
             }
         };
 
@@ -156,7 +174,6 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
                 FilterParamName = propertyConfig.UI.Lookup.FilterParamName
             };
         }
-
 
         foreach (var attribute in propertyConfig.Attributes)
         {
@@ -193,7 +210,7 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
         return TypeHelper.GetSimplifiedName(propertyConfig.Type);
     }
 
-    protected virtual LocalizableStringDto CreateDisplayNameDto(ExtensionPropertyConfiguration propertyConfig)
+    protected virtual LocalizableStringDto? CreateDisplayNameDto(ExtensionPropertyConfiguration propertyConfig)
     {
         if (propertyConfig.DisplayName == null)
         {
@@ -225,13 +242,19 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
                     e => e.GetProperties()
                 )
             )
-            .Where(p => p.Type.IsEnum)
+            .Where(p => p.Type.IsEnum || TypeHelper.IsNullableEnum(p.Type))
             .ToList();
 
         foreach (var enumProperty in enumProperties)
         {
-            // ReSharper disable once AssignNullToNotNullAttribute (enumProperty.Type.FullName can not be null for this case)
-            objectExtensionsDto.Enums[enumProperty.Type.FullName] = CreateExtensionEnumDto(enumProperty);
+            if (TypeHelper.IsNullableEnum(enumProperty.Type))
+            {
+                objectExtensionsDto.Enums[Nullable.GetUnderlyingType(enumProperty.Type)!.FullName + "?"] = CreateExtensionEnumDto(enumProperty);
+            }
+            else
+            {
+                objectExtensionsDto.Enums[enumProperty.Type.FullName!] = CreateExtensionEnumDto(enumProperty);
+            }
         }
     }
 
@@ -243,12 +266,23 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
             LocalizationResource = enumProperty.GetLocalizationResourceNameOrNull()
         };
 
-        foreach (var enumValue in enumProperty.Type.GetEnumValues())
+        var enumType = enumProperty.Type.IsEnum
+            ? enumProperty.Type
+            : TypeHelper.IsNullableEnum(enumProperty.Type)
+                ? Nullable.GetUnderlyingType(enumProperty.Type)
+                : null;
+
+        if (enumType == null)
+        {
+            return extensionEnumDto;
+        }
+
+        foreach (var enumValue in enumType.GetEnumValues())
         {
             extensionEnumDto.Fields.Add(
                 new ExtensionEnumFieldDto
                 {
-                    Name = enumProperty.Type.GetEnumName(enumValue),
+                    Name = enumType.GetEnumName(enumValue)!,
                     Value = enumValue
                 }
             );

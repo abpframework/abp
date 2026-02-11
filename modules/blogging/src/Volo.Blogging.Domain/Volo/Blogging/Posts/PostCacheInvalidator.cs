@@ -17,7 +17,7 @@ namespace Volo.Blogging.Posts
         
         public virtual async Task HandleEventAsync(PostChangedEvent post)
         {
-            await Cache.RemoveAsync(post.BlogId.ToString());
+            await Cache.RemoveAsync(post.BlogId.ToString(), considerUow: true);
         }
     }
 }

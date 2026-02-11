@@ -1,34 +1,39 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Memory;
 using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.IO;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli;
 
 public class CliService : ITransientDependency
 {
+    private const string McpLogSource = nameof(CliService);
+    
     private readonly MemoryService _memoryService;
+    private readonly ITelemetryService _telemetryService;
+    private readonly IMcpLogger _mcpLogger;
     public ILogger<CliService> Logger { get; set; }
     protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
     protected ICommandSelector CommandSelector { get; }
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected PackageVersionCheckerService PackageVersionCheckerService { get; }
     public ICmdHelper CmdHelper { get; }
+    protected CliVersionService CliVersionService { get; }
 
     public CliService(
         ICommandLineArgumentParser commandLineArgumentParser,
@@ -36,7 +41,10 @@ public class CliService : ITransientDependency
         IServiceScopeFactory serviceScopeFactory,
         PackageVersionCheckerService nugetService,
         ICmdHelper cmdHelper,
-        MemoryService memoryService)
+        MemoryService memoryService,
+        CliVersionService cliVersionService, 
+        ITelemetryService telemetryService,
+        IMcpLogger mcpLogger)
     {
         _memoryService = memoryService;
         CommandLineArgumentParser = commandLineArgumentParser;
@@ -44,19 +52,29 @@ public class CliService : ITransientDependency
         ServiceScopeFactory = serviceScopeFactory;
         PackageVersionCheckerService = nugetService;
         CmdHelper = cmdHelper;
+        CliVersionService = cliVersionService;
+        _telemetryService = telemetryService;
+        _mcpLogger = mcpLogger;
 
         Logger = NullLogger<CliService>.Instance;
     }
 
     public async Task RunAsync(string[] args)
     {
-        var currentCliVersion = await GetCurrentCliVersionInternalAsync(typeof(CliService).Assembly);
-        Logger.LogInformation($"ABP CLI {currentCliVersion}");
-
         var commandLineArgs = CommandLineArgumentParser.Parse(args);
+        var currentCliVersion = await CliVersionService.GetCurrentCliVersionAsync();
+        
+        var isMcpCommand = commandLineArgs.IsMcpCommand();
+        
+        // Don't print banner for MCP command to avoid corrupting stdout JSON-RPC stream
+        if (!isMcpCommand)
+        {
+            Logger.LogInformation($"ABP CLI {currentCliVersion}");
+        }
 
 #if !DEBUG
-        if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
+        // Skip version check for MCP command to avoid corrupting stdout JSON-RPC stream
+        if (!isMcpCommand && !commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
         {
             await CheckCliVersionAsync(currentCliVersion);
         }
@@ -64,6 +82,7 @@ public class CliService : ITransientDependency
 
         try
         {
+            await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliRun);
             if (commandLineArgs.IsCommand("prompt"))
             {
                 await RunPromptAsync();
@@ -79,11 +98,34 @@ public class CliService : ITransientDependency
         }
         catch (CliUsageException usageException)
         {
-            Logger.LogWarning(usageException.Message);
+            // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
+            if (commandLineArgs.IsMcpCommand())
+            {
+                _mcpLogger.Error(McpLogSource, usageException.Message);
+            }
+            else
+            {
+                Logger.LogWarning(usageException.Message);
+            }
+            Environment.ExitCode = 1;
         }
         catch (Exception ex)
         {
-            Logger.LogException(ex);
+            await _telemetryService.AddErrorActivityAsync(ex.Message);
+            // For MCP command, use IMcpLogger to avoid corrupting stdout JSON-RPC stream
+            if (commandLineArgs.IsMcpCommand())
+            {
+                _mcpLogger.Error(McpLogSource, "Fatal error", ex);
+            }
+            else
+            {
+                Logger.LogException(ex);
+            }
+            throw;
+        }
+        finally
+        {
+            await _telemetryService.AddActivityAsync(ActivityNameConsts.AbpCliExit);
         }
     }
 
@@ -184,8 +226,20 @@ public class CliService : ITransientDependency
             var updateChannel = GetUpdateChannel(currentCliVersion);
 
             var latestVersionInfo = await GetLatestVersion(updateChannel);
-            if (latestVersionInfo != null && latestVersionInfo.Version > currentCliVersion)
+            if (ShouldLogNewVersionInfo(latestVersionInfo, currentCliVersion))
             {
+                if(updateChannel == UpdateChannel.Prerelease && !latestVersionInfo.Version.IsPrerelease)
+                {
+                    latestVersionInfo = await PackageVersionCheckerService.GetLatestStableVersionFromGithubAsync();
+
+                    if(ShouldLogNewVersionInfo(latestVersionInfo, currentCliVersion))
+                    {
+                        LogNewVersionInfo(updateChannel, latestVersionInfo.Version, toolPath, latestVersionInfo.Message);
+                    }
+
+                    return;
+                }
+
                 LogNewVersionInfo(updateChannel, latestVersionInfo.Version, toolPath, latestVersionInfo.Message);
             }
         }
@@ -193,6 +247,11 @@ public class CliService : ITransientDependency
         {
             Logger.LogWarning("Unable to retrieve the latest version: " + e.Message);
         }
+    }
+
+    private bool ShouldLogNewVersionInfo(LatestVersionInfo latestVersionInfo, SemanticVersion currentCliVersion)
+    {
+        return latestVersionInfo != null && latestVersionInfo.Version > currentCliVersion;
     }
 
     private async Task<bool> IsLatestVersionCheckExpiredAsync()
@@ -228,41 +287,6 @@ public class CliService : ITransientDependency
         }
 
         return assembly.Location.Substring(0, assembly.Location.IndexOf(".store", StringComparison.Ordinal));
-    }
-
-    public async Task<SemanticVersion> GetCurrentCliVersionAsync(Assembly assembly)
-    {
-        return await GetCurrentCliVersionInternalAsync(assembly);
-    }
-
-    private async Task<SemanticVersion> GetCurrentCliVersionInternalAsync(Assembly assembly)
-    {
-        SemanticVersion currentCliVersion = default;
-
-        var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list -g", out int exitCode));
-        string line;
-        while ((line = await consoleOutput.ReadLineAsync()) != null)
-        {
-            if (line.StartsWith("volo.abp.cli", StringComparison.InvariantCultureIgnoreCase))
-            {
-                var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
-
-                SemanticVersion.TryParse(version, out currentCliVersion);
-
-                break;
-            }
-        }
-
-
-        if (currentCliVersion == null)
-        {
-            // If not a tool executable, fallback to assembly version and treat as dev without updates
-            // Assembly revisions are not supported by SemVer scheme required for NuGet, trim to {major}.{minor}.{patch}
-            var assemblyVersion = string.Join(".", assembly.GetFileVersion().Split('.').Take(3));
-            return SemanticVersion.Parse(assemblyVersion + "-dev");
-        }
-
-        return currentCliVersion;
     }
 
     private UpdateChannel GetUpdateChannel(SemanticVersion currentCliVersion)
@@ -313,13 +337,13 @@ public class CliService : ITransientDependency
     {
         var toolPathArg = IsGlobalTool(toolPath) ? "-g" : $"--tool-path {toolPath}";
 
-        Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
-        
+        Logger.LogWarning($"A newer {updateChannel.ToString().ToLowerInvariant()} version of the ABP CLI is available: {latestVersion}.");
+
         if (!string.IsNullOrWhiteSpace(message))
         {
             Logger.LogWarning(message);
         }
-        
+
         Logger.LogWarning(string.Empty);
         Logger.LogWarning("Update Command: ");
 

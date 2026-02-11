@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Enregistrement...",
     "Actions": "Actions",
     "Delete": "Supprimer",
-    "SuccessfullyDeleted": "Supprimé avec succès",
+    "CreatedSuccessfully": "Créé avec succès",
+    "SavedSuccessfully": "Enregistré avec succès",
+    "DeletedSuccessfully": "Supprimé avec succès",
     "Edit": "Modifier",
     "Refresh": "Actualiser",
     "Language": "Langue",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Affichage de 0 à 0 sur 0 entrées",
     "PagerInfoFiltered": "(filtré à partir des entrées _MAX_ totale)",
     "NoDataAvailableInDatatable": "Aucune donnée disponible",
+    "ErrorLoadingDatatable": "Une erreur est survenue lors de la requête. Vérifiez le message pour plus de détails.",
     "Total": "Total",
     "Selected": "Sélectionné",
     "PagerShowMenuEntries": "Afficher les entrées _MENU_",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sera supprimé!",
     "ItemWillBeDeletedMessage": "Cet objet va être supprimé!",
     "ManageYourAccount": "Gérer votre compte",
-    "OthersGroup": "Autre"
+    "OthersGroup": "Autre",
+    "Today": "Aujourd'hui",
+    "Apply": "Appliquer",
+    "InternetConnectionInfo": "L&#39;opération n&#39;a pas pu être effectuée. Votre connexion Internet n&#39;est pas disponible pour le moment.",
+    "CopiedToTheClipboard": "Copié dans le presse-papiers",
+    "AddNew": "Ajouter un nouveau",
+    "ProfilePicture": "Image de profil",
+    "Theme": "Thème",
+    "NotAssigned": "Non attribué",
+    "EntityActionsDisabledTooltip": "Vous n&#39;avez pas les permissions pour effectuer une action.",
+    "ResourcePermissions": "Autorisations"
   }
 }

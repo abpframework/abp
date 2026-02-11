@@ -8,7 +8,7 @@ public class UnitOfWorkCacheItem<TValue>
 {
     public bool IsRemoved { get; set; }
 
-    public TValue Value { get; set; }
+    public TValue? Value { get; set; }
 
     public UnitOfWorkCacheItem()
     {

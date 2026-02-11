@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Local;
@@ -20,6 +21,11 @@ public sealed class NullLocalEventBus : ILocalEventBus
     public IDisposable Subscribe<TEvent>(ILocalEventHandler<TEvent> handler) where TEvent : class
     {
         return NullDisposable.Instance;
+    }
+
+    public List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType)
+    {
+        return new List<EventTypeWithEventHandlerFactories>();
     }
 
     public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()

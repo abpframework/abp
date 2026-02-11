@@ -15,7 +15,7 @@ public class FolderPlugInSource : IPlugInSource
 
     public SearchOption SearchOption { get; set; }
 
-    public Func<string, bool> Filter { get; set; }
+    public Func<string, bool>? Filter { get; set; }
 
     public FolderPlugInSource(
         [NotNull] string folder,

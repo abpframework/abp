@@ -14,10 +14,10 @@ public partial class PageAlert : ComponentBase, IDisposable
     private List<AlertWrapper> Alerts = new List<AlertWrapper>();
 
     [Inject]
-    protected IAlertManager AlertManager { get; set; }
+    protected IAlertManager AlertManager { get; set; } = default!;
 
     [Inject]
-    protected NavigationManager NavigationManager { get; set; }
+    protected NavigationManager NavigationManager { get; set; } = default!;
 
     protected override void OnInitialized()
     {
@@ -33,17 +33,17 @@ public partial class PageAlert : ComponentBase, IDisposable
     }
 
     //Since Blazor WASM doesn't support scoped dependency, we need to clear alerts on each location changed event.
-    private void NavigationManager_LocationChanged(object sender, LocationChangedEventArgs e)
+    private void NavigationManager_LocationChanged(object? sender, LocationChangedEventArgs e)
     {
         AlertManager.Alerts.Clear();
         Alerts.Clear();
     }
 
-    private void Alerts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void Alerts_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            foreach (var item in e.NewItems)
+            foreach (var item in e.NewItems!)
             {
                 Alerts.Add(new AlertWrapper
                 {

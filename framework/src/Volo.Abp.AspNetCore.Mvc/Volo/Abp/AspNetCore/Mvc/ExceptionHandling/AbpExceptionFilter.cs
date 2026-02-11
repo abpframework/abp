@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.ExceptionHandling;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
@@ -18,7 +19,7 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 
-public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
+public class AbpExceptionFilter : IAsyncExceptionFilter, IAbpFilter, ITransientDependency
 {
     public virtual async Task OnExceptionAsync(ExceptionContext context)
     {
@@ -34,6 +35,11 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
     protected virtual bool ShouldHandleException(ExceptionContext context)
     {
         //TODO: Create DontWrap attribute to control wrapping..?
+
+        if (context.ExceptionHandled)
+        {
+            return false;
+        }
 
         if (context.ActionDescriptor.IsControllerAction() &&
             context.ActionDescriptor.HasObjectResult())
@@ -69,15 +75,23 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
         }
         else
         {
-            context.HttpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-            context.HttpContext.Response.StatusCode = (int)context
-                .GetRequiredService<IHttpExceptionStatusCodeFinder>()
-                .GetStatusCode(context.HttpContext, context.Exception);
+            if (!context.HttpContext.Response.HasStarted)
+            {
+                context.HttpContext.Response.Headers.Append(AbpHttpConsts.AbpErrorFormat, "true");
+                context.HttpContext.Response.StatusCode = (int)context
+                    .GetRequiredService<IHttpExceptionStatusCodeFinder>()
+                    .GetStatusCode(context.HttpContext, context.Exception);
+            }
+            else
+            {
+                var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance)!;
+                logger.LogWarning("HTTP response has already started, cannot set headers and status code!");
+            }
 
             context.Result = new ObjectResult(new RemoteServiceErrorResponse(remoteServiceErrorInfo));
         }
 
-        context.Exception = null; //Handled!
+        context.ExceptionHandled = true; //Handled!
     }
 
     protected virtual void LogException(ExceptionContext context, out RemoteServiceErrorInfo remoteServiceErrorInfo)
@@ -88,15 +102,19 @@ public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
         {
             options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+            options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
         });
 
         var remoteServiceErrorInfoBuilder = new StringBuilder();
         remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
         remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-        var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance);
-        var logLevel = context.Exception.GetLogLevel();
-        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
-        logger.LogException(context.Exception, logLevel);
+        if(exceptionHandlingOptions.ShouldLogException(context.Exception))
+        {
+            var logger = context.GetService<ILogger<AbpExceptionFilter>>(NullLogger<AbpExceptionFilter>.Instance)!;
+            var logLevel = context.Exception.GetLogLevel();
+            logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+            logger.LogException(context.Exception, logLevel);
+        }
     }
 }

@@ -1,0 +1,7 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Quản lý tài liệu chung",
+    "Permission:PdfDownload": "Tải xuống PDF"
+  }
+}

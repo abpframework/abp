@@ -16,6 +16,7 @@ export const environment = {
     scope: 'offline_access MyProjectName',
     responseType: 'code',
     redirectUri: baseUrl,
+    ssrAuthorizationUrl: '/authorize'
   },
   apis: {
     default: {

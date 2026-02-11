@@ -16,6 +16,11 @@ $(function () {
         modalClass: 'projectPull',
     });
 
+    var _managePdfFilesModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Docs/Admin/Projects/ManagePdfFiles',
+        modalClass: 'projectManagePdfFiles',
+    });
+
     var _dataTable = $('#ProjectsTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
             processing: true,
@@ -56,8 +61,8 @@ $(function () {
                                     volo.docs.admin.projectsAdmin
                                         .delete(data.record.id)
                                         .then(function () {
-                                            _dataTable.ajax.reload();
-                                            abp.notify.success(l('SuccessfullyDeleted'));
+                                            _dataTable.ajax.reloadEx();
+                                            abp.notify.success(l('DeletedSuccessfully'));
                                         });
                                 },
                             },
@@ -89,7 +94,7 @@ $(function () {
                                             projectId: data.record.id,
                                         })
                                         .then(function () {
-                                            _dataTable.ajax.reload();
+                                            _dataTable.ajax.reloadEx();
                                         });
                                 },
                             },
@@ -117,6 +122,17 @@ $(function () {
                                         });
                                 },
                             },
+                            {
+                                text: l('ManagePdfFiles'),
+                                visible: abp.auth.isGranted(
+                                    'Docs.Admin.Projects.ManagePdfFiles'
+                                ),
+                                action: function (data) {
+                                    _managePdfFilesModal.open({
+                                        projectId: data.record.id,
+                                    });
+                                }
+                            }
                         ],
                     },
                 },
@@ -168,10 +184,10 @@ $(function () {
     });
 
     _createModal.onClose(function () {
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 
     _editModal.onResult(function () {
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 });

@@ -2,6 +2,11 @@
   "culture": "ar",
   "texts": {
     "ThisFieldIsRequired": "الحقل مطلوب",
-    "MaxLenghtErrorMessage": "اقصى طول للحقل '{0}' حرف"
+    "MaxLenghtErrorMessage": "اقصى طول للحقل '{0}' حرف",
+    "Enum:BookType.Undefined": "غير محدد من ValidationResource",
+    "Enum:BookType.0": "غير محدد بقيمة 0 من ValidationResource",
+    "BookType.Adventure": "مغامرة من ValidationResource",
+    "BookType.1": "مغامرة بقيمة 1 من ValidationResource",
+    "Biography": "السيرة الذاتية من ValidationResource"
   }
 }

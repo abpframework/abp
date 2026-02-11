@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.DependencyInjection;
@@ -12,14 +12,29 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
 {
     public virtual void AddAssembly(IServiceCollection services, Assembly assembly)
     {
-        var types = AssemblyHelper
-            .GetAllTypes(assembly)
-            .Where(
-                type => type != null &&
-                        type.IsClass &&
-                        !type.IsAbstract &&
-                        !type.IsGenericType
-            ).ToArray();
+        var logger = services.GetInitLogger<ConventionalRegistrarBase>();
+        var types = Array.Empty<Type>();
+
+        try
+        {
+            types = AssemblyHelper
+                .GetAllTypes(assembly)
+                .Where(type => type != null && type.IsClass && !type.IsAbstract && !type.IsGenericType)
+                .ToArray();
+        }
+        catch (ReflectionTypeLoadException e)
+        {
+            types = e.Types
+                .Where(type => type != null && type.IsClass && !type.IsAbstract && !type.IsGenericType)
+                .Select(x => x!)
+                .ToArray();
+            logger.LogException(e);
+        }
+        catch (Exception e)
+        {
+            //TODO: Trigger a global event?
+            logger.LogException(e);
+        }
 
         AddTypes(services, types);
     }
@@ -41,6 +56,11 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
 
     protected virtual void TriggerServiceExposing(IServiceCollection services, Type implementationType, List<Type> serviceTypes)
     {
+        TriggerServiceExposing(services, implementationType, serviceTypes.ConvertAll(t => new ServiceIdentifier(t)));
+    }
+
+    protected virtual void TriggerServiceExposing(IServiceCollection services, Type implementationType, List<ServiceIdentifier> serviceTypes)
+    {
         var exposeActions = services.GetExposingActionList();
         if (exposeActions.Any())
         {
@@ -52,12 +72,12 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         }
     }
 
-    protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
+    protected virtual DependencyAttribute? GetDependencyAttributeOrNull(Type type)
     {
         return type.GetCustomAttribute<DependencyAttribute>(true);
     }
 
-    protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, [CanBeNull] DependencyAttribute dependencyAttribute)
+    protected virtual ServiceLifetime? GetLifeTimeOrNull(Type type, DependencyAttribute? dependencyAttribute)
     {
         return dependencyAttribute?.Lifetime ?? GetServiceLifetimeFromClassHierarchy(type) ?? GetDefaultLifeTimeOrNull(type);
     }
@@ -92,10 +112,16 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         return ExposedServiceExplorer.GetExposedServices(type);
     }
 
+    protected virtual List<ServiceIdentifier> GetExposedKeyedServiceTypes(Type type)
+    {
+        return ExposedServiceExplorer.GetExposedKeyedServices(type);
+    }
+
     protected virtual ServiceDescriptor CreateServiceDescriptor(
         Type implementationType,
+        object? serviceKey,
         Type exposingServiceType,
-        List<Type> allExposingServiceTypes,
+        List<ServiceIdentifier> allExposingServiceTypes,
         ServiceLifetime lifeTime)
     {
         if (lifeTime.IsIn(ServiceLifetime.Singleton, ServiceLifetime.Scoped))
@@ -108,27 +134,41 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
 
             if (redirectedType != null)
             {
-                return ServiceDescriptor.Describe(
-                    exposingServiceType,
-                    provider => provider.GetService(redirectedType),
-                    lifeTime
-                );
+                return serviceKey == null
+                    ? ServiceDescriptor.Describe(
+                        exposingServiceType,
+                        provider => provider.GetService(redirectedType)!,
+                        lifeTime
+                    )
+                    : ServiceDescriptor.DescribeKeyed(
+                        exposingServiceType,
+                        serviceKey,
+                        (provider, key) => provider.GetKeyedService(redirectedType, key)!,
+                        lifeTime
+                    );
             }
         }
 
-        return ServiceDescriptor.Describe(
-            exposingServiceType,
-            implementationType,
-            lifeTime
-        );
+        return serviceKey == null
+            ? ServiceDescriptor.Describe(
+                exposingServiceType,
+                implementationType,
+                lifeTime
+            )
+            : ServiceDescriptor.DescribeKeyed(
+                exposingServiceType,
+                serviceKey,
+                implementationType,
+                lifeTime
+            );
     }
 
-    protected virtual Type GetRedirectedTypeOrNull(
+    protected virtual Type? GetRedirectedTypeOrNull(
         Type implementationType,
         Type exposingServiceType,
-        List<Type> allExposingServiceTypes)
+        List<ServiceIdentifier> allExposingKeyedServiceTypes)
     {
-        if (allExposingServiceTypes.Count < 2)
+        if (allExposingKeyedServiceTypes.Count < 2)
         {
             return null;
         }
@@ -138,14 +178,13 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
             return null;
         }
 
-        if (allExposingServiceTypes.Contains(implementationType))
+        if (allExposingKeyedServiceTypes.Any(t => t.ServiceType == implementationType))
         {
             return implementationType;
         }
 
-        return allExposingServiceTypes.FirstOrDefault(
-            t => t != exposingServiceType && exposingServiceType.IsAssignableFrom(t)
-        );
+        return allExposingKeyedServiceTypes.FirstOrDefault(
+            t => t.ServiceType != exposingServiceType && exposingServiceType.IsAssignableFrom(t.ServiceType)
+        ).ServiceType;
     }
-
 }

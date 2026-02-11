@@ -12,12 +12,12 @@ public class GlobalResourceEventHandler :
     ILocalEventHandler<EntityUpdatedEventData<GlobalResource>>,
     ITransientDependency
 {
-    public IObjectMapper ObjectMapper { get; }
+    public IObjectMapper<CmsKitPublicApplicationModule> ObjectMapper { get; }
     private readonly IDistributedCache<GlobalResourceDto> _resourceCache;
 
     public GlobalResourceEventHandler(
         IDistributedCache<GlobalResourceDto> resourceCache,
-        IObjectMapper objectMapper)
+        IObjectMapper<CmsKitPublicApplicationModule> objectMapper)
     {
         ObjectMapper = objectMapper;
         _resourceCache = resourceCache;

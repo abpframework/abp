@@ -1,0 +1,7 @@
+{
+  "culture": "tr",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Genel Belge Yönetimi",
+    "Permission:PdfDownload": "PDF İndirme"
+  }
+}

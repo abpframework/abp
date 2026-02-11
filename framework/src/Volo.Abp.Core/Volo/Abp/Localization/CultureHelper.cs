@@ -1,13 +1,12 @@
 using System;
 using System.Globalization;
-using System.Linq;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization;
 
 public static class CultureHelper
 {
-    public static IDisposable Use([NotNull] string culture, string uiCulture = null)
+    public static IDisposable Use([NotNull] string culture, string? uiCulture = null)
     {
         Check.NotNull(culture, nameof(culture));
 
@@ -19,7 +18,7 @@ public static class CultureHelper
         );
     }
 
-    public static IDisposable Use([NotNull] CultureInfo culture, CultureInfo uiCulture = null)
+    public static IDisposable Use([NotNull] CultureInfo culture, CultureInfo? uiCulture = null)
     {
         Check.NotNull(culture, nameof(culture));
 

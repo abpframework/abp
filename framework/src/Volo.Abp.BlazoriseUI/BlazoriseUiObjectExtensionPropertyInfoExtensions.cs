@@ -1,5 +1,6 @@
 ﻿using Blazorise;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Volo.Abp.BlazoriseUI;
 
 public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
 {
-    private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> NumberTypes = new HashSet<Type>
+        {
             typeof(int),
             typeof(long),
             typeof(byte),
@@ -36,16 +38,23 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             typeof(float?),
             typeof(double?),
             typeof(decimal?)
-        };
+        }.ToFrozenSet();
 
-    private static readonly HashSet<Type> TextEditSupportedAttributeTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> TextEditSupportedAttributeTypes = new HashSet<Type>
+        {
             typeof(EmailAddressAttribute),
             typeof(UrlAttribute),
             typeof(PhoneAttribute)
-        };
+        }.ToFrozenSet();
 
-    public static string GetDateEditInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
+    public static string? GetDateEditInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
+        var dataFormatString = property.GetDataFormatStringOrNull();
+        if (dataFormatString != null)
+        {
+            return dataFormatString;
+        }
+
         if (property.IsDate())
         {
             return "{0:yyyy-MM-dd}";
@@ -59,7 +68,15 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
         return null;
     }
 
-    public static string GetTextInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object value)
+    public static string? GetDataFormatStringOrNull(this IBasicObjectExtensionPropertyInfo property)
+    {
+        return property
+            .Attributes
+            .OfType<DisplayFormatAttribute>()
+            .FirstOrDefault()?.DataFormatString;
+    }
+
+    public static string? GetTextInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object? value)
     {
         if (value == null)
         {
@@ -74,7 +91,7 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
         return value.ToString();
     }
 
-    public static T GetInputValueOrDefault<T>(this IBasicObjectExtensionPropertyInfo property, object value)
+    public static T? GetInputValueOrDefault<T>(this IBasicObjectExtensionPropertyInfo property, object? value)
     {
         if (value == null)
         {
@@ -204,7 +221,12 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
                ?? typeof(TextExtensionProperty<,>); //default
     }
 
-    private static Type GetInputTypeFromAttributeOrNull(Attribute attribute)
+    public static bool IsEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
+    }
+
+    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute)
     {
         var hasTextEditSupport = TextEditSupportedAttributeTypes.Any(t => t == attribute.GetType());
 
@@ -219,26 +241,24 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             switch (dataTypeAttribute.DataType)
             {
                 case DataType.Password:
+                case DataType.EmailAddress:
+                case DataType.Url:
+                case DataType.PhoneNumber:
                     return typeof(TextExtensionProperty<,>);
                 case DataType.Date:
+                case DataType.DateTime:
                     return typeof(DateTimeExtensionProperty<,>);
                 case DataType.Time:
                     return typeof(TimeExtensionProperty<,>);
-                case DataType.EmailAddress:
-                    return typeof(TextExtensionProperty<,>);
-                case DataType.Url:
-                    return typeof(TextExtensionProperty<,>);
-                case DataType.PhoneNumber:
-                    return typeof(TextExtensionProperty<,>);
-                case DataType.DateTime:
-                    return typeof(DateTimeExtensionProperty<,>);
+                case DataType.MultilineText:
+                    return typeof(TextAreaExtensionProperty<,>);
             }
         }
 
         return null;
     }
 
-    private static Type GetInputTypeFromTypeOrNull(Type type)
+    private static Type? GetInputTypeFromTypeOrNull(Type type)
     {
         if (type == typeof(bool))
         {

@@ -37,6 +37,7 @@ public class SettingPageContributorManager : IScopedDependency
         {
             await contributor.ConfigureAsync(context);
         }
+        context.Normalize();
         return context;
     }
 

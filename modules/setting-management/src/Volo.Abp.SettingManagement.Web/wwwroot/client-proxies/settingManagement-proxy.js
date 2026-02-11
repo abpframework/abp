@@ -38,6 +38,36 @@
 
   })();
 
+  // controller volo.abp.settingManagement.timeZoneSettings
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.abp.settingManagement.timeZoneSettings');
+
+    volo.abp.settingManagement.timeZoneSettings.get = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/setting-management/timezone',
+        type: 'GET'
+      }, { dataType: 'text' }, ajaxParams));
+    };
+
+    volo.abp.settingManagement.timeZoneSettings.getTimezones = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/setting-management/timezone/timezones',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.abp.settingManagement.timeZoneSettings.update = function(timezone, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/setting-management/timezone' + abp.utils.buildQueryString([{ name: 'timezone', value: timezone }]) + '',
+        type: 'POST',
+        dataType: null
+      }, ajaxParams));
+    };
+
+  })();
+
 })();
 
 

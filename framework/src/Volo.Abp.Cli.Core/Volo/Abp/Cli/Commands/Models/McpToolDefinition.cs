@@ -1,0 +1,26 @@
+using System.Collections.Generic;
+using System.Text.Json;
+
+namespace Volo.Abp.Cli.Commands.Models;
+
+public class McpToolDefinition
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public McpToolInputSchema InputSchema { get; set; }
+    public JsonElement? OutputSchema { get; set; }
+}
+
+public class McpToolInputSchema
+{
+    public string Type { get; set; } = "object";
+    public Dictionary<string, McpToolProperty> Properties { get; set; }
+    public List<string> Required { get; set; }
+}
+
+public class McpToolProperty
+{
+    public string Type { get; set; }
+    public string Description { get; set; }
+}
+

@@ -11,11 +11,11 @@ namespace Volo.Abp.Domain.Entities.Auditing;
 public abstract class CreationAuditedEntityWithUser<TUser> : CreationAuditedEntity, ICreationAuditedObject<TUser>
 {
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 }
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="ICreationAuditedObjectObject{TCreator}"/>.
+/// This class can be used to simplify implementing <see cref="ICreationAuditedObject{TCreator}"/>.
 /// </summary>
 /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
 /// <typeparam name="TUser">Type of the user</typeparam>
@@ -23,7 +23,7 @@ public abstract class CreationAuditedEntityWithUser<TUser> : CreationAuditedEnti
 public abstract class CreationAuditedEntityWithUser<TKey, TUser> : CreationAuditedEntity<TKey>, ICreationAuditedObject<TUser>
 {
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     protected CreationAuditedEntityWithUser()
     {

@@ -1,6 +1,7 @@
 {
   "culture": "it",
   "texts": {
+    "AppName": "MyProjectName",
     "Menu:Home": "Home",
     "Welcome": "Benvenuto",
     "LongWelcomeMessage": "Benvenuto nell'applicazione. Questo è un progetto di avvio basato sul framework ABP. Per ulteriori informazioni, visita abp.io."

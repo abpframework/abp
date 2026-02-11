@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.OpenIddict.ViewModels.Authorization;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.OpenIddict.Controllers;
 
@@ -20,42 +26,31 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
     [IgnoreAntiforgeryToken]
+    [IgnoreAbpSecurityHeader]
     public virtual async Task<IActionResult> HandleAsync()
     {
         var request = await GetOpenIddictServerRequestAsync(HttpContext);
 
-        // If prompt=login was specified by the client application,
-        // immediately return the user agent to the login page.
-        if (request.HasPrompt(OpenIddictConstants.Prompts.Login))
-        {
-            // To avoid endless login -> authorization redirects, the prompt=login flag
-            // is removed from the authorization request payload before redirecting the user.
-            var prompt = string.Join(" ", request.GetPrompts().Remove(OpenIddictConstants.Prompts.Login));
-
-            var parameters = Request.HasFormContentType ?
-                Request.Form.Where(parameter => parameter.Key != OpenIddictConstants.Parameters.Prompt).ToList() :
-                Request.Query.Where(parameter => parameter.Key != OpenIddictConstants.Parameters.Prompt).ToList();
-
-            parameters.Add(KeyValuePair.Create(OpenIddictConstants.Parameters.Prompt, new StringValues(prompt)));
-
-            return Challenge(
-                authenticationSchemes: IdentityConstants.ApplicationScheme,
-                properties: new AuthenticationProperties
-                {
-                    RedirectUri = Request.PathBase + Request.Path + QueryString.Create(parameters)
-                });
-        }
-
-        // Retrieve the user principal stored in the authentication cookie.
-        // If a max_age parameter was provided, ensure that the cookie is not too old.
-        // If the user principal can't be extracted or the cookie is too old, redirect the user to the login page.
+        // Try to retrieve the user principal stored in the authentication cookie and redirect
+        // the user agent to the login page (or to an external provider) in the following cases:
+        //
+        //  - If the user principal can't be extracted or the cookie is too old.
+        //  - If prompt=login was specified by the client application.
+        //  - If max_age=0 was specified by the client application (max_age=0 is equivalent to prompt=login).
+        //  - If a max_age parameter was provided and the authentication cookie is not considered "fresh" enough.
+        //
+        // For scenarios where the default authentication handler configured in the ASP.NET Core
+        // authentication options shouldn't be used, a specific scheme can be specified here.
         var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
-        if (result == null || !result.Succeeded || (request.MaxAge != null && result.Properties?.IssuedUtc != null &&
-            DateTimeOffset.UtcNow - result.Properties.IssuedUtc > TimeSpan.FromSeconds(request.MaxAge.Value)))
+        if (result is not { Succeeded: true } ||
+            ((request.HasPromptValue(OpenIddictConstants.PromptValues.Login) || request.MaxAge is 0 ||
+              (request.MaxAge is not null && result.Properties?.IssuedUtc is not null &&
+               TimeProvider.System.GetUtcNow() - result.Properties.IssuedUtc > TimeSpan.FromSeconds(request.MaxAge.Value))) &&
+             TempData["IgnoreAuthenticationChallenge"] is null or false))
         {
             // If the client application requested promptless authentication,
             // return an error indicating that the user is not logged in.
-            if (request.HasPrompt(OpenIddictConstants.Prompts.None))
+            if (request.HasPromptValue(OpenIddictConstants.PromptValues.None))
             {
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
@@ -66,18 +61,61 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                     }));
             }
 
+            // To avoid endless login endpoint -> authorization endpoint redirects, a special temp data entry is
+            // used to skip the challenge if the user agent has already been redirected to the login endpoint.
+            //
+            // Note: this flag doesn't guarantee that the user has accepted to re-authenticate. If such a guarantee
+            // is needed, the existing authentication cookie MUST be deleted AND revoked (e.g using ASP.NET Core
+            // Identity's security stamp feature with an extremely short revalidation time span) before triggering
+            // a challenge to redirect the user agent to the login endpoint.
+            TempData["IgnoreAuthenticationChallenge"] = true;
+
+            // For scenarios where the default challenge handler configured in the ASP.NET Core
+            // authentication options shouldn't be used, a specific scheme can be specified here.
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = Request.PathBase + Request.Path + QueryString.Create(Request.HasFormContentType ? Request.Form : Request.Query)
+            });
+        }
+
+        // If prompt=select_account was specified by the client application,
+        // We will redirect the user to the select_account page.
+        if (request.HasPromptValue(OpenIddictConstants.PromptValues.SelectAccount) && TempData["IgnoreSelectAccount"] is null or false)
+        {
+            // To avoid endless select account endpoint -> authorization endpoint redirects, a special temp data entry is
+            // used to skip the redirect if the user agent has already been redirected to the select account endpoint.
+            TempData["IgnoreSelectAccount"] = true;
+
+            var selectAccountPath = HttpContext.RequestServices.GetRequiredService<IOptions<AbpOpenIddictAspNetCoreOptions>>().Value.SelectAccountPage.RemovePostFix("/");
+            return Redirect(Url.Content($"{selectAccountPath}?RedirectUri={UrlEncoder.Default.Encode(Request.PathBase + Request.Path + QueryString.Create(Request.HasFormContentType ? Request.Form : Request.Query))}"));
+        }
+
+        // Retrieve the profile of the logged in user.
+        var dynamicPrincipal = result.Principal;
+        if (AbpClaimsPrincipalFactoryOptions.Value.IsDynamicClaimsEnabled)
+        {
+            dynamicPrincipal = await AbpClaimsPrincipalFactory.CreateDynamicAsync(dynamicPrincipal);
+            if (dynamicPrincipal == null)
+            {
+                return Challenge(
+                    authenticationSchemes: IdentityConstants.ApplicationScheme,
+                    properties: new AuthenticationProperties
+                    {
+                        RedirectUri = Request.PathBase + Request.Path + QueryString.Create(Request.HasFormContentType ? Request.Form : Request.Query)
+                    });
+            }
+        }
+
+        var user = await UserManager.GetUserAsync(dynamicPrincipal);
+        if (user == null)
+        {
             return Challenge(
                 authenticationSchemes: IdentityConstants.ApplicationScheme,
                 properties: new AuthenticationProperties
                 {
-                    RedirectUri = Request.PathBase + Request.Path + QueryString.Create(
-                        Request.HasFormContentType ? Request.Form.ToList() : Request.Query.ToList())
+                    RedirectUri = Request.PathBase + Request.Path + QueryString.Create(Request.HasFormContentType ? Request.Form : Request.Query)
                 });
         }
-
-        // Retrieve the profile of the logged in user.
-        var user = await UserManager.GetUserAsync(result.Principal) ??
-            throw new InvalidOperationException(L["TheUserDetailsCannotBbeRetrieved"]);
 
         // Retrieve the application details from the database.
         var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
@@ -108,8 +146,21 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
             // return an authorization response without displaying the consent form.
             case OpenIddictConstants.ConsentTypes.Implicit:
             case OpenIddictConstants.ConsentTypes.External when authorizations.Any():
-            case OpenIddictConstants.ConsentTypes.Explicit when authorizations.Any() && !request.HasPrompt(OpenIddictConstants.Prompts.Consent):
+            case OpenIddictConstants.ConsentTypes.Explicit when authorizations.Any() && !request.HasPromptValue(OpenIddictConstants.PromptValues.Consent):
                 var principal = await SignInManager.CreateUserPrincipalAsync(user);
+
+                var sid = dynamicPrincipal.FindFirst(JwtRegisteredClaimNames.Sid);
+                if (sid != null)
+                {
+                    principal.RemoveClaims(JwtRegisteredClaimNames.Sid);
+                    principal.AddClaim(JwtRegisteredClaimNames.Sid, sid.Value);
+                }
+
+                if (result.Properties != null && result.Properties.IsPersistent)
+                {
+                    var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+                    principal.Identities.FirstOrDefault()?.AddClaim(claim);
+                }
 
                 // Note: in this sample, the granted scopes match the requested scope
                 // but you may want to allow the user to uncheck specific scopes.
@@ -138,8 +189,8 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 
             // At this point, no authorization was found in the database and an error must be returned
             // if the client application specified prompt=none in the authorization request.
-            case OpenIddictConstants.ConsentTypes.Explicit when request.HasPrompt(OpenIddictConstants.Prompts.None):
-            case OpenIddictConstants.ConsentTypes.Systematic when request.HasPrompt(OpenIddictConstants.Prompts.None):
+            case OpenIddictConstants.ConsentTypes.Explicit when request.HasPromptValue(OpenIddictConstants.PromptValues.None):
+            case OpenIddictConstants.ConsentTypes.Systematic when request.HasPromptValue(OpenIddictConstants.PromptValues.None):
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
                     properties: new AuthenticationProperties(new Dictionary<string, string>
@@ -203,6 +254,20 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         }
 
         var principal = await SignInManager.CreateUserPrincipalAsync(user);
+
+        var sid = User.FindFirst(JwtRegisteredClaimNames.Sid);
+        if (sid != null)
+        {
+            principal.RemoveClaims(JwtRegisteredClaimNames.Sid);
+            principal.AddClaim(JwtRegisteredClaimNames.Sid, sid.Value);
+        }
+
+        var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
+        if (result.Succeeded && result.Properties != null && result.Properties.IsPersistent)
+        {
+            var claim = new Claim(AbpClaimTypes.RememberMe, true.ToString()).SetDestinations(OpenIddictConstants.Destinations.AccessToken);
+            principal.Identities.FirstOrDefault()?.AddClaim(claim);
+        }
 
         // Note: in this sample, the granted scopes match the requested scope
         // but you may want to allow the user to uncheck specific scopes.

@@ -1,19 +1,45 @@
-import { AuthService, ConfigStateService } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, Injector, OnInit, inject } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { eAccountComponents } from '../../enums/components';
-import { getRedirectUrl } from '../../utils/auth-utils';
+import {
+  AuthService,
+  AutofocusDirective,
+  ConfigStateService,
+  LocalizationPipe,
+  NgxValidateCoreModule,
+} from '@abp/ng.core';
+import { ButtonComponent, ToasterService } from '@abp/ng.theme.shared';
+import { eAccountComponents } from '../../enums';
+import { getRedirectUrl } from '../../utils';
 
 const { maxLength, required } = Validators;
 
 @Component({
   selector: 'abp-login',
   templateUrl: './login.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    LocalizationPipe,
+    ButtonComponent,
+    NgxValidateCoreModule,
+    AutofocusDirective,
+  ],
 })
 export class LoginComponent implements OnInit {
+  protected injector = inject(Injector);
+  protected fb = inject(UntypedFormBuilder);
+  protected toasterService = inject(ToasterService);
+  protected authService = inject(AuthService);
+  protected configState = inject(ConfigStateService);
+
   form!: UntypedFormGroup;
 
   inProgress?: boolean;
@@ -21,14 +47,6 @@ export class LoginComponent implements OnInit {
   isSelfRegistrationEnabled = true;
 
   authWrapperKey = eAccountComponents.AuthWrapper;
-
-  constructor(
-    protected injector: Injector,
-    protected fb: UntypedFormBuilder,
-    protected toasterService: ToasterService,
-    protected authService: AuthService,
-    protected configState: ConfigStateService,
-  ) {}
 
   ngOnInit() {
     this.init();

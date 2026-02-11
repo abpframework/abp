@@ -26,7 +26,7 @@
         <p>
             @if (!Model.ErrorInfo.ValidationErrors.IsNullOrEmpty())
             {
-                foreach (var validationError in Model.ErrorInfo.ValidationErrors)
+                foreach (var validationError in Model.ErrorInfo.ValidationErrors!)
                 {
                     <text>* </text>@(validationError.Message)
                     if (validationError.Members != null && validationError.Members.Any())

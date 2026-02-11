@@ -2,10 +2,11 @@
   "culture": "hu",
   "texts": {
     "Settings": "Beállítások",
-    "SuccessfullySaved": "Sikeresen mentve",
+    "SavedSuccessfully": "Sikeresen mentve",
     "Permission:SettingManagement": "Beállításkezelés",
     "Permission:Emailing": "E-mailezés",
     "Permission:EmailingTest": "E-mail teszt",
+    "Permission:TimeZone": "Időzóna",
     "SendTestEmail": "Küldj teszt e-mailt",
     "SenderEmailAddress": "Feladó e-mail címe",
     "TargetEmailAddress": "Cél e-mail cím",
@@ -13,9 +14,15 @@
     "Body": "Test",
     "TestEmailSubject": "Teszt e-mail {0}",
     "TestEmailBody": "Itt tesztelheti az e-mail törzsüzenetét",
-    "SuccessfullySent": "Sikeresen elküldve",
+    "SentSuccessfully": "Sikeresen elküldve",
+    "MailSendingFailed": "Az e-mail küldése sikertelen, ellenőrizze az e-mail konfigurációját, és próbálja újra.",
     "Send": "Küld",
+    "Menu:Settings": "Beállítások",
     "Menu:Emailing": "E-mailezés",
+    "Menu:TimeZone": "Időzóna",
+    "DisplayName:Timezone": "Időzóna",
+    "TimezoneHelpText": "Ez a funkció lehetővé teszi, hogy alapértelmezett időzónát állítson be a szerveréhez, miközben a felhasználók sajátot választhatnak. Ha egy felhasználó időzónája eltér a szerver időzónájától, az összes idő ennek megfelelően módosul. Például, ha a szerver Európa/London(00:00) időzónára van állítva, és egy felhasználó Európa/Párizs(+01:00) időzónában van, az időket 1 órával módosítják ennél a felhasználónál. Az 'Alapértelmezett időzóna' kiválasztása automatikusan a szerver vagy a böngésző időzónáját használja.",
+    "DefaultTimeZone": "Alapértelmezett időzóna",
     "SmtpHost": "Házigazda",
     "SmtpPort": "Kikötő",
     "SmtpUserName": "Felhasználónév",
@@ -28,7 +35,8 @@
     "Feature:SettingManagementGroup": "Beállításkezelés",
     "Feature:SettingManagementEnable": "Beállításkezelés engedélyezése",
     "Feature:SettingManagementEnableDescription": "A beállításkezelő rendszer engedélyezése az alkalmazásban.",
-    "Feature:AllowChangingEmailSettings": "Az e-mail beállítások módosításának engedélyezése.",
-    "Feature:AllowChangingEmailSettingsDescription": "Az e-mail beállítások módosításának engedélyezése."
+    "Feature:AllowChangingEmailSettings": "Az e-mail beállítások módosításának engedélyezése",
+    "Feature:AllowChangingEmailSettingsDescription": "Az e-mail beállítások módosításának engedélyezése.",
+    "SmtpPasswordPlaceholder": "Adjon meg egy értéket a jelszó frissítéséhez"
   }
 }

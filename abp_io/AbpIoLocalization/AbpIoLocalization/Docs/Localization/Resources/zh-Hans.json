@@ -1,6 +1,9 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "Buy": "购买"
+    "Buy": "购买",
+    "SeeBookDetails": "查看书籍详情",
+    "MasteringAbpFrameworkEBookDescription": "本书将帮助你全面了解框架和现代Web应用程序开发技术。",
+    "Feedback": "反馈意见"
   }
 }

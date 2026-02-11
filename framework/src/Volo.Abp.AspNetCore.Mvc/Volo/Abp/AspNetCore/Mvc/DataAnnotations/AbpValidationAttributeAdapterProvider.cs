@@ -14,7 +14,7 @@ public class AbpValidationAttributeAdapterProvider : IValidationAttributeAdapter
         _defaultAdapter = defaultAdapter;
     }
 
-    public virtual IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
+    public virtual IAttributeAdapter? GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer? stringLocalizer)
     {
         var type = attribute.GetType();
 

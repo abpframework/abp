@@ -21,7 +21,7 @@
         <abp-modal-body>
             <abp-tabs name="create-user-modal-tabs">
                 <abp-tab title="@L["UserInformations"].Value">
-                    <div class="mt-3" >
+                    <div >
                         @* TODO: Can we use dynamic form? *@
                         <abp-input asp-for="UserInfo.UserName" />
                         <abp-input asp-for="UserInfo.Name" />
@@ -37,19 +37,20 @@
                         <abp-input asp-for="UserInfo.Email" />
                         <abp-input asp-for="UserInfo.PhoneNumber" />
                         <abp-input asp-for="UserInfo.IsActive" />
-                        <abp-input asp-for="UserInfo.LockoutEnabled" />
+                        <abp-input asp-for="UserInfo.LockoutEnabled" label-tooltip="@L.GetString("Description:LockoutEnabled")"  />
 
-                        @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.UserInfoViewModel>())
+                        @foreach (var propertyInfo in await ObjectExtensionManager.Instance.GetPropertiesAndCheckPolicyAsync<CreateModalModel.UserInfoViewModel>(HttpContext.RequestServices))
                         {
                             if (!propertyInfo.Name.EndsWith("_Text"))
                             {
-                                if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                                if (propertyInfo.IsEnum() || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                                 {
-                                    if (propertyInfo.Type.IsEnum)
+                                    if (propertyInfo.IsEnum())
                                     {
                                         Model.UserInfo.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                                     }
                                     <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                                enum-type="@propertyInfo.IsEnum() ? propertyInfo.Type : null"
                                                 label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                                 autocomplete-api-url="@propertyInfo.Lookup.Url"
                                                 autocomplete-selected-item-name="@Model.UserInfo.GetProperty(propertyInfo.Name+"_Text")"
@@ -72,7 +73,7 @@
                     </div>
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
-                    <div class="mt-3" >
+                    <div>
                         @for (var i = 0; i < Model.Roles.Length; i++)
                         {
                             var role = Model.Roles[i];

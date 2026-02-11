@@ -8,7 +8,9 @@ using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.IdentityServer;
 
@@ -16,7 +18,8 @@ namespace Volo.Abp.IdentityServer;
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpIdentityServerEntityFrameworkCoreModule),
     typeof(AbpIdentityServerTestBaseModule),
-    typeof(AbpEntityFrameworkCoreSqliteModule)
+    typeof(AbpEntityFrameworkCoreSqliteModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule)
     )]
 public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
 {
@@ -31,11 +34,13 @@ public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
                 abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
             });
         });
+
+        context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
     {
-        var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
         connection.Open();
 
         new IdentityDbContext(
@@ -44,6 +49,10 @@ public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
 
         new IdentityServerDbContext(
             new DbContextOptionsBuilder<IdentityServerDbContext>().UseSqlite(connection).Options
+        ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+        new PermissionManagementDbContext(
+            new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(connection).Options
         ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
         return connection;

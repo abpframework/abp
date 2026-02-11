@@ -1,5 +1,5 @@
 import { HttpClient, HttpParameterCodec, HttpParams, HttpRequest } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ExternalHttpClient } from '../clients/http.client';
@@ -14,13 +14,12 @@ import { HttpErrorReporterService } from './http-error-reporter.service';
   providedIn: 'root',
 })
 export class RestService {
-  constructor(
-    @Inject(CORE_OPTIONS) protected options: ABP.Root,
-    protected http: HttpClient,
-    protected externalHttp: ExternalHttpClient,
-    protected environment: EnvironmentService,
-    protected httpErrorReporter: HttpErrorReporterService,
-  ) {}
+  protected options = inject<ABP.Root>(CORE_OPTIONS);
+  protected http = inject(HttpClient);
+  protected externalHttp = inject(ExternalHttpClient);
+  protected environment = inject(EnvironmentService);
+  protected httpErrorReporter = inject(HttpErrorReporterService);
+
 
   protected getApiFromStore(apiName: string | undefined): string {
     return this.environment.getApiUrl(apiName);
@@ -28,7 +27,7 @@ export class RestService {
 
   handleError(err: any): Observable<any> {
     this.httpErrorReporter.reportError(err);
-    return throwError(err);
+    return throwError(() => err);
   }
 
   request<T, R>(
@@ -39,19 +38,20 @@ export class RestService {
     config = config || ({} as Rest.Config);
     api = api || this.getApiFromStore(config.apiName);
     const { method, params, ...options } = request;
-    const { observe = Rest.Observe.Body, skipHandleError } = config;
+    const { observe = Rest.Observe.Body, skipHandleError, responseType = Rest.ResponseType.JSON } = config;
     const url = this.removeDuplicateSlashes(api + request.url);
 
     const httpClient: HttpClient = this.getHttpClient(config.skipAddingHeader);
     return httpClient
       .request<R>(method, url, {
         observe,
+        responseType: responseType as any,
         ...(params && {
           params: this.getParams(params, config.httpParamEncoder),
         }),
         ...options,
       } as any)
-      .pipe(catchError(err => (skipHandleError ? throwError(err) : this.handleError(err))));
+      .pipe(catchError(err => (skipHandleError ? throwError(() => err) : this.handleError(err))));
   }
   private getHttpClient(isExternal: boolean) {
     return isExternal ? this.externalHttp : this.http;

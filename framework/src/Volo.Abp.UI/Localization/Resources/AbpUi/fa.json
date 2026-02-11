@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "ذخیره...",
     "Actions": "عملیات",
     "Delete": "حذف",
-    "SuccessfullyDeleted": "با موفقیت حذف شد",
+    "CreatedSuccessfully": "با موفقیت ایجاد شد",
+    "SavedSuccessfully": "با موفقیت ذخیره شد",
+    "DeletedSuccessfully": "با موفقیت حذف شد",
     "Edit": "ویرایش",
     "Refresh": "رفرش",
     "Language": "زبان",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "نمایش از 0 تا 0 از مجموع 0 مورد",
     "PagerInfoFiltered": "(فیلتر شده از مجموع _MAX_ مورد)",
     "NoDataAvailableInDatatable": "داده ای وجود ندارد",
+    "ErrorLoadingDatatable": "در طول درخواست خطایی رخ داد. برای جزئیات پیام را بررسی کنید.",
     "Total": "مجموع",
     "Selected": "انتخاب شده",
     "PagerShowMenuEntries": "نمایش _MENU_ مورد",
@@ -49,6 +52,10 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} حذف خواهد شد!",
     "ItemWillBeDeletedMessage": "این مورد حذف خواهد شد!",
     "ManageYourAccount": "حساب خود را مدیریت کنید",
-    "OthersGroup": "دیگر"
+    "OthersGroup": "دیگر",
+    "Today": "امروز",
+    "Apply": "درخواست دادن",
+    "EntityActionsDisabledTooltip": "شما دسترسی به انجام هر گونه عملیات ندارید.",
+    "ResourcePermissions": "مجوزها"
   }
 }

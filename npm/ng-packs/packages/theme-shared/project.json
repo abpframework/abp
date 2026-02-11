@@ -1,0 +1,38 @@
+{
+  "name": "theme-shared",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/theme-shared/src",
+  "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "oauth"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/theme-shared"],
+      "options": {
+        "project": "packages/theme-shared/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/theme-shared/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/theme-shared/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/theme-shared"
+      }
+    }
+  }
+}

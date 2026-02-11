@@ -10,7 +10,7 @@ public interface ILocalizationDictionary
 {
     string CultureName { get; }
 
-    LocalizedString GetOrNull(string name);
+    LocalizedString? GetOrNull(string name);
 
     void Fill(Dictionary<string, LocalizedString> dictionary);
 }

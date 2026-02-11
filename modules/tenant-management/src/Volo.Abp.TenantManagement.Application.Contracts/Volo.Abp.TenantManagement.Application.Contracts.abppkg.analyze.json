@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.TenantManagement.Application.Contracts",
-  "hash": "e1f3dac6048d2ca6284ea045f63842a6",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.TenantManagement",
@@ -98,7 +98,7 @@
       "summary": null
     },
     {
-      "displayName": "Manage features",
+      "displayName": "Features",
       "isEnabled": true,
       "contentType": "permission",
       "name": "AbpTenantManagement.Tenants.ManageFeatures",

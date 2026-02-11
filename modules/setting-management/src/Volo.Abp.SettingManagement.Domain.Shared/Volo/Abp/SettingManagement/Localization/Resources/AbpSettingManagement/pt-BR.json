@@ -2,10 +2,11 @@
   "culture": "pt-BR",
   "texts": {
     "Settings": "Configurações",
-    "SuccessfullySaved": "Salvo com sucesso!",
+    "SavedSuccessfully": "Salvo com sucesso!",
     "Permission:SettingManagement": "Gestão de Cenários",
     "Permission:Emailing": "Enviando por e-mail",
     "Permission:EmailingTest": "Teste de e-mail",
+    "Permission:TimeZone": "Fuso horário",
     "SendTestEmail": "Enviar e-mail de teste",
     "SenderEmailAddress": "E-mail remetente",
     "TargetEmailAddress": "E-mail destinatário",
@@ -13,9 +14,15 @@
     "Body": "Corpo",
     "TestEmailSubject": "E-mail teste {0}",
     "TestEmailBody": "Corpo de e-mail de teste aqui",
-    "SuccessfullySent": "Enviado com sucesso",
+    "SentSuccessfully": "Enviado com sucesso",
+    "MailSendingFailed": "Falha no envio de e-mail, verifique sua configuração de e-mail e tente novamente.",
     "Send": "Enviar",
+    "Menu:Settings": "Configurações",
     "Menu:Emailing": "Enviando por e-mail",
+    "Menu:TimeZone": "Fuso Horário",
+    "DisplayName:Timezone": "Fuso horário",
+    "TimezoneHelpText": "Este recurso permite que você defina um fuso horário padrão para seu servidor, enquanto os usuários podem selecionar o seu próprio. Se o fuso horário de um usuário for diferente do fuso horário do servidor, todos os horários serão ajustados de acordo. Por exemplo, com o servidor definido como Europa/Londres(00:00) e um usuário na Europa/Paris(+01:00), os horários serão ajustados em 1 hora para esse usuário. Selecionar 'Fuso horário padrão' usará automaticamente o fuso horário do servidor ou do navegador.",
+    "DefaultTimeZone": "Fuso horário padrão",
     "SmtpHost": "Hospedeiro",
     "SmtpPort": "Porta",
     "SmtpUserName": "Nome do usuário",
@@ -28,7 +35,8 @@
     "Feature:SettingManagementGroup": "Gestão de Cenários",
     "Feature:SettingManagementEnable": "Habilitar gerenciamento de configuração",
     "Feature:SettingManagementEnableDescription": "Habilite o sistema de gerenciamento de configuração no aplicativo.",
-    "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail.",
-    "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail."
+    "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail",
+    "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail.",
+    "SmtpPasswordPlaceholder": "Digite um valor para atualizar a senha"
   }
 }

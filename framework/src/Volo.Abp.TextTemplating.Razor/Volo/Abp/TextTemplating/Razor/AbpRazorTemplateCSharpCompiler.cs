@@ -40,7 +40,7 @@ public class AbpRazorTemplateCSharpCompiler : ISingletonDependency
         .Select(x => MetadataReference.CreateFromFile(x.Location))
         .ToImmutableList();
 
-    public virtual Stream CreateAssembly(string code, string assemblyName, List<MetadataReference> references = null, CSharpCompilationOptions options = null)
+    public virtual Stream CreateAssembly(string code, string assemblyName, List<MetadataReference>? references = null, CSharpCompilationOptions? options = null)
     {
         var defaultReferences = DefaultReferences.Concat(Options.References);
         try

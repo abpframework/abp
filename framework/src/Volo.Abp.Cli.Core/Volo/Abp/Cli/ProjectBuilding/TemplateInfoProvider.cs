@@ -88,7 +88,7 @@ public class TemplateInfoProvider : ITemplateInfoProvider, ITransientDependency
 
         try
         {
-            var url = $"{CliUrls.WwwAbpIo}api/license/check-user";
+            var url = $"{CliUrls.AccountAbpIo}api/license/check-user";
             var client = _cliHttpClientFactory.CreateClient();
 
             using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, Logger))

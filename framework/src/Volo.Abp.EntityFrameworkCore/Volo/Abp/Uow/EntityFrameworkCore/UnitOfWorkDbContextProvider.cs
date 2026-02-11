@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -18,7 +17,7 @@ namespace Volo.Abp.Uow.EntityFrameworkCore;
 public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
     where TDbContext : IEfCoreDbContext
 {
-    private const string TransactionsNotSupportedErrorMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
+    private const string TransactionsNotSupportedWarningMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
 
     public ILogger<UnitOfWorkDbContextProvider<TDbContext>> Logger { get; set; }
 
@@ -189,8 +188,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
             }
             catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
             {
-                Logger.LogError(TransactionsNotSupportedErrorMessage);
-                Logger.LogException(e);
+                Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                 return dbContext;
             }
@@ -227,8 +225,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                     }
                     catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                     {
-                        Logger.LogError(TransactionsNotSupportedErrorMessage);
-                        Logger.LogException(e);
+                        Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                         return dbContext;
                     }
@@ -245,8 +242,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                 }
                 catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                 {
-                    Logger.LogError(TransactionsNotSupportedErrorMessage);
-                    Logger.LogException(e);
+                    Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                     return dbContext;
                 }
@@ -284,8 +280,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
             }
             catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
             {
-                Logger.LogError(TransactionsNotSupportedErrorMessage);
-                Logger.LogException(e);
+                Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                 return dbContext;
             }
@@ -327,8 +322,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                     }
                     catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                     {
-                        Logger.LogError(TransactionsNotSupportedErrorMessage);
-                        Logger.LogException(e);
+                        Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                         return dbContext;
                     }
@@ -345,8 +339,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
                 }
                 catch (Exception e) when (e is InvalidOperationException || e is NotSupportedException)
                 {
-                    Logger.LogError(TransactionsNotSupportedErrorMessage);
-                    Logger.LogException(e);
+                    Logger.LogWarning(TransactionsNotSupportedWarningMessage);
 
                     return dbContext;
                 }

@@ -4,7 +4,7 @@ import {
   PROJECTION_STRATEGY,
   Strict,
 } from '@abp/ng.core';
-import { ComponentRef, Injectable } from '@angular/core';
+import { ComponentRef, inject, Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 import { Toaster } from '../models';
@@ -20,8 +20,7 @@ export class ToasterService implements ToasterContract {
   private toasts = [] as Toaster.Toast[];
 
   private containerComponentRef!: ComponentRef<ToastContainerComponent>;
-
-  constructor(private contentProjectionService: ContentProjectionService) {}
+  private contentProjectionService: ContentProjectionService;
 
   private setContainer() {
     this.containerComponentRef = this.contentProjectionService.projectContent(
@@ -32,6 +31,10 @@ export class ToasterService implements ToasterContract {
     );
 
     this.containerComponentRef.changeDetectorRef.detectChanges();
+  }
+
+  constructor() {
+    this.contentProjectionService = inject(ContentProjectionService);
   }
 
   /**

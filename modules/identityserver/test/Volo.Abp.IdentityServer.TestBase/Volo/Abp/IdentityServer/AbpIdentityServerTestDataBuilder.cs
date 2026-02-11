@@ -139,7 +139,7 @@ public class AbpIdentityServerTestDataBuilder : ITransientDependency
 
     private async Task AddClients()
     {
-        var client = new Client(_testData.Client1Id, "ClientId1")
+        var client = new Client(_testData.Client1Id, _testData.Client1Name)
         {
             Description = nameof(Client.Description),
             ClientName = nameof(Client.ClientName),

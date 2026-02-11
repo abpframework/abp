@@ -82,7 +82,7 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
             }
         }
 
-        throw new AbpException($"Could not found remote action for method: {method} on the URL: {baseUrl}");
+        throw new AbpException($"Could not find remote action for method: {method} on the URL: {baseUrl}");
     }
 
     public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(HttpClient client, string baseUrl)
@@ -118,7 +118,7 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions);
+        var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions)!;
 
         return result;
     }
@@ -126,7 +126,11 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     protected virtual void AddHeaders(HttpRequestMessage requestMessage)
     {
         //CorrelationId
-        requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+        var correlationId = CorrelationIdProvider.Get();
+        if (correlationId != null)
+        {
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, correlationId);
+        }
 
         //TenantId
         if (CurrentTenant.Id.HasValue)

@@ -9,6 +9,9 @@
 @using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
 @inject AbpBlazorMessageLocalizerHelper<IdentityResource> LH
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.UI.Navigation.Localization.Resource
+@inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
 
 @inherits AbpCrudPageBase<IIdentityRoleAppService, IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
 <Card>
@@ -38,7 +41,7 @@
 {
     <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
-            <Form>
+            <Form id="CreateRoleForm">
                 <ModalHeader>
                     <ModalTitle>@L["NewRole"]</ModalTitle>
                     <CloseButton Clicked="CloseCreateModalAsync"/>
@@ -54,7 +57,7 @@
                                     </Feedback>
                                 </TextEdit>
                             </Field>
-                            <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH"/>
+                            <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                         </Validation>
                         <Field>
                             <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
@@ -63,8 +66,8 @@
                     </Validations>
                 </ModalBody>
                 <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@CreateEntityAsync"/>
+                    <Button Color="Color.Primary" Outline Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Form="CreateRoleForm" Clicked="@CreateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -75,7 +78,7 @@
 {
     <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
-            <Form>
+            <Form id="EditRoleForm">
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
                     <CloseButton Clicked="CloseEditModalAsync"/>
@@ -92,7 +95,7 @@
                                     </Feedback>
                                 </TextEdit>
                             </Field>
-                            <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"/>
+                            <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"  ModalType="ExtensionPropertyModalType.EditModal" />
                         </Validation>
                         <Field>
                             <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
@@ -101,8 +104,8 @@
                     </Validations>
                 </ModalBody>
                 <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@UpdateEntityAsync"/>
+                    <Button Color="Color.Primary" Outline Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Form="EditRoleForm" Clicked="@UpdateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>

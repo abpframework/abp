@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity.Integration;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity;
@@ -11,21 +12,21 @@ namespace Volo.Abp.Identity;
 [Dependency(TryRegister = true)]
 public class HttpClientExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
 {
-    protected IIdentityUserLookupAppService UserLookupAppService { get; }
+    protected IIdentityUserIntegrationService IdentityUserIntegrationService { get; }
 
-    public HttpClientExternalUserLookupServiceProvider(IIdentityUserLookupAppService userLookupAppService)
+    public HttpClientExternalUserLookupServiceProvider(IIdentityUserIntegrationService identityUserIntegrationService)
     {
-        UserLookupAppService = userLookupAppService;
+        IdentityUserIntegrationService = identityUserIntegrationService;
     }
 
     public virtual async Task<IUserData> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await UserLookupAppService.FindByIdAsync(id);
+        return await IdentityUserIntegrationService.FindByIdAsync(id);
     }
 
     public virtual async Task<IUserData> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
     {
-        return await UserLookupAppService.FindByUserNameAsync(userName);
+        return await IdentityUserIntegrationService.FindByUserNameAsync(userName);
     }
 
     public async Task<List<IUserData>> SearchAsync(
@@ -35,7 +36,7 @@ public class HttpClientExternalUserLookupServiceProvider : IExternalUserLookupSe
         int skipCount = 0,
         CancellationToken cancellationToken = default)
     {
-        var result = await UserLookupAppService.SearchAsync(
+        var result = await IdentityUserIntegrationService.SearchAsync(
             new UserLookupSearchInputDto
             {
                 Filter = filter,
@@ -52,7 +53,7 @@ public class HttpClientExternalUserLookupServiceProvider : IExternalUserLookupSe
         string filter = null,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        return await UserLookupAppService
+        return await IdentityUserIntegrationService
             .GetCountAsync(
                 new UserLookupCountInputDto
                 {

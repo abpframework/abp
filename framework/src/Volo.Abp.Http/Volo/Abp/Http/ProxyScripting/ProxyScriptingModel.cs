@@ -8,11 +8,11 @@ public class ProxyScriptingModel
 
     public bool UseCache { get; set; }
 
-    public string[] Modules { get; set; }
+    public string[]? Modules { get; set; }
 
-    public string[] Controllers { get; set; }
+    public string[]? Controllers { get; set; }
 
-    public string[] Actions { get; set; }
+    public string[]? Actions { get; set; }
 
     public IDictionary<string, string> Properties { get; set; }
 

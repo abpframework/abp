@@ -7,13 +7,14 @@ using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.Permissions;
+using Volo.CmsKit.Admin;
 
 namespace Volo.CmsKit.Admin.GlobalResources;
 
 [RequiresFeature(CmsKitFeatures.GlobalResourceEnable)]
 [RequiresGlobalFeature(typeof(GlobalResourcesFeature))]
 [Authorize(CmsKitAdminPermissions.GlobalResources.Default)]
-public class GlobalResourceAdminAppService : ApplicationService, IGlobalResourceAdminAppService
+public class GlobalResourceAdminAppService : CmsKitAdminAppServiceBase, IGlobalResourceAdminAppService
 {
     public GlobalResourceManager GlobalResourceManager { get; }
 
@@ -22,7 +23,7 @@ public class GlobalResourceAdminAppService : ApplicationService, IGlobalResource
         GlobalResourceManager = globalResourceManager;
     }
 
-    public async Task<GlobalResourcesDto> GetAsync()
+    public virtual async Task<GlobalResourcesDto> GetAsync()
     {
         return new GlobalResourcesDto
         {
@@ -31,7 +32,7 @@ public class GlobalResourceAdminAppService : ApplicationService, IGlobalResource
         };
     }
 
-    public async Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
+    public virtual async Task SetGlobalResourcesAsync(GlobalResourcesUpdateDto input)
     {
         await GlobalResourceManager.SetGlobalStyleAsync(input.Style);
         await GlobalResourceManager.SetGlobalScriptAsync(input.Script);

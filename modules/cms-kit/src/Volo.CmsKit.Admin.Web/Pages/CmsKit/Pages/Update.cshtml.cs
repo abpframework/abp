@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Pages;
 using Volo.CmsKit.Pages;
@@ -43,9 +43,7 @@ public class UpdateModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(PageDto))]
-    [AutoMap(typeof(UpdatePageInputDto), ReverseMap = true)]
-    public class UpdatePageViewModel : IHasConcurrencyStamp
+    public class UpdatePageViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxTitleLength))]
@@ -54,6 +52,10 @@ public class UpdateModel : CmsKitAdminPageModel
         [Required]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
         public string Slug { get; set; }
+
+        [Required]
+        [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxLayoutNameLength))]
+        public string LayoutName { get; set; }
 
         [HiddenInput]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxSlugLength))]
@@ -66,6 +68,9 @@ public class UpdateModel : CmsKitAdminPageModel
         [TextArea(Rows = 6)]
         [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
         public string Style { get; set; }
+
+        [HiddenInput]
+        public PageStatus Status { get; set; }
 
         [HiddenInput]
         public string ConcurrencyStamp { get; set; }

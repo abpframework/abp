@@ -8,6 +8,7 @@ public class FixedLocalizableString : ILocalizableString
 
     public FixedLocalizableString(string value)
     {
+        Check.NotNull(value, nameof(value));
         Value = value;
     }
 

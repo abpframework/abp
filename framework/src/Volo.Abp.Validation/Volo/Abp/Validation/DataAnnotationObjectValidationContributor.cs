@@ -33,7 +33,7 @@ public class DataAnnotationObjectValidationContributor : IObjectValidationContri
         return Task.CompletedTask;
     }
 
-    protected virtual void ValidateObjectRecursively(List<ValidationResult> errors, object validatingObject, int currentDepth)
+    protected virtual void ValidateObjectRecursively(List<ValidationResult> errors, object? validatingObject, int currentDepth)
     {
         if (currentDepth > MaxRecursiveParameterValidationDepth)
         {

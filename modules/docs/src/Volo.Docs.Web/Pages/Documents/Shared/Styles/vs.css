@@ -10,7 +10,7 @@ body a {
   text-decoration: none;
 }
 body .btn-primary {
-  background-color: #b84297 !important;
+  background-color: #E83090 !important;
   font-size: 12px;
 }
 body .for-mobile {
@@ -219,7 +219,7 @@ body.scrolledMore .alert-criteria p.alert-p {
 }
 .docs-page .docs-sidebar .docs-tree-list > ul {
   display: block;
-  height: calc(100vh - 310px);
+  height: calc(100vh - 350px);
   overflow-y: auto;
   margin-right: -4px !important;
   margin-top: 20px !important;
@@ -298,10 +298,13 @@ body.scrolledMore .alert-criteria p.alert-p {
 }
 .docs-page .docs-sidebar .docs-tree-list ul li.selected-tree > span .fa {
   transform: rotate(90deg);
-  color: #b84297;
+  color: #E83090;
 }
 .docs-page .docs-sidebar .docs-tree-list ul li.selected-tree.last-link > span .fa {
   transform: rotate(0deg);
+}
+.docs-page .docs-sidebar .docs-tree-list .mCSB_scrollTools {
+  right: -20px;
 }
 .docs-page .docs-content {
   display: inline-block;
@@ -371,7 +374,7 @@ body.scrolledMore .alert-criteria p.alert-p {
   color: #3e9fcb;
 }
 .docs-page .docs-content .docs-link-btns a .text-muted {
-  color: rgba(11, 22, 33, 0.3) !important;
+  color: rgba(11, 22, 33, 0.6) !important;
 }
 .docs-page .docs-content .docs-link-btns a:hover {
   color: #3e9fcb;
@@ -585,7 +588,7 @@ body.scrolledMore .alert-criteria p.alert-p {
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link {
   padding: 3px 14px 4px;
-  color: #aaa;
+  color: #726d6d;
   line-height: 1.2;
   position: relative;
   border-left: 1px solid #eee;
@@ -597,16 +600,16 @@ body.scrolledMore .alert-criteria p.alert-p {
   font-weight: normal;
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link.active {
-  border-left: 1px solid #b84297;
+  border-left: 1px solid #E83090;
   background: none;
-  color: #b84297;
+  color: #E83090;
   font-weight: normal;
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-pills .nav-link.active {
-  color: #b84297;
+  color: #E83090;
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-pills .nav-pills .nav-link.active {
-  color: #b84297;
+  color: #E83090;
 }
 .docs-page .docs-page-index .docs-inner-anchors .index-scroll {
   margin-left: -30px;

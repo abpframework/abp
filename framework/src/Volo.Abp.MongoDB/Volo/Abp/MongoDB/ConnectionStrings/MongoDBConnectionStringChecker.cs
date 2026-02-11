@@ -22,7 +22,7 @@ public class MongoDBConnectionStringChecker : IConnectionStringChecker, ITransie
                 DatabaseExists = true
             });
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return Task.FromResult(new AbpConnectionStringCheckResult());
         }

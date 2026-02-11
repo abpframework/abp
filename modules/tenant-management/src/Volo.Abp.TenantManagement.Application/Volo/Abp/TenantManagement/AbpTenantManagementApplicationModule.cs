@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.TenantManagement;
@@ -12,10 +11,6 @@ public class AbpTenantManagementApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpTenantManagementApplicationModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpTenantManagementApplicationAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpTenantManagementApplicationModule>();
     }
 }

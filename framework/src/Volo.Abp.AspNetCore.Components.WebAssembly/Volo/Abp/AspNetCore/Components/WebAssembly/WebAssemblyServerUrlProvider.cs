@@ -17,7 +17,7 @@ public class WebAssemblyServerUrlProvider : IServerUrlProvider, ITransientDepend
         RemoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
     }
 
-    public async Task<string> GetBaseUrlAsync(string remoteServiceName = null)
+    public async Task<string> GetBaseUrlAsync(string? remoteServiceName = null)
     {
         var remoteServiceConfiguration = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync(
             remoteServiceName ?? RemoteServiceConfigurationDictionary.DefaultName

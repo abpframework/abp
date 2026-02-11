@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Kaydediliyor...",
     "Actions": "İşlemler",
     "Delete": "Sil",
-    "SuccessfullyDeleted": "Başarıyla silindi",
+    "CreatedSuccessfully": "Başarıyla oluşturuldu",
+    "SavedSuccessfully": "Başarıyla kaydedildi",
+    "DeletedSuccessfully": "Başarıyla silindi",
     "Edit": "Düzenle",
     "Refresh": "Yenile",
     "Language": "Dil",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "0 kayıttan 0 ile 0 arası gösteriliyor.",
     "PagerInfoFiltered": "(_MAX_ kayıt arasından filtrelendi)",
     "NoDataAvailableInDatatable": "Tabloda kayıt mevcut değil.",
+    "ErrorLoadingDatatable": "İstek sırasında bir hata oluştu. Detaylar için mesajı kontrol edin.",
     "Total": "toplam",
     "Selected": "seçilen",
     "PagerShowMenuEntries": "Sayfada _MENU_ kayıt göster.",
@@ -51,6 +54,14 @@
     "ManageYourAccount": "Hesap yönetimi",
     "OthersGroup": "Diğer",
     "Today": "Bugün",
-    "Apply": "Uygula"
+    "Apply": "Uygula",
+    "InternetConnectionInfo": "İşlem gerçekleştirilemedi. İnternet bağlantısı mevcut değil.",
+    "CopiedToTheClipboard": "Panoya kopyalandı",
+    "AddNew": "Yeni ekle",
+    "ProfilePicture": "Profil resmi",
+    "Theme": "Tema",
+    "NotAssigned": "Atanmadı",
+    "EntityActionsDisabledTooltip": "Bu işlemi gerçekleştirmek için yeterli yetkiniz yok.",
+    "ResourcePermissions": "İzinler"
   }
 }

@@ -2,8 +2,6 @@ var abp = abp || {};
 (function () {
 
     /* Application paths *****************************************/
-
-    //Current application root path (including virtual directory if exists).
     abp.appPath = abp.appPath || '/';
 
     /* UTILS ***************************************************/

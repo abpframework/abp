@@ -22,18 +22,18 @@ public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
         StringLocalizerFactory = stringLocalizerFactory;
     }
 
-    public abstract Task<string> RenderAsync(string templateName, object model = null, string cultureName = null, Dictionary<string, object> globalContext = null);
+    public abstract Task<string> RenderAsync(string templateName, object? model = null, string? cultureName = null, Dictionary<string, object>? globalContext = null);
 
-    protected virtual async Task<string> GetContentOrNullAsync(TemplateDefinition templateDefinition)
+    protected virtual async Task<string?> GetContentOrNullAsync(TemplateDefinition templateDefinition)
     {
         return await TemplateContentProvider.GetContentOrNullAsync(templateDefinition);
     }
 
-    protected virtual IStringLocalizer GetLocalizerOrNull(TemplateDefinition templateDefinition)
+    protected virtual IStringLocalizer? GetLocalizerOrNull(TemplateDefinition templateDefinition)
     {
-        if (templateDefinition.LocalizationResource != null)
+        if (templateDefinition.LocalizationResourceName != null)
         {
-            return StringLocalizerFactory.Create(templateDefinition.LocalizationResource);
+            return StringLocalizerFactory.CreateByResourceName(templateDefinition.LocalizationResourceName);
         }
 
         return StringLocalizerFactory.CreateDefaultOrNull();

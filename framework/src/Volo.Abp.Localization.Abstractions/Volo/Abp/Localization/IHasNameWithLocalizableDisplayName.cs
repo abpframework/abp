@@ -7,6 +7,5 @@ public interface IHasNameWithLocalizableDisplayName
     [NotNull]
     public string Name { get; }
 
-    [CanBeNull]
-    public ILocalizableString DisplayName { get; }
+    public ILocalizableString? DisplayName { get; }
 }

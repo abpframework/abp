@@ -135,8 +135,6 @@ public abstract class FeatureManagementStore_Tests<TStartupModule> : FeatureMana
                 EditionFeatureValueProvider.ProviderName,
                 TestEditionIds.Regular.ToString());
 
-            await uow.SaveChangesAsync();
-
             // Assert
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,

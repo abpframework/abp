@@ -1,4 +1,4 @@
-using IdentityModel;
+using Duende.IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -10,8 +10,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
@@ -32,14 +32,13 @@ public class IdentityServerSupportedLoginModel : LoginModel
     public IdentityServerSupportedLoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
+        IOptions<IdentityOptions> identityOptions,
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
         IIdentityServerInteractionService interaction,
         IClientStore clientStore,
         IEventService identityServerEvents,
-        IOptions<IdentityOptions> identityOptions)
-        : base(
-            schemeProvider,
-            accountOptions,
-            identityOptions)
+        IWebHostEnvironment webHostEnvironment)
+        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
     {
         Interaction = interaction;
         ClientStore = clientStore;
@@ -177,7 +176,10 @@ public class IdentityServerSupportedLoginModel : LoginModel
         Debug.Assert(user != null, nameof(user) + " != null");
         await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
-        return RedirectSafely(ReturnUrl, ReturnUrlHash);
+        // Clear the dynamic claims cache.
+        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+
+        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
 
     public override async Task<IActionResult> OnPostExternalLogin(string provider)

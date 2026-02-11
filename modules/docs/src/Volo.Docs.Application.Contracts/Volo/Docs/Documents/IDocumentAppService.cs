@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Docs.Documents
@@ -16,7 +17,7 @@ namespace Volo.Docs.Documents
 
         Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input);
 
-        Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input);
+        Task<PagedResultDto<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input);
         
         Task<bool> FullSearchEnabledAsync();
 

@@ -7,8 +7,8 @@ namespace Volo.Abp.UI.Navigation;
 
 public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<ApplicationMenuItem>
 {
-    private string _displayName;
-    private string _elementId;
+    private string _displayName = default!;
+    private string? _elementId;
 
     /// <summary>
     /// Default <see cref="Order"/> value of a menu item.
@@ -42,14 +42,12 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     /// <summary>
     /// The URL to navigate when this menu item is selected.
     /// </summary>
-    [CanBeNull]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     /// <summary>
     /// Icon of the menu item if exists.
     /// </summary>
-    [CanBeNull]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     /// <summary>
     /// Returns true if this menu item has no child <see cref="Items"/>.
@@ -59,8 +57,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     /// <summary>
     /// Target of the menu item. Can be null, "_blank", "_self", "_parent", "_top" or a frame name for web applications.
     /// </summary>
-    [CanBeNull]
-    public string Target { get; set; }
+    public string? Target { get; set; }
 
     /// <summary>
     /// Can be used to disable this menu item.
@@ -71,9 +68,8 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     [NotNull]
     public ApplicationMenuItemList Items { get; }
 
-    [CanBeNull]
     [Obsolete("Use RequirePermissions extension method.")]
-    public string RequiredPermissionName { get; set; }
+    public string? RequiredPermissionName { get; set; }
 
     public List<ISimpleStateChecker<ApplicationMenuItem>> StateCheckers { get; }
 
@@ -86,7 +82,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     /// <summary>
     /// Can be used to render the element with a specific Id for DOM selections.
     /// </summary>
-    public string ElementId {
+    public string? ElementId {
         get { return _elementId; }
         set {
             _elementId = NormalizeElementId(value);
@@ -96,24 +92,24 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
     /// <summary>
     /// Can be used to render the element with extra CSS classes.
     /// </summary>
-    public string CssClass { get; set; }
+    public string? CssClass { get; set; }
 
     /// <summary>
     /// Can be used to group menu items.
     /// </summary>
-    public string GroupName { get; set; }
+    public string? GroupName { get; set; }
 
     public ApplicationMenuItem(
         [NotNull] string name,
         [NotNull] string displayName,
-        string url = null,
-        string icon = null,
+        string? url = null,
+        string? icon = null,
         int order = DefaultOrder,
-        string target = null,
-        string elementId = null,
-        string cssClass = null,
-        string groupName = null,
-        string requiredPermissionName = null)
+        string? target = null,
+        string? elementId = null,
+        string? cssClass = null,
+        string? groupName = null,
+        string? requiredPermissionName = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
         Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -129,7 +125,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
         GroupName = groupName;
         RequiredPermissionName = requiredPermissionName;
         StateCheckers = new List<ISimpleStateChecker<ApplicationMenuItem>>();
-        Items = new ApplicationMenuItemList();
+        Items = new ApplicationMenuItemList();        
     }
 
     /// <summary>
@@ -158,7 +154,7 @@ public class ApplicationMenuItem : IHasMenuItems, IHasSimpleStateCheckers<Applic
         return "MenuItem_" + Name;
     }
     
-    private string NormalizeElementId(string elementId)
+    private string? NormalizeElementId(string? elementId)
     {
         return elementId?.Replace(".", "_");
     }

@@ -1,5 +1,4 @@
 using System;
-using System.Text.Json.Serialization;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
@@ -7,18 +6,11 @@ namespace Volo.Abp.FeatureManagement;
 
 public class FeatureGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    /* Ignoring Id because it is different whenever we create an instance of
-     * this class, and we are using Json Serialize, than Hash to understand
-     * if feature definitions have changed (in StaticFeatureSaver.CalculateHash()).
-     */
-    [JsonIgnore] //TODO: TODO: Use JSON modifier to ignore this property
-    public override Guid Id { get; protected set; }
+    public virtual string Name { get; set; }
 
-    public string Name { get; set; }
+    public virtual string DisplayName { get; set; }
 
-    public string DisplayName { get; set; }
-
-    public ExtraPropertyDictionary ExtraProperties { get; protected set; }
+    public virtual ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
     public FeatureGroupDefinitionRecord()
     {

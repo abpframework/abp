@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MyProjectNameService } from '../services/my-project-name.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { MyProjectNameService } from '../services/my-project-name.service';
   styles: [],
 })
 export class MyProjectNameComponent implements OnInit {
-  constructor(private service: MyProjectNameService) {}
+  private service = inject(MyProjectNameService);
 
   ngOnInit(): void {
     this.service.sample().subscribe(console.log);

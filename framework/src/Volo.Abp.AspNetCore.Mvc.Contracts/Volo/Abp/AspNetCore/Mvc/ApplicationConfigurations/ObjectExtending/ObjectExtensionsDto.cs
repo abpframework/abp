@@ -9,4 +9,10 @@ public class ObjectExtensionsDto
     public Dictionary<string, ModuleExtensionDto> Modules { get; set; }
 
     public Dictionary<string, ExtensionEnumDto> Enums { get; set; }
+
+    public ObjectExtensionsDto()
+    {
+        Modules = new Dictionary<string, ModuleExtensionDto>();
+        Enums = new Dictionary<string, ExtensionEnumDto>();
+    }
 }

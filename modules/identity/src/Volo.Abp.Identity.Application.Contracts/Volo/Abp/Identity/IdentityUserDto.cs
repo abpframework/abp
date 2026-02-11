@@ -27,10 +27,14 @@ public class IdentityUserDto : ExtensibleFullAuditedEntityDto<Guid>, IMultiTenan
     public bool IsActive { get; set; }
 
     public bool LockoutEnabled { get; set; }
+    
+    public int AccessFailedCount { get; set; }
 
     public DateTimeOffset? LockoutEnd { get; set; }
 
     public string ConcurrencyStamp { get; set; }
 
     public int EntityVersion { get; set; }
+    
+    public DateTimeOffset? LastPasswordChangeTime { get; set; }
 }

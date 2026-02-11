@@ -6,6 +6,11 @@
     "CarPlural": "Carros",
     "MaxLenghtErrorMessage": "Este campo pode ter no máximo '{0}' caracteres",
     "Universe": "Universo",
-    "FortyTwo": "Quarenta e Dois"
+    "FortyTwo": "Quarenta e Dois",
+    "Enum:BookType.Undefined": "Indefinido",
+    "Enum:BookType.0": "Indefinido com valor 0",
+    "BookType.Adventure": "Aventura",
+    "BookType.1": "Aventura com valor 1",
+    "Biography": "Biografia"
   }
 }

@@ -22,5 +22,5 @@ public interface IDeletionAuditedObject<TUser> : IDeletionAuditedObject
     /// <summary>
     /// Reference to the deleter user.
     /// </summary>
-    TUser Deleter { get; }
+    TUser? Deleter { get; }
 }

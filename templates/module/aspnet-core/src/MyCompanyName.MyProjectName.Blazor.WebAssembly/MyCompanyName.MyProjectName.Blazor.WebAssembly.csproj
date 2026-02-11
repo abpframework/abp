@@ -3,7 +3,7 @@
     <Import Project="..\..\common.props"/>
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling\MyCompanyName.MyProjectName.Blazor.WebAssembly.Bundling.csproj" />
         <ProjectReference Include="..\MyCompanyName.MyProjectName.Blazor\MyCompanyName.MyProjectName.Blazor.csproj"/>
         <ProjectReference Include="..\MyCompanyName.MyProjectName.HttpApi.Client\MyCompanyName.MyProjectName.HttpApi.Client.csproj"/>
     </ItemGroup>

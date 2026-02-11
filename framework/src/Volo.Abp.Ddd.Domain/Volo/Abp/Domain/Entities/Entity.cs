@@ -18,7 +18,18 @@ public abstract class Entity : IEntity
         return $"[ENTITY: {GetType().Name}] Keys = {GetKeys().JoinAsString(", ")}";
     }
 
-    public abstract object[] GetKeys();
+    public virtual string? GetObjectKey()
+    {
+        var keys = GetKeys();
+        return keys.Length switch
+        {
+            0 => null,
+            1 when keys[0] != null => keys[0]?.ToString(),
+            _ => KeyedObjectHelper.EncodeCompositeKey(keys)
+        };
+    }
+
+    public abstract object?[] GetKeys();
 
     public bool EntityEquals(IEntity other)
     {
@@ -31,7 +42,7 @@ public abstract class Entity : IEntity
 public abstract class Entity<TKey> : Entity, IEntity<TKey>
 {
     /// <inheritdoc/>
-    public virtual TKey Id { get; protected set; }
+    public virtual TKey Id { get; protected set; } = default!;
 
     protected Entity()
     {
@@ -43,9 +54,9 @@ public abstract class Entity<TKey> : Entity, IEntity<TKey>
         Id = id;
     }
 
-    public override object[] GetKeys()
+    public override object?[] GetKeys()
     {
-        return new object[] { Id };
+        return [Id];
     }
 
     /// <inheritdoc/>

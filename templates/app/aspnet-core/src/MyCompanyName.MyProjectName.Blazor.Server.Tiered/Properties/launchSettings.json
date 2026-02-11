@@ -17,7 +17,7 @@
     },
     "MyCompanyName.MyProjectName.Blazor.Server.Tiered": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "applicationUrl": "https://localhost:44309/",
       "environmentVariables": {

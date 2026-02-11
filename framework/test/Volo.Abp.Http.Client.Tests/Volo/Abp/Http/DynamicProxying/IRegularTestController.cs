@@ -43,4 +43,7 @@ public interface IRegularTestController
     Task<int> DeleteByIdAsync(int id);
 
     Task<string> AbortRequestAsync(CancellationToken cancellationToken = default);
+
+    Task<string> TimeOutRequestAsync();
+
 }

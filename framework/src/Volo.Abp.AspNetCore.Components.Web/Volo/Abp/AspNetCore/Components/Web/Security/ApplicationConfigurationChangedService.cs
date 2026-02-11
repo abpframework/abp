@@ -6,7 +6,7 @@ public delegate void ApplicationConfigurationChangedHandler();
 
 public class ApplicationConfigurationChangedService : IScopedDependency
 {
-    public event ApplicationConfigurationChangedHandler Changed;
+    public event ApplicationConfigurationChangedHandler Changed = default!;
 
     public void NotifyChanged()
     {

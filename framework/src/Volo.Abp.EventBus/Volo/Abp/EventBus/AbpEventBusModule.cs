@@ -53,7 +53,8 @@ public class AbpEventBusModule : AbpModule
             {
                 localHandlers.Add(context.ImplementationType);
             }
-            else if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
+
+            if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IDistributedEventHandler<>)))
             {
                 distributedHandlers.Add(context.ImplementationType);
             }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
 [Serializable]
-public class CreateBlogPostDto
+public class CreateBlogPostDto: ExtensibleObject
 {
     [Required]
     public Guid BlogId { get; set; }

@@ -1,0 +1,8 @@
+{
+  "culture": "is",
+  "texts": {
+    "AbpTitle": "Lestu allar bloggfærslur",
+    "AbpDescription": "ABP er opinn hugbúnaðarrammi sem einbeitir sér að AspNet Core byggðri vefforritaþróun. Ekki endurtaka sjálfan þig, einbeittu þér að eigin viðskiptakóða.",
+    "AbpDefinition": "ABP blogg fyrir .NET þróun, krossvettvang, ASP.NET forritasniðmát, ABP tengdar fréttir og fleira..."
+  }
+}

@@ -17,16 +17,16 @@ public static class ApiTypeNameHelper
 
         if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
         {
-            if (!duplicateTypes.Contains(keyType) && !duplicateTypes.Contains(valueType))
+            if (!duplicateTypes.Contains(keyType!) && !duplicateTypes.Contains(valueType!))
             {
-                return $"{{{GetTypeName(keyType, duplicateTypes)}:{GetTypeName(valueType, duplicateTypes)}}}";
+                return $"{{{GetTypeName(keyType!, duplicateTypes)}:{GetTypeName(valueType!, duplicateTypes)}}}";
             }
         }
         else if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
         {
-            if (!duplicateTypes.Contains(itemType))
+            if (!duplicateTypes.Contains(itemType!))
             {
-                return $"[{GetTypeName(itemType, duplicateTypes)}]";
+                return $"[{GetTypeName(itemType!, duplicateTypes)}]";
             }
         }
 
@@ -44,16 +44,16 @@ public static class ApiTypeNameHelper
 
         if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
         {
-            if (!duplicateTypes.Contains(keyType) && !duplicateTypes.Contains(valueType))
+            if (!duplicateTypes.Contains(keyType!) && !duplicateTypes.Contains(valueType!))
             {
-                return $"{{{GetSimpleTypeName(keyType, duplicateTypes)}:{GetSimpleTypeName(valueType, duplicateTypes)}}}";
+                return $"{{{GetSimpleTypeName(keyType!, duplicateTypes)}:{GetSimpleTypeName(valueType!, duplicateTypes)}}}";
             }
         }
         else if (TypeHelper.IsEnumerable(type, out var itemType, includePrimitives: false))
         {
-            if (!duplicateTypes.Contains(itemType))
+            if (!duplicateTypes.Contains(itemType!))
             {
-                return $"[{GetSimpleTypeName(itemType, duplicateTypes)}]";
+                return $"[{GetSimpleTypeName(itemType!, duplicateTypes)}]";
             }
         }
 

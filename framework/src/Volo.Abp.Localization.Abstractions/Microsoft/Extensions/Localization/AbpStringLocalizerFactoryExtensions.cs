@@ -6,15 +6,13 @@ namespace Microsoft.Extensions.Localization;
 
 public static class AbpStringLocalizerFactoryExtensions
 {
-    [CanBeNull]
-    public static IStringLocalizer CreateDefaultOrNull(this IStringLocalizerFactory localizerFactory)
+    public static IStringLocalizer? CreateDefaultOrNull(this IStringLocalizerFactory localizerFactory)
     {
         return (localizerFactory as IAbpStringLocalizerFactory)
             ?.CreateDefaultOrNull();
     }
 
-    [CanBeNull]
-    public static IStringLocalizer CreateByResourceNameOrNull(
+    public static IStringLocalizer? CreateByResourceNameOrNull(
         this IStringLocalizerFactory localizerFactory,
         string resourceName)
     {
@@ -36,8 +34,7 @@ public static class AbpStringLocalizerFactoryExtensions
         return localizer;
     }
     
-    [ItemCanBeNull]
-    public static async Task<IStringLocalizer> CreateByResourceNameOrNullAsync(
+    public static async Task<IStringLocalizer?> CreateByResourceNameOrNullAsync(
         this IStringLocalizerFactory localizerFactory,
         string resourceName)
     {

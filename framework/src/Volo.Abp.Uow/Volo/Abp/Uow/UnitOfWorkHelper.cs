@@ -23,7 +23,7 @@ public static class UnitOfWorkHelper
         return false;
     }
 
-    public static bool IsUnitOfWorkMethod([NotNull] MethodInfo methodInfo, [CanBeNull] out UnitOfWorkAttribute unitOfWorkAttribute)
+    public static bool IsUnitOfWorkMethod([NotNull] MethodInfo methodInfo, out UnitOfWorkAttribute? unitOfWorkAttribute)
     {
         Check.NotNull(methodInfo, nameof(methodInfo));
 
@@ -57,7 +57,7 @@ public static class UnitOfWorkHelper
         return false;
     }
 
-    public static UnitOfWorkAttribute GetUnitOfWorkAttributeOrNull(MethodInfo methodInfo)
+    public static UnitOfWorkAttribute? GetUnitOfWorkAttributeOrNull(MethodInfo methodInfo)
     {
         var attrs = methodInfo.GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
         if (attrs.Length > 0)
@@ -65,12 +65,15 @@ public static class UnitOfWorkHelper
             return attrs[0];
         }
 
-        attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
-        if (attrs.Length > 0)
+        if (methodInfo.DeclaringType != null)
         {
-            return attrs[0];
+            attrs = methodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes(true).OfType<UnitOfWorkAttribute>().ToArray();
+            if (attrs.Length > 0)
+            {
+                return attrs[0];
+            }
         }
-
+        
         return null;
     }
 

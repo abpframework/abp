@@ -25,26 +25,26 @@ public class AbpDistributedCacheOptions
     /// List of all cache configurators.
     /// (func argument:Name of cache)
     /// </summary>
-    public List<Func<string, DistributedCacheEntryOptions>> CacheConfigurators { get; set; } //TODO: use a configurator interface instead?
+    public List<Func<string, DistributedCacheEntryOptions?>> CacheConfigurators { get; set; } //TODO: use a configurator interface instead?
 
     public AbpDistributedCacheOptions()
     {
-        CacheConfigurators = new List<Func<string, DistributedCacheEntryOptions>>();
+        CacheConfigurators = new List<Func<string, DistributedCacheEntryOptions?>>();
         GlobalCacheEntryOptions = new DistributedCacheEntryOptions();
         KeyPrefix = "";
     }
 
-    public void ConfigureCache<TCacheItem>(DistributedCacheEntryOptions options)
+    public void ConfigureCache<TCacheItem>(DistributedCacheEntryOptions? options)
     {
         ConfigureCache(typeof(TCacheItem), options);
     }
     
-    public void ConfigureCache(Type cacheItemType, DistributedCacheEntryOptions options)
+    public void ConfigureCache(Type cacheItemType, DistributedCacheEntryOptions? options)
     {
         ConfigureCache(CacheNameAttribute.GetCacheName(cacheItemType), options);
     }
     
-    public void ConfigureCache(string cacheName, DistributedCacheEntryOptions options)
+    public void ConfigureCache(string cacheName, DistributedCacheEntryOptions? options)
     {
         CacheConfigurators.Add(name => cacheName != name ? null : options);
     }

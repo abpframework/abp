@@ -1,5 +1,4 @@
 using System;
-using System.Net.Mime;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
@@ -7,7 +6,7 @@ using Microsoft.Net.Http.Headers;
 namespace Microsoft.AspNetCore.Internal;
 
 /// <summary>
-/// https://github.com/dotnet/aspnetcore/blob/release/7.0/src/Shared/ResponseContentTypeHelper.cs
+/// https://github.com/dotnet/aspnetcore/blob/release/8.0-rc1/src/Shared/ResponseContentTypeHelper.cs
 /// </summary>
 public static class ResponseContentTypeHelper
 {
@@ -15,7 +14,7 @@ public static class ResponseContentTypeHelper
     /// Gets the content type and encoding that need to be used for the response.
     /// The priority for selecting the content type is:
     /// 1. ContentType property set on the action result
-    /// 2. <see cref="ContentType"/> property set on <see cref="HttpResponse"/>
+    /// 2. <see cref="HttpResponse.ContentType"/> property set on <see cref="HttpResponse"/>
     /// 3. Default content type set on the action result
     /// </summary>
     /// <remarks>
@@ -28,7 +27,7 @@ public static class ResponseContentTypeHelper
         string? actionResultContentType,
         string? httpResponseContentType,
         (string defaultContentType, Encoding defaultEncoding) @default,
-        Func<string, Encoding> getEncoding,
+        Func<string, Encoding?> getEncoding,
         out string resolvedContentType,
         out Encoding resolvedContentTypeEncoding)
     {
@@ -66,7 +65,7 @@ public static class ResponseContentTypeHelper
         resolvedContentTypeEncoding = defaultContentTypeEncoding;
     }
 
-    public static Encoding GetEncoding(string mediaType)
+    public static Encoding? GetEncoding(string mediaType)
     {
         if (MediaTypeHeaderValue.TryParse(mediaType, out var parsed))
         {

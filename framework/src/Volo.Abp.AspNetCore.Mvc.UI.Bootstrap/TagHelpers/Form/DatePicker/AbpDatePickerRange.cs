@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 public class AbpDatePickerRange
 {
     private readonly List<string> _dates = new List<string>();
-    public string Label { get; set; }
+    public string Label { get; set; } = default!;
     public IReadOnlyList<string> Dates => _dates;
 
     public AbpDatePickerRange()

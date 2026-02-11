@@ -25,7 +25,7 @@ public class StaticLocalizationDictionary : ILocalizationDictionary
     }
 
     /// <inheritdoc/>
-    public virtual LocalizedString GetOrNull(string name)
+    public virtual LocalizedString? GetOrNull(string name)
     {
         return Dictionary.GetOrDefault(name);
     }

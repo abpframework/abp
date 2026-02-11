@@ -22,13 +22,13 @@ namespace Volo.Blogging.Areas.Blog.Controllers
         }
 
         [HttpPost]
-        public async Task Delete(Guid id)
+        public virtual async Task Delete(Guid id)
         {
             await _commentAppService.DeleteAsync(id);
         }
 
         [HttpPost]
-        public async Task Update(Guid id, UpdateCommentDto commentDto)
+        public virtual async Task Update(Guid id, UpdateCommentDto commentDto)
         {
             await _commentAppService.UpdateAsync(id, commentDto);
         }

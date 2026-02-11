@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Shouldly;
 using Xunit;
 
@@ -55,6 +54,11 @@ public class EntityHelper_Tests
         public object[] GetKeys()
         {
             return new object[] { Id };
+        }
+
+        public string GetObjectKey()
+        {
+            return Id.ToString();
         }
     }
 

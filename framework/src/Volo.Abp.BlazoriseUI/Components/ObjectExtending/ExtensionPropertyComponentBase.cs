@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Blazorise;
 using Blazorise.Utilities;
@@ -16,22 +15,25 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
     where TEntity : IHasExtraProperties
 {
     [Inject]
-    public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+    public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
 
     [Inject]
-    public IAbpEnumLocalizer AbpEnumLocalizer { get; set; }
+    public IAbpEnumLocalizer AbpEnumLocalizer { get; set; } = default!;
 
     [Inject]
-    public IValidationMessageLocalizerAttributeFinder ValidationMessageLocalizerAttributeFinder { get; set; }
+    public IValidationMessageLocalizerAttributeFinder ValidationMessageLocalizerAttributeFinder { get; set; } = default!;
 
     [Parameter]
-    public TEntity Entity { get; set; }
+    public TEntity Entity { get; set; } = default!;
 
     [Parameter]
-    public ObjectExtensionPropertyInfo PropertyInfo { get; set; }
+    public ObjectExtensionPropertyInfo PropertyInfo { get; set; } = default!;
 
     [Parameter]
-    public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; }
+    public AbpBlazorMessageLocalizerHelper<TResourceType> LH { get; set; } = default!;
+
+    [Parameter]
+    public ExtensionPropertyModalType? ModalType { get; set; }
 
     protected virtual void Validate(ValidatorEventArgs e)
     {
@@ -65,12 +67,14 @@ public abstract class ExtensionPropertyComponentBase<TEntity, TResourceType> : O
             }
 
             e.MemberNames = result.MemberNames;
-            e.Status = ValidationStatus.Error;
+            e.Status = ValidationStatus.Error; 
             e.ErrorText = errorMessage;
             break;
         }
     }
 
+    protected bool IsReadonlyField => ModalType is ExtensionPropertyModalType.EditModal && PropertyInfo.UI.EditModal.IsReadOnly;
+    
     private static string GetDefaultErrorMessage(ValidationAttribute validationAttribute)
     {
         if (validationAttribute is StringLengthAttribute stringLengthAttribute && stringLengthAttribute.MinimumLength != 0)

@@ -26,11 +26,11 @@ public class FormElementsDemoModel
     public class InformMeModel
     {
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = default!;
 
         public bool CheckMeOut { get; set; }
     }
@@ -38,14 +38,14 @@ public class FormElementsDemoModel
     public class DetailsModel
     {
         [Required]
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; } = default!;
 
-        public string City { get; set; }
+        public string? City { get; set; }
 
-        public List<string> Cities { get; set; }
+        public List<string>? Cities { get; set; }
 
         [TextArea]
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 
     public class CheckboxModel
@@ -58,7 +58,7 @@ public class FormElementsDemoModel
     public class CityRadioModel
     {
         [Display(Name = "City")]
-        public string CityRadio { get; set; }
+        public string? CityRadio { get; set; }
     }
 
     public class EnumModel

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement.Blazor.Components;
@@ -41,6 +43,10 @@ public partial class UserManagement
 
     private List<TableColumn> UserManagementTableColumns => TableColumns.Get<UserManagement>();
     private TextRole _passwordTextRole = TextRole.Password;
+    public bool IsEditCurrentUser { get; set; }
+
+    [Inject]
+    protected IPermissionChecker PermissionChecker { get; set; }
 
     public UserManagement()
     {
@@ -69,6 +75,7 @@ public partial class UserManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Users"].Value));
         return base.SetBreadcrumbItemsAsync();
@@ -119,16 +126,20 @@ public partial class UserManagement
         try
         {
             EditModalSelectedTab = DefaultSelectedTab;
+            IsEditCurrentUser = entity.Id == CurrentUser.Id;
 
-            var userRoleNames = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Name).ToList();
-
-            EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+            if (await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
             {
-                Name = x.Name,
-                IsAssigned = userRoleNames.Contains(x.Name)
-            }).ToArray();
+                var userRoleIds = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Id).ToList();
 
-            ChangePasswordTextRole(TextRole.Password);
+                EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+                {
+                    Name = x.Name,
+                    IsAssigned = userRoleIds.Contains(x.Id)
+                }).ToArray();
+
+                ChangePasswordTextRole(TextRole.Password);
+            }
             await base.OpenEditModalAsync(entity);
         }
         catch (Exception ex)
@@ -140,8 +151,10 @@ public partial class UserManagement
     protected override Task OnUpdatingEntityAsync()
     {
         // apply roles before saving
-        EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
-
+        if (EditUserRoles != null)
+        {
+            EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
+        }
         return base.OnUpdatingEntityAsync();
     }
 
@@ -185,7 +198,7 @@ public partial class UserManagement
         return base.SetEntityActionsAsync();
     }
 
-    protected override ValueTask SetTableColumnsAsync()
+    protected override async ValueTask SetTableColumnsAsync()
     {
         UserManagementTableColumns
             .AddRange(new TableColumn[]
@@ -215,9 +228,9 @@ public partial class UserManagement
                     }
             });
 
-        UserManagementTableColumns.AddRange(GetExtensionTableColumns(IdentityModuleExtensionConsts.ModuleName,
+        UserManagementTableColumns.AddRange(await GetExtensionTableColumnsAsync(IdentityModuleExtensionConsts.ModuleName,
             IdentityModuleExtensionConsts.EntityNames.User));
-        return base.SetEntityActionsAsync();
+        await base.SetTableColumnsAsync();
     }
 
     protected override ValueTask SetToolbarItemsAsync()

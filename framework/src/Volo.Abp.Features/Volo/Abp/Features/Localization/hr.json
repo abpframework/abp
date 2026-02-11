@@ -1,0 +1,8 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Volo.Feature:010001": "Značajka nije omogućena: {FeatureName}",
+    "Volo.Feature:010002": "Potrebne značajke nisu omogućene. Sve ove značajke moraju biti omogućene: {FeatureNames}",
+    "Volo.Feature:010003": "Potrebne značajke nisu omogućene. Najmanje jedna od ovih značajki mora biti omogućena: {FeatureNames}"
+  }
+}

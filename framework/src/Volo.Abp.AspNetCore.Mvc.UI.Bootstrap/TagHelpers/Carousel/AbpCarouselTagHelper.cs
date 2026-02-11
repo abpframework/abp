@@ -2,7 +2,7 @@
 
 public class AbpCarouselTagHelper : AbpTagHelper<AbpCarouselTagHelper, AbpCarouselTagHelperService>
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     public bool? Crossfade { get; set; }
 

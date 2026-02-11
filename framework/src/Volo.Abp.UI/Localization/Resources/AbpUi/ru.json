@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Сохранение...",
     "Actions": "Действия",
     "Delete": "Удалить",
-    "SuccessfullyDeleted": "Успешно удалено",
+    "CreatedSuccessfully": "Успешно создано",
+    "SavedSuccessfully": "Успешно сохранено",
+    "DeletedSuccessfully": "Успешно удалено",
     "Edit": "Редактировать",
     "Refresh": "Обновить",
     "Language": "Язык",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Записи с 0 до 0 из 0 записей.",
     "PagerInfoFiltered": "(отфильтровано из _MAX_ записей)",
     "NoDataAvailableInDatatable": "Данные в таблице отсутствуют",
+    "ErrorLoadingDatatable": "Произошла ошибка во время запроса. Проверьте сообщение для получения деталей.",
     "Total": "общий",
     "Selected": "выбранный",
     "PagerShowMenuEntries": "Показать _MENU_ записей",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} будет удален!",
     "ItemWillBeDeletedMessage": "Этот предмет будет удален!",
     "ManageYourAccount": "Настройте свой аккаунт",
-    "OthersGroup": "Другой"
+    "OthersGroup": "Другой",
+    "Today": "Сегодня",
+    "Apply": "Применять",
+    "InternetConnectionInfo": "Операцию выполнить не удалось. Ваше интернет-соединение в данный момент недоступно.",
+    "CopiedToTheClipboard": "Скопировано в буфер обмена",
+    "AddNew": "Добавить новое",
+    "ProfilePicture": "Изображение профиля",
+    "Theme": "Тема",
+    "NotAssigned": "Не назначен",
+    "EntityActionsDisabledTooltip": "У вас нет прав на выполнение каких-либо действий.",
+    "ResourcePermissions": "Разрешения"
   }
 }

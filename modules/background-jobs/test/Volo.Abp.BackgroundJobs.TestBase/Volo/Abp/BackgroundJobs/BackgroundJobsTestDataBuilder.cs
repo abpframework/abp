@@ -26,6 +26,7 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
         await _backgroundJobRepository.InsertAsync(
             new BackgroundJobRecord(_testData.JobId1)
             {
+                ApplicationName = "App1",
                 JobName = "TestJobName",
                 JobArgs = "{ value: 1 }",
                 NextTryTime = _clock.Now.Subtract(TimeSpan.FromMinutes(1)),
@@ -40,6 +41,7 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
         await _backgroundJobRepository.InsertAsync(
             new BackgroundJobRecord(_testData.JobId2)
             {
+                ApplicationName = "App2",
                 JobName = "TestJobName",
                 JobArgs = "{ value: 2 }",
                 NextTryTime = _clock.Now.AddMinutes(42),
@@ -54,6 +56,7 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
         await _backgroundJobRepository.InsertAsync(
             new BackgroundJobRecord(_testData.JobId3)
             {
+                ApplicationName = "App1",
                 JobName = "TestJobName",
                 JobArgs = "{ value: 3 }",
                 NextTryTime = _clock.Now,

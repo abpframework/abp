@@ -2,15 +2,17 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
-using MyCompanyName.MyProjectName;
+using MyCompanyName.MyProjectName.Components;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -21,7 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.MongoDB;
@@ -40,6 +42,8 @@ using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.VirtualFileSystem;
@@ -54,8 +58,9 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
 
@@ -99,6 +104,9 @@ public class MyProjectNameHostModule : AbpModule
 {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            var configuration = context.Services.GetConfiguration();
+
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
                 options.AddAssemblyResource(
@@ -106,15 +114,28 @@ public class MyProjectNameHostModule : AbpModule
                 );
             });
 
-    		PreConfigure<OpenIddictBuilder>(builder =>
-    		{
-    			builder.AddValidation(options =>
-    			{
-    				options.AddAudiences("MyProjectName");
-    				options.UseLocalServer();
-    				options.UseAspNetCore();
-    			});
-    		});
+            PreConfigure<OpenIddictBuilder>(builder =>
+            {
+                builder.AddValidation(options =>
+                {
+                    options.AddAudiences("MyProjectName");
+                    options.UseLocalServer();
+                    options.UseAspNetCore();
+                });
+            });
+
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+                {
+                    options.AddDevelopmentEncryptionAndSigningCertificate = false;
+                });
+
+                PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+                {
+                    serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
+                });
+            }
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -127,11 +148,15 @@ public class MyProjectNameHostModule : AbpModule
                 context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
             }
 
+            // Add services to the container.
+            context.Services.AddRazorComponents()
+                .AddInteractiveWebAssemblyComponents();
+
             ConfigureAuthentication(context);
             ConfigureBundles();
             ConfigureMultiTenancy();
             ConfigureUrls(configuration);
-            ConfigureAutoMapper(context);
+            ConfigureMapperly(context);
             ConfigureSwagger(context.Services, configuration);
             ConfigureAutoApiControllers();
             ConfigureVirtualFiles(hostingEnvironment);
@@ -143,6 +168,10 @@ public class MyProjectNameHostModule : AbpModule
         private void ConfigureAuthentication(ServiceConfigurationContext context)
         {
             context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+            context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+            {
+                options.IsDynamicClaimsEnabled = true;
+            });
         }
 
         private void ConfigureBundles()
@@ -197,7 +226,7 @@ public class MyProjectNameHostModule : AbpModule
         private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
         {
             services.AddAbpSwaggerGenWithOAuth(
-                configuration["AuthServer:Authority"],
+                configuration["AuthServer:Authority"]!,
                 new Dictionary<string, string>
                 {
                         {"MyProjectName", "MyProjectName API"}
@@ -210,17 +239,9 @@ public class MyProjectNameHostModule : AbpModule
                 });
         }
 
-        private void ConfigureAutoMapper(ServiceConfigurationContext context)
+        private void ConfigureMapperly(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<MyProjectNameHostModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                /* Uncomment `validate: true` if you want to enable the Configuration Validation feature.
-                 * See AutoMapper's documentation to learn what it is:
-                 * https://docs.automapper.org/en/stable/Configuration-validation.html
-                 */
-                options.AddMaps<MyProjectNameHostModule>(/* validate: true */);
-            });
+            context.Services.AddMapperlyObjectMapper<MyProjectNameHostModule>();
         }
 
         private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
@@ -270,6 +291,7 @@ public class MyProjectNameHostModule : AbpModule
 
             if (env.IsDevelopment())
             {
+                app.UseWebAssemblyDebugging();
                 app.UseDeveloperExceptionPage();
             }
 
@@ -281,8 +303,7 @@ public class MyProjectNameHostModule : AbpModule
             }
 
             app.UseCorrelationId();
-            app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();
+            app.MapAbpStaticAssets();
             app.UseRouting();
             app.UseCors();
             app.UseAuthentication();
@@ -294,6 +315,8 @@ public class MyProjectNameHostModule : AbpModule
             }
 
             app.UseUnitOfWork();
+            app.UseDynamicClaims();
+            app.UseAntiforgery();
             app.UseAuthorization();
 
             app.UseSwagger();
@@ -309,10 +332,11 @@ public class MyProjectNameHostModule : AbpModule
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
-
-            if (app is WebApplication webApp)
+            app.UseConfiguredEndpoints(builder =>
             {
-                webApp.MapFallbackToFile("index.html");
-            }
+                builder.MapRazorComponents<App>()
+                    .AddInteractiveWebAssemblyRenderMode()
+                    .AddAdditionalAssemblies(WebAppAdditionalAssembliesHelper.GetAssemblies<MyProjectNameBlazorModule>());
+            });
         }
 }

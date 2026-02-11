@@ -1,3 +1,0 @@
-# Event Bus
-
-Façam

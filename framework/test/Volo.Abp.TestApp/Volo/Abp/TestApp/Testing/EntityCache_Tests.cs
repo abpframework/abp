@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Shouldly;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
@@ -38,8 +39,8 @@ public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStart
     public async Task Should_Throw_EntityNotFoundException_IF_Entity_Not_Exist()
     {
         var notExistId = Guid.NewGuid();
-        await Assert.ThrowsAsync<EntityNotFoundException>(() => ProductEntityCache.GetAsync(notExistId));
-        await Assert.ThrowsAsync<EntityNotFoundException>(() => ProductCacheItem.GetAsync(notExistId));
+        await Assert.ThrowsAsync<EntityNotFoundException<Product>>(() => ProductEntityCache.GetAsync(notExistId));
+        await Assert.ThrowsAsync<EntityNotFoundException<Product>>(() => ProductCacheItem.GetAsync(notExistId));
     }
 
     [Fact]
@@ -72,6 +73,29 @@ public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStart
     }
 
     [Fact]
+    public async Task Should_Return_New_EntityCache_IF_Added()
+    {
+        var productId = Guid.NewGuid();
+        (await ProductEntityCache.FindAsync(productId)).ShouldBeNull();
+        (await ProductCacheItem.FindAsync(productId)).ShouldBeNull();
+
+        var product = new Product(productId, "Product2", decimal.Zero);
+        await ProductRepository.InsertAsync(product);
+
+        product = await ProductEntityCache.FindAsync(product.Id);
+        product.ShouldNotBeNull();
+        product.Id.ShouldBe(productId);
+        product.Name.ShouldBe("Product2");
+        product.Price.ShouldBe(decimal.Zero);
+
+        var productCacheItem = await ProductCacheItem.FindAsync(product.Id);
+        productCacheItem.ShouldNotBeNull();
+        productCacheItem.Id.ShouldBe(productId);
+        productCacheItem.Name.ShouldBe("Product2");
+        productCacheItem.Price.ShouldBe(decimal.Zero);
+    }
+
+    [Fact]
     public async Task Should_Return_New_EntityCache_IF_Updated()
     {
         (await ProductEntityCache.FindAsync(TestDataBuilder.ProductId)).ShouldNotBeNull();
@@ -93,6 +117,49 @@ public abstract class EntityCache_Tests<TStartupModule> : TestAppTestBase<TStart
         productCacheItem.Id.ShouldBe(TestDataBuilder.ProductId);
         productCacheItem.Name.ShouldBe("Product2");
         productCacheItem.Price.ShouldBe(decimal.Zero);
+    }
+
+    [Fact]
+    public void EntityCache_Default_Options_Should_Be_2_Minutes()
+    {
+        var productCache = GetRequiredService<IDistributedCache<EntityCacheItemWrapper<ProductCacheItem2>, Guid>>();
+
+        var productOptions = GetDefaultCachingOptions(productCache);
+        productOptions.AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(2));
+        productOptions.SlidingExpiration.ShouldBeNull();
+    }
+
+    [Fact]
+    public void EntityCache_Configured_Options_Should_Be_Applied()
+    {
+        var productCache = GetRequiredService<IDistributedCache<EntityCacheItemWrapper<Product>, Guid>>();
+        var productCacheItemCache = GetRequiredService<IDistributedCache<EntityCacheItemWrapper<ProductCacheItem>, Guid>>();
+
+        var productOptions = GetDefaultCachingOptions(productCache);
+        productOptions.AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(7));
+        productOptions.SlidingExpiration.ShouldBeNull();
+
+        var productCacheItemOptions = GetDefaultCachingOptions(productCacheItemCache);
+        productCacheItemOptions.AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(9));
+        productCacheItemOptions.SlidingExpiration.ShouldBeNull();
+    }
+
+    private static DistributedCacheEntryOptions GetDefaultCachingOptions(object instance)
+    {
+        var internalCacheProperty = instance
+            .GetType()
+            .GetProperty("InternalCache", BindingFlags.Instance | BindingFlags.Public);
+
+        if (internalCacheProperty != null)
+        {
+            instance = internalCacheProperty.GetValue(instance);
+        }
+
+        var defaultOptionsField = instance
+            .GetType()
+            .GetField("DefaultCacheOptions", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        return (DistributedCacheEntryOptions)defaultOptionsField.GetValue(instance);
     }
 }
 
@@ -119,6 +186,17 @@ public class Product : FullAuditedAggregateRoot<Guid>
 [Serializable]
 [CacheName("ProductCacheItem")]
 public class ProductCacheItem
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; }
+
+    public decimal Price { get; set; }
+}
+
+[Serializable]
+[CacheName("ProductCacheItem2")]
+public class ProductCacheItem2
 {
     public Guid Id { get; set; }
 

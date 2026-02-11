@@ -16,5 +16,5 @@ public interface IUiPageProgressService
     /// <param name="percentage">Value of the progress from 0 to 100, or null for indeterminate progress.</param>
     /// <param name="options">Additional options.</param>
     /// <returns>Awaitable task.</returns>
-    Task Go(int? percentage, Action<UiPageProgressOptions> options = null);
+    Task Go(int? percentage, Action<UiPageProgressOptions>? options = null);
 }

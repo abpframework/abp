@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Shouldly;
-using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Security.Claims;

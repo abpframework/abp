@@ -41,8 +41,29 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         CancellationToken cancellationToken = default
     );
 
+    Task<List<OrganizationUnit>> GetListByRoleIdAsync(
+        Guid roleId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<OrganizationUnit>> GetListByDisplayNamesAsync(
+        string[] displayNames,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
     Task<List<IdentityRole>> GetRolesAsync(
         OrganizationUnit organizationUnit,
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityRole>> GetRolesAsync(
+        Guid[] organizationUnitIds,
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
@@ -77,13 +98,21 @@ public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string filter = null,
+        bool includeChildren = false,
         bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<Guid>> GetMemberIdsAsync(
+        Guid id,
+        bool includeChildren = false,
         CancellationToken cancellationToken = default
     );
 
     Task<int> GetMembersCountAsync(
         OrganizationUnit organizationUnit,
         string filter = null,
+        bool includeChildren = false,
         CancellationToken cancellationToken = default
     );
 

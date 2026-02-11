@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Volo.Abp.Cli.Utils;
@@ -19,8 +18,9 @@ public static class ProjectNameValidator
 
     private static readonly string[] IllegalKeywords = new[]
     {
+            "MauiBlazor",
             "Blazor"
-        };
+    };
 
     private static void ValidateParentDirectoryString(string projectName)
     {

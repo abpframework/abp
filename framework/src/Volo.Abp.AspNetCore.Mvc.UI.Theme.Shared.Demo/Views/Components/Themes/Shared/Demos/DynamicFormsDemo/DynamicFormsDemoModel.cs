@@ -40,7 +40,7 @@ public class DynamicFormsDemoModel
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string Password { get; set; } = default!;
 
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; }
@@ -87,34 +87,34 @@ public class DynamicFormsDemoModel
     public class OrderExampleModel
     {
         [DisplayOrder(10005)]
-        public string Surname { get; set; }
+        public string? Surname { get; set; }
 
         //Default 10000
-        public string EmailAddress { get; set; }
+        public string? EmailAddress { get; set; }
 
         [DisplayOrder(10003)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [DisplayOrder(9999)]
-        public string City { get; set; }
+        public string? City { get; set; }
     }
 
     public class AttributeExamplesModel
     {
         [HiddenInput]
-        public string HiddenInput { get; set; }
+        public string? HiddenInput { get; set; }
 
         [DisabledInput]
-        public string DisabledInput { get; set; }
+        public string? DisabledInput { get; set; }
 
         [ReadOnlyInput]
-        public string ReadonlyInput { get; set; }
+        public string? ReadonlyInput { get; set; }
 
         [FormControlSize(AbpFormControlSize.Large)]
-        public string LargeInput { get; set; }
+        public string? LargeInput { get; set; }
 
         [FormControlSize(AbpFormControlSize.Small)]
-        public string SmallInput { get; set; }
+        public string? SmallInput { get; set; }
     }
 
     public DetailedModel MyDetailedModel { get; set; }

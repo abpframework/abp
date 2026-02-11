@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -17,17 +18,20 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     protected ITenantRepository TenantRepository { get; }
     protected ITenantManager TenantManager { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
+    protected ILocalEventBus LocalEventBus { get; }
 
     public TenantAppService(
         ITenantRepository tenantRepository,
         ITenantManager tenantManager,
         IDataSeeder dataSeeder,
-        IDistributedEventBus distributedEventBus)
+        IDistributedEventBus distributedEventBus,
+        ILocalEventBus localEventBus)
     {
         DataSeeder = dataSeeder;
         TenantRepository = tenantRepository;
         TenantManager = tenantManager;
         DistributedEventBus = distributedEventBus;
+        LocalEventBus = localEventBus;
     }
 
     public virtual async Task<TenantDto> GetAsync(Guid id)
@@ -132,6 +136,10 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     public virtual async Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
     {
         var tenant = await TenantRepository.GetAsync(id);
+        if (tenant.FindDefaultConnectionString() != defaultConnectionString)
+        {
+            await LocalEventBus.PublishAsync(new TenantChangedEvent(tenant.Id, tenant.NormalizedName));
+        }
         tenant.SetDefaultConnectionString(defaultConnectionString);
         await TenantRepository.UpdateAsync(tenant);
     }
@@ -141,6 +149,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     {
         var tenant = await TenantRepository.GetAsync(id);
         tenant.RemoveDefaultConnectionString();
+        await LocalEventBus.PublishAsync(new TenantChangedEvent(tenant.Id, tenant.NormalizedName));
         await TenantRepository.UpdateAsync(tenant);
     }
 }

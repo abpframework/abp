@@ -1,0 +1,28 @@
+﻿@using Volo.Abp.SettingManagement.Localization
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+@inject AbpBlazorMessageLocalizerHelper<AbpSettingManagementResource> LH
+
+@if (TimezoneSettings != null)
+{
+    <Form>
+        <Row>
+            <Column>
+                 <Field>
+                     <FieldLabel>@L["DisplayName:Timezone"] *</FieldLabel>
+                     <Select TValue="string" SelectedValue="TimezoneSettings.Timezone" SelectedValueChanged="OnSelectedValueChangedAsync">
+                         @foreach (var item in TimezoneSettings.TimeZoneItems)
+                         {
+                             <SelectItem Value="item.Value">@item.Name</SelectItem>
+                         }
+                     </Select>
+                     <div class="form-text">@L["TimezoneHelpText"].Value</div>
+                 </Field>
+            </Column>
+        </Row>
+        <Row>
+            <Column>
+                <SubmitButton Clicked="@UpdateSettingsAsync"/>
+            </Column>
+        </Row>
+    </Form>
+}

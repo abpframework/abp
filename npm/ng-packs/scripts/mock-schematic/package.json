@@ -16,7 +16,7 @@
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.4",
-    "nodemon":  "^2.0.19",
+    "nodemon": "^2.0.19",
     "@types/express": "^4.17.13"
   }
 }

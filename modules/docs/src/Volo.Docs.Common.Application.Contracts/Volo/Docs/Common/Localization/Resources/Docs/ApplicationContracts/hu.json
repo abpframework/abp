@@ -1,0 +1,7 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Általános dokumentumkezelés",
+    "Permission:PdfDownload": "PDF letöltése"
+  }
+}

@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -13,20 +12,15 @@ public static class EntityCacheServiceCollectionExtensions
 {
     public static IServiceCollection AddEntityCache<TEntity, TKey>(
         this IServiceCollection services,
-        [CanBeNull] DistributedCacheEntryOptions cacheOptions = null)
+        DistributedCacheEntryOptions? cacheOptions = null)
         where TEntity : Entity<TKey>
     {
-        services
-            .TryAddTransient<
-                IEntityCache<TEntity, TKey>,
-                EntityCacheWithoutCacheItem<TEntity, TKey>
-            >();
-        services
-            .TryAddTransient<EntityCacheWithoutCacheItem<TEntity, TKey>>();
+        services.TryAddTransient<IEntityCache<TEntity, TKey>, EntityCacheWithoutCacheItem<TEntity, TKey>>();
+        services.TryAddTransient<EntityCacheWithoutCacheItem<TEntity, TKey>>();
 
         services.Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.ConfigureCache<TEntity>(cacheOptions ?? GetDefaultCacheOptions());
+            options.ConfigureCache<EntityCacheItemWrapper<TEntity>>(cacheOptions ?? GetDefaultCacheOptions());
         });
 
         services.Configure<AbpSystemTextJsonSerializerModifiersOptions>(options =>
@@ -39,21 +33,16 @@ public static class EntityCacheServiceCollectionExtensions
 
     public static IServiceCollection AddEntityCache<TEntity, TEntityCacheItem, TKey>(
         this IServiceCollection services,
-        [CanBeNull] DistributedCacheEntryOptions cacheOptions = null)
+        DistributedCacheEntryOptions? cacheOptions = null)
         where TEntity : Entity<TKey>
         where TEntityCacheItem : class
     {
-        services
-            .TryAddTransient<
-                IEntityCache<TEntityCacheItem, TKey>,
-                EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>
-            >();
-        services
-            .TryAddTransient<EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>>();
+        services.TryAddTransient<IEntityCache<TEntityCacheItem, TKey>, EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>>();
+        services.TryAddTransient<EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>>();
 
         services.Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.ConfigureCache<TEntityCacheItem>(cacheOptions ?? GetDefaultCacheOptions());
+            options.ConfigureCache<EntityCacheItemWrapper<TEntityCacheItem>>(cacheOptions ?? GetDefaultCacheOptions());
         });
 
         return services;
@@ -61,20 +50,16 @@ public static class EntityCacheServiceCollectionExtensions
 
     public static IServiceCollection AddEntityCache<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>(
         this IServiceCollection services,
-        [CanBeNull] DistributedCacheEntryOptions cacheOptions = null)
+        DistributedCacheEntryOptions? cacheOptions = null)
         where TEntity : Entity<TKey>
         where TEntityCacheItem : class
     {
-        services
-            .TryAddTransient<
-                IEntityCache<TEntityCacheItem, TKey>,
-                EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>
-            >();
+        services.TryAddTransient<IEntityCache<TEntityCacheItem, TKey>, EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>>();
         services.TryAddTransient<EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, TEntityCacheItem, TKey>>();
 
         services.Configure<AbpDistributedCacheOptions>(options =>
         {
-            options.ConfigureCache<TEntityCacheItem>(cacheOptions ?? GetDefaultCacheOptions());
+            options.ConfigureCache<EntityCacheItemWrapper<TEntityCacheItem>>(cacheOptions ?? GetDefaultCacheOptions());
         });
 
         return services;

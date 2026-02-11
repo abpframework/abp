@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.SettingManagement.Domain.Shared",
-  "hash": "2f93f4bc80c473a7680b5edd11fe138a",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.SettingManagement",
@@ -84,7 +84,7 @@
       "valueType": "ToggleStringValueType",
       "defaultValue": "false",
       "displayName": "Allow changing email settings.",
-      "description": null,
+      "description": "",
       "isAvailableToHost": false,
       "isVisibleToClients": true,
       "contentType": "feature",

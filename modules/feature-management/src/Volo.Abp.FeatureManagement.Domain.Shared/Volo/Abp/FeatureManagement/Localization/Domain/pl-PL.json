@@ -3,10 +3,15 @@
   "texts": {
     "Features": "Funkcje",
     "NoFeatureFoundMessage": "Brak dostępnej funkcji.",
-    "ManageHostFeatures": "Zarządzaj funkcjami hosta",
-    "Permission:FeatureManagement": "Zarządzanie funkcjami",
+    "ManageHostFeatures": "Zarządzaj Funkcjami Hosta",
+    "ManageHostFeaturesText": "Możesz zarządzać funkcjami po stronie hosta, klikając poniższy przycisk.",
+    "Permission:FeatureManagement": "Zarządzanie Funkcjami",
     "Permission:FeatureManagement.ManageHostFeatures": "Zarządzaj funkcjami hosta",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} wartość funkcji jest nieprawidłowa!",
-		"Menu:FeatureManagement": "Zarządzanie funkcjami"
+    "Menu:FeatureManagement": "Zarządzanie funkcjami",
+    "ResetToDefault": "Przywróć ustawienia domyślne",
+    "ResetedToDefault": "Zresetowano do ustawień domyślnych",
+    "AreYouSure": "Jesteś pewny?",
+    "AreYouSureToResetToDefault": "Czy na pewno chcesz przywrócić ustawienia domyślne?"
   }
 }

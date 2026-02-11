@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Opslaan...",
     "Actions": "Acties",
     "Delete": "Verwijder",
-    "SuccessfullyDeleted": "Succesvol verwijderd",
+    "CreatedSuccessfully": "Succesvol aangemaakt",
+    "SavedSuccessfully": "Succesvol opgeslagen",
+    "DeletedSuccessfully": "Succesvol verwijderd",
     "Edit": "Bewerk",
     "Refresh": "Ververs",
     "Language": "Taal",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Toont 0 tot 0 van 0 vermeldingen",
     "PagerInfoFiltered": "(gefilterd uit in totaal _MAX_ vermeldingen)",
     "NoDataAvailableInDatatable": "Geen gegevens beschikbaar",
+    "ErrorLoadingDatatable": "Er is een fout opgetreden tijdens het verzoek. Controleer het bericht voor details.",
     "Total": "totaal",
     "Selected": "geselecteed",
     "PagerShowMenuEntries": "Toon _MENU_-vermeldingen",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} wordt verwijderd!",
     "ItemWillBeDeletedMessage": "Dit item wordt verwijderd!",
     "ManageYourAccount": "Beheer uw account",
-    "OthersGroup": "Ander"
+    "OthersGroup": "Ander",
+    "Today": "Vandaag",
+    "Apply": "Toepassen",
+    "InternetConnectionInfo": "De bewerking kon niet worden uitgevoerd. Je internetverbinding is momenteel niet beschikbaar.",
+    "CopiedToTheClipboard": "Gekopieerd naar het klembord",
+    "AddNew": "Nieuw toevoegen",
+    "ProfilePicture": "Profielfoto",
+    "Theme": "Thema",
+    "NotAssigned": "Niet toegekend",
+    "EntityActionsDisabledTooltip": "U hebt geen toegang tot deze acties.",
+    "ResourcePermissions": "Machtigingen"
   }
 }

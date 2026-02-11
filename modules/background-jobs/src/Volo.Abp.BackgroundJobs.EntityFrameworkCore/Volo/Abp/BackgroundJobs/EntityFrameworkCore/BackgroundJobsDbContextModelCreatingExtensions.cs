@@ -22,13 +22,14 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
 
             b.ConfigureByConvention();
 
+            b.Property(x => x.ApplicationName).IsRequired(false).HasMaxLength(BackgroundJobRecordConsts.MaxApplicationNameLength);
             b.Property(x => x.JobName).IsRequired().HasMaxLength(BackgroundJobRecordConsts.MaxJobNameLength);
             b.Property(x => x.JobArgs).IsRequired().HasMaxLength(BackgroundJobRecordConsts.MaxJobArgsLength);
             b.Property(x => x.TryCount).HasDefaultValue(0);
             b.Property(x => x.NextTryTime);
             b.Property(x => x.LastTryTime);
             b.Property(x => x.IsAbandoned).HasDefaultValue(false);
-            b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal);
+            b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal).HasSentinel(BackgroundJobPriority.Normal);
 
             b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
 

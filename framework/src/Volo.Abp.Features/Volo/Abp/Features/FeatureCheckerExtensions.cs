@@ -52,6 +52,11 @@ public static class FeatureCheckerExtensions
         return false;
     }
 
+    /// <summary>
+    /// Checks if the specified feature is enabled and throws an <see cref="AbpAuthorizationException"/> if it is not.
+    /// </summary>
+    /// <param name="featureChecker">The <see cref="IFeatureChecker"/></param>
+    /// <param name="featureName">The name of the feature to be checked.</param>
     public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, string featureName)
     {
         if (!(await featureChecker.IsEnabledAsync(featureName)))
@@ -61,6 +66,13 @@ public static class FeatureCheckerExtensions
         }
     }
 
+    /// <summary>
+    /// Checks if the specified features are enabled and throws an <see cref="AbpAuthorizationException"/> if they are not.
+    /// The check can either require all features to be enabled or just one, based on the <paramref name="requiresAll"/> parameter.
+    /// </summary>
+    /// <param name="featureChecker">The <see cref="IFeatureChecker"/></param>
+    /// <param name="requiresAll">True: Requires all features to be enabled. False: Requires at least one of the features to be enabled.</param>
+    /// <param name="featureNames">The names of the features to be checked.</param>
     public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
     {
         if (featureNames.IsNullOrEmpty())

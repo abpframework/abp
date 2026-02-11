@@ -14,16 +14,17 @@ public abstract class BackgroundWorkerBase : IBackgroundWorker
 {
     //TODO: Add UOW, Localization and other useful properties..?
 
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    protected CancellationTokenSource StoppingTokenSource { get; }
-    protected CancellationToken StoppingToken { get; }
+    protected CancellationTokenSource StoppingTokenSource { get; set; }
+	
+    protected CancellationToken StoppingToken { get; set; }
 
     public BackgroundWorkerBase()
     {
@@ -47,6 +48,6 @@ public abstract class BackgroundWorkerBase : IBackgroundWorker
 
     public override string ToString()
     {
-        return GetType().FullName;
+        return GetType().FullName!;
     }
 }

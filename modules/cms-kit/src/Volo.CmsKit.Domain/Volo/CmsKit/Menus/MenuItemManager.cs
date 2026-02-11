@@ -22,7 +22,13 @@ public class MenuItemManager : CmsKitDomainServiceBase
     public virtual void SetPageUrl(MenuItem menuItem, Page page)
     {
         menuItem.SetPageId(page.Id);
-        menuItem.SetUrl(PageConsts.UrlPrefix + page.Slug);
+        menuItem.SetUrl(page.Slug.EnsureStartsWith('/'));
+    }
+
+    public virtual void SetPageUrl(MenuItem menuItem, string url)
+    {
+        menuItem.SetPageId(null);
+        menuItem.SetUrl(url);
     }
 
     [UnitOfWork]

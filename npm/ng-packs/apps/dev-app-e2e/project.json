@@ -1,0 +1,27 @@
+{
+  "name": "dev-app-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/dev-app-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/dev-app-e2e/cypress.json",
+        "tsConfig": "apps/dev-app-e2e/tsconfig.e2e.json",
+        "devServerTarget": "dev-app:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "dev-app:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["dev-app"]
+}

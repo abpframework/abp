@@ -2,14 +2,14 @@
 
 public interface IObjectSerializer
 {
-    byte[] Serialize<T>(T obj);
+    byte[]? Serialize<T>(T? obj);
 
-    T Deserialize<T>(byte[] bytes);
+    T? Deserialize<T>(byte[] bytes);
 }
 
 public interface IObjectSerializer<T>
 {
-    byte[] Serialize(T obj);
+    byte[]? Serialize(T? obj);
 
-    T Deserialize(byte[] bytes);
+    T? Deserialize(byte[]? bytes);
 }

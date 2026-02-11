@@ -19,15 +19,15 @@ public class EntityChangeInfo : IHasExtraProperties
     /// </summary>
     public Guid? EntityTenantId { get; set; }
 
-    public string EntityId { get; set; }
+    public string? EntityId { get; set; }
 
-    public string EntityTypeFullName { get; set; }
+    public string? EntityTypeFullName { get; set; }
 
-    public List<EntityPropertyChangeInfo> PropertyChanges { get; set; }
+    public List<EntityPropertyChangeInfo> PropertyChanges { get; set; } = default!;
 
     public ExtraPropertyDictionary ExtraProperties { get; }
 
-    public virtual object EntityEntry { get; set; } //TODO: Try to remove since it breaks serializability
+    public virtual object EntityEntry { get; set; } = default!; //TODO: Try to remove since it breaks serializability
 
     public EntityChangeInfo()
     {

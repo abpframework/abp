@@ -10,16 +10,14 @@ public class EntityCacheWithoutCacheItem<TEntity, TKey> :
 {
     public EntityCacheWithoutCacheItem(
         IReadOnlyRepository<TEntity, TKey> repository,
-        IDistributedCache<TEntity, TKey> cache,
+        IDistributedCache<EntityCacheItemWrapper<TEntity>, TKey> cache,
         IUnitOfWorkManager unitOfWorkManager)
         : base(repository, cache, unitOfWorkManager)
     {
     }
 
-    protected override TEntity MapToCacheItem(TEntity entity)
+    protected override EntityCacheItemWrapper<TEntity>? MapToCacheItem(TEntity? entity)
     {
-        return entity;
+         return new EntityCacheItemWrapper<TEntity>(entity);
     }
-
-
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -110,7 +109,7 @@ public class MenuManager : IMenuManager, ITransientDependency
         {
             if (!item.RequiredPermissionName.IsNullOrWhiteSpace())
             {
-                item.RequirePermissions(item.RequiredPermissionName);
+                item.RequirePermissions(item.RequiredPermissionName!);
             }
         }
 
@@ -165,7 +164,7 @@ public class MenuManager : IMenuManager, ITransientDependency
     {
         foreach (var menuGroup in applicationMenu.Items.Where(x => !x.GroupName.IsNullOrWhiteSpace()).GroupBy(x => x.GroupName))
         {
-            var group = applicationMenu.GetMenuGroupOrNull(menuGroup.First().GroupName);
+            var group = applicationMenu.GetMenuGroupOrNull(menuGroup.First().GroupName!);
             if (group != null)
             {
                 continue;

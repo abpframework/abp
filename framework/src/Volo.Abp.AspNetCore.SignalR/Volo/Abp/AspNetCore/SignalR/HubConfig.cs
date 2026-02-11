@@ -20,7 +20,7 @@ public class HubConfig
     public HubConfig(
         [NotNull] Type hubType,
         [NotNull] string routePattern,
-        [CanBeNull] Action<HttpConnectionDispatcherOptions> configureAction = null)
+        Action<HttpConnectionDispatcherOptions>? configureAction = null)
     {
         HubType = Check.NotNull(hubType, nameof(hubType));
         RoutePattern = Check.NotNullOrWhiteSpace(routePattern, nameof(routePattern));

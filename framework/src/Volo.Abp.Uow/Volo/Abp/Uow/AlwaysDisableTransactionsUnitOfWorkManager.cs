@@ -12,7 +12,7 @@ public class AlwaysDisableTransactionsUnitOfWorkManager : IUnitOfWorkManager
         _unitOfWorkManager = unitOfWorkManager;
     }
 
-    public IUnitOfWork Current => _unitOfWorkManager.Current;
+    public IUnitOfWork? Current => _unitOfWorkManager.Current;
 
     public IUnitOfWork Begin(AbpUnitOfWorkOptions options, bool requiresNew = false)
     {

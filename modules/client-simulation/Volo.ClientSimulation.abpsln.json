@@ -1,7 +1,0 @@
-{
-  "modules": {
-    "Volo.ClientSimulation": {
-      "path": "Volo.ClientSimulation.abpmdl.json"
-    }
-  }
-}

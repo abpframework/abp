@@ -5,8 +5,8 @@ namespace Volo.Abp.ObjectMapping;
 
 public static class ObjectMapperExtensions
 {
-    private static readonly MethodInfo MapToNewObjectMethod;
-    private static readonly MethodInfo MapToExistingObjectMethod;
+    private static readonly MethodInfo MapToNewObjectMethod = default!;
+    private static readonly MethodInfo MapToExistingObjectMethod = default!;
 
     static ObjectMapperExtensions()
     {
@@ -32,13 +32,13 @@ public static class ObjectMapperExtensions
     {
         return MapToNewObjectMethod
             .MakeGenericMethod(sourceType, destinationType)
-            .Invoke(objectMapper, new[] { source });
+            .Invoke(objectMapper, new[] { source })!;
     }
 
     public static object Map(this IObjectMapper objectMapper, Type sourceType, Type destinationType, object source, object destination)
     {
         return MapToExistingObjectMethod
             .MakeGenericMethod(sourceType, destinationType)
-            .Invoke(objectMapper, new[] { source, destination });
+            .Invoke(objectMapper, new[] { source, destination })!;
     }
 }

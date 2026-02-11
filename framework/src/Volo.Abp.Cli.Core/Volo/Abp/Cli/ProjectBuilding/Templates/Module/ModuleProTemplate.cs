@@ -12,7 +12,6 @@ public class ModuleProTemplate : ModuleTemplateBase
     public ModuleProTemplate()
         : base(TemplateName)
     {
-        //TODO: uncomment next line after document is ready
-        //DocumentUrl = "https://docs.abp.io/en/commercial/latest/Startup-Templates/Module";
+        DocumentUrl = "https://abp.io/docs/latest/solution-templates/application-module";
     }
 }

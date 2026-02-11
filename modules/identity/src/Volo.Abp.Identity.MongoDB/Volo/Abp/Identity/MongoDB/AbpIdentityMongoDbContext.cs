@@ -21,6 +21,8 @@ public class AbpIdentityMongoDbContext : AbpMongoDbContext, IAbpIdentityMongoDbC
 
     public IMongoCollection<IdentityUserDelegation> UserDelegations => Collection<IdentityUserDelegation>();
 
+    public IMongoCollection<IdentitySession> Sessions => Collection<IdentitySession>();
+
     protected override void CreateModel(IMongoModelBuilder modelBuilder)
     {
         base.CreateModel(modelBuilder);

@@ -1,24 +1,26 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Blog.Posts
+namespace Volo.Blogging.Pages.Blogs.Posts
 {
     public class EditModel : BloggingPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly IAuthorizationService _authorization;
+        private readonly BloggingUrlOptions _blogOptions;
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -29,11 +31,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [BindProperty]
         public EditPostViewModel Post { get; set; }
 
-        public EditModel(IPostAppService postAppService, IBlogAppService blogAppService, IAuthorizationService authorization)
+        public EditModel(IPostAppService postAppService, IBlogAppService blogAppService, IAuthorizationService authorization, IOptions<BloggingUrlOptions> blogOptions)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
             _authorization = authorization;
+            _blogOptions = blogOptions.Value;
         }
 
         public virtual async Task<ActionResult> OnGetAsync()
@@ -42,6 +45,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
             {
                 return Redirect("/");
             }
+
+            if (_blogOptions.SingleBlogMode.Enabled)
+            {
+                BlogShortName = _blogOptions.SingleBlogMode.BlogName;
+            }
+            
             if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
             {
                 return NotFound();
@@ -73,7 +82,16 @@ namespace Volo.Blogging.Pages.Blog.Posts
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
             var blog = await _blogAppService.GetAsync(editedPost.BlogId);
 
-            return RedirectToPage("/Blogs/Posts/Detail", new { blogShortName = blog.ShortName, postUrl = editedPost.Url });
+            Dictionary<string, object> routeValues = new()
+            {
+                { nameof(DetailModel.PostUrl), editedPost.Url }
+            };
+
+            if (!_blogOptions.SingleBlogMode.Enabled)
+            {
+                routeValues.Add(nameof(DetailModel.BlogShortName), blog.ShortName);
+            }
+            return RedirectToPage("/Blogs/Posts/Detail", routeValues);
         }
     }
 

@@ -20,17 +20,18 @@
     @<span>
         <i class="far fa-comment-alt me-2"></i>
         @((string.IsNullOrWhiteSpace(author.Name)
-            ? author.UserName
-            : author.Name + " " + author.Surname).Trim())
-        <small class="text-muted float-end" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
+    ? author.UserName
+    : author.Name + " " + author.Surname).Trim())
+        <small class="text-muted float-end" style="opacity: .5; font-size: 14px" comment-time="@creationTime.ToUniversalTime().ToString("o")"></small>
     </span>;
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
     @<div class="cms-comment-form-area bg-light card p-3 mx-0  @(repliedCommentId.HasValue ? "my-3" : "mt-3")"
-          data-reply-id="@(repliedCommentId?.ToString() ?? "")"
-          style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
+              data-reply-id="@(repliedCommentId?.ToString() ?? "")"
+              style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
         <form class="cms-comment-form">
+            <input hidden value="@(Guid.NewGuid().ToString("N"))" name="idempotencyToken" />
             <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId" />
             <div class="row">
                 <div class="col">
@@ -39,35 +40,35 @@
                     </div>
                 </div>
                 <div class="mt-0">
-                    <small class="text-muted float-start float-end">@L["MarkdownSupported"]</small>
+                    <small class="text-muted float-end">@L["MarkdownSupported"]</small>
                 </div>
 
                 @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
-                {
-                    <div class="volo-captcha">
-                        <label class="form-label" for="Input_Captcha">@L["CaptchaCode"]</label>
-                        <div class="d-flex">
-                            <div class="bd-highlight">
-                                <img src="@Model.Input.CaptchaImageBase64" />
-                            </div>
-                            <div class="flex-grow-1 bd-highlight">
-                                <abp-input type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
-                            </div>
-                            <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
+            {
+                <div class="volo-captcha">
+                    <label class="form-label" for="Input_Captcha">@L["CaptchaCode"]</label>
+                    <div class="d-flex">
+                        <div class="bd-highlight">
+                            <img src="@Model.Input.CaptchaImageBase64" />
                         </div>
+                        <div class="flex-grow-1 bd-highlight">
+                            <abp-input type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
+                        </div>
+                        <abp-input asp-for="@Model.CaptchaId" value="@Model.CaptchaOutput.Id" />
                     </div>
-                }
+                </div>
+            }
                 <div class="col-auto">
                     <div class="text-end">
                         <abp-button id="submit-button" type="submit" button-type="Primary">
                             <i class="fa fa-comment-alt me-1"></i> @L["Send"]
                         </abp-button>
                         @if (cancelButton)
-                        {
-                            <abp-button type="button" button-type="Light" class="reply-cancel-button" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
-                                <i class="fa fa-times me-1"></i> @L["Cancel"]
-                            </abp-button>
-                        }
+                    {
+                        <abp-button type="button" button-type="Light" class="reply-cancel-button" data-reply-id="@(repliedCommentId?.ToString() ?? "")">
+                            <i class="fa fa-times me-1"></i> @L["Cancel"]
+                        </abp-button>
+                    }
                     </div>
                 </div>
             </div>
@@ -92,10 +93,6 @@
                 <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}_link")">
                     <i class="fa fa-reply mr -1"></i> @L["Reply"]
                 </a>
-
-                <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-author-id="@authorId.ToString()" data-id="@id.ToString()">
-                    <i class="fa fa-trash  mr -1"></i> @L["Delete"]
-                </a>
             }
             else
             {
@@ -104,12 +101,16 @@
                 </a>
             }
         }
-        
-        
+
+
         @if (authorId == CurrentUser.Id)
         {
-            <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted bg-white" data-id="@id.ToString()">
+            <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted" data-id="@id.ToString()">
                 <i class="fa fa-pencil  mr -1 "></i> @L["Edit"]
+            </a>
+
+            <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted" data-author-id="@authorId.ToString()" data-id="@id.ToString()">
+                <i class="fa fa-trash  mr -1"></i> @L["Delete"]
             </a>
         }
     </div>;
@@ -127,14 +128,32 @@
                             <input name="commentConcurrencyStamp" value="@concurrencyStamp" type="hidden" />
                         </div>
                     </div>
+                    <div class="mt-0">
+                        <small class="text-muted float-end">@L["MarkdownSupported"]</small>
+                    </div>
+
+                    @if (CmsKitCommentOptions.Value.IsRecaptchaEnabled)
+                {
+                var output = await Model.GenerateCaptchaAsync();
+
+                    <div class="volo-captcha">
+                        <label class="form-label" for="Input_Captcha_@output.Id">@L["CaptchaCode"]</label>
+                        <div class="d-flex">
+                            <div class="bd-highlight">
+                                <img src="@Model.GetCaptchaImageBase64(output.ImageBytes)" />
+                            </div>
+                            <div class="flex-grow-1 bd-highlight">
+                                <abp-input id="Input_Captcha_@output.Id" type="number" asp-for="@Model.Input.Captcha" suppress-label="true" class="d-inline-block" autocomplete="off" />
+                            </div>
+                            <abp-input asp-for="@Model.CaptchaId" value="@output.Id" />
+                        </div>
+                    </div>
+                }
                     <div class="col-auto">
                         <div class="text-end">
                             <abp-button type="submit" button-type="Primary" size="Block"> @L["Update"] </abp-button>
                             <abp-button type="button" button-type="Light" size="Block_Small" class="comment-edit-cancel-button" data-id="@id.ToString()"><i class="fa fa-times me-1"></i>  @L["Cancel"] </abp-button>
                         </div>
-                    </div>
-                    <div class="mt-0">
-                        <small class="text-muted float-start" >@L["MarkdownSupported"]</small>
                     </div>
                 </div>
             </form>
@@ -165,28 +184,31 @@
 
                 @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
 
-                <div class="row mt-2">
-                    <div class="col">
-                        <div class="my-2 ">
-                            @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
+                @if (!Model.Input.IsReadOnly)
+                {
+                    <div class="row mt-2">
+                        <div class="col">
+                            <div class="my-2 ">
+                                @GetCommentActionArea(comment.Id, comment.Author.Id, false).Invoke(null)
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="reaction-in-comment">
+                                @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                                {
+                                    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
+                                }
+                            </div>
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <div class="reaction-in-comment">
-                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                            {
-                                @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = comment.Id.ToString() })
-                            }
-                        </div>
-                    </div>
-                </div>
-                @GetEditArea(comment.Id, Model.Input.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
+                    @GetEditArea(comment.Id, Model.Input.RawCommentTexts[comment.Id], comment.ConcurrencyStamp).Invoke(null)
+                }
 
                 @if (comment.Replies.Any())
                 {
                     @foreach (var reply in comment.Replies)
                     {
-                        <div class="bg-light card p-3 mx-0 mt-3">
+                        <div class="comment-container card p-3 mx-0 mt-3">
                             <div class="comment">
                                 <h5>
                                     @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
@@ -194,23 +216,26 @@
 
                                 @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
 
-                                <div class="row mt-2">
-                                    <div class="col">
-                                        <div class="my-2 ">
-                                            @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
+                                @if (!Model.Input.IsReadOnly)
+                                {
+                                    <div class="row mt-2">
+                                        <div class="col">
+                                            <div class="my-2 ">
+                                                @GetCommentActionArea(reply.Id, reply.Author.Id, true).Invoke(null)
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="reaction-in-comment">
+                                                @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                                                {
+                                                    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
+                                                }
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-auto">
-                                        <div class="reaction-in-comment">
-                                            @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
-                                            {
-                                                @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "comment", entityId = reply.Id.ToString() })
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
 
-                                @GetEditArea(reply.Id, Model.Input.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
+                                    @GetEditArea(reply.Id, Model.Input.RawCommentTexts[reply.Id], reply.ConcurrencyStamp).Invoke(null)
+                                }
                             </div>
                         </div>
                     }

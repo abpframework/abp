@@ -1,0 +1,14 @@
+{
+  "culture": "sv",
+  "texts": {
+    "VirtualFileExplorer": "Virtuell filutforskare",
+    "VirtualFileType": "Virtuell filtyp",
+    "Menu:VirtualFileExplorer": "Virtuell filutforskare",
+    "LastUpdateTime": "Senaste uppdateringstid",
+    "VirtualFileName": "Virtuellt filnamn",
+    "FileContent": "Filens innehåll",
+    "Size": "Storlek",
+    "BackToRoot": "Tillbaka till roten",
+    "EmptyFileInfoList": "Det finns inga virtuella filer"
+  }
+}

@@ -15,7 +15,7 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
 
     public EntityCacheWithObjectMapper(
         IReadOnlyRepository<TEntity, TKey> repository,
-        IDistributedCache<TEntityCacheItem, TKey> cache,
+        IDistributedCache<EntityCacheItemWrapper<TEntityCacheItem>, TKey> cache,
         IUnitOfWorkManager unitOfWorkManager,
         IObjectMapper objectMapper)
         : base(repository, cache, unitOfWorkManager)
@@ -23,7 +23,7 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
         ObjectMapper = objectMapper;
     }
 
-    protected override TEntityCacheItem MapToCacheItem(TEntity entity)
+    protected override EntityCacheItemWrapper<TEntityCacheItem>? MapToCacheItem(TEntity? entity)
     {
         if (entity == null)
         {
@@ -32,9 +32,9 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
 
         if (typeof(TEntity) == typeof(TEntityCacheItem))
         {
-            return entity.As<TEntityCacheItem>();
+            return new EntityCacheItemWrapper<TEntityCacheItem>(entity.As<TEntityCacheItem>());
         }
 
-        return ObjectMapper.Map<TEntity, TEntityCacheItem>(entity);
+        return new EntityCacheItemWrapper<TEntityCacheItem>(ObjectMapper.Map<TEntity, TEntityCacheItem>(entity));
     }
 }

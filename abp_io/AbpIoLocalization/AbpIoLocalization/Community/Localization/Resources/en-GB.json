@@ -59,7 +59,7 @@
     "MilestoneErrorMessage": "Couldn't get the current milestone details from Github.",
     "QuestionItemErrorMessage": "Couldn't get the latest question details from Stackoverflow.",
     "Oops": "Oops!",
-    "CreatePostSuccessMessage": "The Post has been successfully submitted. It will be published once it has been reviewed by the site admin.",
+    "CreatePostSuccessMessage": "Your post has been successfully submitted. It will be published after review by the site administrator.",
     "ChooseCoverImage": "Choose a cover image...",
     "CoverImage": "Cover Image",
     "ShareYourExperiencesWithTheABPFramework": "Share your experiences with the ABP Framework!",
@@ -103,6 +103,8 @@
     "Language": "Language",
     "CreatePostLanguageInfo": "Language of the post",
     "SeeMore": "See More",
-    "MemberNotPublishedPostYet": "This member hasn't published any posts yet."
+    "MemberNotPublishedPostYet": "This member hasn't published any posts yet.",
+    "MarkdownSupported": "<a href=\"https://www.markdownguide.org/basic-syntax/\">Markdown</a> supported.",
+    "Preview": "Preview"
   }
 }

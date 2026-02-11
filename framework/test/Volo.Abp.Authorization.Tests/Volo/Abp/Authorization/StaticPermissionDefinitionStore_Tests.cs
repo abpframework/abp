@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Authorization.TestServices.Resources;
 using Xunit;
 
 namespace Volo.Abp.Authorization;
@@ -43,5 +44,30 @@ public class StaticPermissionDefinitionStore_Tests : AuthorizationTestBase
     {
         var groups = await _store.GetGroupsAsync();
         groups.ShouldNotContain(x => x.Name == "TestGetGroup");
+    }
+
+    [Fact]
+    public async Task GetResourcePermissionOrNullAsync()
+    {
+        var permission = await _store.GetResourcePermissionOrNullAsync(TestEntityResource.ResourceName, "MyResourcePermission1");
+        permission.ShouldNotBeNull();
+        permission.Name.ShouldBe("MyResourcePermission1");
+        permission.StateCheckers.ShouldContain(x => x.GetType() == typeof(TestRequireEditionPermissionSimpleStateChecker));
+
+        permission = await _store.GetResourcePermissionOrNullAsync(TestEntityResource.ResourceName, "NotExists");
+        permission.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetResourcePermissionsAsync()
+    {
+        var permissions = await _store.GetResourcePermissionsAsync();
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission1");
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission2");
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission3");
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission4");
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission5");
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission6");
+        permissions.ShouldContain(x => x.Name == "MyResourcePermission7");
     }
 }

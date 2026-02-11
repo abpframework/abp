@@ -73,7 +73,7 @@ public static class AbpAuditLoggingDbContextModelBuilderExtensions
             b.ConfigureByConvention();
 
             b.Property(x => x.EntityTypeFullName).HasMaxLength(EntityChangeConsts.MaxEntityTypeFullNameLength).IsRequired().HasColumnName(nameof(EntityChange.EntityTypeFullName));
-            b.Property(x => x.EntityId).HasMaxLength(EntityChangeConsts.MaxEntityIdLength).IsRequired().HasColumnName(nameof(EntityChange.EntityId));
+            b.Property(x => x.EntityId).HasMaxLength(EntityChangeConsts.MaxEntityIdLength).HasColumnName(nameof(EntityChange.EntityId));
             b.Property(x => x.AuditLogId).IsRequired().HasColumnName(nameof(EntityChange.AuditLogId));
             b.Property(x => x.ChangeTime).IsRequired().HasColumnName(nameof(EntityChange.ChangeTime));
             b.Property(x => x.ChangeType).IsRequired().HasColumnName(nameof(EntityChange.ChangeType));
@@ -101,6 +101,13 @@ public static class AbpAuditLoggingDbContextModelBuilderExtensions
             b.HasIndex(x => new { x.EntityChangeId });
 
             b.ApplyObjectExtensionMappings();
+        });
+
+        builder.Entity<AuditLogExcelFile>(b =>
+        {
+            b.ToTable(AbpAuditLoggingDbProperties.DbTablePrefix + "AuditLogExcelFiles", AbpAuditLoggingDbProperties.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.FileName).HasMaxLength(AuditLogExcelFileConsts.MaxFileNameLength).HasColumnName(nameof(AuditLogExcelFile.FileName));
         });
 
         builder.TryConfigureObjectExtensions<AbpAuditLoggingDbContext>();

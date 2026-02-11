@@ -12,13 +12,13 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
     /// </summary>
     public string Name { get; }
 
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     public ILocalizableString DisplayName {
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
     public IReadOnlyList<FeatureDefinition> Features => _features.ToImmutableList();
     private readonly List<FeatureDefinition> _features;
@@ -31,28 +31,28 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
     /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
     /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     protected internal FeatureGroupDefinition(
         string name,
-        ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         Name = name;
         DisplayName = displayName ?? new FixedLocalizableString(Name);
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
         _features = new List<FeatureDefinition>();
     }
 
     public virtual FeatureDefinition AddFeature(
         string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {
@@ -72,10 +72,10 @@ public class FeatureGroupDefinition : ICanCreateChildFeature
     }
 
     public FeatureDefinition CreateChildFeature(string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
-        IStringValueType valueType = null,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
+        IStringValueType? valueType = null,
         bool isVisibleToClients = true,
         bool isAvailableToHost = true)
     {

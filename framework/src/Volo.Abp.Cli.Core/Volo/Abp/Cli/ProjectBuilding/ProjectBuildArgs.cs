@@ -15,6 +15,8 @@ public class ProjectBuildArgs
     [CanBeNull]
     public string Version { get; set; }
 
+    public bool TrustUserVersion { get; set; }
+
     public DatabaseProvider DatabaseProvider { get; set; }
 
     public DatabaseManagementSystem DatabaseManagementSystem { get; set; }
@@ -46,6 +48,8 @@ public class ProjectBuildArgs
 
     public ThemeStyle? ThemeStyle { get; set; }
 
+    public bool SkipCache { get; set; }
+
     [NotNull]
     public Dictionary<string, string> ExtraProperties { get; set; }
 
@@ -66,7 +70,9 @@ public class ProjectBuildArgs
         [CanBeNull] string connectionString = null,
         bool pwa = false,
         Theme? theme = null,
-        ThemeStyle? themeStyle = null)
+        ThemeStyle? themeStyle = null,
+        bool skipCache = false,
+        bool trustUserVersion = false)
     {
         SolutionName = Check.NotNull(solutionName, nameof(solutionName));
         TemplateName = templateName;
@@ -85,5 +91,7 @@ public class ProjectBuildArgs
         Pwa = pwa;
         Theme = theme;
         ThemeStyle = themeStyle;
+        SkipCache = skipCache;
+        TrustUserVersion = trustUserVersion;
     }
 }

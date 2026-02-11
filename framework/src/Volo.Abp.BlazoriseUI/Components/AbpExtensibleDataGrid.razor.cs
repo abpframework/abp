@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Blazorise.DataGrid;
 using Blazorise.Extensions;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
@@ -18,7 +19,7 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     protected Regex ExtensionPropertiesRegex = new Regex(@"ExtraProperties\[(.*?)\]");
 
-    [Parameter] public IEnumerable<TItem> Data { get; set; }
+    [Parameter] public IEnumerable<TItem> Data { get; set; } = default!;
 
     [Parameter] public EventCallback<DataGridReadDataEventArgs<TItem>> ReadData { get; set; }
 
@@ -28,16 +29,21 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     [Parameter] public int PageSize { get; set; }
 
-    [Parameter] public IEnumerable<TableColumn> Columns { get; set; }
+    [Parameter] public IEnumerable<TableColumn> Columns { get; set; } = default!;
 
     [Parameter] public int CurrentPage { get; set; } = 1;
 
-    [Parameter] public string Class { get; set; }
+    [Parameter] public string? Class { get; set; }
 
     [Parameter] public bool Responsive { get; set; }
 
+    [Parameter] public bool AutoGenerateColumns { get; set; }
+
     [Inject]
-    public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+    public IStringLocalizerFactory StringLocalizerFactory { get; set; } = default!;
+
+    [Inject]
+    public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
 
     protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
     {
@@ -51,10 +57,10 @@ public partial class AbpExtensibleDataGrid<TItem> : ComponentBase
 
     protected virtual string GetConvertedFieldValue(TItem item, TableColumn columnDefinition)
     {
-        var convertedValue = columnDefinition.ValueConverter.Invoke(item);
+        var convertedValue = columnDefinition.ValueConverter!.Invoke(item!);
         if (!columnDefinition.DisplayFormat.IsNullOrEmpty())
         {
-            return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat,
+            return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat!,
                 convertedValue);
         }
 

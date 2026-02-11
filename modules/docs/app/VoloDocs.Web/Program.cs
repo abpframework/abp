@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -9,7 +12,7 @@ namespace VoloDocs.Web
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public async static Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug() //TODO: Should be configurable!
@@ -22,7 +25,14 @@ namespace VoloDocs.Web
             try
             {
                 Log.Information("Starting web host.");
-                CreateHostBuilder(args).Build().Run();
+                var builder = WebApplication.CreateBuilder(args);
+                builder.Host
+                    .UseAutofac()
+                    .UseSerilog();
+                await builder.AddApplicationAsync<VoloDocsWebModule>();
+                var app = builder.Build();
+                await app.InitializeApplicationAsync();
+                await app.RunAsync();
                 return 0;
             }
             catch (Exception ex)
@@ -32,17 +42,8 @@ namespace VoloDocs.Web
             }
             finally
             {
-                Log.CloseAndFlush();
+                await Log.CloseAndFlushAsync();
             }
         }
-
-        internal static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac()
-                .UseSerilog();
     }
 }

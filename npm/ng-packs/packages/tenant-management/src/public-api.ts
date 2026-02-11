@@ -4,3 +4,5 @@ export * from './lib/guards';
 export * from './lib/models';
 export * from './lib/tenant-management.module';
 export * from './lib/tokens';
+export * from './lib/resolvers';
+export * from './lib/tenant-management.routes';

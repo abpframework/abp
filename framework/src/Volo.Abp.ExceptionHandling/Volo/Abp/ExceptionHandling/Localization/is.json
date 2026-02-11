@@ -13,14 +13,19 @@
     "DefaultErrorMessage404": "Auðlind fannst ekki!",
     "DefaultErrorMessage404Detail": "Auðlindin sem óskað var eftir fannst ekki á netþjóninum!",
     "EntityNotFoundErrorMessage": "Það er enginn eining {0} með id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Það er enginn eining {0}!",
     "AbpDbConcurrencyErrorMessage": "Gögnunum sem þú hefur sent inn hefur þegar verið breytt af öðrum notanda/viðskiptavini. Fleygðu breytingunum sem þú hefur gert og reyndu frá upphafi.",
     "Error": "Villa",
     "UnhandledException": "Ómeðhöndluð villa",
+    "Authorizing": "Heimilun…",
     "401Message": "Ekki er heimild fyrir þessari aðgerð",
     "403Message": "Bannað",
     "404Message": "Síðan fannst ekki",
     "500Message": "Villa í netþjóni",
     "403MessageDetail": "Þú hefur ekki heimild fyrir þessa aðgerð!",
-    "404MessageDetail": "Því miður, það er ekkert á þessu heimilisfangi."
+    "404MessageDetail": "Því miður, það er ekkert á þessu heimilisfangi.",
+    "Unauthorized": "Óheimilt",
+    "invalid_token": "Ógildur auðkenni",
+    "SessionExpired": "Sessían þín er útrunnin. Vinsamlegast skráðu þig inn aftur til að halda áfram í forritinu."
   }
 }

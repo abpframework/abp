@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
-  "hash": "0dd0efed5fec2360dd19217eb02c8343",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
@@ -69,25 +69,50 @@
       "connectionStringName": "AbpPermissionManagement",
       "databaseTables": [
         {
+          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "PermissionGroups",
+          "summary": null
+        },
+        {
           "entityFullName": "Volo.Abp.PermissionManagement.PermissionDefinitionRecord",
           "contentType": "databaseTable",
-          "name": "AbpPermissions",
+          "name": "Permissions",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.PermissionManagement.PermissionGrant",
           "contentType": "databaseTable",
-          "name": "AbpPermissionGrants",
+          "name": "PermissionGrants",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.PermissionManagement.PermissionGroupDefinitionRecord",
+          "entityFullName": "Volo.Abp.PermissionManagement.ResourcePermissionGrant",
           "contentType": "databaseTable",
-          "name": "AbpPermissionGroups",
+          "name": "ResourcePermissionGrants",
           "summary": null
         }
       ],
       "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.PermissionManagement.EntityFrameworkCore",
+          "name": "ConfigurePermissionManagement",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -142,6 +167,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",

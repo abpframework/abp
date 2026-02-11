@@ -6,6 +6,11 @@
     "CarPlural": "Bílar",
     "MaxLenghtErrorMessage": "Lengd þessa svæðis getur að hámarki verið að hámarki {0}",
     "Universe": "Alheimur",
-    "FortyTwo": "Fjörutíu og tveir"
+    "FortyTwo": "Fjörutíu og tveir",
+    "Enum:BookType.Undefined": "Óskilgreint",
+    "Enum:BookType.0": "Óskilgreint með gildi 0",
+    "BookType.Adventure": "Ævintýri",
+    "BookType.1": "Ævintýri með gildi 1",
+    "Biography": "Ævisaga"
   }
 }

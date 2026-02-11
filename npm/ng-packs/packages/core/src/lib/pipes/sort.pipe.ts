@@ -1,11 +1,12 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 export type SortOrder = 'asc' | 'desc';
+
 @Injectable()
 @Pipe({
   name: 'abpSort',
 })
 export class SortPipe implements PipeTransform {
-  transform(value: any[], sortOrder: SortOrder | string = 'asc', sortKey?: string): any {
+  transform(value: any[], sortOrder: SortOrder | string = 'asc', sortKey?: string | number): any {
     sortOrder = sortOrder && (sortOrder.toLowerCase() as any);
 
     if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc')) return value;

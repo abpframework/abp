@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Modularity;
@@ -9,12 +10,12 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.SystemTextJson;
 
-[DependsOn(typeof(AbpJsonAbstractionsModule), typeof(AbpTimingModule))]
+[DependsOn(typeof(AbpJsonAbstractionsModule), typeof(AbpTimingModule), typeof(AbpDataModule))]
 public class AbpJsonSystemTextJsonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<AbpSystemTextJsonSerializerOptions>()
+        context.Services.AddAbpOptions<AbpSystemTextJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
@@ -28,12 +29,13 @@ public class AbpJsonSystemTextJsonModule : AbpModule
 
                 options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(rootServiceProvider
                     .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
-            });
 
-        context.Services.AddOptions<AbpSystemTextJsonSerializerModifiersOptions>()
-            .Configure<IServiceProvider>((options, rootServiceProvider) =>
-            {
-                options.Modifiers.Add(new AbpDateTimeConverterModifier().CreateModifyAction(rootServiceProvider));
+                var dateTimeConverter = rootServiceProvider.GetRequiredService<AbpDateTimeConverter>().SkipDateTimeNormalization();
+                var nullableDateTimeConverter = rootServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>().SkipDateTimeNormalization();
+
+                options.JsonSerializerOptions.TypeInfoResolver.As<AbpDefaultJsonTypeInfoResolver>().Modifiers.Add(
+                    new AbpDateTimeConverterModifier(dateTimeConverter, nullableDateTimeConverter)
+                        .CreateModifyAction());
             });
     }
 }

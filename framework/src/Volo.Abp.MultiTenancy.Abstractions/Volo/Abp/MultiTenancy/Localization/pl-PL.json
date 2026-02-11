@@ -1,0 +1,9 @@
+{
+  "culture": "pl-PL",
+  "texts": {
+    "TenantNotFoundMessage": "Nie znaleziono najemcy!",
+    "TenantNotFoundDetails": "Brak dzierżawcy o identyfikatorze lub nazwie dzierżawy: {0}",
+    "TenantNotActiveMessage": "Najemca nie jest aktywny!",
+    "TenantNotActiveDetails": "Najemca nie jest aktywny z identyfikatorem lub nazwą dzierżawcy: {0}"
+  }
+}

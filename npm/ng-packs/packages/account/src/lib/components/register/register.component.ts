@@ -1,20 +1,47 @@
 import { AccountService, RegisterDto } from '@abp/ng.account.core/proxy';
-import { AuthService, ConfigStateService } from '@abp/ng.core';
-import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  AuthService,
+  AutofocusDirective,
+  ConfigStateService,
+  LocalizationPipe,
+} from '@abp/ng.core';
+import { ButtonComponent, getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
+import { Component, Injector, OnInit, inject } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { throwError } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { eAccountComponents } from '../../enums/components';
 import { getRedirectUrl } from '../../utils/auth-utils';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { RouterLink } from '@angular/router';
 
 const { maxLength, required, email } = Validators;
 
 @Component({
   selector: 'abp-register',
   templateUrl: './register.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgxValidateCoreModule,
+    LocalizationPipe,
+    ButtonComponent,
+    AutofocusDirective,
+  ],
 })
 export class RegisterComponent implements OnInit {
+  protected fb = inject(UntypedFormBuilder);
+  protected accountService = inject(AccountService);
+  protected configState = inject(ConfigStateService);
+  protected toasterService = inject(ToasterService);
+  protected authService = inject(AuthService);
+  protected injector = inject(Injector);
+
   form!: UntypedFormGroup;
 
   inProgress?: boolean;
@@ -22,15 +49,6 @@ export class RegisterComponent implements OnInit {
   isSelfRegistrationEnabled = true;
 
   authWrapperKey = eAccountComponents.AuthWrapper;
-
-  constructor(
-    protected fb: UntypedFormBuilder,
-    protected accountService: AccountService,
-    protected configState: ConfigStateService,
-    protected toasterService: ToasterService,
-    protected authService: AuthService,
-    protected injector: Injector,
-  ) {}
 
   ngOnInit() {
     this.init();

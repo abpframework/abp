@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace Volo.Abp.MongoDB;
 
-public class AbpMongoDbDateTimeSerializer : DateTimeSerializer
+public class AbpMongoDbDateTimeSerializer : StructSerializerBase<DateTime>
 {
     protected DateTimeKind DateTimeKind { get; set; }
     protected bool DisableDateTimeNormalization { get; set; }

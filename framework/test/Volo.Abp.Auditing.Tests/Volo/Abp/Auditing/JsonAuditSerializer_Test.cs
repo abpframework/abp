@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
@@ -58,7 +57,6 @@ public class JsonAuditSerializer_Test : AbpAuditingTestBase
         [DisableAuditing]
         public string Password { get; set; }
 
-        [JsonIgnore]
         public string PrivateEmail { get; set; }
 
         public DateTime Birthday { get; set; }

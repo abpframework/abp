@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
 
 public class AbpExtraPropertiesDictionaryModelBinderProvider : IModelBinderProvider
 {
-    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         if (context == null)
         {
@@ -41,6 +41,6 @@ public class AbpExtraPropertiesDictionaryModelBinderProvider : IModelBinderProvi
             valueBinder,
             loggerFactory,
             true /* allowValidatingTopLevelNodes */,
-            mvcOptions);
+            mvcOptions)!;
     }
 }

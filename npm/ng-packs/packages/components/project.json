@@ -1,0 +1,38 @@
+{
+  "name": "components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/components/src",
+  "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/components"],
+      "options": {
+        "project": "packages/components/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/components/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/components/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/components"
+      }
+    }
+  }
+}

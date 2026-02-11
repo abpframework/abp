@@ -38,9 +38,9 @@ public class QuartzJobExecutionAdapter<TArgs> : IJob
     {
         using (var scope = ServiceScopeFactory.CreateScope())
         {
-            var args = JsonSerializer.Deserialize<TArgs>(context.JobDetail.JobDataMap.GetString(nameof(TArgs)));
+            var args = JsonSerializer.Deserialize<TArgs>(context.JobDetail.JobDataMap.GetString(nameof(TArgs))!);
             var jobType = Options.GetJob(typeof(TArgs)).JobType;
-            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobType, args, cancellationToken: context.CancellationToken);
+            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: context.CancellationToken);
             try
             {
                 await JobExecuter.ExecuteAsync(jobContext);
@@ -49,7 +49,7 @@ public class QuartzJobExecutionAdapter<TArgs> : IJob
             {
                 var jobExecutionException = new JobExecutionException(exception);
 
-                var retryIndex = context.JobDetail.JobDataMap.GetString(QuartzBackgroundJobManager.JobDataPrefix + QuartzBackgroundJobManager.RetryIndex).To<int>();
+                var retryIndex = context.JobDetail.JobDataMap.GetString(QuartzBackgroundJobManager.JobDataPrefix + QuartzBackgroundJobManager.RetryIndex)!.To<int>();
                 retryIndex++;
                 context.JobDetail.JobDataMap.Put(QuartzBackgroundJobManager.JobDataPrefix + QuartzBackgroundJobManager.RetryIndex, retryIndex.ToString());
 

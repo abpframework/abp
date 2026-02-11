@@ -16,7 +16,7 @@ public static class EventInboxDbContextModelBuilderExtensions
             b.Property(x => x.EventName).IsRequired().HasMaxLength(IncomingEventRecord.MaxEventNameLength);
             b.Property(x => x.EventData).IsRequired();
 
-            b.HasIndex(x => new { x.Processed, x.CreationTime });
+            b.HasIndex(x => new { x.Status, x.CreationTime });
             b.HasIndex(x => x.MessageId);
         });
     }

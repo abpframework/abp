@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Volo.Abp.Security.Encryption;
+﻿namespace Volo.Abp.Security.Encryption;
 
 /// <summary>
 /// Can be used to simply encrypt/decrypt texts.
@@ -15,8 +13,7 @@ public interface IStringEncryptionService
     /// <param name="passPhrase">A phrase to use as the encryption key (optional, uses default if not provided)</param>
     /// <param name="salt">Salt value (optional, uses default if not provided)</param>
     /// <returns>Enrypted text</returns>
-    [CanBeNull]
-    string Encrypt([CanBeNull] string plainText, string passPhrase = null, byte[] salt = null);
+    string? Encrypt(string? plainText, string? passPhrase = null, byte[]? salt = null);
 
     /// <summary>
     /// Decrypts a text that is encrypted by the <see cref="Encrypt"/> method.
@@ -25,6 +22,5 @@ public interface IStringEncryptionService
     /// <param name="passPhrase">A phrase to use as the encryption key (optional, uses default if not provided)</param>
     /// <param name="salt">Salt value (optional, uses default if not provided)</param>
     /// <returns>Decrypted text</returns>
-    [CanBeNull]
-    string Decrypt([CanBeNull] string cipherText, string passPhrase = null, byte[] salt = null);
+    string? Decrypt(string? cipherText, string? passPhrase = null, byte[]? salt = null);
 }

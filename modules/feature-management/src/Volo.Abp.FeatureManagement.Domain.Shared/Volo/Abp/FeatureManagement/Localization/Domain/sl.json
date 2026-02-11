@@ -3,10 +3,15 @@
   "texts": {
     "Features": "Funkcionalnosti",
     "NoFeatureFoundMessage": "Na voljo ni nobene funkcionalnosti.",
-    "ManageHostFeatures": "Upravljajte funkcije gostitelja",
-    "Permission:FeatureManagement": "Upravljanje funkcij",
+    "ManageHostFeatures": "Upravljajte Funkcije Gostitelja",
+    "ManageHostFeaturesText": "Funkcije gostiteljske strani lahko upravljate s klikom na naslednji gumb.",
+    "Permission:FeatureManagement": "Upravljanje Funkcij",
     "Permission:FeatureManagement.ManageHostFeatures": "Upravljajte funkcije gostitelja",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Vrednost funkcije {0} ni veljavna!",
-		"Menu:FeatureManagement": "Upravljanje funkcij"
+    "Menu:FeatureManagement": "Upravljanje funkcij",
+    "ResetToDefault": "Ponastavi na privzeto",
+    "ResetedToDefault": "Ponastavljeno na privzeto",
+    "AreYouSure": "Ali si prepričan?",
+    "AreYouSureToResetToDefault": "Ali ste prepričani, da želite ponastaviti na privzeto?"
   }
 }

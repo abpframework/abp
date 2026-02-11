@@ -31,7 +31,8 @@ public partial class SettingManagement
 
     protected async override Task OnInitializedAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(@L["Settings"]));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
+        BreadcrumbItems.Add(new BreadcrumbItem(@L["Menu:Settings"].Value));
 
         SettingComponentCreationContext = new SettingComponentCreationContext(ServiceProvider);
 
@@ -39,10 +40,13 @@ public partial class SettingManagement
         {
             await contributor.ConfigureAsync(SettingComponentCreationContext);
         }
-
+        SettingComponentCreationContext.Normalize();
         SettingItemRenders.Clear();
 
-        SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
+        if(SelectedGroup.IsNullOrEmpty() && SettingComponentCreationContext.Groups.Any())
+        {
+            SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
+        }
     }
 
     protected virtual string GetNormalizedString(string value)

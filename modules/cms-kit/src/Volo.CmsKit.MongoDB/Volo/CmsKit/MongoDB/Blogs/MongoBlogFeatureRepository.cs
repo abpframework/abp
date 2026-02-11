@@ -25,14 +25,14 @@ public class MongoBlogFeatureRepository : MongoDbRepository<ICmsKitMongoDbContex
 
     public virtual async Task<List<BlogFeature>> GetListAsync(Guid blogId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
                         .Where(x => x.BlogId == blogId)
                         .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<BlogFeature>> GetListAsync(Guid blogId, List<string> featureNames, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
                     .Where(x => x.BlogId == blogId && featureNames.Contains(x.FeatureName))
                     .ToListAsync(GetCancellationToken(cancellationToken));
     }

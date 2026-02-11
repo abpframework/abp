@@ -10,7 +10,7 @@ public static class AbpDbContextConfigurationContextOracleExtensions
 {
     public static DbContextOptionsBuilder UseOracle(
        [NotNull] this AbpDbContextConfigurationContext context,
-       [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null)
+       Action<OracleDbContextOptionsBuilder>? oracleOptionsAction = null)
     {
         if (context.ExistingConnection != null)
         {

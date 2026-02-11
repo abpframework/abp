@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MongoDB.Driver;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -12,7 +11,7 @@ public class AbpMongoDbContextOptions
 {
     internal Dictionary<MultiTenantDbContextType, Type> DbContextReplacements { get; }
 
-    public Action<MongoClientSettings> MongoClientSettingsConfigurer { get; set; }
+    public Action<MongoClientSettings>? MongoClientSettingsConfigurer { get; set; }
 
     public AbpMongoDbContextOptions()
     {

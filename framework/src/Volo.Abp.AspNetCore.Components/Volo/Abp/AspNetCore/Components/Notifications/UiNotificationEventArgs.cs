@@ -4,7 +4,7 @@ namespace Volo.Abp.AspNetCore.Components.Notifications;
 
 public class UiNotificationEventArgs : EventArgs
 {
-    public UiNotificationEventArgs(UiNotificationType notificationType, string message, string title, UiNotificationOptions options)
+    public UiNotificationEventArgs(UiNotificationType notificationType, string message, string? title, UiNotificationOptions options)
     {
         NotificationType = notificationType;
         Message = message;
@@ -16,7 +16,7 @@ public class UiNotificationEventArgs : EventArgs
 
     public string Message { get; }
 
-    public string Title { get; }
+    public string? Title { get; }
 
     public UiNotificationOptions Options { get; }
 }

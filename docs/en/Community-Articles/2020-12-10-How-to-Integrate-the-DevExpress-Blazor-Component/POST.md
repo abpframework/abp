@@ -1,4 +1,4 @@
-## Using DevExpress Blazor UI Components With the ABP Framework
+# Using DevExpress Blazor UI Components With the ABP Framework
 
 Hi, in this step by step article, I will show you how to integrate [DevExpress](https://demos.devexpress.com/blazor/) blazor UI components into ABP Framework-based applications.
 

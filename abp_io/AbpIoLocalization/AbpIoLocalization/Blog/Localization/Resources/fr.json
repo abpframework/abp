@@ -1,0 +1,8 @@
+{
+  "culture": "fr",
+  "texts": {
+    "AbpTitle": "Lire tous les articles du blog",
+    "AbpDescription": "ABP est un framework d&#39;application open source axé sur le développement d&#39;applications Web basées sur AspNet Core. Ne vous répétez pas, concentrez-vous sur votre propre code d&#39;entreprise.",
+    "AbpDefinition": "Blog ABP pour le développement .NET, multiplateforme, modèles d&#39;application ASP.NET, actualités liées à ABP et plus encore..."
+  }
+}

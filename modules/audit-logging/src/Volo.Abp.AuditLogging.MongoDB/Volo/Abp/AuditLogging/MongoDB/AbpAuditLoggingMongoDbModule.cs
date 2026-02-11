@@ -13,6 +13,7 @@ public class AbpAuditLoggingMongoDbModule : AbpModule
         context.Services.AddMongoDbContext<AuditLoggingMongoDbContext>(options =>
         {
             options.AddRepository<AuditLog, MongoAuditLogRepository>();
+            options.AddRepository<AuditLogExcelFile, MongoAuditLogExcelFileRepository>();
         });
     }
 }

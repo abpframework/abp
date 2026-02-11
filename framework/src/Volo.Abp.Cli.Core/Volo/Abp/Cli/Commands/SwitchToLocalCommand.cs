@@ -70,7 +70,7 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
             return null;
         }
 
-        if (path.EndsWith(".sln") || path.EndsWith(".csproj"))
+        if (path.EndsWith(".sln") || path.EndsWith(".slnx") || path.EndsWith(".csproj"))
         {
             return Path.GetDirectoryName(path);
         }
@@ -78,7 +78,7 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
         return path;
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Changes all NuGet package references to local project references for all the .csproj files in the specified folder" +
                " (and all its subfolders with any deep)";
@@ -103,7 +103,7 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp switch-to-local --paths D:\\Github\\abp");
         sb.AppendLine("  abp switch-to-local --paths D:\\Github\\abp --solution D:\\test\\MyProject");
         sb.AppendLine("  abp switch-to-local --paths \"D:\\Github\\abp|D:\\Github\\volo\"");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }

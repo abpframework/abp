@@ -18,7 +18,7 @@ public static class AbpAspNetCoreMvcApplicationBuilderExtensions
     [Obsolete("Use app.UseConfiguredEndpoints(...) extension method instead!")]
     public static IApplicationBuilder UseMvcWithDefaultRouteAndArea(
         this IApplicationBuilder app,
-        Action<IEndpointRouteBuilder> additionalConfigurationAction = null)
+        Action<IEndpointRouteBuilder>? additionalConfigurationAction = null)
     {
         return app.UseConfiguredEndpoints(additionalConfigurationAction);
     }

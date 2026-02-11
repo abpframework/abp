@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.BlobStoring.TestObjects;
-using Volo.Abp.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Testing;
@@ -61,7 +60,7 @@ public abstract class BlobContainer_Tests<TStartupModule> : AbpIntegratedTest<TS
 
             using (CurrentTenant.Change(null))
             {
-                // Could not found the requested BLOB...
+                // Could not find the requested BLOB...
                 await Assert.ThrowsAsync<AbpException>(async () =>
                     await Container.GetAllBytesAsync(blobName)
                 );

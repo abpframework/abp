@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Shouldly;
 using Volo.Abp.Http;
 using Volo.Abp.Localization;
@@ -118,14 +116,14 @@ public class ValidationTestController_Tests : AspNetCoreMvcTestBase
 
 public class DisableAutoModelValidationTestController_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.AutoModelValidation = false;
         });
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]

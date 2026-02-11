@@ -3,7 +3,6 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using Shouldly;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -24,9 +23,9 @@ public class AbpAuthorizationExceptionTestController_Tests : AspNetCoreMvcTestBa
         FakeRequiredService = GetRequiredService<FakeUserClaims>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
 
         FakeExceptionSubscriber = Substitute.For<IExceptionSubscriber>();
 

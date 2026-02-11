@@ -6,6 +6,12 @@ In this article, I will highlight a few interesting features that are now availa
 
 There are many new features coming with this release. We are going to examine new features within 4 sub-sections: ASP.NET Core, C#11, EF 7 and MAUI. Let's start with ASP.NET Core.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## ASP.NET Core
 
 We will see the following features in this section:
@@ -289,6 +295,12 @@ In this article, I've highlighted some features that were shipped with .NET 7.
 > I've added a references section down below, so you can check the references and see other features that came with this version.
 
 Thanks for reading the article and I hope you find it helpful. See you in the next one!
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## References
 

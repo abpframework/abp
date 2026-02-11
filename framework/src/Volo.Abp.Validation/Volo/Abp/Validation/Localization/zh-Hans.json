@@ -23,7 +23,7 @@
     "ThisFieldIsNotValid.": "验证未通过.",
     "ThisFieldIsNotAValidEmailAddress.": "字段不是有效的邮箱地址.",
     "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "字段只允许以下扩展名的文件: {0}",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "字段必须是最大长度为'{0}'的字符串或数组.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "该字段的长度不能超过'{0}'个字符.",
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "字段必须是最小长度为'{0}'的字符串或数组.",
     "ThisFieldIsNotAValidPhoneNumber.": "字段不是有效的手机号码.",
     "ThisFieldMustBeBetween{0}And{1}": "字段值必须在{0}和{1}范围内.",
@@ -31,8 +31,8 @@
     "ThisFieldMustBeLessOrEqual{0}": "该字段必须小于或等于 {0}。",
     "ThisFieldMustMatchTheRegularExpression{0}": "字段必须匹配正则表达式'{0}'.",
     "ThisFieldIsRequired.": "字段不可为空.",
-    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "字段必须是长度为{0}的字符串.",
-    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "字段必须是最小长度为{1}并且最大长度{0}的字符串.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "该字段的长度不能超过'{0}'个字符.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "该字段的长度应在{1}到{0}个字符之间.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "字段{0}不是有效的完全限定的http,https或ftp URL.",
     "ThisFieldIsInvalid.": "该字段无效."
   }

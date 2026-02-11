@@ -21,7 +21,7 @@ public class AbpPageToolbarButtonViewComponent : AbpViewComponent
         string name,
         string icon,
         string id,
-        ILocalizableString busyText,
+        ILocalizableString? busyText,
         FontIconType iconType,
         AbpButtonType type,
         AbpButtonSize size,
@@ -36,7 +36,7 @@ public class AbpPageToolbarButtonViewComponent : AbpViewComponent
                 name,
                 icon,
                 id,
-                busyText == null ? null : await busyText.LocalizeAsync(StringLocalizerFactory),
+                busyText == null ? null : (await busyText.LocalizeAsync(StringLocalizerFactory)).ToString(),
                 iconType,
                 type,
                 size,
@@ -51,7 +51,7 @@ public class AbpPageToolbarButtonViewComponent : AbpViewComponent
         public string Name { get; }
         public string Icon { get; }
         public string Id { get; }
-        public string BusyText { get; }
+        public string? BusyText { get; }
         public FontIconType IconType { get; }
         public AbpButtonType Type { get; }
         public AbpButtonSize Size { get; }
@@ -62,7 +62,7 @@ public class AbpPageToolbarButtonViewComponent : AbpViewComponent
             string name,
             string icon,
             string id,
-            string busyText,
+            string? busyText,
             FontIconType iconType,
             AbpButtonType type,
             AbpButtonSize size,

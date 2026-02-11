@@ -31,6 +31,9 @@ public interface IEfCoreDbContext : IDisposable, IInfrastructure<IServiceProvide
 
     DbSet<T> Set<T>()
         where T : class;
+    
+    DbSet<T> Set<T>(string name)
+        where T : class;
 
     DatabaseFacade Database { get; }
 
@@ -60,17 +63,17 @@ public interface IEfCoreDbContext : IDisposable, IInfrastructure<IServiceProvide
 
     EntityEntry Entry([NotNull] object entity);
 
-    object Find([NotNull] Type entityType, [NotNull] params object[] keyValues);
+    object? Find([NotNull] Type entityType, [NotNull] params object[] keyValues);
 
-    TEntity Find<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
+    TEntity? Find<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
 
-    ValueTask<object> FindAsync([NotNull] Type entityType, [NotNull] object[] keyValues, CancellationToken cancellationToken);
+    ValueTask<object?> FindAsync([NotNull] Type entityType, [NotNull] object[] keyValues, CancellationToken cancellationToken);
 
-    ValueTask<TEntity> FindAsync<TEntity>([NotNull] object[] keyValues, CancellationToken cancellationToken) where TEntity : class;
+    ValueTask<TEntity?> FindAsync<TEntity>([NotNull] object[] keyValues, CancellationToken cancellationToken) where TEntity : class;
 
-    ValueTask<TEntity> FindAsync<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
+    ValueTask<TEntity?> FindAsync<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
 
-    ValueTask<object> FindAsync([NotNull] Type entityType, [NotNull] params object[] keyValues);
+    ValueTask<object?> FindAsync([NotNull] Type entityType, [NotNull] params object[] keyValues);
 
     EntityEntry<TEntity> Remove<TEntity>([NotNull] TEntity entity) where TEntity : class;
 

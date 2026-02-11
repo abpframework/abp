@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -33,9 +31,9 @@ public class DataSeeder : IDataSeeder, ITransientDependency
                 foreach (var contributorType in Options.Contributors)
                 {
                     var options = context.Properties.TryGetValue(DataSeederExtensions.SeedInSeparateUowOptions, out var uowOptions)
-                        ? (AbpUnitOfWorkOptions) uowOptions
+                        ? (AbpUnitOfWorkOptions) uowOptions!
                         : new AbpUnitOfWorkOptions();
-                    var requiresNew = context.Properties.TryGetValue(DataSeederExtensions.SeedInSeparateUowRequiresNew, out var obj) && (bool) obj;
+                    var requiresNew = context.Properties.TryGetValue(DataSeederExtensions.SeedInSeparateUowRequiresNew, out var obj) && (bool) obj!;
 
                     using (var uow = manager.Begin(options, requiresNew))
                     {

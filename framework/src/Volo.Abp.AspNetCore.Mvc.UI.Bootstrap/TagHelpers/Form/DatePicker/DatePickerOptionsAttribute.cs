@@ -14,7 +14,7 @@ public class DatePickerOptionsAttribute : Attribute
         DatePickerOptionsPropertyName = datePickerOptionsPropertyName;
     }
     
-    public IAbpDatePickerOptions GetDatePickerOptions(ModelExplorer explorer)
+    public IAbpDatePickerOptions? GetDatePickerOptions(ModelExplorer explorer)
     {
         var properties = explorer.Container.Properties.Where(p => p.Metadata.PropertyName != null && p.Metadata.PropertyName.Equals(DatePickerOptionsPropertyName)).ToList();
 

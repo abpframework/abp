@@ -152,7 +152,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             var application = new AbpApplicationDescriptor
             {
                 ClientId = name,
-                Type = type,
+                ClientType = type,
                 ClientSecret = secret,
                 ConsentType = consentType,
                 DisplayName = displayName,
@@ -175,7 +175,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
             if (!redirectUri.IsNullOrWhiteSpace() || !postLogoutRedirectUri.IsNullOrWhiteSpace())
             {
-                application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Logout);
+                application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.EndSession);
             }
 
             var buildInGrantTypes = new []
@@ -235,7 +235,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
               if (grantType == OpenIddictConstants.GrantTypes.DeviceCode)
               {
                   application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
-                  application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Device);
+                  application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization);
               }
 
               if (grantType == OpenIddictConstants.GrantTypes.Implicit)

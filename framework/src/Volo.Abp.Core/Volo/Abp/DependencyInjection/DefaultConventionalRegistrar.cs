@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -22,16 +23,21 @@ public class DefaultConventionalRegistrar : ConventionalRegistrarBase
             return;
         }
 
-        var exposedServiceTypes = GetExposedServiceTypes(type);
+        var exposedServiceAndKeyedServiceTypes = GetExposedKeyedServiceTypes(type).Concat(GetExposedServiceTypes(type).Select(t => new ServiceIdentifier(t))).ToList();
 
-        TriggerServiceExposing(services, type, exposedServiceTypes);
+        TriggerServiceExposing(services, type, exposedServiceAndKeyedServiceTypes);
 
-        foreach (var exposedServiceType in exposedServiceTypes)
+        foreach (var exposedServiceType in exposedServiceAndKeyedServiceTypes)
         {
+            var allExposingServiceTypes = exposedServiceType.ServiceKey == null
+                ? exposedServiceAndKeyedServiceTypes.Where(x => x.ServiceKey == null).ToList()
+                : exposedServiceAndKeyedServiceTypes.Where(x => x.ServiceKey?.ToString() == exposedServiceType.ServiceKey?.ToString()).ToList();
+
             var serviceDescriptor = CreateServiceDescriptor(
                 type,
-                exposedServiceType,
-                exposedServiceTypes,
+                exposedServiceType.ServiceKey,
+                exposedServiceType.ServiceType,
+                allExposingServiceTypes,
                 lifeTime.Value
             );
 

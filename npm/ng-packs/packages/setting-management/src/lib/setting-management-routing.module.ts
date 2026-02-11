@@ -1,11 +1,11 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import {
-  AuthGuard,
+  authGuard,
   ReplaceableComponents,
   ReplaceableRouteContainerComponent,
   RouterOutletComponent,
 } from '@abp/ng.core';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { SettingManagementComponent } from './components/setting-management.component';
 import { eSettingManagementComponents } from './enums/components';
 
@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: '',
     component: RouterOutletComponent,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -27,6 +27,7 @@ const routes: Routes = [
         },
       },
     ],
+    title: 'AbpSettingManagement::Settings',
   },
 ];
 
@@ -34,4 +35,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SettingManagementRoutingModule {}
+export class SettingManagementRoutingModule { }

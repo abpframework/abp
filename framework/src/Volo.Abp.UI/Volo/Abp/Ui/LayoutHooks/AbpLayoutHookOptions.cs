@@ -12,7 +12,7 @@ public class AbpLayoutHookOptions
         Hooks = new Dictionary<string, List<LayoutHookInfo>>();
     }
 
-    public AbpLayoutHookOptions Add(string name, Type componentType, string layout = null)
+    public AbpLayoutHookOptions Add(string name, Type componentType, string? layout = null)
     {
         Hooks
             .GetOrAdd(name, () => new List<LayoutHookInfo>())

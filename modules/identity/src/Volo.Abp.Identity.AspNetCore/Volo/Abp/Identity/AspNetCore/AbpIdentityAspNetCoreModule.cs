@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
+using static Volo.Abp.Identity.AspNetCore.AbpSecurityStampValidatorCallback;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
@@ -16,7 +19,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
             builder
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
-                .AddSignInManager<AbpSignInManager>();
+                .AddSignInManager<AbpSignInManager>()
+                .AddUserValidator<AbpIdentityUserValidator>();
         });
     }
 
@@ -39,5 +43,15 @@ public class AbpIdentityAspNetCoreModule : AbpModule
                 })
                 .AddIdentityCookies();
         }
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAbpOptions<SecurityStampValidatorOptions>()
+            .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
+            {
+                var abpRefreshingPrincipalOptions = serviceProvider.GetRequiredService<IOptions<AbpRefreshingPrincipalOptions>>().Value;
+                securityStampValidatorOptions.UpdatePrincipal(abpRefreshingPrincipalOptions);
+            });
     }
 }

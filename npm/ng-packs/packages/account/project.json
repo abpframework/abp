@@ -1,0 +1,38 @@
+{
+  "name": "account",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/account/src",
+  "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "account-core"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/account"],
+      "options": {
+        "project": "packages/account/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/account/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/account/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/account"
+      }
+    }
+  }
+}

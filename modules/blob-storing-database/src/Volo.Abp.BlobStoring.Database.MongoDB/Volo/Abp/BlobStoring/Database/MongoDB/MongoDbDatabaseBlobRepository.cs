@@ -17,7 +17,7 @@ public class MongoDbDatabaseBlobRepository : MongoDbRepository<IBlobStoringMongo
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .FirstOrDefaultAsync(
                 x => x.ContainerId == containerId && x.Name == name,
                 cancellationToken
@@ -28,7 +28,7 @@ public class MongoDbDatabaseBlobRepository : MongoDbRepository<IBlobStoringMongo
     {
         cancellationToken = GetCancellationToken(cancellationToken);
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .AnyAsync(
                 x => x.ContainerId == containerId && x.Name == name,
                 cancellationToken

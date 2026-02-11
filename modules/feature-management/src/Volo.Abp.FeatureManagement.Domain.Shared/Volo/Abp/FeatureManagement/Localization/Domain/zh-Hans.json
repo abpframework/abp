@@ -2,16 +2,16 @@
   "culture": "zh-Hans",
   "texts": {
     "Features": "功能",
-    "NoFeatureFoundMessage": "没有可用的功能.",
-    "ManageHostFeatures": "管理Host功能",
-    "ManageHostFeaturesText": "您可以通过单击以下按钮来管理宿主功能。",
+    "NoFeatureFoundMessage": "没有任何可用的功能。",
+    "ManageHostFeatures": "管理主机功能",
+    "ManageHostFeaturesText": "点击以下按钮即可管理主机端功能。",
     "Permission:FeatureManagement": "功能管理",
-    "Permission:FeatureManagement.ManageHostFeatures": "管理Host功能",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0}功能的值无效!",
+    "Permission:FeatureManagement.ManageHostFeatures": "管理主机功能",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0}功能值无效！",
     "Menu:FeatureManagement": "功能管理",
     "ResetToDefault": "重置为默认值",
     "ResetedToDefault": "已重置为默认值",
-    "AreYouSure": "是否确认？",
-    "AreYouSureToResetToDefault": "你确定要重置为默认值吗？"
+    "AreYouSure": "你确定吗？",
+    "AreYouSureToResetToDefault": "您确定要重置为默认设置吗？"
   }
 }

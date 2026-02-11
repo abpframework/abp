@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "Site Web de support commercial",
     "CommunityWebSite": "Site Web de la communauté ABP",
     "ManageAccount": "Mon compte | ABP.IO",
-    "ManageYourAccount": "Gérer votre compte"
+    "ManageYourProfile": "Gérer votre profil",
+    "ReturnToApplication": "Retour à la candidature"
   }
 }

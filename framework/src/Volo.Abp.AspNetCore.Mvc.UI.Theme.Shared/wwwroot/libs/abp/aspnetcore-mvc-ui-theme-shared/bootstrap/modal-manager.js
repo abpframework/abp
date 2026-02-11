@@ -55,7 +55,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _createContainer() {
                 _removeContainer();
-                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>');
+                _$modalContainer = $('<div id="' + _modalId + '"></div>');
                 var existsModals = $('[id^="Abp_Modal_"]');
                 if (existsModals.length) {
                     existsModals.last().after(_$modalContainer)
@@ -96,13 +96,22 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
+                    var modalBackdrop = $('.modal-backdrop').last();
+                    if (modalBackdrop) {
+                        var zIndex = parseInt(_$modal.css('z-index'));
+                        if (!isNaN(zIndex)) {
+                            modalBackdrop.css("z-index", zIndex - 1);
+                        }
+                    }
+
+                    var focusElement = null;
                     if (!options.focusElement) {
                         //focuses first element if it's a typeable input.
                         var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
 
                         _onOpenCallbacks.triggerAll(_publicApi);
 
-                        if ($firstVisibleInput.hasClass("datepicker")) {
+                        if ($firstVisibleInput.data("datepicker") || $firstVisibleInput.data("daterangepicker")) {
                             return; //don't pop-up date pickers...
                         }
 
@@ -112,11 +121,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                         }
 
                         $firstVisibleInput.focus();
+                        focusElement = $firstVisibleInput;
                     } else if (typeof options.focusElement === 'function') {
-                        var focusElement = options.focusElement();
+                        focusElement = options.focusElement();
                         focusElement.focus();
                     } else if (typeof options.focusElement === 'string') {
-                        $(options.focusElement).focus();
+                        focusElement = $(options.focusElement);
+                        focusElement.focus();
+                    }
+
+                    if (focusElement && $(focusElement).is('input')) {
+                         var value = focusElement.val();
+                        focusElement[0].setSelectionRange(value.length, value.length);
                     }
                 });
 
@@ -127,6 +143,12 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     _modalObject.initModal && _modalObject.initModal(_publicApi, _args);
                 }
 
+                var modalCount = $('.modal').length;
+                var zIndex = parseInt(_$modal.css('z-index'));
+                if (!isNaN(zIndex)) {
+                    _$modal.css("z-index", zIndex + modalCount - 1);
+                }
+
                 _$modal.modal('show');
             };
 
@@ -134,10 +156,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
                 _args = args || {};
 
+                var argsWithoutFunc = {};
+                for (var a in _args) {
+                    if (_args.hasOwnProperty(a) && typeof _args[a] !== 'function') {
+                        argsWithoutFunc[a] = _args[a];
+                    }
+                }
+
                 _createContainer(_modalId)
-                    .load(options.viewUrl, $.param(_args), function (response, status, xhr) {
+                    .load(options.viewUrl, $.param(argsWithoutFunc), function (response, status, xhr) {
                         if (status === "error") {
-                            //TODO: Handle!
+                            var responseJSON = xhr.responseJSON ? xhr.responseJSON : JSON.parse(xhr.responseText);
+                            abp.ajax.showError(responseJSON.error ? responseJSON.error : abp.ajax.defaultError);
                             return;
                         };
 

@@ -28,6 +28,13 @@
     "Undo": "Undo",
     "Update": "Update",
     "YourComment": "Your comment",
-    "YourReply": "Your reply"
+    "YourReply": "Your reply",
+    "ChooseAnActionForBlog": "Choose an action for the blog",
+    "AssignBlogPostsToOtherBlog": "Assign blog posts to another blog",
+    "SelectAnBlogToAssign": "Select a blog to assign",
+    "DeleteAllBlogPostsOfThisBlog": "Delete all blog posts of this blog",
+    "RequiredPermissionName": "Required permission name",
+    "AllPosts": "All posts",
+    "IsReadOnly": "Readonly"
   }
 }

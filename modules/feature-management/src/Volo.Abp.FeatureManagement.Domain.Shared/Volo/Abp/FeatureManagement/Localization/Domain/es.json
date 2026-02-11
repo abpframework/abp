@@ -3,10 +3,15 @@
   "texts": {
     "Features": "Características",
     "NoFeatureFoundMessage": "No hay ninguna característica disponible.",
-    "ManageHostFeatures": "Administrar funciones de host",
-    "Permission:FeatureManagement": "Gestión de características",
+    "ManageHostFeatures": "Administrar Funciones de Host",
+    "ManageHostFeaturesText": "Puede administrar las funciones del lado del host haciendo clic en el siguiente botón.",
+    "Permission:FeatureManagement": "Gestión de Características",
     "Permission:FeatureManagement.ManageHostFeatures": "Gestionar características del Host",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} valor de característica no es valido!",
-		"Menu:FeatureManagement": "Gestión de características"
+    "Menu:FeatureManagement": "Gestión de características",
+    "ResetToDefault": "Restablecen a los predeterminados",
+    "ResetedToDefault": "Restablecido a los valores predeterminados",
+    "AreYouSure": "¿Está seguro?",
+    "AreYouSureToResetToDefault": "¿Estás seguro de restablecer los valores predeterminados?"
   }
 }

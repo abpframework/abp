@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -11,6 +12,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -48,6 +50,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
     private readonly IOptions<CmsKitCommentOptions> _commentsOptions;
     private readonly IOptions<CmsKitRatingOptions> _ratingOptions;
     private readonly IMenuItemRepository _menuItemRepository;
+    private readonly MarkedItemManager _markedItemManager;
+    private readonly IOptions<CmsKitMarkedItemOptions> _markedItemOptions;
 
     public CmsKitDataSeedContributor(
         IGuidGenerator guidGenerator,
@@ -74,7 +78,9 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
         IOptions<CmsKitMediaOptions> cmsMediaOptions,
         IOptions<CmsKitCommentOptions> commentsOptions,
         IOptions<CmsKitRatingOptions> ratingOptions,
-        IMenuItemRepository menuItemRepository)
+        IMenuItemRepository menuItemRepository,
+        MarkedItemManager markedItemManager,
+        IOptions<CmsKitMarkedItemOptions> markedItemOptions)
     {
         _guidGenerator = guidGenerator;
         _cmsUserRepository = cmsUserRepository;
@@ -101,6 +107,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
         _commentsOptions = commentsOptions;
         _ratingOptions = ratingOptions;
         _menuItemRepository = menuItemRepository;
+        _markedItemManager = markedItemManager;
+        _markedItemOptions = markedItemOptions;
     }
 
     public async Task SeedAsync(DataSeedContext context)
@@ -128,6 +136,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             await SeedMediaAsync();
 
             await SeedMenusAsync();
+
+            await SeedMarkedItemsAsync();
         }
     }
 
@@ -170,6 +180,9 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
         _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType1));
         _ratingOptions.Value.EntityTypes.Add(new RatingEntityTypeDefinition(_cmsKitTestData.EntityType2));
 
+        _markedItemOptions.Value.EntityTypes.Add(new MarkedItemEntityTypeDefinition(_cmsKitTestData.EntityType1, StandardMarkedItems.Favorite));
+        _markedItemOptions.Value.EntityTypes.Add(new MarkedItemEntityTypeDefinition(_cmsKitTestData.EntityType2, StandardMarkedItems.Starred));
+
         return Task.CompletedTask;
     }
 
@@ -194,7 +207,8 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
             "comment",
             null,
             _cmsKitTestData.User1Id
-        ));
+        )
+        { IdempotencyToken = _cmsKitTestData.IdempotencyToken_1 });
 
         await _commentRepository.InsertAsync(new Comment(_guidGenerator.Create(),
             _cmsKitTestData.EntityType1,
@@ -344,7 +358,7 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
     private async Task SeedPagesAsync()
     {
-        var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Content_1);
+        var page1 = new Page(_cmsKitTestData.Page_1_Id, _cmsKitTestData.Page_1_Title, _cmsKitTestData.Page_1_Slug, _cmsKitTestData.Content_1, status:_cmsKitTestData.Page_1_Status);
         await _pageRepository.InsertAsync(page1);
 
         var page2 = new Page(_cmsKitTestData.Page_2_Id, _cmsKitTestData.Page_2_Title, _cmsKitTestData.Page_2_Slug, _cmsKitTestData.Content_2);
@@ -416,12 +430,20 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
 
     private async Task SeedMenusAsync()
     {
+        var menuItem4 = new MenuItem(
+                       _cmsKitTestData.MenuItem_4_With_Page_1_Id,
+                        _cmsKitTestData.MenuItem_4_With_Page_1_Name,
+                        _cmsKitTestData.Page_1_Slug.EnsureStartsWith('/'));
+
+        menuItem4.SetPageId(_cmsKitTestData.Page_1_Id);
+
         await _menuItemRepository.InsertManyAsync(new[]
         {
                 new MenuItem(
                     _cmsKitTestData.MenuItem_1_Id,
                     _cmsKitTestData.MenuItem_1_Name,
-                    _cmsKitTestData.MenuItem_1_Url),
+                    _cmsKitTestData.MenuItem_1_Url,
+                    order: _cmsKitTestData.HighestMenuItemOrder),
                 new MenuItem(
                     _cmsKitTestData.MenuItem_2_Id,
                     _cmsKitTestData.MenuItem_2_Name,
@@ -429,8 +451,34 @@ public class CmsKitDataSeedContributor : IDataSeedContributor, ITransientDepende
                 new MenuItem(
                     _cmsKitTestData.MenuItem_3_Id,
                     _cmsKitTestData.MenuItem_3_Name,
-                    _cmsKitTestData.MenuItem_3_Url)
-
+                    _cmsKitTestData.MenuItem_3_Url),
+                menuItem4,
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_5_Id,
+                    _cmsKitTestData.MenuItem_5_Name,
+                    _cmsKitTestData.MenuItem_5_Url,
+                    order: 0,
+                    parentId: _cmsKitTestData.MenuItem_1_Id),
+                new MenuItem(
+                    _cmsKitTestData.MenuItem_6_Id,
+                    _cmsKitTestData.MenuItem_6_Name,
+                    _cmsKitTestData.MenuItem_6_Url,
+                    order: 1,
+                    parentId: _cmsKitTestData.MenuItem_1_Id)
             });
+    }
+
+    private async Task SeedMarkedItemsAsync()
+    {
+        await _markedItemManager.ToggleUserMarkedItemAsync(
+            _cmsKitTestData.User1Id,
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId1
+        );
+        await _markedItemManager.ToggleUserMarkedItemAsync(
+            _cmsKitTestData.User1Id,
+            _cmsKitTestData.EntityType1,
+            _cmsKitTestData.EntityId2
+        );
     }
 }

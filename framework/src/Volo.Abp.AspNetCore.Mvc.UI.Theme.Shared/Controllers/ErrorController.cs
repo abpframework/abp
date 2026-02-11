@@ -51,6 +51,7 @@ public class ErrorController : AbpController
         {
             options.SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients;
+            options.SendExceptionDataToClientTypes = ExceptionHandlingOptions.SendExceptionDataToClientTypes;
         });
 
         if (httpStatusCode == 0)

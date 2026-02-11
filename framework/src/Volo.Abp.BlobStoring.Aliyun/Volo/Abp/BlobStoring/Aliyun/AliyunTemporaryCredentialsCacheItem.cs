@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Caching;
 
 namespace Volo.Abp.BlobStoring.Aliyun;
 
 [Serializable]
 public class AliyunTemporaryCredentialsCacheItem
 {
-    public string AccessKeyId { get; set; }
+    public string AccessKeyId { get; set; } = default!;
 
-    public string AccessKeySecret { get; set; }
+    public string AccessKeySecret { get; set; } = default!;
 
-    public string SecurityToken { get; set; }
+    public string SecurityToken { get; set; } = default!;
 
     public AliyunTemporaryCredentialsCacheItem()
     {

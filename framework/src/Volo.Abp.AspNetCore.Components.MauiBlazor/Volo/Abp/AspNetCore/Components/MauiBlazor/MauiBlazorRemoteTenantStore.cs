@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Pages.Abp.MultiTenancy.ClientProxies;
@@ -23,13 +24,13 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         Cache = cache;
     }
 
-    public async Task<TenantConfiguration> FindAsync(string name)
+    public async Task<TenantConfiguration?> FindAsync(string normalizedName)
     {
-        var cacheKey = CreateCacheKey(name);
+        var cacheKey = CreateCacheKey(normalizedName);
 
         var tenantConfiguration = await Cache.GetOrAddAsync(
             cacheKey,
-            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name)),
+            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(normalizedName))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow =
@@ -40,13 +41,13 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    public async Task<TenantConfiguration> FindAsync(Guid id)
+    public async Task<TenantConfiguration?> FindAsync(Guid id)
     {
         var cacheKey = CreateCacheKey(id);
 
         var tenantConfiguration = await Cache.GetOrAddAsync(
             cacheKey,
-            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id)),
+            async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow =
@@ -57,13 +58,18 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    public TenantConfiguration Find(string name)
+    public Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
     {
-        var cacheKey = CreateCacheKey(name);
+        return Task.FromResult<IReadOnlyList<TenantConfiguration>>(Array.Empty<TenantConfiguration>());
+    }
+
+    public TenantConfiguration? Find(string normalizedName)
+    {
+        var cacheKey = CreateCacheKey(normalizedName);
 
         var tenantConfiguration = Cache.GetOrAdd(
             cacheKey,
-            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(name))),
+            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByNameAsync(normalizedName)))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow =
@@ -74,13 +80,13 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    public TenantConfiguration Find(Guid id)
+    public TenantConfiguration? Find(Guid id)
     {
         var cacheKey = CreateCacheKey(id);
 
         var tenantConfiguration = Cache.GetOrAdd(
             cacheKey,
-            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id))),
+            () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await TenantAppService.FindTenantByIdAsync(id)))!,
             () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow =
@@ -91,19 +97,19 @@ public class MauiBlazorRemoteTenantStore : ITenantStore, ITransientDependency
         return tenantConfiguration;
     }
 
-    protected virtual TenantConfiguration CreateTenantConfiguration(FindTenantResultDto tenantResultDto)
+    protected virtual TenantConfiguration? CreateTenantConfiguration(FindTenantResultDto tenantResultDto)
     {
         if (!tenantResultDto.Success || tenantResultDto.TenantId == null)
         {
             return null;
         }
 
-        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name);
+        return new TenantConfiguration(tenantResultDto.TenantId.Value, tenantResultDto.Name!, tenantResultDto.NormalizedName!);
     }
 
-    protected virtual string CreateCacheKey(string tenantName)
+    protected virtual string CreateCacheKey(string normalizedName)
     {
-        return $"RemoteTenantStore_Name_{tenantName}";
+        return $"RemoteTenantStore_Name_{normalizedName}";
     }
 
     protected virtual string CreateCacheKey(Guid tenantId)

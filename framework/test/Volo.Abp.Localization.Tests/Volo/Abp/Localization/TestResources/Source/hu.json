@@ -6,6 +6,11 @@
     "CarPlural": "Autók",
     "MaxLenghtErrorMessage": "Ennek a mezőnek a hossza legfeljebb „{0}” karakter lehet",
     "Universe": "Világegyetem",
-    "FortyTwo": "Negyvenkettő"
+    "FortyTwo": "Negyvenkettő",
+    "Enum:BookType.Undefined": "Határozatlan",
+    "Enum:BookType.0": "Undefined 0 értékkel",
+    "BookType.Adventure": "Kaland",
+    "BookType.1": "1-es értékű kaland",
+    "Biography": "Életrajz"
   }
 }

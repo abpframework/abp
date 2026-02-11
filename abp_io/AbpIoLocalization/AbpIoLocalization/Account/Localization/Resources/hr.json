@@ -1,0 +1,17 @@
+{
+  "culture": "hr",
+  "texts": {
+    "Account": "ABP račun - Prijava i registracija | ABP.IO",
+    "Welcome": "Dobrodošli",
+    "UseOneOfTheFollowingLinksToContinue": "Koristite jednu od sljedećih veza za nastavak",
+    "FrameworkHomePage": "Početna stranica okvira",
+    "FrameworkDocumentation": "Okvirna dokumentacija",
+    "OfficialBlog": "Službeni blog",
+    "CommercialHomePage": "Komercijalna početna stranica",
+    "CommercialSupportWebSite": "Web stranica za komercijalnu podršku",
+    "CommunityWebSite": "Web stranica ABP zajednice",
+    "ManageAccount": "Moj račun | ABP.IO",
+    "ManageYourProfile": "Upravljajte svojim profilom",
+    "ReturnToApplication": "Povratak na aplikaciju"
+  }
+}

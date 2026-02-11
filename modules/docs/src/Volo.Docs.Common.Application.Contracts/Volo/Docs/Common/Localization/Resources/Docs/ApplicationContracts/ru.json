@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Общее управление документами",
+    "Permission:PdfDownload": "Скачивание PDF"
+  }
+}

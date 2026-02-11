@@ -1,22 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Blazorise;
-using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.Data;
-using Volo.Abp.Http;
-using Volo.Abp.Http.Client;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 
@@ -25,11 +14,11 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
 {
     protected List<SelectItem<object>> lookupItems = new();
 
-    [Inject] public ILookupApiRequestService LookupApiService { get; set; }
+    [Inject] public ILookupApiRequestService LookupApiService { get; set; } = default!;
 
     public string TextPropertyName => PropertyInfo.Name + "_Text";
 
-    public object SelectedValue {
+    public object? SelectedValue {
         get { return Entity.GetProperty(PropertyInfo.Name); }
         set {
             Entity.SetProperty(PropertyInfo.Name, value, false);
@@ -43,14 +32,17 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         var text = Entity.GetProperty(TextPropertyName);
         if (value != null && text != null)
         {
-            lookupItems.Add(new SelectItem<object>
-            {
-                Text = Entity.GetProperty(TextPropertyName).ToString(),
-                Value = value
-            });
+            lookupItems =
+            [
+                new SelectItem<object>()
+                {
+                    Text = Entity.GetProperty(TextPropertyName)!.ToString()!,
+                    Value = value
+                }
+            ];
         }
     }
-    
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -61,7 +53,7 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         }
     }
 
-    protected virtual void UpdateLookupTextProperty(object value)
+    protected virtual void UpdateLookupTextProperty(object? value)
     {
         var selectedItemText = lookupItems.SingleOrDefault(t => t.Value.Equals(value))?.Text;
         Entity.SetProperty(TextPropertyName, selectedItemText);
@@ -85,8 +77,8 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         {
             selectItems.Add(new SelectItem<object>
             {
-                Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString(),
-                Value = JsonSerializer.Deserialize(item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)
+                Text = item.GetProperty(PropertyInfo.Lookup.DisplayPropertyName).GetString()!,
+                Value = JsonSerializer.Deserialize(item.GetProperty(PropertyInfo.Lookup.ValuePropertyName).GetRawText(), PropertyInfo.Type)!
             });
         }
 

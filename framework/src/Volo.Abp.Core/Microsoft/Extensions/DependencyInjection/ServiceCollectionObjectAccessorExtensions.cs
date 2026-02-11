@@ -40,7 +40,7 @@ public static class ServiceCollectionObjectAccessorExtensions
         return accessor;
     }
 
-    public static T GetObjectOrNull<T>(this IServiceCollection services)
+    public static T? GetObjectOrNull<T>(this IServiceCollection services)
         where T : class
     {
         return services.GetSingletonInstanceOrNull<IObjectAccessor<T>>()?.Value;

@@ -1,0 +1,9 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Buy": "يشتري",
+    "SeeBookDetails": "انظر تفاصيل الكتاب",
+    "MasteringAbpFrameworkEBookDescription": "سيساعدك هذا الكتاب على اكتساب فهم كامل لإطار العمل وتقنيات تطوير تطبيقات الويب الحديثة.",
+    "Feedback": "تعليق"
+  }
+}

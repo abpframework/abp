@@ -4,66 +4,44 @@
       "rootPath": "cms-kit-common",
       "remoteServiceName": "CmsKitCommon",
       "controllers": {
-        "Volo.CmsKit.MediaDescriptors.MediaDescriptorController": {
-          "controllerName": "MediaDescriptor",
-          "controllerGroupName": "MediaDescriptor",
-          "isRemoteService": true,
-          "apiVersion": null,
-          "type": "Volo.CmsKit.MediaDescriptors.MediaDescriptorController",
-          "interfaces": [
-            {
-              "type": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
-            }
-          ],
-          "actions": {
-            "DownloadAsyncById": {
-              "uniqueName": "DownloadAsyncById",
-              "name": "DownloadAsync",
-              "httpMethod": "GET",
-              "url": "api/cms-kit/media/{id}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "Volo.Abp.Content.RemoteStreamContent",
-                "typeSimple": "Volo.Abp.Content.RemoteStreamContent"
-              },
-              "allowAnonymous": null,
-              "implementFrom": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
-            }
-          }
-        },
         "Volo.CmsKit.Blogs.BlogFeatureController": {
           "controllerName": "BlogFeature",
           "controllerGroupName": "BlogFeature",
           "isRemoteService": true,
+          "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.CmsKit.Blogs.BlogFeatureController",
           "interfaces": [
             {
-              "type": "Volo.CmsKit.Blogs.IBlogFeatureAppService"
+              "type": "Volo.CmsKit.Blogs.IBlogFeatureAppService",
+              "name": "IBlogFeatureAppService",
+              "methods": [
+                {
+                  "name": "GetOrDefaultAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "featureName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Blogs.BlogFeatureDto",
+                    "typeSimple": "Volo.CmsKit.Blogs.BlogFeatureDto"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -123,6 +101,78 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.CmsKit.Blogs.IBlogFeatureAppService"
+            }
+          }
+        },
+        "Volo.CmsKit.MediaDescriptors.MediaDescriptorController": {
+          "controllerName": "MediaDescriptor",
+          "controllerGroupName": "MediaDescriptor",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.CmsKit.MediaDescriptors.MediaDescriptorController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService",
+              "name": "IMediaDescriptorAppService",
+              "methods": [
+                {
+                  "name": "DownloadAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.RemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.RemoteStreamContent"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "DownloadAsyncById": {
+              "uniqueName": "DownloadAsyncById",
+              "name": "DownloadAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit/media/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.RemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.RemoteStreamContent"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.CmsKit.MediaDescriptors.IMediaDescriptorAppService"
             }
           }
         }

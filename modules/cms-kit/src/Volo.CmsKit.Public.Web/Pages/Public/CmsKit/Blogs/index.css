@@ -1,4 +1,6 @@
-.card-img-top { 
+.card-img-top {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
 }
 
 .popover {
@@ -7,4 +9,17 @@
 
 .author-name-span{
     cursor: pointer;
+}
+
+.cms-blogpost-desc-preview {
+    min-height: 60px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.favorite-toggle {
+    width: 40px;
+    height: 40px;
 }

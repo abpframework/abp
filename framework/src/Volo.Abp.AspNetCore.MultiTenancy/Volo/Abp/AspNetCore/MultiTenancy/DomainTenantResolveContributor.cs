@@ -23,11 +23,11 @@ public class DomainTenantResolveContributor : HttpTenantResolveContributorBase
         _domainFormat = domainFormat.RemovePreFix(ProtocolPrefixes);
     }
 
-    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    protected override Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
     {
         if (!httpContext.Request.Host.HasValue)
         {
-            return Task.FromResult<string>(null);
+            return Task.FromResult<string?>(null);
         }
 
         var hostName = httpContext.Request.Host.Value.RemovePreFix(ProtocolPrefixes);

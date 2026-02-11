@@ -81,7 +81,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var webClientId = configurationSection["MyProjectName_Web:ClientId"];
         if (!webClientId.IsNullOrWhiteSpace())
         {
-            var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
+            var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"]!.EnsureEndsWith('/');
 
             /* MyProjectName_Web client is only needed if you created a tiered
              * solution. Otherwise, you can delete this client. */
@@ -204,7 +204,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             var application = new OpenIddictApplicationDescriptor
             {
                 ClientId = name,
-                Type = type,
+                ClientType = type,
                 ClientSecret = secret,
                 ConsentType = consentType,
                 DisplayName = displayName
@@ -226,7 +226,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
             if (!redirectUri.IsNullOrWhiteSpace() || !postLogoutRedirectUri.IsNullOrWhiteSpace())
             {
-                application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Logout);
+                application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.EndSession);
             }
 
             var buildInGrantTypes = new []
@@ -286,7 +286,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
               if (grantType == OpenIddictConstants.GrantTypes.DeviceCode)
               {
                   application.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
-                  application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Device);
+                  application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.DeviceAuthorization);
               }
 
               if (grantType == OpenIddictConstants.GrantTypes.Implicit)

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -6,12 +5,13 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.GlobalFeatures;
 
 namespace Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 
-public class GlobalFeaturePageFilter : IAsyncPageFilter, ITransientDependency
+public class GlobalFeaturePageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependency
 {
     public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
     {
@@ -28,8 +28,8 @@ public class GlobalFeaturePageFilter : IAsyncPageFilter, ITransientDependency
 
         if (!GlobalFeatureHelper.IsGlobalFeatureEnabled(context.HandlerInstance.GetType(), out var attribute))
         {
-            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance);
-            logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute.Name}' feature.");
+            var logger = context.GetService<ILogger<GlobalFeatureActionFilter>>(NullLogger<GlobalFeatureActionFilter>.Instance)!;
+            logger.LogWarning($"The '{context.HandlerInstance.GetType().FullName}' page needs to enable '{attribute!.Name}' feature.");
             context.Result = new NotFoundResult();
             return;
         }

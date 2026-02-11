@@ -1,6 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using Volo.Abp.Domain;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB.DependencyInjection;
@@ -12,6 +17,13 @@ namespace Volo.Abp.MongoDB;
 [DependsOn(typeof(AbpDddDomainModule))]
 public class AbpMongoDbModule : AbpModule
 {
+    static AbpMongoDbModule()
+    {
+        AbpBsonSerializer.RemoveSerializer<Guid>();
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+        BsonTypeMapper.RegisterCustomTypeMapper(typeof(Guid), new AbpGuidCustomBsonTypeMapper());
+    }
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddConventionalRegistrar(new AbpMongoDbConventionalRegistrar());
@@ -43,5 +55,11 @@ public class AbpMongoDbModule : AbpModule
             typeof(IMongoDbContextEventInbox<>),
             typeof(MongoDbContextEventInbox<>)
         );
+
+        Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.IgnoredEventSelectors.Add<OutgoingEventRecord>();
+            options.IgnoredEventSelectors.Add<IncomingEventRecord>();
+        });
     }
 }

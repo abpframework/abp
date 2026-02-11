@@ -28,7 +28,7 @@ public class EfCoreFeatureValueRepository : EfCoreRepository<IFeatureManagementD
             .FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<FeatureValue>> FindAllAsync(
+    public virtual async Task<List<FeatureValue>> FindAllAsync(
         string name,
         string providerName,
         string providerKey,
@@ -51,7 +51,7 @@ public class EfCoreFeatureValueRepository : EfCoreRepository<IFeatureManagementD
             ).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task DeleteAsync(
+    public virtual async Task DeleteAsync(
         string providerName,
         string providerKey,
         CancellationToken cancellationToken = default)

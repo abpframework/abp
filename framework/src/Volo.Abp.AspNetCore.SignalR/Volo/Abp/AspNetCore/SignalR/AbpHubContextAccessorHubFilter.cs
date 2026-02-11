@@ -7,7 +7,7 @@ namespace Volo.Abp.AspNetCore.SignalR;
 
 public class AbpHubContextAccessorHubFilter : IHubFilter
 {
-    public virtual async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object>> next)
+    public virtual async ValueTask<object?> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object?>> next)
     {
         var hubContextAccessor = invocationContext.ServiceProvider.GetRequiredService<IAbpHubContextAccessor>();
         using (hubContextAccessor.Change(new AbpHubContext(

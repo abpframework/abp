@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Shouldly;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Http.Client;
@@ -20,7 +19,7 @@ public class RegularTestControllerClientProxy_AbpRemoteCallException_Tests : Abp
         _controller = ServiceProvider.GetRequiredService<IRegularTestController>();
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Replace(ServiceDescriptor.Singleton<IProxyHttpClientFactory, TestProxyHttpClientFactory>());
     }

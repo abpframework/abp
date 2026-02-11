@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Localization;
@@ -14,7 +13,7 @@ public class DynamicStringLengthAttributeAdapter : AttributeAdapterBase<DynamicS
 
     public DynamicStringLengthAttributeAdapter(
         DynamicStringLengthAttribute attribute,
-        IStringLocalizer stringLocalizer)
+        IStringLocalizer? stringLocalizer)
         : base(attribute, stringLocalizer)
     {
         _max = Attribute.MaximumLength.ToString(CultureInfo.InvariantCulture);

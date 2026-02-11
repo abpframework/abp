@@ -14,10 +14,10 @@ public class ResetPasswordConfirmationModel : AccountPageModel
     [BindProperty(SupportsGet = true)]
     public string ReturnUrlHash { get; set; }
 
-    public virtual Task<IActionResult> OnGetAsync()
+    public virtual async Task<IActionResult> OnGetAsync()
     {
-        ReturnUrl = GetRedirectUrl(ReturnUrl, ReturnUrlHash);
+        ReturnUrl = await GetRedirectUrlAsync(ReturnUrl, ReturnUrlHash);
 
-        return Task.FromResult<IActionResult>(Page());
+        return Page();
     }
 }

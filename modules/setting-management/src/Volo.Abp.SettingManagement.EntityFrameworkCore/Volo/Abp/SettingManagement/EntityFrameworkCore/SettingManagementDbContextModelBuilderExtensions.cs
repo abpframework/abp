@@ -36,6 +36,23 @@ public static class SettingManagementDbContextModelBuilderExtensions
             b.ApplyObjectExtensionMappings();
         });
 
+        builder.Entity<SettingDefinitionRecord>(b =>
+        {
+            b.ToTable(AbpSettingManagementDbProperties.DbTablePrefix + "SettingDefinitions", AbpSettingManagementDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.Property(x => x.Name).HasMaxLength(SettingDefinitionRecordConsts.MaxNameLength).IsRequired();
+            b.Property(x => x.DisplayName).HasMaxLength(SettingDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+            b.Property(x => x.Description).HasMaxLength(SettingDefinitionRecordConsts.MaxDescriptionLength);
+            b.Property(x => x.DefaultValue).HasMaxLength(SettingDefinitionRecordConsts.MaxDefaultValueLength);
+            b.Property(x => x.Providers).HasMaxLength(SettingDefinitionRecordConsts.MaxProvidersLength);
+
+            b.HasIndex(x => new { x.Name }).IsUnique();
+
+            b.ApplyObjectExtensionMappings();
+        });
+
         builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
     }
 }

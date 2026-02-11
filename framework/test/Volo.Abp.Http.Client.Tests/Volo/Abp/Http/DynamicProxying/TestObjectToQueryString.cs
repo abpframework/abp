@@ -14,7 +14,7 @@ public class TestObjectToQueryString : IObjectToQueryString<List<GetParamsNameVa
     {
         if (values.IsNullOrEmpty())
         {
-            return null;
+            return Task.FromResult<string>(null);
         }
 
         var sb = new StringBuilder();
@@ -22,6 +22,10 @@ public class TestObjectToQueryString : IObjectToQueryString<List<GetParamsNameVa
         for (var i = 0; i < values.Count; i++)
         {
             sb.Append($"NameValues[{i}].Name={values[i].Name}&NameValues[{i}].Value={values[i].Value}&");
+            foreach (var item in values[i].ExtraProperties)
+            {
+                sb.Append($"NameValues[{i}].ExtraProperties[{item.Key}]={item.Value}&");
+            }
         }
 
         sb.Remove(sb.Length - 1, 1);

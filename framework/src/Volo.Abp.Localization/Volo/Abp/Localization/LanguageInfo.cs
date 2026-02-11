@@ -8,21 +8,17 @@ namespace Volo.Abp.Localization;
 public class LanguageInfo : ILanguageInfo
 {
     [NotNull]
-    public virtual string CultureName { get; protected set; }
+    public virtual string CultureName { get; protected set; } = default!;
 
     [NotNull]
-    public virtual string UiCultureName { get; protected set; }
+    public virtual string UiCultureName { get; protected set; } = default!;
 
     [NotNull]
-    public virtual string DisplayName { get; protected set; }
+    public virtual string DisplayName { get; protected set; } = default!;
 
     [NotNull]
-    public virtual string TwoLetterISOLanguageName { get; protected set; }
+    public virtual string TwoLetterISOLanguageName { get; protected set; } = default!;
 
-    [CanBeNull]
-    public virtual string FlagIcon { get; set; }
-
-    
     protected LanguageInfo()
     {
 
@@ -30,30 +26,28 @@ public class LanguageInfo : ILanguageInfo
 
     public LanguageInfo(
         string cultureName,
-        string uiCultureName = null,
-        string displayName = null,
-        string flagIcon = null)
-    {
-        ChangeCultureInternal(cultureName, uiCultureName, displayName);
-        FlagIcon = flagIcon;
-    }
-
-    public virtual void ChangeCulture(string cultureName, string uiCultureName = null, string displayName = null)
+        string? uiCultureName = null,
+        string? displayName = null)
     {
         ChangeCultureInternal(cultureName, uiCultureName, displayName);
     }
 
-    private void ChangeCultureInternal(string cultureName, string uiCultureName, string displayName)
+    public virtual void ChangeCulture(string cultureName, string? uiCultureName = null, string? displayName = null)
+    {
+        ChangeCultureInternal(cultureName, uiCultureName, displayName);
+    }
+
+    private void ChangeCultureInternal(string cultureName, string? uiCultureName, string? displayName)
     {
         CultureName = Check.NotNullOrWhiteSpace(cultureName, nameof(cultureName));
 
-        UiCultureName = !uiCultureName.IsNullOrWhiteSpace()
+        UiCultureName = (!uiCultureName.IsNullOrWhiteSpace()
             ? uiCultureName
-            : cultureName;
+            : cultureName)!;
 
-        DisplayName = !displayName.IsNullOrWhiteSpace()
+        DisplayName = (!displayName.IsNullOrWhiteSpace()
             ? displayName
-            : cultureName;
+            : cultureName)!;
         
         TwoLetterISOLanguageName = new CultureInfo(cultureName)
             .TwoLetterISOLanguageName;

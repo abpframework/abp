@@ -1,4 +1,6 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using Microsoft.Extensions.Localization;
+using MyCompanyName.MyProjectName.Localization;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Ui.Branding;
 
 namespace MyCompanyName.MyProjectName.Blazor.Server;
@@ -6,5 +8,12 @@ namespace MyCompanyName.MyProjectName.Blazor.Server;
 [Dependency(ReplaceServices = true)]
 public class MyProjectNameBrandingProvider : DefaultBrandingProvider
 {
-    public override string AppName => "MyProjectName";
+    private IStringLocalizer<MyProjectNameResource> _localizer;
+
+    public MyProjectNameBrandingProvider(IStringLocalizer<MyProjectNameResource> localizer)
+    {
+        _localizer = localizer;
+    }
+
+    public override string AppName => _localizer["AppName"];
 }

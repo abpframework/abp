@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
   <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -16,5 +16,6 @@
   <ItemGroup>
     <Folder Include="Volo\CmsKit\Admin\Contents\" />
   </ItemGroup>
+
 
 </Project>

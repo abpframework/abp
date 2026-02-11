@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Modularity;
@@ -98,5 +99,21 @@ public abstract class PageRepository_Test<TStartupModule> : CmsKitTestBase<TStar
 		var pages = await _pageRepository.GetListOfHomePagesAsync();
 
 		pages.ShouldBeEmpty();
+	}
+
+	[Fact]
+	public async Task ShouldFindTitleAsync()
+	{
+		var result = await _pageRepository.FindTitleAsync(_cmsKitTestData.Page_1_Id);
+		result.ShouldNotBeNull();
+		result.ShouldBe(_cmsKitTestData.Page_1_Title);
+	}
+
+	[Fact]
+	public async Task ShouldReturnNullFindTitleAsync()
+	{
+		var nonExistingId = Guid.NewGuid();
+		var result = await _pageRepository.FindTitleAsync(nonExistingId);
+		result.ShouldBeNull();
 	}
 }

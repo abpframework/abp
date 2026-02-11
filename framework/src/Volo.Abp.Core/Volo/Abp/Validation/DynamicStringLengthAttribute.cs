@@ -12,7 +12,7 @@ namespace Volo.Abp.Validation;
 /// </summary>
 public class DynamicStringLengthAttribute : StringLengthAttribute
 {
-    private static readonly FieldInfo MaximumLengthField;
+    private static readonly FieldInfo? MaximumLengthField;
 
     static DynamicStringLengthAttribute()
     {
@@ -28,8 +28,8 @@ public class DynamicStringLengthAttribute : StringLengthAttribute
     /// <param name="minimumLengthPropertyName">The name of the public static property for the <see cref="StringLengthAttribute.MinimumLength"/></param>
     public DynamicStringLengthAttribute(
         [NotNull] Type sourceType,
-        [CanBeNull] string maximumLengthPropertyName,
-        [CanBeNull] string minimumLengthPropertyName = null)
+        string? maximumLengthPropertyName,
+        string? minimumLengthPropertyName = null)
         : base(0)
     {
         Check.NotNull(sourceType, nameof(sourceType));
@@ -41,7 +41,7 @@ public class DynamicStringLengthAttribute : StringLengthAttribute
                 BindingFlags.Static | BindingFlags.Public
             );
             Debug.Assert(maximumLengthProperty != null, nameof(maximumLengthProperty) + " != null");
-            MaximumLengthField.SetValue(this, (int)maximumLengthProperty.GetValue(null));
+            MaximumLengthField?.SetValue(this, (int)maximumLengthProperty?.GetValue(null)!);
         }
 
         if (minimumLengthPropertyName != null)
@@ -51,7 +51,7 @@ public class DynamicStringLengthAttribute : StringLengthAttribute
                 BindingFlags.Static | BindingFlags.Public
             );
             Debug.Assert(minimumLengthProperty != null, nameof(minimumLengthProperty) + " != null");
-            MinimumLength = (int)minimumLengthProperty.GetValue(null);
+            MinimumLength = (int)minimumLengthProperty?.GetValue(null)!;
         }
     }
 }

@@ -29,7 +29,7 @@ public class MongoUserReactionRepository : MongoDbRepository<ICmsKitMongoDbConte
         Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
         Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x =>
                 x.CreatorId == userId &&
                 x.EntityType == entityType &&
@@ -47,7 +47,7 @@ public class MongoUserReactionRepository : MongoDbRepository<ICmsKitMongoDbConte
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
         Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x =>
                 x.CreatorId == userId &&
                 x.EntityType == entityType &&
@@ -63,7 +63,7 @@ public class MongoUserReactionRepository : MongoDbRepository<ICmsKitMongoDbConte
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
         Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x =>
                 x.EntityType == entityType &&
                 x.EntityId == entityId)

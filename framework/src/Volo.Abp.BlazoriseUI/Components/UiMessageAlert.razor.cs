@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Blazorise;
@@ -10,7 +9,7 @@ namespace Volo.Abp.BlazoriseUI.Components;
 
 public partial class UiMessageAlert : ComponentBase, IDisposable
 {
-    protected Modal ModalRef { get; set; }
+    protected Modal ModalRef { get; set; } = default!;
 
     protected virtual bool IsConfirmation
         => MessageType == UiMessageType.Confirmation;
@@ -21,7 +20,10 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
     protected virtual bool ShowMessageIcon
        => Options?.ShowMessageIcon ?? true;
 
-    protected virtual object MessageIcon => Options?.MessageIcon ?? MessageType switch
+    protected virtual bool IsMessageHtmlMarkup
+        => Options?.IsMessageHtmlMarkup ?? false;
+
+    protected virtual object? MessageIcon => Options?.MessageIcon ?? MessageType switch
     {
         UiMessageType.Info => IconName.Info,
         UiMessageType.Success => IconName.Check,
@@ -31,7 +33,7 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
         _ => null,
     };
 
-    protected virtual string MessageIconColor => MessageType switch
+    protected virtual string? MessageIconColor => MessageType switch
     {
         // gets the color in the order of importance: Blazorise > Bootstrap > fallback color
         UiMessageType.Info => "var(--b-theme-info, var(--info, #17a2b8))",
@@ -63,13 +65,13 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
 
     [Parameter] public UiMessageType MessageType { get; set; }
 
-    [Parameter] public string Title { get; set; }
+    [Parameter] public string? Title { get; set; }
 
-    [Parameter] public string Message { get; set; }
+    [Parameter] public string Message { get; set; } = default!;
 
-    [Parameter] public TaskCompletionSource<bool> Callback { get; set; }
+    [Parameter] public TaskCompletionSource<bool>? Callback { get; set; }
 
-    [Parameter] public UiMessageOptions Options { get; set; }
+    [Parameter] public UiMessageOptions? Options { get; set; }
 
     [Parameter] public EventCallback Okayed { get; set; }
 
@@ -77,16 +79,19 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
 
     [Parameter] public EventCallback Canceled { get; set; }
 
-    [Inject] protected BlazoriseUiMessageService UiMessageService { get; set; }
+    [Inject] protected BlazoriseUiMessageService? UiMessageService { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        UiMessageService.MessageReceived += OnMessageReceived;
+        if (UiMessageService != null)
+        {
+            UiMessageService.MessageReceived += OnMessageReceived;
+        }
     }
 
-    private async void OnMessageReceived(object sender, UiMessageEventArgs e)
+    private async void OnMessageReceived(object? sender, UiMessageEventArgs e)
     {
         MessageType = e.MessageType;
         Message = e.Message;

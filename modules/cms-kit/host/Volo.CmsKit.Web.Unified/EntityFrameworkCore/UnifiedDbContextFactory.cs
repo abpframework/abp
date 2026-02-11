@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if EntityFrameworkCore
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -28,3 +29,4 @@ public class UnifiedDbContextFactory : IDesignTimeDbContextFactory<UnifiedDbCont
         return builder.Build();
     }
 }
+#endif

@@ -41,12 +41,12 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         if (setting == null)
         {
             setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
-            await SettingRepository.InsertAsync(setting);
+            await SettingRepository.InsertAsync(setting, true);
         }
         else
         {
             setting.Value = value;
-            await SettingRepository.UpdateAsync(setting);
+            await SettingRepository.UpdateAsync(setting, true);
         }
 
         await Cache.SetAsync(CalculateCacheKey(name, providerName, providerKey), new SettingCacheItem(setting?.Value), considerUow: true);
@@ -64,7 +64,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
         if (setting != null)
         {
-            await SettingRepository.DeleteAsync(setting);
+            await SettingRepository.DeleteAsync(setting, true);
             await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey), considerUow: true);
         }
     }
@@ -92,7 +92,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         string currentName,
         SettingCacheItem currentCacheItem)
     {
-        var settingDefinitions = SettingDefinitionManager.GetAll();
+        var settingDefinitions = await SettingDefinitionManager.GetAllAsync();
         var settingsDictionary = (await SettingRepository.GetListAsync(providerName, providerKey))
             .ToDictionary(s => s.Name, s => s.Value);
 
@@ -176,9 +176,10 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         string providerKey,
         List<string> notCacheKeys)
     {
-        var settingDefinitions = SettingDefinitionManager.GetAll().Where(x => notCacheKeys.Any(k => GetSettingNameFormCacheKeyOrNull(k) == x.Name));
+        var settingNames = new HashSet<string>(notCacheKeys.Select(GetSettingNameFormCacheKeyOrNull));
+        var settingDefinitions = (await SettingDefinitionManager.GetAllAsync()).Where(x => settingNames.Contains(x.Name));
 
-        var settingsDictionary = (await SettingRepository.GetListAsync(notCacheKeys.Select(GetSettingNameFormCacheKeyOrNull).ToArray(), providerName, providerKey))
+        var settingsDictionary = (await SettingRepository.GetListAsync(settingNames.ToArray(), providerName, providerKey))
             .ToDictionary(s => s.Name, s => s.Value);
 
         var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();

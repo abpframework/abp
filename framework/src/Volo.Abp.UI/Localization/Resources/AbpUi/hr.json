@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Spremanje...",
     "Actions": "Akcije",
     "Delete": "Izbrisati",
-    "SuccessfullyDeleted": "Uspješno izbrisano",
+    "CreatedSuccessfully": "Uspješno kreirano",
+    "SavedSuccessfully": "Uspešno zabeleženo",
+    "DeletedSuccessfully": "Uspješno izbrisano",
     "Edit": "Uredi",
     "Refresh": "Osvježi",
     "Language": "Jezik",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Prikazano 0 do 0 od 0 zapisa",
     "PagerInfoFiltered": "(filtrirano od _MAX_ ukupnih zapisa)",
     "NoDataAvailableInDatatable": "Nema dostupnih podataka",
+    "ErrorLoadingDatatable": "Došlo je do pogreške tijekom zahtjeva. Provjerite poruku za detalje.",
     "Total": "ukupno",
     "Selected": "odabrano",
     "PagerShowMenuEntries": "Pokaži _MENU_ zapise",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} zapis će biti obrisan!",
     "ItemWillBeDeletedMessage": "Ovaj zapis će biti obrisan!",
     "ManageYourAccount": "Upravljaj korisničkim računom",
-    "OthersGroup": "Drugi"
+    "OthersGroup": "Drugi",
+    "Today": "Danas",
+    "Apply": "primijeniti",
+    "InternetConnectionInfo": "Operacija se nije mogla izvesti. Vaša internetska veza trenutačno nije dostupna.",
+    "CopiedToTheClipboard": "Kopirano u međuspremnik",
+    "AddNew": "Dodaj novi",
+    "ProfilePicture": "Profilna slika",
+    "Theme": "Tema",
+    "NotAssigned": "Nije dodijeljeno",
+    "EntityActionsDisabledTooltip": "Nemate dozvolu za izvođenje bilo kakve akcije.",
+    "ResourcePermissions": "Dozvole"
   }
 }

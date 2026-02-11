@@ -24,11 +24,11 @@ public static class ServiceCollectionCommonExtensions
         return services.GetSingletonInstance<ITypeFinder>();
     }
 
-    public static T GetSingletonInstanceOrNull<T>(this IServiceCollection services)
+    public static T? GetSingletonInstanceOrNull<T>(this IServiceCollection services)
     {
-        return (T)services
+        return (T?)services
             .FirstOrDefault(d => d.ServiceType == typeof(T))
-            ?.ImplementationInstance;
+            ?.NormalizedImplementationInstance();
     }
 
     public static T GetSingletonInstance<T>(this IServiceCollection services)
@@ -48,7 +48,7 @@ public static class ServiceCollectionCommonExtensions
 
         foreach (var service in services)
         {
-            var factoryInterface = service.ImplementationInstance?.GetType()
+            var factoryInterface = service.NormalizedImplementationInstance()?.GetType()
                 .GetTypeInfo()
                 .GetInterfaces()
                 .FirstOrDefault(i => i.GetTypeInfo().IsGenericType &&
@@ -65,13 +65,13 @@ public static class ServiceCollectionCommonExtensions
                 .GetMethods()
                 .Single(m => m.Name == nameof(BuildServiceProviderFromFactory) && m.IsGenericMethod)
                 .MakeGenericMethod(containerBuilderType)
-                .Invoke(null, new object[] { services, null });
+                .Invoke(null, new object?[] { services, null })!;
         }
 
         return services.BuildServiceProvider();
     }
 
-    public static IServiceProvider BuildServiceProviderFromFactory<TContainerBuilder>([NotNull] this IServiceCollection services, Action<TContainerBuilder> builderAction = null)
+    public static IServiceProvider BuildServiceProviderFromFactory<TContainerBuilder>([NotNull] this IServiceCollection services, Action<TContainerBuilder>? builderAction = null) where TContainerBuilder : notnull
     {
         Check.NotNull(services, nameof(services));
 
@@ -90,7 +90,7 @@ public static class ServiceCollectionCommonExtensions
     /// Resolves a dependency using given <see cref="IServiceCollection"/>.
     /// This method should be used only after dependency injection registration phase completed.
     /// </summary>
-    internal static T GetService<T>(this IServiceCollection services)
+    internal static T? GetService<T>(this IServiceCollection services)
     {
         return services
             .GetSingletonInstance<IAbpApplication>()
@@ -102,7 +102,7 @@ public static class ServiceCollectionCommonExtensions
     /// Resolves a dependency using given <see cref="IServiceCollection"/>.
     /// This method should be used only after dependency injection registration phase completed.
     /// </summary>
-    internal static object GetService(this IServiceCollection services, Type type)
+    internal static object? GetService(this IServiceCollection services, Type type)
     {
         return services
             .GetSingletonInstance<IAbpApplication>()
@@ -115,7 +115,7 @@ public static class ServiceCollectionCommonExtensions
     /// Throws exception if service is not registered.
     /// This method should be used only after dependency injection registration phase completed.
     /// </summary>
-    public static T GetRequiredService<T>(this IServiceCollection services)
+    public static T GetRequiredService<T>(this IServiceCollection services) where T : notnull
     {
         return services
             .GetSingletonInstance<IAbpApplication>()
@@ -140,25 +140,25 @@ public static class ServiceCollectionCommonExtensions
     /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
     /// once dependency injection registration phase completed.
     /// </summary>
-    public static Lazy<T> GetServiceLazy<T>(this IServiceCollection services)
+    public static Lazy<T?> GetServiceLazy<T>(this IServiceCollection services)
     {
-        return new Lazy<T>(services.GetService<T>, true);
+        return new Lazy<T?>(services.GetService<T>, true);
     }
 
     /// <summary>
     /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
     /// once dependency injection registration phase completed.
     /// </summary>
-    public static Lazy<object> GetServiceLazy(this IServiceCollection services, Type type)
+    public static Lazy<object?> GetServiceLazy(this IServiceCollection services, Type type)
     {
-        return new Lazy<object>(() => services.GetService(type), true);
+        return new Lazy<object?>(() => services.GetService(type), true);
     }
 
     /// <summary>
     /// Returns a <see cref="Lazy{T}"/> to resolve a service from given <see cref="IServiceCollection"/>
     /// once dependency injection registration phase completed.
     /// </summary>
-    public static Lazy<T> GetRequiredServiceLazy<T>(this IServiceCollection services)
+    public static Lazy<T> GetRequiredServiceLazy<T>(this IServiceCollection services) where T : notnull
     {
         return new Lazy<T>(services.GetRequiredService<T>, true);
     }
@@ -172,7 +172,7 @@ public static class ServiceCollectionCommonExtensions
         return new Lazy<object>(() => services.GetRequiredService(type), true);
     }
 
-    public static IServiceProvider GetServiceProviderOrNull(this IServiceCollection services)
+    public static IServiceProvider? GetServiceProviderOrNull(this IServiceCollection services)
     {
         return services.GetObjectOrNull<IServiceProvider>();
     }

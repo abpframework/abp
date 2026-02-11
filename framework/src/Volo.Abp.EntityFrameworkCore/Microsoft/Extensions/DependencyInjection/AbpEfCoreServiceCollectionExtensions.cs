@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +12,7 @@ public static class AbpEfCoreServiceCollectionExtensions
 {
     public static IServiceCollection AddAbpDbContext<TDbContext>(
         this IServiceCollection services,
-        Action<IAbpDbContextRegistrationOptionsBuilder> optionsBuilder = null)
+        Action<IAbpDbContextRegistrationOptionsBuilder>? optionsBuilder = null)
         where TDbContext : AbpDbContext<TDbContext>
     {
         services.AddMemoryCache();

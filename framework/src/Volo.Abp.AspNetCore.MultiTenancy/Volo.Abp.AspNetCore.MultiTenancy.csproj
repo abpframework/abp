@@ -4,7 +4,9 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.AspNetCore.MultiTenancy</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.MultiTenancy</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -19,6 +21,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Volo\Abp\AspNetCore\MultiTenancy\Views\MultiTenancyMiddlewareErrorPage.cshtml" />
+    <None Include="Volo\Abp\AspNetCore\MultiTenancy\Views\MultiTenancyMiddlewareErrorPage.cshtml" />
   </ItemGroup>
 
 </Project>

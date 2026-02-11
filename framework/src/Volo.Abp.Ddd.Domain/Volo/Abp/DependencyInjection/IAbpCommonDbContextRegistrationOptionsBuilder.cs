@@ -20,23 +20,23 @@ public interface IAbpCommonDbContextRegistrationOptionsBuilder
 
     /// <summary>
     /// Registers default repositories for all the entities in this DbContext.
-    /// Default repositories will use given <see cref="TDefaultRepositoryDbContext"/>.
+    /// Default repositories will use given <typeparamref name="TDefaultRepositoryDbContext"/>.
     /// </summary>
     /// <typeparam name="TDefaultRepositoryDbContext">DbContext type that will be used by default repositories</typeparam>
     /// <param name="includeAllEntities">
     /// Registers repositories only for aggregate root entities by default.
-    /// Set <see cref="includeAllEntities"/> to true to include all entities.
+    /// Set <paramref name="includeAllEntities"/> to true to include all entities.
     /// </param>
     IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false);
 
     /// <summary>
     /// Registers default repositories for all the entities in this DbContext.
-    /// Default repositories will use given <see cref="defaultRepositoryDbContextType"/>.
+    /// Default repositories will use given <paramref name="defaultRepositoryDbContextType"/>.
     /// </summary>
     /// <param name="defaultRepositoryDbContextType">DbContext type that will be used by default repositories</param>
     /// <param name="includeAllEntities">
     /// Registers repositories only for aggregate root entities by default.
-    /// Set <see cref="includeAllEntities"/> to true to include all entities.
+    /// Set <paramref name="includeAllEntities"/> to true to include all entities.
     /// </param>
     IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false);
 
@@ -90,5 +90,5 @@ public interface IAbpCommonDbContextRegistrationOptionsBuilder
     /// <param name="otherDbContextType">The DbContext type to be replaced</param>
     /// <param name="targetDbContextType">The target DbContext type (optional, used this DbContext type if not provided)</param>
     /// <param name="multiTenancySides">MultiTenancy side</param>
-    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both);
+    IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType, Type? targetDbContextType = null, MultiTenancySides multiTenancySides = MultiTenancySides.Both);
 }

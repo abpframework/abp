@@ -129,4 +129,14 @@ public abstract class TagRepository_Test<TStartupModule> : CmsKitTestBase<TStart
 
         count.ShouldBe(1);
     }
+    
+    [Fact]
+    public async Task Should_Get_Popular_Tags()
+    {
+        var popularTags = await _tagRepository.GetPopularTagsAsync(_cmsKitTestData.Content_1_EntityType, 2);
+
+        popularTags.Count.ShouldBe(2);
+        _cmsKitTestData.Content_1_Tags.Contains(popularTags[0].Name).ShouldBeTrue();
+        _cmsKitTestData.Content_1_Tags.Contains(popularTags[1].Name).ShouldBeTrue();
+    }
 }

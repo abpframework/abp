@@ -2,7 +2,7 @@
 
 public interface ICurrentClient
 {
-    string Id { get; }
+    string? Id { get; }
 
     bool IsAuthenticated { get; }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building;
 
@@ -28,11 +29,17 @@ public abstract class TemplateInfo
 
     public virtual IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        return Array.Empty<ProjectBuildPipelineStep>();
+        var steps = new List<ProjectBuildPipelineStep>();
+        return steps;
     }
 
     public bool IsPro()
     {
         return Name.EndsWith("-pro", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public bool IsNoLayer()
+    {
+        return Name is AppNoLayersTemplate.TemplateName or AppNoLayersProTemplate.TemplateName;
     }
 }

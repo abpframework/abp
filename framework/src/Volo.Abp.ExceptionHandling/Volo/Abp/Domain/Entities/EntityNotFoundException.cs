@@ -5,17 +5,45 @@ namespace Volo.Abp.Domain.Entities;
 /// <summary>
 /// This exception is thrown if an entity is expected to be found but not found.
 /// </summary>
+public class EntityNotFoundException<TEntityType> : EntityNotFoundException
+{
+    /// <summary>
+    /// Creates a new <see cref="EntityNotFoundException{TEntityType}"/> object.
+    /// </summary>
+    public EntityNotFoundException()
+        : base(typeof(TEntityType))
+    {
+    }
+    /// <summary>
+    /// Creates a new <see cref="EntityNotFoundException{TEntityType}"/> object.
+    /// </summary>
+    public EntityNotFoundException(object? id)
+        : base(typeof(TEntityType), id)
+    {
+    }
+    /// <summary>
+    /// Creates a new <see cref="EntityNotFoundException{TEntityType}"/> object.
+    /// </summary>
+    public EntityNotFoundException(object? id, Exception? innerException)
+        : base(typeof(TEntityType), id, innerException)
+    {
+    }
+}
+
+/// <summary>
+/// This exception is thrown if an entity is expected to be found but not found.
+/// </summary>
 public class EntityNotFoundException : AbpException
 {
     /// <summary>
     /// Type of the entity.
     /// </summary>
-    public Type EntityType { get; set; }
+    public Type? EntityType { get; set; }
 
     /// <summary>
     /// Id of the Entity.
     /// </summary>
-    public object Id { get; set; }
+    public object? Id { get; set; }
 
     /// <summary>
     /// Creates a new <see cref="EntityNotFoundException"/> object.
@@ -37,7 +65,7 @@ public class EntityNotFoundException : AbpException
     /// <summary>
     /// Creates a new <see cref="EntityNotFoundException"/> object.
     /// </summary>
-    public EntityNotFoundException(Type entityType, object id)
+    public EntityNotFoundException(Type entityType, object? id)
         : this(entityType, id, null)
     {
 
@@ -46,7 +74,7 @@ public class EntityNotFoundException : AbpException
     /// <summary>
     /// Creates a new <see cref="EntityNotFoundException"/> object.
     /// </summary>
-    public EntityNotFoundException(Type entityType, object id, Exception innerException)
+    public EntityNotFoundException(Type entityType, object? id, Exception? innerException)
         : base(
             id == null
                 ? $"There is no such an entity given id. Entity type: {entityType.FullName}"

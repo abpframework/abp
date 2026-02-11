@@ -1,15 +1,34 @@
 {
-  "version": "7.2.1",
+  "version": "10.1.0-rc.3",
   "name": "@abp/docs",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/anchor-js": "~7.2.1",
-    "@abp/clipboard": "~7.2.1",
-    "@abp/malihu-custom-scrollbar-plugin": "~7.2.1",
-    "@abp/popper.js": "~7.2.1",
-    "@abp/prismjs": "~7.2.1"
+    "@abp/anchor-js": "~10.1.0-rc.3",
+    "@abp/clipboard": "~10.1.0-rc.3",
+    "@abp/malihu-custom-scrollbar-plugin": "~10.1.0-rc.3",
+    "@abp/popper.js": "~10.1.0-rc.3",
+    "@abp/prismjs": "~10.1.0-rc.3"
   },
-  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "license": "LGPL-3.0",
+  "keywords": [
+    "aspnetcore",
+    "boilerplate",
+    "framework",
+    "web",
+    "best-practices",
+    "angular",
+    "maui",
+    "blazor",
+    "mvc",
+    "csharp",
+    "webapp"
+  ]
 }

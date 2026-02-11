@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.Identity;
@@ -13,11 +14,17 @@ public abstract class IdentityRoleRepository_Tests<TStartupModule> : AbpIdentity
 {
     protected IIdentityRoleRepository RoleRepository { get; }
     protected ILookupNormalizer LookupNormalizer { get; }
+    protected IdentityUserManager UserManager { get; }
+    protected IdentityTestData TestData { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     protected IdentityRoleRepository_Tests()
     {
         RoleRepository = ServiceProvider.GetRequiredService<IIdentityRoleRepository>();
         LookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
+        UserManager = ServiceProvider.GetRequiredService<IdentityUserManager>();
+        TestData = ServiceProvider.GetRequiredService<IdentityTestData>();
+        UnitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
     }
 
     [Fact]
@@ -65,5 +72,31 @@ public abstract class IdentityRoleRepository_Tests<TStartupModule> : AbpIdentity
         var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"));
         role.Claims.ShouldNotBeNull();
         role.Claims.Any().ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task GetListWithUserCountAsync()
+    {
+        var roles = await RoleRepository.GetListWithUserCountAsync();
+
+        roles.Count.ShouldBe(5);
+        roles.ShouldContain(r => r.Role.Name == "admin" && r.UserCount == 2);
+        roles.ShouldContain(r => r.Role.Name == "moderator" && r.UserCount == 1);
+        roles.ShouldContain(r => r.Role.Name == "supporter" && r.UserCount == 2);
+        roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 1);
+
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var userBob = await UserManager.FindByIdAsync(TestData.UserBobId.ToString());
+            await UserManager.DeleteAsync(userBob!);
+            await uow.CompleteAsync();
+        }
+        
+        roles = await RoleRepository.GetListWithUserCountAsync();
+
+        roles.Count.ShouldBe(5);
+        roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 0);
+        roles.ShouldContain(r => r.Role.Name == "sale" && r.UserCount == 0);
     }
 }

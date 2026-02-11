@@ -16,7 +16,7 @@ public static class ActionDescriptorExtensions
             throw new AbpException($"{nameof(actionDescriptor)} should be type of {typeof(ControllerActionDescriptor).AssemblyQualifiedName}");
         }
 
-        return actionDescriptor as ControllerActionDescriptor;
+        return (actionDescriptor as ControllerActionDescriptor)!;
     }
 
     public static MethodInfo GetMethodInfo(this ActionDescriptor actionDescriptor)
@@ -51,6 +51,6 @@ public static class ActionDescriptorExtensions
             throw new AbpException($"{nameof(actionDescriptor)} should be type of {typeof(PageActionDescriptor).AssemblyQualifiedName}");
         }
 
-        return actionDescriptor as PageActionDescriptor;
+        return (actionDescriptor as PageActionDescriptor)!;
     }
 }

@@ -5,6 +5,21 @@
 
 (function(){
 
+  // controller volo.docs.areas.documents.documentNavigation
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.docs.areas.documents.documentNavigation');
+
+    volo.docs.areas.documents.documentNavigation.getNavigation = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'docs/document-navigation' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }, { name: 'projectName', value: input.projectName }, { name: 'projectFormat', value: input.projectFormat }, { name: 'routeVersion', value: input.routeVersion }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.docs.areas.documents.documentResource
 
   (function(){
@@ -14,49 +29,6 @@
     volo.docs.areas.documents.documentResource.getResource = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'document-resources' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'name', value: input.name }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-  })();
-
-  // controller volo.docs.projects.docsProject
-
-  (function(){
-
-    abp.utils.createNamespace(window, 'volo.docs.projects.docsProject');
-
-    volo.docs.projects.docsProject.getList = function(ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/projects',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.docs.projects.docsProject.get = function(shortName, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/projects/' + shortName + '',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.docs.projects.docsProject.getDefaultLanguageCode = function(shortName, version, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/projects/' + shortName + '/defaultLanguage' + abp.utils.buildQueryString([{ name: 'version', value: version }]) + '',
-        type: 'GET'
-      }, { dataType: 'text' }, ajaxParams));
-    };
-
-    volo.docs.projects.docsProject.getVersions = function(shortName, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/projects/' + shortName + '/versions',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.docs.projects.docsProject.getLanguageList = function(shortName, version, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/projects/' + shortName + '/' + version + '/languageList',
         type: 'GET'
       }, ajaxParams));
     };

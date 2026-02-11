@@ -2,13 +2,10 @@
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter;
-using Fody;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Client;
-using Microsoft.Extensions.Options;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.Extensibility;
@@ -33,14 +30,18 @@ public class WebAssemblyLookupApiRequestService : ILookupApiRequestService, ITra
 
     public async Task<string> SendAsync(string url)
     {
-        var client = HttpClientFactory.CreateClient();
+        var client = HttpClientFactory.CreateClient(nameof(WebAssemblyLookupApiRequestService));
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         AddHeaders(requestMessage);
 
         var uri = new Uri(url, UriKind.RelativeOrAbsolute);
         if (!uri.IsAbsoluteUri)
         {
-            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultOrNullAsync("Default");
+            if (remoteServiceConfig == null)
+            {
+                throw new AbpException("Remote service configuration 'Default' was not found!");
+            }
             client.BaseAddress = new Uri(remoteServiceConfig.BaseUrl);
             await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(remoteServiceConfig.BaseUrl), string.Empty));
         }

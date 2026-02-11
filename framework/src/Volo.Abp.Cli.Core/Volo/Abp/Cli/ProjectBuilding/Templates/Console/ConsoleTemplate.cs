@@ -10,6 +10,6 @@ public class ConsoleTemplate : ConsoleTemplateBase
     public ConsoleTemplate()
         : base(TemplateName)
     {
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Console";
+        DocumentUrl = CliConsts.DocsLink + "latest/get-started/console";
     }
 }

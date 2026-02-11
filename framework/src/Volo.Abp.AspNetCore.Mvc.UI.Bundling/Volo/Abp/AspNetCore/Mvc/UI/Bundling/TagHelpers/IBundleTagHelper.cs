@@ -2,5 +2,5 @@
 
 public interface IBundleTagHelper
 {
-    string GetNameOrNull();
+    string? GetNameOrNull();
 }

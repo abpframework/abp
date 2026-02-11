@@ -2,7 +2,6 @@
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.Logging;
 
 namespace Volo.Abp.Modularity.PlugIns;
 

@@ -1,0 +1,9 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Buy": "खरीदना",
+    "SeeBookDetails": "पुस्तक विवरण देखें",
+    "MasteringAbpFrameworkEBookDescription": "यह पुस्तक आपको रूपरेखा और आधुनिक वेब एप्लिकेशन विकास तकनीकों की पूरी समझ हासिल करने में मदद करेगी।",
+    "Feedback": "प्रतिक्रिया"
+  }
+}

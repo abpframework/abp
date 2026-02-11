@@ -41,6 +41,7 @@ public partial class TenantManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(LUiNavigation["Menu:Administration"]));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:TenantManagement"]));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Tenants"]));
         return base.SetBreadcrumbItemsAsync();
@@ -87,7 +88,7 @@ public partial class TenantManagement
                         Clicked = async (data) =>
                         {
                             var tenant = data.As<TenantDto>();
-                            await FeatureManagementModal.OpenAsync(FeatureProviderName, tenant.Id.ToString());
+                            await FeatureManagementModal.OpenAsync(FeatureProviderName, tenant.Id.ToString(), tenant.Name);
                         }
                     },
                     new EntityAction
@@ -102,7 +103,7 @@ public partial class TenantManagement
         return base.SetEntityActionsAsync();
     }
 
-    protected override ValueTask SetTableColumnsAsync()
+    protected override async ValueTask SetTableColumnsAsync()
     {
         TenantManagementTableColumns
             .AddRange(new TableColumn[]
@@ -120,11 +121,11 @@ public partial class TenantManagement
                     },
             });
 
-        TenantManagementTableColumns.AddRange(GetExtensionTableColumns(
+        TenantManagementTableColumns.AddRange(await GetExtensionTableColumnsAsync(
             TenantManagementModuleExtensionConsts.ModuleName,
             TenantManagementModuleExtensionConsts.EntityNames.Tenant));
 
-        return base.SetTableColumnsAsync();
+        await base.SetTableColumnsAsync();
     }
 
     protected virtual void TogglePasswordVisibility()

@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.AspNetCore.Components.Server.BasicTheme/Volo.Abp.AspNetCore.Components.Server.BasicTheme.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.Web.BasicTheme/Volo.Abp.AspNetCore.Components.Web.BasicTheme.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
+    <Project Path="src/Volo.Abp.BasicTheme.Installer/Volo.Abp.BasicTheme.Installer.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.csproj" />
+  </Folder>
+</Solution>

@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-using Shouldly;
 using Volo.Abp.Auditing;
 using Xunit;
 
@@ -22,11 +20,11 @@ public class AuditIntegrationServiceTestController_Tests : AspNetCoreMvcTestBase
         _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
     }
     
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         _auditingStore = Substitute.For<IAuditingStore>();
         services.Replace(ServiceDescriptor.Singleton(_auditingStore));
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
     
     [Fact]

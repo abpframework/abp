@@ -18,14 +18,14 @@ public class AbpFileExtensionContentTypeProvider : IContentTypeProvider, ITransi
         var extension = GetExtension(subpath);
         if (extension == null)
         {
-            contentType = null;
+            contentType = null!;
             return false;
         }
 
-        return Options.ContentTypeMaps.TryGetValue(extension, out contentType);
+        return Options.ContentTypeMaps.TryGetValue(extension, out contentType!);
     }
 
-    protected virtual string GetExtension(string path)
+    protected virtual string? GetExtension(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
         {

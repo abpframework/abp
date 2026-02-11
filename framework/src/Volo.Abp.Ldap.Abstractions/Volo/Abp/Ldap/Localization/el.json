@@ -1,6 +1,8 @@
 {
   "culture": "el",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP μέσω SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP μέσω SSL",
     "DisplayName:Abp.Ldap.ServerHost": "Κεντρικός διακομιστής",
     "Description:Abp.Ldap.ServerHost": "Κεντρικός διακομιστής",
     "DisplayName:Abp.Ldap.ServerPort": "Θύρα",

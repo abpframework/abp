@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling;
@@ -7,17 +8,17 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class TypeApiDescriptionModel
 {
-    public string BaseType { get; set; }
+    public string? BaseType { get; set; }
 
     public bool IsEnum { get; set; }
 
-    public string[] EnumNames { get; set; }
+    public string[]? EnumNames { get; set; }
 
-    public object[] EnumValues { get; set; }
+    public object[]? EnumValues { get; set; }
 
-    public string[] GenericArguments { get; set; }
+    public string[]? GenericArguments { get; set; }
 
-    public PropertyApiDescriptionModel[] Properties { get; set; }
+    public PropertyApiDescriptionModel[]? Properties { get; set; }
 
     public TypeApiDescriptionModel()
     {
@@ -46,7 +47,7 @@ public class TypeApiDescriptionModel
         else
         {
             typeModel.Properties = type
-                .GetProperties()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => p.DeclaringType == type)
                 .Select(PropertyApiDescriptionModel.Create)
                 .ToArray();

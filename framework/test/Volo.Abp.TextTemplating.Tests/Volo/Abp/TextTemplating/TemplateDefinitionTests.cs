@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Threading.Tasks;
+using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
 
@@ -15,28 +16,28 @@ public abstract class TemplateDefinitionTests<TStartupModule> : AbpTextTemplatin
     }
 
     [Fact]
-    public void Should_Retrieve_Template_Definition_By_Name()
+    public async Task Should_Retrieve_Template_Definition_By_Name()
     {
-        var welcomeEmailTemplate = TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail);
+        var welcomeEmailTemplate = await TemplateDefinitionManager.GetAsync(TestTemplates.WelcomeEmail);
         welcomeEmailTemplate.Name.ShouldBe(TestTemplates.WelcomeEmail);
         welcomeEmailTemplate.IsInlineLocalized.ShouldBeFalse();
 
-        var forgotPasswordEmailTemplate = TemplateDefinitionManager.Get(TestTemplates.ForgotPasswordEmail);
+        var forgotPasswordEmailTemplate = await TemplateDefinitionManager.GetAsync(TestTemplates.ForgotPasswordEmail);
         forgotPasswordEmailTemplate.Name.ShouldBe(TestTemplates.ForgotPasswordEmail);
         forgotPasswordEmailTemplate.IsInlineLocalized.ShouldBeTrue();
     }
 
     [Fact]
-    public void Should_Get_Null_If_Template_Not_Found()
+    public async Task Should_Get_Null_If_Template_Not_Found()
     {
-        var definition = TemplateDefinitionManager.GetOrNull("undefined-template");
+        var definition = await TemplateDefinitionManager.GetOrNullAsync("undefined-template");
         definition.ShouldBeNull();
     }
 
     [Fact]
-    public void Should_Retrieve_All_Template_Definitions()
+    public async Task  Should_Retrieve_All_Template_Definitions()
     {
-        var definitions = TemplateDefinitionManager.GetAll();
+        var definitions = await TemplateDefinitionManager.GetAllAsync();
         definitions.Count.ShouldBeGreaterThan(1);
     }
 }

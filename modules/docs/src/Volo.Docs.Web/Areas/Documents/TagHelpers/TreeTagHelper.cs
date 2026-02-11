@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -18,10 +19,12 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         private readonly DocsUiOptions _uiOptions;
 
         private readonly IStringLocalizer<DocsResource> _localizer;
+        
+        private readonly IDocsLinkGenerator _docsLinkGenerator;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
-        private const string ListItemAnchor = @"<a href='{0}' class='{1}'>{2}</a>";
+        private const string ListItemAnchor = @"<a href='{0}' {1} class='{2}'>{3}</a>";
 
         private const string ListItemSpan = @"<span class='{0}'>{1}</span>";
 
@@ -45,10 +48,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer, IDocsLinkGenerator docsLinkGenerator)
         {
             _localizer = localizer;
             _uiOptions = urlOptions.Value;
+            _docsLinkGenerator = docsLinkGenerator;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -69,11 +73,14 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
             var isAnyNodeOpenedInThisLevel = IsAnyNodeOpenedInThisLevel(node);
 
-            node.Items?.ForEach(innerNode =>
+            if (!node.IsLazyExpandable || isAnyNodeOpenedInThisLevel)
             {
-                content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
-            });
-
+                node.Items?.ForEach(innerNode =>
+                {
+                    content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
+                });
+            }
+            
             var result = node.IsEmpty ? content : GetLeafNode(node, content);
 
             return result;
@@ -118,6 +125,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 listItemCss += " selected-tree";
             }
 
+            if (node.IsLazyExpandable)
+            {
+                listItemCss += " lazy-expand";
+            }
+
             string listInnerItem;
             if (node.Path.IsNullOrEmpty() && node.IsLeaf)
             {
@@ -144,7 +156,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
                 sb.Clear();
 
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
+                var additionalAttributes = node.Keywords.IsNullOrEmpty() ? "" : "data-keywords=\"" + node.Keywords.JoinAsString(",") + "\"";
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), additionalAttributes ,textCss,
                     node.Text.IsNullOrEmpty()
                         ? "?"
                         : sb.Append(node.Text).Append(badgeStringBuilder.ToString()).ToString());
@@ -154,18 +167,13 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             
             return string.Format(LiItemTemplateWithLink,
                 listItemCss,
-                node.HasChildItems ? "chevron-right" : sb.Append("long-arrow-right ").Append(node.Path.IsNullOrEmpty() ?  "no-link" : "has-link").ToString(),
+                node.HasChildItems ? "chevron-right" : sb.Append(node.Path.IsNullOrEmpty() ?  "no-link" : "has-link").ToString(),
                 listInnerItem,
                 content);
         }
 
         private string NormalizePath(string path)
         {
-            if (UrlHelper.IsExternalLink(path))
-            {
-                return path;
-            }
-
             var pathWithoutFileExtension = RemoveFileExtensionFromPath(path);
 
             if (string.IsNullOrWhiteSpace(path))
@@ -173,10 +181,13 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            var prefix = _uiOptions.RoutePrefix;
-            
-            var sb = new StringBuilder();
-            return sb.Append(prefix).Append(LanguageCode).Append("/").Append(ProjectName).Append("/").Append(Version).Append("/").Append(pathWithoutFileExtension).ToString();
+            if (!UrlHelper.IsExternalLink(path))
+            {
+                path = _docsLinkGenerator.GenerateLink(ProjectName, LanguageCode, Version, pathWithoutFileExtension);
+            }
+
+
+            return path;
         }
 
         private string RemoveFileExtensionFromPath(string path)

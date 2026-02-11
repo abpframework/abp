@@ -5,12 +5,12 @@ using OpenIddict.Server;
 
 namespace Volo.Abp.OpenIddict.WildcardDomains;
 
-public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<OpenIddictServerHandlers.Session.ValidateAuthorizedParty, OpenIddictServerEvents.ValidateLogoutRequestContext>
+public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<AbpValidateAuthorizedParty, OpenIddictServerHandlers.Session.ValidateAuthorizedParty, OpenIddictServerEvents.ValidateEndSessionRequestContext>
 {
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
-        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateLogoutRequestContext>()
+        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateEndSessionRequestContext>()
             .UseScopedHandler<AbpValidateAuthorizedParty>()
-            .SetOrder(OpenIddictServerHandlers.Session.ValidateToken.Descriptor.Order + 1_000)
+            .SetOrder(OpenIddictServerHandlers.Session.ValidateEndpointPermissions.Descriptor.Order + 1_000)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 
@@ -19,19 +19,18 @@ public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<OpenId
         IOpenIddictApplicationManager applicationManager)
         : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager))
     {
-        Handler = new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager);
+        OriginalHandler = new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager);
     }
 
-    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateEndSessionRequestContext context)
     {
         Check.NotNull(context, nameof(context));
-        Check.NotNull(context.IdentityTokenHintPrincipal, nameof(context.IdentityTokenHintPrincipal));
 
         if (await CheckWildcardDomainAsync(context.PostLogoutRedirectUri))
         {
             return;
         }
 
-        await Handler.HandleAsync(context);
+        await OriginalHandler.HandleAsync(context);
     }
 }

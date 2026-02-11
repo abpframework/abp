@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -9,29 +8,35 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Json;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<AbpDatePickerTagHelper>
 {
-    public AbpDatePickerTagHelperService(IJsonSerializer jsonSerializer, IHtmlGenerator generator, HtmlEncoder encoder, IServiceProvider serviceProvider, IStringLocalizer<AbpUiResource> l, IAbpTagHelperLocalizer tagHelperLocalizer) : base(jsonSerializer, generator, encoder, serviceProvider, l, tagHelperLocalizer)
+    public AbpDatePickerTagHelperService(
+        IJsonSerializer jsonSerializer,
+        IHtmlGenerator generator,
+        HtmlEncoder encoder,
+        IServiceProvider serviceProvider,
+        IStringLocalizer<AbpUiResource> l,
+        IAbpTagHelperLocalizer tagHelperLocalizer,
+        IClock clock)
+        : base(jsonSerializer, generator, encoder, serviceProvider, l, tagHelperLocalizer, clock)
     {
-
     }
 
-    protected override TagHelperOutput TagHelperOutput { get; set; }
+    protected override TagHelperOutput TagHelperOutput { get; set; } = default!;
 
-    [CanBeNull]
-    protected virtual InputTagHelper DateTagHelper { get; set; }
+    protected virtual InputTagHelper? DateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput DateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? DateTagHelperOutput { get; set; }
     protected override string GetPropertyName()
     {
         return TagHelper.AspFor?.Name ?? string.Empty;
     }
 
-    protected override T GetAttributeAndModelExpression<T>(out ModelExpression modelExpression)
+    protected override T? GetAttributeAndModelExpression<T>(out ModelExpression? modelExpression) where T : class
     {
         modelExpression = TagHelper.AspFor;
         return modelExpression?.ModelExplorer.GetAttribute<T>();
@@ -45,10 +50,28 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
             {
                 InputTypeName = "hidden",
                 ViewContext = TagHelper.ViewContext,
-                For = TagHelper.AspFor,
+                For = TagHelper.AspFor
             };
 
-            var attributes = new TagHelperAttributeList { { "data-date", "true" }, { "type", "hidden" } };
+            var attributes = new TagHelperAttributeList { { "data-hidden-datepicker", "true" }, { "data-date", "true" }, { "type", "hidden" } };
+
+            if (Clock.SupportsMultipleTimezone)
+            {
+                if (TagHelper.AspFor.Model is DateTime dateTime)
+                {
+                    DateTagHelper.Format = "{0:O}";
+                    DateTagHelper.Value = Clock.ConvertToUserTime(dateTime).ToString("O");
+                    attributes.Add("value", DateTagHelper.Value);
+                }
+
+                if (TagHelper.AspFor.Model is DateTimeOffset dateTimeOffset)
+                {
+                    DateTagHelper.Format = "{0:O}";
+                    DateTagHelper.Value = Clock.ConvertToUserTime(dateTimeOffset).UtcDateTime.ToString("O");
+                    attributes.Add("value", DateTagHelper.Value);
+                }
+            }
+
             DateTagHelperOutput = await DateTagHelper.ProcessAndGetOutputAsync(attributes, context, "input");
         }
 
@@ -63,26 +86,24 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
 
     protected override void AddBaseTagAttributes(TagHelperAttributeList attributes)
     {
-        if (TagHelper.AspFor != null && 
-            TagHelper.AspFor.Model != null && 
+        if (TagHelper.AspFor?.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspFor.Metadata.ModelType, out var convertFunc))
         {
-            attributes.Add("data-date", convertFunc(TagHelper.AspFor.Model));
+            var convert = convertFunc(TagHelper.AspFor.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-date", convert);
+            }
         }
     }
 
-    protected override ModelExpression GetModelExpression()
+    protected override ModelExpression? GetModelExpression()
     {
         return TagHelper.AspFor;
     }
 
-    protected async override Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        return DateTagHelper != null ? await GetValidationAsHtmlByInputAsync(context, output, DateTagHelper) : string.Empty;
-    }
-
     protected override string GetExtraInputHtml(TagHelperContext context, TagHelperOutput output)
     {
-        return DateTagHelperOutput?.Render(Encoder);
+        return DateTagHelperOutput?.Render(Encoder)!;
     }
 }

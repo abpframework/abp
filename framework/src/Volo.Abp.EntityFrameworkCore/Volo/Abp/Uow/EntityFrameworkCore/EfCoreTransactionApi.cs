@@ -28,7 +28,7 @@ public class EfCoreTransactionApi : ITransactionApi, ISupportsRollback
         AttendedDbContexts = new List<IEfCoreDbContext>();
     }
 
-    public async Task CommitAsync()
+    public async Task CommitAsync(CancellationToken cancellationToken = default)
     {
         foreach (var dbContext in AttendedDbContexts)
         {
@@ -38,10 +38,10 @@ public class EfCoreTransactionApi : ITransactionApi, ISupportsRollback
                 continue; //Relational databases use the shared transaction if they are using the same connection
             }
 
-            await dbContext.Database.CommitTransactionAsync(CancellationTokenProvider.Token);
+            await dbContext.Database.CommitTransactionAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
         }
 
-        await DbContextTransaction.CommitAsync(CancellationTokenProvider.Token);
+        await DbContextTransaction.CommitAsync(CancellationTokenProvider.FallbackToProvider(cancellationToken));
     }
 
     public void Dispose()

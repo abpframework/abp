@@ -17,16 +17,14 @@ public class SettingDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
 
-    [CanBeNull]
-    public ILocalizableString Description { get; set; }
+    public ILocalizableString? Description { get; set; }
 
     /// <summary>
     /// Default value of the setting.
     /// </summary>
-    [CanBeNull]
-    public string DefaultValue { get; set; }
+    public string? DefaultValue { get; set; }
 
     /// <summary>
     /// Can clients see this setting and it's value.
@@ -61,9 +59,9 @@ public class SettingDefinition
 
     public SettingDefinition(
         string name,
-        string defaultValue = null,
-        ILocalizableString displayName = null,
-        ILocalizableString description = null,
+        string? defaultValue = null,
+        ILocalizableString? displayName = null,
+        ILocalizableString? description = null,
         bool isVisibleToClients = false,
         bool isInherited = true,
         bool isEncrypted = false)

@@ -51,4 +51,12 @@ export class EnvironmentService {
   getIssuer$() {
     return this.store.sliceState(state => state?.oAuthConfig?.issuer).pipe(map(mapToIssuer));
   }
+
+  getImpersonation() {
+    return this.store.state?.oAuthConfig?.impersonation || {};
+  }
+
+  getImpersonation$() {
+    return this.store.sliceState(state => state?.oAuthConfig?.impersonation || {});
+  }
 }

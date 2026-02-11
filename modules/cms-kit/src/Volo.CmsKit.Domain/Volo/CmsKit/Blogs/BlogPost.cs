@@ -53,7 +53,7 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntity
         ) : base(id)
     {
         TenantId = tenantId;
-        BlogId = blogId;
+        SetBlogId(blogId);
         AuthorId = authorId;
         SetTitle(title);
         SetSlug(slug);
@@ -66,6 +66,11 @@ public class BlogPost : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntity
     public virtual void SetTitle(string title)
     {
         Title = Check.NotNullOrWhiteSpace(title, nameof(title), BlogPostConsts.MaxTitleLength);
+    }
+
+    public virtual void SetBlogId(Guid blogId)
+    {
+        BlogId = blogId;
     }
 
     internal void SetSlug(string slug)

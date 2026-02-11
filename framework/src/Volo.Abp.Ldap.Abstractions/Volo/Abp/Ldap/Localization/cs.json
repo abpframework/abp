@@ -1,6 +1,8 @@
 {
   "culture": "cs",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP přes SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP přes SSL",
     "DisplayName:Abp.Ldap.ServerHost": "Hostitel serveru",
     "Description:Abp.Ldap.ServerHost": "Hostitel serveru",
     "DisplayName:Abp.Ldap.ServerPort": "Port serveru",

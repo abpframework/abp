@@ -1,18 +1,17 @@
-import {
-  Directive,
-  TemplateRef,
-  ViewContainerRef,
-  Input,
-  InjectionToken,
-  Optional,
-  Inject,
-  OnInit,
-  OnDestroy,
-  Injector,
-  OnChanges,
-  SimpleChanges,
-  SimpleChange,
-} from '@angular/core';
+import { 
+  Directive, 
+  TemplateRef, 
+  ViewContainerRef, 
+  Input, 
+  InjectionToken, 
+  OnInit, 
+  OnDestroy, 
+  Injector, 
+  OnChanges, 
+  SimpleChanges, 
+  SimpleChange, 
+  inject
+ } from '@angular/core';
 import { Observable, Subscription, of } from 'rxjs';
 
 export interface PageRenderStrategy {
@@ -24,8 +23,15 @@ export interface PageRenderStrategy {
 
 export const PAGE_RENDER_STRATEGY = new InjectionToken<PageRenderStrategy>('PAGE_RENDER_STRATEGY');
 
-@Directive({ selector: '[abpPagePart]' })
+@Directive({
+  selector: '[abpPagePart]',
+})
 export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
+  private templateRef = inject<TemplateRef<any>>(TemplateRef);
+  private viewContainer = inject(ViewContainerRef);
+  private renderLogic = inject<PageRenderStrategy>(PAGE_RENDER_STRATEGY, { optional: true })!;
+  private injector = inject(Injector);
+
   hasRendered = false;
   type!: string;
   subscription!: Subscription;
@@ -45,13 +51,6 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
       this.hasRendered = false;
     }
   };
-
-  constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    @Optional() @Inject(PAGE_RENDER_STRATEGY) private renderLogic: PageRenderStrategy,
-    private injector: Injector,
-  ) {}
 
   ngOnChanges({ context }: SimpleChanges): void {
     if (this.renderLogic?.onContextUpdate) {

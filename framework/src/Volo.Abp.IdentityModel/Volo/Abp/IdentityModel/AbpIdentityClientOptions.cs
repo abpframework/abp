@@ -14,7 +14,7 @@ public class AbpIdentityClientOptions
         IdentityClients = new IdentityClientConfigurationDictionary();
     }
 
-    public IdentityClientConfiguration GetClientConfiguration(ICurrentTenant currentTenant, string identityClientName = null)
+    public IdentityClientConfiguration? GetClientConfiguration(ICurrentTenant currentTenant, string? identityClientName = null)
     {
         if (identityClientName.IsNullOrWhiteSpace())
         {
@@ -35,7 +35,7 @@ public class AbpIdentityClientOptions
             }
         }
 
-        return IdentityClients.GetOrDefault(identityClientName) ??
+        return IdentityClients.GetOrDefault(identityClientName!) ??
                IdentityClients.Default;
     }
 }

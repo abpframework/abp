@@ -3,7 +3,15 @@
   "texts": {
     "Features": "Funktionen",
     "NoFeatureFoundMessage": "Es ist keine Funktion verfügbar.",
-    "Volo.Abp.FeatureManagement:InvalidFeatureValue" : "Der {0} -Feature-Wert ist ungültig!",
-    "Menu:FeatureManagement": "Feature Verwaltung"
+    "ManageHostFeatures": "Hostfunktionen Verwalten",
+    "ManageHostFeaturesText": "Sie können die hostseitigen Funktionen verwalten, indem Sie auf die folgende Schaltfläche klicken.",
+    "Permission:FeatureManagement": "Funktionsverwaltung",
+    "Permission:FeatureManagement.ManageHostFeatures": "Hostfunktionen verwalten",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Der {0} -Feature-Wert ist ungültig!",
+    "Menu:FeatureManagement": "Feature Verwaltung",
+    "ResetToDefault": "Zurücksetzen",
+    "ResetedToDefault": "Auf Standard zurückgesetzt",
+    "AreYouSure": "Bist du sicher?",
+    "AreYouSureToResetToDefault": "Sind Sie sicher, dass Sie die Standardeinstellungen wiederherstellen möchten?"
   }
 }

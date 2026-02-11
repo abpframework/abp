@@ -20,21 +20,22 @@ The contents of `BookStore.Blazor.Tests.csproj`
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
+
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="bunit" Version="1.2.49" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-        <PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="5.0.1" />
-        <PackageReference Include="xunit" Version="2.4.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+        <PackageReference Include="bunit" Version="1.28.9" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+        <PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="8.1.1" />
+        <PackageReference Include="xunit" Version="2.7.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.8">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.1.0">
+        <PackageReference Include="coverlet.collector" Version="6.0.2">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -46,6 +47,7 @@ The contents of `BookStore.Blazor.Tests.csproj`
     </ItemGroup>
 
 </Project>
+
 ```
 
 Create `BookStoreBlazorTestModule` that depends on `AbpAspNetCoreComponentsModule` and `BookStoreEntityFrameworkCoreTestModule`.
@@ -63,7 +65,7 @@ public class BookStoreBlazorTestModule : AbpModule
 
 Create a `BookStoreBlazorTestBase` class and add the `CreateTestContext` method. The `CreateTestContext` have key code.
 
-It uses ABP's `ServiceProvider` as a fallback `ServiceProvider` and add all ABP's services to the `TestContext`.
+It creates a `AutofacServiceProvider` and add all ABP's services to the `TestContext`.
 
 ```cs
 public abstract class BookStoreBlazorTestBase : BookStoreTestBase<BookStoreBlazorTestModule>
@@ -71,12 +73,23 @@ public abstract class BookStoreBlazorTestBase : BookStoreTestBase<BookStoreBlazo
     protected virtual TestContext CreateTestContext()
     {
         var testContext = new TestContext();
-        testContext.Services.AddFallbackServiceProvider(ServiceProvider);
-        foreach (var service in ServiceProvider.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().Services)
+        var blazorise = testContext.JSInterop.SetupModule("./_content/Blazorise/utilities.js?v=1.5.1.0");
+        blazorise.SetupVoid("log", _ => true);
+
+        testContext.Services.UseServiceProviderFactory(serviceCollection =>
         {
-            testContext.Services.Add(service);
-        }
+            foreach (var service in ServiceProvider.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().Services)
+            {
+                serviceCollection.Add(service);
+            }
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.Populate(serviceCollection);
+            return new AutofacServiceProvider(containerBuilder.Build());
+        });
+
         testContext.Services.AddBlazorise().AddBootstrap5Providers().AddFontAwesomeIcons();
+        testContext.Services.Replace(ServiceDescriptor.Transient<IComponentActivator, ServiceProviderComponentActivator>());
+
         return testContext;
     }
 }
@@ -87,19 +100,18 @@ Finally, we add an `Index_Tests` class to test the `Index` component.
 ```cs
 public class Index_Tests : BookStoreBlazorTestBase
 {
-    [Fact]
+[Fact]
     public void Index_Test()
     {
-        using (var ctx = CreateTestContext())
-        {
-            // Act
-            var cut = ctx.RenderComponent<BookStore.Blazor.Pages.Index>();
+        // Arrange
+        var ctx = CreateTestContext();
 
-            // Assert
-            cut.Find(".lead").InnerHtml.Contains("Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.").ShouldBeTrue();
+        // Act
+        var cut = ctx.RenderComponent<BookStore.Blazor.Pages.Index>();
 
-            cut.Find("#username").InnerHtml.Contains("Welcome admin").ShouldBeTrue();
-        }
+        // Assert
+        cut.Find(".lead").InnerHtml.Contains("Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.").ShouldBeTrue();
+        cut.Find("#username").InnerHtml.Contains("Welcome admin").ShouldBeTrue();
     }
 }
 ```

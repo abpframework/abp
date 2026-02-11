@@ -28,14 +28,17 @@ public static class OpenIddictDbContextModelCreatingExtensions
             b.HasIndex(x => x.ClientId);
                 //.IsUnique();
 
+            b.Property(x => x.ApplicationType)
+                .HasMaxLength(OpenIddictApplicationConsts.ApplicationTypeMaxLength);
+
             b.Property(x => x.ClientId)
                 .HasMaxLength(OpenIddictApplicationConsts.ClientIdMaxLength);
 
             b.Property(x => x.ConsentType)
                 .HasMaxLength(OpenIddictApplicationConsts.ConsentTypeMaxLength);
 
-            b.Property(x => x.Type)
-                .HasMaxLength(OpenIddictApplicationConsts.TypeMaxLength);
+            b.Property(x => x.ClientType)
+                .HasMaxLength(OpenIddictApplicationConsts.ClientTypeMaxLength);
 
             b.ApplyObjectExtensionMappings();
         });

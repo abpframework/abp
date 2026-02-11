@@ -11,7 +11,7 @@ public static class WebApplicationBuilderExtensions
 {
     public static async Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync<TStartupModule>(
         [NotNull] this WebApplicationBuilder builder,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
+        Action<AbpApplicationCreationOptions>? optionsAction = null)
         where TStartupModule : IAbpModule
     {
         return await builder.Services.AddApplicationAsync<TStartupModule>(options =>
@@ -28,7 +28,7 @@ public static class WebApplicationBuilderExtensions
     public static async Task<IAbpApplicationWithExternalServiceProvider> AddApplicationAsync(
         [NotNull] this WebApplicationBuilder builder,
         [NotNull] Type startupModuleType,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction = null)
+        Action<AbpApplicationCreationOptions>? optionsAction = null)
     {
         return await builder.Services.AddApplicationAsync(startupModuleType, options =>
         {

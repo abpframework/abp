@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
@@ -8,30 +7,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 [AttributeUsage(AttributeTargets.Class)]
 public class WidgetAttribute : Attribute
 {
-    [CanBeNull]
-    public string[] StyleFiles { get; set; }
+    public string[]? StyleFiles { get; set; }
 
-    [CanBeNull]
-    public Type[] StyleTypes { get; set; }
+    public Type[]? StyleTypes { get; set; }
 
-    [CanBeNull]
-    public string[] ScriptFiles { get; set; }
+    public string[]? ScriptFiles { get; set; }
 
-    [CanBeNull]
-    public Type[] ScriptTypes { get; set; }
+    public Type[]? ScriptTypes { get; set; }
 
-    [CanBeNull]
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
-    [CanBeNull]
-    public Type DisplayNameResource { get; set; }
+    public Type? DisplayNameResource { get; set; }
 
-    [CanBeNull]
-    public string[] RequiredPolicies { get; set; }
+    public string[]? RequiredPolicies { get; set; }
 
     public bool RequiresAuthentication { get; set; }
 
-    public string RefreshUrl { get; set; }
+    public string? RefreshUrl { get; set; }
 
     public bool AutoInitialize { get; set; }
 

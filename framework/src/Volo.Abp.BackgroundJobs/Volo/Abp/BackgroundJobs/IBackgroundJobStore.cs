@@ -24,12 +24,13 @@ public interface IBackgroundJobStore
 
     /// <summary>
     /// Gets waiting jobs. It should get jobs based on these:
-    /// Conditions: !IsAbandoned And NextTryTime &lt;= Clock.Now.
+    /// Conditions: ApplicationName is applicationName And !IsAbandoned And NextTryTime &lt;= Clock.Now.
     /// Order by: Priority DESC, TryCount ASC, NextTryTime ASC.
     /// Maximum result: <paramref name="maxResultCount"/>.
     /// </summary>
+    /// <param name="applicationName">Application name.</param>
     /// <param name="maxResultCount">Maximum result count.</param>
-    Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount);
+    Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(string? applicationName, int maxResultCount);
 
     /// <summary>
     /// Deletes a job.

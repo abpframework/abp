@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -18,17 +19,21 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor
 
         protected ICurrentTenantAccessor CurrentTenantAccessor { get; }
 
+        protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; }
+
         public MauiBlazorCachedApplicationConfigurationClient(
             AbpApplicationConfigurationClientProxy applicationConfigurationClientProxy,
             ApplicationConfigurationCache cache,
             ICurrentTenantAccessor currentTenantAccessor,
             AuthenticationStateProvider authenticationStateProvider,
-            AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy)
+            AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
+            ApplicationConfigurationChangedService applicationConfigurationChangedService)
         {
             ApplicationConfigurationClientProxy = applicationConfigurationClientProxy;
             Cache = cache;
             CurrentTenantAccessor = currentTenantAccessor;
             ApplicationLocalizationClientProxy = applicationLocalizationClientProxy;
+            ApplicationConfigurationChangedService = applicationConfigurationChangedService;
 
             authenticationStateProvider.AuthenticationStateChanged += async _ => { await InitializeAsync(); };
         }
@@ -57,6 +62,8 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor
             CurrentTenantAccessor.Current = new BasicTenantInfo(
                 configurationDto.CurrentTenant.Id,
                 configurationDto.CurrentTenant.Name);
+
+            ApplicationConfigurationChangedService.NotifyChanged();
         }
 
         public virtual Task<ApplicationConfigurationDto> GetAsync()

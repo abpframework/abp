@@ -1,22 +1,25 @@
 using System;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing;
 
 [Serializable]
-public class BackgroundEmailSendingJobArgs
+public class BackgroundEmailSendingJobArgs : IMultiTenant
 {
-    public string From { get; set; }
+    public Guid? TenantId { get; set; }
 
-    public string To { get; set; }
+    public string? From { get; set; }
 
-    public string Subject { get; set; }
+    public string To { get; set; } = default!;
 
-    public string Body { get; set; }
+    public string? Subject { get; set; }
+
+    public string? Body { get; set; }
 
     /// <summary>
     /// Default: true.
     /// </summary>
     public bool IsBodyHtml { get; set; } = true;
 
-    //TODO: Add other properties and attachments
+    public AdditionalEmailSendingArgs? AdditionalEmailSendingArgs { get; set; }
 }

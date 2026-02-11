@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
@@ -15,15 +14,15 @@ public class BackgroundEmailSendingJob : AsyncBackgroundJob<BackgroundEmailSendi
         EmailSender = emailSender;
     }
 
-    public override async Task ExecuteAsync(BackgroundEmailSendingJobArgs args)
+    public async override Task ExecuteAsync(BackgroundEmailSendingJobArgs args)
     {
         if (args.From.IsNullOrWhiteSpace())
         {
-            await EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml);
+            await EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml, args.AdditionalEmailSendingArgs);
         }
         else
         {
-            await EmailSender.SendAsync(args.From, args.To, args.Subject, args.Body, args.IsBodyHtml);
+            await EmailSender.SendAsync(args.From!, args.To, args.Subject, args.Body, args.IsBodyHtml, args.AdditionalEmailSendingArgs);
         }
     }
 }

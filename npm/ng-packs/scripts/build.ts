@@ -4,7 +4,6 @@ import fse from 'fs-extra';
 
 (async () => {
   program.option('-i, --noInstall', 'skip updating package.json and installation', false);
-  program.option('-c, --skipNgcc', 'skip ngcc', false);
 
   program.parse(process.argv);
 
@@ -66,8 +65,6 @@ import fse from 'fs-extra';
       ],
       { stdout: 'inherit', cwd: '../' },
     );
-
-    if (!program.skipNgcc) await execa('yarn', ['compile:ivy'], { stdout: 'inherit', cwd: '../' });
   } catch (error) {
     console.error(error.stderr);
     process.exit(1);

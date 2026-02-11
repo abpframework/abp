@@ -1,23 +1,5 @@
 (function ($) {
     $(function () {
-        $('li:not(.last-link) a.tree-toggle').click(function () {
-            $(this).parent().children('ul.tree').toggle(100);
-            $(this).closest('li').toggleClass('selected-tree');
-        });
-
-        $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(
-            function () {
-                var $element = $(this).parent();
-                var $filter = $('.docs-version #filter');
-
-                if ($filter && $filter.val() != ''){
-                    return;
-                }
-
-                $element.parent().children('ul.tree').toggle(100);
-                $element.closest('li').toggleClass('selected-tree');
-            }
-        );
 
         var scrollTopBtn = $('.scroll-top-btn');
         var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height();
@@ -52,15 +34,17 @@
         var scrollToHashLink = function () {
             var hash = window.location.hash;
 
-            if (!hash || hash === '#') {
+            if (!hash || hash === '#' || hash === '#gsc.tab=0') {
                 return;
             }
+
+            hash = hash.split('&')[0];
 
             var $targetElement = $(decodeURIComponent(hash));
 
             $targetElement = $targetElement.length
                 ? $targetElement
-                : $('[name=' + this.hash.slice(1) + ']');
+                : $('[name=' + hash.slice(1) + ']');
 
             if (!$targetElement.length) {
                 return;
@@ -80,10 +64,14 @@
             handleCustomScrolls();
 
             var $myNav = $('#docs-sticky-index');
-            Toc.init($myNav);
+
+            if ($myNav.length === 0) {
+                return;
+            }
 
             $('body').scrollspy({
                 target: $myNav,
+                offset:100
             });
 
             $('#docs-sticky-index a').on('click', function (event) {
@@ -102,6 +90,23 @@
                 }
             });
 
+            $("body").on('activate.bs.scrollspy', function (e) {
+                var $activeLink = $('.nav-link.active', $('#docs-sticky-index'));
+
+                var $activeLi = $activeLink.parent('li.nav-item');
+
+                $myNav.find('li.toc-item-has-children.open').each(function () {
+                    if ($(this).has($activeLi).length === 0) {
+                        $(this).removeClass('open');
+                    }
+                });
+
+                var $parentToOpen = $activeLi.closest('li.toc-item-has-children');
+                if ($parentToOpen.length > 0) {
+                    $parentToOpen.addClass('open');
+                }
+            });
+
             $('.btn-toggle').on('click', function () {
                 $('.toggle-row').slideToggle(400);
                 $(this).toggleClass('less');
@@ -115,6 +120,7 @@
                 $('.docs-tree-list').slideToggle();
             });
 
+            initMenuToggle();
             scrollToHashLink();
         });
 
@@ -141,24 +147,29 @@
         });
     }
 
-    window.Toc.helpers.createNavList = function () {
-        return $('<ul class="nav nav-pills flex-column"></ul>');
-    };
+     function initMenuToggle() {
+        $('li:not(.last-link) a.tree-toggle').off('click');
+        $('li:not(.last-link) span.plus-icon i.fa-chevron-right').off('click');
+        
+        $('li:not(.last-link) a.tree-toggle').click(function () {
+            $(this).parent().children('ul.tree').toggle(100);
+            $(this).closest('li').toggleClass('selected-tree');
+        });
 
-    window.Toc.helpers.createChildNavList = function ($parent) {
-        var $childList = this.createNavList();
-        $parent.append($childList);
-        return $childList;
-    };
+        $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(
+            function () {
+                var $element = $(this).parent();
+                var $filter = $('.docs-version #filter');
 
-    window.Toc.helpers.generateNavEl = function (anchor, text) {
-        var $a = $('<a class="nav-link"></a>');
-        $a.attr('href', '#' + anchor);
-        $a.text(text);
-        var $li = $('<li class="nav-item"></li>');
-        $li.append($a);
-        return $li;
-    };
+                if ($filter && $filter.val() != ''){
+                    return;
+                }
+
+                $element.parent().children('ul.tree').toggle(100);
+                $element.closest('li').toggleClass('selected-tree');
+            }
+        );
+    }
 
     function docsCriteria() {
         var docsContentWidth = $('.docs-content').width() - 74;

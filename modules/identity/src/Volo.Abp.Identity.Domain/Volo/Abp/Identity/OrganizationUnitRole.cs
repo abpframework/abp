@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.Identity;
 
 /// <summary>
-/// Represents membership of a User to an OU.
+/// Represents the link between a role and an organization unit.
 /// </summary>
 public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant
 {
@@ -36,7 +36,7 @@ public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant
     /// Initializes a new instance of the <see cref="OrganizationUnitRole"/> class.
     /// </summary>
     /// <param name="tenantId">TenantId</param>
-    /// <param name="roleId">Id of the User.</param>
+    /// <param name="roleId">Id of the Role.</param>
     /// <param name="organizationUnitId">Id of the <see cref="OrganizationUnit"/>.</param>
     public OrganizationUnitRole(Guid roleId, Guid organizationUnitId, Guid? tenantId = null)
     {

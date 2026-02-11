@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Speichern...",
     "Actions": "Aktionen",
     "Delete": "Löschen",
-    "SuccessfullyDeleted": "Erfolgreich gelöscht",
+    "CreatedSuccessfully": "Erfolgreich erstellt",
+    "SavedSuccessfully": "Erfolgreich gespeichert",
+    "DeletedSuccessfully": "Erfolgreich gelöscht",
     "Edit": "Bearbeiten",
     "Refresh": "Aktualisieren",
     "Language": "Sprache",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "0 bis 0 von 0 Einträgen anzeigen",
     "PagerInfoFiltered": "(gefiltert aus _MAX_ Einträgen)",
     "NoDataAvailableInDatatable": "Keine Daten verfügbar",
+    "ErrorLoadingDatatable": "Ein Fehler ist während der Anfrage aufgetreten. Überprüfen Sie die Nachricht auf Details.",
     "Total": "gesamt",
     "Selected": "ausgewählt",
     "PagerShowMenuEntries": "_MENU_ Einträge anzeigen",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} wird gelöscht!",
     "ItemWillBeDeletedMessage": "Dieses Element wird gelöscht!",
     "ManageYourAccount": "Verwalten Sie Ihr Benutzerkonto",
-    "OthersGroup":"Andere"
+    "OthersGroup": "Andere",
+    "Today": "Heute",
+    "Apply": "Anwenden",
+    "InternetConnectionInfo": "Der Vorgang konnte nicht ausgeführt werden. Ihre Internetverbindung ist im Moment nicht verfügbar.",
+    "CopiedToTheClipboard": "In die Zwischenablage kopiert",
+    "AddNew": "Neue hinzufügen",
+    "ProfilePicture": "Profilbild",
+    "Theme": "Thema",
+    "NotAssigned": "Nicht zugeordnet",
+    "EntityActionsDisabledTooltip": "Sie haben keine Berechtigung, Aktionen auszuführen.",
+    "ResourcePermissions": "Berechtigungen"
   }
 }

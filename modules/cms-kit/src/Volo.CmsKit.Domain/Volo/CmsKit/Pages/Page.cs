@@ -25,6 +25,10 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVers
 
     public virtual int EntityVersion { get; protected set; }
 
+    public virtual string LayoutName { get; protected set; }
+
+    public virtual PageStatus Status { get; protected set; }
+
     protected Page()
     {
     }
@@ -36,7 +40,9 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVers
         string content = null,
         string script = null,
         string style = null,
-        Guid? tenantId = null) : base(id)
+        string layoutName = null,
+        Guid? tenantId = null,
+        PageStatus status = PageStatus.Draft) : base(id)
     {
         TenantId = tenantId;
 
@@ -45,6 +51,8 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVers
         SetContent(content);
         SetScript(script);
         SetStyle(style);
+        SetLayoutName(layoutName);
+        SetStatus(status);
     }
 
     public virtual void SetTitle(string title)
@@ -72,8 +80,18 @@ public class Page : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVers
         Style = Check.Length(style, nameof(style), PageConsts.MaxStyleLength);
     }
 
+    public virtual void SetLayoutName(string layoutName) 
+    {
+        LayoutName = Check.Length(layoutName, nameof(layoutName), PageConsts.MaxLayoutNameLength); 
+    }
+
     internal void SetIsHomePage(bool isHomePage)
     {
         IsHomePage = isHomePage;
+    }
+
+    public virtual void SetStatus(PageStatus status)
+    {
+        Status = status;
     }
 }

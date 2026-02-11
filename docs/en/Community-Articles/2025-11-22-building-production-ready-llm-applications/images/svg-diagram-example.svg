@@ -1,0 +1,149 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#f0f4f8"/>
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#1e3a8a" text-anchor="middle">
+    PostgreSQL + pgvector Architecture
+  </text>
+  
+  <!-- .NET Application -->
+  <g id="dotnet-app">
+    <rect x="50" y="80" width="140" height="240" rx="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+    <text x="120" y="110" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
+      .NET Application
+    </text>
+    
+    <!-- API Layer -->
+    <rect x="65" y="130" width="110" height="50" rx="5" fill="#60a5fa" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="120" y="160" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Web API /
+    </text>
+    <text x="120" y="175" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Controllers
+    </text>
+    
+    <!-- Business Logic -->
+    <rect x="65" y="190" width="110" height="50" rx="5" fill="#60a5fa" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="120" y="215" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Business Logic /
+    </text>
+    <text x="120" y="230" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Services
+    </text>
+    
+    <!-- Data Layer -->
+    <rect x="65" y="250" width="110" height="50" rx="5" fill="#60a5fa" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="120" y="275" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Data Access
+    </text>
+    <text x="120" y="290" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Layer
+    </text>
+  </g>
+  
+  <!-- Arrow 1: .NET to EF Core -->
+  <defs>
+    <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1e40af" />
+    </marker>
+  </defs>
+  
+  <line x1="190" y1="200" x2="260" y2="200" stroke="#1e40af" stroke-width="3" marker-end="url(#arrowblue)"/>
+  <text x="225" y="190" font-family="Arial, sans-serif" font-size="11" fill="#1e3a8a" text-anchor="middle">ORM</text>
+  
+  <!-- EF Core -->
+  <g id="ef-core">
+    <rect x="260" y="150" width="140" height="100" rx="10" fill="#2563eb" stroke="#1e40af" stroke-width="2"/>
+    <text x="330" y="180" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
+      Entity Framework
+    </text>
+    <text x="330" y="200" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
+      Core
+    </text>
+    <text x="330" y="225" font-family="Arial, sans-serif" font-size="12" fill="#bfdbfe" text-anchor="middle">
+      DbContext
+    </text>
+    <text x="330" y="240" font-family="Arial, sans-serif" font-size="12" fill="#bfdbfe" text-anchor="middle">
+      LINQ Queries
+    </text>
+  </g>
+  
+  <!-- Arrow 2: EF Core to PostgreSQL -->
+  <line x1="400" y1="200" x2="470" y2="200" stroke="#1e40af" stroke-width="3" marker-end="url(#arrowblue)"/>
+  <text x="435" y="190" font-family="Arial, sans-serif" font-size="11" fill="#1e3a8a" text-anchor="middle">Npgsql</text>
+  
+  <!-- PostgreSQL -->
+  <g id="postgresql">
+    <rect x="470" y="80" width="140" height="240" rx="10" fill="#1e40af" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="540" y="110" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
+      PostgreSQL
+    </text>
+    
+    <!-- Tables -->
+    <rect x="485" y="130" width="110" height="50" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="540" y="155" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">
+      Relational Tables
+    </text>
+    <text x="540" y="170" font-family="Arial, sans-serif" font-size="11" fill="#bfdbfe" text-anchor="middle">
+      (Standard Data)
+    </text>
+    
+    <!-- pgvector Extension -->
+    <rect x="485" y="190" width="110" height="50" rx="5" fill="#60a5fa" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="540" y="215" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="white" text-anchor="middle">
+      pgvector
+    </text>
+    <text x="540" y="230" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">
+      Vector Storage
+    </text>
+    
+    <!-- Vector Search -->
+    <rect x="485" y="250" width="110" height="50" rx="5" fill="#93c5fd" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="540" y="270" font-family="Arial, sans-serif" font-size="12" fill="#1e3a8a" text-anchor="middle">
+      Vector Search
+    </text>
+    <text x="540" y="285" font-family="Arial, sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">
+      Similarity Queries
+    </text>
+    <text x="540" y="297" font-family="Arial, sans-serif" font-size="10" fill="#1e40af" text-anchor="middle">
+      (&lt;=&gt;, &lt;-&gt;, &lt;#&gt;)
+    </text>
+  </g>
+  
+  <!-- Arrow 3: Vector Operations -->
+  <path d="M 540 240 L 540 250" stroke="#1e40af" stroke-width="2" marker-end="url(#arrowblue)"/>
+  
+  <!-- Vector Search Results -->
+  <g id="results">
+    <rect x="640" y="160" width="130" height="80" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="705" y="185" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e40af" text-anchor="middle">
+      Search Results
+    </text>
+    <text x="705" y="205" font-family="Arial, sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">
+      • Embeddings
+    </text>
+    <text x="705" y="220" font-family="Arial, sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">
+      • Similarity Score
+    </text>
+    <text x="705" y="235" font-family="Arial, sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">
+      • Ranked Results
+    </text>
+  </g>
+  
+  <!-- Arrow to Results -->
+  <line x1="610" y1="200" x2="640" y2="200" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowblue)" stroke-dasharray="5,5"/>
+  
+  <!-- Legend -->
+  <g id="legend">
+    <text x="50" y="360" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1e3a8a">
+      Data Flow:
+    </text>
+    <text x="50" y="380" font-family="Arial, sans-serif" font-size="11" fill="#334155">
+      1. .NET → EF Core → PostgreSQL (Data Operations)
+    </text>
+    <text x="420" y="380" font-family="Arial, sans-serif" font-size="11" fill="#334155">
+      2. Vector Similarity Search with pgvector
+    </text>
+  </g>
+</svg>

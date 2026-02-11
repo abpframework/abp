@@ -16,7 +16,7 @@ public class AbpCachingStackExchangeRedisModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         var redisEnabled = configuration["Redis:IsEnabled"];
-        if (redisEnabled.IsNullOrEmpty() || bool.Parse(redisEnabled))
+        if (string.IsNullOrEmpty(redisEnabled) || bool.Parse(redisEnabled))
         {
             context.Services.AddStackExchangeRedisCache(options =>
             {

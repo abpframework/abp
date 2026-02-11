@@ -31,6 +31,7 @@ public partial class FeatureManagementModal
 
     protected string ProviderName;
     protected string ProviderKey;
+    protected string ProviderKeyDisplayName;
 
     protected string SelectedTabName;
 
@@ -40,7 +41,7 @@ public partial class FeatureManagementModal
 
     protected Dictionary<string, string> SelectionStringValues;
 
-    public virtual async Task OpenAsync([NotNull] string providerName, string providerKey = null)
+    public virtual async Task OpenAsync([NotNull] string providerName, string providerKey = null, string providerKeyDisplayName = null)
     {
         try
         {
@@ -49,6 +50,11 @@ public partial class FeatureManagementModal
 
             ToggleValues = new Dictionary<string, bool>();
             SelectionStringValues = new Dictionary<string, string>();
+
+            if (!providerKeyDisplayName.IsNullOrWhiteSpace())
+            {
+                ProviderKeyDisplayName = $" - {providerKeyDisplayName}";
+            }
 
             var result = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
 
@@ -107,6 +113,7 @@ public partial class FeatureManagementModal
             await CurrentApplicationConfigurationCacheResetService.ResetAsync();
 
             await InvokeAsync(Modal.Hide);
+            await Notify.Success(L["SavedSuccessfully"]);
         }
         catch (Exception ex)
         {
@@ -143,9 +150,19 @@ public partial class FeatureManagementModal
         return $"margin-left: {feature.Depth * 20}px";
     }
 
-    protected virtual bool IsDisabled(string providerName)
+    protected virtual bool IsDisabled(FeatureDto feature)
     {
-        return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+        return feature.Value != null &&
+               feature.Provider.Name != null &&
+               feature.Provider.Name != ProviderName &&
+               feature.Provider.Name != DefaultValueFeatureValueProvider.ProviderName;
+    }
+
+    public virtual string GetShownName(FeatureDto featureDto)
+    {
+        return !IsDisabled(featureDto)
+            ? featureDto.DisplayName
+            : $"{featureDto.DisplayName} ({featureDto.Provider.Name})";
     }
 
     protected virtual async Task OnFeatureValueChangedAsync(string value, FeatureDto feature)

@@ -1,0 +1,8 @@
+{
+  "culture": "hr",
+  "texts": {
+    "AbpTitle": "Pročitajte sve postove na blogu",
+    "AbpDescription": "ABP je aplikacijski okvir otvorenog koda usmjeren na razvoj web aplikacija temeljen na AspNet Core. Nemojte se ponavljati, usredotočite se na vlastiti poslovni kod.",
+    "AbpDefinition": "ABP blog za .NET razvoj, više platformi, ASP.NET predloške aplikacija, vijesti vezane uz ABP i više..."
+  }
+}

@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.TextTemplating.Razor;
 
 public class DefaultAbpCompiledViewProvider : IAbpCompiledViewProvider, ITransientDependency
 {
-    private static readonly ConcurrentDictionary<string, Assembly> CachedAssembles = new ConcurrentDictionary<string, Assembly>();
+    private readonly static ConcurrentDictionary<string, Assembly> CachedAssembles = new ConcurrentDictionary<string, Assembly>();
+    private readonly static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
 
     private readonly AbpCompiledViewProviderOptions _options;
     private readonly AbpRazorTemplateCSharpCompiler _razorTemplateCSharpCompiler;
@@ -45,7 +48,22 @@ public class DefaultAbpCompiledViewProvider : IAbpCompiledViewProvider, ITransie
         }
 
         var templateContent = await _templateContentProvider.GetContentOrNullAsync(templateDefinition);
-        return CachedAssembles.GetOrAdd((templateDefinition.Name + templateContent).ToMd5(), await CreateAssembly(templateContent));
+        if (templateContent == null)
+        {
+            throw new AbpException($"Razor template content of {templateDefinition.Name} is null!");
+        }
+
+        using (await SemaphoreSlim.LockAsync())
+        {
+            var cacheKey = (templateDefinition.Name + templateContent).ToMd5();
+            if (CachedAssembles.TryGetValue(cacheKey, out var cachedAssemble))
+            {
+                return cachedAssemble;
+            }
+            var assemble = await CreateAssembly(templateContent);
+            CachedAssembles.TryAdd(cacheKey, assemble);
+            return assemble;
+        }
     }
 
     protected virtual async Task<Stream> GetAssemblyStreamAsync(TemplateDefinition templateDefinition, string templateContent)

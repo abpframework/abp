@@ -1,3 +1,0 @@
-# ABP Documentation
-
-Façam!

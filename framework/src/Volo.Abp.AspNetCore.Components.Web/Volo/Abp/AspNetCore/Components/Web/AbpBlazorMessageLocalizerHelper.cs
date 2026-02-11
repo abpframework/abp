@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.AspNetCore.Components.Web;
@@ -14,12 +13,13 @@ public class AbpBlazorMessageLocalizerHelper<T>
         this.stringLocalizer = stringLocalizer;
     }
 
-    public string Localize(string message, [CanBeNull] IEnumerable<string> arguments)
+    public string Localize(string message, IEnumerable<string>? arguments = null)
     {
         try
         {
-            return arguments?.Count() > 0
-                ? stringLocalizer[message, LocalizeMessageArguments(arguments)?.ToArray()]
+            var argumentsList = arguments?.ToList();
+            return argumentsList?.Count > 0
+                ? stringLocalizer[message, LocalizeMessageArguments(argumentsList).ToArray()]
                 : stringLocalizer[message];
         }
         catch
@@ -28,7 +28,7 @@ public class AbpBlazorMessageLocalizerHelper<T>
         }
     }
 
-    private IEnumerable<string> LocalizeMessageArguments(IEnumerable<string> arguments)
+    private IEnumerable<object> LocalizeMessageArguments(List<string> arguments)
     {
         foreach (var argument in arguments)
         {

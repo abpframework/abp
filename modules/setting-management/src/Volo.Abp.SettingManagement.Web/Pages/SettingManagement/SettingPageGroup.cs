@@ -5,6 +5,8 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 
 public class SettingPageGroup
 {
+    public const int DefaultOrder = 1000;
+    
     public string Id {
         get => _id;
         set => _id = Check.NotNullOrWhiteSpace(value, nameof(Id));
@@ -24,12 +26,15 @@ public class SettingPageGroup
     private Type _componentType;
 
     public object Parameter { get; set; }
+    
+    public int Order { get; set; }
 
-    public SettingPageGroup([NotNull] string id, [NotNull] string displayName, [NotNull] Type componentType, object parameter = null)
+    public SettingPageGroup([NotNull] string id, [NotNull] string displayName, [NotNull] Type componentType, object parameter = null, int order = DefaultOrder)
     {
         Id = id;
         DisplayName = displayName;
         ComponentType = componentType;
         Parameter = parameter;
+        Order = order;
     }
 }

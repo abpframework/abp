@@ -16,8 +16,7 @@ public class DataSeedContext
     /// Returns the value in the <see cref="Properties"/> dictionary by given <paramref name="name"/>.
     /// Returns null if given <paramref name="name"/> is not present in the <see cref="Properties"/> dictionary.
     /// </returns>
-    [CanBeNull]
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
@@ -26,19 +25,19 @@ public class DataSeedContext
     /// Can be used to get/set custom properties.
     /// </summary>
     [NotNull]
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     public DataSeedContext(Guid? tenantId = null)
     {
         TenantId = tenantId;
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
     }
 
     /// <summary>
     /// Sets a property in the <see cref="Properties"/> dictionary.
     /// This is a shortcut for nested calls on this object.
     /// </summary>
-    public virtual DataSeedContext WithProperty(string key, object value)
+    public virtual DataSeedContext WithProperty(string key, object? value)
     {
         Properties[key] = value;
         return this;

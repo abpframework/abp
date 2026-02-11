@@ -10,7 +10,7 @@ public static class HasNameWithLocalizableDisplayNameExtensions
     public static string GetLocalizedDisplayName(
         [NotNull] this IHasNameWithLocalizableDisplayName source,
         [NotNull] IStringLocalizerFactory stringLocalizerFactory,
-        [CanBeNull] string localizationNamePrefix = "DisplayName:")
+        string? localizationNamePrefix = "DisplayName:")
     {
         if (source.DisplayName != null)
         {

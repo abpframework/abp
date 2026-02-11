@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Đang lưu...",
     "Actions": "Hành động",
     "Delete": "Xóa",
-    "SuccessfullyDeleted": "Đã xóa thành công",
+    "CreatedSuccessfully": "Đã tạo thành công",
+    "SavedSuccessfully": "Đã lưu thành công",
+    "DeletedSuccessfully": "Đã xóa thành công",
     "Edit": "Sửa",
     "Refresh": "Làm mới",
     "Language": "Ngôn ngữ",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Hiển thị từ 0 đến 0 trong 0 mục",
     "PagerInfoFiltered": "(được lọc từ tổng số _MAX_ mục)",
     "NoDataAvailableInDatatable": "Không có dữ liệu trong bảng",
+    "ErrorLoadingDatatable": "Đã xảy ra lỗi trong quá trình yêu cầu. Kiểm tra tin nhắn để biết chi tiết.",
     "Total": "toàn bộ",
     "Selected": "đã chọn",
     "PagerShowMenuEntries": "Hiển thị _MENU_ mục",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sẽ bị xóa!",
     "ItemWillBeDeletedMessage": "Vật phẩm này sẽ bị xoá!",
     "ManageYourAccount": "Quản lý tài khoản của bạn",
-    "OthersGroup": "Khác"
+    "OthersGroup": "Khác",
+    "Today": "Hôm nay",
+    "Apply": "Áp dụng",
+    "InternetConnectionInfo": "Các hoạt động không thể được thực hiện. Kết nối internet của bạn hiện không khả dụng.",
+    "CopiedToTheClipboard": "Đã sao chép vào bảng nhớ tạm",
+    "AddNew": "Thêm mới",
+    "ProfilePicture": "Ảnh đại diện",
+    "Theme": "chủ đề",
+    "NotAssigned": "Không được chỉ định",
+    "EntityActionsDisabledTooltip": "Bạn không có quyền thực hiện bất kỳ hành động nào.",
+    "ResourcePermissions": "Quyền"
   }
 }

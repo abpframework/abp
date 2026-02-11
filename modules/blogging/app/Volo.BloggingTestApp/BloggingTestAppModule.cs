@@ -1,4 +1,4 @@
-//#define MONGODB
+#define MONGODB
 
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -26,9 +26,14 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Data;
+#if MONGODB
+using Volo.Abp.MongoDB;
+#else
 using Volo.Abp.EntityFrameworkCore;
+#endif
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.HttpApi;
@@ -39,7 +44,11 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
 using Volo.Blogging.Admin;
 using Volo.Blogging.Files;
+#if MONGODB
+using Volo.BloggingTestApp.MongoDB;
+#else
 using Volo.BloggingTestApp.EntityFrameworkCore;
+#endif
 
 namespace Volo.BloggingTestApp
 {
@@ -78,6 +87,7 @@ namespace Volo.BloggingTestApp
             Configure<BloggingUrlOptions>(options =>
             {
                 options.RoutePrefix = null;
+                options.SingleBlogMode.Enabled = false;
             });
 
             Configure<AbpDbConnectionOptions>(options =>
@@ -145,6 +155,22 @@ namespace Volo.BloggingTestApp
                     container.UseDatabase();
                 });
             });
+            
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
+                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi"));
+                options.Languages.Add(new LanguageInfo("it", "it", "Italiano"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁体中文"));
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -160,7 +186,7 @@ namespace Volo.BloggingTestApp
                 app.UseErrorPage();
             }
 
-            app.UseStaticFiles();
+            app.MapAbpStaticAssets();
 
             app.UseRouting();
 

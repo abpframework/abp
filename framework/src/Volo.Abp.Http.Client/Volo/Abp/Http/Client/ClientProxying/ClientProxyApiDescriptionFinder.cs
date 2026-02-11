@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
@@ -15,7 +15,7 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
     protected IVirtualFileProvider VirtualFileProvider { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected Dictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels { get; }
-    protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; }
+    protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; } = default!;
 
     public ClientProxyApiDescriptionFinder(
         IVirtualFileProvider virtualFileProvider,
@@ -28,17 +28,17 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         Initialize();
     }
 
-    public ActionApiDescriptionModel FindAction(string methodName)
+    public virtual ActionApiDescriptionModel? FindAction(string methodName)
     {
-        return ActionApiDescriptionModels.ContainsKey(methodName) ? ActionApiDescriptionModels[methodName] : null;
+        return ActionApiDescriptionModels.TryGetValue(methodName, out var model) ? model : null;
     }
 
-    public ApplicationApiDescriptionModel GetApiDescription()
+    public virtual ApplicationApiDescriptionModel GetApiDescription()
     {
         return ApplicationApiDescriptionModel;
     }
 
-    private void Initialize()
+    protected virtual void Initialize()
     {
         ApplicationApiDescriptionModel = GetApplicationApiDescriptionModel();
         var controllers = ApplicationApiDescriptionModel.Modules.Select(x => x.Value).SelectMany(x => x.Controllers.Values).ToList();
@@ -50,7 +50,6 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
             foreach (var actionItem in controller.Actions.Values)
             {
                 var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
-
                 if (!ActionApiDescriptionModels.ContainsKey(actionKey))
                 {
                     ActionApiDescriptionModels.Add(actionKey, actionItem);
@@ -59,7 +58,7 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         }
     }
 
-    private ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
+    protected virtual ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
     {
         var applicationApiDescription = ApplicationApiDescriptionModel.Create();
         var fileInfoList = new List<IFileInfo>();
@@ -86,19 +85,19 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         return applicationApiDescription;
     }
 
-    private void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
+    protected virtual void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
     {
-        foreach (var directoryContent in VirtualFileProvider.GetDirectoryContents(path))
+        foreach (var fileInfo in VirtualFileProvider.GetDirectoryContents(path))
         {
-            if (directoryContent.IsDirectory)
+            if (fileInfo.IsDirectory)
             {
-                GetGenerateProxyFileInfos(fileInfoList, directoryContent.PhysicalPath);
+                GetGenerateProxyFileInfos(fileInfoList, path + fileInfo.Name.EnsureStartsWith('/'));
             }
             else
             {
-                if (directoryContent.Name.EndsWith("generate-proxy.json"))
+                if (fileInfo.Name.EndsWith("generate-proxy.json", StringComparison.OrdinalIgnoreCase))
                 {
-                    fileInfoList.Add(VirtualFileProvider.GetFileInfo(directoryContent.GetVirtualOrPhysicalPathOrNull()));
+                    fileInfoList.Add(fileInfo);
                 }
             }
         }

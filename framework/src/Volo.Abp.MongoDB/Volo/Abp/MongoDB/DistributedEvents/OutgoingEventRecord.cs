@@ -15,9 +15,9 @@ public class OutgoingEventRecord :
 
     public ExtraPropertyDictionary ExtraProperties { get; private set; }
 
-    public string EventName { get; private set; }
+    public string EventName { get; private set; } = default!;
 
-    public byte[] EventData { get; private set; }
+    public byte[] EventData { get; private set; } = default!;
 
     public DateTime CreationTime { get; private set; }
 
@@ -37,15 +37,26 @@ public class OutgoingEventRecord :
 
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
+        foreach (var property in eventInfo.ExtraProperties)
+        {
+            this.SetProperty(property.Key, property.Value);
+        }
     }
 
     public OutgoingEventInfo ToOutgoingEventInfo()
     {
-        return new OutgoingEventInfo(
+        var info = new OutgoingEventInfo(
             Id,
             EventName,
             EventData,
             CreationTime
         );
+
+        foreach (var property in ExtraProperties)
+        {
+            info.SetProperty(property.Key, property.Value);
+        }
+
+        return info;
     }
 }

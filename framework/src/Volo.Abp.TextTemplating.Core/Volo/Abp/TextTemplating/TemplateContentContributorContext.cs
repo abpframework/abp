@@ -11,13 +11,12 @@ public class TemplateContentContributorContext
     [NotNull]
     public IServiceProvider ServiceProvider { get; }
 
-    [CanBeNull]
-    public string Culture { get; }
+    public string? Culture { get; }
 
     public TemplateContentContributorContext(
         [NotNull] TemplateDefinition templateDefinition,
         [NotNull] IServiceProvider serviceProvider,
-        [CanBeNull] string culture)
+        string? culture)
     {
         TemplateDefinition = Check.NotNull(templateDefinition, nameof(templateDefinition));
         ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));

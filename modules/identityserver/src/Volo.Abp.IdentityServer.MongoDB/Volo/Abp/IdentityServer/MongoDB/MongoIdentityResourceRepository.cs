@@ -20,20 +20,19 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
 
     public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityResource.Name) : sorting)
-            .As<IMongoQueryable<IdentityResource>>()
-            .PageBy<IdentityResource, IMongoQueryable<IdentityResource>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<IdentityResource, IMongoQueryable<IdentityResource>>(!filter.IsNullOrWhiteSpace(),
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.Description.Contains(filter) ||
                      x.DisplayName.Contains(filter))
@@ -45,7 +44,7 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.Name == name)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -54,14 +53,14 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
     public virtual async Task<List<IdentityResource>> GetListByScopeNameAsync(string[] scopeNames, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(ar => scopeNames.Contains(ar.Name))
+        return await (await GetQueryableAsync(cancellationToken))
+            .Where(ar => scopeNames.AsEnumerable().Contains(ar.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .AnyAsync(ir => ir.Id != expectedId && ir.Name == name, GetCancellationToken(cancellationToken));
     }
 }

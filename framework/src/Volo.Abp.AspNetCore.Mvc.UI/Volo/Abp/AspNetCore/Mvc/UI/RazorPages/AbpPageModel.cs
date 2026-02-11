@@ -25,10 +25,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 public abstract class AbpPageModel : PageModel
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     [Obsolete("Use LazyServiceProvider instead.")]
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
@@ -36,7 +36,7 @@ public abstract class AbpPageModel : PageModel
 
     protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
-    protected Type ObjectMapperContext { get; set; }
+    protected Type? ObjectMapperContext { get; set; }
     protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
         ObjectMapperContext == null
             ? provider.GetRequiredService<IObjectMapper>()
@@ -59,9 +59,9 @@ public abstract class AbpPageModel : PageModel
         }
     }
 
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResourceType { get; set; }
+    protected Type? LocalizationResourceType { get; set; }
 
     protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
 
@@ -75,9 +75,9 @@ public abstract class AbpPageModel : PageModel
 
     protected IAlertManager AlertManager => LazyServiceProvider.LazyGetRequiredService<IAlertManager>();
 
-    protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
+    protected IUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
     protected IAppUrlProvider AppUrlProvider => LazyServiceProvider.LazyGetRequiredService<IAppUrlProvider>();
 
@@ -122,40 +122,40 @@ public abstract class AbpPageModel : PageModel
         return localizer;
     }
 
-    protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+    protected virtual async Task<RedirectResult> RedirectSafelyAsync(string returnUrl, string? returnUrlHash = null)
     {
-        return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+        return Redirect(await GetRedirectUrlAsync(returnUrl, returnUrlHash));
     }
 
-    protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+    protected virtual async Task<string> GetRedirectUrlAsync(string returnUrl, string? returnUrlHash = null)
     {
-        returnUrl = NormalizeReturnUrl(returnUrl);
+        returnUrl = await NormalizeReturnUrlAsync(returnUrl);
 
         if (!returnUrlHash.IsNullOrWhiteSpace())
         {
-            returnUrl = returnUrl + returnUrlHash;
+            returnUrl += returnUrlHash;
         }
 
         return returnUrl;
     }
 
-    private string NormalizeReturnUrl(string returnUrl)
+    protected virtual async Task<string> NormalizeReturnUrlAsync(string returnUrl)
     {
         if (returnUrl.IsNullOrEmpty())
         {
-            return GetAppHomeUrl();
+            return await GetAppHomeUrlAsync();
         }
 
-        if (Url.IsLocalUrl(returnUrl) || AppUrlProvider.IsRedirectAllowedUrl(returnUrl))
+        if (Url.IsLocalUrl(returnUrl) || await AppUrlProvider.IsRedirectAllowedUrlAsync(returnUrl))
         {
             return returnUrl;
         }
 
-        return GetAppHomeUrl();
+        return await GetAppHomeUrlAsync();
     }
 
-    protected virtual string GetAppHomeUrl()
+    protected virtual Task<string> GetAppHomeUrlAsync()
     {
-        return "~/"; //TODO: ???
+        return Task.FromResult("~/"); //TODO: ???
     }
 }

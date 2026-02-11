@@ -136,6 +136,21 @@ public class PermissionManager_Tests : PermissionTestBase
     }
 
     [Fact]
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_Found()
+    {
+       var exception =  await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _permissionManager.SetAsync(
+                "MyPermission1",
+                "UndefinedProvider",
+                "Test",
+                true);
+        });
+
+        exception.Message.ShouldBe("Unknown permission management provider: UndefinedProvider");
+    }
+
+    [Fact]
     public async Task UpdateProviderKey()
     {
         await _permissionGrantRepository.InsertAsync(new PermissionGrant(
@@ -149,5 +164,21 @@ public class PermissionManager_Tests : PermissionTestBase
 
         await _permissionManager.UpdateProviderKeyAsync(permissionGrant, "NewProviderKey");
         (await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "NewProviderKey")).ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task DeleteAsync()
+    {
+        await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+            Guid.NewGuid(),
+            "MyPermission1",
+            "Test",
+            "Test")
+        );
+        var permissionGrant = await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "Test");
+        permissionGrant.ProviderKey.ShouldBe("Test");
+
+        await _permissionManager.DeleteAsync("Test","Test");
+        (await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "Test")).ShouldBeNull();
     }
 }

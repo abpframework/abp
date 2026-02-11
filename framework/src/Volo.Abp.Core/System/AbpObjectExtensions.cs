@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace System;
@@ -36,7 +35,7 @@ public static class AbpObjectExtensions
     {
         if (typeof(T) == typeof(Guid))
         {
-            return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(obj.ToString());
+            return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(obj.ToString()!)!;
         }
 
         return (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);

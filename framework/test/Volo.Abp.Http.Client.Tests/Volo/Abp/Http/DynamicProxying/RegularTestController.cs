@@ -152,6 +152,14 @@ public class RegularTestController : AbpController, IRegularTestController
         await Task.Delay(100, cancellationToken);
         return "AbortRequestAsync";
     }
+
+    [HttpGet]
+    [Route("timeout-request")]
+    public async Task<string> TimeOutRequestAsync()
+    {
+        await Task.Delay(100);
+        return "TimeOutRequestAsync";
+    }
 }
 
 public class Car

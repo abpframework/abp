@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -17,15 +19,19 @@ public class ListModulesCommand : IConsoleCommand, ITransientDependency
     public ModuleInfoProvider ModuleInfoProvider { get; }
     public ILogger<ListModulesCommand> Logger { get; set; }
 
+    private readonly ITelemetryService _telemetryService;
 
-    public ListModulesCommand(ModuleInfoProvider moduleInfoProvider)
+    public ListModulesCommand(ModuleInfoProvider moduleInfoProvider, ITelemetryService telemetryService)
     {
         ModuleInfoProvider = moduleInfoProvider;
+        _telemetryService = telemetryService;
         Logger = NullLogger<ListModulesCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsListModules);
+        
         var modules = await ModuleInfoProvider.GetModuleListAsync();
         var freeModules = modules.Where(m => !m.IsPro).ToList();
         var proModules = modules.Where(m => m.IsPro).ToList();
@@ -67,12 +73,12 @@ public class ListModulesCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("Options:");
         sb.AppendLine("  --include-pro-modules                                           Includes commercial (pro) modules in the output.");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "List open source application modules";
     }

@@ -240,3 +240,7 @@ gRPC on .NET has different approaches, features, configurations and more details
 * You can find the completed source code here: https://github.com/abpframework/abp-samples/tree/master/GrpcDemo2
 
 * You can also see all the changes I've done in this article here: https://github.com/abpframework/abp-samples/pull/200/files
+
+## See Also
+
+* [Consuming gRPC Services from Blazor WebAssembly Application Using gRPC-Web](https://abp.io/community/articles/consuming-grpc-services-from-blazor-webassembly-application-using-grpcweb-dqjry3rv)

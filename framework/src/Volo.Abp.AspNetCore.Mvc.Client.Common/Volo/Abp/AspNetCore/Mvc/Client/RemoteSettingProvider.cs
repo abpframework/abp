@@ -15,7 +15,7 @@ public class RemoteSettingProvider : ISettingProvider, ITransientDependency
         ConfigurationClient = configurationClient;
     }
 
-    public async Task<string> GetOrNullAsync(string name)
+    public async Task<string?> GetOrNullAsync(string name)
     {
         var configuration = await ConfigurationClient.GetAsync();
         return configuration.Setting.Values.GetOrDefault(name);

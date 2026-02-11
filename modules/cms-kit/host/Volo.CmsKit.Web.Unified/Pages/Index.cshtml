@@ -8,6 +8,7 @@
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Pages
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.MarkedItemToggle
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Tags
@@ -48,7 +49,12 @@
     <abp-column size-md="_6">
         @if (GlobalFeatureManager.Instance.IsEnabled<RatingsFeature>())
         {
-            @await Component.InvokeAsync(typeof(RatingViewComponent), new {entityType = "quote", entityId = "1"})
+            @await Component.InvokeAsync(typeof(RatingViewComponent), new 
+            { 
+                entityType = "quote",
+                entityId = "1",
+                isReadOnly = false
+            })
         }
     </abp-column>
     <abp-column size-md="_6">
@@ -60,7 +66,13 @@
     <abp-column size-md="_12">
         @if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
         {
-            @await Component.InvokeAsync(typeof(CommentingViewComponent), new {entityType = "quote", entityId = "1", referralLinks  = new [] {"nofollow"}})
+            @await Component.InvokeAsync(typeof(CommentingViewComponent), new 
+            {
+                entityType = "quote",
+                entityId = "1",
+                isReadOnly = false,
+                referralLinks  = new [] {"nofollow"}
+            })
         }
     </abp-column>
 </abp-row>
@@ -106,4 +118,33 @@
             })
         }
     </abp-column>
+</abp-row>
+
+
+<hr />
+<abp-row>
+    @for (int i = 1; i <= 4; i++)
+    {
+        var name = $"Item {i}";
+        <abp-column>
+            <abp-card background="Light" text-color="Dark" border="Success" class="mb-3" style="max-width: 18rem;">
+                <abp-card-header class="d-flex justify-content-between">
+                    <div>
+                        Item
+                    </div>
+                    <div>
+                        @await Component.InvokeAsync(typeof(MarkedItemToggleViewComponent), new
+                            {
+                                entityId = name,
+                                entityType = "product",
+                                needsConfirmation = true // (optional)
+                            })
+                    </div>
+                </abp-card-header>
+                <abp-card-body>
+                    <abp-card-title>@name</abp-card-title>
+                </abp-card-body>
+            </abp-card>
+        </abp-column>
+    }
 </abp-row>

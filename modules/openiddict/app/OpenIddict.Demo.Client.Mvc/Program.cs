@@ -1,4 +1,5 @@
-using IdentityModel;
+using Duende.IdentityModel;
+using OpenIddict.Demo.Client.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -16,7 +17,7 @@ builder.Services.AddAuthentication(options =>
     {
         options.ExpireTimeSpan = TimeSpan.FromDays(365);
     })
-    .AddOpenIdConnect("oidc", options =>
+    .AddAbpOpenIdConnect("oidc", options =>
     {
         options.Authority = "https://localhost:44301/";
         options.RequireHttpsMetadata = true;
@@ -35,7 +36,9 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("AbpAPI");
     });
 
+await builder.AddApplicationAsync<OpenIddictMvcModule>();
 var app = builder.Build();
+await app.InitializeApplicationAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -46,13 +49,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
+app.MapAbpStaticAssets();
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapRazorPages();
-
+app.UseConfiguredEndpoints();
 app.Run();

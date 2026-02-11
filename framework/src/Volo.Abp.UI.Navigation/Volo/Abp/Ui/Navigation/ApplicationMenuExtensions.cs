@@ -1,11 +1,13 @@
+using System;
 using JetBrains.Annotations;
 using System.Linq;
-using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.UI.Navigation;
 
 public static class ApplicationMenuExtensions
 {
+    public const string CustomDataComponentKey = "ApplicationMenu.CustomComponent";
+    
     [NotNull]
     public static ApplicationMenuItem GetAdministration(
         [NotNull] this ApplicationMenu applicationMenu)
@@ -29,8 +31,7 @@ public static class ApplicationMenuExtensions
         return menuItem;
     }
 
-    [CanBeNull]
-    public static ApplicationMenuItem GetMenuItemOrNull(
+    public static ApplicationMenuItem? GetMenuItemOrNull(
         [NotNull] this IHasMenuItems menuWithItems,
         string menuItemName)
     {
@@ -79,8 +80,7 @@ public static class ApplicationMenuExtensions
         return menuGroup;
     }
 
-    [CanBeNull]
-    public static ApplicationMenuGroup GetMenuGroupOrNull(
+    public static ApplicationMenuGroup? GetMenuGroupOrNull(
         [NotNull] this IHasMenuGroups menuWithGroups,
         string menuGroupName)
     {
@@ -113,5 +113,25 @@ public static class ApplicationMenuExtensions
         }
 
         return menuWithGroups;
+    }
+    
+    public static ApplicationMenuItem UseComponent<TComponent>(this ApplicationMenuItem applicationMenuItem)
+    {
+        return applicationMenuItem.UseComponent(typeof(TComponent));
+    }
+    
+    public static ApplicationMenuItem UseComponent(this ApplicationMenuItem applicationMenuItem, Type componentType)
+    {
+        return applicationMenuItem.WithCustomData(CustomDataComponentKey, componentType);
+    }
+
+    public static Type? GetComponentTypeOrDefault(this ApplicationMenuItem applicationMenuItem)
+    {
+        if (applicationMenuItem.CustomData.TryGetValue(CustomDataComponentKey, out var value))
+        {
+            return value as Type;
+        }
+        
+        return default;
     }
 }

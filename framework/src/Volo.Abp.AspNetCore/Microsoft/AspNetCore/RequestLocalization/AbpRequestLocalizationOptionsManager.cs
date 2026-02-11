@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.RequestLocalization;
 
 public class AbpRequestLocalizationOptionsManager : AbpDynamicOptionsManager<RequestLocalizationOptions>
 {
-    private RequestLocalizationOptions _options;
+    private RequestLocalizationOptions? _options;
 
     private readonly IAbpRequestLocalizationOptionsProvider _abpRequestLocalizationOptionsProvider;
 
@@ -19,7 +19,7 @@ public class AbpRequestLocalizationOptionsManager : AbpDynamicOptionsManager<Req
         _abpRequestLocalizationOptionsProvider = abpRequestLocalizationOptionsProvider;
     }
 
-    public override RequestLocalizationOptions Get(string name)
+    public override RequestLocalizationOptions Get(string? name)
     {
         return _options ?? base.Get(name);
     }

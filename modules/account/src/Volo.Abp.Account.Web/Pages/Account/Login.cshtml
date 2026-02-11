@@ -22,6 +22,14 @@
     </abp-script-bundle>
 }
 
+@if (Model.ShowRequireMigrateSeedMessage)
+{
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">@L["RequireMigrateSeedTitle"]</h4>
+        <p>@L["RequireMigrateSeedMessage"]</p>
+    </div>
+}
+
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <h4>@L["Login"]</h4>

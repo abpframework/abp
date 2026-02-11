@@ -20,9 +20,12 @@ public class AppTemplateChangeConsoleTestClientPortSettingsStep : ProjectBuildPi
 
     public override void Execute(ProjectBuildContext context)
     {
-        context
-            .GetFile("/aspnet-core/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json")
-            .ReplaceText("44300", RemoteServicePort)
-            .ReplaceText("44301", AuthServerPort);
+        var appsettingsFile = context.FindFile("/aspnet-core/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json");
+
+        if(appsettingsFile != null)
+        {
+            appsettingsFile.ReplaceText("44300", RemoteServicePort);
+            appsettingsFile.ReplaceText("44301", AuthServerPort);
+        }
     }
 }

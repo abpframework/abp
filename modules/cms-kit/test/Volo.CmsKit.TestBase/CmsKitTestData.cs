@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit;
 
@@ -47,6 +48,8 @@ public class CmsKitTestData : ISingletonDependency
     public string Page_1_Title { get; } = "Imagine Dragons - Believer Lyrics";
 
     public string Page_1_Slug { get; } = "imagine-dragons-believer-lyrics";
+    
+    public PageStatus Page_1_Status { get; } = PageStatus.Publish;
 
     public Guid Page_1_Id { get; } = Guid.NewGuid();
 
@@ -128,7 +131,25 @@ public class CmsKitTestData : ISingletonDependency
 
     public string MenuItem_3_Url { get; } = "/products";
 
+    public Guid MenuItem_4_With_Page_1_Id { get; } = Guid.NewGuid();
+
+    public string MenuItem_4_With_Page_1_Name { get; } = "Products";
+
+    public Guid MenuItem_5_Id { get; } = Guid.NewGuid();
+
+    public string MenuItem_5_Name { get; } = "FAQ";
+    public string MenuItem_5_Url { get; } = "/faq";
+
+    public Guid MenuItem_6_Id { get; } = Guid.NewGuid();
+
+    public string MenuItem_6_Name { get; } = "Contact Us";
+    public string MenuItem_6_Url { get; } = "/contact-us";
+
+    public int HighestMenuItemOrder { get; } = 2;
+
     public string PollName { get; } = "Poll";
 
     public string WidgetName { get; } = "CmsPollByCode";
+
+    public string IdempotencyToken_1 { get; } = Guid.NewGuid().ToString("N");
 }

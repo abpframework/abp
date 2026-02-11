@@ -1,1 +1,1 @@
-.dataTable{width:100% !important;border-spacing:0 !important;}.table td,.table th{padding:8px 10px;}.dataTable tbody tr td button{cursor:pointer;}.dataTable tbody tr td div.dropdown ul.dropdown-menu li{cursor:pointer;}
+.dataTable{width:100%!important;border-spacing:0!important}.table td,.table th{padding:8px 10px}.dataTable tbody tr td button{cursor:pointer}.dataTable tbody tr td div.dropdown ul.dropdown-menu li{cursor:pointer}.abp-action-button ui.dropdown-menu[data-popper-reference-hidden]{visibility:hidden;pointer-events:none}

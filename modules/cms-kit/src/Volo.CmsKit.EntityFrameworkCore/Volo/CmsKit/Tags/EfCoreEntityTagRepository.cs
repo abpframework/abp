@@ -53,7 +53,7 @@ public class EfCoreEntityTagRepository : EfCoreRepository<ICmsKitDbContext, Enti
             .ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
+    public virtual async Task<List<string>> GetEntityIdsFilteredByTagNameAsync(
         [NotNull] string tagName,
         [NotNull] string entityType,
         [CanBeNull] Guid? tenantId = null,

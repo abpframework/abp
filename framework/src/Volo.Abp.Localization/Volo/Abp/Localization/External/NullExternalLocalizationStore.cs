@@ -6,14 +6,14 @@ namespace Volo.Abp.Localization.External;
 
 public class NullExternalLocalizationStore : IExternalLocalizationStore, ISingletonDependency
 {
-    public LocalizationResourceBase GetResourceOrNull(string resourceName)
+    public LocalizationResourceBase? GetResourceOrNull(string resourceName)
     {
         return null;
     }
 
-    public Task<LocalizationResourceBase> GetResourceOrNullAsync(string resourceName)
+    public Task<LocalizationResourceBase?> GetResourceOrNullAsync(string resourceName)
     {
-        return Task.FromResult<LocalizationResourceBase>(null);
+        return Task.FromResult<LocalizationResourceBase?>(null);
     }
 
     public Task<string[]> GetResourceNamesAsync()

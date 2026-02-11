@@ -1,21 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
+using AbpPerfTest.WithAbp;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace AbpPerfTest.WithAbp
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac();
-    }
-}
+var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseAutofac();
+await builder.AddApplicationAsync<AppModule>();
+var app = builder.Build();
+await app.InitializeApplicationAsync();
+await app.RunAsync();

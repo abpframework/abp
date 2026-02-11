@@ -1,5 +1,4 @@
 using System;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.Auditing;
 
@@ -8,8 +7,7 @@ public interface IMayHaveCreator<TCreator>
     /// <summary>
     /// Reference to the creator.
     /// </summary>
-    [CanBeNull]
-    TCreator Creator { get; }
+    TCreator? Creator { get; }
 }
 
 /// <summary>

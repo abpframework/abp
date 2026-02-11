@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -15,7 +16,7 @@ using Volo.Abp.Settings;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy;
 
-public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
+public class MultiTenancyMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     public ILogger<MultiTenancyMiddleware> Logger { get; set; }
 
@@ -38,9 +39,9 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         _options = options.Value;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        TenantConfiguration tenant = null;
+        TenantConfiguration? tenant = null;
         try
         {
             tenant = await _tenantConfigurationProvider.GetAsync(saveResolveResult: true);
@@ -86,7 +87,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         }
     }
 
-    private async Task<RequestCulture> TryGetRequestCultureAsync(HttpContext httpContext)
+    private async Task<RequestCulture?> TryGetRequestCultureAsync(HttpContext httpContext)
     {
         var requestCultureFeature = httpContext.Features.Get<IRequestCultureFeature>();
 
@@ -114,7 +115,7 @@ public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
         string culture;
         string uiCulture;
 
-        if (defaultLanguage.Contains(';'))
+        if (defaultLanguage!.Contains(';'))
         {
             var splitted = defaultLanguage.Split(';');
             culture = splitted[0];

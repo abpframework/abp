@@ -25,7 +25,7 @@ public class MongoRatingRepository : MongoDbRepository<ICmsKitMongoDbContext, Ra
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
         Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-        var rating = await (await GetMongoQueryableAsync(cancellationToken))
+        var rating = await (await GetQueryableAsync(cancellationToken))
             .FirstOrDefaultAsync(r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId,
                 GetCancellationToken(cancellationToken));
 
@@ -39,7 +39,7 @@ public class MongoRatingRepository : MongoDbRepository<ICmsKitMongoDbContext, Ra
         Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
         var query = (
-            from rating in (await GetMongoQueryableAsync(cancellationToken))
+            from rating in (await GetQueryableAsync(cancellationToken))
             where rating.EntityType == entityType && rating.EntityId == entityId
             group rating by rating.StarCount
             into g

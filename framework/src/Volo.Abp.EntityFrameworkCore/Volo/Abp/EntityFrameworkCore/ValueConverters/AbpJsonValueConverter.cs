@@ -14,12 +14,14 @@ public class AbpJsonValueConverter<TPropertyType> : ValueConverter<TPropertyType
 
     }
 
+    public readonly static JsonSerializerOptions SerializeOptions = new JsonSerializerOptions();
+
     private static string SerializeObject(TPropertyType d)
     {
-        return JsonSerializer.Serialize(d);
+        return JsonSerializer.Serialize(d, SerializeOptions);
     }
 
-    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    public readonly static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
     {
         Converters =
         {
@@ -29,6 +31,6 @@ public class AbpJsonValueConverter<TPropertyType> : ValueConverter<TPropertyType
 
     private static TPropertyType DeserializeObject(string s)
     {
-        return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions);
+        return JsonSerializer.Deserialize<TPropertyType>(s, DeserializeOptions)!;
     }
 }

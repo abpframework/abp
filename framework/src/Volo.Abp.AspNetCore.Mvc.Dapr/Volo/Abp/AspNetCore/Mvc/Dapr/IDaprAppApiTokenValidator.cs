@@ -6,5 +6,5 @@ public interface IDaprAppApiTokenValidator
 
     bool IsValidDaprAppApiToken();
 
-    string GetDaprAppApiTokenOrNull();
+    string? GetDaprAppApiTokenOrNull();
 }

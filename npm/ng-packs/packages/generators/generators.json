@@ -1,0 +1,19 @@
+{
+  "generators": {
+    "generate-proxy": {
+      "factory": "./src/generators/generate-proxy/generator",
+      "schema": "./src/generators/generate-proxy/schema.json",
+      "description": "generate-proxy generator"
+    },
+    "update-version": {
+      "factory": "./src/generators/update-version/generator",
+      "schema": "./src/generators/update-version/schema.json",
+      "description": "update-version generator"
+    },
+    "change-theme": {
+      "factory": "./src/generators/change-theme/generator",
+      "schema": "./src/generators/change-theme/schema.json",
+      "description": "change-theme generator"
+    }
+  }
+}

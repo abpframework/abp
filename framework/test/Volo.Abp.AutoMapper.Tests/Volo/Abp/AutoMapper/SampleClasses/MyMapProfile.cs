@@ -9,6 +9,8 @@ public class MyMapProfile : Profile
     {
         CreateMap<MyEntity, MyEntityDto>().ReverseMap();
 
+        CreateMap<MyEnum, MyEnumDto>().ReverseMap();
+
         CreateMap<ExtensibleTestPerson, ExtensibleTestPersonDto>()
             .MapExtraProperties(ignoredProperties: new[] { "CityName" });
 

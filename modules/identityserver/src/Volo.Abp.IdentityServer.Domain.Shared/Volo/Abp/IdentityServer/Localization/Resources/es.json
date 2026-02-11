@@ -10,6 +10,8 @@
     "LoginIsNotAllowed": "¡No está permitido iniciar sesión! Su cuenta está inactiva o necesita confirmar su correo electrónico/número de teléfono.",
     "InvalidUsername": "Nombre de usuario icorrecto",
     "InvalidAuthenticatorCode": "¡Código de autenticador no válido!",
-    "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a usted."
+    "InvalidRecoveryCode": "¡Código de recuperación no válido!",
+    "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a usted.",
+    "ClientResourcePermissionProviderKeyLookupService": "Cliente"
   }
 }

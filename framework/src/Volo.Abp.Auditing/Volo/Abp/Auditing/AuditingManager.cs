@@ -38,7 +38,7 @@ public class AuditingManager : IAuditingManager, ITransientDependency
         _auditingStore = auditingStore;
     }
 
-    public IAuditLogScope Current => _ambientScopeProvider.GetValue(AmbientContextKey);
+    public IAuditLogScope? Current => _ambientScopeProvider.GetValue(AmbientContextKey);
 
     public IAuditLogSaveHandle BeginScope()
     {
@@ -49,7 +49,7 @@ public class AuditingManager : IAuditingManager, ITransientDependency
 
         Debug.Assert(Current != null, "Current != null");
 
-        return new DisposableSaveHandle(this, ambientScope, Current.Log, Stopwatch.StartNew());
+        return new DisposableSaveHandle(this, ambientScope, Current!.Log, Stopwatch.StartNew());
     }
 
     protected virtual void ExecutePostContributors(AuditLogInfo auditLogInfo)

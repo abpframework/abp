@@ -6,6 +6,11 @@
     "CarPlural": "Auta",
     "MaxLenghtErrorMessage": "Dužina ovog polja može biti maksimalno '{0}' znakova",
     "Universe": "Univerzum",
-    "FortyTwo": "Četrdeset dva"
+    "FortyTwo": "Četrdeset dva",
+    "Enum:BookType.Undefined": "Nedefiniran",
+    "Enum:BookType.0": "Nedefinirano s vrijednošću 0",
+    "BookType.Adventure": "Avantura",
+    "BookType.1": "Avantura s vrijednošću 1",
+    "Biography": "Biografija"
   }
 }

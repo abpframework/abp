@@ -2,5 +2,5 @@
 
 public class AbpHostEnvironment : IAbpHostEnvironment
 {
-    public string EnvironmentName { get; set; }
+    public string? EnvironmentName { get; set; }
 }

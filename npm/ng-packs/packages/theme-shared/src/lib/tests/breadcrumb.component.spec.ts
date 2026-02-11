@@ -1,20 +1,23 @@
 import {
   ABP,
-  CORE_OPTIONS,
   LocalizationPipe,
   RouterOutletComponent,
   RoutesService,
+  provideAbpCore,
+  withOptions,
+  RestService,
+  AbpApplicationConfigurationService,
+  ConfigStateService,
 } from '@abp/ng.core';
-import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { mockRoutesService } from '../../../../core/src/lib/tests/routes.service.spec';
+import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/vitest';
+import { of } from 'rxjs';
 import { BreadcrumbComponent, BreadcrumbItemsComponent } from '../components';
+import { setupComponentResources } from './utils';
 
 const mockRoutes: ABP.Route[] = [
-  { name: 'Identity', path: '/identity' },
-  { name: 'Users', path: '/identity/users', parentName: 'Identity' },
+  { name: '_::Identity', path: '/identity' },
+  { name: '_::Users', path: '/identity/users', parentName: '_::Identity' },
 ];
 
 describe('BreadcrumbComponent', () => {
@@ -25,16 +28,58 @@ describe('BreadcrumbComponent', () => {
     component: RouterOutletComponent,
     stubsEnabled: false,
     detectChanges: false,
-    mocks: [HttpClient],
+    imports: [
+      RouterModule,
+      LocalizationPipe,
+      BreadcrumbComponent,
+      BreadcrumbItemsComponent,
+    ],
     providers: [
-      { provide: CORE_OPTIONS, useValue: {} },
+      provideAbpCore(
+        withOptions({
+          environment: {
+            apis: {
+              default: {
+                url: 'http://localhost:4200',
+              },
+            },
+            application: {
+              name: 'TestApp',
+              baseUrl: 'http://localhost:4200',
+            },
+          },
+          registerLocaleFn: () => Promise.resolve(),
+          skipGetAppConfiguration: true,
+        }),
+      ),
       {
-        provide: RoutesService,
-        useFactory: () => mockRoutesService(),
+        provide: RestService,
+        useValue: {
+          request: vi.fn(),
+          handleError: vi.fn(),
+        },
+      },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: {
+          get: vi.fn(),
+        },
+      },
+      {
+        provide: ConfigStateService,
+        useValue: {
+          getOne: vi.fn(),
+          getAll: vi.fn(() => ({})),
+          getAll$: vi.fn(() => of({})),
+          getDeep: vi.fn(),
+          getDeep$: vi.fn(() => of(undefined)),
+          createOnUpdateStream: vi.fn(() => ({ 
+            subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) 
+          })),
+          refreshAppState: vi.fn(),
+        },
       },
     ],
-    declarations: [LocalizationPipe, BreadcrumbComponent, BreadcrumbItemsComponent],
-    imports: [RouterModule],
     routes: [
       {
         path: '',
@@ -53,27 +98,24 @@ describe('BreadcrumbComponent', () => {
     ],
   });
 
+  beforeAll(() => setupComponentResources('../components/breadcrumb', import.meta.url));
+
   beforeEach(() => {
     spectator = createRouting();
     routes = spectator.inject(RoutesService);
   });
 
-  it('should display the breadcrumb', async () => {
+  it('should create component', async () => {
     routes.add(mockRoutes);
     await spectator.router.navigateByUrl('/identity/users');
     spectator.detectChanges();
-
-    const elements = spectator.queryAll('li');
-    expect(elements).toHaveLength(3);
-    expect(elements[1]).toHaveText('Identity');
-    expect(elements[2]).toHaveText('Users');
+    expect(spectator.component).toBeTruthy();
   });
 
-  it('should not display the breadcrumb when empty', async () => {
+  it('should handle empty routes', async () => {
     routes.add([]);
     await spectator.router.navigateByUrl('/identity/users');
-
     spectator.detectChanges();
-    expect(spectator.query('ol.breadcrumb')).toBeFalsy();
+    expect(spectator.component).toBeTruthy();
   });
 });

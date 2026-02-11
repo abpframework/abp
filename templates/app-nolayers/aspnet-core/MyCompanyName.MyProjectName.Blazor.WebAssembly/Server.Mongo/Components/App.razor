@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MyCompanyName.MyProjectName.Blazor</title>
+    <base href="/" />
+
+    <link href="global.css" rel="stylesheet"/>
+    <link href="main.css" rel="stylesheet"/>
+    <link href="MyCompanyName.MyProjectName.Blazor.styles.css" rel="stylesheet"/>
+
+    <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <!-- </TEMPLATE-REMOVE> -->
+
+    <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
+</head>
+
+<body class="abp-application-layout bg-light">
+
+    <script src="_framework/blazor.web.js"></script>
+
+    <div id="ApplicationContainer">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+
+        <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"/>
+    </div>
+
+    <script src="global.js"></script>
+</body>
+</html>

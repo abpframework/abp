@@ -37,8 +37,7 @@ public class DisposeAction<T> : IDisposable
 {
     private readonly Action<T> _action;
 
-    [CanBeNull]
-    private readonly T _parameter;
+    private readonly T? _parameter;
 
     /// <summary>
     /// Creates a new <see cref="DisposeAction"/> object.
@@ -55,6 +54,9 @@ public class DisposeAction<T> : IDisposable
 
     public void Dispose()
     {
-        _action(_parameter);
+        if (_parameter != null)
+        {
+            _action(_parameter);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
@@ -7,6 +8,30 @@ public static class BundleConfigurationExtensions
     public static BundleConfiguration AddFiles(this BundleConfiguration bundleConfiguration, params string[] files)
     {
         bundleConfiguration.Contributors.AddFiles(files);
+        return bundleConfiguration;
+    }
+
+    public static BundleConfiguration AddFiles(this BundleConfiguration bundleConfiguration, params BundleFile[] files)
+    {
+        bundleConfiguration.Contributors.AddFiles(files);
+        return bundleConfiguration;
+    }
+
+    public static BundleConfiguration AddExternalFiles(this BundleConfiguration bundleConfiguration, params string[] files)
+    {
+        bundleConfiguration.Contributors.AddExternalFiles(files.Select(x => new BundleFile(x, true)).ToArray());
+        return bundleConfiguration;
+    }
+
+    public static BundleConfiguration RemoveFiles(this BundleConfiguration bundleConfiguration, params string[] files)
+    {
+        bundleConfiguration.Contributors.RemoveBundleFile(files.ToArray());
+        return bundleConfiguration;
+    }
+
+    public static BundleConfiguration RemoveFiles(this BundleConfiguration bundleConfiguration, Func<string, bool> predicate)
+    {
+        bundleConfiguration.Contributors.RemoveBundleFile(predicate);
         return bundleConfiguration;
     }
 

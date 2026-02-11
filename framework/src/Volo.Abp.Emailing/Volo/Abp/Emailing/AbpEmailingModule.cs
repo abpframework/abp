@@ -13,7 +13,9 @@ namespace Volo.Abp.Emailing;
     typeof(AbpVirtualFileSystemModule),
     typeof(AbpBackgroundJobsAbstractionsModule),
     typeof(AbpLocalizationModule),
+#pragma warning disable CS0618 // Type or member is obsolete
     typeof(AbpTextTemplatingModule)
+#pragma warning restore CS0618 // Type or member is obsolete
     )]
 public class AbpEmailingModule : AbpModule
 {

@@ -1,0 +1,38 @@
+{
+  "name": "theme-basic",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/theme-basic/src",
+  "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "account-core"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/theme-basic"],
+      "options": {
+        "project": "packages/theme-basic/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/theme-basic/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/theme-basic/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/theme-basic"
+      }
+    }
+  }
+}

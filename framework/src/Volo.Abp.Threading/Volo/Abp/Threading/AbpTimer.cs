@@ -15,7 +15,7 @@ public class AbpTimer : ITransientDependency
     /// <summary>
     /// This event is raised periodically according to Period of Timer.
     /// </summary>
-    public event EventHandler Elapsed;
+    public event EventHandler Elapsed = default!;
 
     /// <summary>
     /// Task period of timer (as milliseconds).
@@ -42,7 +42,7 @@ public class AbpTimer : ITransientDependency
         Logger = NullLogger<AbpTimer>.Instance;
 
         _taskTimer = new Timer(
-            TimerCallBack,
+            TimerCallBack!,
             null,
             Timeout.Infinite,
             Timeout.Infinite

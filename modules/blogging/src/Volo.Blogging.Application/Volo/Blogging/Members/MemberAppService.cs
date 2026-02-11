@@ -15,9 +15,9 @@ public class MemberAppService : BloggingAppServiceBase, IMemberAppService
         _userRepository = userRepository;
     }
     
-    public async Task<BlogUserDto> FindAsync(string username)
+    public virtual async Task<BlogUserDto> FindAsync(string username)
     {
-        var user = await _userRepository.FindAsync(x => x.UserName == username);
+        var user = await _userRepository.FindAsync(x => x.UserName == username && x.IsActive);
         
         if (user == null)
         {
@@ -27,7 +27,7 @@ public class MemberAppService : BloggingAppServiceBase, IMemberAppService
         return ObjectMapper.Map<BlogUser, BlogUserDto>(user);
     }
 
-    public async Task UpdateUserProfileAsync(CustomIdentityBlogUserUpdateDto input)
+    public virtual async Task UpdateUserProfileAsync(CustomIdentityBlogUserUpdateDto input)
     {
         var user = await _userRepository.GetAsync(CurrentUser.Id.Value);
 

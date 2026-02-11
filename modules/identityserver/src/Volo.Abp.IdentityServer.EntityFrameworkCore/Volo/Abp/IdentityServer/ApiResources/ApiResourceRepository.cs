@@ -18,7 +18,7 @@ public class ApiResourceRepository : EfCoreRepository<IIdentityServerDbContext, 
 
     }
 
-    public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    public virtual async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
@@ -26,7 +26,7 @@ public class ApiResourceRepository : EfCoreRepository<IIdentityServerDbContext, 
             .FirstOrDefaultAsync(apiResource => apiResource.Name == apiResourceName, GetCancellationToken(cancellationToken));
     }
 
-    public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
+    public virtual async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -64,7 +64,7 @@ public class ApiResourceRepository : EfCoreRepository<IIdentityServerDbContext, 
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(),

@@ -3,10 +3,15 @@
   "texts": {
     "Features": "Funkcie",
     "NoFeatureFoundMessage": "Nie je k dispozícii žiadna funkcia.",
-    "ManageHostFeatures": "Spravovať funkcie poskytovateľa",
-    "Permission:FeatureManagement": "Správa funkcií",
+    "ManageHostFeatures": "Spravovať Funkcie Poskytovateľa",
+    "ManageHostFeaturesText": "Funkcie na strane hostiteľa môžete spravovať kliknutím na nasledujúce tlačidlo.",
+    "Permission:FeatureManagement": "Správa Funkcií",
     "Permission:FeatureManagement.ManageHostFeatures": "Správa funkcií poskytovateľa",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Hodnota funkcie {0} nie je platná!",
-		"Menu:FeatureManagement": "Správa funkcií"
+    "Menu:FeatureManagement": "Správa funkcií",
+    "ResetToDefault": "Obnoviť pôvodné nastavenia",
+    "ResetedToDefault": "Obnovené na predvolené",
+    "AreYouSure": "Si si istý?",
+    "AreYouSureToResetToDefault": "Naozaj chcete obnoviť predvolené nastavenia?"
   }
 }

@@ -3,16 +3,18 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import {
+  FileOperator,
   Rule,
   Tree,
   apply,
   applyTemplates,
   chain,
   filter,
+  forEach,
   mergeWith,
   move,
   noop,
@@ -30,6 +32,8 @@ export interface GenerateFromFilesOptions {
   prefix?: string;
   project: string;
   skipTests?: boolean;
+  templateFilesDirectory?: string;
+  type?: string;
 }
 
 export function generateFromFiles(
@@ -41,19 +45,33 @@ export function generateFromFiles(
     options.prefix ??= '';
     options.flat ??= true;
 
+    // Schematic templates require a defined type value
+    options.type ??= '';
+
     const parsedPath = parseName(options.path, options.name);
     options.name = parsedPath.name;
     options.path = parsedPath.path;
 
     validateClassName(strings.classify(options.name));
 
-    const templateSource = apply(url('./files'), [
+    const templateFilesDirectory = options.templateFilesDirectory ?? './files';
+    const templateSource = apply(url(templateFilesDirectory), [
       options.skipTests ? filter(path => !path.endsWith('.spec.ts.template')) : noop(),
       applyTemplates({
         ...strings,
         ...options,
         ...extraTemplateValues,
       }),
+      !options.type
+        ? forEach((file => {
+            return file.path.includes('..')
+              ? {
+                  content: file.content,
+                  path: file.path.replace('..', '.'),
+                }
+              : file;
+          }) as FileOperator)
+        : noop(),
       move(parsedPath.path + (options.flat ? '' : '/' + strings.dasherize(options.name))),
     ]);
 

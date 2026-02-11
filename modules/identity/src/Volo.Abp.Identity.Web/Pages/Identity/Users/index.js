@@ -96,8 +96,8 @@
                             _identityUserAppService
                                 .delete(data.record.id)
                                 .then(function () {
-                                    _dataTable.ajax.reload();
-                                    abp.notify.success(l('SuccessfullyDeleted'));
+                                    _dataTable.ajax.reloadEx();
+                                    abp.notify.success(l('DeletedSuccessfully'));
                                 });
                         },
                     }
@@ -150,7 +150,7 @@
         var _$table = _$wrapper.find('table');
         _dataTable = _$table.DataTable(
             abp.libs.datatables.normalizeConfiguration({
-                order: [[1, 'asc']],
+                order: [],
                 processing: true,
                 serverSide: true,
                 scrollX: true,
@@ -163,11 +163,11 @@
         );
 
         _createModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         _editModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         $('#AbpContentToolbar button[name=CreateUser]').click(function (e) {

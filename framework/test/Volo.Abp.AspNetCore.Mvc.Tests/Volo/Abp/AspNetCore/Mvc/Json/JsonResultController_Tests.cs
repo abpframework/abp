@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Shouldly;
 using Volo.Abp.Json;
 using Xunit;
@@ -10,14 +8,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Json;
 
 public class JsonResultController_Tests : AspNetCoreMvcTestBase
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpJsonOptions>(options =>
         {
             options.OutputDateTimeFormat = "yyyy*MM*dd";
         });
 
-        base.ConfigureServices(context, services);
+        base.ConfigureServices(services);
     }
 
     [Fact]

@@ -2,10 +2,27 @@
   "culture": "hi",
   "texts": {
     "Settings": "समायोजन",
-    "SuccessfullySaved": "सफलतापूर्वक संचित कर लिया गया है",
+    "SavedSuccessfully": "सफलतापूर्वक संचित कर लिया गया है",
     "Permission:SettingManagement": "प्रबंधन की स्थापना",
     "Permission:Emailing": "ईमेल से भेजना",
+    "Permission:EmailingTest": "ईमेल परीक्षण",
+    "Permission:TimeZone": "समय क्षेत्र",
+    "SendTestEmail": "परीक्षण ईमेल भेजें",
+    "SenderEmailAddress": "प्रेषक का ईमेल पता",
+    "TargetEmailAddress": "लक्ष्य ईमेल पता",
+    "Subject": "विषय",
+    "Body": "शरीर",
+    "TestEmailSubject": "परीक्षण ईमेल {0}",
+    "TestEmailBody": "यहां ईमेल बॉडी संदेश का परीक्षण करें",
+    "SentSuccessfully": "सफलतापूर्वक भेज दिया गया",
+    "MailSendingFailed": "मेल भेजने में विफल, कृपया अपनी ईमेल विन्यास की जाँच करें और पुनः प्रयास करें।",
+    "Send": "भेजना",
+    "Menu:Settings": "समायोजन",
     "Menu:Emailing": "ईमेल से भेजना",
+    "Menu:TimeZone": "समय क्षेत्र",
+    "DisplayName:Timezone": "समय क्षेत्र",
+    "TimezoneHelpText": "यह सुविधा आपको अपने सर्वर के लिए एक डिफ़ॉल्ट समय क्षेत्र सेट करने की अनुमति देती है, जबकि उपयोगकर्ता अपना स्वयं का चुन सकते हैं। यदि किसी उपयोगकर्ता का समय क्षेत्र सर्वर के समय क्षेत्र से भिन्न है, तो सभी समय तदनुसार समायोजित किए जाएंगे। उदाहरण के लिए, सर्वर को यूरोप/लंदन(00:00) पर सेट किए जाने पर और एक उपयोगकर्ता यूरोप/पेरिस(+01:00) में होने पर, उस उपयोगकर्ता के लिए समय 1 घंटे के लिए समायोजित किया जाएगा। 'डिफ़ॉल्ट समय क्षेत्र' का चयन स्वचालित रूप से सर्वर या ब्राउज़र के समय क्षेत्र का उपयोग करेगा।",
+    "DefaultTimeZone": "डिफ़ॉल्ट समय क्षेत्र",
     "SmtpHost": "मेज़बान",
     "SmtpPort": "बंदरगाह",
     "SmtpUserName": "उपयोगकर्ता नाम",
@@ -19,6 +36,7 @@
     "Feature:SettingManagementEnable": "सेटिंग प्रबंधन सक्षम करें",
     "Feature:SettingManagementEnableDescription": "एप्लिकेशन में सेटिंग प्रबंधन प्रणाली सक्षम करें।",
     "Feature:AllowChangingEmailSettings": "ईमेल सेटिंग्स बदलने की अनुमति दें।",
-    "Feature:AllowChangingEmailSettingsDescription": "ईमेल सेटिंग्स बदलने की अनुमति दें।"
+    "Feature:AllowChangingEmailSettingsDescription": "ईमेल सेटिंग्स बदलने की अनुमति दें।",
+    "SmtpPasswordPlaceholder": "पासवर्ड अपडेट करने के लिए एक मान दर्ज करें"
   }
 }

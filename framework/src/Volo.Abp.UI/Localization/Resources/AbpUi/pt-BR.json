@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Salvando...",
     "Actions": "Ações",
     "Delete": "Excluir",
-    "SuccessfullyDeleted": "Excluído com sucesso",
+    "CreatedSuccessfully": "Criado com sucesso",
+    "SavedSuccessfully": "Salvo com sucesso",
+    "DeletedSuccessfully": "Excluído com sucesso",
     "Edit": "Editar",
     "Refresh": "Atualizar",
     "Language": "Idioma",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Mostrando 0 até 0 de 0 registros",
     "PagerInfoFiltered": "(filtrado de um total de _MAX_ registros)",
     "NoDataAvailableInDatatable": "Nenhum dado disponível",
+    "ErrorLoadingDatatable": "Ocorreu um erro durante a solicitação. Verifique a mensagem para mais detalhes.",
     "Total": "total",
     "Selected": "selecionado",
     "PagerShowMenuEntries": "Mostrando _MENU_ registros",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} será excluído!",
     "ItemWillBeDeletedMessage": "Este item será excluído!",
     "ManageYourAccount": "Gerenciar sua conta",
-    "OthersGroup": "Outra"
+    "OthersGroup": "Outra",
+    "Today": "Hoje",
+    "Apply": "Aplicar",
+    "InternetConnectionInfo": "A operação não pôde ser executada. Sua conexão com a Internet não está disponível no momento.",
+    "CopiedToTheClipboard": "Copiado para a área de transferência",
+    "AddNew": "Adicionar novo",
+    "ProfilePicture": "Foto do perfil",
+    "Theme": "Tema",
+    "NotAssigned": "Não atribuído",
+    "EntityActionsDisabledTooltip": "Você não tem permissão para executar qualquer ação.",
+    "ResourcePermissions": "Permissões"
   }
 }

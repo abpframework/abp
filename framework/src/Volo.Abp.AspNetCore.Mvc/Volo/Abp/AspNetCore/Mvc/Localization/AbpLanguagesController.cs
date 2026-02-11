@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Auditing;

@@ -1,0 +1,9 @@
+{
+  "culture": "fi",
+  "texts": {
+    "TenantNotFoundMessage": "Vuokralaista ei löydy!",
+    "TenantNotFoundDetails": "Ei ole vuokralaista, jolla on vuokralaisen tunnus tai nimi: {0}",
+    "TenantNotActiveMessage": "Vuokralainen ei ole aktiivinen!",
+    "TenantNotActiveDetails": "Vuokralainen ei ole aktiivinen vuokralaisen tunnuksella tai nimellä: {0}"
+  }
+}

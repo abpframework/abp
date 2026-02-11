@@ -7,7 +7,7 @@ public class GdprUserDataPreparedEto
 {
     public Guid RequestId { get; set; }
 
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
     
-    public GdprDataInfo Data { get; set; }
+    public GdprDataInfo Data { get; set; } = default!;
 }

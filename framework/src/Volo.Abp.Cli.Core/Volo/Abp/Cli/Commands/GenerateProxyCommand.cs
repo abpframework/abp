@@ -2,7 +2,6 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.ServiceProxying;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -34,7 +33,7 @@ public class GenerateProxyCommand : ProxyCommandBase<GenerateProxyCommand>
         return sb.ToString();
     }
 
-    public override string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Generates client service proxies and DTOs to consume HTTP APIs.";
     }

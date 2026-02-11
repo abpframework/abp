@@ -4,5 +4,5 @@ namespace Volo.Abp.AutoMapper;
 
 internal class MapperAccessor : IMapperAccessor
 {
-    public IMapper Mapper { get; set; }
+    public IMapper Mapper { get; set; } = default!;
 }

@@ -7,11 +7,10 @@ public interface IValueValidator
 {
     string Name { get; }
 
-    [CanBeNull]
-    object this[string key] { get; set; }
+    object? this[string key] { get; set; }
 
     [NotNull]
-    IDictionary<string, object> Properties { get; }
+    IDictionary<string, object?> Properties { get; }
 
-    bool IsValid(object value);
+    bool IsValid(object? value);
 }

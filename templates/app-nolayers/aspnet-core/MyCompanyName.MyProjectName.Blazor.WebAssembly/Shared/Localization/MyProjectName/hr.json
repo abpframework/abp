@@ -1,0 +1,9 @@
+{
+  "culture": "hr",
+  "texts": {
+    "AppName": "MyProjectName",
+    "Welcome_Title": "Dobrodošli",
+    "Welcome_Text": "Ovo je minimalistički jednoslojni predložak za pokretanje aplikacije za ABP Framework.",
+    "Menu:Home": "Dom"
+  }
+}

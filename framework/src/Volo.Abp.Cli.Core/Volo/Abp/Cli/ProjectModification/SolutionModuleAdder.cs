@@ -15,13 +15,13 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Files;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.Cli.ProjectModification.Events;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Json;
+using System.Text.RegularExpressions;
 
 namespace Volo.Abp.Cli.ProjectModification;
 
@@ -36,6 +36,7 @@ public class SolutionModuleAdder : ITransientDependency
     public BundleCommand BundleCommand { get; }
     public ICmdHelper CmdHelper { get; }
     public ILocalEventBus LocalEventBus { get; }
+    public SolutionPackageVersionFinder SolutionPackageVersionFinder { get; }
 
     protected IJsonSerializer JsonSerializer { get; }
     protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
@@ -66,7 +67,8 @@ public class SolutionModuleAdder : ITransientDependency
         BundleCommand bundleCommand,
         CliHttpClientFactory cliHttpClientFactory,
         ICmdHelper cmdHelper,
-        ILocalEventBus localEventBus)
+        ILocalEventBus localEventBus,
+        SolutionPackageVersionFinder solutionPackageVersionFinder)
     {
         JsonSerializer = jsonSerializer;
         ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -84,6 +86,7 @@ public class SolutionModuleAdder : ITransientDependency
         BundleCommand = bundleCommand;
         CmdHelper = cmdHelper;
         LocalEventBus = localEventBus;
+        SolutionPackageVersionFinder = solutionPackageVersionFinder;
         _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<SolutionModuleAdder>.Instance;
     }
@@ -95,14 +98,14 @@ public class SolutionModuleAdder : ITransientDependency
         bool withSourceCode = false,
         bool addSourceCodeToSolutionFile = false,
         bool newTemplate = false,
-        bool newProTemplate = false)
+        bool newProTemplate = false,
+        bool skipOpeningDocumentation = false)
     {
         Check.NotNull(solutionFile, nameof(solutionFile));
         Check.NotNull(moduleName, nameof(moduleName));
 
         await PublishEventAsync(1, "Retrieving module info...");
         var module = await GetModuleInfoAsync(moduleName, newTemplate, newProTemplate);
-
 
         await PublishEventAsync(2, "Removing incompatible packages from module...");
         module = RemoveIncompatiblePackages(module, version);
@@ -111,12 +114,12 @@ public class SolutionModuleAdder : ITransientDependency
 
         var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
-        await AddNugetAndNpmReferences(module, projectFiles, !(newTemplate || newProTemplate));
+        await AddNugetAndNpmReferences(module, projectFiles, !(newTemplate || newProTemplate), version);
+
+        var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
 
         if (withSourceCode || newTemplate || newProTemplate)
         {
-            var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
-
             await PublishEventAsync(5, $"Downloading source code of {moduleName}");
             await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version, newTemplate, newProTemplate);
 
@@ -144,24 +147,122 @@ public class SolutionModuleAdder : ITransientDependency
         else
         {
             await AddAngularPackages(solutionFile, module);
+
+            await TryConfigureModuleConfigurationsForAngular(solutionFile, module);
         }
 
         await RunBundleForBlazorAsync(projectFiles, module);
 
         await ModifyDbContext(projectFiles, module, skipDbMigrations);
 
-        var documentationLink = module.GetFirstDocumentationLinkOrNull();
-        if (documentationLink != null)
+        if (module.Name.Contains("LeptonX"))
         {
-            CmdHelper.Open(documentationLink);
+            await SetLeptonXAbpVersionsAsync(solutionFile, Path.Combine(modulesFolderInSolution, module.Name));
+        }
+
+        if (!skipOpeningDocumentation)
+        {
+            var documentationLink = module.GetFirstDocumentationLinkOrNull();
+            if (documentationLink != null)
+            {
+                CmdHelper.Open(documentationLink);
+            }
         }
 
         return module;
     }
 
+    private async Task TryConfigureModuleConfigurationsForAngular(string solutionFilePath, ModuleWithMastersInfo module)
+    {
+        var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
+
+        if (!Directory.Exists(angularPath))
+        {
+            return;
+        }
+
+        var angularPackages = module.NpmPackages?
+            .Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Angular))
+            .ToList();
+
+        if (!angularPackages.Any())
+        {
+            return;
+        }
+
+        await PublishEventAsync(6, "Configuring angular projects...");
+
+        var moduleName = module.Name.Split('.').Last();
+
+        ConfigureAngularPackagesForAppModuleFile(angularPath, angularPackages, moduleName);
+
+        ConfigureAngularPackagesForAppRoutingModuleFile(angularPath, angularPackages, moduleName);
+    }
+
+    private void ConfigureAngularPackagesForAppModuleFile(string angularPath, List<NpmPackageInfo> angularPackages, string moduleName)
+    {
+        var appModulePath = Path.Combine(angularPath, "src", "app", "app.module.ts");
+        if (!File.Exists(appModulePath))
+        {
+            return;
+        }
+
+        var appModuleFileContent = File.ReadAllText(appModulePath);
+
+        foreach (var angularPackage in angularPackages)
+        {
+            var moduleNameAsConfigPath = angularPackage.Name.EnsureStartsWith('@').EnsureEndsWith('/') + "config";
+
+            appModuleFileContent = "import { " + moduleName + "ConfigModule } from '" + moduleNameAsConfigPath + "';" + Environment.NewLine + appModuleFileContent;
+            appModuleFileContent = Regex.Replace(appModuleFileContent, "imports\\s*:\\s*\\[",
+                "imports: [" + Environment.NewLine +
+                "    " + moduleName + "ConfigModule.forRoot(),");
+        }
+
+        File.WriteAllText(appModulePath, appModuleFileContent);
+    }
+
+    private void ConfigureAngularPackagesForAppRoutingModuleFile(string angularPath, List<NpmPackageInfo> angularPackages, string moduleName)
+    {
+        var appRoutingModulePath = Path.Combine(angularPath, "src", "app", "app-routing.module.ts");
+        if (!File.Exists(appRoutingModulePath))
+        {
+            return;
+        }
+
+        var appRoutingModuleFileContent = File.ReadAllText(appRoutingModulePath);
+
+        foreach (var angularPackage in angularPackages)
+        {
+            appRoutingModuleFileContent = Regex.Replace(appRoutingModuleFileContent, "Routes\\s*=\\s*\\[",
+                "Routes = [" + Environment.NewLine +
+                "  " + "{" + Environment.NewLine +
+                "    " + "path: '" + moduleName.ToKebabCase() + "'," + Environment.NewLine +
+                "    " + "loadChildren: () => " + $"import('{angularPackage.Name.EnsureStartsWith('@')}').then(m => m.{moduleName}Module.forLazy())," + Environment.NewLine +
+                "  " + "},");
+        }
+
+        File.WriteAllText(appRoutingModulePath, appRoutingModuleFileContent);
+    }
+
+    private async Task SetLeptonXAbpVersionsAsync(string solutionFile, string combine)
+    {
+        var abpVersion = SolutionPackageVersionFinder.FindByCsprojVersion(solutionFile);
+
+        var projects = Directory.GetFiles(Path.GetDirectoryName(solutionFile)!, "*.csproj", SearchOption.AllDirectories);
+
+        foreach (var project in projects)
+        {
+            File.WriteAllText(project,
+                File.ReadAllText(project).Replace("\"$(AbpVersion)\"", $"\"{abpVersion}\"")
+            );
+        }
+    }
+
     private async Task PublishEventAsync(int currentStep, string message)
     {
-        await LocalEventBus.PublishAsync(new ModuleInstallingProgressEvent {
+        await LocalEventBus.PublishAsync(new ModuleInstallingProgressEvent
+        {
             CurrentStep = currentStep,
             Message = message
         }, false);
@@ -203,7 +304,8 @@ public class SolutionModuleAdder : ITransientDependency
 
     private async Task RunBundleForBlazorAsync(string[] projectFiles, ModuleWithMastersInfo module)
     {
-        var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
+        var blazorProject = projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.Client.csproj")) ??
+                            projectFiles.FirstOrDefault(f => f.EndsWith(".Blazor.csproj"));
 
         if (blazorProject == null || !module.NugetPackages.Any(np => np.Target == NuGetPackageTarget.Blazor))
         {
@@ -233,7 +335,8 @@ public class SolutionModuleAdder : ITransientDependency
     {
         var projectsToRemove = new List<string>();
         var moduleDirectory = Path.Combine(solutionDirectory, "modules", module.Name);
-        var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly).First();
+        var moduleSolutionFile = Directory.GetFiles(moduleDirectory, "*.sln", SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(moduleDirectory, "*.slnx", SearchOption.TopDirectoryOnly)).First();
         var isProjectTiered = await IsProjectTiered(projectFiles);
         var webPackagesWillBeAddedToBlazorServerProject = false;
 
@@ -259,6 +362,11 @@ public class SolutionModuleAdder : ITransientDependency
             {
                 projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.BlazorServer, isProjectTiered));
             }
+        }
+
+        if (!projectFiles.Any(p => p.EndsWith(".MauiBlazor.csproj")))
+        {
+            projectsToRemove.AddRange(await FindProjectsToRemoveByTarget(module, NuGetPackageTarget.MauiBlazor, isProjectTiered));
         }
 
         if (!projectFiles.Any(p => p.EndsWith(".Web.csproj")) && !webPackagesWillBeAddedToBlazorServerProject)
@@ -287,7 +395,7 @@ public class SolutionModuleAdder : ITransientDependency
                 continue;
             }
 
-            RemoveProjectFromSolutionAsync(moduleSolutionFile, projectToRemove);
+            await RemoveProjectFromSolutionAsync(moduleSolutionFile, projectToRemove);
         }
     }
 
@@ -410,7 +518,7 @@ public class SolutionModuleAdder : ITransientDependency
 
             foreach (var npmPackage in angularPackages)
             {
-                await ProjectNpmPackageAdder.AddAngularPackageAsync(angularPath, npmPackage);
+                await ProjectNpmPackageAdder.AddNpmPackageAsync(angularPath, npmPackage);
             }
         }
     }
@@ -491,17 +599,19 @@ public class SolutionModuleAdder : ITransientDependency
     {
         var args = new CommandLineArgs("new", module.Name);
 
-        args.Options.Add("t", newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
-        args.Options.Add("v", version);
-        args.Options.Add("o", Path.Combine(modulesFolderInSolution, module.Name));
-        args.Options.Add("sib", true.ToString());
+        args.Options.Add(ProjectCreationCommandBase.Options.Template.Short, newProTemplate ? ModuleProTemplate.TemplateName : ModuleTemplate.TemplateName);
+        args.Options.Add(ProjectCreationCommandBase.Options.Version.Short, version);
+        args.Options.Add(ProjectCreationCommandBase.Options.OutputFolder.Short, Path.Combine(modulesFolderInSolution, module.Name));
+        args.Options.Add(ProjectCreationCommandBase.Options.SkipInstallingLibs.Short, true.ToString());
+        args.Options.Add(ProjectCreationCommandBase.Options.SkipBundling.Long, true.ToString());
 
         await NewCommand.ExecuteAsync(args);
     }
 
     private async Task DeleteRedundantHostProjects(string targetModuleFolder, string folderName)
     {
-        var moduleSolutionFile = Directory.GetFiles(targetModuleFolder, "*.sln", SearchOption.TopDirectoryOnly).First();
+        var moduleSolutionFile = Directory.GetFiles(targetModuleFolder, "*.sln", SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(targetModuleFolder, "*.slnx", SearchOption.TopDirectoryOnly)).First();
 
         var folder = Path.Combine(targetModuleFolder, folderName);
         if (Directory.Exists(folder))
@@ -519,9 +629,9 @@ public class SolutionModuleAdder : ITransientDependency
     }
 
     private async Task AddNugetAndNpmReferences(ModuleWithMastersInfo module, string[] projectFiles,
-        bool useDotnetCliToInstall)
+        bool useDotnetCliToInstall, string version = null)
     {
-        var webPackagesWillBeAddedToBlazorServerProject = SouldWebPackagesBeAddedToBlazorServerProject(module, projectFiles);
+        var webPackagesWillBeAddedToBlazorServerProject = ShouldWebPackagesBeAddedToBlazorServerProject(module, projectFiles);
 
         await PublishEventAsync(3, "Adding nuget package references");
         foreach (var nugetPackage in module.NugetPackages)
@@ -535,7 +645,7 @@ public class SolutionModuleAdder : ITransientDependency
 
             if (webPackagesWillBeAddedToBlazorServerProject)
             {
-                if ( nugetTarget == NuGetPackageTarget.Web)
+                if (nugetTarget == NuGetPackageTarget.Web)
                 {
                     nugetTarget = NuGetPackageTarget.BlazorServer;
                 }
@@ -552,7 +662,7 @@ public class SolutionModuleAdder : ITransientDependency
                 continue;
             }
 
-            await ProjectNugetPackageAdder.AddAsync(null, targetProjectFile, nugetPackage, null, useDotnetCliToInstall);
+            await ProjectNugetPackageAdder.AddAsync(null, targetProjectFile, nugetPackage, version, useDotnetCliToInstall);
         }
 
         var mvcNpmPackages = module.NpmPackages?.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc))
@@ -583,7 +693,7 @@ public class SolutionModuleAdder : ITransientDependency
         }
     }
 
-    private static bool SouldWebPackagesBeAddedToBlazorServerProject(ModuleWithMastersInfo module, string[] projectFiles)
+    private static bool ShouldWebPackagesBeAddedToBlazorServerProject(ModuleWithMastersInfo module, string[] projectFiles)
     {
         var blazorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".Blazor.csproj"));
 
@@ -609,7 +719,7 @@ public class SolutionModuleAdder : ITransientDependency
         }
 
         var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"))
-            ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj")) ;
+            ?? projectFiles.FirstOrDefault(p => p.EndsWith(".EntityFrameworkCore.csproj"));
 
         if (dbMigrationsProject == null)
         {

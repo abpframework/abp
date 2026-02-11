@@ -2,5 +2,5 @@
 
 public interface IAbpHostEnvironment
 {
-    string EnvironmentName { get; set; }
+    string? EnvironmentName { get; set; }
 }

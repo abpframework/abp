@@ -1,0 +1,9 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Buy": "Kúpiť",
+    "SeeBookDetails": "Pozri Podrobnosti knihy",
+    "MasteringAbpFrameworkEBookDescription": "Táto kniha vám pomôže získať úplné pochopenie rámca a moderných techník vývoja webových aplikácií.",
+    "Feedback": "Spätná väzba"
+  }
+}

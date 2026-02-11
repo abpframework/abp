@@ -15,7 +15,7 @@ public static class AbpHostingHostBuilderExtensions
         return hostBuilder.ConfigureAppConfiguration((_, builder) =>
         {
             builder.AddJsonFile(
-                path: AppSettingsSecretJsonPath,
+                path: path,
                 optional: optional,
                 reloadOnChange: reloadOnChange
             );

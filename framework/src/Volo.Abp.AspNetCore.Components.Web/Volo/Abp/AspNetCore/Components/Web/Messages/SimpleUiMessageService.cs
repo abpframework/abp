@@ -15,27 +15,27 @@ public class SimpleUiMessageService : IUiMessageService, ITransientDependency
         JsRuntime = jsRuntime;
     }
 
-    public async Task Info(string message, string title = null, Action<UiMessageOptions> options = null)
+    public async Task Info(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         await JsRuntime.InvokeVoidAsync("alert", message);
     }
 
-    public async Task Success(string message, string title = null, Action<UiMessageOptions> options = null)
+    public async Task Success(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         await JsRuntime.InvokeVoidAsync("alert", message);
     }
 
-    public async Task Warn(string message, string title = null, Action<UiMessageOptions> options = null)
+    public async Task Warn(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         await JsRuntime.InvokeVoidAsync("alert", message);
     }
 
-    public async Task Error(string message, string title = null, Action<UiMessageOptions> options = null)
+    public async Task Error(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         await JsRuntime.InvokeVoidAsync("alert", message);
     }
 
-    public async Task<bool> Confirm(string message, string title = null, Action<UiMessageOptions> options = null)
+    public async Task<bool> Confirm(string message, string? title = null, Action<UiMessageOptions>? options = null)
     {
         return await JsRuntime.InvokeAsync<bool>("confirm", message);
     }

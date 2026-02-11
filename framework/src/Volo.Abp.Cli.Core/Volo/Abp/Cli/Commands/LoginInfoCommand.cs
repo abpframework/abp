@@ -57,12 +57,12 @@ public class LoginInfoCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("Usage:");
         sb.AppendLine("  abp login-info");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Show your login info.";
     }

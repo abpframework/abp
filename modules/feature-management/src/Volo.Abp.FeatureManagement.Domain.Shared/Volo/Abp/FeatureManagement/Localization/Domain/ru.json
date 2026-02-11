@@ -4,9 +4,14 @@
     "Features": "Функциональные возможности",
     "NoFeatureFoundMessage": "Нет доступных функциональных возможностей.",
     "ManageHostFeatures": "Управление функциями хоста",
+    "ManageHostFeaturesText": "Вы можете управлять функциями хоста, нажав следующую кнопку.",
     "Permission:FeatureManagement": "Управление функциями",
     "Permission:FeatureManagement.ManageHostFeatures": "Управление функциями хоста",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "Недопустимое значение функции {0}!",
-		"Menu:FeatureManagement": "Управление функциями"
+    "Menu:FeatureManagement": "Управление функциями",
+    "ResetToDefault": "Восстановление значений по умолчанию",
+    "ResetedToDefault": "Сброс по умолчанию",
+    "AreYouSure": "Вы уверены?",
+    "AreYouSureToResetToDefault": "Вы уверены, что сбросите настройки по умолчанию?"
   }
 }

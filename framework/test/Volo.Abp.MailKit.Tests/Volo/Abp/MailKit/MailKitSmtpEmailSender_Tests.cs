@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing.Smtp;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Testing;
-using Xunit;
 
 namespace Volo.Abp.MailKit;
 
@@ -35,6 +35,7 @@ public class MailKitSmtpEmailSender_Tests : AbpIntegratedTest<AbpMailKitTestModu
 
     private static MailKitSmtpEmailSender CreateMailKitEmailSender()
     {
+        var currentTenant = Substitute.For<ICurrentTenant>();
         var mailConfig = Substitute.For<ISmtpEmailSenderConfiguration>();
         var bgJob = Substitute.For<IBackgroundJobManager>();
 
@@ -44,7 +45,7 @@ public class MailKitSmtpEmailSender_Tests : AbpIntegratedTest<AbpMailKitTestModu
         mailConfig.GetPortAsync().Returns(Task.FromResult(587));
         mailConfig.GetEnableSslAsync().Returns(Task.FromResult(false));
 
-        var mailSender = new MailKitSmtpEmailSender(mailConfig, bgJob, null);
+        var mailSender = new MailKitSmtpEmailSender(currentTenant, mailConfig, bgJob, null);
         return mailSender;
     }
 }

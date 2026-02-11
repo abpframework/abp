@@ -1,4 +1,5 @@
-﻿using Volo.Abp.ExceptionHandling.Localization;
+﻿using Volo.Abp.Data;
+using Volo.Abp.ExceptionHandling.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -11,7 +12,8 @@ namespace Volo.Abp.ExceptionHandling;
  * We will re-design this package in a later time, probably with v5.0.
  */
 [DependsOn(
-    typeof(AbpLocalizationModule)
+    typeof(AbpLocalizationModule),
+    typeof(AbpDataModule)
     )]
 public class AbpExceptionHandlingModule : AbpModule
 {

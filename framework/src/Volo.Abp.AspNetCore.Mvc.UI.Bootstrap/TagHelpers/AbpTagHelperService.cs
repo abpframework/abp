@@ -23,7 +23,7 @@ public abstract class AbpTagHelperService<TTagHelper> : IAbpTagHelperService<TTa
     protected const string AbpTabItemSelectedPlaceholder = "{_Tab_Selected_Placeholder_}";
     protected const string AbpAccordionParentIdPlaceholder = "{_Parent_Accordion_Id_}";
 
-    public TTagHelper TagHelper { get; internal set; }
+    public TTagHelper TagHelper { get; internal set; } = default!;
 
     public virtual int Order { get; }
 

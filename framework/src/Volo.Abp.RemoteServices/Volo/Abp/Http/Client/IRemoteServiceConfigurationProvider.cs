@@ -8,6 +8,5 @@ public interface IRemoteServiceConfigurationProvider
     [ItemNotNull]
     Task<RemoteServiceConfiguration> GetConfigurationOrDefaultAsync(string name);
 
-    [ItemCanBeNull]
-    Task<RemoteServiceConfiguration> GetConfigurationOrDefaultOrNullAsync(string name);
+    Task<RemoteServiceConfiguration?> GetConfigurationOrDefaultOrNullAsync(string name);
 }

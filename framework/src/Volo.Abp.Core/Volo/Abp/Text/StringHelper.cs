@@ -10,7 +10,7 @@ public class StringHelper
     /// <param name="bytes">The byte[] to be converted to string</param>
     /// <param name="encoding">The encoding to get string. Default is UTF8</param>
     /// <returns></returns>
-    public static string ConvertFromBytesWithoutBom(byte[] bytes, Encoding encoding = null)
+    public static string? ConvertFromBytesWithoutBom(byte[]? bytes, Encoding? encoding = null)
     {
         if (bytes == null)
         {

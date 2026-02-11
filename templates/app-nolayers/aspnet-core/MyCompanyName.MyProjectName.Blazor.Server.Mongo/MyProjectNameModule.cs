@@ -2,7 +2,9 @@ using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi;
+using MyCompanyName.MyProjectName.Blazor.Server.Mongo.Components;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Menus;
@@ -10,6 +12,7 @@ using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
 using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
@@ -21,7 +24,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.MongoDB;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
@@ -46,6 +49,8 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Blazor.Server;
 using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
@@ -58,7 +63,7 @@ namespace MyCompanyName.MyProjectName;
     // ABP Framework packages
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAutofacModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
@@ -111,6 +116,9 @@ public class MyProjectNameModule : AbpModule
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(
@@ -119,15 +127,36 @@ public class MyProjectNameModule : AbpModule
             );
         });
 
-		PreConfigure<OpenIddictBuilder>(builder =>
-		{
-			builder.AddValidation(options =>
-			{
-				options.AddAudiences("MyProjectName");
-				options.UseLocalServer();
-				options.UseAspNetCore();
-			});
-		});
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
+        });
+
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+            {
+                serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
+            });
+        }
+
+        PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            options.IsBlazorWebApp = true;
+        });
+        
+        MyProjectNameGlobalFeatureConfigurator.Configure();
+        MyProjectNameModuleExtensionConfigurator.Configure();
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -140,10 +169,13 @@ public class MyProjectNameModule : AbpModule
             context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         }
 
+        // Add services to the container.
+        context.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
-        ConfigureAutoMapper(context);
         ConfigureVirtualFiles(hostingEnvironment);
         ConfigureLocalizationServices();
         ConfigureSwaggerServices(context.Services);
@@ -152,11 +184,17 @@ public class MyProjectNameModule : AbpModule
         ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMongoDB(context);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameModule>();
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -188,7 +226,7 @@ public class MyProjectNameModule : AbpModule
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
                     //You can remove the following line if you don't use Blazor CSS isolation for components
-                    bundle.AddFiles("/MyCompanyName.MyProjectName.Blazor.Server.styles.css");
+                    bundle.AddFiles(new BundleFile("/MyCompanyName.MyProjectName.Blazor.Server.Mongo.styles.css", true));
                 }
             );
         });
@@ -213,16 +251,16 @@ public class MyProjectNameModule : AbpModule
             options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
             options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
             options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
-            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano"));
             options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
             options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
             options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
             options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
@@ -289,15 +327,6 @@ public class MyProjectNameModule : AbpModule
         });
     }
 
-    private void ConfigureAutoMapper(ServiceConfigurationContext context)
-    {
-        context.Services.AddAutoMapperObjectMapper<MyProjectNameModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameModule>();
-        });
-    }
-
     private void ConfigureMongoDB(ServiceConfigurationContext context)
     {
         context.Services.AddMongoDbContext<MyProjectNameDbContext>(options =>
@@ -330,7 +359,7 @@ public class MyProjectNameModule : AbpModule
 
         app.UseHttpsRedirection();
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
@@ -341,6 +370,8 @@ public class MyProjectNameModule : AbpModule
         }
 
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
+        app.UseAntiforgery();
         app.UseAuthorization();
 
         app.UseSwagger();
@@ -351,6 +382,11 @@ public class MyProjectNameModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
-        app.UseConfiguredEndpoints();
+        app.UseConfiguredEndpoints(builder =>
+        {
+            builder.MapRazorComponents<App>()
+                .AddInteractiveServerRenderMode()
+                .AddAdditionalAssemblies(builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies.ToArray());
+        });
     }
 }

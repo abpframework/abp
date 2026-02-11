@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400">
+  <defs>
+    <style>
+      .box { fill: #f8f9fa; stroke: #1890ff; stroke-width: 2; }
+      .highlight-box { fill: #e6f7ff; stroke: #1890ff; stroke-width: 2; }
+      .cache-box { fill: #f0f5ff; stroke: #597ef7; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #333; }
+      .title { font-family: Arial, sans-serif; font-size: 16px; fill: #1890ff; font-weight: bold; }
+      .small-text { font-family: Arial, sans-serif; font-size: 12px; fill: #666; }
+      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .cache-arrow { stroke: #52c41a; stroke-width: 2; fill: none; marker-end: url(#arrowhead-green); }
+      .miss-arrow { stroke: #ff4d4f; stroke-width: 2; fill: none; marker-end: url(#arrowhead-red); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#52c41a" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#ff4d4f" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="title" x="450" y="30" text-anchor="middle">Automatic Caching Flow</text>
+
+  <!-- Client Call -->
+  <rect class="box" x="50" y="80" width="180" height="80" rx="5" />
+  <text class="text" x="140" y="115" text-anchor="middle">Client Call</text>
+  <text class="small-text" x="140" y="135" text-anchor="middle">GetAsync(bookId)</text>
+
+  <!-- Interceptor -->
+  <rect class="highlight-box" x="320" y="80" width="180" height="80" rx="5" />
+  <text class="text" x="410" y="110" text-anchor="middle">AutoCache</text>
+  <text class="text" x="410" y="130" text-anchor="middle">Interceptor</text>
+  <text class="small-text" x="410" y="145" text-anchor="middle">[Cache] detected</text>
+
+  <!-- Cache Check Diamond -->
+  <polygon class="cache-box" points="670,70 770,120 670,170 570,120" stroke="#1890ff" stroke-width="2" fill="#e6f7ff"/>
+  <text class="text" x="670" y="120" text-anchor="middle">Cache</text>
+  <text class="text" x="670" y="137" text-anchor="middle">Hit?</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M 230 120 L 320 120" />
+  <path class="arrow" d="M 500 120 L 570 120" />
+
+  <!-- Cache Hit Path -->
+  <path class="cache-arrow" d="M 770 120 L 820 120 L 820 250 L 140 250 L 140 160" />
+  <text class="small-text" x="800" y="200" fill="#52c41a" font-weight="bold">✓ HIT</text>
+  <text class="small-text" x="780" y="265" fill="#52c41a">Return cached result (Fast!)</text>
+
+  <!-- Cache Miss Path -->
+  <path class="miss-arrow" d="M 670 170 L 670 240" />
+  <text class="small-text" x="685" y="210" fill="#ff4d4f" font-weight="bold">✗ MISS</text>
+
+  <!-- Execute Method -->
+  <rect class="box" x="580" y="260" width="180" height="80" rx="5" />
+  <text class="text" x="670" y="290" text-anchor="middle">Execute</text>
+  <text class="text" x="670" y="310" text-anchor="middle">Actual Method</text>
+  <text class="small-text" x="670" y="325" text-anchor="middle">Query Database</text>
+
+  <!-- Store in Cache -->
+  <rect class="cache-box" x="320" y="260" width="180" height="80" rx="5" />
+  <text class="text" x="410" y="290" text-anchor="middle">Store Result</text>
+  <text class="text" x="410" y="310" text-anchor="middle">in Cache</text>
+  <text class="small-text" x="410" y="325" text-anchor="middle">For future use</text>
+
+  <!-- Return to Client -->
+  <text class="small-text" x="270" y="285" text-anchor="middle">Return result</text>
+
+  <!-- Miss path arrows -->
+  <path class="arrow" d="M 580 300 L 500 300" />
+  <path class="arrow" d="M 320 300 L 230 300 L 230 120" />
+
+  <!-- Legend -->
+  <rect x="50" y="360" width="15" height="15" fill="#52c41a" opacity="0.3" />
+  <text class="small-text" x="70" y="372">Cache Hit (5-10ms)</text>
+  
+  <rect x="250" y="360" width="15" height="15" fill="#ff4d4f" opacity="0.3" />
+  <text class="small-text" x="270" y="372">Cache Miss (100-500ms)</text>
+</svg>

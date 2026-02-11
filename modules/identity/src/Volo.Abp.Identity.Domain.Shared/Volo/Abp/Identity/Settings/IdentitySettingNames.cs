@@ -16,6 +16,8 @@ public static class IdentitySettingNames
         public const string RequireDigit = PasswordPrefix + ".RequireDigit";
         public const string ForceUsersToPeriodicallyChangePassword = PasswordPrefix + ".ForceUsersToPeriodicallyChangePassword";
         public const string PasswordChangePeriodDays = PasswordPrefix + ".PasswordChangePeriodDays";
+        public const string EnablePreventPasswordReuse = PasswordPrefix + ".EnablePreventPasswordReuse";
+        public const string PreventPasswordReuseCount = PasswordPrefix + ".PreventPasswordReuseCount";
     }
 
     public static class Lockout
@@ -32,6 +34,7 @@ public static class IdentitySettingNames
         private const string SignInPrefix = Prefix + ".SignIn";
 
         public const string RequireConfirmedEmail = SignInPrefix + ".RequireConfirmedEmail";
+        public const string RequireEmailVerificationToRegister = SignInPrefix + ".RequireEmailVerificationToRegister";
         public const string EnablePhoneNumberConfirmation = SignInPrefix + ".EnablePhoneNumberConfirmation";
         public const string RequireConfirmedPhoneNumber = SignInPrefix + ".RequireConfirmedPhoneNumber";
     }

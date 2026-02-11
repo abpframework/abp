@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using Ganss.XSS;
+using Ganss.Xss;
 using Markdig;
 using Volo.Abp.DependencyInjection;
 
@@ -19,6 +19,9 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
     {
         MarkdownPipeline = markdownPipeline;
         _htmlSanitizer = new HtmlSanitizer();
+        _htmlSanitizer.AllowedAttributes.Add("class");
+        _htmlSanitizer.AllowedAttributes.Add("data-bs-toggle");
+        _htmlSanitizer.AllowedAttributes.Add("data-bs-target");
     }
 
     public Task<string> RenderAsync(string rawMarkdown, bool allowHtmlTags = true, bool preventXSS = true, string referralLinks = null)
@@ -34,7 +37,7 @@ public class MarkdownToHtmlRenderer : IMarkdownToHtmlRenderer, ITransientDepende
         {
             html = _htmlSanitizer.Sanitize(html);
         }
-        
+
         if(!referralLinks.IsNullOrWhiteSpace())
         {
             html = SetReferralLinks(html, referralLinks);

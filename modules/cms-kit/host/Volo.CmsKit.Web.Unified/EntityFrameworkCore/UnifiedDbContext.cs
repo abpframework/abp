@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#if EntityFrameworkCore
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -32,3 +34,4 @@ public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
         modelBuilder.ConfigureBlobStoring();
     }
 }
+#endif

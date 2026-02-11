@@ -8,8 +8,8 @@ public interface IConnectionStringResolver
 {
     [NotNull]
     [Obsolete("Use ResolveAsync method.")]
-    string Resolve(string connectionStringName = null);
+    string Resolve(string? connectionStringName = null);
 
     [NotNull]
-    Task<string> ResolveAsync(string connectionStringName = null);
+    Task<string> ResolveAsync(string? connectionStringName = null);
 }

@@ -1,9 +1,10 @@
 ﻿using System;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.GlobalResources;
 
 [Serializable]
-public class GlobalResourcesDto
+public class GlobalResourcesDto : ExtensibleObject
 {
     public string StyleContent { get; set; }
     

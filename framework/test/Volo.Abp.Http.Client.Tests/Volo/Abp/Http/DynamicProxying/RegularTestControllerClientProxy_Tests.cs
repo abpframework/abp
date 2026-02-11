@@ -188,4 +188,11 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
         var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.AbortRequestAsync(cts.Token));
         exception.InnerException.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
     }
+
+    [Fact]
+    public async Task TimeOutRequestAsync()
+    {
+        var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await _controller.TimeOutRequestAsync());
+        exception.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
+    }
 }

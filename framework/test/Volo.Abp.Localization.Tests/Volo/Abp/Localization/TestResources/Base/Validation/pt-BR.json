@@ -2,6 +2,11 @@
   "culture": "pt-BR",
   "texts": {
     "ThisFieldIsRequired": "Este campo é obrigatório",
-    "MaxLenghtErrorMessage": "Este campo pode ter no máximo '{0}' caracteres"
+    "MaxLenghtErrorMessage": "Este campo pode ter no máximo '{0}' caracteres",
+    "Enum:BookType.Undefined": "Indefinido de ValidationResource",
+    "Enum:BookType.0": "Indefinido com valor 0 de ValidationResource",
+    "BookType.Adventure": "Aventura de ValidationResource",
+    "BookType.1": "Aventura com valor 1 de ValidationResource",
+    "Biography": "Biografia de ValidationResource"
   }
 }

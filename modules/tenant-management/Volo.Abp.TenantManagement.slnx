@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.TenantManagement.Application.Contracts/Volo.Abp.TenantManagement.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Application/Volo.Abp.TenantManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Blazor.Server/Volo.Abp.TenantManagement.Blazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Blazor.WebAssembly/Volo.Abp.TenantManagement.Blazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Blazor/Volo.Abp.TenantManagement.Blazor.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Domain.Shared/Volo.Abp.TenantManagement.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Domain/Volo.Abp.TenantManagement.Domain.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.EntityFrameworkCore/Volo.Abp.TenantManagement.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.HttpApi.Client/Volo.Abp.TenantManagement.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.HttpApi/Volo.Abp.TenantManagement.HttpApi.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Installer/Volo.Abp.TenantManagement.Installer.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.MongoDB/Volo.Abp.TenantManagement.MongoDB.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Web/Volo.Abp.TenantManagement.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.TenantManagement.Application.Tests/Volo.Abp.TenantManagement.Application.Tests.csproj" />
+    <Project Path="test/Volo.Abp.TenantManagement.Domain.Tests/Volo.Abp.TenantManagement.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Abp.TenantManagement.EntityFrameworkCore.Tests/Volo.Abp.TenantManagement.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.TenantManagement.MongoDB.Tests/Volo.Abp.TenantManagement.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.TenantManagement.TestBase/Volo.Abp.TenantManagement.TestBase.csproj" />
+  </Folder>
+</Solution>

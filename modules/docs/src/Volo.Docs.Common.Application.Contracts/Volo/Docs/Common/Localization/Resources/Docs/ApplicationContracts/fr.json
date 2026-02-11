@@ -1,0 +1,7 @@
+{
+  "culture": "fr",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Gestion des documents communs",
+    "Permission:PdfDownload": "Téléchargement de PDF"
+  }
+}

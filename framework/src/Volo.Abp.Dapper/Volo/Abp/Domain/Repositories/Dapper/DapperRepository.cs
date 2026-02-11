@@ -16,7 +16,7 @@ namespace Volo.Abp.Domain.Repositories.Dapper;
 public class DapperRepository<TDbContext> : IDapperRepository, IUnitOfWorkEnabled
     where TDbContext : IEfCoreDbContext
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
@@ -36,12 +36,12 @@ public class DapperRepository<TDbContext> : IDapperRepository, IUnitOfWorkEnable
     [Obsolete("Use GetDbConnectionAsync method.")]
     public IDbConnection DbConnection => _dbContextProvider.GetDbContext().Database.GetDbConnection();
 
-    public async Task<IDbConnection> GetDbConnectionAsync() => (await _dbContextProvider.GetDbContextAsync()).Database.GetDbConnection();
+    public virtual async Task<IDbConnection> GetDbConnectionAsync() => (await _dbContextProvider.GetDbContextAsync()).Database.GetDbConnection();
 
     [Obsolete("Use GetDbTransactionAsync method.")]
-    public IDbTransaction DbTransaction => _dbContextProvider.GetDbContext().Database.CurrentTransaction?.GetDbTransaction();
+    public IDbTransaction? DbTransaction => _dbContextProvider.GetDbContext().Database.CurrentTransaction?.GetDbTransaction();
 
-    public async Task<IDbTransaction> GetDbTransactionAsync() => (await _dbContextProvider.GetDbContextAsync()).Database.CurrentTransaction?.GetDbTransaction();
+    public virtual async Task<IDbTransaction?> GetDbTransactionAsync() => (await _dbContextProvider.GetDbContextAsync()).Database.CurrentTransaction?.GetDbTransaction();
 
     protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
     {

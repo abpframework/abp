@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Tallennetaan...",
     "Actions": "Toiminnot",
     "Delete": "Poista",
-    "SuccessfullyDeleted": "Poistettu onnistuneesti",
+    "CreatedSuccessfully": "Luotu onnistuneesti",
+    "SavedSuccessfully": "Tallennettu onnistuneesti",
+    "DeletedSuccessfully": "Poistettu onnistuneesti",
     "Edit": "Muokkaa",
     "Refresh": "Virkistä",
     "Language": "Kieli",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Näytetään 0 - 0/0 tietueesta",
     "PagerInfoFiltered": "(suodatettu _MAX_ tietueen kokonaismäärästä)",
     "NoDataAvailableInDatatable": "Tietoja ei löydy",
+    "ErrorLoadingDatatable": "Pyynnön aikana tapahtui virhe. Tarkista viesti yksityiskohtia varten.",
     "Total": "kaikki yhteensä",
     "Selected": "valittu",
     "PagerShowMenuEntries": "Näytä _MENU_ tietueet",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} poistetaan!",
     "ItemWillBeDeletedMessage": "Tämä kohde poistetaan!",
     "ManageYourAccount": "Hallitse tiliäsi",
-    "OthersGroup": "Muut"
+    "OthersGroup": "Muut",
+    "Today": "Tänään",
+    "Apply": "Käytä",
+    "InternetConnectionInfo": "Toimenpidettä ei voitu suorittaa. Internetyhteytesi ei ole tällä hetkellä käytettävissä.",
+    "CopiedToTheClipboard": "Kopioitu leikepöydälle",
+    "AddNew": "Lisää uusi",
+    "ProfilePicture": "Profiilikuva",
+    "Theme": "Teema",
+    "NotAssigned": "Ei määritetty",
+    "EntityActionsDisabledTooltip": "Sinulla ei ole oikeutta suorittaa mitään toimintoa.",
+    "ResourcePermissions": "Käyttöoikeudet"
   }
 }

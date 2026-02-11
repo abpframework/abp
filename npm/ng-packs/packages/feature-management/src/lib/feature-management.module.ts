@@ -1,28 +1,28 @@
-import { CoreModule } from '@abp/ng.core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { FeatureManagementComponent } from './components/feature-management/feature-management.component';
-import { FreeTextInputDirective } from './directives/free-text-input.directive';
-import { FEATURE_MANAGEMENT_SETTINGS_PROVIDERS } from './providers';
-import { FeatureManagementTabComponent } from './components';
+import { FreeTextInputDirective } from './directives';
+import { provideFeatureManagementConfig } from './providers';
+import { FeatureManagementTabComponent, FeatureManagementComponent } from './components';
 
-const exported = [
+export const FEATURE_MANAGEMENT_EXPORTS = [
   FeatureManagementComponent,
   FreeTextInputDirective,
   FeatureManagementTabComponent,
 ];
 
+/**
+ * @deprecated FeatureManagementModule is deprecated .
+ * @description use `provideFeatureManagementConfig` *function* for config settings.
+ * You can import directives and pipes directly whichs were belongs to FeatureManagementModule are switched to standalone.
+ */
 @NgModule({
-  declarations: [...exported],
-  imports: [CoreModule, ThemeSharedModule, NgbNavModule],
-  exports: [...exported],
+  imports: [...FEATURE_MANAGEMENT_EXPORTS],
+  exports: [...FEATURE_MANAGEMENT_EXPORTS],
 })
 export class FeatureManagementModule {
   static forRoot(): ModuleWithProviders<FeatureManagementModule> {
     return {
       ngModule: FeatureManagementModule,
-      providers: [FEATURE_MANAGEMENT_SETTINGS_PROVIDERS],
+      providers: [provideFeatureManagementConfig()],
     };
   }
 }

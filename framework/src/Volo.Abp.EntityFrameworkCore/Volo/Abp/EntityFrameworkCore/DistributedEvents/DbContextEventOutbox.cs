@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -28,13 +29,20 @@ public class DbContextEventOutbox<TDbContext> : IDbContextEventOutbox<TDbContext
     }
 
     [UnitOfWork]
-    public virtual async Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default)
+    public virtual async Task<List<OutgoingEventInfo>> GetWaitingEventsAsync(int maxCount, Expression<Func<IOutgoingEventInfo, bool>>? filter = null, CancellationToken cancellationToken = default)
     {
         var dbContext = (IHasEventOutbox)await DbContextProvider.GetDbContextAsync();
+
+        Expression<Func<OutgoingEventRecord, bool>>? transformedFilter = null;
+        if (filter != null)
+        {
+            transformedFilter = InboxOutboxFilterExpressionTransformer.Transform<IOutgoingEventInfo, OutgoingEventRecord>(filter)!;
+        }
 
         var outgoingEventRecords = await dbContext
             .OutgoingEvents
             .AsNoTracking()
+            .WhereIf(transformedFilter != null, transformedFilter!)
             .OrderBy(x => x.CreationTime)
             .Take(maxCount)
             .ToListAsync(cancellationToken: cancellationToken);

@@ -29,7 +29,7 @@ public class AssemblyFinder : IAssemblyFinder
 
         foreach (var module in _moduleContainer.Modules)
         {
-            assemblies.Add(module.Type.Assembly);
+            assemblies.AddRange(module.AllAssemblies);
         }
 
         return assemblies.Distinct().ToImmutableList();

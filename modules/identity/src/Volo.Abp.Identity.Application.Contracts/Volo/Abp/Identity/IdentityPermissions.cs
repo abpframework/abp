@@ -22,6 +22,7 @@ public static class IdentityPermissions
         public const string Update = Default + ".Update";
         public const string Delete = Default + ".Delete";
         public const string ManagePermissions = Default + ".ManagePermissions";
+        public const string ManageRoles = Update + ".ManageRoles";
     }
 
     public static class UserLookup

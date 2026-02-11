@@ -1,0 +1,39 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's comprehensive infrastructure features for building robust .NET applications, including audit logging, background jobs, and more."
+}
+```
+
+# ABP Infrastructure
+
+ABP provides a complete infrastructure for creating real world software solutions with modern architectures based on the .NET platform. Each of the following documents explains an infrastructure feature:
+
+* [Audit Logging](./audit-logging.md)
+* [Artificial Intelligence](./artificial-intelligence/index.md)
+* [Background Jobs](./background-jobs/index.md)
+* [Background Workers](./background-workers/index.md)
+* [BLOB Storing](./blob-storing/index.md)
+* [Cancellation Token Provider](./cancellation-token-provider.md)
+* [CSRF/XSRF & Anti Forgery](./csrf-anti-forgery.md)
+* [Concurrency Check](./concurrency-check.md)
+* [Current User](./current-user.md)
+* [Data Filtering](./data-filtering.md)
+* [Data Seeding](./data-seeding.md)
+* [Distributing Locking](./distributed-locking.md)
+* [Email Sending](./emailing.md)
+* [Entity Cache](./entity-cache.md)
+* [Event Bus](./event-bus/index.md)
+* [Features](./features.md)
+* [Global Features](./global-features.md)
+* [GUID Generation](./guid-generation.md)
+* [Image Manipulation](./image-manipulation.md)
+* [JSON](./json.md)
+* [Object to Object Mapping](./object-to-object-mapping.md)
+* [Settings](./settings.md)
+* [Simple State Checker](./simple-state-checker.md)
+* [SMS Sending](./sms-sending.md)
+* [String Encryption](./string-encryption.md)
+* [Text Templating](./text-templating/index.md)
+* [Timing](./timing.md)
+* [Virtual File System](./virtual-file-system.md)

@@ -9,10 +9,33 @@ export namespace ABP {
     environment: Partial<Environment>;
     registerLocaleFn: (locale: string) => Promise<any>;
     skipGetAppConfiguration?: boolean;
+    skipInitAuthService?: boolean;
     sendNullsAsQueryParam?: boolean;
     tenantKey?: string;
     localizations?: Localization[];
     othersGroup?: string;
+    dynamicLayouts?: Map<string, string>;
+    disableProjectNameInTitle?: boolean;
+    uiLocalization?: UILocalizationOptions;
+  }
+
+  export interface UILocalizationOptions {
+    /**
+     * Enable UI localization feature
+     * When enabled, localization files are automatically loaded based on selected language
+     * Files should be located at: {basePath}/{culture}.json
+     * Example: /assets/localization/en.json
+     * JSON format: { "ResourceName": { "Key": "Value" } }
+     * Merges with backend localizations (UI > Backend priority)
+     */
+    enabled?: boolean;
+    /**
+     * Base path for localization JSON files
+     * Default: '/assets/localization'
+     * Files should be located at: {basePath}/{culture}.json
+     * Example: /assets/localization/en.json
+     */
+    basePath?: string;
   }
 
   export interface Child {
@@ -72,6 +95,7 @@ export namespace ABP {
     layout?: eLayoutType;
     iconClass?: string;
     group?: string;
+    breadcrumbText?: string;
   }
 
   export interface Tab extends Nav {

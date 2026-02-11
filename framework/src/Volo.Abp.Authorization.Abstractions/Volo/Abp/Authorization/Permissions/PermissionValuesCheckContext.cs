@@ -9,12 +9,11 @@ public class PermissionValuesCheckContext
     [NotNull]
     public List<PermissionDefinition> Permissions { get; }
 
-    [CanBeNull]
-    public ClaimsPrincipal Principal { get; }
+    public ClaimsPrincipal? Principal { get; }
 
     public PermissionValuesCheckContext(
         [NotNull] List<PermissionDefinition> permissions,
-        [CanBeNull] ClaimsPrincipal principal)
+        ClaimsPrincipal? principal)
     {
         Check.NotNull(permissions, nameof(permissions));
 

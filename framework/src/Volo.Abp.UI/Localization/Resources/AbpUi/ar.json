@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "حفظ...",
     "Actions": "الإجراءات",
     "Delete": "حذف",
-    "SuccessfullyDeleted": "تم الحذف بنجاح",
+    "CreatedSuccessfully": "تم الإنشاء بنجاح",
+    "SavedSuccessfully": "تم الحفظ  بنجاح",
+    "DeletedSuccessfully": "تم الحذف بنجاح",
     "Edit": "تعديل",
     "Refresh": "تحديث",
     "Language": "لغة",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "عرض 0 الي 0 من 0 إدخالات",
     "PagerInfoFiltered": "(تمت تصفيته من _MAX_ مجموع الإدخالات)",
     "NoDataAvailableInDatatable": "لا توجد بيانات متاحة في الجدول",
+    "ErrorLoadingDatatable": "حدث خطأ أثناء الطلب. تحقق من الرسالة للتفاصيل.",
     "Total": "مجموع",
     "Selected": "مختارة",
     "PagerShowMenuEntries": "عرض _MENU_ إدخالات",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "سيتم حذف {0}!",
     "ItemWillBeDeletedMessage": "سوف يتم حذف هذا البند!",
     "ManageYourAccount": "إدارة حسابك",
-    "OthersGroup": "آخرون"
+    "OthersGroup": "آخرون",
+    "Today": "اليوم",
+    "Apply": "يتقدم",
+    "InternetConnectionInfo": "لا يمكن تنفيذ العملية. اتصالك بالإنترنت غير متوفر في الوقت الراهن.",
+    "CopiedToTheClipboard": "تم النسخ إلى الحافظة",
+    "AddNew": "اضف جديد",
+    "ProfilePicture": "الصوره الشخصيه",
+    "Theme": "سمة",
+    "NotAssigned": "غيرمعتمد",
+    "EntityActionsDisabledTooltip": "ليس لديك إذن لتنفيذ أي إجراء.",
+    "ResourcePermissions": "أذونات"
   }
 }

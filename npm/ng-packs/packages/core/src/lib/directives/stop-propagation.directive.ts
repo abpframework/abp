@@ -1,16 +1,16 @@
-import { Directive, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
+import { Directive, ElementRef, OnInit, inject, output } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { SubscriptionService } from '../services/subscription.service';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[click.stop]',
   providers: [SubscriptionService],
 })
 export class StopPropagationDirective implements OnInit {
-  @Output('click.stop') readonly stopPropEvent = new EventEmitter<MouseEvent>();
+  private el = inject(ElementRef);
+  private subscription = inject(SubscriptionService);
 
-  constructor(private el: ElementRef, private subscription: SubscriptionService) {}
+  readonly stopPropEvent = output<MouseEvent>({ alias: 'click.stop' });
 
   ngOnInit(): void {
     this.subscription.addOne(fromEvent<MouseEvent>(this.el.nativeElement, 'click'), event => {

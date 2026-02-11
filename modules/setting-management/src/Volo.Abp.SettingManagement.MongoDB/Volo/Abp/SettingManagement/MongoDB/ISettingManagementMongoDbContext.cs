@@ -10,4 +10,5 @@ namespace Volo.Abp.SettingManagement.MongoDB;
 public interface ISettingManagementMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<Setting> Settings { get; }
+    IMongoCollection<SettingDefinitionRecord> SettingDefinitionRecords { get; }
 }

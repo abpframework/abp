@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.ServiceProxying;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -33,7 +32,7 @@ public class RemoveProxyCommand : ProxyCommandBase<RemoveProxyCommand>
         return sb.ToString();
     }
 
-    public override string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Remove client service proxies and DTOs to consume HTTP APIs.";
     }

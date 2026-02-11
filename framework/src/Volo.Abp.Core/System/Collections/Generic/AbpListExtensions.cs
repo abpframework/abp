@@ -196,7 +196,7 @@ public static class AbpListExtensions
     public static List<T> SortByDependencies<T>(
         this IEnumerable<T> source,
         Func<T, IEnumerable<T>> getDependencies,
-        IEqualityComparer<T> comparer = null)
+        IEqualityComparer<T>? comparer = null) where T : notnull
     {
         /* See: http://www.codeproject.com/Articles/869059/Topological-sorting-in-Csharp
          *      http://en.wikipedia.org/wiki/Topological_sorting
@@ -222,7 +222,7 @@ public static class AbpListExtensions
     /// <param name="sorted">List with the sortet items</param>
     /// <param name="visited">Dictionary with the visited items</param>
     private static void SortByDependenciesVisit<T>(T item, Func<T, IEnumerable<T>> getDependencies, List<T> sorted,
-        Dictionary<T, bool> visited)
+        Dictionary<T, bool> visited) where T : notnull
     {
         bool inProcess;
         var alreadyVisited = visited.TryGetValue(item, out inProcess);

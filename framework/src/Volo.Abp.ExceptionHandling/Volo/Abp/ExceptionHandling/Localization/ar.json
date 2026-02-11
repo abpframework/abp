@@ -13,14 +13,19 @@
     "DefaultErrorMessage404": "المورد غير موجود!",
     "DefaultErrorMessage404Detail": "لم يتم العثور على المورد المطلوب على الخادم!",
     "EntityNotFoundErrorMessage": "لا يوجد كيان {0} بالمعرف = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "لا يوجد كيان {0}!",
     "AbpDbConcurrencyErrorMessage": "تم تغيير البيانات التي قدمتها بالفعل من قبل مستخدم/عميل آخر. يرجى تجاهل التغييرات التي قمت بها والمحاولة من البداية.",
     "Error": "خطأ",
     "UnhandledException": "استثناء غير معالج!",
+    "Authorizing": "التحقق من الصلاحية…",
     "401Message": "غير مصرح",
     "403Message": "ممنوع",
     "404Message": "الصفحة غير موجودة",
     "500Message": "خطأ في الخادم الداخلي",
     "403MessageDetail": "أنت غير مصرح لك لإجراء هذه العملية!",
-    "404MessageDetail": "عذرا ، لا يوجد شيء في هذا العنوان."
+    "404MessageDetail": "عذرا ، لا يوجد شيء في هذا العنوان.",
+    "Unauthorized": "غير مصرح",
+    "invalid_token": "الرمز غير صالح",
+    "SessionExpired": "انتهت جلستك. يرجى تسجيل الدخول مرة أخرى لمتابعة التطبيق."
   }
 }

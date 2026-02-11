@@ -4,20 +4,24 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web\Volo.Abp.AspNetCore.Components.Web.csproj" />
         <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
         <ProjectReference Include="..\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Features\Volo.Abp.Features.csproj" />
+        <ProjectReference Include="..\Volo.Abp.GlobalFeatures\Volo.Abp.GlobalFeatures.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazorise" Version="1.2.0" />
-        <PackageReference Include="Blazorise.DataGrid" Version="1.2.0" />
-        <PackageReference Include="Blazorise.Snackbar" Version="1.2.0" />
-        <PackageReference Include="Blazorise.Components" Version="1.2.0" />
+        <PackageReference Include="Blazorise" />
+        <PackageReference Include="Blazorise.DataGrid" />
+        <PackageReference Include="Blazorise.Snackbar" />
+        <PackageReference Include="Blazorise.Components" />
     </ItemGroup>
 
 </Project>

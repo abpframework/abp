@@ -1,6 +1,7 @@
 {
   "culture": "cs",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Jméno nájemce již existuje: {Name}",
     "Menu:TenantManagement": "Správa tenantů",
     "Tenants": "Tenanty",
     "NewTenant": "Nový tenant",
@@ -15,7 +16,7 @@
     "Permission:Edit": "Upravit",
     "Permission:Delete": "Smazat",
     "Permission:ManageConnectionStrings": "Spravovat connection stringy",
-    "Permission:ManageFeatures": "Spravovat funkce",
+    "Permission:ManageFeatures": "Funkce",
     "DisplayName:AdminEmailAddress": "Email adresa správce",
     "DisplayName:AdminPassword": "Heslo správce"
   }

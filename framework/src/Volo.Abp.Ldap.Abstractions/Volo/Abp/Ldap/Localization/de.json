@@ -1,0 +1,19 @@
+{
+  "culture": "de",
+  "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP über SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP über SSL",
+    "DisplayName:Abp.Ldap.ServerHost": "Serverhost",
+    "Description:Abp.Ldap.ServerHost": "Serverhost",
+    "DisplayName:Abp.Ldap.ServerPort": "Server Port",
+    "Description:Abp.Ldap.ServerPort": "Server Port",
+    "DisplayName:Abp.Ldap.BaseDc": "Basisdomänenkomponente",
+    "Description:Abp.Ldap.BaseDc": "Basisdomänenkomponente",
+    "DisplayName:Abp.Ldap.Domain": "Domain",
+    "Description:Abp.Ldap.Domain": "Domain",
+    "DisplayName:Abp.Ldap.UserName": "Nutzername",
+    "Description:Abp.Ldap.UserName": "Nutzername",
+    "DisplayName:Abp.Ldap.Password": "Passwort",
+    "Description:Abp.Ldap.Password": "Passwort"
+  }
+}

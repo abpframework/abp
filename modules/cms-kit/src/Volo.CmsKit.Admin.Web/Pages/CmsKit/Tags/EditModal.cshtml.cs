@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Admin.Tags;
 using Volo.CmsKit.Tags;
@@ -43,9 +43,7 @@ public class EditModalModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(TagDto))]
-    [AutoMap(typeof(TagUpdateDto), ReverseMap = true)]
-    public class TagEditViewModel : IHasConcurrencyStamp
+    public class TagEditViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]
         [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxNameLength))]

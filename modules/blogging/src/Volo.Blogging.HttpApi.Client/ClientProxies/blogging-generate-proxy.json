@@ -7,10 +7,67 @@
         "Volo.Blogging.BlogFilesController": {
           "controllerName": "BlogFiles",
           "controllerGroupName": "BlogFiles",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Blogging.BlogFilesController",
           "interfaces": [
             {
-              "type": "Volo.Blogging.Files.IFileAppService"
+              "type": "Volo.Blogging.Files.IFileAppService",
+              "name": "IFileAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Files.RawFileDto",
+                    "typeSimple": "Volo.Blogging.Files.RawFileDto"
+                  }
+                },
+                {
+                  "name": "GetFileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Files.FileUploadInputDto, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Files.FileUploadInputDto",
+                      "typeSimple": "Volo.Blogging.Files.FileUploadInputDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Files.FileUploadOutputDto",
+                    "typeSimple": "Volo.Blogging.Files.FileUploadOutputDto"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -142,10 +199,58 @@
         "Volo.Blogging.BlogsController": {
           "controllerName": "Blogs",
           "controllerGroupName": "Blogs",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Blogging.BlogsController",
           "interfaces": [
             {
-              "type": "Volo.Blogging.Blogs.IBlogAppService"
+              "type": "Volo.Blogging.Blogs.IBlogAppService",
+              "name": "IBlogAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Blogs.Dtos.BlogDto>"
+                  }
+                },
+                {
+                  "name": "GetByShortNameAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "shortName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                    "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Blogs.Dtos.BlogDto",
+                    "typeSimple": "Volo.Blogging.Blogs.Dtos.BlogDto"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -243,10 +348,92 @@
         "Volo.Blogging.CommentsController": {
           "controllerName": "Comments",
           "controllerGroupName": "Comments",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Blogging.CommentsController",
           "interfaces": [
             {
-              "type": "Volo.Blogging.Comments.ICommentAppService"
+              "type": "Volo.Blogging.Comments.ICommentAppService",
+              "name": "ICommentAppService",
+              "methods": [
+                {
+                  "name": "GetHierarchicalListOfPostAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "postId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Blogging.Comments.Dtos.CommentWithRepliesDto>",
+                    "typeSimple": "[Volo.Blogging.Comments.Dtos.CommentWithRepliesDto]"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Comments.Dtos.CreateCommentDto, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Comments.Dtos.CreateCommentDto",
+                      "typeSimple": "Volo.Blogging.Comments.Dtos.CreateCommentDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto",
+                    "typeSimple": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Comments.Dtos.UpdateCommentDto, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Comments.Dtos.UpdateCommentDto",
+                      "typeSimple": "Volo.Blogging.Comments.Dtos.UpdateCommentDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto",
+                    "typeSimple": "Volo.Blogging.Comments.Dtos.CommentWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -423,10 +610,193 @@
         "Volo.Blogging.PostsController": {
           "controllerName": "Posts",
           "controllerGroupName": "Posts",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Blogging.PostsController",
           "interfaces": [
             {
-              "type": "Volo.Blogging.Posts.IPostAppService"
+              "type": "Volo.Blogging.Posts.IPostAppService",
+              "name": "IPostAppService",
+              "methods": [
+                {
+                  "name": "GetListByBlogIdAndTagNameAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "tagName",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>"
+                  }
+                },
+                {
+                  "name": "GetTimeOrderedListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Blogging.Posts.PostWithDetailsDto>"
+                  }
+                },
+                {
+                  "name": "GetForReadingAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Posts.GetPostInput, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Posts.GetPostInput",
+                      "typeSimple": "Volo.Blogging.Posts.GetPostInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                    "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                    "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Posts.CreatePostDto, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Posts.CreatePostDto",
+                      "typeSimple": "Volo.Blogging.Posts.CreatePostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                    "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Posts.UpdatePostDto, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Posts.UpdatePostDto",
+                      "typeSimple": "Volo.Blogging.Posts.UpdatePostDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Blogging.Posts.PostWithDetailsDto",
+                    "typeSimple": "Volo.Blogging.Posts.PostWithDetailsDto"
+                  }
+                },
+                {
+                  "name": "GetListByUserIdAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "userId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Blogging.Posts.PostWithDetailsDto>",
+                    "typeSimple": "[Volo.Blogging.Posts.PostWithDetailsDto]"
+                  }
+                },
+                {
+                  "name": "GetLatestBlogPostsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "count",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Blogging.Posts.PostWithDetailsDto>",
+                    "typeSimple": "[Volo.Blogging.Posts.PostWithDetailsDto]"
+                  }
+                }
+              ]
             }
           ],
           "actions": {
@@ -704,6 +1074,100 @@
               "allowAnonymous": null,
               "implementFrom": "Volo.Blogging.Posts.IPostAppService"
             },
+            "GetListByUserIdAsyncByUserId": {
+              "uniqueName": "GetListByUserIdAsyncByUserId",
+              "name": "GetListByUserIdAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/posts/user/{userId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "userId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "userId",
+                  "name": "userId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Blogging.Posts.PostWithDetailsDto>",
+                "typeSimple": "[Volo.Blogging.Posts.PostWithDetailsDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
+            "GetLatestBlogPostsAsyncByBlogIdAndCount": {
+              "uniqueName": "GetLatestBlogPostsAsyncByBlogIdAndCount",
+              "name": "GetLatestBlogPostsAsync",
+              "httpMethod": "GET",
+              "url": "api/blogging/posts/{blogId}/latest/{count}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "blogId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "count",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "blogId",
+                  "name": "blogId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "count",
+                  "name": "count",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Blogging.Posts.PostWithDetailsDto>",
+                "typeSimple": "[Volo.Blogging.Posts.PostWithDetailsDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Blogging.Posts.IPostAppService"
+            },
             "DeleteAsyncById": {
               "uniqueName": "DeleteAsyncById",
               "name": "DeleteAsync",
@@ -746,10 +1210,41 @@
         "Volo.Blogging.TagsController": {
           "controllerName": "Tags",
           "controllerGroupName": "Tags",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
           "type": "Volo.Blogging.TagsController",
           "interfaces": [
             {
-              "type": "Volo.Blogging.Tagging.ITagAppService"
+              "type": "Volo.Blogging.Tagging.ITagAppService",
+              "name": "ITagAppService",
+              "methods": [
+                {
+                  "name": "GetPopularTagsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "blogId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Blogging.Tagging.Dtos.GetPopularTagsInput, Volo.Blogging.Application.Contracts",
+                      "type": "Volo.Blogging.Tagging.Dtos.GetPopularTagsInput",
+                      "typeSimple": "Volo.Blogging.Tagging.Dtos.GetPopularTagsInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Blogging.Tagging.Dtos.TagDto>",
+                    "typeSimple": "[Volo.Blogging.Tagging.Dtos.TagDto]"
+                  }
+                }
+              ]
             }
           ],
           "actions": {

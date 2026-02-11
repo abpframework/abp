@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,8 +35,7 @@ public static class FileHelper
     /// Returns extension without dot.
     /// Returns null if given <paramref name="fileNameWithExtension"></paramref> does not include dot.
     /// </returns>
-    [CanBeNull]
-    public static string GetExtension([NotNull] string fileNameWithExtension)
+    public static string? GetExtension([NotNull] string fileNameWithExtension)
     {
         Check.NotNull(fileNameWithExtension, nameof(fileNameWithExtension));
 
@@ -70,7 +68,7 @@ public static class FileHelper
     /// <returns>A string containing all lines of the file.</returns>
     public static async Task<byte[]> ReadAllBytesAsync(string path)
     {
-        using (var stream = File.Open(path, FileMode.Open))
+        using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
             var result = new byte[stream.Length];
             await stream.ReadAsync(result, 0, (int)stream.Length);
@@ -90,7 +88,7 @@ public static class FileHelper
     /// <param name="fileOptions">Indicates FileStream options. Default is Asynchronous (The file is to be used for asynchronous reading.) and SequentialScan (The file is to be accessed sequentially from beginning to end.) </param>
     /// <returns>A string containing all lines of the file.</returns>
     public static async Task<string[]> ReadAllLinesAsync(string path,
-        Encoding encoding = null,
+        Encoding? encoding = null,
         FileMode fileMode = FileMode.Open,
         FileAccess fileAccess = FileAccess.Read,
         FileShare fileShare = FileShare.Read,
@@ -114,7 +112,7 @@ public static class FileHelper
         {
             using (var reader = new StreamReader(stream, encoding))
             {
-                string line;
+                string? line;
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
                     lines.Add(line);
@@ -134,6 +132,6 @@ public static class FileHelper
     {
         var content = await ReadAllBytesAsync(path);
 
-        return StringHelper.ConvertFromBytesWithoutBom(content);
+        return StringHelper.ConvertFromBytesWithoutBom(content)!;
     }
 }

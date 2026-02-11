@@ -3,7 +3,6 @@ using Volo.Abp.GlobalFeatures;
 
 namespace Volo.CmsKit.GlobalFeatures;
 
-
 [GlobalFeatureName(Name)]
 public class BlogPostScrollIndexFeature : GlobalFeature
 {

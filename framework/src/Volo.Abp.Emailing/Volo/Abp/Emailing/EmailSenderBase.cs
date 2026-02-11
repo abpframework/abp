@@ -1,8 +1,14 @@
 using System;
+using System.IO;
+using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Emailing;
 
@@ -11,6 +17,10 @@ namespace Volo.Abp.Emailing;
 /// </summary>
 public abstract class EmailSenderBase : IEmailSender
 {
+    public ILogger<EmailSenderBase> Logger { get; set; }
+
+    protected ICurrentTenant CurrentTenant { get; }
+
     protected IEmailSenderConfiguration Configuration { get; }
 
     protected IBackgroundJobManager BackgroundJobManager { get; }
@@ -18,26 +28,56 @@ public abstract class EmailSenderBase : IEmailSender
     /// <summary>
     /// Constructor.
     /// </summary>
-    protected EmailSenderBase(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
+    protected EmailSenderBase(
+        ICurrentTenant currentTenant,
+        IEmailSenderConfiguration configuration,
+        IBackgroundJobManager backgroundJobManager)
     {
+        Logger = NullLogger<EmailSenderBase>.Instance;
+
+        CurrentTenant = currentTenant;
         Configuration = configuration;
         BackgroundJobManager = backgroundJobManager;
     }
 
-    public virtual async Task SendAsync(string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
-        await SendAsync(new MailMessage
-        {
-            To = { to },
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = isBodyHtml
-        });
+        await SendAsync(BuildMailMessage(null, to, subject, body, isBodyHtml, additionalEmailSendingArgs));
     }
 
-    public virtual async Task SendAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
-        await SendAsync(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml });
+        await SendAsync(BuildMailMessage(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs));
+    }
+
+    protected virtual MailMessage BuildMailMessage(string? from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
+    {
+        var message = from == null
+            ? new MailMessage { To = { to }, Subject = subject, Body = body, IsBodyHtml = isBodyHtml }
+            : new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml };
+
+        if (additionalEmailSendingArgs != null)
+        {
+            if (additionalEmailSendingArgs.Attachments != null)
+            {
+                foreach (var attachment in additionalEmailSendingArgs.Attachments.Where(x => x.File != null))
+                {
+                    var fileStream = new MemoryStream(attachment.File!);
+                    fileStream.Seek(0, SeekOrigin.Begin);
+                    message.Attachments.Add(new Attachment(fileStream, attachment.Name));
+                }
+            }
+
+            if (additionalEmailSendingArgs.CC != null)
+            {
+                foreach (var cc in additionalEmailSendingArgs.CC)
+                {
+                    message.CC.Add(cc);
+                }
+            }
+        }
+
+        return message;
     }
 
     public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
@@ -50,41 +90,49 @@ public abstract class EmailSenderBase : IEmailSender
         await SendEmailAsync(mail);
     }
 
-    public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
+        await ValidateEmailAddressAsync(to);
+
         if (!BackgroundJobManager.IsAvailable())
         {
-            await SendAsync(to, subject, body, isBodyHtml);
+            await SendAsync(to, subject, body, isBodyHtml, additionalEmailSendingArgs);
             return;
         }
 
         await BackgroundJobManager.EnqueueAsync(
             new BackgroundEmailSendingJobArgs
             {
+                TenantId = CurrentTenant.Id,
                 To = to,
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = isBodyHtml
+                IsBodyHtml = isBodyHtml,
+                AdditionalEmailSendingArgs = additionalEmailSendingArgs
             }
         );
     }
 
-    public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
+    public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
+        await ValidateEmailAddressAsync(to);
+
         if (!BackgroundJobManager.IsAvailable())
         {
-            await SendAsync(from, to, subject, body, isBodyHtml);
+            await SendAsync(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
             return;
         }
 
         await BackgroundJobManager.EnqueueAsync(
             new BackgroundEmailSendingJobArgs
             {
+                TenantId = CurrentTenant.Id,
                 From = from,
                 To = to,
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = isBodyHtml
+                IsBodyHtml = isBodyHtml,
+                AdditionalEmailSendingArgs = additionalEmailSendingArgs
             }
         );
     }
@@ -125,6 +173,19 @@ public abstract class EmailSenderBase : IEmailSender
         if (mail.BodyEncoding == null)
         {
             mail.BodyEncoding = Encoding.UTF8;
+        }
+    }
+
+    protected virtual Task ValidateEmailAddressAsync(string emailAddress)
+    {
+        try
+        {
+            _ = new MailAddressCollection { emailAddress };
+            return Task.CompletedTask;
+        }
+        catch (Exception e)
+        {
+            throw new ArgumentException($"Email address '{emailAddress}' is not valid!");
         }
     }
 }

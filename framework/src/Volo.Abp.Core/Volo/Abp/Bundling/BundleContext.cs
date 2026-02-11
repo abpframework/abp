@@ -6,6 +6,7 @@ public class BundleContext
 {
     public List<BundleDefinition> BundleDefinitions { get; set; }
     public BundleParameterDictionary Parameters { get; set; }
+    public bool InteractiveAuto { get; set; }
 
     public BundleContext()
     {
@@ -14,7 +15,7 @@ public class BundleContext
     }
 
     public void Add(string source, bool excludeFromBundle = false,
-        Dictionary<string, string> additionalProperties = null)
+        Dictionary<string, string>? additionalProperties = null)
     {
         var bundleDefinition = new BundleDefinition
         {

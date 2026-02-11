@@ -8,11 +8,11 @@ namespace Volo.Abp.Testing;
 public class AbpAsyncIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider
     where TStartupModule : IAbpModule
 {
-    protected IAbpApplication Application { get; set; }
+    protected IAbpApplication Application { get; set; } = default!;
 
-    protected IServiceProvider RootServiceProvider { get; set; }
+    protected IServiceProvider RootServiceProvider { get; set; } = default!;
 
-    protected IServiceScope TestServiceScope { get; set; }
+    protected IServiceScope TestServiceScope { get; set; } = default!;
 
     public virtual async Task InitializeAsync()
     {
@@ -34,6 +34,10 @@ public class AbpAsyncIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProv
     public virtual async Task DisposeAsync()
     {
         await Application.ShutdownAsync();
+        if (RootServiceProvider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
         TestServiceScope.Dispose();
         Application.Dispose();
     }

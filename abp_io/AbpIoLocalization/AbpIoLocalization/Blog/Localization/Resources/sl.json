@@ -1,5 +1,8 @@
 {
   "culture": "sl",
   "texts": {
+    "AbpTitle": "Preberi vse objave v spletnem dnevniku",
+    "AbpDescription": "ABP je odprtokodno aplikacijsko ogrodje, osredotočeno na razvoj spletnih aplikacij na osnovi AspNet Core. Ne ponavljajte se, osredotočite se na svoj poslovni kodeks.",
+    "AbpDefinition": "Blog ABP za razvoj .NET, večplatformske predloge aplikacij ASP.NET, novice v zvezi z ABP in več ..."
   }
 }

@@ -1,15 +1,15 @@
 /* eslint-disable @angular-eslint/no-output-native */
-import { ABP } from '@abp/ng.core';
 import {
   Component,
   ElementRef,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   Renderer2,
-  ViewChild,
+  inject,
+  output,
+  viewChild
 } from '@angular/core';
+import { ABP, StopPropagationDirective } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-button',
@@ -19,17 +19,20 @@ import {
       [id]="buttonId"
       [attr.type]="buttonType"
       [attr.form]="formName"
-      [ngClass]="buttonClass"
+      [class]="buttonClass"
       [disabled]="loading || disabled"
-      (click.stop)="click.next($event); abpClick.next($event)"
-      (focus)="focus.next($event); abpFocus.next($event)"
-      (blur)="blur.next($event); abpBlur.next($event)"
+      (click.stop)="click.emit($event); abpClick.emit($event)"
+      (focus)="focus.emit($event); abpFocus.emit($event)"
+      (blur)="blur.emit($event); abpBlur.emit($event)"
     >
-      <i [ngClass]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
+      <i [class]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
     </button>
   `,
+  imports: [StopPropagationDirective],
 })
 export class ButtonComponent implements OnInit {
+  private renderer = inject(Renderer2);
+
   @Input()
   buttonId = '';
 
@@ -54,32 +57,29 @@ export class ButtonComponent implements OnInit {
   @Input()
   attributes?: ABP.Dictionary<string>;
 
-  @Output() readonly click = new EventEmitter<MouseEvent>();
+  readonly click = output<MouseEvent>();
 
-  @Output() readonly focus = new EventEmitter<FocusEvent>();
+  readonly focus = output<FocusEvent>();
 
-  @Output() readonly blur = new EventEmitter<FocusEvent>();
+  readonly blur = output<FocusEvent>();
 
-  @Output() readonly abpClick = new EventEmitter<MouseEvent>();
+  readonly abpClick = output<MouseEvent>();
 
-  @Output() readonly abpFocus = new EventEmitter<FocusEvent>();
+  readonly abpFocus = output<FocusEvent>();
 
-  @Output() readonly abpBlur = new EventEmitter<FocusEvent>();
+  readonly abpBlur = output<FocusEvent>();
 
-  @ViewChild('button', { static: true })
-  buttonRef!: ElementRef<HTMLButtonElement>;
+  readonly buttonRef = viewChild.required<ElementRef<HTMLButtonElement>>('button');
 
   get icon(): string {
     return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
   }
 
-  constructor(private renderer: Renderer2) {}
-
   ngOnInit() {
     if (this.attributes) {
       Object.keys(this.attributes).forEach(key => {
         if (this.attributes?.[key]) {
-          this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
+          this.renderer.setAttribute(this.buttonRef().nativeElement, key, this.attributes[key]);
         }
       });
     }

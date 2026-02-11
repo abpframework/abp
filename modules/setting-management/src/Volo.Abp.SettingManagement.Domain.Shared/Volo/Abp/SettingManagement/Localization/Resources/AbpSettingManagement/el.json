@@ -2,10 +2,11 @@
   "culture": "el",
   "texts": {
     "Settings": "Ρυθμίσεις",
-    "SuccessfullySaved": "Αποθηκεύτηκε με επιτυχία",
+    "SavedSuccessfully": "Αποθηκεύτηκε με επιτυχία",
     "Permission:SettingManagement": "Διαχείριση ρυθμίσεων",
     "Permission:Emailing": "Αποστολή email",
     "Permission:EmailingTest": "Αποστολή δοκιμαστικού email",
+    "Permission:TimeZone": "Ζώνη ώρας",
     "SendTestEmail": "Αποστολή δοκιμαστικού email",
     "SenderEmailAddress": "Διεύθυνση email αποστολέα",
     "TargetEmailAddress": "Διεύθυνση email παραλήπτη",
@@ -13,8 +14,10 @@
     "Body": "Κείμενο",
     "TestEmailSubject": "Δοκιμαστικό email {0}",
     "TestEmailBody": "Δοκιμαστικό κείμενο email εδώ",
-    "SuccessfullySent": "Στάλθηκε με επιτυχία",
+    "SentSuccessfully": "Στάλθηκε με επιτυχία",
+    "MailSendingFailed": "Αποτυχία αποστολής email. Ελέγξτε τη διαμόρφωση του email σας και δοκιμάστε ξανά.",
     "Send": "Αποστολή",
+    "Menu:Settings": "Ρυθμίσεις",
     "Menu:Emailing": "Αποστολή email",
     "SmtpHost": "Διακομιστής",
     "SmtpPort": "Πόρτα",
@@ -28,7 +31,8 @@
     "Feature:SettingManagementGroup": "Διαχείριση ρυθμίσεων",
     "Feature:SettingManagementEnable": "Ενεργοποίηση διαχείρισης ρυθμίσεων",
     "Feature:SettingManagementEnableDescription": "Ενεργοποίηση συστήματος διαχείρισης ρυθμίσεων στην εφαρμογή.",
-    "Feature:AllowChangingEmailSettings": "Επιτρέψτε την αλλαγή των ρυθμίσεων email.",
-    "Feature:AllowChangingEmailSettingsDescription": "Επιτρέψτε την αλλαγή των ρυθμίσεων email."
+    "Feature:AllowChangingEmailSettings": "Επιτρέψτε την αλλαγή των ρυθμίσεων email",
+    "Feature:AllowChangingEmailSettingsDescription": "Επιτρέψτε την αλλαγή των ρυθμίσεων email.",
+    "SmtpPasswordPlaceholder": "Εισαγάγετε μια τιμή για ενημέρωση κωδικού πρόσβασης"
   }
 }

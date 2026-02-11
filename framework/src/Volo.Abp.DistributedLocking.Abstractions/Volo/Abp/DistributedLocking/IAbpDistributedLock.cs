@@ -16,8 +16,7 @@ public interface IAbpDistributedLock
     /// <param name="name">The name of the lock</param>
     /// <param name="timeout">How long to wait before giving up on the acquisition attempt. Defaults to 0</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    [ItemCanBeNull]
-    Task<IAbpDistributedLockHandle> TryAcquireAsync(
+    Task<IAbpDistributedLockHandle?> TryAcquireAsync(
         [NotNull] string name,
         TimeSpan timeout = default,
         CancellationToken cancellationToken = default

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,20 @@ public class CliAnalyticsCollect : ICliAnalyticsCollect, ITransientDependency
 
     public async Task CollectAsync(CliAnalyticsCollectInputDto input)
     {
+        if (input.RandomComputerId.IsNullOrWhiteSpace())
+        {
+            if (!File.Exists(CliPaths.ComputerId))
+            {
+                var randomComputerId = Guid.NewGuid().ToString("D");
+                input.RandomComputerId = randomComputerId;
+                File.WriteAllText(CliPaths.ComputerId, randomComputerId, Encoding.UTF8);
+            }
+            else
+            {
+                input.RandomComputerId = File.ReadAllText(CliPaths.ComputerId, Encoding.UTF8);
+            }
+        }
+
         var postData = _jsonSerializer.Serialize(input);
         var url = $"{CliUrls.WwwAbpIo}api/clianalytics/collect";
 

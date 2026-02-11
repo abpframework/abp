@@ -13,15 +13,14 @@ public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
     [NotNull]
     public Assembly Assembly { get; }
 
-    [CanBeNull]
-    public string BaseNamespace { get; }
+    public string? BaseNamespace { get; }
 
     protected override IDictionary<string, IFileInfo> Files => _files.Value;
     private readonly Lazy<Dictionary<string, IFileInfo>> _files;
 
     public AbpEmbeddedFileProvider(
         [NotNull] Assembly assembly,
-        [CanBeNull] string baseNamespace = null)
+        string? baseNamespace = null)
     {
         Check.NotNull(assembly, nameof(assembly));
 
@@ -40,7 +39,7 @@ public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
 
         foreach (var resourcePath in Assembly.GetManifestResourceNames())
         {
-            if (!BaseNamespace.IsNullOrEmpty() && !resourcePath.StartsWith(BaseNamespace))
+            if (!BaseNamespace.IsNullOrEmpty() && !resourcePath.StartsWith(BaseNamespace!))
             {
                 continue;
             }
@@ -106,7 +105,7 @@ public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
     {
         if (!BaseNamespace.IsNullOrEmpty())
         {
-            resourceName = resourceName.Substring(BaseNamespace.Length + 1);
+            resourceName = resourceName.Substring(BaseNamespace!.Length + 1);
         }
 
         var pathParts = resourceName.Split('.');

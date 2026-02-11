@@ -8,6 +8,9 @@
 @using Volo.Abp.BlazoriseUI.Components.ObjectExtending
 @using Volo.Abp.AspNetCore.Components.Web
 @inject AbpBlazorMessageLocalizerHelper<AbpTenantManagementResource> LH
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.UI.Navigation.Localization.Resource
+@inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
 @inherits AbpCrudPageBase<ITenantAppService, TenantDto, Guid, GetTenantsInput, TenantCreateDto, TenantUpdateDto>
 
 <Card>
@@ -37,7 +40,7 @@
 {
     <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
         <ModalContent Centered="true">
-            <Form>
+            <Form id="CreateTenantForm">
                 <ModalHeader>
                     <ModalTitle>@L["NewTenant"]</ModalTitle>
                     <CloseButton Clicked="CloseCreateModalAsync"/>
@@ -81,12 +84,12 @@
                             <ValidationError Style="display: block" />
                          </Field>
                         </Validation>
-                        <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH"/>
+                        <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                     </Validations>
                 </ModalBody>
                 <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@CreateEntityAsync"/>
+                    <Button Color="Color.Primary" Outline Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Form="CreateTenantForm" Clicked="@CreateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -98,7 +101,7 @@
 {
     <Modal @ref="EditModal" Closing="@ClosingEditModal">
         <ModalContent Centered="true">
-            <Form>
+            <Form id="EditTenantForm">
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
                     <CloseButton Clicked="CloseEditModalAsync"/>
@@ -116,11 +119,11 @@
                             </Field>
                         </Validation>
                     </Validations>
-                    <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" LH="@LH"/>
+                    <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" LH="@LH" ModalType="ExtensionPropertyModalType.EditModal" />
                 </ModalBody>
                 <ModalFooter>
-                    <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@UpdateEntityAsync"/>
+                    <Button Color="Color.Primary" Outline Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
+                    <SubmitButton Form="EditTenantForm" Clicked="@UpdateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>

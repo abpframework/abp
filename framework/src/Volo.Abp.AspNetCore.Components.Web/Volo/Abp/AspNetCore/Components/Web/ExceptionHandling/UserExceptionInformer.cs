@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Client;
 
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 
@@ -35,29 +36,33 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
     {
         //TODO: Create sync versions of the MessageService APIs.
 
+        LogException(context);
+
         var errorInfo = GetErrorInfo(context);
 
         if (errorInfo.Details.IsNullOrEmpty())
         {
-            MessageService.Error(errorInfo.Message);
+            MessageService.Error(errorInfo.Message!);
         }
         else
         {
-            MessageService.Error(errorInfo.Details, errorInfo.Message);
+            MessageService.Error(errorInfo.Details!, errorInfo.Message);
         }
     }
 
     public async Task InformAsync(UserExceptionInformerContext context)
     {
+        LogException(context);
+
         var errorInfo = GetErrorInfo(context);
 
         if (errorInfo.Details.IsNullOrEmpty())
         {
-            await MessageService.Error(errorInfo.Message);
+            await MessageService.Error(errorInfo.Message!);
         }
         else
         {
-            await MessageService.Error(errorInfo.Details, errorInfo.Message);
+            await MessageService.Error(errorInfo.Details!, errorInfo.Message);
         }
     }
 
@@ -67,6 +72,17 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
         {
             options.SendExceptionsDetailsToClients = Options.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = Options.SendStackTraceToClients;
+            options.SendExceptionDataToClientTypes = Options.SendExceptionDataToClientTypes;
         });
+    }
+
+    protected virtual void LogException(UserExceptionInformerContext context)
+    {
+        if (context.Exception is AbpRemoteCallException && OperatingSystem.IsBrowser())
+        {
+            return;
+        }
+
+        Logger.LogException(context.Exception);
     }
 }

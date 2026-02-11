@@ -1,26 +1,32 @@
-﻿using Minio;
-using Minio.Exceptions;
-using System;
+﻿using System;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Minio;
+using Minio.DataModel.Args;
+using Minio.Exceptions;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring.Minio;
 
 public class MinioBlobProvider : BlobProviderBase, ITransientDependency
 {
+    protected IHttpClientFactory HttpClientFactory { get; }
     protected IMinioBlobNameCalculator MinioBlobNameCalculator { get; }
     protected IBlobNormalizeNamingService BlobNormalizeNamingService { get; }
 
     public MinioBlobProvider(
+        IHttpClientFactory httpClientFactory,
         IMinioBlobNameCalculator minioBlobNameCalculator,
         IBlobNormalizeNamingService blobNormalizeNamingService)
     {
+        HttpClientFactory = httpClientFactory;
         MinioBlobNameCalculator = minioBlobNameCalculator;
         BlobNormalizeNamingService = blobNormalizeNamingService;
     }
 
-    public override async Task SaveAsync(BlobProviderSaveArgs args)
+    public async override Task SaveAsync(BlobProviderSaveArgs args)
     {
         var blobName = MinioBlobNameCalculator.Calculate(args);
         var configuration = args.Configuration.GetMinioConfiguration();
@@ -44,7 +50,7 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
             .WithObjectSize(args.BlobStream.Length));
     }
 
-    public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
+    public async override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
     {
         var blobName = MinioBlobNameCalculator.Calculate(args);
         var client = GetMinioClient(args);
@@ -60,7 +66,7 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
 
     }
 
-    public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
+    public async override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
     {
         var blobName = MinioBlobNameCalculator.Calculate(args);
         var client = GetMinioClient(args);
@@ -69,7 +75,7 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(client, containerName, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public async override Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var blobName = MinioBlobNameCalculator.Calculate(args);
         var client = GetMinioClient(args);
@@ -80,24 +86,19 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
             return null;
         }
 
-        var memoryStream = new MemoryStream();
-        await client.GetObjectAsync(new GetObjectArgs().WithBucket(containerName).WithObject(blobName).WithCallbackStream(stream =>
-        {
-            if (stream != null)
-            {
-                stream.CopyTo(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-            }
-            else
-            {
-                memoryStream = null;
-            }
-        }));
+        var configuration = args.Configuration.GetMinioConfiguration();
+        var downloadUrl = await client.PresignedGetObjectAsync(
+            new PresignedGetObjectArgs()
+                .WithBucket(containerName)
+                .WithObject(blobName)
+                .WithExpiry(configuration.PresignedGetExpirySeconds));
 
-        return memoryStream;
+        var httpClient = HttpClientFactory.CreateMinioHttpClient();
+
+        return await httpClient.GetStreamAsync(downloadUrl, args.CancellationToken);
     }
 
-    protected virtual MinioClient GetMinioClient(BlobProviderArgs args)
+    protected virtual IMinioClient GetMinioClient(BlobProviderArgs args)
     {
         var configuration = args.Configuration.GetMinioConfiguration();
 
@@ -113,7 +114,7 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
         return client.Build();
     }
 
-    protected virtual async Task CreateBucketIfNotExists(MinioClient client, string containerName)
+    protected virtual async Task CreateBucketIfNotExists(IMinioClient client, string containerName)
     {
         if (!await client.BucketExistsAsync(new BucketExistsArgs().WithBucket(containerName)))
         {
@@ -121,7 +122,7 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
         }
     }
 
-    protected virtual async Task<bool> BlobExistsAsync(MinioClient client, string containerName, string blobName)
+    protected virtual async Task<bool> BlobExistsAsync(IMinioClient client, string containerName, string blobName)
     {
         // Make sure Blob Container exists.
         if (await client.BucketExistsAsync(new BucketExistsArgs().WithBucket(containerName)))
@@ -152,6 +153,6 @@ public class MinioBlobProvider : BlobProviderBase, ITransientDependency
 
         return configuration.BucketName.IsNullOrWhiteSpace()
             ? args.ContainerName
-            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.BucketName);
+            : BlobNormalizeNamingService.NormalizeContainerName(args.Configuration, configuration.BucketName!);
     }
 }

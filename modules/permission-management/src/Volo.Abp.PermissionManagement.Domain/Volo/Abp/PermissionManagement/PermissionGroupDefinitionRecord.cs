@@ -1,5 +1,4 @@
 using System;
-using System.Text.Json.Serialization;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
@@ -7,17 +6,10 @@ namespace Volo.Abp.PermissionManagement;
 
 public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    /* Ignoring Id because it is different whenever we create an instance of
-     * this class, and we are using Json Serialize, than Hash to understand
-     * if permission definitions have changed (in StaticPermissionSaver.CalculateHash()).
-     */
-    [JsonIgnore]
-    public override Guid Id { get; protected set; }
-
     public string Name { get; set; }
-    
+
     public string DisplayName { get; set; }
-    
+
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
     public PermissionGroupDefinitionRecord()
@@ -25,7 +17,7 @@ public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExt
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
     }
-    
+
     public PermissionGroupDefinitionRecord(
         Guid id,
         string name,
@@ -45,7 +37,7 @@ public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExt
         {
             return false;
         }
-        
+
         if (DisplayName != otherRecord.DisplayName)
         {
             return false;
@@ -70,11 +62,11 @@ public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExt
         {
             DisplayName = otherRecord.DisplayName;
         }
-        
+
         if (!this.HasSameExtraProperties(otherRecord))
         {
             this.ExtraProperties.Clear();
-            
+
             foreach (var property in otherRecord.ExtraProperties)
             {
                 this.ExtraProperties.Add(property.Key, property.Value);

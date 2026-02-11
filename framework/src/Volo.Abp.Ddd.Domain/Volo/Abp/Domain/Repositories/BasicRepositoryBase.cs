@@ -1,9 +1,11 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
@@ -20,9 +22,9 @@ public abstract class BasicRepositoryBase<TEntity> :
     IUnitOfWorkEnabled
     where TEntity : class, IEntity
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     public IDataFilter DataFilter => LazyServiceProvider.LazyGetRequiredService<IDataFilter>();
 
@@ -34,9 +36,21 @@ public abstract class BasicRepositoryBase<TEntity> :
 
     public ICancellationTokenProvider CancellationTokenProvider => LazyServiceProvider.LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
 
-    protected BasicRepositoryBase()
-    {
+    public ILoggerFactory? LoggerFactory => LazyServiceProvider.LazyGetService<ILoggerFactory>();
 
+    public ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
+
+    public IEntityChangeTrackingProvider EntityChangeTrackingProvider => LazyServiceProvider.LazyGetRequiredService<IEntityChangeTrackingProvider>();
+
+    public bool? IsChangeTrackingEnabled { get; protected set; }
+
+    public string? EntityName { get; set; }
+
+    public string ProviderName { get; }
+
+    protected BasicRepositoryBase(string providerName)
+    {
+        ProviderName = Check.NotNullOrWhiteSpace(providerName, nameof(providerName));
     }
 
     public abstract Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
@@ -106,24 +120,48 @@ public abstract class BasicRepositoryBase<TEntity> :
     {
         return CancellationTokenProvider.FallbackToProvider(preferredValue);
     }
+
+    protected virtual bool ShouldTrackingEntityChange()
+    {
+        // If IsChangeTrackingEnabled is set, it has the highest priority. This generally means the repository is read-only.
+        if (IsChangeTrackingEnabled.HasValue)
+        {
+            return IsChangeTrackingEnabled.Value;
+        }
+
+        // If Interface/Class/Method has Enable/DisableEntityChangeTrackingAttribute, it has the second highest priority.
+        if (EntityChangeTrackingProvider.Enabled.HasValue)
+        {
+            return EntityChangeTrackingProvider.Enabled.Value;
+        }
+
+        // Default behavior is tracking entity change.
+        return true;
+    }
 }
 
 public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
+    protected BasicRepositoryBase(string providerName)
+        : base(providerName)
+    {
+
+    }
+
     public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         var entity = await FindAsync(id, includeDetails, cancellationToken);
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity), id);
+            throw new EntityNotFoundException<TEntity>(id);
         }
 
         return entity;
     }
 
-    public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+    public abstract Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
     {

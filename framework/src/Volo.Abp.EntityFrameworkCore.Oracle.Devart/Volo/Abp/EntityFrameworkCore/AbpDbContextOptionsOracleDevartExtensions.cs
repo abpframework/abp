@@ -8,7 +8,7 @@ public static class AbpDbContextOptionsOracleDevartExtensions
 {
     public static void UseOracle(
             [NotNull] this AbpDbContextOptions options,
-            [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
+            Action<OracleDbContextOptionsBuilder>? oracleOptionsAction = null,
             bool useExistingConnectionIfAvailable = false)
     {
         options.Configure(context =>
@@ -19,7 +19,7 @@ public static class AbpDbContextOptionsOracleDevartExtensions
 
     public static void UseOracle<TDbContext>(
         [NotNull] this AbpDbContextOptions options,
-        [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
+        Action<OracleDbContextOptionsBuilder>? oracleOptionsAction = null,
         bool useExistingConnectionIfAvailable = false)
         where TDbContext : AbpDbContext<TDbContext>
     {

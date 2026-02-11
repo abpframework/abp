@@ -1,0 +1,54 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Localization
+@using Volo.Abp.PermissionManagement.Localization
+@using Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
+@model AddResourcePermissionManagementModal
+@inject IHtmlLocalizer<AbpPermissionManagementResource> L
+
+@{
+    Layout = null;
+}
+
+<script src="/client-proxies/permissionManagement-proxy.js"></script>
+<script src="/Pages/AbpPermissionManagement/add-resource-permission-management-modal.js"></script>
+
+<form method="post" asp-page="/AbpPermissionManagement/AddResourcePermissionManagementModal" id="addResourcePermissionManagementForm">
+    <abp-modal id="addResourcePermissionManagementModal">
+        <abp-modal-header title="@(L["AddResourcePermission"].Value)"></abp-modal-header>
+        <input asp-for="@Model.ResourceName" />
+        <input asp-for="@Model.ResourceKey" />
+        <input asp-for="@Model.ResourceDisplayName" />
+        <abp-modal-body>
+            <div class="mb-3">
+                <div class="mb-1">
+                    @foreach (var provider in Model.ResourceProviders.Providers.Select((value, i) => new { i, value }))
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" checked="@(provider.i == 0)" name="AddModel.ProviderName" id="@provider.value.Name.Replace(".", "")" value="@provider.value.Name">
+                            <label class="form-check-label" for="@provider.value.Name.Replace(".", "-")">@provider.value.DisplayName</label>
+                        </div>
+                    }
+                </div>
+                <select asp-for="@Model.AddModel.ProviderKey" data-val="true" data-val-required="@L["ThisFieldIsRequired."].Value" id="AddModel_ProviderKey" name="AddModel.ProviderKey" value="" class="form-control"></select>
+                <span class="text-danger field-validation-valid" data-valmsg-for="AddModel.ProviderKey" data-valmsg-replace="true"></span>
+            </div>
+            <div class="position-relative mb-3" id="permissionList">
+                <h4>@L["ResourcePermissionPermissions"]</h4>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" id="grantAllresourcePermissions" type="checkbox">
+                    <label class="form-check-label" for="grantAllresourcePermissions">@L["GrantAllResourcePermissions"]</label>
+                </div>
+                @foreach (var permission in Model.ResourcePermissionDefinitions.Permissions)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="AddModel.Permissions[]" id="@permission.Name.Replace(".", "")" value="@permission.Name">
+                        <label class="form-check-label" for="@permission.Name.Replace(".", "")">@permission.DisplayName</label>
+                    </div>
+                }
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

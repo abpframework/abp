@@ -2,5 +2,5 @@
 
 public interface IAmbientUnitOfWork : IUnitOfWorkAccessor
 {
-    IUnitOfWork GetCurrentByChecking();
+    IUnitOfWork? GetCurrentByChecking();
 }

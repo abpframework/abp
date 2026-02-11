@@ -1,6 +1,5 @@
 ﻿@typeparam TEntity
 @typeparam TResourceType
-@using Volo.Abp.BlazoriseUI
 @using Volo.Abp.Localization
 @inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
 
@@ -8,7 +7,7 @@
 {
     <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
         <Field>
-            <Check TValue="bool" @bind-Checked="@Value">
+            <Check TValue="bool" @bind-Checked="@Value" Disabled="IsReadonlyField">
                 <ChildContent>
                     @PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)
                 </ChildContent>

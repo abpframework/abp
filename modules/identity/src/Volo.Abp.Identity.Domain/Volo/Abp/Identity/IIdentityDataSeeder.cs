@@ -9,5 +9,6 @@ public interface IIdentityDataSeeder
     Task<IdentityDataSeedResult> SeedAsync(
         [NotNull] string adminEmail,
         [NotNull] string adminPassword,
-        Guid? tenantId = null);
+        Guid? tenantId = null,
+        string? adminUserName = null);
 }

@@ -12,27 +12,27 @@ public class NpgsqlConnectionStringChecker : IConnectionStringChecker, ITransien
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {
         var result = new AbpConnectionStringCheckResult();
-        var connString = new NpgsqlConnectionStringBuilder(connectionString)
-        {
-            Timeout = 1
-        };
-
-        var oldDatabaseName = connString.Database;
-        connString.Database = "postgres";
-
         try
         {
+            var connString = new NpgsqlConnectionStringBuilder(connectionString)
+            {
+                Timeout = 1
+            };
+
+            var oldDatabaseName = connString.Database;
+            connString.Database = "postgres";
+
             await using var conn = new NpgsqlConnection(connString.ConnectionString);
             await conn.OpenAsync();
             result.Connected = true;
-            await conn.ChangeDatabaseAsync(oldDatabaseName);
+            await conn.ChangeDatabaseAsync(oldDatabaseName!);
             result.DatabaseExists = true;
 
             await conn.CloseAsync();
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

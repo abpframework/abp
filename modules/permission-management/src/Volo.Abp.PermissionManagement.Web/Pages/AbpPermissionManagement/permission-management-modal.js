@@ -4,7 +4,7 @@ var abp = abp || {};
 
     abp.modals.PermissionManagement = function () {
         var l = abp.localization.getResource("AbpPermissionManagement");
-        
+
         function checkParents($tab, $checkBox) {
             var parentName = $checkBox
                 .closest('.custom-checkbox')
@@ -155,6 +155,7 @@ var abp = abp || {};
         }
 
         function setSelectAllInAllTabs() {
+
             var $checkBox = $('#SelectAllInAllTabs');
 
             var anyIndeterminate = false;
@@ -237,7 +238,7 @@ var abp = abp || {};
 
                     $('input[name="SelectAllInThisTab"]').each(function () {
                         var $this = $(this);
-                        if($this.is(':indeterminate') === true) {
+                        if ($this.is(':indeterminate') === true) {
                             $this.prop('indeterminate', false);
                             $this.prop('checked', true);
                         }
@@ -268,14 +269,14 @@ var abp = abp || {};
 
             var $form = $("#PermissionManagementForm");
             var $submitButton = $form.find("button[type='submit']");
-            if($submitButton) {
+            if ($submitButton) {
                 $submitButton.click(function (e) {
                     e.preventDefault();
-                    
-                    if(!$form.find("input:checked").length > 0) {
+
+                    if (!$form.find("input:checked").length > 0) {
                         abp.message.confirm(l("SaveWithoutAnyPermissionsWarningMessage"))
                             .then(function (confirmed) {
-                                if(confirmed) {
+                                if (confirmed) {
                                     $form.submit();
                                 }
                             });
@@ -285,7 +286,78 @@ var abp = abp || {};
                     }
                 });
             }
-            
+
+            var $permissionSearchInput = $('#permission-search');
+
+            $permissionSearchInput.keyup(throttle(function () {
+                var searchTerm = $permissionSearchInput.val().toLowerCase();
+                filterTabs(searchTerm);
+                setFirstVisibleTabActive();
+            }, 300));
+
+            $('#SelectAllInAllTabs').change(function () {
+                // Reset search input
+                $permissionSearchInput.val('');
+                $permissionSearchInput.trigger('keyup');
+            });
+
+            function filterTabs(searchTerm) {
+                var $tabs = $('#PermissionsTabs .nav-link');
+                $tabs.each(function (i) {
+                    var $tabItem = $(this);
+                    var $tab = $tabItem.parent();
+
+                    if (!searchTerm) {
+                        $tab.show();
+                        return;
+                    }
+
+                    var tabName = $tabItem.text().toLowerCase();
+
+                    var tabContentFilters = $($tabItem.attr('href')).find('[data-filter-text]');
+                    let includedInTabContent = false;
+                    tabContentFilters.each(function (i) {
+                        var permissionName = $(this).attr('data-filter-text').toLowerCase();
+                        includedInTabContent = permissionName.includes(searchTerm);
+                        if (includedInTabContent === true) {
+                            return false;
+                        }
+                    });
+
+                    if (includedInTabContent || tabName.includes(searchTerm)) {
+                        $tab.show();
+                    } else {
+                        $tab.hide();
+                    }
+                });
+            }
+
+            function setFirstVisibleTabActive() {
+                $('#PermissionsTabsContent .tab-pane').removeClass('active show');
+
+                var $tabs = $('#PermissionsTabs .nav-link');
+                var $firstVisibleTab = $tabs.filter(':visible').first();
+                $tabs.removeClass('active');
+                $firstVisibleTab.addClass('active');
+
+                var $firstVisibleTabContent = $($firstVisibleTab.attr('href'));
+                $firstVisibleTabContent.addClass('active show');
+            }
+
+            function throttle(mainFunction, delay) {
+                let timerFlag = null; // Variable to keep track of the timer
+
+                // Returning a throttled version 
+                return (...args) => {
+                    if (timerFlag === null) { // If there is no timer currently running
+                        mainFunction(...args); // Execute the main function 
+                        timerFlag = setTimeout(() => { // Set a timer to clear the timerFlag after the specified delay
+                            timerFlag = null; // Clear the timerFlag to allow the main function to be executed again
+                        }, delay);
+                    }
+                };
+            }
+
         };
     };
 })(jQuery);

@@ -1,4 +1,6 @@
-﻿namespace Volo.Blogging
+﻿using Volo.Abp.Data;
+
+namespace Volo.Blogging
 {
     public static class AbpBloggingDbProperties
     {
@@ -10,7 +12,7 @@
         /// <summary>
         /// Default value: "null".
         /// </summary>
-        public static string DbSchema { get; set; } = null;
+        public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         /// <summary>
         /// "Blogging".

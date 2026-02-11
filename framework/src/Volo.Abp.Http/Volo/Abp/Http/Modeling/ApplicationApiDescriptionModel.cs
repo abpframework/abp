@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,9 +7,9 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class ApplicationApiDescriptionModel
 {
-    public IDictionary<string, ModuleApiDescriptionModel> Modules { get; set; }
+    public IDictionary<string, ModuleApiDescriptionModel> Modules { get; set; } = default!;
 
-    public IDictionary<string, TypeApiDescriptionModel> Types { get; set; }
+    public IDictionary<string, TypeApiDescriptionModel> Types { get; set; } = default!;
 
     public ApplicationApiDescriptionModel()
     {
@@ -21,8 +20,8 @@ public class ApplicationApiDescriptionModel
     {
         return new ApplicationApiDescriptionModel
         {
-            Modules = new ConcurrentDictionary<string, ModuleApiDescriptionModel>(), //TODO: Why ConcurrentDictionary?
-            Types = new Dictionary<string, TypeApiDescriptionModel>()
+            Modules = new Dictionary<string, ModuleApiDescriptionModel>(), 
+            Types = new SortedDictionary<string, TypeApiDescriptionModel>()
         };
     }
 
@@ -41,7 +40,7 @@ public class ApplicationApiDescriptionModel
         return Modules.GetOrAdd(rootPath, () => ModuleApiDescriptionModel.Create(rootPath, remoteServiceName));
     }
 
-    public ApplicationApiDescriptionModel CreateSubModel(string[] modules = null, string[] controllers = null, string[] actions = null)
+    public ApplicationApiDescriptionModel CreateSubModel(string[]? modules = null, string[]? controllers = null, string[]? actions = null)
     {
         var subModel = ApplicationApiDescriptionModel.Create(); ;
 
@@ -54,5 +53,10 @@ public class ApplicationApiDescriptionModel
         }
 
         return subModel;
+    }
+
+    public void NormalizeOrder()
+    {
+        Modules = Modules.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
     }
 }

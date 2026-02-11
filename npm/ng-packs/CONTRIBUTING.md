@@ -15,7 +15,7 @@ The `dev-app` project is the same as the Angular UI template project. `dev-app` 
 
 > Reminder! If you have developed the `dev-app` template, you should do the same for the application and module templates.
 
-For more information, see the [docs.abp.io](https://docs.abp.io)
+For more information, see the [abp.io/docs](https://abp.io/docs/latest/)
 
 # Committing changes
 

@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "Commerciële ondersteuningswebsite",
     "CommunityWebSite": "ABP-communitywebsite",
     "ManageAccount": "Mijn account | ABP.IO",
-    "ManageYourAccount": "Beheer uw account"
+    "ManageYourProfile": "Beheer uw profiel",
+    "ReturnToApplication": "Terug naar applicatie"
   }
 }

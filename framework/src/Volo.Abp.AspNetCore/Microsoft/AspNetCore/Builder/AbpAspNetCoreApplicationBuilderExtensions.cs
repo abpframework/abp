@@ -17,13 +17,13 @@ public static class AbpAspNetCoreApplicationBuilderExtensions
     /// <returns></returns>
     public static IApplicationBuilder UseConfiguredEndpoints(
         this IApplicationBuilder app,
-        Action<IEndpointRouteBuilder> additionalConfigurationAction = null)
+        Action<IEndpointRouteBuilder>? additionalConfigurationAction = null)
     {
         var options = app.ApplicationServices
             .GetRequiredService<IOptions<AbpEndpointRouterOptions>>()
             .Value;
 
-        if (!options.EndpointConfigureActions.Any())
+        if (!options.EndpointConfigureActions.Any() && additionalConfigurationAction == null)
         {
             return app;
         }
@@ -32,15 +32,18 @@ public static class AbpAspNetCoreApplicationBuilderExtensions
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                var context = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
-
-                foreach (var configureAction in options.EndpointConfigureActions)
+                if (options.EndpointConfigureActions.Any())
                 {
-                    configureAction(context);
-                }
+                    var context = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
 
-                additionalConfigurationAction?.Invoke(endpoints);
+                    foreach (var configureAction in options.EndpointConfigureActions)
+                    {
+                        configureAction(context);
+                    }
+                }
             }
+            
+            additionalConfigurationAction?.Invoke(endpoints);
         });
     }
 }

@@ -1,0 +1,38 @@
+{
+  "name": "setting-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/setting-management/src",
+  "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "components"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/setting-management"],
+      "options": {
+        "project": "packages/setting-management/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/setting-management/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/setting-management/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/setting-management"
+      }
+    }
+  }
+}

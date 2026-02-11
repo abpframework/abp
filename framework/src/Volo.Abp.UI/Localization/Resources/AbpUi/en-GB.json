@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Saving",
     "Actions": "Actions",
     "Delete": "Delete",
-    "SuccessfullyDeleted": "Successfully deleted",
+    "CreatedSuccessfully": "Created successfully",
+    "SavedSuccessfully": "Saved successfully",
+    "DeletedSuccessfully": "Deleted successfully",
     "Edit": "Edit",
     "Refresh": "Refresh",
     "Language": "Language",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Showing 0 to 0 of 0 entries",
     "PagerInfoFiltered": "(filtered from _MAX_ total entries)",
     "NoDataAvailableInDatatable": "No data available",
+    "ErrorLoadingDatatable": "An error occurred during the request. Check the message for details.",
     "Total": "total",
     "Selected": "selected",
     "PagerShowMenuEntries": "Show _MENU_ entries",
@@ -49,6 +52,11 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} will be deleted!",
     "ItemWillBeDeletedMessage": "This item will be deleted!",
     "ManageYourAccount": "Manage your account",
-    "OthersGroup": "Other"
+    "OthersGroup": "Other",
+    "NotAssigned": "Not Assigned",
+    "Today": "Today",
+    "Apply": "Apply",
+    "EntityActionsDisabledTooltip": "You do not have permission to perform any action.",
+    "ResourcePermissions": "Permissions"
   }
 }

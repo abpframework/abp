@@ -29,14 +29,14 @@ public class DynamicFileProvider : DictionaryBasedFileProvider, IDynamicFileProv
         DynamicFiles = new ConcurrentDictionary<string, IFileInfo>();
     }
 
-    public void AddOrUpdate(IFileInfo fileInfo)
+    public virtual void AddOrUpdate(IFileInfo fileInfo)
     {
         var filePath = fileInfo.GetVirtualOrPhysicalPathOrNull();
-        DynamicFiles.AddOrUpdate(filePath, fileInfo, (key, value) => fileInfo);
-        ReportChange(filePath);
+        DynamicFiles.AddOrUpdate(filePath!, fileInfo, (key, value) => fileInfo);
+        ReportChange(filePath!);
     }
 
-    public bool Delete(string filePath)
+    public virtual bool Delete(string filePath)
     {
         if (!DynamicFiles.TryRemove(filePath, out _))
         {
@@ -65,7 +65,7 @@ public class DynamicFileProvider : DictionaryBasedFileProvider, IDynamicFileProv
         return tokenInfo.ChangeToken;
     }
 
-    private void ReportChange(string filePath)
+    protected virtual void ReportChange(string filePath)
     {
         if (FilePathTokenLookup.TryRemove(filePath, out var tokenInfo))
         {

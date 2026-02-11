@@ -1,4 +1,4 @@
-<ng-container *ngIf="(service.currentTenant$ | async) || { name: '' } as currentTenant">
+@if ((service.currentTenant$ | async) || { name: '' }; as currentTenant) {
   <div class="card shadow-sm rounded mb-3">
     <div class="card-body px-5">
       <div class="row">
@@ -49,7 +49,7 @@
       </form>
     </ng-template>
     <ng-template #abpFooter>
-      <button abpClose type="button" class="btn btn-secondary">
+      <button abpClose type="button" class="btn btn-outline-primary">
         {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
       </button>
       <abp-button
@@ -62,4 +62,4 @@
       </abp-button>
     </ng-template>
   </abp-modal>
-</ng-container>
+}

@@ -1,3 +1,8 @@
+export enum GenerateLibTemplateType {
+  Standalone = 'standalone',
+  Module = 'module',
+}
+
 export interface GenerateLibSchema {
   /**
    * Angular package name will create
@@ -8,8 +13,10 @@ export interface GenerateLibSchema {
    * İs the package a library or a library module
    */
   isSecondaryEntrypoint: boolean;
-
-  isModuleTemplate: boolean;
+  /**
+   * İs the package has standalone template
+   */
+  templateType: GenerateLibTemplateType;
 
   override: boolean;
 

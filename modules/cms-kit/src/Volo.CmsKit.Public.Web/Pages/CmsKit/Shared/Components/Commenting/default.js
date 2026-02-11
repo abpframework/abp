@@ -13,6 +13,79 @@
             };
         }
 
+        function isDoubleClicked(element) {
+            if (element.data("isclicked")) return true;
+
+            element.data("isclicked", true);
+            setTimeout(function () {
+                element.removeData("isclicked");
+            }, 2000);
+        }
+
+        function registerCommentTime($container) {
+            $container.find('[comment-time]').each(function () {
+                const $timeElement = $(this);
+
+                const creationTime = moment.utc($timeElement.attr('comment-time'));
+                var timeAgo = formatTime(creationTime);
+                var readableTime = formatReadableTimestamp(creationTime);
+
+                $timeElement.text(timeAgo);
+                $timeElement.on('click', function () {
+                    if (isDoubleClicked($timeElement)) return;
+
+                    $timeElement.text(readableTime);
+                    setTimeout(function () {
+                        $timeElement.trigger('focusout');
+                    }, 2000);
+
+                });
+
+                $timeElement.on('focusout', function () {
+                    $timeElement.text(timeAgo);
+                });
+            });
+        }
+
+        function formatTime(creationTime) {
+            let now = moment();
+            let duration = moment.duration(now.diff(creationTime));
+            if (duration.asMinutes() < 1) {
+                return l('JustNow');
+            } else if (duration.asMinutes() < 60) {
+                return `${Math.floor(duration.asMinutes())} ${l('Minute')}`;
+            } else if (duration.asHours() < 24) {
+                return `${Math.floor(duration.asHours())} ${l('Hour')}`;
+            } else if (duration.asDays() < 7) {
+                return `${Math.floor(duration.asDays())} ${l('Day')}`;
+            } else {
+                return `${Math.floor(duration.asWeeks())} ${l('Week')}`;
+            }
+        }
+
+        function formatReadableTimestamp(creationTime) {
+            const now = moment();
+            const diffInMinutes = now.diff(creationTime, 'minutes');
+            const diffInHours = now.diff(creationTime, 'hours');
+            const diffInDays = now.diff(creationTime, 'days');
+
+            if (diffInMinutes < 1) {
+                return l('JustNow');
+            } else if (diffInMinutes < 60) {
+                return l('MinutesAgo', diffInMinutes);
+            } else if (diffInHours < 24) {
+                return diffInHours === 1 ? l('HourAgo') : l('HoursAgo', diffInHours);
+            } else if (diffInDays === 1) {
+                return l('YesterdayAt', creationTime.local().format('h:mm a'));
+            } else if (diffInDays < 7) {
+                return l('DayAt', creationTime.local().format('dddd'), creationTime.local().format('h:mm a'));
+            } else if (now.isSame(creationTime, 'year')) {
+                return l('MonthDayAt', creationTime.local().format('D'), creationTime.local().format('MMMM'), creationTime.local().format('h:mm a') );
+            } else {
+                return l('FullDate', creationTime.local().format('D'), creationTime.local().format('MMMM'), creationTime.local().format('YYYY'));
+            }
+        }
+
         function registerEditLinks($container) {
             $container.find('.comment-edit-link').each(function () {
                 let $link = $(this);
@@ -107,18 +180,34 @@
 
         function registerUpdateOfNewComment($container) {
             $container.find('.cms-comment-update-form').each(function () {
-                let $form = $(this);
+                var $form = $(this);
+
                 $form.submit(function (e) {
                     e.preventDefault();
+
+                    abp.ui.setBusy($form.find("button[type='submit']"));
+
                     let formAsObject = $form.serializeFormToObject();
-                    volo.cmsKit.public.comments.commentPublic.update(
-                        formAsObject.id,
-                        {
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/CmsKitPublicComments/Update/' + formAsObject.id,
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify({
                             text: formAsObject.commentText,
-                            concurrencyStamp: formAsObject.commentConcurrencyStamp
+                            concurrencyStamp: formAsObject.commentConcurrencyStamp,
+                            captchaToken: formAsObject.captchaId,
+                            captchaAnswer: formAsObject.input?.captcha
+                        }),
+                        success: function () {
+                            widgetManager.refresh($widget);
+                            abp.ui.clearBusy();
+                        },
+                        error: function (data) {
+                            abp.message.error(data.responseJSON.error.message);
+                            abp.ui.clearBusy();
                         }
-                    ).then(function () {
-                        widgetManager.refresh($widget);
                     });
                 });
             });
@@ -126,10 +215,14 @@
 
         function registerSubmissionOfNewComment($container) {
             $container.find('.cms-comment-form').each(function () {
-                let $form = $(this);
+                var $form = $(this);
+
                 $form.submit(function (e) {
                     e.preventDefault();
-                    let formAsObject = $form.serializeFormToObject();
+
+                    abp.ui.setBusy("button[type='submit']");
+
+                    var formAsObject = $form.serializeFormToObject();
 
                     if (formAsObject.repliedCommentId == '') {
                         formAsObject.repliedCommentId = null;
@@ -137,6 +230,7 @@
 
                     if (formAsObject.commentText == '') {
                         abp.message.error(l("CommentTextRequired"));
+                        abp.ui.clearBusy();
                         return;
                     }
 
@@ -152,13 +246,20 @@
                             text: formAsObject.commentText,
                             url: window.location.href,
                             captchaToken: formAsObject.captchaId,
-                            captchaAnswer: formAsObject.input?.captcha
+                            captchaAnswer: formAsObject.input?.captcha,
+                            idempotencyToken: formAsObject.idempotencyToken
                         }),
                         success: function () {
                             widgetManager.refresh($widget);
+                            if (abp.setting.getBoolean("CmsKit.Comments.RequireApprovement")) {
+                                abp.message.success(l("CommentSubmittedForApproval"), l("SavedSuccessfully"));
+                            }
+                            $form.trigger('reset');
+                            abp.ui.clearBusy();
                         },
                         error: function (data) {
                             abp.message.error(data.responseJSON.error.message);
+                            abp.ui.clearBusy();
                         }
                     });
                 });
@@ -187,6 +288,8 @@
 
             registerUpdateOfNewComment($widget);
             registerSubmissionOfNewComment($widget);
+
+            registerCommentTime($widget);
 
             focusOnHash($widget);
         }

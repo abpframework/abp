@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.BackgroundJobs.Domain",
-  "hash": "9135b4c99ca5f16a980041e8621fb415",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.BackgroundJobs",
@@ -16,9 +16,9 @@
           "name": "AbpBackgroundJobsModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         }
       ],
       "implementingInterfaces": [
@@ -84,6 +84,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -132,6 +138,11 @@
       "namespace": "Volo.Abp.BackgroundJobs",
       "primaryKeyType": "Guid",
       "properties": [
+        {
+          "type": "System.String",
+          "name": "ApplicationName",
+          "summary": "Application name that scheduled this job."
+        },
         {
           "type": "System.String",
           "name": "JobName",
@@ -222,6 +233,7 @@
       "methods": [
         {
           "returnType": "List<BackgroundJobRecord>",
+          "namespace": "Volo.Abp.BackgroundJobs",
           "name": "GetWaitingListAsync",
           "summary": null,
           "isAsync": true,
@@ -229,6 +241,11 @@
           "isPrivate": false,
           "isStatic": false,
           "parameters": [
+            {
+              "type": "String",
+              "name": "applicationName",
+              "isOptional": false
+            },
             {
               "type": "Int32",
               "name": "maxResultCount",

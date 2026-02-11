@@ -9,6 +9,7 @@ export * from './lib/guards';
 export * from './lib/localization.module';
 export * from './lib/models';
 export * from './lib/pipes';
+export * from './lib/providers';
 export * from './lib/proxy/pages/abp/multi-tenancy';
 export * from './lib/proxy/volo/abp/asp-net-core/mvc/api-exploring';
 export * from './lib/proxy/volo/abp/asp-net-core/mvc/application-configurations';

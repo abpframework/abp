@@ -7,5 +7,5 @@ public class ComponentsClientScopeServiceProviderAccessor :
     IClientScopeServiceProviderAccessor,
     ISingletonDependency
 {
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 }

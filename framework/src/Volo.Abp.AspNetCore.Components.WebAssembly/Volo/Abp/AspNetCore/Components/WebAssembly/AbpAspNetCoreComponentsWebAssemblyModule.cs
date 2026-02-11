@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
@@ -19,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly;
     typeof(AbpAspNetCoreMvcClientCommonModule),
     typeof(AbpUiModule),
     typeof(AbpAspNetCoreComponentsWebModule)
-    )]
+)]
 public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -45,6 +49,31 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         context.Services
             .GetHostBuilder().Logging
             .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
+        
+        if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
+        {
+            Configure<AbpAuthenticationOptions>(options =>
+            {
+                options.LoginUrl = "authentication/login";
+                options.LogoutUrl = "authentication/logout";
+            });
+        }
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        var msAuthenticationStateProvider = context.Services.FirstOrDefault(x => x.ServiceType == typeof(AuthenticationStateProvider));
+        if (msAuthenticationStateProvider is {ImplementationType: not null} &&
+            msAuthenticationStateProvider.ImplementationType.IsGenericType &&
+            msAuthenticationStateProvider.ImplementationType.GetGenericTypeDefinition() == typeof(RemoteAuthenticationService<,,>))
+        {
+            var webAssemblyAuthenticationStateProviderType = typeof(WebAssemblyAuthenticationStateProvider<,,>).MakeGenericType(
+                    msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[0],
+                    msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[1],
+                    msAuthenticationStateProvider.ImplementationType.GenericTypeArguments[2]);
+
+            context.Services.Replace(ServiceDescriptor.Scoped(typeof(AuthenticationStateProvider), webAssemblyAuthenticationStateProviderType));
+        }
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -67,7 +96,7 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         var cultureName = configuration.Localization?.CurrentCulture?.CultureName;
         if (!cultureName.IsNullOrEmpty())
         {
-            var culture = new CultureInfo(cultureName);
+            var culture = new CultureInfo(cultureName!);
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }

@@ -23,7 +23,7 @@ namespace Volo.Blogging.Comments
             UserLookupService = userLookupService;
         }
 
-        public async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId)
+        public virtual async Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId)
         {
             var comments = await GetListOfPostAsync(postId);
             var userDictionary = new Dictionary<Guid, BlogUserDto>();
@@ -79,7 +79,7 @@ namespace Volo.Blogging.Comments
         }
 
         [Authorize]
-        public async Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
+        public virtual async Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input)
         {
             var comment = new Comment(GuidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);
 
@@ -91,7 +91,7 @@ namespace Volo.Blogging.Comments
         }
 
         [Authorize]
-        public async Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input)
+        public virtual async Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input)
         {
             var comment = await CommentRepository.GetAsync(id);
 
@@ -106,7 +106,7 @@ namespace Volo.Blogging.Comments
         }
 
         [Authorize]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var comment = await CommentRepository.GetAsync(id);
 

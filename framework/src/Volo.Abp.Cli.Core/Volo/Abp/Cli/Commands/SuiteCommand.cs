@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -12,7 +11,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
-using NuGet.Versioning;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Commands.Services;
@@ -21,8 +19,6 @@ using Volo.Abp.Cli.Version;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
-using Volo.Abp.Json;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -83,7 +79,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             case null:
                 await InstallSuiteIfNotInstalledAsync(currentSuiteVersionAsString);
                 _abpSuitePort = await _suiteAppSettingsService.GetSuitePortAsync(currentSuiteVersionAsString);
-                RunSuite();
+                RunSuite(commandLineArgs);
                 break;
 
             case "generate":
@@ -111,6 +107,9 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
                 Logger.LogInformation("Removing ABP Suite...");
                 RemoveSuite();
                 break;
+
+            default:
+                throw new CliUsageException("Invalid Suite command! Run \"abp help suite\" command to see available Suite commands.");
         }
     }
 
@@ -120,7 +119,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         var solutionFile = args.Options.GetOrNull(Options.Crud.Solution.Short, Options.Crud.Solution.Long);
 
         if (entityFile.IsNullOrEmpty() || !entityFile.EndsWith(".json") || !File.Exists(entityFile) ||
-            solutionFile.IsNullOrEmpty() || !solutionFile.EndsWith(".sln"))
+            solutionFile.IsNullOrEmpty() || !(solutionFile.EndsWith(".sln") || solutionFile.EndsWith(".slnx")))
         {
             throw new UserFriendlyException("Invalid Arguments!");
         }
@@ -418,7 +417,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         CmdHelper.RunCmd("dotnet tool uninstall " + SuitePackageName + " -g");
     }
 
-    private void RunSuite()
+    private void RunSuite(CommandLineArgs commandLineArgs)
     {
         try
         {
@@ -433,11 +432,16 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         {
             Logger.LogWarning("Couldn't check ABP Suite installed status: " + ex.Message);
         }
-
+        
+        var targetSolution = GetTargetSolutionOrNull(commandLineArgs);
+        var launchUrl = targetSolution == null?
+            $"http://localhost:{_abpSuitePort}":
+            $"http://localhost:{_abpSuitePort}/CrudPageGenerator/Create?targetSolution={targetSolution}";
+        
         if (IsSuiteAlreadyRunning())
         {
             Logger.LogInformation("Opening suite...");
-            CmdHelper.Open($"http://localhost:{_abpSuitePort}");
+            CmdHelper.Open(launchUrl);
             return;
         }
 
@@ -447,7 +451,33 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
             return;
         }
 
-        CmdHelper.RunCmd("abp-suite");
+        if (targetSolution == null)
+        {
+            var args = Environment.GetCommandLineArgs();
+            var suiteArgs = args.Skip(2).JoinAsString(" ");
+            var command = string.Concat("abp-suite ", suiteArgs);
+
+            CmdHelper.RunCmd(command);
+        }
+        else
+        {
+            new Thread(OpenSuiteInBrowserWithLaunchUrl).Start();
+            
+            CmdHelper.RunCmd("abp-suite --no-browser");
+            
+            void OpenSuiteInBrowserWithLaunchUrl()
+            {
+                Thread.Sleep(2500); // needed for suite to be ready.
+                CmdHelper.Open(launchUrl);
+            }
+        }
+    }
+
+    private object GetTargetSolutionOrNull(CommandLineArgs commandLineArgs)
+    {
+        return commandLineArgs.Options.GetOrNull(Options.Crud.Solution.Short, Options.Crud.Solution.Long)
+            ?? Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.GetFiles(Directory.GetCurrentDirectory(), "*.slnx", SearchOption.TopDirectoryOnly)).FirstOrDefault();
     }
 
     private Process StartSuite()
@@ -546,9 +576,9 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
-        return "Install, update, remove or start ABP Suite. See https://commercial.abp.io/tools/suite.";
+        return "Install, update, remove or start ABP Suite. See https://abp.io/suite.";
     }
 
     public static class Options

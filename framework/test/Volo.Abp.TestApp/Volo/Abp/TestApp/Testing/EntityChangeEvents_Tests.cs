@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -17,14 +18,24 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
     where TStartupModule : IAbpModule
 {
     protected IRepository<Person, Guid> PersonRepository { get; }
+    protected ICityRepository CityRepository { get; }
     protected ILocalEventBus LocalEventBus { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
 
     protected EntityChangeEvents_Tests()
     {
         PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
+        CityRepository = GetRequiredService<ICityRepository>();
         LocalEventBus = GetRequiredService<ILocalEventBus>();
         DistributedEventBus = GetRequiredService<IDistributedEventBus>();
+    }
+
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        services.Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.IgnoredEventSelectors.Add<City>();
+        });
     }
 
     [Fact]
@@ -62,7 +73,7 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
 
             await uow.CompleteAsync();
         }
-        
+
         createdEventTriggered.ShouldBeTrue();
         createdEtoTriggered.ShouldBeTrue();
     }
@@ -112,5 +123,34 @@ public abstract class EntityChangeEvents_Tests<TStartupModule> : TestAppTestBase
         createEventCount.ShouldBe(1);
         updateEventCount.ShouldBe(1);
         updatedAge.ShouldBe(45);
+    }
+
+    [Fact]
+    public async Task Should_Not_Trigger_Event_If_Ignore_Event_Selector_Is_Configured()
+    {
+        var personCreatedEtoTriggered = false;
+        var cityCreatedEtoTriggered = false;
+        using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            DistributedEventBus.Subscribe<EntityCreatedEto<City>>(eto =>
+            {
+                cityCreatedEtoTriggered = true;
+                return Task.CompletedTask;
+            });
+
+            DistributedEventBus.Subscribe<EntityCreatedEto<PersonEto>>(eto =>
+            {
+                personCreatedEtoTriggered = true;
+                return Task.CompletedTask;
+            });
+
+            await CityRepository.InsertAsync(new City(Guid.NewGuid(), "Istanbul"));
+            await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), "John", 15));
+
+            await uow.CompleteAsync();
+        }
+
+        personCreatedEtoTriggered.ShouldBeTrue();
+        cityCreatedEtoTriggered.ShouldBeFalse();
     }
 }

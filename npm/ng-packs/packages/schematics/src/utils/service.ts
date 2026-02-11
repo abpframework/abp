@@ -14,10 +14,13 @@ import {
 import { sortImports } from './import';
 import { parseNamespace } from './namespace';
 import { parseGenerics } from './tree';
+import { extractGenerics } from './generics';
+import { isCollectionType } from './methods';
 import {
   createTypeAdapter,
   createTypeParser,
   createTypesToImportsReducer,
+  getTypeForEnumList,
   removeTypeModifiers,
 } from './type';
 import { eBindingSourceId } from '../enums';
@@ -45,7 +48,7 @@ export function createControllerToServiceMapper({
       [],
     );
     imports.push(new Import({ path: '@abp/ng.core', specifiers: ['RestService', 'Rest'] }));
-    imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable'] }));
+    imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable', 'inject'] }));
     sortImports(imports);
     const methods = actions.map(mapActionToMethod);
     sortMethods(methods);
@@ -80,7 +83,19 @@ export function createActionToBodyMapper() {
   const adaptType = createTypeAdapter();
 
   return ({ httpMethod, parameters, returnValue, url }: Action) => {
-    const responseType = adaptType(returnValue.typeSimple);
+    let responseType = adaptType(returnValue.typeSimple);
+    if (responseType.includes('enum')) {
+      const type = returnValue.typeSimple.replace('enum', returnValue.type);
+
+      if (responseType === 'enum') {
+        responseType = adaptType(type);
+      }
+
+      if (responseType === 'enum[]') {
+        const normalizedType = getTypeForEnumList(type);
+        responseType = adaptType(normalizedType);
+      }
+    }
     const responseTypeWithNamespace = returnValue.typeSimple;
     const body = new Body({ method: httpMethod, responseType, url, responseTypeWithNamespace });
 
@@ -109,7 +124,12 @@ export function createActionToSignatureMapper() {
       if (isFormData || isFormArray) {
         return new Property({ name: p.name, type: 'FormData' });
       }
-      const type = adaptType(p.typeSimple);
+
+      let type = adaptType(p.typeSimple);
+      if (p.typeSimple === 'enum' || p.typeSimple === '[enum]' || p.typeSimple === 'enum?' || p.typeSimple === '[enum]?') {
+        type = adaptType(p.type);
+      }
+
       const parameter = new Property({ name: p.name, type });
       parameter.setDefault(p.defaultValue);
       parameter.setOptional(p.isOptional);
@@ -126,7 +146,21 @@ export function isRemoteStreamContent(type: string) {
 }
 
 export function isRemoteStreamContentArray(type: string) {
-  return VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type);
+  // Check for array types like Volo.Abp.Content.IRemoteStreamContent[]
+  if (VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type)) {
+    return true;
+  }
+
+  // Check for collection types like List<T>, IEnumerable<T>, ICollection<T>, Collection<T>, IList<T>
+  // This matches any generic type from System.Collections.Generic that implements IEnumerable<T>
+  if (isCollectionType(type)) {
+    const { generics } = extractGenerics(type);
+    if (generics.length > 0 && VOLO_REMOTE_STREAM_CONTENT.includes(generics[0])) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function getMethodNameFromAction(action: Action): string {
@@ -183,7 +217,9 @@ function createActionToImportsReducer(
           parseGenerics(paramType)
             .toGenerics()
             .forEach(type => {
-              if (types[type]) acc.push({ type, isEnum: types[type].isEnum });
+              if (types[type]) {
+                acc.push({ type, isEnum: types[type].isEnum });
+              }
             }),
         );
 

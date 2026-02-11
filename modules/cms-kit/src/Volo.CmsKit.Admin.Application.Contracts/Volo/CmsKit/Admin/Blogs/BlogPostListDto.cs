@@ -6,7 +6,7 @@ using Volo.CmsKit.Blogs;
 namespace Volo.CmsKit.Admin.Blogs;
 
 [Serializable]
-public class BlogPostListDto : EntityDto<Guid>, IHasCreationTime, IHasModificationTime
+public class BlogPostListDto : ExtensibleEntityDto<Guid>, IHasCreationTime, IHasModificationTime
 {
     public Guid BlogId { get; set; }
 

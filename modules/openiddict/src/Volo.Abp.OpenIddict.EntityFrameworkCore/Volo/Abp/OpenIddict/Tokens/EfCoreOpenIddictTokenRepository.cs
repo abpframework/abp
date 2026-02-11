@@ -47,19 +47,14 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default)
+    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid? client, string status, string type, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client).ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken = default)
-    {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client && x.Status == status).ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
-    public virtual async Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken = default)
-    {
-        return await (await GetQueryableAsync()).Where(x => x.Subject == subject && x.ApplicationId == client && x.Status == status && x.Type == type).ToListAsync(GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync())
+            .WhereIf(!subject.IsNullOrWhiteSpace(), x => x.Subject == subject)
+            .WhereIf(client.HasValue, x => x.ApplicationId == client)
+            .WhereIf(!status.IsNullOrWhiteSpace(), x => x.Status == status)
+            .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<OpenIddictToken>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default)
@@ -96,9 +91,9 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task PruneAsync(DateTime date, CancellationToken cancellationToken = default)
+    public virtual async Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default)
     {
-        await (from token in await GetQueryableAsync()
+        return await (from token in await GetQueryableAsync()
                 join authorization in (await GetDbContextAsync()).Set<OpenIddictAuthorization>()
                     on token.AuthorizationId equals authorization.Id into tokenAuthorizations
                 from tokenAuthorization in tokenAuthorizations.DefaultIfEmpty()
@@ -108,5 +103,41 @@ public class EfCoreOpenIddictTokenRepository : EfCoreRepository<IOpenIddictDbCon
                       token.ExpirationDate < DateTime.UtcNow
                 select token)
             .ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async ValueTask<long> RevokeAsync(string subject, Guid? applicationId, string status, string type, CancellationToken cancellationToken = default)
+    {
+        var query = (await GetQueryableAsync())
+            .WhereIf(!subject.IsNullOrWhiteSpace(), x => x.Subject == subject)
+            .WhereIf(applicationId.HasValue, x => x.ApplicationId == applicationId)
+            .WhereIf(!status.IsNullOrWhiteSpace(), x => x.Status == status)
+            .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type);
+
+        return await query.ExecuteUpdateAsync(entity => entity.SetProperty(
+            authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
+    }
+
+    public virtual async ValueTask<long> RevokeByAuthorizationIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await (from token in await GetQueryableAsync() where token.AuthorizationId == id select token)
+            .ExecuteUpdateAsync(
+                entity => entity.SetProperty(token => token.Status, OpenIddictConstants.Statuses.Revoked),
+                GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
+    {
+        return await (from token in await GetQueryableAsync()
+            where token.ApplicationId == applicationId
+            select token).ExecuteUpdateAsync(entity => entity.SetProperty(
+            token => token.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
+    }
+
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken)
+    {
+        return await (from token in await GetQueryableAsync()
+            where token.Subject == subject
+            select token).ExecuteUpdateAsync(entity => entity.SetProperty(
+            token => token.Status, OpenIddictConstants.Statuses.Revoked), cancellationToken);
     }
 }

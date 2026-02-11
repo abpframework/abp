@@ -1,9 +1,16 @@
 @page
 
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems
 @using Volo.CmsKit.Admin.Web.Pages
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
+@using Volo.Abp.Data
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@inject IStringLocalizerFactory StringLocalizerFactory
 @inherits CmsKitAdminPageBase
 
 @model UpdateModalModel
@@ -12,35 +19,112 @@
     Layout = null;
 }
 
-<form asp-page="/CmsKit/Menus/MenuItems/UpdateModal">
+<form id="menu-item-form" asp-page="/CmsKit/Menus/MenuItems/UpdateModal">
     <abp-modal id="menu-update-modal">
-        <abp-modal-header title="@L["New"].Value"></abp-modal-header>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-input asp-for="Id"/>
             <abp-input asp-for="ViewModel.ConcurrencyStamp"/>
 
-            <abp-tabs tab-style="Tab">
-                <abp-tab name="url" title="@L["Url"]">
-                    <abp-input asp-for="ViewModel.Url"/>
+            @if (Model.IsPageFeatureEnabled)
+            {
+                <abp-tabs tab-style="Tab">
+                    <abp-tab name="url" title="@L["Url"]">
+                        <abp-input asp-for="ViewModel.Url" />
+                    </abp-tab>
+                    <abp-tab title="@L["Page"]">
 
-                </abp-tab>
-                <abp-tab title="@L["Page"]">
+                        <label class="form-label" asp-for="ViewModel.PageId"></label>
 
-                    <label class="form-label" asp-for="ViewModel.PageId"></label>
+                        <select asp-for="ViewModel.PageId"
+                                class="auto-complete-select"
+                                data-autocomplete-api-url="/api/cms-kit-admin/menu-items/lookup/pages"
+                                data-autocomplete-display-property="title"
+                                data-autocomplete-value-property="id"
+                                data-autocomplete-items-property="items"
+                                data-autocomplete-filter-param-name="filter"
+                                data-autocomplete-allow-clear="true"
+                                data-autocomplete-parent-selector="#menu-update-modal">
 
-                    <select class="form-control" asp-for="ViewModel.PageId"></select>
-                </abp-tab>
+                            <!-- You can define selected option(s) here  -->
+                            @if (Model.ViewModel.PageId.HasValue)
+                            {
+                                <option selected value="@Model.ViewModel.PageId">@Model.ViewModel.PageTitle</option>
+                            }
+                        </select>
+                    </abp-tab>
 
-            </abp-tabs>
+                </abp-tabs>
 
-            <hr/>
+                <hr />
+            }
+            else
+            {
+                <abp-input asp-for="ViewModel.Url" />
+            }
 
             <abp-input asp-for="ViewModel.DisplayName"/>
+            <div class="mb-3">
+                <label class="form-label" for="requiredPermissionName">@L["RequiredPermissionName"].Value</label>
+                <select asp-for="ViewModel.RequiredPermissionName" id="requiredPermissionName" class="form-control">
+                    @if(Model.ViewModel.RequiredPermissionName != null)
+                    {
+                        var selectedPermission = Model.Permissions.FirstOrDefault(p => p.Name == Model.ViewModel.RequiredPermissionName);
+                        if (selectedPermission != null)
+                        {
+                            <option 
+                                data-bs-toggle="tooltip" 
+                                data-bs-container="#tooltip_container" 
+                                data-bs-placement="top" 
+                                title="@selectedPermission.DisplayName" 
+                                selected 
+                                value="@Model.ViewModel.RequiredPermissionName">@selectedPermission.Name</option>
+                        }
+                        else
+                        {
+                            <option selected value="@Model.ViewModel.RequiredPermissionName">@Model.ViewModel.RequiredPermissionName</option>   
+                        }
+                    }
+                </select>
+                <div id="tooltip_container"></div>
+            </div>
             <abp-input asp-for="ViewModel.IsActive"/>
             <abp-input asp-for="ViewModel.Icon"/>
             <abp-input asp-for="ViewModel.Target"/>
             <abp-input asp-for="ViewModel.ElementId"/>
             <abp-input asp-for="ViewModel.CssClass"/>
+            
+            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<UpdateModalModel.MenuItemUpdateViewModel>())
+            {
+                if (!propertyInfo.Name.EndsWith("_Text"))
+                {
+                    if (propertyInfo.IsEnum() || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    {
+                        if (propertyInfo.IsEnum())
+                        {
+                            Model.ViewModel.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                        }
+                        <abp-select asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                    enum-type="@propertyInfo.IsEnum() ? propertyInfo.Type : null"
+                                    label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                    autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                    autocomplete-selected-item-name="@Model.ViewModel.GetProperty(propertyInfo.Name+"_Text")"
+                                    autocomplete-selected-item-value="@Model.ViewModel.GetProperty(propertyInfo.Name)"
+                                    autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                    autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                    autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                    autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></abp-select>
+                    }
+                    else
+                    {
+                        <abp-input type="@propertyInfo.GetInputType()"
+                                   asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                   label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                   asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                   value="@propertyInfo.GetInputValueOrNull(Model.ViewModel.GetProperty(propertyInfo.Name))" />
+                    }
+                }
+            }
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel | AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>

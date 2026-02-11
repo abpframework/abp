@@ -68,12 +68,12 @@ public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonD
         return queryable.FirstAsync(predicate, cancellationToken);
     }
 
-    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         return queryable.FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         return queryable.FirstOrDefaultAsync(predicate, cancellationToken);
@@ -89,12 +89,12 @@ public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonD
         return queryable.LastAsync(predicate, cancellationToken);
     }
 
-    public Task<T> LastOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> LastOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         return queryable.LastOrDefaultAsync(cancellationToken);
     }
 
-    public Task<T> LastOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> LastOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         return queryable.LastOrDefaultAsync(predicate, cancellationToken);
@@ -110,12 +110,12 @@ public class EfCoreAsyncQueryableProvider : IAsyncQueryableProvider, ISingletonD
         return queryable.SingleAsync(predicate, cancellationToken);
     }
 
-    public Task<T> SingleOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+    public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         return queryable.SingleOrDefaultAsync(cancellationToken);
     }
 
-    public Task<T> SingleOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+    public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         return queryable.SingleOrDefaultAsync(predicate, cancellationToken);

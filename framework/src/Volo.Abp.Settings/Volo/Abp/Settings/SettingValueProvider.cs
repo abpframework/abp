@@ -15,7 +15,7 @@ public abstract class SettingValueProvider : ISettingValueProvider, ITransientDe
         SettingStore = settingStore;
     }
 
-    public abstract Task<string> GetOrNullAsync(SettingDefinition setting);
+    public abstract Task<string?> GetOrNullAsync(SettingDefinition setting);
 
     public abstract Task<List<SettingValue>> GetAllAsync(SettingDefinition[] settings);
 }

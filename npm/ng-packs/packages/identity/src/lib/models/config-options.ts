@@ -5,7 +5,7 @@ import {
   EntityActionContributorCallback,
   EntityPropContributorCallback,
   ToolbarActionContributorCallback,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import { eIdentityComponents } from '../enums/components';
 
 export type IdentityEntityActionContributors = Partial<{

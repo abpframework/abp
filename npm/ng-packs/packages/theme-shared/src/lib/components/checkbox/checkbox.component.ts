@@ -1,6 +1,6 @@
-import { AbstractNgModelComponent } from '@abp/ng.core';
-import { Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, Input, output } from '@angular/core';
+import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-checkbox',
@@ -11,14 +11,16 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
         [(ngModel)]="value"
         [id]="checkboxId"
         [readonly]="checkboxReadonly"
-        [ngClass]="checkboxClass"
-        [ngStyle]="checkboxStyle"
-        (blur)="checkboxBlur.next()"
-        (focus)="checkboxFocus.next()"
+        [class]="checkboxClass"
+        [style]="checkboxStyle"
+        (blur)="checkboxBlur.emit()"
+        (focus)="checkboxFocus.emit()"
       />
-      <label *ngIf="label" [ngClass]="labelClass" [for]="checkboxId">
-        {{ label | abpLocalization }}
-      </label>
+      @if (label) {
+        <label [class]="labelClass" [for]="checkboxId">
+          {{ label | abpLocalization }}
+        </label>
+      }
     </div>
   `,
   providers: [
@@ -28,6 +30,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
       multi: true,
     },
   ],
+  imports: [FormsModule, LocalizationPipe],
 })
 export class FormCheckboxComponent extends AbstractNgModelComponent {
   @Input() label?: string;
@@ -35,16 +38,12 @@ export class FormCheckboxComponent extends AbstractNgModelComponent {
   @Input() checkboxId!: string;
   @Input() checkboxStyle:
     | {
-        [klass: string]: any;
-      }
+      [klass: string]: any;
+    }
     | null
     | undefined;
   @Input() checkboxClass = 'form-check-input';
   @Input() checkboxReadonly = false;
-  @Output() checkboxBlur = new EventEmitter<void>();
-  @Output() checkboxFocus = new EventEmitter<void>();
-
-  constructor(injector: Injector) {
-    super(injector);
-  }
+  readonly checkboxBlur = output<void>();
+  readonly checkboxFocus = output<void>();
 }

@@ -44,6 +44,6 @@ public abstract class EmailSenderConfiguration : IEmailSenderConfiguration
             throw new AbpException($"Setting value for '{name}' is null or empty!");
         }
 
-        return value;
+        return value!;
     }
 }

@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Volo.Abp.AzureServiceBus;
 
 public interface IAzureServiceBusMessageConsumerFactory
@@ -16,5 +14,5 @@ public interface IAzureServiceBusMessageConsumerFactory
     IAzureServiceBusMessageConsumer CreateMessageConsumer(
         string topicName,
         string subscriptionName,
-        string connectionName);
+        string? connectionName);
 }

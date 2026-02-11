@@ -20,4 +20,6 @@ public interface IIdentityDbContext : IEfCoreDbContext
     DbSet<IdentityLinkUser> LinkUsers { get; }
 
     DbSet<IdentityUserDelegation> UserDelegations { get; }
+
+    DbSet<IdentitySession> Sessions { get; }
 }

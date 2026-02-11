@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Volo.Abp.Reflection;
@@ -80,7 +82,7 @@ public static class ReflectionHelper
     /// <param name="memberInfo">MemberInfo</param>
     /// <param name="defaultValue">Default value (null as default)</param>
     /// <param name="inherit">Inherit attribute from base classes</param>
-    public static TAttribute GetSingleAttributeOrDefault<TAttribute>(MemberInfo memberInfo, TAttribute defaultValue = default, bool inherit = true)
+    public static TAttribute? GetSingleAttributeOrDefault<TAttribute>(MemberInfo memberInfo, TAttribute? defaultValue = default, bool inherit = true)
         where TAttribute : Attribute
     {
         //Get attribute on the member
@@ -100,7 +102,7 @@ public static class ReflectionHelper
     /// <param name="memberInfo">MemberInfo</param>
     /// <param name="defaultValue">Default value (null as default)</param>
     /// <param name="inherit">Inherit attribute from base classes</param>
-    public static TAttribute GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<TAttribute>(MemberInfo memberInfo, TAttribute defaultValue = default, bool inherit = true)
+    public static TAttribute? GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<TAttribute>(MemberInfo memberInfo, TAttribute? defaultValue = default, bool inherit = true)
         where TAttribute : class
     {
         return memberInfo.GetCustomAttributes(true).OfType<TAttribute>().FirstOrDefault()
@@ -128,7 +130,7 @@ public static class ReflectionHelper
     /// <summary>
     /// Gets value of a property by it's full path from given object
     /// </summary>
-    public static object GetValueByPath(object obj, Type objectType, string propertyPath)
+    public static object? GetValueByPath(object obj, Type objectType, string propertyPath)
     {
         var value = obj;
         var currentType = objectType;
@@ -167,7 +169,7 @@ public static class ReflectionHelper
     {
         var currentType = objectType;
         PropertyInfo property;
-        var objectPath = currentType.FullName;
+        var objectPath = currentType.FullName!;
         var absolutePropertyPath = propertyPath;
         if (absolutePropertyPath.StartsWith(objectPath))
         {
@@ -178,19 +180,19 @@ public static class ReflectionHelper
 
         if (properties.Length == 1)
         {
-            property = objectType.GetProperty(properties.First());
+            property = objectType.GetProperty(properties.First())!;
             property.SetValue(obj, value);
             return;
         }
 
         for (int i = 0; i < properties.Length - 1; i++)
         {
-            property = currentType.GetProperty(properties[i]);
-            obj = property.GetValue(obj, null);
+            property = currentType.GetProperty(properties[i])!;
+            obj = property.GetValue(obj, null)!;
             currentType = property.PropertyType;
         }
 
-        property = currentType.GetProperty(properties.Last());
+        property = currentType.GetProperty(properties.Last())!;
         property.SetValue(obj, value);
     }
 
@@ -215,7 +217,7 @@ public static class ReflectionHelper
 
             constants.AddRange(targetType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                 .Where(x => x.IsLiteral && !x.IsInitOnly)
-                .Select(x => x.GetValue(null).ToString()));
+                .Select(x => x.GetValue(null)!.ToString()!));
 
             var nestedTypes = targetType.GetNestedTypes(BindingFlags.Public);
 
@@ -228,5 +230,48 @@ public static class ReflectionHelper
         Recursively(publicConstants, type, 1);
 
         return publicConstants.ToArray();
+    }
+
+    /// <summary>
+    /// Checks whether the property is nullable, including nullable reference types (NRT).
+    /// </summary>
+    /// <param name="propertyInfo">Property info to check</param>
+    public static bool IsNullable(PropertyInfo propertyInfo)
+    {
+        if (TypeHelper.IsNullable(propertyInfo.PropertyType))
+        {
+            return true;
+        }
+
+#if NET6_0_OR_GREATER
+        var nullabilityInfoContext = new NullabilityInfoContext();
+        var nullabilityInfo = nullabilityInfoContext.Create(propertyInfo);
+        return nullabilityInfo.ReadState == NullabilityState.Nullable;
+#else
+        var attr = propertyInfo.GetCustomAttributes().FirstOrDefault(a => a.GetType().FullName == "System.Runtime.CompilerServices.NullableAttribute");
+        if (attr != null)
+        {
+            var getter = NullableGetterCache.GetOrAdd(attr.GetType(), CreateNullableAccessor);
+            return getter(attr)?[0] == 2;
+        }
+        return false;
+#endif
+    }
+
+    private static readonly ConcurrentDictionary<Type, Func<object, byte[]?>> NullableGetterCache = new ();
+
+    private static Func<object, byte[]?> CreateNullableAccessor(Type attrType)
+    {
+        var param = Expression.Parameter(typeof(object), "attr");
+        var casted = Expression.Convert(param, attrType);
+
+        var flagsField = attrType.GetField("NullableFlags");
+        if (flagsField == null)
+        {
+            return _ => null;
+        }
+
+        var access = Expression.Field(casted, flagsField);
+        return Expression.Lambda<Func<object, byte[]?>>(access, param).Compile();
     }
 }

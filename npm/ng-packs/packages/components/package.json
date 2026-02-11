@@ -1,22 +1,36 @@
 {
   "name": "@abp/ng.components",
-  "version": "7.2.1",
+  "version": "10.1.0-rc.3",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "peerDependencies": {
-    "@abp/ng.core": ">=7.2.1",
-    "@abp/ng.theme.shared": ">=7.2.1",
-    "@ng-bootstrap/ng-bootstrap": ">=10.0.0"
+    "@abp/ng.core": ">=10.1.0-rc.3",
+    "@abp/ng.theme.shared": ">=10.1.0-rc.3"
   },
   "dependencies": {
     "chart.js": "^3.5.1",
-    "ng-zorro-antd": "^15.0.0",
+    "ng-zorro-antd": "~21.0.0-next.1",
+    "@ctrl/tinycolor": "^4.0.0",
     "tslib": "^2.0.0"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "license": "LGPL-3.0",
+  "keywords": [
+    "aspnetcore",
+    "boilerplate",
+    "framework",
+    "web",
+    "best-practices",
+    "angular",
+    "maui",
+    "blazor",
+    "mvc",
+    "csharp",
+    "webapp"
+  ]
 }

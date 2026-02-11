@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Testing;
 using Xunit;

@@ -10,30 +10,32 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.PermissionManagement;
 
-public class DynamicPermissionDefinitionStoreInMemoryCache : 
+public class DynamicPermissionDefinitionStoreInMemoryCache :
     IDynamicPermissionDefinitionStoreInMemoryCache,
     ISingletonDependency
 {
     public string CacheStamp { get; set; }
-    
+
     protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions { get; }
     protected IDictionary<string, PermissionDefinition> PermissionDefinitions { get; }
+    protected IList<PermissionDefinition> ResourcePermissionDefinitions { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }
 
     public SemaphoreSlim SyncSemaphore { get; } = new(1, 1);
-    
+
     public DateTime? LastCheckTime { get; set; }
 
     public DynamicPermissionDefinitionStoreInMemoryCache(
-        ISimpleStateCheckerSerializer stateCheckerSerializer, 
+        ISimpleStateCheckerSerializer stateCheckerSerializer,
         ILocalizableStringSerializer localizableStringSerializer)
     {
         StateCheckerSerializer = stateCheckerSerializer;
         LocalizableStringSerializer = localizableStringSerializer;
-        
+
         PermissionGroupDefinitions = new Dictionary<string, PermissionGroupDefinition>();
         PermissionDefinitions = new Dictionary<string, PermissionDefinition>();
+        ResourcePermissionDefinitions = new List<PermissionDefinition>();
     }
 
     public Task FillAsync(
@@ -42,16 +44,29 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
     {
         PermissionGroupDefinitions.Clear();
         PermissionDefinitions.Clear();
-        
+        ResourcePermissionDefinitions.Clear();
+
         var context = new PermissionDefinitionContext(null);
-        
+
+        var resourcePermissions = permissionRecords.Where(x => !x.ResourceName.IsNullOrWhiteSpace());
+        foreach (var resourcePermission in resourcePermissions)
+        {
+            context.AddResourcePermission(resourcePermission.Name,
+                resourcePermission.ResourceName,
+                resourcePermission.ManagementPermissionName,
+                resourcePermission.DisplayName != null ? LocalizableStringSerializer.Deserialize(resourcePermission.DisplayName) : null,
+                resourcePermission.MultiTenancySide,
+                resourcePermission.IsEnabled);
+        }
+
+        var permissions = permissionRecords.Where(x => x.ResourceName.IsNullOrWhiteSpace()).ToList();
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
             var permissionGroup = context.AddGroup(
                 permissionGroupRecord.Name,
-                LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName)
+                permissionGroupRecord.DisplayName != null ? LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName) : null
             );
-            
+
             PermissionGroupDefinitions[permissionGroup.Name] = permissionGroup;
 
             foreach (var property in permissionGroupRecord.ExtraProperties)
@@ -59,12 +74,12 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
                 permissionGroup[property.Key] = property.Value;
             }
 
-            var permissionRecordsInThisGroup = permissionRecords
+            var permissionRecordsInThisGroup = permissions
                 .Where(p => p.GroupName == permissionGroup.Name);
-            
+
             foreach (var permissionRecord in permissionRecordsInThisGroup.Where(x => x.ParentName == null))
             {
-                AddPermissionRecursively(permissionGroup, permissionRecord, permissionRecords);
+                AddPermissionRecursively(permissionGroup, permissionRecord, permissions);
             }
         }
 
@@ -86,17 +101,27 @@ public class DynamicPermissionDefinitionStoreInMemoryCache :
         return PermissionGroupDefinitions.Values.ToList();
     }
 
+    public PermissionDefinition GetResourcePermissionOrNull(string resourceName, string name)
+    {
+        return ResourcePermissionDefinitions.FirstOrDefault(p => p.ResourceName == resourceName && p.Name == name);
+    }
+
+    public IReadOnlyList<PermissionDefinition> GetResourcePermissions()
+    {
+        return ResourcePermissionDefinitions.ToList();
+    }
+
     private void AddPermissionRecursively(ICanAddChildPermission permissionContainer,
         PermissionDefinitionRecord permissionRecord,
         List<PermissionDefinitionRecord> allPermissionRecords)
     {
         var permission = permissionContainer.AddPermission(
             permissionRecord.Name,
-            LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName),
+            permissionRecord.DisplayName != null ? LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName) : null,
             permissionRecord.MultiTenancySide,
             permissionRecord.IsEnabled
         );
-        
+
         PermissionDefinitions[permission.Name] = permission;
 
         if (!permissionRecord.Providers.IsNullOrWhiteSpace())

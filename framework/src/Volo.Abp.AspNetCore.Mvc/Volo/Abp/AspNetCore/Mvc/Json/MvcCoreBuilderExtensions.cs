@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
+using Volo.Abp.Json.SystemTextJson.Modifiers;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json;
 
@@ -12,7 +13,7 @@ public static class MvcCoreBuilderExtensions
 {
     public static IMvcCoreBuilder AddAbpJson(this IMvcCoreBuilder builder)
     {
-        builder.Services.AddOptions<JsonOptions>()
+        builder.Services.AddAbpOptions<JsonOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
@@ -26,6 +27,13 @@ public static class MvcCoreBuilderExtensions
 
                 options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(rootServiceProvider
                     .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
+
+                var dateTimeConverter = rootServiceProvider.GetRequiredService<AbpDateTimeConverter>();
+                var nullableDateTimeConverter = rootServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>();
+
+                options.JsonSerializerOptions.TypeInfoResolver.As<AbpDefaultJsonTypeInfoResolver>().Modifiers.Add(
+                    new AbpDateTimeConverterModifier(dateTimeConverter, nullableDateTimeConverter)
+                        .CreateModifyAction());
             });
 
         return builder;

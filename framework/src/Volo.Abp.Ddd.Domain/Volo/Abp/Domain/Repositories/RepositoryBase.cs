@@ -1,10 +1,10 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
@@ -14,6 +14,11 @@ namespace Volo.Abp.Domain.Repositories;
 public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
     where TEntity : class, IEntity
 {
+    protected RepositoryBase(string providerName)
+        : base(providerName)
+    {
+    }
+
     [Obsolete("Use WithDetailsAsync method.")]
     public virtual IQueryable<TEntity> WithDetails()
     {
@@ -41,7 +46,7 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 
     public abstract Task<IQueryable<TEntity>> GetQueryableAsync();
 
-    public abstract Task<TEntity> FindAsync(
+    public abstract Task<TEntity?> FindAsync(
         Expression<Func<TEntity, bool>> predicate,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
@@ -55,7 +60,7 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity));
+            throw new EntityNotFoundException<TEntity>();
         }
 
         return entity;
@@ -76,13 +81,13 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
     {
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TOtherEntity)))
         {
-            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e).IsDeleted == false);
+            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<ISoftDelete>(), e => ((ISoftDelete)e!).IsDeleted == false);
         }
 
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TOtherEntity)))
         {
             var tenantId = CurrentTenant.Id;
-            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e).TenantId == tenantId);
+            query = (TQueryable)query.WhereIf(DataFilter.IsEnabled<IMultiTenant>(), e => ((IMultiTenant)e!).TenantId == tenantId);
         }
 
         return query;
@@ -92,9 +97,14 @@ public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IR
 public abstract class RepositoryBase<TEntity, TKey> : RepositoryBase<TEntity>, IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
+    protected RepositoryBase(string providerName)
+        : base(providerName)
+    {
+    }
+
     public abstract Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
-    public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+    public abstract Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
     {

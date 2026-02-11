@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Tracing;
 

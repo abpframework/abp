@@ -18,7 +18,7 @@ public class AbpIdNameTagHelper : AbpTagHelper
     public override int Order => -1000 - 1;
 
     [HtmlAttributeName("abp-id-name")]
-    public ModelExpression IdNameFor { get; set; }
+    public ModelExpression? IdNameFor { get; set; }
 
     private readonly MvcViewOptions _mvcViewOptions;
 

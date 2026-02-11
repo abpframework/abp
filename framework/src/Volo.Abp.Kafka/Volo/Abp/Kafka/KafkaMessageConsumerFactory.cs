@@ -16,7 +16,7 @@ public class KafkaMessageConsumerFactory : IKafkaMessageConsumerFactory, ISingle
     public IKafkaMessageConsumer Create(
         string topicName,
         string groupId,
-        string connectionName = null)
+        string? connectionName = null)
     {
         var consumer = ServiceScope.ServiceProvider.GetRequiredService<KafkaMessageConsumer>();
         consumer.Initialize(topicName, groupId, connectionName);

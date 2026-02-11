@@ -20,6 +20,7 @@ public class SendTestEmailModal : AbpPageModel
     {
         LocalizationResourceType = typeof(AbpSettingManagementResource);
         EmailSettingsAppService = emailSettingsAppService;
+        ObjectMapperContext = typeof(AbpSettingManagementWebModule);
     }
 
     public async Task OnGetAsync()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NuGet.Versioning;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -44,18 +43,11 @@ public class ThemePackageAdder : ITransientDependency
             return;
         }
 
-        var yarnAvailable = NpmHelper.IsYarnAvailable();
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             var directory = Path.GetDirectoryName(packageJsonFilePath).EnsureEndsWith(Path.DirectorySeparatorChar);
-            if (yarnAvailable)
-            {
-                NpmHelper.YarnAddPackage(package, version, directory);
-            }
-            else
-            {
-                NpmHelper.NpmInstallPackage(package, version, directory);
-            }
+            
+            NpmHelper.YarnAddPackage(package, version, directory);
         }
     }
 }

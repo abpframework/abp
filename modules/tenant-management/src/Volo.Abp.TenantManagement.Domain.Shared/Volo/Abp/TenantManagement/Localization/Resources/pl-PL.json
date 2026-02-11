@@ -1,6 +1,7 @@
 {
   "culture": "pl-PL",
   "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Nazwa najemcy już istnieje: {Name}",
     "Menu:TenantManagement": "Zarządzanie tenantami",
     "Tenants": "Tenanty",
     "NewTenant": "Nowy tenant",
@@ -15,7 +16,7 @@
     "Permission:Edit": "Edytuj",
     "Permission:Delete": "Usuń",
     "Permission:ManageConnectionStrings": "Zarządzaj connection string'ami",
-    "Permission:ManageFeatures": "Zarządzaj fukcjami",
+    "Permission:ManageFeatures": "Funkcje",
     "DisplayName:AdminEmailAddress": "Adres e-mail administratora",
     "DisplayName:AdminPassword": "Hasło administratora"
   }

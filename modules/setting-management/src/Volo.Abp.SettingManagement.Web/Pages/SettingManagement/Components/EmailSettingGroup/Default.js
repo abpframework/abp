@@ -40,7 +40,8 @@
         })
         
         _sendTestEmailModal.onResult(function () {
-            abp.notify.success(l('SuccessfullySent'));
+            abp.notify.success(l('SentSuccessfully'));
+            _sendTestEmailModal.close();
         });
 
         $("#SendTestEmailButton").click(function (e) {

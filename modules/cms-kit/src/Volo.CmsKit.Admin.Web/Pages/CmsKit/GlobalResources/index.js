@@ -25,7 +25,7 @@ $(function (){
                 script: scriptEditor.getValue()
             }
         ).then(function () {
-            abp.message.success(l("SavedSuccessfully"));
+            abp.notify.success(l("SavedSuccessfully"));
         });
     });
 });

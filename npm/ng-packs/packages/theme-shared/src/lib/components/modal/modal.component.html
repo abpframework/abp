@@ -1,21 +1,27 @@
 <ng-content></ng-content>
 
 <ng-template #modalContent let-modal>
-  <div *ngIf="abpHeader" id="abp-modal-header" class="modal-header abp-modal-header">
-    <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
-    ​
-    <button
-      id="abp-modal-close-button"
-      type="button"
-      class="btn-sm btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    ></button>
-  </div>
-  <div *ngIf="abpBody" id="abp-modal-body" class="modal-body">
-    <ng-container *ngTemplateOutlet="abpBody"></ng-container>
-  </div>
-  <div *ngIf="abpFooter" id="abp-modal-footer" class="modal-footer">
-    <ng-container *ngTemplateOutlet="abpFooter"></ng-container>
-  </div>
+  @if (abpHeader()) {
+    <div id="abp-modal-header" class="modal-header abp-modal-header">
+      <ng-container *ngTemplateOutlet="abpHeader()"></ng-container>
+      ​
+      <button
+        id="abp-modal-close-button"
+        type="button"
+        class="btn-sm btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+  }
+  @if (abpBody()) {
+    <div id="abp-modal-body" class="modal-body">
+      <ng-container *ngTemplateOutlet="abpBody()"></ng-container>
+    </div>
+  }
+  @if (abpFooter()) {
+    <div id="abp-modal-footer" class="modal-footer">
+      <ng-container *ngTemplateOutlet="abpFooter()"></ng-container>
+    </div>
+  }
 </ng-template>

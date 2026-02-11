@@ -10,6 +10,8 @@
     "LoginIsNotAllowed": "Ne smete se prijaviti! Vaš račun je neaktiven ali mora potrditi vaš e -poštni naslov/telefonsko številko.",
     "InvalidUsername": "Napačno uporabniško ime ali geslo!",
     "InvalidAuthenticatorCode": "Neveljavna koda za preverjanje pristnosti!",
-    "TheTargetUserIsNotLinkedToYou": "Ciljni uporabnik ni povezan z vami!"
+    "InvalidRecoveryCode": "Neveljavna obnovitvena koda!",
+    "TheTargetUserIsNotLinkedToYou": "Ciljni uporabnik ni povezan z vami!",
+    "ClientResourcePermissionProviderKeyLookupService": "Odjemalec"
   }
 }

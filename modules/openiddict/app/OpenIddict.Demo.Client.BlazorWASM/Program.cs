@@ -1,4 +1,4 @@
-using IdentityModel;
+using Duende.IdentityModel;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using OpenIddict.Demo.Client.BlazorWASM;
@@ -15,12 +15,13 @@ builder.Services.AddOidcAuthentication(options =>
     options.ProviderOptions.ClientId = "AbpBlazorWASMApp";
     options.ProviderOptions.ResponseType = "code";
 
-    options.UserOptions.NameClaim = JwtClaimTypes.Name;
+    options.UserOptions.NameClaim = JwtClaimTypes.PreferredUserName;
     options.UserOptions.RoleClaim = JwtClaimTypes.Role;
 
     options.ProviderOptions.DefaultScopes.Add("roles");
     options.ProviderOptions.DefaultScopes.Add("email");
     options.ProviderOptions.DefaultScopes.Add("phone");
+    options.ProviderOptions.DefaultScopes.Add("AbpAPI");
 });
 
 await builder.Build().RunAsync();

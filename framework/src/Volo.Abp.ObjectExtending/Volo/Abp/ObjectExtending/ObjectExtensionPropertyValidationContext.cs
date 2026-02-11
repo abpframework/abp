@@ -35,22 +35,20 @@ public class ObjectExtensionPropertyValidationContext
     /// <summary>
     /// The value of the validating property of the <see cref="ValidatingObject"/>.
     /// </summary>
-    [CanBeNull]
-    public object Value { get; }
+    public object? Value { get; }
 
     /// <summary>
     /// Can be used to resolve services from the dependency injection container.
     /// This can be null when SetProperty method is used on the object.
     /// </summary>
-    [CanBeNull]
-    public IServiceProvider ServiceProvider => ValidationContext;
+    public IServiceProvider? ServiceProvider => ValidationContext;
 
     public ObjectExtensionPropertyValidationContext(
         [NotNull] ObjectExtensionPropertyInfo objectExtensionPropertyInfo,
         [NotNull] IHasExtraProperties validatingObject,
         [NotNull] List<ValidationResult> validationErrors,
         [NotNull] ValidationContext validationContext,
-        [CanBeNull] object value)
+        object? value)
     {
         ExtensionPropertyInfo = Check.NotNull(objectExtensionPropertyInfo, nameof(objectExtensionPropertyInfo));
         ValidatingObject = Check.NotNull(validatingObject, nameof(validatingObject));

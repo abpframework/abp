@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Application.Localization.Resources.AbpDdd;
 using Volo.Abp.Auditing;
+using Volo.Abp.Data;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -8,7 +9,8 @@ namespace Volo.Abp.Application;
 
 [DependsOn(
     typeof(AbpLocalizationModule),
-    typeof(AbpAuditingContractsModule)
+    typeof(AbpAuditingContractsModule),
+    typeof(AbpDataModule)
     )]
 public class AbpDddApplicationContractsModule : AbpModule
 {

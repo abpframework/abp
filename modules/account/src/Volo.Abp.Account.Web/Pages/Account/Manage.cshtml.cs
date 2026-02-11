@@ -38,7 +38,7 @@ public class ManageModel : AccountPageModel
         {
             if (!Url.IsLocalUrl(ReturnUrl) &&
                 !ReturnUrl.StartsWith(UriHelper.BuildAbsolute(Request.Scheme, Request.Host, Request.PathBase).RemovePostFix("/")) &&
-                !AppUrlProvider.IsRedirectAllowedUrl(ReturnUrl))
+                !await AppUrlProvider.IsRedirectAllowedUrlAsync(ReturnUrl))
             {
                 ReturnUrl = null;
             }

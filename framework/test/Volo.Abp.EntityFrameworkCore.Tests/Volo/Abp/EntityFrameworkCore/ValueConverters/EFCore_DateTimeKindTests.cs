@@ -11,7 +11,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters;
 
 public abstract class EFCore_DateTimeKindTests : DateTimeKind_Tests<AbpEntityFrameworkCoreTestModule>
 {
-    [Fact]
+    [Fact(Skip = "https://github.com/dotnet/efcore/issues/34760")]
     public async Task DateTime_Kind_Should_Be_Normalized_In_View_Query_Test()
     {
         var personName = "bob lee";
@@ -37,6 +37,7 @@ public abstract class EFCore_DateTimeKindTests : DateTimeKind_Tests<AbpEntityFra
     }
 }
 
+[Collection(nameof(EFCore_DateTimeKindTests))]
 public class DateTimeKindTests : EFCore_DateTimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
@@ -46,6 +47,7 @@ public class DateTimeKindTests : EFCore_DateTimeKindTests
     }
 }
 
+[Collection(nameof(EFCore_DateTimeKindTests))]
 public class DateTimeKindTests_Local : EFCore_DateTimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)
@@ -55,6 +57,7 @@ public class DateTimeKindTests_Local : EFCore_DateTimeKindTests
     }
 }
 
+[Collection(nameof(EFCore_DateTimeKindTests))]
 public class DateTimeKindTests_Utc : EFCore_DateTimeKindTests
 {
     protected override void AfterAddApplication(IServiceCollection services)

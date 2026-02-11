@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
@@ -42,7 +41,7 @@ public static class PredicateBuilder
     }
 
     /// <summary> Start an expression </summary>
-    public static ExpressionStarter<T> New<T>(Expression<Func<T, bool>> expr = null)
+    public static ExpressionStarter<T> New<T>(Expression<Func<T, bool>>? expr = null)
     {
         return new ExpressionStarter<T>(expr);
     }
@@ -58,7 +57,7 @@ public static class PredicateBuilder
         [NotNull] Expression<Func<T, bool>> expr2)
     {
         var expr2Body = new RebindParameterVisitor(expr2.Parameters[0], expr1.Parameters[0]).Visit(expr2.Body);
-        return Expression.Lambda<Func<T, bool>>(Expression.OrElse(expr1.Body, expr2Body), expr1.Parameters);
+        return Expression.Lambda<Func<T, bool>>(Expression.OrElse(expr1.Body, expr2Body!), expr1.Parameters);
     }
 
     /// <summary> AND </summary>
@@ -66,7 +65,7 @@ public static class PredicateBuilder
         [NotNull] Expression<Func<T, bool>> expr2)
     {
         var expr2Body = new RebindParameterVisitor(expr2.Parameters[0], expr1.Parameters[0]).Visit(expr2.Body);
-        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(expr1.Body, expr2Body), expr1.Parameters);
+        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(expr1.Body, expr2Body!), expr1.Parameters);
     }
 
     /// <summary>
@@ -120,16 +119,16 @@ public class ExpressionStarter<T>
         }
     }
 
-    public ExpressionStarter(Expression<Func<T, bool>> exp) : this(false)
+    public ExpressionStarter(Expression<Func<T, bool>>? exp) : this(false)
     {
         _predicate = exp;
     }
 
     /// <summary>The actual Predicate. It can only be set by calling Start.</summary>
     private Expression<Func<T, bool>> Predicate =>
-        (IsStarted || !UseDefaultExpression) ? _predicate : DefaultExpression;
+        ((IsStarted || !UseDefaultExpression) ? _predicate : DefaultExpression)!;
 
-    private Expression<Func<T, bool>> _predicate;
+    private Expression<Func<T, bool>>? _predicate;
 
     /// <summary>Determines if the predicate is started.</summary>
     public bool IsStarted => _predicate != null;
@@ -138,7 +137,7 @@ public class ExpressionStarter<T>
     public bool UseDefaultExpression => DefaultExpression != null;
 
     /// <summary>The default expression</summary>
-    public Expression<Func<T, bool>> DefaultExpression { get; set; }
+    public Expression<Func<T, bool>>? DefaultExpression { get; set; }
 
     /// <summary>Set the Expression predicate</summary>
     /// <param name="exp">The first expression</param>
@@ -165,7 +164,7 @@ public class ExpressionStarter<T>
     }
 
     /// <summary> Show predicate string </summary>
-    public override string ToString()
+    public override string? ToString()
     {
         return Predicate?.ToString();
     }
@@ -176,7 +175,7 @@ public class ExpressionStarter<T>
     /// Allows this object to be implicitely converted to an Expression{Func{T, bool}}.
     /// </summary>
     /// <param name="right"></param>
-    public static implicit operator Expression<Func<T, bool>>(ExpressionStarter<T> right)
+    public static implicit operator Expression<Func<T, bool>>?(ExpressionStarter<T>? right)
     {
         return right?.Predicate;
     }
@@ -185,7 +184,7 @@ public class ExpressionStarter<T>
     /// Allows this object to be implicitely converted to an Expression{Func{T, bool}}.
     /// </summary>
     /// <param name="right"></param>
-    public static implicit operator Func<T, bool>(ExpressionStarter<T> right)
+    public static implicit operator Func<T, bool>?(ExpressionStarter<T>? right)
     {
         return right == null ? null :
             (right.IsStarted || right.UseDefaultExpression) ? right.Predicate.Compile() : null;
@@ -195,7 +194,7 @@ public class ExpressionStarter<T>
     /// Allows this object to be implicitely converted to an Expression{Func{T, bool}}.
     /// </summary>
     /// <param name="right"></param>
-    public static implicit operator ExpressionStarter<T>(Expression<Func<T, bool>> right)
+    public static implicit operator ExpressionStarter<T>?(Expression<Func<T, bool>>? right)
     {
         return right == null ? null : new ExpressionStarter<T>(right);
     }
@@ -240,7 +239,7 @@ public class ExpressionStarter<T>
 
 #if !(NET35)
     /// <summary></summary>
-    public string Name => Predicate.Name;
+    public string? Name => Predicate.Name;
 
     /// <summary></summary>
     public Type ReturnType => Predicate.ReturnType;

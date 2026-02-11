@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.Content;
 using Volo.Abp.Http.Modeling;
@@ -20,6 +19,8 @@ public class AbpConventionalControllerOptions
     /// </summary>
     public bool UseV3UrlStyle { get; set; }
 
+    public string[] IgnoredUrlSuffixesInControllerNames { get; set; } = new[] { "Integration" };
+
     public AbpConventionalControllerOptions()
     {
         ConventionalControllerSettings = new ConventionalControllerSettingList();
@@ -33,7 +34,7 @@ public class AbpConventionalControllerOptions
 
     public AbpConventionalControllerOptions Create(
         Assembly assembly,
-        [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
+        Action<ConventionalControllerSetting>? optionsAction = null)
     {
         var setting = new ConventionalControllerSetting(
             assembly,

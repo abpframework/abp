@@ -44,7 +44,8 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
     public virtual async Task<IdentityDataSeedResult> SeedAsync(
         string adminEmail,
         string adminPassword,
-        Guid? tenantId = null)
+        Guid? tenantId = null,
+        string? adminUserName = null)
     {
         Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
         Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
@@ -55,7 +56,10 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
             var result = new IdentityDataSeedResult();
             //"admin" user
-            const string adminUserName = "admin";
+            if(adminUserName.IsNullOrWhiteSpace())
+            {
+                adminUserName = IdentityDataSeedContributor.AdminUserNameDefaultValue;
+            }
             var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
                 LookupNormalizer.NormalizeName(adminUserName)
             );

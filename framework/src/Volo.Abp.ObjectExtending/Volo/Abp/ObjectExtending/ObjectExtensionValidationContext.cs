@@ -35,8 +35,7 @@ public class ObjectExtensionValidationContext
     /// <summary>
     /// Can be used to resolve services from the dependency injection container.
     /// </summary>
-    [CanBeNull]
-    public IServiceProvider ServiceProvider => ValidationContext;
+    public IServiceProvider? ServiceProvider => ValidationContext;
 
     public ObjectExtensionValidationContext(
         [NotNull] ObjectExtensionInfo objectExtensionInfo,

@@ -1,12 +1,16 @@
 import { ContentProjectionService, LocalizationParam, PROJECTION_STRATEGY } from '@abp/ng.core';
-import { ComponentRef, Injectable } from '@angular/core';
+import { ComponentRef, Injectable, inject } from '@angular/core';
 import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
 import { Confirmation } from '../models/confirmation';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
+  private contentProjectionService = inject(ContentProjectionService);
+  private document = inject(DOCUMENT);
+
   status$!: Subject<Confirmation.Status>;
   confirmation$ = new ReplaySubject<Confirmation.DialogData | null>(1);
 
@@ -16,8 +20,6 @@ export class ConfirmationService {
     this.confirmation$.next(null);
     this.status$.next(status);
   };
-
-  constructor(private contentProjectionService: ContentProjectionService) {}
 
   private setContainer() {
     this.containerComponentRef = this.contentProjectionService.projectContent(
@@ -87,7 +89,7 @@ export class ConfirmationService {
   }
 
   private listenToEscape() {
-    fromEvent<KeyboardEvent>(document, 'keyup')
+    fromEvent<KeyboardEvent>(this.document, 'keyup')
       .pipe(
         takeUntil(this.status$),
         debounceTime(150),

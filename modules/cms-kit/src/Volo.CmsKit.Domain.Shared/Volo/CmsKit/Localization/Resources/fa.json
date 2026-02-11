@@ -89,6 +89,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "مدیریت نظرات",
     "Permission:Comments.Delete": "حذف",
+    "Permission:Comments.Update": "به روز رسانی",
+    "Permission:Comments.SettingManagement": "مدیریت تنظیمات",
     "Permission:Contents": "مدیریت محتوا",
     "Permission:Contents.Create": "ایجاد محتوی",
     "Permission:Contents.Delete": "حذف محتوی",
@@ -142,7 +144,7 @@
     "SubjectPlaceholder": "لطفا یک موضوع را تایپ کنید",
     "Submit": "ارسال",
     "Subscribe": "اشتراک",
-    "SuccessfullySaved": "با موفقیت ذخیره گردید!",
+    "SavedSuccessfully": "با موفقیت ذخیره گردید!",
     "TagDeletionConfirmationMessage": "آیا مطمئن هستید که برچسب '{0}' را حذف می کنید؟",
     "Tags": "برچسب ها",
     "Text": "متن",
@@ -181,6 +183,15 @@
     "HasBlogPostWaitingForReviewMessage": "شما یک پست وبلاگ دارید که منتظر بررسی است. برای لیست کلیک کنید.",
     "SelectAStatus": "انتخاب وضعیت",
     "Status": "وضعیت",
-    "CmsKit.BlogPost.ScrollIndex": "نوار پیمایش سریع در پست های وبلاگ"
+    "CmsKit.BlogPost.ScrollIndex": "نوار پیمایش سریع در پست های وبلاگ",
+    "CmsKit.BlogPost.PreventXssFeature": "جلوگیری از XSS",
+    "ThisPartOfContentCouldntBeLoaded": "این قسمت از محتوا قابل بارگیری نیست.",
+    "ChooseAnActionForBlog": "یک عمل برای وبلاگ انتخاب کنید",
+    "AssignBlogPostsToOtherBlog": "پست های وبلاگ را به وبلاگ دیگری اختصاص دهید",
+    "SelectAnBlogToAssign": "یک وبلاگ برای اختصاص دادن انتخاب کنید",
+    "DeleteAllBlogPostsOfThisBlog": "تمام پست های وبلاگ این وبلاگ را حذف کنید",
+    "RequiredPermissionName": "نام مجوز مورد نیاز",
+    "AllPosts": "همه پست ها",
+    "IsReadOnly": "فقط خواندنی"
   }
 }

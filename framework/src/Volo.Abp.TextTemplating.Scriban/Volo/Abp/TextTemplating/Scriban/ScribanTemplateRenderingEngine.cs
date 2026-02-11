@@ -24,9 +24,9 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
 
     public override async Task<string> RenderAsync(
         [NotNull] string templateName,
-        [CanBeNull] object model = null,
-        [CanBeNull] string cultureName = null,
-        [CanBeNull] Dictionary<string, object> globalContext = null)
+        object? model = null,
+        string? cultureName = null,
+        Dictionary<string, object>? globalContext = null)
     {
         Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
@@ -59,9 +59,9 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
     protected virtual async Task<string> RenderInternalAsync(
         string templateName,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
-        var templateDefinition = TemplateDefinitionManager.Get(templateName);
+        var templateDefinition = await TemplateDefinitionManager.GetAsync(templateName);
 
         var renderedContent = await RenderSingleTemplateAsync(
             templateDefinition,
@@ -84,13 +84,13 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
     protected virtual async Task<string> RenderSingleTemplateAsync(
         TemplateDefinition templateDefinition,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         var rawTemplateContent = await GetContentOrNullAsync(templateDefinition);
 
         return await RenderTemplateContentWithScribanAsync(
             templateDefinition,
-            rawTemplateContent,
+            rawTemplateContent!,
             globalContext,
             model
         );
@@ -100,7 +100,7 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         TemplateDefinition templateDefinition,
         string templateContent,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         var context = CreateScribanTemplateContext(
             templateDefinition,
@@ -116,7 +116,7 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
     protected virtual TemplateContext CreateScribanTemplateContext(
         TemplateDefinition templateDefinition,
         Dictionary<string, object> globalContext,
-        object model = null)
+        object? model = null)
     {
         var context = new TemplateContext();
 

@@ -1,5 +1,6 @@
 ﻿using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MyCompanyName.MyProjectName.Menus;
 using MyCompanyName.MyProjectName;
@@ -9,7 +10,7 @@ using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
 using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
 using Volo.Abp.Autofac.WebAssembly;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Blazor.WebAssembly;
@@ -66,10 +67,10 @@ public class MyProjectNameBlazorModule : AbpModule
         ConfigureHttpClient(context, environment);
         ConfigureBlazorise(context);
         ConfigureRouter(context);
-        ConfigureUI(builder);
         ConfigureMenu(context);
-        ConfigureAutoMapper(context);
         ConfigureHttpClientProxies(context);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameBlazorModule>();
     }
 
     private void ConfigureRouter(ServiceConfigurationContext context)
@@ -121,7 +122,7 @@ public class MyProjectNameBlazorModule : AbpModule
     private static void ConfigureUI(WebAssemblyHostBuilder builder)
     {
         builder.RootComponents.Add<App>("#ApplicationContainer");
-
+        builder.RootComponents.Add<HeadOutlet>("head::after");
     }
 
     private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)
@@ -129,14 +130,6 @@ public class MyProjectNameBlazorModule : AbpModule
         context.Services.AddTransient(sp => new HttpClient
         {
             BaseAddress = new Uri(environment.BaseAddress)
-        });
-    }
-
-    private void ConfigureAutoMapper(ServiceConfigurationContext context)
-    {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameBlazorModule>();
         });
     }
 }

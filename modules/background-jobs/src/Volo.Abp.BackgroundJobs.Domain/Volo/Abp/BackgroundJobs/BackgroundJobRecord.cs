@@ -7,6 +7,11 @@ namespace Volo.Abp.BackgroundJobs;
 public class BackgroundJobRecord : AggregateRoot<Guid>, IHasCreationTime
 {
     /// <summary>
+    /// Application name that scheduled this job.
+    /// </summary>
+    public virtual string ApplicationName { get; set; }
+
+    /// <summary>
     /// Type of the job.
     /// It's AssemblyQualifiedName of job type.
     /// </summary>

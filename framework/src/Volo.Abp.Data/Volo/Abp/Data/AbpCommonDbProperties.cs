@@ -13,5 +13,5 @@ public static class AbpCommonDbProperties
     /// <summary>
     /// Default value: null.
     /// </summary>
-    public static string DbSchema { get; set; } = null;
+    public static string? DbSchema { get; set; } = null;
 }

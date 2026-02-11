@@ -8,5 +8,6 @@ public abstract class CmsKitAppServiceBase : ApplicationService
     protected CmsKitAppServiceBase()
     {
         LocalizationResource = typeof(CmsKitResource);
+        ObjectMapperContext = typeof(CmsKitCommonApplicationModule);
     }
 }

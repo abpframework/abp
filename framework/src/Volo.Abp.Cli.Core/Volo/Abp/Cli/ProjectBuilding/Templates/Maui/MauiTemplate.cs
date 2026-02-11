@@ -10,6 +10,6 @@ public class MauiTemplate : MauiTemplateBase
     public MauiTemplate() 
         : base(TemplateName)
     {
-        DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/MAUI";
+        DocumentUrl = CliConsts.DocsLink + "latest/get-started/MAUI";
     }
 }

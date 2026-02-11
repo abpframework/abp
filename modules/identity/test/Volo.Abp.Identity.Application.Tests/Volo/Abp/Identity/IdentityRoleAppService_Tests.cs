@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Xunit;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.PermissionManagement.Identity;
 
 namespace Volo.Abp.Identity;
 
@@ -11,11 +14,14 @@ public class IdentityRoleAppService_Tests : AbpIdentityApplicationTestBase
 {
     private readonly IIdentityRoleAppService _roleAppService;
     private readonly IIdentityRoleRepository _roleRepository;
-
+    private readonly IPermissionManager _permissionManager;
+    private readonly RolePermissionManagementProvider _rolePermissionManagementProvider;
     public IdentityRoleAppService_Tests()
     {
         _roleAppService = GetRequiredService<IIdentityRoleAppService>();
         _roleRepository = GetRequiredService<IIdentityRoleRepository>();
+        _permissionManager = GetRequiredService<IPermissionManager>();
+        _rolePermissionManagementProvider = GetRequiredService<RolePermissionManagementProvider>();
     }
 
     [Fact]
@@ -123,6 +129,20 @@ public class IdentityRoleAppService_Tests : AbpIdentityApplicationTestBase
         //Assert
 
         (await FindRoleAsync("moderator")).ShouldBeNull();
+    }
+
+
+    [Fact]
+    public async Task Role_Permissions_Should_Deleted_If_Role_Deleted()
+    {
+        var moderator = await GetRoleAsync("moderator");
+
+        (await _rolePermissionManagementProvider.CheckAsync(IdentityPermissions.Users.Create, RolePermissionValueProvider.ProviderName, moderator.Name)).IsGranted.ShouldBeFalse();
+        await _permissionManager.SetForRoleAsync(moderator.Name, IdentityPermissions.Users.Create, true);
+        (await _rolePermissionManagementProvider.CheckAsync(IdentityPermissions.Users.Create, RolePermissionValueProvider.ProviderName, moderator.Name)).IsGranted.ShouldBeTrue();
+
+        await _roleAppService.DeleteAsync(moderator.Id);
+        (await _rolePermissionManagementProvider.CheckAsync(IdentityPermissions.Users.Create, RolePermissionValueProvider.ProviderName, moderator.Name)).IsGranted.ShouldBeFalse();
     }
 
     private async Task<IdentityRole> GetRoleAsync(string roleName)

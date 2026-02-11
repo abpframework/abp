@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.EntityFrameworkCore",
-  "hash": "ed3635e7fd238a79369834f410ffbb2d",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
@@ -69,85 +69,74 @@
       "connectionStringName": "AbpIdentity",
       "databaseTables": [
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
           "contentType": "databaseTable",
-          "name": "AbpClaimTypes",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
-          "contentType": "databaseTable",
-          "name": "AbpLinkUsers",
+          "name": "Users",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityRole",
           "contentType": "databaseTable",
-          "name": "AbpRoles",
+          "name": "Roles",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityRoleClaim",
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
           "contentType": "databaseTable",
-          "name": "AbpRoleClaims",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
-          "contentType": "databaseTable",
-          "name": "AbpSecurityLogs",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityUser",
-          "contentType": "databaseTable",
-          "name": "AbpUsers",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityUserClaim",
-          "contentType": "databaseTable",
-          "name": "AbpUserClaims",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityUserLogin",
-          "contentType": "databaseTable",
-          "name": "AbpUserLogins",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityUserOrganizationUnit",
-          "contentType": "databaseTable",
-          "name": "AbpUserOrganizationUnits",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityUserRole",
-          "contentType": "databaseTable",
-          "name": "AbpUserRoles",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.IdentityUserToken",
-          "contentType": "databaseTable",
-          "name": "AbpUserTokens",
+          "name": "ClaimTypes",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
           "contentType": "databaseTable",
-          "name": "AbpOrganizationUnits",
+          "name": "OrganizationUnits",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.OrganizationUnitRole",
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
           "contentType": "databaseTable",
-          "name": "AbpOrganizationUnitRoles",
+          "name": "SecurityLogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseTable",
+          "name": "LinkUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserDelegation",
+          "contentType": "databaseTable",
+          "name": "UserDelegations",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySession",
+          "contentType": "databaseTable",
+          "name": "Sessions",
           "summary": null
         }
       ],
       "replacedDbContexts": [],
+      "modelBuilderExtensionMethods": [
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
+          "name": "ConfigureIdentity",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": true,
+          "parameters": [
+            {
+              "type": "ModelBuilder",
+              "name": "builder",
+              "isOptional": false
+            }
+          ]
+        }
+      ],
       "implementingInterfaces": [
         {
           "name": "IInfrastructure<IServiceProvider>",
@@ -202,6 +191,12 @@
           "namespace": "Volo.Abp.EntityFrameworkCore",
           "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
           "fullName": "Volo.Abp.EntityFrameworkCore.IEfCoreDbContext"
+        },
+        {
+          "name": "IAbpEfCoreDbFunctionContext",
+          "namespace": "Volo.Abp.EntityFrameworkCore.GlobalFilters",
+          "declaringAssemblyName": "Volo.Abp.EntityFrameworkCore",
+          "fullName": "Volo.Abp.EntityFrameworkCore.GlobalFilters.IAbpEfCoreDbFunctionContext"
         },
         {
           "name": "ITransientDependency",

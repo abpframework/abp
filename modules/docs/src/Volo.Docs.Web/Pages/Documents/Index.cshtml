@@ -6,6 +6,8 @@
 @inject IHtmlLocalizer<DocsResource> L
 @model IndexModel
 @{
+    ViewBag.Title = L["Docs_Page_Title"].Value;
+    ViewBag.Description = L["Docs_Page_Description"].Value;
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
@@ -29,7 +31,7 @@
                 {
                     <li>
                         <h3>
-                            <a href="@(Model.DocumentsUrlPrefix + project.ShortName)">
+                            <a href="@Model.GetUrlForProject(project)">
                                 @project.Name
                             </a>
                         </h3>

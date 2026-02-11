@@ -59,15 +59,15 @@ public class AbpTooltipTagHelperService : AbpTagHelperService<AbpTooltipTagHelpe
         switch (GetDirectory())
         {
             case TooltipDirectory.Top:
-                return TagHelper.AbpTooltipTop;
+                return TagHelper.AbpTooltipTop!;
             case TooltipDirectory.Right:
-                return TagHelper.AbpTooltipRight;
+                return TagHelper.AbpTooltipRight!;
             case TooltipDirectory.Bottom:
-                return TagHelper.AbpTooltipBottom;
+                return TagHelper.AbpTooltipBottom!;
             case TooltipDirectory.Left:
-                return TagHelper.AbpTooltipLeft;
+                return TagHelper.AbpTooltipLeft!;
             default:
-                return TagHelper.AbpTooltip;
+                return TagHelper.AbpTooltip!;
         }
     }
 

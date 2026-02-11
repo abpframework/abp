@@ -12,6 +12,6 @@ public class ModuleTemplate : ModuleTemplateBase
     public ModuleTemplate()
         : base(TemplateName)
     {
-        DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Module";
+        DocumentUrl = "https://abp.io/docs/latest/solution-templates/application-module";
     }
 }

@@ -1,5 +1,7 @@
 $(function () {
     $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+        $(this).next().toggleClass('show');
+
         if (!$(this).next().hasClass('show')) {
             $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
         }

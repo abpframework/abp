@@ -11,17 +11,16 @@ public class ToolbarItem : IHasSimpleStateCheckers<ToolbarItem>
         get => _componentType;
         set => _componentType = Check.NotNull(value, nameof(value));
     }
-    private Type _componentType;
+    private Type _componentType = default!;
 
     public int Order { get; set; }
 
-    [CanBeNull]
     [Obsolete("Use RequirePermissions extension method.")]
-    public string RequiredPermissionName { get; set; }
+    public string? RequiredPermissionName { get; set; }
 
     public List<ISimpleStateChecker<ToolbarItem>> StateCheckers { get; }
 
-    public ToolbarItem([NotNull] Type componentType, int order = 0, string requiredPermissionName = null)
+    public ToolbarItem([NotNull] Type componentType, int order = 0, string? requiredPermissionName = null)
     {
         Order = order;
         ComponentType = Check.NotNull(componentType, nameof(componentType));

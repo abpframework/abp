@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <title>Swagger UI: OAuth2 Redirect</title>
+</head>
+<body>
+<script>
+    'use strict';
+    function run () {
+        var qp, arr;
+
+        if (/code|token|error/.test(window.location.hash)) {
+            qp = window.location.hash.substring(1).replace('?', '&');
+        } else {
+            qp = location.search.substring(1);
+        }
+
+        arr = qp.split("&");
+        arr.forEach(function (v,i,_arr) { _arr[i] = '"' + v.replace('=', '":"') + '"';});
+        qp = qp ? JSON.parse('{' + arr.join() + '}',
+                function (key, value) {
+                    return key === "" ? value : decodeURIComponent(value);
+                }
+        ) : {};
+
+        localStorage.setItem("abp_swagger_oauth2", JSON.stringify(qp));
+        window.close();
+    }
+
+    if (document.readyState !== 'loading') {
+        run();
+    } else {
+        document.addEventListener('DOMContentLoaded', function () {
+            run();
+        });
+    }
+</script>
+</body>
+</html>

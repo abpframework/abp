@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp.Domain;
@@ -52,6 +52,22 @@ public class EfCoreAsyncQueryableProvider_Tests : EntityFrameworkCoreTestBase
             (await _efCoreAsyncQueryableProvider.CountAsync(query) > 0).ShouldBeTrue();
             (await _efCoreAsyncQueryableProvider.FirstOrDefaultAsync(query)).ShouldNotBeNull();
             (await _efCoreAsyncQueryableProvider.ToListAsync(query)).Count.ShouldBeGreaterThan(0);
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task LastOrDefaultAsync_With_DefaultOrderBy()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var lastOrDefault = await _personRepository.LastOrDefaultAsync();
+            lastOrDefault.ShouldNotBeNull();
+
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await (await _personRepository.GetQueryableAsync()).LastOrDefaultAsync()
+            );
 
             await uow.CompleteAsync();
         }

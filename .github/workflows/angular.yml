@@ -27,12 +27,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: 'npm/ng-packs/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('npm/ng-packs/yarn.lock') }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: 'templates/app/angular/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('templates/app/angular/yarn.lock') }}

@@ -3,17 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
-using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Commands;
-using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -31,14 +26,12 @@ public class NpmPackagesUpdater : ITransientDependency
 
     private readonly PackageJsonFileFinder _packageJsonFileFinder;
     private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
-    private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
+    private readonly Dictionary<string, string> _fileVersionStorage = [];
 
     public NpmPackagesUpdater(
         PackageJsonFileFinder packageJsonFileFinder,
         NpmGlobalPackagesChecker npmGlobalPackagesChecker,
         ICancellationTokenProvider cancellationTokenProvider,
-        CliHttpClientFactory cliHttpClientFactory,
         IInstallLibsService installLibsService,
         ICmdHelper cmdHelper)
     {
@@ -47,22 +40,33 @@ public class NpmPackagesUpdater : ITransientDependency
         CancellationTokenProvider = cancellationTokenProvider;
         InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
-        _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<NpmPackagesUpdater>.Instance;
     }
 
     public async Task Update(string rootDirectory, bool includePreviews = false,
         bool includeReleaseCandidates = false,
-        bool switchToStable = false, string version = null)
+        bool switchToStable = false, string version = null, string leptonXVersion = null, bool includePreRc = false)
     {
         var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
-        if (!fileList.Any())
+        if (fileList.Count == 0)
         {
             return;
         }
 
         _npmGlobalPackagesChecker.Check();
+
+        foreach (var file in fileList)
+        {
+            if (includePreviews || includePreRc)
+            {
+                await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
+            }
+            else if (switchToStable)
+            {
+                await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
+            }
+        }
 
         var packagesUpdated = new ConcurrentDictionary<string, bool>();
 
@@ -70,7 +74,10 @@ public class NpmPackagesUpdater : ITransientDependency
         {
             var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates,
                 switchToStable,
-                version);
+                version,
+                leptonXVersion,
+                includePreRc);
+
             packagesUpdated.TryAdd(file, updated);
         }
 
@@ -80,28 +87,12 @@ public class NpmPackagesUpdater : ITransientDependency
         {
             var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-            if (includePreviews)
-            {
-                await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-            }
-            else if (switchToStable)
-            {
-                await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-            }
-
-            if (await NpmrcFileExistAsync(fileDirectory))
-            {
-                RunNpmInstall(fileDirectory);
-            }
-            else
-            {
-                RunYarn(fileDirectory);
-            }
+            RunYarn(fileDirectory);
 
             if (!IsAngularProject(fileDirectory))
             {
-                Thread.Sleep(1000);
-                RunInstallLibsAsync(fileDirectory);
+                await Task.Delay(1000);
+                await RunInstallLibsAsync(fileDirectory);
             }
         }
     }
@@ -122,6 +113,8 @@ public class NpmPackagesUpdater : ITransientDependency
     {
         var fileName = Path.Combine(directoryName, ".npmrc");
         var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
+        var voloRegistry = "@volo:registry=https://www.myget.org/F/abp-commercial-npm-nightly/npm";
+        var volosoftRegistry = "@volosoft:registry=https://www.myget.org/F/abp-commercial-npm-nightly/npm";
 
         if (await NpmrcFileExistAsync(directoryName))
         {
@@ -132,16 +125,26 @@ public class NpmPackagesUpdater : ITransientDependency
                 fileContent += Environment.NewLine + abpRegistry;
             }
 
+            if (!fileContent.Contains(voloRegistry))
+            {
+                fileContent += Environment.NewLine + voloRegistry;
+            }
+
+            if (!fileContent.Contains(volosoftRegistry))
+            {
+                fileContent += volosoftRegistry;
+            }
+
             File.WriteAllText(fileName, fileContent);
 
             return;
         }
 
-        using var fs = File.Create(fileName);
+        using var sw = File.CreateText(fileName);
 
-        var content = new UTF8Encoding(true)
-            .GetBytes(abpRegistry);
-        fs.Write(content, 0, content.Length);
+        sw.WriteLine(abpRegistry);
+        sw.WriteLine(voloRegistry);
+        sw.WriteLine(volosoftRegistry);
     }
 
     private static bool IsAngularProject(string fileDirectory)
@@ -154,7 +157,9 @@ public class NpmPackagesUpdater : ITransientDependency
         bool includePreviews = false,
         bool includeReleaseCandidates = false,
         bool switchToStable = false,
-        string specifiedVersion = null)
+        string specifiedVersion = null,
+        string specifiedLeptonXVersion = null,
+        bool includePreRc = false)
     {
         var packagesUpdated = false;
         var fileContent = File.ReadAllText(filePath);
@@ -169,7 +174,7 @@ public class NpmPackagesUpdater : ITransientDependency
         foreach (var abpPackage in abpPackages)
         {
             var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates,
-                switchToStable, specifiedVersion);
+                switchToStable, specifiedVersion, specifiedLeptonXVersion, includePreRc);
 
             if (updated)
             {
@@ -180,7 +185,7 @@ public class NpmPackagesUpdater : ITransientDependency
         var updatedContent = packageJson.ToString(Formatting.Indented);
 
         File.WriteAllText(filePath, updatedContent);
-
+        
         return packagesUpdated;
     }
 
@@ -190,7 +195,9 @@ public class NpmPackagesUpdater : ITransientDependency
         bool includePreviews = false,
         bool includeReleaseCandidates = false,
         bool switchToStable = false,
-        string specifiedVersion = null)
+        string specifiedVersion = null,
+        string specifiedLeptonXVersion = null,
+        bool includePreRc = false)
     {
         var currentVersion = (string)package.Value;
 
@@ -198,26 +205,48 @@ public class NpmPackagesUpdater : ITransientDependency
 
         if (!specifiedVersion.IsNullOrWhiteSpace())
         {
-            if (!SpecifiedVersionExists(specifiedVersion, package))
+            if (IsLeptonXPackage(package) && !specifiedLeptonXVersion.IsNullOrWhiteSpace())
             {
-                return false;
-            }
+                if (!SpecifiedVersionExists(specifiedLeptonXVersion, package))
+                {
+                    return false;
+                }
 
-            if (SemanticVersion.Parse(specifiedVersion) <=
-                SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                if (SemanticVersion.Parse(specifiedLeptonXVersion) <=
+                    SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                {
+                    return false;
+                }
+
+                version = specifiedLeptonXVersion.EnsureStartsWith('^');
+            }
+            else
             {
-                return false;
-            }
+                if (!SpecifiedVersionExists(specifiedVersion, package))
+                {
+                    return false;
+                }
 
-            version = specifiedVersion.EnsureStartsWith('^');
+                if (SemanticVersion.Parse(specifiedVersion) <=
+                    SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                {
+                    return false;
+                }
+
+                version = specifiedVersion.EnsureStartsWith('^');
+            }
         }
         else
         {
-            if ((includePreviews ||
+            if (includePreRc && !includeReleaseCandidates)
+            {
+                version = await GetLatestVersion(package, includePreRc: true, workingDirectory: filePath.RemovePostFix("package.json"));
+            }
+            else if ((includePreviews ||
                  (!switchToStable && (currentVersion != null && currentVersion.Contains("-preview")))) &&
                 !includeReleaseCandidates)
             {
-                version = "preview";
+                version = await GetLatestVersion(package, includePreviews: includePreviews, workingDirectory: filePath.RemovePostFix("package.json"));
             }
             else
             {
@@ -232,17 +261,33 @@ public class NpmPackagesUpdater : ITransientDependency
             }
         }
 
-
         if (string.IsNullOrEmpty(version) || version == currentVersion)
         {
             return false;
         }
 
+        var prefix = string.Empty;
+        if (package.Value.ToString().StartsWith("~"))
+        {
+            prefix = "~";
+        }
+        else if (package.Value.ToString().StartsWith("^"))
+        {
+            prefix = "^";
+        }
+
+        version = prefix + version.RemovePreFix("~", "^");
         package.Value.Replace(version);
 
         Logger.LogInformation(
             $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
         return true;
+    }
+
+    private static bool IsLeptonXPackage(JProperty package)
+    {
+        return package.Name.IndexOf("leptonx", StringComparison.InvariantCultureIgnoreCase) > 0
+            || package.Name.IndexOf("lepton-x", StringComparison.InvariantCultureIgnoreCase) > 0;
     }
 
     protected virtual bool IsPrerelease(string version)
@@ -255,28 +300,45 @@ public class NpmPackagesUpdater : ITransientDependency
         return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
     }
 
-    protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false)
+    protected virtual async Task<string> GetLatestVersion(JProperty package, bool includeReleaseCandidates = false, bool includePreviews = false, string workingDirectory = null, bool includePreRc = false)
     {
-        if (_fileVersionStorage.ContainsKey(package.Name))
+        var postfix = includePreviews || includePreRc ? "(preview)" : string.Empty;
+        var key = package.Name + postfix;
+
+        if (_fileVersionStorage.ContainsKey(key))
         {
-            return await Task.FromResult(_fileVersionStorage[package.Name]);
+            return await Task.FromResult(_fileVersionStorage[key]);
         }
 
-        var versionList = GetPackageVersionList(package);
+        var versionList = GetPackageVersionList(package, workingDirectory);
 
-        var newVersion = includeReleaseCandidates
-            ? versionList.First()
-            : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+        string newVersion = string.Empty;
+
+        if (includePreRc)
+        {
+            var filterKey = $"-preview{DateTime.Now.ToString("yyyyMMdd")}";
+            newVersion = versionList.Where(f => f.Contains(filterKey)).OrderBy(o => o).FirstOrDefault();
+        }
+        else if (includePreviews)
+        {
+            newVersion = versionList.FirstOrDefault(v => v.Contains("-preview"));
+        }
+        else
+        {
+            newVersion = includeReleaseCandidates
+                ? versionList.First()
+                : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+        }
 
         if (string.IsNullOrEmpty(newVersion))
         {
-            _fileVersionStorage[package.Name] = newVersion;
+            _fileVersionStorage[key] = newVersion;
             return await Task.FromResult(newVersion);
         }
 
         var newVersionWithPrefix = $"~{newVersion}";
 
-        _fileVersionStorage[package.Name] = newVersionWithPrefix;
+        _fileVersionStorage[key] = newVersionWithPrefix;
 
         return await Task.FromResult(newVersionWithPrefix);
     }
@@ -298,8 +360,12 @@ public class NpmPackagesUpdater : ITransientDependency
             var properties = dependencies.Properties().ToList();
 
             abpPackages
-                .AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
-                    .ToList());
+                .AddRange(
+                properties.Where(
+                      p => p.Name.StartsWith("@abp/")
+                        || p.Name.StartsWith("@volo/")
+                        || p.Name.StartsWith("@volosoft/")).ToList()
+                );
         }
 
         return abpPackages;
@@ -314,7 +380,7 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"yarn", fileDirectory);
+        CmdHelper.RunCmd($"npx yarn", fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)
@@ -323,9 +389,9 @@ public class NpmPackagesUpdater : ITransientDependency
         CmdHelper.RunCmd($"npm install", fileDirectory);
     }
 
-    protected virtual List<string> GetPackageVersionList(JProperty package)
+    protected virtual List<string> GetPackageVersionList(JProperty package, string workingDirectory = null)
     {
-        var output = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions --json");
+        var output = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions --json", workingDirectory);
 
         var versionListAsJson = ExtractVersions(output);
 

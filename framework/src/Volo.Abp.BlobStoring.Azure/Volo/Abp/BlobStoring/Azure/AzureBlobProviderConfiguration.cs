@@ -13,7 +13,7 @@ public class AzureBlobProviderConfiguration
     /// The name must also be between 3 and 63 characters long.
     /// If this parameter is not specified, the ContainerName of the <see cref="BlobProviderArgs"/> will be used.
     /// </summary>
-    public string ContainerName {
+    public string? ContainerName {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AzureBlobProviderConfigurationNames.ContainerName);
         set => _containerConfiguration.SetConfiguration(AzureBlobProviderConfigurationNames.ContainerName, value);
     }

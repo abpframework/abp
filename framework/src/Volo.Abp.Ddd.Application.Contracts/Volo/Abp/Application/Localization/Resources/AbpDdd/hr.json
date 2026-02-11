@@ -1,0 +1,6 @@
+{
+  "culture": "hr",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} ne može biti veći od {1}! Povećajte {2}.{3} na strani poslužitelja kako biste omogućili više rezultata."
+  }
+}

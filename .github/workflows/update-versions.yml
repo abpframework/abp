@@ -28,6 +28,6 @@ jobs:
 
       - name: Update latest-versions.json and create PR
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           python .github/scripts/update_versions.py

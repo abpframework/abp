@@ -15,7 +15,7 @@ public class TestObjectToFormData : IObjectToFormData<List<GetParamsNameValue>>,
     {
         if (values.IsNullOrEmpty())
         {
-            return null;
+            return Task.FromResult<List<KeyValuePair<string, HttpContent>>>(null);
         }
 
         var formDataContents = new List<KeyValuePair<string, HttpContent>>();
@@ -23,6 +23,11 @@ public class TestObjectToFormData : IObjectToFormData<List<GetParamsNameValue>>,
         {
             formDataContents.Add(new KeyValuePair<string, HttpContent>($"NameValues[{i}].Name", new StringContent(values[i].Name, Encoding.UTF8)));
             formDataContents.Add(new KeyValuePair<string, HttpContent>($"NameValues[{i}].Value", new StringContent(values[i].Value, Encoding.UTF8)));
+
+            foreach (var item in values[i].ExtraProperties)
+            {
+                formDataContents.Add(new KeyValuePair<string, HttpContent>($"NameValues[{i}].ExtraProperties[{item.Key}]", new StringContent(item.Value!.ToString()!, Encoding.UTF8)));
+            }
         }
 
         return Task.FromResult(formDataContents);

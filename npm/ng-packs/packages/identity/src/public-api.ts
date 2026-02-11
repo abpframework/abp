@@ -4,3 +4,5 @@ export * from './lib/guards';
 export * from './lib/identity.module';
 export * from './lib/models';
 export * from './lib/tokens';
+export * from './lib/resolvers';
+export * from './lib/identity.routes';

@@ -1,8 +1,8 @@
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Emailing;
 
@@ -12,15 +12,13 @@ namespace Volo.Abp.Emailing;
 /// </summary>
 public class NullEmailSender : EmailSenderBase
 {
-    public ILogger<NullEmailSender> Logger { get; set; }
-
     /// <summary>
     /// Creates a new <see cref="NullEmailSender"/> object.
     /// </summary>
-    public NullEmailSender(IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
-        : base(configuration, backgroundJobManager)
+    public NullEmailSender(ICurrentTenant currentTenant, IEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
+        : base(currentTenant, configuration, backgroundJobManager)
     {
-        Logger = NullLogger<NullEmailSender>.Instance;
+
     }
 
     protected override Task SendEmailAsync(MailMessage mail)

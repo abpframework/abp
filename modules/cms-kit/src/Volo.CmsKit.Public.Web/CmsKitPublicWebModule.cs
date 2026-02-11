@@ -1,23 +1,24 @@
-﻿using Markdig;
+﻿using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.Ui.LayoutHooks;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
+using Volo.Abp.Ui.LayoutHooks;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
-using Volo.CmsKit.Pages;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.Public.Web.Menus;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.GlobalResources.Script;
 using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.GlobalResources.Style;
 using Volo.CmsKit.Web;
+using Volo.CmsKit.Web.Icons;
 
 namespace Volo.CmsKit.Public.Web;
 
@@ -47,6 +48,14 @@ public class CmsKitPublicWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<CmsKitUiOptions>(options =>
+        {
+            options.MarkedItemIcons[StandardMarkedItems.Favorite] = new LocalizableIconDictionary("fa fa-heart text-danger");
+            options.MarkedItemIcons[StandardMarkedItems.Flagged] = new LocalizableIconDictionary("fa fa-flag text-info");
+            options.MarkedItemIcons[StandardMarkedItems.Bookmark] = new LocalizableIconDictionary("fa fa-bookmark text-primary");
+            options.MarkedItemIcons[StandardMarkedItems.Starred] = new LocalizableIconDictionary("fa fa-star text-warning");
+
+        });
         Configure<AbpNavigationOptions>(options =>
         {
             options.MenuContributors.Add(new CmsKitPublicMenuContributor());
@@ -58,30 +67,23 @@ public class CmsKitPublicWebModule : AbpModule
             options.FileSets.AddEmbedded<CmsKitPublicWebModule>("Volo.CmsKit.Public.Web");
         });
 
-        context.Services.AddAutoMapperObjectMapper<CmsKitPublicWebModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<CmsKitPublicWebModule>(validate: true);
-        });
-
-        context.Services
-            .AddSingleton(_ => new MarkdownPipelineBuilder()
-                .UseAutoLinks()
-                .UseBootstrap()
-                .UseGridTables()
-                .UsePipeTables()
-                .Build());
+        context.Services.AddMapperlyObjectMapper<CmsKitPublicWebModule>();
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(CmsKitPublicRemoteServiceConsts.ModuleName);
         });
 
-        Configure<AbpDistributedCacheOptions>(options =>
+        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
         {
-            options.KeyPrefix = "CmsKit:";
-        });
+            Configure<AbpEndpointRouterOptions>(options =>
+            {
+                options.EndpointConfigureActions.Add(context =>
+                {
+                    context.Endpoints.MapCmsPageRoute();
+                });
+            });
+        }
     }
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
@@ -90,9 +92,13 @@ public class CmsKitPublicWebModule : AbpModule
         {
             Configure<RazorPagesOptions>(options =>
             {
-                options.Conventions.AddPageRoute("/Public/CmsKit/Pages/Index", PageConsts.UrlPrefix + "{slug:minlength(1)}");
-                options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/Index", @"/blogs/{blogSlug:minlength(1)}");
-                options.Conventions.AddPageRoute("/Public/CmsKit/Blogs/BlogPost", @"/blogs/{blogSlug}/{blogPostSlug:minlength(1)}");
+                options.Conventions.AddPageRoute(
+                    "/Public/CmsKit/Blogs/Index",
+                    CmsBlogsWebConsts.BlogsRoutePrefix.EnsureStartsWith('/') + @"/{blogSlug:minlength(1)}");
+
+                options.Conventions.AddPageRoute(
+                    "/Public/CmsKit/Blogs/BlogPost",
+                    CmsBlogsWebConsts.BlogsRoutePrefix.EnsureStartsWith('/') + @"/{blogSlug}/{blogPostSlug:minlength(1)}");
             });
         }
 
@@ -109,17 +115,6 @@ public class CmsKitPublicWebModule : AbpModule
                     typeof(GlobalScriptViewComponent)
                 );
             });
-        }
-
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        var app = context.GetApplicationBuilder();
-        
-        if (GlobalFeatureManager.Instance.IsEnabled<PagesFeature>())
-        {
-            app.UseHomePageDefaultMiddleware();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Volo.Abp;
 
@@ -13,20 +12,14 @@ public class AbpException : Exception
 
     }
 
-    public AbpException(string message)
+    public AbpException(string? message)
         : base(message)
     {
 
     }
 
-    public AbpException(string message, Exception innerException)
+    public AbpException(string? message, Exception? innerException)
         : base(message, innerException)
-    {
-
-    }
-
-    public AbpException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
     {
 
     }

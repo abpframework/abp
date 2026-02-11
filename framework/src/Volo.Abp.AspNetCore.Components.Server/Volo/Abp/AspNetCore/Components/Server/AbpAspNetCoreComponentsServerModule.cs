@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.AspNetCore.Auditing;
+using Volo.Abp.AspNetCore.Components.Server.Extensibility;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.SignalR;
@@ -27,8 +30,11 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());
-        context.Services.AddHttpClient();
+        context.Services.AddHttpClient(nameof(BlazorServerLookupApiRequestService))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.All
+            });
         var serverSideBlazorBuilder = context.Services.AddServerSideBlazor(options =>
         {
             if (context.Services.GetHostingEnvironment().IsDevelopment())
@@ -48,22 +54,20 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
             options.IgnoredUrls.AddIfNotContains("/_blazor");
         });
 
-        Configure<AbpEndpointRouterOptions>(options =>
+        if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
         {
-            options.EndpointConfigureActions.Add(endpointContext =>
+            var preConfigureActions = context.Services.GetPreConfigureActions<HttpConnectionDispatcherOptions>();
+            Configure<AbpEndpointRouterOptions>(options =>
             {
-                endpointContext.Endpoints.MapBlazorHub();
-                endpointContext.Endpoints.MapFallbackToPage("/_Host");
+                options.EndpointConfigureActions.Add(endpointContext =>
+                {
+                    endpointContext.Endpoints.MapBlazorHub(httpConnectionDispatcherOptions =>
+                    {
+                        preConfigureActions.Configure(httpConnectionDispatcherOptions);
+                    });
+                    endpointContext.Endpoints.MapFallbackToPage("/_Host");
+                });
             });
-        });
-    }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        context.GetEnvironment().WebRootFileProvider =
-            new CompositeFileProvider(
-                new ManifestEmbeddedFileProvider(typeof(IServerSideBlazorBuilder).Assembly),
-                context.GetEnvironment().WebRootFileProvider
-            );
+        }
     }
 }

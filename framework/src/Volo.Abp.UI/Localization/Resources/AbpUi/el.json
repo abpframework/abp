@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Αποθηκεύεται...",
     "Actions": "Ενέργειες",
     "Delete": "Διαγραφή",
-    "SuccessfullyDeleted": "Διαγράφηκε με επιτυχία",
+    "CreatedSuccessfully": "Δημιουργήθηκε με επιτυχία",
+    "SavedSuccessfully": "Αποθηκεύτηκε με επιτυχία",
+    "DeletedSuccessfully": "Διαγράφηκε με επιτυχία",
     "Edit": "Επεξεργασία",
     "Refresh": "Ανανέωση",
     "Language": "Γλώσσα",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Εμφάνιση 0 έως 0 από 0 εγγραφές",
     "PagerInfoFiltered": "(φιλτραρισμένο από _MAX_ συνολικές εγγραφές)",
     "NoDataAvailableInDatatable": "Δεν υπάρχουν διαθέσιμα δεδομένα",
+    "ErrorLoadingDatatable": "Παρουσιάστηκε σφάλμα κατά τη διάρκεια του αιτήματος. Ελέγξτε το μήνυμα για λεπτομέρειες.",
     "Total": "Σύνολο",
     "Selected": "Έχει γίνει επιλογή",
     "PagerShowMenuEntries": "Εμφάνιση στοιχείων _MENU_",
@@ -49,6 +52,10 @@
     "ItemWillBeDeletedMessageWithFormat": "Το {0} θα διαγραφεί",
     "ItemWillBeDeletedMessage": "Αυτό το στοιχείο θα διαγραφεί!",
     "ManageYourAccount": "Διαχείριση Λογαριασμού",
-    "OthersGroup":"άλλος"
+    "OthersGroup": "άλλος",
+    "Today": "Σήμερα",
+    "Apply": "Ισχύουν",
+    "EntityActionsDisabledTooltip": "Δεν έχετε δικαίωμα να εκτελέσετε καμία ενέργεια.",
+    "ResourcePermissions": "Δικαιώματα",
   }
 }

@@ -21,13 +21,13 @@ public class EntityPropertyChangeInfo
     /// Maximum length of <see cref="PropertyTypeFullName"/> property.
     /// Value: 512.
     /// </summary>
-    public static int MaxPropertyTypeFullNameLength = 192;
+    public static int MaxPropertyTypeFullNameLength = 512;
 
-    public virtual string NewValue { get; set; }
+    public virtual string? NewValue { get; set; }
 
-    public virtual string OriginalValue { get; set; }
+    public virtual string? OriginalValue { get; set; }
 
-    public virtual string PropertyName { get; set; }
+    public virtual string PropertyName { get; set; } = default!;
 
-    public virtual string PropertyTypeFullName { get; set; }
+    public virtual string PropertyTypeFullName { get; set; } = default!;
 }

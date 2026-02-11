@@ -5,11 +5,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Layout;
 
 public class ContentLayout
 {
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     public BreadCrumb BreadCrumb { get; }
 
-    public string MenuItemName { get; set; }
+    public string? MenuItemName { get; set; }
+
+    public bool ShowToolbar { get; set; } = true;
 
     public ContentLayout()
     {
@@ -23,11 +25,6 @@ public class ContentLayout
             return true;
         }
 
-        if (BreadCrumb.ShowCurrent && !Title.IsNullOrEmpty())
-        {
-            return true;
-        }
-
-        return false;
+        return BreadCrumb.ShowCurrent || BreadCrumb.ShowHome;
     }
 }

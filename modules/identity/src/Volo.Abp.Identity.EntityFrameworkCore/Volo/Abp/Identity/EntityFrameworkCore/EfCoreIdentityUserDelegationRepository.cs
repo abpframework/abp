@@ -20,7 +20,7 @@ public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentity
         Clock = clock;
     }
 
-    public async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .AsNoTracking()
@@ -29,24 +29,26 @@ public class EfCoreIdentityUserDelegationRepository : EfCoreRepository<IIdentity
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
     {
+        var now = Clock.Now;
         return await (await GetDbSetAsync())
             .AsNoTracking()
             .Where(x => x.TargetUserId == targetUserId && 
-                        x.StartTime <= Clock.Now && 
-                        x.EndTime >= Clock.Now)
+                        x.StartTime <= now && 
+                        x.EndTime >= now)
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
+        var now = Clock.Now;
         return await (await GetDbSetAsync())
             .AsNoTracking()
             .FirstOrDefaultAsync(x =>
                     x.Id == id &&
-                    x.StartTime <= Clock.Now &&
-                    x.EndTime >= Clock.Now
+                    x.StartTime <= now &&
+                    x.EndTime >= now
                 , cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

@@ -1,0 +1,9 @@
+{
+  "culture": "ro-RO",
+  "texts": {
+    "TenantNotFoundMessage": "Chiriașul nu a fost găsit!",
+    "TenantNotFoundDetails": "Nu există niciun chiriaș cu ID-ul sau numele chiriașului: {0}",
+    "TenantNotActiveMessage": "Chiriașul nu este activ!",
+    "TenantNotActiveDetails": "Chiriașul nu este activ cu ID-ul sau numele chiriașului: {0}"
+  }
+}

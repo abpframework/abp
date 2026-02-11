@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import { Rule, Tree, strings } from '@angular-devkit/schematics';
@@ -19,6 +19,7 @@ export interface DeclarationToNgModuleOptions {
   flat?: boolean;
   export?: boolean;
   type: string;
+  typeSeparator?: '.' | '-';
   skipImport?: boolean;
   standalone?: boolean;
 }
@@ -30,6 +31,8 @@ export function addDeclarationToNgModule(options: DeclarationToNgModuleOptions):
       return host;
     }
 
+    const typeSeparator = options.typeSeparator ?? '.';
+
     const sourceText = host.readText(modulePath);
     const source = ts.createSourceFile(modulePath, sourceText, ts.ScriptTarget.Latest, true);
 
@@ -37,11 +40,11 @@ export function addDeclarationToNgModule(options: DeclarationToNgModuleOptions):
       `/${options.path}/` +
       (options.flat ? '' : strings.dasherize(options.name) + '/') +
       strings.dasherize(options.name) +
-      (options.type ? '.' : '') +
-      strings.dasherize(options.type);
+      (options.type ? typeSeparator + strings.dasherize(options.type) : '');
 
     const importPath = buildRelativePath(modulePath, filePath);
-    const classifiedName = strings.classify(options.name) + strings.classify(options.type);
+    const classifiedName =
+      strings.classify(options.name) + (options.type ? strings.classify(options.type) : '');
     const changes = addDeclarationToModule(source, modulePath, classifiedName, importPath);
 
     if (options.export) {

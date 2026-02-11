@@ -1,0 +1,100 @@
+@page "/"
+@using Volo.Abp.MultiTenancy
+@inherits MyProjectNameComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="row mb-3">
+    <div class="col-xl-6 col-12 d-flex">
+        <div class="card h-lg-100 w-100 overflow-hidden">
+            <div class="card-body">
+                <div class="starting-content">
+                    <h3>Getting Started</h3>
+                    <p class="lead text-muted mb-2">Learn how to create and run a new web application using the application startup template.</p>
+                    <a href="https://docs.abp.io/en/commercial/latest/getting-started" class="btn btn-brand mb-4" target="_blank">Getting Started</a>
+
+                    <h4>Web Application Development Tutorial</h4>
+                    <p class="text-muted mb-2">Learn how to build an ABP based web application named Acme.BookStore.</p>
+                    <a href="https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF" class="btn btn-primary soft mb-4" target="_blank">Explore Tutorial</a>
+
+                    <h4>Customize Lepton Theme</h4>
+                    <p class="text-muted mb-2">Learn how to customize LeptonX Theme as you wish.</p>
+                    <a href="https://docs.abp.io/en/commercial/latest/themes/lepton/customizing-lepton-theme" class="btn btn-primary soft mb-5 mb-xl-0" target="_blank">Customize Lepton</a>
+                </div>
+                <img class="card-bg-image" src="/images/getting-started/bg-01.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card h-100 overflow-hidden">
+            <div class="card-body">
+                <div class="abp-support abp-logo mb-2"></div>
+                <p class="text-muted mb-2">You can check for similar problems and solutions, or open a new topic to discuss your specific issue.</p>
+                <a href="https://support.abp.io/QA/Questions" class="btn btn-brand soft" target="_blank">Visit Support</a>
+                <img class="" src="/images/getting-started/img-support.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 d-flex">
+        <div class="card h-100 overflow-hidden">
+            <div class="card-body">
+                <div class="abp-community abp-logo mb-2"></div>
+                <p class="lead text-muted">A unique community platform for <span class="fw-bold">ABP Lovers!</span></p>
+                <p class="text-muted mb-2">Explore all ABP users' experiences with the ABP Framework, discover articles and videos on how to use ABP, and join raffles for a chance to win surprise gifts!</p>
+                <a class="btn btn-brand soft mb-3" href="https://community.abp.io/" target="_blank">Join ABP Community</a>
+            </div>
+            <img class="mt-3" src="/images/getting-started/img-community.png">
+        </div>
+    </div>
+</div>
+
+<div class="my-3 text-center">
+    <h3>Let's improve your application!</h3>
+    <p>Here are some links to help you get started:</p>
+</div>
+
+<div class="card mt-4 mb-5">
+    <div class="card-body">
+        <div class="row text-center justify-content-md-center">
+            <div class="col-lg-4">
+                <div class="p-4">
+                    <h5 class="mb-3"><i class="fas fa-book text-secondary d-block my-3 fa-2x"></i> Learn the ABP Framework</h5>
+                    <p>Explore the comprehensive documentation to learn how to build a modern web application.</p>
+                    <a href="https://abp.io/docs/latest?ref=tmpl" target="_blank" class="btn btn-link px-1">See Documents <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-4 border-start">
+                <div class="p-4">
+                    <h5 class="mb-3"><i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> Samples</h5>
+                    <p>See the example projects built with the ABP Framework.</p>
+                    <a href="https://abp.io/docs/latest/samples?ref=tmpl" target="_blank" class="btn btn-link px-1">All samples <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-4 border-start">
+                <div class="p-4">
+                    <h5 class="mb-3"><i class="fas fa-users text-secondary d-block my-3 fa-2x"></i> ABP Community</h5>
+                    <p>Get involved with a vibrant community and become a contributor.</p>
+                    <a href="https://abp.io/community/" target="_blank" class="btn btn-link px-1">Community <i class="fas fa-chevron-right"></i></a>
+                    <a href="https://abp.io/docs/latest/contribution?ref=tmpl" target="_blank" class="btn btn-link px-1">Contribute <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mt-lg-3 justify-content-md-center">
+            <div class="col-lg-4">
+                <div class="p-4">
+                    <h5 class="mb-3"><i class="fas fa-pen-nib text-secondary d-block my-3 fa-2x"></i> ABP Blog</h5>
+                    <p>Take a look at our recently published articles.</p>
+                    <a href="https://abp.io/blog?ref=tmpl" target="_blank" class="btn btn-link px-1">See Blog <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-4 border-start">
+                <div class="p-4">
+                    <h5 class="mb-3"><i class="fab fa-github text-secondary d-block my-3 fa-2x"></i> Github</h5>
+                    <p>Do you love the ABP Framework? Please <strong>give a star</strong> to support it!</p>
+                    <a href="https://github.com/abpframework/abp/" target="_blank" class="btn btn-link px-1">See Open Source Framework <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

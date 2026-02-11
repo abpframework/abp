@@ -17,13 +17,13 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
 
     private readonly Lazy<IStringLocalizerFactory> _stringLocalizerFactory;
     private readonly Lazy<IOptions<MvcDataAnnotationsLocalizationOptions>> _localizationOptions;
-    private readonly ConcurrentDictionary<DisplayMetadataProviderContext, string> _displayNameKeys;
+    private readonly ConcurrentDictionary<DisplayMetadataProviderContext, string?> _displayNameKeys;
 
     public AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(IServiceCollection services)
     {
         _stringLocalizerFactory = services.GetRequiredServiceLazy<IStringLocalizerFactory>();
         _localizationOptions = services.GetRequiredServiceLazy<IOptions<MvcDataAnnotationsLocalizationOptions>>();
-        _displayNameKeys = new ConcurrentDictionary<DisplayMetadataProviderContext, string>();
+        _displayNameKeys = new ConcurrentDictionary<DisplayMetadataProviderContext, string?>();
     }
 
     public virtual void CreateDisplayMetadata(DisplayMetadataProviderContext context)
@@ -58,11 +58,11 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
         displayMetadata.DisplayName = () =>
         {
             var key = _displayNameKeys.GetOrAdd(context, _ => GetDisplayNameKey(context, localizer));
-            return key != null ? localizer[key] : null;
+            return (key != null ? localizer[key] : null)!;
         };
     }
 
-    protected virtual string GetDisplayNameKey(DisplayMetadataProviderContext context, IStringLocalizer localizer)
+    protected virtual string? GetDisplayNameKey(DisplayMetadataProviderContext context, IStringLocalizer localizer)
     {
         /*
         * DisplayName:ClassName:PropertyName
@@ -71,7 +71,7 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
         * PropertyName
         */
 
-        LocalizedString localizedString = null;
+        LocalizedString? localizedString = null;
 
         if (context.Key.ContainerType != null)
         {
@@ -102,7 +102,7 @@ public class AbpDataAnnotationAutoLocalizationMetadataDetailsProvider : IDisplay
 
         if (localizedString.ResourceNotFound)
         {
-            localizedString = localizer[context.Key.Name];
+            localizedString = localizer[context.Key.Name!];
             if (!localizedString.ResourceNotFound)
             {
                 return localizedString.Name;

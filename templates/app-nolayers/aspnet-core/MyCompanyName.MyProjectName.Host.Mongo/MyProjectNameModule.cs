@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using OpenIddict.Validation.AspNetCore;
@@ -19,7 +19,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.MongoDB;
@@ -40,6 +40,8 @@ using Volo.Abp.SettingManagement.MongoDB;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.MongoDB;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation.Localization;
@@ -52,7 +54,7 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -100,6 +102,9 @@ public class MyProjectNameModule : AbpModule
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(
@@ -107,15 +112,31 @@ public class MyProjectNameModule : AbpModule
             );
         });
 
-		PreConfigure<OpenIddictBuilder>(builder =>
-		{
-			builder.AddValidation(options =>
-			{
-				options.AddAudiences("MyProjectName");
-				options.UseLocalServer();
-				options.UseAspNetCore();
-			});
-		});
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("MyProjectName");
+                options.UseLocalServer();
+                options.UseAspNetCore();
+            });
+        });
+
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+            {
+                serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
+            });
+        }
+        
+        MyProjectNameGlobalFeatureConfigurator.Configure();
+        MyProjectNameModuleExtensionConfigurator.Configure();
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -132,7 +153,7 @@ public class MyProjectNameModule : AbpModule
         ConfigureBundles();
         ConfigureMultiTenancy();
         ConfigureUrls(configuration);
-        ConfigureAutoMapper(context);
+        ConfigureMapperly(context);
         ConfigureSwagger(context.Services, configuration);
         ConfigureAutoApiControllers();
         ConfigureVirtualFiles(hostingEnvironment);
@@ -145,6 +166,10 @@ public class MyProjectNameModule : AbpModule
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
         context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
     }
 
     private void ConfigureBundles()
@@ -197,16 +222,16 @@ public class MyProjectNameModule : AbpModule
             options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
             options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
             options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic", "is"));
-            options.Languages.Add(new LanguageInfo("it", "it", "Italiano", "it"));
+            options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi"));
+            options.Languages.Add(new LanguageInfo("is", "is", "Icelandic"));
+            options.Languages.Add(new LanguageInfo("it", "it", "Italiano"));
             options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
             options.Languages.Add(new LanguageInfo("ro-RO", "ro-RO", "Română"));
             options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
             options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
             options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+            options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
         });
@@ -241,7 +266,7 @@ public class MyProjectNameModule : AbpModule
     private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAbpSwaggerGenWithOAuth(
-            configuration["AuthServer:Authority"],
+            configuration["AuthServer:Authority"]!,
             new Dictionary<string, string>
             {
                     {"MyProjectName", "MyProjectName API"}
@@ -254,17 +279,9 @@ public class MyProjectNameModule : AbpModule
             });
     }
 
-    private void ConfigureAutoMapper(ServiceConfigurationContext context)
+    private void ConfigureMapperly(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<MyProjectNameModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            /* Uncomment `validate: true` if you want to enable the Configuration Validation feature.
-             * See AutoMapper's documentation to learn what it is:
-             * https://docs.automapper.org/en/stable/Configuration-validation.html
-             */
-            options.AddMaps<MyProjectNameModule>(/* validate: true */);
-        });
+        context.Services.AddMapperlyObjectMapper<MyProjectNameModule>();
     }
 
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
@@ -325,7 +342,7 @@ public class MyProjectNameModule : AbpModule
         }
 
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
@@ -337,6 +354,7 @@ public class MyProjectNameModule : AbpModule
         }
 
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
         app.UseAuthorization();
 
         app.UseSwagger();

@@ -17,7 +17,7 @@ namespace Volo.Abp.Cli.Commands;
 public class LoginCommand : IConsoleCommand, ITransientDependency
 {
     public const string Name = "login";
-    
+
     public ILogger<LoginCommand> Logger { get; set; }
 
     protected AuthService AuthService { get; }
@@ -122,6 +122,12 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
             return;
         }
 
+        if (ex.Message.Contains("RequiresTwoFactor"))
+        {
+            Logger.LogError("Two factor authentication is enabled for your account. Please use `abp login --device` command to login.");
+            return;
+        }
+
         if (TryGetErrorMessageFromHtmlPage(ex.Message, out var errorMsg))
         {
             Logger.LogError(errorMsg);
@@ -177,12 +183,12 @@ public class LoginCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp login john");
         sb.AppendLine("  abp login john -p 1234");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Sign in to " + CliUrls.AccountAbpIo + ".";
     }

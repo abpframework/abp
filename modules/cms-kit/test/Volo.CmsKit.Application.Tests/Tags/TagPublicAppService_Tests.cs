@@ -43,4 +43,13 @@ public class TagPublicAppService_Tests : CmsKitApplicationTestBase
 
         list.ShouldBeEmpty();
     }
+    
+    [Fact]
+    public async Task GetPopularTagsAsync()
+    {
+        var list = await _tagAppService.GetPopularTagsAsync(_cmsKitTestData.Content_1_EntityType, 2);
+
+        list.ShouldNotBeEmpty();
+        list.Count.ShouldBe(2);
+    }
 }

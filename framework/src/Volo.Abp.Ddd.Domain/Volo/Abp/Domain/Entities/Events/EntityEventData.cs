@@ -27,7 +27,7 @@ public class EntityEventData<TEntity> : IEventDataWithInheritableGenericArgument
 
     public virtual object[] GetConstructorArgs()
     {
-        return new object[] { Entity };
+        return new object[] { Entity! };
     }
 
     public virtual bool IsMultiTenant(out Guid? tenantId)

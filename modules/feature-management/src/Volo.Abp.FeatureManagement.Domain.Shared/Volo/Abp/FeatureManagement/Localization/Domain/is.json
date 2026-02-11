@@ -4,9 +4,14 @@
     "Features": "Eiginleikar",
     "NoFeatureFoundMessage": "Enginn eiginleiki í boði.",
     "ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
+    "ManageHostFeaturesText": "Þú getur stjórnað hýsingareiginleikum með því að smella á eftirfarandi hnapp.",
     "Permission:FeatureManagement": "Eiginleika stjórnun",
     "Permission:FeatureManagement.ManageHostFeatures": "Stjórna Gestgjafa Eiginleikum",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "eiginleikagildið {0} er ekki gilt",
-		"Menu:FeatureManagement": "Eiginleikastjórnun"
+    "Menu:FeatureManagement": "Eiginleikastjórnun",
+    "ResetToDefault": "Endurstilla í sjálfgefið",
+    "ResetedToDefault": "Núllstillt í sjálfgefið",
+    "AreYouSure": "Ertu viss?",
+    "AreYouSureToResetToDefault": "Ertu viss um að núllstilla á sjálfgefið?"
   }
 }

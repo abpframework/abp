@@ -54,7 +54,7 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
                 {
                     if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
                     {
-                        await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs }));
+                        await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs })!);
                     }
                     else
                     {
@@ -74,7 +74,7 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
 
             throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
             {
-                JobType = context.JobType.AssemblyQualifiedName,
+                JobType = context.JobType.AssemblyQualifiedName!,
                 JobArgs = context.JobArgs
             };
         }

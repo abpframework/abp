@@ -12,13 +12,13 @@ namespace Volo.Abp.Application.Dtos;
 public abstract class FullAuditedEntityWithUserDto<TUserDto> : FullAuditedEntityDto, IFullAuditedObject<TUserDto>
 {
     /// <inheritdoc />
-    public TUserDto Creator { get; set; }
+    public TUserDto? Creator { get; set; }
 
     /// <inheritdoc />
-    public TUserDto LastModifier { get; set; }
+    public TUserDto? LastModifier { get; set; }
 
     /// <inheritdoc />
-    public TUserDto Deleter { get; set; }
+    public TUserDto? Deleter { get; set; }
 }
 
 /// <summary>
@@ -31,11 +31,11 @@ public abstract class FullAuditedEntityWithUserDto<TUserDto> : FullAuditedEntity
 public abstract class FullAuditedEntityWithUserDto<TPrimaryKey, TUserDto> : FullAuditedEntityDto<TPrimaryKey>, IFullAuditedObject<TUserDto>
 {
     /// <inheritdoc />
-    public TUserDto Creator { get; set; }
+    public TUserDto? Creator { get; set; }
 
     /// <inheritdoc />
-    public TUserDto LastModifier { get; set; }
+    public TUserDto? LastModifier { get; set; }
 
     /// <inheritdoc />
-    public TUserDto Deleter { get; set; }
+    public TUserDto? Deleter { get; set; }
 }

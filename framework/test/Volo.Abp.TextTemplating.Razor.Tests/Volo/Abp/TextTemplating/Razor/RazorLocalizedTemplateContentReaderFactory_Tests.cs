@@ -12,7 +12,8 @@ public class RazorLocalizedTemplateContentReaderFactory_Tests : LocalizedTemplat
         LocalizedTemplateContentReaderFactory = new LocalizedTemplateContentReaderFactory(
             new PhysicalFileVirtualFileProvider(
                 new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
-                    "Volo", "Abp", "TextTemplating", "Razor"))));
+                    "Volo", "Abp", "TextTemplating", "Razor"))),
+            GetRequiredService<IAbpHostEnvironment>());
 
         WelcomeEmailEnglishContent = "@inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase<Volo.Abp.TextTemplating.Razor.RazorTemplateRendererProvider_Tests.WelcomeEmailModel>" +
                          Environment.NewLine +

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using RabbitMQ.Client;
 
@@ -13,29 +14,30 @@ public class QueueDeclareConfiguration
     public bool Exclusive { get; set; }
 
     public bool AutoDelete { get; set; }
-    
-    public ushort? PrefetchCount { get; set; } 
 
-    public IDictionary<string, object> Arguments { get; }
+    public ushort? PrefetchCount { get; set; }
+
+    public IDictionary<string, object?> Arguments { get; }
 
     public QueueDeclareConfiguration(
         [NotNull] string queueName,
         bool durable = true,
         bool exclusive = false,
         bool autoDelete = false,
-        ushort? prefetchCount = null)
+        ushort? prefetchCount = null,
+        IDictionary<string, object?>? arguments = null)
     {
         QueueName = queueName;
         Durable = durable;
         Exclusive = exclusive;
         AutoDelete = autoDelete;
-        Arguments = new Dictionary<string, object>();
+        Arguments = arguments?? new Dictionary<string, object?>();
         PrefetchCount = prefetchCount;
     }
 
-    public virtual QueueDeclareOk Declare(IModel channel)
+    public virtual async Task<QueueDeclareOk> DeclareAsync(IChannel channel)
     {
-        return channel.QueueDeclare(
+        return await channel.QueueDeclareAsync(
             queue: QueueName,
             durable: Durable,
             exclusive: Exclusive,

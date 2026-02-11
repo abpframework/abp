@@ -32,8 +32,7 @@ public class ToolbarConfigurationContext : IToolbarConfigurationContext
         return AuthorizationService.IsGrantedAsync(policyName);
     }
 
-    [CanBeNull]
-    public IStringLocalizer GetDefaultLocalizer()
+    public IStringLocalizer? GetDefaultLocalizer()
     {
         return StringLocalizerFactory.CreateDefaultOrNull();
     }

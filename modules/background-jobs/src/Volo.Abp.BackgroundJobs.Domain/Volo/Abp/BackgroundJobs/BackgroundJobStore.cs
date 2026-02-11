@@ -34,10 +34,10 @@ public class BackgroundJobStore : IBackgroundJobStore, ITransientDependency
         );
     }
 
-    public virtual async Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
+    public virtual async Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(string applicationName, int maxResultCount)
     {
         return ObjectMapper.Map<List<BackgroundJobRecord>, List<BackgroundJobInfo>>(
-            await BackgroundJobRepository.GetWaitingListAsync(maxResultCount)
+            await BackgroundJobRepository.GetWaitingListAsync(applicationName, maxResultCount)
         );
     }
 

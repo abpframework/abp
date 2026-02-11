@@ -2,10 +2,11 @@
   "culture": "zh-Hant",
   "texts": {
     "Settings": "設置",
-    "SuccessfullySaved": "保存成功",
+    "SavedSuccessfully": "保存成功",
     "Permission:SettingManagement": "設定管理",
     "Permission:Emailing": "信箱",
     "Permission:EmailingTest": "郵件測試",
+    "Permission:TimeZone": "時區",
     "SendTestEmail": "發送測試郵件",
     "SenderEmailAddress": "發送者電子郵件地址",
     "TargetEmailAddress": "目標電子郵件地址",
@@ -13,9 +14,15 @@
     "Body": "內文",
     "TestEmailSubject": "測試郵件 {0}",
     "TestEmailBody": "測試郵件內容",
-    "SuccessfullySent": "成功發送",
+    "SentSuccessfully": "發送成功",
+    "MailSendingFailed": "郵件發送失敗,請檢查你的郵件配置並重試.",
     "Send": "發送",
+    "Menu:Settings": "設置",
     "Menu:Emailing": "信箱",
+    "Menu:TimeZone": "時區",
+    "DisplayName:Timezone": "時區",
+    "TimezoneHelpText": "此功能允許您為伺服器設置預設時區，同時用戶可以選擇自己的時區。如果用戶的時區與伺服器的時區不同，所有時間將相應調整。例如，如果伺服器設置為歐洲/倫敦(00:00)，而用戶在歐洲/巴黎(+01:00)，則該用戶的時間將調整1小時。選擇'預設時區'將自動使用伺服器或瀏覽器的時區。",
+    "DefaultTimeZone": "預設時區",
     "SmtpHost": "主機",
     "SmtpPort": "Port",
     "SmtpUserName": "帳號",
@@ -28,7 +35,8 @@
     "Feature:SettingManagementGroup": "設定管理",
     "Feature:SettingManagementEnable": "啟用設定管理",
     "Feature:SettingManagementEnableDescription": "在應用程序中啟用設定管理系統.",
-    "Feature:AllowChangingEmailSettings": "允許更改電子郵件設置。",
-    "Feature:AllowChangingEmailSettingsDescription": "允許更改電子郵件設置。"
+    "Feature:AllowChangingEmailSettings": "允許更改電子郵件設置",
+    "Feature:AllowChangingEmailSettingsDescription": "允許更改電子郵件設置。",
+    "SmtpPasswordPlaceholder": "輸入一個值以更新密碼"
   }
 }

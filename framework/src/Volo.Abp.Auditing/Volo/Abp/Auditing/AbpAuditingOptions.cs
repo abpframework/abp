@@ -26,7 +26,7 @@ public class AbpAuditingOptions
     /// The name of the application or service writing audit logs.
     /// Default: null.
     /// </summary>
-    public string ApplicationName { get; set; }
+    public string? ApplicationName { get; set; }
 
     /// <summary>
     /// Default: true.
@@ -52,6 +52,12 @@ public class AbpAuditingOptions
     public List<Type> IgnoredTypes { get; }
 
     public IEntityHistorySelectorList EntityHistorySelectors { get; }
+
+    /// <summary>
+    /// Default: true.
+    /// Save entity changes to audit log when any navigation property changes.
+    /// </summary>
+    public bool SaveEntityHistoryWhenNavigationChanges { get; set; } = true;
 
     //TODO: Move this to asp.net core layer or convert it to a more dynamic strategy?
     /// <summary>

@@ -37,6 +37,13 @@ public class AbpAutoMapperModule_Basic_Tests : AbpIntegratedTest<AutoMapperTestM
         dto.Number.ShouldBe(42);
     }
 
+    [Fact]
+    public void Should_Map_Enum()
+    {
+        var dto = _objectMapper.Map<MyEnum, MyEnumDto>(MyEnum.Value3);
+        dto.ShouldBe(MyEnumDto.Value2); //Value2 is same as Value3
+    }
+
     //[Fact] TODO: Disabled because of https://github.com/AutoMapper/AutoMapper/pull/2379#issuecomment-355899664
     /*public void Should_Not_Map_Objects_With_AutoMap_Attributes()
     {

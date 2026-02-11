@@ -7,13 +7,15 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
-using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
@@ -25,7 +27,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected ISettingProvider SettingProvider { get; }
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
-
+    protected IDistributedEventBus DistributedEventBus { get; }
+    protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
     public IdentityUserManager(
@@ -42,7 +46,10 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ILogger<IdentityUserManager> logger,
         ICancellationTokenProvider cancellationTokenProvider,
         IOrganizationUnitRepository organizationUnitRepository,
-        ISettingProvider settingProvider)
+        ISettingProvider settingProvider,
+        IDistributedEventBus distributedEventBus,
+        IIdentityLinkUserRepository identityLinkUserRepository,
+        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache)
         : base(
             store,
             optionsAccessor,
@@ -56,8 +63,11 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
         OrganizationUnitRepository = organizationUnitRepository;
         SettingProvider = settingProvider;
+        DistributedEventBus = distributedEventBus;
         RoleRepository = roleRepository;
         UserRepository = userRepository;
+        IdentityLinkUserRepository = identityLinkUserRepository;
+        DynamicClaimCache = dynamicClaimCache;
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
@@ -70,6 +80,56 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return await CreateAsync(user);
+    }
+
+    public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
+    {
+        user.Claims.Clear();
+        user.Roles.Clear();
+        user.Tokens.Clear();
+        user.Logins.Clear();
+        user.OrganizationUnits.Clear();
+        await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
+        await UpdateAsync(user);
+
+        return await base.DeleteAsync(user);
+    }
+
+    protected async override Task<IdentityResult> UpdateUserAsync(IdentityUser user)
+    {
+        var result = await base.UpdateUserAsync(user);
+
+        if (result.Succeeded)
+        {
+            await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// This is to call the protection method ValidateUserAsync
+    /// Should return <see cref="IdentityResult.Success"/> if validation is successful. This is
+    /// called before saving the user via Create or Update.
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
+    public virtual async Task<IdentityResult> CallValidateUserAsync(IdentityUser user)
+    {
+        return await base.ValidateUserAsync(user);
+    }
+
+    /// <summary>
+    /// This is to call the protection method ValidatePasswordAsync
+    /// Should return <see cref="IdentityResult.Success"/> if validation is successful. This is
+    /// called before updating the password hash.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <param name="password">The password.</param>
+    /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
+    public virtual async Task<IdentityResult> CallValidatePasswordAsync(IdentityUser user, string password)
+    {
+        return await base.ValidatePasswordAsync(user, password);
     }
 
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
@@ -141,6 +201,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         user.AddOrganizationUnit(ou.Id);
         await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
+
+        await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
     }
 
     public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
@@ -148,6 +210,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         var user = await UserRepository.GetAsync(userId, cancellationToken: CancellationToken);
         user.RemoveOrganizationUnit(ouId);
         await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
+
+        await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), token: CancellationToken);
     }
 
     public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
@@ -274,5 +338,221 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         var passwordChangePeriodDays = await SettingProvider.GetAsync<int>(IdentitySettingNames.Password.PasswordChangePeriodDays);
 
         return passwordChangePeriodDays > 0 && lastPasswordChangeTime.AddDays(passwordChangePeriodDays) < DateTime.UtcNow;
+    }
+
+    public virtual async Task ResetRecoveryCodesAsync(IdentityUser user)
+    {
+        if (!(Store is IdentityUserStore identityUserStore))
+        {
+            throw new AbpException($"Store is not an instance of {typeof(IdentityUserStore).AssemblyQualifiedName}");
+        }
+
+        await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
+    }
+
+    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string email)
+    {
+        var oldMail = user.Email;
+
+        var result = await base.SetEmailAsync(user, email);
+
+        result.CheckErrors();
+
+        if (!string.IsNullOrEmpty(oldMail) && !oldMail.Equals(email, StringComparison.OrdinalIgnoreCase))
+        {
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserEmailChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    Email = email,
+                    OldEmail = oldMail
+                });
+        }
+
+        return result;
+    }
+
+    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
+    {
+        var oldUserName = user.UserName;
+
+        var result = await base.SetUserNameAsync(user, userName);
+
+        result.CheckErrors();
+
+        if (!string.IsNullOrEmpty(oldUserName) && oldUserName != userName)
+        {
+            await DistributedEventBus.PublishAsync(
+                new IdentityUserUserNameChangedEto
+                {
+                    Id = user.Id,
+                    TenantId = user.TenantId,
+                    UserName = userName,
+                    OldUserName = oldUserName
+                });
+        }
+
+        return result;
+    }
+
+    public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId)
+    {
+        var sourceRole = await RoleRepository.GetAsync(sourceRoleId, cancellationToken: CancellationToken);
+
+        Logger.LogDebug($"Remove dynamic claims cache for users of role: {sourceRoleId}");
+        var userIdList = await UserRepository.GetUserIdListByRoleIdAsync(sourceRoleId, cancellationToken: CancellationToken);
+        await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, sourceRole.TenantId)), token: CancellationToken);
+
+        var targetRole = targetRoleId.HasValue ? await RoleRepository.GetAsync(targetRoleId.Value, cancellationToken: CancellationToken) : null;
+        if (targetRole != null)
+        {
+            Logger.LogDebug($"Remove dynamic claims cache for users of role: {targetRoleId}");
+            userIdList = await UserRepository.GetUserIdListByRoleIdAsync(targetRoleId.Value, cancellationToken: CancellationToken);
+            await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetRole.TenantId)), token: CancellationToken);
+        }
+
+        await UserRepository.UpdateRoleAsync(sourceRoleId, targetRoleId, CancellationToken);
+    }
+
+    public virtual async Task UpdateOrganizationAsync(Guid sourceOrganizationId, Guid? targetOrganizationId)
+    {
+        var sourceOrganization = await OrganizationUnitRepository.GetAsync(sourceOrganizationId, cancellationToken: CancellationToken);
+
+        Logger.LogDebug($"Remove dynamic claims cache for users of organization: {sourceOrganizationId}");
+        var userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(sourceOrganizationId, includeChildren: true, cancellationToken: CancellationToken);
+        await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, sourceOrganization.TenantId)), token: CancellationToken);
+
+        var targetOrganization = targetOrganizationId.HasValue ? await OrganizationUnitRepository.GetAsync(targetOrganizationId.Value, cancellationToken: CancellationToken) : null;
+        if (targetOrganization != null)
+        {
+            Logger.LogDebug($"Remove dynamic claims cache for users of organization: {targetOrganizationId}");
+            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganizationId.Value, includeChildren: true, cancellationToken: CancellationToken);
+            await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetOrganization.TenantId)), token: CancellationToken);
+        }
+
+        await UserRepository.UpdateOrganizationAsync(sourceOrganizationId, targetOrganizationId, CancellationToken);
+    }
+
+    public virtual async Task<bool> ValidateUserNameAsync(string userName, Guid? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrEmpty(Options.User.AllowedUserNameCharacters) && userName.Any(c => !Options.User.AllowedUserNameCharacters.Contains(c)))
+        {
+            return false;
+        }
+
+        var owner = await FindByNameAsync(userName);
+        if (owner != null && owner.Id != userId)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public virtual Task<string> GetRandomUserNameAsync(int length)
+    {
+        var allowedUserNameCharacters = Options.User.AllowedUserNameCharacters;
+        if (allowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            allowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        }
+
+        var randomUserName = string.Empty;
+        var random = new Random();
+        while (randomUserName.Length < length)
+        {
+            randomUserName += allowedUserNameCharacters[random.Next(0, allowedUserNameCharacters.Length)];
+        }
+
+        return Task.FromResult(randomUserName);
+    }
+
+    public virtual async Task<string> GetUserNameFromEmailAsync(string email)
+    {
+        const int maxTryCount = 20;
+        var tryCount = 0;
+
+        var userName = email.Split('@')[0];
+
+        if (await ValidateUserNameAsync(userName))
+        {
+            // The username is valid.
+            return userName;
+        }
+
+        if (Options.User.AllowedUserNameCharacters.IsNullOrWhiteSpace())
+        {
+            // The AllowedUserNameCharacters is not set. So, we are generating a random username.
+            tryCount = 0;
+            do
+            {
+                var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else if (!userName.All(Options.User.AllowedUserNameCharacters.Contains))
+        {
+            // The username contains not allowed characters. So, we are generating a random username.
+            do
+            {
+                var randomUserName = await GetRandomUserNameAsync(userName.Length);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else if (Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().Count() >= 4)
+        {
+            // The AllowedUserNameCharacters includes 4 numbers. So, we are generating 4 random numbers and appending to the username.
+            var numbers = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
+            var minArray = numbers.OrderBy(x => x).ToArray();
+            if (minArray[0] == '0')
+            {
+                var secondItem = minArray[1];
+                minArray[0] = secondItem;
+                minArray[1] = '0';
+            }
+            var min = int.Parse(new string(minArray));
+            var max = int.Parse(new string(numbers.OrderByDescending(x => x).ToArray()));
+            tryCount = 0;
+            do
+            {
+                var randomUserName = userName + RandomHelper.GetRandom(min, max);
+                if ( await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+        else
+        {
+            tryCount = 0;
+            do
+            {
+                // The AllowedUserNameCharacters does not include numbers. So, we are generating 4 random characters and appending to the username.
+                var randomUserName = userName + await GetRandomUserNameAsync(4);
+                if (await ValidateUserNameAsync(randomUserName))
+                {
+                    return randomUserName;
+                }
+                tryCount++;
+            } while (tryCount < maxTryCount);
+        }
+
+        Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
+        throw new AbpIdentityResultException(IdentityResult.Failed(ErrorDescriber.InvalidUserName(userName)));
     }
 }

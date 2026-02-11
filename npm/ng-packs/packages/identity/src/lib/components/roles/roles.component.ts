@@ -1,16 +1,37 @@
-import { ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
-import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import {Confirmation, ConfirmationService, ToasterService} from '@abp/ng.theme.shared';
 import {
+  InitDirective,
+  ListService,
+  LocalizationPipe,
+  PagedAndSortedResultRequestDto,
+  PagedResultDto,
+  ReplaceableTemplateDirective
+} from '@abp/ng.core';
+import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
+import {
+  ePermissionManagementComponents,
+  PermissionManagementComponent,
+} from '@abp/ng.permission-management';
+import {
+  ButtonComponent,
+  Confirmation,
+  ConfirmationService,
+  ModalCloseDirective,
+  ModalComponent,
+  ToasterService,
+} from '@abp/ng.theme.shared';
+import {
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
-import { Component, Injector, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+} from '@abp/ng.components/extensible';
+import { Component, inject, Injector, OnInit } from '@angular/core';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
+import { PageComponent } from '@abp/ng.components/page';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
   selector: 'abp-roles',
@@ -22,35 +43,40 @@ import { eIdentityComponents } from '../../enums/components';
       useValue: eIdentityComponents.Roles,
     },
   ],
+  imports: [
+    ReactiveFormsModule,
+    LocalizationPipe,
+    ExtensibleTableComponent,
+    ModalComponent,
+    ButtonComponent,
+    PageComponent,
+    ExtensibleFormComponent,
+    ModalCloseDirective,
+    PermissionManagementComponent,
+    ReplaceableTemplateDirective,
+    NgxValidateCoreModule,
+    InitDirective,
+  ],
 })
 export class RolesComponent implements OnInit {
+  protected readonly list = inject(ListService<PagedAndSortedResultRequestDto>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly injector = inject(Injector);
+  protected readonly service = inject(IdentityRoleService);
+
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
-
   form!: UntypedFormGroup;
-
   selected?: IdentityRoleDto;
-
   isModalVisible!: boolean;
-
   visiblePermissions = false;
-
   providerKey?: string;
-
   modalBusy = false;
-
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   onVisiblePermissionChange = (event: boolean) => {
     this.visiblePermissions = event;
   };
-
-  constructor(
-    public readonly list: ListService<PagedAndSortedResultRequestDto>,
-    protected confirmationService: ConfirmationService,
-    private toasterService: ToasterService,
-    protected injector: Injector,
-    protected service: IdentityRoleService,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();
@@ -90,6 +116,7 @@ export class RolesComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
   }
@@ -101,14 +128,18 @@ export class RolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.toasterService.success('AbpUi::SuccessfullyDeleted');
+          this.toasterService.success('AbpUi::DeletedSuccessfully');
           this.service.delete(id).subscribe(() => this.list.get());
         }
       });
   }
 
   private hookToQuery() {
-    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
+    this.list
+      .hookToQuery(query => this.service.getList(query))
+      .subscribe(res => {
+        this.data = res;
+      });
   }
 
   openPermissionsModal(providerKey: string) {

@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Úkladanie...",
     "Actions": "Akcie",
     "Delete": "Odstrániť",
-    "SuccessfullyDeleted": "Úspešne odstránené",
+    "CreatedSuccessfully": "Úspešne vytvorené",
+    "SavedSuccessfully": "Úspešne uložené",
+    "DeletedSuccessfully": "Úspešne odstránené",
     "Edit": "Upraviť",
     "Refresh": "Obnoviť",
     "Language": "Jazyk",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Zobrazených 0 až 0 z 0 záznamov",
     "PagerInfoFiltered": "(filtrované z celkom _MAX_ záznamov)",
     "NoDataAvailableInDatatable": "Nie sú k dispozícii žiadne údaje",
+    "ErrorLoadingDatatable": "Počas žiadosti došlo k chybe. Skontrolujte správu pre podrobnosti.",
     "Total": "celkom",
     "Selected": "vybrané",
     "PagerShowMenuEntries": "Zobraziť _MENU_ záznamov",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} sa vymaže!",
     "ItemWillBeDeletedMessage": "Táto položka bude vymazaná!",
     "ManageYourAccount": "Spravovať svoje konto",
-    "OthersGroup": "Iné"
+    "OthersGroup": "Iné",
+    "Today": "Dnes",
+    "Apply": "Použiť",
+    "InternetConnectionInfo": "Operáciu nebolo možné vykonať. Vaše internetové pripojenie momentálne nie je dostupné.",
+    "CopiedToTheClipboard": "Skopírované do schránky",
+    "AddNew": "Pridať nové",
+    "ProfilePicture": "Profilový obrázok",
+    "Theme": "Téma",
+    "NotAssigned": "Nepridelené",
+    "EntityActionsDisabledTooltip": "Nemáte oprávnenie vykonávať žiadnu akciu.",
+    "ResourcePermissions": "Oprávnenia"
   }
 }

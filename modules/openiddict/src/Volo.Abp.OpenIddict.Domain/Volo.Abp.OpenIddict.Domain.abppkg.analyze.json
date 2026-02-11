@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.OpenIddict.Domain",
-  "hash": "7bc7931189c97d5bef0fed5dbd107b10",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.OpenIddict",
@@ -86,10 +86,10 @@
     },
     {
       "baseClass": {
-        "name": "FullAuditedAggregateRoot<Guid>",
-        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
         "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
-        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
@@ -97,6 +97,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -133,66 +139,6 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Data",
           "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
-        },
-        {
-          "name": "ICreationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
-        },
-        {
-          "name": "IHasCreationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
-        },
-        {
-          "name": "IMayHaveCreator",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
-        },
-        {
-          "name": "IAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IAuditedObject"
-        },
-        {
-          "name": "IModificationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
-        },
-        {
-          "name": "IHasModificationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
-        },
-        {
-          "name": "IFullAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
-        },
-        {
-          "name": "IDeletionAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
-        },
-        {
-          "name": "IHasDeletionTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
-        },
-        {
-          "name": "ISoftDelete",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [],
@@ -274,6 +220,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -420,10 +372,10 @@
     },
     {
       "baseClass": {
-        "name": "FullAuditedAggregateRoot<Guid>",
-        "namespace": "Volo.Abp.Domain.Entities.Auditing",
+        "name": "AggregateRoot<Guid>",
+        "namespace": "Volo.Abp.Domain.Entities",
         "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
-        "fullName": "Volo.Abp.Domain.Entities.Auditing.FullAuditedAggregateRoot<Guid>"
+        "fullName": "Volo.Abp.Domain.Entities.AggregateRoot<Guid>"
       },
       "implementingInterfaces": [
         {
@@ -431,6 +383,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -467,66 +425,6 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Data",
           "fullName": "Volo.Abp.Domain.Entities.IHasConcurrencyStamp"
-        },
-        {
-          "name": "ICreationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.ICreationAuditedObject"
-        },
-        {
-          "name": "IHasCreationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasCreationTime"
-        },
-        {
-          "name": "IMayHaveCreator",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IMayHaveCreator"
-        },
-        {
-          "name": "IAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IAuditedObject"
-        },
-        {
-          "name": "IModificationAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IModificationAuditedObject"
-        },
-        {
-          "name": "IHasModificationTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasModificationTime"
-        },
-        {
-          "name": "IFullAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IFullAuditedObject"
-        },
-        {
-          "name": "IDeletionAuditedObject",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IDeletionAuditedObject"
-        },
-        {
-          "name": "IHasDeletionTime",
-          "namespace": "Volo.Abp.Auditing",
-          "declaringAssemblyName": "Volo.Abp.Auditing.Contracts",
-          "fullName": "Volo.Abp.Auditing.IHasDeletionTime"
-        },
-        {
-          "name": "ISoftDelete",
-          "namespace": "Volo.Abp",
-          "declaringAssemblyName": "Volo.Abp.Core",
-          "fullName": "Volo.Abp.ISoftDelete"
         }
       ],
       "methods": [],
@@ -588,6 +486,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -694,6 +598,11 @@
       "properties": [
         {
           "type": "System.String",
+          "name": "ApplicationType",
+          "summary": "Gets or sets the application type associated with the application."
+        },
+        {
+          "type": "System.String",
           "name": "ClientId",
           "summary": "Gets or sets the client identifier associated with the current application."
         },
@@ -701,6 +610,11 @@
           "type": "System.String",
           "name": "ClientSecret",
           "summary": "Gets or sets the client secret associated with the current application.\r\n            Note: depending on the application manager used to create this instance,\r\n            this property may be hashed or encrypted for security reasons."
+        },
+        {
+          "type": "System.String",
+          "name": "ClientType",
+          "summary": "Gets or sets the client type associated with the application."
         },
         {
           "type": "System.String",
@@ -716,6 +630,11 @@
           "type": "System.String",
           "name": "DisplayNames",
           "summary": "Gets or sets the localized display names\r\n            associated with the current application,\r\n            serialized as a JSON object."
+        },
+        {
+          "type": "System.String",
+          "name": "JsonWebKeySet",
+          "summary": "Gets or sets the JSON Web Key Set associated with\r\n            the application, serialized as a JSON object."
         },
         {
           "type": "System.String",
@@ -744,8 +663,13 @@
         },
         {
           "type": "System.String",
-          "name": "Type",
-          "summary": "Gets or sets the application type associated with the current application."
+          "name": "Settings",
+          "summary": "Gets or sets the settings serialized as a JSON object."
+        },
+        {
+          "type": "System.String",
+          "name": "FrontChannelLogoutUri",
+          "summary": "Gets or sets the front-channel logout URI associated with the application."
         },
         {
           "type": "System.String",
@@ -807,6 +731,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "DeleteManyByApplicationIdAsync",
           "summary": null,
           "isAsync": true,
@@ -833,6 +758,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "DeleteManyByAuthorizationIdAsync",
           "summary": null,
           "isAsync": true,
@@ -858,8 +784,9 @@
           ]
         },
         {
-          "returnType": "List<OpenIddictToken>",
-          "name": "FindAsync",
+          "returnType": "Void",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
+          "name": "DeleteManyByAuthorizationIdsAsync",
           "summary": null,
           "isAsync": true,
           "isPublic": true,
@@ -867,14 +794,14 @@
           "isStatic": false,
           "parameters": [
             {
-              "type": "String",
-              "name": "subject",
+              "type": "Guid[]",
+              "name": "authorizationIds",
               "isOptional": false
             },
             {
-              "type": "Guid",
-              "name": "client",
-              "isOptional": false
+              "type": "Boolean",
+              "name": "autoSave",
+              "isOptional": true
             },
             {
               "type": "CancellationToken",
@@ -885,6 +812,7 @@
         },
         {
           "returnType": "List<OpenIddictToken>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -898,38 +826,7 @@
               "isOptional": false
             },
             {
-              "type": "Guid",
-              "name": "client",
-              "isOptional": false
-            },
-            {
-              "type": "String",
-              "name": "status",
-              "isOptional": false
-            },
-            {
-              "type": "CancellationToken",
-              "name": "cancellationToken",
-              "isOptional": true
-            }
-          ]
-        },
-        {
-          "returnType": "List<OpenIddictToken>",
-          "name": "FindAsync",
-          "summary": null,
-          "isAsync": true,
-          "isPublic": true,
-          "isPrivate": false,
-          "isStatic": false,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "subject",
-              "isOptional": false
-            },
-            {
-              "type": "Guid",
+              "type": "Nullable<Guid>",
               "name": "client",
               "isOptional": false
             },
@@ -952,6 +849,7 @@
         },
         {
           "returnType": "List<OpenIddictToken>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "FindByApplicationIdAsync",
           "summary": null,
           "isAsync": true,
@@ -973,6 +871,7 @@
         },
         {
           "returnType": "List<OpenIddictToken>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "FindByAuthorizationIdAsync",
           "summary": null,
           "isAsync": true,
@@ -994,6 +893,7 @@
         },
         {
           "returnType": "OpenIddictToken",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "FindByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -1015,6 +915,7 @@
         },
         {
           "returnType": "OpenIddictToken",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "FindByReferenceIdAsync",
           "summary": null,
           "isAsync": true,
@@ -1036,6 +937,7 @@
         },
         {
           "returnType": "List<OpenIddictToken>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "FindBySubjectAsync",
           "summary": null,
           "isAsync": true,
@@ -1057,6 +959,7 @@
         },
         {
           "returnType": "List<OpenIddictToken>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
           "name": "ListAsync",
           "summary": null,
           "isAsync": true,
@@ -1082,8 +985,9 @@
           ]
         },
         {
-          "returnType": "List<OpenIddictToken>",
-          "name": "GetPruneListAsync",
+          "returnType": "Int64",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
+          "name": "PruneAsync",
           "summary": null,
           "isAsync": true,
           "isPublic": true,
@@ -1096,8 +1000,106 @@
               "isOptional": false
             },
             {
-              "type": "Int32",
-              "name": "count",
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
+          "name": "RevokeAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "subject",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "applicationId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "status",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
+          "name": "RevokeByAuthorizationIdAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "id",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
+          "name": "RevokeByApplicationIdAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "applicationId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Tokens",
+          "name": "RevokeBySubjectAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "subject",
               "isOptional": false
             },
             {
@@ -1157,6 +1159,7 @@
       "methods": [
         {
           "returnType": "List<OpenIddictScope>",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1193,6 +1196,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -1214,6 +1218,7 @@
         },
         {
           "returnType": "OpenIddictScope",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "FindByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -1235,6 +1240,7 @@
         },
         {
           "returnType": "OpenIddictScope",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -1256,6 +1262,7 @@
         },
         {
           "returnType": "List<OpenIddictScope>",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "FindByNamesAsync",
           "summary": null,
           "isAsync": true,
@@ -1277,6 +1284,7 @@
         },
         {
           "returnType": "List<OpenIddictScope>",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "FindByResourceAsync",
           "summary": null,
           "isAsync": true,
@@ -1298,6 +1306,7 @@
         },
         {
           "returnType": "List<OpenIddictScope>",
+          "namespace": "Volo.Abp.OpenIddict.Scopes",
           "name": "ListAsync",
           "summary": null,
           "isAsync": true,
@@ -1372,6 +1381,7 @@
       "methods": [
         {
           "returnType": "List<OpenIddictAuthorization>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -1385,64 +1395,7 @@
               "isOptional": false
             },
             {
-              "type": "Guid",
-              "name": "client",
-              "isOptional": false
-            },
-            {
-              "type": "CancellationToken",
-              "name": "cancellationToken",
-              "isOptional": true
-            }
-          ]
-        },
-        {
-          "returnType": "List<OpenIddictAuthorization>",
-          "name": "FindAsync",
-          "summary": null,
-          "isAsync": true,
-          "isPublic": true,
-          "isPrivate": false,
-          "isStatic": false,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "subject",
-              "isOptional": false
-            },
-            {
-              "type": "Guid",
-              "name": "client",
-              "isOptional": false
-            },
-            {
-              "type": "String",
-              "name": "status",
-              "isOptional": false
-            },
-            {
-              "type": "CancellationToken",
-              "name": "cancellationToken",
-              "isOptional": true
-            }
-          ]
-        },
-        {
-          "returnType": "List<OpenIddictAuthorization>",
-          "name": "FindAsync",
-          "summary": null,
-          "isAsync": true,
-          "isPublic": true,
-          "isPrivate": false,
-          "isStatic": false,
-          "parameters": [
-            {
-              "type": "String",
-              "name": "subject",
-              "isOptional": false
-            },
-            {
-              "type": "Guid",
+              "type": "Nullable<Guid>",
               "name": "client",
               "isOptional": false
             },
@@ -1465,6 +1418,7 @@
         },
         {
           "returnType": "List<OpenIddictAuthorization>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
           "name": "FindByApplicationIdAsync",
           "summary": null,
           "isAsync": true,
@@ -1486,6 +1440,7 @@
         },
         {
           "returnType": "OpenIddictAuthorization",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
           "name": "FindByIdAsync",
           "summary": null,
           "isAsync": true,
@@ -1507,6 +1462,7 @@
         },
         {
           "returnType": "List<OpenIddictAuthorization>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
           "name": "FindBySubjectAsync",
           "summary": null,
           "isAsync": true,
@@ -1528,6 +1484,7 @@
         },
         {
           "returnType": "List<OpenIddictAuthorization>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
           "name": "ListAsync",
           "summary": null,
           "isAsync": true,
@@ -1553,8 +1510,9 @@
           ]
         },
         {
-          "returnType": "List<OpenIddictAuthorization>",
-          "name": "GetPruneListAsync",
+          "returnType": "Int64",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
+          "name": "PruneAsync",
           "summary": null,
           "isAsync": true,
           "isPublic": true,
@@ -1567,8 +1525,84 @@
               "isOptional": false
             },
             {
-              "type": "Int32",
-              "name": "count",
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
+          "name": "RevokeAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "subject",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Guid>",
+              "name": "applicationId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "status",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "type",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
+          "name": "RevokeByApplicationIdAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "applicationId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "ValueTask<Int64>",
+          "namespace": "Volo.Abp.OpenIddict.Authorizations",
+          "name": "RevokeBySubjectAsync",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "subject",
               "isOptional": false
             },
             {
@@ -1628,6 +1662,7 @@
       "methods": [
         {
           "returnType": "List<OpenIddictApplication>",
+          "namespace": "Volo.Abp.OpenIddict.Applications",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1664,6 +1699,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Abp.OpenIddict.Applications",
           "name": "GetCountAsync",
           "summary": null,
           "isAsync": true,
@@ -1685,6 +1721,7 @@
         },
         {
           "returnType": "OpenIddictApplication",
+          "namespace": "Volo.Abp.OpenIddict.Applications",
           "name": "FindByClientIdAsync",
           "summary": null,
           "isAsync": true,
@@ -1706,6 +1743,7 @@
         },
         {
           "returnType": "List<OpenIddictApplication>",
+          "namespace": "Volo.Abp.OpenIddict.Applications",
           "name": "FindByPostLogoutRedirectUriAsync",
           "summary": null,
           "isAsync": true,
@@ -1727,6 +1765,7 @@
         },
         {
           "returnType": "List<OpenIddictApplication>",
+          "namespace": "Volo.Abp.OpenIddict.Applications",
           "name": "FindByRedirectUriAsync",
           "summary": null,
           "isAsync": true,
@@ -1748,6 +1787,7 @@
         },
         {
           "returnType": "List<OpenIddictApplication>",
+          "namespace": "Volo.Abp.OpenIddict.Applications",
           "name": "ListAsync",
           "summary": null,
           "isAsync": true,

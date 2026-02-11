@@ -16,7 +16,7 @@ public class AbpPageToolbarOptions
     public void Configure<TPage>([NotNull] Action<PageToolbar> configureAction)
     {
         // ReSharper disable once AssignNullToNotNullAttribute
-        Configure(typeof(TPage).FullName, configureAction);
+        Configure(typeof(TPage).FullName!, configureAction);
     }
 
     public void Configure([NotNull] string pageName, [NotNull] Action<PageToolbar> configureAction)

@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit.Settings;
+namespace Volo.CmsKit.Settings;
 
 public static class CmsKitSettings
 {

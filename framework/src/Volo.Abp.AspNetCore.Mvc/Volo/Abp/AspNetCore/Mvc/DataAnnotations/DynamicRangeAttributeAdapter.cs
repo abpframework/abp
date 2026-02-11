@@ -14,11 +14,11 @@ public class DynamicRangeAttributeAdapter : AttributeAdapterBase<DynamicRangeAtt
 
     public DynamicRangeAttributeAdapter(
         DynamicRangeAttribute attribute,
-        IStringLocalizer stringLocalizer)
+        IStringLocalizer? stringLocalizer)
         : base(attribute, stringLocalizer)
     {
-        _min = Convert.ToString(Attribute.Minimum, CultureInfo.InvariantCulture);
-        _max = Convert.ToString(Attribute.Maximum, CultureInfo.InvariantCulture);
+        _min = Convert.ToString(Attribute.Minimum, CultureInfo.InvariantCulture)!;
+        _max = Convert.ToString(Attribute.Maximum, CultureInfo.InvariantCulture)!;
     }
 
     public override void AddValidation(ClientModelValidationContext context)

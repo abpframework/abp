@@ -1,0 +1,9 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "TenantNotFoundMessage": "找不到租戶!",
+    "TenantNotFoundDetails": "無法找到ID或名稱為{0}的租戶",
+    "TenantNotActiveMessage": "租戶未啟用!",
+    "TenantNotActiveDetails": "ID或名稱為{0}的租戶未啟用"
+  }
+}

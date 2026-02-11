@@ -8,9 +8,9 @@ public interface IPermissionChecker
 {
     Task<bool> IsGrantedAsync([NotNull] string name);
 
-    Task<bool> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull] string name);
+    Task<bool> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, [NotNull] string name);
 
     Task<MultiplePermissionGrantResult> IsGrantedAsync([NotNull] string[] names);
 
-    Task<MultiplePermissionGrantResult> IsGrantedAsync([CanBeNull] ClaimsPrincipal claimsPrincipal, [NotNull] string[] names);
+    Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, [NotNull] string[] names);
 }

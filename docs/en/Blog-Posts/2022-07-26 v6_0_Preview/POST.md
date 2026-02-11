@@ -187,7 +187,6 @@ The following improvements have been made on [eShopOnAbp project](https://github
 
 * Some improvements have been made on the Admin Application for Order Management for Angular UI. See [#110](https://github.com/abpframework/eShopOnAbp/pull/110).
 * `SignalR` error on Kubernetes & Docker Compose has been fixed. See [#113](https://github.com/abpframework/eShopOnAbp/pull/113).
-* eShopOnAbp project has been deployed to Azure Kubernetes Service. See [#114](https://github.com/abpframework/eShopOnAbp/pull/114). The live demo can be seen from [eshoponabp.com](https://eshoponabp.com/).
 * Configurations have been made for some services on the `docker-compose.yml` file. See [#112](https://github.com/abpframework/eShopOnAbp/pull/112).
 * Gateway Redirect Loop problem on Kubernetes has been fixed. See [the commit](https://github.com/abpframework/eShopOnAbp/commit/6413ef15c91cd8a5309050b63bb4dbca23587607).
 

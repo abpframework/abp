@@ -2,7 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'abp-card-body',
-  template: ` <div [ngClass]="cardBodyClass" [ngStyle]="cardBodyStyle">
+  template: ` <div [class]="cardBodyClass" [style]="cardBodyStyle">
     <ng-content></ng-content>
   </div>`,
 })

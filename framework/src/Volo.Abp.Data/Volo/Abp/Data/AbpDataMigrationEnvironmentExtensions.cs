@@ -6,17 +6,17 @@ namespace Volo.Abp.Data;
 
 public static class AbpDataMigrationEnvironmentExtensions
 {
-    public static void AddDataMigrationEnvironment(this AbpApplicationCreationOptions options, AbpDataMigrationEnvironment environment = null)
+    public static void AddDataMigrationEnvironment(this AbpApplicationCreationOptions options, AbpDataMigrationEnvironment? environment = null)
     {
         options.Services.AddDataMigrationEnvironment(environment ?? new AbpDataMigrationEnvironment());
     }
 
-    public static void AddDataMigrationEnvironment(this IServiceCollection services, AbpDataMigrationEnvironment environment = null)
+    public static void AddDataMigrationEnvironment(this IServiceCollection services, AbpDataMigrationEnvironment? environment = null)
     {
         services.AddObjectAccessor<AbpDataMigrationEnvironment>(environment ?? new AbpDataMigrationEnvironment());
     }
 
-    public static AbpDataMigrationEnvironment GetDataMigrationEnvironment(this IServiceCollection services)
+    public static AbpDataMigrationEnvironment? GetDataMigrationEnvironment(this IServiceCollection services)
     {
         return services.GetObjectOrNull<AbpDataMigrationEnvironment>();
     }
@@ -26,7 +26,7 @@ public static class AbpDataMigrationEnvironmentExtensions
         return services.GetDataMigrationEnvironment() != null;
     }
 
-    public static AbpDataMigrationEnvironment GetDataMigrationEnvironment(this IServiceProvider serviceProvider)
+    public static AbpDataMigrationEnvironment? GetDataMigrationEnvironment(this IServiceProvider serviceProvider)
     {
         return serviceProvider.GetService<IObjectAccessor<AbpDataMigrationEnvironment>>()?.Value;
     }

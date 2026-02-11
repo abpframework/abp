@@ -4,6 +4,7 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
 @using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Comments
 @using Volo.CmsKit.Localization
 
 @inject IPageLayout PageLayout
@@ -31,6 +32,9 @@
     </abp-script-bundle>
 }
 
+<abp-alert id="CommentsWaitingAlert" alert-type="Warning" style="display: none">
+</abp-alert>
+
 <abp-card class="mb-4">
     <abp-card-body>
         <div id="CmsKitCommentsWrapper">
@@ -39,7 +43,7 @@
                     <abp-column size-lg="_4" size-md="_12">
                         <abp-row>
                             <abp-column size-lg="_6" size-md="_6">
-                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" />
+                                <abp-input asp-for="@Model.CreationStartDate" class="singledatepicker" label="@L["StartDate"].Value" type="text" value="" />
                             </abp-column>
                             <abp-column size-lg="_6" size-md="_6">
                                 <abp-input asp-for="@Model.CreationEndDate" class="singledatepicker" label="@L["EndDate"].Value" type="text" />
@@ -47,12 +51,24 @@
                         </abp-row>
                     </abp-column>
 
-                    <abp-column size-lg="_3" size-md="_6">
+                    <abp-column size-lg="_2" size-md="_6">
                         <abp-input asp-for="@Model.Author" label="@L["Username"].Value" type="text" />
                     </abp-column>
 
-                    <abp-column size-lg="_3" size-md="_6">
+                    <abp-column size-lg="_2" size-md="_6">
                         <abp-input asp-for="@Model.EntityType" label="@L["EntityType"].Value" type="text" />
+                    </abp-column>
+
+                    <abp-column size-lg="_2" size-md="_6">
+                        <div class="mb-3" id="IsApprovedSelectInput" style="display: none">
+                            <label class="mb-1" for="IsApprovedSelect">@L["CommentFilter:ApproveState"].Value</label>
+                            <select id="IsApprovedSelect" asp-for="@Model.CommentApproveState" class="form-control">
+                                @foreach (var status in (CommentApproveState[])Enum.GetValues(typeof(CommentApproveState)))
+                                {
+                                    <option value="@((int)status)">@L["CommentFilter:" + (int)status]</option>
+                                }
+                            </select>
+                        </div>
                     </abp-column>
 
                     <abp-column size-lg="_2" size-md="_6">
@@ -68,6 +84,6 @@
 
 <abp-card>
     <abp-card-body>
-        <abp-table striped-rows="true" id="CommentsTable" class="nowrap"></abp-table>
+        <abp-table  id="CommentsTable" class="nowrap"></abp-table>
     </abp-card-body>
 </abp-card>

@@ -1,17 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Security.Claims;
 
-public class AbpClaimsMapMiddleware : IMiddleware, ITransientDependency
+[Obsolete("Use the TransformAbpClaims extension method from IServiceCollection instead.")]
+public class AbpClaimsMapMiddleware : AbpMiddlewareBase, ITransientDependency
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var currentPrincipalAccessor = context.RequestServices
             .GetRequiredService<ICurrentPrincipalAccessor>();

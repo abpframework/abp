@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
@@ -105,7 +104,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
                 factories.RemoveAll(
                     factory =>
                         factory is SingleInstanceHandlerFactory &&
-                        (factory as SingleInstanceHandlerFactory).HandlerInstance == handler
+                        ((factory as SingleInstanceHandlerFactory)!).HandlerInstance == handler
                 );
             });
     }
@@ -135,6 +134,11 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     public virtual async Task PublishAsync(LocalEventMessage localEventMessage)
     {
         await TriggerHandlersAsync(localEventMessage.EventType, localEventMessage.EventData);
+    }
+
+    public virtual List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType)
+    {
+        return GetHandlerFactories(eventType).ToList();
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
@@ -174,46 +178,5 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         }
 
         return false;
-    }
-
-    // Internal for unit testing
-    internal Func<Type, object, Task> OnEventHandleInvoking { get; set; }
-
-    // Internal for unit testing
-    protected async override Task InvokeEventHandlerAsync(IEventHandler eventHandler, object eventData, Type eventType)
-    {
-        if (OnEventHandleInvoking != null && eventType != typeof(DistributedEventSent) && eventType != typeof(DistributedEventReceived))
-        {
-            await OnEventHandleInvoking(eventType, eventData);
-        }
-
-        await base.InvokeEventHandlerAsync(eventHandler, eventData, eventType);
-    }
-
-    // Internal for unit testing
-    internal Func<Type, object, Task> OnPublishing { get; set; }
-
-    // For unit testing
-    public async override Task PublishAsync(
-        Type eventType,
-        object eventData,
-        bool onUnitOfWorkComplete = true)
-    {
-        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
-        {
-            AddToUnitOfWork(
-                UnitOfWorkManager.Current,
-                new UnitOfWorkEventRecord(eventType, eventData, EventOrderGenerator.GetNext())
-            );
-            return;
-        }
-
-        // For unit testing
-        if (OnPublishing != null && eventType != typeof(DistributedEventSent) && eventType != typeof(DistributedEventReceived))
-        {
-            await OnPublishing(eventType, eventData);
-        }
-
-        await PublishToEventBusAsync(eventType, eventData);
     }
 }

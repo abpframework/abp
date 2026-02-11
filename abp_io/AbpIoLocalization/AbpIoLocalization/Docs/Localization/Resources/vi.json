@@ -1,0 +1,9 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Buy": "Mua",
+    "SeeBookDetails": "Xem chi tiết sách",
+    "MasteringAbpFrameworkEBookDescription": "Cuốn sách này sẽ giúp bạn có được sự hiểu biết đầy đủ về framework và các kỹ thuật phát triển ứng dụng web hiện đại.",
+    "Feedback": "Nhận xét"
+  }
+}

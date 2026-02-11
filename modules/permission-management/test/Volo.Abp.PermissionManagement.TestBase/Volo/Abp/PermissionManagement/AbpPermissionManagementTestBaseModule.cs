@@ -18,6 +18,8 @@ public class AbpPermissionManagementTestBaseModule : AbpModule
         context.Services.Configure<PermissionManagementOptions>(options =>
         {
             options.ManagementProviders.Add<TestPermissionManagementProvider>();
+            options.ResourceManagementProviders.Add<TestResourcePermissionManagementProvider>();
+            options.ResourcePermissionProviderKeyLookupServices.Add<TestResourcePermissionProviderKeyLookupService>();
         });
     }
 

@@ -12,21 +12,30 @@ namespace Volo.Abp.Hangfire;
 
 public class AbpHangfireOptions
 {
-    [CanBeNull]
-    public BackgroundJobServerOptions ServerOptions { get; set; }
+    /// <summary>
+    /// This value is used to add prefix to all of the queues. Default is empty.
+    /// </summary>
+    public string DefaultQueuePrefix { get; set; } = string.Empty;
 
-    [CanBeNull]
-    public IEnumerable<IBackgroundProcess> AdditionalProcesses { get; set; }
+    /// <summary>
+    /// Hangfire queue name max length, default is 50.
+    /// </summary>
+    public int MaxQueueNameLength { get; set; } = 50;
 
-    [CanBeNull]
-    public JobStorage Storage { get; set; }
+    public string DefaultQueue { get; set; } = EnqueuedState.DefaultQueue;
+
+    public BackgroundJobServerOptions? ServerOptions { get; set; }
+
+    public IEnumerable<IBackgroundProcess>? AdditionalProcesses { get; set; }
+
+    public JobStorage? Storage { get; set; }
 
     [NotNull]
-    public Func<IServiceProvider, BackgroundJobServer> BackgroundJobServerFactory {
+    public Func<IServiceProvider, BackgroundJobServer?> BackgroundJobServerFactory {
         get => _backgroundJobServerFactory;
         set => _backgroundJobServerFactory = Check.NotNull(value, nameof(value));
     }
-    private Func<IServiceProvider, BackgroundJobServer> _backgroundJobServerFactory;
+    private Func<IServiceProvider, BackgroundJobServer?> _backgroundJobServerFactory;
 
     public AbpHangfireOptions()
     {

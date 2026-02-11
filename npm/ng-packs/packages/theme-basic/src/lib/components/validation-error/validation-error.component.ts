@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-validate/core';
+import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-validation-error',
   template: `
-    <div class="invalid-feedback" *ngFor="let error of abpErrors; trackBy: trackByFn">
-      {{ error.message | abpLocalization: error.interpoliteParams }}
-    </div>
+    @for (error of abpErrors; track $index) {
+      <div class="invalid-feedback">
+        {{ error.message | abpLocalization: error.interpoliteParams }}
+      </div>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [LocalizationPipe],
 })
 export class ValidationErrorComponent extends ErrorComponent {
   get abpErrors(): (Validation.Error & { interpoliteParams?: string[] })[] {

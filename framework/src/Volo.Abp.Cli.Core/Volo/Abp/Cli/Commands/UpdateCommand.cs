@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -20,42 +22,46 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
 
     private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
     private readonly NpmPackagesUpdater _npmPackagesUpdater;
+    private readonly ITelemetryService _telemetryService;
 
     public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
-        NpmPackagesUpdater npmPackagesUpdater)
+        NpmPackagesUpdater npmPackagesUpdater, ITelemetryService telemetryService)
     {
         _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
         _npmPackagesUpdater = npmPackagesUpdater;
+        _telemetryService = telemetryService;
 
         Logger = NullLogger<UpdateCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsUpdate);
         var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
         var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
         var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long) ??
                         Directory.GetCurrentDirectory();
         var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+        var leptonXVersion = commandLineArgs.Options.GetOrNull(Options.LeptonXVersion.Short, Options.LeptonXVersion.Long);
 
         if (updateNuget || !updateNpm)
         {
-            await UpdateNugetPackages(commandLineArgs, directory, version);
+            await UpdateNugetPackages(commandLineArgs, directory, version, leptonXVersion);
         }
 
         if (updateNpm || !updateNuget)
         {
-            await UpdateNpmPackages(directory, version);
+            await UpdateNpmPackages(directory, version, leptonXVersion);
         }
     }
 
-    private async Task UpdateNpmPackages(string directory, string version)
+    private async Task UpdateNpmPackages(string directory, string version, string leptonXVersion)
     {
-        await _npmPackagesUpdater.Update(directory, version: version);
+        await _npmPackagesUpdater.Update(directory, version: version, leptonXVersion: leptonXVersion);
     }
 
-    private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory, string version)
+    private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory, string version, string leptonXVersion)
     {
         var solutions = new List<string>();
         var givenSolution = commandLineArgs.Options.GetOrNull(Options.SolutionName.Short, Options.SolutionName.Long);
@@ -63,6 +69,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         if (givenSolution.IsNullOrWhiteSpace())
         {
             solutions.AddRange(Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories));
+            solutions.AddRange(Directory.GetFiles(directory, "*.slnx", SearchOption.AllDirectories));
         }
         else
         {
@@ -75,24 +82,24 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         {
             foreach (var solution in solutions)
             {
-                var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
+                var solutionName = Path.GetFileName(solution).RemovePostFix(".slnx", ".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll, version: version);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll, version: version, leptonXVersion: leptonXVersion);
 
-                Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
+                Logger.LogInformation("Volo packages are updated in {SolutionName} solution", solutionName);
             }
             return;
         }
 
-        var project = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.csproj").FirstOrDefault();
+        var project = Directory.GetFiles(directory, "*.csproj").FirstOrDefault();
 
         if (project != null)
         {
             var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-            await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, checkAll: checkAll, version: version);
+            await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, checkAll: checkAll, version: version, leptonXVersion: leptonXVersion);
 
-            Logger.LogInformation($"Volo packages are updated in {projectName} project.");
+            Logger.LogInformation("Volo packages are updated in {ProjectName} project", projectName);
             return;
         }
 
@@ -120,6 +127,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("-sn|--solution-name                         (Specify the solution name)");
         sb.AppendLine("--check-all                                 (Check the new version of each package separately)");
         sb.AppendLine("-v|--version <version>                      (default: latest version)");
+        sb.AppendLine("-lv|--leptonx-version <version>             (default: latest LeptonX version)");
         sb.AppendLine("");
         sb.AppendLine("Some examples:");
         sb.AppendLine("");
@@ -127,12 +135,12 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp update -p");
         sb.AppendLine("  abp update -sp \"D:\\projects\\\" -sn Acme.BookStore");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Update all ABP related NuGet packages and NPM packages in a solution or project to the latest version.";
     }
@@ -166,6 +174,12 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "v";
             public const string Long = "version";
+        }
+
+        public static class LeptonXVersion
+        {
+            public const string Short = "lv";
+            public const string Long = "leptonx-version";
         }
     }
 }

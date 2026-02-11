@@ -52,7 +52,7 @@ export async function resolveProject<T = any>(
   // @typescript-eslint/no-explicit-any
   notFoundValue: T = NOT_FOUND_VALUE as unknown as any,
 ): Promise<Project | T> {
-  name = name || readWorkspaceSchema(tree).defaultProject || getFirstApplication(tree).name!;
+  name = name || getFirstApplication(tree).name!;
   const workspace = await getWorkspace(tree);
   let definition: Project['definition'] | undefined;
 

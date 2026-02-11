@@ -57,6 +57,18 @@
     "LastCachedTime": "Cache time",
     "Project": "Project",
     "AdvancedFilters": "Advanced Filters",
-    "RemoveCacheAndReIndexConfirmation": "The document \"{0}\" will be removed from the cache and re-indexed. Do you confirm?"
+    "RemoveCacheAndReIndexConfirmation": "The document \"{0}\" will be removed from the cache and re-indexed. Do you confirm?",
+    "GeneratePdf": "Generate PDF",
+    "Generating": "Generating...",
+    "Language": "Language",
+    "ForceToGenerateNewPdf": "Force to generate new PDF",
+    "PdfGeneratedSuccessfully": "PDF generated successfully",
+    "GenerateAndDownloadPdf": "Generate and download PDF",
+    "PdfFileDeletionWarningMessage": "Are you sure you want to delete the PDF file \"{0}\"?",
+    "ManagePdfFiles": "Manage PDF files",
+    "Permission:ManagePdfFiles": "Manage PDF files",
+    "PdfDeletedSuccessfully": "PDF file has been deleted successfully",
+    "PdfGenerationStarted": "PDF generation started",
+    "PdfGenerationStartedInfoMessage": "PDF generation has started. Once completed, you can check if the file has been added to the PDF files section."
   }
 }

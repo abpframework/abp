@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Dapr;
@@ -22,7 +21,7 @@ public static class DaprHttpContextExtensions
             .IsValidDaprAppApiToken();
     }
 
-    public static string GetDaprAppApiTokenOrNull(HttpContext httpContext)
+    public static string? GetDaprAppApiTokenOrNull(HttpContext httpContext)
     {
         return httpContext
             .RequestServices

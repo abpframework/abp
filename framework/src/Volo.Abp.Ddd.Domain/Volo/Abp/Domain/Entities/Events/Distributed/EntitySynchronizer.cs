@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -22,7 +21,7 @@ public abstract class EntitySynchronizer<TEntity, TKey, TSourceEntityEto> :
         Repository = repository;
     }
 
-    protected override Task<TEntity> FindLocalEntityAsync(TSourceEntityEto eto)
+    protected override Task<TEntity?> FindLocalEntityAsync(TSourceEntityEto eto)
     {
         return Repository.FindAsync(eto.Id);
     }
@@ -154,10 +153,9 @@ public abstract class EntitySynchronizer<TEntity, TSourceEntityEto> :
         return true;
     }
 
-    [ItemCanBeNull]
-    protected abstract Task<TEntity> FindLocalEntityAsync(TSourceEntityEto eto);
+    protected abstract Task<TEntity?> FindLocalEntityAsync(TSourceEntityEto eto);
 
-    protected virtual Task<bool> IsEtoNewerAsync(TSourceEntityEto eto, [CanBeNull] TEntity localEntity)
+    protected virtual Task<bool> IsEtoNewerAsync(TSourceEntityEto eto, TEntity? localEntity)
     {
         if (localEntity is IHasEntityVersion versionedLocalEntity && eto is IHasEntityVersion versionedEto)
         {

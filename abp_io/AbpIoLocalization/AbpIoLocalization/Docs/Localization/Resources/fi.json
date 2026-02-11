@@ -1,6 +1,9 @@
 {
   "culture": "fi",
   "texts": {
-    "Buy": "Osta"
+    "Buy": "Osta",
+    "SeeBookDetails": "Katso kirjan tiedot",
+    "MasteringAbpFrameworkEBookDescription": "Tämä kirja auttaa sinua saamaan täydellisen käsityksen puitteista ja nykyaikaisista verkkosovelluskehitystekniikoista.",
+    "Feedback": "Palaute"
   }
 }

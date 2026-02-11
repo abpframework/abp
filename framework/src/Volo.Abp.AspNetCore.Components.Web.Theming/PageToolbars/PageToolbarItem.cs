@@ -9,14 +9,13 @@ public class PageToolbarItem
     [NotNull]
     public Type ComponentType { get; }
 
-    [CanBeNull]
-    public Dictionary<string, object> Arguments { get; set; }
+    public Dictionary<string, object?>? Arguments { get; set; }
 
     public int Order { get; set; }
 
     public PageToolbarItem(
         [NotNull] Type componentType,
-        [CanBeNull] Dictionary<string, object> arguments = null,
+        Dictionary<string, object?>? arguments = null,
         int order = 0)
     {
         ComponentType = Check.NotNull(componentType, nameof(componentType));

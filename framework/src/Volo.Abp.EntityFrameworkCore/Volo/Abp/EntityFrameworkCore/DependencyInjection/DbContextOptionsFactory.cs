@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
+using Volo.Abp.EntityFrameworkCore.GlobalFilters;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -27,6 +28,11 @@ public static class DbContextOptionsFactory
         PreConfigure(options, context);
         Configure(options, context);
 
+        if (serviceProvider.GetRequiredService<IOptions<AbpEfCoreGlobalFilterOptions>>().Value.UseDbFunction)
+        {
+            context.DbContextOptions.AddAbpDbContextOptionsExtension();
+        }
+
         return context.DbContextOptions.Options;
     }
 
@@ -43,7 +49,7 @@ public static class DbContextOptionsFactory
         var preConfigureActions = options.PreConfigureActions.GetOrDefault(typeof(TDbContext));
         if (!preConfigureActions.IsNullOrEmpty())
         {
-            foreach (var preConfigureAction in preConfigureActions)
+            foreach (var preConfigureAction in preConfigureActions!)
             {
                 ((Action<AbpDbContextConfigurationContext<TDbContext>>)preConfigureAction).Invoke(context);
             }

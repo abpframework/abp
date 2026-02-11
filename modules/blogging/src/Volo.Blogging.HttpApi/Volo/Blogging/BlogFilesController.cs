@@ -28,7 +28,7 @@ namespace Volo.Blogging
 
         [HttpGet]
         [Route("www/{name}")]
-        public async Task<IRemoteStreamContent> GetFileAsync(string name)
+        public virtual async Task<IRemoteStreamContent> GetFileAsync(string name)
         {
             return await _fileAppService.GetFileAsync(name);
         }

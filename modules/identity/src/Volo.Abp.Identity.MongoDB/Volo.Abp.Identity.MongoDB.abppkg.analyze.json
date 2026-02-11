@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.Identity.MongoDB",
-  "hash": "a42f1167e4a0f3aa2f9ca919442cadd2",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.Identity.MongoDB",
@@ -69,39 +69,51 @@
       "connectionStringName": "AbpIdentity",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
           "contentType": "databaseCollection",
-          "name": "AbpSecurityLogs",
+          "name": "Users",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityRole",
           "contentType": "databaseCollection",
-          "name": "AbpRoles",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
-          "contentType": "databaseCollection",
-          "name": "AbpOrganizationUnits",
+          "name": "Roles",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
           "contentType": "databaseCollection",
-          "name": "AbpClaimTypes",
+          "name": "ClaimTypes",
           "summary": null
         },
         {
-          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
           "contentType": "databaseCollection",
-          "name": "AbpUsers",
+          "name": "OrganizationUnits",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "contentType": "databaseCollection",
+          "name": "SecurityLogs",
           "summary": null
         },
         {
           "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
           "contentType": "databaseCollection",
-          "name": "AbpLinkUsers",
+          "name": "LinkUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserDelegation",
+          "contentType": "databaseCollection",
+          "name": "UserDelegations",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySession",
+          "contentType": "databaseCollection",
+          "name": "Sessions",
           "summary": null
         }
       ],

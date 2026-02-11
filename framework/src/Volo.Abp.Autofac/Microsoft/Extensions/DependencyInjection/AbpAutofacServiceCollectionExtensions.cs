@@ -21,7 +21,7 @@ public static class AbpAutofacServiceCollectionExtensions
         return builder;
     }
 
-    public static IServiceProvider BuildAutofacServiceProvider([NotNull] this IServiceCollection services, Action<ContainerBuilder> builderAction = null)
+    public static IServiceProvider BuildAutofacServiceProvider([NotNull] this IServiceCollection services, Action<ContainerBuilder>? builderAction = null)
     {
         return services.BuildServiceProviderFromFactory(builderAction);
     }

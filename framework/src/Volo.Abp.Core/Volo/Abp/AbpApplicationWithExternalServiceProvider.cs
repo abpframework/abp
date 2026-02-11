@@ -10,7 +10,7 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
     public AbpApplicationWithExternalServiceProvider(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction
+        Action<AbpApplicationCreationOptions>? optionsAction
         ) : base(
             startupModuleType,
             services,
@@ -23,6 +23,7 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
     {
         Check.NotNull(serviceProvider, nameof(serviceProvider));
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (ServiceProvider != null)
         {
             if (ServiceProvider != serviceProvider)
@@ -43,6 +44,8 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
         SetServiceProvider(serviceProvider);
 
         await InitializeModulesAsync();
+        
+        await SetupTelemetryTrackingAsync();
     }
 
     public void Initialize([NotNull] IServiceProvider serviceProvider)
@@ -52,6 +55,8 @@ internal class AbpApplicationWithExternalServiceProvider : AbpApplicationBase, I
         SetServiceProvider(serviceProvider);
 
         InitializeModules();
+        
+        SetupTelemetryTracking();
     }
 
     public override void Dispose()

@@ -6,21 +6,27 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Bundling;
+using Volo.Abp.AspNetCore.Security;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 
 public class AbpTagHelperStyleService : AbpTagHelperResourceService
 {
+    protected AbpSecurityHeadersOptions SecurityHeadersOptions;
     public AbpTagHelperStyleService(
         IBundleManager bundleManager,
         IOptions<AbpBundlingOptions> options,
-        IWebHostEnvironment hostingEnvironment) : base(
-            bundleManager,
-            options,
-            hostingEnvironment)
+        IWebHostEnvironment hostingEnvironment,
+        IOptions<AbpSecurityHeadersOptions> securityHeadersOptions) : base(
+        bundleManager,
+        options,
+        hostingEnvironment)
     {
+        SecurityHeadersOptions = securityHeadersOptions.Value;
     }
 
     protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
@@ -32,12 +38,12 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
         );
     }
 
-    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
+    protected override async Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(string bundleName)
     {
         return await BundleManager.GetStyleBundleFilesAsync(bundleName);
     }
 
-    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file)
+    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, IFileInfo? fileInfo = null)
     {
         var preload = tagHelper switch
         {
@@ -46,13 +52,16 @@ public class AbpTagHelperStyleService : AbpTagHelperResourceService
             _ => false
         };
 
-        if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+        var href = file.IsExternalFile ? file.FileName : viewContext.GetUrlHelper().Content((file.FileName + "?_v=" + fileInfo!.LastModified.UtcTicks).EnsureStartsWith('~'));
+        if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.FileName.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
-            output.Content.AppendHtml($"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
+            output.Content.AppendHtml(SecurityHeadersOptions.UseContentSecurityPolicyScriptNonce
+                ? $"<link rel=\"preload\" href=\"{href}\" as=\"style\" abp-csp-style />{Environment.NewLine}"
+                : $"<link rel=\"preload\" href=\"{href}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
         }
         else
         {
-            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" />{Environment.NewLine}");
+            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{href}\" />{Environment.NewLine}");
         }
     }
 }

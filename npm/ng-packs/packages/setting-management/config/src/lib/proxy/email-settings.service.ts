@@ -1,11 +1,16 @@
 import type { EmailSettingsDto, SendTestEmailInput, UpdateEmailSettingsDto } from './models';
 import { RestService } from '@abp/ng.core';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
+/**
+@deprecated This method is deprecated, use it from @abp/ng.setting-management/proxy
+*/
 @Injectable({
   providedIn: 'root',
 })
 export class EmailSettingsService {
+  private restService = inject(RestService);
+
   apiName = 'SettingManagement';
 
   get = () =>
@@ -30,6 +35,4 @@ export class EmailSettingsService {
       body: input,
     },
     { apiName: this.apiName });
-
-  constructor(private restService: RestService) {}
 }

@@ -1,4 +1,4 @@
-## Streamline Localization in Your ABP Project
+# Streamline Localization in Your ABP Project
 
 Making localization changes to an ABP project can be a daunting task, especially if you're dealing with multiple languages and translations. During development, it's easy to overlook some changes and that leads to inconsistencies across different languages. Fortunately, I have developed a tool that can help streamline the localization process and ensure consistency across different languages.
 

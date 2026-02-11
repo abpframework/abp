@@ -6,8 +6,81 @@
     }
 }
 
-.input-group{
-    .input-group-text{
-        background-color: transparent!important;
+.input-group {
+    .input-group-text {
+        background-color: transparent !important;
     }
+}
+
+.navigation {
+    .next-link, .prev-link {
+        .desc {
+            color: #0D6EFD;
+
+            .fa {
+                font-size: 12px;
+            }
+        }
+
+        .title {
+            font-weight: 600;
+            font-size: 18px;
+            color: #0B1621;
+        }
+    }
+}
+
+body {
+    top: 0px !important;
+}
+
+.skiptranslate {
+    iframe {
+        display: none !important;
+    }
+}
+
+.google_translate_text {
+    color: #aaa;
+    font-family: var(--bs-body-font-family);
+    font-size: 10pt;
+    margin-left: 2px;
+    font-weight: 500;
+}
+
+.goog-te-gadget {
+    white-space: break-spaces !important;
+}
+
+.goog-te-combo {
+    &:focus-visible {
+        border: 0px;
+        outline: none;
+    }
+}
+
+.docs-sidebar-footer {
+    border-block-start: 1px solid #aaa;
+    border-block-end: 1px solid #aaa;
+}
+
+.download-pdf-btn {
+    text-align: left;
+    width: 100%;
+    color: #aaa;
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 14px;
+}
+
+.toc-item-has-children > ul {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.toc-item-has-children.open > ul {
+    max-height: 1000px;
+    opacity: 1;
 }

@@ -10,17 +10,19 @@ public class SimplePageToolbarContributor : IPageToolbarContributor
 {
     public Type ComponentType { get; }
 
-    public Dictionary<string, object> Arguments { get; set; }
+    public Dictionary<string, object?>? Arguments { get; set; }
 
     public int Order { get; }
 
-    public string RequiredPolicyName { get; }
+    public string? RequiredPolicyName { get; }
+
+    private bool? _shouldAddComponent;
 
     public SimplePageToolbarContributor(
         Type componentType,
-        Dictionary<string, object> arguments = null,
+        Dictionary<string, object?>? arguments = null,
         int order = 0,
-        string requiredPolicyName = null)
+        string? requiredPolicyName = null)
     {
         ComponentType = componentType;
         Arguments = arguments;
@@ -38,15 +40,19 @@ public class SimplePageToolbarContributor : IPageToolbarContributor
 
     protected virtual async Task<bool> ShouldAddComponentAsync(PageToolbarContributionContext context)
     {
-        if (RequiredPolicyName != null)
+        if (_shouldAddComponent.HasValue)
         {
-            var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-            if (!await authorizationService.IsGrantedAsync(RequiredPolicyName))
-            {
-                return false;
-            }
+            return _shouldAddComponent.Value;
         }
 
-        return true;
+        if (RequiredPolicyName == null)
+        {
+            _shouldAddComponent = true;
+            return _shouldAddComponent.Value;
+        }
+
+        var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
+        _shouldAddComponent = await authorizationService.IsGrantedAsync(RequiredPolicyName);
+        return _shouldAddComponent.Value;
     }
 }

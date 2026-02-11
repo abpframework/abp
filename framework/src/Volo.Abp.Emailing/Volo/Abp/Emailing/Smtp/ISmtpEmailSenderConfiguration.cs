@@ -30,7 +30,7 @@ public interface ISmtpEmailSenderConfiguration : IEmailSenderConfiguration
     /// <summary>
     /// Domain name to login to SMTP server.
     /// </summary>
-    Task<string> GetDomainAsync();
+    Task<string?> GetDomainAsync();
 
     /// <summary>
     /// Is SSL enabled?

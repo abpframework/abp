@@ -10,7 +10,9 @@ namespace Volo.Abp.TenantManagement;
 public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {
     public virtual string Name { get; protected set; }
-    
+
+    public virtual string NormalizedName { get; protected set; }
+
     public virtual int EntityVersion { get; protected set; }
 
     public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
@@ -20,10 +22,11 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     }
 
-    protected internal Tenant(Guid id, [NotNull] string name)
+    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName)
         : base(id)
     {
         SetName(name);
+        SetNormalizedName(normalizedName);
 
         ConnectionStrings = new List<TenantConnectionString>();
     }
@@ -77,5 +80,10 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     protected internal virtual void SetName([NotNull] string name)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
+    }
+
+    protected internal virtual void SetNormalizedName([CanBeNull] string normalizedName)
+    {
+        NormalizedName = normalizedName;
     }
 }

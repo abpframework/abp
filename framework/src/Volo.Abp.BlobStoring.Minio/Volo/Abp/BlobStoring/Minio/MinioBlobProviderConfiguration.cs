@@ -2,7 +2,7 @@
 
 public class MinioBlobProviderConfiguration
 {
-    public string BucketName {
+    public string? BucketName {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(MinioBlobProviderConfigurationNames.BucketName);
         set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.BucketName, value);
     }
@@ -46,6 +46,16 @@ public class MinioBlobProviderConfiguration
         get => _containerConfiguration.GetConfigurationOrDefault(MinioBlobProviderConfigurationNames.CreateBucketIfNotExists, false);
         set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.CreateBucketIfNotExists, value);
     }
+
+    /// <summary>
+    /// Default value: 7 * 24 * 3600.
+    /// </summary>
+    public int PresignedGetExpirySeconds {
+        get => _containerConfiguration.GetConfigurationOrDefault(MinioBlobProviderConfigurationNames.PresignedGetExpirySeconds, _defaultExpirySeconds);
+        set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.PresignedGetExpirySeconds, value);
+    }
+
+    private int _defaultExpirySeconds = 7 * 24 * 3600;
 
     private readonly BlobContainerConfiguration _containerConfiguration;
 

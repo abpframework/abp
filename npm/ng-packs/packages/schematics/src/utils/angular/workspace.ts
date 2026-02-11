@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import { json, workspaces } from '@angular-devkit/core';
@@ -20,7 +20,7 @@ export type TargetDefinition = workspaces.TargetDefinition;
 /**
  * A {@link workspaces.WorkspaceHost} backed by a Schematics {@link Tree} instance.
  */
-class TreeWorkspaceHost implements workspaces.WorkspaceHost {
+export class TreeWorkspaceHost implements workspaces.WorkspaceHost {
   constructor(private readonly tree: Tree) {}
 
   async readFile(path: string): Promise<string> {
@@ -58,14 +58,12 @@ class TreeWorkspaceHost implements workspaces.WorkspaceHost {
 export function updateWorkspace(
   updater: (workspace: WorkspaceDefinition) => void | Rule | PromiseLike<void | Rule>,
 ): Rule {
-  return async (tree: Tree) => {
-    const host = new TreeWorkspaceHost(tree);
-
-    const { workspace } = await workspaces.readWorkspace(DEFAULT_WORKSPACE_PATH, host);
+  return async (host: Tree) => {
+    const workspace = await getWorkspace(host);
 
     const result = await updater(workspace);
 
-    await workspaces.writeWorkspace(workspace, host);
+    await workspaces.writeWorkspace(workspace, new TreeWorkspaceHost(host));
 
     return result || noop;
   };
@@ -163,3 +161,5 @@ export function* allTargetOptions(
     }
   }
 }
+
+export { getWorkspace as readWorkspace } from './workspace'; // for backwards compatibility

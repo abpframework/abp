@@ -8,12 +8,12 @@ public abstract class StringValueTypeBase : IStringValueType
 {
     public virtual string Name => ValueValidatorAttribute.GetName(GetType());
 
-    public object this[string key] {
+    public object? this[string key] {
         get => Properties.GetOrDefault(key);
         set => Properties[key] = value;
     }
 
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
     public IValueValidator Validator { get; set; }
 
@@ -26,6 +26,6 @@ public abstract class StringValueTypeBase : IStringValueType
     protected StringValueTypeBase(IValueValidator validator)
     {
         Validator = validator;
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
     }
 }

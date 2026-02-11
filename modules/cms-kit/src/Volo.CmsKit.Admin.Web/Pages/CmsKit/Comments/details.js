@@ -3,17 +3,17 @@ $(function (){
     
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
 
-    var detailsModal = new abp.ModalManager(abp.appPath + "CmsKit/Comments/DetailsModal");
-    
+    var commentRequireApprovement = abp.setting.getBoolean("CmsKit.Comments.RequireApprovement");
 
-    var getFormattedDate = function ($datePicker) {
-        return $datePicker.data('date');
-    };
-
+    if (commentRequireApprovement) {
+        $('#IsApprovedSelectInput').show();
+    }
+	
 	moment.localeData().preparse = (s)=>s;
     moment.localeData().postformat = (s)=>s;
-	
-    $('.singledatepicker').daterangepicker({
+
+    var singleDatePicker = $('#CmsKitCommentsDetailsWrapper .singledatepicker');
+    singleDatePicker.daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
@@ -24,22 +24,19 @@ $(function (){
         "maxYear": 2199,
     });
 
-    $('.singledatepicker').attr('autocomplete', 'off');
+    singleDatePicker.attr('autocomplete', 'off');
 
-    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+    singleDatePicker.on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
         $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
     });
     
     var filterForm = $('#CmsKitCommentsFilterForm');
-    
-    var getFilter = function () {
-        var filterObj = filterForm.serializeFormToObject();
 
-        filterObj.creationStartDate = getFormattedDate($('#creationStartDate'));
-        filterObj.creationEndDate = getFormattedDate($('#creationEndDate'));
-        
-        return filterObj;
+    var getFilter = function () {
+        filterForm.handleDatepicker('.singledatepicker');
+        var formObject = filterForm.serializeFormToObject();
+        return formObject;
     };
     
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
@@ -74,9 +71,45 @@ $(function (){
                                 commentsService
                                     .delete(data.record.id)
                                     .then(function () {
-                                        _dataTable.ajax.reload();
-                                        abp.notify.success(l('SuccessfullyDeleted'));
+                                        _dataTable.ajax.reloadEx();
+                                        abp.notify.success(l('DeletedSuccessfully'));
                                     });
+                            }
+                        },
+                        {
+                            text: function (data) {
+                                return data.isApproved ? l('Disapproved') : l('Approve');
+                            },
+                            visible: commentRequireApprovement,
+                            action: function (data) {
+                                var newApprovalStatus = !data.record?.isApproved;
+
+                                commentsService
+                                    .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
+                                    .then(function () {
+                                        _dataTable.ajax.reloadEx();
+                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                                        abp.notify.success(message);
+                                    })
+                            }
+                        },
+                        {
+                            text: function (data) {
+                                if (data.isApproved == null) {
+                                    return l('Disapproved')
+                                }
+                            },
+                            visible: commentRequireApprovement,
+                            action: function (data) {
+                                var newApprovalStatus = false;
+
+                                commentsService
+                                    .updateApprovalStatus(data.record.id, { IsApproved: newApprovalStatus })
+                                    .then(function () {
+                                        _dataTable.ajax.reloadEx();
+                                        var message = newApprovalStatus ? l('ApprovedSuccessfully') : l('ApprovalRevokedSuccessfully');
+                                        abp.notify.success(message);
+                                    })
                             }
                         }
                     ]
@@ -123,6 +156,28 @@ $(function (){
                 data: "creationTime",
                 orderable: true,
                 dataFormat: "datetime"
+            },
+            {
+                width: "10%",
+                title: l("ApproveState"),
+                visible: commentRequireApprovement,
+                orderable: false,
+                data: "isApproved",
+                render: function (data, type, row) {
+                    var icons = ''
+
+                    if (data === null) {
+                        icons = '<i class="fa-solid fa-hourglass-half text-muted"></i>';
+                    } else if (typeof data === "boolean") {
+                        if (data) {
+                            icons = '<i class="fa-solid fa-check text-success"></i>';
+                        } else {
+                            icons = '<i class="fa-solid fa-x text-danger"></i>';
+                        }
+                    }
+
+                    return icons;
+                }
             }
         ]
     }));
@@ -137,11 +192,11 @@ $(function (){
         
         $(inputSelector).val(value);
         
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
-
+        
     filterForm.submit(function (e){
         e.preventDefault();
-        _dataTable.ajax.reload();
+        _dataTable.ajax.reloadEx();
     });
 });

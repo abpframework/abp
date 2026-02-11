@@ -6,8 +6,8 @@ public class NonTypedLocalizationResource : LocalizationResourceBase
 {
     public NonTypedLocalizationResource(
         [NotNull] string resourceName,
-        [CanBeNull] string defaultCultureName = null,
-        [CanBeNull] ILocalizationResourceContributor initialContributor = null
+        string? defaultCultureName = null,
+        ILocalizationResourceContributor? initialContributor = null
     ) : base(
         resourceName,
         defaultCultureName,

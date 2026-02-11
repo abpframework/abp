@@ -1,6 +1,6 @@
 {
   "name": "Volo.CmsKit.MongoDB",
-  "hash": "0a97f3dd5afa54002ac001896c098325",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.CmsKit.MongoDB",
@@ -74,39 +74,15 @@
       "connectionStringName": "CmsKit",
       "databaseCollections": [
         {
-          "entityFullName": "Volo.CmsKit.Tags.Tag",
+          "entityFullName": "Volo.CmsKit.Comments.Comment",
           "contentType": "databaseCollection",
-          "name": "CmsTags",
+          "name": "Comments",
           "summary": null
         },
         {
           "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
           "contentType": "databaseCollection",
-          "name": "CmsUserReactions",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Pages.Page",
-          "contentType": "databaseCollection",
-          "name": "CmsPages",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Comments.Comment",
-          "contentType": "databaseCollection",
-          "name": "CmsComments",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Ratings.Rating",
-          "contentType": "databaseCollection",
-          "name": "CmsRatings",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogFeatures",
+          "name": "UserReactions",
           "summary": null
         },
         {
@@ -116,39 +92,69 @@
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
+          "entityFullName": "Volo.CmsKit.Ratings.Rating",
           "contentType": "databaseCollection",
-          "name": "CmsBlogPosts",
+          "name": "Ratings",
           "summary": null
         },
         {
-          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "entityFullName": "Volo.CmsKit.Tags.Tag",
           "contentType": "databaseCollection",
-          "name": "CmsMenuItems",
-          "summary": null
-        },
-        {
-          "entityFullName": "Volo.CmsKit.Blogs.Blog",
-          "contentType": "databaseCollection",
-          "name": "CmsBlogs",
+          "name": "Tags",
           "summary": null
         },
         {
           "entityFullName": "Volo.CmsKit.Tags.EntityTag",
           "contentType": "databaseCollection",
-          "name": "CmsEntityTags",
+          "name": "EntityTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "contentType": "databaseCollection",
+          "name": "Pages",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "contentType": "databaseCollection",
+          "name": "Blogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
+          "contentType": "databaseCollection",
+          "name": "BlogPosts",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "contentType": "databaseCollection",
+          "name": "BlogFeatures",
           "summary": null
         },
         {
           "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
           "contentType": "databaseCollection",
-          "name": "CmsMediaDescriptors",
+          "name": "MediaDescriptors",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "contentType": "databaseCollection",
+          "name": "MenuItems",
           "summary": null
         },
         {
           "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
           "contentType": "databaseCollection",
-          "name": "CmsGlobalResources",
+          "name": "GlobalResources",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.MarkedItems.UserMarkedItem",
+          "contentType": "databaseCollection",
+          "name": "UserMarkedItems",
           "summary": null
         }
       ],

@@ -12,12 +12,14 @@ public class BlogAdminAppService_Tests : CmsKitApplicationTestBase
     protected IBlogAdminAppService BlogAdminAppService { get; }
     protected CmsKitTestData CmsKitTestData { get; }
     protected IBlogRepository BlogRepository { get; }
+    protected IBlogPostRepository BlogPostRepository { get; }
 
     public BlogAdminAppService_Tests()
     {
         BlogAdminAppService = GetRequiredService<IBlogAdminAppService>();
         CmsKitTestData = GetRequiredService<CmsKitTestData>();
         BlogRepository = GetRequiredService<IBlogRepository>();
+        BlogPostRepository = GetRequiredService<IBlogPostRepository>();
     }
 
     [Fact]
@@ -81,11 +83,17 @@ public class BlogAdminAppService_Tests : CmsKitApplicationTestBase
     [Fact]
     public async Task DeleteAsync_ShouldWork()
     {
+        var posts = await BlogPostRepository.GetListAsync();
+        posts.ShouldContain(x => x.BlogId == CmsKitTestData.Blog_Id);
+
         await BlogAdminAppService.DeleteAsync(CmsKitTestData.Blog_Id);
 
         await Should.ThrowAsync<EntityNotFoundException>(
             async () =>
                 await BlogAdminAppService.GetAsync(CmsKitTestData.Blog_Id)
         );
+
+        posts = await BlogPostRepository.GetListAsync();
+        posts.ShouldNotContain(x => x.BlogId == CmsKitTestData.Blog_Id);
     }
 }

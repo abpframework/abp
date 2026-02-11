@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
@@ -14,7 +15,7 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.ExceptionHandling;
 
-public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
+public class AbpExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     private readonly ILogger<AbpExceptionHandlingMiddleware> _logger;
 
@@ -27,7 +28,7 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
         _clearCacheHeadersDelegate = ClearCacheHeaders;
     }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
@@ -57,7 +58,12 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
 
     private async Task HandleAndWrapException(HttpContext httpContext, Exception exception)
     {
-        _logger.LogException(exception);
+        var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+
+        if (exceptionHandlingOptions.ShouldLogException(exception))
+        {
+            _logger.LogException(exception);
+        }
 
         await httpContext
             .RequestServices
@@ -76,13 +82,12 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
             var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
             var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
-            var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);
             httpContext.Response.OnStarting(_clearCacheHeadersDelegate, httpContext.Response);
-            httpContext.Response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
-            httpContext.Response.Headers.Add("Content-Type", "application/json");
+            httpContext.Response.Headers.Append(AbpHttpConsts.AbpErrorFormat, "true");
+            httpContext.Response.Headers.Append("Content-Type", "application/json");
 
             await httpContext.Response.WriteAsync(
                 jsonSerializer.Serialize(
@@ -91,6 +96,7 @@ public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
                         {
                             options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
                             options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
+                            options.SendExceptionDataToClientTypes = exceptionHandlingOptions.SendExceptionDataToClientTypes;
                         })
                     )
                 )

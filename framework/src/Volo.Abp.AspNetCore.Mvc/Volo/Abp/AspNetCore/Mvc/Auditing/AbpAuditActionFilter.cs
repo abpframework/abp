@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Aspects;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Auditing;
 
-public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
+public class AbpAuditActionFilter : IAsyncActionFilter, IAbpFilter, ITransientDependency
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
@@ -28,14 +29,17 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
             {
                 var result = await next();
 
-                if (result.Exception != null && !result.ExceptionHandled)
+                if (result.Exception != null && !auditLog!.Exceptions.Contains(result.Exception))
                 {
-                    auditLog.Exceptions.Add(result.Exception);
+                    auditLog!.Exceptions.Add(result.Exception);
                 }
             }
             catch (Exception ex)
             {
-                auditLog.Exceptions.Add(ex);
+                if (!auditLog!.Exceptions.Contains(ex))
+                {
+                    auditLog!.Exceptions.Add(ex);
+                }
                 throw;
             }
             finally
@@ -45,13 +49,13 @@ public class AbpAuditActionFilter : IAsyncActionFilter, ITransientDependency
                 if (auditLogAction != null)
                 {
                     auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                    auditLog.Actions.Add(auditLogAction);
+                    auditLog!.Actions.Add(auditLogAction);
                 }
             }
         }
     }
 
-    private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo auditLog, out AuditLogActionInfo auditLogAction)
+    private bool ShouldSaveAudit(ActionExecutingContext context, out AuditLogInfo? auditLog, out AuditLogActionInfo? auditLogAction)
     {
         auditLog = null;
         auditLogAction = null;

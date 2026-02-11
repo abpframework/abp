@@ -12,6 +12,11 @@ public class ExtensibleTestPerson : ExtensibleObject
     {
 
     }
+
+    public void SetExtraPropertiesAsNull()
+    {
+        ExtraProperties = null;
+    }
 }
 
 public enum ExtensibleTestEnumProperty

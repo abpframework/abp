@@ -32,7 +32,21 @@ public class MenuManager_Test : CmsKitDomainTestBase
         menuManager.SetPageUrl(menuItem, page);
 
         menuItem.Url.ShouldNotBeNullOrEmpty();
-        menuItem.Url.ShouldBe(PageConsts.UrlPrefix + page.Slug);
+        menuItem.Url.ShouldBe(page.Slug.EnsureStartsWith('/'));
+    }
+
+    [Fact]
+    public async Task SetPageUrl_ShouldSetUrlSameWithPage_WithStringUrl()
+    {
+        var newUrl = "/my-new-url";
+
+        var menuItem = await menuItemRepository.GetAsync(testData.MenuItem_4_With_Page_1_Id);
+
+        menuManager.SetPageUrl(menuItem, newUrl);
+
+        menuItem.Url.ShouldNotBeNullOrEmpty();
+        menuItem.Url.ShouldBe(newUrl);
+        menuItem.PageId.ShouldBeNull();
     }
 
     [Fact]

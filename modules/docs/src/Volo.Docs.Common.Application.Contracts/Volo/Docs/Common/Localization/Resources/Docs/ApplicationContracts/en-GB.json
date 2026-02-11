@@ -1,0 +1,7 @@
+{
+  "culture": "en-GB",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Document Management Common",
+    "Permission:PdfDownload": "PDF Download"
+  }
+}

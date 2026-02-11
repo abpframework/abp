@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
@@ -17,13 +18,13 @@ public static class ServiceCollectionRepositoryExtensions
         var readOnlyBasicRepositoryInterface = typeof(IReadOnlyBasicRepository<>).MakeGenericType(entityType);
         if (readOnlyBasicRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
         {
-            RegisterService(services, readOnlyBasicRepositoryInterface, repositoryImplementationType, replaceExisting);
+            RegisterService(services, readOnlyBasicRepositoryInterface, repositoryImplementationType, replaceExisting, true);
 
             //IReadOnlyRepository<TEntity>
             var readOnlyRepositoryInterface = typeof(IReadOnlyRepository<>).MakeGenericType(entityType);
             if (readOnlyRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
             {
-                RegisterService(services, readOnlyRepositoryInterface, repositoryImplementationType, replaceExisting);
+                RegisterService(services, readOnlyRepositoryInterface, repositoryImplementationType, replaceExisting, true);
             }
 
             //IBasicRepository<TEntity>
@@ -48,13 +49,13 @@ public static class ServiceCollectionRepositoryExtensions
             var readOnlyBasicRepositoryInterfaceWithPk = typeof(IReadOnlyBasicRepository<,>).MakeGenericType(entityType, primaryKeyType);
             if (readOnlyBasicRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
             {
-                RegisterService(services, readOnlyBasicRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                RegisterService(services, readOnlyBasicRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting, true);
 
                 //IReadOnlyRepository<TEntity, TKey>
                 var readOnlyRepositoryInterfaceWithPk = typeof(IReadOnlyRepository<,>).MakeGenericType(entityType, primaryKeyType);
                 if (readOnlyRepositoryInterfaceWithPk.IsAssignableFrom(repositoryImplementationType))
                 {
-                    RegisterService(services, readOnlyRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting);
+                    RegisterService(services, readOnlyRepositoryInterfaceWithPk, repositoryImplementationType, replaceExisting, true);
                 }
 
                 //IBasicRepository<TEntity, TKey>
@@ -80,15 +81,27 @@ public static class ServiceCollectionRepositoryExtensions
         IServiceCollection services,
         Type serviceType,
         Type implementationType,
-        bool replaceExisting)
+        bool replaceExisting,
+        bool isReadOnlyRepository = false)
     {
+        var descriptor = ServiceDescriptor.Transient(serviceType, implementationType);
+
+        if (isReadOnlyRepository)
+        {
+            services.OnActivated(descriptor, context =>
+            {
+                var repository = context.Instance.As<IRepository>();
+                ObjectHelper.TrySetProperty(repository.As<IRepository>(), x => x.IsChangeTrackingEnabled, _ => false);
+            });
+        }
+
         if (replaceExisting)
         {
-            services.Replace(ServiceDescriptor.Transient(serviceType, implementationType));
+            services.Replace(descriptor);
         }
         else
         {
-            services.TryAddTransient(serviceType, implementationType);
+            services.TryAdd(descriptor);
         }
     }
 }

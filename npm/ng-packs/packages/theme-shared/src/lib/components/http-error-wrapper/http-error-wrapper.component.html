@@ -4,32 +4,28 @@
   class="error"
   [style.backgroundColor]="backgroundColor"
 >
-  <button
-    *ngIf="!hideCloseIcon"
-    id="abp-close-button"
-    type="button"
-    class="btn-close me-2"
-    (click)="destroy()"
-  ></button>
+  @if (!hideCloseIcon) {
+    <button id="abp-close-button" type="button" class="btn-close me-2" (click)="destroy()"></button>
+  }
 
-  <div *ngIf="!customComponent" class="row centered">
-    <div class="col-md-12">
-      <div class="error-template">
-        <h1>{{ statusText }} {{ title | abpLocalization }}</h1>
-        <div class="error-details">
-          {{ details | abpLocalization }}
-        </div>
-        <div class="error-actions">
-          <a
-            *ngIf="isHomeShow"
-            (click)="destroy()"
-            routerLink="/"
-            class="btn btn-primary btn-md mt-2"
-            ><span class="glyphicon glyphicon-home"></span>
-            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}
-          </a>
+  @if (!customComponent) {
+    <div class="row centered">
+      <div class="col-md-12">
+        <div class="error-template">
+          <h1>{{ statusText }} {{ title | abpLocalization }}</h1>
+          <div class="error-details">
+            {{ details | abpLocalization }}
+          </div>
+          <div class="error-actions">
+            @if (isHomeShow) {
+              <a (click)="goHome()" class="btn btn-primary btn-md mt-2"
+                ><span class="glyphicon glyphicon-home"></span>
+                {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}
+              </a>
+            }
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  }
 </div>

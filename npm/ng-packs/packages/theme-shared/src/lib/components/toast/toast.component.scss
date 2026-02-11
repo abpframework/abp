@@ -1,11 +1,13 @@
+@use 'sass:color';
+
 @mixin fillColor($background, $color) {
   border: 2px solid $background;
   background-color: $background;
   color: $color;
   box-shadow: 0 0 10px -5px rgba(#000, 0.4);
   &:hover {
-    border: 2px solid darken($background, 5);
-    background-color: darken($background, 5);
+    border: 2px solid color.scale($background, $lightness: -5%);
+    background-color: color.scale($background, $lightness: -5%);
     box-shadow: 0 0 15px -5px rgba(#000, 0.4);
   }
 }
@@ -14,42 +16,49 @@ $toastClass: abp-toast;
 
 .#{$toastClass} {
   display: grid;
-  grid-template-columns: 50px 1fr;
-  gap: 10px;
+  grid-template-columns: 35px 1fr;
+  gap: 5px;
   margin: 5px 0;
-  padding: 10px;
-  border-radius: 0px;
+  padding: 7px;
   width: 350px;
   user-select: none;
   box-shadow: 0 0 10px -5px rgba(#000, 0.4);
   z-index: 9999;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
+
   @include fillColor(#f0f0f0, #000);
   opacity: 1;
   &.#{$toastClass}-success {
-    @include fillColor(#51a351, #fff);
+    @include fillColor(#4fbf67, #fff);
   }
   &.#{$toastClass}-info {
-    @include fillColor(#2f96b4, #fff);
+    @include fillColor(#438aa7, #fff);
   }
   &.#{$toastClass}-warning {
-    @include fillColor(#f89406, #fff);
+    @include fillColor(#ff9f38, #fff);
   }
   &.#{$toastClass}-error {
-    @include fillColor(#bd362f, #fff);
+    @include fillColor(#c00d49, #fff);
   }
   .#{$toastClass}-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     .icon {
-      font-size: 36px;
+      font-size: 32px;
     }
   }
   .#{$toastClass}-content {
     position: relative;
     display: flex;
     align-self: center;
+    flex-direction: column;
     word-break: break-word;
+    padding-bottom: 2px;
+
     .#{$toastClass}-close-button {
       position: absolute;
       top: 0;
@@ -60,7 +69,7 @@ $toastClass: abp-toast;
       margin: 0;
       padding: 0px 5px 0 0;
       width: 25px;
-      height: 25px;
+      height: 100%;
       border: none;
       border-radius: 50%;
       background: transparent;

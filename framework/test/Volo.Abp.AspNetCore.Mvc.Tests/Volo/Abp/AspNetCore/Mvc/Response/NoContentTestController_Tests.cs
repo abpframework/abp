@@ -55,4 +55,12 @@ public class NoContentTestController_Tests : AspNetCoreMvcTestBase
         var result = await GetResponseAsync("/api/NoContent-Test/TestAsyncMethodWithResultFilter");
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
+
+    [Fact]
+    public async Task Should_Not_Set_No_Content_If_Body_Changed()
+    {
+        var result = await GetResponseAsync("/api/NoContent-Test/TestAsyncMethodChangeBody");
+        result.StatusCode.ShouldBe(HttpStatusCode.OK);
+    }
+
 }

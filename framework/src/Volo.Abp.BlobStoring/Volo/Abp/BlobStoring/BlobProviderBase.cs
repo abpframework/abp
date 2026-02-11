@@ -12,9 +12,9 @@ public abstract class BlobProviderBase : IBlobProvider
 
     public abstract Task<bool> ExistsAsync(BlobProviderExistsArgs args);
 
-    public abstract Task<Stream> GetOrNullAsync(BlobProviderGetArgs args);
+    public abstract Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args);
 
-    protected virtual async Task<Stream> TryCopyToMemoryStreamAsync(Stream stream, CancellationToken cancellationToken = default)
+    protected virtual async Task<Stream?> TryCopyToMemoryStreamAsync(Stream? stream, CancellationToken cancellationToken = default)
     {
         if (stream == null)
         {

@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Zapisywanie...",
     "Actions": "Akcje",
     "Delete": "Usuń",
-    "SuccessfullyDeleted": "Pomyślnie usunięto",
+    "CreatedSuccessfully": "Pomyślnie utworzono",
+    "SavedSuccessfully": "Pomyślnie zapisano",
+    "DeletedSuccessfully": "Pomyślnie usunięto",
     "Edit": "Edytuj",
     "Refresh": "Odśwież",
     "Language": "Język",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Pokaż od 0 do 0 z 0 rekordów",
     "PagerInfoFiltered": "(filtruj od _MAX_ wszystkich rekordów)",
     "NoDataAvailableInDatatable": "Nie znaleziono danych w tabeli",
+    "ErrorLoadingDatatable": "Wystąpił błąd podczas żądania. Sprawdź wiadomość, aby uzyskać szczegóły.",
     "Total": "całkowity",
     "Selected": "wybrany",
     "PagerShowMenuEntries": "Pokaż _MENU_ rekordów",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} zostanie usunięty!",
     "ItemWillBeDeletedMessage": "Ten element zostanie usunięty!",
     "ManageYourAccount": "Zarządzaj kontem",
-    "OthersGroup": "Inny"
+    "OthersGroup": "Inny",
+    "Today": "Dzisiaj",
+    "Apply": "Stosować",
+    "InternetConnectionInfo": "Nie można było wykonać operacji. Twoje połączenie internetowe nie jest w tej chwili dostępne.",
+    "CopiedToTheClipboard": "Skopiowano do schowka",
+    "AddNew": "Dodaj nowe",
+    "ProfilePicture": "Zdjęcie profilowe",
+    "Theme": "Temat",
+    "NotAssigned": "Nie przypisano",
+    "EntityActionsDisabledTooltip": "Nie masz uprawnień do wykonania żadnej akcji.",
+    "ResourcePermissions": "Uprawnienia"
   }
 }

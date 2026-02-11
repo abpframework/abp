@@ -24,5 +24,5 @@ public interface IExceptionToErrorInfoConverter
     /// <param name="exception">The exception.</param>
     /// <param name="options">Additional options.</param>
     /// <returns>Error info or null</returns>
-    RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions> options = null);
+    RemoteServiceErrorInfo Convert(Exception exception, Action<AbpExceptionHandlingOptions>? options = null);
 }

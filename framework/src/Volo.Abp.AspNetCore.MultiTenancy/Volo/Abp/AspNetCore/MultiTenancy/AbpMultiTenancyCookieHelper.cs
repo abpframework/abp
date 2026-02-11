@@ -14,7 +14,7 @@ public static class AbpMultiTenancyCookieHelper
         {
             context.Response.Cookies.Append(
                 tenantKey,
-                tenantId.ToString(),
+                tenantId.ToString()!,
                 new CookieOptions
                 {
                     Path = "/",

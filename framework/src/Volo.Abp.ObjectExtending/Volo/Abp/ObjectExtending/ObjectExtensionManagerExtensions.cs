@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending;
@@ -13,7 +15,7 @@ public static class ObjectExtensionManagerExtensions
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] Type[] objectTypes,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         return objectExtensionManager.AddOrUpdateProperty(
             objectTypes,
@@ -26,7 +28,7 @@ public static class ObjectExtensionManagerExtensions
     public static ObjectExtensionManager AddOrUpdateProperty<TObject, TProperty>(
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
         where TObject : IHasExtraProperties
     {
         return objectExtensionManager.AddOrUpdateProperty(
@@ -43,7 +45,7 @@ public static class ObjectExtensionManagerExtensions
         [NotNull] Type[] objectTypes,
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         Check.NotNull(objectTypes, nameof(objectTypes));
 
@@ -66,7 +68,7 @@ public static class ObjectExtensionManagerExtensions
         [NotNull] Type objectType,
         [NotNull] Type propertyType,
         [NotNull] string propertyName,
-        [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
+        Action<ObjectExtensionPropertyInfo>? configureAction = null)
     {
         Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
@@ -82,7 +84,7 @@ public static class ObjectExtensionManagerExtensions
             });
     }
 
-    public static ObjectExtensionPropertyInfo GetPropertyOrNull<TObject>(
+    public static ObjectExtensionPropertyInfo? GetPropertyOrNull<TObject>(
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] string propertyName)
     {
@@ -92,7 +94,7 @@ public static class ObjectExtensionManagerExtensions
         );
     }
 
-    public static ObjectExtensionPropertyInfo GetPropertyOrNull(
+    public static ObjectExtensionPropertyInfo? GetPropertyOrNull(
         [NotNull] this ObjectExtensionManager objectExtensionManager,
         [NotNull] Type objectType,
         [NotNull] string propertyName)
@@ -129,5 +131,34 @@ public static class ObjectExtensionManagerExtensions
         }
 
         return extensionInfo.GetProperties();
+    }
+
+    public static Task<ImmutableList<ObjectExtensionPropertyInfo>> GetPropertiesAndCheckPolicyAsync<TObject>(
+        [NotNull] this ObjectExtensionManager objectExtensionManager,
+        [NotNull] IServiceProvider serviceProvider)
+    {
+        return objectExtensionManager.GetPropertiesAndCheckPolicyAsync(typeof(TObject), serviceProvider);
+    }
+
+    public async static Task<ImmutableList<ObjectExtensionPropertyInfo>> GetPropertiesAndCheckPolicyAsync(
+        [NotNull] this ObjectExtensionManager objectExtensionManager,
+        [NotNull] Type objectType,
+        [NotNull] IServiceProvider serviceProvider)
+    {
+        Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+        Check.NotNull(objectType, nameof(objectType));
+        Check.NotNull(serviceProvider, nameof(serviceProvider));
+
+        var extensionPropertyPolicyConfigurationChecker = serviceProvider.GetRequiredService<ExtensionPropertyPolicyChecker>();
+        var properties = new List<ObjectExtensionPropertyInfo>();
+        foreach (var propertyInfo in objectExtensionManager.GetProperties(objectType))
+        {
+            if (await extensionPropertyPolicyConfigurationChecker.CheckPolicyAsync(propertyInfo.Policy))
+            {
+                properties.Add(propertyInfo);
+            }
+        }
+
+        return properties.ToImmutableList();
     }
 }

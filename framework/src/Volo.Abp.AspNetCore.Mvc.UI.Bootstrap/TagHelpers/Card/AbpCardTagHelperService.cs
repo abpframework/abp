@@ -8,7 +8,11 @@ public class AbpCardTagHelperService : AbpTagHelperService<AbpCardTagHelper>
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "div";
-        output.Attributes.AddClass("card mb-3");
+        output.Attributes.AddClass("card");
+        if (TagHelper.AddMarginBottomClass)
+        {
+            output.Attributes.AddClass("mb-3");
+        }
 
         SetBorder(context, output);
     }

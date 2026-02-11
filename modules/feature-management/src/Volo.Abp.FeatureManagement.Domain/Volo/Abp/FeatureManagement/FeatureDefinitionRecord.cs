@@ -7,38 +7,31 @@ namespace Volo.Abp.FeatureManagement;
 
 public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    /* Ignoring Id because it is different whenever we create an instance of
-     * this class, and we are using Json Serialize, than Hash to understand
-     * if feature definitions have changed (in StaticFeatureSaver.CalculateHash()).
-     */
-    [JsonIgnore] //TODO: TODO: Use JSON modifier to ignore this property
-    public override Guid Id { get; protected set; }
+    public virtual string GroupName { get; set; }
 
-    public string GroupName { get; set; }
+    public virtual string Name  { get; set; }
 
-    public string Name  { get; set; }
+    public virtual string ParentName { get; set; }
 
-    public string ParentName { get; set; }
+    public virtual string DisplayName  { get; set; }
 
-    public string DisplayName  { get; set; }
+    public virtual string Description { get; set; }
 
-    public string Description { get; set; }
+    public virtual string DefaultValue { get; set; }
 
-    public string DefaultValue { get; set; }
+    public virtual bool IsVisibleToClients { get; set; }
 
-    public bool IsVisibleToClients { get; set; }
-
-    public bool IsAvailableToHost { get; set; }
+    public virtual bool IsAvailableToHost { get; set; }
 
     /// <summary>
     /// Comma separated list of provider names.
     /// </summary>
-    public string AllowedProviders { get; set; }
+    public virtual string AllowedProviders { get; set; }
 
     /// <summary>
     /// Serialized string to store info about the ValueType.
     /// </summary>
-    public string ValueType { get; set; } // ToggleStringValueType
+    public virtual string ValueType { get; set; } // ToggleStringValueType
 
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 

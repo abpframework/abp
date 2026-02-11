@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
@@ -15,16 +14,19 @@ namespace Pages.Abp.MultiTenancy;
 public class TenantSwitchModalModel : AbpPageModel
 {
     [BindProperty]
-    public TenantInfoModel Input { get; set; }
+    public TenantInfoModel Input { get; set; } = default!;
 
     protected ITenantStore TenantStore { get; }
+    protected ITenantNormalizer TenantNormalizer { get; }
     protected AbpAspNetCoreMultiTenancyOptions Options { get; }
 
     public TenantSwitchModalModel(
         ITenantStore tenantStore,
+        ITenantNormalizer tenantNormalizer,
         IOptions<AbpAspNetCoreMultiTenancyOptions> options)
     {
         TenantStore = tenantStore;
+        TenantNormalizer = tenantNormalizer;
         Options = options.Value;
         LocalizationResourceType = typeof(AbpUiMultiTenancyResource);
     }
@@ -45,15 +47,15 @@ public class TenantSwitchModalModel : AbpPageModel
         Guid? tenantId = null;
         if (!Input.Name.IsNullOrEmpty())
         {
-            var tenant = await TenantStore.FindAsync(Input.Name);
+            var tenant = await TenantStore.FindAsync(TenantNormalizer.NormalizeName(Input.Name!)!);
             if (tenant == null)
             {
-                throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name]);
+                throw new UserFriendlyException(L["GivenTenantIsNotExist", Input.Name!]);
             }
 
             if (!tenant.IsActive)
             {
-                throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);
+                throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name!]);
             }
 
             tenantId = tenant.Id;
@@ -65,6 +67,6 @@ public class TenantSwitchModalModel : AbpPageModel
     public class TenantInfoModel
     {
         [InputInfoText("SwitchTenantHint")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

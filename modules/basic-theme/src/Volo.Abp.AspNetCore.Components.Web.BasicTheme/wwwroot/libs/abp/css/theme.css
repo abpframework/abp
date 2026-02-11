@@ -82,10 +82,6 @@ div.dataTables_wrapper div.dataTables_length label {
 
 /* TEMP */
 
-.navbar-dark .navbar-nav .nav-link {
-    color: #000 !important;
-}
-
 .navbar-nav > .nav-item > .nav-link,
 .navbar-nav > .nav-item > .dropdown > .nav-link {
     color: #fff !important;
@@ -170,4 +166,9 @@ h1.content-header-title{
 
 form .table-responsive{
     min-height: 412px;
+}
+
+.tab-content {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 }

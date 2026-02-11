@@ -7,50 +7,51 @@
   [nzData]="nodes"
   [nzTreeTemplate]="treeTemplate"
   [nzExpandedKeys]="expandedKeys"
-  [nzExpandedIcon]="expandedIconTemplate?.template || defaultIconTemplate"
+  [nzExpandedIcon]="expandedIconTemplate()?.template || defaultIconTemplate"
   (nzExpandChange)="onExpandedKeysChange($event)"
-  (nzCheckBoxChange)="onCheckboxChange($event)"
+  (nzCheckboxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
   [nzNoAnimation]="noAnimation"
-  (nzContextMenu)="dropdowns[$event.node?.key]?.toggle()"
-></nz-tree>
+  (nzContextMenu)="onContextMenuChange($event)"
+/>
 <ng-template #treeTemplate let-node>
   <div
     [class.selected]="isNodeSelected(node)"
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"
   >
-    <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"></ng-container>
+    <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }" />
 
     <ng-template #nodeTemplate let-node>
-      <div class="d-inline-block">
+      <div class="d-inline-flex align-items-center abp-ellipsis-inline">
         <ng-container
           *ngTemplateOutlet="
-            customNodeTemplate ? customNodeTemplate?.template : defaultNodeTemplate;
+            customNodeTemplate() ? customNodeTemplate()?.template : defaultNodeTemplate;
             context: { $implicit: node }
           "
-        ></ng-container>
+        />
       </div>
 
-      <div
-        #dropdown="ngbDropdown"
-        *ngIf="menu"
-        class="d-inline-block ms-1"
-        ngbDropdown
-        placement="bottom"
-        container="body"
-        (abpInit)="initDropdown(node.key, dropdown)"
-      >
-        <i
-          class="fas fa-caret-down text-muted"
-          ngbDropdownToggle
-          [class.dropdown-toggle]="false"
-          aria-hidden="true"
-        ></i>
-        <div ngbDropdownMenu>
-          <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }"></ng-template>
+      @if (menu()) {
+        <div
+          #dropdown="ngbDropdown"
+          class="d-inline-block ms-1"
+          ngbDropdown
+          placement="bottom"
+          container="body"
+          (abpInit)="initDropdown(node.key, dropdown)"
+        >
+          <i
+            class="fas fa-caret-down text-muted"
+            ngbDropdownToggle
+            [class.dropdown-toggle]="false"
+            aria-hidden="true"
+          ></i>
+          <div ngbDropdownMenu>
+            <ng-template *ngTemplateOutlet="menu(); context: { $implicit: node }" />
+          </div>
         </div>
-      </div>
+      }
     </ng-template>
 
     <ng-template #defaultNodeTemplate let-node>
@@ -61,8 +62,8 @@
 
 <ng-template #defaultIconTemplate let-node let-origin="origin">
   <i aria-hidden="true">
-    <ng-container *ngTemplateOutlet="node.isExpanded ? minusIcon : plusIcon"></ng-container
-  ></i>
+    <ng-container *ngTemplateOutlet="node.isExpanded ? minusIcon : plusIcon"
+  /></i>
 </ng-template>
 
 <ng-template #minusIcon>

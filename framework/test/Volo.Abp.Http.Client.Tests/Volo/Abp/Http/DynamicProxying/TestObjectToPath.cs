@@ -15,9 +15,8 @@ public class TestObjectToPath : IObjectToPath<int>, ITransientDependency
             {
                 value = 888;
             }
-            return Task.FromResult(value.ToString());
         }
 
-        return Task.FromResult<string>(null);
+        return Task.FromResult(value.ToString());
     }
 }

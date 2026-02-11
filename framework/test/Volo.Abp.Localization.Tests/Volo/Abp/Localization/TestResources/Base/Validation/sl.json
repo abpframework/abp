@@ -2,6 +2,11 @@
   "culture": "sl",
   "texts": {
     "ThisFieldIsRequired": "to polje je obvezno",
-    "MaxLenghtErrorMessage": "To polje lahko vsebuje največ znakov »{0}«."
+    "MaxLenghtErrorMessage": "To polje lahko vsebuje največ znakov »{0}«.",
+    "Enum:BookType.Undefined": "Nedefinirano iz ValidationResource",
+    "Enum:BookType.0": "Nedefinirano z vrednostjo 0 iz ValidationResource",
+    "BookType.Adventure": "Pustolovščina iz ValidationResource",
+    "BookType.1": "Pustolovščina z vrednostjo 1 iz ValidationResource",
+    "Biography": "Življenjepis iz ValidationResource"
   }
 }

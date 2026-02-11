@@ -14,6 +14,7 @@ using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Localization;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Http.Client.ClientProxying;
 
@@ -36,14 +37,19 @@ public class ClientProxyUrlBuilder : ITransientDependency
 
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected AbpHttpClientProxyingOptions HttpClientProxyingOptions { get; }
+    protected IClock Clock { get; }
 
-    public ClientProxyUrlBuilder(IServiceScopeFactory serviceScopeFactory, IOptions<AbpHttpClientProxyingOptions> httpClientProxyingOptions)
+    public ClientProxyUrlBuilder(
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpHttpClientProxyingOptions> httpClientProxyingOptions,
+        IClock clock)
     {
         ServiceScopeFactory = serviceScopeFactory;
         HttpClientProxyingOptions = httpClientProxyingOptions.Value;
+        Clock = clock;
     }
 
-    public async Task<string> GenerateUrlWithParametersAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+    public async Task<string> GenerateUrlWithParametersAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
     {
         // The ASP.NET Core route value provider and query string value provider:
         //  Treat values as invariant culture.
@@ -59,7 +65,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
         }
     }
 
-    protected virtual async Task ReplacePathVariablesAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+    protected virtual async Task ReplacePathVariablesAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
     {
         var pathParameters = action.Parameters
             .Where(p => p.BindingSourceId == ParameterBindingSources.Path)
@@ -100,21 +106,21 @@ public class ClientProxyUrlBuilder : ITransientDependency
                 {
                     using (var scope = ServiceScopeFactory.CreateScope())
                     {
-                        var path = await (Task<string>)CallObjectToPathAsyncMethod
+                        var path = await (Task<string?>)CallObjectToPathAsyncMethod
                             .MakeGenericMethod(value.GetType())
-                            .Invoke(this, new object[]
+                            .Invoke(this, new object?[]
                             {
                                 scope.ServiceProvider.GetRequiredService(HttpClientProxyingOptions.PathConverts[value.GetType()]),
                                 action,
                                 pathParameter,
                                 value
-                            });
+                            })!;
 
                         if (path != null)
                         {
                             urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", path);
-                            continue;
                         }
+                        continue;
                     }
                 }
 
@@ -123,7 +129,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
         }
     }
 
-    protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+    protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
     {
         var queryStringParameters = action.Parameters
             .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
@@ -143,7 +149,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
             {
                 using (var scope = ServiceScopeFactory.CreateScope())
                 {
-                    var queryString = await (Task<string>)CallObjectToQueryStringAsyncMethod
+                    var queryString = await (Task<string?>)CallObjectToQueryStringAsyncMethod
                         .MakeGenericMethod(value.GetType())
                         .Invoke(this, new object[]
                         {
@@ -151,15 +157,15 @@ public class ClientProxyUrlBuilder : ITransientDependency
                             action,
                             queryStringParameter,
                             value
-                        });
+                        })!;
 
                     if (queryString != null)
                     {
                         urlBuilder.Append(isFirstParam ? "?" : "&");
                         urlBuilder.Append(queryString);
                         isFirstParam = false;
-                        continue;
                     }
+                    continue;
                 }
             }
 
@@ -218,13 +224,18 @@ public class ClientProxyUrlBuilder : ITransientDependency
         return true;
     }
 
-    protected virtual Task<string> ConvertValueToStringAsync([CanBeNull] object value)
+    protected virtual Task<string> ConvertValueToStringAsync(object? value)
     {
         if (value is DateTime dateTimeValue)
         {
-            return Task.FromResult(dateTimeValue.ToUniversalTime().ToString("O"));
+            if (Clock.SupportsMultipleTimezone || dateTimeValue.Kind == DateTimeKind.Utc)
+            {
+                return Task.FromResult(dateTimeValue.ToUniversalTime().ToString("O"));
+            }
+
+            return Task.FromResult(dateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss.fffffff").TrimEnd('0').TrimEnd('.'));
         }
 
-        return Task.FromResult(value?.ToString());
+        return Task.FromResult(value?.ToString() ?? string.Empty);
     }
 }

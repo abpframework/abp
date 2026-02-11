@@ -68,13 +68,9 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
 
     private bool ShouldPublishDistributedEventForEntity(object entity)
     {
-        return DistributedEntityEventOptions
-            .AutoEventSelectors
-            .IsMatch(
-                ProxyHelper
-                    .UnProxy(entity)
-                    .GetType()
-            );
+        var entityType = ProxyHelper.UnProxy(entity).GetType();
+        return !DistributedEntityEventOptions.IgnoredEventSelectors.IsMatch(entityType) &&
+               DistributedEntityEventOptions.AutoEventSelectors.IsMatch(entityType);
     }
 
     public virtual void PublishEntityUpdatedEvent(object entity)
@@ -133,7 +129,7 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
     {
         var entityType = ProxyHelper.UnProxy(entityOrEto).GetType();
         var eventType = genericEventType.MakeGenericType(entityType);
-        var eventData = Activator.CreateInstance(eventType, entityOrEto);
+        var eventData = Activator.CreateInstance(eventType, entityOrEto)!;
         var currentUow = UnitOfWorkManager.Current;
 
         if (currentUow == null)

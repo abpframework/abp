@@ -1,9 +1,10 @@
-﻿using JetBrains.Annotations;
+﻿using System;
 
 namespace Volo.Abp.Tracing;
 
 public interface ICorrelationIdProvider
 {
-    [NotNull]
-    string Get();
+    string? Get();
+
+    IDisposable Change(string? correlationId);
 }

@@ -68,7 +68,8 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             SourceCodeTypes.Template,
             args.Version,
             args.TemplateSource,
-            args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long)
+            args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long),
+            trustUserVersion: args.TrustUserVersion
         );
 
         ConfigureThemeOptions(args, templateFile.Version);
@@ -243,7 +244,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             {
                 Logger.LogWarning("You may need to make some additional changes for this theme. " +
                                   "See the documentation for more information: " +
-                                  "https://docs.abp.io/en/abp/latest/UI/Angular/Theme-Configurations");
+                                  "https://abp.io/docs/latest/framework/ui/angular/theme-configurations");
             }
         }
 

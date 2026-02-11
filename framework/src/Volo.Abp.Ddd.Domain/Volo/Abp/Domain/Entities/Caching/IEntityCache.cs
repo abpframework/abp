@@ -10,8 +10,7 @@ public interface IEntityCache<TEntityCacheItem, in TKey>
     /// Gets the entity with given <paramref name="id"/>,
     /// or returns null if the entity was not found.
     /// </summary>
-    [ItemCanBeNull] 
-    Task<TEntityCacheItem> FindAsync(TKey id);
+    Task<TEntityCacheItem?> FindAsync(TKey id);
  
     /// <summary>
     /// Gets the entity with given <paramref name="id"/>,

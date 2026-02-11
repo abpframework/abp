@@ -21,7 +21,7 @@ public class RemotePermissionChecker : IPermissionChecker, ITransientDependency
         return configuration.Auth.GrantedPolicies.ContainsKey(name);
     }
 
-    public async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
+    public async Task<bool> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string name)
     {
         /* This provider always works for the current principal. */
         return await IsGrantedAsync(name);
@@ -41,7 +41,7 @@ public class RemotePermissionChecker : IPermissionChecker, ITransientDependency
         return result;
     }
 
-    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string[] names)
+    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string[] names)
     {
         /* This provider always works for the current principal. */
         return await IsGrantedAsync(names);

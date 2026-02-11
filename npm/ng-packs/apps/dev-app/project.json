@@ -1,0 +1,197 @@
+{
+  "name": "dev-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/dev-app/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/dev-app",
+        "browser": "apps/dev-app/src/main.ts",
+        "polyfills": ["apps/dev-app/src/polyfills.ts", "zone.js"],
+        "tsConfig": "apps/dev-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
+        "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
+        "styles": [
+          {
+            "input": "node_modules/bootstrap/dist/css/bootstrap.rtl.min.css",
+            "inject": false,
+            "bundleName": "bootstrap-rtl.min"
+          },
+          {
+            "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "inject": true,
+            "bundleName": "bootstrap-ltr.min"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.css",
+            "inject": false,
+            "bundleName": "bootstrap-dim"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.css",
+            "inject": false,
+            "bundleName": "ng-bundle"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.css",
+            "inject": false,
+            "bundleName": "layout-bundle"
+          },
+          {
+            "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.css",
+            "inject": false,
+            "bundleName": "abp-bundle"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/bootstrap-dim.rtl.css",
+            "inject": false,
+            "bundleName": "bootstrap-dim.rtl"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/ng-bundle.rtl.css",
+            "inject": false,
+            "bundleName": "ng-bundle.rtl"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/side-menu/layout-bundle.rtl.css",
+            "inject": false,
+            "bundleName": "layout-bundle.rtl"
+          },
+          {
+            "input": "node_modules/@abp/ng.theme.lepton-x/assets/css/abp-bundle.rtl.css",
+            "inject": false,
+            "bundleName": "abp-bundle.rtl"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.rtl.css",
+            "inject": false,
+            "bundleName": "font-bundle.rtl"
+          },
+          {
+            "input": "node_modules/@volo/ngx-lepton-x.lite/assets/css/font-bundle.css",
+            "inject": false,
+            "bundleName": "font-bundle"
+          },
+          {
+            "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+            "inject": true,
+            "bundleName": "fontawesome-all.min"
+          },
+          {
+            "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+            "inject": true,
+            "bundleName": "fontawesome-v4-shims.min"
+          },
+          {
+            "input": "node_modules/@swimlane/ngx-datatable/index.css",
+            "inject": true,
+            "bundleName": "ngx-datatable-index"
+          },
+          {
+            "input": "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+            "inject": true,
+            "bundleName": "ngx-datatable-icons"
+          },
+          {
+            "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
+            "inject": true,
+            "bundleName": "ngx-datatable-material"
+          },
+          {
+            "input": "node_modules/ng-zorro-antd/tree/style/index.min.css",
+            "inject": false,
+            "bundleName": "ng-zorro-antd-tree"
+          },
+          {
+            "input": "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+            "inject": true,
+            "bundleName": "bootstrap-icons"
+          },
+          "apps/dev-app/src/styles.scss"
+        ],
+        "scripts": [],
+        "server": "apps/dev-app/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/dev-app/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "apps/dev-app/tsconfig.app.json",
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "6kb",
+              "maximumError": "10kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/dev-app/src/environments/environment.ts",
+              "with": "apps/dev-app/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "dev-app:build:production"
+        },
+        "development": {
+          "buildTarget": "dev-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "dev-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/dev-app",
+        "silent": false
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "dev-app:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/dev-app/browser",
+        "spa": true
+      }
+    }
+  }
+}

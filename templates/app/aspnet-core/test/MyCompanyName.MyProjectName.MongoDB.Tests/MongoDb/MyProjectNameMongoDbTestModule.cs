@@ -5,9 +5,9 @@ using Volo.Abp.Modularity;
 namespace MyCompanyName.MyProjectName.MongoDB;
 
 [DependsOn(
-    typeof(MyProjectNameTestBaseModule),
+    typeof(MyProjectNameApplicationTestModule),
     typeof(MyProjectNameMongoDbModule)
-    )]
+)]
 public class MyProjectNameMongoDbTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

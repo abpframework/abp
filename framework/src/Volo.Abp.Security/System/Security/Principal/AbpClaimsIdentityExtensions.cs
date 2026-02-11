@@ -84,7 +84,7 @@ public static class AbpClaimsIdentityExtensions
         return null;
     }
 
-    public static string FindClientId([NotNull] this ClaimsPrincipal principal)
+    public static string? FindClientId([NotNull] this ClaimsPrincipal principal)
     {
         Check.NotNull(principal, nameof(principal));
 
@@ -97,7 +97,7 @@ public static class AbpClaimsIdentityExtensions
         return clientIdOrNull.Value;
     }
 
-    public static string FindClientId([NotNull] this IIdentity identity)
+    public static string? FindClientId([NotNull] this IIdentity identity)
     {
         Check.NotNull(identity, nameof(identity));
 
@@ -238,6 +238,19 @@ public static class AbpClaimsIdentityExtensions
         return claimsIdentity;
     }
 
+    public static ClaimsIdentity RemoveAll(this ClaimsIdentity claimsIdentity, string claimType)
+    {
+        Check.NotNull(claimsIdentity, nameof(claimsIdentity));
+
+        foreach (var x in claimsIdentity.FindAll(claimType).ToList())
+        {
+            claimsIdentity.RemoveClaim(x);
+        }
+
+        return claimsIdentity;
+    }
+
+
     public static ClaimsIdentity AddOrReplace(this ClaimsIdentity claimsIdentity, Claim claim)
     {
         Check.NotNull(claimsIdentity, nameof(claimsIdentity));
@@ -264,4 +277,31 @@ public static class AbpClaimsIdentityExtensions
         return principal;
     }
 
+    public static string? FindSessionId([NotNull] this IIdentity identity)
+    {
+        Check.NotNull(identity, nameof(identity));
+
+        var claimsIdentity = identity as ClaimsIdentity;
+
+        var sessionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.SessionId);
+        if (sessionIdOrNull == null || sessionIdOrNull.Value.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        return sessionIdOrNull.Value;
+    }
+
+    public static string? FindSessionId([NotNull] this ClaimsPrincipal principal)
+    {
+        Check.NotNull(principal, nameof(principal));
+
+        var sessionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.SessionId);
+        if (sessionIdOrNull == null || sessionIdOrNull.Value.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        return sessionIdOrNull.Value;
+    }
 }

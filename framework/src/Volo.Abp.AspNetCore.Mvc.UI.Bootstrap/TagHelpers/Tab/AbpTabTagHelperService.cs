@@ -21,7 +21,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
 
         var active = TagHelper.Active ?? false;
 
-        tabHeaderItems.Add(new TabItem(tabHeader, tabContent, active, TagHelper.Name, TagHelper.ParentDropdownName, false));
+        tabHeaderItems.Add(new TabItem(tabHeader, tabContent, active, TagHelper.Name!, TagHelper.ParentDropdownName, false));
 
         output.SuppressOutput();
     }
@@ -53,7 +53,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
                 anchor.Attributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.Append(title);
 
             return anchor.ToHtmlString();
         }
@@ -73,7 +73,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
                 anchor.Attributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.Append(title);
 
             var listItem = new TagBuilder("li");
             listItem.AddCssClass("nav-item");
@@ -89,7 +89,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
         var id = TagHelper.Name;
         var attributes = GetTabContentAttributes(context, output);
 
-        var classAttributesAsString = attributes.Where(a => a.Name == "class").ToList().Select(a => a.Name).JoinAsString(" ");
+        var classAttributesAsString = attributes.Where(a => a.Name == "class").ToList().Select(a => a.Value).JoinAsString(" ");
         var otherAttributes = attributes.Where(a => a.Name != "class").ToList();
 
         var wrapper = new TagBuilder("div");

@@ -27,6 +27,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac.Builder;
+using Autofac.Core;
+using Autofac.Core.Activators;
+using Autofac.Core.Activators.Delegate;
+using Autofac.Core.Activators.Reflection;
+using Autofac.Core.Resolving.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Modularity;
@@ -87,7 +92,7 @@ public static class AutofacRegistration
     public static void Populate(
         this ContainerBuilder builder,
         IServiceCollection services,
-        object lifetimeScopeTagForSingletons)
+        object? lifetimeScopeTagForSingletons)
     {
         if (services == null)
         {
@@ -97,6 +102,8 @@ public static class AutofacRegistration
         builder.RegisterType<AutofacServiceProvider>()
             .As<IServiceProvider>()
             .As<IServiceProviderIsService>()
+            .As<IKeyedServiceProvider>()
+            .As<IServiceProviderIsKeyedService>()
             .ExternallyOwned();
 
         var autofacServiceScopeFactory = typeof(AutofacServiceProvider).Assembly.GetType("Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory");
@@ -111,7 +118,113 @@ public static class AutofacRegistration
             .As<IServiceScopeFactory>()
             .SingleInstance();
 
+        // Shims for keyed service compatibility.
+        builder.RegisterSource<AnyKeyRegistrationSource>();
+        builder.ComponentRegistryBuilder.Registered += AddFromKeyedServiceParameterMiddleware;
+
         Register(builder, services, lifetimeScopeTagForSingletons);
+    }
+
+    /// <summary>
+    /// Inspect each component registration, and determine whether or not we can avoid adding the
+    /// <see cref="FromKeyedServicesAttribute"/> parameter to the resolve pipeline.
+    /// </summary>
+    private static void AddFromKeyedServiceParameterMiddleware(object? sender, ComponentRegisteredEventArgs e)
+    {
+        var needFromKeyedServiceParameter = false;
+
+        // We can optimise quite significantly in the case where we are using the reflection activator.
+        // In that state we can inspect the constructors ahead of time and determine whether the parameter will even need to be added.
+        if (e.ComponentRegistration.Activator is ReflectionActivator reflectionActivator)
+        {
+            var constructors = reflectionActivator.ConstructorFinder.FindConstructors(reflectionActivator.LimitType);
+
+            // Go through all the constructors; if any have a FromKeyedServices, then we must add our component middleware to
+            // the pipeline.
+            foreach (var constructor in constructors)
+            {
+                foreach (var constructorParameter in constructor.GetParameters())
+                {
+                    if (constructorParameter.GetCustomAttribute<FromKeyedServicesAttribute>() is not null)
+                    {
+                        // One or more of the constructors we will use to activate has a FromKeyedServicesAttribute,
+                        // we must add our middleware.
+                        needFromKeyedServiceParameter = true;
+                        break;
+                    }
+                }
+
+                if (needFromKeyedServiceParameter)
+                {
+                    break;
+                }
+            }
+        }
+        else if (e.ComponentRegistration.Activator is DelegateActivator)
+        {
+            // For delegate activation there are very few paths that would let the FromKeyedServicesAttribute
+            // actually work, and none that MSDI supports directly.
+            // We're explicitly choosing here not to support [FromKeyedServices] on the Autofac-specific generic
+            // delegate resolve methods, to improve performance for the 99% case of other delegates that only
+            // receive an IComponentContext or an IServiceProvider.
+            needFromKeyedServiceParameter = false;
+        }
+        else if (e.ComponentRegistration.Activator is InstanceActivator)
+        {
+            // Instance activators don't use parameters.
+            needFromKeyedServiceParameter = false;
+        }
+        else
+        {
+            // Unknown activator, assume we need the parameter.
+            needFromKeyedServiceParameter = true;
+        }
+
+        e.ComponentRegistration.PipelineBuilding += (_, pipeline) =>
+        {
+            var keyedServiceMiddlewareType = typeof(AutofacServiceProvider).Assembly.GetType("Autofac.Extensions.DependencyInjection.KeyedServiceMiddleware");
+            var instanceWithFromKeyedServicesParameter = (IResolveMiddleware)keyedServiceMiddlewareType!.GetProperty("InstanceWithFromKeyedServicesParameter", BindingFlags.Public | BindingFlags.Static)!.GetValue(null, null)!;
+            var instanceWithoutFromKeyedServicesParameter = (IResolveMiddleware)keyedServiceMiddlewareType!.GetProperty("InstanceWithoutFromKeyedServicesParameter", BindingFlags.Public | BindingFlags.Static)!.GetValue(null, null)!;
+
+            if (needFromKeyedServiceParameter)
+            {
+                pipeline.Use(instanceWithFromKeyedServicesParameter, MiddlewareInsertionMode.StartOfPhase);
+            }
+            else
+            {
+                pipeline.Use(instanceWithoutFromKeyedServicesParameter, MiddlewareInsertionMode.StartOfPhase);
+            }
+        };
+    }
+
+    /// <summary>
+    /// Configures the exposed service type on a service registration.
+    /// </summary>
+    /// <typeparam name="TActivatorData">The activator data type.</typeparam>
+    /// <typeparam name="TRegistrationStyle">The object registration style.</typeparam>
+    /// <param name="registrationBuilder">The registration being built.</param>
+    /// <param name="descriptor">The service descriptor with service type and key information.</param>
+    /// <returns>
+    /// The <paramref name="registrationBuilder" />, configured with the proper service type,
+    /// and available for additional configuration.
+    /// </returns>
+    private static IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> ConfigureServiceType<TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder,
+        ServiceDescriptor descriptor)
+    {
+        if (descriptor.IsKeyedService)
+        {
+            var key = descriptor.ServiceKey!;
+
+            // If it's keyed, the service key won't be null. A null key results in it _not_ being a keyed service.
+            registrationBuilder.Keyed(key, descriptor.ServiceType);
+        }
+        else
+        {
+            registrationBuilder.As(descriptor.ServiceType);
+        }
+
+        return registrationBuilder;
     }
 
     /// <summary>
@@ -134,7 +247,7 @@ public static class AutofacRegistration
     private static IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> ConfigureLifecycle<TActivatorData, TRegistrationStyle>(
         this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder,
         ServiceLifetime lifecycleKind,
-        object lifetimeScopeTagForSingleton)
+        object? lifetimeScopeTagForSingleton)
     {
         switch (lifecycleKind)
         {
@@ -179,54 +292,86 @@ public static class AutofacRegistration
     private static void Register(
         ContainerBuilder builder,
         IServiceCollection services,
-        object lifetimeScopeTagForSingletons)
+        object? lifetimeScopeTagForSingletons)
     {
         var moduleContainer = services.GetSingletonInstance<IModuleContainer>();
         var registrationActionList = services.GetRegistrationActionList();
+        var activatedActionList = services.GetServiceActivatedActionList();
 
         foreach (var descriptor in services)
         {
-            if (descriptor.ImplementationType != null)
+            var implementationType = descriptor.NormalizedImplementationType();
+            if (implementationType != null)
             {
                 // Test if the an open generic type is being registered
                 var serviceTypeInfo = descriptor.ServiceType.GetTypeInfo();
                 if (serviceTypeInfo.IsGenericTypeDefinition)
                 {
                     builder
-                        .RegisterGeneric(descriptor.ImplementationType)
-                        .As(descriptor.ServiceType)
+                        .RegisterGeneric(implementationType)
+                        .ConfigureServiceType(descriptor)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
                 }
                 else
                 {
                     builder
-                        .RegisterType(descriptor.ImplementationType)
-                        .As(descriptor.ServiceType)
+                        .RegisterType(implementationType)
+                        .ConfigureServiceType(descriptor)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
                 }
+
+                continue;
             }
-            else if (descriptor.ImplementationFactory != null)
+
+            if (descriptor.IsKeyedService && descriptor.KeyedImplementationFactory != null)
+            {
+                var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
+                {
+                    // At this point the context is always a ResolveRequestContext, which will expose the actual service type.
+                    var requestContext = (ResolveRequestContext)context;
+
+                    var serviceProvider = context.Resolve<IServiceProvider>();
+
+                    var keyedService = (Autofac.Core.KeyedService)requestContext.Service;
+
+                    var key = keyedService.ServiceKey;
+
+                    return descriptor.KeyedImplementationFactory(serviceProvider, key);
+                })
+                .ConfigureServiceType(descriptor)
+                .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
+                .CreateRegistration();
+                //TODO: ConfigureAbpConventions ?
+
+                builder.RegisterComponent(registration);
+
+                continue;
+            }
+
+            if (!descriptor.IsKeyedService && descriptor.ImplementationFactory != null)
             {
                 var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
                     {
                         var serviceProvider = context.Resolve<IServiceProvider>();
                         return descriptor.ImplementationFactory(serviceProvider);
                     })
+                    .ConfigureServiceType(descriptor)
                     .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
                     .CreateRegistration();
                 //TODO: ConfigureAbpConventions ?
 
                 builder.RegisterComponent(registration);
+
+                continue;
             }
-            else
-            {
-                builder
-                    .RegisterInstance(descriptor.ImplementationInstance)
-                    .As(descriptor.ServiceType)
-                    .ConfigureLifecycle(descriptor.Lifetime, null);
-            }
+
+            // It's not a type or factory, so it must be an instance.
+            builder
+                .RegisterInstance(descriptor.NormalizedImplementationInstance()!)
+                .ConfigureServiceType(descriptor)
+                .ConfigureLifecycle(descriptor.Lifetime, null);
         }
     }
 }

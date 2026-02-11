@@ -23,7 +23,7 @@ public class AbpSecurityModule : AbpModule
         {
             Configure<AbpSecurityLogOptions>(options =>
             {
-                options.ApplicationName = applicationName;
+                options.ApplicationName = applicationName!;
             });
         }
 
@@ -42,26 +42,28 @@ public class AbpSecurityModule : AbpModule
             var defaultPassPhrase = configuration["StringEncryption:DefaultPassPhrase"];
             if (!defaultPassPhrase.IsNullOrWhiteSpace())
             {
-                options.DefaultPassPhrase = defaultPassPhrase;
+                options.DefaultPassPhrase = defaultPassPhrase!;
             }
 
             var initVectorBytes = configuration["StringEncryption:InitVectorBytes"];
             if (!initVectorBytes.IsNullOrWhiteSpace())
             {
-                options.InitVectorBytes = Encoding.ASCII.GetBytes(initVectorBytes); ;
+                options.InitVectorBytes = Encoding.ASCII.GetBytes(initVectorBytes!);
             }
 
             var defaultSalt = configuration["StringEncryption:DefaultSalt"];
             if (!defaultSalt.IsNullOrWhiteSpace())
             {
-                options.DefaultSalt = Encoding.ASCII.GetBytes(defaultSalt); ;
+                options.DefaultSalt = Encoding.ASCII.GetBytes(defaultSalt!);
             }
         });
     }
 
+
     private static void AutoAddClaimsPrincipalContributors(IServiceCollection services)
     {
         var contributorTypes = new List<Type>();
+        var dynamicContributorTypes = new List<Type>();
 
         services.OnRegistered(context =>
         {
@@ -69,11 +71,17 @@ public class AbpSecurityModule : AbpModule
             {
                 contributorTypes.Add(context.ImplementationType);
             }
+
+            if (typeof(IAbpDynamicClaimsPrincipalContributor).IsAssignableFrom(context.ImplementationType))
+            {
+                dynamicContributorTypes.Add(context.ImplementationType);
+            }
         });
 
         services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.Contributors.AddIfNotContains(contributorTypes);
+            options.DynamicContributors.AddIfNotContains(dynamicContributorTypes);
         });
     }
 }

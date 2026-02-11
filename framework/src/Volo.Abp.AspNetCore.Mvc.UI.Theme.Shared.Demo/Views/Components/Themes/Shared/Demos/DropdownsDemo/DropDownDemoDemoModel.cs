@@ -6,11 +6,11 @@ public class DropDownDemoDemoModel
 {
     [Required]
     [EmailAddress]
-    public string EmailAddress { get; set; }
+    public string EmailAddress { get; set; } = default!;
 
     [Required]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public string Password { get; set; } = default!;
 
     public bool RememberMe { get; set; }
 }

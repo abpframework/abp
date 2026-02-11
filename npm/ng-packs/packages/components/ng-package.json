@@ -6,6 +6,7 @@
   },
   "allowedNonPeerDependencies": [
     "ng-zorro-antd",
+    "@ctrl/tinycolor",
     "chart.js"
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "culture": "tr",
+  "texts": {
+    "TenantNotFoundMessage": "Kiracı bulunamadı!",
+    "TenantNotFoundDetails": "Kiracı kimliğine veya adına sahip bir kiracı yok: {0}",
+    "TenantNotActiveMessage": "Kiracı aktif değil!",
+    "TenantNotActiveDetails": "Kiracı, kiracı kimliği veya adıyla etkin değil: {0}"
+  }
+}

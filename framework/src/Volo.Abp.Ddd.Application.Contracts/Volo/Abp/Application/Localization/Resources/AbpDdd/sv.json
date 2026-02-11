@@ -1,0 +1,6 @@
+{
+  "culture": "sv",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} kan inte vara mer än {1}! Öka {2}.{3} på serversidan för att tillåta fler resultat."
+  }
+}

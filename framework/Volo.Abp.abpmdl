@@ -1,0 +1,846 @@
+{
+  "folders": {
+    "items": {
+      "test": {},
+      "src": {}
+    }
+  },
+  "packages": {
+    "AbpTestBase": {
+      "path": "test/AbpTestBase/AbpTestBase.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore": {
+      "path": "src/Volo.Abp.AspNetCore/Volo.Abp.AspNetCore.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Tests/Volo.Abp.AspNetCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MultiTenancy.Tests": {
+      "path": "test/Volo.Abp.MultiTenancy.Tests/Volo.Abp.MultiTenancy.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.MultiTenancy": {
+      "path": "src/Volo.Abp.AspNetCore.MultiTenancy/Volo.Abp.AspNetCore.MultiTenancy.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.MultiTenancy.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.MultiTenancy.Tests/Volo.Abp.AspNetCore.MultiTenancy.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.TestBase": {
+      "path": "src/Volo.Abp.AspNetCore.TestBase/Volo.Abp.AspNetCore.TestBase.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EntityFrameworkCore": {
+      "path": "src/Volo.Abp.EntityFrameworkCore/Volo.Abp.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc/Volo.Abp.AspNetCore.Mvc.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TestBase": {
+      "path": "src/Volo.Abp.TestBase/Volo.Abp.TestBase.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.MongoDB": {
+      "path": "src/Volo.Abp.MongoDB/Volo.Abp.MongoDB.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI/Volo.Abp.AspNetCore.Mvc.UI.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Autofac": {
+      "path": "src/Volo.Abp.Autofac/Volo.Abp.Autofac.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Castle.Core": {
+      "path": "src/Volo.Abp.Castle.Core/Volo.Abp.Castle.Core.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Autofac.Tests": {
+      "path": "test/Volo.Abp.Autofac.Tests/Volo.Abp.Autofac.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Castle.Core.Tests": {
+      "path": "test/Volo.Abp.Castle.Core.Tests/Volo.Abp.Castle.Core.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AutoMapper": {
+      "path": "src/Volo.Abp.AutoMapper/Volo.Abp.AutoMapper.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AutoMapper.Tests": {
+      "path": "test/Volo.Abp.AutoMapper.Tests/Volo.Abp.AutoMapper.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.Tests/Volo.Abp.AspNetCore.Mvc.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TestApp": {
+      "path": "test/Volo.Abp.TestApp/Volo.Abp.TestApp.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MemoryDb": {
+      "path": "src/Volo.Abp.MemoryDb/Volo.Abp.MemoryDb.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.MemoryDb.Tests": {
+      "path": "test/Volo.Abp.MemoryDb.Tests/Volo.Abp.MemoryDb.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TestApp.Tests": {
+      "path": "test/Volo.Abp.TestApp.Tests/Volo.Abp.TestApp.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Http": {
+      "path": "src/Volo.Abp.Http/Volo.Abp.Http.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Http.Client": {
+      "path": "src/Volo.Abp.Http.Client/Volo.Abp.Http.Client.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Http.Client.Tests": {
+      "path": "test/Volo.Abp.Http.Client.Tests/Volo.Abp.Http.Client.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.EntityFrameworkCore.Tests": {
+      "path": "test/Volo.Abp.EntityFrameworkCore.Tests/Volo.Abp.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "SimpleConsoleDemo": {
+      "path": "test/SimpleConsoleDemo/SimpleConsoleDemo.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.EntityFrameworkCore.Tests.SecondContext": {
+      "path": "test/Volo.Abp.EntityFrameworkCore.Tests.SecondContext/Volo.Abp.EntityFrameworkCore.Tests.SecondContext.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Versioning.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.Versioning.Tests/Volo.Abp.AspNetCore.Mvc.Versioning.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.VirtualFileSystem": {
+      "path": "src/Volo.Abp.VirtualFileSystem/Volo.Abp.VirtualFileSystem.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.VirtualFileSystem.Tests": {
+      "path": "test/Volo.Abp.VirtualFileSystem.Tests/Volo.Abp.VirtualFileSystem.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Core": {
+      "path": "src/Volo.Abp.Core/Volo.Abp.Core.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Localization": {
+      "path": "src/Volo.Abp.Localization/Volo.Abp.Localization.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Localization.Tests": {
+      "path": "test/Volo.Abp.Localization.Tests/Volo.Abp.Localization.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Core.Tests": {
+      "path": "test/Volo.Abp.Core.Tests/Volo.Abp.Core.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.ApiVersioning.Abstractions": {
+      "path": "src/Volo.Abp.ApiVersioning.Abstractions/Volo.Abp.ApiVersioning.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Data": {
+      "path": "src/Volo.Abp.Data/Volo.Abp.Data.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Data.Tests": {
+      "path": "test/Volo.Abp.Data.Tests/Volo.Abp.Data.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MultiTenancy": {
+      "path": "src/Volo.Abp.MultiTenancy/Volo.Abp.MultiTenancy.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.ObjectMapping": {
+      "path": "src/Volo.Abp.ObjectMapping/Volo.Abp.ObjectMapping.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Validation": {
+      "path": "src/Volo.Abp.Validation/Volo.Abp.Validation.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Validation.Tests": {
+      "path": "test/Volo.Abp.Validation.Tests/Volo.Abp.Validation.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Security": {
+      "path": "src/Volo.Abp.Security/Volo.Abp.Security.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Guids": {
+      "path": "src/Volo.Abp.Guids/Volo.Abp.Guids.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Threading": {
+      "path": "src/Volo.Abp.Threading/Volo.Abp.Threading.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Ddd.Tests": {
+      "path": "test/Volo.Abp.Ddd.Tests/Volo.Abp.Ddd.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Http.Abstractions": {
+      "path": "src/Volo.Abp.Http.Abstractions/Volo.Abp.Http.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Authorization": {
+      "path": "src/Volo.Abp.Authorization/Volo.Abp.Authorization.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Json": {
+      "path": "src/Volo.Abp.Json/Volo.Abp.Json.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Timing": {
+      "path": "src/Volo.Abp.Timing/Volo.Abp.Timing.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.UI": {
+      "path": "src/Volo.Abp.UI/Volo.Abp.UI.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.UI.Navigation": {
+      "path": "src/Volo.Abp.UI.Navigation/Volo.Abp.UI.Navigation.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.UI.Navigation.Tests": {
+      "path": "test/Volo.Abp.UI.Navigation.Tests/Volo.Abp.UI.Navigation.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Settings": {
+      "path": "src/Volo.Abp.Settings/Volo.Abp.Settings.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Caching": {
+      "path": "src/Volo.Abp.Caching/Volo.Abp.Caching.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus": {
+      "path": "src/Volo.Abp.EventBus/Volo.Abp.EventBus.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.Tests": {
+      "path": "test/Volo.Abp.EventBus.Tests/Volo.Abp.EventBus.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Caching.Tests": {
+      "path": "test/Volo.Abp.Caching.Tests/Volo.Abp.Caching.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Serialization": {
+      "path": "src/Volo.Abp.Serialization/Volo.Abp.Serialization.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Serialization.Tests": {
+      "path": "test/Volo.Abp.Serialization.Tests/Volo.Abp.Serialization.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Authorization.Tests": {
+      "path": "test/Volo.Abp.Authorization.Tests/Volo.Abp.Authorization.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Authentication.OAuth": {
+      "path": "src/Volo.Abp.AspNetCore.Authentication.OAuth/Volo.Abp.AspNetCore.Authentication.OAuth.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Authentication.OAuth.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Authentication.OAuth.Tests/Volo.Abp.AspNetCore.Authentication.OAuth.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Uow": {
+      "path": "src/Volo.Abp.Uow/Volo.Abp.Uow.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Uow.Tests": {
+      "path": "test/Volo.Abp.Uow.Tests/Volo.Abp.Uow.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Ddd.Domain": {
+      "path": "src/Volo.Abp.Ddd.Domain/Volo.Abp.Ddd.Domain.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Ddd.Application": {
+      "path": "src/Volo.Abp.Ddd.Application/Volo.Abp.Ddd.Application.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Auditing": {
+      "path": "src/Volo.Abp.Auditing/Volo.Abp.Auditing.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Auditing.Tests": {
+      "path": "test/Volo.Abp.Auditing.Tests/Volo.Abp.Auditing.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MongoDB.Tests": {
+      "path": "test/Volo.Abp.MongoDB.Tests/Volo.Abp.MongoDB.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.EntityFrameworkCore.SqlServer": {
+      "path": "src/Volo.Abp.EntityFrameworkCore.SqlServer/Volo.Abp.EntityFrameworkCore.SqlServer.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.RabbitMQ": {
+      "path": "src/Volo.Abp.EventBus.RabbitMQ/Volo.Abp.EventBus.RabbitMQ.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Tests/Volo.Abp.AspNetCore.Mvc.UI.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Emailing": {
+      "path": "src/Volo.Abp.Emailing/Volo.Abp.Emailing.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Sms": {
+      "path": "src/Volo.Abp.Sms/Volo.Abp.Sms.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Bundling": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Bundling/Volo.Abp.AspNetCore.Mvc.UI.Bundling.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Packages": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Packages/Volo.Abp.AspNetCore.Mvc.UI.Packages.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EntityFrameworkCore.MySQL": {
+      "path": "src/Volo.Abp.EntityFrameworkCore.MySQL/Volo.Abp.EntityFrameworkCore.MySQL.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundJobs": {
+      "path": "src/Volo.Abp.BackgroundJobs/Volo.Abp.BackgroundJobs.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundWorkers": {
+      "path": "src/Volo.Abp.BackgroundWorkers/Volo.Abp.BackgroundWorkers.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundJobs.Tests": {
+      "path": "test/Volo.Abp.BackgroundJobs.Tests/Volo.Abp.BackgroundJobs.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BackgroundJobs.Abstractions": {
+      "path": "src/Volo.Abp.BackgroundJobs.Abstractions/Volo.Abp.BackgroundJobs.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundJobs.HangFire": {
+      "path": "src/Volo.Abp.BackgroundJobs.HangFire/Volo.Abp.BackgroundJobs.HangFire.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.HangFire": {
+      "path": "src/Volo.Abp.HangFire/Volo.Abp.HangFire.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundJobs.RabbitMQ": {
+      "path": "src/Volo.Abp.BackgroundJobs.RabbitMQ/Volo.Abp.BackgroundJobs.RabbitMQ.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.RabbitMQ": {
+      "path": "src/Volo.Abp.RabbitMQ/Volo.Abp.RabbitMQ.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Emailing.Tests": {
+      "path": "test/Volo.Abp.Emailing.Tests/Volo.Abp.Emailing.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EntityFrameworkCore.PostgreSql": {
+      "path": "src/Volo.Abp.EntityFrameworkCore.PostgreSql/Volo.Abp.EntityFrameworkCore.PostgreSql.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Localization.Abstractions": {
+      "path": "src/Volo.Abp.Localization.Abstractions/Volo.Abp.Localization.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Security.Tests": {
+      "path": "test/Volo.Abp.Security.Tests/Volo.Abp.Security.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Settings.Tests": {
+      "path": "test/Volo.Abp.Settings.Tests/Volo.Abp.Settings.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Http.Client.IdentityModel": {
+      "path": "src/Volo.Abp.Http.Client.IdentityModel/Volo.Abp.Http.Client.IdentityModel.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.IdentityModel": {
+      "path": "src/Volo.Abp.IdentityModel/Volo.Abp.IdentityModel.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Client": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.Client/Volo.Abp.AspNetCore.Mvc.Client.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Contracts": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.Contracts/Volo.Abp.AspNetCore.Mvc.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Features": {
+      "path": "src/Volo.Abp.Features/Volo.Abp.Features.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Features.Tests": {
+      "path": "test/Volo.Abp.Features.Tests/Volo.Abp.Features.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Authentication.JwtBearer": {
+      "path": "src/Volo.Abp.AspNetCore.Authentication.JwtBearer/Volo.Abp.AspNetCore.Authentication.JwtBearer.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Cli": {
+      "path": "src/Volo.Abp.Cli/Volo.Abp.Cli.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.FluentValidation": {
+      "path": "src/Volo.Abp.FluentValidation/Volo.Abp.FluentValidation.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.FluentValidation.Tests": {
+      "path": "test/Volo.Abp.FluentValidation.Tests/Volo.Abp.FluentValidation.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.EntityFrameworkCore.Sqlite": {
+      "path": "src/Volo.Abp.EntityFrameworkCore.Sqlite/Volo.Abp.EntityFrameworkCore.Sqlite.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Cli.Core": {
+      "path": "src/Volo.Abp.Cli.Core/Volo.Abp.Cli.Core.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Specifications": {
+      "path": "src/Volo.Abp.Specifications/Volo.Abp.Specifications.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Specifications.Tests": {
+      "path": "test/Volo.Abp.Specifications.Tests/Volo.Abp.Specifications.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Cli.Core.Tests": {
+      "path": "test/Volo.Abp.Cli.Core.Tests/Volo.Abp.Cli.Core.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Widgets": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Widgets/Volo.Abp.AspNetCore.Mvc.UI.Widgets.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Ldap": {
+      "path": "src/Volo.Abp.Ldap/Volo.Abp.Ldap.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Ldap.Tests": {
+      "path": "test/Volo.Abp.Ldap.Tests/Volo.Abp.Ldap.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Dapper": {
+      "path": "src/Volo.Abp.Dapper/Volo.Abp.Dapper.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Dapper.Tests": {
+      "path": "test/Volo.Abp.Dapper.Tests/Volo.Abp.Dapper.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MailKit": {
+      "path": "src/Volo.Abp.MailKit/Volo.Abp.MailKit.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.MailKit.Tests": {
+      "path": "test/Volo.Abp.MailKit.Tests/Volo.Abp.MailKit.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.ObjectMapping.Tests": {
+      "path": "test/Volo.Abp.ObjectMapping.Tests/Volo.Abp.ObjectMapping.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Ddd.Application.Contracts": {
+      "path": "src/Volo.Abp.Ddd.Application.Contracts/Volo.Abp.Ddd.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Minify": {
+      "path": "src/Volo.Abp.Minify/Volo.Abp.Minify.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Minify.Tests": {
+      "path": "test/Volo.Abp.Minify.Tests/Volo.Abp.Minify.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Serilog": {
+      "path": "src/Volo.Abp.AspNetCore.Serilog/Volo.Abp.AspNetCore.Serilog.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Serilog.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Serilog.Tests/Volo.Abp.AspNetCore.Serilog.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Http.Client.IdentityModel.Web": {
+      "path": "src/Volo.Abp.Http.Client.IdentityModel.Web/Volo.Abp.Http.Client.IdentityModel.Web.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundJobs.Quartz": {
+      "path": "src/Volo.Abp.BackgroundJobs.Quartz/Volo.Abp.BackgroundJobs.Quartz.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Quartz": {
+      "path": "src/Volo.Abp.Quartz/Volo.Abp.Quartz.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BackgroundWorkers.Quartz": {
+      "path": "src/Volo.Abp.BackgroundWorkers.Quartz/Volo.Abp.BackgroundWorkers.Quartz.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Http.Client.IdentityModel.Web.Tests": {
+      "path": "test/Volo.Abp.Http.Client.IdentityModel.Web.Tests/Volo.Abp.Http.Client.IdentityModel.Web.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.ObjectExtending": {
+      "path": "src/Volo.Abp.ObjectExtending/Volo.Abp.ObjectExtending.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.ObjectExtending.Tests": {
+      "path": "test/Volo.Abp.ObjectExtending.Tests/Volo.Abp.ObjectExtending.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TextTemplating": {
+      "path": "src/Volo.Abp.TextTemplating/Volo.Abp.TextTemplating.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TextTemplating.Tests": {
+      "path": "test/Volo.Abp.TextTemplating.Tests/Volo.Abp.TextTemplating.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Validation.Abstractions": {
+      "path": "src/Volo.Abp.Validation.Abstractions/Volo.Abp.Validation.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.SignalR": {
+      "path": "src/Volo.Abp.AspNetCore.SignalR/Volo.Abp.AspNetCore.SignalR.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.SignalR.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.SignalR.Tests/Volo.Abp.AspNetCore.SignalR.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring": {
+      "path": "src/Volo.Abp.BlobStoring/Volo.Abp.BlobStoring.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Tests/Volo.Abp.BlobStoring.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.FileSystem": {
+      "path": "src/Volo.Abp.BlobStoring.FileSystem/Volo.Abp.BlobStoring.FileSystem.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.FileSystem.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.FileSystem.Tests/Volo.Abp.BlobStoring.FileSystem.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.EntityFrameworkCore.Oracle.Devart": {
+      "path": "src/Volo.Abp.EntityFrameworkCore.Oracle.Devart/Volo.Abp.EntityFrameworkCore.Oracle.Devart.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Azure": {
+      "path": "src/Volo.Abp.BlobStoring.Azure/Volo.Abp.BlobStoring.Azure.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Azure.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Azure.Tests/Volo.Abp.BlobStoring.Azure.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.Minio": {
+      "path": "src/Volo.Abp.BlobStoring.Minio/Volo.Abp.BlobStoring.Minio.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Minio.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Minio.Tests/Volo.Abp.BlobStoring.Minio.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.EntityFrameworkCore.Oracle": {
+      "path": "src/Volo.Abp.EntityFrameworkCore.Oracle/Volo.Abp.EntityFrameworkCore.Oracle.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Caching.StackExchangeRedis": {
+      "path": "src/Volo.Abp.Caching.StackExchangeRedis/Volo.Abp.Caching.StackExchangeRedis.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Caching.StackExchangeRedis.Tests": {
+      "path": "test/Volo.Abp.Caching.StackExchangeRedis.Tests/Volo.Abp.Caching.StackExchangeRedis.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.Aliyun": {
+      "path": "src/Volo.Abp.BlobStoring.Aliyun/Volo.Abp.BlobStoring.Aliyun.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Aliyun.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Aliyun.Tests/Volo.Abp.BlobStoring.Aliyun.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BlobStoring.Aws": {
+      "path": "src/Volo.Abp.BlobStoring.Aws/Volo.Abp.BlobStoring.Aws.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.BlobStoring.Aws.Tests": {
+      "path": "test/Volo.Abp.BlobStoring.Aws.Tests/Volo.Abp.BlobStoring.Aws.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Kafka": {
+      "path": "src/Volo.Abp.Kafka/Volo.Abp.Kafka.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.Kafka": {
+      "path": "src/Volo.Abp.EventBus.Kafka/Volo.Abp.EventBus.Kafka.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.GlobalFeatures": {
+      "path": "src/Volo.Abp.GlobalFeatures/Volo.Abp.GlobalFeatures.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.GlobalFeatures.Tests": {
+      "path": "test/Volo.Abp.GlobalFeatures.Tests/Volo.Abp.GlobalFeatures.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MultiLingualObjects": {
+      "path": "src/Volo.Abp.MultiLingualObjects/Volo.Abp.MultiLingualObjects.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.MultiLingualObjects.Tests": {
+      "path": "test/Volo.Abp.MultiLingualObjects.Tests/Volo.Abp.MultiLingualObjects.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Http.Client.IdentityModel.WebAssembly": {
+      "path": "src/Volo.Abp.Http.Client.IdentityModel.WebAssembly/Volo.Abp.Http.Client.IdentityModel.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Client.Common": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.Client.Common/Volo.Abp.AspNetCore.Mvc.Client.Common.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.WebAssembly": {
+      "path": "src/Volo.Abp.AspNetCore.Components.WebAssembly/Volo.Abp.AspNetCore.Components.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.WebAssembly.Theming": {
+      "path": "src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Autofac.WebAssembly": {
+      "path": "src/Volo.Abp.Autofac.WebAssembly/Volo.Abp.Autofac.WebAssembly.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Authentication.OpenIdConnect": {
+      "path": "src/Volo.Abp.AspNetCore.Authentication.OpenIdConnect/Volo.Abp.AspNetCore.Authentication.OpenIdConnect.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.Rebus": {
+      "path": "src/Volo.Abp.EventBus.Rebus/Volo.Abp.EventBus.Rebus.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.ExceptionHandling": {
+      "path": "src/Volo.Abp.ExceptionHandling/Volo.Abp.ExceptionHandling.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components": {
+      "path": "src/Volo.Abp.AspNetCore.Components/Volo.Abp.AspNetCore.Components.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Swashbuckle": {
+      "path": "src/Volo.Abp.Swashbuckle/Volo.Abp.Swashbuckle.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Json.Tests": {
+      "path": "test/Volo.Abp.Json.Tests/Volo.Abp.Json.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Http.Tests": {
+      "path": "test/Volo.Abp.Http.Tests/Volo.Abp.Http.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Components.Web": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Web/Volo.Abp.AspNetCore.Components.Web.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.Web.Theming": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Web.Theming/Volo.Abp.AspNetCore.Components.Web.Theming.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.Abstractions": {
+      "path": "src/Volo.Abp.EventBus.Abstractions/Volo.Abp.EventBus.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Sms.Aliyun": {
+      "path": "src/Volo.Abp.Sms.Aliyun/Volo.Abp.Sms.Aliyun.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Sms.Aliyun.Tests": {
+      "path": "test/Volo.Abp.Sms.Aliyun.Tests/Volo.Abp.Sms.Aliyun.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Components.Server": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Server/Volo.Abp.AspNetCore.Components.Server.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.Server.Theming": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Server.Theming/Volo.Abp.AspNetCore.Components.Server.Theming.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions/Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AzureServiceBus": {
+      "path": "src/Volo.Abp.AzureServiceBus/Volo.Abp.AzureServiceBus.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.Azure": {
+      "path": "src/Volo.Abp.EventBus.Azure/Volo.Abp.EventBus.Azure.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Authorization.Abstractions": {
+      "path": "src/Volo.Abp.Authorization.Abstractions/Volo.Abp.Authorization.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TextTemplating.Core": {
+      "path": "src/Volo.Abp.TextTemplating.Core/Volo.Abp.TextTemplating.Core.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TextTemplating.Scriban": {
+      "path": "src/Volo.Abp.TextTemplating.Scriban/Volo.Abp.TextTemplating.Scriban.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TextTemplating.Razor": {
+      "path": "src/Volo.Abp.TextTemplating.Razor/Volo.Abp.TextTemplating.Razor.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.TextTemplating.Razor.Tests": {
+      "path": "test/Volo.Abp.TextTemplating.Razor.Tests/Volo.Abp.TextTemplating.Razor.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.TextTemplating.Scriban.Tests": {
+      "path": "test/Volo.Abp.TextTemplating.Scriban.Tests/Volo.Abp.TextTemplating.Scriban.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.MongoDB.Tests.SecondContext": {
+      "path": "test/Volo.Abp.MongoDB.Tests.SecondContext/Volo.Abp.MongoDB.Tests.SecondContext.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.IdentityModel.Tests": {
+      "path": "test/Volo.Abp.IdentityModel.Tests/Volo.Abp.IdentityModel.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Threading.Tests": {
+      "path": "test/Volo.Abp.Threading.Tests/Volo.Abp.Threading.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.DistributedLocking": {
+      "path": "src/Volo.Abp.DistributedLocking/Volo.Abp.DistributedLocking.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Auditing.Contracts": {
+      "path": "src/Volo.Abp.Auditing.Contracts/Volo.Abp.Auditing.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Http.Client.Web": {
+      "path": "src/Volo.Abp.Http.Client.Web/Volo.Abp.Http.Client.Web.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.DistributedLocking.Abstractions": {
+      "path": "src/Volo.Abp.DistributedLocking.Abstractions/Volo.Abp.DistributedLocking.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.DistributedLocking.Abstractions.Tests": {
+      "path": "test/Volo.Abp.DistributedLocking.Abstractions.Tests/Volo.Abp.DistributedLocking.Abstractions.Tests.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.BackgroundWorkers.Hangfire": {
+      "path": "src/Volo.Abp.BackgroundWorkers.Hangfire/Volo.Abp.BackgroundWorkers.Hangfire.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Gdpr.Abstractions": {
+      "path": "src/Volo.Abp.Gdpr.Abstractions/Volo.Abp.Gdpr.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.RemoteServices": {
+      "path": "src/Volo.Abp.RemoteServices/Volo.Abp.RemoteServices.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.PlugIn": {
+      "path": "test/Volo.Abp.AspNetCore.Mvc.PlugIn/Volo.Abp.AspNetCore.Mvc.PlugIn.abppkg",
+      "folder": "test"
+    },
+    "Volo.Abp.Json.Newtonsoft": {
+      "path": "src/Volo.Abp.Json.Newtonsoft/Volo.Abp.Json.Newtonsoft.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Json.SystemTextJson": {
+      "path": "src/Volo.Abp.Json.SystemTextJson/Volo.Abp.Json.SystemTextJson.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Json.Abstractions": {
+      "path": "src/Volo.Abp.Json.Abstractions/Volo.Abp.Json.Abstractions.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.NewtonsoftJson": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.NewtonsoftJson/Volo.Abp.AspNetCore.Mvc.NewtonsoftJson.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Dapr": {
+      "path": "src/Volo.Abp.Dapr/Volo.Abp.Dapr.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.EventBus.Dapr": {
+      "path": "src/Volo.Abp.EventBus.Dapr/Volo.Abp.EventBus.Dapr.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.Http.Client.Dapr": {
+      "path": "src/Volo.Abp.Http.Client.Dapr/Volo.Abp.Http.Client.Dapr.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Dapr": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.Dapr/Volo.Abp.AspNetCore.Mvc.Dapr.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Mvc.Dapr.EventBus": {
+      "path": "src/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus/Volo.Abp.AspNetCore.Mvc.Dapr.EventBus.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.DistributedLocking.Dapr": {
+      "path": "src/Volo.Abp.DistributedLocking.Dapr/Volo.Abp.DistributedLocking.Dapr.abppkg",
+      "folder": "src"
+    }
+  }
+}

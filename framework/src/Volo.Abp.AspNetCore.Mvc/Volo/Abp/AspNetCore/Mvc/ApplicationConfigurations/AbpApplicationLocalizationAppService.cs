@@ -9,7 +9,7 @@ using Volo.Abp.Localization.External;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
-public class AbpApplicationLocalizationAppService : 
+public class AbpApplicationLocalizationAppService :
     ApplicationService,
     IAbpApplicationLocalizationAppService
 {
@@ -23,14 +23,14 @@ public class AbpApplicationLocalizationAppService :
         ExternalLocalizationStore = externalLocalizationStore;
         LocalizationOptions = localizationOptions.Value;
     }
-    
-    public async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
+
+    public virtual async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
         if (!CultureHelper.IsValidCultureCode(input.CultureName))
         {
             throw new AbpException("The selected culture is not valid! Make sure you enter a valid culture name.");
         }
-        
+
         using (CultureHelper.Use(input.CultureName))
         {
             var resources = LocalizationOptions
@@ -40,8 +40,10 @@ public class AbpApplicationLocalizationAppService :
                     await ExternalLocalizationStore.GetResourcesAsync()
                 ).ToArray();
 
-            var localizationConfig = new ApplicationLocalizationDto {
-                Resources = new Dictionary<string, ApplicationLocalizationResourceDto>(resources.Length)
+            var localizationConfig = new ApplicationLocalizationDto
+            {
+                Resources = new Dictionary<string, ApplicationLocalizationResourceDto>(resources.Length),
+                CurrentCulture = CurrentCultureDto.Create()
             };
 
             foreach (var resource in resources)
@@ -50,8 +52,8 @@ public class AbpApplicationLocalizationAppService :
                 var localizer = await StringLocalizerFactory.CreateByResourceNameOrNullAsync(resource.ResourceName);
                 if (localizer != null)
                 {
-                    Dictionary<string, LocalizedString> staticLocalizedStrings = null;
-                    
+                    Dictionary<string, LocalizedString>? staticLocalizedStrings = null;
+
                     if (input.OnlyDynamics)
                     {
                         staticLocalizedStrings = (await localizer.GetAllStringsAsync(
@@ -60,7 +62,7 @@ public class AbpApplicationLocalizationAppService :
                             includeDynamicContributors: false
                         )).ToDictionary(x => x.Name);
                     }
-                    
+
                     var localizedStringsWithDynamics = await localizer.GetAllStringsAsync(
                         includeParentCultures: true,
                         includeBaseLocalizers: false,
@@ -71,7 +73,7 @@ public class AbpApplicationLocalizationAppService :
                     {
                         if (input.OnlyDynamics)
                         {
-                            var staticLocalizedString = staticLocalizedStrings.GetOrDefault(localizedString.Name);
+                            var staticLocalizedString = staticLocalizedStrings!.GetOrDefault(localizedString.Name);
                             if (staticLocalizedString != null &&
                                 localizedString.Value == staticLocalizedString.Value)
                             {

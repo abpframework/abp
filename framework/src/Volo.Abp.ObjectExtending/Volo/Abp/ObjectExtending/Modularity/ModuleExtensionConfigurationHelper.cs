@@ -29,9 +29,9 @@ public static class ModuleExtensionConfigurationHelper
     public static void ApplyEntityConfigurationToApi(
         string moduleName,
         string objectName,
-        Type[] getApiTypes = null,
-        Type[] createApiTypes = null,
-        Type[] updateApiTypes = null)
+        Type[]? getApiTypes = null,
+        Type[]? createApiTypes = null,
+        Type[]? updateApiTypes = null)
     {
         lock (SyncLock)
         {
@@ -66,8 +66,8 @@ public static class ModuleExtensionConfigurationHelper
     public static void ApplyEntityConfigurationToUi(
         string moduleName,
         string entityName,
-        Type[] createFormTypes = null,
-        Type[] editFormTypes = null)
+        Type[]? createFormTypes = null,
+        Type[]? editFormTypes = null)
     {
         lock (SyncLock)
         {
@@ -96,12 +96,12 @@ public static class ModuleExtensionConfigurationHelper
     public static void ApplyEntityConfigurations(
         string moduleName,
         string entityName,
-        Type entityType = null,
-        Type[] createFormTypes = null,
-        Type[] editFormTypes = null,
-        Type[] getApiTypes = null,
-        Type[] createApiTypes = null,
-        Type[] updateApiTypes = null)
+        Type? entityType = null,
+        Type[]? createFormTypes = null,
+        Type[]? editFormTypes = null,
+        Type[]? getApiTypes = null,
+        Type[]? createApiTypes = null,
+        Type[]? updateApiTypes = null)
     {
         lock (SyncLock)
         {
@@ -174,6 +174,12 @@ public static class ModuleExtensionConfigurationHelper
                         property.DefaultValue = propertyConfig.DefaultValue;
                         property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
                         property.Lookup = propertyConfig.UI.Lookup;
+                        property.UI.Order = propertyConfig.UI.Order;
+                        property.UI.CreateModal.IsVisible = propertyConfig.UI.OnCreateForm.IsVisible;
+                        property.UI.CreateModal.IsReadOnly = propertyConfig.UI.OnCreateForm.IsReadOnly;
+                        property.UI.EditModal.IsVisible = propertyConfig.UI.OnEditForm.IsVisible;
+                        property.UI.EditModal.IsReadOnly = propertyConfig.UI.OnEditForm.IsReadOnly;
+                        property.Policy = propertyConfig.Policy;
                         foreach (var configuration in propertyConfig.Configuration)
                         {
                             property.Configuration[configuration.Key] = configuration.Value;

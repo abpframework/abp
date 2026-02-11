@@ -6,9 +6,9 @@ namespace Volo.Abp.GlobalFeatures;
 [Serializable]
 public class AbpGlobalFeatureNotEnabledException : AbpException, IHasErrorCode
 {
-    public string Code { get; }
+    public string? Code { get; }
 
-    public AbpGlobalFeatureNotEnabledException(string message = null, string code = null, Exception innerException = null)
+    public AbpGlobalFeatureNotEnabledException(string? message = null, string? code = null, Exception? innerException = null)
         : base(message, innerException)
     {
         Code = code;

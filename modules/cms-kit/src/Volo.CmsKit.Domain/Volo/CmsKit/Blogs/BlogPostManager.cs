@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Blogs;
@@ -12,17 +13,20 @@ public class BlogPostManager : DomainService
 {
     protected IBlogPostRepository BlogPostRepository { get; }
     protected IBlogRepository BlogRepository { get; }
+    protected ICommentRepository CommentRepository { get; }
     protected IDefaultBlogFeatureProvider BlogFeatureProvider { get; }
 
 
     public BlogPostManager(
         IBlogPostRepository blogPostRepository,
         IBlogRepository blogRepository,
-        IDefaultBlogFeatureProvider blogFeatureProvider)
+        IDefaultBlogFeatureProvider blogFeatureProvider, 
+        ICommentRepository commentRepository)
     {
         BlogPostRepository = blogPostRepository;
         BlogRepository = blogRepository;
         BlogFeatureProvider = blogFeatureProvider;
+        CommentRepository = commentRepository;
     }
 
     public virtual async Task<BlogPost> CreateAsync(
@@ -65,6 +69,12 @@ public class BlogPostManager : DomainService
         await CheckSlugExistenceAsync(blogPost.BlogId, newSlug);
 
         blogPost.SetSlug(newSlug);
+    }
+    
+    public virtual async Task DeleteAsync(Guid blogId)
+    {
+        await BlogPostRepository.DeleteAsync(blogId);
+        await CommentRepository.DeleteByEntityTypeAndIdAsync(BlogPostConsts.EntityType, blogId.ToString());
     }
 
     protected virtual async Task CheckSlugExistenceAsync(Guid blogId, string slug)

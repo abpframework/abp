@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
@@ -41,28 +38,26 @@ public class BlazorServerLookupApiRequestService : ILookupApiRequestService, ITr
 
     public async Task<string> SendAsync(string url)
     {
-        var client = HttpClientFactory.CreateClient();
+        var client = HttpClientFactory.CreateClient(nameof(BlazorServerLookupApiRequestService));
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
 
         var uri = new Uri(url, UriKind.RelativeOrAbsolute);
         if (!uri.IsAbsoluteUri)
         {
-            var baseUrl = string.Empty;
-            try
+            var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultOrNullAsync("Default");
+            if (remoteServiceConfig != null)
             {
-                //Blazor tiered -- mode
-                var remoteServiceConfig = await RemoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("Default");
-                baseUrl = remoteServiceConfig.BaseUrl;
+                // Blazor tiered mode
+                var baseUrl = remoteServiceConfig.BaseUrl;
                 client.BaseAddress = new Uri(baseUrl);
                 AddHeaders(requestMessage);
-                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client,
-                    requestMessage, new RemoteServiceConfiguration(baseUrl), string.Empty));
+                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration(baseUrl), string.Empty));
             }
-            catch (AbpException) // Blazor-Server mode.
+            else
             {
-                baseUrl = NavigationManager.BaseUri;
-                client.BaseAddress = new Uri(baseUrl);
-                foreach (var header in HttpContextAccessor.HttpContext.Request.Headers)
+                // Blazor server  mode
+                client.BaseAddress = new Uri(NavigationManager.BaseUri);
+                foreach (var header in HttpContextAccessor.HttpContext!.Request.Headers)
                 {
                     requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
                 }

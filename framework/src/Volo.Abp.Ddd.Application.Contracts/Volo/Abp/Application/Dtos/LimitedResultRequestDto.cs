@@ -42,7 +42,7 @@ public class LimitedResultRequestDto : ILimitedResultRequest, IValidatableObject
                     "MaxResultCountExceededExceptionMessage",
                     nameof(MaxResultCount),
                     MaxMaxResultCount,
-                    typeof(LimitedResultRequestDto).FullName,
+                    typeof(LimitedResultRequestDto).FullName!,
                     nameof(MaxMaxResultCount)
                 ],
                 new[] { nameof(MaxResultCount) });
@@ -90,7 +90,7 @@ public class ExtensibleLimitedResultRequestDto : ExtensibleEntityDto, ILimitedRe
                     "MaxResultCountExceededExceptionMessage",
                     nameof(MaxResultCount),
                     MaxMaxResultCount,
-                    typeof(ExtensibleLimitedResultRequestDto).FullName,
+                    typeof(ExtensibleLimitedResultRequestDto).FullName!,
                     nameof(MaxMaxResultCount)
                 ],
                 new[] { nameof(MaxResultCount) });

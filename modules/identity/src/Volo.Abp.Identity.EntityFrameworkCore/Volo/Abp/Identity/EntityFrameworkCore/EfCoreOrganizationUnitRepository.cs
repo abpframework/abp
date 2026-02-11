@@ -40,7 +40,7 @@ public class EfCoreOrganizationUnitRepository
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
-            .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
+            .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -48,12 +48,12 @@ public class EfCoreOrganizationUnitRepository
         string sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
-        bool includeDetails = true,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
-            .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.DisplayName) : sorting)
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(OrganizationUnit.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -66,6 +66,32 @@ public class EfCoreOrganizationUnitRepository
         return await (await GetDbSetAsync())
             .IncludeDetails(includeDetails)
             .Where(t => ids.Contains(t.Id))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<OrganizationUnit>> GetListByRoleIdAsync(
+        Guid roleId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+
+        var query = from organizationRole in dbContext.Set<OrganizationUnitRole>()
+            join organizationUnit in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on organizationRole.OrganizationUnitId equals organizationUnit.Id
+            where organizationRole.RoleId == roleId
+            select organizationUnit;
+
+        return await query.ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<OrganizationUnit>> GetListByDisplayNamesAsync(
+        string[] displayNames,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .Where(ou => displayNames.Contains(ou.DisplayName))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -97,6 +123,28 @@ public class EfCoreOrganizationUnitRepository
                     join role in dbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
                     where organizationRole.OrganizationUnitId == organizationUnit.Id
                     select role;
+
+        query = query
+            .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
+            .PageBy(skipCount, maxResultCount);
+
+        return await query.ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<List<IdentityRole>> GetRolesAsync(
+        Guid[] organizationUnitIds,
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+
+        var query = from organizationRole in dbContext.Set<OrganizationUnitRole>()
+            join role in dbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
+            where organizationUnitIds.Contains(organizationRole.OrganizationUnitId)
+            select role;
 
         query = query
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityRole.Name) : sorting)
@@ -160,22 +208,31 @@ public class EfCoreOrganizationUnitRepository
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string filter = null,
+        bool includeChildren = false,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter);
+        var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter, includeChildren);
 
         return await query.IncludeDetails(includeDetails).OrderBy(sorting.IsNullOrEmpty() ? nameof(IdentityUser.UserName) : sorting)
                     .PageBy(skipCount, maxResultCount)
                     .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<Guid>> GetMemberIdsAsync(Guid id, bool includeChildren = false, CancellationToken cancellationToken = default)
+    {
+        var organizationUnit = await GetAsync(id, cancellationToken: cancellationToken);
+        var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, null, includeChildren);
+        return await query.Select(x => x.Id).ToListAsync(cancellationToken);
+    }
+
     public virtual async Task<int> GetMembersCountAsync(
         OrganizationUnit organizationUnit,
         string filter = null,
+        bool includeChildren = false,
         CancellationToken cancellationToken = default)
     {
-        var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter);
+        var query = await CreateGetMembersFilteredQueryAsync(organizationUnit, filter, includeChildren);
 
         return await query.CountAsync(GetCancellationToken(cancellationToken));
     }
@@ -266,14 +323,33 @@ public class EfCoreOrganizationUnitRepository
         dbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
     }
 
-    protected virtual async Task<IQueryable<IdentityUser>> CreateGetMembersFilteredQueryAsync(OrganizationUnit organizationUnit, string filter = null)
+    protected virtual async Task<IQueryable<IdentityUser>> CreateGetMembersFilteredQueryAsync(
+        OrganizationUnit organizationUnit,
+        string filter = null,
+        bool includeChildren = false)
     {
         var dbContext = await GetDbContextAsync();
 
-        var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
-                    join user in dbContext.Users on userOu.UserId equals user.Id
-                    where userOu.OrganizationUnitId == organizationUnit.Id
-                    select user;
+        IQueryable<IdentityUser> query;
+        if (includeChildren)
+        {
+            var childrenIds = await (await GetDbSetAsync())
+                .Where(ou => ou.Code.StartsWith(organizationUnit.Code))
+                .Select(x => x.Id)
+                .ToListAsync();
+
+            query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                join user in dbContext.Users on userOu.UserId equals user.Id
+                where childrenIds.Contains(userOu.OrganizationUnitId)
+                select user;
+        }
+        else
+        {
+            query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                join user in dbContext.Users on userOu.UserId equals user.Id
+                where userOu.OrganizationUnitId == organizationUnit.Id
+                select user;
+        }
 
         if (!filter.IsNullOrWhiteSpace())
         {

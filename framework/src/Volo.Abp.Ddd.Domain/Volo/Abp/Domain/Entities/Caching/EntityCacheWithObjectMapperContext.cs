@@ -12,7 +12,7 @@ public class EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, T
 {
     public EntityCacheWithObjectMapperContext(
         IReadOnlyRepository<TEntity, TKey> repository,
-        IDistributedCache<TEntityCacheItem, TKey> cache,
+        IDistributedCache<EntityCacheItemWrapper<TEntityCacheItem>, TKey> cache,
         IUnitOfWorkManager unitOfWorkManager,
         IObjectMapper objectMapper)// Intentionally injected with TContext
         : base(repository, cache, unitOfWorkManager, objectMapper)

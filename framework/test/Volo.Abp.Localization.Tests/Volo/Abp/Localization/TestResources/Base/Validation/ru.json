@@ -2,6 +2,11 @@
   "culture": "ru",
   "texts": {
     "ThisFieldIsRequired": "Это поле обязательно к заполнению",
-    "MaxLenghtErrorMessage": "В этом поле может быть не более \"{0}\" символов."
+    "MaxLenghtErrorMessage": "В этом поле может быть не более \"{0}\" символов.",
+    "Enum:BookType.Undefined": "Не определено из ValidationResource",
+    "Enum:BookType.0": "Не определено со значением 0 из ValidationResource.",
+    "BookType.Adventure": "Приключение от ValidationResource",
+    "BookType.1": "Приключение со значением 1 из ValidationResource",
+    "Biography": "Биография от ValidationResource"
   }
 }

@@ -1,6 +1,8 @@
 {
   "culture": "fa",
   "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP از طریق SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP از طریق SSL",
     "DisplayName:Abp.Ldap.ServerHost": "میزبان سرور",
     "Description:Abp.Ldap.ServerHost": "میزبان سرور",
     "DisplayName:Abp.Ldap.ServerPort": "پورت سرور",

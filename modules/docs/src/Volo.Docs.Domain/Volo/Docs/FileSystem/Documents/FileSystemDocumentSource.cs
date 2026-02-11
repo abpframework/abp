@@ -32,6 +32,9 @@ namespace Volo.Docs.FileSystem.Documents
                 localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
             }
 
+            // The version is intentionally set to "1.0.0" as part of the versioning strategy for file system documents.
+            version = "1.0.0";
+
             return new Document(GuidGenerator.Create(),
                 project.Id,
                 documentName,

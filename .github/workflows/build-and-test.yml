@@ -16,6 +16,9 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
+      - '.github/workflows/build-and-test.yml'
 
   pull_request:
     paths:
@@ -31,6 +34,9 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
+      - '.github/workflows/build-and-test.yml'
     types:
       - opened
       - synchronize
@@ -41,18 +47,18 @@ permissions:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
     if: ${{ !github.event.pull_request.draft }}
     steps:
+    - uses: jlumbroso/free-disk-space@main
+    - uses: PSModule/install-powershell@v1
+      with:
+        Version: latest
     - uses: actions/checkout@v2
     - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 7.0.100
-
-    - name: chown
-      run: |
-        sudo chown -R $USER:$USER /home/runneradmin
-
+        dotnet-version: 10.0.x
     - name: Build All
       run: ./build-all.ps1
       working-directory: ./build

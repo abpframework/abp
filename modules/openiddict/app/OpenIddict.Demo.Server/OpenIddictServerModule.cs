@@ -34,6 +34,7 @@ using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.Uow;
 
 namespace OpenIddict.Demo.Server;
 
@@ -88,24 +89,7 @@ public class OpenIddictServerModule : AbpModule
 
         PreConfigure<OpenIddictServerBuilder>(builder =>
         {
-            //https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-            using (var algorithm = RSA.Create(keySizeInBits: 2048))
-            {
-                var subject = new X500DistinguishedName("CN=Fabrikam Encryption Certificate");
-                var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature, critical: true));
-                var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
-                builder.AddSigningCertificate(certificate);
-            }
-
-            using (var algorithm = RSA.Create(keySizeInBits: 2048))
-            {
-                var subject = new X500DistinguishedName("CN=Fabrikam Signing Certificate");
-                var request = new CertificateRequest(subject, algorithm, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.KeyEncipherment, critical: true));
-                var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddYears(2));
-                builder.AddEncryptionCertificate(certificate);
-            }
+            builder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", "00000000-0000-0000-0000-000000000000");
 
             builder.Configure(openIddictServerOptions =>
             {
@@ -116,7 +100,7 @@ public class OpenIddictServerModule : AbpModule
         PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
         {
             options.EnableWildcardDomainSupport = true;
-            options.WildcardDomainsFormat.Add("https://{0}.abp.io/signin-oidc");
+            options.WildcardDomainsFormat.Add("https://*.abp.io");
         });
 
         PreConfigure<OpenIddictBuilder>(builder =>
@@ -155,8 +139,19 @@ public class OpenIddictServerModule : AbpModule
         });
     }
 
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public async override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
+        using var uow = context.ServiceProvider.GetRequiredService<IUnitOfWorkManager>().Begin();
+        {
+            var dbContext = await context.ServiceProvider.GetRequiredService<IDbContextProvider<ServerDbContext>>().GetDbContextAsync();
+            if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
+            {
+                await dbContext.Database.MigrateAsync();
+            }
+
+            await uow.CompleteAsync();
+        }
+
         await context.ServiceProvider
             .GetRequiredService<IDataSeeder>()
             .SeedAsync();

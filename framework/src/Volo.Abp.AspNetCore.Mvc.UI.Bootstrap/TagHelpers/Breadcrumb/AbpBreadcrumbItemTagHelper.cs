@@ -2,9 +2,9 @@
 
 public class AbpBreadcrumbItemTagHelper : AbpTagHelper<AbpBreadcrumbItemTagHelper, AbpBreadcrumbItemTagHelperService>
 {
-    public string Href { get; set; }
+    public string? Href { get; set; }
 
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 
     public bool Active { get; set; }
 

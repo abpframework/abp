@@ -9,7 +9,7 @@ public class UnitOfWorkEventRecord
 
     public Type EventType { get; }
 
-    public long EventOrder { get; }
+    public long EventOrder { get; protected set; }
 
     public bool UseOutbox { get; }
 
@@ -28,5 +28,10 @@ public class UnitOfWorkEventRecord
         EventData = eventData;
         EventOrder = eventOrder;
         UseOutbox = useOutbox;
+    }
+
+    public void SetOrder(long order)
+    {
+        EventOrder = order;
     }
 }

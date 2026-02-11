@@ -4,8 +4,7 @@ namespace Volo.Abp.Uow;
 
 public interface IUnitOfWorkManager
 {
-    [CanBeNull]
-    IUnitOfWork Current { get; }
+    IUnitOfWork? Current { get; }
 
     [NotNull]
     IUnitOfWork Begin([NotNull] AbpUnitOfWorkOptions options, bool requiresNew = false);

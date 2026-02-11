@@ -20,4 +20,6 @@ public interface IAbpIdentityMongoDbContext : IAbpMongoDbContext
     IMongoCollection<IdentityLinkUser> LinkUsers { get; }
 
     IMongoCollection<IdentityUserDelegation> UserDelegations { get; }
+
+    IMongoCollection<IdentitySession> Sessions { get; }
 }

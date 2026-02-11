@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Volo.Abp.Bundling;
+using Volo.Abp.Bundling.Styles;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Minify.Styles;
 
@@ -44,7 +45,7 @@ public class StyleBundler : BundlerBase, IStyleBundler, ITransientDependency
     protected override string ProcessBeforeAddingToTheBundle(string referencePath, string bundleDirectory,
         string fileContent)
     {
-        return CssRelativePathAdjuster.Adjust(
+        return CssRelativePath.Adjust(
             fileContent,
             referencePath,
             bundleDirectory

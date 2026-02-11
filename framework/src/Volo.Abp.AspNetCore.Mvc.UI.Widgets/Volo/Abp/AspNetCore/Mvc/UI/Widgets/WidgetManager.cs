@@ -27,7 +27,7 @@ public class WidgetManager : IWidgetManager
     {
         var widget = Options.Widgets.Find(widgetComponentType);
 
-        return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
+        return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName!);
     }
 
     public async Task<bool> IsGrantedAsync(string name)
@@ -37,7 +37,7 @@ public class WidgetManager : IWidgetManager
         return await IsGrantedAsyncInternal(widget, name);
     }
 
-    private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
+    private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition? widget, string wantedWidgetName)
     {
         if (widget == null)
         {

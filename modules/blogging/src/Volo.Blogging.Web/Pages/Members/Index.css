@@ -1,6 +1,0 @@
-.post-desc {
-    overflow-wrap: break-word;
-}
-a:not(#all-posts-tab,#edit-profile-tab) {
-    color: unset!important;
-}

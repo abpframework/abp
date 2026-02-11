@@ -5,7 +5,7 @@ namespace Volo.Abp.BlazoriseUI.Components.ObjectExtending;
 public partial class TextExtensionProperty<TEntity, TResourceType>
     where TEntity : IHasExtraProperties
 {
-    protected string Value {
+    protected string? Value {
         get {
             return PropertyInfo.GetTextInputValueOrNull(Entity.GetProperty(PropertyInfo.Name));
         }

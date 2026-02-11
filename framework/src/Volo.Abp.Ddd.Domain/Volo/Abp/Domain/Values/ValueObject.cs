@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Volo.Abp.Domain.Values;
 
@@ -30,7 +29,14 @@ public abstract class ValueObject
                 return false;
             }
 
-            if (thisValues.Current != null && !thisValues.Current.Equals(otherValues.Current))
+            if (thisValues.Current is ValueObject currentValueObject && otherValues.Current is ValueObject otherValueObject)
+            {
+                if (!currentValueObject.ValueEquals(otherValueObject))
+                {
+                    return false;
+                }
+            }
+            else if (thisValues.Current != null && !thisValues.Current.Equals(otherValues.Current))
             {
                 return false;
             }

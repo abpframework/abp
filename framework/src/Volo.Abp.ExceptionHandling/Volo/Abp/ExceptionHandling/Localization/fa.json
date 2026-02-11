@@ -13,14 +13,19 @@
     "DefaultErrorMessage404": "منبع درخواستی یافت نشد!",
     "DefaultErrorMessage404Detail": "منبع درخواستی در سرور یافت نشد!",
     "EntityNotFoundErrorMessage": "هیچ موجودیتی {0} با id = {1} وجود ندارد!",
+    "EntityNotFoundErrorMessageWithoutId": "هیچ موجودیتی {0} وجود ندارد!",
     "AbpDbConcurrencyErrorMessage": "اطلاعات ارسالی شما قبلاً توسط کاربر/مشتری دیگری تغییر یافته است. لطفاً تغییراتی را که انجام داده اید لغو کنید و مجددا تلاش فرمایید.",
     "Error": "خطا",
     "UnhandledException": "خطای پیش بینی نشده!",
+    "Authorizing": "در حال احراز هویت…",
     "401Message": "غیر مجاز",
     "403Message": "ممنوع",
     "404Message": "صفحه موردنظر یافت نشد",
     "500Message": "خطای داخلی رخ داد",
     "403MessageDetail": "شما مجاز به انجام این عملیات نمی باشید!",
-    "404MessageDetail": "با عرض پورش، در این آدرس هیچ محتوایی وجود ندارد."
+    "404MessageDetail": "با عرض پورش، در این آدرس هیچ محتوایی وجود ندارد.",
+    "Unauthorized": "غیر مجاز",
+    "invalid_token": "توکن نامعتبر است",
+    "SessionExpired": "جلسه شما منقضی شده است. لطفاً مجددا وارد شوید تا در برنامه ادامه دهید."
   }
 }

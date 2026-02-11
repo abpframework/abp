@@ -13,17 +13,15 @@ public class ObjectExtensionPropertyInfoEfCoreMappingOptions
     public ObjectExtensionInfo ObjectExtension => ExtensionProperty.ObjectExtension;
 
     [Obsolete("Use EntityTypeAndPropertyBuildAction property.")]
-    [CanBeNull]
-    public Action<PropertyBuilder> PropertyBuildAction { get; set; }
+    public Action<PropertyBuilder>? PropertyBuildAction { get; set; }
 
-    [CanBeNull]
-    public Action<EntityTypeBuilder, PropertyBuilder> EntityTypeAndPropertyBuildAction { get; set; }
+    public Action<EntityTypeBuilder, PropertyBuilder>? EntityTypeAndPropertyBuildAction { get; set; }
 
     [Obsolete("Use other constructors.")]
     public ObjectExtensionPropertyInfoEfCoreMappingOptions(
         [NotNull] ObjectExtensionPropertyInfo extensionProperty,
-        [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null,
-        [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+        Action<PropertyBuilder>? propertyBuildAction = null,
+        Action<EntityTypeBuilder, PropertyBuilder>? entityTypeAndPropertyBuildAction = null)
     {
         ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
 
@@ -39,7 +37,7 @@ public class ObjectExtensionPropertyInfoEfCoreMappingOptions
 
     public ObjectExtensionPropertyInfoEfCoreMappingOptions(
         [NotNull] ObjectExtensionPropertyInfo extensionProperty,
-        [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
+        Action<EntityTypeBuilder, PropertyBuilder>? entityTypeAndPropertyBuildAction)
     {
         ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
 

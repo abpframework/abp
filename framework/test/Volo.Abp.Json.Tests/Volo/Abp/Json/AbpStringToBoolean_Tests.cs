@@ -3,13 +3,13 @@ using Shouldly;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
 using Xunit;
 
-namespace Volo.Abp.Json
+namespace Volo.Abp.Json;
+
+public class AbpStringToBoolean_Tests
 {
-    public class AbpStringToBoolean_Tests
+    [Fact]
+    public void Test_Read()
     {
-        [Fact]
-        public void Test_Read()
-        {
             var options = new JsonSerializerOptions()
             {
                 Converters =
@@ -27,9 +27,9 @@ namespace Volo.Abp.Json
             testClass.Enabled.ShouldBe(true);
         }
 
-        [Fact]
-        public void Test_Write()
-        {
+    [Fact]
+    public void Test_Write()
+    {
             var options = new JsonSerializerOptions()
             {
                 Converters =
@@ -46,9 +46,8 @@ namespace Volo.Abp.Json
             testClassJson.ShouldBe("{\"Enabled\":true}");
         }
 
-        class TestClass
-        {
-            public bool Enabled { get; set; }
-        }
+    class TestClass
+    {
+        public bool Enabled { get; set; }
     }
 }

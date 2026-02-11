@@ -21,20 +21,20 @@
                 <div id="HideSectionWhenUseDefaultCredentialsIsChecked" @Html.Raw(Model.SmtpUseDefaultCredentials ? "style=\"display: none;\"" : "")>
                     <abp-input asp-for="SmtpDomain"/>
                     <abp-input asp-for="SmtpUserName"/>
-                    <abp-input type="password" autocomplete="new-password" asp-for="SmtpPassword"/>
+                    <abp-input type="password" autocomplete="new-password" placeholder="@L["SmtpPasswordPlaceholder"].Value" asp-for="SmtpPassword"/>
                 </div>
             </div>
             <hr class="my-4"/>
             <div>
-                <abp-button button-type="Primary" type="submit">
-                    <i class="fa fa-save"></i> @L["Save"]
-                </abp-button>
                 @if (await PermissionChecker.IsGrantedAsync(SettingManagementPermissions.EmailingTest))
                 {
-                    <abp-button button-type="Primary" id="SendTestEmailButton">
+                    <abp-button button-type="Outline_Primary" id="SendTestEmailButton">
                         <i class="fa fa-send"></i> @L["SendTestEmail"]
                     </abp-button>
                 }
+                <abp-button button-type="Primary" type="submit">
+                    <i class="fa fa-save"></i> @L["Save"]
+                </abp-button>
             </div>
         </abp-column>
     </abp-row>

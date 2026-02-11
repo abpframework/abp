@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "保存中...",
     "Actions": "操作",
     "Delete": "删除",
-    "SuccessfullyDeleted": "删除成功",
+    "CreatedSuccessfully": "创建成功",
+    "SavedSuccessfully": "保存成功",
+    "DeletedSuccessfully": "删除成功",
     "Edit": "编辑",
     "Refresh": "刷新",
     "Language": "语言",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "显示0个条目中的0到0",
     "PagerInfoFiltered": "(从 _MAX_ 总条目中过滤掉)",
     "NoDataAvailableInDatatable": "表中没有数据",
+    "ErrorLoadingDatatable": " 请求过程中发生错误。检查消息以获取详细信息",
     "Total": "总计",
     "Selected": "已选",
     "PagerShowMenuEntries": "显示 _MENU_ 条数据",
@@ -49,6 +52,16 @@
     "ItemWillBeDeletedMessageWithFormat": "{0} 将被删除!",
     "ItemWillBeDeletedMessage": "此项将被删除!",
     "ManageYourAccount": "管理你的账户",
-    "OthersGroup": "其他"
+    "OthersGroup": "其他",
+    "Today": "今天",
+    "Apply": "应用",
+    "InternetConnectionInfo": "无法执行该操作。您的互联网连接目前不可用。",
+    "CopiedToTheClipboard": "已复制到剪贴板",
+    "AddNew": "添新",
+    "ProfilePicture": "个人资料图片",
+    "Theme": "主题",
+    "NotAssigned": "未分配",
+    "EntityActionsDisabledTooltip": "您没有权限执行任何操作。",
+    "ResourcePermissions": "权限"
   }
 }

@@ -6,6 +6,6 @@ public class TableColumnDictionary : Dictionary<string, List<TableColumn>>
 {
     public List<TableColumn> Get<T>()
     {
-        return this.GetOrAdd(typeof(T).FullName, () => new List<TableColumn>());
+        return this.GetOrAdd(typeof(T).FullName!, () => new List<TableColumn>());
     }
 }

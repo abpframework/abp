@@ -1,0 +1,10 @@
+{
+  "culture": "sv",
+  "texts": {
+    "Volo.Authorization:010001": "Auktorisering misslyckades! Angiven policy har inte beviljats.",
+    "Volo.Authorization:010002": "Auktorisering misslyckades! Angiven policy har inte beviljat: {Policynamn}",
+    "Volo.Authorization:010003": "Auktorisering misslyckades! Given policy har inte beviljats för given resurs: {Resursnamn}",
+    "Volo.Authorization:010004": "Auktorisering misslyckades! Givet krav har inte beviljats för given resurs: {Resursnamn}",
+    "Volo.Authorization:010005": "Auktorisering misslyckades! Givet krav har inte beviljats för given resurs: {Resursnamn}"
+  }
+}

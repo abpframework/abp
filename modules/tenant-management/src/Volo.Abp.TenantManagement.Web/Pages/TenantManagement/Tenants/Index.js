@@ -38,6 +38,7 @@
                             _featuresModal.open({
                                 providerName: 'T',
                                 providerKey: data.record.id,
+                                providerKeyDisplayName: data.record.name,
                             });
                         },
                     },
@@ -56,8 +57,8 @@
                             _tenantAppService
                                 .delete(data.record.id)
                                 .then(function () {
-                                    _dataTable.ajax.reload();
-                                    abp.notify.success(l('SuccessfullyDeleted'));
+                                    _dataTable.ajax.reloadEx();
+                                    abp.notify.success(l('DeletedSuccessfully'));
                                 });
                         },
                     }
@@ -102,11 +103,11 @@
         );
 
         _createModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         _editModal.onResult(function () {
-            _dataTable.ajax.reload();
+            _dataTable.ajax.reloadEx();
         });
 
         $('#AbpContentToolbar button[name=CreateTenant]').click(function (e) {

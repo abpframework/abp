@@ -38,7 +38,7 @@
             <abp-row>
                 <abp-column size="_2">
                     <select id="StatusSelect" class="form-select">
-                        <option value="">@L["SelectAStatus"]</option>
+                        <option value="">@L["AllPosts"]</option>
                         @foreach (var status in (BlogPostStatus[]) Enum.GetValues(typeof(BlogPostStatus)))
                         {
                             <option value="@((int)status)">@L["CmsKit.BlogPost.Status." + (int)status]</option>
@@ -55,6 +55,6 @@
 
 <abp-card>
     <abp-card-body>
-        <abp-table striped-rows="true" id="BlogPostsTable" class="nowrap"></abp-table>
+        <abp-table  id="BlogPostsTable" class="nowrap"></abp-table>
     </abp-card-body>
 </abp-card>

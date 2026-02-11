@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.Features;
@@ -12,34 +11,31 @@ public class FeatureChecker : FeatureCheckerBase
     protected AbpFeatureOptions Options { get; }
     protected IServiceProvider ServiceProvider { get; }
     protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
-    protected List<IFeatureValueProvider> Providers => _providers.Value;
-
-    private readonly Lazy<List<IFeatureValueProvider>> _providers;
+    protected IFeatureValueProviderManager FeatureValueProviderManager { get; }
 
     public FeatureChecker(
         IOptions<AbpFeatureOptions> options,
         IServiceProvider serviceProvider,
-        IFeatureDefinitionManager featureDefinitionManager)
+        IFeatureDefinitionManager featureDefinitionManager,
+        IFeatureValueProviderManager featureValueProviderManager)
     {
         ServiceProvider = serviceProvider;
         FeatureDefinitionManager = featureDefinitionManager;
+        FeatureValueProviderManager = featureValueProviderManager;
 
         Options = options.Value;
-
-        _providers = new Lazy<List<IFeatureValueProvider>>(
-            () => Options
-                .ValueProviders
-                .Select(type => ServiceProvider.GetRequiredService(type) as IFeatureValueProvider)
-                .ToList(),
-            true
-        );
     }
 
-    public override async Task<string> GetOrNullAsync(string name)
+    public override async Task<string?> GetOrNullAsync(string name)
     {
-        var featureDefinition = await FeatureDefinitionManager.GetAsync(name);
-        var providers = Enumerable
-            .Reverse(Providers);
+        var featureDefinition = await FeatureDefinitionManager.GetOrNullAsync(name);
+        if (featureDefinition == null)
+        {
+            return null;
+        }
+        
+        var providers = FeatureValueProviderManager.ValueProviders
+            .Reverse();
 
         if (featureDefinition.AllowedProviders.Any())
         {
@@ -49,7 +45,7 @@ public class FeatureChecker : FeatureCheckerBase
         return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
     }
 
-    protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
+    protected virtual async Task<string?> GetOrNullValueFromProvidersAsync(
         IEnumerable<IFeatureValueProvider> providers,
         FeatureDefinition feature)
     {

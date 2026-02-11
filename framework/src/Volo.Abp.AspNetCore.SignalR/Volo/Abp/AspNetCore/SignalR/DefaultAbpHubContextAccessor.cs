@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.SignalR;
 
 public class DefaultAbpHubContextAccessor : IAbpHubContextAccessor, ISingletonDependency
 {
-    public AbpHubContext Context => _currentHubContext.Value;
+    public AbpHubContext Context => _currentHubContext.Value!;
 
     private readonly AsyncLocal<AbpHubContext> _currentHubContext = new AsyncLocal<AbpHubContext>();
 

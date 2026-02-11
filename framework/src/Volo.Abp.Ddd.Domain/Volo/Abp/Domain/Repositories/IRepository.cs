@@ -8,11 +8,15 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.Domain.Repositories;
 
 /// <summary>
-/// Just to mark a class as repository.
+/// The base interface to implement a repository for an entity.
 /// </summary>
 public interface IRepository
 {
+    bool? IsChangeTrackingEnabled { get; }
 
+    string? EntityName { get; set; }
+    
+    string ProviderName { get; }
 }
 
 public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepository<TEntity>
@@ -28,7 +32,7 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepo
     /// <param name="predicate">A condition to find the entity</param>
     /// <param name="includeDetails">Set true to include all children of this entity</param>
     /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
-    Task<TEntity> FindAsync(
+    Task<TEntity?> FindAsync(
         [NotNull] Expression<Func<TEntity, bool>> predicate,
         bool includeDetails = true,
         CancellationToken cancellationToken = default

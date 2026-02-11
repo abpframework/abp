@@ -12,7 +12,6 @@ public class SqliteConnectionStringChecker : IConnectionStringChecker, ITransien
     public virtual async Task<AbpConnectionStringCheckResult> CheckAsync(string connectionString)
     {
         var result = new AbpConnectionStringCheckResult();
-
         try
         {
             await using var conn = new SqliteConnection(connectionString);
@@ -24,7 +23,7 @@ public class SqliteConnectionStringChecker : IConnectionStringChecker, ITransien
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return result;
         }

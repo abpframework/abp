@@ -13,6 +13,7 @@ using OpenIddict.Abstractions;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict.Localization;
+using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.OpenIddict.Controllers;
@@ -26,6 +27,8 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
     protected IOpenIddictScopeManager ScopeManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeManager>();
     protected IOpenIddictTokenManager TokenManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictTokenManager>();
     protected AbpOpenIddictClaimsPrincipalManager OpenIddictClaimsPrincipalManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimsPrincipalManager>();
+    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory => LazyServiceProvider.LazyGetRequiredService<IAbpClaimsPrincipalFactory>();
+    protected IOptions<AbpClaimsPrincipalFactoryOptions> AbpClaimsPrincipalFactoryOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpClaimsPrincipalFactoryOptions>>();
 
     protected AbpOpenIdDictControllerBase()
     {

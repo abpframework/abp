@@ -12,7 +12,7 @@ public class RouteTenantResolveContributor : HttpTenantResolveContributorBase
 
     public override string Name => ContributorName;
 
-    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    protected override Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
     {
         var tenantId = httpContext.GetRouteValue(context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey);
         return Task.FromResult(tenantId != null ? Convert.ToString(tenantId) : null);

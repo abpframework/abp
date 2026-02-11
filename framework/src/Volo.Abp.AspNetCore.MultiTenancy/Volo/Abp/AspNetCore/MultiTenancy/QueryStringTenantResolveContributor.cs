@@ -11,7 +11,7 @@ public class QueryStringTenantResolveContributor : HttpTenantResolveContributorB
 
     public override string Name => ContributorName;
 
-    protected override Task<string> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
+    protected override Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
     {
         if (httpContext.Request.QueryString.HasValue)
         {
@@ -22,13 +22,13 @@ public class QueryStringTenantResolveContributor : HttpTenantResolveContributorB
                 if (tenantValue.IsNullOrWhiteSpace())
                 {
                     context.Handled = true;
-                    return Task.FromResult<string>(null);
+                    return Task.FromResult<string?>(null);
                 }
 
-                return Task.FromResult(tenantValue);
+                return Task.FromResult(tenantValue)!;
             }
         }
 
-        return Task.FromResult<string>(null);
+        return Task.FromResult<string?>(null);
     }
 }

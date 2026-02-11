@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Polly;
-using Polly.Extensions.Http;
 using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -58,7 +51,7 @@ public class AbpIoApiKeyService : IApiKeyService, ITransientDependency
             return _apiKeyResult;
         }
 
-        var url = $"{CliUrls.WwwAbpIo}api/license/api-key";
+        var url = $"{CliUrls.AccountAbpIo}api/license/api-key";
         var client = _cliHttpClientFactory.CreateClient();
 
         using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, _logger))

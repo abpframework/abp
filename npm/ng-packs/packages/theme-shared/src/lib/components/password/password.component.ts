@@ -1,9 +1,16 @@
-import { Component, forwardRef, Injector, Input } from '@angular/core';
-import { AbstractNgModelComponent } from '@abp/ng.core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, Input } from '@angular/core';
+import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { AbstractNgModelComponent } from '@abp/ng.core';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+
+/**
+ * @deprecated use ShowPasswordDirective directive
+ * https://abp.io/docs/latest/framework/ui/angular/show-password-directive
+ */
 @Component({
   selector: 'abp-password',
+  imports: [FormsModule, NgxValidateCoreModule],
   templateUrl: `./password.component.html`,
   providers: [
     {
@@ -17,10 +24,6 @@ export class PasswordComponent extends AbstractNgModelComponent {
   @Input() inputId!: string;
   @Input() formControlName!: string;
   fieldTextType?: boolean;
-
-  constructor(injector: Injector) {
-    super(injector);
-  }
 
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;

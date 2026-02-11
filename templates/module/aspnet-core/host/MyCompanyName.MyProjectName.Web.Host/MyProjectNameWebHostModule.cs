@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -29,7 +29,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement;
@@ -101,11 +101,12 @@ public class MyProjectNameWebHostModule : AbpModule
         ConfigureCache(configuration);
         ConfigureUrls(configuration);
         ConfigureAuthentication(context, configuration);
-        ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureSwaggerServices(context.Services);
         ConfigureMultiTenancy();
         ConfigureDataProtection(context, configuration, hostingEnvironment);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameWebHostModule>();
     }
 
     private void ConfigureMenu(IConfiguration configuration)
@@ -154,7 +155,7 @@ public class MyProjectNameWebHostModule : AbpModule
             .AddAbpOpenIdConnect("oidc", options =>
             {
                 options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("AuthServer:RequireHttpsMetadata");
                 options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                 options.ClientId = configuration["AuthServer:ClientId"];
@@ -167,14 +168,6 @@ public class MyProjectNameWebHostModule : AbpModule
                 options.Scope.Add("phone");
                 options.Scope.Add("MyProjectName");
             });
-    }
-
-    private void ConfigureAutoMapper()
-    {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameWebHostModule>();
-        });
     }
 
     private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
@@ -219,7 +212,7 @@ public class MyProjectNameWebHostModule : AbpModule
         var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
         if (!hostingEnvironment.IsDevelopment())
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
     }
@@ -240,7 +233,7 @@ public class MyProjectNameWebHostModule : AbpModule
         }
 
         app.UseHttpsRedirection();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
 

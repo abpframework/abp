@@ -6,5 +6,5 @@ namespace Volo.Abp.TextTemplating.Razor;
 
 public interface IAbpRazorProjectEngineFactory
 {
-    Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder> configure = null);
+    Task<RazorProjectEngine> CreateAsync(Action<RazorProjectEngineBuilder>? configure = null);
 }

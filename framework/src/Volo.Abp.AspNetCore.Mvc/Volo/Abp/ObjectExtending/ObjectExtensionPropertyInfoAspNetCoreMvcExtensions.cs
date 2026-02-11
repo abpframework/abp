@@ -34,7 +34,7 @@ public static class ObjectExtensionPropertyInfoAspNetCoreMvcExtensions
             .FirstOrDefault()?.DataType;
     }
 
-    public static string GetDataFormatStringOrNull(this IBasicObjectExtensionPropertyInfo property)
+    public static string? GetDataFormatStringOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
         return property
             .Attributes

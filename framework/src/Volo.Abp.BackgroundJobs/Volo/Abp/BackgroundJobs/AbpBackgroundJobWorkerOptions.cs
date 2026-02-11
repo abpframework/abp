@@ -3,6 +3,11 @@
 public class AbpBackgroundJobWorkerOptions
 {
     /// <summary>
+    /// Application name.
+    /// </summary>
+    public string? ApplicationName { get; set; }
+
+    /// <summary>
     /// Interval between polling jobs from <see cref="IBackgroundJobStore"/>.
     /// Default value: 5000 (5 seconds).
     /// </summary>
@@ -33,6 +38,12 @@ public class AbpBackgroundJobWorkerOptions
     /// </summary>
     public double DefaultWaitFactor { get; set; }
 
+    /// <summary>
+    /// Distributed lock name for the worker.
+    /// Default value: "AbpBackgroundJobWorker".
+    /// </summary>
+    public string  DistributedLockName { get; set; }
+
     public AbpBackgroundJobWorkerOptions()
     {
         MaxJobFetchCount = 1000;
@@ -40,5 +51,6 @@ public class AbpBackgroundJobWorkerOptions
         DefaultFirstWaitDuration = 60;
         DefaultTimeout = 172800;
         DefaultWaitFactor = 2.0;
+        DistributedLockName = "AbpBackgroundJobWorker";
     }
 }

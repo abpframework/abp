@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -11,7 +8,7 @@ public static class TagHelperContextExtensions
     {
         if (!context.Items.ContainsKey(key))
         {
-            return default(T);
+            return default(T)!;
         }
 
         return (T)context.Items[key];

@@ -1,0 +1,16 @@
+﻿{
+  "selectedKubernetesProfile": null,
+  "solutionRunner": {
+    "selectedProfile": "Default",
+    "targetFrameworks": [],
+    "applicationsStartingWithoutBuild": [],
+    "applicationBatchStartStates": [
+      {
+        "profile": "Default",
+        "applicationOrFolder": "VoloDocs.Web",
+        "value": 0
+      }
+    ],
+    "folderBatchStartStates": []
+  }
+}

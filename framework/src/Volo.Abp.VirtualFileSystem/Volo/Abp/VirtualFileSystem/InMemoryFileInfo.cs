@@ -10,7 +10,7 @@ public class InMemoryFileInfo : IFileInfo
 
     public long Length => _fileContent.Length;
 
-    public string PhysicalPath => null;
+    public string? PhysicalPath => null;
 
     public string Name { get; }
 

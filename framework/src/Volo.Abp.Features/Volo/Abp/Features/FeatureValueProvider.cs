@@ -14,5 +14,5 @@ public abstract class FeatureValueProvider : IFeatureValueProvider, ITransientDe
         FeatureStore = featureStore;
     }
 
-    public abstract Task<string> GetOrNullAsync(FeatureDefinition feature);
+    public abstract Task<string?> GetOrNullAsync(FeatureDefinition feature);
 }

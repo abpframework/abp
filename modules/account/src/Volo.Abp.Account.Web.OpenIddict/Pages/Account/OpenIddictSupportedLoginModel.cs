@@ -2,12 +2,14 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 
@@ -17,12 +19,15 @@ namespace Volo.Abp.Account.Web.Pages.Account;
 public class OpenIddictSupportedLoginModel : LoginModel
 {
     protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
+
     public OpenIddictSupportedLoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
         IOptions<IdentityOptions> identityOptions,
-        AbpOpenIddictRequestHelper openIddictRequestHelper)
-        : base(schemeProvider, accountOptions, identityOptions)
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+        AbpOpenIddictRequestHelper openIddictRequestHelper,
+        IWebHostEnvironment webHostEnvironment)
+        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
     {
         OpenIddictRequestHelper = openIddictRequestHelper;
     }

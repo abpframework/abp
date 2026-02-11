@@ -6,5 +6,5 @@ namespace Volo.Abp.AspNetCore.Components.MauiBlazor;
 [Dependency(ReplaceServices = true)]
 public class MauiBlazorCurrentTenantAccessor : ICurrentTenantAccessor, ISingletonDependency
 {
-    public BasicTenantInfo Current { get; set; }
+    public BasicTenantInfo? Current { get; set; }
 }

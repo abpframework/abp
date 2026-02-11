@@ -32,5 +32,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
       }
     `,
   ],
+  imports: [],
 })
 export class LoadingComponent {}

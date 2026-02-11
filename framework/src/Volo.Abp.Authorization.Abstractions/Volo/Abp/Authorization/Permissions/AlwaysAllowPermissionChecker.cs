@@ -17,7 +17,7 @@ public class AlwaysAllowPermissionChecker : IPermissionChecker
         return TaskCache.TrueResult;
     }
 
-    public Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
+    public Task<bool> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string name)
     {
         return TaskCache.TrueResult;
     }
@@ -27,7 +27,7 @@ public class AlwaysAllowPermissionChecker : IPermissionChecker
         return IsGrantedAsync(null, names);
     }
 
-    public Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string[] names)
+    public Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string[] names)
     {
         return Task.FromResult(new MultiplePermissionGrantResult(names, PermissionGrantResult.Granted));
     }

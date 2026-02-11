@@ -10,7 +10,7 @@ public class TimingSettingProvider : SettingDefinitionProvider
     {
         context.Add(
             new SettingDefinition(TimingSettingNames.TimeZone,
-                "UTC",
+                "",
                 L("DisplayName:Abp.Timing.Timezone"),
                 L("Description:Abp.Timing.Timezone"),
                 isVisibleToClients: true)

@@ -8,7 +8,7 @@ public class FilePlugInSource : IPlugInSource
 {
     public string[] FilePaths { get; }
 
-    public FilePlugInSource(params string[] filePaths)
+    public FilePlugInSource(params string[]? filePaths)
     {
         FilePaths = filePaths ?? new string[0];
     }

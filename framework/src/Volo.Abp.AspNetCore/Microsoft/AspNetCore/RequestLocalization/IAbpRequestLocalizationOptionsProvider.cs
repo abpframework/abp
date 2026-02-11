@@ -6,7 +6,7 @@ namespace Microsoft.AspNetCore.RequestLocalization;
 
 public interface IAbpRequestLocalizationOptionsProvider
 {
-    void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null);
+    void InitLocalizationOptions(Action<RequestLocalizationOptions>? optionsAction = null);
 
     Task<RequestLocalizationOptions> GetLocalizationOptionsAsync();
 }

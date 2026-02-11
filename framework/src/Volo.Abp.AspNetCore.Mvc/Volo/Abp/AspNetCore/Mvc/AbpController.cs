@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,14 +24,14 @@ namespace Volo.Abp.AspNetCore.Mvc;
 
 public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingConcerns
 {
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
 
     [Obsolete("Use LazyServiceProvider instead.")]
-    public IServiceProvider ServiceProvider { get; set; }
+    public IServiceProvider ServiceProvider { get; set; } = default!;
 
     protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
 
-    protected Type ObjectMapperContext { get; set; }
+    protected Type? ObjectMapperContext { get; set; }
     protected IObjectMapper ObjectMapper => LazyServiceProvider.LazyGetService<IObjectMapper>(provider =>
         ObjectMapperContext == null
             ? provider.GetRequiredService<IObjectMapper>()
@@ -40,7 +41,7 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
 
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
 
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
     protected ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
 
@@ -48,7 +49,7 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
 
     protected IAuthorizationService AuthorizationService => LazyServiceProvider.LazyGetRequiredService<IAuthorizationService>();
 
-    protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
+    protected IUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
     protected IClock Clock => LazyServiceProvider.LazyGetRequiredService<IClock>();
 
@@ -70,16 +71,16 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
             return _localizer;
         }
     }
-    private IStringLocalizer _localizer;
+    private IStringLocalizer? _localizer;
 
-    protected Type LocalizationResource {
+    protected Type? LocalizationResource {
         get => _localizationResource;
         set {
             _localizationResource = value;
             _localizer = null;
         }
     }
-    private Type _localizationResource = typeof(DefaultResource);
+    private Type? _localizationResource = typeof(DefaultResource);
 
     public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
@@ -104,14 +105,14 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
         return localizer;
     }
 
-    protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+    protected virtual async Task<RedirectResult> RedirectSafelyAsync(string returnUrl, string? returnUrlHash = null)
     {
-        return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
+        return Redirect(await GetRedirectUrlAsync(returnUrl, returnUrlHash));
     }
 
-    protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+    protected virtual async Task<string> GetRedirectUrlAsync(string returnUrl, string? returnUrlHash = null)
     {
-        returnUrl = NormalizeReturnUrl(returnUrl);
+        returnUrl = await NormalizeReturnUrlAsync(returnUrl);
 
         if (!returnUrlHash.IsNullOrWhiteSpace())
         {
@@ -121,23 +122,23 @@ public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingCon
         return returnUrl;
     }
 
-    protected virtual string NormalizeReturnUrl(string returnUrl)
+    protected virtual async Task<string> NormalizeReturnUrlAsync(string returnUrl)
     {
         if (returnUrl.IsNullOrEmpty())
         {
-            return GetAppHomeUrl();
+            return await GetAppHomeUrlAsync();
         }
 
-        if (Url.IsLocalUrl(returnUrl) || AppUrlProvider.IsRedirectAllowedUrl(returnUrl))
+        if (Url.IsLocalUrl(returnUrl) || await AppUrlProvider.IsRedirectAllowedUrlAsync(returnUrl))
         {
             return returnUrl;
         }
 
-        return GetAppHomeUrl();
+        return await GetAppHomeUrlAsync();
     }
 
-    protected virtual string GetAppHomeUrl()
+    protected virtual Task<string> GetAppHomeUrlAsync()
     {
-        return Url.Content("~/");
+        return Task.FromResult(Url.Content("~/"));
     }
 }

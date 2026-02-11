@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.MultiTenancy;
 using System.Linq;
 using Volo.Abp.Security.Claims;
@@ -45,7 +44,7 @@ public class ClientPermissionValueProvider : PermissionValueProvider
         var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
         if (clientId == null)
         {
-            return new MultiplePermissionGrantResult(permissionNames); ;
+            return new MultiplePermissionGrantResult(permissionNames);
         }
 
         using (CurrentTenant.Change(null))

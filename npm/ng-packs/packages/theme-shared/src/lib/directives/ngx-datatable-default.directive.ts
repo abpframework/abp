@@ -1,6 +1,14 @@
-import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, Directive, HostBinding, Inject, Input, OnDestroy } from '@angular/core';
-import { ColumnMode, DatatableComponent, ScrollerComponent } from '@swimlane/ngx-datatable';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import {
+  AfterViewInit,
+  Directive,
+  HostBinding,
+  Input,
+  OnDestroy,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
+import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -10,8 +18,11 @@ import { debounceTime } from 'rxjs/operators';
   exportAs: 'ngxDatatableDefault',
 })
 export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
-  private subscription = new Subscription();
+  private table = inject(DatatableComponent);
+  private document = inject<MockDocument>(DOCUMENT);
+  private platformId = inject(PLATFORM_ID);
 
+  private subscription = new Subscription();
   private resizeDiff = 0;
 
   @Input() class = 'material bordered';
@@ -21,7 +32,7 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
     return `ngx-datatable ${this.class}`;
   }
 
-  constructor(private table: DatatableComponent, @Inject(DOCUMENT) private document: MockDocument) {
+  constructor() {
     this.table.columnMode = ColumnMode.force;
     this.table.footerHeight = 50;
     this.table.headerHeight = 50;
@@ -30,33 +41,35 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
     this.table.virtualization = false;
   }
 
-  private fixHorizontalGap(scroller: ScrollerComponent) {
+  private fixHorizontalGap(scroller: any) {
     const { body, documentElement } = this.document;
-
-    if (documentElement.scrollHeight !== documentElement.clientHeight) {
-      if (this.resizeDiff === 0) {
-        this.resizeDiff = window.innerWidth - body.offsetWidth;
-        scroller.scrollWidth -= this.resizeDiff;
+    if (isPlatformBrowser(this.platformId)) {
+      if (documentElement.scrollHeight !== documentElement.clientHeight) {
+        if (this.resizeDiff === 0) {
+          this.resizeDiff = window.innerWidth - body.offsetWidth;
+          scroller.scrollWidth -= this.resizeDiff;
+        }
+      } else {
+        scroller.scrollWidth += this.resizeDiff;
+        this.resizeDiff = 0;
       }
-    } else {
-      scroller.scrollWidth += this.resizeDiff;
-      this.resizeDiff = 0;
     }
   }
 
   private fixStyleOnWindowResize() {
-    // avoided @HostListener('window:resize') in favor of performance
-    const subscription = fromEvent(window, 'resize')
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        const { scroller } = this.table.bodyComponent;
+    if (isPlatformBrowser(this.platformId)) {
+      const subscription = fromEvent(window, 'resize')
+        .pipe(debounceTime(500))
+        .subscribe(() => {
+          const { scroller } = this.table.bodyComponent;
 
-        if (!scroller) return;
+          if (!scroller) return;
 
-        this.fixHorizontalGap(scroller);
-      });
+          this.fixHorizontalGap(scroller);
+        });
 
-    this.subscription.add(subscription);
+      this.subscription.add(subscription);
+    }
   }
 
   ngAfterViewInit() {

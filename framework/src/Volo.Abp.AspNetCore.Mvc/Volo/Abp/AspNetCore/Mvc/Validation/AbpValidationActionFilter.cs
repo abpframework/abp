@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.Validation;
 
-public class AbpValidationActionFilter : IAsyncActionFilter, ITransientDependency
+public class AbpValidationActionFilter : IAsyncActionFilter, IAbpFilter, ITransientDependency
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {

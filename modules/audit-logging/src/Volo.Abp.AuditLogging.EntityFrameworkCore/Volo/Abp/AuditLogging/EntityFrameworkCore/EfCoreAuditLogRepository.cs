@@ -29,6 +29,7 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
         DateTime? endTime = null,
         string httpMethod = null,
         string url = null,
+        string clientId = null,
         Guid? userId = null,
         string userName = null,
         string applicationName = null,
@@ -46,6 +47,7 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
             endTime,
             httpMethod,
             url,
+            clientId,
             userId,
             userName,
             applicationName,
@@ -71,6 +73,7 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
         DateTime? endTime = null,
         string httpMethod = null,
         string url = null,
+        string clientId = null,
         Guid? userId = null,
         string userName = null,
         string applicationName = null,
@@ -87,6 +90,7 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
             endTime,
             httpMethod,
             url,
+            clientId,
             userId,
             userName,
             applicationName,
@@ -108,6 +112,7 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
         DateTime? endTime = null,
         string httpMethod = null,
         string url = null,
+        string clientId = null,
         Guid? userId = null,
         string userName = null,
         string applicationName = null,
@@ -126,13 +131,14 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
             .WhereIf(endTime.HasValue, auditLog => auditLog.ExecutionTime <= endTime)
             .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions != "")
             .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions == "")
-            .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod == httpMethod)
-            .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+            .WhereIf(!httpMethod.IsNullOrEmpty(), auditLog => auditLog.HttpMethod == httpMethod)
+            .WhereIf(!url.IsNullOrEmpty(), auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+            .WhereIf(!clientId.IsNullOrEmpty(), auditLog => auditLog.ClientId == clientId)
             .WhereIf(userId != null, auditLog => auditLog.UserId == userId)
-            .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
-            .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
-            .WhereIf(clientIpAddress != null, auditLog => auditLog.ClientIpAddress != null && auditLog.ClientIpAddress == clientIpAddress)
-            .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
+            .WhereIf(!userName.IsNullOrEmpty(), auditLog => auditLog.UserName == userName)
+            .WhereIf(!applicationName.IsNullOrEmpty(), auditLog => auditLog.ApplicationName == applicationName)
+            .WhereIf(!clientIpAddress.IsNullOrEmpty(), auditLog => auditLog.ClientIpAddress != null && auditLog.ClientIpAddress == clientIpAddress)
+            .WhereIf(!correlationId.IsNullOrEmpty(), auditLog => auditLog.CorrelationId == correlationId)
             .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == nHttpStatusCode)
             .WhereIf(maxExecutionDuration != null && maxExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
             .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
@@ -159,7 +165,7 @@ public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext,
         return GetQueryable().IncludeDetails();
     }
 
-    public override async Task<IQueryable<AuditLog>> WithDetailsAsync()
+    public async override Task<IQueryable<AuditLog>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();
     }

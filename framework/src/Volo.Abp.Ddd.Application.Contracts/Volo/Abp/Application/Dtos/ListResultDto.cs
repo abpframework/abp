@@ -13,7 +13,7 @@ public class ListResultDto<T> : IListResult<T>
         get { return _items ?? (_items = new List<T>()); }
         set { _items = value; }
     }
-    private IReadOnlyList<T> _items;
+    private IReadOnlyList<T>? _items;
 
     /// <summary>
     /// Creates a new <see cref="ListResultDto{T}"/> object.
@@ -42,7 +42,7 @@ public class ExtensibleListResultDto<T> : ExtensibleObject, IListResult<T>
         get { return _items ?? (_items = new List<T>()); }
         set { _items = value; }
     }
-    private IReadOnlyList<T> _items;
+    private IReadOnlyList<T>? _items;
 
     /// <summary>
     /// Creates a new <see cref="ListResultDto{T}"/> object.

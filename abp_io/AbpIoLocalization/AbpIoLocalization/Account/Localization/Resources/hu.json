@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "Kereskedelmi támogatási webhely",
     "CommunityWebSite": "ABP közösségi webhely",
     "ManageAccount": "Saját fiók | ABP.IO",
-    "ManageYourProfile": "Profilod kezelése"
+    "ManageYourProfile": "Profilod kezelése",
+    "ReturnToApplication": "Vissza az alkalmazáshoz"
   }
 }

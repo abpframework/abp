@@ -8,11 +8,11 @@ public class PermissionGrantInfo
 
     public bool IsGranted { get; }
 
-    public string ProviderName { get; }
+    public string? ProviderName { get; }
 
-    public string ProviderKey { get; }
+    public string? ProviderKey { get; }
 
-    public PermissionGrantInfo([NotNull] string name, bool isGranted, [CanBeNull] string providerName = null, [CanBeNull] string providerKey = null)
+    public PermissionGrantInfo([NotNull] string name, bool isGranted, string? providerName = null, string? providerKey = null)
     {
         Check.NotNull(name, nameof(name));
 

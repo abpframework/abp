@@ -1,0 +1,38 @@
+{
+  "name": "identity",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/identity/src",
+  "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "permission-management"],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/identity"],
+      "options": {
+        "project": "packages/identity/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/identity/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/identity/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/identity"
+      }
+    }
+  }
+}

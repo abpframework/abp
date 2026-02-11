@@ -2,6 +2,11 @@
   "culture": "vi",
   "texts": {
     "ThisFieldIsRequired": "Trường này là bắt buộc",
-    "MaxLenghtErrorMessage": "Trường này có thể có tối đa là '{0}' kí tự"
+    "MaxLenghtErrorMessage": "Trường này có thể có tối đa là '{0}' kí tự",
+    "Enum:BookType.Undefined": "Không xác định từ tài nguyên xác thực",
+    "Enum:BookType.0": "Không xác định với giá trị 0 từ ValidationResource",
+    "BookType.Adventure": "Cuộc phiêu lưu từ tài nguyên xác thực",
+    "BookType.1": "Cuộc phiêu lưu với giá trị 1 từ ValidationResource",
+    "Biography": "Tiểu sử từ Nguồn xác thực"
   }
 }

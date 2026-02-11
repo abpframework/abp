@@ -19,16 +19,21 @@ namespace Volo.Docs.Projects
         {
         }
 
-        public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
+        public virtual async Task<List<Project>> GetListAsync(
+            string sorting,
+            int maxResultCount,
+            int skipCount, 
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
         {
-            var projects = await (await GetDbSetAsync()).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting)
+            var projects = await (await GetDbSetAsync()).IncludeDetails(includeDetails).OrderBy(sorting.IsNullOrEmpty() ? "Id desc" : sorting)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             return projects;
         }
 
-        public async Task<List<ProjectWithoutDetails>> GetListWithoutDetailsAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<ProjectWithoutDetails>> GetListWithoutDetailsAsync(CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Select(x=> new ProjectWithoutDetails() {
@@ -39,7 +44,7 @@ namespace Volo.Docs.Projects
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<Project> GetByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
+        public virtual async Task<Project> GetByShortNameAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);
 
@@ -53,7 +58,7 @@ namespace Volo.Docs.Projects
             return project;
         }
 
-        public async Task<bool> ShortNameExistsAsync(string shortName, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ShortNameExistsAsync(string shortName, CancellationToken cancellationToken = default)
         {
             var normalizeShortName = NormalizeShortName(shortName);
 
@@ -63,6 +68,11 @@ namespace Volo.Docs.Projects
         private string NormalizeShortName(string shortName)
         {
             return shortName.ToLower();
+        }
+
+        public async override Task<IQueryable<Project>> WithDetailsAsync()
+        {
+            return (await GetQueryableAsync()).IncludeDetails();
         }
     }
 }

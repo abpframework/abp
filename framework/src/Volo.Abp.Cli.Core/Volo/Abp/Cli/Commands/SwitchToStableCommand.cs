@@ -31,14 +31,14 @@ public class SwitchToStableCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp switch-to-stable [options]");
         sb.AppendLine("");
         sb.AppendLine("Options:");
-        sb.AppendLine("-sd|--solution-directory");
+        sb.AppendLine("-d|--directory");
         sb.AppendLine("");
-        sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+        sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
         return "Switches packages to stable ABP version from preview version.";
     }

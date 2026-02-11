@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -21,11 +22,12 @@ public abstract class ModuleTemplateBase : TemplateInfo
 
     public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
     {
-        var steps = new List<ProjectBuildPipelineStep>();
+        var steps = base.GetCustomSteps(context).ToList();
 
         DeleteUnrelatedProjects(context, steps);
         RandomizeSslPorts(context, steps);
         UpdateNuGetConfig(context, steps);
+        RemoveMigrations(context, steps);
         ChangeConnectionString(context, steps);
         CleanupFolderHierarchy(context, steps);
 
@@ -58,6 +60,11 @@ public abstract class ModuleTemplateBase : TemplateInfo
         steps.Add(new RemoveProjectFromSolutionStep(
             "MyCompanyName.MyProjectName.Blazor.Host",
             projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Host"
+        ));
+
+        steps.Add(new RemoveProjectFromSolutionStep(
+            "MyCompanyName.MyProjectName.Blazor.Host.Client",
+            projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Host.Client"
         ));
 
         steps.Add(new RemoveProjectFromSolutionStep(
@@ -102,11 +109,27 @@ public abstract class ModuleTemplateBase : TemplateInfo
         steps.Add(new UpdateNuGetConfigStep("/NuGet.Config"));
     }
 
-    private static void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    protected void RemoveMigrations(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+    {
+        steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.AuthServer/Migrations"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host/Migrations"));
+        steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified/Migrations"));
+        if (context.BuildArgs.TemplateName == ModuleProTemplate.TemplateName)
+        {
+            steps.Add(new RemoveFolderStep("/aspnet-core/host/MyCompanyName.MyProjectName.HttpApi.Host/Migrations"));
+        }
+    }
+
+    private void ChangeConnectionString(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
     {
         if (context.BuildArgs.ConnectionString != null)
         {
             steps.Add(new ConnectionStringChangeStep());
+        }
+
+        if (IsPro())
+        {
+            steps.Add(new ConnectionStringRenameStep());
         }
     }
 

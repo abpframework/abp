@@ -25,6 +25,10 @@ export function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
 export function mergeAndAllowDelete(host: Tree, rule: Rule) {
   return async (tree: Tree, context: SchematicContext) => {
     const nextTree = await callRule(rule, tree, context).toPromise();
+    if(!nextTree) {
+      return;
+    }
+    
     host.merge(nextTree, MergeStrategy.AllowDeleteConflict);
   };
 }

@@ -23,7 +23,11 @@ public class AbpFeatureManagementWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AbpFeatureManagementResource), typeof(AbpFeatureManagementWebModule).Assembly);
+            options.AddAssemblyResource(
+                typeof(AbpFeatureManagementResource), 
+                typeof(AbpFeatureManagementWebModule).Assembly, 
+                typeof(AbpFeatureManagementApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>

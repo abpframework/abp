@@ -214,7 +214,8 @@ public class ProjectNugetPackageAdder : ITransientDependency
     {
         var folder = FindSolutionFolder(projectFile);
 
-        return Directory.GetFiles(folder, "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+        return Directory.GetFiles(folder, "*.sln", SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(folder, "*.slnx", SearchOption.TopDirectoryOnly)).FirstOrDefault();
     }
 
     protected virtual string FindSolutionFolder(string projectFile)
@@ -232,7 +233,8 @@ public class ProjectNugetPackageAdder : ITransientDependency
                 return Path.GetDirectoryName(projectFile);
             }
 
-            if (Directory.GetFiles(targetFolder, "*.sln", SearchOption.TopDirectoryOnly).Any())
+            if (Directory.GetFiles(targetFolder, "*.sln", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.GetFiles(targetFolder, "*.slnx", SearchOption.TopDirectoryOnly)).Any())
             {
                 break;
             }
@@ -259,11 +261,11 @@ public class ProjectNugetPackageAdder : ITransientDependency
 
             if (useDotnetCliToInstall)
             {
-                AddUsingDotnetCli(package, version);
+                await AddUsingDotnetCli(package, version);
             }
             else
             {
-                AddToCsprojManuallyAsync(projectFile, package, version);
+                await AddToCsprojManuallyAsync(projectFile, package, version);
             }
 
             var moduleFiles = ModuleClassFinder.Find(projectFile, "AbpModule");
@@ -291,7 +293,7 @@ public class ProjectNugetPackageAdder : ITransientDependency
             {
                 await RunBundleForBlazorAsync(projectFile);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.LogWarning("Couldn't run bundle for blazor.");
             }

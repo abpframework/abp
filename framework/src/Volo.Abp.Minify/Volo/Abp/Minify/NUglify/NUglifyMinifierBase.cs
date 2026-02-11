@@ -8,7 +8,7 @@ namespace Volo.Abp.Minify.NUglify;
 
 public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
 {
-    private static void CheckErrors(UglifyResult result, string originalFileName)
+    private static void CheckErrors(UglifyResult result, string? originalFileName)
     {
         if (result.HasErrors)
         {
@@ -28,8 +28,8 @@ public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
 
     public string Minify(
         string source,
-        string fileName = null,
-        string originalFileName = null)
+        string? fileName = null,
+        string? originalFileName = null)
     {
         try
         {
@@ -50,5 +50,5 @@ public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
         }
     }
 
-    protected abstract UglifyResult UglifySource(string source, string fileName);
+    protected abstract UglifyResult UglifySource(string source, string? fileName);
 }

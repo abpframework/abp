@@ -2,13 +2,12 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Directive,
-  Inject,
   Input,
   OnChanges,
   OnDestroy,
-  Optional,
   TemplateRef,
   ViewContainerRef,
+  inject,
 } from '@angular/core';
 import { ReplaySubject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take } from 'rxjs/operators';
@@ -20,6 +19,12 @@ import { QueueManager } from '../utils/queue';
   selector: '[abpPermission]',
 })
 export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit {
+  private templateRef = inject<TemplateRef<any>>(TemplateRef, { optional: true });
+  private vcRef = inject(ViewContainerRef);
+  private permissionService = inject(PermissionService);
+  private cdRef = inject(ChangeDetectorRef);
+  queue = inject<QueueManager>(QUEUE_MANAGER);
+
   @Input('abpPermission') condition: string | undefined;
 
   @Input('abpPermissionRunChangeDetection') runChangeDetection = true;
@@ -29,14 +34,6 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
   cdrSubject = new ReplaySubject<void>();
 
   rendered = false;
-
-  constructor(
-    @Optional() private templateRef: TemplateRef<any>,
-    private vcRef: ViewContainerRef,
-    private permissionService: PermissionService,
-    private cdRef: ChangeDetectorRef,
-    @Inject(QUEUE_MANAGER) public queue: QueueManager,
-  ) {}
 
   private check() {
     if (this.subscription) {
@@ -48,7 +45,9 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
       .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
         this.vcRef.clear();
-        if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
+        if (isGranted && this.templateRef) {
+          this.vcRef.createEmbeddedView(this.templateRef);
+        }
         if (this.runChangeDetection) {
           if (!this.rendered) {
             this.cdrSubject.next();

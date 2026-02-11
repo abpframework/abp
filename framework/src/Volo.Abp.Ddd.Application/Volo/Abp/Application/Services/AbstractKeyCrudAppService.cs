@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
@@ -70,11 +69,11 @@ public abstract class AbstractKeyCrudAppService<TEntity, TGetOutputDto, TGetList
 {
     protected IRepository<TEntity> Repository { get; }
 
-    protected virtual string CreatePolicyName { get; set; }
+    protected virtual string? CreatePolicyName { get; set; }
 
-    protected virtual string UpdatePolicyName { get; set; }
+    protected virtual string? UpdatePolicyName { get; set; }
 
-    protected virtual string DeletePolicyName { get; set; }
+    protected virtual string? DeletePolicyName { get; set; }
 
     protected AbstractKeyCrudAppService(IRepository<TEntity> repository)
         : base(repository)

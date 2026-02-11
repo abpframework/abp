@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace Volo.Abp.DependencyInjection;
 
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
 {
     public Type[] ServiceTypes { get; }
@@ -59,7 +60,7 @@ public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
                 interfaceName = interfaceName.Right(interfaceName.Length - 1);
             }
 
-            if (type.Name.EndsWith(interfaceName))
+            if (type.Name.EndsWith(interfaceName, StringComparison.OrdinalIgnoreCase))
             {
                 serviceTypes.Add(interfaceType);
             }

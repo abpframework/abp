@@ -6,9 +6,11 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Users;
 using Volo.CmsKit.Admin.MediaDescriptors;
 using Volo.CmsKit.Blogs;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Permissions;
@@ -24,6 +26,8 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     protected BlogPostManager BlogPostManager { get; }
     protected IBlogPostRepository BlogPostRepository { get; }
     protected IBlogRepository BlogRepository { get; }
+    
+    protected ICommentRepository CommentRepository { get; }
     protected ICmsUserLookupService UserLookupService { get; }
 
     protected IMediaDescriptorAdminAppService MediaDescriptorAdminAppService { get; }
@@ -33,13 +37,15 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         IBlogPostRepository blogPostRepository,
         IBlogRepository blogRepository,
         ICmsUserLookupService userLookupService,
-        IMediaDescriptorAdminAppService mediaDescriptorAdminAppService)
+        IMediaDescriptorAdminAppService mediaDescriptorAdminAppService,
+        ICommentRepository commentRepository)
     {
         BlogPostManager = blogPostManager;
         BlogPostRepository = blogPostRepository;
         BlogRepository = blogRepository;
         UserLookupService = userLookupService;
         MediaDescriptorAdminAppService = mediaDescriptorAdminAppService;
+        CommentRepository = commentRepository;
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Create)]
@@ -59,7 +65,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
             input.Content,
             input.CoverImageMediaId
         );
-
+        input.MapExtraPropertiesTo(blogPost);
         await BlogPostRepository.InsertAsync(blogPost);
 
         return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
@@ -85,7 +91,8 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
         {
             await BlogPostManager.SetSlugUrlAsync(blogPost, input.Slug);
         }
-
+        input.MapExtraPropertiesTo(blogPost);
+        
         await BlogPostRepository.UpdateAsync(blogPost);
 
         return ObjectMapper.Map<BlogPost, BlogPostDto>(blogPost);
@@ -104,9 +111,15 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     {
         var blogs = (await BlogRepository.GetListAsync()).ToDictionary(x => x.Id);
 
-        var blogPosts = await BlogPostRepository.GetListAsync(input.Filter, input.BlogId, input.AuthorId, input.TagId,
+        var blogPosts = await BlogPostRepository.GetListAsync(
+            input.Filter, 
+            input.BlogId, 
+            input.AuthorId, 
+            input.TagId,
             statusFilter: input.Status,
-            input.MaxResultCount, input.SkipCount, input.Sorting);
+            maxResultCount: input.MaxResultCount,
+            skipCount: input.SkipCount, 
+            sorting: input.Sorting);
 
         var count = await BlogPostRepository.GetCountAsync(input.Filter, input.BlogId, input.AuthorId, tagId: input.TagId);
 
@@ -124,7 +137,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     [Authorize(CmsKitAdminPermissions.BlogPosts.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
-        await BlogPostRepository.DeleteAsync(id);
+        await BlogPostManager.DeleteAsync(id);
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
@@ -175,7 +188,7 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     }
 
     [Authorize(CmsKitAdminPermissions.BlogPosts.Publish)]
-    public async Task<bool> HasBlogPostWaitingForReviewAsync()
+    public virtual async Task<bool> HasBlogPostWaitingForReviewAsync()
     {
         return await BlogPostRepository.HasBlogPostWaitingForReviewAsync();
     }

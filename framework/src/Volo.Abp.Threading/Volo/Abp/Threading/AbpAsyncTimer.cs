@@ -43,7 +43,7 @@ public class AbpAsyncTimer : ITransientDependency
         Logger = NullLogger<AbpAsyncTimer>.Instance;
 
         _taskTimer = new Timer(
-            TimerCallBack,
+            TimerCallBack!,
             null,
             Timeout.Infinite,
             Timeout.Infinite

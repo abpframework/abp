@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using JetBrains.Annotations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -22,17 +24,16 @@ public class MongoBackgroundJobRepository : MongoDbRepository<IBackgroundJobsMon
         Clock = clock;
     }
 
-    public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync(
-        int maxResultCount,
-        CancellationToken cancellationToken = default)
+    public virtual async Task<List<BackgroundJobRecord>> GetWaitingListAsync([CanBeNull] string applicationName, int maxResultCount, CancellationToken cancellationToken = default)
     {
-        return await (await GetWaitingListQuery(maxResultCount)).ToListAsync(GetCancellationToken(cancellationToken));
+        return await (await GetWaitingListQuery(applicationName, maxResultCount, cancellationToken)).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    protected virtual async Task<IMongoQueryable<BackgroundJobRecord>> GetWaitingListQuery(int maxResultCount, CancellationToken cancellationToken = default)
+    protected virtual async Task<IQueryable<BackgroundJobRecord>> GetWaitingListQuery([CanBeNull] string applicationName, int maxResultCount, CancellationToken cancellationToken = default)
     {
         var now = Clock.Now;
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
+            .Where(t => t.ApplicationName == applicationName)
             .Where(t => !t.IsAbandoned && t.NextTryTime <= now)
             .OrderByDescending(t => t.Priority)
             .ThenBy(t => t.TryCount)

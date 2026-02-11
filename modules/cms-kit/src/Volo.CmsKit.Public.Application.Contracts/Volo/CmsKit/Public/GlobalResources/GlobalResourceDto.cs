@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 namespace Volo.CmsKit.Public.GlobalResources;
 
 [Serializable]
-public class GlobalResourceDto : AuditedEntityDto
+public class GlobalResourceDto : ExtensibleAuditedEntityDto
 {
     public string Name { get; set; }
 

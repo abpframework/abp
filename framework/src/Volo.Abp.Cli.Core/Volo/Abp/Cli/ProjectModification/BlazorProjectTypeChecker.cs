@@ -8,6 +8,7 @@ public static class BlazorProjectTypeChecker
     {
         var blazorProjectCsprojContent = File.ReadAllText(blazorProjectPath);
 
-        return !blazorProjectCsprojContent.Contains("Microsoft.NET.Sdk.BlazorWebAssembly");
+        return !blazorProjectCsprojContent.Contains("Microsoft.NET.Sdk.BlazorWebAssembly") &&
+               blazorProjectCsprojContent.Contains("Volo.Abp.AspNetCore.Components.Server");
     }
 }

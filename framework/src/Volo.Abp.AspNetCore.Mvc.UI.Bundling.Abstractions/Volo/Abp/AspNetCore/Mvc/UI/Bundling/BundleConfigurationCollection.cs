@@ -27,7 +27,7 @@ public class BundleConfigurationCollection
     /// <returns>Returns this object for chained calls.</returns>
     public BundleConfigurationCollection Add(
         [NotNull] string bundleName,
-        [CanBeNull] Action<BundleConfiguration> configureAction = null)
+        Action<BundleConfiguration>? configureAction = null)
     {
         if (!TryAdd(bundleName, configureAction))
         {
@@ -52,7 +52,7 @@ public class BundleConfigurationCollection
     /// <returns>Returns true if added. Returns false if it's already added before.</returns>
     public bool TryAdd(
         [NotNull] string bundleName,
-        [CanBeNull] Action<BundleConfiguration> configureAction = null,
+        Action<BundleConfiguration>? configureAction = null,
         bool overrideIfExists = false)
     {
         Check.NotNull(bundleName, nameof(bundleName));
@@ -78,7 +78,7 @@ public class BundleConfigurationCollection
         return true;
     }
 
-    private BundleConfiguration CreateBundle(string bundleName, Action<BundleConfiguration> configureAction)
+    private BundleConfiguration CreateBundle(string bundleName, Action<BundleConfiguration>? configureAction)
     {
         var bundle = new BundleConfiguration(bundleName);
 

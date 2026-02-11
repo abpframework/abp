@@ -16,6 +16,11 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore;
 )]
 public class AbpAuditLoggingEntityFrameworkCoreTestModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var sqliteConnection = CreateDatabaseAndGetConnection();
@@ -31,7 +36,7 @@ public class AbpAuditLoggingEntityFrameworkCoreTestModule : AbpModule
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
     {
-        var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
         connection.Open();
 
         new AbpAuditLoggingDbContext(

@@ -10,7 +10,7 @@ public interface IIdentitySecurityLogRepository : IBasicRepository<IdentitySecur
 {
     Task<List<IdentitySecurityLog>> GetListAsync(
         string sorting = null,
-        int maxResultCount = 50,
+        int maxResultCount = int.MaxValue,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
@@ -21,6 +21,7 @@ public interface IIdentitySecurityLogRepository : IBasicRepository<IdentitySecur
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default);
 
@@ -34,6 +35,7 @@ public interface IIdentitySecurityLogRepository : IBasicRepository<IdentitySecur
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         CancellationToken cancellationToken = default);
 
     Task<IdentitySecurityLog> GetByUserIdAsync(

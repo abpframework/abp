@@ -1,6 +1,7 @@
 {
   "culture": "fi",
   "texts": {
+    "AppName": "MyProjectName",
     "Menu:Home": "Koti",
     "Welcome": "Tervetuloa",
     "LongWelcomeMessage": "Tervetuloa sovellukseen. Tämä on ABP-kehykseen perustuva käynnistysprojekti. Lisätietoja on osoitteessa abp.io."

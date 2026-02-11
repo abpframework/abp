@@ -11,7 +11,8 @@ public class TestAppMemoryDbContext : MemoryDbContext
     private static readonly Type[] EntityTypeList = {
             typeof(Person),
             typeof(EntityWithIntPk),
-            typeof(Product)
+            typeof(Product),
+            typeof(AppEntityWithNavigations)
     };
 
     public override IReadOnlyList<Type> GetEntityTypes()

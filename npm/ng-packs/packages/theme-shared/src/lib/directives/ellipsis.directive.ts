@@ -1,17 +1,20 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Directive,
-  ElementRef,
-  HostBinding,
-  Input,
-  NgModule,
+import { 
+  AfterViewInit, 
+  ChangeDetectorRef, 
+  Directive, 
+  ElementRef, 
+  HostBinding, 
+  Input, 
+  inject 
 } from '@angular/core';
 
 @Directive({
   selector: '[abpEllipsis]',
 })
 export class EllipsisDirective implements AfterViewInit {
+  private cdRef = inject(ChangeDetectorRef);
+  private elRef = inject(ElementRef);
+
   @Input('abpEllipsis')
   width?: string;
 
@@ -37,16 +40,8 @@ export class EllipsisDirective implements AfterViewInit {
     return this.enabled && this.width ? this.width || '170px' : undefined;
   }
 
-  constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}
-
   ngAfterViewInit() {
     this.title = this.title || (this.elRef.nativeElement as HTMLElement).innerText;
     this.cdRef.detectChanges();
   }
 }
-
-@NgModule({
-  exports: [EllipsisDirective],
-  declarations: [EllipsisDirective],
-})
-export class EllipsisModule {}

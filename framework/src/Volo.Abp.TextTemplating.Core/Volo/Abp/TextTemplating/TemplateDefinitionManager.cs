@@ -1,85 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.TextTemplating;
 
 public class TemplateDefinitionManager : ITemplateDefinitionManager, ISingletonDependency
 {
-    protected Lazy<IDictionary<string, TemplateDefinition>> TemplateDefinitions { get; }
+    protected readonly IStaticTemplateDefinitionStore StaticStore;
+    protected readonly IDynamicTemplateDefinitionStore DynamicStore;
 
-    protected AbpTextTemplatingOptions Options { get; }
-
-    protected IServiceProvider ServiceProvider { get; }
-
-    public TemplateDefinitionManager(
-        IOptions<AbpTextTemplatingOptions> options,
-        IServiceProvider serviceProvider)
+    public TemplateDefinitionManager(IStaticTemplateDefinitionStore staticStore, IDynamicTemplateDefinitionStore dynamicStore)
     {
-        ServiceProvider = serviceProvider;
-        Options = options.Value;
-
-        TemplateDefinitions =
-            new Lazy<IDictionary<string, TemplateDefinition>>(CreateTextTemplateDefinitions, true);
+        StaticStore = staticStore;
+        DynamicStore = dynamicStore;
     }
 
-    public virtual TemplateDefinition Get(string name)
+    public virtual async Task<TemplateDefinition> GetAsync(string name)
+    {
+        var permission = await GetOrNullAsync(name);
+        if (permission == null)
+        {
+            throw new AbpException("Undefined Template: " + name);
+        }
+
+        return permission;
+    }
+
+    public virtual async Task<TemplateDefinition?> GetOrNullAsync(string name)
     {
         Check.NotNull(name, nameof(name));
 
-        var template = GetOrNull(name);
-
-        if (template == null)
-        {
-            throw new AbpException("Undefined template: " + name);
-        }
-
-        return template;
+        return await StaticStore.GetOrNullAsync(name) ?? await DynamicStore.GetOrNullAsync(name);
     }
 
-    public virtual IReadOnlyList<TemplateDefinition> GetAll()
+    public virtual async Task<IReadOnlyList<TemplateDefinition>> GetAllAsync()
     {
-        return TemplateDefinitions.Value.Values.ToImmutableList();
-    }
+        var staticTemplates = await StaticStore.GetAllAsync();
+        var staticTemplateNames = staticTemplates
+            .Select(p => p.Name)
+            .ToImmutableHashSet();
 
-    public virtual TemplateDefinition GetOrNull(string name)
-    {
-        return TemplateDefinitions.Value.GetOrDefault(name);
-    }
+        var dynamicTemplates = await DynamicStore.GetAllAsync();
 
-    protected virtual IDictionary<string, TemplateDefinition> CreateTextTemplateDefinitions()
-    {
-        var templates = new Dictionary<string, TemplateDefinition>();
-
-        using (var scope = ServiceProvider.CreateScope())
-        {
-            var providers = Options
-                .DefinitionProviders
-                .Select(p => scope.ServiceProvider.GetRequiredService(p) as ITemplateDefinitionProvider)
-                .ToList();
-
-            var context = new TemplateDefinitionContext(templates);
-
-            foreach (var provider in providers)
-            {
-                provider.PreDefine(context);
-            }
-
-            foreach (var provider in providers)
-            {
-                provider.Define(context);
-            }
-
-            foreach (var provider in providers)
-            {
-                provider.PostDefine(context);
-            }
-        }
-
-        return templates;
+        /* We prefer static Templates over dynamics */
+        return staticTemplates.Concat(dynamicTemplates.Where(d => !staticTemplateNames.Contains(d.Name))).ToImmutableList();
     }
 }

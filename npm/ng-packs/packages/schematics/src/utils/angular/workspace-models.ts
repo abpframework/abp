@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 export enum ProjectType {
@@ -18,16 +18,25 @@ export enum ProjectType {
  * `angular.json` workspace file.
  */
 export enum Builders {
+  Application = '@angular-devkit/build-angular:application',
   AppShell = '@angular-devkit/build-angular:app-shell',
   Server = '@angular-devkit/build-angular:server',
   Browser = '@angular-devkit/build-angular:browser',
+  SsrDevServer = '@angular-devkit/build-angular:ssr-dev-server',
+  Prerender = '@angular-devkit/build-angular:prerender',
+  BrowserEsbuild = '@angular-devkit/build-angular:browser-esbuild',
   Karma = '@angular-devkit/build-angular:karma',
+  BuildKarma = '@angular/build:karma',
   TsLint = '@angular-devkit/build-angular:tslint',
-  DeprecatedNgPackagr = '@angular-devkit/build-ng-packagr:build',
   NgPackagr = '@angular-devkit/build-angular:ng-packagr',
+  BuildNgPackagr = '@angular/build:ng-packagr',
   DevServer = '@angular-devkit/build-angular:dev-server',
+  BuildDevServer = '@angular/build:dev-server',
   ExtractI18n = '@angular-devkit/build-angular:extract-i18n',
-  Protractor = '@angular-devkit/build-angular:protractor',
+  BuildExtractI18n = '@angular/build:extract-i18n',
+  Protractor = '@angular-devkit/build-angular:private-protractor',
+  BuildApplication = '@angular/build:application',
+  UnitTest = '@angular/build:unit-test',
 }
 
 export interface FileReplacements {
@@ -70,8 +79,9 @@ export interface BrowserBuilderOptions extends BrowserBuilderBaseOptions {
 }
 
 export interface ServeBuilderOptions {
-  browserTarget: string;
+  buildTarget: string;
 }
+
 export interface LibraryBuilderOptions {
   tsConfig: string;
   project: string;
@@ -138,11 +148,9 @@ export type E2EBuilderTarget = BuilderTarget<Builders.Protractor, E2EOptions>;
 interface WorkspaceCLISchema {
   warnings?: Record<string, boolean>;
   schematicCollections?: string[];
-  defaultCollection?: string;
 }
 export interface WorkspaceSchema {
   version: 1;
-  defaultProject?: string;
   cli?: WorkspaceCLISchema;
   projects: {
     [key: string]: WorkspaceProject<ProjectType.Application | ProjectType.Library>;
@@ -165,6 +173,7 @@ export interface WorkspaceProject<TProjectType extends ProjectType = ProjectType
    * Tool options.
    */
   architect?: WorkspaceTargets<TProjectType>;
+
   /**
    * Tool options.
    */

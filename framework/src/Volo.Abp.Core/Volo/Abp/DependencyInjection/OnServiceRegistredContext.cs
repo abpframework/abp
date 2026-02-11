@@ -13,10 +13,13 @@ public class OnServiceRegistredContext : IOnServiceRegistredContext
 
     public virtual Type ImplementationType { get; }
 
-    public OnServiceRegistredContext(Type serviceType, [NotNull] Type implementationType)
+    public virtual object? ServiceKey { get; }
+
+    public OnServiceRegistredContext(Type serviceType, [NotNull] Type implementationType, object? serviceKey = null)
     {
         ServiceType = Check.NotNull(serviceType, nameof(serviceType));
         ImplementationType = Check.NotNull(implementationType, nameof(implementationType));
+        ServiceKey = serviceKey;
 
         Interceptors = new TypeList<IAbpInterceptor>();
     }

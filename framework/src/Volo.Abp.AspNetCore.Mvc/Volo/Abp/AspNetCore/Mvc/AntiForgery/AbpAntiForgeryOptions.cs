@@ -17,7 +17,7 @@ public class AbpAntiForgeryOptions
     /// Used to find auth cookie when validating Anti Forgery token.
     /// Default value: "Identity.Application".
     /// </summary>
-    public string AuthCookieSchemaName { get; set; }
+    public string? AuthCookieSchemaName { get; set; }
 
     /// <summary>
     /// Default value: true.
@@ -34,7 +34,7 @@ public class AbpAntiForgeryOptions
         get => _autoValidateFilter;
         set => _autoValidateFilter = Check.NotNull(value, nameof(value));
     }
-    private Predicate<Type> _autoValidateFilter;
+    private Predicate<Type> _autoValidateFilter = default!;
 
     /// <summary>
     /// Default methods: "GET", "HEAD", "TRACE", "OPTIONS".
@@ -44,7 +44,7 @@ public class AbpAntiForgeryOptions
         get => _autoValidateIgnoredHttpMethods;
         set => _autoValidateIgnoredHttpMethods = Check.NotNull(value, nameof(value));
     }
-    private HashSet<string> _autoValidateIgnoredHttpMethods;
+    private HashSet<string> _autoValidateIgnoredHttpMethods = default!;
 
     public AbpAntiForgeryOptions()
     {

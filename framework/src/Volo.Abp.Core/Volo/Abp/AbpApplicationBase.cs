@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp;
 
@@ -19,13 +24,13 @@ public abstract class AbpApplicationBase : IAbpApplication
     [NotNull]
     public Type StartupModuleType { get; }
 
-    public IServiceProvider ServiceProvider { get; private set; }
+    public IServiceProvider ServiceProvider { get; private set; } = default!;
 
     public IServiceCollection Services { get; }
 
     public IReadOnlyList<IAbpModuleDescriptor> Modules { get; }
 
-    public string ApplicationName { get; }
+    public string? ApplicationName { get; }
 
     public string InstanceId { get; } = Guid.NewGuid().ToString();
 
@@ -34,7 +39,7 @@ public abstract class AbpApplicationBase : IAbpApplication
     internal AbpApplicationBase(
         [NotNull] Type startupModuleType,
         [NotNull] IServiceCollection services,
-        [CanBeNull] Action<AbpApplicationCreationOptions> optionsAction)
+        Action<AbpApplicationCreationOptions>? optionsAction)
     {
         Check.NotNull(startupModuleType, nameof(startupModuleType));
         Check.NotNull(services, nameof(services));
@@ -149,6 +154,61 @@ public abstract class AbpApplicationBase : IAbpApplication
                 options.PlugInSources
             );
     }
+    protected void SetupTelemetryTracking()
+    {
+        if (!ShouldSendTelemetryData())
+        {
+            return;
+        }
+
+        AsyncHelper.RunSync(InitializeTelemetryTracking);
+    }
+
+    protected async Task SetupTelemetryTrackingAsync()
+    {
+        if (!ShouldSendTelemetryData())
+        {
+            return;
+        }
+
+        await InitializeTelemetryTracking();
+    }
+
+    private async Task InitializeTelemetryTracking()
+    {
+        try
+        {
+            using var scope = ServiceProvider.CreateScope();
+            var telemetryService = scope.ServiceProvider.GetRequiredService<ITelemetryService>();
+            await telemetryService.AddActivityAsync(ActivityNameConsts.ApplicationRun);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                var logger = Services.GetInitLogger<AbpApplicationBase>();
+                logger.LogException(ex, LogLevel.Trace);
+            }
+            catch
+            {
+                /* ignored */
+            }
+        }
+    }
+
+    private bool ShouldSendTelemetryData()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var abpHostEnvironment = scope.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") != false;
+        }
+
+        return false;
+    }
 
     //TODO: We can extract a new class for this
     public virtual async Task ConfigureServicesAsync()
@@ -188,11 +248,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             {
                 if (!abpModule.SkipAutoServiceRegistration)
                 {
-                    var assembly = module.Type.Assembly;
-                    if (!assemblies.Contains(assembly))
+                    foreach (var assembly in module.AllAssemblies)
                     {
-                        Services.AddAssembly(assembly);
-                        assemblies.Add(assembly);
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
             }
@@ -224,7 +286,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         {
             if (module.Instance is AbpModule abpModule)
             {
-                abpModule.ServiceConfigurationContext = null;
+                abpModule.ServiceConfigurationContext = null!;
             }
         }
 
@@ -279,11 +341,13 @@ public abstract class AbpApplicationBase : IAbpApplication
             {
                 if (!abpModule.SkipAutoServiceRegistration)
                 {
-                    var assembly = module.Type.Assembly;
-                    if (!assemblies.Contains(assembly))
+                    foreach (var assembly in module.AllAssemblies)
                     {
-                        Services.AddAssembly(assembly);
-                        assemblies.Add(assembly);
+                        if (!assemblies.Contains(assembly))
+                        {
+                            Services.AddAssembly(assembly);
+                            assemblies.Add(assembly);
+                        }
                     }
                 }
             }
@@ -315,7 +379,7 @@ public abstract class AbpApplicationBase : IAbpApplication
         {
             if (module.Instance is AbpModule abpModule)
             {
-                abpModule.ServiceConfigurationContext = null;
+                abpModule.ServiceConfigurationContext = null!;
             }
         }
 
@@ -324,11 +388,11 @@ public abstract class AbpApplicationBase : IAbpApplication
         TryToSetEnvironment(Services);
     }
 
-    private static string GetApplicationName(AbpApplicationCreationOptions options)
+    private static string? GetApplicationName(AbpApplicationCreationOptions options)
     {
         if (!string.IsNullOrWhiteSpace(options.ApplicationName))
         {
-            return options.ApplicationName;
+            return options.ApplicationName!;
         }
 
         var configuration = options.Services.GetConfigurationOrNull();
@@ -337,7 +401,7 @@ public abstract class AbpApplicationBase : IAbpApplication
             var appNameConfig = configuration["ApplicationName"];
             if (!string.IsNullOrWhiteSpace(appNameConfig))
             {
-                return appNameConfig;
+                return appNameConfig!;
             }
         }
 

@@ -1,13 +1,18 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Dapr;
 
-[DependsOn(typeof(AbpJsonModule))]
+[DependsOn(
+    typeof(AbpJsonModule),
+    typeof(AbpMultiTenancyAbstractionsModule),
+    typeof(AbpHttpClientModule)
+)]
 public class AbpDaprModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -15,12 +20,6 @@ public class AbpDaprModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureDaprOptions(configuration);
-
-        context.Services.TryAddSingleton(
-            serviceProvider => serviceProvider
-                .GetRequiredService<IAbpDaprClientFactory>()
-                .Create()
-        );
     }
 
     private void ConfigureDaprOptions(IConfiguration configuration)
@@ -33,14 +32,14 @@ public class AbpDaprModule : AbpModule
                 var confEnv = configuration["DAPR_API_TOKEN"];
                 if (!confEnv.IsNullOrWhiteSpace())
                 {
-                    options.DaprApiToken = confEnv;
+                    options.DaprApiToken = confEnv!;
                 }
                 else
                 {
                     var env = Environment.GetEnvironmentVariable("DAPR_API_TOKEN");
                     if (!env.IsNullOrWhiteSpace())
                     {
-                        options.DaprApiToken = env;
+                        options.DaprApiToken = env!;
                     }
                 }
             }
@@ -50,14 +49,14 @@ public class AbpDaprModule : AbpModule
                 var confEnv = configuration["APP_API_TOKEN"];
                 if (!confEnv.IsNullOrWhiteSpace())
                 {
-                    options.AppApiToken = confEnv;
+                    options.AppApiToken = confEnv!;
                 }
                 else
                 {
                     var env = Environment.GetEnvironmentVariable("APP_API_TOKEN");
                     if (!env.IsNullOrWhiteSpace())
                     {
-                        options.AppApiToken = env;
+                        options.AppApiToken = env!;
                     }
                 }
             }

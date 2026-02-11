@@ -62,4 +62,19 @@ public class BlogAdminController : CmsKitAdminController, IBlogAdminAppService
     {
         return BlogAdminAppService.DeleteAsync(id);
     }
+
+    [HttpGet]
+    [Route("all")]
+    public Task<ListResultDto<BlogDto>> GetAllListAsync()
+    {
+        return BlogAdminAppService.GetAllListAsync();
+    }
+
+    [HttpPut]
+    [Route("{id}/move-all-blog-posts")]
+    [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
+    public Task MoveAllBlogPostsAsync(Guid blogId, [FromQuery]Guid? assignToBlogId)
+    {
+        return BlogAdminAppService.MoveAllBlogPostsAsync(blogId, assignToBlogId);
+    }
 }

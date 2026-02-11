@@ -6,8 +6,6 @@ import { HomeComponent } from "./home.component";
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthService } from '@abp/ng.core';
 
-
-
 describe("HomeComponent", () => {
   let fixture: ComponentFixture<HomeComponent>;
   const mockOAuthService = jasmine.createSpyObj('OAuthService', ['hasValidAccessToken'])
@@ -15,11 +13,12 @@ describe("HomeComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [HomeComponent],
+        declarations: [],
         imports: [
           CoreTestingModule.withConfig(),
           ThemeSharedTestingModule.withConfig(),
           NgxValidateCoreModule,
+          HomeComponent
         ],
         providers: [
           /* mock providers here */

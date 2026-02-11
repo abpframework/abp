@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts;
 

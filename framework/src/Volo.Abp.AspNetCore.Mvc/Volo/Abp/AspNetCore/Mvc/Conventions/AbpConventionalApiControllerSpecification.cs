@@ -1,3 +1,4 @@
+using Asp.Versioning.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Options;
 

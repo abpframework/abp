@@ -27,12 +27,12 @@ public class AbpTagHelperLocalizer : IAbpTagHelperLocalizer
             : localizer[text].Value;
     }
 
-    public IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer)
+    public IStringLocalizer? GetLocalizerOrNull(ModelExplorer explorer)
     {
         return GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
     }
 
-    public IStringLocalizer GetLocalizerOrNull(Assembly assembly)
+    public IStringLocalizer? GetLocalizerOrNull(Assembly assembly)
     {
         var resourceType = GetResourceType(assembly);
         return resourceType == null
@@ -40,7 +40,7 @@ public class AbpTagHelperLocalizer : IAbpTagHelperLocalizer
             : _stringLocalizerFactory.Create(resourceType);
     }
 
-    private Type GetResourceType(Assembly assembly)
+    private Type? GetResourceType(Assembly assembly)
     {
         return _options
             .AssemblyResources

@@ -19,7 +19,7 @@ public class JsonVirtualFileLocalizationResourceContributor : VirtualFileLocaliz
         return file.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
     }
 
-    protected override ILocalizationDictionary CreateDictionaryFromFileContent(string jsonString)
+    protected override ILocalizationDictionary? CreateDictionaryFromFileContent(string jsonString)
     {
         return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);
     }

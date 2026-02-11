@@ -13,7 +13,9 @@
     "SavingWithThreeDot": "Saving...",
     "Actions": "Actions",
     "Delete": "Delete",
-    "SuccessfullyDeleted": "Successfully deleted",
+    "CreatedSuccessfully": "Created successfully",
+    "SavedSuccessfully": "Saved successfully",
+    "DeletedSuccessfully": "Deleted successfully",
     "Edit": "Edit",
     "Refresh": "Refresh",
     "Language": "Language",
@@ -36,6 +38,7 @@
     "PagerInfoEmpty": "Showing 0 to 0 of 0 entries",
     "PagerInfoFiltered": "(filtered from _MAX_ total entries)",
     "NoDataAvailableInDatatable": "No data available",
+    "ErrorLoadingDatatable": "An error occurred during the request. Check the message for details.",
     "Total": "total",
     "Selected": "selected",
     "PagerShowMenuEntries": "Show _MENU_ entries",
@@ -51,6 +54,14 @@
     "ManageYourAccount": "Manage your account",
     "OthersGroup": "Other",
     "Today": "Today",
-    "Apply": "Apply"
+    "Apply": "Apply",
+    "InternetConnectionInfo": "The operation could not be performed. Your internet connection is not available at the moment.",
+    "CopiedToTheClipboard": "Copied to the clipboard",
+    "AddNew": "Add new",
+    "ProfilePicture": "Profile picture",
+    "Theme": "Theme",
+    "NotAssigned": "Not Assigned",
+    "EntityActionsDisabledTooltip": "You do not have permission to perform any action.",
+    "ResourcePermissions": "Permissions"
   }
 }

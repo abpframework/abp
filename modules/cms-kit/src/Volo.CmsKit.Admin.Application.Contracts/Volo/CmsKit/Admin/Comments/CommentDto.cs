@@ -1,9 +1,10 @@
-﻿using System;
+using System;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.CmsKit.Admin.Comments;
 
 [Serializable]
-public class CommentDto
+public class CommentDto : ExtensibleObject
 {
     public Guid Id { get; set; }
 
@@ -18,4 +19,6 @@ public class CommentDto
     public Guid CreatorId { get; set; }
 
     public DateTime CreationTime { get; set; }
+
+    public bool? IsApproved { get; set; }
 }

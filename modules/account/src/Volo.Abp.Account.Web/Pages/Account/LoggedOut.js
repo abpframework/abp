@@ -1,6 +1,17 @@
-document.addEventListener('DOMContentLoaded', function (event) {
+document.addEventListener("DOMContentLoaded", function (event) {
     setTimeout(function () {
-        window.clientName = document.getElementById("redirectButton").getAttribute("cname");
-        window.location = document.getElementById('redirectButton').getAttribute('href');
+        var redirectButton = document.getElementById("redirectButton");
+        if (!redirectButton) {
+            return;
+        }
+        var clientName = redirectButton.getAttribute("cname");
+        if (clientName) {
+            window.clientName = clientName;
+        }
+        var href = redirectButton.getAttribute("href");
+        if (!href) {
+            return;
+        }
+        window.location = href;
     }, 3000);
 });

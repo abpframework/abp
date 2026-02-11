@@ -11,6 +11,7 @@
     "CommercialSupportWebSite": "موقع الدعم الفني للنظام التجاري",
     "CommunityWebSite": "موقع منتدى ABP",
     "ManageAccount": "حسابي | ABP.IO",
-    "ManageYourAccount": "إدارة حسابك"
+    "ManageYourProfile": "إدارة ملف التعريف الخاص بك",
+    "ReturnToApplication": "العودة إلى التطبيق"
   }
 }

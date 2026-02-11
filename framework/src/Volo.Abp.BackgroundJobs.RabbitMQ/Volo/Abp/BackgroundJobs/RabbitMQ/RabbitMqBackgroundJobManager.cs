@@ -20,6 +20,6 @@ public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDep
         TimeSpan? delay = null)
     {
         var jobQueue = await _jobQueueManager.GetAsync<TArgs>();
-        return await jobQueue.EnqueueAsync(args, priority, delay);
+        return (await jobQueue.EnqueueAsync(args, priority, delay))!;
     }
 }

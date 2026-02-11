@@ -10,7 +10,7 @@
             <ChildContent>
                 @foreach (var item in SelectItems)
                 {
-                    <SelectItem Value="@item.Value">@item.Text</SelectItem>
+                    <SelectItem Value="@item.Value" Disabled="IsReadonlyField">@item.Text</SelectItem>
                 }
             </ChildContent>
             <Feedback>

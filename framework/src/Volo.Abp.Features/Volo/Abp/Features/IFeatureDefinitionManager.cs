@@ -11,7 +11,7 @@ public interface IFeatureDefinitionManager
 
     Task<IReadOnlyList<FeatureDefinition>> GetAllAsync();
 
-    Task<FeatureDefinition> GetOrNullAsync(string name);
+    Task<FeatureDefinition?> GetOrNullAsync(string name);
 
     Task<IReadOnlyList<FeatureGroupDefinition>> GetGroupsAsync();
 }

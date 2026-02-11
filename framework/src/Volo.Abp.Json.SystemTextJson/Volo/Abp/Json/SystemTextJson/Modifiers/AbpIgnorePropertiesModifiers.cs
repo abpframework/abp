@@ -9,7 +9,7 @@ namespace Volo.Abp.Json.SystemTextJson.Modifiers;
 public class AbpIgnorePropertiesModifiers<TClass, TProperty>
     where TClass : class
 {
-    private Expression<Func<TClass, TProperty>> _propertySelector;
+    private Expression<Func<TClass, TProperty>> _propertySelector = default!;
 
     public Action<JsonTypeInfo> CreateModifyAction(Expression<Func<TClass, TProperty>> propertySelector)
     {

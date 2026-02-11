@@ -1,0 +1,19 @@
+{
+  "culture": "sv",
+  "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP över SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP över SSL",
+    "DisplayName:Abp.Ldap.ServerHost": "Servervärd",
+    "Description:Abp.Ldap.ServerHost": "Servervärd",
+    "DisplayName:Abp.Ldap.ServerPort": "Serverport",
+    "Description:Abp.Ldap.ServerPort": "Serverport",
+    "DisplayName:Abp.Ldap.BaseDc": "Komponent för basdomän",
+    "Description:Abp.Ldap.BaseDc": "Komponent för basdomän",
+    "DisplayName:Abp.Ldap.Domain": "Domän",
+    "Description:Abp.Ldap.Domain": "Domän",
+    "DisplayName:Abp.Ldap.UserName": "Användarnamn",
+    "Description:Abp.Ldap.UserName": "Användarnamn",
+    "DisplayName:Abp.Ldap.Password": "Lösenord",
+    "Description:Abp.Ldap.Password": "Lösenord"
+  }
+}

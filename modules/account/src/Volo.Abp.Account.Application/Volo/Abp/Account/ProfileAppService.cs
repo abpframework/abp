@@ -58,13 +58,18 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
             }
         }
 
+        if (user.PhoneNumber.IsNullOrWhiteSpace() && input.PhoneNumber.IsNullOrWhiteSpace())
+        {
+            input.PhoneNumber = user.PhoneNumber;
+        }
+
         if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
         {
             (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
         }
 
-        user.Name = input.Name;
-        user.Surname = input.Surname;
+        user.Name = input.Name?.Trim();
+        user.Surname = input.Surname?.Trim();
 
         input.MapExtraPropertiesTo(user);
 

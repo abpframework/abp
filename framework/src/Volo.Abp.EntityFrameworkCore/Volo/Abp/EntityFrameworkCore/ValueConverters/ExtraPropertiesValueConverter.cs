@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.Data;
 using Volo.Abp.Json.SystemTextJson.JsonConverters;
@@ -9,20 +8,23 @@ using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters;
 
-public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDictionary, string>
+public class ExtraPropertiesValueConverter<TEntityType> : ValueConverter<ExtraPropertyDictionary, string>
 {
-    public ExtraPropertiesValueConverter(Type entityType)
+    public ExtraPropertiesValueConverter()
         : base(
-            d => SerializeObject(d, entityType),
-            s => DeserializeObject(s, entityType))
+            d => SerializeObject(d),
+            s => DeserializeObject(s))
     {
 
     }
 
-    private static string SerializeObject(ExtraPropertyDictionary extraProperties, Type entityType)
-    {
-        var copyDictionary = new Dictionary<string, object>(extraProperties);
+    public readonly static JsonSerializerOptions SerializeOptions = new JsonSerializerOptions();
 
+    private static string SerializeObject(ExtraPropertyDictionary extraProperties)
+    {
+        var copyDictionary = new Dictionary<string, object?>(extraProperties);
+
+        var entityType = typeof(TEntityType);
         if (entityType != null)
         {
             var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
@@ -38,10 +40,10 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
             }
         }
 
-        return JsonSerializer.Serialize(copyDictionary);
+        return JsonSerializer.Serialize(copyDictionary, SerializeOptions);
     }
 
-    private static readonly JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
+    public readonly static JsonSerializerOptions DeserializeOptions = new JsonSerializerOptions()
     {
         Converters =
         {
@@ -49,7 +51,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         }
     };
 
-    private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson, Type entityType)
+    private static ExtraPropertyDictionary DeserializeObject(string extraPropertiesAsJson)
     {
         if (extraPropertiesAsJson.IsNullOrEmpty() || extraPropertiesAsJson == "{}")
         {
@@ -59,6 +61,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         var dictionary = JsonSerializer.Deserialize<ExtraPropertyDictionary>(extraPropertiesAsJson, DeserializeOptions) ??
                             new ExtraPropertyDictionary();
 
+        var entityType = typeof(TEntityType);
         if (entityType != null)
         {
             var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
@@ -66,7 +69,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
             {
                 foreach (var property in objectExtension.GetProperties())
                 {
-                    dictionary[property.Name] = GetNormalizedValue(dictionary, property);
+                    dictionary[property.Name] = GetNormalizedValue(dictionary!, property);
                 }
             }
         }
@@ -74,7 +77,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         return dictionary;
     }
 
-    private static object GetNormalizedValue(
+    private static object? GetNormalizedValue(
         Dictionary<string, object> dictionary,
         ObjectExtensionPropertyInfo property)
     {
@@ -88,7 +91,7 @@ public class ExtraPropertiesValueConverter : ValueConverter<ExtraPropertyDiction
         {
             if (property.Type.IsEnum)
             {
-                return Enum.Parse(property.Type, value.ToString(), true);
+                return Enum.Parse(property.Type, value.ToString()!, true);
             }
 
             //return Convert.ChangeType(value, property.Type);

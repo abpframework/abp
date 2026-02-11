@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
@@ -61,6 +59,13 @@ public partial class LoginDisplay : IDisposable
 
     private void BeginSignOut()
     {
-        Navigation.NavigateToLogout("authentication/logout");
+        if (AbpAspNetCoreComponentsWebOptions.Value.IsBlazorWebApp)
+        {
+            Navigation.NavigateTo(AuthenticationOptions.Value.LogoutUrl, forceLoad: true);
+        }
+        else
+        {
+            Navigation.NavigateToLogout(AuthenticationOptions.Value.LogoutUrl);
+        }
     }
 }

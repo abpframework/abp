@@ -29,7 +29,7 @@ public class FluentObjectValidationContributor : IObjectValidationContributor, I
 
         var result = await validator.ValidateAsync((IValidationContext)Activator.CreateInstance(
             typeof(ValidationContext<>).MakeGenericType(context.ValidatingObject.GetType()),
-            context.ValidatingObject));
+            context.ValidatingObject)!);
 
         if (!result.IsValid)
         {

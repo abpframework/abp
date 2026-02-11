@@ -25,7 +25,9 @@ public class ContentPreviewViewComponent : AbpViewComponent
 
         return View("~/Pages/CmsKit/Components/ContentPreview/Default.cshtml", new DefaultContentDto
         {
-            ContentFragments = fragments
+            ContentFragments = fragments,
+            AllowHtmlTags = true,
+            PreventXSS = false
         });
     }
 }

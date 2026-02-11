@@ -4,7 +4,7 @@ using Volo.Abp.Auditing;
 namespace Volo.Abp.Domain.Entities.Auditing;
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="IAuditedObjectObject{TUser}"/> for aggregate roots.
+/// This class can be used to simplify implementing <see cref="IAuditedObject{TUser}"/> for aggregate roots.
 /// </summary>
 /// <typeparam name="TUser">Type of the user</typeparam>
 [Serializable]
@@ -12,14 +12,14 @@ public abstract class AuditedAggregateRootWithUser<TUser> : AuditedAggregateRoot
     where TUser : IEntity<Guid>
 {
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     /// <inheritdoc />
-    public virtual TUser LastModifier { get; set; }
+    public virtual TUser? LastModifier { get; set; }
 }
 
 /// <summary>
-/// This class can be used to simplify implementing <see cref="IAuditedObjectObject{TUser}"/> for aggregate roots.
+/// This class can be used to simplify implementing <see cref="IAuditedObject{TUser}"/> for aggregate roots.
 /// </summary>
 /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
 /// <typeparam name="TUser">Type of the user</typeparam>
@@ -28,10 +28,10 @@ public abstract class AuditedAggregateRootWithUser<TKey, TUser> : AuditedAggrega
     where TUser : IEntity<Guid>
 {
     /// <inheritdoc />
-    public virtual TUser Creator { get; protected set; }
+    public virtual TUser? Creator { get; protected set; }
 
     /// <inheritdoc />
-    public virtual TUser LastModifier { get; set; }
+    public virtual TUser? LastModifier { get; set; }
 
     protected AuditedAggregateRootWithUser()
     {

@@ -14,17 +14,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip;
 [HtmlTargetElement("abp-button", Attributes = "abp-tooltip-bottom")]
 public class AbpTooltipTagHelper : AbpTagHelper<AbpTooltipTagHelper, AbpTooltipTagHelperService>
 {
-    public string AbpTooltip { get; set; }
+    public string? AbpTooltip { get; set; }
 
-    public string AbpTooltipRight { get; set; }
+    public string? AbpTooltipRight { get; set; }
 
-    public string AbpTooltipLeft { get; set; }
+    public string? AbpTooltipLeft { get; set; }
 
-    public string AbpTooltipTop { get; set; }
+    public string? AbpTooltipTop { get; set; }
 
-    public string AbpTooltipBottom { get; set; }
+    public string? AbpTooltipBottom { get; set; }
 
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     public AbpTooltipTagHelper(AbpTooltipTagHelperService tagHelperService)
         : base(tagHelperService)

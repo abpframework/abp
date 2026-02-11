@@ -16,5 +16,11 @@ public class AbpAspNetCoreComponentsWebModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.Replace(ServiceDescriptor.Transient<IComponentActivator, ServiceProviderComponentActivator>());
+
+        var preActions = context.Services.GetPreConfigureActions<AbpAspNetCoreComponentsWebOptions>();
+        Configure<AbpAspNetCoreComponentsWebOptions>(options =>
+        {
+            preActions.Configure(options);
+        });
     }
 }

@@ -64,4 +64,19 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Auto
         personDto.HasProperty("IsActive").ShouldBe(false);
         personDto.IsActive.ShouldBe(true);
     }
+
+    [Fact]
+    public void MapExtraPropertiesTo_Should_Ignored_If_ExtraProperties_Is_Null()
+    {
+        var person = new ExtensibleTestPerson();
+        person.SetExtraPropertiesAsNull();
+
+        var personDto = new ExtensibleTestPersonDto();
+        personDto.SetExtraPropertiesAsNull();
+
+        Should.NotThrow(() => _objectMapper.Map(person, personDto));
+
+        person.ExtraProperties.ShouldBe(null);
+        personDto.ExtraProperties.ShouldBeEmpty();
+    }
 }

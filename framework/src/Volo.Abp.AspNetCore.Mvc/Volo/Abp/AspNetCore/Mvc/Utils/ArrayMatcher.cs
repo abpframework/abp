@@ -33,7 +33,7 @@ internal static class ArrayMatcher
             }
 
             var resultItem = EqualityComparer<T>.Default.Equals(parentItem, default) ? sourceItem : parentItem;
-            result.Add(resultItem);
+            result.Add(resultItem!);
         }
 
         return result.ToArray();

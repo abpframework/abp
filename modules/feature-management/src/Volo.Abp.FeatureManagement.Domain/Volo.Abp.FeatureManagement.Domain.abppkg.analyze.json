@@ -1,6 +1,6 @@
 {
   "name": "Volo.Abp.FeatureManagement.Domain",
-  "hash": "7dc58fbace956cd5b28d943e0568d553",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Abp.FeatureManagement",
@@ -84,6 +84,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -117,6 +123,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "HasSameData",
           "summary": null,
           "isAsync": false,
@@ -133,6 +140,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "Patch",
           "summary": null,
           "isAsync": false,
@@ -153,11 +161,6 @@
       "namespace": "Volo.Abp.FeatureManagement",
       "primaryKeyType": "Guid",
       "properties": [
-        {
-          "type": "System.Guid",
-          "name": "Id",
-          "summary": null
-        },
         {
           "type": "System.String",
           "name": "GroupName",
@@ -233,6 +236,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -266,6 +275,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "HasSameData",
           "summary": null,
           "isAsync": false,
@@ -282,6 +292,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "Patch",
           "summary": null,
           "isAsync": false,
@@ -302,11 +313,6 @@
       "namespace": "Volo.Abp.FeatureManagement",
       "primaryKeyType": "Guid",
       "properties": [
-        {
-          "type": "System.Guid",
-          "name": "Id",
-          "summary": null
-        },
         {
           "type": "System.String",
           "name": "Name",
@@ -340,6 +346,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -436,6 +448,7 @@
       "methods": [
         {
           "returnType": "FeatureDefinitionRecord",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "FindByNameAsync",
           "summary": null,
           "isAsync": true,
@@ -552,6 +565,7 @@
       "methods": [
         {
           "returnType": "FeatureValue",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -583,6 +597,7 @@
         },
         {
           "returnType": "List<FeatureValue>",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "FindAllAsync",
           "summary": null,
           "isAsync": true,
@@ -614,6 +629,7 @@
         },
         {
           "returnType": "List<FeatureValue>",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -640,6 +656,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Abp.FeatureManagement",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -667,6 +684,83 @@
       ],
       "contentType": "repositoryInterface",
       "name": "IFeatureValueRepository",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.FeatureManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "FeatureValue",
+            "namespace": "Volo.Abp.FeatureManagement",
+            "declaringAssemblyName": "Volo.Abp.FeatureManagement.Domain",
+            "fullName": "Volo.Abp.FeatureManagement.FeatureValue"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "FeatureValueCacheItemInvalidator",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.FeatureManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": null,
+          "name": "StaticFeatureDefinitionChangedEvent",
+          "namespace": "Volo.Abp.Features",
+          "declaringAssemblyName": "Volo.Abp.Features",
+          "fullName": "Volo.Abp.Features.StaticFeatureDefinitionChangedEvent"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<StaticFeatureDefinitionChangedEvent>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<StaticFeatureDefinitionChangedEvent>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "StaticFeatureDefinitionChangedEventHandler",
       "summary": null
     }
   ]

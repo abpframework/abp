@@ -17,6 +17,11 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore;
     )]
 public class AbpTenantManagementEntityFrameworkCoreTestModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var sqliteConnection = CreateDatabaseAndGetConnection();
@@ -37,7 +42,7 @@ public class AbpTenantManagementEntityFrameworkCoreTestModule : AbpModule
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
     {
-        var connection = new SqliteConnection("Data Source=:memory:");
+        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
         connection.Open();
 
         new TenantManagementDbContext(

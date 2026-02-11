@@ -7,5 +7,5 @@ public interface IAbpEnumLocalizer
 {
     string GetString(Type enumType, object enumValue);
 
-    string GetString(Type enumType, object enumValue, IStringLocalizer[] specifyLocalizers);
+    string GetString(Type enumType, object enumValue, IStringLocalizer?[] specifyLocalizers);
 }

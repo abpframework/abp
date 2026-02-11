@@ -4,7 +4,7 @@ namespace Volo.Abp.Http.Client.ClientProxying;
 
 public interface IClientProxyApiDescriptionFinder
 {
-    ActionApiDescriptionModel FindAction(string methodName);
+    ActionApiDescriptionModel? FindAction(string methodName);
 
     ApplicationApiDescriptionModel GetApiDescription();
 }

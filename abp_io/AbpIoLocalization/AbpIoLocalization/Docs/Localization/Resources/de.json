@@ -1,0 +1,9 @@
+{
+  "culture": "de",
+  "texts": {
+    "Buy": "Kaufen",
+    "SeeBookDetails": "Siehe Buchdetails",
+    "MasteringAbpFrameworkEBookDescription": "Dieses Buch wird Ihnen helfen, ein umfassendes Verständnis des Frameworks und moderner Webanwendungsentwicklungstechniken zu erlangen.",
+    "Feedback": "Rückmeldung"
+  }
+}

@@ -1,5 +1,5 @@
 using System;
-using EphemeralMongo;
+using MongoSandbox;
 using MongoDB.Driver;
 using Volo.Abp.MongoDB;
 

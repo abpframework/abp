@@ -3,9 +3,9 @@
   "texts": {
     "Features": "Özellikler",
     "NoFeatureFoundMessage": "Hiç özellik yok.",
-    "ManageHostFeatures": "Host özelliklerini yönetin",
+    "ManageHostFeatures": "Host Özelliklerini Yönetin",
     "ManageHostFeaturesText": "Aşağıdaki butona tıklayarak host özelliklerini yönetebilirsiniz.",
-    "Permission:FeatureManagement": "Özellik yönetimi",
+    "Permission:FeatureManagement": "Özellik Yönetimi",
     "Permission:FeatureManagement.ManageHostFeatures": "Host özelliklerini düzenle",
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "{0} özellik değeri geçerli değil!",
     "Menu:FeatureManagement": "Özellik Yönetimi",

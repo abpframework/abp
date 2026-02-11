@@ -1,0 +1,32 @@
+﻿.post-desc {
+    overflow-wrap: break-word;
+}
+
+#gravatar {
+    margin: 10px; 
+}
+
+#profile-photo {
+    margin-bottom: 10px;
+}
+
+.custom-heading {
+    margin-bottom: 20px !important;
+    font-size: 28px !important;
+}
+
+.company-jobtitle {
+    font-size: 16px !important;
+    font-weight: 300 !important;
+    margin-bottom: 20px;
+}
+
+.username-website {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    margin-bottom: 20px;
+}
+
+.custom-small {
+    display: block;
+}

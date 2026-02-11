@@ -10,7 +10,7 @@ public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
     [Obsolete("This will be removed in next versions.")]
     public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
 
-    public IUnitOfWork Current => _ambientUnitOfWork.GetCurrentByChecking();
+    public IUnitOfWork? Current => _ambientUnitOfWork.GetCurrentByChecking();
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IAmbientUnitOfWork _ambientUnitOfWork;

@@ -22,7 +22,7 @@ public class AbpMvcAttributeValidationResultProvider : DefaultAttributeValidatio
         _stringLocalizerFactory = stringLocalizerFactory;
     }
 
-    public override ValidationResult GetOrDefault(ValidationAttribute validationAttribute, object validatingObject, ValidationContext validationContext)
+    public override ValidationResult? GetOrDefault(ValidationAttribute validationAttribute, object? validatingObject, ValidationContext validationContext)
     {
         var resourceSource = _abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(validationContext.ObjectType.Assembly);
         if (resourceSource == null)

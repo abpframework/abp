@@ -1,6 +1,10 @@
 {
   "culture": "en",
   "texts": {
-    "Buy": "Buy"
+    "Buy": "Buy",
+    "SeeBookDetails": "See Book Details",
+    "MasteringAbpFrameworkEBookDescription": "This book will help you gain a complete understanding of the framework and modern web application development techniques.",
+    "Feedback": "Feedback",
+    "DocumentationDescription": "Dive into ABP's latest documentation. Find guides, API references, and best practices to help you effectively build and manage modern web apps with ABP"
   }
 }

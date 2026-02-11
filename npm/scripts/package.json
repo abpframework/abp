@@ -4,12 +4,14 @@
   "description": "",
   "scripts": {
     "remove-lock-files": "yarn && ts-node -r tsconfig-paths/register remove-lock-files.ts",
-    "validate-versions": "yarn && ts-node -r tsconfig-paths/register validate-versions.ts"
+    "validate-versions": "yarn && ts-node -r tsconfig-paths/register validate-versions.ts",
+    "change-package-version": "ts-node -r tsconfig-paths/register change-package-version.ts",
+    "update-lepton-x-versions": "ts-node -r  tsconfig-paths/register update-lepton-x-versions.ts"
   },
   "dependencies": {
     "axios": "^0.24.0",
     "chalk": "^4.1.0",
-    "commander": "^8.3.0",
+    "commander": "^11.0.0",
     "execa": "^5.1.1",
     "fs-extra": "^9.0.1",
     "glob": "^7.1.6",

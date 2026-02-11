@@ -24,7 +24,7 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
     public virtual async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(u => u.UserName == userName, cancellationToken);
     }
@@ -32,7 +32,7 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
     public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(u => ids.Contains(u.Id))
             .ToListAsync(cancellationToken);
     }
@@ -45,8 +45,8 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<TUser, IMongoQueryable<TUser>>(
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||
@@ -55,16 +55,15 @@ public abstract class MongoUserRepositoryBase<TDbContext, TUser> : MongoDbReposi
                     (u.Surname != null && u.Surname.Contains(filter))
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(IUserData.UserName) : sorting)
-            .As<IMongoQueryable<TUser>>()
-            .PageBy<TUser, IMongoQueryable<TUser>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<TUser, IMongoQueryable<TUser>>(
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.UserName.Contains(filter) ||

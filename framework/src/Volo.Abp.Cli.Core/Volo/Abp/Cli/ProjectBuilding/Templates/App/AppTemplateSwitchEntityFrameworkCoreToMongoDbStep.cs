@@ -45,7 +45,7 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
             "MongoDB"
         );
-        
+
         ChangeNamespaceAndKeyword(
             context,
             "/aspnet-core/src/MyCompanyName.MyProjectName.AuthServer/MyProjectNameAuthServerModule.cs",
@@ -106,6 +106,29 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Server/appsettings.json"
         );
 
+        //MyCompanyName.MyProjectName.Blazor.WebApp
+
+        ChangeProjectReference(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.WebApp/MyCompanyName.MyProjectName.Blazor.WebApp.csproj",
+            _hasDbMigrations ? "EntityFrameworkCore.DbMigrations" : "EntityFrameworkCore",
+            "MongoDB"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.WebApp/MyProjectNameBlazorModule.cs",
+            "MyCompanyName.MyProjectName.EntityFrameworkCore",
+            "MyCompanyName.MyProjectName.MongoDB",
+            _hasDbMigrations ? "MyProjectNameEntityFrameworkCoreDbMigrationsModule" : "MyProjectNameEntityFrameworkCoreModule",
+            "MyProjectNameMongoDbModule"
+        );
+
+        ChangeConnectionStringToMongoDb(
+            context,
+            "/aspnet-core/src/MyCompanyName.MyProjectName.Blazor.WebApp/appsettings.json"
+        );
+
         //MyCompanyName.MyProjectName.HttpApi.HostWithIds
 
         ChangeProjectReference(
@@ -154,13 +177,6 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
 
         //MyCompanyName.MyProjectName.Domain.Tests
 
-        ChangeProjectReference(
-            context,
-            "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
-            "EntityFrameworkCore.Tests",
-            "MongoDB.Tests"
-        );
-
         ChangeNamespaceAndKeyword(
             context,
             "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
@@ -199,6 +215,22 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
             "MyCompanyName.MyProjectName.MongoDB",
             "MyProjectNameEntityFrameworkCoreCollectionFixtureBase",
             "MyProjectNameMongoDbCollectionFixtureBase"
+        );
+
+        ChangeNamespaceAndKeyword(
+            context,
+            "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests/MyProjectNameWebTestModule.cs",
+            "MyCompanyName.MyProjectName.EntityFrameworkCore",
+            "MyCompanyName.MyProjectName.MongoDB",
+            "MyProjectNameEntityFrameworkCoreTestModule",
+            "MyProjectNameMongoDbTestModule"
+        );
+
+        ChangeProjectReference(
+            context,
+            "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests/MyCompanyName.MyProjectName.Web.Tests.csproj",
+            "EntityFrameworkCore",
+            "MongoDB"
         );
 
         // TODO: remove this method after published 6.0.0
@@ -254,8 +286,6 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
                 return;
             }
         }
-
-        throw new ApplicationException($"Could not find the '{oldReference}' reference in the project '{targetProjectFilePath}'!");
     }
 
     private void ChangeNamespaceAndKeyword(
@@ -318,7 +348,7 @@ public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPip
 
         throw new ApplicationException("Could not find the 'Default' connection string in appsettings.json file!");
     }
-    
+
     // TODO: remove this method after published 6.0.0
     private void ProvideIdentityServerBackwardCompatibility(ProjectBuildContext context)
     {

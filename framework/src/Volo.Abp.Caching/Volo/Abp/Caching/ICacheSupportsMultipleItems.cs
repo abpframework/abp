@@ -7,11 +7,11 @@ namespace Volo.Abp.Caching;
 
 public interface ICacheSupportsMultipleItems
 {
-    byte[][] GetMany(
+    byte[]?[] GetMany(
         IEnumerable<string> keys
     );
 
-    Task<byte[][]> GetManyAsync(
+    Task<byte[]?[]> GetManyAsync(
         IEnumerable<string> keys,
         CancellationToken token = default
     );

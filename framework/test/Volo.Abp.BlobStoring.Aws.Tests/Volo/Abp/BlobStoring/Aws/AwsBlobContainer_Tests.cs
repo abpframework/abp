@@ -1,3 +1,1 @@
-﻿using Xunit;
-
-namespace Volo.Abp.BlobStoring.Aws;
+﻿namespace Volo.Abp.BlobStoring.Aws;

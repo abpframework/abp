@@ -5,10 +5,10 @@ using OpenIddict.Server;
 
 namespace Volo.Abp.OpenIddict.WildcardDomains;
 
-public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomainBase<OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri, OpenIddictServerEvents.ValidateLogoutRequestContext>
+public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomainBase<AbpValidateClientPostLogoutRedirectUri, OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri, OpenIddictServerEvents.ValidateEndSessionRequestContext>
 {
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
-        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateLogoutRequestContext>()
+        = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateEndSessionRequestContext>()
             .AddFilter<OpenIddictServerHandlerFilters.RequireDegradedModeDisabled>()
             .AddFilter<OpenIddictServerHandlerFilters.RequirePostLogoutRedirectUriParameter>()
             .UseScopedHandler<AbpValidateClientPostLogoutRedirectUri>()
@@ -21,10 +21,10 @@ public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomai
         IOpenIddictApplicationManager applicationManager)
         : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager))
     {
-        Handler = new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager);
+        OriginalHandler = new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager);
     }
 
-    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateEndSessionRequestContext context)
     {
         Check.NotNull(context, nameof(context));
         Check.NotNullOrEmpty(context.PostLogoutRedirectUri, nameof(context.PostLogoutRedirectUri));
@@ -34,6 +34,6 @@ public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomai
             return;
         }
 
-        await Handler.HandleAsync(context);
+        await OriginalHandler.HandleAsync(context);
     }
 }

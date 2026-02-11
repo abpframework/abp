@@ -1,3 +1,0 @@
-## Value Objects
-
-Façam

@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Admin.HttpApi",
-  "hash": "6661b70996cefd1caa9f3072d98aeab3",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs.Admin",
@@ -14,6 +14,11 @@
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc",
           "namespace": "Volo.Abp.AspNetCore.Mvc",
           "name": "AbpAspNetCoreMvcModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Docs.Common.HttpApi",
+          "namespace": "Volo.Docs",
+          "name": "DocsCommonHttpApiModule"
         }
       ],
       "implementingInterfaces": [

@@ -1,28 +1,60 @@
-import { ListService, PagedResultDto } from '@abp/ng.core';
+import {
+  InitDirective,
+  ListService,
+  LocalizationPipe,
+  PagedResultDto,
+  ReplaceableTemplateDirective,
+} from '@abp/ng.core';
 import {
   GetIdentityUsersInput,
   IdentityRoleDto,
   IdentityUserDto,
   IdentityUserService,
 } from '@abp/ng.identity/proxy';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import {Confirmation, ConfirmationService, eFormComponets, ToasterService} from '@abp/ng.theme.shared';
 import {
+  ePermissionManagementComponents,
+  PermissionManagementComponent,
+} from '@abp/ng.permission-management';
+import {
+  ButtonComponent,
+  Confirmation,
+  ConfirmationService,
+  eFormComponets,
+  FormCheckboxComponent,
+  ModalCloseDirective,
+  ModalComponent,
+  ToasterService,
+} from '@abp/ng.theme.shared';
+import {
+  ExtensibleFormComponent,
+  ExtensibleTableComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
-} from '@abp/ng.theme.shared/extensions';
+} from '@abp/ng.components/extensible';
 import {
   Component,
+  inject,
   Injector,
   OnInit,
   TemplateRef,
   TrackByFunction,
-  ViewChild,
+  viewChild
 } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 import { eIdentityComponents } from '../../enums/components';
+import { PageComponent } from '@abp/ng.components/page';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { Tabs, TabList, Tab, TabPanel, TabContent } from '@angular/aria/tabs';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
   selector: 'abp-users',
@@ -34,16 +66,46 @@ import { eIdentityComponents } from '../../enums/components';
       useValue: eIdentityComponents.Users,
     },
   ],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    PermissionManagementComponent,
+    PageComponent,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    TabContent,
+    NgbDropdownModule,
+    NgxValidateCoreModule,
+    LocalizationPipe,
+    ExtensibleTableComponent,
+    ModalComponent,
+    ExtensibleFormComponent,
+    FormCheckboxComponent,
+    ButtonComponent,
+    ReplaceableTemplateDirective,
+    ModalCloseDirective,
+    InitDirective,
+  ],
 })
 export class UsersComponent implements OnInit {
+  protected readonly list = inject(ListService<GetIdentityUsersInput>);
+  protected readonly confirmationService = inject(ConfirmationService);
+  protected readonly service = inject(IdentityUserService);
+  protected readonly toasterService = inject(ToasterService);
+  private readonly fb = inject(UntypedFormBuilder);
+  private readonly injector = inject(Injector);
+
   data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
-  @ViewChild('modalContent', { static: false })
-  modalContent!: TemplateRef<any>;
+  readonly modalContent = viewChild.required<TemplateRef<any>>('modalContent');
 
   form!: UntypedFormGroup;
 
   selected?: IdentityUserDto;
+
+  selectedTab = 'user-info';
 
   selectedUserRoles?: IdentityRoleDto[];
 
@@ -60,8 +122,8 @@ export class UsersComponent implements OnInit {
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   entityDisplayName: string;
-  
-  inputKey=eFormComponets.FormCheckboxComponent
+
+  inputKey = eFormComponets.FormCheckboxComponent;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -72,15 +134,6 @@ export class UsersComponent implements OnInit {
   get roleGroups(): UntypedFormGroup[] {
     return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
   }
-
-  constructor(
-    public readonly list: ListService<GetIdentityUsersInput>,
-    protected confirmationService: ConfirmationService,
-    protected service: IdentityUserService,
-    private toasterService: ToasterService,
-    protected fb: UntypedFormBuilder,
-    protected injector: Injector,
-  ) {}
 
   ngOnInit() {
     this.hookToQuery();
@@ -112,6 +165,7 @@ export class UsersComponent implements OnInit {
   }
 
   openModal() {
+    this.selectedTab = 'user-info';
     this.buildForm();
     this.isModalVisible = true;
   }
@@ -158,6 +212,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
   }
@@ -170,7 +225,7 @@ export class UsersComponent implements OnInit {
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
           this.service.delete(id).subscribe(() => {
-            this.toasterService.success('AbpUi::SuccessfullyDeleted');
+            this.toasterService.success('AbpUi::DeletedSuccessfully');
             this.list.get();
           });
         }
@@ -184,7 +239,11 @@ export class UsersComponent implements OnInit {
   }
 
   private hookToQuery() {
-    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
+    this.list
+      .hookToQuery(query => this.service.getList(query))
+      .subscribe(res => {
+        this.data = res;
+      });
   }
 
   openPermissionsModal(providerKey: string, entityDisplayName?: string) {

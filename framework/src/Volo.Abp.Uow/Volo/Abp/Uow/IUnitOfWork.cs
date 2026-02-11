@@ -19,7 +19,7 @@ public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, 
 
     IAbpUnitOfWorkOptions Options { get; }
 
-    IUnitOfWork Outer { get; }
+    IUnitOfWork? Outer { get; }
 
     bool IsReserved { get; }
 
@@ -27,9 +27,9 @@ public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, 
 
     bool IsCompleted { get; }
 
-    string ReservationName { get; }
+    string? ReservationName { get; }
 
-    void SetOuter([CanBeNull] IUnitOfWork outer);
+    void SetOuter(IUnitOfWork? outer);
 
     void Initialize([NotNull] AbpUnitOfWorkOptions options);
 
@@ -45,11 +45,11 @@ public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, 
 
     void AddOrReplaceLocalEvent(
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null
     );
 
     void AddOrReplaceDistributedEvent(
         UnitOfWorkEventRecord eventRecord,
-        Predicate<UnitOfWorkEventRecord> replacementSelector = null
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null
     );
 }

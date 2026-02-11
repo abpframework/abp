@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -14,7 +14,7 @@ public abstract class ChallengeAccountController : AbpController
     protected string AuthenticationType { get; }
     protected string[] ForbidSchemes { get; }
 
-    protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
+    protected ChallengeAccountController(string[]? challengeAuthenticationSchemas = null)
     {
         ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
         AuthenticationType = "Identity.Application";
@@ -22,38 +22,38 @@ public abstract class ChallengeAccountController : AbpController
     }
 
     [HttpGet]
-    public virtual ActionResult Login(string returnUrl = "", string returnUrlHash = "")
+    public virtual async Task<ActionResult> LoginAsync(string returnUrl = "", string returnUrlHash = "")
     {
         if (CurrentUser.IsAuthenticated)
         {
-            return RedirectSafely(returnUrl, returnUrlHash);
+            return await RedirectSafelyAsync(returnUrl, returnUrlHash);
         }
 
-        return Challenge(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
+        return Challenge(new AuthenticationProperties { RedirectUri = await GetRedirectUrlAsync(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
     }
 
     [HttpGet]
-    public virtual async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
+    public virtual async Task<ActionResult> LogoutAsync(string returnUrl = "", string returnUrlHash = "")
     {
         await HttpContext.SignOutAsync();
 
         if (HttpContext.User.Identity?.AuthenticationType == AuthenticationType)
         {
-            return RedirectSafely(returnUrl, returnUrlHash);
+            return await RedirectSafelyAsync(returnUrl, returnUrlHash);
         }
 
-        return SignOut(new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
+        return SignOut(new AuthenticationProperties { RedirectUri = await GetRedirectUrlAsync(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
     }
 
     [HttpGet]
-    public virtual async Task<IActionResult> FrontChannelLogout(string sid)
+    public virtual async Task<IActionResult> FrontChannelLogoutAsync(string sid)
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             var currentSid = User.FindFirst("sid")?.Value ?? string.Empty;
             if (string.Equals(currentSid, sid, StringComparison.Ordinal))
             {
-                await Logout();
+                await LogoutAsync();
             }
         }
 
@@ -61,19 +61,26 @@ public abstract class ChallengeAccountController : AbpController
     }
 
     [HttpGet]
-    public virtual Task<IActionResult> AccessDenied(string returnUrl = "", string returnUrlHash = "")
+    public virtual Task<IActionResult> AccessDeniedAsync()
     {
         return Task.FromResult<IActionResult>(Challenge(
             new AuthenticationProperties
             {
-                RedirectUri = GetRedirectUrl(returnUrl, returnUrlHash)
+                RedirectUri = "/"
             },
-            ForbidSchemes.IsNullOrEmpty()
+            (ForbidSchemes.IsNullOrEmpty()
                 ? new[]
                 {
                     HttpContext.RequestServices.GetRequiredService<IOptions<AuthenticationOptions>>().Value.DefaultForbidScheme
                 }
-                : ForbidSchemes
+                : ForbidSchemes)!
         ));
+    }
+
+    [HttpGet]
+    public virtual async Task<ActionResult> ChallengeAsync(string returnUrl = "", string returnUrlHash = "")
+    {
+        await HttpContext.SignOutAsync();
+        return Challenge(new AuthenticationProperties { RedirectUri = await GetRedirectUrlAsync(returnUrl, returnUrlHash) }, ChallengeAuthenticationSchemas);
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 using Volo.CmsKit.Blogs;
 
 namespace Volo.CmsKit.Admin.Blogs;
 
 [Serializable]
-public class UpdateBlogPostDto : IHasConcurrencyStamp
+public class UpdateBlogPostDto : ExtensibleObject, IHasConcurrencyStamp
 {
     [Required]
     [DynamicMaxLength(typeof(BlogPostConsts), nameof(BlogPostConsts.MaxTitleLength))]

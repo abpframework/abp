@@ -128,21 +128,29 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 }
                 else if (result.IsNotAllowed)
                 {
-                    Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
-
-                    if (user.ShouldChangePasswordOnNextLogin)
+                    if (!await UserManager.CheckPasswordAsync(user, context.Password))
                     {
-                        await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
-                        return;
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", context.UserName);
+                        errorDescription = Localizer["InvalidUserNameOrPassword"];
                     }
-
-                    if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                    else
                     {
-                        await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
-                        return;
-                    }
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
 
-                    errorDescription = Localizer["LoginIsNotAllowed"];
+                        if (user.ShouldChangePasswordOnNextLogin)
+                        {
+                            await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
+                            return;
+                        }
+
+                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                        {
+                            await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                            return;
+                        }
+
+                        errorDescription = Localizer["LoginIsNotAllowed"];
+                    }
                 }
                 else
                 {
@@ -178,6 +186,20 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     protected virtual async Task HandleTwoFactorLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
     {
+        var recoveryCode = context.Request?.Raw?["RecoveryCode"];
+        if (!recoveryCode.IsNullOrWhiteSpace())
+        {
+            var result = await UserManager.RedeemTwoFactorRecoveryCodeAsync(user, recoveryCode);
+            if (result.Succeeded)
+            {
+                await SetSuccessResultAsync(context, user);
+                return;
+            }
+
+            Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidRecoveryCode", context.UserName);
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidRecoveryCode"]);
+        }
+
         var twoFactorProvider = context.Request?.Raw?["TwoFactorProvider"];
         var twoFactorCode = context.Request?.Raw?["TwoFactorCode"];
         if (!twoFactorProvider.IsNullOrWhiteSpace() && !twoFactorCode.IsNullOrWhiteSpace())
@@ -188,6 +210,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 await SetSuccessResultAsync(context, user);
                 return;
             }
+
+            await UserManager.AccessFailedAsync(user);
 
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.UserName);
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidAuthenticatorCode"]);
@@ -297,6 +321,9 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             OidcConstants.AuthenticationMethods.Password,
             additionalClaims.ToArray()
         );
+
+        user.SetLastSignInTime(DateTimeOffset.UtcNow);
+        await UserManager.UpdateAsync(user);
 
         await IdentitySecurityLogManager.SaveAsync(
             new IdentitySecurityLogContext

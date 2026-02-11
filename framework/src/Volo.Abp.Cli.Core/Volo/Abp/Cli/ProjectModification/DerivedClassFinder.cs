@@ -26,10 +26,10 @@ public class DerivedClassFinder : ITransientDependency
         var binFile = Path.Combine(csprojFileDirectory, "bin");
         var objFile = Path.Combine(csprojFileDirectory, "obj");
 
-
         var csFiles = new DirectoryInfo(csprojFileDirectory)
             .GetFiles("*.cs", SearchOption.AllDirectories)
-            .Where(f => f.DirectoryName != null && (!f.DirectoryName.StartsWith(binFile) || !f.DirectoryName.StartsWith(objFile)))
+            .Where(f => !f.FullName.StartsWith(binFile, StringComparison.OrdinalIgnoreCase) &&
+                        !f.FullName.StartsWith(objFile, StringComparison.OrdinalIgnoreCase))
             .Select(f => f.FullName)
             .ToList();
 
@@ -53,7 +53,13 @@ public class DerivedClassFinder : ITransientDependency
 
     protected bool IsDerived(string csFile, string baseClass)
     {
-        var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
+        var csFileText = File.ReadAllText(csFile);
+        if (!csFileText.Contains("class"))
+        {
+            return false;
+        }
+
+        var root = CSharpSyntaxTree.ParseText(csFileText).GetRoot();
         var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
         var classDeclaration = (namespaceSyntax?.DescendantNodes().OfType<ClassDeclarationSyntax>())?.FirstOrDefault();
 

@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.CmsKit.Menus;
 
 [Serializable]
-public class MenuItemDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
+public class MenuItemDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
     public Guid? ParentId { get; set; }
 
@@ -26,6 +26,8 @@ public class MenuItemDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
     public string CssClass { get; set; }
 
     public Guid? PageId { get; set; }
+    
+    public string RequiredPermissionName { get; set; }
 
     public string ConcurrencyStamp { get; set; }
 }

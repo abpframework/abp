@@ -5,7 +5,7 @@ namespace Volo.Abp.Features;
 
 public interface IStaticFeatureDefinitionStore
 {
-    Task<FeatureDefinition> GetOrNullAsync(string name);
+    Task<FeatureDefinition?> GetOrNullAsync(string name);
 
     Task<IReadOnlyList<FeatureDefinition>> GetFeaturesAsync();
 

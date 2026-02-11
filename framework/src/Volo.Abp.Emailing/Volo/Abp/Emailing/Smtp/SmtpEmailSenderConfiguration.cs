@@ -37,7 +37,7 @@ public class SmtpEmailSenderConfiguration : EmailSenderConfiguration, ISmtpEmail
         return GetNotEmptySettingValueAsync(EmailSettingNames.Smtp.Password);
     }
 
-    public Task<string> GetDomainAsync()
+    public Task<string?> GetDomainAsync()
     {
         return SettingProvider.GetOrNullAsync(EmailSettingNames.Smtp.Domain);
     }

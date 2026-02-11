@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Volo.Abp.Aspects;
+using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
 namespace Volo.Abp.AspNetCore.Mvc.Features;
 
-public class AbpFeaturePageFilter : IAsyncPageFilter, ITransientDependency
+public class AbpFeaturePageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependency
 {
     public Task OnPageHandlerSelectionAsync(PageHandlerSelectedContext context)
     {

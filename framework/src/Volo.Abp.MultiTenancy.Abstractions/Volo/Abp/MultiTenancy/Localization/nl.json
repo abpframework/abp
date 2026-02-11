@@ -1,0 +1,9 @@
+{
+  "culture": "nl",
+  "texts": {
+    "TenantNotFoundMessage": "Huurder niet gevonden!",
+    "TenantNotFoundDetails": "Er is geen tenant met de tenant-ID of -naam: {0}",
+    "TenantNotActiveMessage": "Huurder is niet actief!",
+    "TenantNotActiveDetails": "De tenant is niet actief met de tenant-ID of -naam: {0}"
+  }
+}

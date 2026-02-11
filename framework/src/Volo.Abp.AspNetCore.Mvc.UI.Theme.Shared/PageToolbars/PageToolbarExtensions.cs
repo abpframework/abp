@@ -11,9 +11,9 @@ public static class PageToolbarExtensions
 {
     public static PageToolbar AddComponent<TComponent>(
         this PageToolbar toolbar,
-        object argument = null,
+        object? argument = null,
         int order = 0,
-        string requiredPolicyName = null)
+        string? requiredPolicyName = null)
     {
         return toolbar.AddComponent(
             typeof(TComponent),
@@ -26,9 +26,9 @@ public static class PageToolbarExtensions
     public static PageToolbar AddComponent(
         this PageToolbar toolbar,
         Type componentType,
-        object argument = null,
+        object? argument = null,
         int order = 0,
-        string requiredPolicyName = null)
+        string? requiredPolicyName = null)
     {
         toolbar.Contributors.Add(
             new SimplePageToolbarContributor(
@@ -45,16 +45,16 @@ public static class PageToolbarExtensions
     public static PageToolbar AddButton(
         this PageToolbar toolbar,
         ILocalizableString text,
-        string icon = null,
-        string name = null,
-        string id = null,
-        ILocalizableString busyText = null,
+        string? icon = null,
+        string? name = null,
+        string? id = null,
+        ILocalizableString? busyText = null,
         FontIconType iconType = FontIconType.FontAwesome,
         AbpButtonType type = AbpButtonType.Primary,
         AbpButtonSize size = AbpButtonSize.Small,
         bool disabled = false,
         int order = 0,
-        string requiredPolicyName = null)
+        string? requiredPolicyName = null)
     {
         if (busyText == null)
         {

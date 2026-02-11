@@ -18,7 +18,7 @@ public partial class EntityAction<TItem> : ComponentBase
     internal bool HasPermission { get; set; } = true;
 
     [Parameter]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
 
     [Parameter]
     public bool Primary { get; set; }
@@ -28,25 +28,25 @@ public partial class EntityAction<TItem> : ComponentBase
 
     [Parameter]
     [Obsolete("Use Visible to hide actions based on permissions. Check the permission yourself. It is more performant. This option might be removed in future versions.")]
-    public string RequiredPolicy { get; set; }
+    public string? RequiredPolicy { get; set; }
 
     [Parameter]
-    public Color Color { get; set; }
+    public Color? Color { get; set; }
 
     [Parameter]
-    public Func<string> ConfirmationMessage { get; set; }
+    public Func<string>? ConfirmationMessage { get; set; }
 
     [Parameter]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     [CascadingParameter]
-    public EntityActions<TItem> ParentActions { get; set; }
+    public EntityActions<TItem> ParentActions { get; set; } = default!;
 
     [Inject]
-    protected IAuthorizationService AuthorizationService { get; set; }
+    protected IAuthorizationService AuthorizationService { get; set; } = default!;
 
     [Inject]
-    protected IUiMessageService UiMessageService { get; set; }
+    protected IUiMessageService UiMessageService { get; set; } = default!;
 
     protected async override Task OnInitializedAsync()
     {
@@ -55,7 +55,7 @@ public partial class EntityAction<TItem> : ComponentBase
 
         if (!RequiredPolicy.IsNullOrEmpty())
         {
-            HasPermission = await AuthorizationService.IsGrantedAsync(RequiredPolicy);
+            HasPermission = await AuthorizationService.IsGrantedAsync(RequiredPolicy!);
         }
         ParentActions.AddAction(this);
     }

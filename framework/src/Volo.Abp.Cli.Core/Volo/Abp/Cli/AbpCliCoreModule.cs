@@ -1,15 +1,23 @@
-﻿using System.Text;
+using System;
+using System.Linq;
+using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Commands.Internal;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ServiceProxying;
 using Volo.Abp.Cli.ServiceProxying.Angular;
 using Volo.Abp.Cli.ServiceProxying.CSharp;
 using Volo.Abp.Cli.ServiceProxying.JavaScript;
+using Volo.Abp.Cli.Telemetry;
 using Volo.Abp.Domain;
 using Volo.Abp.Http;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Activity.Providers;
 using Volo.Abp.Json;
+using Volo.Abp.Localization;
 using Volo.Abp.Minify;
 using Volo.Abp.Modularity;
 
@@ -20,10 +28,13 @@ namespace Volo.Abp.Cli;
     typeof(AbpJsonModule),
     typeof(AbpIdentityModelModule),
     typeof(AbpMinifyModule),
-    typeof(AbpHttpModule)
+    typeof(AbpHttpModule),
+    typeof(AbpLocalizationModule)
 )]
 public class AbpCliCoreModule : AbpModule
 {
+    private const string EnableTelemetryVariableName = "ABP_STUDIO_ENABLE_TELEMETRY";
+    
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClient(CliConsts.HttpClientName)
@@ -56,6 +67,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[SwitchToPreviewCommand.Name] = typeof(SwitchToPreviewCommand);
             options.Commands[SwitchToStableCommand.Name] = typeof(SwitchToStableCommand);
             options.Commands[SwitchToNightlyCommand.Name] = typeof(SwitchToNightlyCommand);
+            options.Commands[SwitchToPreRcCommand.Name] = typeof(SwitchToPreRcCommand);
             options.Commands[SwitchToLocal.Name] = typeof(SwitchToLocal);
             options.Commands[TranslateCommand.Name] = typeof(TranslateCommand);
             options.Commands[BuildCommand.Name] = typeof(BuildCommand);
@@ -64,7 +76,11 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
-            
+            options.Commands[ClearDownloadCacheCommand.Name] = typeof(ClearDownloadCacheCommand);
+            options.Commands[RecreateInitialMigrationCommand.Name] = typeof(RecreateInitialMigrationCommand);
+            options.Commands[GenerateRazorPage.Name] = typeof(GenerateRazorPage);
+            options.Commands[McpCommand.Name] = typeof(McpCommand);
+
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
         });
@@ -75,5 +91,23 @@ public class AbpCliCoreModule : AbpModule
             options.Generators[AngularServiceProxyGenerator.Name] = typeof(AngularServiceProxyGenerator);
             options.Generators[CSharpServiceProxyGenerator.Name] = typeof(CSharpServiceProxyGenerator);
         });
+        
+        ConfigureTelemetry(context.Services);
+    }
+    
+    private static void ConfigureTelemetry(IServiceCollection services)
+    {
+        var enableTelemetryEnvironmentVariable = Environment.GetEnvironmentVariable(EnableTelemetryVariableName , EnvironmentVariableTarget.Machine) 
+                                                 ?? Environment.GetEnvironmentVariable(EnableTelemetryVariableName , EnvironmentVariableTarget.User) 
+                                                 ?? Environment.GetEnvironmentVariable(EnableTelemetryVariableName , EnvironmentVariableTarget.Process);
+
+        if (enableTelemetryEnvironmentVariable.IsNullOrEmpty() || !enableTelemetryEnvironmentVariable.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+        { 
+            services.Remove(services.First(p => p.ImplementationType == typeof(TelemetrySessionInfoEnricher)));
+        }
+        else
+        { 
+            services.Replace(ServiceDescriptor.Singleton<ITelemetryService, NullTelemetryService>());
+        }
     }
 }

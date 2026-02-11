@@ -10,9 +10,16 @@ public class BlazorAppsettingsFilePortChangeForSeparatedAuthServersStep : Projec
     {
         var appsettingsFile = context.Files.FirstOrDefault(x =>
             !x.IsDirectory &&
-            x.Name.EndsWith("aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/appsettings.json",
-                StringComparison.InvariantCultureIgnoreCase)
+            (x.Name.EndsWith("aspnet-core/src/MyCompanyName.MyProjectName.Blazor/wwwroot/appsettings.json",
+                StringComparison.InvariantCultureIgnoreCase) ||
+            x.Name.EndsWith("aspnet-core/src/MyCompanyName.MyProjectName.Blazor.Client/wwwroot/appsettings.json",
+                StringComparison.InvariantCultureIgnoreCase))
         );
+
+        if (appsettingsFile == null)
+        {
+            return;
+        }
 
         appsettingsFile.NormalizeLineEndings();
         var lines = appsettingsFile.GetLines();

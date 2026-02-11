@@ -7,8 +7,6 @@ namespace Volo.Abp.Authorization.Permissions;
 
 public interface IPermissionDefinitionContext
 {
-    //TODO: Add Get methods to find and modify a permission or group.
-
     IServiceProvider ServiceProvider { get; }
 
     /// <summary>
@@ -17,27 +15,25 @@ public interface IPermissionDefinitionContext
     /// </summary>
     /// <param name="name">Name of the group</param>
     /// <returns></returns>
-    PermissionGroupDefinition GetGroup([NotNull] string name);
+    PermissionGroupDefinition GetGroup(string name);
 
     /// <summary>
     /// Tries to get a pre-defined permission group.
-    /// Returns null if can not find the given group.
+    /// Returns null if it cannot find the given group.
     /// </summary>
     /// <param name="name">Name of the group</param>
     /// <returns></returns>
-    [CanBeNull]
-    PermissionGroupDefinition GetGroupOrNull(string name);
+    PermissionGroupDefinition? GetGroupOrNull(string name);
 
     /// <summary>
     /// Tries to add a new permission group.
     /// Throws <see cref="AbpException"/> if there is a group with the name.
     /// <param name="name">Name of the group</param>
     /// <param name="displayName">Localized display name of the group</param>
-    /// <param name="multiTenancySide">Select a multi-tenancy side</param>
     /// </summary>
     PermissionGroupDefinition AddGroup(
-        [NotNull] string name,
-        ILocalizableString displayName = null);
+        string name,
+        ILocalizableString? displayName = null);
 
     /// <summary>
     /// Tries to remove a permission group.
@@ -47,10 +43,21 @@ public interface IPermissionDefinitionContext
     void RemoveGroup(string name);
 
     /// <summary>
-    /// Tries to get a pre-defined permission group.
-    /// Returns null if can not find the given group.
-    /// <param name="name">Name of the group</param>
+    /// Tries to get a pre-defined permission from all defined groups.
+    /// Returns null if it cannot find the given permission.
+    /// <param name="name">Name of the permission</param>
     /// </summary>
-    [CanBeNull]
-    PermissionDefinition GetPermissionOrNull([NotNull] string name);
+    PermissionDefinition? GetPermissionOrNull(string name);
+
+    PermissionDefinition AddResourcePermission(
+        string name,
+        string resourceName,
+        string managementPermissionName,
+        ILocalizableString? displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true);
+
+    PermissionDefinition? GetResourcePermissionOrNull([NotNull] string resourceName, [NotNull] string name);
+
+    void RemoveResourcePermission([NotNull] string resourceName, [NotNull] string name);
 }

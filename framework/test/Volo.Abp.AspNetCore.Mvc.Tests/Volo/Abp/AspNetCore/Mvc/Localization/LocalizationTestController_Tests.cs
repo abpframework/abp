@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Shouldly;
 using Xunit;
@@ -21,7 +20,7 @@ public class LocalizationTestController_Tests : AspNetCoreMvcTestBase
         }
     }
 
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+    protected override void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AbpRequestLocalizationOptions>(options =>
         {

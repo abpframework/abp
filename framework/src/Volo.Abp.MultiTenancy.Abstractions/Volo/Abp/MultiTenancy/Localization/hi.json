@@ -1,0 +1,9 @@
+{
+  "culture": "hi",
+  "texts": {
+    "TenantNotFoundMessage": "किरायेदार नहीं मिला!",
+    "TenantNotFoundDetails": "किरायेदार आईडी या नाम वाला कोई किरायेदार नहीं है: {0}",
+    "TenantNotActiveMessage": "किरायेदार सक्रिय नहीं है!",
+    "TenantNotActiveDetails": "किरायेदार, किरायेदार आईडी या नाम के साथ सक्रिय नहीं है: {0}"
+  }
+}

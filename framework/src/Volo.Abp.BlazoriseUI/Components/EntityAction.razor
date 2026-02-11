@@ -17,7 +17,8 @@
                 Disabled=@Disabled>
             @if(!string.IsNullOrEmpty(Icon))
             {
-                <Icon Name="@Icon" Class="me-1"/>
+                var iconClass = Text.IsNullOrEmpty() ? "" : "me-1";
+                <Icon Name="@Icon" Class="@iconClass"/>
             }
             <Span>
                 @Text

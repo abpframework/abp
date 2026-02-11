@@ -1,10 +1,11 @@
 using System;
-using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using NuGet.Versioning;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Http;
@@ -46,7 +47,7 @@ public class PackageVersionCheckerService : ITransientDependency
     {
         var versionList = await GetPackageVersionListAsync(packageId, false);
 
-        if (versionList == null)
+        if (!versionList.Any())
         {
             return false;
         }
@@ -61,43 +62,25 @@ public class PackageVersionCheckerService : ITransientDependency
 
     public async Task<LatestVersionInfo> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
     {
-        if (!includeNightly && !includeReleaseCandidates && !packageId.Contains("LeptonX"))
+        if (!includeNightly && !includeReleaseCandidates && !packageId.Contains("LeptonX") && !packageId.StartsWith("Volo.Abp.Studio."))
         {
-            var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
-            if (latestStableVersionResult == null)
-            {
-                return null;
-            }
-
-            return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion) 
-                ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message) 
-                : null;
+            return await GetLatestStableVersionFromGithubAsync();
         }
-        
+
         var versionList = await GetPackageVersionListAsync(packageId, includeNightly);
         if (versionList == null)
         {
             return null;
         }
 
-        List<SemanticVersion> versions;
-        
-        if (!includeNightly && includeReleaseCandidates)
-        {
-            versions = versionList
-                .Where(v => !v.Contains("-preview"))
-                .Select(SemanticVersion.Parse)
-                .OrderByDescending(v => v, new VersionComparer()).ToList();
-        }
-        else
-        {
-            versions = versionList
-                .Select(SemanticVersion.Parse)
-                .OrderByDescending(v => v, new VersionComparer()).ToList();
-        }
+        List<SemanticVersion> versions = versionList
+            .WhereIf(!includeNightly, v => !v.Contains("-preview"))
+            .WhereIf(!includeReleaseCandidates, v => !v.Contains("rc"))
+            .Select(SemanticVersion.Parse)
+            .OrderByDescending(v => v, new VersionComparer()).ToList();
 
-        return versions.Any() 
-            ? new LatestVersionInfo(versions.Max()) 
+        return versions.Any()
+            ? new LatestVersionInfo(versions.Max())
             : null;
 
     }
@@ -113,28 +96,57 @@ public class PackageVersionCheckerService : ITransientDependency
         {
             return await GetPackageVersionsFromAbpCommercialNuGetAsync(packageId);
         }
-        
+
         return await GetPackageVersionsFromNuGetOrgAsync(packageId) ?? new List<string>();
     }
 
+    public async Task<LatestVersionInfo> GetLatestStableVersionFromGithubAsync()
+    {
+        var latestStableVersionResult = await GetLatestStableVersionOrNullAsync();
+        if (latestStableVersionResult == null)
+        {
+            return null;
+        }
+
+        return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion)
+            ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message)
+            : null;
+    }
+    
+    public async Task<List<LatestStableVersionResult>> GetLatestStableVersionsAsync()
+    {
+        return await GetLatestStableVersionsInternalAsync();
+    }
+
+    private static ConcurrentDictionary<string, bool> CommercialPackagesCache { get; } = new ();
+
     private async Task<bool> IsCommercialPackageAsync(string packageId)
     {
+        if (CommercialPackagesCache.TryGetValue(packageId, out var isCommercial))
+        {
+            return isCommercial;
+        }
+
         if (CommercialPackages.IsCommercial(packageId))
         {
+            CommercialPackagesCache.TryAdd(packageId, true);
             return true;
         }
 
         await SetApiKeyResultAsync();
         if (_apiKeyResult?.ApiKey == null)
         {
+            CommercialPackagesCache.TryAdd(packageId, false);
             return false;
         }
 
         var searchUrl = CliUrls.GetNuGetPackageSearchUrl(_apiKeyResult.ApiKey, packageId);
-        return await HasAnyPackageAsync(searchUrl);
+        isCommercial = await HasAnyPackageAsync(searchUrl, packageId);
+        CommercialPackagesCache.TryAdd(packageId, isCommercial);
+        return isCommercial;
     }
 
-    private async Task<bool> HasAnyPackageAsync(string url)
+    private async Task<bool> HasAnyPackageAsync(string url, string packageId)
     {
         try
         {
@@ -149,8 +161,9 @@ public class PackageVersionCheckerService : ITransientDependency
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
-                
-                return JsonSerializer.Deserialize<NuGetSearchResultDto>(responseContent).TotalHits > 0;
+                var nugetSearchResult = JsonSerializer.Deserialize<NuGetSearchResultDto>(responseContent);
+
+                return nugetSearchResult.TotalHits > 0 && nugetSearchResult.Data.Any(package => package.Id.ToLowerInvariant() == packageId.ToLowerInvariant());
             }
         }
         catch (Exception)
@@ -192,9 +205,9 @@ public class PackageVersionCheckerService : ITransientDependency
                 if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     //the package doesn't exist...
-                    return null;
+                    return new List<string>();
                 }
-                
+
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 var responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -203,7 +216,7 @@ public class PackageVersionCheckerService : ITransientDependency
         }
         catch (Exception)
         {
-            return null;
+            return new List<string>();
         }
     }
 
@@ -218,7 +231,7 @@ public class PackageVersionCheckerService : ITransientDependency
         _apiKeyResult ??= await _apiKeyService.GetApiKeyOrNullAsync();
     }
 
-    private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
+    private async Task<List<LatestStableVersionResult>> GetLatestStableVersionsInternalAsync()
     {
         try
         {
@@ -234,26 +247,46 @@ public class PackageVersionCheckerService : ITransientDependency
 
                 var content = await responseMessage.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<List<LatestStableVersionResult>>(content);
-                
-                return result.FirstOrDefault(x => x.Type.ToLowerInvariant() == "stable");
+                return result.Where(q => q.Type.ToLowerInvariant() == "stable").OrderByDescending(q => SemanticVersion.Parse(q.Version)).ToList();
             }
         }
         catch
         {
-            return null;
+            return [];
         }
+    }
+
+    private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
+    {
+        var latestStableVersionsResult = await GetLatestStableVersionsInternalAsync();
+
+        return latestStableVersionsResult.Count <= 0 
+            ? null 
+            : latestStableVersionsResult.FirstOrDefault();
     }
 
     public class NuGetSearchResultDto
     {
-        [JsonProperty("totalHits")]
         public int TotalHits { get; set; }
+
+        public NuGetSearchResultPackagesDto[] Data { get; set; }
     }
-    
+
+    public class NuGetSearchResultPackagesDto
+    {
+        public string Id { get; set; }
+
+        public string Version { get; set; }
+    }
+
     public class NuGetVersionResultDto
     {
-        [JsonProperty("versions")]
         public List<string> Versions { get; set; }
+    }
+
+    public class LeptonXThemeInfo
+    {
+        public string Version { get; set; }
     }
 
     public class LatestStableVersionResult
@@ -263,7 +296,10 @@ public class PackageVersionCheckerService : ITransientDependency
         public DateTime? ReleaseDate { get; set; }
 
         public string Type { get; set; }
-        
+
         public string Message { get; set; }
+
+        [CanBeNull] 
+        public LeptonXThemeInfo LeptonX { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -10,22 +9,26 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Json;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperService<AbpDateRangePickerTagHelper>
 {
-    public AbpDateRangePickerTagHelperService(IJsonSerializer jsonSerializer, IHtmlGenerator generator,
-        HtmlEncoder encoder, IServiceProvider serviceProvider, IStringLocalizer<AbpUiResource> l,
-        IAbpTagHelperLocalizer tagHelperLocalizer) :
-        base(jsonSerializer, generator, encoder, serviceProvider, l,
-        tagHelperLocalizer)
+    public AbpDateRangePickerTagHelperService(
+        IJsonSerializer jsonSerializer, IHtmlGenerator generator,
+        HtmlEncoder encoder,
+        IServiceProvider serviceProvider,
+        IStringLocalizer<AbpUiResource> l,
+        IAbpTagHelperLocalizer tagHelperLocalizer,
+        IClock clock) :
+        base(jsonSerializer, generator, encoder, serviceProvider, l, tagHelperLocalizer, clock)
     {
     }
 
     protected override string TagName { get; set; } = "abp-date-range-picker";
 
-    protected override T GetAttributeAndModelExpression<T>(out ModelExpression modelExpression)
+    protected override T? GetAttributeAndModelExpression<T>(out ModelExpression? modelExpression) where T : class
     {
         modelExpression = new[] { TagHelper.AspForStart, TagHelper.AspForEnd }.FirstOrDefault(x => x?.ModelExplorer?.GetAttribute<T>() != null);
         return modelExpression?.ModelExplorer.GetAttribute<T>();
@@ -35,7 +38,7 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
     {
         if (TagHelper.AspForStart != null)
         {
-            var startDateAttributes = new TagHelperAttributeList { { "data-start-date", "true" }, { "type", "hidden" } };
+            var startDateAttributes = new TagHelperAttributeList { { "data-hidden-datepicker", "true" }, { "data-start-date", "true" }, { "type", "hidden" } };
             StartDateTagHelper = new InputTagHelper(Generator)
             {
                 ViewContext = TagHelper.ViewContext,
@@ -43,12 +46,29 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
                 InputTypeName = "hidden"
             };
 
+            if (Clock.SupportsMultipleTimezone)
+            {
+                if (TagHelper.AspForStart.Model is DateTime dateTime)
+                {
+                    StartDateTagHelper.Format = "{0:O}";
+                    StartDateTagHelper.Value = Clock.ConvertToUserTime(dateTime).ToString("O");
+                    startDateAttributes.Add("value", StartDateTagHelper.Value);
+                }
+
+                if (TagHelper.AspForStart.Model is DateTimeOffset dateTimeOffset)
+                {
+                    StartDateTagHelper.Format = "{0:O}";
+                    StartDateTagHelper.Value = Clock.ConvertToUserTime(dateTimeOffset).UtcDateTime.ToString("O");
+                    startDateAttributes.Add("value", StartDateTagHelper.Value);
+                }
+            }
+
             StartDateTagHelperOutput = await StartDateTagHelper.ProcessAndGetOutputAsync(startDateAttributes, context, "input");
         }
 
         if (TagHelper.AspForEnd != null)
         {
-            var endDateAttributes = new TagHelperAttributeList { { "data-end-date", "true" }, { "type", "hidden" } };
+            var endDateAttributes = new TagHelperAttributeList { { "data-hidden-datepicker", "true" }, { "data-end-date", "true" }, { "type", "hidden" } };
             EndDateTagHelper = new InputTagHelper(Generator)
             {
                 ViewContext = TagHelper.ViewContext,
@@ -56,25 +76,38 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
                 InputTypeName = "hidden"
             };
 
+            if (Clock.SupportsMultipleTimezone)
+            {
+                if (TagHelper.AspForEnd.Model is DateTime dateTime)
+                {
+                    EndDateTagHelper.Format = "{0:O}";
+                    EndDateTagHelper.Value = Clock.ConvertToUserTime(dateTime).ToString("O");
+                    endDateAttributes.Add("value", EndDateTagHelper.Value);
+                }
+
+                if (TagHelper.AspForEnd.Model is DateTimeOffset dateTimeOffset)
+                {
+                    EndDateTagHelper.Format = "{0:O}";
+                    EndDateTagHelper.Value = Clock.ConvertToUserTime(dateTimeOffset).UtcDateTime.ToString("O");
+                    endDateAttributes.Add("value", EndDateTagHelper.Value);
+                }
+            }
+
             EndDateTagHelperOutput = await EndDateTagHelper.ProcessAndGetOutputAsync(endDateAttributes, context, "input");
         }
 
         await base.ProcessAsync(context, output);
     }
 
-    protected override TagHelperOutput TagHelperOutput { get; set; }
+    protected override TagHelperOutput TagHelperOutput { get; set; } = default!;
 
-    [CanBeNull]
-    protected virtual InputTagHelper StartDateTagHelper { get; set; }
+    protected virtual InputTagHelper? StartDateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput StartDateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? StartDateTagHelperOutput { get; set; }
 
-    [CanBeNull]
-    protected virtual InputTagHelper EndDateTagHelper { get; set; }
+    protected virtual InputTagHelper? EndDateTagHelper { get; set; }
 
-    [CanBeNull]
-    protected virtual TagHelperOutput EndDateTagHelperOutput { get; set; }
+    protected virtual TagHelperOutput? EndDateTagHelperOutput { get; set; }
 
     protected override string GetPropertyName()
     {
@@ -83,23 +116,29 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
 
     protected override int GetOrder()
     {
-        return TagHelper.Order;
+        return TagHelper.AspForStart?.Metadata.Order ?? 0;
     }
 
     protected override void AddBaseTagAttributes(TagHelperAttributeList attributes)
     {
-        if (TagHelper.AspForStart != null && 
-            TagHelper.AspForStart.Model != null &&
+        if (TagHelper.AspForStart?.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspForStart.Metadata.ModelType, out var convertFuncStart))
         {
-            attributes.Add("data-start-date", convertFuncStart(TagHelper.AspForStart.Model));
+            var convert = convertFuncStart(TagHelper.AspForStart.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-start-date", convert);
+            }
         }
 
-        if (TagHelper.AspForEnd != null && 
-            TagHelper.AspForEnd.Model != null &&
+        if (TagHelper.AspForEnd?.Model != null &&
             SupportedInputTypes.TryGetValue(TagHelper.AspForEnd.Metadata.ModelType, out var convertFuncEnd))
         {
-            attributes.Add("data-end-date", convertFuncEnd(TagHelper.AspForEnd.Model));
+            var convert = convertFuncEnd(TagHelper.AspForEnd.Model);
+            if(!convert.IsNullOrWhiteSpace())
+            {
+                attributes.Add("data-end-date", convert);
+            }
         }
     }
 
@@ -108,25 +147,8 @@ public class AbpDateRangePickerTagHelperService : AbpDatePickerBaseTagHelperServ
         return StartDateTagHelperOutput?.Render(Encoder) + EndDateTagHelperOutput?.Render(Encoder);
     }
 
-    protected override ModelExpression GetModelExpression()
+    protected override ModelExpression? GetModelExpression()
     {
-        return TagHelper.AspForStart;
-    }
-
-    protected async override Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var validationHtml = string.Empty;
-
-        if (StartDateTagHelper != null)
-        {
-            validationHtml += await GetValidationAsHtmlByInputAsync(context, output, StartDateTagHelper);
-        }
-
-        if (EndDateTagHelper != null)
-        {
-            validationHtml += await GetValidationAsHtmlByInputAsync(context, output, EndDateTagHelper);
-        }
-
-        return validationHtml;
+        return TagHelper.AspForStart ?? TagHelper.AspForEnd;
     }
 }

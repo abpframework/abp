@@ -1,16 +1,15 @@
 ﻿@typeparam TEntityType
 @typeparam TResourceType
-@using Volo.Abp.ObjectExtending
 @using Volo.Abp.Data
 
 @{
     Entity.SetDefaultsForExtraProperties();
 
-    foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<TEntityType>())
+    foreach (var propertyInfo in Properties)
     {
         if (!propertyInfo.Name.EndsWith("_Text"))
         {
-            if (propertyInfo.Type.IsEnum)
+            if (propertyInfo.IsEnum())
             {
                 <SelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" LH="@LH" />
             }
@@ -25,6 +24,7 @@
                 __builder.AddAttribute(1, "PropertyInfo", propertyInfo);
                 __builder.AddAttribute(2, "Entity", Entity);
                 __builder.AddAttribute(3, "LH", LH);
+                __builder.AddAttribute(4, "ModalType", ModalType);
                 __builder.CloseComponent();
             }
         }

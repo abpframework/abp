@@ -24,13 +24,13 @@ public abstract class VirtualFileTemplateContributor_Tests<TStartupModule> : Abp
     public async Task Should_Get_Localized_Content_By_Culture()
     {
         (await VirtualFileTemplateContentContributor.GetOrNullAsync(
-                new TemplateContentContributorContext(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail),
+                new TemplateContentContributorContext(await TemplateDefinitionManager.GetAsync(TestTemplates.WelcomeEmail),
                     ServiceProvider,
                     "en")))
             .ShouldBe(WelcomeEmailEnglishContent);
 
         (await VirtualFileTemplateContentContributor.GetOrNullAsync(
-                new TemplateContentContributorContext(TemplateDefinitionManager.Get(TestTemplates.WelcomeEmail),
+                new TemplateContentContributorContext(await TemplateDefinitionManager.GetAsync(TestTemplates.WelcomeEmail),
                     ServiceProvider,
                     "tr")))
             .ShouldBe(WelcomeEmailTurkishContent);
@@ -41,7 +41,7 @@ public abstract class VirtualFileTemplateContributor_Tests<TStartupModule> : Abp
     {
         (await VirtualFileTemplateContentContributor.GetOrNullAsync(
                 new TemplateContentContributorContext(
-                    TemplateDefinitionManager.Get(TestTemplates.ForgotPasswordEmail),
+                    await TemplateDefinitionManager.GetAsync(TestTemplates.ForgotPasswordEmail),
                     ServiceProvider,
                     null)))
             .ShouldBe(ForgotPasswordEmailEnglishContent);

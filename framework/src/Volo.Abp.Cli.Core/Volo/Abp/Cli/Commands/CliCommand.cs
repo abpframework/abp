@@ -150,9 +150,9 @@ public class CliCommand : IConsoleCommand, ITransientDependency
         return sb.ToString();
     }
 
-    public string GetShortDescription()
+    public static string GetShortDescription()
     {
-        return "Update or remove ABP CLI. See https://docs.abp.io/en/abp/latest/CLI";
+        return "Update or remove ABP CLI. See https://abp.io/docs/latest/cli";
     }
 
     public static class Options

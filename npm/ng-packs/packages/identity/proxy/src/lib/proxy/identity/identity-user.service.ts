@@ -1,12 +1,14 @@
 import type { GetIdentityUsersInput, IdentityRoleDto, IdentityUserCreateDto, IdentityUserDto, IdentityUserUpdateDto, IdentityUserUpdateRolesDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IdentityUserService {
+  private restService = inject(RestService);
+
   apiName = 'AbpIdentity';
 
   create = (input: IdentityUserCreateDto) =>
@@ -52,13 +54,15 @@ export class IdentityUserService {
     },
     { apiName: this.apiName });
 
-  getList = (input: GetIdentityUsersInput) =>
+  getList = (input: GetIdentityUsersInput) => 
     this.restService.request<any, PagedResultDto<IdentityUserDto>>({
       method: 'GET',
       url: '/api/identity/users',
       params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
+  
+
 
   getRoles = (id: string) =>
     this.restService.request<any, ListResultDto<IdentityRoleDto>>({
@@ -82,6 +86,4 @@ export class IdentityUserService {
       body: input,
     },
     { apiName: this.apiName });
-
-  constructor(private restService: RestService) {}
 }

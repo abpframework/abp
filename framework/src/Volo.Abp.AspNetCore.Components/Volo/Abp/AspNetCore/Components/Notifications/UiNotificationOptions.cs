@@ -10,10 +10,10 @@ public class UiNotificationOptions
     /// <summary>
     /// Custom text for the Ok button.
     /// </summary>
-    public ILocalizableString OkButtonText { get; set; }
+    public ILocalizableString? OkButtonText { get; set; }
 
     /// <summary>
     /// Custom icon for the Ok button.
     /// </summary>
-    public object OkButtonIcon { get; set; }
+    public object? OkButtonIcon { get; set; }
 }

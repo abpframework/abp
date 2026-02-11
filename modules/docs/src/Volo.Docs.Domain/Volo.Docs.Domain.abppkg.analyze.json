@@ -1,6 +1,6 @@
 {
   "name": "Volo.Docs.Domain",
-  "hash": "5b3b84e3cbb3954883258e6ceb4c6f98",
+  "hash": "",
   "contents": [
     {
       "namespace": "Volo.Docs",
@@ -16,9 +16,19 @@
           "name": "AbpDddDomainModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.BlobStoring",
+          "namespace": "Volo.Abp.BlobStoring",
+          "name": "AbpBlobStoringModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.Caching",
+          "namespace": "Volo.Abp.Caching",
+          "name": "AbpCachingModule"
         }
       ],
       "implementingInterfaces": [
@@ -70,6 +80,45 @@
       "summary": null
     },
     {
+      "namespace": "Volo.Docs.Projects",
+      "primaryKeyType": null,
+      "properties": [
+        {
+          "type": "System.Guid",
+          "name": "ProjectId",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "FileName",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "Version",
+          "summary": null
+        },
+        {
+          "type": "System.String",
+          "name": "LanguageCode",
+          "summary": null
+        },
+        {
+          "type": "System.DateTime",
+          "name": "CreationTime",
+          "summary": null
+        },
+        {
+          "type": "System.Nullable`1[System.DateTime]",
+          "name": "LastModificationTime",
+          "summary": null
+        }
+      ],
+      "contentType": "entity",
+      "name": "ProjectPdfFile",
+      "summary": null
+    },
+    {
       "namespace": "Volo.Docs.Documents",
       "primaryKeyType": null,
       "properties": [
@@ -118,6 +167,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -157,6 +212,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
           "name": "SetName",
           "summary": null,
           "isAsync": false,
@@ -173,6 +229,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
           "name": "SetFormat",
           "summary": null,
           "isAsync": false,
@@ -189,6 +246,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
           "name": "SetNavigationDocumentName",
           "summary": null,
           "isAsync": false,
@@ -205,6 +263,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
           "name": "SetParametersDocumentName",
           "summary": null,
           "isAsync": false,
@@ -221,6 +280,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
           "name": "SetDefaultDocumentName",
           "summary": null,
           "isAsync": false,
@@ -234,9 +294,99 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "ProjectPdfFile",
+          "namespace": "Volo.Docs.Projects",
+          "name": "FindPdfFile",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "fileName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
+          "name": "AddPdfFile",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "fileName",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Docs.Projects",
+          "name": "RemovePdfFile",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "fileName",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "String",
+          "namespace": "Volo.Docs.Projects",
+          "name": "GetFullVersion",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            }
+          ]
         }
       ],
-      "collectionProperties": {},
+      "collectionProperties": {
+        "pdfFiles": {
+          "name": "ProjectPdfFile",
+          "namespace": "Volo.Docs.Projects",
+          "declaringAssemblyName": "Volo.Docs.Domain",
+          "fullName": "Volo.Docs.Projects.ProjectPdfFile"
+        }
+      },
       "navigationProperties": {},
       "namespace": "Volo.Docs.Projects",
       "primaryKeyType": "Guid",
@@ -290,6 +440,11 @@
           "type": "System.String",
           "name": "LatestVersionBranchName",
           "summary": null
+        },
+        {
+          "type": "System.Collections.Generic.List`1[Volo.Docs.Projects.ProjectPdfFile]",
+          "name": "PdfFiles",
+          "summary": null
         }
       ],
       "contentType": "aggregateRoot",
@@ -309,6 +464,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -350,6 +511,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents",
           "name": "AddContributor",
           "summary": null,
           "isAsync": false,
@@ -381,6 +543,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents",
           "name": "RemoveAllContributors",
           "summary": null,
           "isAsync": false,
@@ -391,6 +554,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents",
           "name": "RemoveContributor",
           "summary": null,
           "isAsync": false,
@@ -417,6 +581,7 @@
         },
         {
           "returnType": "DocumentContributor",
+          "namespace": "Volo.Docs.Documents",
           "name": "FindContributor",
           "summary": null,
           "isAsync": false,
@@ -550,6 +715,7 @@
       "methods": [
         {
           "returnType": "Document",
+          "namespace": "Volo.Docs.GitHub.Documents",
           "name": "GetDocumentAsync",
           "summary": null,
           "isAsync": true,
@@ -586,6 +752,7 @@
         },
         {
           "returnType": "List<VersionInfo>",
+          "namespace": "Volo.Docs.GitHub.Documents",
           "name": "GetVersionsAsync",
           "summary": null,
           "isAsync": true,
@@ -602,6 +769,7 @@
         },
         {
           "returnType": "DocumentResource",
+          "namespace": "Volo.Docs.GitHub.Documents",
           "name": "GetResource",
           "summary": null,
           "isAsync": true,
@@ -633,6 +801,7 @@
         },
         {
           "returnType": "LanguageConfig",
+          "namespace": "Volo.Docs.GitHub.Documents",
           "name": "GetLanguageListAsync",
           "summary": null,
           "isAsync": true,
@@ -688,6 +857,7 @@
       "methods": [
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Docs.GitHub.Documents",
           "name": "HasPatchSignificantChanges",
           "summary": null,
           "isAsync": false,
@@ -738,6 +908,7 @@
       "methods": [
         {
           "returnType": "Document",
+          "namespace": "Volo.Docs.FileSystem.Documents",
           "name": "GetDocumentAsync",
           "summary": null,
           "isAsync": true,
@@ -774,6 +945,7 @@
         },
         {
           "returnType": "List<VersionInfo>",
+          "namespace": "Volo.Docs.FileSystem.Documents",
           "name": "GetVersionsAsync",
           "summary": null,
           "isAsync": true,
@@ -790,6 +962,7 @@
         },
         {
           "returnType": "LanguageConfig",
+          "namespace": "Volo.Docs.FileSystem.Documents",
           "name": "GetLanguageListAsync",
           "summary": null,
           "isAsync": true,
@@ -811,6 +984,7 @@
         },
         {
           "returnType": "DocumentResource",
+          "namespace": "Volo.Docs.FileSystem.Documents",
           "name": "GetResource",
           "summary": null,
           "isAsync": true,
@@ -876,6 +1050,7 @@
       "methods": [
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "CreateIndexIfNeededAsync",
           "summary": null,
           "isAsync": true,
@@ -892,6 +1067,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "AddOrUpdateAsync",
           "summary": null,
           "isAsync": true,
@@ -913,6 +1089,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "AddOrUpdateManyAsync",
           "summary": null,
           "isAsync": true,
@@ -934,6 +1111,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -955,6 +1133,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "DeleteAllAsync",
           "summary": null,
           "isAsync": true,
@@ -971,6 +1150,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "DeleteAllByProjectIdAsync",
           "summary": null,
           "isAsync": true,
@@ -991,7 +1171,8 @@
           ]
         },
         {
-          "returnType": "List<EsDocument>",
+          "returnType": "EsDocumentResult",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "SearchAsync",
           "summary": null,
           "isAsync": true,
@@ -1038,6 +1219,7 @@
         },
         {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
           "name": "ValidateElasticSearchEnabled",
           "summary": null,
           "isAsync": false,
@@ -1116,6 +1298,7 @@
       "methods": [
         {
           "returnType": "List<Project>",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1139,6 +1322,11 @@
               "isOptional": false
             },
             {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
               "type": "CancellationToken",
               "name": "cancellationToken",
               "isOptional": true
@@ -1147,6 +1335,7 @@
         },
         {
           "returnType": "List<ProjectWithoutDetails>",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetListWithoutDetailsAsync",
           "summary": null,
           "isAsync": true,
@@ -1163,6 +1352,7 @@
         },
         {
           "returnType": "Project",
+          "namespace": "Volo.Docs.Projects",
           "name": "GetByShortNameAsync",
           "summary": null,
           "isAsync": true,
@@ -1184,6 +1374,7 @@
         },
         {
           "returnType": "Boolean",
+          "namespace": "Volo.Docs.Projects",
           "name": "ShortNameExistsAsync",
           "summary": null,
           "isAsync": true,
@@ -1241,6 +1432,7 @@
       "methods": [
         {
           "returnType": "List<DocumentWithoutDetails>",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetListWithoutDetailsByProjectId",
           "summary": null,
           "isAsync": true,
@@ -1262,6 +1454,7 @@
         },
         {
           "returnType": "List<DocumentInfo>",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetUniqueListDocumentInfoAsync",
           "summary": null,
           "isAsync": true,
@@ -1278,6 +1471,7 @@
         },
         {
           "returnType": "List<Document>",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetListByProjectId",
           "summary": null,
           "isAsync": true,
@@ -1298,7 +1492,89 @@
           ]
         },
         {
+          "returnType": "List<Document>",
+          "namespace": "Volo.Docs.Documents",
+          "name": "GetUniqueDocumentsByProjectIdPagedAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "skipCount",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "maxResultCount",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "namespace": "Volo.Docs.Documents",
+          "name": "GetUniqueDocumentCountByProjectIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
+          "returnType": "Void",
+          "namespace": "Volo.Docs.Documents",
+          "name": "UpdateProjectLastCachedTimeAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "DateTime",
+              "name": "cachedTime",
+              "isOptional": false
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "Document",
+          "namespace": "Volo.Docs.Documents",
           "name": "FindAsync",
           "summary": null,
           "isAsync": true,
@@ -1339,7 +1615,50 @@
           ]
         },
         {
+          "returnType": "Document",
+          "namespace": "Volo.Docs.Documents",
+          "name": "FindAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid",
+              "name": "projectId",
+              "isOptional": false
+            },
+            {
+              "type": "List<String>",
+              "name": "possibleNames",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "languageCode",
+              "isOptional": false
+            },
+            {
+              "type": "String",
+              "name": "version",
+              "isOptional": false
+            },
+            {
+              "type": "Boolean",
+              "name": "includeDetails",
+              "isOptional": true
+            },
+            {
+              "type": "CancellationToken",
+              "name": "cancellationToken",
+              "isOptional": true
+            }
+          ]
+        },
+        {
           "returnType": "Void",
+          "namespace": "Volo.Docs.Documents",
           "name": "DeleteAsync",
           "summary": null,
           "isAsync": true,
@@ -1381,6 +1700,7 @@
         },
         {
           "returnType": "List<Document>",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetListAsync",
           "summary": null,
           "isAsync": true,
@@ -1412,6 +1732,7 @@
         },
         {
           "returnType": "List<DocumentWithoutContent>",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetAllAsync",
           "summary": null,
           "isAsync": true,
@@ -1513,6 +1834,7 @@
         },
         {
           "returnType": "Int64",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetAllCountAsync",
           "summary": null,
           "isAsync": true,
@@ -1614,6 +1936,7 @@
         },
         {
           "returnType": "Document",
+          "namespace": "Volo.Docs.Documents",
           "name": "GetAsync",
           "summary": null,
           "isAsync": true,
@@ -1636,6 +1959,83 @@
       ],
       "contentType": "repositoryInterface",
       "name": "IDocumentRepository",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Docs.Documents.FullSearch.Elastic",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Document",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain",
+            "fullName": "Volo.Docs.Documents.Document"
+          },
+          "name": "EntityCreatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityCreatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "Document",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain",
+            "fullName": "Volo.Docs.Documents.Document"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "Document",
+            "namespace": "Volo.Docs.Documents",
+            "declaringAssemblyName": "Volo.Docs.Domain",
+            "fullName": "Volo.Docs.Documents.Document"
+          },
+          "name": "EntityDeletedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityDeletedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityCreatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityCreatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "ILocalEventHandler<EntityDeletedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityDeletedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "DocumentChangedEventHandler",
       "summary": null
     }
   ]

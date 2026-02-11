@@ -3,3 +3,4 @@ export * from './loading.directive';
 export * from './ngx-datatable-default.directive';
 export * from './ngx-datatable-list.directive';
 export * from './visible.directive';
+export * from './disabled.directive';

@@ -16,9 +16,9 @@ public static class AbpDictionaryExtensions
     /// <param name="key">Key</param>
     /// <param name="value">Value of the key (or default value if key not exists)</param>
     /// <returns>True if key does exists in the dictionary</returns>
-    internal static bool TryGetValue<T>(this IDictionary<string, object> dictionary, string key, out T value)
+    internal static bool TryGetValue<T>(this IDictionary<string, object> dictionary, string key, out T? value)
     {
-        object valueObj;
+        object? valueObj;
         if (dictionary.TryGetValue(key, out valueObj) && valueObj is T)
         {
             value = (T)valueObj;
@@ -37,9 +37,9 @@ public static class AbpDictionaryExtensions
     /// <typeparam name="TKey">Type of the key</typeparam>
     /// <typeparam name="TValue">Type of the value</typeparam>
     /// <returns>Value if found, default if can not found.</returns>
-    public static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+    public static TValue? GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key) where TKey : notnull
     {
-        TValue obj;
+        TValue? obj;
         return dictionary.TryGetValue(key, out obj) ? obj : default;
     }
 
@@ -51,7 +51,7 @@ public static class AbpDictionaryExtensions
     /// <typeparam name="TKey">Type of the key</typeparam>
     /// <typeparam name="TValue">Type of the value</typeparam>
     /// <returns>Value if found, default if can not found.</returns>
-    public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+    public static TValue? GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
     {
         return dictionary.TryGetValue(key, out var obj) ? obj : default;
     }
@@ -64,7 +64,7 @@ public static class AbpDictionaryExtensions
     /// <typeparam name="TKey">Type of the key</typeparam>
     /// <typeparam name="TValue">Type of the value</typeparam>
     /// <returns>Value if found, default if can not found.</returns>
-    public static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
+    public static TValue? GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
     {
         return dictionary.TryGetValue(key, out var obj) ? obj : default;
     }
@@ -77,7 +77,7 @@ public static class AbpDictionaryExtensions
     /// <typeparam name="TKey">Type of the key</typeparam>
     /// <typeparam name="TValue">Type of the value</typeparam>
     /// <returns>Value if found, default if can not found.</returns>
-    public static TValue GetOrDefault<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
+    public static TValue? GetOrDefault<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key) where TKey : notnull
     {
         return dictionary.TryGetValue(key, out var obj) ? obj : default;
     }
@@ -93,7 +93,7 @@ public static class AbpDictionaryExtensions
     /// <returns>Value if found, default if can not found.</returns>
     public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> factory)
     {
-        TValue obj;
+        TValue? obj;
         if (dictionary.TryGetValue(key, out obj))
         {
             return obj;
@@ -125,20 +125,20 @@ public static class AbpDictionaryExtensions
     /// <typeparam name="TKey">Type of the key</typeparam>
     /// <typeparam name="TValue">Type of the value</typeparam>
     /// <returns>Value if found, default if can not found.</returns>
-    public static TValue GetOrAdd<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> factory)
+    public static TValue GetOrAdd<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> factory) where TKey : notnull
     {
         return dictionary.GetOrAdd(key, k => factory());
     }
 
     /// <summary>
-    /// Converts a <string,object> dictionary to dynamic object so added and removed at run
+    /// Converts a &lt;string,object&gt; dictionary to dynamic object so added and removed at run
     /// </summary>
     /// <param name="dictionary">The collection object</param>
     /// <returns>If value is correct, return ExpandoObject that represents an object</returns>
     public static dynamic ConvertToDynamicObject(this Dictionary<string, object> dictionary)
     {
         var expandoObject = new ExpandoObject();
-        var expendObjectCollection = (ICollection<KeyValuePair<string, object>>)expandoObject;
+        var expendObjectCollection = (ICollection<KeyValuePair<string, object>>)expandoObject!;
 
         foreach (var keyValuePair in dictionary)
         {

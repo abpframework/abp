@@ -15,7 +15,7 @@ public class Utf8JsonDistributedCacheSerializer : IDistributedCacheSerializer, I
 
     public byte[] Serialize<T>(T obj)
     {
-        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(obj));
+        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(obj!));
     }
 
     public T Deserialize<T>(byte[] bytes)

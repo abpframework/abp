@@ -13,6 +13,7 @@
             <DateEdit TValue="DateTime?"
                       InputMode="@(PropertyInfo.IsDate() ? DateInputMode.Date : DateInputMode.DateTime)"
                       Pattern="@PropertyInfo.GetDateEditInputFormatOrNull()"
+                      Disabled="IsReadonlyField"
                       @bind-Date="@Value">
                 <Feedback>
                     <ValidationError/>

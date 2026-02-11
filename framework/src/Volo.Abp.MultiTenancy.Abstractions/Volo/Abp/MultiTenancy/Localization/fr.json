@@ -1,0 +1,9 @@
+{
+  "culture": "fr",
+  "texts": {
+    "TenantNotFoundMessage": "Locataire introuvable !",
+    "TenantNotFoundDetails": "Il n&#39;existe aucun locataire portant l&#39;ID ou le nom du locataire : {0}",
+    "TenantNotActiveMessage": "Le locataire n&#39;est pas actif !",
+    "TenantNotActiveDetails": "Le locataire n&#39;est pas actif avec l&#39;ID ou le nom du locataire : {0}"
+  }
+}

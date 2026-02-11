@@ -18,7 +18,8 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
 
         var usersPermission = identityGroup.AddPermission(IdentityPermissions.Users.Default, L("Permission:UserManagement"));
         usersPermission.AddChild(IdentityPermissions.Users.Create, L("Permission:Create"));
-        usersPermission.AddChild(IdentityPermissions.Users.Update, L("Permission:Edit"));
+        var editPermission = usersPermission.AddChild(IdentityPermissions.Users.Update, L("Permission:Edit"));
+        editPermission.AddChild(IdentityPermissions.Users.ManageRoles, L("Permission:ManageRoles"));
         usersPermission.AddChild(IdentityPermissions.Users.Delete, L("Permission:Delete"));
         usersPermission.AddChild(IdentityPermissions.Users.ManagePermissions, L("Permission:ChangePermissions"));
 

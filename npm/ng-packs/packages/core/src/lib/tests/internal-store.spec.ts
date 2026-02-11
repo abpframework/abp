@@ -124,18 +124,20 @@ describe('Internal Store', () => {
   });
 
   describe('sliceUpdate', () => {
-    it('should return slice of update$ based on selector', done => {
+    it('should return slice of update$ based on selector', () => {
       const store = new InternalStore(mockInitialState);
 
       const onQux$ = store.sliceUpdate(state => state.foo.bar.qux);
 
-      onQux$.pipe(take(1)).subscribe(value => {
-        expect(value).toEqual(deepPatch2.foo.bar.qux);
-        done();
-      });
+      return new Promise<void>(resolve => {
+        onQux$.pipe(take(1)).subscribe(value => {
+          expect(value).toEqual(deepPatch2.foo.bar.qux);
+          resolve();
+        });
 
-      store.deepPatch(deepPatch1);
-      store.deepPatch(deepPatch2);
+        store.deepPatch(deepPatch1);
+        store.deepPatch(deepPatch2);
+      });
     });
   });
 

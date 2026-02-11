@@ -78,7 +78,7 @@ public interface IBlobContainer
     /// <returns>
     /// A <see cref="Stream"/> to read the blob data.
     /// </returns>
-    Task<Stream> GetOrNullAsync(
+    Task<Stream?> GetOrNullAsync(
         string name,
         CancellationToken cancellationToken = default
     );

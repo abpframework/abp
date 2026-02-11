@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Authorization.Localization;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Authorization.Permissions.Resources;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security;
 using Volo.Abp.VirtualFileSystem;
 
@@ -16,7 +18,8 @@ namespace Volo.Abp.Authorization;
 [DependsOn(
     typeof(AbpAuthorizationAbstractionsModule),
     typeof(AbpSecurityModule),
-    typeof(AbpLocalizationModule)
+    typeof(AbpLocalizationModule),
+    typeof(AbpMultiTenancyModule)
 )]
 public class AbpAuthorizationModule : AbpModule
 {
@@ -30,6 +33,7 @@ public class AbpAuthorizationModule : AbpModule
     {
         context.Services.AddAuthorizationCore();
 
+        context.Services.AddKeyedObjectResourcePermissionAuthorization();
         context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         context.Services.AddSingleton<IAuthorizationHandler, PermissionsRequirementHandler>();
 
@@ -40,6 +44,10 @@ public class AbpAuthorizationModule : AbpModule
             options.ValueProviders.Add<UserPermissionValueProvider>();
             options.ValueProviders.Add<RolePermissionValueProvider>();
             options.ValueProviders.Add<ClientPermissionValueProvider>();
+
+            options.ResourceValueProviders.Add<UserResourcePermissionValueProvider>();
+            options.ResourceValueProviders.Add<RoleResourcePermissionValueProvider>();
+            options.ResourceValueProviders.Add<ClientResourcePermissionValueProvider>();
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

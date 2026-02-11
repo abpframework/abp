@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.Http.Modeling;
 
 [Serializable]
 public class ControllerApiDescriptionModel
 {
-    public string ControllerName { get; set; }
+    public string ControllerName { get; set; } = default!;
 
-    public string ControllerGroupName { get; set; }
+    public string? ControllerGroupName { get; set; }
 
     public bool IsRemoteService { get; set; }
 
     public bool IsIntegrationService { get; set; }
 
-    public string ApiVersion { get; set; }
+    public string? ApiVersion { get; set; }
 
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
 
-    public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; }
+    public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; } = default!;
 
-    public Dictionary<string, ActionApiDescriptionModel> Actions { get; set; }
+    public Dictionary<string, ActionApiDescriptionModel> Actions { get; set; } = default!;
 
     public ControllerApiDescriptionModel()
     {
 
     }
 
-    public static ControllerApiDescriptionModel Create(string controllerName, string groupName, bool isRemoteService, bool isIntegrationService, string apiVersion, Type type, [CanBeNull] HashSet<Type> ignoredInterfaces = null)
+    public static ControllerApiDescriptionModel Create(string controllerName, string? groupName, bool isRemoteService, bool isIntegrationService, string? apiVersion, Type type, HashSet<Type>? ignoredInterfaces = null)
     {
         return new ControllerApiDescriptionModel
         {
@@ -38,11 +37,11 @@ public class ControllerApiDescriptionModel
             IsRemoteService = isRemoteService,
             IsIntegrationService = isIntegrationService, //IntegrationServiceAttribute.IsDefinedOrInherited(type),
             ApiVersion = apiVersion,
-            Type = type.FullName,
+            Type = type.FullName!,
             Actions = new Dictionary<string, ActionApiDescriptionModel>(),
             Interfaces = type
                 .GetInterfaces()
-                .WhereIf(ignoredInterfaces != null, i => !i.IsGenericType && !ignoredInterfaces.Contains(i))
+                .WhereIf(ignoredInterfaces != null, i => !i.IsGenericType && !ignoredInterfaces!.Contains(i))
                 .Select(ControllerInterfaceApiDescriptionModel.Create)
                 .ToList()
         };
@@ -60,7 +59,7 @@ public class ControllerApiDescriptionModel
         return Actions[uniqueName] = action;
     }
 
-    public ControllerApiDescriptionModel CreateSubModel(string[] actions)
+    public ControllerApiDescriptionModel CreateSubModel(string[]? actions)
     {
         var subModel = new ControllerApiDescriptionModel
         {

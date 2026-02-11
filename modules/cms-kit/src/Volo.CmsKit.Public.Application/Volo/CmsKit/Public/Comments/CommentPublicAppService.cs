@@ -12,6 +12,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
@@ -32,27 +33,35 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     protected ICmsUserLookupService CmsUserLookupService { get; }
     public IDistributedEventBus DistributedEventBus { get; }
     protected CommentManager CommentManager { get; }
-    
     protected CmsKitCommentOptions CmsCommentOptions { get; }
+
+    private readonly ISettingManager SettingManager;
 
     public CommentPublicAppService(
         ICommentRepository commentRepository,
         ICmsUserLookupService cmsUserLookupService,
         IDistributedEventBus distributedEventBus,
         CommentManager commentManager,
-        IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions)
+        IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions,
+        ISettingManager settingManager
+        )
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
         DistributedEventBus = distributedEventBus;
         CommentManager = commentManager;
         CmsCommentOptions = cmsCommentOptions.Value;
+        SettingManager = settingManager;
     }
 
     public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
     {
-        var commentsWithAuthor = await CommentRepository
-            .GetListWithAuthorsAsync(entityType, entityId);
+        var isRequireApprovementEnabled = bool.Parse(await SettingManager.GetOrNullGlobalAsync(CmsKitSettings.Comments.RequireApprovement));
+        
+        var commentsWithAuthor = isRequireApprovementEnabled
+            ? await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveState.Approved)
+            : await CommentRepository.GetListWithAuthorsAsync(entityType, entityId, CommentApproveState.Approved | CommentApproveState.Waiting);
+
 
         return new ListResultDto<CommentWithDetailsDto>(
             ConvertCommentsToNestedStructure(commentsWithAuthor)
@@ -63,14 +72,15 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
         CheckExternalUrls(entityType, input.Text);
-        
-        var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
         if (input.RepliedCommentId.HasValue)
         {
             await CommentRepository.GetAsync(input.RepliedCommentId.Value);
         }
 
+        await CheckIdempotencyTokenUniquenessAsync(input.IdempotencyToken);
+
+        var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
         var comment = await CommentRepository.InsertAsync(
             await CommentManager.CreateAsync(
                 user,
@@ -191,5 +201,15 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
     {
         return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
+    }
+
+    private async Task CheckIdempotencyTokenUniquenessAsync(string idempotencyToken) 
+    {
+        if(!await CommentRepository.ExistsAsync(idempotencyToken))
+        {
+            return;
+        }
+
+        throw new UserFriendlyException(L["DuplicateCommentAttemptMessage"]);
     }
 }

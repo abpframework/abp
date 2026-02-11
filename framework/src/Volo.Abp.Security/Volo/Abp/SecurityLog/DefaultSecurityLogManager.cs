@@ -19,7 +19,7 @@ public class DefaultSecurityLogManager : ISecurityLogManager, ITransientDependen
         SecurityLogOptions = securityLogOptions.Value;
     }
 
-    public async Task SaveAsync(Action<SecurityLogInfo> saveAction = null)
+    public async Task SaveAsync(Action<SecurityLogInfo>? saveAction = null)
     {
         if (!SecurityLogOptions.IsEnabled)
         {

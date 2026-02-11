@@ -1,5 +1,9 @@
 {
   "culture": "ro-RO",
   "texts": {
+    "Buy": "Cumpără",
+    "SeeBookDetails": "Vedeți detaliile cărții",
+    "MasteringAbpFrameworkEBookDescription": "Această carte vă va ajuta să obțineți o înțelegere completă a cadrului și a tehnicilor moderne de dezvoltare a aplicațiilor web.",
+    "Feedback": "Părere"
   }
 }

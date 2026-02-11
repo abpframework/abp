@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +14,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using StackExchange.Redis;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -27,7 +28,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
@@ -37,6 +38,7 @@ using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
@@ -90,11 +92,12 @@ public class MyProjectNameWebModule : AbpModule
         ConfigureDistributedLocking(context, configuration);
         ConfigureUrls(configuration);
         ConfigureAuthentication(context, configuration);
-        ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureNavigationServices(configuration);
         ConfigureMultiTenancy();
         ConfigureSwaggerServices(context.Services);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameWebModule>();
     }
 
     private void ConfigureBundles()
@@ -145,11 +148,12 @@ public class MyProjectNameWebModule : AbpModule
             .AddCookie("Cookies", options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                options.CheckTokenExpiration();
             })
             .AddAbpOpenIdConnect("oidc", options =>
             {
                 options.Authority = configuration["AuthServer:Authority"];
-                options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
+                options.RequireHttpsMetadata = configuration.GetValue<bool>("AuthServer:RequireHttpsMetadata");
                 options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                 options.ClientId = configuration["AuthServer:ClientId"];
@@ -164,13 +168,53 @@ public class MyProjectNameWebModule : AbpModule
                 options.Scope.Add("phone");
                 options.Scope.Add("MyProjectName");
             });
-    }
+            /*
+            * This configuration is used when the AuthServer is running on the internal network such as docker or k8s.
+            * Configuring the redirecting URLs for internal network and the web
+            * The login and the logout URLs are configured to redirect to the AuthServer real DNS for browser.
+            * The token acquired and validated from the the internal network AuthServer URL.
+            */
+            if (configuration.GetValue<bool>("AuthServer:IsContainerized"))
+            {
+                context.Services.Configure<OpenIdConnectOptions>("oidc", options =>
+                {
+                    options.TokenValidationParameters.ValidIssuers = new[]
+                    {
+                        configuration["AuthServer:MetaAddress"]!.EnsureEndsWith('/'),
+                        configuration["AuthServer:Authority"]!.EnsureEndsWith('/')
+                    };
 
-    private void ConfigureAutoMapper()
-    {
-        Configure<AbpAutoMapperOptions>(options =>
+                    options.MetadataAddress = configuration["AuthServer:MetaAddress"]!.EnsureEndsWith('/') +
+                                            ".well-known/openid-configuration";
+
+                    var previousOnRedirectToIdentityProvider = options.Events.OnRedirectToIdentityProvider;
+                    options.Events.OnRedirectToIdentityProvider = async ctx =>
+                    {
+                        // Intercept the redirection so the browser navigates to the right URL in your host
+                        ctx.ProtocolMessage.IssuerAddress = configuration["AuthServer:Authority"]!.EnsureEndsWith('/') + "connect/authorize";
+
+                        if (previousOnRedirectToIdentityProvider != null)
+                        {
+                            await previousOnRedirectToIdentityProvider(ctx);
+                        }
+                    };
+                    var previousOnRedirectToIdentityProviderForSignOut = options.Events.OnRedirectToIdentityProviderForSignOut;
+                    options.Events.OnRedirectToIdentityProviderForSignOut = async ctx =>
+                    {
+                        // Intercept the redirection for signout so the browser navigates to the right URL in your host
+                        ctx.ProtocolMessage.IssuerAddress = configuration["AuthServer:Authority"]!.EnsureEndsWith('/') + "connect/logout";
+
+                        if (previousOnRedirectToIdentityProviderForSignOut != null)
+                        {
+                            await previousOnRedirectToIdentityProviderForSignOut(ctx);
+                        }
+                    };
+                });
+            }
+
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
-            options.AddMaps<MyProjectNameWebModule>();
+            options.IsDynamicClaimsEnabled = true;
         });
     }
 
@@ -228,19 +272,18 @@ public class MyProjectNameWebModule : AbpModule
         var dataProtectionBuilder = context.Services.AddDataProtection().SetApplicationName("MyProjectName");
         if (!hostingEnvironment.IsDevelopment())
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
             dataProtectionBuilder.PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
     }
-    
+
     private void ConfigureDistributedLocking(
         ServiceConfigurationContext context,
         IConfiguration configuration)
     {
         context.Services.AddSingleton<IDistributedLockProvider>(sp =>
         {
-            var connection = ConnectionMultiplexer
-                .Connect(configuration["Redis:Configuration"]);
+            var connection = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
             return new RedisDistributedSynchronizationProvider(connection.GetDatabase());
         });
     }
@@ -263,7 +306,7 @@ public class MyProjectNameWebModule : AbpModule
         }
 
         app.UseCorrelationId();
-        app.UseStaticFiles();
+        app.MapAbpStaticAssets();
         app.UseRouting();
         app.UseAuthentication();
 
@@ -272,6 +315,7 @@ public class MyProjectNameWebModule : AbpModule
             app.UseMultiTenancy();
         }
 
+        app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

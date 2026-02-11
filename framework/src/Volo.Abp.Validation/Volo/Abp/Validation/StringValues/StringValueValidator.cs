@@ -22,7 +22,7 @@ public class StringValueValidator : ValueValidatorBase
         set => this["MaxLength"] = value;
     }
 
-    public string RegularExpression {
+    public string? RegularExpression {
         get => this["RegularExpression"] as string;
         set => this["RegularExpression"] = value;
     }
@@ -32,7 +32,7 @@ public class StringValueValidator : ValueValidatorBase
 
     }
 
-    public StringValueValidator(int minLength = 0, int maxLength = 0, string regularExpression = null, bool allowNull = false)
+    public StringValueValidator(int minLength = 0, int maxLength = 0, string? regularExpression = null, bool allowNull = false)
     {
         MinLength = minLength;
         MaxLength = maxLength;
@@ -40,19 +40,17 @@ public class StringValueValidator : ValueValidatorBase
         AllowNull = allowNull;
     }
 
-    public override bool IsValid(object value)
+    public override bool IsValid(object? value)
     {
         if (value == null)
         {
             return AllowNull;
         }
 
-        if (!(value is string))
+        if (!(value is string strValue))
         {
             return false;
         }
-
-        var strValue = value as string;
 
         if (MinLength > 0 && strValue.Length < MinLength)
         {
@@ -66,7 +64,7 @@ public class StringValueValidator : ValueValidatorBase
 
         if (!RegularExpression.IsNullOrEmpty())
         {
-            return Regex.IsMatch(strValue, RegularExpression);
+            return Regex.IsMatch(strValue, RegularExpression!);
         }
 
         return true;

@@ -1,17 +1,4 @@
 {
-  "npmScope": "abp",
-  "affected": {
-    "defaultBase": "dev"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "parallel": 3
-      }
-    }
-  },
   "workspaceLayout": {
     "libsDir": "packages",
     "appsDir": ""
@@ -21,7 +8,22 @@
   },
   "defaultProject": "dev-app",
   "generators": {
-    "@nrwl/angular": {
+    "@nx/angular:application": {
+      "e2eTestRunner": "cypress",
+      "linter": "eslint",
+      "style": "scss",
+      "unitTestRunner": "jest"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "strict": false
+    },
+    "@nx/angular:component": {
+      "style": "scss",
+      "type": "component"
+    },
+    "@nx/angular": {
       "application": {
         "linter": "eslint"
       },
@@ -30,37 +32,96 @@
       },
       "storybook-configuration": {
         "linter": "eslint"
+      },
+      "directive": {
+        "type": "directive"
+      },
+      "service": {
+        "type": "service"
+      },
+      "scam": {
+        "type": "component"
+      },
+      "scam-directive": {
+        "type": "directive"
+      },
+      "guard": {
+        "typeSeparator": "."
+      },
+      "interceptor": {
+        "typeSeparator": "."
+      },
+      "module": {
+        "typeSeparator": "."
+      },
+      "pipe": {
+        "typeSeparator": "."
+      },
+      "resolver": {
+        "typeSeparator": "."
       }
     },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
+    "@schematics/angular:component": {
+      "type": "component"
     },
-    "@nrwl/angular:library": {
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "strict": false
+    "@schematics/angular:directive": {
+      "type": "directive"
     },
-    "@nrwl/angular:component": {
-      "style": "scss"
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   },
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "cache": true
     },
     "e2e": {
+      "inputs": ["default", "^production"],
+      "cache": true
+    },
+    "@nx/jest:jest": {
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+      "cache": true,
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "@nx/eslint:lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "cache": true
+    },
+    "@angular/build:application": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "@nx/vitest:test": {
+      "cache": true,
       "inputs": ["default", "^production"]
-    },
-    "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
-    },
-    "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
     }
   },
   "namedInputs": {
@@ -73,5 +134,6 @@
       "!{projectRoot}/jest.config.[jt]s",
       "!{projectRoot}/.eslintrc.json"
     ]
-  }
+  },
+  "parallel": 3
 }

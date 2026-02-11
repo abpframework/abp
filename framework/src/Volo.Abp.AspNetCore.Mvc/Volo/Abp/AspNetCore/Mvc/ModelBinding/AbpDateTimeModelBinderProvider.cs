@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding;
 
 public class AbpDateTimeModelBinderProvider : IModelBinderProvider
 {
-    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         var modelType = context.Metadata.UnderlyingOrModelType;
         if (modelType == typeof(DateTime))
@@ -31,7 +31,7 @@ public class AbpDateTimeModelBinderProvider : IModelBinderProvider
                     context.Metadata.ContainerType.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
 
                 var dateNormalizationDisabledForProperty = context.Metadata.ContainerType
-                    .GetProperty(context.Metadata.PropertyName)
+                    .GetProperty(context.Metadata.PropertyName!)
                     ?.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true);
 
                 if (!dateNormalizationDisabledForClass &&
@@ -50,6 +50,6 @@ public class AbpDateTimeModelBinderProvider : IModelBinderProvider
     {
         const DateTimeStyles supportedStyles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AdjustToUniversal;
         var dateTimeModelBinder = new DateTimeModelBinder(supportedStyles, context.Services.GetRequiredService<ILoggerFactory>());
-        return new AbpDateTimeModelBinder(context.Services.GetRequiredService<IClock>(), dateTimeModelBinder);
+        return ActivatorUtilities.CreateInstance<AbpDateTimeModelBinder>(context.Services, dateTimeModelBinder);
     }
 }
