@@ -461,12 +461,12 @@
             </tr>
             <tr>
                 <td>.NET MAUI QR Login</td>
-                <td><i class="fa fa-check text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
                 <td>.NET MAUI Dark mode</td>
-                <td><i class="fa fa-check text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
