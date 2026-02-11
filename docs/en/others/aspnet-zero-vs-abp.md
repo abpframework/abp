@@ -384,7 +384,7 @@
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
-                <td>Desktop tool for monitoring, orchestrating project</td>
+                <td>Desktop tool for monitoring and orchestrating projects</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
