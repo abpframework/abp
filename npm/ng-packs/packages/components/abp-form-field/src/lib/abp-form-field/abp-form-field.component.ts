@@ -16,6 +16,7 @@ export const ABP_FORM_FIELD = new InjectionToken<AbpFormFieldComponent>('AbpForm
 @Component({
   selector: 'abp-form-field',
   templateUrl: './abp-form-field.component.html',
+  styleUrls: ['./abp-form-field.component.scss'],
   imports: [CommonModule],
   exportAs: 'abpFormField',
   providers: [{ provide: ABP_FORM_FIELD, useExisting: AbpFormFieldComponent }],

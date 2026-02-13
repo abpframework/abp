@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 0.75rem;
+}
+
+.form-label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--bs-danger, #dc3545);
+}
+
+// Disabled state
+:host-context([disabled]) {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+// Required field indicator
+.form-label.required::after {
+  content: ' *';
+  color: var(--bs-danger, #dc3545);
+}
