@@ -11,8 +11,8 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Working with Kubernetes",
-    "Path": "studio/kubernetes"
+    "Name": "Model Context Protocol (MCP)",
+    "Path": "studio/model-context-protocol"
   }
 }
 ````

@@ -73,6 +73,7 @@ Here is the list of all available commands before explaining their details:
 * **[`clear-download-cache`](../cli#clear-download-cache)**: Clears the templates download cache.
 * **[`check-extensions`](../cli#check-extensions)**: Checks the latest version of the ABP CLI extensions.
 * **[`install-old-cli`](../cli#install-old-cli)**: Installs old ABP CLI.
+* **[`mcp-studio`](../cli#mcp-studio)**: Starts ABP Studio MCP bridge for AI tools (requires ABP Studio running).
 * **[`generate-razor-page`](../cli#generate-razor-page)**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 
 ### help
@@ -980,6 +981,35 @@ Usage:
 ```bash
 abp install-old-cli [options]
 ```
+
+### mcp-studio
+
+Starts an MCP stdio bridge for AI tools (Cursor, Claude Desktop, VS Code, etc.) that connects to the local ABP Studio instance. ABP Studio must be running for this command to work.
+
+> You do not need to run this command manually. It is invoked automatically by your AI tool once you add the MCP configuration to your IDE. See the [Configuration](#configuration) examples below.
+
+> This command connects to the **local ABP Studio** instance. It is separate from the `abp mcp` command, which connects to the ABP.IO cloud MCP service and requires an active license.
+
+Usage:
+
+```bash
+abp mcp-studio [options]
+```
+
+Options:
+
+* `--endpoint` or `-e`: Overrides ABP Studio MCP endpoint. Default value is `http://localhost:38280/mcp/`.
+
+Example:
+
+```bash
+abp mcp-studio
+abp mcp-studio --endpoint http://localhost:38280/mcp/
+```
+
+For detailed configuration examples (Cursor, Claude Desktop, VS Code) and the full list of available MCP tools, see the [Model Context Protocol (MCP)](../studio/model-context-protocol.md) documentation.
+
+> You can also run `abp help mcp-studio` to see available options and example IDE configuration snippets directly in your terminal.
 
 ### generate-razor-page
 

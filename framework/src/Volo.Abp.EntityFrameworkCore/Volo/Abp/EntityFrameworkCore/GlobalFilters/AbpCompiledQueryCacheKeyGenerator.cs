@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore.GlobalFilters;
 
@@ -23,7 +25,21 @@ public class AbpCompiledQueryCacheKeyGenerator : ICompiledQueryCacheKeyGenerator
         var cacheKey = InnerCompiledQueryCacheKeyGenerator.GenerateCacheKey(query, async);
         if (CurrentContext.Context is IAbpEfCoreDbFunctionContext abpEfCoreDbFunctionContext)
         {
-            return new AbpCompiledQueryCacheKey(cacheKey, abpEfCoreDbFunctionContext.GetCompiledQueryCacheKey());
+            var abpCacheKey = abpEfCoreDbFunctionContext.GetCompiledQueryCacheKey();
+            var cacheKeyProviders = abpEfCoreDbFunctionContext.LazyServiceProvider.GetService<IEnumerable<IAbpEfCoreCompiledQueryCacheKeyProvider>>();
+            if (cacheKeyProviders != null)
+            {
+                foreach (var provider in cacheKeyProviders)
+                {
+                    var key = provider.GetCompiledQueryCacheKey();
+                    if (!key.IsNullOrWhiteSpace())
+                    {
+                        abpCacheKey += $":{key}";
+                    }
+                }
+            }
+
+            return new AbpCompiledQueryCacheKey(cacheKey, abpCacheKey);
         }
 
         return cacheKey;

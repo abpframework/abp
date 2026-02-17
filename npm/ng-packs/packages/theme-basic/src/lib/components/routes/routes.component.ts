@@ -10,9 +10,9 @@ import {
   Component,
   ElementRef,
   inject,
-  Input,
   Renderer2,
   TrackByFunction,
+  input,
   viewChildren
 } from '@angular/core';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
@@ -38,7 +38,7 @@ export class RoutesComponent {
   public readonly routesService = inject(RoutesService);
   protected renderer = inject(Renderer2);
 
-  @Input() smallScreen?: boolean;
+  readonly smallScreen = input<boolean>(undefined);
 
   readonly childrenContainers = viewChildren<ElementRef<HTMLDivElement>>('childrenContainer');
 

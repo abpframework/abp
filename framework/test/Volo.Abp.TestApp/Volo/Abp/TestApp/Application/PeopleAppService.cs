@@ -67,6 +67,19 @@ public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeople
         return Task.CompletedTask;
     }
 
+    [AllowAnonymous]
+    public Task GetWithAllowAnonymous()
+    {
+        return Task.CompletedTask;
+    }
+
+    [Authorize("TestPolicy", Roles = "Admin")]
+    [Authorize("TestPolicy2", Roles = "Manager")]
+    public Task GetWithAuthorizePolicy()
+    {
+        return Task.CompletedTask;
+    }
+
     public Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input)
     {
         return Task.FromResult(input);

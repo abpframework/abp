@@ -451,6 +451,75 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<IdentityUser>> GetUsersByNormalizedUserNameAsync(string normalizedUserName, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .Where(u => u.NormalizedUserName == normalizedUserName)
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUser>> GetUsersByNormalizedUserNamesAsync(string[] normalizedUserNames, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .Where(u => normalizedUserNames.Contains(u.NormalizedUserName))
+            .Distinct()
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUser>> GetUsersByNormalizedEmailAsync(string normalizedEmail, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .Where(u => u.NormalizedEmail == normalizedEmail)
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUser>> GetUsersByNormalizedEmailsAsync(string[] normalizedEmails, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .Where(u => normalizedEmails.Contains(u.NormalizedEmail))
+            .Distinct()
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUser>> GetUsersByLoginAsync(string loginProvider, string providerKey, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<IdentityUser>> GetUsersByPasskeyIdAsync(byte[] credentialId, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .Where(u => u.Passkeys.Any(x => x.CredentialId == credentialId))
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(Guid? tenantId, string normalizedUserName, bool includeDetails = true, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id)
+            .FirstOrDefaultAsync(
+                u => u.TenantId == tenantId && u.NormalizedUserName == normalizedUserName,
+                GetCancellationToken(cancellationToken)
+            );
+    }
+
+    public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(Guid? tenantId, string normalizedEmail, bool includeDetails = true, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .OrderBy(x => x.Id).FirstOrDefaultAsync(
+                u => u.TenantId == tenantId && u.NormalizedEmail == normalizedEmail,
+                GetCancellationToken(cancellationToken)
+            );
+    }
+
     protected virtual async Task<IQueryable<IdentityUser>> GetFilteredQueryableAsync(
         string filter = null,
         Guid? roleId = null,

@@ -1,7 +1,7 @@
 @if (actionList.length > 1) {
 <div ngbDropdown container="body" class="d-inline-block">
   <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" ngbDropdownToggle>
-    <i [class]="icon" [class.me-1]="icon"></i>{{ text | abpLocalization }}
+    <i [class]="icon()" [class.me-1]="icon()"></i>{{ text() | abpLocalization }}
   </button>
   <div ngbDropdownMenu>
     @for (action of actionList; track action.text) {

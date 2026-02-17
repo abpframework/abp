@@ -1,0 +1,39 @@
+<abp-page [title]="'CmsKit::GlobalResources' | abpLocalization">
+  <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+    <div class="card">
+      <div class="card-body">
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          class="nav-tabs"
+          [(activeId)]="activeTab"
+          (activeIdChange)="onTabChange($event)"
+        >
+          <li ngbNavItem="script">
+            <a ngbNavLink>{{ 'CmsKit::Script' | abpLocalization }}</a>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <abp-codemirror-editor formControlName="script" />
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem="style">
+            <a ngbNavLink>{{ 'CmsKit::Style' | abpLocalization }}</a>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <abp-codemirror-editor formControlName="style" />
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div class="mt-2 fade-in-top" [ngbNavOutlet]="nav"></div>
+      </div>
+      <div class="card-footer">
+        <!-- *abpPermission="'CmsKit.GlobalResources.Update'" -->
+        <abp-button type="submit" [disabled]="form?.invalid" (click)="save()">
+          {{ 'AbpUi::Save' | abpLocalization }}
+        </abp-button>
+      </div>
+    </div>
+  </form>
+</abp-page>

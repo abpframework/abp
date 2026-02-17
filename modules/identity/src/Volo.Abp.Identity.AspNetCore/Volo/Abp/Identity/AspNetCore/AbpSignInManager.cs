@@ -46,6 +46,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         bool isPersistent,
         bool lockoutOnFailure)
     {
+        IdentityUser user;
         foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
         {
             var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
@@ -53,7 +54,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
             if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
             {
-                var user = await UserManager.FindByNameAsync(userName);
+                user = await FindByNameAsync(userName);
                 if (user == null)
                 {
                     if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
@@ -81,7 +82,44 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             }
         }
 
-        return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        user = await FindByNameAsync(userName);
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        return await PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
+    }
+
+    public override async Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey, bool isPersistent, bool bypassTwoFactor)
+    {
+        var user = await FindByLoginAsync(loginProvider, providerKey);
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        var error = await PreSignInCheck(user);
+        if (error != null)
+        {
+            return error;
+        }
+        return await SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
+    }
+
+    public virtual async Task<IdentityUser> FindByEmaiAsync(string email)
+    {
+        return await _identityUserManager.FindSharedUserByEmailAsync(email);
+    }
+
+    public virtual async Task<IdentityUser> FindByNameAsync(string userName)
+    {
+        return await _identityUserManager.FindSharedUserByNameAsync(userName);
+    }
+
+    public virtual async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey)
+    {
+        return await _identityUserManager.FindSharedUserByLoginAsync(loginProvider, providerKey);
     }
 
     /// <summary>

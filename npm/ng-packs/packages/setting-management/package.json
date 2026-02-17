@@ -12,7 +12,7 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/aria": "~21.1.0"
+    "@angular/aria": "~21.0.0"
   },
   "publishConfig": {
     "access": "public"

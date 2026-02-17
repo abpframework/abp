@@ -3,8 +3,8 @@
   <ng-template #abpHeader>
     <h3>
       {{ 'AbpFeatureManagement::Features' | abpLocalization }}
-      @if (providerTitle) {
-      - {{ providerTitle }}
+      @if (providerTitle()) {
+      - {{ providerTitle() }}
       }
     </h3>
   </ng-template>
@@ -38,7 +38,7 @@
               @for (feature of features[group.name]; track feature.id || i; let i = $index) {
               @let provider = feature.provider.name;
               @let isFeatureDisabled = !feature.parentName ? isParentDisabled(feature.name, group.name, provider) :
-              (provider !== providerName && provider !== defaultProviderName);
+              (provider !== providerName() && provider !== defaultProviderName);
 
               <div class="mt-2" [style]="feature.style" (keyup.enter)="save()">
                 @switch (feature.valueType?.name) {

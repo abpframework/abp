@@ -3,13 +3,14 @@ import {
   ChangeDetectorRef,
   Component,
   contentChild,
-  EventEmitter,
   inject,
-  Input,
   OnInit,
-  output,
   TemplateRef,
   ViewEncapsulation,
+  input,
+  output,
+  signal,
+  effect
 } from '@angular/core';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -56,7 +57,7 @@ export class TreeComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private disableTreeStyleLoading = inject(DISABLE_TREE_STYLE_LOADING_TOKEN, { optional: true });
 
-  dropPosition: number;
+  dropPosition!: number;
 
   dropdowns = {} as { [key: string]: NgbDropdown };
 
@@ -68,20 +69,52 @@ export class TreeComponent implements OnInit {
   readonly selectedNodeChange = output<any>();
   readonly dropOver = output<DropEvent>();
   readonly nzExpandChange = output<NzFormatEmitEvent>();
-  @Input() noAnimation = true;
-  @Input() draggable: boolean;
-  @Input() checkable: boolean;
-  @Input() checkStrictly: boolean;
-  @Input() checkedKeys = [];
-  @Input() nodes = [];
-  @Input() expandedKeys: string[] = [];
-  @Input() selectedNode: any;
-  @Input() changeCheckboxWithNode: boolean;
-  @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
-  @Input() beforeDrop = (event: NzFormatBeforeDropEvent) => {
-    this.dropPosition = event.pos;
-    return of(false);
-  };
+  
+  // Input signals
+  readonly noAnimation = input(true);
+  readonly draggable = input<boolean | undefined>(undefined);
+  readonly checkable = input<boolean | undefined>(undefined);
+  readonly checkStrictly = input<boolean | undefined>(undefined);
+  readonly checkedKeysInput = input<any[]>([], { alias: 'checkedKeys' });
+  readonly nodesInput = input<any[]>([], { alias: 'nodes' });
+  readonly expandedKeysInput = input<string[]>([], { alias: 'expandedKeys' });
+  readonly selectedNodeInput = input<any>(undefined, { alias: 'selectedNode' });
+  readonly changeCheckboxWithNode = input<boolean | undefined>(undefined);
+  readonly isNodeSelectedFn = input<(node: any) => boolean>(
+    (node) => this._selectedNode()?.id === node.key,
+    { alias: 'isNodeSelected' }
+  );
+  readonly beforeDropFn = input<(event: NzFormatBeforeDropEvent) => any>(
+    (event: NzFormatBeforeDropEvent) => {
+      this.dropPosition = event.pos;
+      return of(false);
+    },
+    { alias: 'beforeDrop' }
+  );
+
+  // Internal signals for two-way binding
+  protected readonly _checkedKeys = signal<any[]>([]);
+  protected readonly _expandedKeys = signal<string[]>([]);
+  protected readonly _selectedNode = signal<any>(undefined);
+  protected readonly _nodes = signal<any[]>([]);
+
+  // Getters for template access
+  get checkedKeys() { return this._checkedKeys(); }
+  get expandedKeys() { return this._expandedKeys(); }
+  get selectedNode() { return this._selectedNode(); }
+  get nodes() { return this._nodes(); }
+  get isNodeSelected() { return this.isNodeSelectedFn(); }
+  get beforeDrop() { return this.beforeDropFn(); }
+
+  constructor() {
+    // Sync input signals to internal signals
+    effect(() => {
+      this._checkedKeys.set(this.checkedKeysInput());
+      this._expandedKeys.set(this.expandedKeysInput());
+      this._selectedNode.set(this.selectedNodeInput());
+      this._nodes.set(this.nodesInput());
+    });
+  }
 
   ngOnInit() {
     this.loadStyle();
@@ -97,13 +130,13 @@ export class TreeComponent implements OnInit {
     this.subscriptionService.addOne(loaded$);
   }
 
-  private findNode(target: any, nodes: any[]) {
+  private findNode(target: any, nodes: any[]): any {
     for (const node of nodes) {
       if (node.key === target.id) {
         return node;
       }
       if (node.children) {
-        const res = this.findNode(target, node.children);
+        const res: any = this.findNode(target, node.children);
         if (res) {
           return res;
         }
@@ -113,36 +146,37 @@ export class TreeComponent implements OnInit {
   }
 
   onSelectedNodeChange(node: NzTreeNode) {
-    this.selectedNode = node.origin.entity;
-    if (this.changeCheckboxWithNode) {
+    this._selectedNode.set(node.origin.entity);
+    if (this.changeCheckboxWithNode()) {
+      const keys = this._checkedKeys();
       let newVal;
       if (node.isChecked) {
-        newVal = this.checkedKeys.filter(x => x !== node.key);
+        newVal = keys.filter(x => x !== node.key);
       } else {
-        newVal = [...this.checkedKeys, node.key];
+        newVal = [...keys, node.key];
       }
       this.selectedNodeChange.emit(node);
-      this.checkedKeys = newVal;
+      this._checkedKeys.set(newVal);
       this.checkedKeysChange.emit(newVal);
     } else {
       this.selectedNodeChange.emit(node.origin.entity);
     }
   }
 
-  onCheckboxChange(event) {
-    this.checkedKeys = [...event.keys];
+  onCheckboxChange(event: { keys: any[] }) {
+    this._checkedKeys.set([...event.keys]);
     this.checkedKeysChange.emit(event.keys);
   }
 
-  onExpandedKeysChange(event) {
-    this.expandedKeys = [...event.keys];
+  onExpandedKeysChange(event: { keys: string[] } & NzFormatEmitEvent) {
+    this._expandedKeys.set([...event.keys]);
     this.expandedKeysChange.emit(event.keys);
     this.nzExpandChange.emit(event);
   }
 
   onDrop(event: DropEvent) {
-    event.event.stopPropagation();
-    event.event.preventDefault();
+    event.event?.stopPropagation();
+    event.event?.preventDefault();
     event.pos = this.dropPosition;
 
     this.dropOver.emit(event);
@@ -160,12 +194,14 @@ export class TreeComponent implements OnInit {
         dropdown.close();
       }
     });
-    this.dropdowns[dropdownKey]?.toggle();
+    if (dropdownKey) {
+      this.dropdowns[dropdownKey]?.toggle();
+    }
   }
 
   setSelectedNode(node: any) {
-    const newSelectedNode = this.findNode(node, this.nodes);
-    this.selectedNode = { ...newSelectedNode };
+    const newSelectedNode = this.findNode(node, this._nodes());
+    this._selectedNode.set({ ...newSelectedNode });
     this.cdr.markForCheck();
   }
 }

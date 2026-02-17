@@ -31,8 +31,6 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Replace(ServiceDescriptor.Singleton<IAbpDistributedLock, NullAbpDistributedLock>());
-
         if (context.Services.IsDataMigrationEnvironment())
         {
             Configure<PermissionManagementOptions>(options =>

@@ -1,9 +1,9 @@
 <div
   class="abp-toast-container"
-  [style.top]="top || 'auto'"
-  [style.right]="right || 'auto'"
-  [style.bottom]="bottom || 'auto'"
-  [style.left]="left || 'auto'"
+  [style.top]="top() || 'auto'"
+  [style.right]="right() || 'auto'"
+  [style.bottom]="bottom() || 'auto'"
+  [style.left]="left() || 'auto'"
   [style.display]="toasts.length ? 'flex' : 'none'"
   [@toastInOut]="toasts.length"
 >

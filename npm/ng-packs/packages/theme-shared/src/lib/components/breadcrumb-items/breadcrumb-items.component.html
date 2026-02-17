@@ -1,9 +1,9 @@
-@if (items.length) {
+@if (items().length) {
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
       <a routerLink="/"><i class="fa fa-home" aria-hidden="true"></i> </a>
     </li>
-    @for (item of items; track $index; let last = $last) {
+    @for (item of items(); track $index; let last = $last) {
       <li class="breadcrumb-item" [class.active]="last" aria-current="page">
         <ng-container
           *ngTemplateOutlet="item.path ? linkTemplate : textTemplate; context: { $implicit: item }"

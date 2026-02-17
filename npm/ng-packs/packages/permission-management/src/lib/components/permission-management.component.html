@@ -1,9 +1,9 @@
 <abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg', scrollable: false }">
-  @if (data.entityDisplayName || entityDisplayName) {
+  @if (data.entityDisplayName || entityDisplayName()) {
     <ng-template #abpHeader>
       <h4>
         {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} -
-        {{ entityDisplayName || data.entityDisplayName }}
+        {{ entityDisplayName() || data.entityDisplayName }}
       </h4>
     </ng-template>
     <ng-template #abpBody>

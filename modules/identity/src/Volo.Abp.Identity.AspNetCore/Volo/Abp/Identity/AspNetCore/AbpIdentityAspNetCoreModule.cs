@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -47,6 +48,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
+        // Replace the default UserValidator with AbpIdentityUserValidator
+        context.Services.RemoveAll(x => x.ServiceType == typeof(IUserValidator<IdentityUser>) && x.ImplementationType == typeof(UserValidator<IdentityUser>));
         context.Services.AddAbpOptions<SecurityStampValidatorOptions>()
             .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
             {

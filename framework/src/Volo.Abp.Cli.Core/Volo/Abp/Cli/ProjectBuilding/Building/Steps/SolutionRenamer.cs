@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -41,7 +42,7 @@ public class SolutionRenamer
             if (_companyName != null)
             {
                 RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
-                RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase(), _companyName.ToCamelCase());
+                RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToCamelCase(), ToCamelCaseWithNamespace(_companyName));
                 RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToKebabCase(), _companyName.ToKebabCase());
                 RenameHelper.RenameAll(_entries, _companyNamePlaceHolder.ToLowerInvariant(), _companyName.ToLowerInvariant());
             }
@@ -55,9 +56,19 @@ public class SolutionRenamer
         }
 
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder, _projectName);
-        RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), _projectName.ToCamelCase());
+        RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), ToCamelCaseWithNamespace(_projectName));
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToKebabCase(), _projectName.ToKebabCase());
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToLowerInvariant(), _projectName.ToLowerInvariant());
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToSnakeCase().ToUpper(), _projectName.ToSnakeCase().ToUpper());
+    }
+
+    private static string ToCamelCaseWithNamespace(string name)
+    {
+        if (name.Contains('.'))
+        {
+            return name.Split('.').Select(n => n.ToCamelCase()).JoinAsString(".");
+        }
+
+        return name.ToCamelCase();
     }
 }

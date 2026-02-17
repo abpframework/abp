@@ -14,12 +14,11 @@ import {
   ElementRef,
   inject,
   Injector,
-  Input,
-  OnChanges,
   Optional,
-  SimpleChanges,
   SkipSelf,
   viewChild,
+  effect,
+  input,
 } from '@angular/core';
 import {
   ControlContainer,
@@ -40,7 +39,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { DateAdapter, DisabledDirective, TimeAdapter } from '@abp/ng.theme.shared';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { FormProp } from '../../models/form-props';
-import { PropData } from '../../models/props';
+import { ReadonlyPropData } from '../../models/props';
 import { selfFactory } from '../../utils/factory.util';
 import { addTypeaheadTextSuffix } from '../../utils/typeahead.util';
 import { eExtensibleComponents } from '../../enums/components';
@@ -84,7 +83,7 @@ import { ExtensibleFormMultiselectComponent } from '../multi-select/extensible-f
     { provide: NgbTimeAdapter, useClass: TimeAdapter },
   ],
 })
-export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
+export class ExtensibleFormPropComponent implements AfterViewInit {
   protected service = inject(ExtensibleFormPropService);
   public readonly cdRef = inject(ChangeDetectorRef);
   public readonly track = inject(TrackByService);
@@ -92,10 +91,10 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   private injector = inject(Injector);
   private readonly form = this.#groupDirective.form;
 
-  @Input() data!: PropData;
-  @Input() prop!: FormProp;
-  @Input() first?: boolean;
-  @Input() isFirstGroup?: boolean;
+  readonly data = input.required<ReadonlyPropData>();
+  readonly prop = input.required<FormProp>();
+  readonly first = input<boolean | undefined>(undefined);
+  readonly isFirstGroup = input<boolean | undefined>(undefined);
   private readonly fieldRef = viewChild.required<ElementRef<HTMLElement>>('field');
 
   injectorForCustomComponent?: Injector;
@@ -108,10 +107,60 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   typeaheadModel: any;
   passwordKey = eExtensibleComponents.PasswordComponent;
 
-  disabledFn = (data: PropData) => false;
+  disabledFn = (data: ReadonlyPropData) => false;
 
   get disabled() {
-    return this.disabledFn(this.data);
+    const data = this.data();
+    if (!data) return false;
+    return this.disabledFn(data);
+  }
+
+  constructor() {
+    // Watch prop changes and update state
+    effect(() => {
+      const currentProp = this.prop();
+      const data = this.data();
+      if (!currentProp || !data) return;
+
+      const { options, readonly, disabled, validators, className, template } = currentProp;
+
+      if (template) {
+        this.injectorForCustomComponent = Injector.create({
+          providers: [
+            {
+              provide: EXTENSIONS_FORM_PROP,
+              useValue: currentProp,
+            },
+            {
+              provide: EXTENSIONS_FORM_PROP_DATA,
+              useValue: data?.record,
+            },
+            { provide: ControlContainer, useExisting: FormGroupDirective },
+          ],
+          parent: this.injector,
+        });
+      }
+
+      if (options) this.options$ = options(data);
+      if (readonly) this.readonly = readonly(data);
+
+      if (disabled) {
+        this.disabledFn = disabled;
+      }
+      if (validators) {
+        this.validators = validators(data);
+        this.setAsterisk();
+      }
+      if (className !== undefined) {
+        this.containerClassName = className;
+      }
+
+      const [keyControl, valueControl] = this.getTypeaheadControls();
+      if (keyControl && valueControl)
+        this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
+
+      this.cdRef.markForCheck();
+    });
   }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
@@ -128,7 +177,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
       ? text$.pipe(
           debounceTime(300),
           distinctUntilChanged(),
-          switchMap(text => this.prop?.options?.(this.data, text) || of([])),
+          switchMap(text => this.prop()?.options?.(this.data(), text) || of([])),
         )
       : of([]);
 
@@ -137,12 +186,12 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   meridian$ = this.service.meridian$;
 
   get isInvalid() {
-    const control = this.form.get(this.prop.name);
+    const control = this.form.get(this.prop().name);
     return control?.touched && control.invalid;
   }
 
   private getTypeaheadControls() {
-    const { name } = this.prop;
+    const { name } = this.prop();
     const extraPropName = `${EXTRA_PROPERTIES_KEY}.${name}`;
     const keyControl =
       this.form.get(addTypeaheadTextSuffix(extraPropName)) ||
@@ -156,7 +205,7 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.isFirstGroup && this.first && this.fieldRef()) {
+    if (this.isFirstGroup() && this.first() && this.fieldRef()) {
       requestAnimationFrame(() => {
         this.fieldRef().nativeElement.focus();
       });
@@ -169,44 +218,5 @@ export class ExtensibleFormPropComponent implements OnChanges, AfterViewInit {
 
   getType(prop: FormProp): string {
     return this.service.getType(prop);
-  }
-
-  ngOnChanges({ prop, data }: SimpleChanges) {
-    const currentProp = prop?.currentValue as FormProp;
-    const { options, readonly, disabled, validators, className, template } = currentProp || {};
-    if (template) {
-      this.injectorForCustomComponent = Injector.create({
-        providers: [
-          {
-            provide: EXTENSIONS_FORM_PROP,
-            useValue: currentProp,
-          },
-          {
-            provide: EXTENSIONS_FORM_PROP_DATA,
-            useValue: (data?.currentValue as PropData)?.record,
-          },
-          { provide: ControlContainer, useExisting: FormGroupDirective },
-        ],
-        parent: this.injector,
-      });
-    }
-
-    if (options) this.options$ = options(this.data);
-    if (readonly) this.readonly = readonly(this.data);
-
-    if (disabled) {
-      this.disabledFn = disabled;
-    }
-    if (validators) {
-      this.validators = validators(this.data);
-      this.setAsterisk();
-    }
-    if (className !== undefined) {
-      this.containerClassName = className;
-    }
-
-    const [keyControl, valueControl] = this.getTypeaheadControls();
-    if (keyControl && valueControl)
-      this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
   }
 }

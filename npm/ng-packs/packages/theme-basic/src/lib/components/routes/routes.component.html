@@ -30,7 +30,7 @@
       </a>
       <div #routeContainer class="dropdown-menu border-0 shadow-sm"
         (click)="$event.preventDefault(); $event.stopPropagation()"
-        [class.d-block]="smallScreen && rootDropdownExpand[route.name]">
+        [class.d-block]="smallScreen() && rootDropdownExpand[route.name]">
         <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: route }" />
       </div>
     </li>
@@ -60,7 +60,7 @@
     <div class="dropdown-submenu" ngbDropdown #dropdownSubmenu="ngbDropdown" placement="right-top" [autoClose]="true"
       *abpPermission="child.requiredPolicy">
       <div ngbDropdownToggle [class.dropdown-toggle]="false">
-        <a abpEllipsis="210px" [abpEllipsisEnabled]="!smallScreen" role="button"
+        <a abpEllipsis="210px" [abpEllipsisEnabled]="!smallScreen()" role="button"
           class="btn d-block text-start dropdown-toggle">
           @if (child.iconClass) {
           <i [class]="child.iconClass"></i>
@@ -69,7 +69,7 @@
         </a>
       </div>
       <div #childrenContainer class="dropdown-menu dropdown-menu-start border-0 shadow-sm"
-        [class.d-block]="smallScreen && dropdownSubmenu.isOpen()">
+        [class.d-block]="smallScreen() && dropdownSubmenu.isOpen()">
         <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: child }" />
       </div>
     </div>

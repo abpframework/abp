@@ -1,6 +1,6 @@
 @if (form) {
-@for (groupedProp of groupedPropList.items; track i; let i = $index; let first = $first) {
-<ng-container *abpPropData="let data; fromList: groupedProp.formPropList; withRecord: record">
+@for (groupedProp of groupedPropList()?.items; track i; let i = $index; let first = $first) {
+<ng-container *abpPropData="let data; fromList: groupedProp.formPropList; withRecord: record()">
   @if (isAnyGroupMemberVisible(i, data) && groupedProp.group?.className) {
   <div [class]="groupedProp.group?.className"
     [attr.data-name]="groupedProp.group?.name || groupedProp.group?.className">
