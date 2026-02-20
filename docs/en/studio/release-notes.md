@@ -9,7 +9,71 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.4 (2025-12-30) Latest
+## 2.2.1 (2026-02-20) Latest
+
+- Remove ConfigureHttpClientProxies method
+- Fix public-website build error on app template
+- Handle already installed external dependencies for winget
+- Angular - Templates version upgrade to v21
+- Update version to release 2.1.5 with 10.0.2
+- Added Start and End date to campaign info
+- Fixes TelemetrySessionInfoEnricher not found exception in AbpStudioUIHostModule
+- Add admin password option to solution templates
+- Replace angular reference with source code too when replacing c# references
+- Add collapsible bottom panel with expand/collapse toggle
+- Angular - Black Screen Appears When Opening the Project
+- Disable telemetry in non-development environments in debugging
+- Add run profile selection to new module wizard
+- Update Avalonia packages to `11.3.0`
+- Show License Expiry Warning Bar on Welcome Screen When Less Than 30 D…
+- AI Management Module Microservice Startup Template Option (MVC UI)
+- Use select instead of undefined sample CRUD page
+- Add Angular support to standard solution templates
+- Angular - Add angular template to standard module
+- Add unit tests for module solution template config builders
+- Double run migrator in initial tasks
+- Add dark/light logos and update templating for backwark compability on lepton
+- Angular - Footer component for the templates
+- Remove ANSI codes from messages/notifications/logs
+- Revise README.md files in templates
+- Add dev login helper script to templates
+- Add workflow to trigger ABP Studio documentation updates
+- Move Serilog setup to configuration in templates
+- Refactor ABP docs update workflow to remove redundant GitHub App toke…
+- Update target branch in ABP docs update workflow to 'dev'
+- Update release tag description and enhance payload for ABP docs updat…
+- Improve release tag handling in trigger workflow
+- Refactor release tag determination and fetching logic in ABP docs upd…
+- Fix Tooltip problem on Solution Runner
+- Add AnalyzingMongoModelBuilder unit tests
+- Refactor release tag handling and improve fetch logic in ABP docs upd…
+- Studio Cli: Introduced `abp run` & `abp watch` commands
+- Update abp and LeptonX version to 10.0.3 and 5.0.3
+- Refactor trigger workflow to enhance release data handling and improv…
+- Fix grafana dashboard problem on ms template
+- Enable chat support for maui_blazor UI
+- Bump CommunityToolkit.Maui to 13.0.0
+- Add preview versions checkbox to change-version modal
+- Disable Abp MVC libs check in HttpApi host
+- Add `KeepVolumes` to Docker compose builder
+- Update MCP help command
+- Create AssemblyDocumentationLoadService_Tests.cs
+- Add unit tests for cli services
+- Handle Homebrew env vars safely for macos
+- React Native - Updating the template
+- Solution Runner: Added "start and wait for ready" option
+- Migrate ABP Angular templates to Vitest as the default testing framework
+- Use llama3.2 as default Ollama model
+- Upgrade to ABP 10.1
+- Angular - Version upgrades to v21
+- Suppress console output for 'mcp' mode
+- Update workflow to merge rel-2.2 with rel-2.1
+- Update workflow to merge dev with rel-2.2
+- Update version to release 2.2.1 with 10.1.0
+- Bump Microsoft packages to 10.0.2
+- Made their first contribution in https://github.com/volosoft/abp-studio/pull/4515
+
+## 2.1.4 (2025-12-30)
 
 * Fixed books sample for blazor-webapp tiered solution.
 * Fixed K8s cluster deployment issues for microservices.
