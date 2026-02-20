@@ -29,7 +29,7 @@ This plugin bundles **16 curated rules** that teach Cursor how to write idiomati
 
 ### ABP Studio MCP Server
 
-This plugin includes an [MCP](https://modelcontextprotocol.io/) server configuration that connects Cursor to your local ABP Studio instance. ABP Studio exposes runtime telemetry and solution control tools through the Model Context Protocol. See the [ABP Studio MCP documentation](https://abp.io/docs/10.1/studio/model-context-protocol) for more details.
+This plugin includes an [MCP](https://modelcontextprotocol.io/) server configuration that connects Cursor to your local ABP Studio instance. ABP Studio exposes runtime telemetry and solution control tools through the Model Context Protocol. See the [ABP Studio MCP documentation](https://abp.io/docs/latest/studio/model-context-protocol) for more details.
 
 **Prerequisites:** ABP Studio must be running while MCP is in use. The `abp` CLI must be installed and available in your PATH. If you have the ABP Studio desktop application installed, the CLI is already installed and added to your PATH by default.
 
