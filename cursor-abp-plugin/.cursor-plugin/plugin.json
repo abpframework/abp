@@ -1,7 +1,7 @@
 {
     "name": "abp-plugin",
     "displayName": "ABP",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "ABP Rules and ABP MCP server packaged as a Cursor plugin.",
     "author": {
       "name": "Volosoft Bilişim A.Ş."

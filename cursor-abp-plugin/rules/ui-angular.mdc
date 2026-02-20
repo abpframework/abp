@@ -218,6 +218,54 @@ const routes: Routes = [
 ];
 ```
 
+## Component Replacement
+
+ABP Angular provides a **component replacement** system via `ReplaceableComponentsService`:
+
+```typescript
+import { ReplaceableComponentsService } from '@abp/ng.core';
+import { eIdentityComponents } from '@abp/ng.identity';
+
+constructor(private replaceableComponents: ReplaceableComponentsService) {
+  this.replaceableComponents.add({
+    component: YourCustomComponent,
+    key: eIdentityComponents.Roles,
+  });
+}
+```
+
+Replaceable targets include ABP default components (Roles, Users, Tenants), layouts (Application, Account, Empty), and UI elements (Logo, Routes, NavItems).
+
+> **Docs**: https://abp.io/docs/latest/framework/ui/angular/customization-user-interface
+
+## Modern Angular Patterns
+
+### Standalone Components
+Prefer **standalone components** (no `NgModules`). `standalone: true` is the default in modern Angular — do not set it manually.
+
+### Signals & State
+- Use **signals** for local component state
+- Use `computed()` for derived state
+- Avoid `mutate()` on signals — use `update()` or `set()`
+
+### Components
+- Set `changeDetection: ChangeDetectionStrategy.OnPush`
+- Use `input()` and `output()` functions instead of decorators
+- Use **Reactive Forms** over template-driven forms
+- Prefer `[class]` bindings over `ngClass` and `[style]` over `ngStyle`
+
+### Templates
+- Use **native control flow** (`@if`, `@for`, `@switch`) instead of structural directives
+- Use the **async pipe** for observable bindings
+
+### Services
+- Provide services using `providedIn: 'root'`
+- Use the **`inject()` function** instead of constructor injection
+
+### TypeScript
+- Enable **strict type checking** in `tsconfig.json`
+- Avoid `any`; use `unknown` or generics instead
+
 ## Theme & Styling
 - Use Bootstrap classes
 - ABP provides theme variables via CSS custom properties
