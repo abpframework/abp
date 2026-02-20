@@ -476,11 +476,30 @@ public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbC
 
     public virtual async Task<TEntity?> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return includeDetails
-            ? await (await WithDetailsAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id!.Equals(id), GetCancellationToken(cancellationToken))
-            : !ShouldTrackingEntityChange()
-                ? await (await GetQueryableAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id!.Equals(id), GetCancellationToken(cancellationToken))
-                : await (await GetDbSetAsync()).FindAsync(new object[] { id! }, GetCancellationToken(cancellationToken));
+        if (includeDetails)
+        {
+            return await (await WithDetailsAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id!.Equals(id), GetCancellationToken(cancellationToken));
+        }
+
+        if (!ShouldTrackingEntityChange())
+        {
+            return await (await GetQueryableAsync()).OrderBy(e => e.Id).FirstOrDefaultAsync(e => e.Id!.Equals(id), GetCancellationToken(cancellationToken));
+        }
+
+        var dbSet = await GetDbSetAsync();
+
+        var entity = await dbSet.FindAsync(new object[] { id! }, GetCancellationToken(cancellationToken));
+        if (entity == null)
+        {
+            return null;
+        }
+
+        if (dbSet.Entry(entity).State == EntityState.Detached)
+        {
+            dbSet.Attach(entity);
+        }
+
+        return entity;
     }
 
     public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
