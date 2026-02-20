@@ -1,10 +1,15 @@
 {
     "name": "abp-plugin",
+    "displayName": "ABP",
     "version": "0.1.0",
     "description": "ABP Rules and ABP MCP server packaged as a Cursor plugin.",
     "author": {
       "name": "Volosoft Bilişim A.Ş."
     },
-    "logo": "https://abp.io/assets/platform/img/brand-guidelines/abp-icon-dark.svg",
-    "keywords": ["abp", "abp-framework", "abp-studio", "productivity", "documentation", "tasks", "rules", "mcp"]
+    "homepage": "https://github.com/abpframework/abp",
+    "repository": "https://github.com/abpframework/abp",
+    "category": "developer-tools",
+    "logo": "https://raw.githubusercontent.com/abpframework/abp/01e1e7bd81b1ed1e8cf40dad630d0cfa07166955/cursor-abp-plugin/assets/abp-icon.svg",
+    "keywords": ["abp", "abp-framework", "abp-studio", "productivity", "documentation", "tasks", "rules", "mcp"],
+    "rules": "./rules/"
   }
