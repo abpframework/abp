@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+      "abp-studio": {
+        "command": "abp",
+        "args": ["mcp-studio"]
+      }
+    }
+  }

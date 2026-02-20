@@ -1,0 +1,10 @@
+{
+    "name": "abp-plugin",
+    "version": "0.1.0",
+    "description": "ABP Rules and ABP MCP server packaged as a Cursor plugin.",
+    "author": {
+      "name": "Volosoft Bilişim A.Ş."
+    },
+    "logo": "https://abp.io/assets/platform/img/brand-guidelines/abp-icon-dark.svg",
+    "keywords": ["abp", "abp-framework", "abp-studio", "productivity", "documentation", "tasks", "rules", "mcp"]
+  }
