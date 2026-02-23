@@ -22,7 +22,7 @@ Add endpoints to the `endpoints` array in `model.json`:
       "method": "GET",
       "description": "Get product statistics",
       "requireAuthentication": false,
-      "javascript": "var count = await db.count('LowCodeDemo.Products.Product');\nreturn ok({ totalProducts: count });"
+      "javascript": "var count = await db.getCount('LowCodeDemo.Products.Product');\nreturn ok({ totalProducts: count });"
     }
   ]
 }
@@ -106,7 +106,7 @@ The full [Scripting API](scripting-api.md) (`db` object) is available for queryi
   "route": "/api/custom/products/stats",
   "method": "GET",
   "requireAuthentication": false,
-  "javascript": "var totalCount = await db.count('LowCodeDemo.Products.Product');\nvar avgPrice = totalCount > 0 ? await db.query('LowCodeDemo.Products.Product').average(p => p.Price) : 0;\nreturn ok({ totalProducts: totalCount, averagePrice: avgPrice });"
+  "javascript": "var totalCount = await db.getCount('LowCodeDemo.Products.Product');\nvar avgPrice = totalCount > 0 ? await db.query('LowCodeDemo.Products.Product').average(p => p.Price) : 0;\nreturn ok({ totalProducts: totalCount, averagePrice: avgPrice });"
 }
 ```
 
@@ -130,7 +130,7 @@ The full [Scripting API](scripting-api.md) (`db` object) is available for queryi
   "route": "/api/custom/dashboard",
   "method": "GET",
   "requireAuthentication": true,
-  "javascript": "var productCount = await db.count('LowCodeDemo.Products.Product');\nvar customerCount = await db.count('LowCodeDemo.Customers.Customer');\nvar orderCount = await db.count('LowCodeDemo.Orders.Order');\nreturn ok({ products: productCount, customers: customerCount, orders: orderCount, user: user.isAuthenticated ? user.userName : 'Anonymous' });"
+  "javascript": "var productCount = await db.getCount('LowCodeDemo.Products.Product');\nvar customerCount = await db.getCount('LowCodeDemo.Customers.Customer');\nvar orderCount = await db.getCount('LowCodeDemo.Orders.Order');\nreturn ok({ products: productCount, customers: customerCount, orders: orderCount, user: user.isAuthenticated ? user.userName : 'Anonymous' });"
 }
 ```
 

@@ -331,7 +331,7 @@ Define custom REST endpoints with JavaScript handlers:
       "route": "/api/custom/products/stats",
       "method": "GET",
       "requireAuthentication": false,
-      "javascript": "var count = await db.count('Products.Product'); return ok({ total: count });"
+      "javascript": "var count = await db.getCount('Products.Product'); return ok({ total: count });"
     }
   ]
 }
