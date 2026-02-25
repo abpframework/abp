@@ -98,7 +98,6 @@
                 return;
             }
 
-            arr = $form.serializeArray();
             var formData = new FormData(formEl);
 
             var method = (options.method || $form.attr("method") || "POST").toUpperCase();
