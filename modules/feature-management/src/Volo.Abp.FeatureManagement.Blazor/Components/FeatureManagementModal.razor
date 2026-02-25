@@ -2,8 +2,8 @@
 @using Microsoft.Extensions.Localization
 @inherits AbpFeatureManagementComponentBase
 
-<Modal @ref="Modal" Closing="@ClosingModal">
-    <ModalContent Size="ModalSize.Large">
+<Modal @ref="Modal" Closing="@ClosingModal" Size="ModalSize.Large">
+    <ModalContent>
         <ModalHeader>
             <ModalTitle>@L["Features"]@ProviderKeyDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
@@ -41,9 +41,9 @@
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
                                                     <FieldLabel>@GetShownName(feature)</FieldLabel>
-                                                    <TextEdit Disabled="@disabled"
-                                                          Text="@feature.Value"
-                                                          TextChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))" />
+                                                    <TextInput Disabled="@disabled"
+                                                          Value="@feature.Value"
+                                                          ValueChanged="@(async (v) => await OnFeatureValueChangedAsync(v, feature))" />
                                                     @if (feature.Description != null)
                                                     {
                                                         <div class="form-text">@feature.Description</div>
@@ -57,7 +57,7 @@
                                                 var selectedValue = SelectionStringValues[feature.Name];
                                                 <Field Style="@GetFeatureStyles(feature)">
                                                     <FieldLabel>@GetShownName(feature)</FieldLabel>
-                                                    <Select TValue="string" Disabled="disabled" SelectedValue="selectedValue" SelectedValueChanged="s => SelectionStringValues[feature.Name] = s">
+                                                    <Select TValue="string" Disabled="disabled" Value="selectedValue" ValueChanged="s => SelectionStringValues[feature.Name] = s">
                                                         @foreach (var item in items)
                                                         {
                                                             <SelectItem Value="@item.Value">
@@ -75,7 +75,7 @@
                                             if (feature.ValueType is ToggleStringValueType)
                                             {
                                                 <Field Style="@GetFeatureStyles(feature)">
-                                                    <Check TValue="bool" Disabled="disabled" Checked="@ToggleValues[feature.Name]" CheckedChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
+                                                    <Check TValue="bool" Disabled="disabled" Value="@ToggleValues[feature.Name]" ValueChanged="@(async (v) => await OnSelectedValueChangedAsync(v, feature))">
                                                         @GetShownName(feature)
                                                     </Check>
                                                     @if (feature.Description != null)

@@ -121,6 +121,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
 
         bool? allowAnonymous = null;
+        var authorizeModels = new List<AuthorizeDataApiDescriptionModel>();
         if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAllowAnonymous))
         {
             allowAnonymous = true;
@@ -128,6 +129,12 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         else if (apiDescription.ActionDescriptor.EndpointMetadata.Any(x => x is IAuthorizeData))
         {
             allowAnonymous = false;
+            var authorizeDatas = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is IAuthorizeData).Cast<IAuthorizeData>().ToList();
+            authorizeModels.AddRange(authorizeDatas.Select(authorizeData => new AuthorizeDataApiDescriptionModel
+            {
+                Policy = authorizeData.Policy,
+                Roles = authorizeData.Roles
+            }));
         }
 
         var implementFrom = controllerType.FullName;
@@ -147,6 +154,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
                 apiDescription.HttpMethod,
                 GetSupportedVersions(controllerType, method, setting),
                 allowAnonymous,
+                authorizeModels,
                 implementFrom
             )
         );

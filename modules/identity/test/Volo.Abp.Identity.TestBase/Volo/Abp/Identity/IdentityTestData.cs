@@ -5,6 +5,7 @@ namespace Volo.Abp.Identity;
 
 public class IdentityTestData : ISingletonDependency
 {
+    public Guid UserAdminId { get; } = Guid.NewGuid();
     public Guid RoleModeratorId { get; } = Guid.NewGuid();
     public Guid RoleSupporterId { get; } = Guid.NewGuid();
     public Guid RoleManagerId { get; } = Guid.NewGuid();

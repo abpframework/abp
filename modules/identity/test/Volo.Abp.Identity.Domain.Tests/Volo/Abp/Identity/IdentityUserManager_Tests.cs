@@ -490,3 +490,148 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         TestSettingValueProvider.AddSetting(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword, true.ToString());
     }
 }
+
+public class SharedTenantUserSharingStrategy_IdentityUserManager_Tests : AbpIdentityDomainTestBase
+{
+    private readonly IdentityUserManager _identityUserManager;
+    private readonly IIdentityUserRepository _identityUserRepository;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+    public SharedTenantUserSharingStrategy_IdentityUserManager_Tests()
+    {
+        _identityUserManager = GetRequiredService<IdentityUserManager>();
+        _identityUserRepository = GetRequiredService<IIdentityUserRepository>();
+        _currentTenant = GetRequiredService<ICurrentTenant>();
+        _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+    }
+
+    protected override void AfterAddApplication(IServiceCollection services)
+    {
+        services.Configure<AbpMultiTenancyOptions>(options =>
+        {
+            options.IsEnabled = true;
+            options.UserSharingStrategy = TenantUserSharingStrategy.Shared;
+        });
+    }
+
+    [Fact]
+    public async Task FindSharedUserByEmailAsync_Should_Return_Host_User()
+    {
+        var tenantId = Guid.NewGuid();
+        var email = "shared-email@abp.io";
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await CreateUserAsync(null, "shared-host-email", email);
+            await CreateUserAsync(tenantId, "shared-tenant-email", email);
+            await uow.CompleteAsync();
+        }
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = await _identityUserManager.FindSharedUserByEmailAsync(email);
+
+            user.ShouldNotBeNull();
+            user.TenantId.ShouldBeNull();
+            user.UserName.ShouldBe("shared-host-email");
+        }
+    }
+
+    [Fact]
+    public async Task FindSharedUserByNameAsync_Should_Return_Host_User()
+    {
+        var tenantId = Guid.NewGuid();
+        var userName = "shared-user-name";
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await CreateUserAsync(null, userName, "shared-host-name@abp.io");
+            await CreateUserAsync(tenantId, userName, "shared-tenant-name@abp.io");
+            await uow.CompleteAsync();
+        }
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = await _identityUserManager.FindSharedUserByNameAsync(userName);
+
+            user.ShouldNotBeNull();
+            user.TenantId.ShouldBeNull();
+            user.UserName.ShouldBe(userName);
+        }
+    }
+
+    [Fact]
+    public async Task FindSharedUserByLoginAsync_Should_Return_Host_User()
+    {
+        var tenantId = Guid.NewGuid();
+        const string loginProvider = "github";
+        const string providerKey = "shared-login";
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await CreateUserAsync(null, "shared-host-login", "shared-host-login@abp.io", user =>
+            {
+                user.AddLogin(new UserLoginInfo(loginProvider, providerKey, "Shared Login"));
+            });
+
+            await CreateUserAsync(tenantId, "shared-tenant-login", "shared-tenant-login@abp.io", user =>
+            {
+                user.AddLogin(new UserLoginInfo(loginProvider, providerKey, "Shared Login"));
+            });
+
+            await uow.CompleteAsync();
+        }
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = await _identityUserManager.FindSharedUserByLoginAsync(loginProvider, providerKey);
+
+            user.ShouldNotBeNull();
+            user.TenantId.ShouldBeNull();
+            user.UserName.ShouldBe("shared-host-login");
+        }
+    }
+
+    [Fact]
+    public async Task FindSharedUserByPasskeyIdAsync_Should_Return_Host_User()
+    {
+        var tenantId = Guid.NewGuid();
+        var credentialId = new byte[] { 10, 20, 30, 40, 50, 60 };
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await CreateUserAsync(null, "shared-host-passkey", "shared-host-passkey@abp.io", user =>
+            {
+                user.AddPasskey(credentialId, new IdentityPasskeyData());
+            });
+            await uow.CompleteAsync();
+        }
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = await _identityUserManager.FindSharedUserByPasskeyIdAsync(credentialId);
+
+            user.ShouldNotBeNull();
+            user.TenantId.ShouldBeNull();
+            user.UserName.ShouldBe("shared-host-passkey");
+        }
+    }
+
+    private async Task<IdentityUser> CreateUserAsync(
+        Guid? tenantId,
+        string userName,
+        string email,
+        Action<IdentityUser>? configureUser = null)
+    {
+        var user = new IdentityUser(Guid.NewGuid(), userName, email, tenantId);
+        configureUser?.Invoke(user);
+
+        using (_currentTenant.Change(tenantId))
+        {
+            await _identityUserRepository.InsertAsync(user);
+        }
+
+        return user;
+    }
+}

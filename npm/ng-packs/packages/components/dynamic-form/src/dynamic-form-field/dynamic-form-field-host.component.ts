@@ -1,6 +1,5 @@
 import {
   Component,
-  ViewChild,
   ViewContainerRef,
   ChangeDetectionStrategy,
   forwardRef,
@@ -9,6 +8,7 @@ import {
   DestroyRef,
   inject,
   input,
+  viewChild
 } from '@angular/core';
 import {
   ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule
@@ -34,7 +34,7 @@ export class DynamicFieldHostComponent implements ControlValueAccessor {
   component = input<Type<ControlValueAccessor>>();
   inputs = input<Record<string, any>>({});
 
-  @ViewChild('vcRef', { read: ViewContainerRef, static: true }) viewContainerRef!: ViewContainerRef;
+  readonly viewContainerRef = viewChild.required('vcRef', { read: ViewContainerRef });
   private componentRef?: any;
 
   private value: any;
@@ -55,10 +55,10 @@ export class DynamicFieldHostComponent implements ControlValueAccessor {
   }
 
   private createChild() {
-    this.viewContainerRef.clear();
+    this.viewContainerRef().clear();
     if (!this.component()) return;
 
-    this.componentRef = this.viewContainerRef.createComponent(this.component());
+    this.componentRef = this.viewContainerRef().createComponent(this.component());
     this.applyInputs();
 
     const instance: any = this.componentRef.instance as controlValueAccessorLike & acceptsFormControl;

@@ -50,9 +50,12 @@
       "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
       "@abp/ng.theme.shared/testing": ["packages/theme-shared/testing/src/public-api.ts"],
       "@abp/nx.generators": ["packages/generators/src/index.ts"],
-      "ng-zorro-antd/core/no-animation": [
-        "node_modules/ng-zorro-antd/core/no-animation"
-      ]
+      "@abp/ng.cms-kit": ["packages/cms-kit/src/public-api.ts"],
+      "@abp/ng.cms-kit/proxy": ["packages/cms-kit/proxy/src/public-api.ts"],
+      "@abp/ng.cms-kit/admin": ["packages/cms-kit/admin/src/public-api.ts"],
+      "@abp/ng.cms-kit/admin/config": ["packages/cms-kit/admin/config/src/public-api.ts"],
+      "@abp/ng.cms-kit/public": ["packages/cms-kit/public/src/public-api.ts"],
+      "@abp/ng.cms-kit/public/config": ["packages/cms-kit/public/config/src/public-api.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

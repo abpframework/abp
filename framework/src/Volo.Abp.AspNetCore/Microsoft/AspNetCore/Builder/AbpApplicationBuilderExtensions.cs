@@ -38,6 +38,18 @@ public static class AbpApplicationBuilderExtensions
         Check.NotNull(app, nameof(app));
 
         app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+        if (app is WebApplication webApplication)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<WebApplication>>().Value = webApplication;
+        }
+        if (app is IHost host)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IHost>>().Value = host;
+        }
+        if (app is IEndpointRouteBuilder endpointRouteBuilder)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IEndpointRouteBuilder>>().Value = endpointRouteBuilder;
+        }
         var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
         var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
@@ -59,6 +71,18 @@ public static class AbpApplicationBuilderExtensions
         Check.NotNull(app, nameof(app));
 
         app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+        if (app is WebApplication webApplication)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<WebApplication>>().Value = webApplication;
+        }
+        if (app is IHost host)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IHost>>().Value = host;
+        }
+        if (app is IEndpointRouteBuilder endpointRouteBuilder)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IEndpointRouteBuilder>>().Value = endpointRouteBuilder;
+        }
         var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
         var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 

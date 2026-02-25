@@ -9,7 +9,45 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.4 (2025-12-30) Latest
+## 2.2.1 (2026-02-20) Latest
+
+* Added `abp run` and `abp watch` commands to Studio CLI.
+* Added "Start and wait for ready" option in Solution Runner.
+* Added Angular support to standard solution and module templates, with Angular templates upgraded to v21.
+* Updated ABP Framework to `10.1.0` and LeptonX to `5.0.3`.
+* Fixed various Solution Runner issues, including tooltips, log rendering, and stability problems.
+
+## 2.1.9 (2026-01-30)
+
+* Fixed MCP server CLI output problem.
+
+## 2.1.8 (2026-01-29)
+
+* Added Studio MCP server support to allow AI monitoring of applications linked to ABP Studio.
+* Added `Open with > Cursor` option.
+* Improved task failure handling and related log visibility.
+* Fixed various Solution Runner issues, including memory/crash and log scrolling problems.
+
+## 2.1.7 (2026-01-23)
+
+* Added management UI for custom solution commands.
+* Showed logs of background jobs.
+* Updated Aspire to version `13.1`.
+
+## 2.1.6 (2026-01-13)
+
+* Enhanced runnable task logs window.
+* Fixed tooltip line-height problem.
+
+## 2.1.5 (2026-01-13)
+
+* Added `version` command to Studio CLI.
+* Updated ABP Framework to `10.0.2` and LeptonX to `5.0.2`.
+* Fixed microservice solution build errors for Blazor Server and Angular.
+* Improved Solution Runner behavior to avoid re-running applications after build errors.
+* Replaced "Clear Cookies" with "Clear site data" in the tools section.
+
+## 2.1.4 (2025-12-30)
 
 * Fixed books sample for blazor-webapp tiered solution.
 * Fixed K8s cluster deployment issues for microservices.

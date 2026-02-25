@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Injector } from '@angular/core';
+import { Injector, isDevMode } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Environment, RemoteEnv } from '../models/environment';
 import { EnvironmentService } from '../services/environment.service';
-import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { deepMerge } from './object-utils';
 
 export function getRemoteEnv(injector: Injector, environment: Partial<Environment>) {
@@ -15,15 +14,20 @@ export function getRemoteEnv(injector: Injector, environment: Partial<Environmen
   if (!url) return Promise.resolve();
 
   const http = injector.get(HttpClient);
-  const httpErrorReporter = injector.get(HttpErrorReporterService);
 
   return http
     .request<Environment>(method, url, { headers })
     .pipe(
       catchError(err => {
-        httpErrorReporter.reportError(err);
+        if (isDevMode()) {
+          console.warn(
+            `[ABP Environment] Failed to fetch remote environment from "${url}". ` +
+              `Error: ${err.message || err}\n` +
+              `See https://abp.io/docs/latest/framework/ui/angular/environment#example-remoteenv-configuration for configuration details.`,
+          );
+        }
         return of(null);
-      }), // TODO: Consider get handle function from a provider
+      }),
       tap(env =>
         environmentService.setState(
           mergeEnvironments(environment, env || ({} as Environment), remoteEnv as RemoteEnv),

@@ -1,0 +1,81 @@
+<abp-page [title]="'CmsKit::BlogPosts' | abpLocalization">
+  <div class="card">
+    <div class="card-body">
+      @if (form && (!isEditMode || blogPost)) {
+        <form [formGroup]="form" (ngSubmit)="saveAsDraft()" validateOnSubmit>
+          <!-- Cover Image -->
+          <div class="mb-3">
+            @if (coverImagePreview) {
+              <div class="mb-2">
+                <img [src]="coverImagePreview" height="120" alt="Cover Image" />
+                <br />
+                <button type="button" class="btn btn-link p-0" (click)="removeCoverImage()">
+                  {{ 'CmsKit::RemoveCoverImage' | abpLocalization }}
+                </button>
+                <br />
+              </div>
+            }
+            <label class="form-label"
+              >{{ 'CmsKit::CoverImage' | abpLocalization }}
+              <span class="badge text-bg-light">16:9</span></label
+            >
+            <input
+              type="file"
+              class="form-control"
+              accept="image/*"
+              (change)="onCoverImageChange($event)"
+            />
+          </div>
+
+          <!-- Basic fields -->
+          <abp-extensible-form [selectedRecord]="blogPost || {}" />
+
+          <!-- Content editor -->
+          <div class="mt-3">
+            <label class="form-label">{{ 'CmsKit::Content' | abpLocalization }}</label>
+            <abp-toastui-editor formControlName="content" />
+          </div>
+        </form>
+
+        <!-- Tags Editor -->
+        @if (isTagsEnabled) {
+          <hr />
+          <div class="mb-3">
+            <label class="form-label">{{ 'CmsKit::Tags' | abpLocalization }}</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="tags"
+              [ngModelOptions]="{ standalone: true }"
+              [placeholder]="'CmsKit::TagsHelpText' | abpLocalization"
+            />
+            <div class="form-text">{{ 'CmsKit::TagsHelpText' | abpLocalization }}</div>
+          </div>
+        }
+      } @else {
+        <div class="text-center">
+          <i class="fa fa-pulse fa-spinner" aria-hidden="true"></i>
+        </div>
+      }
+    </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-start gap-2">
+        <button class="btn btn-secondary" (click)="saveAsDraft()" [disabled]="form?.invalid">
+          {{ 'CmsKit::SaveAsDraft' | abpLocalization }}
+        </button>
+        @if (isEditMode) {
+          <abp-button (click)="publish()" [disabled]="form?.invalid">
+            {{ 'CmsKit::Publish' | abpLocalization }}
+          </abp-button>
+        } @else {
+          <abp-button (click)="publish()" [disabled]="form?.invalid">
+            {{ 'CmsKit::Publish' | abpLocalization }}
+          </abp-button>
+          <abp-button (click)="sendToReview()" [disabled]="form?.invalid">
+            {{ 'CmsKit::SendToReviewToPublish' | abpLocalization }}
+          </abp-button>
+        }
+      </div>
+    </div>
+  </div>
+</abp-page>

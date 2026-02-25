@@ -4,11 +4,12 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
-  Input,
   Optional,
-  QueryList,
   SkipSelf,
-  ViewChildren,
+  viewChildren,
+  input,
+  signal,
+  effect
 } from '@angular/core';
 import { ControlContainer, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
@@ -41,21 +42,24 @@ export class ExtensibleFormComponent<R = any> {
   private readonly extensions = inject(ExtensionsService);
   private readonly identifier = inject(EXTENSIONS_IDENTIFIER);
 
-  @ViewChildren(ExtensibleFormPropComponent)
-  formProps!: QueryList<ExtensibleFormPropComponent>;
+  readonly formProps = viewChildren(ExtensibleFormPropComponent);
 
-  @Input()
-  set selectedRecord(record: R) {
-    const type = !record || JSON.stringify(record) === '{}' ? 'create' : 'edit';
-    const propList = this.extensions[`${type}FormProps`].get(this.identifier).props;
-    this.groupedPropList = this.createGroupedList(propList);
-    this.record = record;
-  }
+  readonly selectedRecord = input<R | undefined>(undefined);
 
   extraPropertiesKey = EXTRA_PROPERTIES_KEY;
-  groupedPropList!: GroupedFormPropList;
+  readonly groupedPropList = signal<GroupedFormPropList | undefined>(undefined);
   groupedPropListOfArray: FormProp<any>[][];
-  record!: R;
+  readonly record = signal<R | undefined>(undefined);
+
+  constructor() {
+    effect(() => {
+      const recordValue = this.selectedRecord();
+      const type = !recordValue || JSON.stringify(recordValue) === '{}' ? 'create' : 'edit';
+      const propList = this.extensions[`${type}FormProps`].get(this.identifier).props;
+      this.groupedPropList.set(this.createGroupedList(propList));
+      this.record.set(recordValue);
+    });
+  }
 
   get form(): UntypedFormGroup {
     return (this.container ? this.container.control : { controls: {} }) as UntypedFormGroup;
@@ -75,8 +79,10 @@ export class ExtensibleFormComponent<R = any> {
   }
 
   //TODO: Reactor this method
-  isAnyGroupMemberVisible(index: number, data) {
-    const { items } = this.groupedPropList;
+  isAnyGroupMemberVisible(index: number, data: any) {
+    const groupedPropListValue = this.groupedPropList();
+    if (!groupedPropListValue) return false;
+    const { items } = groupedPropListValue;
     const formPropList = items[index].formPropList.toArray();
     return formPropList.some(prop => prop.visible(data));
   }

@@ -37,9 +37,9 @@
 @* ************************* CREATE MODAL ************************* *@
 @if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
-        <ModalContent Centered="true">
-            <Form>
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal" Centered="true">
+        <ModalContent>
+            <Form id="CreateTenantForm">
                 <ModalHeader>
                     <ModalTitle>@L["NewTenant"]</ModalTitle>
                     <CloseButton Clicked="CloseCreateModalAsync"/>
@@ -49,21 +49,21 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"] *</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextInput @bind-Value="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["DisplayName:AdminEmailAddress"] *</FieldLabel>
-                                <TextEdit Role="@TextRole.Email" @bind-Text="@NewEntity.AdminEmailAddress">
+                                <TextInput Role="@TextRole.Email" @bind-Value="@NewEntity.AdminEmailAddress">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
@@ -71,8 +71,8 @@
                              <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
                              <Addons>
                                 <Addon AddonType="AddonType.Body">
-                                    <TextEdit Role="ShowPassword ? TextRole.Text : TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
-                                    </TextEdit>
+                                    <TextInput Role="ShowPassword ? TextRole.Text : TextRole.Password" @bind-Value="@NewEntity.AdminPassword">
+                                    </TextInput>
                                 </Addon>
                                 <Addon AddonType="AddonType.End">
                                     <Button Color="Color.Secondary" Clicked="@(() => TogglePasswordVisibility())">
@@ -88,7 +88,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Primary" Outline Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@CreateEntityAsync"/>
+                    <SubmitButton Form="CreateTenantForm" Clicked="@CreateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>
@@ -98,9 +98,9 @@
 @* ************************* EDIT MODAL ************************* *@
 @if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal" Closing="@ClosingEditModal">
-        <ModalContent Centered="true">
-            <Form>
+    <Modal @ref="EditModal" Closing="@ClosingEditModal" Centered="true">
+        <ModalContent>
+            <Form id="EditTenantForm">
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
                     <CloseButton Clicked="CloseEditModalAsync"/>
@@ -110,11 +110,11 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"] *</FieldLabel>
-                                <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
+                                <TextInput @bind-Value="@EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                     </Validations>
@@ -122,7 +122,7 @@
                 </ModalBody>
                 <ModalFooter>
                     <Button Color="Color.Primary" Outline Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
-                    <SubmitButton Clicked="@UpdateEntityAsync"/>
+                    <SubmitButton Form="EditTenantForm" Clicked="@UpdateEntityAsync"/>
                 </ModalFooter>
             </Form>
         </ModalContent>

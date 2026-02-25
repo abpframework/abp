@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-property-descriptor.schema.json",
+  "title": "EntityPropertyDescriptor",
+  "description": "Describes a property configuration",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the property",
+      "minLength": 1
+    },
+    "type": {
+      "$ref": "entity-property-type.schema.json"
+    },
+    "enumType": {
+      "type": "string",
+      "description": "Name of a JSON-defined enum (or full type name for code enums)"
+    },
+    "allowSetByClients": {
+      "type": "boolean",
+      "description": "Indicates whether clients are allowed to set this property"
+    },
+    "serverOnly": {
+      "type": "boolean",
+      "description": "When true, this property is completely hidden from clients (API responses and UI definitions). Use for sensitive data like passwords."
+    },
+    "isMappedToDbField": {
+      "type": "boolean",
+      "description": "Indicates whether the property is mapped to a database field"
+    },
+    "isUnique": {
+      "type": "boolean",
+      "description": "Indicates whether the property value must be unique across all entities"
+    },
+    "isRequired": {
+      "type": "boolean",
+      "description": "When true, the property is required (not nullable). Affects DB column (NOT NULL), UI validation, and backend validation."
+    },
+    "ui": {
+      "$ref": "entity-property-ui-descriptor.schema.json"
+    },
+    "foreignKey": {
+      "$ref": "foreign-key-descriptor.schema.json"
+    },
+    "validators": {
+      "type": "array",
+      "description": "Array of validators to apply to this property",
+      "items": {
+        "$ref": "validator-descriptor.schema.json"
+      }
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false
+}

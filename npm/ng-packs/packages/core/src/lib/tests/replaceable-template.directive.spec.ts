@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, Input, inject, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { BehaviorSubject } from 'rxjs';
@@ -18,11 +18,9 @@ class DefaultComponent {
   @Input()
   twoWay: boolean;
 
-  @Output()
-  readonly twoWayChange = new EventEmitter<boolean>();
+  readonly twoWayChange = output<boolean>();
 
-  @Output()
-  readonly someOutput = new EventEmitter<string>();
+  readonly someOutput = output<string>();
 
   setTwoWay(value) {
     this.twoWay = value;

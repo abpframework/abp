@@ -24,7 +24,7 @@
     "BrowserInfo": "Browser-Informationen",
     "Url": "URL",
     "UserName": "Benutzername",
-    "TenantImpersonator": "Mieter-Imitator",
+    "TenantImpersonator": "Mandanten-Imitator",
     "UserImpersonator": "Benutzer-Imitator",
     "UrlFilter": "URL-Filter",
     "Exceptions": "Ausnahmen",

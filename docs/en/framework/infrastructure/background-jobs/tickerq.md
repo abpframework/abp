@@ -38,16 +38,19 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ### UseAbpTickerQ
 
-You need to call the `UseAbpTickerQ` extension method instead of `AddTickerQ` in the `OnApplicationInitialization` method of your module:
+You need to call the `UseAbpTickerQ` extension method in the `OnApplicationInitialization` method of your module:
 
 ```csharp
-// (default: TickerQStartMode.Immediate)
-app.UseAbpTickerQ(startMode: ...);
+public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+{
+    // (default: TickerQStartMode.Immediate)
+    context.GetHost().UseAbpTickerQ(qStartMode: ...);
+}
 ```
 
 ### AbpBackgroundJobsTickerQOptions
 
-You can configure the `TimeTicker` properties for specific jobs. For example, you can change `Priority`, `Retries` and `RetryIntervals` properties as shown below:
+You can configure the `TimeTickerEntity` properties for specific jobs. For example, you can change `Priority`, `Retries` and `RetryIntervals` properties as shown below:
 
 ```csharp
 Configure<AbpBackgroundJobsTickerQOptions>(options =>
@@ -56,11 +59,10 @@ Configure<AbpBackgroundJobsTickerQOptions>(options =>
 	{
 		Retries = 3,
 		RetryIntervals = new[] {30, 60, 120}, // Retry after 30s, 60s, then 2min
-		Priority = TickerTaskPriority.High
+		Priority = TickerTaskPriority.High,
 
-		// Optional batching
-		//BatchParent = Guid.Parse("...."),
-		//BatchRunCondition = BatchRunCondition.OnSuccess
+		// Optional: run condition for chained jobs
+		//RunCondition = RunCondition.OnSuccess
 	});
 
 	options.AddJobConfiguration<MyBackgroundJob2>(new AbpBackgroundJobsTimeTickerConfiguration()
@@ -74,7 +76,7 @@ Configure<AbpBackgroundJobsTickerQOptions>(options =>
 
 ### Add your own TickerQ Background Jobs Definitions
 
-ABP will handle the TickerQ job definitions by `AbpTickerQFunctionProvider` service. You shouldn't use `TickerFunction` to add your own job definitions. You can inject and use the `AbpTickerQFunctionProvider` to add your own definitions and use `ITimeTickerManager<TimeTicker>` or `ICronTickerManager<CronTicker>` to manage the jobs.
+ABP will handle the TickerQ job definitions by `AbpTickerQFunctionProvider` service. You shouldn't use `TickerFunction` to add your own job definitions. You can inject and use the `AbpTickerQFunctionProvider` to add your own definitions and use `ITimeTickerManager<TimeTickerEntity>` or `ICronTickerManager<CronTickerEntity>` to manage the jobs.
 
 For example, you can add a `CleanupJobs` job definition in the `OnPreApplicationInitializationAsync` method of your module:
 
@@ -96,7 +98,7 @@ public override Task OnPreApplicationInitializationAsync(ApplicationInitializati
 	abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
 	{
 		var service = new CleanupJobs(); // Or get it from the serviceProvider
-		var request = await TickerRequestProvider.GetRequestAsync<string>(serviceProvider,  tickerFunctionContext.Id, tickerFunctionContext.Type);
+		var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
 		var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
 		await service.CleanupLogsAsync(genericContext, cancellationToken);
 	})));
@@ -105,11 +107,11 @@ public override Task OnPreApplicationInitializationAsync(ApplicationInitializati
 }
 ```
 
-And then you can add a job by using the `ITimeTickerManager<TimeTicker>`:
+And then you can add a job by using the `ITimeTickerManager<TimeTickerEntity>`:
 
 ```csharp
-var timeTickerManager = context.ServiceProvider.GetRequiredService<ITimeTickerManager<TimeTicker>>();
-await timeTickerManager.AddAsync(new TimeTicker
+var timeTickerManager = context.ServiceProvider.GetRequiredService<ITimeTickerManager<TimeTickerEntity>>();
+await timeTickerManager.AddAsync(new TimeTickerEntity
 {
 	Function = nameof(CleanupJobs),
 	ExecutionTime = DateTime.UtcNow.AddSeconds(5),

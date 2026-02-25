@@ -135,7 +135,8 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
     {
         return new MultiTenancyInfoDto
         {
-            IsEnabled = _multiTenancyOptions.IsEnabled
+            IsEnabled = _multiTenancyOptions.IsEnabled,
+            UserSharingStrategy = _multiTenancyOptions.UserSharingStrategy
         };
     }
 

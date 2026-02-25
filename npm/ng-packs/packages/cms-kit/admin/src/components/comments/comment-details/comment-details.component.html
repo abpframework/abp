@@ -1,0 +1,147 @@
+<abp-page [title]="'CmsKit::Comments' | abpLocalization">
+  @if (comment) {
+    <div class="card mb-4">
+      <div class="card-body">
+        <table class="table">
+          <tr>
+            <td width="10%">
+              <b>{{ 'CmsKit::EntityType' | abpLocalization }}</b
+              >:
+            </td>
+            <td>{{ comment.entityType }}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>{{ 'CmsKit::EntityId' | abpLocalization }}</b
+              >:
+            </td>
+            <td>{{ comment.entityId }}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>{{ 'AbpIdentity::CreationTime' | abpLocalization }}</b
+              >:
+            </td>
+            <td>{{ comment.creationTime | date }}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>{{ 'CmsKit::Username' | abpLocalization }}</b
+              >:
+            </td>
+            <td>{{ comment.author?.name }}</td>
+          </tr>
+          @if (comment.repliedCommentId) {
+            <tr>
+              <td>
+                <b>{{ 'CmsKit::ReplyTo' | abpLocalization }}</b
+                >:
+              </td>
+              <td>
+                <a (click)="navigateToReply(comment.repliedCommentId!)" style="cursor: pointer">
+                  {{ comment.repliedCommentId }}
+                </a>
+              </td>
+            </tr>
+          }
+          <tr>
+            <td class="align-text-top">
+              <b>{{ 'CmsKit::Text' | abpLocalization }}</b
+              >:
+            </td>
+            <td>{{ comment.text }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  }
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+        <input type="hidden" [value]="commentId" />
+        <div class="row">
+          <div class="col-lg-4 col-md-12">
+            <div class="row">
+              <div class="col-lg-6 col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="creationStartDate">
+                    {{ 'CmsKit::StartDate' | abpLocalization }}
+                  </label>
+                  <input
+                    id="creationStartDate"
+                    formControlName="creationStartDate"
+                    (click)="startDatePicker.open()"
+                    (keyup.space)="startDatePicker.open()"
+                    ngbDatepicker
+                    #startDatePicker="ngbDatepicker"
+                    type="text"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="creationEndDate">
+                    {{ 'CmsKit::EndDate' | abpLocalization }}
+                  </label>
+                  <input
+                    id="creationEndDate"
+                    formControlName="creationEndDate"
+                    class="form-control"
+                    ngbDatepicker
+                    #endDatePicker="ngbDatepicker"
+                    (click)="endDatePicker.toggle()"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-12">
+            <abp-form-input
+              formControlName="author"
+              [label]="'CmsKit::Username' | abpLocalization"
+              type="text"
+            />
+          </div>
+          @if (requireApprovement) {
+            <div class="col-lg-2 col-md-12">
+              <div class="mb-3">
+                <label class="mb-1 form-label" for="commentApproveState">
+                  {{ 'CmsKit::CommentFilter:ApproveState' | abpLocalization }}
+                </label>
+                <select
+                  id="commentApproveState"
+                  formControlName="commentApproveState"
+                  class="form-control"
+                >
+                  @for (option of commentApproveStateOptions; track option.value) {
+                    <option [value]="option.value">
+                      {{ 'CmsKit::CommentFilter:' + option.value | abpLocalization }}
+                    </option>
+                  }
+                </select>
+              </div>
+            </div>
+          }
+
+          <div class="col-lg-2 col-md-12">
+            <div class="d-grid gap-2">
+              <abp-button class="mt-md-4" buttonType="Primary" type="submit">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </abp-button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <h3>{{ 'CmsKit::RepliesToThisComment' | abpLocalization }}</h3>
+
+  <div class="card">
+    <abp-extensible-table [data]="data.items" [recordsTotal]="data.totalCount" [list]="list" />
+  </div>
+</abp-page>

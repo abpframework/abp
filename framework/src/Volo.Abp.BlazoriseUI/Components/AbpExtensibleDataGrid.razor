@@ -7,7 +7,7 @@
           ReadData="@ReadData"
           TotalItems="@TotalItems"
           ShowPager="@ShowPager"
-          CurrentPage="@CurrentPage"
+          Page="@CurrentPage"
           PageSize="@PageSize"
           Responsive="@Responsive"
           Striped
@@ -44,9 +44,9 @@
                                         <EntityAction TItem="TItem"
                                                       Color="@(action.Color != null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
-                                                      Clicked="async () => await action.Clicked(context!)"
-                                                      ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context!)"
-                                                      Visible="@(action.Visible != null ? action.Visible(context!) : true)"
+                                                      Clicked="async () => await action.Clicked(context.Item!)"
+                                                      ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context.Item!)"
+                                                      Visible="@(action.Visible != null ? action.Visible(context.Item!) : true)"
                                                       Text="@action.Text"
                                                       Disabled="@action.Disabled">
                                         </EntityAction>
@@ -54,10 +54,10 @@
                                     else
                                     {
                                         <EntityAction TItem="TItem"
-                                                      Clicked="async () => await action.Clicked(context!)"
+                                                      Clicked="async () => await action.Clicked(context.Item!)"
                                                       Color="@(action.Color != null ? (Blazorise.Color)action.Color : Blazorise.Color.Primary)"
                                                       Icon="@action.Icon"
-                                                      Visible="@(action.Visible != null ? action.Visible(context!) : true)"
+                                                      Visible="@(action.Visible != null ? action.Visible(context.Item!) : true)"
                                                       Text="@action.Text"
                                                       Disabled="@action.Disabled">
                                         </EntityAction>
@@ -73,17 +73,17 @@
                     {
                         @if (column.ValueConverter == null)
                         {
-                            <DataGridColumn TItem="TItem" Field="@column.Data" Width="@column.Width" Caption="@column.Title" Sortable="@column.Sortable" DisplayFormat="@column.DisplayFormat" DisplayFormatProvider="@column.DisplayFormatProvider" Displayable="column.Visible" >
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)" Caption="@column.Title" Sortable="@column.Sortable" DisplayFormat="@column.DisplayFormat" DisplayFormatProvider="@column.DisplayFormatProvider" Displayable="column.Visible" >
                                 <DisplayTemplate>
-                                    @RenderCustomTableColumnComponent(column.Component, context!)
+                                    @RenderCustomTableColumnComponent(column.Component, context.Item!)
                                 </DisplayTemplate>
                             </DataGridColumn>
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@column.Data" Width="@column.Width"  Caption="@column.Title" Sortable="@column.Sortable" Displayable="column.Visible">
+                            <DataGridColumn TItem="TItem" Field="@column.Data" Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)"  Caption="@column.Title" Sortable="@column.Sortable" Displayable="column.Visible">
                                 <DisplayTemplate>
-                                    @RenderCustomTableColumnComponent(column.Component, context!)
+                                    @RenderCustomTableColumnComponent(column.Component, context.Item!)
                                 </DisplayTemplate>
                             </DataGridColumn>
                         }
@@ -92,11 +92,11 @@
                     {
                         if (!ExtensionPropertiesRegex.IsMatch(column.Data))
                         {
-                            @if (column.ValueConverter == null)
+                            @if (column.ValueConverter == null && !IsDateTimeColumn(column))
                             {
                                 <DataGridColumn TItem="TItem"
                                                 Field="@column.Data"
-                                                Width="@column.Width"
+                                                Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)"
                                                 Caption="@column.Title"
                                                 Sortable="@column.Sortable"
                                                 DisplayFormat="@column.DisplayFormat"
@@ -107,19 +107,19 @@
                             {
                                 <DataGridColumn TItem="TItem"
                                                 Field="@column.Data"
-                                                Width="@column.Width"
+                                                Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)"
                                                 Caption="@column.Title"
                                                 Sortable="@column.Sortable"
                                                 Displayable="column.Visible">
                                     <DisplayTemplate>
-                                        @((MarkupString)GetConvertedFieldValue(context, column))
+                                        @((MarkupString)GetConvertedFieldValue(context.Item, column))
                                     </DisplayTemplate>
                                 </DataGridColumn>
                             }
                         }
                         else
                         {
-                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@column.Width" Caption="@column.Title" Displayable="column.Visible" Sortable="@column.Sortable">
+                            <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)" Caption="@column.Title" Displayable="column.Visible" Sortable="@column.Sortable">
                                 <DisplayTemplate>
                                     @{
                                         var entity = context as IHasExtraProperties;
@@ -140,18 +140,11 @@
                                         {
                                             if (column.ValueConverter != null)
                                             {
-                                                @((MarkupString)GetConvertedFieldValue(context, column))
+                                                @((MarkupString)GetConvertedFieldValue(context.Item, column))
                                             }
                                             else
                                             {
-                                                if (column.DisplayFormat == null)
-                                                {
-                                                    @(propertyValue)
-                                                }
-                                                else
-                                                {
-                                                    @(string.Format(column.DisplayFormatProvider, column.DisplayFormat, propertyValue))
-                                                }
+                                                @((MarkupString)GetConvertedFieldValue(propertyValue, column))
                                             }
                                         }
                                     }

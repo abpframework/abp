@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Blazorise;
 using Blazorise.DataGrid;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
@@ -21,13 +22,13 @@ public partial class DataGridEntityActionsColumn<TItem> : DataGridColumn<TItem>
     protected virtual ValueTask SetDefaultValuesAsync()
     {
         Caption = UiLocalizer["Actions"];
-        Width = "150px";
+        Width = Blazorise.Width.Px(150);
         Sortable = false;
         Field = ResolveFieldName();
-        
+
         return ValueTask.CompletedTask;
     }
-    
+
     protected virtual string ResolveFieldName()
     {
         var props = typeof(TItem).GetProperties();

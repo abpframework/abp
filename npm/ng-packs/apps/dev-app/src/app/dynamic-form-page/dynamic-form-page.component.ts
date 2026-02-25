@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { DynamicFormComponent, FormFieldConfig } from '@abp/ng.components/dynamic-form';
 import { FormConfigService } from './form-config.service';
 
@@ -8,7 +8,7 @@ import { FormConfigService } from './form-config.service';
     imports: [DynamicFormComponent],
 })
 export class DynamicFormPageComponent implements OnInit {
-    @ViewChild(DynamicFormComponent, { static: false }) dynamicFormComponent: DynamicFormComponent;
+    readonly dynamicFormComponent = viewChild(DynamicFormComponent);
     protected readonly formConfigService = inject(FormConfigService);
 
     formFields: FormFieldConfig[] = [];
@@ -27,12 +27,12 @@ export class DynamicFormPageComponent implements OnInit {
         alert('✅ Form submitted successfully! Check the console for details.');
         
         // Reset form after submission
-        this.dynamicFormComponent.resetForm();
+        this.dynamicFormComponent().resetForm();
     }
 
     cancel() {
         console.log('❌ Form Cancelled');
         alert('Form cancelled');
-        this.dynamicFormComponent.resetForm();
+        this.dynamicFormComponent().resetForm();
     }
 }

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TickerQ.Dashboard.DependencyInjection;
 using TickerQ.DependencyInjection;
 using TickerQ.Utilities;
 using TickerQ.Utilities.Enums;
 using TickerQ.Utilities.Interfaces.Managers;
-using TickerQ.Utilities.Models;
-using TickerQ.Utilities.Models.Ticker;
+using TickerQ.Utilities.Base;
+using TickerQ.Utilities.Entities;
 using Volo.Abp.AspNetCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs.DemoApp.Shared;
@@ -35,13 +36,14 @@ public class DemoAppTickerQModule : AbpModule
     {
         context.Services.AddTickerQ(options =>
         {
-            options.UpdateMissedJobCheckDelay(TimeSpan.FromSeconds(30));
+            options.ConfigureScheduler(scheduler =>
+            {
+                scheduler.FallbackIntervalChecker = TimeSpan.FromSeconds(30);
+            });
 
             options.AddDashboard(x =>
             {
-                x.BasePath = "/tickerq-dashboard";
-
-                x.UseHostAuthentication = true;
+                x.SetBasePath("/tickerq-dashboard");
             });
         });
 
@@ -78,7 +80,7 @@ public class DemoAppTickerQModule : AbpModule
         abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
         {
             var service = new CleanupJobs();
-            var request = await TickerRequestProvider.GetRequestAsync<string>(serviceProvider,  tickerFunctionContext.Id, tickerFunctionContext.Type);
+            var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
             var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
             await service.CleanupLogsAsync(genericContext, cancellationToken);
         })));
@@ -92,10 +94,11 @@ public class DemoAppTickerQModule : AbpModule
         await backgroundWorkerManager.AddAsync(context.ServiceProvider.GetRequiredService<MyBackgroundWorker>());
 
         var app = context.GetApplicationBuilder();
-        app.UseAbpTickerQ();
 
-        var timeTickerManager = context.ServiceProvider.GetRequiredService<ITimeTickerManager<TimeTicker>>();
-        await timeTickerManager.AddAsync(new TimeTicker
+        context.GetHost().UseAbpTickerQ();
+
+        var timeTickerManager = context.ServiceProvider.GetRequiredService<ITimeTickerManager<TimeTickerEntity>>();
+        await timeTickerManager.AddAsync(new TimeTickerEntity
         {
             Function = nameof(CleanupJobs),
             ExecutionTime = DateTime.UtcNow.AddSeconds(5),
@@ -104,8 +107,8 @@ public class DemoAppTickerQModule : AbpModule
             RetryIntervals = new[] { 30, 60, 120 }, // Retry after 30s, 60s, then 2min
         });
 
-        var cronTickerManager = context.ServiceProvider.GetRequiredService<ICronTickerManager<CronTicker>>();
-        await cronTickerManager.AddAsync(new CronTicker
+        var cronTickerManager = context.ServiceProvider.GetRequiredService<ICronTickerManager<CronTickerEntity>>();
+        await cronTickerManager.AddAsync(new CronTickerEntity
         {
             Function = nameof(CleanupJobs),
             Expression = "* * * * *", // Every minute
@@ -134,7 +137,7 @@ public class DemoAppTickerQModule : AbpModule
 
         await Task.Delay(1000);
 
-        var timeTickerManager = serviceProvider.GetRequiredService<ITimeTickerManager<TimeTicker>>();
+        var timeTickerManager = serviceProvider.GetRequiredService<ITimeTickerManager<TimeTickerEntity>>();
         var result = await timeTickerManager.DeleteAsync(Guid.Parse(jobId));
     }
 }

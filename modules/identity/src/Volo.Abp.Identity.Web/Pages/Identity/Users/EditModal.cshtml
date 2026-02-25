@@ -83,7 +83,14 @@
                             @for (var i = 0; i < Model.Roles.Length; i++)
                             {
                                 var role = Model.Roles[i];
-                                <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                                @if (role.IsAssignable)
+                                {
+                                    <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                                }
+                                else
+                                {
+                                    <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" disabled="true" readonly="true" />
+                                }
                                 <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
                             }
                         </div>

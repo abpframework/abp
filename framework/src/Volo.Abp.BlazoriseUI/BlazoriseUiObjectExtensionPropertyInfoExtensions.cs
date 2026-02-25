@@ -211,7 +211,7 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
     {
         foreach (var attribute in propertyInfo.Attributes)
         {
-            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute);
+            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute, propertyInfo.Type);
             if (inputTypeByAttribute != null)
             {
                 return inputTypeByAttribute;
@@ -226,7 +226,7 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
         return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
     }
 
-    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute)
+    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute, Type propertyType)
     {
         var hasTextEditSupport = TextEditSupportedAttributeTypes.Any(t => t == attribute.GetType());
 
@@ -234,7 +234,6 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
         {
             return typeof(TextExtensionProperty<,>);
         }
-
 
         if (attribute is DataTypeAttribute dataTypeAttribute)
         {
@@ -247,7 +246,9 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
                     return typeof(TextExtensionProperty<,>);
                 case DataType.Date:
                 case DataType.DateTime:
-                    return typeof(DateTimeExtensionProperty<,>);
+                    return propertyType == typeof(DateTimeOffset) || propertyType == typeof(DateTimeOffset?)
+                        ? typeof(DateTimeOffsetExtensionProperty<,>)
+                        : typeof(DateTimeExtensionProperty<,>);
                 case DataType.Time:
                     return typeof(TimeExtensionProperty<,>);
                 case DataType.MultilineText:
@@ -265,9 +266,14 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             return typeof(CheckExtensionProperty<,>);
         }
 
-        if (type == typeof(DateTime))
+        if (type == typeof(DateTime) || type == typeof(DateTime?))
         {
             return typeof(DateTimeExtensionProperty<,>);
+        }
+
+        if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
+        {
+            return typeof(DateTimeOffsetExtensionProperty<,>);
         }
 
         if (NumberTypes.Contains(type))

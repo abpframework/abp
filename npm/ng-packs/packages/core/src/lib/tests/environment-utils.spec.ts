@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { Environment, RemoteEnv } from '../models/environment';
 import { EnvironmentService } from '../services/environment.service';
 import { getRemoteEnv } from '../utils/environment-utils';
@@ -85,7 +85,6 @@ describe('EnvironmentUtils', () => {
 
       injectorSpy.mockReturnValueOnce(environmentService);
       injectorSpy.mockReturnValueOnce(http);
-      injectorSpy.mockReturnValueOnce({});
 
       requestSpy.mockReturnValue(new BehaviorSubject(customEnv));
 
@@ -95,5 +94,24 @@ describe('EnvironmentUtils', () => {
       expect(requestSpy).toHaveBeenCalledWith('GET', '/assets/appsettings.json', { headers: {} });
       expect(setStateSpy).toHaveBeenCalledWith(expectedValue);
     }
+
+    it('should handle request error gracefully and use local environment', async () => {
+      const injector = spectator.inject(Injector);
+      const injectorSpy = jest.spyOn(injector, 'get');
+      const http = spectator.inject(HttpClient);
+      const requestSpy = jest.spyOn(http, 'request');
+      const environmentService = spectator.inject(EnvironmentService);
+      const setStateSpy = jest.spyOn(environmentService, 'setState');
+
+      injectorSpy.mockReturnValueOnce(environmentService);
+      injectorSpy.mockReturnValueOnce(http);
+
+      requestSpy.mockReturnValue(throwError(() => new Error('Network error')));
+
+      environment.remoteEnv.mergeStrategy = 'deepmerge';
+      await getRemoteEnv(injector, environment);
+
+      expect(setStateSpy).toHaveBeenCalledWith(deepMerge(environment, {}));
+    });
   });
 });

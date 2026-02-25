@@ -1,13 +1,13 @@
-name: Merge branch dev with rel-10.1
+name: Merge branch dev with rel-10.2
 on:
   push:
     branches:
-      - rel-10.1
+      - rel-10.2
 permissions:
   contents: read
 
 jobs:
-  merge-dev-with-rel-10-1:
+  merge-dev-with-rel-10-2:
     permissions:
       contents: write  # for peter-evans/create-pull-request to create branch
       pull-requests: write  # for peter-evans/create-pull-request to create a PR
@@ -18,14 +18,14 @@ jobs:
           ref: dev
       - name: Reset promotion branch
         run: |
-          git fetch origin rel-10.1:rel-10.1
-          git reset --hard rel-10.1
+          git fetch origin rel-10.2:rel-10.2
+          git reset --hard rel-10.2
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: auto-merge/rel-10-1/${{github.run_number}}
-          title: Merge branch dev with rel-10.1
-          body: This PR generated automatically to merge dev with rel-10.1. Please review the changed files before merging to prevent any errors that may occur.
+          branch: auto-merge/rel-10-2/${{github.run_number}}
+          title: Merge branch dev with rel-10.2
+          body: This PR generated automatically to merge dev with rel-10.2. Please review the changed files before merging to prevent any errors that may occur.
           draft: true
           token: ${{ github.token }}
       - name: Merge Pull Request
@@ -33,5 +33,5 @@ jobs:
           GH_TOKEN: ${{ secrets.BOT_SECRET }}
         run: |
           gh pr ready
-          gh pr review auto-merge/rel-10-1/${{github.run_number}} --approve
-          gh pr merge auto-merge/rel-10-1/${{github.run_number}} --merge --auto --delete-branch
+          gh pr review auto-merge/rel-10-2/${{github.run_number}} --approve
+          gh pr merge auto-merge/rel-10-2/${{github.run_number}} --merge --auto --delete-branch

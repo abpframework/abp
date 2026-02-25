@@ -341,6 +341,10 @@
                   "path": "studio/monitoring-applications.md"
                 },
                 {
+                  "text": "Model Context Protocol (MCP)",
+                  "path": "studio/model-context-protocol.md"
+                },
+                {
                   "text": "Working with Kubernetes",
                   "path": "studio/kubernetes.md"
                 },
@@ -696,6 +700,10 @@
             {
               "text": "Concurrency Check",
               "path": "framework/infrastructure/concurrency-check.md"
+            },
+            {
+              "text": "Correlation ID",
+              "path": "framework/infrastructure/correlation-id.md"
             },
             {
               "text": "Current User",
@@ -1620,6 +1628,10 @@
                       "path": "framework/ui/angular/localization.md"
                     },
                     {
+                      "text": "Hybrid Localization",
+                      "path": "framework/ui/angular/hybrid-localization.md"
+                    },
+                    {
                       "text": "Form Validation",
                       "path": "framework/ui/angular/form-validation.md"
                     },
@@ -1970,6 +1982,44 @@
         {
           "text": "Dapr Integration",
           "path": "framework/dapr"
+        }
+      ]
+    },
+    {
+      "text": "Low-Code System",
+      "items": [
+        {
+          "text": "Overview",
+          "path": "low-code",
+          "isIndex": true
+        },
+        {
+          "text": "Attributes & Fluent API",
+          "path": "low-code/fluent-api.md"
+        },
+        {
+          "text": "model.json Structure",
+          "path": "low-code/model-json.md"
+        },
+        {
+          "text": "Reference Entities",
+          "path": "low-code/reference-entities.md"
+        },
+        {
+          "text": "Interceptors",
+          "path": "low-code/interceptors.md"
+        },
+        {
+          "text": "Scripting API",
+          "path": "low-code/scripting-api.md"
+        },
+        {
+          "text": "Custom Endpoints",
+          "path": "low-code/custom-endpoints.md"
+        },
+        {
+          "text": "Foreign Access",
+          "path": "low-code/foreign-access.md"
         }
       ]
     },

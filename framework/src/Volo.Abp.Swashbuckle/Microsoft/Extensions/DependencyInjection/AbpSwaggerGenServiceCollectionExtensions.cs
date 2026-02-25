@@ -77,7 +77,8 @@ public static class AbpSwaggerGenServiceCollectionExtensions
         string[]? scopes = null,
         string[]? flows = null,
         string? discoveryEndpoint = null,
-        Action<SwaggerGenOptions>? setupAction = null)
+        Action<SwaggerGenOptions>? setupAction = null,
+        string oidcAuthenticationScheme = "oidc")
     {
         var discoveryUrl = discoveryEndpoint != null ?
             $"{discoveryEndpoint.TrimEnd('/')}/.well-known/openid-configuration":
@@ -96,7 +97,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
             .AddSwaggerGen(
                 options =>
                 {
-                    options.AddSecurityDefinition("oidc", new OpenApiSecurityScheme
+                    options.AddSecurityDefinition(oidcAuthenticationScheme, new OpenApiSecurityScheme
                     {
                         Type = SecuritySchemeType.OpenIdConnect,
                         OpenIdConnectUrl = new Uri(RemoveTenantPlaceholders(discoveryUrl))
@@ -104,7 +105,7 @@ public static class AbpSwaggerGenServiceCollectionExtensions
 
                     options.AddSecurityRequirement(document => new OpenApiSecurityRequirement()
                     {
-                        [new OpenApiSecuritySchemeReference("oauth2", document)] = []
+                        [new OpenApiSecuritySchemeReference(oidcAuthenticationScheme, document)] = []
                     });
 
                     setupAction?.Invoke(options);

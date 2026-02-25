@@ -4,8 +4,8 @@
 @inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
 @inject AbpBlazorMessageLocalizerHelper<AbpPermissionManagementResource> LH
 
-<Modal @ref="Modal" Closing="@ClosingModal">
-    <ModalContent Size="ModalSize.ExtraLarge" Centered="true">
+<Modal @ref="Modal" Closing="@ClosingModal" Size="ModalSize.ExtraLarge" Centered="true">
+    <ModalContent>
         <ModalHeader>
             <ModalTitle>@L["ResourcePermissions"] - @ResourceDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
@@ -23,7 +23,7 @@
                           PageSize="PageSize">
                     <DataGridColumns>
                         <DataGridColumn
-                            Width="150px"
+                            Width="Width.Px( 150 )"
                             Sortable="false"
                             TItem="ResourcePermissionGrantInfoDto"
                             Field="@nameof(ResourcePermissionGrantInfoDto.ProviderName)"
@@ -34,10 +34,10 @@
                                         @L["Actions"]
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                        <DropdownItem Clicked="() => OpenEditModalAsync(context)">
+                                        <DropdownItem Clicked="() => OpenEditModalAsync(context.Item)">
                                             @L["Edit"]
                                         </DropdownItem>
-                                        <DropdownItem Clicked="() => DeleteResourcePermissionAsync(context)">
+                                        <DropdownItem Clicked="() => DeleteResourcePermissionAsync(context.Item)">
                                             @L["Delete"]
                                         </DropdownItem>
                                     </DropdownMenu>
@@ -47,17 +47,17 @@
                         <DataGridColumn TItem="ResourcePermissionGrantInfoDto" Field="@nameof(ResourcePermissionGrantInfoDto.ProviderName)" Caption="@L["ResourcePermissionTarget"]" Sortable="false">
                             <DisplayTemplate>
                                 @{
-                                    <Tooltip Text="@context.ProviderNameDisplayName" Placement="TooltipPlacement.Right" Style="float: left;">
-                                        <span class="d-inline-block bg-light rounded-pill px-2 me-1 ms-1 mb-1">@context.ProviderName</span>
+                                    <Tooltip Text="@context.Item.ProviderNameDisplayName" Placement="TooltipPlacement.Right" Style="float: left;">
+                                        <span class="d-inline-block bg-light rounded-pill px-2 me-1 ms-1 mb-1">@context.Item.ProviderName</span>
                                     </Tooltip>
-                                    @context.ProviderDisplayName
+                                    @context.Item.ProviderDisplayName
                                 }
                             </DisplayTemplate>
                         </DataGridColumn>
                         <DataGridColumn TItem="ResourcePermissionGrantInfoDto" Field="@nameof(ResourcePermissionGrantInfoDto.Permissions)" Caption="@L["ResourcePermissionPermissions"]" Sortable="false">
                             <DisplayTemplate>
                                 @{
-                                    foreach (var permission in context.Permissions)
+                                    foreach (var permission in context.Item.Permissions)
                                     {
                                         <span class="d-inline-block bg-light rounded-pill px-2 me-1 mb-1">@permission.DisplayName</span>
                                     }
@@ -90,8 +90,8 @@
     </ModalContent>
 </Modal>
 
-<Modal @ref="CreateModal" Closing="@ClosingCreateModal">
-    <ModalContent Centered="true">
+<Modal @ref="CreateModal" Closing="@ClosingCreateModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["AddResourcePermission"]</ModalTitle>
@@ -101,8 +101,8 @@
                 <Validations @ref="@CreateValidationsRef" Model="@CreateEntity" ValidateOnLoad="false">
                     <div class="mb-3">
                         <RadioGroup TValue="string"
-                                    CheckedValue="@CurrentLookupService"
-                                    CheckedValueChanged="@OnLookupServiceCheckedValueChanged">
+                                    Value="@CurrentLookupService"
+                                    ValueChanged="@OnLookupServiceCheckedValueChanged">
                             @foreach(var keyLookupService in ResourceProviderKeyLookupServices)
                             {
                                 <Radio Value="@(keyLookupService.Name)">@keyLookupService.DisplayName</Radio>
@@ -122,20 +122,20 @@
                                       class="mt-1">
                         </Autocomplete>
                         <Validation @ref="ProviderKeyValidationRef" Validator="ValidateProviderKey">
-                            <TextEdit Style="display: none;">
+                            <TextInput Style="display: none;">
                                 <Feedback>
                                     <ValidationError></ValidationError>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Validation>
                     </div>
                     <div class="mb-3">
                         <h4>@L["ResourcePermissionPermissions"]</h4>
-                        <Switch TValue="bool" Checked="CreateEntity.Permissions.All(x => x.IsGranted)" CheckedChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
+                        <Switch TValue="bool" Value="CreateEntity.Permissions.All(x => x.IsGranted)" ValueChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
                         <div class="mt-2">
                             @foreach (var permission in CreateEntity.Permissions)
                             {
-                                <Check TValue="bool" Checked="@permission.IsGranted" CheckedChanged="@((c) => OnPermissionCheckedChanged(permission, c))">@permission.DisplayName</Check>
+                                <Check TValue="bool" Value="@permission.IsGranted" ValueChanged="@((c) => OnPermissionCheckedChanged(permission, c))">@permission.DisplayName</Check>
                             }
                         </div>
                     </div>
@@ -149,8 +149,8 @@
     </ModalContent>
 </Modal>
 
-<Modal @ref="EditModal" Closing="@ClosingEditModal">
-    <ModalContent Centered="true">
+<Modal @ref="EditModal" Closing="@ClosingEditModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["UpdateResourcePermission"]</ModalTitle>
@@ -160,11 +160,11 @@
                 <Validations @ref="@EditValidationsRef" Model="@EditEntity" ValidateOnLoad="false">
                     <div class="mb-3">
                         <h4>@L["ResourcePermissionPermissions"]</h4>
-                        <Switch TValue="bool" Checked="EditEntity.Permissions.All(x => x.IsGranted)" CheckedChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
+                        <Switch TValue="bool" Value="EditEntity.Permissions.All(x => x.IsGranted)" ValueChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
                         <div class="mt-2">
                             @foreach (var permission in EditEntity.Permissions)
                             {
-                                <Check TValue="bool" Checked="@permission.IsGranted" CheckedChanged="@((c) => OnPermissionCheckedChanged(permission, c))">@permission.DisplayName</Check>
+                                <Check TValue="bool" Value="@permission.IsGranted" ValueChanged="@((c) => OnPermissionCheckedChanged(permission, c))">@permission.DisplayName</Check>
                             }
                         </div>
                     </div>

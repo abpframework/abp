@@ -1,0 +1,16 @@
+<abp-page [title]="'CmsKit::Blogs' | abpLocalization" [toolbar]="data.items">
+  <div class="card">
+    <abp-extensible-table [data]="data.items" [recordsTotal]="data.totalCount" [list]="list" />
+  </div>
+
+  @if (isModalVisible) {
+    <abp-blog-modal [selected]="selected" (visibleChange)="onVisibleModalChange($event)" />
+  }
+
+  @if (isFeaturesModalVisible) {
+    <abp-blog-features-modal
+      [blogId]="selectedBlogId"
+      (visibleChange)="onFeaturesModalChange($event)"
+    />
+  }
+</abp-page>

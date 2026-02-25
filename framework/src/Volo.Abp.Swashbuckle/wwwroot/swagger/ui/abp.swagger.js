@@ -11,7 +11,7 @@ var abp = abp || {};
         var oidcSupportedScopes = configObject.oidcSupportedScopes || [];
         var oidcDiscoveryEndpoint = configObject.oidcDiscoveryEndpoint || [];
         var tenantPlaceHolders = ["{{tenantId}}", "{{tenantName}}", "{0}"]
-        abp.appPath = configObject.baseUrl || abp.appPath;
+        abp.appPath = abp.appPath || "/";
 
         var requestInterceptor = configObject.requestInterceptor;
         var responseInterceptor = configObject.responseInterceptor;

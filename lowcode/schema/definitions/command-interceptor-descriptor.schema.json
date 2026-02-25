@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "command-interceptor-descriptor.schema.json",
+  "title": "CommandInterceptorDescriptor",
+  "description": "Describes a command interceptor",
+  "type": "object",
+  "properties": {
+    "commandName": {
+      "type": "string",
+      "description": "Name of the command to intercept",
+      "enum": ["Create", "Update", "Delete"]
+    },
+    "type": {
+      "$ref": "interceptor-type.schema.json"
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute"
+    }
+  },
+  "required": ["commandName", "type", "javascript"],
+  "additionalProperties": false
+}

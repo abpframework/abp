@@ -39,7 +39,7 @@ import {
   OnInit,
   TemplateRef,
   TrackByFunction,
-  ViewChild,
+  viewChild
 } from '@angular/core';
 import {
   AbstractControl,
@@ -99,8 +99,7 @@ export class UsersComponent implements OnInit {
 
   data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
-  @ViewChild('modalContent', { static: false })
-  modalContent!: TemplateRef<any>;
+  readonly modalContent = viewChild.required<TemplateRef<any>>('modalContent');
 
   form!: UntypedFormGroup;
 

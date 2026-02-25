@@ -148,7 +148,7 @@ public class OrganizationUnitManager : DomainService
         }
     }
 
-    public async Task<List<OrganizationUnit>> FindChildrenAsync(Guid? parentId, bool recursive = false)
+    public virtual async Task<List<OrganizationUnit>> FindChildrenAsync(Guid? parentId, bool recursive = false)
     {
         if (!recursive)
         {

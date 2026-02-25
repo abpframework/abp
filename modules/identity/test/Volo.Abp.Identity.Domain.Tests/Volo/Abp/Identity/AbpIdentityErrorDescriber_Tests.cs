@@ -200,9 +200,12 @@ public class AbpIdentityErrorDescriber_Tests : AbpIdentityDomainTestBase
                 var mismatchUser = new IdentityUser(Guid.NewGuid(), "mismatch_user_en", "mismatch_user_en@abp.io");
                 (await userManager.CreateAsync(mismatchUser, "Abp123!")).Succeeded.ShouldBeTrue();
 
-                var mismatchResult = await userManager.ChangePasswordAsync(mismatchUser, "WrongOld123!", "NewAbp123!");
-                mismatchResult.Succeeded.ShouldBeFalse();
-                mismatchResult.Errors.ShouldContain(e => e.Description == "Incorrect password.");
+                var identityException = await Assert.ThrowsAsync<AbpIdentityResultException>(async () =>
+                {
+                    await userManager.ChangePasswordAsync(mismatchUser, "WrongOld123!", "NewAbp123!");
+                });
+                identityException.IdentityResult.Succeeded.ShouldBeFalse();
+                identityException.IdentityResult.Errors.ShouldContain(e => e.Description == "Incorrect password.");
 
                 var recoveryUser = new IdentityUser(Guid.NewGuid(), "recovery_user_en", "recovery_user_en@abp.io");
                 ObjectHelper.TrySetProperty(recoveryUser, x => x.TwoFactorEnabled, () => true);
@@ -321,9 +324,12 @@ public class AbpIdentityErrorDescriber_Tests : AbpIdentityDomainTestBase
                 var mismatchUser = new IdentityUser(Guid.NewGuid(), "mismatch_user_tr", "mismatch_user_tr@abp.io");
                 (await userManager.CreateAsync(mismatchUser, "Abp123!")).Succeeded.ShouldBeTrue();
 
-                var mismatchResult = await userManager.ChangePasswordAsync(mismatchUser, "WrongOld123!", "NewAbp123!");
-                mismatchResult.Succeeded.ShouldBeFalse();
-                mismatchResult.Errors.ShouldContain(e => e.Description == "Hatalı şifre.");
+                var identityException = await Assert.ThrowsAsync<AbpIdentityResultException>(async () =>
+                {
+                    await userManager.ChangePasswordAsync(mismatchUser, "WrongOld123!", "NewAbp123!");
+                });
+                identityException.IdentityResult.Succeeded.ShouldBeFalse();
+                identityException.IdentityResult.Errors.ShouldContain(e => e.Description == "Hatalı şifre.");
 
                 var recoveryUser = new IdentityUser(Guid.NewGuid(), "recovery_user_tr", "recovery_user_tr@abp.io");
                 ObjectHelper.TrySetProperty(recoveryUser, x => x.TwoFactorEnabled, () => true);
@@ -441,9 +447,12 @@ public class AbpIdentityErrorDescriber_Tests : AbpIdentityDomainTestBase
                 var mismatchUser = new IdentityUser(Guid.NewGuid(), "mismatch_user_zh", "mismatch_user_zh@abp.io");
                 (await userManager.CreateAsync(mismatchUser, "Abp123!")).Succeeded.ShouldBeTrue();
 
-                var mismatchResult = await userManager.ChangePasswordAsync(mismatchUser, "WrongOld123!", "NewAbp123!");
-                mismatchResult.Succeeded.ShouldBeFalse();
-                mismatchResult.Errors.ShouldContain(e => e.Description == "密码错误。");
+                var identityException = await Assert.ThrowsAsync<AbpIdentityResultException>(async () =>
+                {
+                    await userManager.ChangePasswordAsync(mismatchUser, "WrongOld123!", "NewAbp123!");
+                });
+                identityException.IdentityResult.Succeeded.ShouldBeFalse();
+                identityException.IdentityResult.Errors.ShouldContain(e => e.Description == "密码错误。");
 
                 var recoveryUser = new IdentityUser(Guid.NewGuid(), "recovery_user_zh", "recovery_user_zh@abp.io");
                 ObjectHelper.TrySetProperty(recoveryUser, x => x.TwoFactorEnabled, () => true);

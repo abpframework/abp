@@ -36,11 +36,14 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ### UseAbpTickerQ
 
-You need to call the `UseAbpTickerQ` extension method instead of `AddTickerQ` in the `OnApplicationInitialization` method of your module:
+You need to call the `UseAbpTickerQ` extension method in the `OnApplicationInitialization` method of your module:
 
 ```csharp
-// (default: TickerQStartMode.Immediate)
-app.UseAbpTickerQ(startMode: ...);
+public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+{
+    // (default: TickerQStartMode.Immediate)
+    context.GetHost().UseAbpTickerQ(qStartMode: ...);
+}
 ```
 
 ### AbpBackgroundWorkersTickerQOptions
@@ -61,7 +64,7 @@ Configure<AbpBackgroundWorkersTickerQOptions>(options =>
 
 ### Add your own TickerQ Background Worker Definitions
 
-ABP will handle the TickerQ job definitions by `AbpTickerQFunctionProvider` service. You shouldn't use `TickerFunction` to add your own job definitions. You can inject and use the `AbpTickerQFunctionProvider` to add your own definitions and use `ITimeTickerManager<TimeTicker>` or `ICronTickerManager<CronTicker>` to manage the jobs.
+ABP will handle the TickerQ job definitions by `AbpTickerQFunctionProvider` service. You shouldn't use `TickerFunction` to add your own job definitions. You can inject and use the `AbpTickerQFunctionProvider` to add your own definitions and use `ITimeTickerManager<TimeTickerEntity>` or `ICronTickerManager<CronTickerEntity>` to manage the jobs.
 
 For example, you can add a `CleanupJobs` job definition in the `OnPreApplicationInitializationAsync` method of your module:
 
@@ -83,7 +86,7 @@ public override Task OnPreApplicationInitializationAsync(ApplicationInitializati
 	abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
 	{
 		var service = new CleanupJobs(); // Or get it from the serviceProvider
-		var request = await TickerRequestProvider.GetRequestAsync<string>(serviceProvider,  tickerFunctionContext.Id, tickerFunctionContext.Type);
+		var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
 		var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
 		await service.CleanupLogsAsync(genericContext, cancellationToken);
 	})));
@@ -92,11 +95,11 @@ public override Task OnPreApplicationInitializationAsync(ApplicationInitializati
 }
 ```
 
-And then you can add a job by using the `ICronTickerManager<CronTicker>`:
+And then you can add a job by using the `ICronTickerManager<CronTickerEntity>`:
 
 ```csharp
-var cronTickerManager = context.ServiceProvider.GetRequiredService<ICronTickerManager<CronTicker>>();
-await cronTickerManager.AddAsync(new CronTicker
+var cronTickerManager = context.ServiceProvider.GetRequiredService<ICronTickerManager<CronTickerEntity>>();
+await cronTickerManager.AddAsync(new CronTickerEntity
 {
 	Function = nameof(CleanupJobs),
 	Expression = "0 */6 * * *", // Every 6 hours
@@ -106,13 +109,13 @@ await cronTickerManager.AddAsync(new CronTicker
 });
 ```
 
-You can specify a cron expression instead of use `ICronTickerManager<CronTicker>` to add a worker:
+You can specify a cron expression instead of using `ICronTickerManager<CronTickerEntity>` to add a worker:
 
 ```csharp
 abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
 {
 	var service = new CleanupJobs();
-	var request = await TickerRequestProvider.GetRequestAsync<string>(serviceProvider,  tickerFunctionContext.Id, tickerFunctionContext.Type);
+	var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
 	var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
 	await service.CleanupLogsAsync(genericContext, cancellationToken);
 })));

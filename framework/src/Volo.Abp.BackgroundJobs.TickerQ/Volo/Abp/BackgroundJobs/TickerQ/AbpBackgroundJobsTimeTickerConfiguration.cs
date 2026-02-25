@@ -1,4 +1,3 @@
-using System;
 using TickerQ.Utilities.Enums;
 
 namespace Volo.Abp.BackgroundJobs.TickerQ;
@@ -11,7 +10,5 @@ public class AbpBackgroundJobsTimeTickerConfiguration
 
     public TickerTaskPriority? Priority { get; set; }
 
-    public Guid? BatchParent { get; set; }
-
-    public BatchRunCondition? BatchRunCondition { get; set; }
+    public RunCondition? RunCondition { get; set; }
 }

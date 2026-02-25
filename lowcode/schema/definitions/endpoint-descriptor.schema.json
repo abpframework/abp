@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:abp:lowcode:endpoint-descriptor",
+  "title": "Custom Endpoint Descriptor",
+  "description": "Defines a custom HTTP endpoint that executes JavaScript code",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for the endpoint"
+    },
+    "route": {
+      "type": "string",
+      "description": "URL route pattern (e.g., '/api/custom/products/{id}')"
+    },
+    "method": {
+      "type": "string",
+      "description": "HTTP method",
+      "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      "default": "GET"
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute. Has access to context object with request, db, currentUser, emailSender."
+    },
+    "requireAuthentication": {
+      "type": "boolean",
+      "description": "Whether authentication is required",
+      "default": true
+    },
+    "requiredPermissions": {
+      "type": "array",
+      "description": "Permission names required to access the endpoint",
+      "items": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description for documentation"
+    }
+  },
+  "required": ["name", "route", "javascript"],
+  "additionalProperties": false
+}

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -15,6 +17,8 @@ public class AbpPermissionManagementTestBaseModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.Replace(ServiceDescriptor.Singleton<IAbpDistributedLock, NullAbpDistributedLock>());
+
         context.Services.Configure<PermissionManagementOptions>(options =>
         {
             options.ManagementProviders.Add<TestPermissionManagementProvider>();

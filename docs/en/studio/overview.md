@@ -103,6 +103,8 @@ This pane is dedicated to managing Kubernetes services. It simplifies the proces
 
 The AI Assistant is an integrated chat interface within ABP Studio that provides intelligent assistance for ABP-related questions. You can access it from the left sidebar by clicking the AI icon.
 
+For external AI tool integrations through MCP, see the [Model Context Protocol (MCP)](./model-context-protocol.md) documentation.
+
 ![ai-assistant](./images/overview/ai-assistant.png)
 
 Key features of the AI Assistant include:

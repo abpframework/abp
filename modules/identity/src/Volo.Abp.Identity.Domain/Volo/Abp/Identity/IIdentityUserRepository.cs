@@ -165,4 +165,55 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         byte[] credentialId,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
+
+    Task<List<IdentityUser>> GetUsersByNormalizedUserNameAsync(
+        [NotNull] string normalizedUserName,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityUser>> GetUsersByNormalizedUserNamesAsync(
+        [NotNull] string[] normalizedUserNames,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityUser>> GetUsersByNormalizedEmailAsync(
+        [NotNull] string normalizedEmail,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityUser>> GetUsersByNormalizedEmailsAsync(
+        [NotNull] string[] normalizedEmails,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityUser>> GetUsersByLoginAsync(
+        [NotNull] string loginProvider,
+        [NotNull] string providerKey,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityUser>> GetUsersByPasskeyIdAsync(
+        [NotNull] byte[] credentialId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<IdentityUser> FindByNormalizedUserNameAsync(
+        Guid? tenantId,
+        [NotNull] string normalizedUserName,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<IdentityUser> FindByNormalizedEmailAsync(
+        Guid? tenantId,
+        [NotNull] string normalizedEmail,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default
+    );
 }

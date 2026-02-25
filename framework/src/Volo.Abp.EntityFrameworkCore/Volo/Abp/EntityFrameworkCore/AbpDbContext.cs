@@ -277,7 +277,19 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         finally
         {
             ChangeTracker.AutoDetectChangesEnabled = true;
-            AbpEfCoreNavigationHelper.RemoveChangedEntityEntries();
+            AbpEfCoreNavigationHelper.ResetChangedFlags();
+            if (UnitOfWorkManager.Current != null)
+            {
+                UnitOfWorkManager.Current.OnCompleted(() =>
+                {
+                    AbpEfCoreNavigationHelper.Clear();
+                    return Task.CompletedTask;
+                });
+            }
+            else
+            {
+                AbpEfCoreNavigationHelper.Clear();
+            }
         }
     }
 
@@ -994,7 +1006,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         return expression;
     }
 
-    protected virtual bool UseDbFunction()
+    public virtual bool UseDbFunction()
     {
         return LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null;
     }
