@@ -114,6 +114,7 @@
             };
 
             if (method === "GET") {
+                arr = $form.serializeArray();
                 var query = $.param(arr);
                 if (query) {
                     url += (url.indexOf("?") >= 0 ? "&" : "?") + query;
