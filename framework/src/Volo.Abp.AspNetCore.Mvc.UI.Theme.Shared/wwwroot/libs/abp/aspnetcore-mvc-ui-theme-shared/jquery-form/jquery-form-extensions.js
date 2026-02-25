@@ -114,8 +114,17 @@
             };
 
             if (method === "GET") {
-                arr = $form.serializeArray();
-                var query = $.param(arr);
+                // Re-serialize from DOM to capture any DOM mutations made in beforeSubmit
+                // (e.g. hidden inputs set by beforeSubmit). Then merge any additional items
+                // that were directly added to arr by beforeSubmit but are not DOM fields.
+                var domArr = $form.serializeArray();
+                var domNames = domArr.map(function (item) { return item.name; });
+                arr.forEach(function (item) {
+                    if (domNames.indexOf(item.name) === -1) {
+                        domArr.push(item);
+                    }
+                });
+                var query = $.param(domArr);
                 if (query) {
                     url += (url.indexOf("?") >= 0 ? "&" : "?") + query;
                 }
