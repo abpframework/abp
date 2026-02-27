@@ -48,9 +48,10 @@ You can integrate this dialog into your own application to manage permissions fo
 Use the `abp.ModalManager` to open the resource permission management dialog:
 
 ````javascript
-var _resourcePermissionsModal = new abp.ModalManager(
-    abp.appPath + 'AbpPermissionManagement/ResourcePermissionManagementModal'
-);
+var _resourcePermissionsModal = new abp.ModalManager({
+    viewUrl: abp.appPath + 'AbpPermissionManagement/ResourcePermissionManagementModal',
+    modalClass: 'ResourcePermissionManagement'
+});
 
 // Open the modal for a specific resource
 _resourcePermissionsModal.open({
