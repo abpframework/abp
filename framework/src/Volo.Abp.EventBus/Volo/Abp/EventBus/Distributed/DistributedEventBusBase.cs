@@ -321,14 +321,19 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
     protected virtual async Task TriggerHandlersFromInboxAsync(Type eventType, object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)
     {
+        await TriggerHandlersFromInboxAsync(EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, exceptions, inboxConfig);
+    }
+
+    protected virtual async Task TriggerHandlersFromInboxAsync(string eventName, Type eventType, object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)
+    {
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Inbox,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
+            EventName = eventName,
             EventData = eventData
         });
 
-        await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
+        await TriggerHandlersAsync(eventName, eventType, eventData, exceptions, inboxConfig);
     }
 
     public virtual async Task TriggerDistributedEventSentAsync(DistributedEventSent distributedEvent)

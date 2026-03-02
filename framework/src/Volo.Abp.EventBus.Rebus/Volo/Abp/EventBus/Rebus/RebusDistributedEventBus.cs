@@ -376,7 +376,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
-            await TriggerHandlersFromInboxAsync(eventType, eventData, exceptions, inboxConfig);
+            await TriggerHandlersFromInboxAsync(incomingEvent.EventName, eventType, eventData, exceptions, inboxConfig);
         }
         if (exceptions.Any())
         {
