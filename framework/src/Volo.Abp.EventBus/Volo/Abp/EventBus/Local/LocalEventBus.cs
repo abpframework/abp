@@ -28,7 +28,9 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
     protected AbpLocalEventBusOptions Options { get; }
 
-    protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    protected ConcurrentDictionary<(string eventName, Type eventType), List<IEventHandlerFactory>> HandlerFactories { get; }
+
+    protected ConcurrentDictionary<string, Type> EventTypes { get; }
 
     public LocalEventBus(
         IOptions<AbpLocalEventBusOptions> options,
@@ -41,7 +43,8 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         Options = options.Value;
         Logger = NullLogger<LocalEventBus>.Instance;
 
-        HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        HandlerFactories = new ConcurrentDictionary<(string, Type), List<IEventHandlerFactory>>();
+        EventTypes = new ConcurrentDictionary<string, Type>();
         SubscribeHandlers(Options.Handlers);
     }
 
@@ -65,6 +68,48 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
             );
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    /// <inheritdoc/>
+    public virtual IDisposable Subscribe<TPayload>(string eventName, ILocalEventHandler<TPayload> handler)
+        where TPayload : class
+    {
+        return Subscribe(eventName, typeof(TPayload), new SingleInstanceHandlerFactory(handler));
+    }
+
+    /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventName, payloadType)
+            .Locking(factories =>
+            {
+                if (!factory.IsInFactories(factories))
+                {
+                    factories.Add(factory);
+                }
+            });
+
+        return new NamedEventHandlerFactoryUnregistrar(this, eventName, payloadType, factory);
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventName, payloadType)
+            .Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        var keysToRemove = HandlerFactories.Keys.Where(k => k.eventName == eventName).ToList();
+        foreach (var key in keysToRemove)
+        {
+            if (HandlerFactories.TryGetValue(key, out var factories))
+            {
+                factories.Locking(list => list.Clear());
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -126,6 +171,18 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         await PublishAsync(new LocalEventMessage(Guid.NewGuid(), eventData, eventType));
     }
 
+    protected override async Task PublishToEventBusByNameAsync(string eventName, object eventData)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType == null)
+        {
+            return;
+        }
+
+        var convertedData = ConvertPayloadToType(eventData, eventType);
+        await TriggerHandlersAsync(eventName, eventType, convertedData);
+    }
+
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
     {
         unitOfWork.AddOrReplaceLocalEvent(eventRecord);
@@ -141,16 +198,39 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         return GetHandlerFactories(eventType).ToList();
     }
 
+    public virtual List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(string eventName, Type eventType)
+    {
+        return GetHandlerFactories(eventName, eventType).ToList();
+    }
+
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key.eventType)))
         {
             foreach (var factory in handlerFactory.Value)
             {
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
-                    handlerFactory.Key,
+                    handlerFactory.Key.eventType,
+                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+            }
+        }
+
+        return handlerFactoryList.OrderBy(x => x.Item3).Select(x => new EventTypeWithEventHandlerFactories(x.Item2, new List<IEventHandlerFactory> {x.Item1})).ToArray();
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(string eventName, Type eventType)
+    {
+        var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
+        foreach (var handlerFactory in HandlerFactories.Where(hf =>
+                     hf.Key.eventName == eventName && ShouldTriggerEventForHandler(eventType, hf.Key.eventType)))
+        {
+            foreach (var factory in handlerFactory.Value)
+            {
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
+                    factory,
+                    handlerFactory.Key.eventType,
                     ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
             }
         }
@@ -160,18 +240,37 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
-        return HandlerFactories.GetOrAdd(eventType, (type) => new List<IEventHandlerFactory>());
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetOrCreateHandlerFactories(eventName, eventType);
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(string eventName, Type eventType)
+    {
+        var existingType = EventTypes.GetOrDefault(eventName);
+        if (existingType != null && existingType != eventType)
+        {
+            throw new AbpException(
+                $"Event name '{eventName}' is already mapped to type '{existingType.FullName}'. " +
+                $"Cannot register a different type '{eventType.FullName}' for the same event name.");
+        }
+
+        return HandlerFactories.GetOrAdd(
+            (eventName, eventType),
+            _ =>
+            {
+                EventTypes.GetOrAdd(eventName, eventType);
+                return new List<IEventHandlerFactory>();
+            }
+        );
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
     {
-        //Should trigger same type
         if (handlerEventType == targetEventType)
         {
             return true;
         }
 
-        //Should trigger for inherited types
         if (handlerEventType.IsAssignableFrom(targetEventType))
         {
             return true;

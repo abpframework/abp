@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
@@ -25,11 +25,22 @@ public class UnitOfWorkEventPublisher : IUnitOfWorkEventPublisher, ITransientDep
     {
         foreach (var localEvent in localEvents)
         {
-            await _localEventBus.PublishAsync(
-                localEvent.EventType,
-                localEvent.EventData,
-                onUnitOfWorkComplete: false
-            );
+            if (localEvent.EventName != null)
+            {
+                await _localEventBus.PublishByNameAsync(
+                    localEvent.EventName,
+                    localEvent.EventData,
+                    onUnitOfWorkComplete: false
+                );
+            }
+            else
+            {
+                await _localEventBus.PublishAsync(
+                    localEvent.EventType,
+                    localEvent.EventData,
+                    onUnitOfWorkComplete: false
+                );
+            }
         }
     }
 
@@ -37,12 +48,24 @@ public class UnitOfWorkEventPublisher : IUnitOfWorkEventPublisher, ITransientDep
     {
         foreach (var distributedEvent in distributedEvents)
         {
-            await _distributedEventBus.PublishAsync(
-                distributedEvent.EventType,
-                distributedEvent.EventData,
-                onUnitOfWorkComplete: false,
-                useOutbox: distributedEvent.UseOutbox
-            );
+            if (distributedEvent.EventName != null)
+            {
+                await _distributedEventBus.PublishByNameAsync(
+                    distributedEvent.EventName,
+                    distributedEvent.EventData,
+                    onUnitOfWorkComplete: false,
+                    useOutbox: distributedEvent.UseOutbox
+                );
+            }
+            else
+            {
+                await _distributedEventBus.PublishAsync(
+                    distributedEvent.EventType,
+                    distributedEvent.EventData,
+                    onUnitOfWorkComplete: false,
+                    useOutbox: distributedEvent.UseOutbox
+                );
+            }
         }
     }
 }

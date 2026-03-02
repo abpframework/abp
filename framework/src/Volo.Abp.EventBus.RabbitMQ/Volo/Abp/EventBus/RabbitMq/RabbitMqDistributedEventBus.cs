@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     protected IRabbitMqSerializer Serializer { get; }
 
     //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
-    protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    protected ConcurrentDictionary<(string eventName, Type eventType), List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
     protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
     protected IRabbitMqMessageConsumer Consumer { get; private set; } = default!;
@@ -68,7 +68,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         MessageConsumerFactory = messageConsumerFactory;
         AbpRabbitMqEventBusOptions = options.Value;
 
-        HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        HandlerFactories = new ConcurrentDictionary<(string, Type), List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
     }
 
@@ -101,6 +101,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     {
         var eventName = ea.RoutingKey;
         var eventType = EventTypes.GetOrDefault(eventName);
+        var correlationId = ea.BasicProperties.CorrelationId;
+
         if (eventType == null)
         {
             return;
@@ -108,7 +110,6 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
-        var correlationId = ea.BasicProperties.CorrelationId;
         if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData, correlationId))
         {
             return;
@@ -116,7 +117,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         using (CorrelationIdProvider.Change(correlationId))
         {
-            await TriggerHandlersDirectAsync(eventType, eventData);
+            await TriggerHandlersDirectAsync(eventName, eventType, eventData);
         }
     }
 
@@ -137,6 +138,45 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    public override IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        var needsBind = !HandlerFactories.Any(hf => hf.Key.eventName == eventName);
+
+        var handlerFactories = GetOrCreateHandlerFactories(eventName, payloadType);
+
+        if (factory.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(factory);
+
+        if (needsBind)
+        {
+            Consumer.BindAsync(eventName);
+        }
+
+        return new NamedEventHandlerFactoryUnregistrar(this, eventName, payloadType, factory);
+    }
+
+    public override void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventName, payloadType)
+            .Locking(factories => factories.Remove(factory));
+    }
+
+    public override void UnsubscribeAll(string eventName)
+    {
+        var keysToRemove = HandlerFactories.Keys.Where(k => k.eventName == eventName).ToList();
+        foreach (var key in keysToRemove)
+        {
+            if (HandlerFactories.TryGetValue(key, out var factories))
+            {
+                factories.Locking(list => list.Clear());
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -196,6 +236,12 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(eventType, eventData, correlationId: CorrelationIdProvider.Get());
+    }
+
+    protected override async Task PublishToEventBusByNameAsync(string eventName, object eventData)
+    {
+        var body = Serializer.Serialize(eventData);
+        await PublishAsync(eventName, body, correlationId: CorrelationIdProvider.Get());
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -388,11 +434,24 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetOrCreateHandlerFactories(eventName, eventType);
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(string eventName, Type eventType)
+    {
+        var existingType = EventTypes.GetOrDefault(eventName);
+        if (existingType != null && existingType != eventType)
+        {
+            throw new AbpException(
+                $"Event name '{eventName}' is already mapped to type '{existingType.FullName}'. " +
+                $"Cannot register a different type '{eventType.FullName}' for the same event name.");
+        }
+
         return HandlerFactories.GetOrAdd(
-            eventType,
-            type =>
+            (eventName, eventType),
+            _ =>
             {
-                var eventName = EventNameAttribute.GetNameOrDefault(type);
                 EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
@@ -401,16 +460,16 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetHandlerFactories(eventName, eventType);
+    }
 
-        foreach (var handlerFactory in
-                 HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
-        {
-            handlerFactoryList.Add(
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
-        }
-
-        return handlerFactoryList.ToArray();
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(string eventName, Type eventType)
+    {
+        return HandlerFactories
+            .Where(hf => hf.Key.eventName == eventName && ShouldTriggerEventForHandler(eventType, hf.Key.eventType))
+            .Select(hf => new EventTypeWithEventHandlerFactories(hf.Key.eventType, hf.Value))
+            .ToArray();
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

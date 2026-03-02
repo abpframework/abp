@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
@@ -27,7 +28,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected IKafkaMessageConsumerFactory MessageConsumerFactory { get; }
     protected IKafkaSerializer Serializer { get; }
     protected IProducerPool ProducerPool { get; }
-    protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    protected ConcurrentDictionary<(string eventName, Type eventType), List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
     protected IKafkaMessageConsumer Consumer { get; private set; } = default!;
 
@@ -61,7 +62,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         Serializer = serializer;
         ProducerPool = producerPool;
 
-        HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        HandlerFactories = new ConcurrentDictionary<(string, Type), List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
     }
 
@@ -80,14 +81,15 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var eventName = message.Key;
         var eventType = EventTypes.GetOrDefault(eventName);
+        var messageId = message.GetMessageId();
+        var correlationId = message.GetCorrelationId();
+
         if (eventType == null)
         {
             return;
         }
 
-        var messageId = message.GetMessageId();
         var eventData = Serializer.Deserialize(message.Value, eventType);
-        var correlationId = message.GetCorrelationId();
 
         if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
         {
@@ -96,7 +98,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         using (CorrelationIdProvider.Change(correlationId))
         {
-            await TriggerHandlersDirectAsync(eventType, eventData);
+            await TriggerHandlersDirectAsync(eventName, eventType, eventData);
         }
     }
 
@@ -112,6 +114,38 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         handlerFactories.Add(factory);
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    public override IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        var handlerFactories = GetOrCreateHandlerFactories(eventName, payloadType);
+
+        if (factory.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(factory);
+
+        return new NamedEventHandlerFactoryUnregistrar(this, eventName, payloadType, factory);
+    }
+
+    public override void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventName, payloadType)
+            .Locking(factories => factories.Remove(factory));
+    }
+
+    public override void UnsubscribeAll(string eventName)
+    {
+        var keysToRemove = HandlerFactories.Keys.Where(k => k.eventName == eventName).ToList();
+        foreach (var key in keysToRemove)
+        {
+            if (HandlerFactories.TryGetValue(key, out var factories))
+            {
+                factories.Locking(list => list.Clear());
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -186,6 +220,22 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             eventData,
             headers
         );
+    }
+
+    protected override async Task PublishToEventBusByNameAsync(string eventName, object eventData)
+    {
+        var headers = new Headers
+        {
+            { "messageId", System.Text.Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N")) }
+        };
+
+        if (CorrelationIdProvider.Get() != null)
+        {
+            headers.Add(EventBusConsts.CorrelationIdHeaderName, System.Text.Encoding.UTF8.GetBytes(CorrelationIdProvider.Get()!));
+        }
+
+        var body = Serializer.Serialize(eventData);
+        await PublishAsync(AbpKafkaEventBusOptions.TopicName, eventName, body, headers);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -338,11 +388,24 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetOrCreateHandlerFactories(eventName, eventType);
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(string eventName, Type eventType)
+    {
+        var existingType = EventTypes.GetOrDefault(eventName);
+        if (existingType != null && existingType != eventType)
+        {
+            throw new AbpException(
+                $"Event name '{eventName}' is already mapped to type '{existingType.FullName}'. " +
+                $"Cannot register a different type '{eventType.FullName}' for the same event name.");
+        }
+
         return HandlerFactories.GetOrAdd(
-            eventType,
-            type =>
+            (eventName, eventType),
+            _ =>
             {
-                var eventName = EventNameAttribute.GetNameOrDefault(type);
                 EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
@@ -351,16 +414,16 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetHandlerFactories(eventName, eventType);
+    }
 
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
-        )
-        {
-            handlerFactoryList.Add(
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
-        }
-
-        return handlerFactoryList.ToArray();
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(string eventName, Type eventType)
+    {
+        return HandlerFactories
+            .Where(hf => hf.Key.eventName == eventName && ShouldTriggerEventForHandler(eventType, hf.Key.eventType))
+            .Select(hf => new EventTypeWithEventHandlerFactories(hf.Key.eventType, hf.Value))
+            .ToArray();
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

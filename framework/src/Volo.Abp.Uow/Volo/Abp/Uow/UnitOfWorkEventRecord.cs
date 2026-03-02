@@ -9,6 +9,8 @@ public class UnitOfWorkEventRecord
 
     public Type EventType { get; }
 
+    public string? EventName { get; }
+
     public long EventOrder { get; protected set; }
 
     public bool UseOutbox { get; }
@@ -25,6 +27,19 @@ public class UnitOfWorkEventRecord
         bool useOutbox = true)
     {
         EventType = eventType;
+        EventData = eventData;
+        EventOrder = eventOrder;
+        UseOutbox = useOutbox;
+    }
+
+    public UnitOfWorkEventRecord(
+        string eventName,
+        object eventData,
+        long eventOrder,
+        bool useOutbox = true)
+    {
+        EventName = Check.NotNullOrWhiteSpace(eventName, nameof(eventName));
+        EventType = typeof(object);
         EventData = eventData;
         EventOrder = eventOrder;
         UseOutbox = useOutbox;

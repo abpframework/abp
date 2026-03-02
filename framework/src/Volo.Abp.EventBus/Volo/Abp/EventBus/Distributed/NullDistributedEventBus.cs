@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Distributed;
@@ -22,6 +22,11 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
         return NullDisposable.Instance;
     }
 
+    public IDisposable Subscribe<TPayload>(string eventName, IDistributedEventHandler<TPayload> handler) where TPayload : class
+    {
+        return NullDisposable.Instance;
+    }
+
     public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
     {
         return NullDisposable.Instance;
@@ -38,6 +43,11 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+    {
+        return NullDisposable.Instance;
+    }
+
+    public IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
     {
         return NullDisposable.Instance;
     }
@@ -67,12 +77,22 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
 
     }
 
+    public void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+
+    }
+
     public void UnsubscribeAll<TEvent>() where TEvent : class
     {
 
     }
 
     public void UnsubscribeAll(Type eventType)
+    {
+
+    }
+
+    public void UnsubscribeAll(string eventName)
     {
 
     }
@@ -93,6 +113,16 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task PublishByNameAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task PublishByNameAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
         return Task.CompletedTask;
     }

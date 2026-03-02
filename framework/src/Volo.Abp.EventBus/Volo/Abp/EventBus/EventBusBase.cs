@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -93,6 +94,15 @@ public abstract class EventBusBase : IEventBus
     public abstract void UnsubscribeAll(Type eventType);
 
     /// <inheritdoc/>
+    public abstract IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory);
+
+    /// <inheritdoc/>
+    public abstract void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory);
+
+    /// <inheritdoc/>
+    public abstract void UnsubscribeAll(string eventName);
+
+    /// <inheritdoc/>
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
         where TEvent : class
     {
@@ -119,6 +129,39 @@ public abstract class EventBusBase : IEventBus
 
     protected abstract Task PublishToEventBusAsync(Type eventType, object eventData);
 
+    /// <inheritdoc/>
+    public virtual async Task PublishByNameAsync(
+        string eventName,
+        object eventData,
+        bool onUnitOfWorkComplete = true)
+    {
+        Check.NotNullOrWhiteSpace(eventName, nameof(eventName));
+
+        if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
+        {
+            AddToUnitOfWork(
+                UnitOfWorkManager.Current,
+                new UnitOfWorkEventRecord(eventName, eventData, EventOrderGenerator.GetNext())
+            );
+            return;
+        }
+
+        await PublishToEventBusByNameAsync(eventName, eventData);
+    }
+
+    protected abstract Task PublishToEventBusByNameAsync(string eventName, object eventData);
+
+    protected virtual object ConvertPayloadToType(object payload, Type targetType)
+    {
+        if (targetType.IsInstanceOfType(payload))
+        {
+            return payload;
+        }
+
+        var json = JsonSerializer.Serialize(payload);
+        return JsonSerializer.Deserialize(json, targetType)!;
+    }
+
     protected abstract void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord);
 
     public virtual async Task TriggerHandlersAsync(Type eventType, object eventData)
@@ -126,6 +169,18 @@ public abstract class EventBusBase : IEventBus
         var exceptions = new List<Exception>();
 
         await TriggerHandlersAsync(eventType, eventData, exceptions);
+
+        if (exceptions.Any())
+        {
+            ThrowOriginalExceptions(eventType, exceptions);
+        }
+    }
+    
+    public virtual async Task TriggerHandlersAsync(string eventName, Type eventType, object eventData)
+    {
+        var exceptions = new List<Exception>();
+
+        await TriggerHandlersAsync(eventName, eventType, eventData, exceptions);
 
         if (exceptions.Any())
         {
@@ -145,7 +200,26 @@ public abstract class EventBusBase : IEventBus
             }
         }
 
-        //Implements generic argument inheritance. See IEventDataWithInheritableGenericArgument
+        await PublishInheritedGenericEventAsync(eventType, eventData);
+    }
+    
+    protected virtual async Task TriggerHandlersAsync(string eventName, Type eventType, object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)
+    {
+        await new SynchronizationContextRemover();
+
+        foreach (var handlerFactories in GetHandlerFactories(eventName, eventType).ToList())
+        {
+            foreach (var handlerFactory in handlerFactories.EventHandlerFactories.ToList())
+            {
+                await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions, inboxConfig);
+            }
+        }
+
+        await PublishInheritedGenericEventAsync(eventType, eventData);
+    }
+
+    protected virtual async Task PublishInheritedGenericEventAsync(Type eventType, object eventData)
+    {
         if (eventType.GetTypeInfo().IsGenericType &&
             eventType.GetGenericArguments().Length == 1 &&
             typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(eventType))
@@ -197,6 +271,7 @@ public abstract class EventBusBase : IEventBus
     }
 
     protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType);
+    protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(string eventName, Type eventType);
 
     protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType,
         object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)

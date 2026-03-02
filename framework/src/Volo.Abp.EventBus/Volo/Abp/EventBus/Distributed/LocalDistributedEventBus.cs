@@ -78,6 +78,12 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return LocalEventBus.Subscribe(eventType, factory);
     }
 
+    public override IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        EventTypes.GetOrAdd(eventName, payloadType);
+        return LocalEventBus.Subscribe(eventName, payloadType, factory);
+    }
+
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
     {
         LocalEventBus.Unsubscribe(action);
@@ -93,9 +99,19 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         LocalEventBus.Unsubscribe(eventType, factory);
     }
 
+    public override void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        LocalEventBus.Unsubscribe(eventName, payloadType, factory);
+    }
+
     public override void UnsubscribeAll(Type eventType)
     {
         LocalEventBus.UnsubscribeAll(eventType);
+    }
+
+    public override void UnsubscribeAll(string eventName)
+    {
+        LocalEventBus.UnsubscribeAll(eventName);
     }
 
     public async override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
@@ -142,6 +158,11 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         await LocalEventBus.PublishAsync(eventType, eventData, false);
+    }
+
+    protected override async Task PublishToEventBusByNameAsync(string eventName, object eventData)
+    {
+        await LocalEventBus.PublishByNameAsync(eventName, eventData, false);
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -222,5 +243,10 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         return LocalEventBus.GetEventHandlerFactories(eventType);
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(string eventName, Type eventType)
+    {
+        return LocalEventBus.GetEventHandlerFactories(eventName, eventType);
     }
 }

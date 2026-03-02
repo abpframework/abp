@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +29,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected IRebusSerializer Serializer { get; }
 
     //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
-    protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    protected ConcurrentDictionary<(string eventName, Type eventType), List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
     protected AbpRebusEventBusOptions AbpRebusEventBusOptions { get; }
 
@@ -61,7 +61,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         Serializer = serializer;
         AbpRebusEventBusOptions = abpEventBusRebusOptions.Value;
 
-        HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        HandlerFactories = new ConcurrentDictionary<(string, Type), List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
     }
 
@@ -87,6 +87,38 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    public override IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        var handlerFactories = GetOrCreateHandlerFactories(eventName, payloadType);
+
+        if (factory.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(factory);
+
+        return new NamedEventHandlerFactoryUnregistrar(this, eventName, payloadType, factory);
+    }
+
+    public override void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventName, payloadType)
+            .Locking(factories => factories.Remove(factory));
+    }
+
+    public override void UnsubscribeAll(string eventName)
+    {
+        var keysToRemove = HandlerFactories.Keys.Where(k => k.eventName == eventName).ToList();
+        foreach (var key in keysToRemove)
+        {
+            if (HandlerFactories.TryGetValue(key, out var factories))
+            {
+                factories.Locking(list => list.Clear());
+            }
+        }
     }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
@@ -156,7 +188,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         using (CorrelationIdProvider.Change(correlationId))
         {
-            await TriggerHandlersDirectAsync(eventType, eventData);
+            await TriggerHandlersDirectAsync(eventName, eventType, eventData);
         }
     }
 
@@ -168,6 +200,22 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             headers.Add(EventBusConsts.CorrelationIdHeaderName, CorrelationIdProvider.Get()!);
         }
         await PublishAsync(eventType, eventData, headersArguments: headers);
+    }
+
+    protected override async Task PublishToEventBusByNameAsync(string eventName, object eventData)
+    {
+        var headers = new Dictionary<string, string>();
+        if (CorrelationIdProvider.Get() != null)
+        {
+            headers.Add(EventBusConsts.CorrelationIdHeaderName, CorrelationIdProvider.Get()!);
+        }
+
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType != null)
+        {
+            var convertedData = ConvertPayloadToType(eventData, eventType);
+            await PublishAsync(eventType, convertedData, headersArguments: headers);
+        }
     }
 
     protected virtual async Task PublishAsync(
@@ -204,11 +252,24 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
     {
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetOrCreateHandlerFactories(eventName, eventType);
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(string eventName, Type eventType)
+    {
+        var existingType = EventTypes.GetOrDefault(eventName);
+        if (existingType != null && existingType != eventType)
+        {
+            throw new AbpException(
+                $"Event name '{eventName}' is already mapped to type '{existingType.FullName}'. " +
+                $"Cannot register a different type '{eventType.FullName}' for the same event name.");
+        }
+
         return HandlerFactories.GetOrAdd(
-            eventType,
-            type =>
+            (eventName, eventType),
+            _ =>
             {
-                var eventName = EventNameAttribute.GetNameOrDefault(type);
                 EventTypes.GetOrAdd(eventName, eventType);
                 return new List<IEventHandlerFactory>();
             }
@@ -217,16 +278,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        return GetHandlerFactories(eventName, eventType);
+    }
 
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
-        )
-        {
-            handlerFactoryList.Add(
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
-        }
-
-        return handlerFactoryList.ToArray();
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(string eventName, Type eventType)
+    {
+        return HandlerFactories
+            .Where(hf => hf.Key.eventName == eventName && ShouldTriggerEventForHandler(eventType, hf.Key.eventType))
+            .Select(hf => new EventTypeWithEventHandlerFactories(hf.Key.eventType, hf.Value))
+            .ToArray();
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

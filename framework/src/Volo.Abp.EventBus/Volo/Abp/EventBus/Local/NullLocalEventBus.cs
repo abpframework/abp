@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,7 +23,17 @@ public sealed class NullLocalEventBus : ILocalEventBus
         return NullDisposable.Instance;
     }
 
+    public IDisposable Subscribe<TPayload>(string eventName, ILocalEventHandler<TPayload> handler) where TPayload : class
+    {
+        return NullDisposable.Instance;
+    }
+
     public List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType)
+    {
+        return new List<EventTypeWithEventHandlerFactories>();
+    }
+
+    public List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(string eventName, Type eventType)
     {
         return new List<EventTypeWithEventHandlerFactories>();
     }
@@ -44,6 +54,11 @@ public sealed class NullLocalEventBus : ILocalEventBus
     }
 
     public IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+    {
+        return NullDisposable.Instance;
+    }
+
+    public IDisposable Subscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
     {
         return NullDisposable.Instance;
     }
@@ -73,6 +88,11 @@ public sealed class NullLocalEventBus : ILocalEventBus
 
     }
 
+    public void Unsubscribe(string eventName, Type payloadType, IEventHandlerFactory factory)
+    {
+
+    }
+
     public void UnsubscribeAll<TEvent>() where TEvent : class
     {
 
@@ -83,12 +103,22 @@ public sealed class NullLocalEventBus : ILocalEventBus
 
     }
 
+    public void UnsubscribeAll(string eventName)
+    {
+
+    }
+
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class
     {
         return Task.CompletedTask;
     }
 
     public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task PublishByNameAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         return Task.CompletedTask;
     }
