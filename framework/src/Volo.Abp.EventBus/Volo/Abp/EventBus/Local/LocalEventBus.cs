@@ -206,14 +206,16 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key.eventType)))
+        foreach (var handlerFactory in HandlerFactories.Where(hf =>
+                     hf.Key.eventName == EventNameAttribute.GetNameOrDefault(hf.Key.eventType) &&
+                     ShouldTriggerEventForHandler(eventType, hf.Key.eventType)))
         {
             foreach (var factory in handlerFactory.Value)
             {
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
                     handlerFactory.Key.eventType,
-                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+                    GetHandlerOrder(factory)));
             }
         }
 
@@ -231,7 +233,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
                     handlerFactory.Key.eventType,
-                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+                    GetHandlerOrder(factory)));
             }
         }
 
@@ -277,5 +279,32 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         }
 
         return false;
+    }
+
+    private static int GetHandlerOrder(IEventHandlerFactory factory)
+    {
+        var handlerType = GetHandlerType(factory);
+        return ReflectionHelper
+                   .GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handlerType)
+                   .FirstOrDefault()
+                   ?.Order ?? 0;
+    }
+
+    private static Type GetHandlerType(IEventHandlerFactory factory)
+    {
+        switch (factory)
+        {
+            case SingleInstanceHandlerFactory singleInstanceHandlerFactory:
+                return singleInstanceHandlerFactory.HandlerInstance.GetType();
+            case IocEventHandlerFactory iocEventHandlerFactory:
+                return iocEventHandlerFactory.HandlerType;
+            case TransientEventHandlerFactory transientEventHandlerFactory:
+                return transientEventHandlerFactory.HandlerType;
+            default:
+            {
+                using var eventHandlerWrapper = factory.GetHandler();
+                return eventHandlerWrapper.EventHandler.GetType();
+            }
+        }
     }
 }

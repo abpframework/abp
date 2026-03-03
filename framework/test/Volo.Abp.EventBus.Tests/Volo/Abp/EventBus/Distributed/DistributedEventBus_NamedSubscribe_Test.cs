@@ -84,6 +84,22 @@ public class DistributedEventBus_NamedSubscribe_Test : LocalDistributedEventBusT
         exception.Message.ShouldContain("already mapped");
     }
 
+    [Fact]
+    public async Task Should_Not_Trigger_Named_Handler_When_Publishing_By_Type()
+    {
+        var handler = new DictionaryDistributedEventHandler();
+        DistributedEventBus.Subscribe<Dictionary<string, object>>("OrderCreated", handler);
+
+        await DistributedEventBus.PublishAsync(
+            typeof(Dictionary<string, object>),
+            new Dictionary<string, object> { ["OrderId"] = 1 },
+            onUnitOfWorkComplete: false,
+            useOutbox: false
+        );
+
+        handler.HandleCount.ShouldBe(0);
+    }
+
     private class NamedEventTestDataHandler : IDistributedEventHandler<NamedEventTestData>
     {
         public Task HandleEventAsync(NamedEventTestData eventData)

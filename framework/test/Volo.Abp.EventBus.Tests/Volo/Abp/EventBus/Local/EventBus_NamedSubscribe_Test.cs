@@ -101,6 +101,21 @@ public class EventBus_NamedSubscribe_Test : EventBusTestBase
         handler.HandleCount.ShouldBe(1);
     }
 
+    [Fact]
+    public async Task Should_Not_Trigger_Named_Handler_When_Publishing_By_Type()
+    {
+        var handler = new DictionaryEventHandler();
+        LocalEventBus.Subscribe<Dictionary<string, object>>("OrderCreated", handler);
+
+        await LocalEventBus.PublishAsync(
+            typeof(Dictionary<string, object>),
+            new Dictionary<string, object> { ["OrderId"] = 123 },
+            onUnitOfWorkComplete: false
+        );
+
+        handler.HandleCount.ShouldBe(0);
+    }
+
     private class DictionaryEventHandler : ILocalEventHandler<Dictionary<string, object>>
     {
         public Dictionary<string, object>? LastReceivedData { get; private set; }
