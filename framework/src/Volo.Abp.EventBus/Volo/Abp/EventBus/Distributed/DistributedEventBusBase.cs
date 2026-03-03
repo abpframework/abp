@@ -90,8 +90,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
     }
 
@@ -124,7 +124,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
                 var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+                var eventName = GetEventName(eventType, eventData);
+                eventData = GetEventData(eventData);
 
                 await OnAddToOutboxAsync(eventName, eventType, eventData);
 
@@ -181,8 +182,6 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     {
                         if (await eventInbox.ExistsByMessageIdAsync(messageId!))
                         {
-                            // Message already exists in the inbox, no need to add again.
-                            // This can happen in case of retries from the sender side.
                             addToInbox = true;
                             continue;
                         }
@@ -212,8 +211,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerHandlersAsync(eventType, eventData);
@@ -224,8 +223,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Inbox,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
@@ -253,5 +252,30 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             // ignored
         }
+    }
+
+    protected virtual string GetEventName(Type eventType, object eventData)
+    {
+        if (eventData is AnonymousEventData anonymousEventData)
+        {
+            return anonymousEventData.EventName;
+        }
+
+        return EventNameAttribute.GetNameOrDefault(eventType);
+    }
+
+    protected virtual object GetEventData(object eventData)
+    {
+        if (eventData is AnonymousEventData anonymousEventData)
+        {
+            return anonymousEventData.ConvertToTypedObject();
+        }
+
+        return eventData;
+    }
+
+    protected virtual (string EventName, object EventData) ResolveEventForPublishing(Type eventType, object eventData)
+    {
+        return (GetEventName(eventType, eventData), GetEventData(eventData));
     }
 }

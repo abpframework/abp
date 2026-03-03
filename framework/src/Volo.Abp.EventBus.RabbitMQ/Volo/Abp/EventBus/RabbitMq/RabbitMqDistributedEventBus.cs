@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> AnonymousHandlerFactories { get; }
     protected IRabbitMqMessageConsumerFactory MessageConsumerFactory { get; }
     protected IRabbitMqMessageConsumer Consumer { get; private set; } = default!;
 
@@ -70,6 +72,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
+        AnonymousHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public virtual void Initialize()
@@ -101,12 +104,22 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     {
         var eventName = ea.RoutingKey;
         var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
+        }
+        else if (AnonymousHandlerFactories.ContainsKey(eventName))
+        {
+            var jsonElement = JsonSerializer.Deserialize<JsonElement>(ea.Body.ToArray());
+            eventData = new AnonymousEventData(eventName, jsonElement);
+            eventType = typeof(AnonymousEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
         var correlationId = ea.BasicProperties.CorrelationId;
         if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData, correlationId))
@@ -196,12 +209,19 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
+        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+
+        if (eventType != null)
         {
-            throw new AbpException($"Unknown event name: {eventName}");
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
         }
 
-        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        if (AnonymousHandlerFactories.ContainsKey(eventName))
+        {
+            return PublishAsync(typeof(AnonymousEventData), new AnonymousEventData(eventName, eventData), onUnitOfWorkComplete);
+        }
+
+        throw new AbpException($"Unknown event name: {eventName}");
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -267,12 +287,22 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         InboxConfig inboxConfig)
     {
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
-        if (eventType == null)
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+        }
+        else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
+        {
+            var jsonElement = JsonSerializer.Deserialize<JsonElement>(incomingEvent.EventData);
+            eventData = new AnonymousEventData(incomingEvent.EventName, jsonElement);
+            eventType = typeof(AnonymousEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
@@ -296,8 +326,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         Guid? eventId = null,
         string? correlationId = null)
     {
-        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-        var body = Serializer.Serialize(eventData);
+        var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
+        var body = Serializer.Serialize(resolvedData);
 
         return PublishAsync(eventName, body, headersArguments, eventId, correlationId);
     }
@@ -422,6 +452,52 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
 
         return handlerFactoryList.ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
+    }
+
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
+        {
+            if (!handler.IsInFactories(factories))
+            {
+                factories.Add(handler);
+            }
+        });
+
+        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+    }
+
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    {
+        var result = new List<EventTypeWithEventHandlerFactories>();
+
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            result.AddRange(GetHandlerFactories(eventType));
+        }
+
+        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
+        {
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+        }
+
+        return result;
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
+    {
+        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

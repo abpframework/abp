@@ -13,6 +13,11 @@ public sealed class NullLocalEventBus : ILocalEventBus
 
     }
 
+    public Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return Task.CompletedTask;
+    }
+
     public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
     {
         return NullDisposable.Instance;
@@ -28,12 +33,22 @@ public sealed class NullLocalEventBus : ILocalEventBus
         return new List<EventTypeWithEventHandlerFactories>();
     }
 
+    public List<EventTypeWithEventHandlerFactories> GetAnonymousEventHandlerFactories(string eventName)
+    {
+        return new List<EventTypeWithEventHandlerFactories>();
+    }
+
     public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
     {
         return NullDisposable.Instance;
     }
 
     public IDisposable Subscribe(Type eventType, IEventHandler handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    public IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         return NullDisposable.Instance;
     }
@@ -71,6 +86,11 @@ public sealed class NullLocalEventBus : ILocalEventBus
     public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
     {
 
+    }
+
+    public void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        
     }
 
     public void UnsubscribeAll<TEvent>() where TEvent : class

@@ -57,6 +57,8 @@ public abstract class EventBusBase : IEventBus
         return Subscribe(eventType, new SingleInstanceHandlerFactory(handler));
     }
 
+    public abstract IDisposable Subscribe(string eventName, IEventHandlerFactory handler);
+
     /// <inheritdoc/>
     public virtual IDisposable Subscribe<TEvent>(IEventHandlerFactory factory) where TEvent : class
     {
@@ -82,6 +84,8 @@ public abstract class EventBusBase : IEventBus
     }
 
     public abstract void Unsubscribe(Type eventType, IEventHandlerFactory factory);
+
+    public abstract void Unsubscribe(string eventName, IEventHandlerFactory factory);
 
     /// <inheritdoc/>
     public virtual void UnsubscribeAll<TEvent>() where TEvent : class
@@ -139,29 +143,66 @@ public abstract class EventBusBase : IEventBus
     {
         await new SynchronizationContextRemover();
 
-        foreach (var handlerFactories in GetHandlerFactories(eventType).ToList())
+        var (handlerFactoriesList, actualEventType) = ResolveHandlerFactories(eventType, eventData);
+
+        foreach (var handlerFactories in handlerFactoriesList)
         {
             foreach (var handlerFactory in handlerFactories.EventHandlerFactories.ToList())
             {
-                await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions, inboxConfig);
+                var resolvedEventData = ResolveEventDataForHandler(eventData, eventType, handlerFactories.EventType);
+                await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, resolvedEventData, exceptions, inboxConfig);
             }
         }
 
-        //Implements generic argument inheritance. See IEventDataWithInheritableGenericArgument
-        if (eventType.GetTypeInfo().IsGenericType &&
-            eventType.GetGenericArguments().Length == 1 &&
-            typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(eventType))
+        if (actualEventType != null &&
+            actualEventType.GetTypeInfo().IsGenericType &&
+            actualEventType.GetGenericArguments().Length == 1 &&
+            typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(actualEventType))
         {
-            var genericArg = eventType.GetGenericArguments()[0];
+            var resolvedEventData = eventData is AnonymousEventData aed
+                ? aed.ConvertToTypedObject(actualEventType)
+                : eventData;
+
+            var genericArg = actualEventType.GetGenericArguments()[0];
             var baseArg = genericArg.GetTypeInfo().BaseType;
             if (baseArg != null)
             {
-                var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
-                var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
+                var baseEventType = actualEventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
+                var constructorArgs = ((IEventDataWithInheritableGenericArgument)resolvedEventData).GetConstructorArgs();
                 var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs)!;
                 await PublishToEventBusAsync(baseEventType, baseEventData);
             }
         }
+    }
+
+    protected virtual (List<EventTypeWithEventHandlerFactories> Factories, Type? ActualEventType) ResolveHandlerFactories(
+        Type eventType,
+        object eventData)
+    {
+        if (eventData is AnonymousEventData anonymousEventData)
+        {
+            return (
+                GetAnonymousHandlerFactories(anonymousEventData.EventName).ToList(),
+                GetEventTypeByEventName(anonymousEventData.EventName)
+            );
+        }
+
+        return (GetHandlerFactories(eventType).ToList(), eventType);
+    }
+
+    protected virtual object ResolveEventDataForHandler(object eventData, Type sourceEventType, Type handlerEventType)
+    {
+        if (eventData is AnonymousEventData anonymousEventData && handlerEventType != typeof(AnonymousEventData))
+        {
+            return anonymousEventData.ConvertToTypedObject(handlerEventType);
+        }
+
+        if (handlerEventType == typeof(AnonymousEventData) && eventData is not AnonymousEventData)
+        {
+            return new AnonymousEventData(EventNameAttribute.GetNameOrDefault(sourceEventType), eventData);
+        }
+
+        return eventData;
     }
 
     protected void ThrowOriginalExceptions(Type eventType, List<Exception> exceptions)
@@ -199,6 +240,10 @@ public abstract class EventBusBase : IEventBus
     }
 
     protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType);
+
+    protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName);
+
+    protected abstract Type? GetEventTypeByEventName(string eventName);
 
     protected virtual async Task TriggerHandlerAsync(IEventHandlerFactory asyncHandlerFactory, Type eventType,
         object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)

@@ -23,4 +23,6 @@ public interface ILocalEventBus : IEventBus
     /// <param name="eventType">Event type</param>
     /// <returns></returns>
      List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType);
+    
+    List<EventTypeWithEventHandlerFactories> GetAnonymousEventHandlerFactories(string eventName);
 }

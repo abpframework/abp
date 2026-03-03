@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
-using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -25,6 +24,8 @@ namespace Volo.Abp.EventBus.Distributed;
 public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
+
+    protected ConcurrentDictionary<string, bool> AnonymousEventNames { get; }
 
     public LocalDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -47,6 +48,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             correlationIdProvider)
     {
         EventTypes = new ConcurrentDictionary<string, Type>();
+        AnonymousEventNames = new ConcurrentDictionary<string, bool>();
         Subscribe(abpDistributedEventBusOptions.Value.Handlers);
     }
 
@@ -71,6 +73,12 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
     }
 
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        AnonymousEventNames.GetOrAdd(eventName, true);
+        return LocalEventBus.Subscribe(eventName, handler);
+    }
+
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
@@ -91,6 +99,11 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
     {
         LocalEventBus.Unsubscribe(eventType, factory);
+    }
+
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        LocalEventBus.Unsubscribe(eventName, factory);
     }
 
     public override void UnsubscribeAll(Type eventType)
@@ -120,15 +133,15 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await PublishToEventBusAsync(eventType, eventData);
@@ -137,12 +150,21 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
+
+        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+        }
+
+        var isAnonymous = AnonymousEventNames.ContainsKey(eventName);
+        if (!isAnonymous)
         {
             throw new AbpException($"Unknown event name: {eventName}");
         }
 
-        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        return PublishAsync(typeof(AnonymousEventData), new AnonymousEventData(eventName, eventData), onUnitOfWorkComplete);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -179,7 +201,13 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         if (eventType == null)
         {
-            return;
+            var isAnonymous = AnonymousEventNames.ContainsKey(outgoingEvent.EventName);
+            if (!isAnonymous)
+            {
+                return;
+            }
+
+            eventType = typeof(AnonymousEventData);
         }
 
         var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(outgoingEvent.EventData), eventType)!;
@@ -204,7 +232,13 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
         {
-            return;
+            var isAnonymous = AnonymousEventNames.ContainsKey(incomingEvent.EventName);
+            if (!isAnonymous)
+            {
+                return;
+            }
+
+            eventType = typeof(AnonymousEventData);
         }
 
         var eventData = JsonSerializer.Deserialize(incomingEvent.EventData, eventType);
@@ -226,12 +260,25 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        EventTypes.GetOrAdd(eventName, eventType);
+        if (eventType != typeof(AnonymousEventData))
+        {
+            EventTypes.GetOrAdd(eventName, eventType);
+        }
         return base.OnAddToOutboxAsync(eventName, eventType, eventData);
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         return LocalEventBus.GetEventHandlerFactories(eventType);
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    {
+        return LocalEventBus.GetAnonymousEventHandlerFactories(eventName);
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
     }
 }

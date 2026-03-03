@@ -23,3 +23,22 @@ public class EventHandlerFactoryUnregistrar : IDisposable
         _eventBus.Unsubscribe(_eventType, _factory);
     }
 }
+
+public class AnonymousEventHandlerFactoryUnregistrar : IDisposable
+{
+    private readonly IEventBus _eventBus;
+    private readonly string _eventName;
+    private readonly IEventHandlerFactory _factory;
+
+    public AnonymousEventHandlerFactoryUnregistrar(IEventBus eventBus, string eventName, IEventHandlerFactory factory)
+    {
+        _eventBus = eventBus;
+        _eventName = eventName;
+        _factory = factory;
+    }
+
+    public void Dispose()
+    {
+        _eventBus.Unsubscribe(_eventName, _factory);
+    }
+}

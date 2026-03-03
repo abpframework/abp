@@ -52,6 +52,8 @@ public interface IEventBus
     /// <param name="eventType">Event type</param>
     /// <param name="handler">Object to handle the event</param>
     IDisposable Subscribe(Type eventType, IEventHandler handler);
+    
+    IDisposable Subscribe(string eventName, IEventHandlerFactory handler);
 
     /// <summary>
     /// Registers to an event.
@@ -106,6 +108,8 @@ public interface IEventBus
     /// <param name="eventType">Event type</param>
     /// <param name="factory">Factory object that is registered before</param>
     void Unsubscribe(Type eventType, IEventHandlerFactory factory);
+    
+    void Unsubscribe(string eventName, IEventHandlerFactory factory);
 
     /// <summary>
     /// Unregisters all event handlers of given event type.

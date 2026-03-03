@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +28,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> AnonymousHandlerFactories { get; }
 
     public DaprDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -58,6 +59,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
+        AnonymousHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public void Initialize()
@@ -132,17 +134,25 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
+        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+
+        if (eventType != null)
         {
-            throw new AbpException($"Unknown event name: {eventName}");
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
         }
 
-        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+        if (AnonymousHandlerFactories.ContainsKey(eventName))
+        {
+            return PublishAsync(typeof(AnonymousEventData), new AnonymousEventData(eventName, eventData), onUnitOfWorkComplete);
+        }
+
+        throw new AbpException($"Unknown event name: {eventName}");
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishToDaprAsync(eventType, eventData, null, CorrelationIdProvider.Get());
+        var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
+        await PublishToDaprAsync(eventName, resolvedData, null, CorrelationIdProvider.Get());
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -160,6 +170,52 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         }
 
         return handlerFactoryList.ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
+    }
+
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
+        {
+            if (!handler.IsInFactories(factories))
+            {
+                factories.Add(handler);
+            }
+        });
+
+        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+    }
+
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    {
+        var result = new List<EventTypeWithEventHandlerFactories>();
+
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            result.AddRange(GetHandlerFactories(eventType));
+        }
+
+        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
+        {
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+        }
+
+        return result;
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
+    {
+        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
     }
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)

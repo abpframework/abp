@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Distributed;
@@ -10,6 +10,11 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     private NullDistributedEventBus()
     {
 
+    }
+
+    public Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return Task.CompletedTask;
     }
 
     public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
@@ -28,6 +33,11 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     public IDisposable Subscribe(Type eventType, IEventHandler handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    public IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         return NullDisposable.Instance;
     }
@@ -63,6 +73,11 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     public void Unsubscribe(Type eventType, IEventHandlerFactory factory)
+    {
+
+    }
+
+    public void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
 
     }
