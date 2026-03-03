@@ -294,18 +294,6 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     }
 
     protected abstract byte[] Serialize(object eventData);
-
-    protected virtual async Task TriggerHandlersDirectAsync(Type eventType, object eventData)
-    {
-        await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
-        {
-            Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
-        });
-
-        await TriggerHandlersAsync(eventType, eventData);
-    }
     
     protected virtual async Task TriggerHandlersDirectAsync(string eventName, Type eventType, object eventData)
     {
@@ -318,11 +306,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
         await TriggerHandlersAsync(eventName, eventType, eventData);
     }
-
-    protected virtual async Task TriggerHandlersFromInboxAsync(Type eventType, object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)
-    {
-        await TriggerHandlersFromInboxAsync(EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, exceptions, inboxConfig);
-    }
+    
 
     protected virtual async Task TriggerHandlersFromInboxAsync(string eventName, Type eventType, object eventData, List<Exception> exceptions, InboxConfig? inboxConfig = null)
     {
