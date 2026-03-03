@@ -117,6 +117,8 @@ public abstract class EventBusBase : IEventBus
         await PublishToEventBusAsync(eventType, eventData);
     }
 
+    public abstract Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true);
+
     protected abstract Task PublishToEventBusAsync(Type eventType, object eventData);
 
     protected abstract void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord);

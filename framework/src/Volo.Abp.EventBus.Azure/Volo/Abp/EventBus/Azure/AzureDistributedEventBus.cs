@@ -250,6 +250,17 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             .Locking(factories => factories.Clear());
     }
 
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType == null)
+        {
+            throw new AbpException($"Unknown event name: {eventName}");
+        }
+
+        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+    }
+
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);

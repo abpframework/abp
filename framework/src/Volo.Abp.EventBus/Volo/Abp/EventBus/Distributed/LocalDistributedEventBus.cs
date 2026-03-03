@@ -134,6 +134,17 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await PublishToEventBusAsync(eventType, eventData);
     }
 
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType == null)
+        {
+            throw new AbpException($"Unknown event name: {eventName}");
+        }
+
+        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+    }
+
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         if (await AddToInboxAsync(Guid.NewGuid().ToString(), EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, null))

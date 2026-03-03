@@ -23,6 +23,8 @@ public interface IEventBus
     /// <param name="onUnitOfWorkComplete">True, to publish the event at the end of the current unit of work, if available</param>
     /// <returns>The task to handle async operation</returns>
     Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true);
+    
+    Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true);
 
     /// <summary>
     /// Registers to an event.

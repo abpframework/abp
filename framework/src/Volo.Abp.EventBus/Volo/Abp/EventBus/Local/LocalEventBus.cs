@@ -29,6 +29,8 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     protected AbpLocalEventBusOptions Options { get; }
 
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
+    
+    protected ConcurrentDictionary<string, Type> EventTypes { get; } 
 
     public LocalEventBus(
         IOptions<AbpLocalEventBusOptions> options,
@@ -42,6 +44,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         Logger = NullLogger<LocalEventBus>.Instance;
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        EventTypes = new ConcurrentDictionary<string, Type>();
         SubscribeHandlers(Options.Handlers);
     }
 
@@ -54,6 +57,8 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     /// <inheritdoc/>
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
+        EventTypes.GetOrAdd(EventNameAttribute.GetNameOrDefault(eventType), eventType);
+        
         GetOrCreateHandlerFactories(eventType)
             .Locking(factories =>
                 {
@@ -119,6 +124,17 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     public override void UnsubscribeAll(Type eventType)
     {
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
+    }
+
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType == null)
+        {
+            throw new AbpException($"Unknown event name: {eventName}");
+        }
+
+        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
     }
 
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)

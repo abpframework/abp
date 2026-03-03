@@ -168,6 +168,17 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType == null)
+        {
+            throw new AbpException($"Unknown event name: {eventName}");
+        }
+
+        return PublishAsync(eventType, eventData, onUnitOfWorkComplete);
+    }
+
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         var headers = new Headers
