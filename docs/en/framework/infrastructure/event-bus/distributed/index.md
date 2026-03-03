@@ -721,6 +721,102 @@ Configure<AbpDistributedEventBusOptions>(options =>
 });
 ````
 
+## String-Based (Named) Events
+
+In addition to the type-safe event system described above, ABP provides a **string-based event API** that allows publishing and subscribing to events using event names (strings) at runtime. This is useful for dynamic/plugin scenarios, cross-language interop, or triggering existing typed handlers without a compile-time reference to the event class.
+
+> The string-based API is part of `IDistributedEventBus` (and `IEventBus`). No separate interface or cast is needed.
+
+### Publishing by Name
+
+Use `PublishByNameAsync` to publish an event using its string name. The payload can be any object (dictionary, anonymous object, typed DTO, etc.):
+
+````csharp
+// Publish with a dictionary payload
+await _distributedEventBus.PublishByNameAsync(
+    "MyApp.Orders.OrderPlaced",
+    new Dictionary<string, object>
+    {
+        ["OrderId"] = orderId,
+        ["Amount"] = 99.90
+    }
+);
+````
+
+**Triggering existing typed handlers by name:** If you know the event name of a typed event, you can use `PublishByNameAsync` to trigger its typed handlers. The payload is automatically converted to the expected type via JSON round-trip:
+
+````csharp
+// Get the event name from the type (safe against renames)
+var eventName = EventNameAttribute.GetNameOrDefault<StockCountChangedEto>();
+
+// Publish with a dictionary — typed handlers receive a StockCountChangedEto instance
+await _distributedEventBus.PublishByNameAsync(
+    eventName,
+    new Dictionary<string, object>
+    {
+        ["ProductId"] = product.Id,
+        ["NewCount"] = product.StockCount
+    }
+);
+````
+
+### Subscribing by Name
+
+Use `Subscribe<TPayload>(eventName, handler)` to register a typed handler for a named event:
+
+````csharp
+// Subscribe with a strongly-typed payload
+_distributedEventBus.Subscribe<OrderPlacedEto>(
+    "MyApp.Orders.OrderPlaced",
+    new MyOrderHandler()
+);
+````
+
+You can also subscribe at the `IEventBus` level using a factory:
+
+````csharp
+_distributedEventBus.Subscribe(
+    "MyApp.Orders.OrderPlaced",
+    typeof(OrderPlacedEto),
+    new SingleInstanceHandlerFactory(myHandler)
+);
+````
+
+The returned `IDisposable` can be used to unsubscribe:
+
+````csharp
+var subscription = _distributedEventBus.Subscribe<OrderPlacedEto>(
+    "MyApp.Orders.OrderPlaced",
+    handler
+);
+
+// Later...
+subscription.Dispose(); // Unsubscribes
+````
+
+### Unsubscribing by Name
+
+````csharp
+// Unsubscribe a specific factory
+_distributedEventBus.Unsubscribe("MyApp.Orders.OrderPlaced", typeof(OrderPlacedEto), factory);
+
+// Unsubscribe all handlers for an event name
+_distributedEventBus.UnsubscribeAll("MyApp.Orders.OrderPlaced");
+````
+
+### Payload Conventions
+
+When using `PublishByNameAsync`, keep the following in mind:
+
+* **If a typed event is registered** for the given event name (e.g., via `[EventName]` attribute), the payload is automatically converted to that type via JSON serialization/deserialization. Existing typed `IDistributedEventHandler<T>` handlers will be triggered.
+* **If no typed event is registered**, only named handlers (registered via `Subscribe(eventName, ...)`) will receive the payload.
+* For **cross-service scenarios**, prefer explicit types like `Dictionary<string, object>` or dedicated DTO classes over anonymous objects, since anonymous types cannot be deserialized on the receiving side.
+* **Array payloads** (`int[]`, `List<string>`, etc.) are supported and serialized as JSON arrays.
+
+### Outbox/Inbox Support
+
+String-based events fully participate in the outbox/inbox system. When `useOutbox: true` (the default), named events are serialized and stored in the outbox table just like typed events. The event name is used as the routing key.
+
 ## See Also
 
 * [Local Event Bus](../local)
