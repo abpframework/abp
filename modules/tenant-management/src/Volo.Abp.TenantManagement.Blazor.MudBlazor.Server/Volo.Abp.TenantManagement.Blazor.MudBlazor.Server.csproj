@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.TenantManagement.Blazor.MudBlazor\Volo.Abp.TenantManagement.Blazor.MudBlazor.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor\Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Blazor.MudBlazor.Server\Volo.Abp.FeatureManagement.Blazor.MudBlazor.Server.csproj" />
   </ItemGroup>
 
 </Project>

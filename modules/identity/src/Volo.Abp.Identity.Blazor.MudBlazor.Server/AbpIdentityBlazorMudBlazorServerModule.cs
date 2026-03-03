@@ -6,6 +6,7 @@ namespace Volo.Abp.Identity.Blazor.MudBlazor.Server;
 
 [DependsOn(
     typeof(AbpIdentityBlazorMudBlazorModule),
+    typeof(AbpAspNetCoreComponentsServerThemingMudBlazorModule),
     typeof(AbpPermissionManagementBlazorMudBlazorServerModule)
 )]
 public class AbpIdentityBlazorMudBlazorServerModule : AbpModule

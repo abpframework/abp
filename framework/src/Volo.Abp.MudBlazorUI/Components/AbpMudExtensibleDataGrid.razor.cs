@@ -11,6 +11,7 @@ using Microsoft.Extensions.Localization;
 using MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.Data;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.MudBlazorUI.Components;
 
@@ -45,6 +46,9 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
     [Inject]
     public IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
+
+    [Inject]
+    public IClock Clock { get; set; } = default!;
 
     public virtual async Task ReloadServerDataAsync()
     {
@@ -102,6 +106,16 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             }
 
             value = propertyValue;
+        }
+
+        if (value is DateTime dateTime)
+        {
+            return Clock.ConvertToUserTime(dateTime);
+        }
+
+        if (value is DateTimeOffset dateTimeOffset)
+        {
+            return Clock.ConvertToUserTime(dateTimeOffset);
         }
 
         return value;

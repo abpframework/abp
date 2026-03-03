@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.PageToolbars;
 using Volo.Abp.FeatureManagement.Blazor.MudBlazor.Components;
+using Volo.Abp.MudBlazorUI;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.TenantManagement.Localization;
 
@@ -26,6 +29,11 @@ public partial class TenantManagement
     protected PageToolbar Toolbar { get; } = new();
 
     protected List<TableColumn> TenantManagementTableColumns => TableColumns.Get<TenantManagement>();
+
+    private AbpMudBlazorMessageLocalizerHelper<AbpTenantManagementResource>? _localizerHelper;
+
+    [Inject]
+    protected IStringLocalizer<AbpTenantManagementResource> Localizer { get; set; } = default!;
 
     private MudForm? _createFormRef;
     private MudForm? _editFormRef;
@@ -50,6 +58,12 @@ public partial class TenantManagement
         return base.SetBreadcrumbItemsAsync();
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        _localizerHelper = new AbpMudBlazorMessageLocalizerHelper<AbpTenantManagementResource>(Localizer);
+        await base.OnInitializedAsync();
+    }
+
     protected override async Task SetPermissionsAsync()
     {
         await base.SetPermissionsAsync();
@@ -64,9 +78,9 @@ public partial class TenantManagement
 
     protected override ValueTask SetToolbarItemsAsync()
     {
-        Toolbar.AddButton(L["NewTenant"],
+        Toolbar.AddMudButton(L["NewTenant"],
             OpenCreateDialogAsync,
-            icon: Icons.Material.Filled.Add,
+            icon: Icons.Material.Filled.Add.ToString(),
             requiredPolicyName: CreatePolicyName);
 
         return base.SetToolbarItemsAsync();
@@ -101,7 +115,8 @@ public partial class TenantManagement
                     {
                         Text = L["Delete"],
                         Visible = (data) => HasDeletePermission,
-                        Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>())
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<TenantDto>()),
+                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<TenantDto>())
                     }
             });
 

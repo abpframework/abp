@@ -2,14 +2,16 @@ using System;
 using Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Layout;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Theming;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme;
 
-public class MudBlazorBasicTheme : ITheme
+[ThemeName(Name)]
+public class MudBlazorBasicTheme : ITheme, ITransientDependency
 {
-    public static string Name = "MudBlazorBasic";
+    public const string Name = "MudBlazorBasic";
 
-    public Type GetLayout(string name, bool fallbackToDefault = true)
+    public virtual Type GetLayout(string name, bool fallbackToDefault = true)
     {
         switch (name)
         {

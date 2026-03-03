@@ -1,10 +1,9 @@
 namespace Volo.Abp.Identity.Blazor.MudBlazor;
 
-public static class IdentityMenuNames
+public class IdentityMenuNames
 {
-    public const string GroupName = "IdentityManagement";
+    public const string GroupName = "AbpIdentity";
 
-    public const string Roles = "AbpIdentity.Roles";
-
-    public const string Users = "AbpIdentity.Users";
+    public const string Roles = GroupName + ".Roles";
+    public const string Users = GroupName + ".Users";
 }

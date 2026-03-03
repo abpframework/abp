@@ -114,7 +114,8 @@ public partial class UserManagement
             NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
             {
                 Name = x.Name,
-                IsAssigned = x.IsDefault
+                IsAssigned = x.IsDefault,
+                IsAssignable = true
             }).ToArray();
         }
 
@@ -143,14 +144,25 @@ public partial class UserManagement
             _editTabIndex = 0;
             IsEditCurrentUser = entity.Id == CurrentUser.Id;
 
-            if (Roles != null && await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
+            if (await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
             {
-                var userRoleIds = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Id).ToList();
+                var assignableRoles = Roles ?? (await AppService.GetAssignableRolesAsync()).Items;
+                var currentRoles = (await AppService.GetRolesAsync(entity.Id)).Items;
 
-                EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+                var combinedRoles = assignableRoles
+                    .Concat(currentRoles)
+                    .GroupBy(role => role.Id)
+                    .Select(group => group.First())
+                    .ToList();
+
+                var currentRoleIds = currentRoles.Select(r => r.Id).ToHashSet();
+                var assignableRoleIds = assignableRoles.Select(r => r.Id).ToHashSet();
+
+                EditUserRoles = combinedRoles.Select(x => new AssignedRoleViewModel
                 {
                     Name = x.Name,
-                    IsAssigned = userRoleIds.Contains(x.Id)
+                    IsAssigned = currentRoleIds.Contains(x.Id),
+                    IsAssignable = assignableRoleIds.Contains(x.Id)
                 }).ToArray();
 
                 _showPassword = false;
@@ -208,7 +220,8 @@ public partial class UserManagement
                     {
                         Text = L["Delete"],
                         Visible = (data) => HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id,
-                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>())
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
+                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
                     }
             });
 
@@ -265,4 +278,6 @@ public class AssignedRoleViewModel
     public string Name { get; set; } = string.Empty;
 
     public bool IsAssigned { get; set; }
+
+    public bool IsAssignable { get; set; }
 }

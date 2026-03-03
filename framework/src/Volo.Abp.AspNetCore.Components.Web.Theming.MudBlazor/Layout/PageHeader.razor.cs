@@ -115,8 +115,7 @@ public partial class PageHeader : ComponentBase, IDisposable
             var item = pageItems[i];
             var isLast = i == pageItems.Count - 1;
             
-            // Convert Blazorise icon to MudBlazor icon if needed
-            var mudIcon = ConvertToMudIcon(item.Icon);
+                var mudIcon = ConvertToMudIcon(item.Icon);
             
             // If BreadcrumbShowCurrent is false, skip the last item or make it non-clickable
             if (isLast && !BreadcrumbShowCurrent)
@@ -132,26 +131,19 @@ public partial class PageHeader : ComponentBase, IDisposable
         }
     }
 
-    /// <summary>
-    /// Converts Blazorise icon to MudBlazor icon.
-    /// You may need to expand this mapping based on the icons used in your application.
-    /// </summary>
-    private static string? ConvertToMudIcon(object? blazoriseIcon)
+    private static string? ConvertToMudIcon(object? icon)
     {
-        if (blazoriseIcon == null)
+        if (icon == null)
         {
             return null;
         }
 
-        // If it's already a string (MudBlazor icon format), return as-is
-        if (blazoriseIcon is string iconString)
+        if (icon is string iconString)
         {
             return iconString;
         }
 
-        // Map common Blazorise icons to MudBlazor icons
-        // Add more mappings as needed for your application
-        var iconName = blazoriseIcon.ToString();
+        var iconName = icon.ToString();
         
         return iconName switch
         {

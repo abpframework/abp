@@ -79,11 +79,8 @@ public partial class RoleManagement
                         {
                             if (PermissionManagementModal != null)
                             {
-                                var role = data.As<IdentityRoleDto>();
-                                await PermissionManagementModal.OpenAsync(
-                                    PermissionProviderName,
-                                    role.Id.ToString(),
-                                    role.Name);
+                                await PermissionManagementModal.OpenAsync(PermissionProviderName,
+                                    data.As<IdentityRoleDto>().Name);
                             }
                         }
                     },
@@ -91,7 +88,8 @@ public partial class RoleManagement
                     {
                         Text = L["Delete"],
                         Visible = (data) => HasDeletePermission && !data.As<IdentityRoleDto>().IsStatic,
-                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>())
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityRoleDto>()),
+                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityRoleDto>())
                     }
             });
 

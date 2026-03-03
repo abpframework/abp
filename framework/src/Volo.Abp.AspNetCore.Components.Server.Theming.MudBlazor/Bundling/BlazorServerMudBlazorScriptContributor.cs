@@ -15,7 +15,6 @@ public class BlazorServerMudBlazorScriptContributor : BundleContributor
         {
             context.Files.AddIfNotContains("/_framework/blazor.server.js");
         }
-        //TODO@MudBlazor: Do we need this script, check ?
         context.Files.AddIfNotContains("/_content/MudBlazor/MudBlazor.min.js");
         context.Files.AddIfNotContains("/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js");
         context.Files.AddIfNotContains("/_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/authentication-state-listener.js");

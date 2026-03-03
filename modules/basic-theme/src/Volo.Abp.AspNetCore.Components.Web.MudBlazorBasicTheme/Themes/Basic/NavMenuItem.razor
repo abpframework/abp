@@ -1,3 +1,4 @@
+@implements IDisposable
 @using Volo.Abp.UI.Navigation
 @using MudBlazor
 @using Microsoft.AspNetCore.Components
@@ -75,5 +76,3 @@ else
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }
-
-@implements IDisposable

@@ -28,7 +28,6 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
         typeof(short),
         typeof(ushort),
         typeof(uint),
-        typeof(long),
         typeof(ulong),
         typeof(float),
         typeof(double),
@@ -40,7 +39,6 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
         typeof(short?),
         typeof(ushort?),
         typeof(uint?),
-        typeof(long?),
         typeof(ulong?),
         typeof(float?),
         typeof(double?),
@@ -132,7 +130,7 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
     {
         foreach (var attribute in propertyInfo.Attributes)
         {
-            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute);
+            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute, propertyInfo.Type);
             if (inputTypeByAttribute != null)
             {
                 return inputTypeByAttribute;
@@ -147,7 +145,7 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
         return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
     }
 
-    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute)
+    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute, Type propertyType)
     {
         var hasTextEditSupport = TextEditSupportedAttributeTypes.Any(t => t == attribute.GetType());
 
@@ -167,7 +165,9 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
                     return typeof(MudTextExtensionProperty<,>);
                 case DataType.Date:
                 case DataType.DateTime:
-                    return typeof(MudDateTimeExtensionProperty<,>);
+                    return propertyType == typeof(DateTimeOffset) || propertyType == typeof(DateTimeOffset?)
+                        ? typeof(MudDateTimeOffsetExtensionProperty<,>)
+                        : typeof(MudDateTimeExtensionProperty<,>);
                 case DataType.Time:
                     return typeof(MudTimeExtensionProperty<,>);
                 case DataType.MultilineText:
@@ -185,9 +185,14 @@ public static class MudBlazorUiObjectExtensionPropertyInfoExtensions
             return typeof(MudCheckExtensionProperty<,>);
         }
 
-        if (type == typeof(DateTime))
+        if (type == typeof(DateTime) || type == typeof(DateTime?))
         {
             return typeof(MudDateTimeExtensionProperty<,>);
+        }
+
+        if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
+        {
+            return typeof(MudDateTimeOffsetExtensionProperty<,>);
         }
 
         if (NumberTypes.Contains(type))

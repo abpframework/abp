@@ -88,7 +88,7 @@
                         {
                             @foreach (var role in NewUserRoles)
                             {
-                                <MudCheckBox T="bool" @bind-Value="@role.IsAssigned" Label="@role.Name" />
+                                <MudCheckBox T="bool" @bind-Value="@role.IsAssigned" Disabled="@(!role.IsAssignable)" Label="@role.Name" />
                                 <input type="hidden" @bind-value="@role.Name" />
                             }
                         }
@@ -154,7 +154,7 @@
                         <MudTabPanel Text="@L["Roles"]">
                             @foreach (var role in EditUserRoles)
                             {
-                                <MudCheckBox T="bool" @bind-Value="@role.IsAssigned" Label="@role.Name" />
+                                <MudCheckBox T="bool" @bind-Value="@role.IsAssigned" Disabled="@(!role.IsAssignable)" Label="@role.Name" />
                                 <input type="hidden" @bind-value="@role.Name" />
                             }
                         </MudTabPanel>

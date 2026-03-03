@@ -4,6 +4,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.FeatureManagement.Blazor.MudBlazor.Components
 @using Volo.Abp.MudBlazorUI.Components
+@using Volo.Abp.MudBlazorUI.Components.ObjectExtending
+@using Volo.Abp.TenantManagement.Localization
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.UI.Navigation.Localization.Resource
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Layout
@@ -53,7 +55,7 @@
                              Adornment="Adornment.End"
                              AdornmentIcon="@(ShowPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
                              OnAdornmentClick="@TogglePasswordVisibility" />
-                <ExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" ModalType="ExtensionPropertyModalType.CreateModal" />
+                <MudExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.CreateModal" />
             </MudForm>
         </DialogContent>
         <DialogActions>
@@ -78,7 +80,7 @@
                              Required="true"
                              RequiredError="@L["ThisFieldIsRequired."]"
                              AutoFocus="true" />
-                <ExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" ModalType="ExtensionPropertyModalType.EditModal" />
+                <MudExtensionProperties TEntityType="TenantUpdateDto" TResourceType="AbpTenantManagementResource" Entity="@EditingEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.EditModal" />
             </MudForm>
         </DialogContent>
         <DialogActions>
