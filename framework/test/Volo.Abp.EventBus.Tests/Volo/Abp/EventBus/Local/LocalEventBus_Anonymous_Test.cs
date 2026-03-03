@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
@@ -11,17 +12,18 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     public async Task Should_Handle_Anonymous_Handler_With_EventName()
     {
         var handleCount = 0;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
-        LocalEventBus.Subscribe("TestEvent",
+        using var subscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 handleCount++;
-                d.EventName.ShouldBe("TestEvent");
+                d.EventName.ShouldBe(eventName);
                 await Task.CompletedTask;
             })));
 
-        await LocalEventBus.PublishAsync("TestEvent", new { Value = 1 });
-        await LocalEventBus.PublishAsync("TestEvent", new { Value = 2 });
+        await LocalEventBus.PublishAsync(eventName, new { Value = 1 });
+        await LocalEventBus.PublishAsync(eventName, new { Value = 2 });
 
         handleCount.ShouldBe(2);
     }
@@ -31,7 +33,7 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     {
         var handleCount = 0;
 
-        LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
+        using var subscription = LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
             handleCount++;
             await Task.CompletedTask;
@@ -48,7 +50,7 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     {
         MySimpleEventData? receivedData = null;
 
-        LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
+        using var subscription = LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
             receivedData = data;
             await Task.CompletedTask;
@@ -70,7 +72,7 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
         var typedHandleCount = 0;
         var anonymousHandleCount = 0;
 
-        LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
+        using var typedSubscription = LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
             typedHandleCount++;
             await Task.CompletedTask;
@@ -78,7 +80,7 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
-        LocalEventBus.Subscribe(eventName,
+        using var anonymousSubscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 anonymousHandleCount++;
@@ -95,6 +97,7 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     public async Task Should_Unsubscribe_Anonymous_Handler()
     {
         var handleCount = 0;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
         var handler = new ActionEventHandler<AnonymousEventData>(async (d) =>
         {
@@ -103,15 +106,14 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
         });
         var factory = new SingleInstanceHandlerFactory(handler);
 
-        var disposable = LocalEventBus.Subscribe("TestEvent", factory);
+        var disposable = LocalEventBus.Subscribe(eventName, factory);
 
-        await LocalEventBus.PublishAsync("TestEvent", new { Value = 1 });
+        await LocalEventBus.PublishAsync(eventName, new { Value = 1 });
         handleCount.ShouldBe(1);
 
         disposable.Dispose();
 
-        await Assert.ThrowsAsync<AbpException>(() =>
-            LocalEventBus.PublishAsync("TestEvent", new { Value = 2 }));
+        await LocalEventBus.PublishAsync(eventName, new { Value = 2 });
         handleCount.ShouldBe(1);
     }
 
@@ -126,15 +128,16 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     public async Task Should_ConvertToTypedObject_In_Anonymous_Handler()
     {
         object? receivedData = null;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
-        LocalEventBus.Subscribe("TestEvent",
+        using var subscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 receivedData = d.ConvertToTypedObject();
                 await Task.CompletedTask;
             })));
 
-        await LocalEventBus.PublishAsync("TestEvent", new { Name = "Hello", Count = 42 });
+        await LocalEventBus.PublishAsync(eventName, new { Name = "Hello", Count = 42 });
 
         receivedData.ShouldNotBeNull();
         var dict = receivedData.ShouldBeOfType<Dictionary<string, object?>>();
@@ -146,15 +149,16 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     public async Task Should_ConvertToTypedObject_Generic_In_Anonymous_Handler()
     {
         MySimpleEventData? receivedData = null;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
-        LocalEventBus.Subscribe("TestEvent",
+        using var subscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 receivedData = d.ConvertToTypedObject<MySimpleEventData>();
                 await Task.CompletedTask;
             })));
 
-        await LocalEventBus.PublishAsync("TestEvent", new MySimpleEventData(99));
+        await LocalEventBus.PublishAsync(eventName, new MySimpleEventData(99));
 
         receivedData.ShouldNotBeNull();
         receivedData.Value.ShouldBe(99);

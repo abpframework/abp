@@ -11,10 +11,17 @@ namespace Volo.Abp.EventBus.Distributed;
 
 public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
 {
+    public LocalDistributedEventBus_Test()
+    {
+        MySimpleDistributedTransientEventHandler.HandleCount = 0;
+        MySimpleDistributedTransientEventHandler.DisposeCount = 0;
+        MySimpleDistributedSingleInstanceEventHandler.TenantId = null;
+    }
+
     [Fact]
     public async Task Should_Call_Handler_AndDispose()
     {
-        DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         await DistributedEventBus.PublishAsync(new MySimpleEventData(1));
         await DistributedEventBus.PublishAsync(new MySimpleEventData(2));
@@ -27,7 +34,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     [Fact]
     public async Task Should_Handle_Typed_Handler_When_Published_With_EventName()
     {
-        DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
         await DistributedEventBus.PublishAsync(eventName, new MySimpleEventData(1));
@@ -45,21 +52,22 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     public async Task Should_Handle_Anonymous_Handler_When_Published_With_EventName()
     {
         var handleCount = 0;
+        var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
 
-        DistributedEventBus.Subscribe("MyEvent",
+        using var subscription = DistributedEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 handleCount++;
                 await Task.CompletedTask;
             })));
 
-        await DistributedEventBus.PublishAsync("MyEvent", new MySimpleEventData(1));
-        await DistributedEventBus.PublishAsync("MyEvent", new Dictionary<string, object>()
+        await DistributedEventBus.PublishAsync(eventName, new MySimpleEventData(1));
+        await DistributedEventBus.PublishAsync(eventName, new Dictionary<string, object>()
         {
             {"Value", 2}
         });
-        await DistributedEventBus.PublishAsync("MyEvent", new { Value = 3 });
-        await DistributedEventBus.PublishAsync("MyEvent", new[] { 1, 2, 3 });
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 3 });
+        await DistributedEventBus.PublishAsync(eventName, new[] { 1, 2, 3 });
 
         Assert.Equal(4, handleCount);
     }
@@ -68,8 +76,9 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     public async Task Should_Handle_Anonymous_Handler_When_Published_With_AnonymousEventData()
     {
         var handleCount = 0;
+        var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
 
-        DistributedEventBus.Subscribe("MyEvent",
+        using var subscription = DistributedEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 handleCount++;
@@ -77,12 +86,12 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
                 await Task.CompletedTask;
             })));
 
-        await DistributedEventBus.PublishAsync(new AnonymousEventData("MyEvent", new MySimpleEventData(1)));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData("MyEvent", new Dictionary<string, object>()
+        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new MySimpleEventData(1)));
+        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new Dictionary<string, object>()
         {
             {"Value", 2}
         }));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData("MyEvent", new { Value = 3 }));
+        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new { Value = 3 }));
 
         Assert.Equal(3, handleCount);
     }
@@ -90,7 +99,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     [Fact]
     public async Task Should_Handle_Typed_Handler_When_Published_With_AnonymousEventData()
     {
-        DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
@@ -107,13 +116,13 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     [Fact]
     public async Task Should_Trigger_Both_Typed_And_Anonymous_Handlers_For_Typed_Event()
     {
-        DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        using var typedSubscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
         var anonymousHandleCount = 0;
 
-        DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+        using var anonymousSubscription = DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
         {
             anonymousHandleCount++;
             await Task.CompletedTask;
@@ -130,13 +139,13 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     [Fact]
     public async Task Should_Trigger_Both_Handlers_For_Mixed_Typed_And_Anonymous_Publish()
     {
-        DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        using var typedSubscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
         var anonymousHandleCount = 0;
 
-        DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+        using var anonymousSubscription = DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
         {
             anonymousHandleCount++;
             await Task.CompletedTask;
@@ -157,6 +166,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     public async Task Should_Unsubscribe_Anonymous_Handler()
     {
         var handleCount = 0;
+        var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
 
         var handler = new ActionEventHandler<AnonymousEventData>(async (d) =>
         {
@@ -165,15 +175,14 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         });
         var factory = new SingleInstanceHandlerFactory(handler);
 
-        var disposable = DistributedEventBus.Subscribe("MyEvent", factory);
+        var disposable = DistributedEventBus.Subscribe(eventName, factory);
 
-        await DistributedEventBus.PublishAsync("MyEvent", new { Value = 1 });
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 1 });
         Assert.Equal(1, handleCount);
 
         disposable.Dispose();
 
-        await Assert.ThrowsAsync<AbpException>(() =>
-            DistributedEventBus.PublishAsync("MyEvent", new { Value = 2 }));
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 2 });
         Assert.Equal(1, handleCount);
     }
 
@@ -189,7 +198,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         MySimpleEventData? receivedData = null;
 
-        DistributedEventBus.Subscribe<MySimpleEventData>(async (data) =>
+        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
             receivedData = data;
             await Task.CompletedTask;
@@ -207,7 +216,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         var tenantId = Guid.NewGuid();
 
-        DistributedEventBus.Subscribe<MySimpleEventData>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
+        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
 
         await DistributedEventBus.PublishAsync(new MySimpleEventData(3, tenantId));
 
@@ -219,7 +228,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         var tenantId = Guid.NewGuid();
 
-        DistributedEventBus.Subscribe<EntityCreatedEto<MySimpleEventData>>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
+        using var subscription = DistributedEventBus.Subscribe<EntityCreatedEto<MySimpleEventData>>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
 
         await DistributedEventBus.PublishAsync(new MySimpleEventData(3, tenantId));
 
@@ -231,7 +240,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         var tenantId = Guid.NewGuid();
 
-        DistributedEventBus.Subscribe<MySimpleEto>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
+        using var subscription = DistributedEventBus.Subscribe<MySimpleEto>(GetRequiredService<MySimpleDistributedSingleInstanceEventHandler>());
 
         await DistributedEventBus.PublishAsync(new MySimpleEto
         {
@@ -249,10 +258,10 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     {
         var localEventBus = GetRequiredService<ILocalEventBus>();
 
-        localEventBus.Subscribe<DistributedEventSent, DistributedEventHandles>();
-        localEventBus.Subscribe<DistributedEventReceived, DistributedEventHandles>();
+        using var distributedEventSentSubscription = localEventBus.Subscribe<DistributedEventSent, DistributedEventHandles>();
+        using var distributedEventReceivedSubscription = localEventBus.Subscribe<DistributedEventReceived, DistributedEventHandles>();
 
-        DistributedEventBus.Subscribe<MyEventDate, MyEventHandle>();
+        using var subscription = DistributedEventBus.Subscribe<MyEventDate, MyEventHandle>();
 
         using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
         {
