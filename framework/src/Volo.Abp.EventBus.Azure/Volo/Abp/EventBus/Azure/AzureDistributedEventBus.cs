@@ -221,6 +221,20 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
     }
+    
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+        
+        if (handler.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+        
+        handlerFactories.Add(handler);
+
+        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+    }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
     {
@@ -265,6 +279,12 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
     {
         GetOrCreateHandlerFactories(eventType)
+            .Locking(factories => factories.Remove(factory));
+    }
+    
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName)
             .Locking(factories => factories.Remove(factory));
     }
 
@@ -347,24 +367,6 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override Type? GetEventTypeByEventName(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
-    }
-
-    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
-        {
-            if (!handler.IsInFactories(factories))
-            {
-                factories.Add(handler);
-            }
-        });
-
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
-    }
-
-    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)

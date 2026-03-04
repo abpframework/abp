@@ -94,8 +94,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (AnonymousHandlerFactories.ContainsKey(eventName))
         {
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(message.Value);
-            eventData = new AnonymousEventData(eventName, jsonElement);
+            var element = Serializer.Deserialize<object>(message.Value);
+            eventData = new AnonymousEventData(eventName, element);
             eventType = typeof(AnonymousEventData);
         }
         else
@@ -126,6 +126,19 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         handlerFactories.Add(factory);
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+    
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
+        {
+            if (!handler.IsInFactories(factories))
+            {
+                factories.Add(handler);
+            }
+        });
+
+        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     /// <inheritdoc/>
@@ -174,6 +187,11 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
     {
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Remove(factory));
+    }
+    
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
     }
 
     /// <inheritdoc/>
@@ -318,8 +336,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(incomingEvent.EventData);
-            eventData = new AnonymousEventData(incomingEvent.EventName, jsonElement);
+            var element = Serializer.Deserialize<object>(incomingEvent.EventData);
+            eventData = new AnonymousEventData(incomingEvent.EventName, element);
             eventType = typeof(AnonymousEventData);
         }
         else
@@ -408,24 +426,6 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override Type? GetEventTypeByEventName(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
-    }
-
-    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
-        {
-            if (!handler.IsInFactories(factories))
-            {
-                factories.Add(handler);
-            }
-        });
-
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
-    }
-
-    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)

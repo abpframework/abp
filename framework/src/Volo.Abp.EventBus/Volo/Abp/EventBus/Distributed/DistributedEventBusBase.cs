@@ -124,8 +124,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
                 var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                var eventName = GetEventName(eventType, eventData);
-                eventData = GetEventData(eventData);
+                (var eventName, eventData) = ResolveEventForPublishing(eventType, eventData);
 
                 await OnAddToOutboxAsync(eventName, eventType, eventData);
 
@@ -186,6 +185,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                             continue;
                         }
                     }
+                    
+                    eventData = GetEventData(eventData);
 
                     var incomingEventInfo = new IncomingEventInfo(
                         GuidGenerator.Create(),

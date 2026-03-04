@@ -458,16 +458,20 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
             }
         );
     }
-
+    
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventNames = EventTypes.Where(x => ShouldTriggerEventForHandler(eventType, x.Value)).Select(x => x.Key).ToList();
 
-        foreach (var handlerFactory in
-                 HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+        }
+
+        foreach (var handlerFactory in AnonymousHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
         }
 
         return handlerFactoryList.ToArray();
@@ -490,7 +494,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         var eventType = GetEventTypeByEventName(eventName);
         if (eventType != null)
         {
-            result.AddRange(GetHandlerFactories(eventType));
+            return GetHandlerFactories(eventType);
         }
 
         foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
