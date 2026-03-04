@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -112,9 +111,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
         else if (AnonymousHandlerFactories.ContainsKey(eventName))
         {
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(ea.Body.ToArray());
-            eventData = new AnonymousEventData(eventName, jsonElement);
             eventType = typeof(AnonymousEventData);
+            eventData = new AnonymousEventData(eventName, Serializer.Deserialize<object>(ea.Body.ToArray()));
         }
         else
         {
@@ -150,6 +148,25 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+    
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+        
+        if (handler.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+        
+        handlerFactories.Add(handler);
+        
+        if (handlerFactories.Count == 1) //TODO: Multi-threading!
+        {
+            Consumer.BindAsync(eventName);
+        }
+
+        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     /// <inheritdoc/>
@@ -218,7 +235,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         if (AnonymousHandlerFactories.ContainsKey(eventName))
         {
-            return PublishAsync(typeof(AnonymousEventData), new AnonymousEventData(eventName, eventData), onUnitOfWorkComplete);
+            return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
         }
 
         throw new AbpException($"Unknown event name: {eventName}");
@@ -295,8 +312,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
         else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            var jsonElement = JsonSerializer.Deserialize<JsonElement>(incomingEvent.EventData);
-            eventData = new AnonymousEventData(incomingEvent.EventName, jsonElement);
+            eventData = new AnonymousEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
             eventType = typeof(AnonymousEventData);
         }
         else
@@ -423,7 +439,10 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        EventTypes.GetOrAdd(eventName, eventType);
+        if (typeof(AnonymousEventData) != eventType)
+        {
+            EventTypes.GetOrAdd(eventName, eventType);
+        }
         return base.OnAddToOutboxAsync(eventName, eventType, eventData);
     }
 
@@ -457,19 +476,6 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     protected override Type? GetEventTypeByEventName(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
-    }
-
-    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
-        {
-            if (!handler.IsInFactories(factories))
-            {
-                factories.Add(handler);
-            }
-        });
-
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
