@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.Threading;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,104 @@ public static class CookieAuthenticationOptionsExtensions
             if (!tokenExpiresAt.IsNullOrWhiteSpace() && DateTimeOffset.TryParseExact(tokenExpiresAt, "o", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var expiresAt) &&
                 expiresAt <= DateTimeOffset.UtcNow.Add(advance.Value))
             {
+                var refreshToken = principalContext.Properties.GetTokenValue("refresh_token");
+                if (refreshToken.IsNullOrWhiteSpace())
+                {
+                    await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                    return;
+                }
+
+                logger.LogInformation("The access_token expires within {AdvanceSeconds}s but a refresh_token is available; attempting to refresh.", advance.Value.TotalSeconds);
+
+                var openIdConnectOptions = await GetOpenIdConnectOptions(principalContext, oidcAuthenticationScheme);
+
+                var tokenEndpoint = openIdConnectOptions.Configuration?.TokenEndpoint;
+                if (tokenEndpoint.IsNullOrWhiteSpace() && !openIdConnectOptions.Authority.IsNullOrWhiteSpace())
+                {
+                    tokenEndpoint = openIdConnectOptions.Authority.EnsureEndsWith('/') + "connect/token";
+                }
+
+                if (tokenEndpoint.IsNullOrWhiteSpace())
+                {
+                    logger.LogWarning("No token endpoint configured. Skipping token refresh.");
+                    await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                    return;
+                }
+
+                var clientId = principalContext.Properties.GetString("client_id");
+                var clientSecret = principalContext.Properties.GetString("client_secret");
+
+                var refreshRequest = new RefreshTokenRequest
+                {
+                    Address = tokenEndpoint,
+                    ClientId = clientId ?? openIdConnectOptions.ClientId!,
+                    ClientSecret = clientSecret ?? openIdConnectOptions.ClientSecret,
+                    RefreshToken = refreshToken
+                };
+
+                var cancellationTokenProvider = principalContext.HttpContext.RequestServices.GetRequiredService<ICancellationTokenProvider>();
+
+                const int RefreshTokenLockTimeoutSeconds = 3;
+                const string RefreshTokenLockKeyFormat = "refresh_token_lock_{0}";
+
+                var userKey =
+                    principalContext.Principal?.FindFirst("sub")?.Value
+                    ?? principalContext.Principal?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                    ?? "unknown";
+
+                var lockKey = string.Format(CultureInfo.InvariantCulture, RefreshTokenLockKeyFormat, userKey);
+                var lockTimeout = TimeSpan.FromSeconds(RefreshTokenLockTimeoutSeconds);
+
+                var abpDistributedLock = principalContext.HttpContext.RequestServices.GetRequiredService<IAbpDistributedLock>();
+
+                await using (var handle = await abpDistributedLock.TryAcquireAsync(lockKey, lockTimeout, cancellationTokenProvider.Token))
+                {
+                    if (handle != null)
+                    {
+                        var response = await openIdConnectOptions.Backchannel.RequestRefreshTokenAsync(refreshRequest, cancellationTokenProvider.Token);
+
+                        if (response.IsError)
+                        {
+                            logger.LogError("Token refresh failed: {Error}", response.Error);
+                            await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                            return;
+                        }
+
+                        if (response.ExpiresIn <= 0)
+                        {
+                            logger.LogWarning("The token endpoint response does not contain a valid expires_in value. Skipping token refresh.");
+                            await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                            return;
+                        }
+
+                        if (response.AccessToken.IsNullOrWhiteSpace())
+                        {
+                            logger.LogWarning("The token endpoint response does not contain a new access_token. Skipping token refresh.");
+                            await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                            return;
+                        }
+
+                        if (response.RefreshToken.IsNullOrWhiteSpace())
+                        {
+                            logger.LogInformation("The token endpoint response does not contain a new refresh_token. The old refresh_token will continue to be used until it expires.");
+                        }
+
+                        logger.LogInformation("Token refreshed successfully. Updating cookie with new tokens.");
+                        var newTokens = new[]
+                        {
+                            new AuthenticationToken { Name = "access_token", Value = response.AccessToken },
+                            new AuthenticationToken { Name = "refresh_token", Value = response.RefreshToken ?? refreshToken },
+                            new AuthenticationToken { Name = "expires_at", Value = DateTimeOffset.UtcNow.AddSeconds(response.ExpiresIn).ToString("o", CultureInfo.InvariantCulture) }
+                        };
+
+                        principalContext.Properties.StoreTokens(newTokens);
+                        principalContext.ShouldRenew = true;
+
+                        await InvokePreviousHandlerAsync(principalContext, previousHandler);
+                        return;
+                    }
+                }
+
                 logger.LogInformation("The access_token expires within {AdvanceSeconds}s; signing out.", advance.Value.TotalSeconds);
                 await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
                 return;
