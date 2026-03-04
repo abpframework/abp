@@ -316,6 +316,7 @@ public partial class PermissionManagementModal
         }
 
         return permissionGrantInfo.IsGranted &&
+               permissionGrantInfo.GrantedProviders.Any() &&
                permissionGrantInfo.GrantedProviders.All(p => p.ProviderName != _providerName);
     }
 
@@ -378,8 +379,8 @@ public partial class PermissionManagementModal
                 ? _allGroups.ToList() 
                 : _allGroups.Where(x => x.DisplayName.Contains(_permissionGroupSearchText!, StringComparison.OrdinalIgnoreCase) || x.Permissions.Any(permission => permission.DisplayName.Contains(_permissionGroupSearchText!, StringComparison.OrdinalIgnoreCase))).ToList();
 
-            GrantAll = _groups.SelectMany(x => x.Permissions).All(p => p.IsGranted);
-            GrantAny = !GrantAll && _groups.SelectMany(x => x.Permissions).Any(p => p.IsGranted);
+            GrantAll = _allGroups.SelectMany(x => x.Permissions).All(p => p.IsGranted);
+            GrantAny = !GrantAll && _allGroups.SelectMany(x => x.Permissions).Any(p => p.IsGranted);
 
             NormalizePermissionGroup(false);
         }

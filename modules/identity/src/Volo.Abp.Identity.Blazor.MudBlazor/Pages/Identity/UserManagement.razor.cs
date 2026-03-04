@@ -91,7 +91,6 @@ public partial class UserManagement
     {
         if (e.Key == "Enter")
         {
-            GetListInput.Filter = GetListInput.Filter;
             CurrentPage = 1;
             await _dataGrid.ReloadServerDataAsync();
         }
