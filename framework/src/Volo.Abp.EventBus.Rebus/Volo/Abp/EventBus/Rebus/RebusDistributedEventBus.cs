@@ -75,7 +75,15 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public async Task ProcessEventAsync(Type eventType, object eventData)
     {
         var messageId = MessageContext.Current.TransportMessage.GetMessageId();
-        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        string eventName;
+        if (eventType == typeof(AnonymousEventData) && eventData is AnonymousEventData anonymousEventData)
+        {
+            eventName = anonymousEventData.EventName;
+        }
+        else
+        {
+            eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        }
         var correlationId = MessageContext.Current.Headers.GetOrDefault(EventBusConsts.CorrelationIdHeaderName);
 
         if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
@@ -119,6 +127,11 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         handlerFactories.Add(handler);
+        
+        if (AnonymousHandlerFactories.Count == 1) //TODO: Multi-threading!
+        {
+            Rebus.Subscribe(typeof(AnonymousEventData));
+        }
 
         return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
@@ -224,7 +237,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (AnonymousHandlerFactories.ContainsKey(outgoingEvent.EventName))
         {
-            eventData = Serializer.Deserialize(outgoingEvent.EventData, typeof(object));
+            eventData = new AnonymousEventData(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, typeof(object)));
             eventType = typeof(AnonymousEventData);
         }
         else
