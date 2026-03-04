@@ -1,37 +1,42 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Kafka;
+using Volo.Abp.Kafka;
 using Volo.Abp.Modularity;
-using Volo.Abp.MongoDB;
-using Volo.Abp.MongoDB.DistributedEvents;
 
 namespace DistDemoApp
 {
+#if DISTDEMO_USE_MONGODB
     [DependsOn(
-        typeof(AbpMongoDbModule),
+        typeof(DistDemoAppMongoDbInfrastructureModule),
         typeof(AbpEventBusKafkaModule),
         typeof(DistDemoAppSharedModule)
     )]
+#else
+    [DependsOn(
+        typeof(DistDemoAppEntityFrameworkCoreInfrastructureModule),
+        typeof(AbpEventBusKafkaModule),
+        typeof(DistDemoAppSharedModule)
+    )]
+#endif
     public class DistDemoAppMongoDbKafkaModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddMongoDbContext<TodoMongoDbContext>(options =>
+#if DISTDEMO_USE_MONGODB
+            context.ConfigureDistDemoMongoInfrastructure();
+#else
+            context.ConfigureDistDemoEntityFrameworkInfrastructure();
+#endif
+
+            Configure<AbpKafkaOptions>(options =>
             {
-                options.AddDefaultRepositories();
+                options.Connections.Default.BootstrapServers = "localhost:9092";
             });
 
-            Configure<AbpDistributedEventBusOptions>(options =>
+            Configure<AbpKafkaEventBusOptions>(options =>
             {
-                options.Outboxes.Configure(config =>
-                {
-                    config.UseMongoDbContext<TodoMongoDbContext>();
-                });
-
-                options.Inboxes.Configure(config =>
-                {
-                    config.UseMongoDbContext<TodoMongoDbContext>();
-                });
+                options.ConnectionName = "Default";
+                options.TopicName = "DistDemoTopic";
+                options.GroupId = "DistDemoApp";
             });
         }
     }

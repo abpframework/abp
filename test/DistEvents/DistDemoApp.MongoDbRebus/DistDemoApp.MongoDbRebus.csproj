@@ -4,13 +4,29 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
         <RootNamespace>DistDemoApp</RootNamespace>
+        <DistDemoDbProvider>MongoDb</DistDemoDbProvider>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
         <ProjectReference Include="..\..\..\framework\src\Volo.Abp.EventBus.Rebus\Volo.Abp.EventBus.Rebus.csproj" />
         <ProjectReference Include="..\DistDemoApp.Shared\DistDemoApp.Shared.csproj" />
     </ItemGroup>
+
+    <ItemGroup Condition="'$(DistDemoDbProvider)' == 'MongoDb'">
+        <ProjectReference Include="..\DistDemoApp.Persistence.MongoDb\DistDemoApp.Persistence.MongoDb.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(DistDemoDbProvider)' == 'EntityFrameworkCore'">
+        <ProjectReference Include="..\DistDemoApp.Persistence.EntityFrameworkCore\DistDemoApp.Persistence.EntityFrameworkCore.csproj" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(DistDemoDbProvider)' == 'MongoDb'">
+        <DefineConstants>$(DefineConstants);DISTDEMO_USE_MONGODB</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(DistDemoDbProvider)' == 'EntityFrameworkCore'">
+        <DefineConstants>$(DefineConstants);DISTDEMO_USE_EFCORE</DefineConstants>
+    </PropertyGroup>
 
     <ItemGroup>
         <None Update="appsettings.json">

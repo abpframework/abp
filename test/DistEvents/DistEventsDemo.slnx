@@ -1,5 +1,9 @@
 <Solution>
+  <Project Path="DistDemoApp.AzureEmulator/DistDemoApp.AzureEmulator.csproj" />
+  <Project Path="DistDemoApp.AspNetCoreDapr/DistDemoApp.AspNetCoreDapr.csproj" />
   <Project Path="DistDemoApp.EfCoreRabbitMq/DistDemoApp.EfCoreRabbitMq.csproj" />
+  <Project Path="DistDemoApp.Persistence.EntityFrameworkCore/DistDemoApp.Persistence.EntityFrameworkCore.csproj" />
+  <Project Path="DistDemoApp.Persistence.MongoDb/DistDemoApp.Persistence.MongoDb.csproj" />
   <Project Path="DistDemoApp.MongoDbKafka/DistDemoApp.MongoDbKafka.csproj" />
   <Project Path="DistDemoApp.MongoDbRebus/DistDemoApp.MongoDbRebus.csproj" />
   <Project Path="DistDemoApp.Shared/DistDemoApp.Shared.csproj" />

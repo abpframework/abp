@@ -1,4 +1,4 @@
-﻿using Medallion.Threading;
+using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -21,7 +21,7 @@ namespace DistDemoApp
         {
             var configuration = context.Services.GetConfiguration();
 
-            context.Services.AddHostedService<DistDemoAppHostedService>();
+            // context.Services.AddHostedService<DistDemoAppHostedService>();
 
             Configure<AbpDistributedEntityEventOptions>(options =>
             {

@@ -1,0 +1,22 @@
+{
+  "UserConfig": {
+    "Namespaces": [
+      {
+        "Name": "sbemulatorns",
+        "Topics": [
+          {
+            "Name": "DistDemoAzureTopic",
+            "Subscriptions": [
+              {
+                "Name": "DistDemoAzureSubscriber"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Logging": {
+      "Type": "File"
+    }
+  }
+}

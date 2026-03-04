@@ -1,0 +1,131 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: distevents-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: distevents-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: "2181"
+      ZOOKEEPER_TICK_TIME: "2000"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: distevents-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: "1"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  mongodb:
+    image: mongo:7
+    container_name: distevents-mongodb
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mongodb-rs-init:
+    image: mongo:7
+    container_name: distevents-mongodb-rs-init
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: "no"
+    command:
+      [
+        "mongosh",
+        "--host", "mongodb:27017",
+        "--quiet",
+        "--eval",
+        "try { rs.status() } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017'}]}) }"
+      ]
+
+  redis:
+    image: redis:7-alpine
+    container_name: distevents-redis
+    ports:
+      - "6379:6379"
+
+  dapr-placement:
+    image: daprio/dapr:1.14.4
+    container_name: distevents-dapr-placement
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
+
+  daprd:
+    image: daprio/dapr:1.14.4
+    container_name: distevents-daprd
+    depends_on:
+      - redis
+      - dapr-placement
+    command:
+      [
+        "./daprd",
+        "--app-id", "dist-demo-dapr",
+        "--app-port", "8090",
+        "--app-channel-address", "host.docker.internal",
+        "--app-protocol", "http",
+        "--resources-path", "/components",
+        "--placement-host-address", "dapr-placement:50006",
+        "--dapr-http-port", "3500",
+        "--dapr-grpc-port", "50001"
+      ]
+    volumes:
+      - ./dapr/components:/components
+    ports:
+      - "3500:3500"
+      - "50001:50001"
+
+  servicebus-sql:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: distevents-servicebus-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "AbpDemo_123456"
+
+  servicebus-emulator:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    container_name: distevents-servicebus-emulator
+    depends_on:
+      - servicebus-sql
+    environment:
+      SQL_SERVER: servicebus-sql
+      MSSQL_SA_PASSWORD: "AbpDemo_123456"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ./servicebus-emulator/Config.json:/ServiceBus_Emulator/ConfigFiles/Config.json
+    ports:
+      - "5673:5672"
+      - "5300:5300"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: distevents-sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "AbpDemo_123456"
