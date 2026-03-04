@@ -217,7 +217,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, string? messageId = null, string? correlationId = null)
     {
-        if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, correlationId))
+        if (await AddToInboxAsync(messageId, GetEventName(eventType, eventData), eventType, eventData, correlationId))
         {
             return;
         }
@@ -323,6 +323,11 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     public Type? GetEventType(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
+    }
+    
+    public bool IsAnonymousEvent(string eventName)
+    {
+        return AnonymousHandlerFactories.ContainsKey(eventName);
     }
 
     /// <inheritdoc/>
