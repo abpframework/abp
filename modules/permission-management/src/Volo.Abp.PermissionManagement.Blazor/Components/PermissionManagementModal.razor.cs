@@ -276,6 +276,7 @@ public partial class PermissionManagementModal
         }
 
         return permissionGrantInfo.IsGranted &&
+               permissionGrantInfo.GrantedProviders.Any() &&
                permissionGrantInfo.GrantedProviders.All(p => p.ProviderName != _providerName);
     }
 

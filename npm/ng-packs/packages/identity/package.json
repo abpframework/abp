@@ -12,9 +12,6 @@
     "@abp/ng.theme.shared": "~10.2.0-rc.1",
     "tslib": "^2.0.0"
   },
-  "peerDependencies": {
-    "@angular/aria": "~21.1.0"
-  },
   "publishConfig": {
     "access": "public"
   }

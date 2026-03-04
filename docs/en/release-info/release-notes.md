@@ -14,9 +14,27 @@ Also see the following notes about ABP releases:
 * [ABP Studio release notes](../studio/release-notes.md)
 * [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.2 (2026-02-24)
+
+> This is currently an RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-2-release-candidate-05zatjfq)** for the v10.2 release.
+
+* Multi-Tenant Account Usage: Shared User Accounts
+* Prevent Privilege Escalation: Assignment Restrictions for Roles and Permissions
+* `ClientResourcePermissionValueProvider` for OAuth/OpenIddict
+* Angular: Hybrid Localization Support
+* Angular: Extensible Table Row Detail
+* Angular: CMS Kit Module Features
+* Blazor: Upgrade to Blazorise 2.0
+* Identity: Single Active Token Providers
+* TickerQ Package Upgrade to 10.1.1
+* [AI Management Module](../modules/ai-management/index.md): MCP (Model Context Protocol) Support
+* [AI Management Module](../modules/ai-management/index.md): RAG with File Upload
+* [AI Management Module](../modules/ai-management/index.md): OpenAI-Compatible Chat Endpoint
+* [File Management Module](../modules/file-management.md): Resource-Based Authorization
+
 ## 10.1 (2026-01-06)
 
-> This is currently a RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-1-release-candidate-cyqui19d)** for the v10.1 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-1-stable-release-z4xfn1me)** for the v10.1 release.
 
 * Resource-Based Authorization
 * Introducing the [TickerQ Background Worker Provider](../framework/infrastructure/background-workers/tickerq.md)

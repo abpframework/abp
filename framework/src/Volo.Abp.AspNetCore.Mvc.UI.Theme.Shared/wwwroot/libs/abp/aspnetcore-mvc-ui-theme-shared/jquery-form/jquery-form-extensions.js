@@ -92,11 +92,17 @@
 
             var formEl = $form[0];
 
-            var formData = new FormData(formEl);
             var arr = $form.serializeArray();
 
             if (options.beforeSubmit && options.beforeSubmit.call(formEl, arr, $form) === false) {
                 return;
+            }
+
+            var formData = new FormData(formEl);
+            var submitter = e.originalEvent && e.originalEvent.submitter;
+            if (submitter && submitter.name) {
+                formData.append(submitter.name, submitter.value);
+                arr.push({ name: submitter.name, value: submitter.value });
             }
 
             var method = (options.method || $form.attr("method") || "POST").toUpperCase();

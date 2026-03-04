@@ -28,47 +28,39 @@
     <ng-template #abpBody>
       @if (form) {
         <form [formGroup]="form" (ngSubmit)="save()">
-          <div ngTabs selectionMode="follow">
-            <div ngTabList [(selectedTab)]="selectedTab" class="nav nav-tabs">
-              <button ngTab #tabInfo="ngTab" [value]="'user-info'" class="nav-link" [class.active]="tabInfo.selected()" type="button">
-                {{ 'AbpIdentity::UserInformations' | abpLocalization }}
-              </button>
-              <button ngTab #tabRoles="ngTab" [value]="'roles'" class="nav-link" [class.active]="tabRoles.selected()" type="button">
-                {{ 'AbpIdentity::Roles' | abpLocalization }}
-              </button>
-            </div>
+          <ul ngbNav #newUserNav="ngbNav" class="nav-tabs" [(activeId)]="selectedTab">
+            <li ngbNavItem="user-info">
+              <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
+              <ng-template ngbNavContent>
+                <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+              </ng-template>
+            </li>
+            <li ngbNavItem="roles">
+              <a ngbNavLink>{{ 'AbpIdentity::Roles' | abpLocalization }}</a>
+              <ng-template ngbNavContent>
+                @for (roleGroup of roleGroups; track $index; let i = $index) {
+                  <div class="form-check mb-2">
+                    <abp-checkbox
+                      *abpReplaceableTemplate="{
+                        inputs: {
+                          checkboxId: 'roles-' + i,
+                          label: roles[i].name,
+                          formControl: roleGroup.controls[roles[i].name]
+                        },
+                        componentKey: inputKey
+                      }"
+                      [checkboxId]="'roles-' + i"
+                      [formControl]="roleGroup.controls[roles[i].name]"
+                      [label]="roles[i].name"
+                    >
+                    </abp-checkbox>
+                  </div>
+                }
+              </ng-template>
+            </li>
+          </ul>
 
-            <div class="mt-2 fade-in-top">
-              <div ngTabPanel [value]="'user-info'">
-                <ng-template ngTabContent>
-                  <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
-                </ng-template>
-              </div>
-
-              <div ngTabPanel [value]="'roles'">
-                <ng-template ngTabContent>
-                  @for (roleGroup of roleGroups; track $index; let i = $index) {
-                    <div class="form-check mb-2">
-                      <abp-checkbox
-                        *abpReplaceableTemplate="{
-                          inputs: {
-                            checkboxId: 'roles-' + i,
-                            label: roles[i].name,
-                            formControl: roleGroup.controls[roles[i].name]
-                          },
-                          componentKey: inputKey
-                        }"
-                        [checkboxId]="'roles-' + i"
-                        [formControl]="roleGroup.controls[roles[i].name]"
-                        [label]="roles[i].name"
-                      >
-                      </abp-checkbox>
-                    </div>
-                  }
-                </ng-template>
-              </div>
-            </div> 
-          </div>
+          <div class="mt-2 fade-in-top" [ngbNavOutlet]="newUserNav"></div>
         </form>
       } @else {
         <div class="text-center"><i class="fa fa-pulse fa-spinner" aria-hidden="true"></i></div>

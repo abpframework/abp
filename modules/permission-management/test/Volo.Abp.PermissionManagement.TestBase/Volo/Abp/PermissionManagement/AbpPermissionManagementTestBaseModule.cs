@@ -23,7 +23,9 @@ public class AbpPermissionManagementTestBaseModule : AbpModule
         {
             options.ManagementProviders.Add<TestPermissionManagementProvider>();
             options.ResourceManagementProviders.Add<TestResourcePermissionManagementProvider>();
+            options.ResourceManagementProviders.Add<TestUnavailableResourcePermissionManagementProvider>();
             options.ResourcePermissionProviderKeyLookupServices.Add<TestResourcePermissionProviderKeyLookupService>();
+            options.ResourcePermissionProviderKeyLookupServices.Add<TestUnavailableResourcePermissionProviderKeyLookupService>();
         });
     }
 

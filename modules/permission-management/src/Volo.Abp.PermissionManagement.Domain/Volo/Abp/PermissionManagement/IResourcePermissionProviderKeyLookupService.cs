@@ -9,6 +9,8 @@ public interface IResourcePermissionProviderKeyLookupService
 {
     public string Name { get; }
 
+    Task<bool> IsAvailableAsync();
+
     public ILocalizableString DisplayName { get; }
 
     Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string filter = null, int page = 1, CancellationToken cancellationToken = default);

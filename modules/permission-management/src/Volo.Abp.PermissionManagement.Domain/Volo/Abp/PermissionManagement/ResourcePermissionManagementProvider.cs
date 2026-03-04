@@ -26,6 +26,11 @@ public abstract class ResourcePermissionManagementProvider : IResourcePermission
         CurrentTenant = currentTenant;
     }
 
+    public virtual Task<bool> IsAvailableAsync()
+    {
+        return Task.FromResult(true);
+    }
+
     public virtual async Task<ResourcePermissionValueProviderGrantInfo> CheckAsync(string name, string resourceName, string resourceKey, string providerName, string providerKey)
     {
         var multiplePermissionValueProviderGrantInfo = await CheckAsync(new[] { name }, resourceName, resourceKey, providerName, providerKey);

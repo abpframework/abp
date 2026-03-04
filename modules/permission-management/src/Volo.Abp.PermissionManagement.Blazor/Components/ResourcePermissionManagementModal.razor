@@ -130,7 +130,6 @@
                         </Validation>
                     </div>
                     <div class="mb-3">
-                        <h4>@L["ResourcePermissionPermissions"]</h4>
                         <Switch TValue="bool" Value="CreateEntity.Permissions.All(x => x.IsGranted)" ValueChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
                         <div class="mt-2">
                             @foreach (var permission in CreateEntity.Permissions)
@@ -159,7 +158,6 @@
             <ModalBody>
                 <Validations @ref="@EditValidationsRef" Model="@EditEntity" ValidateOnLoad="false">
                     <div class="mb-3">
-                        <h4>@L["ResourcePermissionPermissions"]</h4>
                         <Switch TValue="bool" Value="EditEntity.Permissions.All(x => x.IsGranted)" ValueChanged="GrantAllAsync">@L["GrantAllResourcePermissions"]</Switch>
                         <div class="mt-2">
                             @foreach (var permission in EditEntity.Permissions)

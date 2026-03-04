@@ -8,6 +8,13 @@
 # Creating the Initial Solution
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -28,7 +35,7 @@ In this first part of this tutorial, we will create a new ABP solution with modu
 Follow the *[Get Started](../../get-started/single-layer-web-application.md)* guide to create a single layer web application with the following configuration:
 
 * **Solution name**: `ModularCrm`
-* **UI Framework**: ASP.NET Core MVC / Razor Pages
+* **UI Framework**: {{if UI == "MVC"}}ASP.NET Core MVC / Razor Pages{{else if UI == "BlazorWebApp"}}Blazor WebApp{{end}}
 * **Database Provider**: Entity Framework Core
 
 You can select the other options based on your preference but at the **Modularity** step, check the _Setup as a modular solution_ option and add a new **Standard Module** named `ModularCrm.Catalog`:
@@ -62,12 +69,16 @@ Initially, you see a `ModularCrm` solution with two solution folders:
 
 If you expand it, you can see the .NET projects (ABP Studio Packages) of the `ModularCrm.Catalog` module:
 
+{{if UI == "MVC"}}
 ![abp-studio-catalog-module-expanded-in-solution-explorer](images/abp-studio-catalog-module-expanded-in-solution-explorer.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-catalog-module-expanded-in-solution-explorer](images/abp-studio-catalog-module-expanded-in-solution-explorer-blazor-webapp.png)
+{{end}}
 
 - `ModularCrm.Catalog`: The main module project that contains your [entities](../../framework/architecture/domain-driven-design/entities.md), [application service](../../framework/architecture/domain-driven-design/application-services.md) implementations and other business objects
 - `ModularCrm.Catalog.Contracts`: Basically contains [application service](../../framework/architecture/domain-driven-design/application-services.md) interfaces and [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). These interfaces then can be used by client modules for integration purposes or by the user interface to perform use cases related to that module
 - `ModularCrm.Catalog.Tests`: Unit and integration tests (if you selected the _Include Tests_ option) for that module
-- `ModularCrm.Catalog.UI`: Contains user interface pages and components for the module
+- {{if UI == "MVC"}}`ModularCrm.Catalog.UI`: Contains user interface pages and components for the module{{else if UI == "BlazorWebApp"}}`ModularCrm.Catalog.Blazor`: Contains Blazor WebApp user interface pages and components for the module{{end}}
 
 ## Summary
 

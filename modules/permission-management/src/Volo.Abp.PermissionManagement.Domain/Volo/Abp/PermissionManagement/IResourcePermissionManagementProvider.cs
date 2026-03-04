@@ -8,6 +8,8 @@ public interface IResourcePermissionManagementProvider : ISingletonDependency //
 {
     string Name { get; }
 
+    Task<bool> IsAvailableAsync();
+
     Task<ResourcePermissionValueProviderGrantInfo> CheckAsync(
         [NotNull] string name,
         [NotNull] string resourceName,

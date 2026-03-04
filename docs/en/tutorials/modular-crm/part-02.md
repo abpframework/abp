@@ -8,6 +8,13 @@
 # Setting Up the Catalog Module
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -25,7 +32,7 @@ In this part, you will install the `ModularCrm.Catalog` module to the main appli
 
 ## Installing the Catalog Module to the Main Application
 
-A module does not contain an executable application inside. The `ModularCrm.Catalog.UI` project is just a class library project, not an executable web application. A module should be installed in an executable application to run it.
+A module does not contain an executable application inside. The {{if UI == "MVC"}}`ModularCrm.Catalog.UI`{{else if UI == "BlazorWebApp"}}`ModularCrm.Catalog.Blazor`{{end}} project is just a class library project, not an executable web application. A module should be installed in an executable application to run it.
 
 > **Ensure that the web application is not running in [Solution Runner](../../studio/running-applications.md) or in your IDE. Installing a module to a running application will produce errors.**
 
@@ -41,9 +48,13 @@ Select the `ModularCrm.Catalog` module and check the *Install this module* optio
 
 When you click the *OK* button, ABP Studio opens the *Install Module* dialog:
 
+{{if UI == "MVC"}}
 ![abp-studio-module-installation-dialog-for-catalog](images/abp-studio-module-installation-dialog-for-catalog.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-module-installation-dialog-for-catalog](images/abp-studio-module-installation-dialog-for-catalog-blazor-webapp.png)
+{{end}}
 
-Select the `ModularCrm.Catalog` and `ModularCrm.Catalog.UI` packages from the left area and ensure the  `ModularCrm` package from the middle area was checked as shown in the preceding figure. Finally, click _OK_.
+Select the `ModularCrm.Catalog` and {{if UI == "MVC"}}`ModularCrm.Catalog.UI`{{else if UI == "BlazorWebApp"}}`ModularCrm.Catalog.Blazor`{{end}} packages from the left area. {{if UI == "MVC"}}Ensure `ModularCrm` was checked in the middle area as shown in the preceding figure.{{else if UI == "BlazorWebApp"}}For `ModularCrm.Catalog`, ensure `ModularCrm` is checked. For `ModularCrm.Catalog.Blazor`, ensure both `ModularCrm` and `ModularCrm.Client` are checked in the middle area as shown in the preceding figure.{{end}} Finally, click _OK_.
 
 ## Building the Main Application
 

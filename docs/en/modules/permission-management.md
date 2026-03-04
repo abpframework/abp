@@ -45,12 +45,23 @@ You can integrate this dialog into your own application to manage permissions fo
 
 #### MVC / Razor Pages
 
-Use the `abp.ModalManager` to open the resource permission management dialog:
+First, add the `resource-permission-management-modal.js` script to your page. This script registers the `ResourcePermissionManagement` modal class used by `abp.ModalManager`:
+
+````html
+@section scripts
+{
+    <abp-script src="/Pages/MyBook/Index.js"/>
+    <abp-script src="/Pages/AbpPermissionManagement/resource-permission-management-modal.js" />
+}
+````
+
+Then use the `abp.ModalManager` to open the resource permission management dialog:
 
 ````javascript
-var _resourcePermissionsModal = new abp.ModalManager(
-    abp.appPath + 'AbpPermissionManagement/ResourcePermissionManagementModal'
-);
+var _resourcePermissionsModal = new abp.ModalManager({
+    viewUrl: abp.appPath + 'AbpPermissionManagement/ResourcePermissionManagementModal',
+    modalClass: 'ResourcePermissionManagement'
+});
 
 // Open the modal for a specific resource
 _resourcePermissionsModal.open({
@@ -333,6 +344,51 @@ Configure<PermissionManagementOptions>(options =>
 {
     options.ResourceManagementProviders.Add<CustomResourcePermissionManagementProvider>();
 });
+````
+
+#### Controlling Provider Availability
+
+You can control whether a provider is active in a given context by overriding `IsAvailableAsync()`. When a provider returns `false`, it is completely excluded from all read, write, and UI listing operations. This is useful for host-only providers that should not be visible or writable in a tenant context.
+
+````csharp
+public class CustomResourcePermissionManagementProvider 
+    : ResourcePermissionManagementProvider
+{
+    public override string Name => "Custom";
+
+    // ...constructor...
+
+    public override Task<bool> IsAvailableAsync()
+    {
+        // Only available for the host, not for tenants
+        return Task.FromResult(CurrentTenant.Id == null);
+    }
+}
+````
+
+The same `IsAvailableAsync()` method is available on `IResourcePermissionProviderKeyLookupService`, which controls whether the provider appears in the UI provider picker:
+
+````csharp
+public class CustomResourcePermissionProviderKeyLookupService
+    : IResourcePermissionProviderKeyLookupService, ITransientDependency
+{
+    public string Name => "Custom";
+    public ILocalizableString DisplayName { get; }
+
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public CustomResourcePermissionProviderKeyLookupService(ICurrentTenant currentTenant)
+    {
+        CurrentTenant = currentTenant;
+    }
+
+    public Task<bool> IsAvailableAsync()
+    {
+        return Task.FromResult(CurrentTenant.Id == null);
+    }
+
+    // ...SearchAsync implementations...
+}
 ````
 
 ## Permission Value Providers

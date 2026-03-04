@@ -8,6 +8,13 @@
 # Modular Monolith Application Development Tutorial
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Next": {

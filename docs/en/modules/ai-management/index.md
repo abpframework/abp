@@ -49,6 +49,34 @@ abp add-package Volo.AIManagement.Ollama
 
 If you need to integrate with a provider that isn't covered by the built-in packages, you can implement your own. See the [Implementing Custom AI Provider Factories](#implementing-custom-ai-provider-factories) section for details.
 
+### Adding RAG Dependencies
+
+> [!TIP]
+> RAG is entirely optional. All other AI Management features work without any RAG dependencies installed.
+
+Retrieval-Augmented Generation (RAG) support requires both an embedding provider and a vector store provider.
+
+Install at least one embedding provider package:
+
+```bash
+abp add-package Volo.AIManagement.OpenAI
+# or
+abp add-package Volo.AIManagement.Ollama
+```
+
+Install at least one vector store package:
+
+```bash
+abp add-package Volo.AIManagement.VectorStores.MongoDB
+# or
+abp add-package Volo.AIManagement.VectorStores.Pgvector
+# or
+abp add-package Volo.AIManagement.VectorStores.Qdrant
+```
+
+> [!NOTE]
+> Available provider names in workspace settings come from registered factories at startup. Built-in names are `OpenAI` and `Ollama` for embedding providers, and `MongoDb`, `Pgvector`, and `Qdrant` for vector stores.
+
 ## Packages
 
 This module follows the [module development best practices guide](../../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
@@ -71,6 +99,7 @@ The **AI Management Module** adds the following items to the "Main" menu:
 
 * **AI Management**: Root menu item for AI Management module. (`AIManagement`)
   * **Workspaces**: Workspace management page. (`AIManagement.Workspaces`)
+  * **MCP Servers**: MCP server management page. (`AIManagement.McpServers`)
 
 `AIManagementMenus` class has the constants for the menu item names.
 
@@ -93,6 +122,8 @@ You can create a new workspace or edit an existing workspace in this page. The w
 * **Temperature**: Response randomness (0.0-1.0)
 * **Application Name**: Associate with specific application
 * **Required Permission**: Permission needed to use this workspace
+* **Embedder Provider / Model**: Embedding generator used for RAG
+* **Vector Store Provider / Settings**: Storage backend and connection settings for document vectors
 
 #### Chat Interface
 
@@ -104,6 +135,47 @@ The AI Management module includes a built-in chat interface for testing workspac
 * Verify workspace configuration before using in production
 
 > Access the chat interface at: `/AIManagement/Workspaces/{WorkspaceName}`
+
+#### MCP Servers
+
+The [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) Servers page allows you to manage external MCP servers that can be used as tools by your AI workspaces. MCP enables AI models to interact with external services, databases, APIs, and more through a standardized protocol.
+
+![ai-management-mcp-servers](../../images/ai-management-mcp-servers.png)
+
+You can create, edit, delete, and test MCP server connections. Each MCP server supports one of the following transport types:
+
+* **Stdio**: Runs a local command (e.g., `npx`, `dotnet`, `python`) with arguments and environment variables.
+* **SSE**: Connects to a remote server using Server-Sent Events.
+* **StreamableHttp**: Connects to a remote server using the Streamable HTTP transport.
+
+For HTTP-based transports (SSE and StreamableHttp), you can configure authentication:
+
+* **None**: No authentication.
+* **API Key**: Sends an API key in the header.
+* **Bearer**: Sends a Bearer token in the Authorization header.
+* **Custom**: Sends a custom header name/value pair.
+
+You can test the connection to an MCP server after creating it. The test verifies connectivity and lists available tools from the server.
+
+![ai-management-mcp-test-connection](../../images/ai-management-mcp-test-connection.png)
+
+Once MCP servers are defined, you can associate them with workspaces. Navigate to a workspace's edit page and configure which MCP servers should be available as tools for that workspace.
+
+![ai-management-workspace-mcp-config](../../images/ai-management-workspace-mcp-config.png)
+
+When a workspace has MCP servers associated, the AI model can invoke tools from those servers during chat conversations. Tool calls and results are displayed in the chat interface.
+
+![ai-management-chat-mcp-tools](../../images/ai-management-chat-mcp-tools.png)
+
+#### Workspace Data Sources
+
+Workspace Data Sources page is used to upload and manage RAG documents per workspace. Uploaded files are processed and indexed in the background.
+
+* Supported file extensions: `.txt`, `.md`, `.pdf`
+* Maximum file size: `10 MB`
+* Each uploaded file can be re-indexed individually or re-indexed in bulk per workspace
+
+> Access the page from workspace details, or navigate to `/AIManagement/WorkspaceDataSources?WorkspaceId={WorkspaceId}`.
 
 ## Workspace Configuration
 
@@ -128,6 +200,12 @@ When creating or managing a workspace, you can configure the following propertie
 | `RequiredPermissionName`      | No       | Permission required to use this workspace                      |
 | `IsSystem`                    | No       | Whether it's a system workspace (read-only)                    |
 | `OverrideSystemConfiguration` | No       | Allow database configuration to override code-defined settings |
+| `EmbedderProvider`            | No       | Embedding provider name (e.g., "OpenAI", "Ollama")             |
+| `EmbedderModelName`           | No       | Embedding model identifier (e.g., "text-embedding-3-small")    |
+| `EmbedderApiKey`              | No       | API key for embedding provider                                 |
+| `EmbedderApiBaseUrl`          | No       | Custom embedding endpoint URL                                  |
+| `VectorStoreProvider`         | No       | Vector store provider name (e.g., "MongoDb", "Pgvector", "Qdrant") |
+| `VectorStoreSettings`         | No       | Provider-specific connection setting string                    |
 
 **\*Not required for system workspaces**
 
@@ -202,16 +280,135 @@ public class WorkspaceDataSeederContributor : IDataSeedContributor, ITransientDe
 * Workspace names **cannot contain spaces** (use underscores or camelCase)
 * Workspace names are **case-sensitive**
 
+## RAG with File Upload
+
+The AI Management module supports RAG (Retrieval-Augmented Generation), which enables workspaces to answer questions based on the content of uploaded documents. When RAG is configured, the AI model searches the uploaded documents for relevant information before generating a response.
+
+### Supported File Formats
+
+* **PDF** (.pdf)
+* **Markdown** (.md)
+* **Text** (.txt)
+
+Maximum file size: **10 MB**.
+
+### Prerequisites
+
+RAG requires an **embedder** and a **vector store** to be configured on the workspace:
+
+* **Embedder**: Converts documents and queries into vector embeddings. You can use any provider that supports embedding generation (e.g., OpenAI `text-embedding-3-small`, Ollama `nomic-embed-text`).
+* **Vector Store**: Stores and retrieves vector embeddings. Supported providers: **MongoDb**, **Pgvector**, and **Qdrant**.
+
+### Configuring RAG on a Workspace
+
+To enable RAG for a workspace, configure the embedder and vector store settings in the workspace edit page.
+
+#### Configuring Embedder
+
+![workspace-embedder](../../images/workspace-embedder.png)
+
+The **Embedder** tab allows you to configure how documents and queries are converted into vector embeddings:
+
+* **Embedder Provider**: The provider for generating embeddings (e.g., "OpenAI", "Ollama").
+* **Embedder Model Name**: The embedding model (e.g., "text-embedding-3-small", "nomic-embed-text").
+* **Embedder Base URL**: The endpoint URL for the embedder (optional if using the default endpoint).
+
+#### Configuring Vector Store
+
+![workspace-vector-store](../../images/workspace-vector-store.png)
+
+The **Vector Store** section allows you to configure where the generated embeddings are stored and retrieved:
+
+* **Vector Store Provider**: The vector store to use (e.g., "Pgvector", "MongoDb", "Qdrant").
+* **Vector Store Settings**: The connection string for the vector store (e.g., `Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=myPassword`).
+
+### Uploading Documents
+
+![ai-management-rag-upload](../../images/ai-management-rag-upload.png)
+
+Once RAG is configured on a workspace, you can upload documents through the workspace management UI. Uploaded documents are automatically processed -- their content is chunked, embedded, and stored in the configured vector store. You can then ask questions in the chat interface, and the AI model will use the uploaded documents as context.
+
+![ai-management-rag-chat](../../images/ai-management-rag-chat.png)
+
+### RAG Configuration & Indexing Flow
+
+RAG is enabled per workspace when both embedding and vector store settings are configured.
+
+#### VectorStoreSettings Format
+
+`VectorStoreSettings` is passed to the selected provider factory as a connection setting string:
+
+* `MongoDb`: Standard MongoDB connection string including database name.
+* `Pgvector`: Standard PostgreSQL/Npgsql connection string.
+* `Qdrant`: Qdrant endpoint string (`http://host:port`, `https://host:port`, or `host:port`).
+
+#### Document Processing Pipeline
+
+When a file is uploaded as a workspace data source:
+
+1. File is stored in blob storage.
+2. `IndexDocumentJob` is queued.
+3. `DocumentProcessingManager` extracts text using content-type-specific extractors.
+4. Text is chunked (default chunk size: `1000`, overlap: `200`).
+5. Embeddings are generated in batches and stored through the configured vector store.
+6. Data source is marked as processed (`IsProcessed = true`).
+
+#### Workspace Data Source HTTP API
+
+The module exposes workspace data source endpoints under `/api/ai-management/workspace-data-sources`:
+
+* `POST /workspace/{workspaceId}`: Upload a new file.
+* `GET /by-workspace/{workspaceId}`: List data sources for a workspace.
+* `GET /{id}`: Get a data source.
+* `PUT /{id}`: Update data source metadata.
+* `DELETE /{id}`: Delete data source and underlying blob.
+* `GET /{id}/download`: Download original file.
+* `POST /{id}/reindex`: Re-index a single file.
+* `POST /workspace/{workspaceId}/reindex-all`: Re-index all files in a workspace.
+
+#### Chat Integration Behavior
+
+When a workspace has embedder configuration, AI Management wraps the chat client with a document search tool function named `search_workspace_documents`.
+
+* The tool delegates to `IDocumentSearchService` (`DocumentSearchService` by default).
+* The search currently uses `TopK = 5` chunks.
+* If RAG retrieval fails, chat continues without injected context.
+
+#### Automatic Reindexing on Configuration Changes
+
+When workspace embedder or vector store configuration changes, AI Management automatically:
+
+* Initializes the new vector store configuration (if needed).
+* Deletes existing embeddings when embedder provider/model changes.
+* Re-queues all workspace data sources for re-indexing.
+
 ## Permissions
 
 The AI Management module defines the following permissions:
 
-| Permission                       | Description              | Default Granted To |
-| -------------------------------- | ------------------------ | ------------------ |
-| `AIManagement.Workspaces`        | View workspaces          | Admin role         |
-| `AIManagement.Workspaces.Create` | Create new workspaces    | Admin role         |
-| `AIManagement.Workspaces.Update` | Edit existing workspaces | Admin role         |
-| `AIManagement.Workspaces.Delete` | Delete workspaces        | Admin role         |
+| Permission                       | Description              |
+| -------------------------------- | ------------------------ |
+| `AIManagement.Workspaces`        | View workspaces          |
+| `AIManagement.Workspaces.Create` | Create new workspaces    |
+| `AIManagement.Workspaces.Update` | Edit existing workspaces |
+| `AIManagement.Workspaces.Delete` | Delete workspaces        |
+| `AIManagement.Workspaces.Playground` | Access workspace chat playground |
+| `AIManagement.Workspaces.ManagePermissions` | Manage workspace resource permissions |
+| `AIManagement.McpServers`        | View MCP servers         |
+| `AIManagement.McpServers.Create` | Create new MCP servers   |
+| `AIManagement.McpServers.Update` | Edit existing MCP servers|
+| `AIManagement.McpServers.Delete` | Delete MCP servers       |
+
+The module also defines workspace data source permissions for RAG document operations:
+
+| Permission                                    | Description                         |
+| --------------------------------------------- | ----------------------------------- |
+| `AIManagement.WorkspaceDataSources`           | View workspace data sources         |
+| `AIManagement.WorkspaceDataSources.Create`    | Upload documents                    |
+| `AIManagement.WorkspaceDataSources.Update`    | Update data source metadata         |
+| `AIManagement.WorkspaceDataSources.Delete`    | Delete uploaded documents           |
+| `AIManagement.WorkspaceDataSources.Download`  | Download original uploaded file     |
+| `AIManagement.WorkspaceDataSources.ReIndex`   | Re-index one or all workspace files |
 
 ### Workspace-Level Permissions
 
@@ -307,6 +504,7 @@ In this scenario, you install the AI Management module with its database layer, 
 
 - `Volo.AIManagement.EntityFrameworkCore` (or `Volo.AIManagement.MongoDB`)
 - `Volo.AIManagement.OpenAI` (or another AI provider package)
+- For RAG: `Volo.AIManagement.VectorStores.MongoDB` or another vector store package (`Volo.AIManagement.VectorStores.Pgvector`, `Volo.AIManagement.VectorStores.Qdrant`)
 
 **Full installation (with UI and API):**
 
@@ -315,6 +513,7 @@ In this scenario, you install the AI Management module with its database layer, 
 - `Volo.AIManagement.HttpApi`
 - `Volo.AIManagement.Web` (for management UI)
 - `Volo.AIManagement.OpenAI` (or another AI provider package)
+- For RAG: `Volo.AIManagement.VectorStores.MongoDB` or another vector store package (`Volo.AIManagement.VectorStores.Pgvector`, `Volo.AIManagement.VectorStores.Qdrant`)
 
 > Note: `Volo.AIManagement.EntityFrameworkCore` transitively includes `Volo.AIManagement.Domain` and `Volo.Abp.AI.AIManagement` packages.
 
@@ -485,6 +684,71 @@ Your application acts as a proxy, forwarding these requests to the AI Management
 | **3. Client Remote**      | No                | Remote Service | Remote Service | No          | Microservices consuming AI centrally      |
 | **4. Client Proxy**       | No                | Remote Service | Remote Service | Yes         | API Gateway pattern, proxy services       |
 
+### OpenAI-Compatible API
+
+The AI Management module exposes an **OpenAI-compatible REST API** at the `/v1` path. This allows any application or tool that supports the OpenAI API format -- such as [AnythingLLM](https://anythingllm.com/), [Open WebUI](https://openwebui.com/), [Dify](https://dify.ai/), or custom scripts using the OpenAI SDK -- to connect directly to your AI Management instance.
+
+![ai-management-openai-anythingllm](../../images/ai-management-openai-anythingllm.png)
+
+Each AI Management **workspace** appears as a selectable model in the client application. The workspace's configured AI provider handles the actual inference transparently.
+
+![ai-management-openai-anythingllm2](../../images/ai-management-openai-anythingllm2.png)
+
+#### Available Endpoints
+
+| Endpoint                     | Method | Description                                     |
+| ---------------------------- | ------ | ----------------------------------------------- |
+| `/v1/chat/completions`       | POST   | Chat completions (streaming and non-streaming)  |
+| `/v1/completions`            | POST   | Legacy text completions                         |
+| `/v1/models`                 | GET    | List available models (workspaces)              |
+| `/v1/models/{modelId}`       | GET    | Retrieve a single model (workspace)             |
+| `/v1/embeddings`             | POST   | Generate embeddings                             |
+| `/v1/files`                  | GET    | List uploaded files                             |
+| `/v1/files`                  | POST   | Upload a file                                   |
+| `/v1/files/{fileId}`         | GET    | Get file info                                   |
+| `/v1/files/{fileId}`         | DELETE | Delete a file                                   |
+| `/v1/files/{fileId}/content` | GET    | Download file content                           |
+
+All endpoints require authentication via a **Bearer token** in the `Authorization` header.
+
+#### Usage
+
+The general pattern for connecting any OpenAI-compatible client:
+
+* **Base URL**: `https://<your-app-url>/v1`
+* **API Key**: A valid Bearer token obtained from your application's authentication endpoint.
+* **Model**: One of the workspace names returned by `GET /v1/models`.
+
+**Example with the OpenAI Python SDK:**
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://localhost:44336/v1",
+    api_key="<your-token>"
+)
+
+response = client.chat.completions.create(
+    model="MyWorkspace",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+print(response.choices[0].message.content)
+```
+
+**Example with cURL:**
+
+```bash
+curl -X POST https://localhost:44336/v1/chat/completions \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "MyWorkspace",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'
+```
+
+> The OpenAI-compatible endpoints are available from both the `Volo.AIManagement.Client.HttpApi` and `Volo.AIManagement.HttpApi` packages, depending on your deployment scenario.
 
 ## Client Usage
 
@@ -887,6 +1151,7 @@ The `ChatClientCreationConfiguration` object provides the following properties f
 | `IsActive`               | bool    | Whether the workspace is active             |
 | `IsSystem`               | bool    | Whether it's a system workspace             |
 | `RequiredPermissionName` | string? | Permission required to use this workspace   |
+| `HasEmbedderConfiguration` | bool | Whether the workspace has embedder/RAG configuration |
 
 ### Example: Azure OpenAI Factory
 
@@ -952,24 +1217,35 @@ The AI Management module follows Domain-Driven Design principles and has a well-
 #### Aggregates
 
 - **Workspace**: The main aggregate root representing an AI workspace configuration.
+- **McpServer**: Aggregate root representing an MCP server configuration.
 
 #### Repositories
 
 The following custom repositories are defined:
 
 - `IWorkspaceRepository`: Repository for workspace management with custom queries.
+- `IMcpServerRepository`: Repository for MCP server management with custom queries.
 
 #### Domain Services
 
 - `ApplicationWorkspaceManager`: Manages workspace operations and validations.
+- `McpServerManager`: Manages MCP server operations and validations.
 - `WorkspaceConfigurationStore`: Retrieves workspace configuration with caching. Implements `IWorkspaceConfigurationStore` interface.
 - `ChatClientResolver`: Resolves the appropriate `IChatClient` implementation for a workspace.
+- `EmbeddingClientResolver`: Resolves the appropriate embedding client for a workspace (used by RAG).
+- `IMcpToolProvider`: Resolves and aggregates MCP tools from all connected MCP servers for a workspace.
+- `IMcpServerConfigurationStore`: Retrieves MCP server configurations for workspaces.
+- `VectorStoreResolver`: Resolves the configured vector store implementation for a workspace.
+- `VectorStoreInitializer`: Initializes vector store artifacts for newly configured workspaces.
+- `RagService`: Generates query embeddings and retrieves relevant chunks from vector stores.
+- `DocumentProcessingManager`: Extracts and chunks uploaded document contents.
 
 #### Integration Services
 
 The module exposes the following integration services for inter-service communication:
 
 - `IAIChatCompletionIntegrationService`: Executes AI chat completions remotely.
+- `IAIEmbeddingIntegrationService`: Generates embeddings remotely.
 - `IWorkspaceConfigurationIntegrationService`: Retrieves workspace configuration for remote setup.
 - `IWorkspaceIntegrationService`: Manages workspaces remotely.
 
@@ -980,8 +1256,11 @@ The module exposes the following integration services for inter-service communic
 #### Application Services
 
 - `WorkspaceAppService`: CRUD operations for workspace management.
+- `McpServerAppService`: CRUD operations for MCP server management.
+- `WorkspaceDataSourceAppService`: Upload, list, download, and re-index workspace documents.
 - `ChatCompletionClientAppService`: Client-side chat completion services.
-- `AIChatCompletionIntegrationService`: Integration service for remote AI execution.
+- `OpenAICompatibleChatAppService`: OpenAI-compatible API endpoint services.
+- `AIChatCompletionIntegrationService`: Integration service for remote AI execution. Returns RAG metadata fields (`HasRagContext`, `RagChunkCount`) and tool call details. Note: `RagChunkCount` reflects the number of RAG tool invocations, not the number of retrieved chunks.
 
 ### Caching
 

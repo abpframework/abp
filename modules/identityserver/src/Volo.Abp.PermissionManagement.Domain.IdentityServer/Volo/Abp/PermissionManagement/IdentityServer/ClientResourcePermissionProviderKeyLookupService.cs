@@ -8,6 +8,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement.IdentityServer;
 
@@ -19,10 +20,20 @@ public class ClientResourcePermissionProviderKeyLookupService : IResourcePermiss
 
     protected IClientFinder ClientFinder { get; }
 
-    public ClientResourcePermissionProviderKeyLookupService(IClientFinder clientFinder)
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public ClientResourcePermissionProviderKeyLookupService(
+        IClientFinder clientFinder,
+        ICurrentTenant currentTenant)
     {
         ClientFinder = clientFinder;
+        CurrentTenant = currentTenant;
         DisplayName = LocalizableString.Create<AbpIdentityServerResource>(nameof(ClientResourcePermissionProviderKeyLookupService));
+    }
+
+    public virtual Task<bool> IsAvailableAsync()
+    {
+        return Task.FromResult(CurrentTenant.Id == null);
     }
 
     public virtual async Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string filter = null, int page = 1, CancellationToken cancellationToken = default)

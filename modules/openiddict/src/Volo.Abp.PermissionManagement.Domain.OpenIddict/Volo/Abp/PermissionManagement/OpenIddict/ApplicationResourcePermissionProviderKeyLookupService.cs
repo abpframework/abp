@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions.Resources;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Localization;
 
@@ -19,10 +20,20 @@ public class ApplicationResourcePermissionProviderKeyLookupService : IResourcePe
 
     protected IApplicationFinder ApplicationFinder { get; }
 
-    public ApplicationResourcePermissionProviderKeyLookupService(IApplicationFinder applicationFinder)
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public ApplicationResourcePermissionProviderKeyLookupService(
+        IApplicationFinder applicationFinder,
+        ICurrentTenant currentTenant)
     {
         ApplicationFinder = applicationFinder;
+        CurrentTenant = currentTenant;
         DisplayName = LocalizableString.Create<AbpOpenIddictResource>(nameof(ApplicationResourcePermissionProviderKeyLookupService));
+    }
+
+    public virtual Task<bool> IsAvailableAsync()
+    {
+        return Task.FromResult(CurrentTenant.Id == null);
     }
 
     public virtual async Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string filter = null, int page = 1, CancellationToken cancellationToken = default)
