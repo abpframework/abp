@@ -23,7 +23,7 @@
                 @foreach (var group in SettingComponentCreationContext.Groups)
                 {
                     <MudTabPanel Text="@group.DisplayName">
-                        <div class="abp-md-form">
+                        <div class="abp-md-form" style="width: 100%">
                             @{
                                 SettingItemRenders.Add(builder =>
                                 {
