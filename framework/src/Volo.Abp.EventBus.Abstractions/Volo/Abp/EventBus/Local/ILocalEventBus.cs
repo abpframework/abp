@@ -24,5 +24,10 @@ public interface ILocalEventBus : IEventBus
     /// <returns></returns>
      List<EventTypeWithEventHandlerFactories> GetEventHandlerFactories(Type eventType);
     
+    /// <summary>
+    /// Gets the list of event handler factories for the given string-based event name.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    /// <returns>List of event handler factories registered for the given event name</returns>
     List<EventTypeWithEventHandlerFactories> GetAnonymousEventHandlerFactories(string eventName);
 }

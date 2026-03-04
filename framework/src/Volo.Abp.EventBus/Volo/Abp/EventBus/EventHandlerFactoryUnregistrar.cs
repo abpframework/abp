@@ -24,6 +24,9 @@ public class EventHandlerFactoryUnregistrar : IDisposable
     }
 }
 
+/// <summary>
+/// Used to unregister an <see cref="IEventHandlerFactory"/> for a string-based event name on <see cref="IDisposable.Dispose"/> method.
+/// </summary>
 public class AnonymousEventHandlerFactoryUnregistrar : IDisposable
 {
     private readonly IEventBus _eventBus;

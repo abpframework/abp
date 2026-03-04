@@ -24,6 +24,14 @@ public interface IEventBus
     /// <returns>The task to handle async operation</returns>
     Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true);
     
+    /// <summary>
+    /// Triggers an event by its string-based event name.
+    /// Used for anonymous (type-less) event publishing.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    /// <param name="eventData">Related data for the event</param>
+    /// <param name="onUnitOfWorkComplete">True, to publish the event at the end of the current unit of work, if available</param>
+    /// <returns>The task to handle async operation</returns>
     Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true);
 
     /// <summary>
@@ -53,6 +61,20 @@ public interface IEventBus
     /// <param name="handler">Object to handle the event</param>
     IDisposable Subscribe(Type eventType, IEventHandler handler);
     
+    /// <summary>
+    /// Registers to an event by its string-based event name.
+    /// Same (given) instance of the handler is used for all event occurrences.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    /// <param name="handler">Object to handle the event</param>
+    IDisposable Subscribe(string eventName, IEventHandler handler);
+
+    /// <summary>
+    /// Registers to an event by its string-based event name.
+    /// Given factory is used to create/release handlers.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    /// <param name="handler">A factory to create/release handlers</param>
     IDisposable Subscribe(string eventName, IEventHandlerFactory handler);
 
     /// <summary>
@@ -109,7 +131,19 @@ public interface IEventBus
     /// <param name="factory">Factory object that is registered before</param>
     void Unsubscribe(Type eventType, IEventHandlerFactory factory);
     
+    /// <summary>
+    /// Unregisters from an event by its string-based event name.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    /// <param name="factory">Factory object that is registered before</param>
     void Unsubscribe(string eventName, IEventHandlerFactory factory);
+
+    /// <summary>
+    /// Unregisters from an event by its string-based event name.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    /// <param name="handler">Handler object that is registered before</param>
+    void Unsubscribe(string eventName, IEventHandler handler);
 
     /// <summary>
     /// Unregisters all event handlers of given event type.
@@ -123,4 +157,10 @@ public interface IEventBus
     /// </summary>
     /// <param name="eventType">Event type</param>
     void UnsubscribeAll(Type eventType);
+
+    /// <summary>
+    /// Unregisters all event handlers of given string-based event name.
+    /// </summary>
+    /// <param name="eventName">Name of the event</param>
+    void UnsubscribeAll(string eventName);
 }

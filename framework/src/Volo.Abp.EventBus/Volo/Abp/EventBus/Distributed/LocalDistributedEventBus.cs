@@ -73,12 +73,14 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
     }
 
+    /// <inheritdoc/>
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         AnonymousEventNames.GetOrAdd(eventName, true);
         return LocalEventBus.Subscribe(eventName, handler);
     }
 
+    /// <inheritdoc/>
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
@@ -101,16 +103,31 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         LocalEventBus.Unsubscribe(eventType, factory);
     }
 
+    /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
         LocalEventBus.Unsubscribe(eventName, factory);
     }
 
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        LocalEventBus.Unsubscribe(eventName, handler);
+    }
+
+    /// <inheritdoc/>
     public override void UnsubscribeAll(Type eventType)
     {
         LocalEventBus.UnsubscribeAll(eventType);
     }
 
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        LocalEventBus.UnsubscribeAll(eventName);
+    }
+
+    /// <inheritdoc/>
     public async override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
         if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
@@ -147,24 +164,29 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await PublishToEventBusAsync(eventType, eventData);
     }
 
+    /// <inheritdoc/>
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
-        var eventType = EventTypes.GetOrDefault(eventName);
+        return PublishAsync(eventName, eventData, onUnitOfWorkComplete, useOutbox: true);
+    }
 
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
         var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
         }
 
-        var isAnonymous = AnonymousEventNames.ContainsKey(eventName);
-        if (!isAnonymous)
+        if (!AnonymousEventNames.ContainsKey(eventName))
         {
             throw new AbpException($"Unknown event name: {eventName}");
         }
 
-        return PublishAsync(typeof(AnonymousEventData), new AnonymousEventData(eventName, eventData), onUnitOfWorkComplete);
+        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)

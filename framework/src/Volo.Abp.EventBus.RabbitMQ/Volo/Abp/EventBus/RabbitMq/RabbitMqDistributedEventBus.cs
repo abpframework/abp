@@ -149,7 +149,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
     }
-    
+
+    /// <inheritdoc/>
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
@@ -223,6 +224,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
+    /// <inheritdoc/>
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
@@ -482,9 +484,30 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         return EventTypes.GetOrDefault(eventName);
     }
 
+    /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
         GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName)
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory singleFactory &&
+                        singleFactory.HandlerInstance == handler
+                );
+            });
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Clear());
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)

@@ -57,6 +57,13 @@ public abstract class EventBusBase : IEventBus
         return Subscribe(eventType, new SingleInstanceHandlerFactory(handler));
     }
 
+    /// <inheritdoc/>
+    public virtual IDisposable Subscribe(string eventName, IEventHandler handler)
+    {
+        return Subscribe(eventName, new SingleInstanceHandlerFactory(handler));
+    }
+
+    /// <inheritdoc/>
     public abstract IDisposable Subscribe(string eventName, IEventHandlerFactory handler);
 
     /// <inheritdoc/>
@@ -85,7 +92,11 @@ public abstract class EventBusBase : IEventBus
 
     public abstract void Unsubscribe(Type eventType, IEventHandlerFactory factory);
 
+    /// <inheritdoc/>
     public abstract void Unsubscribe(string eventName, IEventHandlerFactory factory);
+
+    /// <inheritdoc/>
+    public abstract void Unsubscribe(string eventName, IEventHandler handler);
 
     /// <inheritdoc/>
     public virtual void UnsubscribeAll<TEvent>() where TEvent : class
@@ -95,6 +106,9 @@ public abstract class EventBusBase : IEventBus
 
     /// <inheritdoc/>
     public abstract void UnsubscribeAll(Type eventType);
+
+    /// <inheritdoc/>
+    public abstract void UnsubscribeAll(string eventName);
 
     /// <inheritdoc/>
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true)
@@ -121,6 +135,7 @@ public abstract class EventBusBase : IEventBus
         await PublishToEventBusAsync(eventType, eventData);
     }
 
+    /// <inheritdoc/>
     public abstract Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true);
 
     protected abstract Task PublishToEventBusAsync(Type eventType, object eventData);

@@ -43,16 +43,25 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         CorrelationIdProvider = correlationIdProvider;
     }
 
+    /// <inheritdoc/>
     public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
     {
         return Subscribe(typeof(TEvent), handler);
     }
 
+    /// <inheritdoc/>
+    public virtual IDisposable Subscribe(string eventName, IDistributedEventHandler<AnonymousEventData> handler)
+    {
+        return Subscribe(eventName, (IEventHandler)handler);
+    }
+
+    /// <inheritdoc/>
     public override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
     {
         return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
     }
 
+    /// <inheritdoc/>
     public virtual Task PublishAsync<TEvent>(
         TEvent eventData,
         bool onUnitOfWorkComplete = true,
@@ -62,6 +71,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
     }
 
+    /// <inheritdoc/>
     public virtual async Task PublishAsync(
         Type eventType,
         object eventData,
@@ -93,6 +103,24 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             EventName = GetEventName(eventType, eventData),
             EventData = GetEventData(eventData)
         });
+    }
+
+    /// <inheritdoc/>
+    public virtual Task PublishAsync(
+        string eventName,
+        object eventData,
+        bool onUnitOfWorkComplete = true,
+        bool useOutbox = true)
+    {
+        var eventType = GetEventTypeByEventName(eventName);
+        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+        }
+
+        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     public abstract Task PublishFromOutboxAsync(

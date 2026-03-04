@@ -72,6 +72,23 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
     }
 
+    public async Task ProcessEventAsync(Type eventType, object eventData)
+    {
+        var messageId = MessageContext.Current.TransportMessage.GetMessageId();
+        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+        var correlationId = MessageContext.Current.Headers.GetOrDefault(EventBusConsts.CorrelationIdHeaderName);
+
+        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
+        {
+            return;
+        }
+
+        using (CorrelationIdProvider.Change(correlationId))
+        {
+            await TriggerHandlersDirectAsync(eventType, eventData);
+        }
+    }
+
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
@@ -89,6 +106,21 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+
+        if (handler.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(handler);
+
+        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
@@ -145,23 +177,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         Rebus.Unsubscribe(eventType);
     }
 
-    public async Task ProcessEventAsync(Type eventType, object eventData)
-    {
-        var messageId = MessageContext.Current.TransportMessage.GetMessageId();
-        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-        var correlationId = MessageContext.Current.Headers.GetOrDefault(EventBusConsts.CorrelationIdHeaderName);
-
-        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
-        {
-            return;
-        }
-
-        using (CorrelationIdProvider.Change(correlationId))
-        {
-            await TriggerHandlersDirectAsync(eventType, eventData);
-        }
-    }
-
+    /// <inheritdoc/>
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
@@ -174,7 +190,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         if (AnonymousHandlerFactories.ContainsKey(eventName))
         {
-            return PublishAsync(typeof(AnonymousEventData), new AnonymousEventData(eventName, eventData), onUnitOfWorkComplete);
+            return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
         }
 
         throw new AbpException($"Unknown event name: {eventName}");
@@ -190,126 +206,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await PublishAsync(eventType, eventData, headersArguments: headers);
     }
 
-    protected virtual async Task PublishAsync(
-        Type eventType,
-        object eventData,
-        Guid? eventId = null,
-        Dictionary<string, string>? headersArguments = null)
-    {
-        if (AbpRebusEventBusOptions.Publish != null)
-        {
-            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
-            return;
-        }
-
-        headersArguments ??= new Dictionary<string, string>();
-        if (!headersArguments.ContainsKey(Headers.MessageId))
-        {
-            headersArguments[Headers.MessageId] = (eventId ?? GuidGenerator.Create()).ToString("N");
-        }
-
-        await Rebus.Publish(eventData, headersArguments);
-    }
-
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
     {
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
-    }
-
-    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
-    {
-        EventTypes.GetOrAdd(eventName, eventType);
-        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
-    }
-
-    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
-    {
-        return HandlerFactories.GetOrAdd(
-            eventType,
-            type =>
-            {
-                var eventName = EventNameAttribute.GetNameOrDefault(type);
-                EventTypes.GetOrAdd(eventName, eventType);
-                return new List<IEventHandlerFactory>();
-            }
-        );
-    }
-
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
-    {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
-
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
-        )
-        {
-            handlerFactoryList.Add(
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
-        }
-
-        return handlerFactoryList.ToArray();
-    }
-
-    protected override Type? GetEventTypeByEventName(string eventName)
-    {
-        return EventTypes.GetOrDefault(eventName);
-    }
-
-    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories =>
-        {
-            if (!handler.IsInFactories(factories))
-            {
-                factories.Add(handler);
-            }
-        });
-
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
-    }
-
-    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
-    {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
-    }
-
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
-    {
-        var result = new List<EventTypeWithEventHandlerFactories>();
-
-        var eventType = GetEventTypeByEventName(eventName);
-        if (eventType != null)
-        {
-            result.AddRange(GetHandlerFactories(eventType));
-        }
-
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
-        {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
-        }
-
-        return result;
-    }
-
-    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
-    {
-        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
-    }
-
-    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
-    {
-        //Should trigger same type
-        if (handlerEventType == targetEventType)
-        {
-            return true;
-        }
-
-        //Should trigger for inherited types
-        if (handlerEventType.IsAssignableFrom(targetEventType))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public async override Task PublishFromOutboxAsync(
@@ -317,12 +216,21 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         OutboxConfig outboxConfig)
     {
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
-        if (eventType == null)
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
+        }
+        else if (AnonymousHandlerFactories.ContainsKey(outgoingEvent.EventName))
+        {
+            eventData = Serializer.Deserialize(outgoingEvent.EventData, typeof(object));
+            eventType = typeof(AnonymousEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
 
         var headers = new Dictionary<string, string>();
         if (outgoingEvent.GetCorrelationId() != null)
@@ -401,5 +309,137 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override byte[] Serialize(object eventData)
     {
         return Serializer.Serialize(eventData);
+    }
+
+    protected virtual async Task PublishAsync(
+        Type eventType,
+        object eventData,
+        Guid? eventId = null,
+        Dictionary<string, string>? headersArguments = null)
+    {
+        if (AbpRebusEventBusOptions.Publish != null)
+        {
+            await AbpRebusEventBusOptions.Publish(Rebus, eventType, eventData);
+            return;
+        }
+
+        headersArguments ??= new Dictionary<string, string>();
+        if (!headersArguments.ContainsKey(Headers.MessageId))
+        {
+            headersArguments[Headers.MessageId] = (eventId ?? GuidGenerator.Create()).ToString("N");
+        }
+
+        await Rebus.Publish(eventData, headersArguments);
+    }
+
+    protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
+    {
+        if (typeof(AnonymousEventData) != eventType)
+        {
+            EventTypes.GetOrAdd(eventName, eventType);
+        }
+        return base.OnAddToOutboxAsync(eventName, eventType, eventData);
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
+    {
+        return HandlerFactories.GetOrAdd(
+            eventType,
+            type =>
+            {
+                var eventName = EventNameAttribute.GetNameOrDefault(type);
+                EventTypes.GetOrAdd(eventName, eventType);
+                return new List<IEventHandlerFactory>();
+            }
+        );
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+    {
+        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventNames = EventTypes.Where(x => ShouldTriggerEventForHandler(eventType, x.Value)).Select(x => x.Key).ToList();
+
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+        }
+
+        foreach (var handlerFactory in AnonymousHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+        }
+
+        return handlerFactoryList.ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName)
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory singleFactory &&
+                        singleFactory.HandlerInstance == handler
+                );
+            });
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Clear());
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    {
+        var result = new List<EventTypeWithEventHandlerFactories>();
+
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            result.AddRange(GetHandlerFactories(eventType));
+        }
+
+        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
+        {
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+        }
+
+        return result;
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
+    {
+        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
+    }
+
+    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+    {
+        //Should trigger same type
+        if (handlerEventType == targetEventType)
+        {
+            return true;
+        }
+
+        //Should trigger for inherited types
+        if (handlerEventType.IsAssignableFrom(targetEventType))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

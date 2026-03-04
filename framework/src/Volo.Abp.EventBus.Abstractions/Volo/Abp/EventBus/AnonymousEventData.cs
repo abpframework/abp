@@ -5,25 +5,54 @@ using System.Text.Json;
 
 namespace Volo.Abp.EventBus;
 
+/// <summary>
+/// Wraps arbitrary event data with a string-based event name for anonymous (type-less) event handling.
+/// Acts as both an envelope and event type for events that are identified by name rather than CLR type.
+/// </summary>
 [Serializable]
 public class AnonymousEventData
 {
+    /// <summary>
+    /// The string-based name that identifies the event.
+    /// </summary>
     public string EventName { get; }
+
+    /// <summary>
+    /// The raw event data payload. Can be a CLR object, <see cref="JsonElement"/>, or any serializable object.
+    /// </summary>
     public object Data { get; }
 
     private JsonElement? _cachedJsonElement;
 
+    /// <summary>
+    /// Creates a new instance of <see cref="AnonymousEventData"/>.
+    /// </summary>
+    /// <param name="eventName">The string-based name that identifies the event</param>
+    /// <param name="data">The raw event data payload</param>
     public AnonymousEventData(string eventName, object data)
     {
         EventName = eventName;
         Data = data;
     }
 
+    /// <summary>
+    /// Converts the <see cref="Data"/> to a loosely-typed object graph
+    /// (dictionaries for objects, lists for arrays, primitives for values).
+    /// </summary>
+    /// <returns>A CLR object representation of the event data</returns>
     public object ConvertToTypedObject()
     {
         return ConvertElement(GetJsonElement());
     }
 
+    /// <summary>
+    /// Converts the <see cref="Data"/> to a strongly-typed <typeparamref name="T"/> object.
+    /// Returns the data directly if it is already of type <typeparamref name="T"/>,
+    /// otherwise deserializes from JSON.
+    /// </summary>
+    /// <typeparam name="T">Target type to convert to</typeparam>
+    /// <returns>The deserialized object of type <typeparamref name="T"/></returns>
+    /// <exception cref="InvalidOperationException">Thrown when deserialization fails</exception>
     public T ConvertToTypedObject<T>()
     {
         if (Data is T typedData)
@@ -35,6 +64,14 @@ public class AnonymousEventData
             ?? throw new InvalidOperationException($"Failed to deserialize AnonymousEventData to {typeof(T).FullName}.");
     }
 
+    /// <summary>
+    /// Converts the <see cref="Data"/> to the specified <paramref name="type"/>.
+    /// Returns the data directly if it is already an instance of the target type,
+    /// otherwise deserializes from JSON.
+    /// </summary>
+    /// <param name="type">Target type to convert to</param>
+    /// <returns>The deserialized object</returns>
+    /// <exception cref="InvalidOperationException">Thrown when deserialization fails</exception>
     public object ConvertToTypedObject(Type type)
     {
         if (type.IsInstanceOfType(Data))
