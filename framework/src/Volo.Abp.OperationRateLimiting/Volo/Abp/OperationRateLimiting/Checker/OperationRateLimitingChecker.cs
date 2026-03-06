@@ -65,16 +65,31 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
             ThrowRateLimitException(policy, aggregatedResult, context);
         }
 
-        // Phase 2: All rules pass - now increment all counters.
-        // Also guard against a concurrent race where another request consumed the last quota
+        // Phase 2: All rules passed in Phase 1 - now increment counters.
+        // Guard against concurrent races where another request consumed the last quota
         // between Phase 1 and Phase 2.
+        // Once any rule fails during increment, stop incrementing subsequent rules
+        // to minimize wasted quota. Remaining rules use read-only check instead.
         var incrementResults = new List<OperationRateLimitingRuleResult>();
+        var phase2Failed = false;
         foreach (var rule in rules)
         {
-            incrementResults.Add(await rule.AcquireAsync(context));
+            if (phase2Failed)
+            {
+                incrementResults.Add(await rule.CheckAsync(context));
+            }
+            else
+            {
+                var result = await rule.AcquireAsync(context);
+                incrementResults.Add(result);
+                if (!result.IsAllowed)
+                {
+                    phase2Failed = true;
+                }
+            }
         }
 
-        if (incrementResults.Any(r => !r.IsAllowed))
+        if (phase2Failed)
         {
             var aggregatedResult = AggregateResults(incrementResults, policy);
             ThrowRateLimitException(policy, aggregatedResult, context);
@@ -132,6 +147,11 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
 
     public virtual async Task ResetAsync(string policyName, OperationRateLimitingContext? context = null)
     {
+        if (!Options.IsEnabled)
+        {
+            return;
+        }
+
         context = EnsureContext(context);
         var policy = await PolicyProvider.GetAsync(policyName);
         var rules = CreateRules(policy);
@@ -153,12 +173,11 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
     {
         var rules = new List<IOperationRateLimitingRule>();
 
-        for (var i = 0; i < policy.Rules.Count; i++)
+        foreach (var ruleDefinition in policy.Rules)
         {
             rules.Add(new FixedWindowOperationRateLimitingRule(
                 policy.Name,
-                i,
-                policy.Rules[i],
+                ruleDefinition,
                 Store,
                 CurrentUser,
                 CurrentTenant,
@@ -188,7 +207,7 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
             IsAllowed = isAllowed,
             RemainingCount = mostRestrictive.RemainingCount,
             MaxCount = mostRestrictive.MaxCount,
-            CurrentCount = mostRestrictive.MaxCount - mostRestrictive.RemainingCount,
+            CurrentCount = mostRestrictive.CurrentCount,
             RetryAfter = ruleResults.Any(r => !r.IsAllowed && r.RetryAfter.HasValue)
                 ? ruleResults
                     .Where(r => !r.IsAllowed && r.RetryAfter.HasValue)
@@ -233,7 +252,7 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
                     ["IsAllowed"] = ruleResult.IsAllowed,
                     ["MaxCount"] = ruleResult.MaxCount,
                     ["RemainingCount"] = ruleResult.RemainingCount,
-                    ["CurrentCount"] = ruleResult.MaxCount - ruleResult.RemainingCount,
+                    ["CurrentCount"] = ruleResult.CurrentCount,
                     ["WindowDurationSeconds"] = (int)ruleResult.WindowDuration.TotalSeconds,
                     ["WindowDescription"] = ruleResult.WindowDuration > TimeSpan.Zero
                         ? formatter.Format(ruleResult.WindowDuration)

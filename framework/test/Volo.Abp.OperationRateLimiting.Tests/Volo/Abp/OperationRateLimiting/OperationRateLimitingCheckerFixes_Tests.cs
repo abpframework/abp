@@ -98,6 +98,59 @@ public class OperationRateLimitingCheckerPhase1_Tests : OperationRateLimitingTes
 }
 
 /// <summary>
+/// Tests for Phase 2 early break: when a multi-rule policy encounters a race condition
+/// in Phase 2 (Rule2 fails), Rule3 should NOT be incremented.
+/// Uses a mock store where IncrementAsync fails on the 2nd call.
+/// </summary>
+public class OperationRateLimitingCheckerPhase2EarlyBreak_Tests
+    : AbpIntegratedTest<AbpOperationRateLimitingPhase2EarlyBreakTestModule>
+{
+    protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+    {
+        options.UseAutofac();
+    }
+
+    [Fact]
+    public async Task Should_Not_Increment_Remaining_Rules_After_Phase2_Failure()
+    {
+        // 3-rule policy. Mock store: Rule1 increment succeeds, Rule2 increment fails (race),
+        // Rule3 should NOT be incremented due to early break.
+        var checker = GetRequiredService<IOperationRateLimitingChecker>();
+        var store = (MultiRuleRaceConditionSimulatorStore)GetRequiredService<IOperationRateLimitingStore>();
+        var context = new OperationRateLimitingContext { Parameter = "early-break-test" };
+
+        var exception = await Assert.ThrowsAsync<AbpOperationRateLimitingException>(async () =>
+        {
+            await checker.CheckAsync("TestMultiRuleRacePolicy", context);
+        });
+
+        exception.PolicyName.ShouldBe("TestMultiRuleRacePolicy");
+        exception.Result.IsAllowed.ShouldBeFalse();
+
+        // Key assertion: only 2 IncrementAsync calls were made (Rule1 + Rule2).
+        // Rule3 was skipped (used CheckAsync instead) due to early break.
+        store.IncrementCallCount.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task Should_Include_All_Rule_Results_Despite_Early_Break()
+    {
+        // Even with early break, the aggregated result should contain all 3 rules
+        // (Rule3 via CheckAsync instead of AcquireAsync).
+        var checker = GetRequiredService<IOperationRateLimitingChecker>();
+        var context = new OperationRateLimitingContext { Parameter = $"all-results-{Guid.NewGuid()}" };
+
+        var exception = await Assert.ThrowsAsync<AbpOperationRateLimitingException>(async () =>
+        {
+            await checker.CheckAsync("TestMultiRuleRacePolicy", context);
+        });
+
+        exception.Result.RuleResults.ShouldNotBeNull();
+        exception.Result.RuleResults!.Count.ShouldBe(3);
+    }
+}
+
+/// <summary>
 /// Tests for Fix #1: Phase 2 in CheckAsync now checks the result of AcquireAsync.
 /// Uses a mock store that simulates a concurrent race condition:
 /// GetAsync (Phase 1) always reports quota available, but IncrementAsync (Phase 2) returns denied.

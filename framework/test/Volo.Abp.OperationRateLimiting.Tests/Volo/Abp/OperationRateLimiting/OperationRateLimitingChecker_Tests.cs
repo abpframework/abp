@@ -731,6 +731,57 @@ public class OperationRateLimitingChecker_Tests : OperationRateLimitingTestBase
         });
     }
 
+
+    [Fact]
+    public async Task Should_Return_Correct_CurrentCount_In_RuleResults()
+    {
+        var param = $"current-count-{Guid.NewGuid()}";
+        var context = new OperationRateLimitingContext { Parameter = param };
+
+        await _checker.CheckAsync("TestSimple", context);
+        await _checker.CheckAsync("TestSimple", context);
+
+        var status = await _checker.GetStatusAsync("TestSimple", context);
+        status.RuleResults.ShouldNotBeNull();
+        status.RuleResults!.Count.ShouldBe(1);
+        status.RuleResults[0].CurrentCount.ShouldBe(2);
+        status.RuleResults[0].RemainingCount.ShouldBe(1);
+        status.RuleResults[0].MaxCount.ShouldBe(3);
+    }
+
+    [Fact]
+    public async Task ResetAsync_Should_Skip_When_Disabled()
+    {
+        var options = GetRequiredService<Microsoft.Extensions.Options.IOptions<AbpOperationRateLimitingOptions>>();
+        var originalValue = options.Value.IsEnabled;
+
+        try
+        {
+            var param = $"reset-disabled-{Guid.NewGuid()}";
+            var context = new OperationRateLimitingContext { Parameter = param };
+
+            // Exhaust the quota
+            await _checker.CheckAsync("TestSimple", context);
+            await _checker.CheckAsync("TestSimple", context);
+            await _checker.CheckAsync("TestSimple", context);
+
+            // Disable and call ResetAsync — should be a no-op (counter not actually reset)
+            options.Value.IsEnabled = false;
+            await _checker.ResetAsync("TestSimple", context);
+
+            // Re-enable: quota should still be exhausted because reset was skipped
+            options.Value.IsEnabled = true;
+            await Assert.ThrowsAsync<AbpOperationRateLimitingException>(async () =>
+            {
+                await _checker.CheckAsync("TestSimple", context);
+            });
+        }
+        finally
+        {
+            options.Value.IsEnabled = originalValue;
+        }
+    }
+
     private static ClaimsPrincipal CreateClaimsPrincipal(Guid userId)
     {
         return new ClaimsPrincipal(

@@ -10,7 +10,6 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
     private const string HostTenantKey = "host";
 
     protected string PolicyName { get; }
-    protected int RuleIndex { get; }
     protected OperationRateLimitingRuleDefinition Definition { get; }
     protected IOperationRateLimitingStore Store { get; }
     protected ICurrentUser CurrentUser { get; }
@@ -19,7 +18,6 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
 
     public FixedWindowOperationRateLimitingRule(
         string policyName,
-        int ruleIndex,
         OperationRateLimitingRuleDefinition definition,
         IOperationRateLimitingStore store,
         ICurrentUser currentUser,
@@ -27,7 +25,6 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
         IWebClientInfoProvider webClientInfoProvider)
     {
         PolicyName = policyName;
-        RuleIndex = ruleIndex;
         Definition = definition;
         Store = store;
         CurrentUser = currentUser;
@@ -140,6 +137,7 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
         {
             RuleName = $"{PolicyName}:Rule[{(long)Definition.Duration.TotalSeconds}s,{Definition.MaxCount},{Definition.PartitionType}]",
             IsAllowed = storeResult.IsAllowed,
+            CurrentCount = storeResult.CurrentCount,
             RemainingCount = storeResult.MaxCount - storeResult.CurrentCount,
             MaxCount = storeResult.MaxCount,
             RetryAfter = storeResult.RetryAfter,

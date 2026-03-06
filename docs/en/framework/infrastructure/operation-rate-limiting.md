@@ -283,6 +283,7 @@ The exception includes the following data properties:
 | `CurrentCount` | int | Current usage count |
 | `RemainingCount` | int | Remaining allowed count |
 | `RetryAfterSeconds` | int | Seconds until the window resets |
+| `RetryAfterMinutes` | int | Minutes until the window resets (rounded down) |
 | `RetryAfter` | string | Localized retry-after description (e.g., "5 minutes") |
 | `WindowDurationSeconds` | int | Total window duration in seconds |
 | `WindowDescription` | string | Localized window description |

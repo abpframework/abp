@@ -8,6 +8,8 @@ public class OperationRateLimitingRuleResult
 
     public bool IsAllowed { get; set; }
 
+    public int CurrentCount { get; set; }
+
     public int RemainingCount { get; set; }
 
     public int MaxCount { get; set; }
