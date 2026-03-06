@@ -199,6 +199,52 @@ public class RateLimitDemoController : AbpController
     }
 
     /// <summary>
+    /// Demo 11: Authenticated - PartitionByCurrentTenant (all users in a tenant share one counter)
+    /// </summary>
+    [HttpPost("tenant-wide")]
+    [Authorize]
+    public async Task<IActionResult> TenantWide()
+    {
+        await _checker.CheckAsync("Demo_TenantWide");
+
+        return Ok(new { success = true, message = "Tenant-wide operation completed" });
+    }
+
+    /// <summary>
+    /// Demo 12: Ban policy (maxCount: 0) - always blocked
+    /// </summary>
+    [HttpPost("ban-policy")]
+    [AllowAnonymous]
+    public async Task<IActionResult> BanPolicy([FromBody] BanPolicyInput input)
+    {
+        await _checker.CheckAsync("Demo_BanPolicy", new OperationRateLimitingContext
+        {
+            Parameter = input.Key
+        });
+
+        return Ok(new { success = true, message = $"Operation completed for key: {input.Key}" });
+    }
+
+    /// <summary>
+    /// Demo 13: IsAllowedAsync - read-only pre-check (does NOT increment counter)
+    /// </summary>
+    [HttpPost("pre-check")]
+    [AllowAnonymous]
+    public async Task<IActionResult> PreCheck([FromBody] PreCheckInput input)
+    {
+        var context = new OperationRateLimitingContext { Parameter = input.Key };
+
+        if (input.ReadOnly)
+        {
+            var isAllowed = await _checker.IsAllowedAsync("Demo_PreCheck", context);
+            return Ok(new { success = true, message = $"IsAllowedAsync (read-only): {isAllowed}. Counter was NOT incremented." });
+        }
+
+        await _checker.CheckAsync("Demo_PreCheck", context);
+        return Ok(new { success = true, message = "CheckAsync: Counter incremented." });
+    }
+
+    /// <summary>
     /// Get status without consuming quota
     /// </summary>
     [HttpGet("status/{policyName}")]
@@ -243,7 +289,9 @@ public class RateLimitDemoController : AbpController
         [FromQuery] string? compositeParamKey = null,
         [FromQuery] string? compositeTripleKey = null,
         [FromQuery] string? customMultiKeyResourceId = null,
-        [FromQuery] string? tenantIsolatedKey = null)
+        [FromQuery] string? tenantIsolatedKey = null,
+        [FromQuery] string? banPolicyKey = null,
+        [FromQuery] string? preCheckKey = null)
     {
         var policies = new[]
         {
@@ -259,6 +307,9 @@ public class RateLimitDemoController : AbpController
             ("Demo_LongDays", (string?)null),
             ("Demo_CustomMultiKey", customMultiKeyResourceId),
             ("Demo_TenantIsolated", tenantIsolatedKey),
+            ("Demo_TenantWide", (string?)null),
+            ("Demo_BanPolicy", banPolicyKey),
+            ("Demo_PreCheck", preCheckKey),
         };
 
         foreach (var (policyName, parameter) in policies)
@@ -316,4 +367,15 @@ public class CustomMultiKeyInput
 public class DemoTenantIsolatedInput
 {
     public string Key { get; set; } = default!;
+}
+
+public class BanPolicyInput
+{
+    public string Key { get; set; } = default!;
+}
+
+public class PreCheckInput
+{
+    public string Key { get; set; } = default!;
+    public bool ReadOnly { get; set; }
 }

@@ -405,6 +405,90 @@
                 </div>
             </div>
         </div>
+        <!-- Demo 11: PartitionByCurrentTenant -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>11. Tenant-Wide Limit</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByCurrentTenant</code><br/>
+                        <strong>Rule:</strong> 3 requests per tenant within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> All users within the same tenant share a single counter. Different tenants have independent counters. Uses <code>"host"</code> as the key on the host side.
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoTenantWide()">Execute</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_TenantWide', null, 'tenantWideResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="tenantWideCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="tenantWideResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 12: Ban Policy (maxCount: 0) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>12. Ban Policy (maxCount: 0)</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
+                        <strong>Rule:</strong> <code>maxCount: 0</code> within <code>30 seconds</code><br/>
+                        <strong>Note:</strong> Setting <code>maxCount</code> to 0 creates a ban policy — <strong>every request is blocked</strong> for the entire window duration. Useful for temporarily banning a user or resource.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key</label>
+                        <input type="text" id="banPolicyKey" class="form-control" value="banned-user-1" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-danger" onclick="demoBanPolicy()">Try Request</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_BanPolicy', document.getElementById('banPolicyKey').value, 'banPolicyResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="banPolicyCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="banPolicyResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 13: IsAllowedAsync (read-only pre-check) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>13. IsAllowedAsync (Pre-Check)</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
+                        <strong>Rule:</strong> 3 requests per key within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> Demonstrates the difference between <code>IsAllowedAsync</code> (read-only, does <strong>not</strong> increment counter) and <code>CheckAsync</code> (increments counter). Click "Pre-Check" repeatedly — it never exhausts the quota. Click "Consume" to actually increment.<br/>
+                        <strong>How to test:</strong> Click "Pre-Check" many times (always OK) → Click "Consume" 3 times → Click "Pre-Check" again (now returns false).
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key</label>
+                        <input type="text" id="preCheckKey" class="form-control" value="pre-check-key" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-info text-white" onclick="demoPreCheck(true)">Pre-Check (Read-Only)</button>
+                        <button class="btn btn-primary" onclick="demoPreCheck(false)">Consume (CheckAsync)</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_PreCheck', document.getElementById('preCheckKey').value, 'preCheckResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="preCheckCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="preCheckResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Raw Error Response Viewer -->
@@ -598,6 +682,26 @@
                 { key: key }, 'tenantIsolatedResult', 'tenantIsolatedCountdown');
         }
 
+        // Demo 11
+        function demoTenantWide() {
+            apiCall('/api/rate-limit-demo/tenant-wide', 'POST',
+                null, 'tenantWideResult', 'tenantWideCountdown');
+        }
+
+        // Demo 12
+        function demoBanPolicy() {
+            var key = document.getElementById('banPolicyKey').value;
+            apiCall('/api/rate-limit-demo/ban-policy', 'POST',
+                { key: key }, 'banPolicyResult', 'banPolicyCountdown');
+        }
+
+        // Demo 13
+        function demoPreCheck(readOnly) {
+            var key = document.getElementById('preCheckKey').value;
+            apiCall('/api/rate-limit-demo/pre-check', 'POST',
+                { key: key, readOnly: readOnly }, 'preCheckResult', 'preCheckCountdown');
+        }
+
         // Reset single policy
         function demoReset(policyName, parameter, resultId) {
             var url = '/api/rate-limit-demo/reset/' + policyName;
@@ -626,6 +730,8 @@
             var compositeTripleKey = document.getElementById('compositeTripleKey').value;
             var customMultiKeyResourceId = document.getElementById('customMultiKeyResourceId').value;
             var tenantIsolatedKey = document.getElementById('tenantIsolatedKey').value;
+            var banPolicyKey = document.getElementById('banPolicyKey').value;
+            var preCheckKey = document.getElementById('preCheckKey').value;
             var url = '/api/rate-limit-demo/reset-all?' +
                 'smsPhone=' + encodeURIComponent(smsPhone) +
                 '&feedbackEmail=' + encodeURIComponent(feedbackEmail) +
@@ -633,7 +739,9 @@
                 '&compositeParamKey=' + encodeURIComponent(compositeParamKey) +
                 '&compositeTripleKey=' + encodeURIComponent(compositeTripleKey) +
                 '&customMultiKeyResourceId=' + encodeURIComponent(customMultiKeyResourceId) +
-                '&tenantIsolatedKey=' + encodeURIComponent(tenantIsolatedKey);
+                '&tenantIsolatedKey=' + encodeURIComponent(tenantIsolatedKey) +
+                '&banPolicyKey=' + encodeURIComponent(banPolicyKey) +
+                '&preCheckKey=' + encodeURIComponent(preCheckKey);
 
             $.ajax({ url: url, type: 'POST', dataType: 'json' })
                 .done(function() {
@@ -641,7 +749,7 @@
                     var resultAreas = ['smsResult', 'loginResult', 'apiKeyResult', 'emailResult',
                         'compositeUserIpResult', 'compositeParamUserResult', 'compositeTripleResult',
                         'feedbackResult', 'longHoursResult', 'longDaysResult', 'customMultiKeyResult',
-                        'tenantIsolatedResult'];
+                        'tenantIsolatedResult', 'tenantWideResult', 'banPolicyResult', 'preCheckResult'];
                     resultAreas.forEach(function(id) {
                         var el = document.getElementById(id);
                         if (el) el.innerHTML = '<div class="result-entry"><span class="result-info">[' + now() + '] All counters reset</span></div>';

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
@@ -226,7 +227,7 @@ public class MyProjectNameWebModule : AbpModule
                       .PartitionBy(ctx =>
                       {
                           var userId = ctx.GetRequiredService<Volo.Abp.Users.ICurrentUser>().Id?.ToString() ?? "anonymous";
-                          return $"{ctx.Parameter}:{userId}";
+                          return Task.FromResult($"{ctx.Parameter}:{userId}");
                       });
             });
 
@@ -236,6 +237,28 @@ public class MyProjectNameWebModule : AbpModule
             {
                 policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
                       .WithMultiTenancy()
+                      .PartitionByParameter();
+            });
+
+            // Demo 11: Authenticated - PartitionByCurrentTenant
+            // All users within the same tenant share one counter.
+            options.AddPolicy("Demo_TenantWide", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
+                      .PartitionByCurrentTenant();
+            });
+
+            // Demo 12: Ban policy (maxCount: 0) - blocks all requests for the duration
+            options.AddPolicy("Demo_BanPolicy", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(30), maxCount: 0)
+                      .PartitionByParameter();
+            });
+
+            // Demo 13: IsAllowedAsync - read-only check without incrementing counter
+            options.AddPolicy("Demo_PreCheck", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
                       .PartitionByParameter();
             });
         });
