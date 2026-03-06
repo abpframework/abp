@@ -441,7 +441,7 @@
                     <div class="rule-desc">
                         <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
                         <strong>Rule:</strong> <code>maxCount: 0</code> within <code>30 seconds</code><br/>
-                        <strong>Note:</strong> Setting <code>maxCount</code> to 0 creates a ban policy — <strong>every request is blocked</strong> for the entire window duration. Useful for temporarily banning a user or resource.
+                        <strong>Note:</strong> Setting <code>maxCount</code> to 0 creates a ban policy — <strong>every request is permanently denied</strong> regardless of the window duration. <code>RetryAfter</code> is <code>null</code> since there is no window to wait for.
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Key</label>

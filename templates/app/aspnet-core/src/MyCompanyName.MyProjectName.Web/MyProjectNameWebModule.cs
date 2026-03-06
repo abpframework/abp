@@ -248,7 +248,7 @@ public class MyProjectNameWebModule : AbpModule
                       .PartitionByCurrentTenant();
             });
 
-            // Demo 12: Ban policy (maxCount: 0) - blocks all requests for the duration
+            // Demo 12: Ban policy (maxCount: 0) - permanently denies all requests
             options.AddPolicy("Demo_BanPolicy", policy =>
             {
                 policy.WithFixedWindow(TimeSpan.FromSeconds(30), maxCount: 0)
