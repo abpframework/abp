@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} sat/i i {1} minuta/e",
     "RetryAfter:Minutes": "{0} minuta/e",
     "RetryAfter:MinutesAndSeconds": "{0} minuta/e i {1} sekunda/e",
-    "RetryAfter:Seconds": "{0} sekunda/e"
+    "RetryAfter:Seconds": "{0} sekunda/e",
+    "Volo.Abp.OperationRateLimiting:010002": "Prekoračeno je ograničenje brzine operacije. Ovaj zahtjev je trajno odbijen."
   }
 }

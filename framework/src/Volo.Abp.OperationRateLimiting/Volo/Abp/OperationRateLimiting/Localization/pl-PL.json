@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} godzina/godzin i {1} minuta/minut",
     "RetryAfter:Minutes": "{0} minuta/minut",
     "RetryAfter:MinutesAndSeconds": "{0} minuta/minut i {1} sekunda/sekund",
-    "RetryAfter:Seconds": "{0} sekunda/sekund"
+    "RetryAfter:Seconds": "{0} sekunda/sekund",
+    "Volo.Abp.OperationRateLimiting:010002": "Przekroczono limit częstotliwości operacji. To żądanie jest trwale odrzucone."
   }
 }

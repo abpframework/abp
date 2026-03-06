@@ -274,6 +274,15 @@ When a rate limit is exceeded, `CheckAsync` throws `AbpOperationRateLimitingExce
 * Extends `BusinessException` and implements `IHasHttpStatusCode` with status code **429** (Too Many Requests).
 * Is automatically handled by ABP's exception handling pipeline and serialized into the HTTP response.
 
+The exception uses one of two error codes depending on the policy type:
+
+| Error Code | Constant | When Used |
+|---|---|---|
+| `Volo.Abp.OperationRateLimiting:010001` | `AbpOperationRateLimitingErrorCodes.ExceedLimit` | Regular rate limit exceeded (has a retry-after window) |
+| `Volo.Abp.OperationRateLimiting:010002` | `AbpOperationRateLimitingErrorCodes.ExceedLimitPermanently` | Ban policy (`maxCount: 0`, permanently denied) |
+
+You can override the error code per policy using `WithErrorCode()`. When a custom code is set, it is always used regardless of the policy type.
+
 The exception includes the following data properties:
 
 | Key | Type | Description |
@@ -282,9 +291,9 @@ The exception includes the following data properties:
 | `MaxCount` | int | Maximum allowed count |
 | `CurrentCount` | int | Current usage count |
 | `RemainingCount` | int | Remaining allowed count |
-| `RetryAfterSeconds` | int | Seconds until the window resets |
-| `RetryAfterMinutes` | int | Minutes until the window resets (rounded down) |
-| `RetryAfter` | string | Localized retry-after description (e.g., "5 minutes") |
+| `RetryAfterSeconds` | int | Seconds until the window resets (`0` for ban policies) |
+| `RetryAfterMinutes` | int | Minutes until the window resets, rounded down (`0` for ban policies) |
+| `RetryAfter` | string | Localized retry-after description (e.g., "5 minutes"); absent for ban policies |
 | `WindowDurationSeconds` | int | Total window duration in seconds |
 | `WindowDescription` | string | Localized window description |
 | `RuleDetails` | List | Per-rule details (for multi-rule policies) |
@@ -329,7 +338,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ### Ban Policy (maxCount: 0)
 
-Setting `maxCount` to `0` creates a ban policy that permanently denies all requests regardless of the window duration. The `RetryAfter` value will be `null` since there is no window to wait for:
+Setting `maxCount` to `0` creates a ban policy that permanently denies all requests regardless of the window duration. The `RetryAfter` value will be `null` since there is no window to wait for. The exception uses the error code `Volo.Abp.OperationRateLimiting:010002` (`AbpOperationRateLimitingErrorCodes.ExceedLimitPermanently`) with the message "Operation rate limit exceeded. This request is permanently denied.":
 
 ````csharp
 options.AddPolicy("BlockedUser", policy =>

@@ -655,6 +655,7 @@ public class OperationRateLimitingChecker_Tests : OperationRateLimitingTestBase
         exception.Result.MaxCount.ShouldBe(0);
         exception.Result.RetryAfter.ShouldBeNull();
         exception.HttpStatusCode.ShouldBe(429);
+        exception.Code.ShouldBe(AbpOperationRateLimitingErrorCodes.ExceedLimitPermanently);
     }
 
     [Fact]

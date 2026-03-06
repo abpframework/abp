@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} 小时 {1} 分钟",
     "RetryAfter:Minutes": "{0} 分钟",
     "RetryAfter:MinutesAndSeconds": "{0} 分钟 {1} 秒",
-    "RetryAfter:Seconds": "{0} 秒"
+    "RetryAfter:Seconds": "{0} 秒",
+    "Volo.Abp.OperationRateLimiting:010002": "操作频率超出限制。此请求已被永久拒绝。"
   }
 }

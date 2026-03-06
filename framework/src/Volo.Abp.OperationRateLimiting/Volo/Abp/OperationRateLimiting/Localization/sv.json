@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} timme/timmar och {1} minut(er)",
     "RetryAfter:Minutes": "{0} minut(er)",
     "RetryAfter:MinutesAndSeconds": "{0} minut(er) och {1} sekund(er)",
-    "RetryAfter:Seconds": "{0} sekund(er)"
+    "RetryAfter:Seconds": "{0} sekund(er)",
+    "Volo.Abp.OperationRateLimiting:010002": "Hastighetsgränsen för operationen har överskridits. Denna förfrågan är permanent nekad."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} uur en {1} minuut/minuten",
     "RetryAfter:Minutes": "{0} minuut/minuten",
     "RetryAfter:MinutesAndSeconds": "{0} minuut/minuten en {1} seconde(n)",
-    "RetryAfter:Seconds": "{0} seconde(n)"
+    "RetryAfter:Seconds": "{0} seconde(n)",
+    "Volo.Abp.OperationRateLimiting:010002": "Het bewerkingsfrequentielimiet is overschreden. Dit verzoek wordt permanent geweigerd."
   }
 }

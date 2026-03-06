@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} Stunde(n) und {1} Minute(n)",
     "RetryAfter:Minutes": "{0} Minute(n)",
     "RetryAfter:MinutesAndSeconds": "{0} Minute(n) und {1} Sekunde(n)",
-    "RetryAfter:Seconds": "{0} Sekunde(n)"
+    "RetryAfter:Seconds": "{0} Sekunde(n)",
+    "Volo.Abp.OperationRateLimiting:010002": "Das Vorgangshäufigkeitslimit wurde überschritten. Diese Anfrage wird dauerhaft abgelehnt."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} ura/ur in {1} minuta/minut",
     "RetryAfter:Minutes": "{0} minuta/minut",
     "RetryAfter:MinutesAndSeconds": "{0} minuta/minut in {1} sekunda/sekund",
-    "RetryAfter:Seconds": "{0} sekunda/sekund"
+    "RetryAfter:Seconds": "{0} sekunda/sekund",
+    "Volo.Abp.OperationRateLimiting:010002": "Prekoračena je omejitev hitrosti operacije. Ta zahteva je trajno zavrnjena."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} tunti/tuntia ja {1} minuutti/minuuttia",
     "RetryAfter:Minutes": "{0} minuutti/minuuttia",
     "RetryAfter:MinutesAndSeconds": "{0} minuutti/minuuttia ja {1} sekunti/sekuntia",
-    "RetryAfter:Seconds": "{0} sekunti/sekuntia"
+    "RetryAfter:Seconds": "{0} sekunti/sekuntia",
+    "Volo.Abp.OperationRateLimiting:010002": "Toiminnan nopeusraja ylitettiin. Tämä pyyntö on pysyvästi hylätty."
   }
 }

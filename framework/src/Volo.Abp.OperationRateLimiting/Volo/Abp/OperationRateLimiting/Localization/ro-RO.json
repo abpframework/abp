@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} oră/ore și {1} minut(e)",
     "RetryAfter:Minutes": "{0} minut(e)",
     "RetryAfter:MinutesAndSeconds": "{0} minut(e) și {1} secundă/secunde",
-    "RetryAfter:Seconds": "{0} secundă/secunde"
+    "RetryAfter:Seconds": "{0} secundă/secunde",
+    "Volo.Abp.OperationRateLimiting:010002": "Limita de rată a operației a fost depășită. Această solicitare este permanent refuzată."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} klukkustund(ir) og {1} mínúta/úr",
     "RetryAfter:Minutes": "{0} mínúta/úr",
     "RetryAfter:MinutesAndSeconds": "{0} mínúta/úr og {1} sekúnda/úr",
-    "RetryAfter:Seconds": "{0} sekúnda/úr"
+    "RetryAfter:Seconds": "{0} sekúnda/úr",
+    "Volo.Abp.OperationRateLimiting:010002": "Farið var yfir takmörk á rekstrartíðni. Þessari beiðni er varanlega hafnað."
   }
 }

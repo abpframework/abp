@@ -15,7 +15,7 @@ public class AbpOperationRateLimitingException : BusinessException, IHasHttpStat
         string policyName,
         OperationRateLimitingResult result,
         string? errorCode = null)
-        : base(code: errorCode ?? AbpOperationRateLimitingErrorCodes.ExceedLimit)
+        : base(code: errorCode ?? ResolveDefaultErrorCode(result))
     {
         PolicyName = policyName;
         Result = result;
@@ -37,5 +37,12 @@ public class AbpOperationRateLimitingException : BusinessException, IHasHttpStat
     internal void SetWindowDescriptionFormatted(string formattedWindowDescription)
     {
         WithData("WindowDescription", formattedWindowDescription);
+    }
+
+    private static string ResolveDefaultErrorCode(OperationRateLimitingResult result)
+    {
+        return result.RetryAfter.HasValue
+            ? AbpOperationRateLimitingErrorCodes.ExceedLimit
+            : AbpOperationRateLimitingErrorCodes.ExceedLimitPermanently;
     }
 }

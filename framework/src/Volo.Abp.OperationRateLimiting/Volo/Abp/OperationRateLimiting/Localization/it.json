@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} ora/e e {1} minuto/i",
     "RetryAfter:Minutes": "{0} minuto/i",
     "RetryAfter:MinutesAndSeconds": "{0} minuto/i e {1} secondo/i",
-    "RetryAfter:Seconds": "{0} secondo/i"
+    "RetryAfter:Seconds": "{0} secondo/i",
+    "Volo.Abp.OperationRateLimiting:010002": "Limite di frequenza operazione superato. Questa richiesta è permanentemente negata."
   }
 }

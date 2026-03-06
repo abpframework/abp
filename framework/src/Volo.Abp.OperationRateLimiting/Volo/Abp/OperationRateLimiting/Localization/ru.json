@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} час/часов и {1} минута/минут",
     "RetryAfter:Minutes": "{0} минута/минут",
     "RetryAfter:MinutesAndSeconds": "{0} минута/минут и {1} секунда/секунд",
-    "RetryAfter:Seconds": "{0} секунда/секунд"
+    "RetryAfter:Seconds": "{0} секунда/секунд",
+    "Volo.Abp.OperationRateLimiting:010002": "Превышен лимит частоты операций. Этот запрос постоянно отклонён."
   }
 }

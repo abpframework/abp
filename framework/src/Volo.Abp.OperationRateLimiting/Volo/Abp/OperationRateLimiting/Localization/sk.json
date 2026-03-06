@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} hodina/hodín a {1} minúta/minút",
     "RetryAfter:Minutes": "{0} minúta/minút",
     "RetryAfter:MinutesAndSeconds": "{0} minúta/minút a {1} sekunda/sekúnd",
-    "RetryAfter:Seconds": "{0} sekunda/sekúnd"
+    "RetryAfter:Seconds": "{0} sekunda/sekúnd",
+    "Volo.Abp.OperationRateLimiting:010002": "Bol prekročený limit frekvencie operácie. Táto požiadavka je trvalo zamietnutá."
   }
 }

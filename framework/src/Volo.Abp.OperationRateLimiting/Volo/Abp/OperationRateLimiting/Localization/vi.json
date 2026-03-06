@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} giờ và {1} phút",
     "RetryAfter:Minutes": "{0} phút",
     "RetryAfter:MinutesAndSeconds": "{0} phút và {1} giây",
-    "RetryAfter:Seconds": "{0} giây"
+    "RetryAfter:Seconds": "{0} giây",
+    "Volo.Abp.OperationRateLimiting:010002": "Vượt quá giới hạn tần suất thao tác. Yêu cầu này bị từ chối vĩnh viễn."
   }
 }

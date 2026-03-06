@@ -24,19 +24,37 @@ public class AbpOperationRateLimitingException_Tests
     }
 
     [Fact]
-    public void Should_Set_Default_ErrorCode()
+    public void Should_Use_ExceedLimit_Code_When_RetryAfter_Is_Set()
     {
         var result = new OperationRateLimitingResult
         {
             IsAllowed = false,
             MaxCount = 3,
             CurrentCount = 3,
-            RemainingCount = 0
+            RemainingCount = 0,
+            RetryAfter = TimeSpan.FromMinutes(5)
         };
 
         var exception = new AbpOperationRateLimitingException("TestPolicy", result);
 
         exception.Code.ShouldBe(AbpOperationRateLimitingErrorCodes.ExceedLimit);
+    }
+
+    [Fact]
+    public void Should_Use_ExceedLimitPermanently_Code_When_RetryAfter_Is_Null()
+    {
+        var result = new OperationRateLimitingResult
+        {
+            IsAllowed = false,
+            MaxCount = 0,
+            CurrentCount = 0,
+            RemainingCount = 0,
+            RetryAfter = null
+        };
+
+        var exception = new AbpOperationRateLimitingException("TestPolicy", result);
+
+        exception.Code.ShouldBe(AbpOperationRateLimitingErrorCodes.ExceedLimitPermanently);
     }
 
     [Fact]

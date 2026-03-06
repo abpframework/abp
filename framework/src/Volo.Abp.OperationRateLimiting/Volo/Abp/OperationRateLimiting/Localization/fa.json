@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} ساعت و {1} دقیقه",
     "RetryAfter:Minutes": "{0} دقیقه",
     "RetryAfter:MinutesAndSeconds": "{0} دقیقه و {1} ثانیه",
-    "RetryAfter:Seconds": "{0} ثانیه"
+    "RetryAfter:Seconds": "{0} ثانیه",
+    "Volo.Abp.OperationRateLimiting:010002": "محدودیت نرخ عملیات از حد مجاز فراتر رفت. این درخواست به طور دائمی رد شده است."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} hora(s) e {1} minuto(s)",
     "RetryAfter:Minutes": "{0} minuto(s)",
     "RetryAfter:MinutesAndSeconds": "{0} minuto(s) e {1} segundo(s)",
-    "RetryAfter:Seconds": "{0} segundo(s)"
+    "RetryAfter:Seconds": "{0} segundo(s)",
+    "Volo.Abp.OperationRateLimiting:010002": "Limite de taxa de operação excedido. Esta solicitação está permanentemente negada."
   }
 }

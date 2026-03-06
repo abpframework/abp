@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} घंटा/घंटे और {1} मिनट",
     "RetryAfter:Minutes": "{0} मिनट",
     "RetryAfter:MinutesAndSeconds": "{0} मिनट और {1} सेकंड",
-    "RetryAfter:Seconds": "{0} सेकंड"
+    "RetryAfter:Seconds": "{0} सेकंड",
+    "Volo.Abp.OperationRateLimiting:010002": "ऑपरेशन दर सीमा पार हो गई। यह अनुरोध स्थायी रूप से अस्वीकृत है।"
   }
 }

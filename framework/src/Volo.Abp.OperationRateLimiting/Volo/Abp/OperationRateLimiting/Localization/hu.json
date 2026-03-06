@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} óra és {1} perc",
     "RetryAfter:Minutes": "{0} perc",
     "RetryAfter:MinutesAndSeconds": "{0} perc és {1} másodperc",
-    "RetryAfter:Seconds": "{0} másodperc"
+    "RetryAfter:Seconds": "{0} másodperc",
+    "Volo.Abp.OperationRateLimiting:010002": "A műveleti ráta korlátja túllépve. Ez a kérés véglegesen elutasítva."
   }
 }

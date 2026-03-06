@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} saat ve {1} dakika",
     "RetryAfter:Minutes": "{0} dakika",
     "RetryAfter:MinutesAndSeconds": "{0} dakika ve {1} saniye",
-    "RetryAfter:Seconds": "{0} saniye"
+    "RetryAfter:Seconds": "{0} saniye",
+    "Volo.Abp.OperationRateLimiting:010002": "İşlem hızı sınırı aşıldı. Bu istek kalıcı olarak reddedildi."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} hodina/hodiny/hodin a {1} minuta/minuty/minut",
     "RetryAfter:Minutes": "{0} minuta/minuty/minut",
     "RetryAfter:MinutesAndSeconds": "{0} minuta/minuty/minut a {1} sekunda/sekundy/sekund",
-    "RetryAfter:Seconds": "{0} sekunda/sekundy/sekund"
+    "RetryAfter:Seconds": "{0} sekunda/sekundy/sekund",
+    "Volo.Abp.OperationRateLimiting:010002": "Byl překročen limit četnosti operace. Tento požadavek je trvale zamítnut."
   }
 }

@@ -12,6 +12,7 @@
     "RetryAfter:HoursAndMinutes": "{0} ώρα/ες και {1} λεπτό/ά",
     "RetryAfter:Minutes": "{0} λεπτό/ά",
     "RetryAfter:MinutesAndSeconds": "{0} λεπτό/ά και {1} δευτερόλεπτο/α",
-    "RetryAfter:Seconds": "{0} δευτερόλεπτο/α"
+    "RetryAfter:Seconds": "{0} δευτερόλεπτο/α",
+    "Volo.Abp.OperationRateLimiting:010002": "Υπερβλήθηκε το όριο συχνότητας λειτουργίας. Αυτό το αίτημα απορρίπτεται μόνιμα."
   }
 }
