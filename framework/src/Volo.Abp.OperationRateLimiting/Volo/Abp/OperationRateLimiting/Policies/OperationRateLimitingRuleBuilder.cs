@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.OperationRateLimiting;
 
@@ -8,7 +9,7 @@ public class OperationRateLimitingRuleBuilder
     private TimeSpan _duration;
     private int _maxCount;
     private OperationRateLimitingPartitionType? _partitionType;
-    private Func<OperationRateLimitingContext, string>? _customPartitionKeyResolver;
+    private Func<OperationRateLimitingContext, Task<string>>? _customPartitionKeyResolver;
     private bool _isMultiTenant;
 
     internal bool IsCommitted { get; private set; }
@@ -43,7 +44,8 @@ public class OperationRateLimitingRuleBuilder
     }
 
     /// <summary>
-    /// Auto resolve from ICurrentUser.Id.
+    /// Partition by the current authenticated user (ICurrentUser.Id).
+    /// Use PartitionByParameter() if you need to specify the user ID explicitly.
     /// </summary>
     public OperationRateLimitingPolicyBuilder PartitionByCurrentUser()
     {
@@ -53,7 +55,7 @@ public class OperationRateLimitingRuleBuilder
     }
 
     /// <summary>
-    /// Auto resolve from ICurrentTenant.Id.
+    /// Partition by the current tenant (ICurrentTenant.Id). Uses "host" when no tenant is active.
     /// </summary>
     public OperationRateLimitingPolicyBuilder PartitionByCurrentTenant()
     {
@@ -63,7 +65,8 @@ public class OperationRateLimitingRuleBuilder
     }
 
     /// <summary>
-    /// Auto resolve from IWebClientInfoProvider.ClientIpAddress.
+    /// Partition by the client IP address (IWebClientInfoProvider.ClientIpAddress).
+    /// Use PartitionByParameter() if you need to specify the IP explicitly.
     /// </summary>
     public OperationRateLimitingPolicyBuilder PartitionByClientIp()
     {
@@ -95,10 +98,10 @@ public class OperationRateLimitingRuleBuilder
     }
 
     /// <summary>
-    /// Custom partition key resolver from context.
+    /// Custom async partition key resolver from context.
     /// </summary>
     public OperationRateLimitingPolicyBuilder PartitionBy(
-        Func<OperationRateLimitingContext, string> keyResolver)
+        Func<OperationRateLimitingContext, Task<string>> keyResolver)
     {
         _partitionType = OperationRateLimitingPartitionType.Custom;
         _customPartitionKeyResolver = Check.NotNull(keyResolver, nameof(keyResolver));

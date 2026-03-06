@@ -722,6 +722,10 @@
               "path": "framework/infrastructure/distributed-locking.md"
             },
             {
+              "text": "Operation Rate Limiting",
+              "path": "framework/infrastructure/operation-rate-limiting.md"
+            },
+            {
               "text": "Email Sending",
               "items": [
                 {

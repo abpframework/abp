@@ -8,8 +8,9 @@ public class OperationRateLimitingContext
 {
     /// <summary>
     /// Optional parameter passed by the caller.
-    /// Used by rules configured with PartitionByParameter().
-    /// Can be email, phone number, resource id, or any string.
+    /// Used as the partition key by PartitionByParameter() (required),
+    /// and as a fallback by PartitionByEmail() and PartitionByPhoneNumber().
+    /// Can be email, phone number, user id, resource id, or any string.
     /// </summary>
     public string? Parameter { get; set; }
 

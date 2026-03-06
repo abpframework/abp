@@ -38,7 +38,7 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
     public virtual async Task<OperationRateLimitingRuleResult> AcquireAsync(
         OperationRateLimitingContext context)
     {
-        var partitionKey = ResolvePartitionKey(context);
+        var partitionKey = await ResolvePartitionKeyAsync(context);
         var storeKey = BuildStoreKey(partitionKey);
         var storeResult = await Store.IncrementAsync(storeKey, Definition.Duration, Definition.MaxCount);
 
@@ -48,7 +48,7 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
     public virtual async Task<OperationRateLimitingRuleResult> CheckAsync(
         OperationRateLimitingContext context)
     {
-        var partitionKey = ResolvePartitionKey(context);
+        var partitionKey = await ResolvePartitionKeyAsync(context);
         var storeKey = BuildStoreKey(partitionKey);
         var storeResult = await Store.GetAsync(storeKey, Definition.Duration, Definition.MaxCount);
 
@@ -57,12 +57,12 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
 
     public virtual async Task ResetAsync(OperationRateLimitingContext context)
     {
-        var partitionKey = ResolvePartitionKey(context);
+        var partitionKey = await ResolvePartitionKeyAsync(context);
         var storeKey = BuildStoreKey(partitionKey);
         await Store.ResetAsync(storeKey);
     }
 
-    protected virtual string ResolvePartitionKey(OperationRateLimitingContext context)
+    protected virtual async Task<string> ResolvePartitionKeyAsync(OperationRateLimitingContext context)
     {
         return Definition.PartitionType switch
         {
@@ -71,17 +71,20 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
                     $"OperationRateLimitingContext.Parameter is required for policy '{PolicyName}' (PartitionByParameter)."),
 
             OperationRateLimitingPartitionType.CurrentUser =>
-                CurrentUser.Id?.ToString() ?? throw new AbpException(
-                    $"Current user is not authenticated. Policy '{PolicyName}' requires PartitionByCurrentUser."),
+                CurrentUser.Id?.ToString()
+                ?? throw new AbpException(
+                    $"Current user is not authenticated. Policy '{PolicyName}' requires PartitionByCurrentUser. " +
+                    "Use PartitionByParameter() if you need to specify the user ID explicitly."),
 
             OperationRateLimitingPartitionType.CurrentTenant =>
-                CurrentTenant.Id?.ToString() ?? HostTenantKey,
+                CurrentTenant.Id?.ToString()
+                ?? HostTenantKey,
 
             OperationRateLimitingPartitionType.ClientIp =>
                 WebClientInfoProvider.ClientIpAddress
                 ?? throw new AbpException(
                     $"Client IP address could not be determined. Policy '{PolicyName}' requires PartitionByClientIp. " +
-                    "Ensure IWebClientInfoProvider is properly configured."),
+                    "Ensure IWebClientInfoProvider is properly configured or use PartitionByParameter() to pass the IP explicitly."),
 
             OperationRateLimitingPartitionType.Email =>
                 context.Parameter
@@ -96,7 +99,7 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
                     $"Phone number is required for policy '{PolicyName}' (PartitionByPhoneNumber). Provide it via context.Parameter or ensure the user has a phone number."),
 
             OperationRateLimitingPartitionType.Custom =>
-                Definition.CustomPartitionKeyResolver!(context),
+                await Definition.CustomPartitionKeyResolver!(context),
 
             _ => throw new AbpException($"Unknown partition type: {Definition.PartitionType}")
         };

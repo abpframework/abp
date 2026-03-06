@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Xunit;
 
@@ -74,7 +75,7 @@ public class OperationRateLimitingPolicyBuilder_Tests
         {
             policy.AddRule(rule => rule
                 .WithFixedWindow(TimeSpan.FromMinutes(30), maxCount: 5)
-                .PartitionBy(ctx => $"custom:{ctx.Parameter}"));
+                .PartitionBy(ctx => Task.FromResult($"custom:{ctx.Parameter}")));
         });
 
         var policy = options.Policies["CustomPolicy"];
@@ -242,11 +243,11 @@ public class OperationRateLimitingPolicyBuilder_Tests
         {
             policy.AddRule(rule => rule
                 .WithFixedWindow(TimeSpan.FromHours(1), maxCount: 5)
-                .PartitionBy(ctx => $"by-ip:{ctx.Parameter}"));
+                .PartitionBy(ctx => Task.FromResult($"by-ip:{ctx.Parameter}")));
 
             policy.AddRule(rule => rule
                 .WithFixedWindow(TimeSpan.FromHours(1), maxCount: 5)
-                .PartitionBy(ctx => $"by-device:{ctx.Parameter}"));
+                .PartitionBy(ctx => Task.FromResult($"by-device:{ctx.Parameter}")));
         });
 
         var policy = options.Policies["MultiCustomPolicy"];

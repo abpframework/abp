@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Volo.Abp.AspNetCore.WebClientInfo;
@@ -157,7 +158,7 @@ public class AbpOperationRateLimitingTestModule : AbpModule
             options.AddPolicy("TestCustomResolver", policy =>
             {
                 policy.WithFixedWindow(TimeSpan.FromHours(1), maxCount: 2)
-                      .PartitionBy(ctx => $"action:{ctx.Parameter}");
+                      .PartitionBy(ctx => Task.FromResult($"action:{ctx.Parameter}"));
             });
 
             // Multi-tenant: ByParameter with tenant isolation - same param, different tenants = different counters
