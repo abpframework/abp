@@ -46,6 +46,16 @@ public class MyProjectNameMenuContributor : IMenuContributor
         administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
 
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                "RateLimitDemo",
+                "Rate Limit Demo",
+                "~/RateLimitDemo",
+                icon: "fas fa-tachometer-alt",
+                order: 100
+            )
+        );
+
         return Task.CompletedTask;
     }
 }

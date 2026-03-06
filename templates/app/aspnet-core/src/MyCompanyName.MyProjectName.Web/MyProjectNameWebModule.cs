@@ -39,6 +39,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.OperationRateLimit;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName.Web;
@@ -54,7 +55,8 @@ namespace MyCompanyName.MyProjectName.Web;
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpOperationRateLimitModule)
     )]
 public class MyProjectNameWebModule : AbpModule
 {
@@ -113,6 +115,130 @@ public class MyProjectNameWebModule : AbpModule
         ConfigureSwaggerServices(context.Services);
 
         context.Services.AddMapperlyObjectMapper<MyProjectNameWebModule>();
+
+        ConfigureOperationRateLimit();
+    }
+
+    private void ConfigureOperationRateLimit()
+    {
+        Configure<AbpOperationRateLimitOptions>(options =>
+        {
+            // Demo 1: Public - rate limit by parameter (e.g. phone/email), no auth required
+            options.AddPolicy("Demo_SendSmsCode", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
+                      .PartitionByParameter();
+            });
+
+            // Demo 2: Public - rate limit by client IP
+            options.AddPolicy("Demo_LoginAttempt", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 5)
+                      .PartitionByClientIp();
+            });
+
+            // Demo 3: Authenticated - rate limit by current user
+            options.AddPolicy("Demo_GenerateApiKey", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
+                      .PartitionByCurrentUser();
+            });
+
+            // Demo 4: Authenticated - rate limit by email (auto from current user)
+            options.AddPolicy("Demo_SendEmailCode", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 2)
+                      .PartitionByEmail();
+            });
+
+            // Demo 5a: Composite - ByCurrentUser + ByClientIp
+            // IP triggers first (3/20s). User window is 2min so it won't expire during testing.
+            // After IP resets (20s), 2 more requests trigger user rule (5/2min).
+            options.AddPolicy("Demo_Composite_UserIp", policy =>
+            {
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromMinutes(2), maxCount: 5)
+                    .PartitionByCurrentUser());
+
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
+                    .PartitionByClientIp());
+            });
+
+            // Demo 5b: Composite - ByParameter + ByCurrentUser
+            // User triggers first (2/20s). Parameter has higher limit (5/2min).
+            // After user window resets, parameter counter remains.
+            options.AddPolicy("Demo_Composite_ParamUser", policy =>
+            {
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromMinutes(2), maxCount: 5)
+                    .PartitionByParameter());
+
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 2)
+                    .PartitionByCurrentUser());
+            });
+
+            // Demo 5c: Composite - ByParameter + ByCurrentUser + ByClientIp (triple)
+            // IP (3/20s) triggers first, then user (4/2min), then parameter (5/2min).
+            options.AddPolicy("Demo_Composite_Triple", policy =>
+            {
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromMinutes(2), maxCount: 5)
+                    .PartitionByParameter());
+
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromMinutes(2), maxCount: 4)
+                    .PartitionByCurrentUser());
+
+                policy.AddRule(rule => rule
+                    .WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
+                    .PartitionByClientIp());
+            });
+
+            // Demo 6: Custom error code
+            options.AddPolicy("Demo_SubmitFeedback", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 2)
+                      .PartitionByParameter()
+                      .WithErrorCode("App:Feedback:RateLimited");
+            });
+
+            // Demo 7: Long duration - hours (test "X hours Y minutes" formatting)
+            options.AddPolicy("Demo_LongHours", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromHours(3), maxCount: 2)
+                      .PartitionByParameter();
+            });
+
+            // Demo 8: Long duration - days (test "X days Y hours" formatting)
+            options.AddPolicy("Demo_LongDays", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromDays(3), maxCount: 1)
+                      .PartitionByClientIp();
+            });
+
+            // Demo 9: Custom multi-key resolver - combines resource ID (Parameter) + user ID
+            // into a single partition key so each user has an independent quota per resource.
+            options.AddPolicy("Demo_CustomMultiKey", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 2)
+                      .PartitionBy(ctx =>
+                      {
+                          var userId = ctx.GetRequiredService<Volo.Abp.Users.ICurrentUser>().Id?.ToString() ?? "anonymous";
+                          return $"{ctx.Parameter}:{userId}";
+                      });
+            });
+
+            // Demo 10: Multi-tenancy - same parameter value has independent counters per tenant.
+            // Without .WithMultiTenancy(), all tenants share the same counter.
+            options.AddPolicy("Demo_TenantIsolated", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromSeconds(20), maxCount: 3)
+                      .WithMultiTenancy()
+                      .PartitionByParameter();
+            });
+        });
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)

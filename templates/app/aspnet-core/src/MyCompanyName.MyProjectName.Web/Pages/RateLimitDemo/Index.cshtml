@@ -1,0 +1,666 @@
+@page
+@model MyCompanyName.MyProjectName.Web.Pages.RateLimitDemo.IndexModel
+
+@section styles {
+    <style>
+        .demo-card { margin-bottom: 1.5rem; }
+        .demo-card .card-header { font-weight: 600; }
+        .result-area {
+            min-height: 80px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+        }
+        .result-entry { margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+        .result-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .result-success { color: #198754; }
+        .result-error { color: #dc3545; }
+        .result-info { color: #0d6efd; }
+        .countdown-badge {
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+        }
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+        }
+        .quota-progress { flex: 1; }
+        .badge-auth { background-color: #198754; }
+        .badge-public { background-color: #0d6efd; }
+        .rule-desc { font-size: 0.82rem; color: #6c757d; margin-bottom: 0.75rem; }
+        .rule-desc code { font-size: 0.8rem; }
+    </style>
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Operation Rate Limit Demo</h2>
+            <p class="text-muted">
+                Test various rate limiting policies. Each card shows a different partition strategy and window configuration.
+                When a limit is triggered, observe the localized error message and countdown timer.
+            </p>
+            <div class="d-flex gap-2 mb-3 align-items-center">
+                <span class="badge badge-public">Public</span> = no login required
+                <span class="badge badge-auth ms-2">Auth</span> = login required
+                <button class="btn btn-danger btn-sm ms-auto" onclick="demoResetAll()">
+                    <i class="fas fa-redo"></i> Reset All Counters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Demo 1: Send SMS Code (PartitionByParameter) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>1. Send SMS Code</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
+                        <strong>Rule:</strong> 3 requests per phone number within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> Each phone number has an independent counter. The parameter is passed explicitly by the caller.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" id="smsPhone" class="form-control" value="123456789" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoSendSms()">Send SMS</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_SendSmsCode', document.getElementById('smsPhone').value, 'smsResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="smsCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="smsResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 2: Login Attempt (PartitionByClientIp) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>2. Login Attempt</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByClientIp</code><br/>
+                        <strong>Rule:</strong> 5 requests per IP within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> Client IP is resolved automatically. All requests from the same IP share one counter; no parameter needed.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="loginUser" class="form-control" value="admin" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoLogin()">Login</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_LoginAttempt', null, 'loginResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="loginCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="loginResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 3: Generate API Key (PartitionByCurrentUser) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>3. Generate API Key</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByCurrentUser</code><br/>
+                        <strong>Rule:</strong> 3 requests per user within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> Requires login. Current user ID is used as the partition key automatically; each user has an independent counter.
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoGenerateKey()">Generate Key</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_GenerateApiKey', null, 'apiKeyResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="apiKeyCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="apiKeyResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 4: Send Email Code (PartitionByEmail) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>4. Send Email Code</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByEmail</code><br/>
+                        <strong>Rule:</strong> 2 requests per email within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> Requires login. Email is resolved from the current user's email claim automatically; no manual parameter needed.
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoSendEmail()">Send Email Code</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_SendEmailCode', null, 'emailResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="emailCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="emailResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 5a: Composite - ByCurrentUser + ByClientIp -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>5a. Composite: User + IP</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>ByCurrentUser + ByClientIp</code><br/>
+                        <strong>Rule 1:</strong> 5 requests per user within <code>2 minutes</code><br/>
+                        <strong>Rule 2:</strong> 3 requests per IP within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> IP window (20s) triggers first; user window (2min) does not expire during the wait. Two-phase check prevents wasted quota on blocked requests.<br/>
+                        <strong>How to test:</strong> Click 3 times quickly → IP blocked (3/3); wait 20s then click 2 more → user rule triggers (5/5).
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoCompositeUserIp()">Create Order</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_Composite_UserIp', null, 'compositeUserIpResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="compositeUserIpCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="compositeUserIpResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 5b: Composite - ByParameter + ByCurrentUser -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>5b. Composite: Param + User</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>ByParameter + ByCurrentUser</code><br/>
+                        <strong>Rule 1:</strong> 5 requests per key within <code>2 minutes</code><br/>
+                        <strong>Rule 2:</strong> 2 requests per user within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> User limit (2/20s) triggers first; parameter rule (5/2min) only counts successful requests. Parameter counter persists after user window resets.<br/>
+                        <strong>How to test:</strong> Click 2 times → user blocked (2/2); wait 20s, click 2 more → user blocked again; wait 20s, click 1 more → parameter rule triggers (5/5).
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key</label>
+                        <input type="text" id="compositeParamKey" class="form-control" value="order-001" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoCompositeParamUser()">Execute</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_Composite_ParamUser', document.getElementById('compositeParamKey').value, 'compositeParamUserResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="compositeParamUserCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="compositeParamUserResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 5c: Composite - Triple -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>5c. Composite: Triple</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>ByParameter + ByCurrentUser + ByClientIp</code><br/>
+                        <strong>Rule 1:</strong> 5 requests per key within <code>2 minutes</code><br/>
+                        <strong>Rule 2:</strong> 4 requests per user within <code>2 minutes</code><br/>
+                        <strong>Rule 3:</strong> 3 requests per IP within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> All three rules apply (AND logic). IP (3/20s) triggers first; after 20s reset, user (4/2min) becomes the bottleneck.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key</label>
+                        <input type="text" id="compositeTripleKey" class="form-control" value="triple-001" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoCompositeTriple()">Execute</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_Composite_Triple', document.getElementById('compositeTripleKey').value, 'compositeTripleResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="compositeTripleCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="compositeTripleResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 6: Submit Feedback (Custom ErrorCode) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>6. Submit Feedback (Custom Error Code)</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
+                        <strong>Rule:</strong> 2 requests per email within <code>20 seconds</code><br/>
+                        <strong>Custom error code:</strong> <code>App:Feedback:RateLimited</code><br/>
+                        <strong>Note:</strong> Default error code is <code>Volo.Abp.OperationRateLimit:010001</code>. This policy uses <code>WithErrorCode()</code> to set a custom code so the frontend can handle it differently.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" id="feedbackEmail" class="form-control" value="test@example.com" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select id="feedbackCategory" class="form-select">
+                            <option value="Bug">Bug Report</option>
+                            <option value="Feature">Feature Request</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoFeedback()">Submit Feedback</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_SubmitFeedback', document.getElementById('feedbackEmail').value, 'feedbackResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="feedbackCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="feedbackResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 7: Long Hours (test hours formatting) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>7. Long Window - Hours</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
+                        <strong>Rule:</strong> 2 requests per key within <code>3 hours</code><br/>
+                        <strong>Note:</strong> Tests <code>RetryAfter</code> formatting for long windows. When triggered, the message should display something like "X hours Y minutes".
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key</label>
+                        <input type="text" id="longHoursKey" class="form-control" value="test-key-1" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-warning" onclick="demoLongHours()">Execute</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_LongHours', document.getElementById('longHoursKey').value, 'longHoursResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="longHoursCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="longHoursResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 8: Long Days (test days formatting) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>8. Long Window - Days</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByClientIp</code><br/>
+                        <strong>Rule:</strong> 1 request per IP within <code>3 days</code><br/>
+                        <strong>Note:</strong> Tests <code>RetryAfter</code> formatting for very long windows. When triggered, the message should display something like "X days Y hours". Only 1 request is needed to trigger it.
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-warning" onclick="demoLongDays()">Execute</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_LongDays', null, 'longDaysResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="longDaysCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="longDaysResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 9: Custom Multi-Key Resolver (PartitionBy custom resolver) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>9. Custom Multi-Key Resolver</span>
+                    <span class="badge badge-auth">Auth</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionBy(ctx => $"{resourceId}:{userId}")</code><br/>
+                        <strong>Rule:</strong> 2 requests per user per resource within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> A custom resolver combines multiple values into one partition key. Each user has an independent quota per resource — different users on the same resource don't affect each other, and the same user on different resources doesn't either.<br/>
+                        <strong>How to test:</strong> Click 2 times with the same Resource ID → limit triggered; change the Resource ID → quota resets.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resource ID</label>
+                        <input type="text" id="customMultiKeyResourceId" class="form-control" value="report-001" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoCustomMultiKey()">Process Resource</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_CustomMultiKey', document.getElementById('customMultiKeyResourceId').value, 'customMultiKeyResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="customMultiKeyCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="customMultiKeyResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo 10: Tenant Isolated (WithMultiTenancy + PartitionByParameter) -->
+        <div class="col-lg-6 col-xl-4">
+            <div class="card demo-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>10. Multi-Tenancy Isolation</span>
+                    <span class="badge badge-public">Public</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-desc">
+                        <strong>Partition:</strong> <code>PartitionByParameter</code> + <code>.WithMultiTenancy()</code><br/>
+                        <strong>Rule:</strong> 3 requests per parameter per tenant within <code>20 seconds</code><br/>
+                        <strong>Note:</strong> The same parameter value has independent counters in different tenants. Without <code>.WithMultiTenancy()</code>, all tenants share the same counter.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key</label>
+                        <input type="text" id="tenantIsolatedKey" class="form-control" value="shared-key" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="demoTenantIsolated()">Execute</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="demoReset('Demo_TenantIsolated', document.getElementById('tenantIsolatedKey').value, 'tenantIsolatedResult')">Reset</button>
+                    </div>
+                    <div class="status-bar mt-2">
+                        <div id="tenantIsolatedCountdown" class="text-danger fw-bold" style="display:none;"></div>
+                    </div>
+                    <div id="tenantIsolatedResult" class="result-area mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Raw Error Response Viewer -->
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Last Error Response (Raw JSON)</span>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('rawError').textContent = ''">Clear</button>
+                </div>
+                <div class="card-body">
+                    <pre id="rawError" class="mb-0" style="max-height:400px;overflow:auto;white-space:pre-wrap;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var countdownTimers = {};
+
+        function now() {
+            return new Date().toLocaleTimeString();
+        }
+
+        function appendResult(elementId, html) {
+            var el = document.getElementById(elementId);
+            el.innerHTML = '<div class="result-entry">' + html + '</div>' + el.innerHTML;
+        }
+
+        function startCountdown(elementId, seconds) {
+            var el = document.getElementById(elementId);
+            el.style.display = 'block';
+
+            if (countdownTimers[elementId]) {
+                clearInterval(countdownTimers[elementId]);
+            }
+
+            var remaining = seconds;
+            el.textContent = 'Retry in: ' + remaining + 's';
+
+            countdownTimers[elementId] = setInterval(function () {
+                remaining--;
+                if (remaining <= 0) {
+                    clearInterval(countdownTimers[elementId]);
+                    el.style.display = 'none';
+                } else {
+                    el.textContent = 'Retry in: ' + remaining + 's';
+                }
+            }, 1000);
+        }
+
+        function handleError(jqXHR, resultId, countdownId) {
+            if (jqXHR.status === 429) {
+                var responseData = jqXHR.responseJSON;
+                var data = responseData.error.data;
+                var msg = responseData.error.message;
+                var code = responseData.error.code;
+
+                appendResult(resultId,
+                    '<span class="result-error">[' + now() + '] Blocked (HTTP 429)</span><br/>' +
+                    '<strong>Message:</strong> ' + msg + '<br/>' +
+                    '<strong>Error Code:</strong> <code>' + code + '</code><br/>' +
+                    '<strong>Retry After:</strong> ' + (data.RetryAfter || 'N/A') +
+                    ' (' + data.RetryAfterSeconds + 's)<br/>' +
+                    '<strong>Window:</strong> ' + (data.WindowDescription || 'N/A') +
+                    ' (' + data.WindowDurationSeconds + 's)<br/>' +
+                    '<strong>Count:</strong> ' + data.CurrentCount + '/' + data.MaxCount +
+                    ' (remaining: ' + data.RemainingCount + ')'
+                );
+
+                if (countdownId && data.RetryAfterSeconds > 0) {
+                    startCountdown(countdownId, data.RetryAfterSeconds);
+                }
+
+                document.getElementById('rawError').textContent =
+                    JSON.stringify(responseData, null, 2);
+            } else {
+                var errMsg = 'Unknown error';
+                if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                    errMsg = jqXHR.responseJSON.error.message || errMsg;
+                }
+                appendResult(resultId,
+                    '<span class="result-error">[' + now() + '] Error: ' + errMsg + '</span>'
+                );
+            }
+        }
+
+        function apiCall(url, method, body, resultId, countdownId) {
+            var ajaxOptions = {
+                url: url,
+                type: method,
+                contentType: 'application/json',
+                dataType: 'json'
+            };
+            if (body) {
+                ajaxOptions.data = JSON.stringify(body);
+            }
+
+            return $.ajax(ajaxOptions)
+                .done(function (response) {
+                    appendResult(resultId,
+                        '<span class="result-success">[' + now() + '] OK: ' +
+                        (response.message || JSON.stringify(response)) + '</span>'
+                    );
+                })
+                .fail(function (jqXHR) {
+                    handleError(jqXHR, resultId, countdownId);
+                });
+        }
+
+        // Demo 1
+        function demoSendSms() {
+            var phone = document.getElementById('smsPhone').value;
+            apiCall('/api/rate-limit-demo/send-sms-code', 'POST',
+                { phoneNumber: phone }, 'smsResult', 'smsCountdown');
+        }
+
+        // Demo 2
+        function demoLogin() {
+            var username = document.getElementById('loginUser').value;
+            apiCall('/api/rate-limit-demo/login-attempt', 'POST',
+                { username: username }, 'loginResult', 'loginCountdown');
+        }
+
+        // Demo 3
+        function demoGenerateKey() {
+            apiCall('/api/rate-limit-demo/generate-api-key', 'POST',
+                null, 'apiKeyResult', 'apiKeyCountdown');
+        }
+
+        // Demo 4
+        function demoSendEmail() {
+            apiCall('/api/rate-limit-demo/send-email-code', 'POST',
+                null, 'emailResult', 'emailCountdown');
+        }
+
+        // Demo 5a
+        function demoCompositeUserIp() {
+            apiCall('/api/rate-limit-demo/composite-user-ip', 'POST',
+                null, 'compositeUserIpResult', 'compositeUserIpCountdown');
+        }
+
+        // Demo 5b
+        function demoCompositeParamUser() {
+            var key = document.getElementById('compositeParamKey').value;
+            apiCall('/api/rate-limit-demo/composite-param-user', 'POST',
+                { key: key }, 'compositeParamUserResult', 'compositeParamUserCountdown');
+        }
+
+        // Demo 5c
+        function demoCompositeTriple() {
+            var key = document.getElementById('compositeTripleKey').value;
+            apiCall('/api/rate-limit-demo/composite-triple', 'POST',
+                { key: key }, 'compositeTripleResult', 'compositeTripleCountdown');
+        }
+
+        // Demo 6
+        function demoFeedback() {
+            var email = document.getElementById('feedbackEmail').value;
+            var category = document.getElementById('feedbackCategory').value;
+            apiCall('/api/rate-limit-demo/submit-feedback', 'POST',
+                { email: email, category: category }, 'feedbackResult', 'feedbackCountdown');
+        }
+
+        // Demo 7
+        function demoLongHours() {
+            var key = document.getElementById('longHoursKey').value;
+            apiCall('/api/rate-limit-demo/long-hours', 'POST',
+                { key: key }, 'longHoursResult', 'longHoursCountdown');
+        }
+
+        // Demo 8
+        function demoLongDays() {
+            apiCall('/api/rate-limit-demo/long-days', 'POST',
+                null, 'longDaysResult', 'longDaysCountdown');
+        }
+
+        // Demo 9
+        function demoCustomMultiKey() {
+            var resourceId = document.getElementById('customMultiKeyResourceId').value;
+            apiCall('/api/rate-limit-demo/custom-multi-key', 'POST',
+                { resourceId: resourceId }, 'customMultiKeyResult', 'customMultiKeyCountdown');
+        }
+
+        // Demo 10
+        function demoTenantIsolated() {
+            var key = document.getElementById('tenantIsolatedKey').value;
+            apiCall('/api/rate-limit-demo/demo-tenant-isolated', 'POST',
+                { key: key }, 'tenantIsolatedResult', 'tenantIsolatedCountdown');
+        }
+
+        // Reset single policy
+        function demoReset(policyName, parameter, resultId) {
+            var url = '/api/rate-limit-demo/reset/' + policyName;
+            if (parameter) {
+                url += '?parameter=' + encodeURIComponent(parameter);
+            }
+            $.ajax({ url: url, type: 'POST', dataType: 'json' })
+                .done(function() {
+                    appendResult(resultId,
+                        '<span class="result-info">[' + now() + '] Counter reset</span>'
+                    );
+                })
+                .fail(function() {
+                    appendResult(resultId,
+                        '<span class="result-error">[' + now() + '] Reset failed</span>'
+                    );
+                });
+        }
+
+        // Reset all policies
+        function demoResetAll() {
+            var smsPhone = document.getElementById('smsPhone').value;
+            var feedbackEmail = document.getElementById('feedbackEmail').value;
+            var longHoursKey = document.getElementById('longHoursKey').value;
+            var compositeParamKey = document.getElementById('compositeParamKey').value;
+            var compositeTripleKey = document.getElementById('compositeTripleKey').value;
+            var customMultiKeyResourceId = document.getElementById('customMultiKeyResourceId').value;
+            var tenantIsolatedKey = document.getElementById('tenantIsolatedKey').value;
+            var url = '/api/rate-limit-demo/reset-all?' +
+                'smsPhone=' + encodeURIComponent(smsPhone) +
+                '&feedbackEmail=' + encodeURIComponent(feedbackEmail) +
+                '&longHoursKey=' + encodeURIComponent(longHoursKey) +
+                '&compositeParamKey=' + encodeURIComponent(compositeParamKey) +
+                '&compositeTripleKey=' + encodeURIComponent(compositeTripleKey) +
+                '&customMultiKeyResourceId=' + encodeURIComponent(customMultiKeyResourceId) +
+                '&tenantIsolatedKey=' + encodeURIComponent(tenantIsolatedKey);
+
+            $.ajax({ url: url, type: 'POST', dataType: 'json' })
+                .done(function() {
+                    // Clear all result areas
+                    var resultAreas = ['smsResult', 'loginResult', 'apiKeyResult', 'emailResult',
+                        'compositeUserIpResult', 'compositeParamUserResult', 'compositeTripleResult',
+                        'feedbackResult', 'longHoursResult', 'longDaysResult', 'customMultiKeyResult',
+                        'tenantIsolatedResult'];
+                    resultAreas.forEach(function(id) {
+                        var el = document.getElementById(id);
+                        if (el) el.innerHTML = '<div class="result-entry"><span class="result-info">[' + now() + '] All counters reset</span></div>';
+                    });
+
+                    // Clear all countdowns
+                    Object.keys(countdownTimers).forEach(function(key) {
+                        clearInterval(countdownTimers[key]);
+                        var el = document.getElementById(key);
+                        if (el) el.style.display = 'none';
+                    });
+                    countdownTimers = {};
+
+                    // Clear raw error
+                    document.getElementById('rawError').textContent = '';
+                })
+                .fail(function() {
+                    alert('Reset failed');
+                });
+        }
+    </script>
+}
