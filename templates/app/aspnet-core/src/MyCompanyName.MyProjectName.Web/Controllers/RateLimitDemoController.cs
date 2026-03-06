@@ -3,16 +3,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.OperationRateLimit;
+using Volo.Abp.OperationRateLimiting;
 
 namespace MyCompanyName.MyProjectName.Web.Controllers;
 
 [Route("api/rate-limit-demo")]
 public class RateLimitDemoController : AbpController
 {
-    private readonly IOperationRateLimitChecker _checker;
+    private readonly IOperationRateLimitingChecker _checker;
 
-    public RateLimitDemoController(IOperationRateLimitChecker checker)
+    public RateLimitDemoController(IOperationRateLimitingChecker checker)
     {
         _checker = checker;
     }
@@ -24,7 +24,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> SendSmsCode([FromBody] SendSmsCodeInput input)
     {
-        await _checker.CheckAsync("Demo_SendSmsCode", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_SendSmsCode", new OperationRateLimitingContext
         {
             Parameter = input.PhoneNumber,
             ExtraProperties =
@@ -43,7 +43,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> LoginAttempt([FromBody] LoginAttemptInput input)
     {
-        await _checker.CheckAsync("Demo_LoginAttempt", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_LoginAttempt", new OperationRateLimitingContext
         {
             ExtraProperties =
             {
@@ -97,7 +97,7 @@ public class RateLimitDemoController : AbpController
     [Authorize]
     public async Task<IActionResult> CompositeParamUser([FromBody] CompositeParamUserInput input)
     {
-        await _checker.CheckAsync("Demo_Composite_ParamUser", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_Composite_ParamUser", new OperationRateLimitingContext
         {
             Parameter = input.Key
         });
@@ -112,7 +112,7 @@ public class RateLimitDemoController : AbpController
     [Authorize]
     public async Task<IActionResult> CompositeTriple([FromBody] CompositeTripleInput input)
     {
-        await _checker.CheckAsync("Demo_Composite_Triple", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_Composite_Triple", new OperationRateLimitingContext
         {
             Parameter = input.Key
         });
@@ -127,7 +127,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> SubmitFeedback([FromBody] SubmitFeedbackInput input)
     {
-        await _checker.CheckAsync("Demo_SubmitFeedback", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_SubmitFeedback", new OperationRateLimitingContext
         {
             Parameter = input.Email,
             ExtraProperties =
@@ -147,7 +147,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> LongHours([FromBody] LongHoursInput input)
     {
-        await _checker.CheckAsync("Demo_LongHours", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_LongHours", new OperationRateLimitingContext
         {
             Parameter = input.Key
         });
@@ -174,7 +174,7 @@ public class RateLimitDemoController : AbpController
     [Authorize]
     public async Task<IActionResult> CustomMultiKey([FromBody] CustomMultiKeyInput input)
     {
-        await _checker.CheckAsync("Demo_CustomMultiKey", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_CustomMultiKey", new OperationRateLimitingContext
         {
             Parameter = input.ResourceId
         });
@@ -190,7 +190,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> DemoTenantIsolated([FromBody] DemoTenantIsolatedInput input)
     {
-        await _checker.CheckAsync("Demo_TenantIsolated", new OperationRateLimitContext
+        await _checker.CheckAsync("Demo_TenantIsolated", new OperationRateLimitingContext
         {
             Parameter = input.Key
         });
@@ -205,7 +205,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> GetStatus(string policyName, [FromQuery] string? parameter = null)
     {
-        var context = new OperationRateLimitContext { Parameter = parameter };
+        var context = new OperationRateLimitingContext { Parameter = parameter };
         var status = await _checker.GetStatusAsync(policyName, context);
 
         return Ok(new
@@ -225,7 +225,7 @@ public class RateLimitDemoController : AbpController
     [AllowAnonymous]
     public async Task<IActionResult> Reset(string policyName, [FromQuery] string? parameter = null)
     {
-        var context = new OperationRateLimitContext { Parameter = parameter };
+        var context = new OperationRateLimitingContext { Parameter = parameter };
         await _checker.ResetAsync(policyName, context);
 
         return Ok(new { success = true, message = $"Policy '{policyName}' reset" });
@@ -265,7 +265,7 @@ public class RateLimitDemoController : AbpController
         {
             try
             {
-                await _checker.ResetAsync(policyName, new OperationRateLimitContext { Parameter = parameter });
+                await _checker.ResetAsync(policyName, new OperationRateLimitingContext { Parameter = parameter });
             }
             catch
             {

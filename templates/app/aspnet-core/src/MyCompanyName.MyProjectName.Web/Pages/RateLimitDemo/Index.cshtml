@@ -267,7 +267,7 @@
                         <strong>Partition:</strong> <code>PartitionByParameter</code><br/>
                         <strong>Rule:</strong> 2 requests per email within <code>20 seconds</code><br/>
                         <strong>Custom error code:</strong> <code>App:Feedback:RateLimited</code><br/>
-                        <strong>Note:</strong> Default error code is <code>Volo.Abp.OperationRateLimit:010001</code>. This policy uses <code>WithErrorCode()</code> to set a custom code so the frontend can handle it differently.
+                        <strong>Note:</strong> Default error code is <code>Volo.Abp.OperationRateLimiting:010001</code>. This policy uses <code>WithErrorCode()</code> to set a custom code so the frontend can handle it differently.
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>

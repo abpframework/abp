@@ -39,7 +39,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.OperationRateLimit;
+using Volo.Abp.OperationRateLimiting;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName.Web;
@@ -56,7 +56,7 @@ namespace MyCompanyName.MyProjectName.Web;
     typeof(AbpTenantManagementWebModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpOperationRateLimitModule)
+    typeof(AbpOperationRateLimitingModule)
     )]
 public class MyProjectNameWebModule : AbpModule
 {
@@ -116,12 +116,12 @@ public class MyProjectNameWebModule : AbpModule
 
         context.Services.AddMapperlyObjectMapper<MyProjectNameWebModule>();
 
-        ConfigureOperationRateLimit();
+        ConfigureOperationRateLimiting();
     }
 
-    private void ConfigureOperationRateLimit()
+    private void ConfigureOperationRateLimiting()
     {
-        Configure<AbpOperationRateLimitOptions>(options =>
+        Configure<AbpOperationRateLimitingOptions>(options =>
         {
             // Demo 1: Public - rate limit by parameter (e.g. phone/email), no auth required
             options.AddPolicy("Demo_SendSmsCode", policy =>
