@@ -205,7 +205,9 @@ policy.WithFixedWindow(TimeSpan.FromHours(1), maxCount: 100)
 
 ## Multi-Tenancy
 
-By default, rate limit counters are **shared across all tenants**. You can enable tenant isolation for a rule by calling `WithMultiTenancy()`:
+By default, partition keys do not include tenant information — for partition types like `PartitionByParameter`, `PartitionByCurrentUser`, `PartitionByClientIp`, etc., counters are shared across tenants unless you call `WithMultiTenancy()`. Note that `PartitionByCurrentTenant()` is inherently per-tenant since the partition key is the tenant ID itself, and `PartitionByClientIp()` is typically kept global since the same IP should share a counter regardless of tenant.
+
+You can enable tenant isolation for a rule by calling `WithMultiTenancy()`:
 
 ````csharp
 policy.AddRule(rule => rule
@@ -326,7 +328,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ### Ban Policy (maxCount: 0)
 
-Setting `maxCount` to `0` creates a ban policy that blocks all requests for the specified duration:
+Setting `maxCount` to `0` creates a ban policy that permanently denies all requests regardless of the window duration. The `RetryAfter` value will be `null` since there is no window to wait for:
 
 ````csharp
 options.AddPolicy("BlockedUser", policy =>

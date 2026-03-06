@@ -99,10 +99,22 @@ public class FixedWindowOperationRateLimitingRule : IOperationRateLimitingRule
                     $"Phone number is required for policy '{PolicyName}' (PartitionByPhoneNumber). Provide it via context.Parameter or ensure the user has a phone number."),
 
             OperationRateLimitingPartitionType.Custom =>
-                await Definition.CustomPartitionKeyResolver!(context),
+                await ResolveCustomPartitionKeyAsync(context),
 
             _ => throw new AbpException($"Unknown partition type: {Definition.PartitionType}")
         };
+    }
+
+    protected virtual async Task<string> ResolveCustomPartitionKeyAsync(OperationRateLimitingContext context)
+    {
+        var key = await Definition.CustomPartitionKeyResolver!(context);
+        if (string.IsNullOrEmpty(key))
+        {
+            throw new AbpException(
+                $"Custom partition key resolver returned null or empty for policy '{PolicyName}'. " +
+                "The resolver must return a non-empty string.");
+        }
+        return key;
     }
 
     protected virtual string BuildStoreKey(string partitionKey)

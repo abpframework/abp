@@ -161,6 +161,13 @@ public class AbpOperationRateLimitingTestModule : AbpModule
                       .PartitionBy(ctx => Task.FromResult($"action:{ctx.Parameter}"));
             });
 
+            // Custom resolver returning null - should throw
+            options.AddPolicy("TestCustomResolverNull", policy =>
+            {
+                policy.WithFixedWindow(TimeSpan.FromHours(1), maxCount: 2)
+                      .PartitionBy(ctx => Task.FromResult<string>(null!));
+            });
+
             // Multi-tenant: ByParameter with tenant isolation - same param, different tenants = different counters
             options.AddPolicy("TestMultiTenantByParameter", policy =>
             {

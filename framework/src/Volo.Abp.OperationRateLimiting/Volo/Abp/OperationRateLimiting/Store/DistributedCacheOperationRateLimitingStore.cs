@@ -38,7 +38,7 @@ public class DistributedCacheOperationRateLimitingStore : IOperationRateLimiting
                 IsAllowed = false,
                 CurrentCount = 0,
                 MaxCount = maxCount,
-                RetryAfter = duration
+                RetryAfter = null
             };
         }
 
@@ -111,7 +111,7 @@ public class DistributedCacheOperationRateLimitingStore : IOperationRateLimiting
                 IsAllowed = false,
                 CurrentCount = 0,
                 MaxCount = maxCount,
-                RetryAfter = duration
+                RetryAfter = null
             };
         }
 

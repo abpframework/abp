@@ -653,6 +653,7 @@ public class OperationRateLimitingChecker_Tests : OperationRateLimitingTestBase
 
         exception.Result.IsAllowed.ShouldBeFalse();
         exception.Result.MaxCount.ShouldBe(0);
+        exception.Result.RetryAfter.ShouldBeNull();
         exception.HttpStatusCode.ShouldBe(429);
     }
 
@@ -674,6 +675,7 @@ public class OperationRateLimitingChecker_Tests : OperationRateLimitingTestBase
         status.IsAllowed.ShouldBeFalse();
         status.MaxCount.ShouldBe(0);
         status.RemainingCount.ShouldBe(0);
+        status.RetryAfter.ShouldBeNull();
     }
 
     [Fact]
@@ -699,6 +701,19 @@ public class OperationRateLimitingChecker_Tests : OperationRateLimitingTestBase
         // param2 should still be allowed
         await _checker.CheckAsync("TestCustomResolver", ctx2);
         (await _checker.IsAllowedAsync("TestCustomResolver", ctx2)).ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_Custom_Resolver_Returns_Null()
+    {
+        var context = new OperationRateLimitingContext { Parameter = "test" };
+
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _checker.CheckAsync("TestCustomResolverNull", context);
+        });
+
+        exception.Message.ShouldContain("Custom partition key resolver returned null or empty");
     }
 
     [Fact]

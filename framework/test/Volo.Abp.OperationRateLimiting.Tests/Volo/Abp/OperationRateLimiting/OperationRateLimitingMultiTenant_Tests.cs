@@ -59,7 +59,7 @@ public class OperationRateLimitingMultiTenant_Tests : OperationRateLimitingTestB
     {
         // ClientIp counters are global: requests from the same IP are counted together
         // regardless of which tenant context is active.
-        // The NullClientIpAddressProvider returns null, which resolves to "unknown" in the rule.
+        // The mock IWebClientInfoProvider returns "127.0.0.1" for all requests.
 
         using (_currentTenant.Change(TenantA))
         {

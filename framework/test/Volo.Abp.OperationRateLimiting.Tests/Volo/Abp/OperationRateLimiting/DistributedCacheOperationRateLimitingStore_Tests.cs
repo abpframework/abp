@@ -118,7 +118,7 @@ public class DistributedCacheOperationRateLimitingStore_Tests : OperationRateLim
         result.IsAllowed.ShouldBeFalse();
         result.CurrentCount.ShouldBe(0);
         result.MaxCount.ShouldBe(0);
-        result.RetryAfter.ShouldNotBeNull();
+        result.RetryAfter.ShouldBeNull();
     }
 
     [Fact]
@@ -130,6 +130,6 @@ public class DistributedCacheOperationRateLimitingStore_Tests : OperationRateLim
         result.IsAllowed.ShouldBeFalse();
         result.CurrentCount.ShouldBe(0);
         result.MaxCount.ShouldBe(0);
-        result.RetryAfter.ShouldNotBeNull();
+        result.RetryAfter.ShouldBeNull();
     }
 }
