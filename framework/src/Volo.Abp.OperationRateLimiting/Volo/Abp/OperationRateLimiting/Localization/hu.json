@@ -1,0 +1,17 @@
+{
+  "culture": "hu",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "A műveleti sebességkorlát túllépve. Újra próbálkozhat {RetryAfter} múlva.",
+    "RetryAfter:Years": "{0} év",
+    "RetryAfter:YearsAndMonths": "{0} év és {1} hónap",
+    "RetryAfter:Months": "{0} hónap",
+    "RetryAfter:MonthsAndDays": "{0} hónap és {1} nap",
+    "RetryAfter:Days": "{0} nap",
+    "RetryAfter:DaysAndHours": "{0} nap és {1} óra",
+    "RetryAfter:Hours": "{0} óra",
+    "RetryAfter:HoursAndMinutes": "{0} óra és {1} perc",
+    "RetryAfter:Minutes": "{0} perc",
+    "RetryAfter:MinutesAndSeconds": "{0} perc és {1} másodperc",
+    "RetryAfter:Seconds": "{0} másodperc"
+  }
+}

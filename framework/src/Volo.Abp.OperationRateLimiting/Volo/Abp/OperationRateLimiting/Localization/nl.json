@@ -1,0 +1,17 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "Bewerkingssnelheidslimiet overschreden. U kunt het opnieuw proberen na {RetryAfter}.",
+    "RetryAfter:Years": "{0} jaar",
+    "RetryAfter:YearsAndMonths": "{0} jaar en {1} maand(en)",
+    "RetryAfter:Months": "{0} maand(en)",
+    "RetryAfter:MonthsAndDays": "{0} maand(en) en {1} dag(en)",
+    "RetryAfter:Days": "{0} dag(en)",
+    "RetryAfter:DaysAndHours": "{0} dag(en) en {1} uur",
+    "RetryAfter:Hours": "{0} uur",
+    "RetryAfter:HoursAndMinutes": "{0} uur en {1} minuut/minuten",
+    "RetryAfter:Minutes": "{0} minuut/minuten",
+    "RetryAfter:MinutesAndSeconds": "{0} minuut/minuten en {1} seconde(n)",
+    "RetryAfter:Seconds": "{0} seconde(n)"
+  }
+}

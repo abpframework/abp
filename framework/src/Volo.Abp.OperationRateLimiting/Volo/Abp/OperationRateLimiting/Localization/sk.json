@@ -1,0 +1,17 @@
+{
+  "culture": "sk",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "Prekročený limit rýchlosti operácie. Môžete to skúsiť znova po {RetryAfter}.",
+    "RetryAfter:Years": "{0} rok/rokov",
+    "RetryAfter:YearsAndMonths": "{0} rok/rokov a {1} mesiac/mesiacov",
+    "RetryAfter:Months": "{0} mesiac/mesiacov",
+    "RetryAfter:MonthsAndDays": "{0} mesiac/mesiacov a {1} deň/dní",
+    "RetryAfter:Days": "{0} deň/dní",
+    "RetryAfter:DaysAndHours": "{0} deň/dní a {1} hodina/hodín",
+    "RetryAfter:Hours": "{0} hodina/hodín",
+    "RetryAfter:HoursAndMinutes": "{0} hodina/hodín a {1} minúta/minút",
+    "RetryAfter:Minutes": "{0} minúta/minút",
+    "RetryAfter:MinutesAndSeconds": "{0} minúta/minút a {1} sekunda/sekúnd",
+    "RetryAfter:Seconds": "{0} sekunda/sekúnd"
+  }
+}

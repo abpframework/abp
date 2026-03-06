@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.ClientIpAddress;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Modularity;
@@ -12,6 +11,5 @@ public class AbpAspNetCoreAbstractionsModule : AbpModule
     {
         context.Services.AddSingleton<IWebContentFileProvider, NullWebContentFileProvider>();
         context.Services.AddSingleton<IWebClientInfoProvider, NullWebClientInfoProvider>();
-        context.Services.AddTransient<IClientIpAddressProvider, NullClientIpAddressProvider>();
     }
 }

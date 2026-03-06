@@ -1,0 +1,17 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "محدودیت نرخ عملیات فراتر رفته است. می‌توانید بعد از {RetryAfter} دوباره تلاش کنید.",
+    "RetryAfter:Years": "{0} سال",
+    "RetryAfter:YearsAndMonths": "{0} سال و {1} ماه",
+    "RetryAfter:Months": "{0} ماه",
+    "RetryAfter:MonthsAndDays": "{0} ماه و {1} روز",
+    "RetryAfter:Days": "{0} روز",
+    "RetryAfter:DaysAndHours": "{0} روز و {1} ساعت",
+    "RetryAfter:Hours": "{0} ساعت",
+    "RetryAfter:HoursAndMinutes": "{0} ساعت و {1} دقیقه",
+    "RetryAfter:Minutes": "{0} دقیقه",
+    "RetryAfter:MinutesAndSeconds": "{0} دقیقه و {1} ثانیه",
+    "RetryAfter:Seconds": "{0} ثانیه"
+  }
+}

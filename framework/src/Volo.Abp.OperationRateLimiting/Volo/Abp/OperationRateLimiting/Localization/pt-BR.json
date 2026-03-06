@@ -1,0 +1,17 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "Limite de taxa de operação excedido. Você pode tentar novamente após {RetryAfter}.",
+    "RetryAfter:Years": "{0} ano(s)",
+    "RetryAfter:YearsAndMonths": "{0} ano(s) e {1} mês/meses",
+    "RetryAfter:Months": "{0} mês/meses",
+    "RetryAfter:MonthsAndDays": "{0} mês/meses e {1} dia(s)",
+    "RetryAfter:Days": "{0} dia(s)",
+    "RetryAfter:DaysAndHours": "{0} dia(s) e {1} hora(s)",
+    "RetryAfter:Hours": "{0} hora(s)",
+    "RetryAfter:HoursAndMinutes": "{0} hora(s) e {1} minuto(s)",
+    "RetryAfter:Minutes": "{0} minuto(s)",
+    "RetryAfter:MinutesAndSeconds": "{0} minuto(s) e {1} segundo(s)",
+    "RetryAfter:Seconds": "{0} segundo(s)"
+  }
+}

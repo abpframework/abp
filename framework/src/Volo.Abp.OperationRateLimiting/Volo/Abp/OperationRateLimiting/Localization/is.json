@@ -1,0 +1,17 @@
+{
+  "culture": "is",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "Aðgerðarhraðatakmörk náð. Þú getur reynt aftur eftir {RetryAfter}.",
+    "RetryAfter:Years": "{0} ár",
+    "RetryAfter:YearsAndMonths": "{0} ár og {1} mánuð(ir)",
+    "RetryAfter:Months": "{0} mánuð(ur/ir)",
+    "RetryAfter:MonthsAndDays": "{0} mánuð(ur/ir) og {1} dag(ur/ar)",
+    "RetryAfter:Days": "{0} dag(ur/ar)",
+    "RetryAfter:DaysAndHours": "{0} dag(ur/ar) og {1} klukkustund(ir)",
+    "RetryAfter:Hours": "{0} klukkustund(ir)",
+    "RetryAfter:HoursAndMinutes": "{0} klukkustund(ir) og {1} mínúta/úr",
+    "RetryAfter:Minutes": "{0} mínúta/úr",
+    "RetryAfter:MinutesAndSeconds": "{0} mínúta/úr og {1} sekúnda/úr",
+    "RetryAfter:Seconds": "{0} sekúnda/úr"
+  }
+}
