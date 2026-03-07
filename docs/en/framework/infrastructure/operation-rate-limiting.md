@@ -64,8 +64,7 @@ public class SmsAppService : ApplicationService
 
     public async Task SendCodeAsync(string phoneNumber)
     {
-        await _rateLimitChecker.CheckAsync("SendSmsCode",
-            new OperationRateLimitingContext { Parameter = phoneNumber });
+        await _rateLimitChecker.CheckAsync("SendSmsCode", phoneNumber);
 
         // If we reach here, the limit was not exceeded.
         // Send the SMS code...
@@ -75,6 +74,7 @@ public class SmsAppService : ApplicationService
 
 * `CheckAsync` increments the counter and throws `AbpOperationRateLimitingException` (HTTP 429) if the limit is exceeded.
 * Each phone number has its own counter because we used `PartitionByParameter()`.
+* Passing `phoneNumber` directly is a shortcut for `new OperationRateLimitingContext { Parameter = phoneNumber }`. Extension methods are provided for all four methods (`CheckAsync`, `IsAllowedAsync`, `GetStatusAsync`, `ResetAsync`) when you only need to pass a `parameter` string.
 
 That's the basic usage. The following sections explain each concept in detail.
 
