@@ -106,7 +106,7 @@ The full [Scripting API](scripting-api.md) (`db` object) is available for queryi
   "route": "/api/custom/products/stats",
   "method": "GET",
   "requireAuthentication": false,
-  "javascript": "var totalCount = await db.count('LowCodeDemo.Products.Product');\nvar productTable = await db.query('LowCodeDemo.Products.Product');\nvar avgPrice = totalCount > 0 ? await productTable.average(p => p.Price) : 0;\nreturn ok({ totalProducts: totalCount, averagePrice: avgPrice });"
+  "javascript": "var totalCount = await db.count('LowCodeDemo.Products.Product');\nvar avgPrice = totalCount > 0 ? await db.query('LowCodeDemo.Products.Product').average(p => p.Price) : 0;\nreturn ok({ totalProducts: totalCount, averagePrice: avgPrice });"
 }
 ```
 
@@ -118,7 +118,7 @@ The full [Scripting API](scripting-api.md) (`db` object) is available for queryi
   "route": "/api/custom/customers/search",
   "method": "GET",
   "requireAuthentication": true,
-  "javascript": "var searchTerm = query.q || '';\nvar customerTable = await db.query('LowCodeDemo.Customers.Customer');\nvar customers = await customerTable\n  .where(c => c.Name.toLowerCase().includes(searchTerm.toLowerCase()))\n  .take(10)\n  .toList();\nreturn ok(customers.map(c => ({ id: c.Id, name: c.Name, email: c.EmailAddress })));"
+  "javascript": "var searchTerm = query.q || '';\nvar customers = await db.query('LowCodeDemo.Customers.Customer')\n  .where(c => c.Name.toLowerCase().includes(searchTerm.toLowerCase()))\n  .take(10)\n  .toList();\nreturn ok(customers.map(c => ({ id: c.Id, name: c.Name, email: c.EmailAddress })));"
 }
 ```
 

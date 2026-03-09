@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-layout-descriptor.schema.json",
+  "title": "FormLayoutDescriptor",
+  "description": "Describes the visual layout of a form (tabs > groups > field placements)",
+  "type": "object",
+  "properties": {
+    "tabs": {
+      "type": "array",
+      "description": "Ordered list of tabs in the form",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this tab",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Display title for the tab",
+            "minLength": 1
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether this is the default tab (cannot be deleted, receives orphaned fields)",
+            "default": false
+          },
+          "groups": {
+            "type": "array",
+            "description": "Ordered list of groups within this tab",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for this group",
+                  "minLength": 1
+                },
+                "title": {
+                  "type": ["string", "null"],
+                  "description": "Optional display title for the group"
+                },
+                "isDefault": {
+                  "type": "boolean",
+                  "description": "Whether this is the default group (cannot be deleted, receives orphaned fields)",
+                  "default": false
+                },
+                "rows": {
+                  "type": "array",
+                  "description": "Ordered list of layout rows; each row contains one or more cells (fields placed side-by-side)",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cells": {
+                        "type": "array",
+                        "description": "Fields placed side-by-side in this row (total colSpan should not exceed 4)",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "fieldId": {
+                              "type": "string",
+                              "description": "Reference to a field id in the form's fields array",
+                              "minLength": 1
+                            },
+                            "colSpan": {
+                              "type": "integer",
+                              "description": "Number of grid columns this field spans (1-4)",
+                              "minimum": 1,
+                              "maximum": 4,
+                              "default": 4
+                            },
+                            "colStart": {
+                              "type": "integer",
+                              "description": "Starting grid column (1-4). Omit or null to auto-place after the previous cell.",
+                              "minimum": 1,
+                              "maximum": 4
+                            }
+                          },
+                          "required": ["fieldId"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": ["cells"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["id", "rows"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "title", "groups"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["tabs"],
+  "additionalProperties": false
+}

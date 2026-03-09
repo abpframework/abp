@@ -20,6 +20,24 @@
       "description": "Access level for managing this relation from the referenced entity side. When set to 'view' or 'edit', the referenced entity can see/manage items that reference it.",
       "enum": ["none", "view", "edit"],
       "default": "none"
+    },
+    "dependsOn": {
+      "type": "object",
+      "description": "Cascading dependency: filter this FK's lookup by the value of another FK property on the same entity.",
+      "properties": {
+        "propertyName": {
+          "type": "string",
+          "description": "The property name on the owning entity whose value provides the filter (e.g. 'CountryId' on Author)",
+          "minLength": 1
+        },
+        "filterPropertyName": {
+          "type": "string",
+          "description": "The property name on the target (lookup) entity to filter by (e.g. 'CountryId' on City)",
+          "minLength": 1
+        }
+      },
+      "required": ["propertyName", "filterPropertyName"],
+      "additionalProperties": false
     }
   },
   "required": ["entityName"],

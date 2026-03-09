@@ -1,0 +1,18 @@
+{
+  "culture": "el",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "Υπέρβαση ορίου ρυθμού λειτουργίας. Μπορείτε να δοκιμάσετε ξανά μετά από {RetryAfter}.",
+    "RetryAfter:Years": "{0} έτος/η",
+    "RetryAfter:YearsAndMonths": "{0} έτος/η και {1} μήνας/ες",
+    "RetryAfter:Months": "{0} μήνας/ες",
+    "RetryAfter:MonthsAndDays": "{0} μήνας/ες και {1} ημέρα/ες",
+    "RetryAfter:Days": "{0} ημέρα/ες",
+    "RetryAfter:DaysAndHours": "{0} ημέρα/ες και {1} ώρα/ες",
+    "RetryAfter:Hours": "{0} ώρα/ες",
+    "RetryAfter:HoursAndMinutes": "{0} ώρα/ες και {1} λεπτό/ά",
+    "RetryAfter:Minutes": "{0} λεπτό/ά",
+    "RetryAfter:MinutesAndSeconds": "{0} λεπτό/ά και {1} δευτερόλεπτο/α",
+    "RetryAfter:Seconds": "{0} δευτερόλεπτο/α",
+    "Volo.Abp.OperationRateLimiting:010002": "Υπερβλήθηκε το όριο συχνότητας λειτουργίας. Αυτό το αίτημα απορρίπτεται μόνιμα."
+  }
+}

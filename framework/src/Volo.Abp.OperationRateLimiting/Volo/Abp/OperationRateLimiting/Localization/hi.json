@@ -1,0 +1,18 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Volo.Abp.OperationRateLimiting:010001": "ऑपरेशन दर सीमा पार हो गई। आप {RetryAfter} के बाद पुनः प्रयास कर सकते हैं।",
+    "RetryAfter:Years": "{0} वर्ष",
+    "RetryAfter:YearsAndMonths": "{0} वर्ष और {1} महीना/महीने",
+    "RetryAfter:Months": "{0} महीना/महीने",
+    "RetryAfter:MonthsAndDays": "{0} महीना/महीने और {1} दिन",
+    "RetryAfter:Days": "{0} दिन",
+    "RetryAfter:DaysAndHours": "{0} दिन और {1} घंटा/घंटे",
+    "RetryAfter:Hours": "{0} घंटा/घंटे",
+    "RetryAfter:HoursAndMinutes": "{0} घंटा/घंटे और {1} मिनट",
+    "RetryAfter:Minutes": "{0} मिनट",
+    "RetryAfter:MinutesAndSeconds": "{0} मिनट और {1} सेकंड",
+    "RetryAfter:Seconds": "{0} सेकंड",
+    "Volo.Abp.OperationRateLimiting:010002": "ऑपरेशन दर सीमा पार हो गई। यह अनुरोध स्थायी रूप से अस्वीकृत है।"
+  }
+}

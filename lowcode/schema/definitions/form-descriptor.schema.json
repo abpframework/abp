@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-descriptor.schema.json",
+  "title": "FormDescriptor",
+  "description": "Describes a named form definition bound to an entity",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for the form",
+      "minLength": 1
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Full name of the entity this form is bound to (e.g., 'Namespace.EntityName')",
+      "minLength": 1
+    },
+    "fields": {
+      "type": "array",
+      "description": "Flat list of all field definitions in this form",
+      "items": {
+        "$ref": "form-field-descriptor.schema.json"
+      }
+    },
+    "layout": {
+      "$ref": "form-layout-descriptor.schema.json"
+    },
+    "rules": {
+      "type": "array",
+      "description": "Conditional rules for field/group visibility and enabled state",
+      "items": {
+        "$ref": "form-rule-descriptor.schema.json"
+      }
+    }
+  },
+  "required": ["name", "entityName", "fields", "layout"],
+  "additionalProperties": false
+}

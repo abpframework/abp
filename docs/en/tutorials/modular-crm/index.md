@@ -15,6 +15,13 @@
 ```
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Next": {

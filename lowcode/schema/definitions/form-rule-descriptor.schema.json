@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-rule-descriptor.schema.json",
+  "title": "FormRuleDescriptor",
+  "description": "Describes a conditional rule with one or more actions that execute when the condition is met",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this rule",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for this rule (optional)"
+    },
+    "condition": {
+      "type": "object",
+      "description": "The condition that triggers this rule",
+      "properties": {
+        "fieldId": {
+          "type": "string",
+          "description": "The field whose value is evaluated",
+          "minLength": 1
+        },
+        "operator": {
+          "type": "string",
+          "enum": ["equals", "notEquals", "isEmpty", "isNotEmpty"],
+          "description": "Comparison operator"
+        },
+        "value": {
+          "description": "The value to compare against (not used for isEmpty/isNotEmpty)"
+        }
+      },
+      "required": ["fieldId", "operator"],
+      "additionalProperties": false
+    },
+    "actions": {
+      "type": "array",
+      "description": "Actions to perform when condition is met (executed in order)",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["hide", "show", "disable", "enable", "setValue"],
+            "description": "The action type"
+          },
+          "targetType": {
+            "type": "string",
+            "enum": ["field", "group"],
+            "description": "Whether the target is a field or a group"
+          },
+          "targetId": {
+            "type": "string",
+            "description": "The id of the target field or group",
+            "minLength": 1
+          },
+          "value": {
+            "description": "The value to set (only for setValue action)"
+          }
+        },
+        "required": ["type", "targetType", "targetId"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "condition", "actions"],
+  "additionalProperties": false
+}

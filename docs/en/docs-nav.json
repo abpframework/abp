@@ -808,6 +808,10 @@
               "path": "framework/infrastructure/object-to-object-mapping.md"
             },
             {
+              "text": "Operation Rate Limiting",
+              "path": "framework/infrastructure/operation-rate-limiting.md"
+            },
+            {
               "text": "Settings",
               "path": "framework/infrastructure/settings.md"
             },
