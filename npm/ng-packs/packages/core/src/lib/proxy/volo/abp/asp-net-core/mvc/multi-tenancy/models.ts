@@ -20,5 +20,5 @@ export enum TenantUserSharingStrategy {
 
 export interface MultiTenancyInfoDto {
   isEnabled: boolean;
-  userSharingStrategy: TenantUserSharingStrategy;
+  userSharingStrategy?: TenantUserSharingStrategy;
 }
