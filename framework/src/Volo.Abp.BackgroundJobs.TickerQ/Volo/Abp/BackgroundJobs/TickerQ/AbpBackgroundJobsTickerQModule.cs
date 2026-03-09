@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,8 +66,8 @@ public class AbpBackgroundJobsTickerQModule : AbpModule
             {
                 var jobExecuter = serviceProvider.GetRequiredService<IBackgroundJobExecuter>();
                 var args = await TickerRequestProvider.GetRequestAsync<TArgs>(context, cancellationToken);
-                var jobType = options.GetJob(typeof(TArgs)).JobType;
-                var jobExecutionContext = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: cancellationToken);
+                var jobConfiguration = options.GetJob(typeof(TArgs));
+                var jobExecutionContext = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType ?? typeof(object), args!, cancellationToken: cancellationToken, jobName: jobConfiguration.JobName);
                 await jobExecuter.ExecuteAsync(jobExecutionContext);
             }
         };

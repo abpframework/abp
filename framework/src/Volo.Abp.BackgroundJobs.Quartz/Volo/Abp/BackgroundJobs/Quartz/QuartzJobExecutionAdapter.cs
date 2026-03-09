@@ -39,8 +39,8 @@ public class QuartzJobExecutionAdapter<TArgs> : IJob
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             var args = JsonSerializer.Deserialize<TArgs>(context.JobDetail.JobDataMap.GetString(nameof(TArgs))!);
-            var jobType = Options.GetJob(typeof(TArgs)).JobType;
-            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: context.CancellationToken);
+            var jobConfiguration = Options.GetJob(typeof(TArgs));
+            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType!, args!, cancellationToken: context.CancellationToken, jobName: jobConfiguration.JobName);
             try
             {
                 await JobExecuter.ExecuteAsync(jobContext);
@@ -97,7 +97,7 @@ public class QuartzJobExecutionAdapter : IJob
             var serializedArgs = context.JobDetail.JobDataMap.GetString(JobArgsKey)!;
             var jobConfiguration = Options.GetJob(jobName);
             var args = JsonSerializer.Deserialize(jobConfiguration.ArgsType, serializedArgs);
-            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType, args, cancellationToken: context.CancellationToken);
+            var jobContext = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType ?? typeof(object), args, cancellationToken: context.CancellationToken, jobName: jobName);
             try
             {
                 await JobExecuter.ExecuteAsync(jobContext);

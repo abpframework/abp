@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,9 +65,10 @@ public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroun
                         var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
                         var context = new JobExecutionContext(
                             workerContext.ServiceProvider,
-                            jobConfiguration.JobType,
+                            jobConfiguration.JobType ?? typeof(object),
                             jobArgs,
-                            workerContext.CancellationToken);
+                            workerContext.CancellationToken,
+                            jobName: jobInfo.JobName);
 
                         try
                         {

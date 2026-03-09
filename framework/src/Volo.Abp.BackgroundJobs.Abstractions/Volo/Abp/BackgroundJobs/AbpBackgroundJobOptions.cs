@@ -1,13 +1,15 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.BackgroundJobs;
 
 public class AbpBackgroundJobOptions
 {
     private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
-    private readonly Dictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
+    private readonly ConcurrentDictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
 
     /// <summary>
     /// Default: true.
@@ -23,7 +25,7 @@ public class AbpBackgroundJobOptions
     public AbpBackgroundJobOptions()
     {
         _jobConfigurationsByArgsType = new Dictionary<Type, BackgroundJobConfiguration>();
-        _jobConfigurationsByName = new Dictionary<string, BackgroundJobConfiguration>();
+        _jobConfigurationsByName = new ConcurrentDictionary<string, BackgroundJobConfiguration>();
         GetBackgroundJobName = BackgroundJobNameAttribute.GetName;
     }
 
@@ -46,7 +48,7 @@ public class AbpBackgroundJobOptions
 
     public BackgroundJobConfiguration GetJob(string name)
     {
-        var jobConfiguration = _jobConfigurationsByName.GetOrDefault(name);
+        var jobConfiguration = GetJobOrNull(name);
 
         if (jobConfiguration == null)
         {
@@ -54,6 +56,11 @@ public class AbpBackgroundJobOptions
         }
 
         return jobConfiguration;
+    }
+
+    public BackgroundJobConfiguration? GetJobOrNull(string name)
+    {
+        return _jobConfigurationsByName.GetValueOrDefault(name);
     }
 
     public IReadOnlyList<BackgroundJobConfiguration> GetJobs()
@@ -75,5 +82,30 @@ public class AbpBackgroundJobOptions
     {
         _jobConfigurationsByArgsType[jobConfiguration.ArgsType] = jobConfiguration;
         _jobConfigurationsByName[jobConfiguration.JobName] = jobConfiguration;
+    }
+
+    public void AddDynamicJob(string jobName, Func<DynamicBackgroundJobContext, Task> handler)
+    {
+        var config = new BackgroundJobConfiguration(jobName, handler);
+        _jobConfigurationsByName[jobName] = config;
+    }
+
+    public void AddDynamicJob(string jobName, Action<DynamicBackgroundJobContext> handler)
+    {
+        AddDynamicJob(jobName, context =>
+        {
+            handler(context);
+            return Task.CompletedTask;
+        });
+    }
+
+    public bool RemoveDynamicJob(string name)
+    {
+        if (_jobConfigurationsByName.TryGetValue(name, out var config) && config.IsDynamic)
+        {
+            return _jobConfigurationsByName.TryRemove(name, out _);
+        }
+
+        return false;
     }
 }

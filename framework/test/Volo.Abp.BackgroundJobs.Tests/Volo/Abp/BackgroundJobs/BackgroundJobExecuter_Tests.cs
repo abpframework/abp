@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
@@ -135,5 +136,57 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
 
         //Assert
         asyncJobObject.Canceled.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Should_Execute_Dynamic_Handler()
+    {
+        var tracker = GetRequiredService<DynamicJobExecutionTracker>();
+        tracker.ExecutedArgs.ShouldBeEmpty();
+
+        var args = new Dictionary<string, object> { ["Value"] = "dynamic-42" };
+
+        await _backgroundJobExecuter.ExecuteAsync(
+            new JobExecutionContext(
+                ServiceProvider,
+                typeof(object),
+                args,
+                jobName: "TestDynamicJob"
+            )
+        );
+
+        tracker.ExecutedArgs.Count.ShouldBe(1);
+        tracker.ExecutedArgs[0]["Value"].ShouldBe("dynamic-42");
+    }
+
+    [Fact]
+    public async Task Should_Execute_Dynamic_Handler_Registered_At_Runtime()
+    {
+        var handlerProvider = GetRequiredService<IDynamicBackgroundJobHandlerProvider>();
+        var executedValues = new List<string>();
+
+        handlerProvider.Register("RuntimeDynamicJob", context =>
+        {
+            executedValues.Add(context.Args["Message"]?.ToString()!);
+            return Task.CompletedTask;
+        });
+
+        var args = new Dictionary<string, object> { ["Message"] = "hello-runtime" };
+
+        await _backgroundJobExecuter.ExecuteAsync(
+            new JobExecutionContext(
+                ServiceProvider,
+                typeof(object),
+                args,
+                jobName: "RuntimeDynamicJob"
+            )
+        );
+
+        executedValues.Count.ShouldBe(1);
+        executedValues[0].ShouldBe("hello-runtime");
+
+        handlerProvider.IsRegistered("RuntimeDynamicJob").ShouldBeTrue();
+        handlerProvider.Unregister("RuntimeDynamicJob").ShouldBeTrue();
+        handlerProvider.IsRegistered("RuntimeDynamicJob").ShouldBeFalse();
     }
 }

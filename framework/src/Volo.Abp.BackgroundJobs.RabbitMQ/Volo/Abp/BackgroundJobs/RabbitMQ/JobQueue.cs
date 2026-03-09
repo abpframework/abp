@@ -214,8 +214,9 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
         {
             var context = new JobExecutionContext(
                 scope.ServiceProvider,
-                JobConfiguration.JobType,
-                Serializer.Deserialize(ea.Body.ToArray(), typeof(TArgs))
+                JobConfiguration.JobType ?? typeof(object),
+                Serializer.Deserialize(ea.Body.ToArray(), typeof(TArgs)),
+                jobName: JobConfiguration.JobName
             );
 
             try
