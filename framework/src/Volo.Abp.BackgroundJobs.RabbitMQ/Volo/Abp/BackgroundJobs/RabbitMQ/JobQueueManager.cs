@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,6 +78,33 @@ public class JobQueueManager : IJobQueueManager, ISingletonDependency
             JobQueues.TryAdd(jobConfiguration.JobName, jobQueue);
 
             return (IJobQueue<TArgs>)jobQueue;
+        }
+    }
+
+    public async Task<IJobQueue> GetAsync(string jobName)
+    {
+        if (JobQueues.TryGetValue(jobName, out var jobQueue))
+        {
+            return (IJobQueue)jobQueue;
+        }
+
+        using (await SyncSemaphore.LockAsync())
+        {
+            if (JobQueues.TryGetValue(jobName, out jobQueue))
+            {
+                return (IJobQueue)jobQueue;
+            }
+
+            var jobConfiguration = Options.GetJob(jobName);
+
+            jobQueue = (IRunnable)ServiceProvider
+                .GetRequiredService(typeof(IJobQueue<>).MakeGenericType(jobConfiguration.ArgsType));
+
+            await jobQueue.StartAsync();
+
+            JobQueues.TryAdd(jobName, jobQueue);
+
+            return (IJobQueue)jobQueue;
         }
     }
 }

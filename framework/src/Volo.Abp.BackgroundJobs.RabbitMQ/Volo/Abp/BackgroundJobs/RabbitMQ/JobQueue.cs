@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
@@ -73,6 +73,14 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
                    AbpRabbitMqBackgroundJobOptions.DefaultDelayedQueueNamePrefix + JobConfiguration.JobName,
                    prefetchCount: AbpRabbitMqBackgroundJobOptions.PrefetchCount
                );
+    }
+
+    async Task<string?> IJobQueue.EnqueueAsync(
+        object args,
+        BackgroundJobPriority priority,
+        TimeSpan? delay)
+    {
+        return await EnqueueAsync((TArgs)args, priority, delay);
     }
 
     public virtual async Task<string?> EnqueueAsync(

@@ -21,4 +21,19 @@ public interface IBackgroundJobManager
         BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null
     );
+
+    /// <summary>
+    /// Enqueues a job to be executed by its name.
+    /// </summary>
+    /// <param name="jobName">Name of the background job.</param>
+    /// <param name="args">Job arguments.</param>
+    /// <param name="priority">Job priority.</param>
+    /// <param name="delay">Job delay (wait duration before first try).</param>
+    /// <returns>Unique identifier of a background job.</returns>
+    Task<string> EnqueueAsync(
+        string jobName,
+        object args,
+        BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+        TimeSpan? delay = null
+    );
 }

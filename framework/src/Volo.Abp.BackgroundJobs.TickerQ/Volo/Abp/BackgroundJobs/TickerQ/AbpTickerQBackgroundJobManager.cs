@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using TickerQ.Utilities;
@@ -11,6 +12,8 @@ namespace Volo.Abp.BackgroundJobs.TickerQ;
 [Dependency(ReplaceServices = true)]
 public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
+    private readonly static MethodInfo CreateTickerRequestMethod = typeof(TickerHelper).GetMethod(nameof(TickerHelper.CreateTickerRequest), BindingFlags.Public | BindingFlags.Static)!;
+    
     protected ITimeTickerManager<TimeTickerEntity> TimeTickerManager { get; }
     protected AbpBackgroundJobOptions Options { get; }
     protected AbpBackgroundJobsTickerQOptions TickerQOptions { get; }
@@ -28,12 +31,23 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
         var job = Options.GetJob(typeof(TArgs));
+        return await EnqueueAsync(job, args!, priority, delay);
+    }
+
+    public virtual async Task<string> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+    {
+        var job = Options.GetJob(jobName);
+        return await EnqueueAsync(job, args, priority, delay);
+    }
+
+    protected virtual async Task<string> EnqueueAsync(BackgroundJobConfiguration job, object args, BackgroundJobPriority priority, TimeSpan? delay)
+    {
         var timeTicker = new TimeTickerEntity
         {
             Id = Guid.NewGuid(),
             Function = job.JobName,
             ExecutionTime = delay == null ? DateTime.UtcNow : DateTime.UtcNow.Add(delay.Value),
-            Request = TickerHelper.CreateTickerRequest<TArgs>(args),
+            Request = CreateTickerRequest(job.ArgsType, args),
         };
 
         var config = TickerQOptions.GetConfigurationOrNull(job.JobType);
@@ -46,5 +60,12 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
 
         var result = await TimeTickerManager.AddAsync(timeTicker);
         return !result.IsSucceeded ? timeTicker.Id.ToString() : result.Result.Id.ToString();
+    }
+
+    protected virtual byte[]? CreateTickerRequest(Type argsType, object args)
+    {
+        return (byte[]?)CreateTickerRequestMethod
+            .MakeGenericMethod(argsType)
+            .Invoke(null, [args]);
     }
 }

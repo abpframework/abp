@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
@@ -40,11 +40,10 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
         var jobName = BackgroundJobOptions.Value.GetBackgroundJobName(typeof(TArgs));
-        var jobId = await EnqueueAsync(jobName, args!, priority, delay);
-        return jobId.ToString();
+        return await EnqueueAsync(jobName, args!, priority, delay);
     }
 
-    protected virtual async Task<Guid> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+    public virtual async Task<string> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
         var jobInfo = new BackgroundJobInfo
         {
@@ -64,6 +63,6 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
 
         await Store.InsertAsync(jobInfo);
 
-        return jobInfo.Id;
+        return jobInfo.Id.ToString();
     }
 }

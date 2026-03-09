@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Quartz;
@@ -32,6 +32,12 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
         return await ReEnqueueAsync(args, Options.RetryCount, Options.RetryIntervalMillisecond, priority, delay);
     }
 
+    public virtual async Task<string> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+        TimeSpan? delay = null)
+    {
+        return await ReEnqueueAsync(jobName, args, Options.RetryCount, Options.RetryIntervalMillisecond, priority, delay);
+    }
+
     public virtual async Task<string> ReEnqueueAsync<TArgs>(TArgs args, int retryCount, int retryIntervalMillisecond,
         BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
@@ -44,6 +50,24 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
             };
 
         var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().RequestRecovery().SetJobData(jobDataMap).Build();
+        var trigger = !delay.HasValue ? TriggerBuilder.Create().StartNow().Build() : TriggerBuilder.Create().StartAt(new DateTimeOffset(DateTime.Now.Add(delay.Value))).Build();
+        await Scheduler.ScheduleJob(jobDetail, trigger);
+        return jobDetail.Key.ToString();
+    }
+
+    public virtual async Task<string> ReEnqueueAsync(string jobName, object args, int retryCount, int retryIntervalMillisecond,
+        BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+    {
+        var jobDataMap = new JobDataMap
+            {
+                {QuartzJobExecutionAdapter.JobNameKey, jobName},
+                {QuartzJobExecutionAdapter.JobArgsKey, JsonSerializer.Serialize(args)},
+                {JobDataPrefix + nameof(Options.RetryCount), retryCount.ToString()},
+                {JobDataPrefix + nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond.ToString()},
+                {JobDataPrefix + RetryIndex, "0"}
+            };
+
+        var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter>().RequestRecovery().SetJobData(jobDataMap).Build();
         var trigger = !delay.HasValue ? TriggerBuilder.Create().StartNow().Build() : TriggerBuilder.Create().StartAt(new DateTimeOffset(DateTime.Now.Add(delay.Value))).Build();
         await Scheduler.ScheduleJob(jobDetail, trigger);
         return jobDetail.Key.ToString();
