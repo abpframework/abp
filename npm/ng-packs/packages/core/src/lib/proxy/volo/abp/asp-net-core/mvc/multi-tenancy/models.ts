@@ -13,6 +13,12 @@ export interface CurrentTenantDto {
   isAvailable: boolean;
 }
 
+export enum TenantUserSharingStrategy {
+  Isolated = 0,
+  Shared = 1,
+}
+
 export interface MultiTenancyInfoDto {
   isEnabled: boolean;
+  userSharingStrategy: TenantUserSharingStrategy;
 }
