@@ -77,7 +77,9 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
 
     protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
     {
-        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
+        return jobName != AnonymousJobArgs.JobNameConstant &&
+               AnonymousJobHandlerRegistry.IsRegistered(jobName) &&
+               BackgroundJobOptions.Value.GetJobOrNull(jobName) == null;
     }
 
     protected virtual string GetQueueName(Type argsType)

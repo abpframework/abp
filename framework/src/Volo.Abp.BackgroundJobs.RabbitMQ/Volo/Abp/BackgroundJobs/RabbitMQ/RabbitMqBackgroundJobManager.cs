@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -12,13 +13,19 @@ public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDep
 {
     protected IJobQueueManager JobQueueManager { get; }
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
+    protected AbpBackgroundJobOptions BackgroundJobOptions { get; }
     protected IJsonSerializer JsonSerializer { get; }
     public ILogger<RabbitMqBackgroundJobManager> Logger { get; set; }
 
-    public RabbitMqBackgroundJobManager(IJobQueueManager jobQueueManager, IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry, IJsonSerializer jsonSerializer)
+    public RabbitMqBackgroundJobManager(
+        IJobQueueManager jobQueueManager,
+        IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry,
+        IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
+        IJsonSerializer jsonSerializer)
     {
         JobQueueManager = jobQueueManager;
         AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
+        BackgroundJobOptions = backgroundJobOptions.Value;
         JsonSerializer = jsonSerializer;
         Logger = NullLogger<RabbitMqBackgroundJobManager>.Instance;
     }
@@ -56,6 +63,8 @@ public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDep
 
     protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
     {
-        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
+        return jobName != AnonymousJobArgs.JobNameConstant &&
+               AnonymousJobHandlerRegistry.IsRegistered(jobName) &&
+               BackgroundJobOptions.GetJobOrNull(jobName) == null;
     }
 }

@@ -18,17 +18,24 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
     protected IScheduler Scheduler { get; }
 
     protected AbpBackgroundJobQuartzOptions Options { get; }
+    protected AbpBackgroundJobOptions BackgroundJobOptions { get; }
 
     protected IJsonSerializer JsonSerializer { get; }
 
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
     public ILogger<QuartzBackgroundJobManager> Logger { get; set; }
 
-    public QuartzBackgroundJobManager(IScheduler scheduler, IOptions<AbpBackgroundJobQuartzOptions> options, IJsonSerializer jsonSerializer, IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
+    public QuartzBackgroundJobManager(
+        IScheduler scheduler,
+        IOptions<AbpBackgroundJobQuartzOptions> options,
+        IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
+        IJsonSerializer jsonSerializer,
+        IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
     {
         Scheduler = scheduler;
         JsonSerializer = jsonSerializer;
         Options = options.Value;
+        BackgroundJobOptions = backgroundJobOptions.Value;
         AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
         Logger = NullLogger<QuartzBackgroundJobManager>.Instance;
     }
@@ -59,7 +66,9 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
 
     protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
     {
-        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
+        return jobName != AnonymousJobArgs.JobNameConstant &&
+               AnonymousJobHandlerRegistry.IsRegistered(jobName) &&
+               BackgroundJobOptions.GetJobOrNull(jobName) == null;
     }
 
     public virtual async Task<string> ReEnqueueAsync<TArgs>(TArgs args, int retryCount, int retryIntervalMillisecond,

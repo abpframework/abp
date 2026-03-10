@@ -27,6 +27,8 @@ public class AnonymousJobHandlerRegistry : IAnonymousJobHandlerRegistry, ISingle
 
     public virtual void Register(string jobName, Action<AnonymousJobExecutionContext, CancellationToken> handler)
     {
+        Check.NotNull(handler, nameof(handler));
+
         Register(jobName, (context, ct) =>
         {
             handler(context, ct);
@@ -36,16 +38,20 @@ public class AnonymousJobHandlerRegistry : IAnonymousJobHandlerRegistry, ISingle
 
     public virtual bool Unregister(string jobName)
     {
+        Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
         return _handlers.TryRemove(jobName, out _);
     }
 
     public virtual bool IsRegistered(string jobName)
     {
+        Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
         return _handlers.ContainsKey(jobName) || _options.IsAnonymousJobRegistered(jobName);
     }
 
     public virtual Func<AnonymousJobExecutionContext, CancellationToken, Task>? Get(string jobName)
     {
+        Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
+
         if (_handlers.TryGetValue(jobName, out var handler))
         {
             return handler;

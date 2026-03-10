@@ -1,9 +1,9 @@
 namespace Volo.Abp.BackgroundJobs;
 
-[BackgroundJobName("AnonymousJob")]
+[BackgroundJobName(JobNameConstant)]
 public class AnonymousJobArgs
 {
-    public const string JobNameConstant = "AnonymousJob";
+    public const string JobNameConstant = "Abp.AnonymousJob";
 
     public string JobName { get; }
 

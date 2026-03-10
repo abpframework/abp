@@ -65,7 +65,9 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
 
     protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
     {
-        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
+        return jobName != AnonymousJobArgs.JobNameConstant &&
+               AnonymousJobHandlerRegistry.IsRegistered(jobName) &&
+               Options.GetJobOrNull(jobName) == null;
     }
 
     protected virtual async Task<string> EnqueueAsync(BackgroundJobConfiguration job, object args, BackgroundJobPriority priority, TimeSpan? delay)

@@ -261,7 +261,7 @@ Then enqueue it by name:
 await _backgroundJobManager.EnqueueAsync("ProcessOrder", new { OrderId = "42" });
 ```
 
-ABP keeps a stable internal transport job name (`AnonymousJob`) for provider compatibility, while preserving your effective job name (`ProcessOrder`) in the payload.
+ABP keeps a stable internal transport job name (`Abp.AnonymousJob`) for provider compatibility, while preserving your effective job name (`ProcessOrder`) in the payload.
 
 ### Disable Job Execution
 

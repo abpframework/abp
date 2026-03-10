@@ -87,6 +87,8 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
 
     protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
     {
-        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
+        return jobName != AnonymousJobArgs.JobNameConstant &&
+               AnonymousJobHandlerRegistry.IsRegistered(jobName) &&
+               BackgroundJobOptions.Value.GetJobOrNull(jobName) == null;
     }
 }

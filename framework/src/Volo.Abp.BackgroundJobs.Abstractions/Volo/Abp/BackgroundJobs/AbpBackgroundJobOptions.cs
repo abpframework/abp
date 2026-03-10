@@ -96,6 +96,8 @@ public class AbpBackgroundJobOptions
 
     public void AddAnonymousJobHandler(string jobName, Action<AnonymousJobExecutionContext, CancellationToken> handler)
     {
+        Check.NotNull(handler, nameof(handler));
+
         AddAnonymousJobHandler(jobName, (context, ct) =>
         {
             handler(context, ct);
