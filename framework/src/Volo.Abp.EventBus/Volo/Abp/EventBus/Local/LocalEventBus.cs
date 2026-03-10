@@ -231,11 +231,11 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         {
             foreach (var factory in handlerFactory.Value)
             {
-                using var handler = factory.GetHandler();
+                var handlerType = GetHandlerType(factory);
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
                     handlerFactory.Key,
-                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handler.EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handlerType).FirstOrDefault()?.Order ?? 0));
             }
         }
 
@@ -243,11 +243,11 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         {
             foreach (var factory in handlerFactory.Value)
             {
-                using var handler = factory.GetHandler();
+                var handlerType = GetHandlerType(factory);
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
                     typeof(AnonymousEventData),
-                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handler.EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handlerType).FirstOrDefault()?.Order ?? 0));
             }
         }
 
@@ -268,8 +268,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         {
             foreach (var factory in handlerFactory.Value)
             {
-                using var handler = factory.GetHandler();
-                var handlerType = handler.EventHandler.GetType();
+                var handlerType = GetHandlerType(factory);
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
                     factory,
                     typeof(AnonymousEventData),
@@ -328,6 +327,27 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         }
 
         return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
+    }
+
+    private static Type GetHandlerType(IEventHandlerFactory factory)
+    {
+        if (factory is SingleInstanceHandlerFactory singleInstanceHandlerFactory)
+        {
+            return singleInstanceHandlerFactory.HandlerInstance.GetType();
+        }
+
+        if (factory is IocEventHandlerFactory iocEventHandlerFactory)
+        {
+            return iocEventHandlerFactory.HandlerType;
+        }
+
+        if (factory is TransientEventHandlerFactory transientEventHandlerFactory)
+        {
+            return transientEventHandlerFactory.HandlerType;
+        }
+
+        using var handler = factory.GetHandler();
+        return handler.EventHandler.GetType();
     }
 
     private bool HasAnonymousHandlers(string eventName)

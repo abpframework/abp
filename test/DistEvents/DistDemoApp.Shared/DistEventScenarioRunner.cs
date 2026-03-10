@@ -58,7 +58,7 @@ public class DistEventScenarioRunner : IDistEventScenarioRunner, ITransientDepen
                 new SingleInstanceHandlerFactory(
                     new ActionEventHandler<AnonymousEventData>(eventData =>
                     {
-                        var converted = eventData.ConvertToTypedObject();
+                        var converted = AnonymousEventDataConverter.ConvertToLooseObject(eventData);
                         if (converted is Dictionary<string, object> payload &&
                             payload.TryGetValue("Message", out var message) &&
                             message?.ToString() == profile.AnonymousOnlyMessage)
