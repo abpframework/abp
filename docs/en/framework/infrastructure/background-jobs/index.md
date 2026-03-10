@@ -197,13 +197,15 @@ Enqueue method gets some optional arguments to control the background job:
 * **priority** is used to control priority of the job item. It gets an `BackgroundJobPriority` enum which has `Low`, `BelowNormal`, `Normal` (default), `AboveNormal` and `Hight` fields.
 * **delay** is used to wait a while (`TimeSpan`) before first try.
 
-### Queue by Job Name
+### Enqueue by ABP Job Name
 
-You can also enqueue jobs by their name at runtime:
+You can also enqueue jobs by their ABP background job name at runtime:
 
 ```csharp
+var jobName = BackgroundJobNameAttribute.GetName<EmailSendingArgs>(); // "emails" if configured via [BackgroundJobName]
+
 await _backgroundJobManager.EnqueueAsync(
-    "emails",
+    jobName,
     new
     {
         EmailAddress = "user@abp.io",
@@ -212,6 +214,8 @@ await _backgroundJobManager.EnqueueAsync(
     }
 );
 ```
+
+`jobName` here is the ABP background job name (configuration key), not a provider queue name (like a Hangfire queue or RabbitMQ queue).
 
 In this case, ABP resolves the target job configuration by `jobName` and serializes the `args` object.
 If the `args` runtime type does not match the configured argument type, ABP normalizes the payload by serializing and deserializing it to the expected argument type.
