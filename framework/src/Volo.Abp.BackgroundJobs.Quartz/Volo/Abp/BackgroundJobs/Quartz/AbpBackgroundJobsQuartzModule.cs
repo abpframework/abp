@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
@@ -15,6 +15,7 @@ public class AbpBackgroundJobsQuartzModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
+        context.Services.AddTransient<QuartzJobExecutionAdapter>();
     }
 
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)

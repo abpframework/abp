@@ -61,7 +61,7 @@ public class AbpDashboardOptionsProvider : ITransientDependency
         try
         {
             using var document = JsonDocument.Parse(serializedArgs);
-            if (document.RootElement.TryGetProperty(nameof(AnonymousJobArgs.JobName), out var jobNameElement))
+            if (TryGetJobNameElement(document.RootElement, out var jobNameElement))
             {
                 var jobName = jobNameElement.GetString();
                 if (!string.IsNullOrWhiteSpace(jobName))
@@ -77,5 +77,11 @@ public class AbpDashboardOptionsProvider : ITransientDependency
         }
 
         return false;
+    }
+
+    protected virtual bool TryGetJobNameElement(JsonElement rootElement, out JsonElement jobNameElement)
+    {
+        return rootElement.TryGetProperty(nameof(AnonymousJobArgs.JobName), out jobNameElement)
+               || rootElement.TryGetProperty("jobName", out jobNameElement);
     }
 }

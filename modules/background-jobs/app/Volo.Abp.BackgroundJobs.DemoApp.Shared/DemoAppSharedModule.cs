@@ -17,8 +17,12 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
             {
                 options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (jsonData, sp, ct) =>
                 {
-                    var doc = JsonDocument.Parse(jsonData);
-                    var value = doc.RootElement.TryGetProperty("Value", out var prop) ? prop.GetString() : null;
+                    using var doc = JsonDocument.Parse(jsonData);
+                    var value = doc.RootElement.TryGetProperty("value", out var prop)
+                        ? prop.GetString()
+                        : doc.RootElement.TryGetProperty("Value", out prop)
+                            ? prop.GetString()
+                            : null;
                     Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
                     return Task.CompletedTask;
                 });
