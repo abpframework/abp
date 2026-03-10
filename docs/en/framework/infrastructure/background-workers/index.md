@@ -120,6 +120,33 @@ So, it resolves the given background worker and adds to the `IBackgroundWorkerMa
 
 While we generally add workers in `OnApplicationInitializationAsync`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
 
+### Add Dynamic Workers at Runtime (Handler in Add)
+
+You can add a runtime worker without pre-defining a dedicated worker class by passing a handler directly to `AddAsync`.
+
+```csharp
+await backgroundWorkerManager.AddAsync(
+    "InventorySyncWorker",
+    new DynamicBackgroundWorkerSchedule
+    {
+        Period = 30000 // 30 seconds
+        // CronExpression = "*/30 * * * * *" // optional (provider dependent)
+    },
+    async (context, cancellationToken) =>
+    {
+        var inventorySyncAppService = context.ServiceProvider.GetRequiredService<IInventorySyncAppService>();
+        await inventorySyncAppService.SyncAsync(cancellationToken);
+    }
+);
+```
+
+Key points:
+
+* `workerName` is the runtime identifier of the dynamic worker.
+* The `handler` is registered at runtime and executed through the provider-specific worker manager.
+* Provider behavior is preserved. For example, providers with persistent schedulers keep their own scheduling semantics.
+* The default in-process manager uses in-memory periodic execution.
+
 ## Options
 
 `AbpBackgroundWorkerOptions` class is used to [set options](../../fundamentals/options.md) for the background workers. Currently, there is only one option:

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -10,9 +11,15 @@ namespace Volo.Abp.BackgroundWorkers.Quartz;
 [Dependency(ReplaceServices = true)]
 public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingletonDependency
 {
+    public const string DynamicWorkerNameKey = "AbpDynamicWorkerName";
+
     protected IScheduler Scheduler { get; }
 
-    public QuartzBackgroundWorkerManager(IScheduler scheduler)
+    public QuartzBackgroundWorkerManager(
+        IScheduler scheduler,
+        IServiceProvider serviceProvider,
+        IDynamicBackgroundWorkerHandlerRegistry dynamicBackgroundWorkerHandlerRegistry)
+        : base(serviceProvider, dynamicBackgroundWorkerHandlerRegistry)
     {
         Scheduler = scheduler;
     }
@@ -94,6 +101,74 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
         else
         {
             await Scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger, cancellationToken);
+        }
+    }
+
+    public override Task AddAsync(
+        string workerName,
+        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        CancellationToken cancellationToken = default)
+    {
+        return AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule
+            {
+                Period = DynamicBackgroundWorkerSchedule.DefaultPeriod
+            },
+            handler,
+            cancellationToken
+        );
+    }
+
+    public override async Task AddAsync(
+        string workerName,
+        DynamicBackgroundWorkerSchedule schedule,
+        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+        Check.NotNull(schedule, nameof(schedule));
+        Check.NotNull(handler, nameof(handler));
+
+        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
+
+        if (schedule.Period == null && schedule.CronExpression.IsNullOrWhiteSpace())
+        {
+            throw new AbpException($"Both 'Period' and 'CronExpression' are not set for dynamic worker {workerName}. You must set at least one of them.");
+        }
+
+        var jobKey = new JobKey($"DynamicWorker:{workerName}");
+        var triggerKey = new TriggerKey($"DynamicWorker:{workerName}");
+        var jobDetail = JobBuilder.Create<QuartzDynamicBackgroundWorkerAdapter>()
+            .WithIdentity(jobKey)
+            .UsingJobData(DynamicWorkerNameKey, workerName)
+            .Build();
+
+        var triggerBuilder = TriggerBuilder.Create()
+            .ForJob(jobDetail)
+            .WithIdentity(triggerKey);
+
+        if (!schedule.CronExpression.IsNullOrWhiteSpace())
+        {
+            triggerBuilder.WithCronSchedule(schedule.CronExpression);
+        }
+        else
+        {
+            triggerBuilder.WithSimpleSchedule(builder =>
+                builder.WithInterval(TimeSpan.FromMilliseconds(schedule.Period!.Value)).RepeatForever());
+        }
+
+        var trigger = triggerBuilder.Build();
+
+        if (await Scheduler.CheckExists(jobDetail.Key, cancellationToken))
+        {
+            await Scheduler.AddJob(jobDetail, true, true, cancellationToken);
+            await Scheduler.ResumeJob(jobDetail.Key, cancellationToken);
+            await Scheduler.RescheduleJob(trigger.Key, trigger, cancellationToken);
+        }
+        else
+        {
+            await Scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
         }
     }
 }

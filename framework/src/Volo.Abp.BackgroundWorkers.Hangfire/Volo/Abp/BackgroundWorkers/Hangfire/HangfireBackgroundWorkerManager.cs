@@ -9,6 +9,7 @@ using Hangfire.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Hangfire;
@@ -20,11 +21,12 @@ namespace Volo.Abp.BackgroundWorkers.Hangfire;
 public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISingletonDependency
 {
     protected AbpHangfireBackgroundJobServer BackgroundJobServer { get; set; } = default!;
-    protected IServiceProvider ServiceProvider { get; }
 
-    public HangfireBackgroundWorkerManager(IServiceProvider serviceProvider)
+    public HangfireBackgroundWorkerManager(
+        IServiceProvider serviceProvider,
+        IDynamicBackgroundWorkerHandlerRegistry dynamicBackgroundWorkerHandlerRegistry)
+        : base(serviceProvider, dynamicBackgroundWorkerHandlerRegistry)
     {
-        ServiceProvider = serviceProvider;
     }
 
     public void Initialize()
@@ -135,6 +137,74 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                 await base.AddAsync(worker, cancellationToken);
                 break;
         }
+    }
+
+    public override Task AddAsync(
+        string workerName,
+        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        CancellationToken cancellationToken = default)
+    {
+        return AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule
+            {
+                Period = DynamicBackgroundWorkerSchedule.DefaultPeriod
+            },
+            handler,
+            cancellationToken
+        );
+    }
+
+    public override Task AddAsync(
+        string workerName,
+        DynamicBackgroundWorkerSchedule schedule,
+        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+        Check.NotNull(schedule, nameof(schedule));
+        Check.NotNull(handler, nameof(handler));
+
+        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
+
+        var cronExpression = schedule.CronExpression;
+        if (cronExpression.IsNullOrWhiteSpace())
+        {
+            var period = schedule.Period ?? DynamicBackgroundWorkerSchedule.DefaultPeriod;
+            cronExpression = GetCron(period);
+        }
+
+        var logger = ServiceProvider.GetRequiredService<ILogger<HangfireBackgroundWorkerManager>>();
+        var abpHangfireOptions = ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
+        var queueName = abpHangfireOptions.DefaultQueue;
+        var recurringJobId = $"DynamicWorker:{workerName}";
+
+        if (!JobStorage.Current.HasFeature(JobStorageFeatures.JobQueueProperty))
+        {
+            logger.LogError($"Current storage doesn't support specifying queues({queueName}) directly for a specific job. Please use the QueueAttribute instead.");
+            RecurringJob.AddOrUpdate<HangfireDynamicBackgroundWorkerAdapter>(
+                recurringJobId,
+                adapter => adapter.DoWorkAsync(workerName, cancellationToken),
+                cronExpression,
+                new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneInfo.Utc
+                });
+        }
+        else
+        {
+            RecurringJob.AddOrUpdate<HangfireDynamicBackgroundWorkerAdapter>(
+                recurringJobId,
+                queueName,
+                adapter => adapter.DoWorkAsync(workerName, cancellationToken),
+                cronExpression,
+                new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneInfo.Utc
+                });
+        }
+
+        return Task.CompletedTask;
     }
 
     private static readonly MethodInfo? GetRecurringJobIdMethodInfo = typeof(RecurringJob).GetMethod("GetRecurringJobId", BindingFlags.NonPublic | BindingFlags.Static);
